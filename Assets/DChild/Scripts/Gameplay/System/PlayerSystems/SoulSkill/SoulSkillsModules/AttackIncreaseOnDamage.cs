@@ -1,0 +1,85 @@
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+#if UNITY_EDITOR
+#endif
+
+namespace DChild.Gameplay.Characters.Players.SoulSkills
+{
+    public class AttackIncreaseOnDamage : HandledSoulSkillModule
+    {
+        private class Handle : BaseHandle
+        {
+            private IPlayer m_player;
+            private int m_increaseValue;
+            private int m_maxStacks;
+            private WaitForWorldSeconds waitforSeconds;
+            public int m_currentStacks;
+            private Coroutine m_routine;
+
+            public Handle(IPlayer m_player, int m_increaseValue, int m_maxStacks, float m_outOfCombatResetThreshold)
+            {
+                this.m_player = m_player;
+                this.m_increaseValue = m_increaseValue;
+                this.m_maxStacks = m_maxStacks;
+                waitforSeconds = new WaitForWorldSeconds(m_outOfCombatResetThreshold);
+                this.m_currentStacks = 0;
+            }
+
+            public override void Initialize()
+            {
+                m_player.Damaged += OnDamaged;
+                m_player.CombatModeChanged += OnCombatModeChanged;
+            }
+
+            public override void Dispose()
+            {
+                m_player.Damaged -= OnDamaged;
+                m_player.CombatModeChanged -= OnCombatModeChanged;
+            }
+
+            private void OnCombatModeChanged(object sender, CombatStateEventArgs eventArgs)
+            {
+                if (eventArgs.inCombat)
+                {
+                    if (m_routine != null)
+                    {
+                        m_player.StopCoroutine(m_routine);
+                        m_routine = null;
+                    }
+                }
+                else
+                {
+                    m_routine = m_player.StartCoroutine(ResetRoutine());
+                }
+            }
+
+            private void OnDamaged(object sender, EventActionArgs eventArgs)
+            {
+                if (m_currentStacks < m_maxStacks)
+                {
+                    m_currentStacks++;
+                    m_player.modifiers.damageModifier += m_increaseValue;
+                }
+            }
+
+            private IEnumerator ResetRoutine()
+            {
+                yield return waitforSeconds;
+                m_player.modifiers.damageModifier -= m_increaseValue * m_currentStacks;
+                m_currentStacks = 0;
+            }
+        }
+
+        [SerializeField, MinValue(1)]
+        private int m_increaseValue;
+        [SerializeField, MinValue(1)]
+        private int m_maxStack;
+        [SerializeField, MinValue(0)]
+        private float m_outOfCombatResetThreshold;
+
+        protected override BaseHandle CreateHandle(IPlayer player) => new Handle(player, m_increaseValue, m_maxStack, m_outOfCombatResetThreshold);
+    }
+}

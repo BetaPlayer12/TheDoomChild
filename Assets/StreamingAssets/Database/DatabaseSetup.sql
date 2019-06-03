@@ -1,0 +1,77 @@
+﻿CREATE TABLE [Rarities](
+  [ID] INT PRIMARY KEY UNIQUE, 
+  [Name] TEXT NOT NULL, 
+  [Description] TEXT);
+
+CREATE TABLE [ItemTypes](
+  [ID] INT UNIQUE, 
+  [Name] TEXT PRIMARY KEY NOT NULL, 
+  [Description] TEXT);
+  
+CREATE TABLE "Sprites"(
+  [ID] INT PRIMARY KEY, 
+  [Name] TEXT UNIQUE);
+  
+CREATE TABLE [Items](
+  [ID] INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL, 
+  [Name] TEXT UNIQUE, 
+  [Type] INT DEFAULT 1 REFERENCES [ItemTypes]([ID]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [Rarity] INT DEFAULT 1 REFERENCES [Rarities]([ID]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [Icon] INT REFERENCES [Sprites]([ID]) ON DELETE SET NULL ON UPDATE CASCADE, 
+  [MaxSlot] INTEGER DEFAULT 999, 
+  [Cost] INTEGER DEFAULT 100, 
+  [Description] TEXT DEFAULT "None", 
+  CHECK([MaxSlot] >= 1), 
+  CHECK([Cost] >= 0));
+
+CREATE TABLE [ArmorTypes]([Name] TEXT PRIMARY KEY ASC UNIQUE);
+
+CREATE TABLE [Armors](
+  [Name] TEXT PRIMARY KEY NOT NULL REFERENCES [Items]([Name]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [Type] TEXT DEFAULT 'Head' REFERENCES [ArmorTypes]([Name]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [Strength] INT DEFAULT 0, 
+  [Defense] INTEGER DEFAULT 1, 
+  [HasEffects] BOOL DEFAULT false, 
+  CHECK([Defense] > 0), 
+  CHECK([Strength] >= 0));
+  
+CREATE TABLE [EquipmentEffects](
+  [ID] INTEGER PRIMARY KEY AUTOINCREMENT, 
+  [Name] TEXT NOT NULL UNIQUE, 
+  [Type] TEXT DEFAULT 'OnEquip', 
+  [Description] TEXT, 
+  CHECK([Type] = "OnHit"
+OR  [Type] = "OnEquip"
+OR  [Type] = "OnKill"));
+
+CREATE TABLE [ItemsWithEffects](
+  [Name] TEXT REFERENCES [Items]([Name]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [Effect] TEXT REFERENCES [EquipmentEffects]([Name]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [Value] INTEGER, 
+  PRIMARY KEY([Name], [Effect]));
+
+
+CREATE TABLE [Enemies](
+  [ID] INT PRIMARY KEY UNIQUE, 
+  [Name] TEXT NOT NULL UNIQUE, 
+  [Description] TEXT);
+
+CREATE TABLE [EnemyLoots](
+  [Enemy] TEXT REFERENCES [Enemies]([Name]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [Loot] TEXT REFERENCES [Items]([Name]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  PRIMARY KEY([Enemy], [Loot]));
+
+CREATE TABLE "AttackTypes"(
+  [ID] INT PRIMARY KEY, 
+  [Name] TEXT NOT NULL, 
+  [Description] TEXT);
+
+CREATE TABLE [Weapons](
+  [Name] TEXT NOT NULL REFERENCES [Items]([Name]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [AttackType] INT NOT NULL REFERENCES [AttackTypes]([ID]) ON DELETE CASCADE ON UPDATE CASCADE, 
+  [Value] INTEGER NOT NULL);
+  
+CREATE TABLE [WeaponTypes](
+  [ID] INT PRIMARY KEY UNIQUE, 
+  [Name] TEXT NOT NULL UNIQUE, 
+  [Description] TEXT);

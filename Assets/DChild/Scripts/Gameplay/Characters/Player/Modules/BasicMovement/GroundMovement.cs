@@ -1,0 +1,165 @@
+﻿using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Characters.Players.State;
+using DChild.Gameplay.Systems.WorldComponents;
+using Sirenix.OdinInspector;
+using Holysoft.Collections;
+using Holysoft.Event;
+using UnityEngine;
+
+namespace DChild.Gameplay.Characters.Players.Behaviour
+{
+    public class GroundMovement : MonoBehaviour, IPlayerExternalModule, IEventModule
+    {
+        [SerializeField]
+        private CountdownTimer m_changeSpeedDuration;
+
+        [SerializeField]
+        private GroundMoveHandler m_moveHandler;
+
+        [SerializeField]
+        [TabGroup("TabGroup", "Jog Configurations")]
+        private float m_jogSpeed;
+        [SerializeField]
+        [TabGroup("TabGroup", "Jog Configurations")]
+        private float m_jogAcceleration;
+        [SerializeField]
+        [TabGroup("TabGroup", "Jog Configurations")]
+        private float m_jogDecceleration;
+
+        [SerializeField]
+        [TabGroup("TabGroup", "Sprint Configurations")]
+        private float m_sprintSpeed;
+        [SerializeField]
+        [TabGroup("TabGroup", "Sprint Configurations")]
+        private float m_sprintAcceleration;
+        [SerializeField]
+        [TabGroup("TabGroup", "Sprint Configurations")]
+        private float m_sprintDecceleration;
+
+        private CharacterPhysics2D m_characterPhysics2D;
+
+        private IMoveState m_state;
+        private IIsolatedTime m_time;
+        private IFacingConfigurator m_facingConfig;
+        private HorizontalDirection m_previousFacing;
+        private IPlayerState m_characterState;
+
+        private bool m_increaseVelocity;
+
+        public void Initialize(IPlayerModules player)
+        {
+            m_time = player.isolatedObject;
+            m_characterPhysics2D = player.physics;
+            m_moveHandler.SetPhysics(m_characterPhysics2D);
+            m_state = player.characterState;
+            m_facingConfig = player;
+            m_previousFacing = player.currentFacingDirection;
+            m_characterState = player.characterState;
+        }
+
+        public void Move(float direction)
+        {
+            if (direction == 0)
+            {
+                if (m_increaseVelocity)
+                {
+                    ResetMoveVelocity();
+                }
+
+                if (m_characterPhysics2D.inContactWithGround)
+                {
+                    m_characterPhysics2D.SetVelocity(Vector2.zero);
+                }
+                else
+                {
+                    m_characterPhysics2D.SetVelocity(0);
+                }
+                //m_moveHandler.Deccelerate();
+
+                m_state.isMoving = false;
+                m_changeSpeedDuration.Reset();
+            }
+            else
+            {
+                m_changeSpeedDuration.Tick(m_time.deltaTime);
+                var moveDirection = direction > 0 ? Vector2.right : Vector2.left;
+                m_moveHandler.SetDirection(moveDirection);
+
+                if (m_increaseVelocity)
+                {
+                    if (m_facingConfig.currentFacingDirection != m_previousFacing)
+                    {
+                        ResetMoveVelocity();
+                    }
+                }
+                else
+                {
+                    m_state.isJogging = true;
+                }
+
+                m_moveHandler.Accelerate();
+                m_state.isMoving = true;
+                m_facingConfig.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+            }
+        }
+
+        public void UpdateVelocity()
+        {
+            var moveDirection = m_characterPhysics2D.velocity.x >= 0 ? Vector2.right : Vector2.left;
+            m_moveHandler.SetDirection(moveDirection);
+        }
+
+        public void ConnectEvents()
+        {
+            GetComponentInParent<IGroundMoveController>().MoveCall += OnMoveCall;
+        }
+
+        private void Update()
+        {
+            if (m_increaseVelocity)
+            {
+                if (m_characterState.waitForBehaviour || m_characterState.isDashing || !m_characterState.isGrounded)
+                {
+                    ResetMoveVelocity();
+                }
+            }
+        }
+
+        private void ResetMoveVelocity()
+        {
+            m_state.isJogging = false;
+            m_state.isSprinting = false;
+            m_increaseVelocity = false;
+            m_moveHandler.ResetMoveVelocity(m_jogSpeed, m_jogAcceleration, m_jogDecceleration);
+            m_changeSpeedDuration.Reset();
+        }
+
+        private void OnMoveCall(object sender, ControllerEventArgs eventArgs)
+        {
+            Move(eventArgs.input.direction.horizontalInput);
+        }
+
+        private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_state.isJogging = false;
+            m_state.isSprinting = true;
+            m_increaseVelocity = true;
+            m_moveHandler.IncreaseMoveVelocity(m_sprintSpeed, m_sprintAcceleration, m_sprintDecceleration);
+            m_previousFacing = m_facingConfig.currentFacingDirection;
+        }
+
+        private void Awake()
+        {
+            m_changeSpeedDuration.CountdownEnd += OnCountdownEnd;
+            m_moveHandler.ResetMoveVelocity(m_jogSpeed, m_jogAcceleration, m_jogDecceleration);
+        }
+
+#if UNITY_EDITOR
+        public void Initialize(float maxSpeed, float acceleration, float decceleration)
+        {
+            m_moveHandler = new GroundMoveHandler(maxSpeed, acceleration, decceleration);
+        }
+
+#endif
+    }
+}

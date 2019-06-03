@@ -1,0 +1,40 @@
+﻿using DChild.Configurations;
+using DChild.Gameplay.Pooling;
+using DChild.Menu;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace DChild
+{
+    public class GameSystem : MonoBehaviour
+    {
+        private static PoolManager m_poolManager;
+        private static LoadingScreen m_loadingScreen;
+        public static GameSettings settings { get; private set; }
+        public static GameDataManager dataManager { get; private set; }
+        public static IPoolManager poolManager => m_poolManager;
+
+        [SerializeField]
+        private GameIntroHandler m_introHandler;
+
+        public static void LoadScene(string sceneName)
+        {
+            m_loadingScreen.LoadScene(sceneName);
+        }
+
+        private void Awake()
+        {
+            settings = GetComponentInChildren<GameSettings>();
+            m_loadingScreen = GetComponentInChildren<LoadingScreen>();
+            dataManager = GetComponentInChildren<GameDataManager>();
+            m_poolManager = GetComponentInChildren<PoolManager>();
+        }
+
+        private void Start()
+        {
+            m_introHandler.Execute();
+        }
+    }
+
+}
