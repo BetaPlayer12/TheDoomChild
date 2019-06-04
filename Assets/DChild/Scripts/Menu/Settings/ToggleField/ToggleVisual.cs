@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DChild.Menu.UI
 {
-    [ExecuteAlways]
+    //[ExecuteInEditMode]
     [RequireComponent(typeof(ToggleButton))]
     public abstract class ToggleVisual : MonoBehaviour
     {

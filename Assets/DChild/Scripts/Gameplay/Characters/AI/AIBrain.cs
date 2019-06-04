@@ -2,14 +2,26 @@
 using System.Collections;
 using System.IO;
 using UnityEngine;
+using Spine.Unity;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 namespace Refactor.DChild.Gameplay.Character.AI
 {
-    public abstract class AIBrain<T> : MonoBehaviour where T: IAIInfo
+
+
+    public abstract class AIBrain<T> : MonoBehaviour where T : IAIInfo
     {
+        [System.Serializable]
+        public abstract class BaseInfo : IAIInfo
+        {
+            [SerializeField,PreviewField]
+            private SkeletonDataAsset m_skeletonDataAsset;
+
+            protected IEnumerable GetAnimations() => m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Animations;
+            protected IEnumerable GetEvents() => m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Events;
+        }
 
         [SerializeField, ValueDropdown("GetData")]
         private AIData m_data;
