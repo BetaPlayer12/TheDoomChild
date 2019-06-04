@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override CombatCharacterAnimation animation => null;
 
         public event EventAction<SpawnableEventArgs> Pool;
+        public event EventAction<PoolItemEventArgs> PoolRequest;
 
         public void ForcePool()
         {
