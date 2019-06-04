@@ -147,10 +147,5 @@ namespace DChild.Gameplay
                 m_activatableModules[i].Disable();
             }
         }
-
-        private void OnValidate()
-        {
-            gameObject.name = GetType().Name;
-        }
     }
 }

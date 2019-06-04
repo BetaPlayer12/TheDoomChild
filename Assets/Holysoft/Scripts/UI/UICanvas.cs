@@ -11,7 +11,7 @@ namespace Holysoft.UI
     {
         [SerializeField, ReadOnly]
         protected Canvas m_canvas;
-        [SerializeField, ReadOnly,HorizontalGroup("Canvas Group")]
+        [SerializeField, ReadOnly, HorizontalGroup("Canvas Group")]
         private CanvasGroup m_canvasGroup;
 #if UNITY_EDITOR
         [SerializeField, HideLabel, HorizontalGroup("Canvas Group")]
@@ -104,10 +104,6 @@ namespace Holysoft.UI
         private void OnValidate()
         {
             AssignComponents();
-            gameObject.name = GetType().Name;
         }
-
-
-
     }
 }

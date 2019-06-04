@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Menu.UI
 {
-    [ExecuteAlways]
+    //[ExecuteInEditMode]
     public sealed class ToggleStateLabel : ToggleVisual
     {
 
