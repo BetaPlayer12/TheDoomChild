@@ -37,7 +37,7 @@ using UnityEngine;
 namespace Spine.Unity {
 	
 	#if NEW_PREFAB_SYSTEM
-	[ExecuteAlways]
+	//[ExecuteAlways]
 	#else
 	[ExecuteInEditMode]
 	#endif
