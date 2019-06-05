@@ -21,17 +21,10 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override CombatCharacterAnimation animation => null;
         protected override AttackDamage startDamage => m_damage;
 
-        public override event EventAction<SpawnableEventArgs> Pool;
-
         public void ConjurePlasma(ITarget target)
         {
             m_behaviour.StopActiveBehaviour(ref m_waitForBehaviourEnd);
             m_behaviour.SetActiveBehaviour(StartCoroutine(ConjurePlasmaRoutine(target)));
-        }
-
-        public override void ForcePool()
-        {
-            Pool?.Invoke(this, new SpawnableEventArgs(this));
         }
 
         public override void SpawnAt(Vector2 position, Quaternion rotation)
@@ -54,7 +47,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
 
         }
-
 
         private IEnumerator ConjurePlasmaRoutine(ITarget target)
         {

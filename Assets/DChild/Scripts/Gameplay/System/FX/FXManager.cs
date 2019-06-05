@@ -22,7 +22,7 @@ namespace DChild.Gameplay.VFX
 
         public void Initialize()
         {
-            m_pool = GameSystem.poolManager.GetOrCreatePool<FXPool>();
+            m_pool = GameSystem.poolManager.GetPool<FXPool>();
         }
 
         public T InstantiateFX<T>(GameObject fx, Vector3 position) where T : FX => (T)SmartInstantiateFX(position, fx);
@@ -34,8 +34,7 @@ namespace DChild.Gameplay.VFX
             if (fxGO == null)
                 return null;
 
-            var fx = fxGO.GetComponent<FX>();
-            var pooledFX = m_pool.RetrieveFromPool(fx.fxName);
+            var pooledFX = m_pool.GetOrCreateItem(fxGO);
             if (pooledFX == null)
             {
                 return InstantiateFX(position, fxGO);
@@ -48,7 +47,7 @@ namespace DChild.Gameplay.VFX
 
         private static FX UsePooledFX(Vector3 position, FX pooledFX)
         {
-            pooledFX.SetParent(null);
+            pooledFX.transform.parent = null;
             pooledFX.transform.position = position;
             pooledFX.gameObject.SetActive(true);
             pooledFX.Play();

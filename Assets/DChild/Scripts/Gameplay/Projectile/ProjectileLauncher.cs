@@ -38,19 +38,10 @@ namespace DChild.Gameplay.Projectiles.Handlers
             }
             else
             {
-                var pooledProjectile = GameSystem.poolManager.GetOrCreatePool<ProjectilePool>().RetrieveFromPool(toCreate.projectileName);
-                if (pooledProjectile == null)
-                {
-                    var instance = Object.Instantiate(projectile);
-                    SceneManager.MoveGameObjectToScene(instance, toPlace);
-                    return instance.GetComponent<T>();
-                }
-                else
-                {
-                    pooledProjectile.SetParent(null);
-                    SceneManager.MoveGameObjectToScene(pooledProjectile.gameObject, toPlace);
-                    return (T)pooledProjectile;
-                }
+                var pooledProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+                pooledProjectile.transform.parent = null;
+                SceneManager.MoveGameObjectToScene(pooledProjectile.gameObject, toPlace);
+                return (T)pooledProjectile;
             }
         }
     }

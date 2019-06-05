@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Pooling;
 using Holysoft.Event;
+using Holysoft.Pooling;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -12,14 +13,11 @@ namespace DChild.Gameplay
         private string m_fxName;
 
         public event EventAction<PoolItemEventArgs> PoolRequest;
+        public event EventAction<PoolItemEventArgs> InstanceDestroyed;
 
         public string fxName => m_fxName;
 
         public abstract void Play();
-
-        public void DestroyItem() => Destroy(gameObject);
-
-        public void SetParent(Transform parent) => transform.parent = parent;
 
         protected void FXValidate()
         {
@@ -28,6 +26,14 @@ namespace DChild.Gameplay
                 m_fxName = gameObject.name;
             }
         }
+
+        public void DestroyInstance()
+        {
+            InstanceDestroyed?.Invoke(this, new PoolItemEventArgs(this, transform));
+            Destroy(gameObject);
+        }
+
+        protected void CallPoolRequest() => PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
     }
 
 }

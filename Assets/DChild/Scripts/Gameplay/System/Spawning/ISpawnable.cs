@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Pooling;
 using Holysoft.Event;
+using Holysoft.Pooling;
 using System;
 using UnityEngine;
 
@@ -9,12 +10,6 @@ namespace DChild.Gameplay
     {
         void SpawnAt(Vector2 position, Quaternion rotation);
         Type GetType();
-    }
-
-    public interface IBoundSpawnable : ISpawnable
-    {
-        event EventAction<SpawnableEventArgs> Pool;
-        GameObject gameObject { get; }
     }
 
     public struct SpawnableEventArgs : IEventActionArgs
