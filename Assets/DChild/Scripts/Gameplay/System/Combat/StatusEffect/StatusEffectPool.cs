@@ -100,5 +100,10 @@ namespace DChild.Gameplay.Combat.StatusInfliction
             //return item;
             return null;
         }
+
+        public override void Initialize()
+        {
+           
+        }
     }
 }
