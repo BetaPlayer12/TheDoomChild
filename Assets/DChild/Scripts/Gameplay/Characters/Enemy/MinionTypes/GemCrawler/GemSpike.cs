@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         {
             if (trackEntry.Animation.Name == "attack")
             {
-                GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().AddToPool(this);
+                CallPoolRequest();
             }
         }
     }

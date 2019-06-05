@@ -8,6 +8,6 @@ public class ProjectileSting : AttackProjectile
 {
     protected override void Collide()
     {
-        PoolObject();
+        CallPoolRequest();
     }
 }

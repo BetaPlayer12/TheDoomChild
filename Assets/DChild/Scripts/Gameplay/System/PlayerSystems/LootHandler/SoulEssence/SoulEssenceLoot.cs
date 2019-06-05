@@ -32,7 +32,7 @@ namespace DChild.Gameplay.SoulEssence
         public override void PickUp()
         {
             GameplaySystem.playerManager.soulEssence.Add(m_value);
-            GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().AddToPool(this);
+            CallPoolRequest();
         }
 
         public override void SpawnAt(Vector2 position, Quaternion rotation)

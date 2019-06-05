@@ -15,7 +15,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         [MinValue(0f)]
         private float m_dashSpeed;
-        public override event EventAction<SpawnableEventArgs> Pool;
 
         public float dashSpeed => m_dashSpeed;
         protected override SpecterAnimation specterAnimation => null;
@@ -26,11 +25,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             transform.position = position;
             transform.rotation = rotation;
-        }
-
-        public override void ForcePool()
-        {
-            Pool?.Invoke(this,new SpawnableEventArgs(this));
         }
 
         public void Dash(ITarget target, float duration)

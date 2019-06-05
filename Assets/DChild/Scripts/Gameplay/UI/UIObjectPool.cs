@@ -1,12 +1,15 @@
 ﻿using DChild.UI;
+using Holysoft.Pooling;
 using System;
 
 namespace DChild.Gameplay.Pooling
 {
     public class UIObjectPool : ObjectPool<UIObject, Type>
     {
-        protected override int FindIndex(Type request)
+        protected override int FindAvailableItemIndex(UIObject component)
         {
+            var request = component.GetType();
+
             if (request.IsAbstract)
             {
                 for (int i = 0; i < m_items.Count; i++)

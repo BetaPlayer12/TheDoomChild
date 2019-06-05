@@ -36,7 +36,6 @@ namespace DChild.Gameplay.Combat
 
         private List<UIInfo> m_uiInfoList;
 
-        private IDamageUI m_poolReference;
         private UIObjectPool m_pool;
         private Scene m_scene;
 
@@ -55,9 +54,8 @@ namespace DChild.Gameplay.Combat
         public void Initialize(Scene scene)
         {
             m_damageUIConfigurations = GameplaySystem.databaseManager.GetDatabase<DamageUIConfigurations>();
-            m_poolReference = m_damageValueUI.GetComponent<IDamageUI>();
             m_uiInfoList = new List<UIInfo>();
-            m_pool = GameSystem.poolManager.GetOrCreatePool<UIObjectPool>();
+            m_pool = GameSystem.poolManager.GetPool<UIObjectPool>();
             m_scene = scene;
         }
 
@@ -80,14 +78,14 @@ namespace DChild.Gameplay.Combat
 
         private GameObject GetOrCreateUIGameObject()
         {
-            var uiObject = (m_pool.RetrieveFromPool(m_poolReference.GetType()));
+            var uiObject = (m_pool.GetOrCreateItem(m_damageValueUI));
             if (uiObject == null)
             {
                 return this.InstantiateToScene(m_damageValueUI, m_scene);
             }
             else
             {
-                uiObject.SetParent(null);
+                uiObject.transform.parent = null;
                 return uiObject.gameObject;
             }
         }

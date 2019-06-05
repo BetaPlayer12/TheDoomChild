@@ -63,7 +63,7 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         {
             if (trackEntry.Animation.Name == ANIMATION_SPAWNVINE)
             {
-                GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().AddToPool(this);
+                CallPoolRequest();
             }
         }
     }

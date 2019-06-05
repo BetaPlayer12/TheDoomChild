@@ -14,6 +14,6 @@ public class AcidSpitProjectile : AttackProjectile
    
     protected override void Collide()
     {
-        PoolObject();
+        CallPoolRequest();
     }
 }

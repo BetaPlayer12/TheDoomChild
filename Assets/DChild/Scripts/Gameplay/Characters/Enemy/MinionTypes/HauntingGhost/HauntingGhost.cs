@@ -2,6 +2,7 @@
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using Holysoft.Event;
+using Holysoft.Pooling;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,8 +10,8 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class HauntingGhost : Minion, ISpawnable, IMovingEnemy
     {
-        public event EventAction<SpawnableEventArgs> Pool;
         public event EventAction<PoolItemEventArgs> PoolRequest;
+        public event EventAction<PoolItemEventArgs> InstanceDestroyed;
 
         [SerializeField]
         [TabGroup("References")]
@@ -38,7 +39,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ForcePool()
         {
-            Pool?.Invoke(this,new SpawnableEventArgs(this));
+            PoolRequest?.Invoke(this,new PoolItemEventArgs(this, transform));
             gameObject.SetActive(false);
         }
 
@@ -98,9 +99,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(DashRoutine(target, duration)));
         }
 
-        public void DestroyItem() => Destroy(gameObject);
-
-        public void SetParent(Transform parent) => transform.parent = parent;
+        public void DestroyInstance()
+        {
+            InstanceDestroyed?.Invoke(this, new PoolItemEventArgs(this, transform));
+            Destroy(gameObject);
+        }
 
         private IEnumerator SpawnRoutine()
         {
@@ -171,7 +174,5 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement = new PhysicsMovementHandler2D(GetComponent<ObjectPhysics2D>(), transform);
             m_animation = GetComponent<HauntingGhostAnimation>();
         }
-
-
     }
 }

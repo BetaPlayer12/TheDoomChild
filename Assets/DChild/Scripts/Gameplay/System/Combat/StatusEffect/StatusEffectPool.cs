@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Pooling;
+using Holysoft.Pooling;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,38 +27,38 @@ namespace DChild.Gameplay.Combat.StatusInfliction
 
         public void AddToPool(StatusEffect item)
         {
-            item.SetParent(poolItemStorage);
-            if (m_items.ContainsKey(item.type))
-            {
-                m_items[item.type].Add(item);
-            }
-            else
-            {
-                var list = new List<StatusEffect>();
-                list.Add(item);
-                m_items.Add(item.type, list);
-            }
+            //item.SetParent(poolItemStorage);
+            //if (m_items.ContainsKey(item.type))
+            //{
+            //    m_items[item.type].Add(item);
+            //}
+            //else
+            //{
+            //    var list = new List<StatusEffect>();
+            //    list.Add(item);
+            //    m_items.Add(item.type, list);
+            //}
 
-            m_timers.Add(m_poolDuration);
-            m_itemTypes.Add(item.type);
-            m_poolCount++;
+            //m_timers.Add(m_poolDuration);
+            //m_itemTypes.Add(item.type);
+            //m_poolCount++;
         }
 
         public StatusEffect RetrieveFromPool(StatusEffectType type)
         {
-            if (m_items.ContainsKey(type))
-            {
-                var list = m_items[type];
-                if (list.Count > 0)
-                {
-                    var item = list[0];
-                    var index = m_itemTypes.FindIndex(x => x == type);
-                    m_itemTypes.RemoveAt(index);
-                    m_timers.RemoveAt(index);
-                    m_poolCount--;
-                    return item;
-                }
-            }
+            //if (m_items.ContainsKey(type))
+            //{
+            //    var list = m_items[type];
+            //    if (list.Count > 0)
+            //    {
+            //        var item = list[0];
+            //        var index = m_itemTypes.FindIndex(x => x == type);
+            //        m_itemTypes.RemoveAt(index);
+            //        m_timers.RemoveAt(index);
+            //        m_poolCount--;
+            //        return item;
+            //    }
+            //}
 
             return null;
         }
@@ -65,38 +66,44 @@ namespace DChild.Gameplay.Combat.StatusInfliction
 
         public override void Clear()
         {
-            foreach (var list in m_items.Values)
-            {
-                for (int i = list.Count - 1; i >= 0; i--)
-                {
-                    list[i].DestroyItem();
-                }
-            }
+            //foreach (var list in m_items.Values)
+            //{
+            //    for (int i = list.Count - 1; i >= 0; i--)
+            //    {
+            //        list[i].DestroyItem();
+            //    }
+            //}
         }
 
         public override void Update(float deltaTime)
         {
-            for (int i = m_poolCount - 1; i >= 0; i--)
-            {
-                m_timers[i] -= deltaTime;
-                if (m_timers[i] <= 0)
-                {
-                    var item = RemoveFromPool(i);
-                    item.DestroyItem();
-                }
-            }
+            //for (int i = m_poolCount - 1; i >= 0; i--)
+            //{
+            //    m_timers[i] -= deltaTime;
+            //    if (m_timers[i] <= 0)
+            //    {
+            //        var item = RemoveFromPool(i);
+            //        item.DestroyItem();
+            //    }
+            //}
         }
 
         protected StatusEffect RemoveFromPool(int index)
         {
-            var list = m_items[m_itemTypes[index]];
-            var item = list[0];
-            item.SetParent(null);
-            list.RemoveAt(0);
-            m_timers.RemoveAt(index);
-            m_itemTypes.RemoveAt(index);
-            m_poolCount--;
-            return item;
+            //var list = m_items[m_itemTypes[index]];
+            //var item = list[0];
+            //item.SetParent(null);
+            //list.RemoveAt(0);
+            //m_timers.RemoveAt(index);
+            //m_itemTypes.RemoveAt(index);
+            //m_poolCount--;
+            //return item;
+            return null;
+        }
+
+        public override void Initialize()
+        {
+           
         }
     }
 }
