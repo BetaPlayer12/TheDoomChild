@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Characters.AI
         private float m_nearDistanceTolerance = 0.1f;
 
         [SerializeField]
-        [MinValue(0)]
+        [OnValueChanged("UpdateStartIndex")]
         [BoxGroup("Configuration")]
         private int m_startIndex;
         [SerializeField]
@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Characters.AI
         private bool m_useCurrentPosition;
         [FoldoutGroup("ToolKit")]
         [SerializeField]
-        [MinValue(0)]
+        [MinValue(0), OnValueChanged("UpdateStartIndex")]
         private int m_overridePatrolIndex;
 
         public bool useCurrentPosition => m_useCurrentPosition;
@@ -137,16 +137,17 @@ namespace DChild.Gameplay.Characters.AI
         }
 
         private Vector2 AddToWaypoint() => transform.position;
-#endif
-        private void OnValidate()
+
+        private void UpdateStartIndex()
         {
             if (m_wayPoints != null)
             {
                 m_startIndex = Mathf.Min(m_startIndex, m_wayPoints.Length - 1);
-#if UNITY_EDITOR
+
                 m_overridePatrolIndex = Mathf.Min(m_overridePatrolIndex, m_wayPoints.Length - 1);
-#endif
+
             }
         }
+#endif
     }
 }

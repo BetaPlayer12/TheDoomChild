@@ -111,7 +111,7 @@ Shader "Spine/SkeletonGraphic Tint Black"
 				texColor.rgb *= texColor.a;
 				#endif
 
-				texColor *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
+				texColor.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
 
 				#ifdef UNITY_UI_ALPHACLIP
 				clip (texColor.a - 0.001);
