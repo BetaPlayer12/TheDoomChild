@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Holysoft.Pooling
 {
     public interface IPool
     {
+        void Initialize();
         void Update(float deltaTime);
         void Clear();
     }
@@ -14,14 +16,22 @@ namespace Holysoft.Pooling
         public static Transform poolItemStorage;
 
         public abstract void Clear();
+        public abstract void Initialize();
         public abstract void Update(float deltaTime);
     }
 
     public abstract class ObjectPool<T, U> : ObjectPool where T : class, IPoolableItem
     {
+        [SerializeField,MinValue(1)]
         private float m_poolDuration;
         protected List<T> m_items;
         protected List<float> m_timers;
+
+        public override void Initialize()
+        {
+            m_items = new List<T>();
+            m_timers = new List<float>();
+        }
 
         public T GetOrCreateItem(GameObject gameObject)
         {
