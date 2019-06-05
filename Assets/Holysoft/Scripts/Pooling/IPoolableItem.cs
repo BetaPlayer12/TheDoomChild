@@ -25,12 +25,18 @@ namespace Holysoft.Pooling
         }
     }
 
+    [CreateAssetMenu(fileName = "PoolableItemData",menuName = "Holysoft/Basic Pool Data")]
+    public class PoolableItemData : ScriptableObject
+    {
+
+    }
+
     public interface IPoolableItem
     {
+        PoolableItemData poolableItemData { get; }
         event EventAction<PoolItemEventArgs> PoolRequest;
         event EventAction<PoolItemEventArgs> InstanceDestroyed;
         void DestroyInstance();
-
     }
 
    

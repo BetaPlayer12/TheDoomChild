@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Holysoft.Pooling;
+using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusInfliction
 {

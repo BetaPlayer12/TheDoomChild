@@ -31,6 +31,7 @@ namespace DChild.Gameplay
 
         private void OnComplete(TrackEntry trackEntry)
         {
+            CallFXDone();
             CallPoolRequest();
         }
 
@@ -48,11 +49,6 @@ namespace DChild.Gameplay
         private void OnDisable()
         {
             m_shouldReplay = true;
-        }
-
-        private void OnValidate()
-        {
-            FXValidate();
         }
     }
 

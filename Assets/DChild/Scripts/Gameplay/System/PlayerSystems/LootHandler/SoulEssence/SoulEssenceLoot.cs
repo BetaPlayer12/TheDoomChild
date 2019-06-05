@@ -10,8 +10,9 @@ namespace DChild.Gameplay.SoulEssence
 {
     public class SoulEssenceLoot : Loot
     {
-        [SerializeField]
-        [Min(1)]
+#if UNITY_EDITOR
+        [SerializeField, Min(1)]
+#endif
         private int m_value;
         private Collider2D m_collider;
 
@@ -24,7 +25,13 @@ namespace DChild.Gameplay.SoulEssence
         [HideInInspector]
         private Rigidbody2D m_rigidbody;
 
-        public int value { get => m_value; set => m_value = value; }
+        public int value
+        {
+            get => m_value; set
+            {
+                m_value = Mathf.Max(value, 1);
+            }
+        }
 
         public void DisableEnvironmentCollider() => m_collider.isTrigger = true;
         public void EnableEnvironmentCollider() => m_collider.isTrigger = false;

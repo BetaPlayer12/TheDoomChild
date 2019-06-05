@@ -12,6 +12,12 @@ namespace DChild.Gameplay.Characters.Enemies
     public class EyeBat : FlyingEye, ISpawnable
     {
         [SerializeField]
+        private PoolableItemData m_poolableItemData;
+
+        public PoolableItemData poolableItemData => m_poolableItemData;
+
+
+        [SerializeField]
         [MinValue(0f)]
         private float m_chaseSpeed;
 

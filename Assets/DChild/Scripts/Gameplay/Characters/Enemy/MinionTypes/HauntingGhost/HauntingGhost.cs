@@ -10,6 +10,12 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class HauntingGhost : Minion, ISpawnable, IMovingEnemy
     {
+        [SerializeField]
+        private PoolableItemData m_poolableItemData;
+
+        public PoolableItemData poolableItemData => m_poolableItemData;
+
+
         public event EventAction<PoolItemEventArgs> PoolRequest;
         public event EventAction<PoolItemEventArgs> InstanceDestroyed;
 
