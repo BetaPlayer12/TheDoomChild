@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using Holysoft.Event;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace DChild.Gameplay.Environment.Obstacles
     public class Boulder : Obstacle, IDamageable, ISpawnable
     {
         public event EventAction<SpawnableEventArgs> Pool;
+        public event EventAction<PoolItemEventArgs> PoolRequest;
+
         [SerializeField]
         private AttackDamage m_damage;
         [SerializeField]

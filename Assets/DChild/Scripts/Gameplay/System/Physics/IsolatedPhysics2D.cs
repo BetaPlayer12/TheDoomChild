@@ -187,6 +187,12 @@ namespace DChild.Gameplay
         protected virtual void Awake()
         {
             m_rigidbody2D = GetComponent<Rigidbody2D>();
+            m_rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+            m_rigidbody2D.sleepMode = RigidbodySleepMode2D.NeverSleep;
+            m_rigidbody2D.gravityScale = 0;
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+            m_rigidbody2D.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+
             m_gravity.Initialize(m_rigidbody2D, GetComponent<IIsolatedTime>());
             m_physicsTime = GetComponent<IIsolatedPhysicsTime>();
         }
@@ -200,20 +206,6 @@ namespace DChild.Gameplay
         private void OnDisable()
         {
             GameplaySystem.world?.Unregister(this);
-        }
-
-        private void OnValidate()
-        {
-            var rigidbody2D = GetComponent<Rigidbody2D>();
-            rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
-            rigidbody2D.sleepMode = RigidbodySleepMode2D.NeverSleep;
-            rigidbody2D.gravityScale = 0;
-            rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            rigidbody2D.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-
-#if UNITY_EDITOR
-            m_gravity.Validate();
-#endif
         }
 
         private void OnDrawGizmos()

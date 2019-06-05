@@ -8,11 +8,10 @@ namespace DChild.Gameplay.Physics
     [System.Serializable]
     public class GravitySimulator2D : IGravity2D
     {
-        [SerializeField]
-        [MinValue(0f)]
+        [SerializeField, MinValue(0f)]
         private float m_gravityScale = 1f;
-
-        private Vector2 m_direction;
+        [SerializeField, HideInInspector]
+        private Vector2 m_direction = Vector2.down;
         private Rigidbody2D m_rigidbody;
         private IIsolatedTime m_time;
 
@@ -30,7 +29,7 @@ namespace DChild.Gameplay.Physics
             }
         }
 
-        public void Initialize(Rigidbody2D rigidbody, IIsolatedTime isolatedTime )
+        public void Initialize(Rigidbody2D rigidbody, IIsolatedTime isolatedTime)
         {
             m_rigidbody = rigidbody;
             m_time = isolatedTime;
@@ -46,25 +45,27 @@ namespace DChild.Gameplay.Physics
 
         public void AddGravity(float scale) => m_rigidbody.velocity += m_direction * Mathf.Abs(GRAVITYFORCE) * m_gravityScale / m_rigidbody.mass * (m_time?.fixedDeltaTime ?? Time.fixedDeltaTime);
 
-        public void Simulate() => m_rigidbody.velocity += m_direction * Mathf.Abs(GRAVITYFORCE) * m_gravityScale / m_rigidbody.mass * (m_time?.fixedDeltaTime?? Time.fixedDeltaTime);
+        public void Simulate() => m_rigidbody.velocity += m_direction * Mathf.Abs(GRAVITYFORCE) * m_gravityScale / m_rigidbody.mass * (m_time?.fixedDeltaTime ?? Time.fixedDeltaTime);
 
 #if UNITY_EDITOR
-        [SerializeField]
+        [SerializeField, OnValueChanged("ApplyAngle")]
         private float m_angle = -90f;
         [SerializeField]
         private bool m_drawDirection;
 
-        public void Validate()
+        [Button]
+        private void ApplyAngle()
         {
-           m_direction = MathfExt.DegreeToVector2(-m_angle);
+            m_direction = MathfExt.DegreeToVector2(-m_angle);
         }
 
         public void DrawDirection()
         {
+            var direction = MathfExt.DegreeToVector2(-m_angle); ;
             if (m_drawDirection && m_rigidbody != null)
             {
                 var position = (Vector3)m_rigidbody.position;
-                Gizmos.DrawLine(position, position + ((Vector3)m_direction * 2f));
+                Gizmos.DrawLine(position, position + ((Vector3)direction * 2f));
             }
         }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using Spine.Unity.Modules;
 using Sirenix.OdinInspector;
 using Holysoft.Event;
+using DChild.Gameplay.Pooling;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -20,6 +21,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected PhysicsMovementHandler2D m_movement;
 
         public abstract event EventAction<SpawnableEventArgs> Pool;
+        public event EventAction<PoolItemEventArgs> PoolRequest;
 
         protected abstract SpecterAnimation specterAnimation { get; }
         public abstract void SpawnAt(Vector2 position, Quaternion rotation);

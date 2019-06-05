@@ -7,13 +7,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Pooling
 {
-    public interface IPoolItem
+    [System.Serializable]
+    public struct PoolItemEventArgs : IEventActionArgs
     {
+        public IPoolableItem item { get; }
+    }
+
+    public interface IPoolableItem
+    {
+        event EventAction<PoolItemEventArgs> PoolRequest;
         void DestroyItem();
         void SetParent(Transform parent);
     }
@@ -32,7 +40,7 @@ namespace DChild.Gameplay.Pooling
     /// <typeparam name="T">Type of Item To Pool</typeparam>
     /// <typeparam name="U">How to Find the Item</typeparam>
     [System.Serializable]
-    public abstract class ObjectPool<T, U> : ObjectPool where T : class, IPoolItem
+    public abstract class ObjectPool<T, U> : ObjectPool where T : class, IPoolableItem
     {
         [SerializeField]
         [MinValue(0.1f)]

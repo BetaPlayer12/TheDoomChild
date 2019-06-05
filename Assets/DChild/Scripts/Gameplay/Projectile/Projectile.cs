@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Projectiles
 {
-    public abstract class Projectile : Actor, IPoolItem, IAttacker
+    public abstract class Projectile : Actor, IPoolableItem, IAttacker
     {
         [SerializeField]
         protected AttackDamage[] m_damage;
@@ -17,6 +17,8 @@ namespace DChild.Gameplay.Projectiles
         protected string m_projectileName;
 
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
+        public event EventAction<PoolItemEventArgs> PoolRequest;
+
         protected IsolatedPhysics2D m_physics;
         private IIsolatedPhysicsTime m_isolatedPhysicsTime;
         public string projectileName => m_projectileName;

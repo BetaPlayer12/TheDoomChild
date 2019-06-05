@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class HauntingGhost : Minion, ISpawnable, IMovingEnemy
     {
         public event EventAction<SpawnableEventArgs> Pool;
+        public event EventAction<PoolItemEventArgs> PoolRequest;
 
         [SerializeField]
         [TabGroup("References")]
