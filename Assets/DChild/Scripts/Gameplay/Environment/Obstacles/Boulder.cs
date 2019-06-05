@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using Holysoft.Event;
+using Holysoft.Pooling;
 using UnityEngine;
 
 
@@ -9,8 +10,8 @@ namespace DChild.Gameplay.Environment.Obstacles
     [RequireComponent(typeof(ObjectPhysics2D))]
     public class Boulder : Obstacle, IDamageable, ISpawnable
     {
-        public event EventAction<SpawnableEventArgs> Pool;
         public event EventAction<PoolItemEventArgs> PoolRequest;
+        public event EventAction<PoolItemEventArgs> InstanceDestroyed;
 
         [SerializeField]
         private AttackDamage m_damage;
@@ -46,12 +47,14 @@ namespace DChild.Gameplay.Environment.Obstacles
             m_hitbox.Disable();
             m_model.SetActive(false);
             m_breakFX.Stop();
-            Pool?.Invoke(this, new SpawnableEventArgs(this));
+            PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
         }
 
-        public void DestroyItem() => Destroy(gameObject);
-
-        public void SetParent(Transform parent) => transform.parent = parent;
+        public void DestroyInstance()
+        {
+            InstanceDestroyed?.Invoke(this, new PoolItemEventArgs(this, transform));
+            Destroy(gameObject);
+        }
 
         public override void Damage(ITarget target, BodyDefense targetDefense)
         {
@@ -65,7 +68,7 @@ namespace DChild.Gameplay.Environment.Obstacles
             m_hitbox.Disable();
             m_model.SetActive(false);
             m_breakFX.Play();
-            Pool?.Invoke(this, new SpawnableEventArgs(this));
+            PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
         }
 
         private void Awake()

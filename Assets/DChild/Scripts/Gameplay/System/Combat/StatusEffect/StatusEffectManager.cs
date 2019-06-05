@@ -70,7 +70,7 @@ namespace DChild.Gameplay.Combat.StatusInfliction
                     statusEffect = statusEffectGO.GetComponent<StatusEffect>();
                 }
 
-                statusEffect.SetParent(statusReciever.transform);
+                statusEffect.transform.parent = statusReciever.transform;
                 statusEffect.SpawnAt(statusReciever.transform.position, Quaternion.identity);
                 statusEffect.SetReciever(statusReciever);
                 statusEffect.StartEffect();
@@ -85,7 +85,7 @@ namespace DChild.Gameplay.Combat.StatusInfliction
         {
             m_tracker = new StatusEffectTracker();
             m_updateHandler = new StatusEffectUpdateHandler();
-            m_pool = GameSystem.poolManager.GetOrCreatePool<StatusEffectPool>();
+            m_pool = GameSystem.poolManager.GetPool<StatusEffectPool>();
         }
 
         public void Update()

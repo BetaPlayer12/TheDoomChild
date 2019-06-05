@@ -5,6 +5,7 @@ using Spine.Unity.Modules;
 using Sirenix.OdinInspector;
 using Holysoft.Event;
 using DChild.Gameplay.Pooling;
+using Holysoft.Pooling;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -20,13 +21,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected PhysicsMovementHandler2D m_movement;
 
-        public abstract event EventAction<SpawnableEventArgs> Pool;
         public event EventAction<PoolItemEventArgs> PoolRequest;
+        public event EventAction<PoolItemEventArgs> InstanceDestroyed;
 
         protected abstract SpecterAnimation specterAnimation { get; }
+
         public abstract void SpawnAt(Vector2 position, Quaternion rotation);
-        public abstract void ForcePool();
-       
 
         protected abstract void OnFlinch();
         public abstract void Turn();
@@ -48,7 +48,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isFlickering = true;
         }
 
-        public virtual void DestroyItem() => Destroy(gameObject);
+        public virtual void DestroyInstance()
+        {
+            InstanceDestroyed?.Invoke(this, new PoolItemEventArgs(this, transform));
+            Destroy(gameObject);
+        }
 
         public void SetParent(Transform parent) => transform.parent = parent;
 
@@ -67,5 +71,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedPhysics2D>(), transform);
         }
+
+    
     }
 }

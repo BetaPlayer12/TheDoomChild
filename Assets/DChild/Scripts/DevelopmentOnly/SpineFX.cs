@@ -31,7 +31,7 @@ namespace DChild.Gameplay
 
         private void OnComplete(TrackEntry trackEntry)
         {
-            GameSystem.poolManager.GetOrCreatePool<FXPool>().AddToPool(this);
+            CallPoolRequest();
         }
 
         private void Awake()

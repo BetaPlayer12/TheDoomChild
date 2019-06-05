@@ -3,11 +3,12 @@ using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft;
 using Holysoft.Event;
+using Holysoft.Pooling;
 using UnityEngine;
 
 namespace DChild.Gameplay.Projectiles
 {
-    public abstract class Projectile : Actor, IPoolableItem, IAttacker
+    public abstract class Projectile : PoolableObject, IAttacker
     {
         [SerializeField]
         protected AttackDamage[] m_damage;
@@ -17,7 +18,6 @@ namespace DChild.Gameplay.Projectiles
         protected string m_projectileName;
 
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
-        public event EventAction<PoolItemEventArgs> PoolRequest;
 
         protected IsolatedPhysics2D m_physics;
         private IIsolatedPhysicsTime m_isolatedPhysicsTime;
@@ -35,10 +35,6 @@ namespace DChild.Gameplay.Projectiles
             m_physics.AddForce(force);
             transform.right = m_physics.velocity.normalized;
         }
-
-        public void PoolObject() => GameSystem.poolManager.GetOrCreatePool<ProjectilePool>().AddToPool(this);
-        public void DestroyItem() => Destroy(gameObject);
-        public void SetParent(Transform parent) => transform.parent = parent;
 
         protected void CallAttackerAttacked(CombatConclusionEventArgs eventArgs) => TargetDamaged?.Invoke(this, eventArgs);
         protected bool CollidedWithEnvironment(Collision2D collision) => collision.gameObject.layer == LayerMask.NameToLayer("Environment");
@@ -58,7 +54,6 @@ namespace DChild.Gameplay.Projectiles
 
 
 #endif
-
         private void OnValidate()
         {
             m_projectileName = gameObject.name;

@@ -144,12 +144,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.DoSummonGoldAttack();
             yield return new WaitForAnimationEvent(m_animation.animationState, LeprechaunAnimation.EVENT_SUMMON_POT);
-            var potGold = (PotofGold)GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().RetrieveFromPool(m_potOfGold.GetType());
-            if(potGold == null)
-            {
-                var instance = this.InstantiateToScene(m_potOfGold, targetSpawn, Quaternion.identity);
-                potGold = instance.GetComponent<PotofGold>();
-            }
+            var potGold = (PotofGold)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_potOfGold);
+            potGold.transform.parent = null;
             potGold.SpawnAt(targetSpawn);
             yield return new WaitForAnimationComplete(m_animation.animationState, LeprechaunAnimation.ANIMATION_SUMMON_GOLD_ATTACK);
             m_waitForBehaviourEnd = false;

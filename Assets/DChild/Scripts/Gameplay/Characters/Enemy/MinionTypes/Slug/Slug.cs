@@ -163,12 +163,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.DoSpit();
             yield return new WaitForWorldSeconds(0.5f);//needs event for spitting
-            var acidSpit = (AcidSpitProjectile)GameSystem.poolManager.GetOrCreatePool<ProjectilePool>().RetrieveFromPool(m_acidSpitGO.GetType());
-            if (acidSpit == null)
-            {
-                var instance = this.InstantiateToScene(m_acidSpitGO, m_spitSpawn.position, Quaternion.identity);
-                acidSpit = instance.GetComponent<AcidSpitProjectile>();
-            }
+            var acidSpit = (AcidSpitProjectile)GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_acidSpitGO);
+            acidSpit.transform.parent = null;
             var direction = targetPos - (Vector2)m_spitSpawn.position;
             acidSpit.ChangeTrajectory(direction.normalized);
             acidSpit.SetVelocity(direction, 2f);
@@ -183,12 +179,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.DoProjectiles();
             yield return new WaitForWorldSeconds(0.5f);//needs event for projectile
-            var spike = (SpikeProjectile)GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().RetrieveFromPool(m_projectileGO.GetType());
-            if (spike == null)
-            {
-                var instance = this.InstantiateToScene(m_projectileGO, m_projectileSpawnPosition.position, Quaternion.identity);
-                spike = instance.GetComponent<SpikeProjectile>();
-            }
+            var spike = (SpikeProjectile)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_projectileGO);
+            spike.transform.parent = null;
             spike?.SpawnAt(m_projectileSpawnPosition.position, currentFacingDirection);
             yield return new WaitForAnimationComplete(m_animation.animationState, SlugAnimation.ANIMATION_SPIKE_PROJECTILES);
             m_waitForBehaviourEnd = false;

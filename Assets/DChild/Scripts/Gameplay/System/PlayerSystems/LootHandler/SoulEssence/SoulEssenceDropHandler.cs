@@ -42,11 +42,7 @@ namespace DChild.Gameplay.SoulEssence
         {
             for (int i = 0; i < splice.dropInfo.essenceCount; i++)
             {
-                SoulEssenceLoot essence = (SoulEssenceLoot)GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().RetrieveFromPool(typeof(SoulEssenceLoot));
-                if (essence == null)
-                {
-                    essence = Instantiate(m_soulEssence, splice.position, Quaternion.identity).GetComponent<SoulEssenceLoot>();
-                }
+                SoulEssenceLoot essence = (SoulEssenceLoot)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_soulEssence);
                 essence.value = splice.dropInfo.valuePerEssence;
                 essence.SpawnAt(splice.position, Quaternion.identity);
             }
