@@ -1,31 +1,30 @@
 /******************************************************************************
- * Spine Runtimes Software License v2.5
+ * Spine Runtimes License Agreement
+ * Last updated May 1, 2019. Replaces all prior versions.
  *
- * Copyright (c) 2013-2016, Esoteric Software
- * All rights reserved.
+ * Copyright (c) 2013-2019, Esoteric Software LLC
  *
- * You are granted a perpetual, non-exclusive, non-sublicensable, and
- * non-transferable license to use, install, execute, and perform the Spine
- * Runtimes software and derivative works solely for personal or internal
- * use. Without the written permission of Esoteric Software (see Section 2 of
- * the Spine Software License Agreement), you may not (a) modify, translate,
- * adapt, or develop new applications using the Spine Runtimes or otherwise
- * create derivative works or improvements of the Spine Runtimes or (b) remove,
- * delete, alter, or obscure any trademarks or any copyright, trademark, patent,
- * or other intellectual property or proprietary rights notices on or in the
- * Software, including any copy thereof. Redistributions in binary or source
- * form must include this license and terms.
+ * Integration of the Spine Runtimes into software or otherwise creating
+ * derivative works of the Spine Runtimes is permitted under the terms and
+ * conditions of Section 2 of the Spine Editor License Agreement:
+ * http://esotericsoftware.com/spine-editor-license
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ESOTERIC SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS INTERRUPTION, OR LOSS OF
- * USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * "Products"), provided that each user of the Products must obtain their own
+ * Spine Editor license and redistribution of the Products in any form must
+ * include this license and copyright notice.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
+ * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
+ * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #if UNITY_2018_3 || UNITY_2019 || UNITY_2018_3_OR_NEWER
@@ -49,8 +48,8 @@ namespace Spine.Unity {
 		public SkeletonDataAsset skeletonDataAsset;
 		public SkeletonDataAsset SkeletonDataAsset { get { return skeletonDataAsset; } }
 
-		[SpineSkin(dataField:"skeletonDataAsset")]
-		public string initialSkinName = "default";
+		[SpineSkin(dataField:"skeletonDataAsset", defaultAsEmptyString:true)]
+		public string initialSkinName;
 		public bool initialFlipX, initialFlipY;
 
 		[SpineAnimation(dataField:"skeletonDataAsset")]
@@ -64,7 +63,7 @@ namespace Spine.Unity {
 		protected override void OnValidate () {
 			// This handles Scene View preview.
 			base.OnValidate ();
-			if (this.IsValid) {
+			if (this.IsValid) { 
 				if (skeletonDataAsset == null) {
 					Clear();
 				} else if (skeletonDataAsset.skeletonJSON == null) {
@@ -72,7 +71,6 @@ namespace Spine.Unity {
 				} else if (skeletonDataAsset.GetSkeletonData(true) != skeleton.data) {
 					Clear();
 					Initialize(true);
-					startingAnimation = "";
 					if (skeletonDataAsset.atlasAssets.Length > 1 || skeletonDataAsset.atlasAssets[0].MaterialCount > 1)
 						Debug.LogError("Unity UI does not support multiple textures per Renderer. Your skeleton will not be rendered correctly. Recommend using SkeletonAnimation instead. This requires the use of a Screen space camera canvas.");
 				} else {
@@ -101,14 +99,18 @@ namespace Spine.Unity {
 
 				}
 			} else {
-				if (skeletonDataAsset != null)
+				// Under some circumstances (e.g. sometimes on the first import) OnValidate is called
+				// before SpineEditorUtilities.ImportSpineContent, causing an unnecessary exception.
+				// The (skeletonDataAsset.skeletonJSON != null) condition serves to prevent this exception.
+				if (skeletonDataAsset != null && skeletonDataAsset.skeletonJSON != null)
 					Initialize(true);
-			}				
+			}
 		}
 
 		protected override void Reset () {
+
 			base.Reset();
-			if (material == null || material.shader != Shader.Find("Spine/SkeletonGraphic (Premultiply Alpha)"))
+			if (material == null || material.shader != Shader.Find("Spine/SkeletonGraphic"))
 				Debug.LogWarning("SkeletonGraphic works best with the SkeletonGraphic material.");			
 		}
 		#endif
@@ -155,8 +157,17 @@ namespace Spine.Unity {
 		}
 
 		protected override void Awake () {
+
 			base.Awake ();
 			if (!this.IsValid) {
+#if UNITY_EDITOR
+				// workaround for special import case of open scene where OnValidate and Awake are
+				// called in wrong order, before setup of Spine assets.
+				if (!Application.isPlaying) {
+					if (this.skeletonDataAsset != null && this.skeletonDataAsset.skeletonJSON == null)
+						return;
+				}
+#endif
 				Initialize(false);
 				Rebuild(CanvasUpdate.PreRender);
 			}
@@ -275,6 +286,9 @@ namespace Spine.Unity {
 					}
 					#endif
 				}
+				else {
+					startingAnimation = string.Empty;
+				}
 			}
 		}
 
@@ -309,5 +323,5 @@ namespace Spine.Unity {
 			//this.UpdateMaterial(); // TODO: This allocates memory.
 		}
 		#endregion
-	}
+	} 
 }
