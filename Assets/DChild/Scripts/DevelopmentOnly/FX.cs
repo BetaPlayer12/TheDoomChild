@@ -1,14 +1,18 @@
 ﻿using DChild.Gameplay.Pooling;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay
 {
-    public abstract class FX : MonoBehaviour, IPoolItem
+    public abstract class FX : MonoBehaviour, IPoolableItem
     {
         [SerializeField]
         [ReadOnly]
         private string m_fxName;
+
+        public event EventAction<PoolItemEventArgs> PoolRequest;
+
         public string fxName => m_fxName;
 
         public abstract void Play();

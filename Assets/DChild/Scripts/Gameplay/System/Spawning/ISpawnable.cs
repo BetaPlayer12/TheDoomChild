@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-    public interface ISpawnable : IPoolItem
+    public interface ISpawnable : IPoolableItem
     {
         void SpawnAt(Vector2 position, Quaternion rotation);
         Type GetType();
