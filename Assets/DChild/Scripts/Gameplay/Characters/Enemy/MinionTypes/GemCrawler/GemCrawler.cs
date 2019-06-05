@@ -94,12 +94,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_movement.Stop();
             m_animation.DoCrystalSpike();
             yield return new WaitForAnimationEvent(m_animation.animationState, GemCrawlerAnimation.EVENT_CRYSTALSPIKE);
-            var gemSpike = (GemSpike)GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().RetrieveFromPool(m_gemSpike.GetType());
-            if (gemSpike == null)
-            {
-                var instance = this.InstantiateToScene(m_gemSpike, target, Quaternion.identity);
-                gemSpike = instance.GetComponent<GemSpike>();
-            }
+            var gemSpike = (GemSpike)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_gemSpike);
+            gemSpike.transform.parent = null;
             gemSpike.SpawnAt(target, Quaternion.identity, currentFacingDirection);
             yield return new WaitForAnimationComplete(m_animation.animationState, GemCrawlerAnimation.ANIMATION_ATTACK);
             StopActiveBehaviour();

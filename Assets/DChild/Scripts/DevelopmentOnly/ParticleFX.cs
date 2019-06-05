@@ -82,7 +82,7 @@ namespace DChild.Gameplay
             Destroy(this);
         }
 
-        private void OnParticleSystemStopped() => GameSystem.poolManager.GetOrCreatePool<FXPool>().AddToPool(this);
+        private void OnParticleSystemStopped() => CallPoolRequest();
 
         private void Awake() => m_state = m_playOnAwake ? State.Play : State.Stop;
 

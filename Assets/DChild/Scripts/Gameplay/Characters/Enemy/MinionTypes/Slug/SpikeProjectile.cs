@@ -53,7 +53,7 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
     {
         if (trackEntry.Animation.Name == ANIMATION_PROJECTILE)
         {
-            GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().AddToPool(this);
+            CallPoolRequest();
         }
     }
 

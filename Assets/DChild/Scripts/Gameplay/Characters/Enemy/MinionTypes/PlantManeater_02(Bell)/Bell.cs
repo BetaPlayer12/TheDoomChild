@@ -102,12 +102,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_waitForBehaviourEnd = true;
             m_animation.DoAcidSpit();
             yield return new WaitForAnimationEvent(m_animation.animationState, BellAnimation.EVENT_POISONSPIT);
-            var acidSpit = (AcidSpitProjectile)GameSystem.poolManager.GetOrCreatePool<ProjectilePool>().RetrieveFromPool(m_acidSpit.GetType());
-            if (acidSpit == null)
-            {
-                var instance = this.InstantiateToScene(m_acidSpit, m_spitSpawn.position, Quaternion.identity);
-                acidSpit = instance.GetComponent<AcidSpitProjectile>();
-            }
+            var acidSpit = (AcidSpitProjectile)GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_acidSpit);
+            acidSpit.transform.parent = null;
             var direction = targetPos - (Vector2)m_spitSpawn.position;
             acidSpit.ChangeTrajectory(direction.normalized);
             acidSpit.SetVelocity(direction, 1.5f);
@@ -121,12 +117,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_waitForBehaviourEnd = true;
             m_animation.DoVineAttack();
             yield return new WaitForAnimationEvent(m_animation.animationState, BellAnimation.EVENT_VINESPAWN);
-            var vine = (Vine)GameSystem.poolManager.GetOrCreatePool<PoolableObjectPool>().RetrieveFromPool(m_vine.GetType());
-            if (vine == null)
-            {
-                var instance = this.InstantiateToScene(m_vine, target, Quaternion.identity);
-                vine = instance.GetComponent<Vine>();
-            }
+            var vine = (Vine)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_vine);
+            vine.transform.parent = null;
             vine?.SpawnAt(target, currentFacingDirection);
             yield return new WaitForAnimationComplete(m_animation.animationState, BellAnimation.ANIMATION_VINE_ATTACK);
             m_waitForBehaviourEnd = false;

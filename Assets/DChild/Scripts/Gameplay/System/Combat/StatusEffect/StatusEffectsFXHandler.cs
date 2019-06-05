@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Combat.StatusInfliction
 
         protected override void OnEffectEnd(object sender, StatusEffectEventArgs eventArgs)
         {
-            GameSystem.poolManager.GetOrCreatePool<FXPool>().AddToPool(m_instance);
+            //GameSystem.poolManager.GetPool<FXPool>().AddToPool(m_instance);
             m_instance = null;
         }
 

@@ -41,7 +41,7 @@ namespace DChild.Gameplay.Projectiles
             DamageTargets();
             OnDetonate?.Invoke(this, new AOETargetsEventArgs(m_toDamage));
             m_rigidbody.CastExplosiveForce(m_explosivePower, m_explosiveRadius);
-            PoolObject();
+            CallPoolRequest();
         }
 
         protected virtual bool IsValidToDamage(Hitbox hitbox)

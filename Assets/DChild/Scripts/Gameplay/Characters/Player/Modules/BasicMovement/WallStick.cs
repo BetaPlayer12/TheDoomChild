@@ -132,14 +132,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                                 m_physics.simulateGravity = false;
                             }
 
-                            if (hit.collider.CompareTag("Droppable") == false)
-                            {
-                                AttachToWall(hit);
-                                if (m_wallStickState.isStickingToWall == false)
-                                {
-                                    StickToWall();
-                                }
-                            }
+                            //if (hit.collider.CompareTag("Droppable") == false)
+                            //{
+                            //    AttachToWall(hit);
+                            //    if (m_wallStickState.isStickingToWall == false)
+                            //    {
+                            //        StickToWall();
+                            //    }
+                            //}
                         }
                         else if (m_wallStickState.isStickingToWall)
                         {

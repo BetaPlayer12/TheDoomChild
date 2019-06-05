@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using Holysoft.Event;
+using Holysoft.Pooling;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -16,8 +17,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override CombatCharacterAnimation animation => null;
 
-        public event EventAction<SpawnableEventArgs> Pool;
         public event EventAction<PoolItemEventArgs> PoolRequest;
+        public event EventAction<PoolItemEventArgs> InstanceDestroyed;
 
         public void ForcePool()
         {
@@ -63,6 +64,11 @@ namespace DChild.Gameplay.Characters.Enemies
         public void SetParent(Transform parent)
         {
             transform.parent = parent;
+        }
+
+        public void DestroyInstance()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
