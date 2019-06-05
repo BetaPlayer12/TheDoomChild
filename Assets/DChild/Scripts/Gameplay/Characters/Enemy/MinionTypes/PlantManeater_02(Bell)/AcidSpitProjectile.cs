@@ -9,9 +9,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class AcidSpitProjectile : AttackProjectile
 {
-   
     protected override void Collide()
     {
         CallPoolRequest();

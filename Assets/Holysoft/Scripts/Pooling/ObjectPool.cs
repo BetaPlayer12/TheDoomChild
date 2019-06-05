@@ -20,7 +20,7 @@ namespace Holysoft.Pooling
         public abstract void Update(float deltaTime);
     }
 
-    public abstract class ObjectPool<T, U> : ObjectPool where T : class, IPoolableItem
+    public abstract class ObjectPool<T> : ObjectPool where T : class, IPoolableItem
     {
         [SerializeField,MinValue(1)]
         private float m_poolDuration;
@@ -100,7 +100,7 @@ namespace Holysoft.Pooling
             }
         }
 
-        protected T RetrieveFromPool(T component)
+        protected virtual T RetrieveFromPool(T component)
         {
             int index = FindAvailableItemIndex(component);
             if (index == -1)
@@ -116,7 +116,18 @@ namespace Holysoft.Pooling
             }
         }
 
-        protected abstract int FindAvailableItemIndex(T component);
+        protected virtual int FindAvailableItemIndex(T component)
+        {
+            for (int i = 0; i < m_items.Count; i++)
+            {
+                if (m_items[i] != null && m_items[i].poolableItemData == component.poolableItemData)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
 
     }
 }

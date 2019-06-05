@@ -10,20 +10,17 @@ namespace DChild.Gameplay.Projectiles
 {
     public abstract class Projectile : PoolableObject, IAttacker
     {
-        [SerializeField]
-        protected AttackDamage[] m_damage;
-
-        [SerializeField]
-        [HideInInspector]
-        protected string m_projectileName;
-
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
         protected IsolatedPhysics2D m_physics;
         private IIsolatedPhysicsTime m_isolatedPhysicsTime;
-        public string projectileName => m_projectileName;
+
+        protected abstract ProjectileData projectileData { get; }
+
+        public abstract void ResetState();
 
         public void ChangeTrajectory(Vector2 directionNormal) => transform.right = directionNormal;
+
         public void SetVelocity(Vector2 directionNormal, float speed)
         {
             transform.right = directionNormal;
@@ -32,7 +29,7 @@ namespace DChild.Gameplay.Projectiles
         }
         public void AddForce(Vector2 force)
         {
-            m_physics.AddForce(force);
+            m_physics.AddForce(force, ForceMode2D.Impulse);
             transform.right = m_physics.velocity.normalized;
         }
 
@@ -47,20 +44,8 @@ namespace DChild.Gameplay.Projectiles
         {
             m_physics = GetComponent<IsolatedPhysics2D>();
             m_isolatedPhysicsTime = GetComponent<IIsolatedPhysicsTime>();
-        }
-#if UNITY_EDITOR
-        [SerializeField]
-        private bool m_hasConstantSpeed;
-
-
-#endif
-        private void OnValidate()
-        {
-            m_projectileName = gameObject.name;
-#if UNITY_EDITOR
             var physics = GetComponent<IsolatedPhysics2D>();
-            physics.simulateGravity = !m_hasConstantSpeed;
-#endif
+            physics.simulateGravity = !projectileData.hasConstantSpeed;
         }
     }
 }

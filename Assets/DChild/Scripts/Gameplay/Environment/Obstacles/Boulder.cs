@@ -7,9 +7,15 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Obstacles
 {
+
     [RequireComponent(typeof(ObjectPhysics2D))]
     public class Boulder : Obstacle, IDamageable, ISpawnable
     {
+        [SerializeField]
+        private PoolableItemData m_poolableItemData;
+
+        public PoolableItemData poolableItemData => m_poolableItemData;
+
         public event EventAction<PoolItemEventArgs> PoolRequest;
         public event EventAction<PoolItemEventArgs> InstanceDestroyed;
 
