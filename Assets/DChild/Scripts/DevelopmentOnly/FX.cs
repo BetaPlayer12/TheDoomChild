@@ -9,23 +9,15 @@ namespace DChild.Gameplay
     public abstract class FX : MonoBehaviour, IPoolableItem
     {
         [SerializeField]
-        [ReadOnly]
-        private string m_fxName;
+        private PoolableItemData m_poolableItemData;
 
+        public PoolableItemData poolableItemData => m_poolableItemData;
+
+        public event EventAction<EventActionArgs> Done;
         public event EventAction<PoolItemEventArgs> PoolRequest;
         public event EventAction<PoolItemEventArgs> InstanceDestroyed;
 
-        public string fxName => m_fxName;
-
         public abstract void Play();
-
-        protected void FXValidate()
-        {
-            if (Application.isPlaying == false)
-            {
-                m_fxName = gameObject.name;
-            }
-        }
 
         public void DestroyInstance()
         {
@@ -34,6 +26,7 @@ namespace DChild.Gameplay
         }
 
         protected void CallPoolRequest() => PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
+        protected void CallFXDone() => Done?.Invoke(this, EventActionArgs.Empty);
     }
 
 }

@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-
     public class ParticleFX : FX
     {
         public event EventAction<EventActionArgs> FXDisabled;
@@ -20,8 +19,7 @@ namespace DChild.Gameplay
             Stop
         }
 
-        [SerializeField]
-        [HideInInspector]
+        [SerializeField, HideInInspector]
         private ParticleSystem[] m_particleSystems;
         [SerializeField]
         private bool m_playOnAwake;
@@ -82,7 +80,11 @@ namespace DChild.Gameplay
             Destroy(this);
         }
 
-        private void OnParticleSystemStopped() => CallPoolRequest();
+        private void OnParticleSystemStopped()
+        {
+            CallFXDone();
+            CallPoolRequest();
+        }
 
         private void Awake() => m_state = m_playOnAwake ? State.Play : State.Stop;
 
@@ -100,7 +102,6 @@ namespace DChild.Gameplay
                 }
 #endif
             }
-            FXValidate();      
         }
     }
 
