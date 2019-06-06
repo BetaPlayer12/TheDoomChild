@@ -1,31 +1,30 @@
 /******************************************************************************
- * Spine Runtimes Software License v2.5
+ * Spine Runtimes License Agreement
+ * Last updated May 1, 2019. Replaces all prior versions.
  *
- * Copyright (c) 2013-2016, Esoteric Software
- * All rights reserved.
+ * Copyright (c) 2013-2019, Esoteric Software LLC
  *
- * You are granted a perpetual, non-exclusive, non-sublicensable, and
- * non-transferable license to use, install, execute, and perform the Spine
- * Runtimes software and derivative works solely for personal or internal
- * use. Without the written permission of Esoteric Software (see Section 2 of
- * the Spine Software License Agreement), you may not (a) modify, translate,
- * adapt, or develop new applications using the Spine Runtimes or otherwise
- * create derivative works or improvements of the Spine Runtimes or (b) remove,
- * delete, alter, or obscure any trademarks or any copyright, trademark, patent,
- * or other intellectual property or proprietary rights notices on or in the
- * Software, including any copy thereof. Redistributions in binary or source
- * form must include this license and terms.
+ * Integration of the Spine Runtimes into software or otherwise creating
+ * derivative works of the Spine Runtimes is permitted under the terms and
+ * conditions of Section 2 of the Spine Editor License Agreement:
+ * http://esotericsoftware.com/spine-editor-license
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ESOTERIC SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS INTERRUPTION, OR LOSS OF
- * USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * "Products"), provided that each user of the Products must obtain their own
+ * Spine Editor license and redistribution of the Products in any form must
+ * include this license and copyright notice.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
+ * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
+ * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 // Not for optimization. Do  not disable.
@@ -1009,19 +1008,18 @@ namespace Spine.Unity {
 			}
 
 			{
-				int vertexCount = this.vertexBuffer.Count;
 				if (settings.addNormals) {
 					int oldLength = 0;
 
 					if (normals == null)
-						normals = new Vector3[vertexCount];	
+						normals = new Vector3[vbiLength];
 					else
 						oldLength = normals.Length;
 
-					if (oldLength < vertexCount) {
-						Array.Resize(ref this.normals, vertexCount);
+					if (oldLength != vbiLength) {
+						Array.Resize(ref this.normals, vbiLength);
 						var localNormals = this.normals;
-						for (int i = oldLength; i < vertexCount; i++) localNormals[i] = Vector3.back;
+						for (int i = oldLength; i < vbiLength; i++) localNormals[i] = Vector3.back;
 					}
 					mesh.normals = this.normals;
 				}
@@ -1029,7 +1027,7 @@ namespace Spine.Unity {
 				if (settings.tintBlack) {
 					if (uv2 != null) {
 						// Sometimes, the vertex buffer becomes smaller. We need to trim the size of the tint black buffers to match.
-						if (vbiLength > uv2.Items.Length) {
+						if (vbiLength != uv2.Items.Length) {
 							Array.Resize(ref uv2.Items, vbiLength);
 							Array.Resize(ref uv3.Items, vbiLength);
 							uv2.Count = uv3.Count = vbiLength;
@@ -1049,7 +1047,7 @@ namespace Spine.Unity {
 				var vbi = vertexBuffer.Items;
 				var ubi = uvBuffer.Items;
 
-				MeshGenerator.SolveTangents2DEnsureSize(ref this.tangents, ref this.tempTanBuffer, vertexCount);
+				MeshGenerator.SolveTangents2DEnsureSize(ref this.tangents, ref this.tempTanBuffer, vertexCount, vbi.Length);
 				for (int i = 0; i < submeshCount; i++) {
 					var submesh = sbi[i].Items;
 					int triangleCount = sbi[i].Count;
@@ -1115,9 +1113,9 @@ namespace Spine.Unity {
 			if (uv2 != null) uv2.TrimExcess();
 			if (uv3 != null) uv3.TrimExcess();
 
-			int count = vertexBuffer.Count;
-			if (normals != null) Array.Resize(ref normals, count);
-			if (tangents != null) Array.Resize(ref tangents, count);
+			int vbiLength = vertexBuffer.Items.Length;
+			if (normals != null) Array.Resize(ref normals, vbiLength);
+			if (tangents != null) Array.Resize(ref tangents, vbiLength);
 		}
 
 		#region TangentSolver2D
@@ -1127,9 +1125,9 @@ namespace Spine.Unity {
 		/// <param name="tangentBuffer">Eventual Vector4[] tangent buffer to assign to Mesh.tangents.</param>
 		/// <param name="tempTanBuffer">Temporary Vector2 buffer for calculating directions.</param>
 		/// <param name="vertexCount">Number of vertices that require tangents (or the size of the vertex array)</param>
-		internal static void SolveTangents2DEnsureSize (ref Vector4[] tangentBuffer, ref Vector2[] tempTanBuffer, int vertexCount) {
-			if (tangentBuffer == null || tangentBuffer.Length < vertexCount)
-				tangentBuffer = new Vector4[vertexCount];
+		internal static void SolveTangents2DEnsureSize (ref Vector4[] tangentBuffer, ref Vector2[] tempTanBuffer, int vertexCount, int vertexBufferLength) {
+			if (tangentBuffer == null || tangentBuffer.Length != vertexBufferLength)
+				tangentBuffer = new Vector4[vertexBufferLength];
 
 			if (tempTanBuffer == null || tempTanBuffer.Length < vertexCount * 2)
 				tempTanBuffer = new Vector2[vertexCount * 2]; // two arrays in one.

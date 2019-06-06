@@ -6,14 +6,14 @@ namespace DChild.Gameplay.Projectiles
     {
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            Detonate();
+            Detonate(collision.contacts[0].point);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if(CollidedWithSensor(collision) == false)
             {
-                Detonate();
+                Detonate(transform.position);
             }
         }
     }

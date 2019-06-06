@@ -47,6 +47,11 @@ namespace DChild.Gameplay.Pooling
             SceneManager.MoveGameObjectToScene(pooledItemGO, gameObject.scene);
             ObjectPool.poolItemStorage = pooledItemGO.transform;
             pooledItemGO.SetActive(false);
+
+            for (int i = 0; i < m_poolList.Length; i++)
+            {
+                m_poolList[i].Initialize();
+            }
         }
 
         private void Update()
