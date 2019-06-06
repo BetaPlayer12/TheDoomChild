@@ -41,17 +41,19 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var targetPosition = m_target.position;
 
-            var distance = Vector2.Distance(m_minion.position, m_target.position);
-            if (distance <= ToxicShotRange)
-            {
-                var direction = m_target.position - m_minion.projectileSpawnPosition;
-                var hit = Physics2D.Raycast(m_minion.projectileSpawnPosition, direction.normalized, AttackRange, Physics2D.GetLayerCollisionMask(gameObject.layer));
-                if (hit.collider.GetComponent<ITarget>() == m_target)
-                {
-                    m_minion.ShootProjectile(m_target);
-                }
-            }
-            else if (distance <= AttackRange)
+            var distance = Vector2.Distance(transform.position, m_target.position);
+            //needs to set up the the PID of "toxicshot" prefab.
+            //if (distance <= ToxicShotRange)
+            //{
+            //    var direction = m_target.position - m_minion.projectileSpawnPosition;
+            //    var hit = Physics2D.Raycast(m_minion.projectileSpawnPosition, direction.normalized, AttackRange, Physics2D.GetLayerCollisionMask(gameObject.layer));
+            //    if (hit.collider.GetComponent<ITarget>() == m_target) //cannot see player.
+            //    {
+            //        //m_minion.ShootProjectile(m_target);
+            //    }
+            //}
+            //else
+            if (distance <= AttackRange)
             {
                 m_minion.StingerDive();
             }
