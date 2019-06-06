@@ -30,5 +30,7 @@ namespace DChild.Gameplay.Characters.Players.State
         bool isNearEdge { get; }
         bool isHookDashing { get; }
         bool isAimingProjectile { get; }
+        bool isJogging { get; }
+        bool isSprinting { get; }
     }
 }
