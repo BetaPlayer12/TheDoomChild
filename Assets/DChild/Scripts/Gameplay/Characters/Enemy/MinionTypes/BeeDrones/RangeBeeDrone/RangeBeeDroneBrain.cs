@@ -7,6 +7,8 @@ namespace DChild.Gameplay.Characters.Enemies
     {
         [SerializeField]
         private float AttackRange;
+        [SerializeField]
+        private float ToxicShotRange;
 
         public override void Enable(bool value)
         {
@@ -39,29 +41,19 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var targetPosition = m_target.position;
 
-            if (Vector2.Distance(m_minion.position, m_target.position) <= AttackRange)
+            var distance = Vector2.Distance(m_minion.position, m_target.position);
+            if (distance <= ToxicShotRange)
             {
-                //var direction = m_target.position - m_minion.projectileSpawnPosition;
-                //var hit = Physics2D.Raycast(m_minion.projectileSpawnPosition, direction.normalized, AttackRange, Physics2D.GetLayerCollisionMask(gameObject.layer));
-                //if (hit.collider.GetComponent<ITarget>() == m_target)
-                //{
-                //    m_minion.ShootProjectile(m_target);
-                //}
-                //else
-                //{
-
-                //    if (IsLookingAt(targetPosition))
-                //    {
-                //        MoveTo(targetPosition);
-                //    }
-                //    else
-                //    {
-                //        m_minion.Turn();
-                //    }
-                //}
-                //m_minion.StingerDive();
-                m_minion.ShootProjectile(m_target);
-                m_isAttacking = true;
+                var direction = m_target.position - m_minion.projectileSpawnPosition;
+                var hit = Physics2D.Raycast(m_minion.projectileSpawnPosition, direction.normalized, AttackRange, Physics2D.GetLayerCollisionMask(gameObject.layer));
+                if (hit.collider.GetComponent<ITarget>() == m_target)
+                {
+                    m_minion.ShootProjectile(m_target);
+                }
+            }
+            else if (distance <= AttackRange)
+            {
+                m_minion.StingerDive();
             }
             else
             {    

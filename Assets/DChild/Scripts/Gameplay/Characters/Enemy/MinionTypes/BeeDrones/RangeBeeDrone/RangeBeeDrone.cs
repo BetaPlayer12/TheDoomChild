@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_anim.DoToxicShot();
             yield return new WaitForAnimationEvent(animation.animationState, RangeBeeDroneAnimation.EVENT_PROJECTILE);
-            var projectile = (ProjectileSting)GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_toxicProjectile); 
+            var projectile = (SimpleAttackProjectile)GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_toxicProjectile); 
             var direction = (target.position - (Vector2)m_projectileSpawn.position);
             projectile.ChangeTrajectory(direction.normalized);
             projectile.SetVelocity(direction, 3f);

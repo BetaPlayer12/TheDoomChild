@@ -139,6 +139,11 @@ MonoBehaviour:
   singleSubmesh: 0
   addNormals: 0
   calculateTangents: 0
+  maskInteraction: 0
+  maskMaterials:
+    materialsMaskDisabled: []
+    materialsInsideMask: []
+    materialsOutsideMask: []
   disableRenderingOnOverride: 1
   _animationName: 
   loop: 0
@@ -236,14 +241,13 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.49260372, y: 0.5158653}
-      - {x: -0.5864959, y: 0.21945477}
-      - {x: -0.8134765, y: -0.416492}
-      - {x: -0.8080274, y: -0.81173134}
-      - {x: -0.3896915, y: -1.067208}
-      - {x: 0.1601995, y: -0.9630033}
-      - {x: 1.1822608, y: -0.43774992}
-      - {x: 1.1029791, y: 0.1936736}
+    - - {x: 1.4109595, y: -0.47935665}
+      - {x: 1.0703762, y: 0.4757638}
+      - {x: -0.04102266, y: 0.7552257}
+      - {x: -0.77308106, y: 0.40730423}
+      - {x: -1.2031583, y: -0.24450016}
+      - {x: -1.1167521, y: -1.0316818}
+      - {x: -0.45822632, y: -1.4873371}
 --- !u!1 &7578753504159124264
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,9 +315,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8623103556368761137}
   - component: {fileID: 3149175329843764138}
-  - component: {fileID: 6013334871876193274}
-  - component: {fileID: 3669093046473244371}
   - component: {fileID: 7789134657893367633}
+  - component: {fileID: 559654515556144570}
+  - component: {fileID: 3536880764423563319}
   m_Layer: 13
   m_Name: SkeletonUtility-Root
   m_TagString: Untagged
@@ -358,7 +362,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!66 &6013334871876193274
+--- !u!114 &7789134657893367633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7766276054773015706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!66 &559654515556144570
 CompositeCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -378,45 +394,43 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 244241075629407656}
     m_ColliderPaths:
-    - - X: 2634381
-        Y: 46230740
-      - X: -645136
-        Y: 48460068
-      - X: -8256079
-        Y: 38827120
+    - - X: -641935
+        Y: 17539322
+      - X: 685548
+        Y: 17852702
+      - X: 2747953
+        Y: 15207899
   - m_Collider: {fileID: 7884017989689203758}
     m_ColliderPaths:
-    - - X: 3868259
-        Y: 52734752
-      - X: -1067672
-        Y: 62778064
-      - X: -7740053
-        Y: 63814492
-      - X: -11612047
-        Y: 63019476
-      - X: -13336627
-        Y: 58431104
-      - X: -11281455
-        Y: 53225328
-      - X: -4204734
-        Y: 44171596
-      - X: 1848650
-        Y: 46134924
+    - - X: 1481025
+        Y: 16846818
+      - X: -1360339
+        Y: 18516416
+      - X: -1574822
+        Y: 22234722
+      - X: -17804
+        Y: 24359532
+      - X: 2325173
+        Y: 25335048
+      - X: 4785405
+        Y: 24579254
+      - X: 5838474
+        Y: 22199224
   m_CompositePaths:
     m_Paths:
-    - - {x: 0.2634381, y: 4.623074}
-      - {x: 0.2008222, y: 4.6656384}
-      - {x: 0.38682592, y: 5.273475}
-      - {x: -0.1067672, y: 6.2778063}
-      - {x: -0.7740053, y: 6.381449}
-      - {x: -1.1612047, y: 6.3019476}
-      - {x: -1.3336627, y: 5.8431106}
-      - {x: -1.1281455, y: 5.3225327}
-      - {x: -0.4204734, y: 4.4171596}
-      - {x: -0.3974415, y: 4.4246297}
-      - {x: -0.8256079, y: 3.8827121}
+    - - {x: 0.146055, y: 1.6858848}
+      - {x: 0.1481025, y: 1.6846818}
+      - {x: 0.5838474, y: 2.2199225}
+      - {x: 0.4785405, y: 2.4579253}
+      - {x: 0.2325173, y: 2.5335047}
+      - {x: -0.0017804, y: 2.4359531}
+      - {x: -0.1574822, y: 2.223472}
+      - {x: -0.13603391, y: 1.8516417}
+      - {x: 0.0031822, y: 1.7698376}
+      - {x: -0.0641935, y: 1.7539322}
+      - {x: 0.2747953, y: 1.5207899}
   m_VertexDistance: 0.0005
---- !u!114 &3669093046473244371
+--- !u!114 &3536880764423563319
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -431,21 +445,9 @@ MonoBehaviour:
   m_collider2Ds:
   - {fileID: 244241075629407656}
   - {fileID: 7884017989689203758}
-  m_compositeColliderID: -134096
+  m_compositeColliderID: -169378
   m_isInvulnerable: 0
   m_damageReduction: 0
---- !u!114 &7789134657893367633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7766276054773015706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8328964191918116547
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,6 +602,6 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.35197365, y: 0.17434831}
-      - {x: -0.26030195, y: -0.21145956}
+    - - {x: -0.3024991, y: 0.1602903}
+      - {x: -0.06605502, y: -0.18644962}
       - {x: 0.95137763, y: -0.013887987}
