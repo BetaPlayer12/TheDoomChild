@@ -66,7 +66,6 @@ namespace DChild.Gameplay.Pathfinding
 
                 m_destination = destination;
                 m_seeker.StartPath(transform.position, m_destination, OnSetPathReturn);
-                Debug.Log("Seek");
             }
         }
 
