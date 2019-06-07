@@ -10,9 +10,6 @@ namespace DChild.Menu
 {
     public class SettingsFieldManager : MonoBehaviour
     {
-        [SerializeField]
-        [ReadOnly]
-        private UICanvas m_canvas;
         private SettingsField[] m_fields;
 
         private void OnFocusUnlock(object sender, FocusLockUIEventArgs eventArgs)
@@ -49,11 +46,6 @@ namespace DChild.Menu
                 m_fields[i].FocusLock -= OnFocusLock;
                 m_fields[i].FocusUnlock -= OnFocusUnlock;
             }
-        }
-
-        private void OnValidate()
-        {
-            ComponentUtility.AssignNullComponent(this, ref m_canvas, ComponentUtility.ComponentSearchMethod.Parent);
         }
     }
 }

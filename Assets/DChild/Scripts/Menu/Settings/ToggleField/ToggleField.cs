@@ -10,6 +10,7 @@ namespace DChild.Menu.UI
 
         [SerializeField]
         private ToggleButton m_button;
+
         private bool m_isSettingState;
 
         public void UpdateUI()

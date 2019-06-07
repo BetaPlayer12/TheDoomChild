@@ -10,17 +10,74 @@ using UnityEditor;
 namespace Refactor.DChild.Gameplay.Character.AI
 {
 
-
     public abstract class AIBrain<T> : MonoBehaviour where T : IAIInfo
     {
         [System.Serializable]
         public abstract class BaseInfo : IAIInfo
         {
-            [SerializeField,PreviewField]
-            private SkeletonDataAsset m_skeletonDataAsset;
+            [System.Serializable]
+            public abstract class SkeletonBaseInfo
+            {
+#if UNITY_EDITOR
+                protected SkeletonDataAsset m_skeletonDataAsset;
 
-            protected IEnumerable GetAnimations() => m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Animations;
-            protected IEnumerable GetEvents() => m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Events;
+                public void SetData(SkeletonDataAsset skeletonData) => m_skeletonDataAsset = skeletonData;
+#endif
+            }
+
+            [System.Serializable]
+            public abstract class AnimationBaseInfo : SkeletonBaseInfo
+            {
+                [SerializeField, ValueDropdown("GetAnimations")]
+                private string m_animation;
+
+                public string animation => m_animation;
+
+                protected IEnumerable GetAnimations()
+                {
+                    ValueDropdownList<string> list = new ValueDropdownList<string>();
+                    var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Animations.ToArray();
+                    for (int i = 0; i < reference.Length; i++)
+                    {
+                        list.Add(reference[i].Name);
+                    }
+                    return list;
+                }
+            }
+
+            [System.Serializable,HideReferenceObjectPicker]
+            public class SimpleAttackInfo : AnimationBaseInfo
+            {
+                [SerializeField, MinValue(0)]
+                private float m_range;
+
+                public float range => m_range;
+            }
+
+            [System.Serializable, HideReferenceObjectPicker]
+            public class MovementInfo : AnimationBaseInfo
+            {
+                [SerializeField, MinValue(0)]
+                private float m_speed;
+
+                public float speed => m_speed;
+            }
+
+            [SerializeField, PreviewField, OnValueChanged("Initialize")]
+            protected SkeletonDataAsset m_skeletonDataAsset;
+
+            protected IEnumerable GetEvents()
+            {
+                ValueDropdownList<string> list = new ValueDropdownList<string>();
+                var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Events.ToArray();
+                for (int i = 0; i < reference.Length; i++)
+                {
+                    list.Add(reference[i].Name);
+                }
+                return list;
+            }
+
+            public abstract void Initialize();
         }
 
         [SerializeField, ValueDropdown("GetData")]
@@ -41,7 +98,13 @@ namespace Refactor.DChild.Gameplay.Character.AI
 
         public void ApplyData() => m_info = (T)m_data.info;
 
+
 #if UNITY_EDITOR
+        private void Awake()
+        {
+            m_info.Initialize();
+        }
+
         [SerializeField, FolderPath, PropertyOrder(-1)]
         private string m_referenceFolder;
 
