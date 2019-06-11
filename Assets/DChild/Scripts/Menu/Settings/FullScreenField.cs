@@ -7,6 +7,7 @@ namespace DChild.Menu.UI
     {
         private VisualSettings m_settings;
 
+
         protected override bool value
         {
             get

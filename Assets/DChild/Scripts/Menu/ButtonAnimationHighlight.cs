@@ -37,12 +37,14 @@ namespace DChild.Menu.MainMenu
 
         public override void UseHighlightState()
         {
+            m_highlight = true;
             m_frameIndex = m_animationData.frameCount - 1;
             UpdateTargetGraphic();
         }
 
         public override void UseNormalizeState()
         {
+            m_highlight = false;
             m_frameIndex = 0;
             UpdateTargetGraphic();
         }

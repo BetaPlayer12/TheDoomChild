@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace DChild.Menu.Extras
 {
-    public class ExtrasImageShowcase : UICanvas, IAdjacentNavigation, IAdjacentNavigationEvents
+    public class ExtrasImageShowcase : UICanvas, IAdjacentNavigation
     {
         [SerializeField]
         private Image m_showcase;

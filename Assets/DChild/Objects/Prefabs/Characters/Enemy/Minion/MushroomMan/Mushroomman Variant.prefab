@@ -35,6 +35,7 @@ MonoBehaviour:
   m_simulateGravity: 1
   m_gravity:
     m_gravityScale: 1
+    m_direction: {x: 0, y: -1}
     m_angle: -90
     m_drawDirection: 0
   m_useLinearDrag: 0
@@ -51,9 +52,9 @@ MonoBehaviour:
     m_detector: {fileID: 0}
   m_acceptableWalkableAngle:
     m_min: 0
-    m_max: 0
-  m_legCollision: {fileID: 0}
-  m_legCollider: {fileID: 0}
+    m_max: 37
+  m_legCollision: {fileID: 2564036128994524075}
+  m_legCollider: {fileID: 2564036128994524074}
 --- !u!114 &4298032384109845889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,10 +67,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63eafe752a329884490c49efb1ff166e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_chaseRange: 100
+  m_chaseRange: 20
   m_attackRest:
-    m_startTime: 2
-  m_attackRange: 15
+    m_startTime: 1
+  m_attackRange: 5
   m_wallSensor: {fileID: 850691216516186479}
   m_groundSensor: {fileID: 7987546779709122487}
 --- !u!114 &6113097387653770781
@@ -91,8 +92,8 @@ MonoBehaviour:
   m_startIndex: 0
   m_startIteration: 1
   m_wayPoints:
-  - {x: 115.2, y: -54.7}
-  - {x: 13.55, y: -54.7}
+  - {x: 7.15, y: -7.73}
+  - {x: 13.62, y: -7.73}
   m_useCurrentPosition: 0
   m_overridePatrolIndex: 0
 --- !u!114 &6549687904926912535
@@ -213,6 +214,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &2564036128994524074 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 2379305846433907759, guid: 51a377dc739d3bb44a86ea035e5311c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 185130587873902469}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2564036128994524075 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2379305846433907758, guid: 51a377dc739d3bb44a86ea035e5311c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 185130587873902469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6747670554529529366 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6860457603400466835, guid: 51a377dc739d3bb44a86ea035e5311c1,
@@ -310,6 +329,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_spineObjects.m_skeletonAnimations.Array.size
@@ -329,11 +353,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_spineObjects.m_baseTimeScale.Array.data[0]
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_maxHealth
-      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}

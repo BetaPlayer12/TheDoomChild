@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Holysoft.UI
 {
-    [RequireComponent(typeof(IAdjacentNavigationEvents))]
+    [RequireComponent(typeof(IAdjacentNavigation))]
     public abstract class AdjacentNavigationButtonVisual : MonoBehaviour
     {
-        protected IAdjacentNavigationEvents m_sender;
+        protected IAdjacentNavigation m_sender;
 
         protected abstract void OnNavigatingItem(object sender, EventActionArgs eventArgs);
         protected abstract void OnLastItemReached(object sender, EventActionArgs eventArgs);
@@ -15,7 +15,7 @@ namespace Holysoft.UI
 
         protected virtual void Awake()
         {
-            m_sender = GetComponentInParent<IAdjacentNavigationEvents>();
+            m_sender = GetComponentInParent<IAdjacentNavigation>();
             m_sender.FirstItemReached += OnFirstItemReached;
             m_sender.LastItemReached += OnLastItemReached;
             m_sender.NavigatingItem += OnNavigatingItem;
