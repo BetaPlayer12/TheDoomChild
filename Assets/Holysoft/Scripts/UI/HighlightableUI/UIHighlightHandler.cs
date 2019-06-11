@@ -86,18 +86,38 @@ namespace Holysoft.UI
         private void UpdateHighlight()
         {
             GetChildrenHighlights();
-            if (m_highlight)
+            if (Application.isPlaying == false)
             {
-                for (int i = 0; i < m_highlights.Length; i++)
+                if (m_highlight)
                 {
-                    m_highlights[i].Highlight();
+                    for (int i = 0; i < m_highlights.Length; i++)
+                    {
+                        m_highlights[i].Highlight();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < m_highlights.Length; i++)
+                    {
+                        m_highlights[i].Normalize();
+                    }
                 }
             }
             else
             {
-                for (int i = 0; i < m_highlights.Length; i++)
+                if (m_highlight)
                 {
-                    m_highlights[i].Normalize();
+                    for (int i = 0; i < m_highlights.Length; i++)
+                    {
+                        m_highlights[i].UseHighlightState();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < m_highlights.Length; i++)
+                    {
+                        m_highlights[i].UseNormalizeState();
+                    }
                 }
             }
         }
