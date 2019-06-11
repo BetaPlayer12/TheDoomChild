@@ -275,8 +275,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                     else
                     {
-                        m_animation.DoMove(m_facing.currentFacingDirection);
-                        m_animationState.isFromJog = true;
+                        if (state.isJogging)
+                        {
+                            m_animation.DoJog(m_facing.currentFacingDirection);
+                            m_animationState.isFromJog = true;
+                        }
+                        else if (state.isSprinting)
+                        {
+                            m_animation.DoSprint(m_facing.currentFacingDirection);
+                        }
                     }
                 }
 
@@ -288,7 +295,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                     if (m_animationState.isLanding)
                     {
-                        if(m_animationState.isHardLanding)
+                        if (m_animationState.isHardLanding)
                         {
                             m_animation.DoHardLanding(m_facing.currentFacingDirection);
                         }

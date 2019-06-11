@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players
         public const string ANIMATION_ON_EDGE_IDLE_LEFT = "Idle4_Left";
 
         public const string ANIMATION_JOG_LEFT = "Jog_Static_Left";
+        public const string ANIMATION_SPRINT_LEFT = "RunStatic_Left2";
 
         public const string ANIMATION_JUMP_STATIC_LEFT = "Jump2_Rising_Loop_Left";
         public const string ANIMATION_FALLING_STATIC_LEFT = "Jump2_Falling_Loop_Left";
@@ -61,6 +62,7 @@ namespace DChild.Gameplay.Characters.Players
         public const string ANIMATION_ON_EDGE_IDLE_RIGHT = "Idle4_Right";
 
         public const string ANIMATION_JOG_RIGHT = "Jog_Static_Right";
+        public const string ANIMATION_SPRINT_RIGHT = "RunStatic_Right2";
 
         public const string ANIMATION_JUMP_STATIC_RIGHT = "Jump2_Rising_Loop_right";
         public const string ANIMATION_FALLING_STATIC_RIGHT = "Jump2_Falling_Loop_Right";
@@ -212,7 +214,7 @@ namespace DChild.Gameplay.Characters.Players
         #endregion
 
         #region Moving States
-        public void DoMove(HorizontalDirection direction)
+        public void DoJog(HorizontalDirection direction)
         {
             if (direction == HorizontalDirection.Left)
             {
@@ -221,6 +223,18 @@ namespace DChild.Gameplay.Characters.Players
             else
             {
                 SetAnimation(0, ANIMATION_JOG_RIGHT, true);
+            }
+        }
+
+        public void DoSprint(HorizontalDirection direction)
+        {
+            if (direction == HorizontalDirection.Left)
+            {
+                SetAnimation(0, ANIMATION_SPRINT_LEFT, true);
+            }
+            else
+            {
+                SetAnimation(0, ANIMATION_SPRINT_RIGHT, true);
             }
         }
 
