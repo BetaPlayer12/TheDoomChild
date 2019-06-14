@@ -61,6 +61,11 @@ namespace Holysoft.Menu
             LastItemReached?.Invoke(this, EventActionArgs.Empty);
         }
 
+        protected void CallNavigatingItem()
+        {
+            NavigatingItem?.Invoke(this, EventActionArgs.Empty);
+        }
+
         protected virtual void Awake()
         {
             m_currentNavigationIndex = 0;
