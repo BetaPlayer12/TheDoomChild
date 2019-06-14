@@ -33,6 +33,7 @@ namespace Refactor.DChild.Gameplay.Character.AI
 
                 public string animation => m_animation;
 
+#if UNITY_EDITOR
                 protected IEnumerable GetAnimations()
                 {
                     ValueDropdownList<string> list = new ValueDropdownList<string>();
@@ -43,9 +44,10 @@ namespace Refactor.DChild.Gameplay.Character.AI
                     }
                     return list;
                 }
+#endif
             }
 
-            [System.Serializable,HideReferenceObjectPicker]
+            [System.Serializable, HideReferenceObjectPicker]
             public class SimpleAttackInfo : AnimationBaseInfo
             {
                 [SerializeField, MinValue(0)]

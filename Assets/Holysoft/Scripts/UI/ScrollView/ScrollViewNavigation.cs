@@ -28,6 +28,28 @@ namespace Holysoft.UI
 
         protected override int lastNavigationIndex => m_steps;
 
+        public void JumpTo(int index)
+        {
+            //if (m_currentNavigationIndex != index)
+            //{
+            //    m_currentNavigationIndex = index;
+            //    m_scrollBar.value = m_intervalDistance * m_currentNavigationIndex;
+            //}
+            //Debug.Log(m_scrollBar.value);
+            //if (m_currentNavigationIndex == 0)
+            //{
+            //    CallFirstItemReached();
+            //}
+            //else if (m_currentNavigationIndex == lastNavigationIndex)
+            //{
+            //    CallLastItemReached();
+            //}
+            //else
+            //{
+            //    CallNavigatingItem();
+            //}
+        }
+
         private void Lerp(float from, float to)
         {
             m_fromValue = from;
