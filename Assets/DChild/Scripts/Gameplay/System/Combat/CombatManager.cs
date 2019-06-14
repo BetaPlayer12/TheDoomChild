@@ -154,7 +154,9 @@ namespace DChild.Gameplay.Combat
 
         private void OnValidate()
         {
+#if UNITY_EDITOR
             m_statusEffectManager.OnValidate();
+#endif
         }
     }
 }

@@ -16,7 +16,6 @@ namespace DChild
         [ReadOnly]
         protected T m_name;
         public T name { set => m_name = value; } 
-#endif
 
         public EnumElement(T m_name)
         {
@@ -24,6 +23,7 @@ namespace DChild
         }
 
         public void SetName(T name) => m_name = name;
+#endif
 
         public EnumElement()
         {
@@ -40,10 +40,12 @@ namespace DChild
         {
         }
 
+#if UNITY_EDITOR
         public EnumElement(T name): base(name)
         {
 
         }
+#endif
 
         public U value { get => m_value; }
     }

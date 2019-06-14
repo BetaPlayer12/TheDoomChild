@@ -74,20 +74,24 @@ namespace DChild
         where EnumElement : EnumElement<EnumType>
         where EnumType : Enum, IConvertible
         {
+#if UNITY_EDITOR
             for (int i = 0; i < newList.Count; i++)
             {
                 newList[i].name = ToEnum<EnumType>(i);
             }
+#endif
         }
 
         public static void AlignListElementTypeToEnums<EnumElement, EnumType>(EnumElement[] newList)
       where EnumElement : EnumElement<EnumType>
       where EnumType : Enum, IConvertible
         {
+#if UNITY_EDITOR
             for (int i = 0; i < newList.Length; i++)
             {
                 newList[i].name = ToEnum<EnumType>(i);
             }
+#endif
         }
 
         public static EnumType ToEnum<EnumType>(int value) where EnumType : Enum, IConvertible => (EnumType)Enum.ToObject(typeof(EnumType), value);
@@ -102,12 +106,14 @@ namespace DChild
 
         public EnumList()
         {
+#if UNITY_EDITOR
             m_list = new List<EnumElement<T, U>>();
             var maxCount = Enum.GetValues(typeof(T)).Cast<int>().Max();
             for (int i = 0; i < maxCount; i++)
             {
                 m_list.Add(new EnumElement<T, U>(EnumList.ToEnum<T>(i)));
             }
+#endif
         }
 
         public List<U> ToList() => m_list.Select(x => x.value).ToList();
@@ -140,11 +146,11 @@ namespace DChild
                 EnumList.AlignListElementTypeToEnums<EnumElement<T, U>, T>(m_list);
             }
         }
-    }
 #endif
+    }
 
     [System.Serializable, HideReferenceObjectPicker]
-    public class EnumList<S, T, U> where S : EnumElement<T, U>,new() where T : System.Enum
+    public class EnumList<S, T, U> where S : EnumElement<T, U>, new() where T : System.Enum
     {
         [SerializeField]
         [ListDrawerSettings(HideAddButton = true, OnTitleBarGUI = "DrawUpdateButton", HideRemoveButton = true)]
@@ -152,6 +158,7 @@ namespace DChild
 
         public EnumList()
         {
+#if UNITY_EDITOR
             m_list = new List<S>();
             var maxCount = Enum.GetValues(typeof(T)).Cast<int>().Max();
             for (int i = 0; i < maxCount; i++)
@@ -160,6 +167,7 @@ namespace DChild
                 entry.SetName(EnumList.ToEnum<T>(i));
                 m_list.Add(entry);
             }
+#endif
         }
 
         public List<U> ToList() => m_list.Select(x => x.value).ToList();
