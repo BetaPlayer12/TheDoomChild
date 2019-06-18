@@ -1,6 +1,6 @@
 ﻿using Holysoft.Event;
 
-namespace DChild.Gameplay.Combat
+namespace Holysoft.Gameplay
 {
     public interface ICappedStat : IMaxStat
     {

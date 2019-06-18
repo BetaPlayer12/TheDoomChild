@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Character.AI
 {
-    public interface IAIInfo { }
+    public interface IAIInfo { void Initialize(); }
 
     [CreateAssetMenu(fileName = "AIData", menuName = "DChild/Gameplay/AI Data")]
     public class AIData : SerializedScriptableObject

@@ -6,8 +6,7 @@ namespace DChild.Gameplay.Combat
     [System.Serializable]
     public class BasicHealth : Health
     {
-        [SerializeField]
-        [MinValue(0f)]
+        [SerializeField, MinValue(0f), OnValueChanged("SendValueEvent")]
         private int m_maxHealth;
 
         public override int maxValue => m_maxHealth;

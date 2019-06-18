@@ -1,72 +1,47 @@
-﻿using System;
-using Holysoft.Event;
+﻿using DChild.Menu.Extras;
 using Holysoft.Menu;
-using Holysoft.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DChild.Menu.Extras
+namespace Refactor.DChild.Menu.Extras
 {
-    public class ExtrasImageShowcase : UICanvas, IAdjacentNavigation, IAdjacentNavigationEvents
+    public class ExtrasImageShowcase : AdjacentNavigation
     {
+#if UNITY_EDITOR
         [SerializeField]
-        private Image m_showcase;
-        private ExtrasImageShowcaseHandler m_handler;
-        private bool m_inMiddleOfItems;
+#endif
+        private SpriteList m_list;
 
-        public event EventAction<EventActionArgs> FirstItemReached;
-        public event EventAction<EventActionArgs> LastItemReached;
-        public event EventAction<EventActionArgs> NavigatingItem;
+        [SerializeField]
+        private Image m_image;
 
-        public void Next() => m_handler.Next();
-        public void Previous() => m_handler.Previous();
+        protected override int lastNavigationIndex => m_list.count -1;
 
-        public void SetNavgationHandler(ExtrasImageShowcaseHandler navigation)
+        public void Showcase(SpriteList list, int index)
         {
-            if (m_handler != null)
+            m_list = list;
+            m_currentNavigationIndex = index;
+            m_image.sprite = m_list.GetSprite(m_currentNavigationIndex);
+            if (m_currentNavigationIndex == 0)
             {
-                m_handler.FirstItemReached -= OnFirstItemReached;
-                m_handler.LastItemReached -= OnLastItemReached;
-                if (m_inMiddleOfItems == false)
-                {
-                    m_handler.NavigatingItem -= OnNavigatingItem;
-                }
+                CallFirstItemReached();
             }
-            navigation.FirstItemReached += OnFirstItemReached;
-            navigation.LastItemReached += OnLastItemReached;
-            m_handler = navigation;
-
-            //To Reset Visuals
-            m_inMiddleOfItems = true;
-            NavigatingItem?.Invoke(this, EventActionArgs.Empty);
+            else if (m_currentNavigationIndex == lastNavigationIndex)
+            {
+                CallLastItemReached();
+            }
         }
 
-        private void OnNavigatingItem(object sender, EventActionArgs eventArgs)
+        protected override void GoToNextItem()
         {
-            NavigatingItem?.Invoke(this, eventArgs);
-            m_inMiddleOfItems = true;
-            m_handler.NavigatingItem -= OnNavigatingItem;
+            m_currentNavigationIndex++;
+            m_image.sprite = m_list.GetSprite(m_currentNavigationIndex);
         }
 
-        private void OnLastItemReached(object sender, EventActionArgs eventArgs)
+        protected override void GoToPreviousItem()
         {
-            LastItemReached?.Invoke(this, eventArgs);
-            m_inMiddleOfItems = false;
-            m_handler.NavigatingItem += OnNavigatingItem;
-        }
-
-        private void OnFirstItemReached(object sender, EventActionArgs eventArgs)
-        {
-            FirstItemReached?.Invoke(this, eventArgs);
-            m_inMiddleOfItems = false;
-            m_handler.NavigatingItem += OnNavigatingItem;
-        }
-
-        public void SetShowcase(Sprite sprite)
-        {
-            m_showcase.sprite = sprite;
-            m_showcase.color = Color.white;
-            m_showcase.preserveAspect = true;
+            m_currentNavigationIndex--;
+            m_image.sprite = m_list.GetSprite(m_currentNavigationIndex);
         }
     }
 }

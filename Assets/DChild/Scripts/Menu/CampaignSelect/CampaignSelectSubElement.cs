@@ -24,5 +24,4 @@ namespace DChild.Menu.Campaign
             m_campaignSelect.CampaignSelected += OnCampaignSelected;
         }
     }
-
 }

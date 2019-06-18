@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
+using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System.Collections.Generic;

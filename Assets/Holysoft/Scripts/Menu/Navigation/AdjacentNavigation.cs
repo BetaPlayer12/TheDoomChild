@@ -6,12 +6,13 @@ using UnityEngine;
 
 namespace Holysoft.Menu
 {
-    public abstract class AdjacentNavigation : UIBehaviour, IAdjacentNavigation, IAdjacentNavigationEvents
+    public abstract class AdjacentNavigation : UIBehaviour, IAdjacentNavigation
     {
         public event EventAction<EventActionArgs> FirstItemReached;
         public event EventAction<EventActionArgs> LastItemReached;
         public event EventAction<EventActionArgs> NavigatingItem;
 
+        [ShowInInspector, MinValue(0)]
         protected int m_currentNavigationIndex;
         protected abstract int lastNavigationIndex { get; }
 
@@ -58,6 +59,11 @@ namespace Holysoft.Menu
         protected void CallLastItemReached()
         {
             LastItemReached?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        protected void CallNavigatingItem()
+        {
+            NavigatingItem?.Invoke(this, EventActionArgs.Empty);
         }
 
         protected virtual void Awake()

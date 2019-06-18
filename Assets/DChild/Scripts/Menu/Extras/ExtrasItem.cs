@@ -1,14 +1,35 @@
-﻿using UnityEngine;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace DChild.Menu.Extras
+namespace Refactor.DChild.Menu.Extras
 {
+    public struct ItemSelectedEventArgs : IEventActionArgs
+    {
+        public ItemSelectedEventArgs(int itemIndex) : this()
+        {
+            this.itemIndex = itemIndex;
+        }
+
+        public int itemIndex { get; }
+    }
+
     public class ExtrasItem : MonoBehaviour
     {
-        [SerializeField]
-        protected int m_id;
+#if UNITY_EDITOR
+        [SerializeField, MinValue(0)]
+#endif
+        private int m_itemIndex;
 
-        public int id => m_id;
+        public event EventAction<ItemSelectedEventArgs> Selected;
 
-        public void SetID(int id) => m_id = id;
+        public int itemIndex => m_itemIndex;
+
+        public void SetIndex(int index) => m_itemIndex = index;
+
+        public void Select() => Selected?.Invoke(this, new ItemSelectedEventArgs(m_itemIndex));
     }
 }

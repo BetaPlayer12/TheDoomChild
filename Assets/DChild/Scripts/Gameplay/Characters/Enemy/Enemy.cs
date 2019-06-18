@@ -6,6 +6,7 @@ using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft;
 using Holysoft.Event;
+using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

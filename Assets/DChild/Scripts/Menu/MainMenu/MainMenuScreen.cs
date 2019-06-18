@@ -16,7 +16,7 @@ namespace DChild.Menu.MainMenu
 
         public void RequestExit()
         {
-            MenuSystem.RequestConfirmation(OnExitAffirmed, "<font=\"BACKCOUNTRY-Regular SDF\">Do you really want to exit the game?");
+            GameSystem.RequestConfirmation(OnExitAffirmed, "<font=\"BACKCOUNTRY-Regular SDF\">Do you really want to exit the game?");
         }
 
     }

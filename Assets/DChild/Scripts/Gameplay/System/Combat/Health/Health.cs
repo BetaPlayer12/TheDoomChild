@@ -1,5 +1,6 @@
 ﻿
 using Holysoft.Event;
+using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -69,7 +70,7 @@ namespace DChild.Gameplay.Combat
         }
 
 #if UNITY_EDITOR
-        private void SendValueEvent() => ValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentHealth, maxValue));
+        protected void SendValueEvent() => ValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentHealth, maxValue));
 #endif
     }
 }

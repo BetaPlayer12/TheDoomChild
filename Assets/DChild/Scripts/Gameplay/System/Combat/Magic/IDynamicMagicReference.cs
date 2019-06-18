@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Holysoft.Gameplay;
+using System;
 
 namespace DChild.Gameplay.Combat
 {
