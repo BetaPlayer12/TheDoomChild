@@ -43,7 +43,19 @@ namespace DChild.Gameplay
         protected Vector2 m_addedVelocity;
         protected IIsolatedPhysicsTime m_physicsTime;
         public abstract Vector2 velocity { get; protected set; }
-        public Vector2 position => m_rigidbody2D.position;
+        public Vector2 position
+        {
+            get
+            {
+                return m_rigidbody2D.position;
+            }
+
+            set
+            {
+                m_rigidbody2D.position = value;
+            }
+        }
+
         public float mass => m_rigidbody2D.mass;
         public IGravity2D gravity => m_gravity;
         public ILinearDrag linearDrag => m_linearDrag;

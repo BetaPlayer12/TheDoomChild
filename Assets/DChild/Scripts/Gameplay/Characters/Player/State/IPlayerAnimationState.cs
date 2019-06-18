@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Characters.Players.State
         bool transitionToFall2 { get; set; }
         bool isHardLanding { get; set; }
         bool isFallingFromWallJump { get; set; }
-
+        bool isLedging { get ; set; }
         void ResetAnimations();
     }
 }

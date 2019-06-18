@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.Players.State
                                 ICrouchState, IFlinchState, IWallStickState,
                                 IDashState, IDoubleJumpState, IWallJumpState,
                                 IHighJumpState, IBehaviourState, ICombatState, IPlatformDropState,
-                                IWhipGrapple, IProjectileThrowState
+                                IWhipGrapple, IProjectileThrowState, ILedgeGrabState
     {
         public event EventAction<CombatStateEventArgs> CombatModeChanged;
 
@@ -38,6 +38,7 @@ namespace DChild.Gameplay.Characters.Players.State
         private bool m_isHookDashing;
         private bool m_isJogging;
         private bool m_isSprinting;
+        private bool m_isLedging;///
 
         private bool m_isAttacking;
         private bool m_inCombat;
@@ -74,6 +75,7 @@ namespace DChild.Gameplay.Characters.Players.State
         public bool isHookDashing { get => m_isHookDashing; set => m_isHookDashing = value; }
         public bool isJogging { get => m_isJogging; set => m_isJogging = value; }
         public bool isSprinting { get => m_isSprinting; set => m_isSprinting = value; }
+        public bool isLedging { get => m_isLedging; set => m_isLedging = value; }
 
         public bool isAimingProjectile { get => m_isAimingProjectile; set => m_isAimingProjectile = value; }
         public bool inCombat

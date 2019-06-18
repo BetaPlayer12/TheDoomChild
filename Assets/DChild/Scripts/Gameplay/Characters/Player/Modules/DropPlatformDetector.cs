@@ -19,7 +19,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_groundSensor = player.sensors.groundSensor;
             m_groundSensor.SensorCast += OnSensorCast;
             m_state = player.characterState;
-  
+
             GetComponentInParent<ILandController>().LandCall += OnLandCall;
         }
 
