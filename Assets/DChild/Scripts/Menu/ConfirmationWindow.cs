@@ -7,11 +7,10 @@ using UnityEngine;
 
 namespace DChild.Menu
 {
-    public class ConfirmationWindow : UICanvas
+    public class ConfirmationWindow : MonoBehaviour
     {
         [SerializeField]
         private TextMeshProUGUI m_message;
-        private UIHighlightHandler[] m_buttonHighlights;
 
         public event EventAction<EventActionArgs> RequestAffirmed;
         public event EventAction<EventActionArgs> RequestDeclined;
@@ -31,18 +30,5 @@ namespace DChild.Menu
             RequestDeclined?.Invoke(this, EventActionArgs.Empty);
         }
 
-        public override void Enable()
-        {
-            base.Enable();
-            for (int i = 0; i < m_buttonHighlights.Length; i++)
-            {
-                m_buttonHighlights[i].UseNormalizeState();
-            }
-        }
-
-        private void Awake()
-        {
-            m_buttonHighlights = GetComponentsInChildren<UIHighlightHandler>();
-        }
     }
 }

@@ -35,9 +35,29 @@ namespace DChild.Gameplay.Cinematics.Cameras
                     {
                         brain = FindObjectOfType<CinemachineBrain>();
                     }
-                    m_camera = brain.OutputCamera;
+                    m_camera = brain?.OutputCamera;
                 }
                 return m_camera;
+            }
+        }
+        
+
+        protected override void ConnectToVcam(bool connect)
+        {
+            base.ConnectToVcam(connect);
+            if (connect)
+            {
+                if (camera.usePhysicalProperties != m_isPhysicalCamera)
+                {
+                    camera.usePhysicalProperties = m_isPhysicalCamera;
+                    if (m_isPhysicalCamera)
+                    {
+                        camera.focalLength = m_focalLength;
+                        camera.sensorSize = m_sensorSize;
+                        camera.lensShift = m_lensShift;
+                        camera.gateFit = m_gateFit;
+                    }
+                }
             }
         }
 
@@ -45,14 +65,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             CinemachineVirtualCameraBase vcam,
             CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
         {
-            camera.usePhysicalProperties = m_isPhysicalCamera;
-            if (m_isPhysicalCamera)
-            {
-                camera.focalLength = m_focalLength;
-                camera.sensorSize = m_sensorSize;
-                camera.lensShift = m_lensShift;
-                camera.gateFit = m_gateFit;
-            }
+
         }
     }
 }

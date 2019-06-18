@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
+using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -78,7 +79,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public const string ANIMATION_CROUCH_IDLE_RIGHT = "Crouch_Idle_Right";
         public const string ANIMATION_CROUCH_RIGHT = "Crouch_Right";
-
+        public const string ANIMATION_LEDGE_GRAB_RIGHT = "EdgeGrab_Right2";//
         #endregion
 
         #region Projectile
@@ -781,6 +782,18 @@ namespace DChild.Gameplay.Characters.Players
             }
         }
         #endregion
+
+        public void DoLedgeGrab(HorizontalDirection direction)
+        {
+            Debug.Log("Animation play");
+            if (direction == HorizontalDirection.Left)
+            {
+                SetAnimation(0, ANIMATION_LEDGE_GRAB_RIGHT, false, 0);
+            }
+            else
+                SetAnimation(0, ANIMATION_LEDGE_GRAB_RIGHT, false, 0);//
+
+        }
 
         public void SetCurrentAttackAnimation(string attackAnimation)
         {

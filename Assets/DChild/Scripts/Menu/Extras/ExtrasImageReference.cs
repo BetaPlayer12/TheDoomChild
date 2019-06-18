@@ -12,8 +12,8 @@ namespace DChild.Menu.Extras
 
         protected override void OnInstanceCreated(object sender, ReferenceInstanceEventArgs eventArgs)
         {
-            var extrasImage = eventArgs.value.GetComponent<ExtrasImage>();
-            extrasImage.SetSprite(m_list.GetSprite(eventArgs.referenceIndex));
+            //var extrasImage = eventArgs.value.GetComponent<ExtrasImage>();
+            //extrasImage.SetSprite(m_list.GetSprite(eventArgs.referenceIndex));
         }
     }
 }

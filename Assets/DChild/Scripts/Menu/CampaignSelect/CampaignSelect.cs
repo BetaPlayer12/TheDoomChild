@@ -1,88 +1,86 @@
-﻿using DChild.Serialization;
+﻿using DChild;
+using DChild.Menu;
+using DChild.Serialization;
 using Holysoft.Event;
 using Holysoft.Menu;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Menu
 {
-    public class CampaignSelect : AdjacentNavigation, ICampaignSelect, ICampaignSelectEventCaller
+    public class CampaignSelect : AdjacentNavigation, ICampaignSelect
     {
         [SerializeField]
-        private CampaignSelectAnimation m_animation;
+        private NavigationTimelines m_animation;
 #if UNITY_EDITOR
-        [SerializeField,HideLabel,BoxGroup("Campagin Slot List")]
+        [SerializeField]
+#endif
+        private CampaignSlot m_selectedSlot;
+#if UNITY_EDITOR
+        [SerializeField, HideLabel, BoxGroup("Campagin Slot List")]
 #endif
         private CampaignSlotList m_slotList;
-        private bool m_canNavigate;
 
+        public CampaignSlot selectedSlot => m_selectedSlot;
         protected override int lastNavigationIndex => m_slotList.slotCount - 1;
         public event EventAction<SelectedCampaignSlotEventArgs> CampaignSelected;
 
+        public void SetList(CampaignSlotList list)
+        {
+            m_slotList = list;
+            if (m_currentNavigationIndex > m_slotList.slotCount - 1)
+            {
+                m_currentNavigationIndex = m_slotList.slotCount - 1;
+            }
+            m_selectedSlot = m_selectedSlot = m_slotList.GetSlot(m_currentNavigationIndex);
+            SendCampaignSelectedEvent();
+        }
+
         public override void Next()
         {
-
-            if (m_canNavigate)
+            var previousIndex = m_currentNavigationIndex;
+            base.Next();
+            if (previousIndex < lastNavigationIndex)
             {
-                var previousIndex = m_currentNavigationIndex;
-                base.Next();
-                if (previousIndex < lastNavigationIndex)
-                {
-                    m_animation.PlayNext();
-                }
-                else
-                {
-                    m_animation.PlayLast();
-
-                }
+                m_animation.Play(NavigationTimelines.Type.Next);
             }
+            else
+            {
+                m_animation.Play(NavigationTimelines.Type.LastItem);
+
+            }
+            m_selectedSlot = m_slotList.GetSlot(m_currentNavigationIndex);
         }
 
         public override void Previous()
         {
-            if (m_canNavigate)
+            var previousIndex = m_currentNavigationIndex;
+            base.Previous();
+            if (previousIndex > 0)
             {
-                var previousIndex = m_currentNavigationIndex;
-                base.Previous();
-                if (previousIndex > 0)
-                {
-                    m_animation.PlayPrevious();
-                }
-                else
-                {
-                    m_animation.PlayFirst();
-                }
+                m_animation.Play(NavigationTimelines.Type.Previous);
             }
+            else
+            {
+                m_animation.Play(NavigationTimelines.Type.FirstItem);
+            }
+            m_selectedSlot = m_slotList.GetSlot(m_currentNavigationIndex);
         }
 
+        [Button]
         public void SendCampaignSelectedEvent()
         {
-            CampaignSelected?.Invoke(this, new SelectedCampaignSlotEventArgs(m_slotList.GetSlot(m_currentNavigationIndex)));
+            CampaignSelected?.Invoke(this, new SelectedCampaignSlotEventArgs(m_selectedSlot));
         }
 
         protected override void GoToNextItem()
         {
             m_currentNavigationIndex++;
-            m_canNavigate = false;
         }
 
         protected override void GoToPreviousItem()
         {
             m_currentNavigationIndex--;
-            m_canNavigate = false;
-        }
-
-        private void OnAnimationEnd(object sender, EventActionArgs eventArgs)
-        {
-            m_canNavigate = true;
-        }
-
-        private void OnInfoChangeRequest(object sender, EventActionArgs eventArgs)
-        {
-            SendCampaignSelectedEvent();
         }
 
         protected override void Start()
@@ -92,12 +90,10 @@ namespace DChild.Menu
             {
                 m_slotList = GameSystem.dataManager.campaignSlotList;
             }
-            m_canNavigate = true;
-            m_animation.InfoChangeRequest += OnInfoChangeRequest;
-            m_animation.AnimationEnd += OnAnimationEnd;
+            m_selectedSlot = m_slotList.GetSlot(m_currentNavigationIndex);
             SendCampaignSelectedEvent();
         }
 
-
     }
+
 }

@@ -6,7 +6,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class AnimationController : MonoBehaviour, IPlayerExternalModule
     {
-        private CharacterPhysics2D m_character;
         private PlayerAnimation m_animation;
 
         private IFacing m_facing;
@@ -21,7 +20,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Initialize(IPlayerModules player)
         {
             m_facing = player;
-            m_character = player.physics;
             m_animation = player.animation;
             m_combatState = player.characterState;
             m_animationState = player.animationState;
@@ -31,6 +29,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallLateUpdate(IPlayerState state)
         {
+            if (m_animationState.isLedging)
+            {
+                m_animation.DoLedgeGrab(m_prevFacing);
+                if (m_animation.animationState.GetCurrent(0).IsComplete)
+                {
+                    m_animationState.isLedging = false;
+                }
+                return;
+            }
+
             #region Flinch
             if (state.isFlinching)
             {
@@ -52,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             }
             #endregion
+            
 
             #region Skills
             else if (state.isDashing)
@@ -104,9 +113,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             else if (state.isWallJumping)
             {
+               
+
                 if (state.isFalling)
                 {
-
+                   
                 }
                 else if (state.canDoubleJump)
                 {
@@ -177,9 +188,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (!state.isGrounded)
                 {
+                   
+
                     if (state.isFalling)
                     {
-
+                       
                     }
                     else
                     {
@@ -205,13 +218,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
             #endregion
 
             #region Basic Movements
+            
+
             else if (state.isFalling)
             {
-
+                if (state.isLedging)
+                {
+                    m_animationState.isLedging = true;
+                    m_animation.DoLedgeGrab(HorizontalDirection.Left);///
+                    Debug.Log("animation check2");
+                }
             }
 
             else if (state.canHighJump)
             {
+
+               
                 if (state.hasDoubleJumped)
                 {
 
@@ -224,6 +246,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             else if (state.isGrounded)
             {
+
+
                 if (m_isThrowingBomb)
                 {
                     if (m_animation.animationState.GetCurrent(0).IsComplete)
@@ -232,10 +256,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
 
+               
+
+
                 else if (state.hasLanded)
                 {
                     m_animationState.hasDashed = false;
                     m_animationState.hasJumped = false;
+                    
+                    
+
                 }
 
                 else if (state.isMoving)
@@ -295,8 +325,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                     if (m_animationState.isLanding)
                     {
+
+                     
+                        
                         if (m_animationState.isHardLanding)
                         {
+                            
+                            
                             m_animation.DoHardLanding(m_facing.currentFacingDirection);
                         }
                         else if (!state.isDashing && m_animationState.hasDashed)

@@ -298,7 +298,7 @@ namespace DChildEditor.Toolkit
             caster.InitializeTime(0.5f);
 
             var sensors = sensorGO.AddComponent<PlayerSensors>();
-            sensors.Initialize(m_groundSensor, m_headSensor, m_edgeSensor, m_slopeSensor);
+            sensors.Initialize(m_groundSensor, m_headSensor, m_edgeSensor, m_slopeSensor, null, null, null,null);//
         }
 
         private void AttachSlopeAssist(GameObject player)

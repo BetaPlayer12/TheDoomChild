@@ -11,6 +11,7 @@ namespace DChild.Menu
         {
             this.ID = slot.id;
             isNewGame = slot.newGame;
+            isDemoGame = slot.demoGame;
             location = slot.location;
             completion = slot.completion;
             duration = slot.duration;
@@ -18,6 +19,7 @@ namespace DChild.Menu
 
         public int ID { get; }
         public bool isNewGame { get; }
+        public bool isDemoGame { get; }
         public Location location { get; }
         public int completion { get; }
         public TimeKeeper duration { get; }
@@ -25,11 +27,8 @@ namespace DChild.Menu
 
     public interface ICampaignSelect
     {
+        CampaignSlot selectedSlot { get; }
         event EventAction<SelectedCampaignSlotEventArgs> CampaignSelected;
-    }
-
-    public interface ICampaignSelectEventCaller
-    {
         void SendCampaignSelectedEvent();
     }
 }
