@@ -25,11 +25,8 @@ namespace DChild.Menu
 
     public interface ICampaignSelect
     {
+        CampaignSlot selectedSlot { get; }
         event EventAction<SelectedCampaignSlotEventArgs> CampaignSelected;
-    }
-
-    public interface ICampaignSelectEventCaller
-    {
         void SendCampaignSelectedEvent();
     }
 }

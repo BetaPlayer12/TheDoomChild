@@ -25,7 +25,6 @@ namespace DChildEditor.Toolkit
             var systemGO = Commands.CreateGameObject("System", null, Vector3.zero);
             systemGO.AddComponent<GameSystem>();
             CreateGameSettings(systemGO);
-            CreateMenuSystem(systemGO);
             CreateGameplaySystem(systemGO);
         }
 
@@ -49,12 +48,6 @@ namespace DChildEditor.Toolkit
             combatManager.AddComponent<CombatManager>();
             var playerCombatHandler = combatManager.AddComponent<PlayerCombatHandler>();
             playerCombatHandler.Initialize(50f, 1f, 1f);
-        }
-
-        private static void CreateMenuSystem(GameObject systemGO)
-        {
-            var menuSystemGO = Commands.CreateGameObject("MenuSystem", systemGO.transform, Vector3.zero);
-            menuSystemGO.AddComponent<MenuSystem>();
         }
 
         private static void CreateGameSettings(GameObject systemGO)

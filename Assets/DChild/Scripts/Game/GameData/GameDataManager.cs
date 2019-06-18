@@ -11,10 +11,7 @@ namespace DChild
     {
         [SerializeField, Title("Save File"), HideLabel]
         private CampaignSlotList m_campaignSlotList;
-        [SerializeField, Title("Component Data")]
-        private LocationBackdrop m_locationBackdropData;
 
         public CampaignSlotList campaignSlotList { get => m_campaignSlotList; }
-        public LocationBackdrop locationBackdropData { get => m_locationBackdropData; }
     }
 }

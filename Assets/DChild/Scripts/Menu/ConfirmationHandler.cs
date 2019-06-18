@@ -18,32 +18,16 @@ namespace DChild.Menu
             m_confirmationWindow.RequestAffirmed += m_listener;
             m_isListenerSubscribed = true;
             m_confirmationWindow.SetMessage(message);
-            m_confirmationWindow.Show();
         }
 
-        private void UnsubcribeListner()
+        public void UnsubcribeListner()
         {
-            m_confirmationWindow.RequestAffirmed -= m_listener;
-            m_listener = null;
-            m_isListenerSubscribed = false;
-        }
-
-        private void OnRequesDeclined(object sender, EventActionArgs eventArgs)
-        {
-            if (m_listener != null)
+            if (m_isListenerSubscribed && m_listener != null)
             {
-                UnsubcribeListner();
+                m_confirmationWindow.RequestAffirmed -= m_listener;
+                m_listener = null;
+                m_isListenerSubscribed = false;
             }
-            m_confirmationWindow.Hide();
-            MenuSystem.backTracker.RemoveLastStack();
-            Debug.Log("Hide");
-        }
-
-
-        private void OnRequestAffirmed(object sender, EventActionArgs eventArgs)
-        {
-            m_confirmationWindow.Hide();
-            MenuSystem.backTracker.RemoveLastStack();
         }
 
         private void OnConfirmationHide(object sender, EventActionArgs eventArgs)
@@ -52,13 +36,6 @@ namespace DChild.Menu
             {
                 UnsubcribeListner();
             }
-        }
-
-        private void Awake()
-        {
-            m_confirmationWindow.CanvasHide += OnConfirmationHide;
-            m_confirmationWindow.RequestAffirmed += OnRequestAffirmed;
-            m_confirmationWindow.RequestDeclined += OnRequesDeclined;
         }
     }
 
