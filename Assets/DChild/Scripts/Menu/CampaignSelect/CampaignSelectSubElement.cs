@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Menu.Campaign
 {
+
     public abstract class CampaignSelectSubElement : MonoBehaviour
     {
         private ICampaignSelect m_campaignSelect;

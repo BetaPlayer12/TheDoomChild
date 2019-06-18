@@ -13,6 +13,7 @@ namespace DChild.Menu.Campaign
         protected override void OnCampaignSelected(object sender, SelectedCampaignSlotEventArgs eventArgs)
         {
             m_targetGraphic.sprite = m_list.GetImageOf(eventArgs.location);
+            m_targetGraphic.color = m_targetGraphic.sprite == null ? Color.black : Color.white;
         }
     }
 }

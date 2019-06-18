@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
                     {
                         brain = FindObjectOfType<CinemachineBrain>();
                     }
-                    m_camera = brain.OutputCamera;
+                    m_camera = brain?.OutputCamera;
                 }
                 return m_camera;
             }
