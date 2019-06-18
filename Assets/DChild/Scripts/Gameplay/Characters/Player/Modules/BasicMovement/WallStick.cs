@@ -26,6 +26,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CharacterPhysics2D m_physics;
         private CharacterColliders m_colliders;
         private RaySensor m_sensor;
+        private RaySensor m_groundHeightSensor;
         private Skills m_skills;
 
         private IIsolatedTime m_time;
@@ -40,6 +41,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_wallStickState = player.characterState;
             m_wallJumpState = player.characterState;
             m_sensor = player.sensors.wallStickSensor;
+            m_groundHeightSensor = player.sensors.groundHeightSensor;
             m_colliders = player.colliders;
             m_modifier = player.modifiers;
             m_input = m_physics.GetComponent<PlayerInput>();
@@ -134,11 +136,18 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                             if (hit.collider.CompareTag("Droppable") == false)
                             {
-                                AttachToWall(hit);
-                                if (m_wallStickState.isStickingToWall == false)
-                                {
-                                    StickToWall();
+                                m_groundHeightSensor.Cast();
+                                if (m_groundHeightSensor.isDetecting == false)
+                                { 
+                                    AttachToWall(hit);
+                                    if (m_wallStickState.isStickingToWall == false)
+                                    {
+                                        StickToWall();
+                                    }
                                 }
+                                else
+                                    m_physics.simulateGravity = true;
+                                    
                             }
                         }
                         else if (m_wallStickState.isStickingToWall)

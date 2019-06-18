@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters
 
         protected virtual void Awake()
         {
-            m_rootMotion = GetComponent<SpineRootMotion>();
+            m_rootMotion = GetComponentInChildren<SpineRootMotion>();
         }
     }
 }

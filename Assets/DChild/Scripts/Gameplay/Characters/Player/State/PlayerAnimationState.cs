@@ -25,6 +25,7 @@ namespace DChild.Gameplay.Characters.Players.State
         private bool m_transitionToFall2;
         private bool m_isHardLanding;
         private bool m_isFallingFromWallJump;
+        private bool m_isLedging;
 
         public bool isFromFall { get => m_isFromFall; set => m_isFromFall = value; }
         public bool isAnticPlayed { get => m_isAnticPlayed; set => m_isAnticPlayed = value; }
@@ -45,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.State
         public bool transitionToFall2 { get => m_transitionToFall2; set => m_transitionToFall2 = value; }
         public bool isHardLanding { get => m_isHardLanding; set => m_isHardLanding = value; }
         public bool isFallingFromWallJump { get => m_isFallingFromWallJump; set => m_isFallingFromWallJump = value; }
+        public bool isLedging { get => m_isLedging; set => m_isLedging = value; }//
 
         public void ResetAnimations()
         {
@@ -64,6 +66,7 @@ namespace DChild.Gameplay.Characters.Players.State
             m_isThrowingBomb = false;
             m_transitionToFall2 = false;
             m_isHardLanding = false;
+            m_isLedging = false;
             //m_isFallingFromWallJump = false;
         }
     }

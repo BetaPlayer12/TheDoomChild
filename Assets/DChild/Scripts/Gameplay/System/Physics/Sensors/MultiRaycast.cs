@@ -110,9 +110,12 @@ namespace DChild.Gameplay
             }
             else
             {
-                for (int i = 0; i < m_config.count; i++)
+                if (m_config != null)
                 {
-                    Gizmos.DrawRay(position + (relativeUp * m_config.offsets[i]), relativeRight * m_config.castDistance);
+                    for (int i = 0; i < m_config.count; i++)
+                    {
+                        Gizmos.DrawRay(position + (relativeUp * m_config.offsets[i]), relativeRight * m_config.castDistance);
+                    }
                 }
             }
         }
