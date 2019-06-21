@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-
     public class ColliderDamage : MonoBehaviour
     {
         private IDamageDealer m_damageDealer;
