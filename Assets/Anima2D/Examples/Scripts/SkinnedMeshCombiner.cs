@@ -51,7 +51,7 @@ public class SkinnedMeshCombiner : MonoBehaviour
 		transform.localScale = Vector3.one;
 
 		List<Transform> bones = new List<Transform>();        
-		List<BoneWeight> boneWeights = new List<BoneWeight>();        
+		List<UnityEngine.BoneWeight> boneWeights = new List<UnityEngine.BoneWeight>();        
 		List<CombineInstance> combineInstances = new List<CombineInstance>();
 
 		int numSubmeshes = 0;
@@ -74,15 +74,15 @@ public class SkinnedMeshCombiner : MonoBehaviour
 
 			if(spriteMeshInstance.cachedSkinnedRenderer)
 			{
-				SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;          
+				SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
 
-				BoneWeight[] meshBoneweight = spriteMeshInstance.sharedMesh.boneWeights;
+                UnityEngine.BoneWeight[] meshBoneweight = spriteMeshInstance.sharedMesh.boneWeights;
 				
 				// May want to modify this if the renderer shares bones as unnecessary bones will get added.
 				for (int j = 0; j < meshBoneweight.Length; ++j)
 				{
-					BoneWeight bw = meshBoneweight[j];
-					BoneWeight bWeight = bw;
+                    UnityEngine.BoneWeight bw = meshBoneweight[j];
+                    UnityEngine.BoneWeight bWeight = bw;
 					bWeight.boneIndex0 += boneOffset;
 					bWeight.boneIndex1 += boneOffset;
 					bWeight.boneIndex2 += boneOffset;
