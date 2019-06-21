@@ -3,13 +3,13 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 using Spine.Unity;
+using DChild.Gameplay.Characters;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace Refactor.DChild.Gameplay.Character.AI
+namespace Refactor.DChild.Gameplay.Characters.AI
 {
-
     public abstract class AIBrain<T> : MonoBehaviour where T : IAIInfo
     {
         [System.Serializable]
@@ -82,12 +82,18 @@ namespace Refactor.DChild.Gameplay.Character.AI
             public abstract void Initialize();
         }
 
-        [SerializeField, ValueDropdown("GetData")]
-        private AIData m_data;
-
-#if UNITY_EDITOR
         [SerializeField]
+        protected Character m_character;
+        [SerializeField]
+        protected SpineRootAnimation m_animation;
+        [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo")]
+        private AIData m_data;
+#if UNITY_EDITOR
+        [ShowInInspector, InlineEditor]
+        private AIData m_inlineEditor;
 #endif
+
+        [ShowInInspector, HideInEditorMode]
         protected T m_info;
 
         public void SetData(AIData data)
@@ -98,14 +104,17 @@ namespace Refactor.DChild.Gameplay.Character.AI
             }
         }
 
-        public void ApplyData() => m_info = (T)m_data.info;
-
-
-#if UNITY_EDITOR
-        private void Awake()
+        public void ApplyData()
         {
+            m_info = (T)m_data.info;
             m_info.Initialize();
         }
+
+        protected virtual void Awake()
+        {
+            ApplyData();
+        }
+#if UNITY_EDITOR
 
         [SerializeField, FolderPath, PropertyOrder(-1)]
         private string m_referenceFolder;
@@ -125,6 +134,12 @@ namespace Refactor.DChild.Gameplay.Character.AI
                 }
             }
             return list;
+        }
+
+        private void InitializeInfo()
+        {
+            m_inlineEditor = m_data;
+            m_info = (T)m_data.info;
         }
 #endif
     }

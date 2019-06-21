@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
 
     public class AirController : MonoBehaviour, IAirMoveController, IHighJumpController, IDoubleJumpController,
-                                 IWallStickController, IWallJumpController, IAirDashController, IFallController
+                                 IWallStickController, IWallJumpController, IAirDashController, IFallController, IledgeController
     {
         public event EventAction<ControllerEventArgs> MoveCall;
         public event EventAction<ControllerEventArgs> HighJumpCall;
@@ -18,9 +18,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> DoubleJumpReset;
         public event EventAction<EventActionArgs> FallUpdate;
         public event EventAction<EventActionArgs> FallCall;
+        public event EventAction<EventActionArgs> LedgeGrabCall;//
 
         public void CallFixedUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
         {
+
+            
             if (state.isStickingToWall)
             {
 
@@ -33,6 +36,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 MoveCall?.Invoke(this, callArgs);
             }
+
+
         }
 
         public void CallUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
@@ -58,6 +63,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     FallCall?.Invoke(this, EventActionArgs.Empty);
                     FallUpdate?.Invoke(this, EventActionArgs.Empty);
+                    LedgeGrabCall?.Invoke(this, EventActionArgs.Empty);
+                  
                 }
 
                 if (state.canHighJump)

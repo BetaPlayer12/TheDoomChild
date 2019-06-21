@@ -13,7 +13,7 @@ using Spine.Unity.Modules;
 
 namespace DChild.Gameplay.Characters
 {
-    public abstract class SpineRootAnimation : SpineAnimation
+    public class SpineRootAnimation : SpineAnimation
     {
         private SpineRootMotion m_rootMotion;
 
@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters
 
         protected virtual void Awake()
         {
-            m_rootMotion = GetComponent<SpineRootMotion>();
+            m_rootMotion = GetComponentInChildren<SpineRootMotion>();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace DChild.Menu
 {
     public class CampaignHandler : CampaignSelectSubElement
     {
-        private ICampaignSelectEventCaller m_eventCaller;
+        private ICampaignSelect m_campaignSelect;
         private int m_selectedSlotID;
 
         protected override void OnCampaignSelected(object sender, SelectedCampaignSlotEventArgs eventArgs)
@@ -18,7 +18,7 @@ namespace DChild.Menu
 
         public void RequestDelete()
         {
-            MenuSystem.RequestConfirmation(OnDeleteAffirmed, "Do you want to delete this Save File?");
+            GameSystem.RequestConfirmation(OnDeleteAffirmed, "Do you want to delete this Save File?");
         }
 
         public void Play()
@@ -28,14 +28,14 @@ namespace DChild.Menu
 
         private void OnDeleteAffirmed(object sender, EventActionArgs eventArgs)
         {
-            GameSystem.dataManager.campaignSlotList.GetSlot(m_selectedSlotID).Reset();
-            m_eventCaller.SendCampaignSelectedEvent();
+            m_campaignSelect.selectedSlot.Reset();
+            m_campaignSelect.SendCampaignSelectedEvent();
         }
 
         protected override void Awake()
         {
             base.Awake();
-            m_eventCaller = GetComponentInParent<ICampaignSelectEventCaller>();
+            m_campaignSelect = GetComponentInParent<ICampaignSelect>();
         }
     }
 }

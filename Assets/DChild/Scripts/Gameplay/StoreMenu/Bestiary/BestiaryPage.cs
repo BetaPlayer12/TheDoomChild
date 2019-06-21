@@ -57,11 +57,6 @@ namespace DChild.Menu.Bestiary
         {
             var creatureID = eventArgs.buttonID;
             m_infoPage.ShowInfo(m_list.GetInfo(creatureID));
-            if (MenuSystem.backTracker != null)
-            {
-                MenuSystem.backTracker.Stack(m_indexPage);
-                MenuSystem.backTracker.Stack(m_infoPage);
-            }
             m_indexPage.Hide();
             m_infoPage.Show();
         }
