@@ -13,7 +13,7 @@ namespace HolysoftEditor.Collections
             var sceneInfo = ValueEntry.SmartValue;
             SceneAsset m_sceneAsset = m_sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(sceneInfo.scenePath);
             EditorGUI.BeginChangeCheck();
-            m_sceneAsset = EditorGUILayout.ObjectField("Scene", m_sceneAsset, typeof(SceneAsset), false) as SceneAsset;
+            m_sceneAsset = EditorGUILayout.ObjectField(label, m_sceneAsset, typeof(SceneAsset), false) as SceneAsset;
 
             if (EditorGUI.EndChangeCheck())
             {

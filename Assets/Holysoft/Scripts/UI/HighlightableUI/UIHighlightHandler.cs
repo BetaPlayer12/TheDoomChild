@@ -92,23 +92,6 @@ namespace Holysoft.UI
                 {
                     for (int i = 0; i < m_highlights.Length; i++)
                     {
-                        m_highlights[i].Highlight();
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < m_highlights.Length; i++)
-                    {
-                        m_highlights[i].Normalize();
-                    }
-                }
-            }
-            else
-            {
-                if (m_highlight)
-                {
-                    for (int i = 0; i < m_highlights.Length; i++)
-                    {
                         m_highlights[i].UseHighlightState();
                     }
                 }
@@ -117,6 +100,23 @@ namespace Holysoft.UI
                     for (int i = 0; i < m_highlights.Length; i++)
                     {
                         m_highlights[i].UseNormalizeState();
+                    }
+                }              
+            }
+            else
+            {
+                if (m_highlight)
+                {
+                    for (int i = 0; i < m_highlights.Length; i++)
+                    {
+                        m_highlights[i].Highlight();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < m_highlights.Length; i++)
+                    {
+                        m_highlights[i].Normalize();
                     }
                 }
             }

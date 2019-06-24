@@ -3,6 +3,7 @@ using DChild.Menu.Campaign;
 using DChild.Serialization;
 using Holysoft.Event;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Menu
 {
@@ -23,7 +24,8 @@ namespace DChild.Menu
 
         public void Play()
         {
-
+            GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad.sceneName, true);
+            SceneManager.UnloadSceneAsync(gameObject.scene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
         }
 
         private void OnDeleteAffirmed(object sender, EventActionArgs eventArgs)
