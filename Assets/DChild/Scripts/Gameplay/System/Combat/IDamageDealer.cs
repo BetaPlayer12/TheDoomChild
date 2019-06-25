@@ -8,6 +8,6 @@ namespace DChild.Gameplay.Combat
 {
     public interface IDamageDealer
     {
-        void Damage(ITarget target, BodyDefense targetDefense);
+        void Damage(TargetInfo target, BodyDefense targetDefense);
     }
 }

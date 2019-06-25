@@ -62,7 +62,7 @@ namespace DChild.Gameplay.Environment.Obstacles
             Destroy(gameObject);
         }
 
-        public override void Damage(ITarget target, BodyDefense targetDefense)
+        public override void Damage(TargetInfo target, BodyDefense targetDefense)
         {
             base.Damage(target, targetDefense);
             Break();

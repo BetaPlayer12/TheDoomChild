@@ -76,11 +76,14 @@ namespace DChild.Gameplay.Combat
                 {
                     m_uiHandler.ShowDamageValues(m_cacheTarget.position, new AttackDamage(result.damageType, result.damage), false);
                 }
-            }
-            
-            if(DChildUtility.HasInterface<IFlinch>(m_cacheTarget))
-            {
-                FlinchTarget((IFlinch)m_cacheTarget, m_cacheTarget.position, attacker.position, result.damageType);
+
+                if (targetInfo.isCharacter && m_cacheTarget.isAlive)
+                {
+                    if (targetInfo.flinchHandler != null)
+                    {
+                        FlinchTarget(targetInfo.flinchHandler, targetInfo.facing, m_cacheTarget.position, attacker.position, attacker.damage.type);
+                    }
+                }
             }
 
             return result;
@@ -126,21 +129,17 @@ namespace DChild.Gameplay.Combat
             m_aOETargetHandler = new AOETargetHandler();
         }
 
-        private void FlinchTarget(IFlinch target, Vector2 targetPosition, Vector2 attackerPosition, AttackType attackType)
+        private void FlinchTarget(IFlinch target, HorizontalDirection targetFacing, Vector2 targetPosition, Vector2 attackerPosition, AttackType attackType)
         {
-            if (target.isAlive)
-            {
-                var targetFacing = ((IFacing)target).currentFacingDirection;
-                var damageSource = GameplayUtility.GetRelativeDirection(targetFacing, targetPosition, attackerPosition);
-                target.Flinch(damageSource, attackType);
-            }
+            var damageSource = GameplayUtility.GetRelativeDirection(targetFacing, targetPosition, attackerPosition);
+            target.Flinch(damageSource, attackType);
         }
 
         private void ResolveConflictToPlayer(AttackInfo attacker, IPlayerCombat player, ref DamageInfo info)
         {
             //m_playerCombatHandler.FactorDefense(player, ref info);
             //m_playerCombatHandler.ResolveDamageRecieved(player, attacker.position);
-            FlinchTarget((IFlinch)player, player.position, attacker.position, info.damageType);
+            //FlinchTarget((IFlinch)player, player.position, attacker.position, info.damageType);
         }
 
         private void LateUpdate()

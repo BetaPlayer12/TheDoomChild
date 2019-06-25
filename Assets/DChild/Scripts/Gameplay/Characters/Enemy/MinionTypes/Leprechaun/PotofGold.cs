@@ -63,13 +63,13 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
             yield break;
         }
 
-        public void Damage(ITarget target, BodyDefense targetDefense)
+        public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
             if (!targetDefense.isInvulnerable)
             {
                 AttackInfo info = new AttackInfo(transform.position, 0, 1, m_damage);
-                var result = GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(target, targetDefense.damageReduction));
-                TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, target, result));
+                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo.target, result));
             }
         }
 

@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using Spine.Unity;
 using DChild.Gameplay.Characters;
+using DChild.Gameplay;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
