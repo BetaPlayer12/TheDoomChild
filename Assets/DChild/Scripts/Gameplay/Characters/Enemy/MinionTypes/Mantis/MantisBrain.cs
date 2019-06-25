@@ -31,6 +31,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [TabGroup("Ability Ranges")]
         private float m_scratchDeflectRange;
         [SerializeField]
+        [TabGroup("Ability Ranges")]
+        private float m_leapRange;
+        [SerializeField]
         [TabGroup("Ability Chance")]
         private float m_scratchAttackChance;
         [SerializeField]
@@ -131,7 +134,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     if (m_currentBehavior == 1)
                     {
-                        if (GetDistance() < m_scratchAttackRange && m_behaviorChance < m_scratchAttackChance && GetDistance() > 1)
+                        if (GetDistance() < m_scratchAttackRange && m_behaviorChance < m_scratchAttackChance && GetDistance() > 0.325)
                         {
                             m_minion.ScratchAttack();
                             m_currentBehavior = 0;
@@ -149,7 +152,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     if (m_currentBehavior == 2)
                     {
-                        if (GetDistance() < m_scratchDeflectRange && m_behaviorChance < m_scratchDeflectChance && GetDistance() > 1)
+                        if (GetDistance() < m_scratchDeflectRange && m_behaviorChance < m_scratchDeflectChance && GetDistance() > 0.325)
                         {
                             m_minion.ScratchDeflect();
                             m_currentBehavior = 0;
@@ -167,7 +170,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     if (m_currentBehavior == 3)
                     {
-                        if (m_behaviorChance < m_leapChance && GetDistance() > 20)
+                        if (/*GetDistance() < m_leapRange &&*/ m_behaviorChance < m_leapChance && GetDistance() > m_leapRange)
                         {
                             m_minion.Leap();
                             m_currentBehavior = 0;

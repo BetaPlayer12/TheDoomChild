@@ -221,6 +221,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_patrol = GetComponent<WayPointPatroler>();
+
+            //Experiment
+            GetComponent<IsolatedCharacterPhysics2D>().simulateGravity = GetComponent<IsolatedCharacterPhysics2D>().onWalkableGround;
+            //
         }
 
         void Update()
