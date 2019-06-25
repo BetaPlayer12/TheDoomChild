@@ -87,9 +87,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             if (Wait())
             {
-                m_rootMotion.enabled = false;
-                m_rootMotion.useY = false;
-                m_animation.SetAnimation(0, m_isGrounded ? "Buggiant3_Move_Ground" : "Buggiant3_Move_Flying", true).TimeScale = !isAggro ? 1 : m_hostileMoveSpeedMult;
+                m_rootMotion.enabled = true;
+                m_rootMotion.useX = false;
+                m_rootMotion.useY = true;
+                m_animation.SetAnimation(0, m_isGrounded ? "Buggiant3_Move_Ground" : "Buggiant3_Inplace_Flying", true).TimeScale = !isAggro ? 1 : m_hostileMoveSpeedMult;
 
                 if (!isAggro)
                 {

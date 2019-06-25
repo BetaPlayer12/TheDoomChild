@@ -82,7 +82,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void DoMove(bool isGrounded)
         {
-            SetAnimation(0, isGrounded ? ANIMATION_MOVE_GROUND : ANIMATION_MOVE_FLYING, true);
+            SetAnimation(0, isGrounded ? ANIMATION_MOVE_GROUND : ANIMATION_INPLACE_FLYING, true);
         }
 
         public void DoMoveFlying()

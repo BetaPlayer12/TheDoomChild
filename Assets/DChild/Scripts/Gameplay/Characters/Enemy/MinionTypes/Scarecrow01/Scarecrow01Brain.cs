@@ -128,7 +128,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     if (m_currentBehavior == 1)
                     {
-                        if (GetDistance() < m_attack1Range && m_behaviorChance < m_attack1Chance && GetDistance() > m_idleRange - 5)
+                        if (GetDistance() < m_attack1Range && m_behaviorChance < m_attack1Chance && GetDistance() > m_idleRange - 5 *.325)
                         {
                             m_minion.Attack1();
                             m_currentBehavior = 0;
@@ -146,7 +146,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     if (m_currentBehavior == 2)
                     {
-                        if (GetDistance() < m_attack2Range && m_behaviorChance < m_attack2Chance && GetDistance() > m_idleRange - 5)
+                        if (GetDistance() < m_attack2Range && m_behaviorChance < m_attack2Chance && GetDistance() > m_idleRange - 5 * .325)
                         {
                             m_minion.Attack2();
                             m_currentBehavior = 0;
@@ -156,12 +156,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_currentBehavior = 0;
                         }
                     }
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
                     break;
                 default:
                     break;
