@@ -262,8 +262,10 @@ namespace DChild.Gameplay.Characters.Players
 
         private void Start()
         {
+           
             m_health?.ResetValueToMax();
             m_magic?.ResetValueToMax();
+
         }
 
         private void OnValidate()
