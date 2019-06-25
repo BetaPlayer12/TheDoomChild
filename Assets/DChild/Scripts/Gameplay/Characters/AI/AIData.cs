@@ -4,7 +4,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Refactor.DChild.Gameplay.Character.AI
+namespace Refactor.DChild.Gameplay.Characters.AI
 {
     public interface IAIInfo { void Initialize(); }
 
@@ -15,5 +15,12 @@ namespace Refactor.DChild.Gameplay.Character.AI
         private IAIInfo m_info;
 
         public IAIInfo info => m_info;
+
+#if UNITY_EDITOR
+        private void OnEnable()
+        {
+            m_info.Initialize();
+        }
+#endif
     }
 }

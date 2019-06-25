@@ -1010,10 +1010,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1115089278}
-  - component: {fileID: 1115089277}
   - component: {fileID: 1115089276}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1031,23 +1030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2717006b8486649b7198701323a257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animator: {fileID: 756830162}
---- !u!114 &1115089277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1115089275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449c774334500c34e978386bccee658e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_scene:
-    m_sceneName: _Scene MainMenuUI
-    m_scenePath: Assets/DChild/Scenes/_Scene MainMenuUI.unity
-  m_handle: {fileID: 1115089276}
+  m_animation: {fileID: 1215314393}
 --- !u!4 &1115089278
 Transform:
   m_ObjectHideFlags: 0
@@ -1076,6 +1059,7 @@ GameObject:
   - component: {fileID: 1215314390}
   - component: {fileID: 1215314389}
   - component: {fileID: 1215314388}
+  - component: {fileID: 1215314393}
   m_Layer: 0
   m_Name: View - Animation
   m_TagString: Untagged
@@ -1618,3 +1602,16 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1215314393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215314386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bf5e269e3bc4e40b7a193220f0fd32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animator: {fileID: 756830162}

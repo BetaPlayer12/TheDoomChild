@@ -2,7 +2,7 @@
 using DChild.Gameplay.Pooling;
 using DChild.Menu;
 using Holysoft.Event;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,8 +11,8 @@ namespace DChild
     public class GameSystem : MonoBehaviour
     {
         private static PoolManager m_poolManager;
-        private static LoadingHandle m_loadingScreen;
         private static ConfirmationHandler m_confirmationHander;
+        private static ZoneLoader m_zoneLoader;
         public static GameSettings settings { get; private set; }
         public static GameDataManager dataManager { get; private set; }
 
@@ -26,16 +26,16 @@ namespace DChild
             m_confirmationHander.RequestConfirmation(listener, message);
         }
 
-        public static void LoadScene(string sceneName)
+        public static void LoadZone(string sceneName, bool withLoadingScene)
         {
-            m_loadingScreen.LoadScene(sceneName);
+            m_zoneLoader.LoadZone(sceneName, withLoadingScene);
         }
 
         private void Awake()
         {
             settings = GetComponentInChildren<GameSettings>();
-            m_loadingScreen = GetComponentInChildren<LoadingHandle>();
             m_confirmationHander = GetComponentInChildren<ConfirmationHandler>();
+            m_zoneLoader = GetComponentInChildren<ZoneLoader>();
             dataManager = GetComponentInChildren<GameDataManager>();
             m_poolManager = GetComponentInChildren<PoolManager>();
         }
