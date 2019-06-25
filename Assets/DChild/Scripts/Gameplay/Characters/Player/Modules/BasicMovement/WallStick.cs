@@ -75,7 +75,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                    
                     m_stickTimer.Tick(m_time.deltaTime);
                     m_physics.simulateGravity = true;
-                    Debug.Log("isdownpressed! condition true");
+                    Debug.Log("is sticking");
                 
             }
         }
