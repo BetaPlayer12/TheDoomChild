@@ -28,6 +28,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private RaySensor m_sensor;
         private RaySensor m_groundHeightSensor;
         private Skills m_skills;
+        private IFacing m_playerFacing;
+       
 
         private IIsolatedTime m_time;
         private IWallStickState m_wallStickState;
@@ -46,6 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_modifier = player.modifiers;
             m_input = m_physics.GetComponent<PlayerInput>();
             m_skills = player.skills;
+            m_playerFacing = player;
         }
 
         public void ConnectEvents()
@@ -60,24 +63,20 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_isSliding)
             {
-                m_physics.SetVelocity(0, -m_slideSpeed);
+                 
+                m_physics.simulateGravity = false;
+                m_physics.SetVelocity(Vector2.down);
+                Debug.Log("slide condition true");
             }
 
             else
             {
-                if (m_input.direction.isDownPressed)
-                {
-                    m_stickTimer.Reset();
-
-                    var newPos = m_physics.transform.position;
-                    newPos.y -= 1f;
-                    m_physics.transform.position = Vector2.MoveTowards(m_physics.transform.position, newPos, 2);
-                }
-                else
-                {
-                    m_physics.SetVelocity(Vector2.zero);
+                
+                   
                     m_stickTimer.Tick(m_time.deltaTime);
-                }
+                    m_physics.simulateGravity = true;
+                    Debug.Log("isdownpressed! condition true");
+                
             }
         }
 
@@ -128,11 +127,27 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                         if (m_sensor.allRaysDetecting)
                         {
                             var hit = m_sensor.GetValidHits()[0];
-                            if (m_wallStickState.isStickingToWall && m_stickTimer.time > -1)
+                            if (m_wallStickState.isStickingToWall && m_stickTimer.time > -1 &&  eventArgs.input.direction.isLeftHeld && m_playerFacing.currentFacingDirection == HorizontalDirection.Left )//
                             {
                                 m_physics.SetVelocity(Vector2.zero);
                                 m_physics.simulateGravity = false;
                             }
+                            else
+                             if (m_wallStickState.isStickingToWall && m_stickTimer.time > -1 && eventArgs.input.direction.isRightHeld && m_playerFacing.currentFacingDirection == HorizontalDirection.Right)//
+                            {
+                                m_physics.SetVelocity(Vector2.zero);
+                                m_physics.simulateGravity = false;
+                            }
+                            else
+                            {
+                                Debug.Log("Trigger force");
+                                m_physics.simulateGravity = true;
+                                m_physics.SetVelocity(Vector2.down);
+                                m_wallStickState.isSlidingToWall = true;
+                                m_physics.AddForce(new Vector2(0, -1000));
+                               
+                            }
+                          
 
                             if (hit.collider.CompareTag("Droppable") == false)
                             {
@@ -142,7 +157,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                                     AttachToWall(hit);
                                     if (m_wallStickState.isStickingToWall == false)
                                     {
-                                        StickToWall();
+                                       
+                                            StickToWall();
+                                       
                                     }
                                 }
                                 else
@@ -165,6 +182,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     }
                 }
             }
+           
         }
 
         private void AttachToWall(RaycastHit2D hit)

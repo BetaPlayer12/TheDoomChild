@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using Holysoft.Event;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,29 +7,31 @@ namespace DChild.Menu
     public class LoadingHandle : MonoBehaviour
     {
         [SerializeField]
-        private Animator m_animator;
+        private LoadingAnimation m_animation;
 
-        public void LoadScene(string sceneName)
+        public static string sceneToLoad;
+        public static EventAction<EventActionArgs> SceneDone;
+
+        private void Awake()
         {
-            StartCoroutine(LoadSceneRoutine(sceneName));
+            m_animation.AnimationEnd += OnAnimationEnd;
         }
 
-        private IEnumerator LoadSceneRoutine(string sceneName)
+        private void OnAnimationEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animator.gameObject.SetActive(true);
-            m_animator.SetTrigger("Start");
-            var sceneProgess = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            SceneManager.UnloadSceneAsync(gameObject.scene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+        }
 
-            yield return null;
-            sceneProgess.allowSceneActivation = false;
-            while (sceneProgess.progress < 0.9f)
-            {
-                yield return null;
+        private void Start()
+        {
+            var asyncOperation = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+            m_animation.MonitorProgress(asyncOperation);
+        }
 
-            }
-            m_animator.SetTrigger("End");
-            yield return new WaitForSeconds(2.5f);
-            sceneProgess.allowSceneActivation = true;
+        private void OnDestroy()
+        {
+            m_animation.AnimationEnd -= OnAnimationEnd;
+            SceneDone?.Invoke(this, EventActionArgs.Empty);
         }
     }
 }

@@ -143,6 +143,9 @@ namespace DChild.Gameplay.Characters.Players
             //m_skills.LoadData(data.skills);
         }
 
+
+      
+
         public override void EnableController() => m_controller?.Enable();
         public override void DisableController() => m_controller?.Disable();
 
@@ -160,11 +163,13 @@ namespace DChild.Gameplay.Characters.Players
             if (isAlive == false)
             {
                 OnDeath?.Invoke(this, EventActionArgs.Empty);
+                
             }
         }
 
-        public void Damage(ITarget target, BodyDefense targetDefense)
+        public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
+            var target = targetInfo.target;
             if (target.CompareTag("Interactable"))
             {
                 AttackDamage[] damages = AttackDamage.Add(m_statsHandle.damages, m_modifiers.damageModifier);
@@ -179,8 +184,8 @@ namespace DChild.Gameplay.Characters.Players
                 for (int i = 0; i < damages.Length; i++)
                 {
                     AttackInfo info = new AttackInfo(position, m_statsHandle.GetStat(PlayerStat.CritChance), m_modifiers.critDamageModifier, damages[i]);
-                    var result = GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(target, targetDefense.damageReduction));
-                    if (m_equipment.weapon.canInflictStatusEffects && DChildUtility.HasInterface<IStatusReciever>(target))
+                    var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                    if (m_equipment.weapon.canInflictStatusEffects && DChildUtility.HasInterface<IStatusReciever>(targetInfo))
                     {
                         GameplaySystem.combatManager.InflictStatusTo((IStatusReciever)target, m_equipment.weapon.statusToInflict);
                     }
@@ -195,6 +200,7 @@ namespace DChild.Gameplay.Characters.Players
             {
                 var eventArgs = new FlinchEventArgs(DamageSourceFacing(direction));
                 OnFlinch?.Invoke(this, eventArgs);
+                
             }
         }
 

@@ -88,13 +88,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_facing = facing;
         }
 
-        public virtual void Damage(ITarget target, BodyDefense targetDefense)
+        public virtual void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
             if (!targetDefense.isInvulnerable)
             {
                 AttackInfo info = new AttackInfo(position, 0, 1, m_currentDamage);
-                var result = GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(target,targetDefense.damageReduction));
-                CallAttackerAttacked(new CombatConclusionEventArgs(info, target, result));
+                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo.target, result));
             }
         }
 

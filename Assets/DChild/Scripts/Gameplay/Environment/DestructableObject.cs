@@ -3,6 +3,7 @@ using DChild.Gameplay.Combat;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Refactor.DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay.Environment
 {
@@ -12,6 +13,7 @@ namespace DChild.Gameplay.Environment
 
         public abstract Vector2 position { get; }
         public abstract IAttackResistance attackResistance { get; }
+        public bool isAlive => false;
 
         public abstract void Heal(int health);
         public abstract void TakeDamage(int totalDamage, AttackType type);

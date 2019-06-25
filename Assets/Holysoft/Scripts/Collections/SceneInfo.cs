@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Holysoft.Collections
 {
@@ -27,6 +28,12 @@ namespace Holysoft.Collections
 #if UNITY_EDITOR
             set => m_scenePath = value;
 #endif
+        }
+
+        public void Set(Scene scene)
+        {
+            m_sceneName = scene.name;
+            m_scenePath = scene.path;
         }
     }
 }

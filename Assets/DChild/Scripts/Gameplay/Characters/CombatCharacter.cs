@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using DChild.Gameplay.Combat.StatusInfliction;
 using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay.Characters
 {
@@ -32,7 +33,6 @@ namespace DChild.Gameplay.Characters
         public abstract IAttackResistance attackResistance { get; }
         public abstract IStatusEffectState statusEffectState { get; }
         public abstract IStatusResistance statusResistance { get; }
-
         public abstract void Heal(int health);
         public abstract void TakeDamage(int totalDamage, AttackType type);
         public abstract void SetFacing(HorizontalDirection facing);

@@ -4,21 +4,19 @@
  * 
  ***************************************************/
 using Holysoft;
+using Refactor.DChild.Gameplay;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-
     public class ColliderDamage : MonoBehaviour
     {
         private IDamageDealer m_damageDealer;
-        private Hitbox m_hitbox;
 
         private void Awake()
         {
             m_damageDealer = GetComponentInParent<IDamageDealer>();
-            m_hitbox = this.GetComponentInParent<Actor>().GetComponentInChildren<Hitbox>();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -27,9 +25,9 @@ namespace DChild.Gameplay.Combat
                 return;
 
             var hitbox = collision.GetComponent<Hitbox>();
-            if (hitbox != null && hitbox != m_hitbox)
+            if (hitbox != null)
             {
-                m_damageDealer?.Damage(hitbox.damageable, hitbox.defense);
+                m_damageDealer?.Damage(CreateInfo(hitbox), hitbox.defense);
             }
         }
 
@@ -39,9 +37,22 @@ namespace DChild.Gameplay.Combat
                 return;
 
             var hitbox = collision.gameObject.GetComponent<Hitbox>();
-            if (hitbox != null && hitbox != m_hitbox)
+            if (hitbox != null)
             {
-                m_damageDealer.Damage(hitbox.damageable, hitbox.defense);
+                m_damageDealer.Damage(CreateInfo(hitbox), hitbox.defense);
+            }
+        }
+
+        protected TargetInfo CreateInfo(Hitbox hitbox)
+        {
+            if (hitbox.damageable.CompareTag(Character.objectTag))
+            {
+                var character = hitbox.GetComponentInParent<Character>();
+                return new TargetInfo(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
+            }
+            else
+            {
+                return new TargetInfo(hitbox.damageable);
             }
         }
     }

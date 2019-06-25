@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IledgeController 
+public interface ILedgeController 
 {
     event EventAction<EventActionArgs> LedgeGrabCall;
 }

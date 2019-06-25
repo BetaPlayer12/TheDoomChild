@@ -7,6 +7,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField]
         private RaySensor m_groundSensor;
+        [SerializeField]
         private RaySensor m_extraGroundSensor;//
         [Space]
         [SerializeField]
