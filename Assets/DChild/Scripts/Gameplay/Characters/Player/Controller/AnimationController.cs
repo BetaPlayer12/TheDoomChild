@@ -29,14 +29,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallLateUpdate(IPlayerState state)
         {
-            if (m_animationState.isLedging)
+            if (state.isLedging)
             {
-                m_animation.DoLedgeGrab(m_prevFacing);
-                if (m_animation.animationState.GetCurrent(0).IsComplete)
-                {
-                    m_animationState.isLedging = false;
-                }
-                return;
+             
             }
 
             #region Flinch
@@ -158,12 +153,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             else if (state.isSlidingToWall)
             {
-                m_animation.DoWallSlide(m_facing.currentFacingDirection);
+                  m_animation.DoWallSlide(m_facing.currentFacingDirection);
+                 m_animationState.isWallJumping = true;
+                // m_animationState.isFallingFromWallJump = true;
 
-                m_animationState.isWallJumping = true;
                 m_animationState.isFallingFromWallJump = true;
             }
-
+            
             else if (state.isStickingToWall)
             {
                 if (m_animationState.onWallJumpEnd)
@@ -222,13 +218,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             else if (state.isFalling)
             {
-                if (state.isLedging)
-                {
-                    m_animationState.isLedging = true;
-                    m_animation.DoLedgeGrab(HorizontalDirection.Left);///
-                    Debug.Log("animation check2");
+                
+
                 }
-            }
 
             else if (state.canHighJump)
             {
@@ -389,6 +381,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_prevFacing = m_facing.currentFacingDirection;
         }
+       
 
     }
+
+    
 }

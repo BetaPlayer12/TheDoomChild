@@ -143,6 +143,9 @@ namespace DChild.Gameplay.Characters.Players
             //m_skills.LoadData(data.skills);
         }
 
+
+      
+
         public override void EnableController() => m_controller?.Enable();
         public override void DisableController() => m_controller?.Disable();
 
@@ -160,6 +163,7 @@ namespace DChild.Gameplay.Characters.Players
             if (isAlive == false)
             {
                 OnDeath?.Invoke(this, EventActionArgs.Empty);
+                
             }
         }
 
@@ -195,6 +199,7 @@ namespace DChild.Gameplay.Characters.Players
             {
                 var eventArgs = new FlinchEventArgs(DamageSourceFacing(direction));
                 OnFlinch?.Invoke(this, eventArgs);
+                
             }
         }
 

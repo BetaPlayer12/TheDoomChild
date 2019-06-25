@@ -25,7 +25,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnSensorCast(object sender, RaySensorCastEventArgs eventArgs)
         {
+
             var hitCollider = m_groundSensor.GetProminentHitCollider();
+            //Debug.Log($"{hitCollider.gameObject.name} = " + hitCollider.tag);
             m_state.canPlatformDrop = hitCollider?.CompareTag("Droppable") ?? false;
         }
 
