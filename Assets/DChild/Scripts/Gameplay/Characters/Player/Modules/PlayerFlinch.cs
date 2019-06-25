@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
+
     public class PlayerFlinch : MonoBehaviour, IPlayerExternalModule
     {
         [SerializeField]
@@ -58,6 +59,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_behaviourState.waitForBehaviour = false;
             m_state.isFlinching = false;
             enabled = false;
+           
         }
 
         private void Update() => m_flinchDuration.Tick(m_time.deltaTime);

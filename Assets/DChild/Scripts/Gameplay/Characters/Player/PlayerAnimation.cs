@@ -79,7 +79,8 @@ namespace DChild.Gameplay.Characters.Players
 
         public const string ANIMATION_CROUCH_IDLE_RIGHT = "Crouch_Idle_Right";
         public const string ANIMATION_CROUCH_RIGHT = "Crouch_Right";
-        public const string ANIMATION_LEDGE_GRAB_RIGHT = "EdgeGrab_Right2";//
+        public const string ANIMATION_LEDGE_GRAB_RIGHT = "EdgeGrab_Right1";//
+        public const string ANIMATION_LEDGE_GRAB_LEFT = "EdgeGrab_Left1";//
         #endregion
 
         #region Projectile
@@ -786,13 +787,16 @@ namespace DChild.Gameplay.Characters.Players
         public void DoLedgeGrab(HorizontalDirection direction)
         {
             Debug.Log("Animation play");
-            if (direction == HorizontalDirection.Left)
+            if (direction == HorizontalDirection.Right)
             {
-                SetAnimation(0, ANIMATION_LEDGE_GRAB_RIGHT, false, 0);
+                    SetAnimation(0, ANIMATION_LEDGE_GRAB_RIGHT, false, 0);
+                    Debug.Log("Right");
             }
             else
-                SetAnimation(0, ANIMATION_LEDGE_GRAB_RIGHT, false, 0);//
-
+            {
+                SetAnimation(0, ANIMATION_LEDGE_GRAB_LEFT, false, 0);//
+                Debug.Log("Left");
+            }
         }
 
         public void SetCurrentAttackAnimation(string attackAnimation)

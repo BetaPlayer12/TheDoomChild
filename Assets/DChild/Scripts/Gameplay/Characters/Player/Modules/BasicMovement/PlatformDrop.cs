@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private IPlatformDropState m_state;
         private Collider2D m_platformCollider;
         private RaySensor m_groundSensor;
+        
         private IIsolatedTime m_time;
 
         public void ConnectEvents()
@@ -29,6 +30,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         public void Initialize(IPlayerModules player)
         {
             m_groundSensor = player.sensors.groundSensor;
+           
             m_state = player.characterState;
             m_playerColliders = player.colliders;
             m_time = player.isolatedObject;
