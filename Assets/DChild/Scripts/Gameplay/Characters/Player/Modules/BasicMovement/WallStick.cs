@@ -63,10 +63,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_isSliding)
             {
-                 
-                m_physics.simulateGravity = false;
+
+                m_physics.simulateGravity = true;
                 m_physics.SetVelocity(Vector2.down);
-                Debug.Log("slide condition true");
+                m_wallStickState.isSlidingToWall = true;
+                m_physics.AddForce(new Vector2(0, -250));
+
             }
 
             else
@@ -75,7 +77,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                    
                     m_stickTimer.Tick(m_time.deltaTime);
                     m_physics.simulateGravity = true;
-                    Debug.Log("is sticking");
+                   
                 
             }
         }
@@ -140,11 +142,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                             }
                             else
                             {
-                                Debug.Log("Trigger force");
-                                m_physics.simulateGravity = true;
+
+                                m_physics.simulateGravity = false;
                                 m_physics.SetVelocity(Vector2.down);
                                 m_wallStickState.isSlidingToWall = true;
-                                m_physics.AddForce(new Vector2(0, -1000));
+                                m_stickTimer.EndTime(true);
+                               // m_physics.AddForce(new Vector2(0, -1000));
                                
                             }
                           
