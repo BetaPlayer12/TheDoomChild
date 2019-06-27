@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Cinematics
         private IVirtualCamera m_currentVCam;
         private IVirtualCamera m_defaultCam;
         private List<ITrackingCamera> m_trackingCameras;
+        [SerializeField]
         private Transform m_trackingTarget;
 
         public Camera mainCamera => m_mainCamera;
