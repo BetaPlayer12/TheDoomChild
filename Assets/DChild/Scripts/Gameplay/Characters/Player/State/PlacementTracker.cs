@@ -19,6 +19,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics = player.physics;
         }
 
+        private void Start()
+        {
+            m_state.isGrounded = m_physics.onWalkableGround;
+        }
+
         public void FixedUpdate()
         {
             if (m_state.isGrounded)

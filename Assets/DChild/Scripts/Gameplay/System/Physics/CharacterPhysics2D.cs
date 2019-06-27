@@ -113,6 +113,8 @@ namespace DChild.Gameplay
 
         protected override void Awake()
         {
+            m_inContactWithGround = true;
+            m_onWalkableGround = true;
             m_legColliderDetector = GetComponentInChildren<CapsuleColliderDetector>();
             m_stepClimber.Initialize();
             base.Awake();

@@ -43,6 +43,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         }
 
+       
+
         public void CallUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
         {
             if (state.isStickingToWall)
@@ -77,7 +79,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (state.canHighJump)
                 {
                     HighJumpCall?.Invoke(this, callArgs);
+
                 }
+
+               
+
+                Debug.Log("state of double jump = "+state.canDoubleJump);
 
                 if (skills.IsEnabled(MovementSkill.DoubleJump) && state.canDoubleJump)
                 {
