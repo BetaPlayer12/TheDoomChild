@@ -20,30 +20,18 @@ namespace DChild
         {
             if (withLoadingScene)
             {
-                LoadingHandle.sceneToLoad = sceneName;
-                SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
+                LoadingHandle.LoadScenes(sceneName);
                 if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
                 {
-                    var gameplaySystem = SceneManager.LoadSceneAsync(m_gameplayScene.sceneName, LoadSceneMode.Additive);
-                    StartCoroutine(WaitTillZoneDone(gameplaySystem));
+                    LoadingHandle.LoadScenes(m_gameplayScene.sceneName);
                 }
+                SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
             }
             else
             {
                 SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
                 SceneManager.LoadSceneAsync(m_gameplayScene.sceneName, LoadSceneMode.Additive);
             }
-        }
-
-        private IEnumerator WaitTillZoneDone(AsyncOperation operation)
-        {
-            m_isZoneLoaded = false;
-            operation.allowSceneActivation = false;
-            while (m_isZoneLoaded == false)
-            {
-                yield return null;
-            }
-            operation.allowSceneActivation = true;
         }
 
         private void OnSceneDone(object sender, EventActionArgs eventArgs)

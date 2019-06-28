@@ -122,22 +122,22 @@ namespace DChild.Gameplay.Characters.Players
         {
             switch (eventArgs.atttribute)
             {
-                case PlayerAttribute.Vitality:
+                case Attribute.Vitality:
                     UpdateStat(PlayerStat.Health);
                     UpdateStat(PlayerStat.Defense);
                     UpdateStat(PlayerStat.MagicDefense);
                     break;
-                case PlayerAttribute.Intelligence:
+                case Attribute.Intelligence:
                     UpdateStat(PlayerStat.Magic);
                     UpdateStat(PlayerStat.MagicDefense);
                     UpdateStat(PlayerStat.MagicAttack);
                     UpdateDamage();
                     break;
-                case PlayerAttribute.Strength:
+                case Attribute.Strength:
                     UpdateStat(PlayerStat.Attack);
                     UpdateDamage();
                     break;
-                case PlayerAttribute.Luck:
+                case Attribute.Luck:
                     UpdateStat(PlayerStat.CritChance);
                     UpdateStat(PlayerStat.StatusChance);
                     break;

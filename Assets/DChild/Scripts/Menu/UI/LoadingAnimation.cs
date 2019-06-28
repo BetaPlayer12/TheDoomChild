@@ -12,6 +12,16 @@ namespace DChild.Menu
 
         public event EventAction<EventActionArgs> AnimationEnd;
 
+        public void PlayStart()
+        {
+            m_animator.SetTrigger("Start");
+        }
+
+        public void PlayEnd()
+        {
+            m_animator.SetTrigger("End");
+        }
+
         public void MonitorProgress(AsyncOperation loadingOperation)
         {
             StartCoroutine(AnimationRoutine(loadingOperation));

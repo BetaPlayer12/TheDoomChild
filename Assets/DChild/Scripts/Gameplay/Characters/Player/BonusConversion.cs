@@ -10,11 +10,11 @@ namespace DChild.Gameplay.Characters.Players
         private struct BonusHandle
         {
             [SerializeField]
-            private PlayerAttribute m_fromAttribute;
+            private Attribute m_fromAttribute;
             [SerializeField, HideLabel]
             private RatioCalulation m_calcuation;
 
-            public PlayerAttribute fromAttribute => m_fromAttribute;
+            public Attribute fromAttribute => m_fromAttribute;
             public int CalculateOutput(int value) => m_calcuation.CalculateOutput(value);
         }
 

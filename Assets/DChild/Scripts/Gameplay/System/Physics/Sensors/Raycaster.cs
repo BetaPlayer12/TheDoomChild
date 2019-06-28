@@ -21,7 +21,8 @@ namespace DChild.Gameplay
         }
 
         /// <summary>
-        /// Allows Collision To These Layers Only
+        /// Allows Collision To These Layers Only,
+        /// If you are not using a LayerMask use LayerMask.GetMask() instead
         /// </summary>
         /// <param name="layer"></param>
         public static void SetLayerMask(int layer) => m_contactFilter.SetLayerMask(layer);

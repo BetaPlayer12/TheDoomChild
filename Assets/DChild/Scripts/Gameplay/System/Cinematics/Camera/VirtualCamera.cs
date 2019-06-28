@@ -1,11 +1,32 @@
 ﻿using Cinemachine;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics.Cameras
 {
-    [RequireComponent(typeof(CinemachineVirtualCamera))]
     public class VirtualCamera : MonoBehaviour, IVirtualCamera, ITrackingCamera
     {
+#if UNITY_EDITOR
+        [SerializeField,OnValueChanged("ChangeName")]
+        private string cameraName;
+
+        private void ChangeName()
+        {
+            if(cameraName != string.Empty)
+            {
+                gameObject.name = cameraName;
+                if(m_vCam == null)
+                {
+                    m_vCam = GetComponentInChildren<CinemachineVirtualCamera>(true);
+                }
+                if(m_vCam != null)
+                {
+                    m_vCam.gameObject.name = cameraName + "VCam";
+                }
+            }
+        }
+#endif
+
         [SerializeField]
         private bool m_trackPlayer = true;
         [SerializeField]
@@ -18,12 +39,12 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         public void Activate()
         {
-            gameObject.SetActive(true);
+            m_vCam.enabled = true;
         }
 
         public void Deactivate()
         {
-            gameObject.SetActive(false);
+            m_vCam.enabled = false;
         }
 
         private void OnEnable()
@@ -37,7 +58,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         private void OnValidate()
         {
-            m_vCam = GetComponent<CinemachineVirtualCamera>();
+            m_vCam = GetComponentInChildren<CinemachineVirtualCamera>(true);
         }
     }
 
