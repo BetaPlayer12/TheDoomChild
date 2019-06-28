@@ -13,12 +13,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     {
         [SerializeField]
         private CountdownTimer m_ignoreColliderDuration;
-
+        
         private CharacterColliders m_playerColliders;
+        private ILedgeGrabState m_ledgeGrab;
         private IPlatformDropState m_state;
         private Collider2D m_platformCollider;
         private RaySensor m_groundSensor;
-        
         private IIsolatedTime m_time;
 
         public void ConnectEvents()
@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         public void Initialize(IPlayerModules player)
         {
             m_groundSensor = player.sensors.groundSensor;
-           
+            m_ledgeGrab = player.characterState;
             m_state = player.characterState;
             m_playerColliders = player.colliders;
             m_time = player.isolatedObject;
@@ -41,18 +41,26 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             var colliders = m_playerColliders.colliders;
             for (int i = 0; i < colliders.Length; i++)
             {
+               
                 Physics2D.IgnoreCollision(colliders[i], m_platformCollider, true);
+                
             }
             m_ignoreColliderDuration.Reset();
             enabled = true;
+            m_ledgeGrab.canLedgeGrab = false;//
             m_state.isDroppingFromPlatform = true;
+            Debug.Log("platform trigger " + m_ledgeGrab.canLedgeGrab);
+           
         }
 
         private void OnPlatformDropCall(object sender, ControllerEventArgs eventArgs)
         {
+
+           
             if (m_platformCollider != null)
             {
                 ReapplyPlatformCollision(m_platformCollider);
+                
             }
             m_platformCollider = m_groundSensor.GetProminentHitCollider();
             DropFromPlatform();
@@ -82,6 +90,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 for (int i = 0; i < colliders.Length; i++)
                 {
                     Physics2D.IgnoreCollision(colliders[i], platformCollider, false);
+                    
                 }
             }
         }

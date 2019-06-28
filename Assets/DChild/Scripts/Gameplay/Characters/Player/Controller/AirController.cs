@@ -84,7 +84,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                
 
-                Debug.Log("state of double jump = "+state.canDoubleJump);
+
 
                 if (skills.IsEnabled(MovementSkill.DoubleJump) && state.canDoubleJump)
                 {
