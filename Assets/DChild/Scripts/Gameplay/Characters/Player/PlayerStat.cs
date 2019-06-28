@@ -1,4 +1,6 @@
-﻿namespace DChild.Gameplay.Characters.Players
+﻿using UnityEngine;
+
+namespace DChild.Gameplay.Characters.Players
 {
     public enum PlayerStat
     {
@@ -11,6 +13,8 @@
         CritChance,
         StatusChance,
         MaxAttack,
-        MaxDefense
+        MaxDefense,
+        [HideInInspector]
+        _COUNT
     }
 }

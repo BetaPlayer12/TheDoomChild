@@ -6,20 +6,20 @@ namespace DChild.Gameplay.Characters.Players
     public interface IAttributes
     {
         event EventAction<AttributeValueEventArgs> ValueChange;
-        int GetValue(PlayerAttribute attribute);
-        void SetValue(PlayerAttribute attribute, int value);
-        void AddValue(PlayerAttribute attribute, int value);
+        int GetValue(Attribute attribute);
+        void SetValue(Attribute attribute, int value);
+        void AddValue(Attribute attribute, int value);
     }
 
     public struct AttributeValueEventArgs : IEventActionArgs
     {
-        public AttributeValueEventArgs(PlayerAttribute atttribute, int value) : this()
+        public AttributeValueEventArgs(Attribute atttribute, int value) : this()
         {
             this.atttribute = atttribute;
             this.value = value;
         }
 
-        public PlayerAttribute atttribute { get; }
+        public Attribute atttribute { get; }
         public int value { get; }
     }
 }

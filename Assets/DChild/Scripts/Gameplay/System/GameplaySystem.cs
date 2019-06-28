@@ -71,14 +71,14 @@ namespace DChild.Gameplay
         public static void ResumeGame()
         {
             Time.timeScale = 1;
-            m_playerManager.EnableInput();
+            m_playerManager?.EnableInput();
             isGamePaused = false;
         }
 
         public static void PauseGame()
         {
             Time.timeScale = 0;
-            m_playerManager.EnableInput();
+            m_playerManager?.DisableInput();
             isGamePaused = true;
         }
 
