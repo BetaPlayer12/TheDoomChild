@@ -69,6 +69,7 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             [SerializeField, PreviewField, OnValueChanged("Initialize")]
             protected SkeletonDataAsset m_skeletonDataAsset;
 
+#if UNITY_EDITOR
             protected IEnumerable GetEvents()
             {
                 ValueDropdownList<string> list = new ValueDropdownList<string>();
@@ -79,6 +80,18 @@ namespace Refactor.DChild.Gameplay.Characters.AI
                 }
                 return list;
             }
+
+            protected IEnumerable GetAnimations()
+            {
+                ValueDropdownList<string> list = new ValueDropdownList<string>();
+                var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Animations.ToArray();
+                for (int i = 0; i < reference.Length; i++)
+                {
+                    list.Add(reference[i].Name);
+                }
+                return list;
+            }
+#endif
 
             public abstract void Initialize();
         }

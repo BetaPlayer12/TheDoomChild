@@ -26,6 +26,7 @@ namespace Refactor.DChild.Gameplay.Characters
             m_cacheTrack.MixDuration = 0;
             m_cacheTrack.Complete += OnTrackDone;
             m_cacheTrack.Interrupt += OnTrackDone;
+            m_animation.AddEmptyAnimation(0, 0, 0);
         }
 
         private void OnTrackDone(TrackEntry trackEntry)

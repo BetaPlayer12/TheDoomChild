@@ -9,6 +9,7 @@
  * 
  ***********************************************/
 
+using System;
 using Spine.Unity.Modules;
 
 namespace DChild.Gameplay.Characters

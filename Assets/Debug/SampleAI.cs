@@ -62,9 +62,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs)
         {
+            WaitTillBehaviourEnd(State.ReevaluateSituation);
             m_turnHandle.Execute();
-            m_currentState = State.WaitBehaviourEnd;
-            m_afterWaitForBehaviourState = State.ReevaluateSituation;
         }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
@@ -78,6 +77,18 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
+            m_turnHandle.TurnDone += OnTurnDone;
+        }
+
+        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
+        {
+            m_currentState = m_afterWaitForBehaviourState;
+        }
+
+        private void WaitTillBehaviourEnd(State nextState)
+        {
+            m_currentState = State.WaitBehaviourEnd;
+            m_afterWaitForBehaviourState = nextState;
         }
 
         private void Update()
@@ -93,8 +104,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     m_attackHandle.ExecuteAttack(m_info.attack.animation);
-                    m_currentState = State.WaitBehaviourEnd;
-                    m_afterWaitForBehaviourState = State.ReevaluateSituation;
+                    WaitTillBehaviourEnd(State.ReevaluateSituation);
                     break;
                 case State.Chasing:
                     //Put Target Destination
@@ -104,9 +114,16 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         m_currentState = State.Attacking;
                         m_movementHandle.Stop();
                     }
-                    else
+                    else if (IsFacingTarget())
                     {
                         m_movementHandle.MoveTowards(target, m_info.move.speed);
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    }
+                    else
+                    {
+                        m_movementHandle.Stop();
+                        WaitTillBehaviourEnd(State.ReevaluateSituation);
+                        m_turnHandle.Execute();
                     }
                     //Play Animation
                     break;
