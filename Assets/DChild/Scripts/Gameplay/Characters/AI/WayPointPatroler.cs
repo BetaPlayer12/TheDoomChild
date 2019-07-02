@@ -71,7 +71,7 @@ namespace DChild.Gameplay.Characters.AI
 
             if (nearX && nearY)
             {
-                //Debug.Log("Switch Destinations");
+                Debug.Log("Switch Destinations");
                 isNearDestination = true;
                 NextPatrolPoint();
                 destination = m_wayPoints[m_currentIndex];
