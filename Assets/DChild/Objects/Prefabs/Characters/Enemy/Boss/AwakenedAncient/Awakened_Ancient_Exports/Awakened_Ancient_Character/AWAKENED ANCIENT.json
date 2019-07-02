@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "Gt8XnkOCEKKNWDQfDieroBUPoNk", "spine": "3.7.94", "width": 2695.25, "height": 3296.16, "images": "./images/", "audio": "" },
+"skeleton": { "hash": "fg3TGuQjxKOUqbxIOytxrAtvcRY", "spine": "3.7.94", "width": 2695.25, "height": 3296.16, "images": "./images/", "audio": "" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "main body", "parent": "root", "length": 737.98, "rotation": 18.74, "x": -171.58, "y": 1158.5 },
@@ -46,7 +46,8 @@
 	{ "name": "main body3", "parent": "main body2", "x": -330.6, "y": 440.83, "color": "2900ffff" },
 	{ "name": "middle", "parent": "main body", "length": 306.77, "rotation": -21.03, "x": 665.35, "y": -48.73 },
 	{ "name": "middle2", "parent": "middle", "x": 879.45, "y": 57.87 },
-	{ "name": "VFX", "parent": "middle", "x": 208.85, "y": 37.96 }
+	{ "name": "VFX", "parent": "middle", "x": 208.85, "y": 37.96 },
+	{ "name": "Stomp_VfX", "parent": "L lower front leg", "x": 1062.92, "y": 30.88 }
 ],
 "slots": [
 	{ "name": "back rock 2", "bone": "back rock 2" },
@@ -872,6 +873,7 @@
 	}
 },
 "events": {
+	"Foot_Effects": {},
 	"SA_Anticipation": {},
 	"Seed_Spit": {},
 	"Stomp_Efx": {}
@@ -3760,6 +3762,7 @@
 			}
 		],
 		"events": [
+			{ "time": 0.5, "name": "Foot_Effects" },
 			{ "time": 1.8333, "name": "Stomp_Efx" }
 		]
 	},

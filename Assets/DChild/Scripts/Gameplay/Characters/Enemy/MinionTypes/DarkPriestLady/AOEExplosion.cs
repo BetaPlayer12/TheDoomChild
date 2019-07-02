@@ -86,6 +86,8 @@ namespace DChild.Gameplay
 
         private void Awake()
         {
+            m_cacheHitboxList = new List<Hitbox>();
+            m_toDamage = new List<ITarget>();
             m_rigidbody = GetComponent<Rigidbody2D>();
             m_fx.Done += OnFXDone;
         }
