@@ -786,7 +786,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void DoLedgeGrab(HorizontalDirection direction)
         {
-            Debug.Log("Animation play");
+           // Debug.Log("Animation play");
             if (direction == HorizontalDirection.Right)
             {
                     SetAnimation(0, ANIMATION_LEDGE_GRAB_RIGHT, false, 0);
@@ -795,7 +795,7 @@ namespace DChild.Gameplay.Characters.Players
             else
             {
                 SetAnimation(0, ANIMATION_LEDGE_GRAB_LEFT, false, 0);//
-                Debug.Log("Left");
+               // Debug.Log("Left");
             }
         }
 

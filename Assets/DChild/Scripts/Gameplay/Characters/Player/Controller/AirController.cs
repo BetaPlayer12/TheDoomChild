@@ -71,8 +71,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     LedgeGrabCall?.Invoke(this, EventActionArgs.Empty);
                     if (state.waitForBehaviour)
                     {
+                       
                         return;
                     }
+                    DoubleJumpReset.Invoke(this, EventActionArgs.Empty);
 
                 }
 

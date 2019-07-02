@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             if(hitcount > 0 )
             {
                 
-                Debug.Log("test hit");
+               // Debug.Log("test hit");
                
                 m_state.canLedgeGrab = false;
             }
@@ -112,8 +112,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     {
                       
                         var currentPosition = m_physics.position;
-                        currentPosition.y = groundPosition.y;
-                        currentPosition.x = currentPosition.x + (int)m_characterFacing.currentFacingDirection; //i addedd a forward force by 1 to make sure that the player avoids the edge slide so the player is standing on the platform
+                        currentPosition.y = groundPosition.y -1;
+                        currentPosition.x = currentPosition.x+(2* (int)m_characterFacing.currentFacingDirection) ; //i addedd a forward force by 1 to make sure that the player avoids the edge slide so the player is standing on the platform
                         m_physics.position = currentPosition;
                         StartCoroutine(ChangeLedgingStateToFalse());
                     }
