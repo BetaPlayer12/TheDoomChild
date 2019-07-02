@@ -18,20 +18,42 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private RaySensor m_ledgeSensorCliff;
         private RaySensor m_ledgeSensorEdge;
         private ILedgeGrabState m_state;
+        private IPlatformDropState m_dropPlatform;
         private CharacterPhysics2D m_physics;
         [SerializeField]
         private Vector2 m_groundRayOriginOffset;
 
-        [SerializeField, MinValue(1)]
-        private float rayDistance;
-
         
+        [SerializeField]
+        private Transform headObject;
+        [SerializeField, MinValue(1)]
+        private int distance;
+
+
+        [Button]
+        private void HeadCast()
+        {
+            Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
+            int hitcount;
+            var hitBuffer = Raycaster.Cast(headObject.position, Vector2.up, distance, true, out hitcount);
+            if(hitcount > 0 )
+            {
+                
+                Debug.Log("test hit");
+               
+                m_state.canLedgeGrab = false;
+            }
+        }
+
+
+
+
         private bool FindGroundDestination(out Vector2 groundPosition)
         {
             groundPosition = Vector2.zero;
             Raycaster.SetLayerCollisionMask(LayerMask.NameToLayer("Environment"));
             int hitcount;
-            var hitBuffer = Raycaster.Cast(CalculateGroundRayOrigin(),Vector2.down,rayDistance ,true, out hitcount);
+            var hitBuffer = Raycaster.Cast(CalculateGroundRayOrigin(),Vector2.down, m_groundRayOriginOffset.y, true, out hitcount);
             if(hitcount > 0)
             {
                 groundPosition =  hitBuffer[0].point;
@@ -48,10 +70,19 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             return wallContactPoint;
         }
 
+        
         private PlayerAnimation m_playerAnimation;
 
-        public void ConnectEvents() => GetComponentInParent<ILedgeController>().LedgeGrabCall += PullFromCliff;
+      
 
+
+        public void ConnectEvents()
+        {
+            GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            GetComponentInParent<ILedgeController>().LedgeGrabCall += PullFromCliff;
+        }
+
+       
         public void Initialize(IPlayerModules player)
         {
             m_characterFacing = player;
@@ -60,30 +91,36 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state = player.characterState;
             m_playerAnimation = player.animation;
             m_physics = player.physics;
+            m_dropPlatform = player.characterState;
         }
 
         public void PullFromCliff()
         {
-            Debug.Log("before Cast");
+           
             m_ledgeSensorCliff.Cast();
             m_ledgeSensorEdge.Cast();
 
-            Debug.Log("after Cast");
-
-            if (m_ledgeSensorCliff.isDetecting == true && m_ledgeSensorEdge.isDetecting == false)
+            if (m_state.canLedgeGrab)
             {
-                Debug.Log("Edge detected");
-                Vector2 groundPosition;
-                if(FindGroundDestination(out groundPosition))
+                HeadCast();
+
+                if (m_ledgeSensorCliff.isDetecting == true && m_ledgeSensorEdge.isDetecting == false)
                 {
-                    Debug.Log("Destination  detected");
-                    var currentPosition = m_physics.position;
-                    currentPosition.y = groundPosition.y;
-                    currentPosition.x = currentPosition.x + 1; //i addedd a forward force by 1 to make sure that the player avoids the edge slide so the player is standing on the platform
-                    m_physics.position = currentPosition;
+
+                    Vector2 groundPosition;
+                    if (FindGroundDestination(out groundPosition))
+                    {
+                      
+                        var currentPosition = m_physics.position;
+                        currentPosition.y = groundPosition.y;
+                        currentPosition.x = currentPosition.x + (int)m_characterFacing.currentFacingDirection; //i addedd a forward force by 1 to make sure that the player avoids the edge slide so the player is standing on the platform
+                        m_physics.position = currentPosition;
+                        StartCoroutine(ChangeLedgingStateToFalse());
+                    }
+                    
                 }
-                StartCoroutine(ChangeLedgingStateToFalse());
-            }
+                }
+            
         }
 
         private void PullFromCliff(object sender, EventActionArgs eventArgs)
@@ -127,5 +164,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state.isLedging = false;
             m_playerAnimation.DisableRootMotion();
         }
+
+
+        private void OnLandCall(object sender, EventActionArgs eventArgs)
+        {
+            
+            m_state.canLedgeGrab = true;
+        }
+
     }
 }

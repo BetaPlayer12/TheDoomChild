@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (state.hasLanded)
             {
+
                 LandCall?.Invoke(this, EventActionArgs.Empty);
                 return;
             }
@@ -49,6 +50,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (state.canPlatformDrop && callArgs.input.isJumpPressed)
                 {
+
                     PlatformDropCall?.Invoke(this, callArgs);
                 }
             }

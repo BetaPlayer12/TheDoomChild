@@ -17,10 +17,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!value)
             {
                 m_target = null;
+                Debug.Log("Target found");
             }
             else
             {
                 m_minion.Idle();
+                Debug.Log("Stand by");
             }
             enabled = value;
         }
@@ -32,6 +34,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrol.Initialize();
             m_isResting = false;
             m_isAttacking = false;
+            Debug.Log("reset brain");
         }
 
         public override void SetTarget(IEnemyTarget target)

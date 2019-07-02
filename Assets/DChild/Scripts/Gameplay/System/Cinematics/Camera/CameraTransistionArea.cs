@@ -21,17 +21,17 @@ namespace DChild.Gameplay.Cinematics
             }
         }
 
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (collision.CompareTag("Hitbox"))
-            {
-                var player = collision.GetComponentInParent<Player>();
-                if (player != null)
-                {
-                    GameplaySystem.cinema.TransistionToDefaultCamera();
-                }
-            }
-        }
+        //private void OnTriggerExit2D(Collider2D collision)
+        //{
+        //    if (collision.CompareTag("Hitbox"))
+        //    {
+        //        var player = collision.GetComponentInParent<Player>();
+        //        if (player != null)
+        //        {
+        //            GameplaySystem.cinema.TransistionToDefaultCamera();
+        //        }
+        //    }
+        //}
     }
 
 

@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-
     [System.Serializable]
     public struct PlayerStatsInfo
     {

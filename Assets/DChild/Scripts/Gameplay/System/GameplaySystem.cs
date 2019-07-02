@@ -71,14 +71,14 @@ namespace DChild.Gameplay
         public static void ResumeGame()
         {
             Time.timeScale = 1;
-            m_playerManager.EnableInput();
+            m_playerManager?.EnableInput();
             isGamePaused = false;
         }
 
         public static void PauseGame()
         {
             Time.timeScale = 0;
-            m_playerManager.EnableInput();
+            m_playerManager?.DisableInput();
             isGamePaused = true;
         }
 
@@ -101,6 +101,7 @@ namespace DChild.Gameplay
             AssignModule(out m_world);
             AssignModule(out m_simulation);
             AssignModule(out m_playerManager);
+            Debug.Log("Modules Assigned");
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();

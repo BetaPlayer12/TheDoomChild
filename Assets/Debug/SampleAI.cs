@@ -57,19 +57,32 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            m_currentState = State.ReevaluateSituation;
+            m_currentState = m_afterWaitForBehaviourState;
         }
 
+        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
+        {
+            m_currentState = m_afterWaitForBehaviourState;
+            Debug.Log("Done");
+        }
         private void OnTurnRequest(object sender, EventActionArgs eventArgs)
         {
-            WaitTillBehaviourEnd(State.ReevaluateSituation);
+            WaitForBehaviour(State.ReevaluateSituation);
+            m_movementHandle.Stop();
             m_turnHandle.Execute();
+            Debug.Log("is turning");
         }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             base.SetTarget(damageable, m_target);
             m_currentState = State.Chasing;
+        }
+
+        private void WaitForBehaviour(State nextBehaviour)
+        {
+            m_currentState = State.WaitBehaviourEnd;
+            m_afterWaitForBehaviourState = nextBehaviour;
         }
 
         protected override void Awake()
@@ -80,16 +93,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
         }
 
-        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
-        {
-            m_currentState = m_afterWaitForBehaviourState;
-        }
-
-        private void WaitTillBehaviourEnd(State nextState)
-        {
-            m_currentState = State.WaitBehaviourEnd;
-            m_afterWaitForBehaviourState = nextState;
-        }
 
         private void Update()
         {
@@ -103,8 +106,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     //Play Animation
                     break;
                 case State.Attacking:
+                    WaitForBehaviour(State.ReevaluateSituation);
                     m_attackHandle.ExecuteAttack(m_info.attack.animation);
-                    WaitTillBehaviourEnd(State.ReevaluateSituation);
                     break;
                 case State.Chasing:
                     //Put Target Destination
@@ -117,12 +120,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     else if (IsFacingTarget())
                     {
                         m_movementHandle.MoveTowards(target, m_info.move.speed);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     }
                     else
                     {
-                        m_movementHandle.Stop();
-                        WaitTillBehaviourEnd(State.ReevaluateSituation);
+                        WaitForBehaviour(State.ReevaluateSituation);
                         m_turnHandle.Execute();
                     }
                     //Play Animation

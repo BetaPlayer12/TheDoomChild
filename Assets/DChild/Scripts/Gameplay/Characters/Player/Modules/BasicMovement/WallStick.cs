@@ -63,10 +63,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_isSliding)
             {
-                 
-                m_physics.simulateGravity = false;
+
+                m_physics.simulateGravity = true;
                 m_physics.SetVelocity(Vector2.down);
-                Debug.Log("slide condition true");
+                m_wallStickState.isSlidingToWall = true;
+                m_physics.AddForce(new Vector2(0, -250));
+
             }
 
             else
@@ -75,7 +77,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                    
                     m_stickTimer.Tick(m_time.deltaTime);
                     m_physics.simulateGravity = true;
-                    Debug.Log("is sticking");
+                   
                 
             }
         }
@@ -127,25 +129,28 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                         if (m_sensor.allRaysDetecting)
                         {
                             var hit = m_sensor.GetValidHits()[0];
-                            if (m_wallStickState.isStickingToWall && m_stickTimer.time > -1 &&  eventArgs.input.direction.isLeftHeld && m_playerFacing.currentFacingDirection == HorizontalDirection.Left )//
+                            if ((m_wallStickState.isStickingToWall && m_stickTimer.time > -1 )  )//
                             {
                                 m_physics.SetVelocity(Vector2.zero);
                                 m_physics.simulateGravity = false;
                             }
-                            else
-                             if (m_wallStickState.isStickingToWall && m_stickTimer.time > -1 && eventArgs.input.direction.isRightHeld && m_playerFacing.currentFacingDirection == HorizontalDirection.Right)//
+                             else
                             {
-                                m_physics.SetVelocity(Vector2.zero);
+
                                 m_physics.simulateGravity = false;
-                            }
-                            else
-                            {
-                                Debug.Log("Trigger force");
-                                m_physics.simulateGravity = true;
                                 m_physics.SetVelocity(Vector2.down);
                                 m_wallStickState.isSlidingToWall = true;
-                                m_physics.AddForce(new Vector2(0, -1000));
+                                m_stickTimer.EndTime(true);
+                               // m_physics.AddForce(new Vector2(0, -1000));
                                
+                            }
+                           if(m_input.direction.isDownPressed)
+                            {
+                                m_physics.simulateGravity = false;
+                                m_physics.SetVelocity(Vector2.down);
+                                m_wallStickState.isSlidingToWall = true;
+                                m_stickTimer.EndTime(true);
+
                             }
                           
 

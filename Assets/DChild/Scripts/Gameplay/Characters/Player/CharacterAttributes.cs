@@ -20,23 +20,23 @@ namespace DChild.Gameplay.Characters.Players
 
         public event EventAction<AttributeValueEventArgs> ValueChange;
 
-        public void AddValue(PlayerAttribute attribute, int value)
+        public void AddValue(Attribute attribute, int value)
         {
             switch (attribute)
             {
-                case PlayerAttribute.Vitality:
+                case Attribute.Vitality:
                     m_vitality += value;
                     ValueChange?.Invoke(this, new AttributeValueEventArgs(attribute, m_vitality));
                     break;
-                case PlayerAttribute.Intelligence:
+                case Attribute.Intelligence:
                     m_intelligence += value;
                     ValueChange?.Invoke(this, new AttributeValueEventArgs(attribute, m_intelligence));
                     break;
-                case PlayerAttribute.Strength:
+                case Attribute.Strength:
                     m_strength += value;
                     ValueChange?.Invoke(this, new AttributeValueEventArgs(attribute, m_strength));
                     break;
-                case PlayerAttribute.Luck:
+                case Attribute.Luck:
                     m_luck += value;
                     ValueChange?.Invoke(this, new AttributeValueEventArgs(attribute, m_luck));
                     break;
@@ -44,37 +44,37 @@ namespace DChild.Gameplay.Characters.Players
 
         }
 
-        public int GetValue(PlayerAttribute attribute)
+        public int GetValue(Attribute attribute)
         {
             switch (attribute)
             {
-                case PlayerAttribute.Vitality:
+                case Attribute.Vitality:
                     return m_vitality;
-                case PlayerAttribute.Intelligence:
+                case Attribute.Intelligence:
                     return m_intelligence;
-                case PlayerAttribute.Strength:
+                case Attribute.Strength:
                     return m_strength;
-                case PlayerAttribute.Luck:
+                case Attribute.Luck:
                     return m_luck;
                 default:
                     return 0;
             }
         }
 
-        public void SetValue(PlayerAttribute attribute, int value)
+        public void SetValue(Attribute attribute, int value)
         {
             switch (attribute)
             {
-                case PlayerAttribute.Vitality:
+                case Attribute.Vitality:
                     m_vitality = value;
                     break;
-                case PlayerAttribute.Intelligence:
+                case Attribute.Intelligence:
                     m_intelligence = value;
                     break;
-                case PlayerAttribute.Strength:
+                case Attribute.Strength:
                     m_strength = value;
                     break;
-                case PlayerAttribute.Luck:
+                case Attribute.Luck:
                     m_luck = value;
                     break;
             }
@@ -82,10 +82,10 @@ namespace DChild.Gameplay.Characters.Players
         }
 
 #if UNITY_EDITOR
-        private void VitalityChange() => ValueChange?.Invoke(this, new AttributeValueEventArgs(PlayerAttribute.Vitality, m_vitality));
-        private void IntelligenceChange() => ValueChange?.Invoke(this, new AttributeValueEventArgs(PlayerAttribute.Intelligence, m_intelligence));
-        private void StrengthChange() => ValueChange?.Invoke(this, new AttributeValueEventArgs(PlayerAttribute.Strength, m_strength));
-        private void LuckChange() => ValueChange?.Invoke(this, new AttributeValueEventArgs(PlayerAttribute.Luck, m_luck));
+        private void VitalityChange() => ValueChange?.Invoke(this, new AttributeValueEventArgs(Attribute.Vitality, m_vitality));
+        private void IntelligenceChange() => ValueChange?.Invoke(this, new AttributeValueEventArgs(Attribute.Intelligence, m_intelligence));
+        private void StrengthChange() => ValueChange?.Invoke(this, new AttributeValueEventArgs(Attribute.Strength, m_strength));
+        private void LuckChange() => ValueChange?.Invoke(this, new AttributeValueEventArgs(Attribute.Luck, m_luck));
 #endif
     }
 }
