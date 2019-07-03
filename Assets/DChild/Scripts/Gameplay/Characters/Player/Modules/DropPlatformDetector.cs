@@ -13,13 +13,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private RaySensor m_groundSensor;
         private IPlatformDropState m_state;
+        
 
         public void Initialize(IPlayerModules player)
         {
             m_groundSensor = player.sensors.groundSensor;
             m_groundSensor.SensorCast += OnSensorCast;
             m_state = player.characterState;
-
+            
             GetComponentInParent<ILandController>().LandCall += OnLandCall;
         }
 
@@ -33,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnLandCall(object sender, EventActionArgs eventArgs)
         {
+            
             m_groundSensor.Cast();
         }
     }

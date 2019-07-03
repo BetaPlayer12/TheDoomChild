@@ -101,7 +101,7 @@ namespace DChild.Gameplay
             AssignModule(out m_world);
             AssignModule(out m_simulation);
             AssignModule(out m_playerManager);
-            Debug.Log("Modules Assigned");
+            //Debug.Log("Modules Assigned");
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();

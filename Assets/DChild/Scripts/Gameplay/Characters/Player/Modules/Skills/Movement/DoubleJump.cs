@@ -66,6 +66,7 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         private void OnCallReset(object sender, EventActionArgs eventArgs)
         {
+            Debug.Log("Can Double Jump");
             m_doubleJumpState.canDoubleJump = true;
         }
 
