@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace DChildDebug
 {
-#if UNITY_EDITOR
     public class DatabaseUtility : SerializedMonoBehaviour
     {
         [SerializeField]
@@ -75,6 +74,4 @@ namespace DChildDebug
     {
         protected override string table => "Items";
     }
-
-#endif
 }

@@ -20,11 +20,11 @@ namespace DChild
         {
             if (withLoadingScene)
             {
-                LoadingHandle.LoadScenes(sceneName);
                 if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
                 {
                     LoadingHandle.LoadScenes(m_gameplayScene.sceneName);
                 }
+                LoadingHandle.LoadScenes(sceneName);
                 SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
             }
             else

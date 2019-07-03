@@ -14,11 +14,27 @@ namespace DChild
         private SceneInfo m_mainMenu;
 
         private AsyncOperation m_toMainMenu;
+        private bool m_unloadScene;
 
         public void ActivateNextScene()
         {
-            m_toMainMenu.allowSceneActivation = true;
+            if (m_toMainMenu != null)
+            {
+                m_toMainMenu.allowSceneActivation = true;
+            }
+            m_unloadScene = true;
+        }
+
+        public void LoadScene()
+        {
+            SceneManager.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive);
             SceneManager.UnloadSceneAsync(gameObject.scene);
+        }
+
+        public void LoadSceneAsync()
+        {
+            m_toMainMenu = SceneManager.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive);
+            m_toMainMenu.allowSceneActivation = false;
         }
 
         private void Awake()
@@ -31,11 +47,12 @@ namespace DChild
             GameEventMessage.SendEvent("Stop Intro");
         }
 
-        private void Start()
+        private void Update()
         {
-
-            m_toMainMenu = SceneManager.LoadSceneAsync(m_mainMenu.sceneName, LoadSceneMode.Additive);
-            m_toMainMenu.allowSceneActivation = false;
+            if (m_unloadScene)
+            {
+                SceneManager.UnloadSceneAsync(gameObject.scene);
+            }
         }
     }
 }

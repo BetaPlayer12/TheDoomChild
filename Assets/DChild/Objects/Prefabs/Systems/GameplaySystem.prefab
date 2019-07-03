@@ -55,7 +55,7 @@ MonoBehaviour:
     - Name: m_databases
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[DChild.Gameplay.Databases.ScriptableDatabase,
-        DChildAssembly]], mscorlib
+        Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
       Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[System.Type, mscorlib]],
@@ -75,7 +75,7 @@ MonoBehaviour:
     - Name: list
       Entry: 7
       Data: 2|System.Collections.Generic.List`1[[DChild.Gameplay.Databases.ScriptableDatabase,
-        DChildAssembly]], mscorlib
+        Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -129,8 +129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72c8a246b5939404eace0c75ea2ccba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_trajectorySimulator: {fileID: 0}
-  m_trajectoryUI: {fileID: 0}
+  m_trajectorySimulator: {fileID: 3514372278335052070}
+  m_trajectoryUI: {fileID: 2189044761458441782}
 --- !u!1 &4824955416592166037
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,7 +186,7 @@ MonoBehaviour:
     SerializationNodes:
     - Name: m_statusEffectManager
       Entry: 7
-      Data: 0|DChild.Gameplay.Combat.StatusInfliction.StatusEffectManager, DChildAssembly
+      Data: 0|DChild.Gameplay.Combat.StatusInfliction.StatusEffectManager, Assembly-CSharp
     - Name: m_statusEffects
       Entry: 7
       Data: 1|UnityEngine.GameObject[], UnityEngine.CoreModule
@@ -233,24 +233,49 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: m_tracker
-      Entry: 6
+      Entry: 7
+      Data: 2|DChild.Gameplay.Combat.StatusInfliction.StatusEffectTracker, Assembly-CSharp
+    - Name: m_recieverTracker
+      Entry: 7
+      Data: 3|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.StatusInfliction.IStatusReciever,
+        Assembly-CSharp],[System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[DChild.Gameplay.Combat.StatusInfliction.StatusEffect, Assembly-CSharp]],
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 4|System.Collections.Generic.ObjectEqualityComparer`1[[DChild.Gameplay.Combat.StatusInfliction.IStatusReciever,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_statusEffectList
       Entry: 7
-      Data: 2|DChild.EnumList`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 5|DChild.EnumList`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_list
       Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly]],
+      Data: 6|System.Collections.Generic.List`1[[DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
       Data: 11
     - Name: 
       Entry: 7
-      Data: 4|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 7|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 0
@@ -262,8 +287,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 5|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 8|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 1
@@ -275,8 +300,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 6|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 9|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 2
@@ -288,8 +313,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 7|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 10|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 3
@@ -301,8 +326,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 8|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 11|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 4
@@ -314,8 +339,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 9|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 12|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 5
@@ -327,8 +352,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 10|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 13|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 6
@@ -340,8 +365,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 11|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 14|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 7
@@ -353,8 +378,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 12|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 15|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 8
@@ -366,8 +391,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 13|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 16|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 9
@@ -379,8 +404,8 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 14|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
-        DChildAssembly],[UnityEngine.GameObject, UnityEngine.CoreModule]], DChildAssembly
+      Data: 17|DChild.EnumElement`2[[DChild.Gameplay.Combat.StatusInfliction.StatusEffectType,
+        Assembly-CSharp],[UnityEngine.GameObject, UnityEngine.CoreModule]], Assembly-CSharp
     - Name: m_name
       Entry: 3
       Data: 10
@@ -403,11 +428,12 @@ MonoBehaviour:
       Entry: 8
       Data: 
   m_criticalDamageHandler:
-    m_critModifier: 0
+    m_critModifier: 1
   m_uiHandler:
-    m_damageValueUI: {fileID: 0}
-    m_positionOffset: 0
-    m_maxInstanceSpawned: 0
+    m_damageValueUI: {fileID: 1369470525225484, guid: b928313f67484ac4495709cc5b2878df,
+      type: 3}
+    m_positionOffset: 0.5
+    m_maxInstanceSpawned: 5
 --- !u!114 &1282068314815717093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -608,8 +634,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24d33ee0388761a4582676d4cf2d9e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_recordPerFrame: 0
-  m_maxRecordSize: 0
+  m_recordPerFrame: 1
+  m_maxRecordSize: 1
   m_stopOnCollision: 0
   m_collisionSimulation:
     m_type: 3
@@ -716,3 +742,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mainCamera: {fileID: 0}
   m_camera: {fileID: 0}
+  m_trackingTarget: {fileID: 0}
