@@ -1,4 +1,6 @@
-﻿using Holysoft.UI;
+﻿using DChild.Gameplay.Environment;
+using Holysoft.UI;
+using Sirenix.OdinInspector;
 using Spine.Unity;
 using TMPro;
 using UnityEngine;
@@ -6,13 +8,17 @@ using UnityEngine.UI;
 
 namespace DChild.Menu.Bestiary
 {
-    public class BestiaryInfoPage : SimpleUICanvas
+    public class BestiaryInfoPage : MonoBehaviour
     {
+        [ShowInInspector, OnValueChanged("UpdateInfo")]
         private BestiaryData m_showDataOf;
+
         [SerializeField]
         private TextMeshProUGUI m_name;
         [SerializeField]
-        private SkeletonAnimation m_skeleton;
+        private Image m_image;
+        [SerializeField]
+        private TextMeshProUGUI m_location;
         [SerializeField]
         private TextMeshProUGUI m_description;
         [SerializeField]
@@ -20,14 +26,44 @@ namespace DChild.Menu.Bestiary
 
         public void ShowInfo(BestiaryData data)
         {
-            m_showDataOf = data;
-            m_name.text = data.creatureName.ToUpper();
-            if (m_skeleton != null)
+            if (m_showDataOf = data)
             {
-                data.SetupSpine(m_skeleton);
+                m_showDataOf = data;
+                UpdateInfo();
             }
-            m_description.text = data.description;
-            m_sketchImage.sprite = data.sketchImage;
+        }
+
+        private void UpdateInfo()
+        {
+            if (m_showDataOf == null)
+            {
+                m_name.text = "NOTHING";
+                m_image.sprite = null;
+                m_location.text = "THE VOID";
+                m_description.text = "Dead";
+                m_sketchImage.sprite = null;
+            }
+            else
+            {
+                m_name.text = m_showDataOf.creatureName;
+                m_image.sprite = m_showDataOf.infoImage;
+                UpdateLocation(m_showDataOf.locatedIn);
+                m_description.text = m_showDataOf.description;
+                m_sketchImage.sprite = m_showDataOf.sketchImage;
+            }
+        }
+
+        private void UpdateLocation(Location[] locations)
+        {
+            m_location.text = "";
+            for (int i = 0; i < locations.Length; i++)
+            {
+                m_location.text += locations[i].ToString().Replace('_', ' ');
+                if (i < locations.Length - 1)
+                {
+                    m_location.text += "/";
+                }
+            }
         }
     }
 }

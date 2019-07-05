@@ -2,6 +2,7 @@
 
 namespace Holysoft.UI
 {
+
     public class SwitchHighlightData<T> : ScriptableObject
     {
         [SerializeField]

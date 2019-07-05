@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
@@ -10,5 +11,5 @@ namespace DChild.Gameplay.Systems
         Character,
         [HideInInspector]
         _Count
-    }    
+    }
 }

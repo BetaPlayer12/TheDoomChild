@@ -4847,6 +4847,7 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 0
   TextLabel: {fileID: 0}
+  TextMeshProLabel: {fileID: 0}
 --- !u!114 &119971982 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
@@ -5194,6 +5195,134 @@ MonoBehaviour:
     m_TypeName: Doozy.Engine.Events.StringEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   GameEvent: Stop Menu Animation
+  ListenForAllGameEvents: 0
+--- !u!114 &131627771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131627764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea9f92203d31e240bc110ff7b26d05c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugMode: 0
+  Event:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 615600207}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 918905594}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 918905593}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 918905592}
+        m_MethodName: SetTimeScale
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.75
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Doozy.Engine.Events.StringEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  GameEvent: Resume Menu
+  ListenForAllGameEvents: 0
+--- !u!114 &131627772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131627764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea9f92203d31e240bc110ff7b26d05c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugMode: 0
+  Event:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 615600207}
+        m_MethodName: Pause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 918905594}
+        m_MethodName: Pause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 918905593}
+        m_MethodName: Pause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 918905592}
+        m_MethodName: SetTimeScale
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Doozy.Engine.Events.StringEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  GameEvent: Pause Menu
   ListenForAllGameEvents: 0
 --- !u!1 &143225552
 GameObject:
@@ -7341,11 +7470,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - Continue
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7525,6 +7649,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: Continue
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -8579,11 +8708,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - Delete
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8763,6 +8887,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: Delete
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -10898,11 +11027,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11133,6 +11257,11 @@ PrefabInstance:
       propertyPath: TextMeshProLabel
       value: 
       objectReference: {fileID: 1176728731}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -12692,11 +12821,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - Delete
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12876,6 +13000,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: Delete
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -15358,6 +15487,7 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 0
   TextLabel: {fileID: 0}
+  TextMeshProLabel: {fileID: 0}
 --- !u!1001 &487455003
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15369,11 +15499,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Button - New Game
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -15515,6 +15640,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 215.7
       objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580535, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -15554,6 +15684,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: New Game
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -15648,11 +15783,6 @@ PrefabInstance:
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580535, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -17668,6 +17798,11 @@ PrefabInstance:
       propertyPath: m_button
       value: 
       objectReference: {fileID: 620260181}
+    - target: {fileID: 6073717005113457372, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
+        type: 3}
+      propertyPath: m_Name
+      value: Button - Vysnc Toggle
+      objectReference: {fileID: 0}
     - target: {fileID: 7247548640708232333, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -17703,21 +17838,6 @@ PrefabInstance:
       propertyPath: m_text
       value: '<font="BACKCOUNTRY-Regular SDF">Vsync '
       objectReference: {fileID: 0}
-    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6073717005113457372, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
-        type: 3}
-      propertyPath: m_Name
-      value: Button - Vysnc Toggle
-      objectReference: {fileID: 0}
     - target: {fileID: 8320047788096860193, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
         type: 3}
       propertyPath: ButtonCategory
@@ -17747,6 +17867,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2976ab875d57cc549ac4f1d1d6ed1e89, type: 3}
@@ -19870,6 +20000,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5474743330600774808, guid: ab06a639aa5a8684ab161c7bc816594f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.16565025
+      objectReference: {fileID: 0}
+    - target: {fileID: 5474743330600774808, guid: ab06a639aa5a8684ab161c7bc816594f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.028976794
+      objectReference: {fileID: 0}
+    - target: {fileID: 5474743330600774808, guid: ab06a639aa5a8684ab161c7bc816594f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.7514362
+      objectReference: {fileID: 0}
     - target: {fileID: 5474743331134129145, guid: ab06a639aa5a8684ab161c7bc816594f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20399,21 +20544,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474743330600774808, guid: ab06a639aa5a8684ab161c7bc816594f,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.16565025
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474743330600774808, guid: ab06a639aa5a8684ab161c7bc816594f,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.028976794
-      objectReference: {fileID: 0}
-    - target: {fileID: 5474743330600774808, guid: ab06a639aa5a8684ab161c7bc816594f,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1.7514362
       objectReference: {fileID: 0}
     - target: {fileID: 5474743330878182388, guid: ab06a639aa5a8684ab161c7bc816594f,
         type: 3}
@@ -29364,6 +29494,30 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 379180831, guid: f6b4f2a4c62512d40a2a2b90eadcab40, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f6b4f2a4c62512d40a2a2b90eadcab40, type: 3}
+--- !u!114 &918905592 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4190773830940822642, guid: f6b4f2a4c62512d40a2a2b90eadcab40,
+    type: 3}
+  m_PrefabInstance: {fileID: 918905591}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!198 &918905593 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5765875615352906943, guid: f6b4f2a4c62512d40a2a2b90eadcab40,
+    type: 3}
+  m_PrefabInstance: {fileID: 918905591}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &918905594 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8039623384507209879, guid: f6b4f2a4c62512d40a2a2b90eadcab40,
+    type: 3}
+  m_PrefabInstance: {fileID: 918905591}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &943257226
 GameObject:
   m_ObjectHideFlags: 0
@@ -32658,11 +32812,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -32858,6 +33007,11 @@ PrefabInstance:
       propertyPath: TextMeshProLabel
       value: 
       objectReference: {fileID: 1324817477}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -32974,11 +33128,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Button - Continue
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -33159,6 +33308,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: Continue
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -33880,11 +34034,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -34139,6 +34288,11 @@ PrefabInstance:
         type: 3}
       propertyPath: OnDeselected.OnTrigger.Event.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -42197,11 +42351,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - New Game
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -42391,6 +42540,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: New Game
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -42780,6 +42934,11 @@ PrefabInstance:
       propertyPath: m_button
       value: 
       objectReference: {fileID: 1901837699}
+    - target: {fileID: 6073717005113457372, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
+        type: 3}
+      propertyPath: m_Name
+      value: Button - Damage Value Toggle
+      objectReference: {fileID: 0}
     - target: {fileID: 7247548640708232333, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -42817,21 +42976,6 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
-    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6073717005113457372, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
-        type: 3}
-      propertyPath: m_Name
-      value: Button - Damage Value Toggle
-      objectReference: {fileID: 0}
     - target: {fileID: 8320047788096860193, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
         type: 3}
       propertyPath: ButtonCategory
@@ -42861,6 +43005,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2976ab875d57cc549ac4f1d1d6ed1e89, type: 3}
@@ -46284,11 +46438,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -46484,6 +46633,11 @@ PrefabInstance:
       propertyPath: TextMeshProLabel
       value: 
       objectReference: {fileID: 1478225445}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_fontColor.r
@@ -47745,11 +47899,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -47940,6 +48089,11 @@ PrefabInstance:
       propertyPath: TextMeshProLabel
       value: 
       objectReference: {fileID: 890354259}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -48311,16 +48465,6 @@ PrefabInstance:
       propertyPath: m_button
       value: 
       objectReference: {fileID: 1114274442742634009}
-    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6073717005113457372, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
         type: 3}
       propertyPath: m_Name
@@ -48335,6 +48479,16 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: FullScreen Toggle
+      objectReference: {fileID: 0}
+    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 40137992134460881, guid: 2976ab875d57cc549ac4f1d1d6ed1e89,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2976ab875d57cc549ac4f1d1d6ed1e89, type: 3}

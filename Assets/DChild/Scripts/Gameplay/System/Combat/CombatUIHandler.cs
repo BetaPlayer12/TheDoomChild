@@ -61,11 +61,14 @@ namespace DChild.Gameplay.Combat
 
         public void Update()
         {
-            var count = m_uiInfoList.Count < m_maxInstanceSpawned ? m_uiInfoList.Count : m_maxInstanceSpawned;
-            for (int i = 0; i < count; i++)
+            if (m_uiInfoList != null)
             {
-                ShowCombatUI(m_uiInfoList[0]);
-                m_uiInfoList.RemoveAt(0);
+                var count = m_uiInfoList.Count < m_maxInstanceSpawned ? m_uiInfoList.Count : m_maxInstanceSpawned;
+                for (int i = 0; i < count; i++)
+                {
+                    ShowCombatUI(m_uiInfoList[0]);
+                    m_uiInfoList.RemoveAt(0);
+                }
             }
         }
 

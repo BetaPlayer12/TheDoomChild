@@ -1,87 +1,75 @@
-﻿using Holysoft.UI;
-using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using TMPro;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+#endif
 
 namespace DChild.Menu.Bestiary
 {
-    public class BestiaryIndexButton : NavigationButton
+    [RequireComponent(typeof(Button))]
+    public class BestiaryIndexButton : MonoBehaviour
     {
-#if UNITY_EDITOR
+        //Bestiary Data and isInteracble should be Not serialized later on
+
         [SerializeField, OnValueChanged("UpdateInfo")]
-#endif
         private BestiaryData m_data;
-        [SerializeField, OnValueChanged("InteractabilityChanged")]
-        private bool m_isInteractable;
-        [Title("Visual")]
         [SerializeField]
-        private TextMeshProUGUI m_creatureNameText;
-        [SerializeField]
-        private Image m_creatureImage;
+        private BestiaryIndexInfo m_info;
         private Button m_button;
+        [SerializeField, OnValueChanged("UpdateInteractability")]
+        private bool m_isInteractable;
 
-        private IToggleVisual m_visual;
+        public BestiaryData data => m_data;
 
-        public int creatureID => m_data.id;
-
-        public void SetInteractability(bool value)
+        public void SetData(BestiaryData data)
         {
-            if (value != m_isInteractable)
+            m_data = data;
+            m_info.SetInfo(data);
+        }
+
+        public void SetInteractability(bool isInteractable)
+        {
+            m_isInteractable = isInteractable;
+            UpdateInteractability();
+        }
+
+        private void UpdateInteractability()
+        {
+#if UNITY_EDITOR
+            if (m_button == null)
             {
-                m_isInteractable = value;
-                m_button.interactable = value;
-                m_visual.Toggle(m_isInteractable);
+                m_button = GetComponent<Button>();
             }
-        }
-
-        public void Hide()
-        {
-            gameObject.SetActive(false);
-        }
-
-        public void Show()
-        {
-            gameObject.SetActive(true);
-        }
-
-        public void SetInfo(BestiaryData info)
-        {
-            m_data = info;
-            UpdateInfo();
-        }
-
-        private void UpdateInfo()
-        {
-            m_buttonID = m_data.id;
-            m_creatureNameText.text = m_data.creatureName.ToUpper();
-            if (m_data.indexImage == null)
+#endif
+            m_button.interactable = m_isInteractable;
+            if (m_isInteractable)
             {
-                m_creatureImage.sprite = null;
-                m_creatureImage.color = new Color(0, 0, 0, 0.5176471f);
+                m_info.Show();
             }
             else
             {
-                m_creatureImage.sprite = m_data.indexImage;
-                m_creatureImage.color = Color.white;
+                m_info.Hide();
             }
-            //gameObject.name = $"{info.name}IndexButton";
         }
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
             m_button = GetComponent<Button>();
-            m_visual = GetComponent<IToggleVisual>();
+        }
+
+        private void Start()
+        {
+            if (m_data != null)
+            {
+                m_info.SetInfo(m_data);
+            }
         }
 
 #if UNITY_EDITOR
-        private void InteractabilityChanged()
+        [Button]
+        private void UpdateInfo()
         {
-            m_visual = GetComponent<IToggleVisual>();
-            m_visual.Toggle(m_isInteractable);
+            m_info.SetInfo(m_data);
         }
 #endif
     }

@@ -4,6 +4,7 @@ using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft;
 using Holysoft.Event;
 using Holysoft.Pooling;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Projectiles
@@ -12,12 +13,21 @@ namespace DChild.Gameplay.Projectiles
     {
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
+        [SerializeField, PropertyOrder(1)]
+        private ParticleSystem m_particleSystem;
+        [SerializeField, PropertyOrder(1)]
+        private GameObject m_model;
+
         protected IsolatedPhysics2D m_physics;
         private IIsolatedPhysicsTime m_isolatedPhysicsTime;
 
         protected abstract ProjectileData projectileData { get; }
 
-        public abstract void ResetState();
+        public virtual void ResetState()
+        {
+            m_model?.SetActive(true);
+            m_particleSystem?.Play();
+        }
 
         public void ChangeTrajectory(Vector2 directionNormal) => transform.right = directionNormal;
 
@@ -33,6 +43,18 @@ namespace DChild.Gameplay.Projectiles
             transform.right = m_physics.velocity.normalized;
         }
 
+        protected void UnloadProjectile()
+        {
+            if (m_particleSystem == null)
+            {
+                CallPoolRequest();
+            }
+            else
+            {
+                m_model?.SetActive(false);
+                m_particleSystem.Stop();
+            }
+        }
         protected void CallAttackerAttacked(CombatConclusionEventArgs eventArgs) => TargetDamaged?.Invoke(this, eventArgs);
         protected bool CollidedWithEnvironment(Collision2D collision) => collision.gameObject.layer == LayerMask.NameToLayer("Environment");
         protected bool CollidedWithEnvironment(Collider2D collision) => CollidedWithSensor(collision) == false && collision.gameObject.layer == LayerMask.NameToLayer("Environment");
@@ -40,12 +62,16 @@ namespace DChild.Gameplay.Projectiles
         protected bool CollidedWithTarget(Collider2D collision) => CollidedWithSensor(collision) == false && collision.GetComponentInParent<Hitbox>();
         protected bool CollidedWithSensor(Collider2D collision) => collision.gameObject.CompareTag("Sensor");
 
+        private void OnParticleSystemStopped()
+        {
+            CallPoolRequest();
+        }
+
         protected virtual void Awake()
         {
             m_physics = GetComponent<IsolatedPhysics2D>();
             m_isolatedPhysicsTime = GetComponent<IIsolatedPhysicsTime>();
             var physics = GetComponent<IsolatedPhysics2D>();
-            physics.simulateGravity = !projectileData.hasConstantSpeed;
         }
     }
 }

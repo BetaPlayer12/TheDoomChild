@@ -29,5 +29,4 @@ namespace DChild.Gameplay.Pooling
 
         protected void CallPoolRequest() => PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
     }
-
 }
