@@ -7,6 +7,8 @@ namespace DChild.Gameplay.Systems
     {
         [SerializeField]
         private KeyCode m_pause;
+        [SerializeField]
+        private KeyCode m_bestiary;
 
 
         private void Update()
@@ -14,6 +16,10 @@ namespace DChild.Gameplay.Systems
             if (Input.GetKeyDown(m_pause))
             {
                 GameEventMessage.SendEvent("Pause Game");
+            }
+            else if (Input.GetKeyDown(m_bestiary))
+            {
+                GameEventMessage.SendEvent("Bestiary Open");
             }
         }
     }

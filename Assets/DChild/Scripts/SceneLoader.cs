@@ -43,10 +43,12 @@ namespace DChild
         {
             if (m_activeZone != null)
             {
-                LoadingHandle.UnLoadScenes(m_gameplayScene.sceneName, m_activeZone);
-                LoadingHandle.LoadScenes(m_mainMenu.sceneName);
-                SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
+                LoadingHandle.UnLoadScenes(m_activeZone);
             }
+            LoadingHandle.UnLoadScenes(m_gameplayScene.sceneName);
+            LoadingHandle.LoadScenes(m_mainMenu.sceneName);
+            Time.timeScale = 1;
+            SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
         }
 
         private void OnSceneDone(object sender, EventActionArgs eventArgs)

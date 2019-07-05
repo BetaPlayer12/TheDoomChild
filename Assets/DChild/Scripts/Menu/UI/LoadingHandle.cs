@@ -113,6 +113,7 @@ namespace DChild.Menu
         {
             m_unloadThis = false;
             m_unloadOperations.Clear();
+            scenesToUnload.RemoveAll(x => x == string.Empty);
             for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
             {
                 var operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
@@ -121,9 +122,9 @@ namespace DChild.Menu
             scenesToUnload?.Clear();
 
             m_loadOperations.Clear();
+            scenesToLoad.RemoveAll(x => x == string.Empty);
             for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
             {
-                Debug.LogError($"{scenesToLoad[i]}");
                 m_loadOperations.Add(SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive));
                 m_loadOperations[i].allowSceneActivation = false;
             }
