@@ -1,5 +1,4 @@
-﻿using System;
-using DChild.Gameplay.Characters;
+﻿using DChild.Gameplay.Characters;
 using DChild.Gameplay.Projectiles;
 using Holysoft.Event;
 using Spine;
@@ -7,6 +6,7 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters
 {
+
     [System.Serializable]
     public class AttackHandle
     {

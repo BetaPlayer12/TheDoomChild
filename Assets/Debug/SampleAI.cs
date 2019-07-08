@@ -4,6 +4,7 @@ using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.AI;
+using Spine.Unity;
 using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters.Enemies

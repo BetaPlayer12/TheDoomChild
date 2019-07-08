@@ -51,7 +51,7 @@ namespace DChild.Gameplay.Combat.UI
             m_damageConfigurations = new Configuration[(int)AttackType._COUNT - 1];
             for (int i = 0; i < m_damageConfigurations.Length; i++)
             {
-                m_damageConfigurations[i] = new Configuration((AttackType)i + 1);
+                m_damageConfigurations[i] = new Configuration((AttackType)i);
             }
 
             m_healConfiguration = new Configuration(AttackType._COUNT);
@@ -68,7 +68,7 @@ namespace DChild.Gameplay.Combat.UI
 
         public Configuration FindDamageConfiguration(AttackType type)
         {
-            return m_damageConfigurations[(int)type - 1];
+            return m_damageConfigurations[(int)type];
         }
 
 #if UNITY_EDITOR
@@ -78,7 +78,7 @@ namespace DChild.Gameplay.Combat.UI
             var newConfig = new Configuration[(int)AttackType._COUNT - 1];
             for (int i = 0; i < m_damageConfigurations.Length; i++)
             {
-                newConfig[i] = new Configuration((AttackType)i + 1);
+                newConfig[i] = new Configuration((AttackType)i);
             }
 
             var copyLength = newConfig.Length > m_damageConfigurations.Length ? m_damageConfigurations.Length : newConfig.Length;
@@ -88,7 +88,7 @@ namespace DChild.Gameplay.Combat.UI
 
         private void Realign(int index)
         {
-            m_damageConfigurations[index].name = (AttackType)(index+1);
+            m_damageConfigurations[index].name = (AttackType)(index);
         }
 #endif
     }

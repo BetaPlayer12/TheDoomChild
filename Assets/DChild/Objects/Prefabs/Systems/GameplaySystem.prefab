@@ -434,6 +434,8 @@ MonoBehaviour:
       type: 3}
     m_positionOffset: 0.5
     m_maxInstanceSpawned: 5
+    m_damageUIConfigurations: {fileID: 11400000, guid: 127b5b3426834e343b0a4ca66c45f60a,
+      type: 2}
 --- !u!114 &1282068314815717093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,9 +449,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_lowestDamageReceivePercentage: 0.3
-  m_knockBackPower: 0
-  m_invulnerabilityDuration: 0
-  m_inputDisableDuration: 0
+  m_knockBackPower: 15
+  m_invulnerabilityDuration: 1.5
+  m_inputDisableDuration: 0.5
 --- !u!1 &6243475520926959959
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,6 +667,7 @@ GameObject:
   - component: {fileID: 7300060033477175834}
   - component: {fileID: 3187279951672348425}
   - component: {fileID: 8422006114234957730}
+  - component: {fileID: 736789538}
   m_Layer: 0
   m_Name: GameplaySystem
   m_TagString: Untagged
@@ -743,3 +746,17 @@ MonoBehaviour:
   m_mainCamera: {fileID: 0}
   m_camera: {fileID: 0}
   m_trackingTarget: {fileID: 0}
+--- !u!114 &736789538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9027099112888996189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b66272d8dcbcb044b9691b51f0b9939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_pause: 27
+  m_bestiary: 9

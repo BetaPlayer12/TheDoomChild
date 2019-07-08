@@ -163,7 +163,6 @@ namespace DChild.Gameplay.Characters.Players
             if (isAlive == false)
             {
                 OnDeath?.Invoke(this, EventActionArgs.Empty);
-                
             }
         }
 
@@ -241,30 +240,30 @@ namespace DChild.Gameplay.Characters.Players
 
         private void Awake()
         {
-            //m_hitboxes = GetComponentsInChildren<Hitbox>();
-            //m_controller = GetComponentInChildren<IController>();
-            //projectileThrowHandler = GetComponentInChildren<ProjectileThrowHandler>();
-            //sensors = GetComponentInChildren<PlayerSensors>();
-            //physics = GetComponent<CharacterPhysics2D>();
-            //animation = GetComponent<PlayerAnimation>();
-            //combatAnimation = GetComponent<PlayerCombatAnimation>();
-            //isolatedObject = GetComponent<IsolatedObject>();
-            //lootPicker = GetComponentInChildren<LootPicker>();
-            //colliders = GetComponentInChildren<CharacterColliders>();
-            //m_soulSkillManager = new SoulSkillManager(this);
-            //characterState = new PlayerCharacterState();
-            //animationState = new PlayerAnimationState();
-            //m_statsHandle.Initialize(m_attributes, m_equipment, m_health, m_magic);
-            //m_statusEffectState = new StatusEffectState();
-            //InitializeBehaviours();
-            //GetMagic = GetMagicComponent;
+            m_hitboxes = GetComponentsInChildren<Hitbox>();
+            m_controller = GetComponentInChildren<IController>();
+            projectileThrowHandler = GetComponentInChildren<ProjectileThrowHandler>();
+            sensors = GetComponentInChildren<PlayerSensors>();
+            physics = GetComponent<CharacterPhysics2D>();
+            animation = GetComponent<PlayerAnimation>();
+            combatAnimation = GetComponent<PlayerCombatAnimation>();
+            isolatedObject = GetComponent<IsolatedObject>();
+            lootPicker = GetComponentInChildren<LootPicker>();
+            colliders = GetComponentInChildren<CharacterColliders>();
+            m_soulSkillManager = new SoulSkillManager(this);
+            characterState = new PlayerCharacterState();
+            animationState = new PlayerAnimationState();
+            m_statsHandle.Initialize(m_attributes, m_equipment, m_health, m_magic);
+            m_statusEffectState = new StatusEffectState();
+            InitializeBehaviours();
+            GetMagic = GetMagicComponent;
         }
 
         private void Start()
         {
-           
-            //m_health?.ResetValueToMax();
-            //m_magic?.ResetValueToMax();
+
+            m_health?.ResetValueToMax();
+            m_magic?.ResetValueToMax();
 
         }
 

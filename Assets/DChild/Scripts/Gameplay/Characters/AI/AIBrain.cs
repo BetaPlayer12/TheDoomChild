@@ -23,18 +23,18 @@ namespace Refactor.DChild.Gameplay.Characters.AI
                 protected SkeletonDataAsset m_skeletonDataAsset;
 
                 public void SetData(SkeletonDataAsset skeletonData) => m_skeletonDataAsset = skeletonData;
-#endif
-            }
 
-            [System.Serializable]
-            public abstract class AnimationBaseInfo : SkeletonBaseInfo
-            {
-                [SerializeField, ValueDropdown("GetAnimations")]
-                private string m_animation;
+                protected IEnumerable GetEvents()
+                {
+                    ValueDropdownList<string> list = new ValueDropdownList<string>();
+                    var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Events.ToArray();
+                    for (int i = 0; i < reference.Length; i++)
+                    {
+                        list.Add(reference[i].Name);
+                    }
+                    return list;
+                }
 
-                public string animation => m_animation;
-
-#if UNITY_EDITOR
                 protected IEnumerable GetAnimations()
                 {
                     ValueDropdownList<string> list = new ValueDropdownList<string>();
@@ -48,22 +48,53 @@ namespace Refactor.DChild.Gameplay.Characters.AI
 #endif
             }
 
-            [System.Serializable, HideReferenceObjectPicker]
-            public class SimpleAttackInfo : AnimationBaseInfo
+
+            [System.Serializable]
+            public abstract class EventBaseInfo : SkeletonBaseInfo
             {
+                [SerializeField, ValueDropdown("GetEvents")]
+                private string m_animation;
+
+                public string animation => m_animation;
+
+            }
+
+            [System.Serializable, HideReferenceObjectPicker]
+            public class SimpleAttackInfo : SkeletonBaseInfo
+            {
+                [SerializeField, ValueDropdown("GetAnimations")]
+                private string m_animation;
                 [SerializeField, MinValue(0)]
                 private float m_range;
 
+                public string animation => m_animation;
                 public float range => m_range;
             }
 
             [System.Serializable, HideReferenceObjectPicker]
-            public class MovementInfo : AnimationBaseInfo
+            public class MovementInfo : SkeletonBaseInfo
             {
+                [SerializeField, ValueDropdown("GetAnimations")]
+                private string m_animation;
                 [SerializeField, MinValue(0)]
                 private float m_speed;
 
+                public string animation => m_animation;
                 public float speed => m_speed;
+            }
+
+            public class SimpleProjectileAttackInfo : SkeletonBaseInfo
+            {
+                [SerializeField, ValueDropdown("GetAnimations")]
+                private string m_animation;
+                [SerializeField, ValueDropdown("GetEvents")]
+                private string m_launchOnEvent;
+                [SerializeField]
+                private ProjectileInfo m_projectileInfo;
+
+                public string animation => m_animation;
+                public string launchOnEvent => m_launchOnEvent;
+                public ProjectileInfo projectileInfo => m_projectileInfo;
             }
 
             [SerializeField, PreviewField, OnValueChanged("Initialize")]
