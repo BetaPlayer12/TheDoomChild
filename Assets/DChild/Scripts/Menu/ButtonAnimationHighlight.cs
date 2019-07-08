@@ -105,7 +105,7 @@ namespace DChild.Menu.MainMenu
 
         private void Update()
         {
-            m_frameSpeed.Tick(Time.deltaTime);
+            m_frameSpeed.Tick(Time.unscaledDeltaTime);
         }
 
 #if UNITY_EDITOR

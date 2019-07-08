@@ -163,7 +163,6 @@ namespace DChild.Gameplay.Characters.Players
             if (isAlive == false)
             {
                 OnDeath?.Invoke(this, EventActionArgs.Empty);
-                
             }
         }
 
@@ -262,7 +261,7 @@ namespace DChild.Gameplay.Characters.Players
 
         private void Start()
         {
-           
+
             m_health?.ResetValueToMax();
             m_magic?.ResetValueToMax();
 

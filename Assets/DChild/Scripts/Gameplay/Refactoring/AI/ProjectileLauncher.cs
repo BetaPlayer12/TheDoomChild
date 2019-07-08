@@ -19,7 +19,7 @@ namespace Refactor.DChild.Gameplay.Characters
     }
 
     [System.Serializable]
-    public struct ProjectileLauncher
+    public struct ProjectileLaunchHandle
     {
         public void Launch(GameObject projectile, Vector2 spawnPoint, Vector2 flightDirection, float speed)
         {
@@ -28,6 +28,27 @@ namespace Refactor.DChild.Gameplay.Characters
             var component = instance.GetComponent<Projectile>();
             component.ResetState();
             component.SetVelocity(flightDirection, speed);
+        }
+    }
+
+    public class ProjectileLauncher
+    {
+        private ProjectileInfo m_projectileInfo;
+        private Transform m_spawnPoint;
+        private ProjectileLaunchHandle m_handle;
+
+        public ProjectileLauncher(ProjectileInfo projectileInfo, Transform spawnPoint)
+        {
+            this.m_projectileInfo = projectileInfo;
+            this.m_spawnPoint = spawnPoint;
+            m_handle = new ProjectileLaunchHandle();
+        }
+
+        public void SetProjectile(ProjectileInfo info) => m_projectileInfo = info;
+        public void SetSpawnPoint(Transform spawnPoint) => m_spawnPoint = spawnPoint;
+        public void LaunchProjectile()
+        {
+            m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, m_spawnPoint.right, m_projectileInfo.speed);
         }
     }
 }

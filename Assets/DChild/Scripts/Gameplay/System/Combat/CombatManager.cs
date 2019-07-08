@@ -56,7 +56,9 @@ namespace DChild.Gameplay.Combat
             {
                 m_resistanceHandler.CalculatateResistanceReduction(m_cacheTarget.attackResistance, ref result);
             }
-            if (DChildUtility.HasInterface<IPlayerCombat>(m_cacheTarget))
+
+            bool isPlayer = DChildUtility.HasInterface<IPlayerCombat>(m_cacheTarget);
+            if (isPlayer)
             {
                 ResolveConflictToPlayer(attacker, (IPlayerCombat)m_cacheTarget, ref result);
             }
@@ -77,11 +79,22 @@ namespace DChild.Gameplay.Combat
                     m_uiHandler.ShowDamageValues(m_cacheTarget.position, new AttackDamage(result.damageType, result.damage), false);
                 }
 
-                if (targetInfo.isCharacter && m_cacheTarget.isAlive)
+                if (m_cacheTarget.isAlive)
                 {
-                    if (targetInfo.flinchHandler != null)
+                    if (targetInfo.isCharacter)
                     {
-                        FlinchTarget(targetInfo.flinchHandler, targetInfo.facing, m_cacheTarget.position, attacker.position, attacker.damage.type);
+                        if (targetInfo.flinchHandler != null)
+                        {
+                            FlinchTarget(targetInfo.flinchHandler, targetInfo.facing, m_cacheTarget.position, attacker.position, attacker.damage.type);
+                        }
+                    }
+                    else if (DChildUtility.HasInterface<IFlinch>(m_cacheTarget))
+                    {
+                        FlinchTarget((IFlinch)m_cacheTarget, targetInfo.facing, m_cacheTarget.position, attacker.position, attacker.damage.type);
+                        if (isPlayer)
+                        {
+                            m_playerCombatHandler.ResolveDamageRecieved((IPlayerCombat)m_cacheTarget, attacker.position);
+                        }
                     }
                 }
             }

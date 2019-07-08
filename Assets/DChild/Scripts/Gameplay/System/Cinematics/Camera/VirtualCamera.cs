@@ -7,19 +7,19 @@ namespace DChild.Gameplay.Cinematics.Cameras
     public class VirtualCamera : MonoBehaviour, IVirtualCamera, ITrackingCamera
     {
 #if UNITY_EDITOR
-        [SerializeField,OnValueChanged("ChangeName")]
+        [SerializeField, OnValueChanged("ChangeName")]
         private string cameraName;
 
         private void ChangeName()
         {
-            if(cameraName != string.Empty)
+            if (cameraName != string.Empty)
             {
                 gameObject.name = cameraName;
-                if(m_vCam == null)
+                if (m_vCam == null)
                 {
                     m_vCam = GetComponentInChildren<CinemachineVirtualCamera>(true);
                 }
-                if(m_vCam != null)
+                if (m_vCam != null)
                 {
                     m_vCam.gameObject.name = cameraName + "VCam";
                 }
@@ -59,6 +59,11 @@ namespace DChild.Gameplay.Cinematics.Cameras
         private void OnValidate()
         {
             m_vCam = GetComponentInChildren<CinemachineVirtualCamera>(true);
+        }
+
+        private void Awake()
+        {
+            m_vCam.enabled = false;
         }
     }
 

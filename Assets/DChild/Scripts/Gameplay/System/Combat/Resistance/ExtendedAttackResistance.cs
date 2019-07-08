@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Combat
 
         public override float GetResistance(AttackType type)
         {
-            var baseResistance = m_resistanceInfo.ContainsKey(type) ? m_resistanceInfo[type] : 0;
+            var baseResistance = m_resistance.ContainsKey(type) ? m_resistance[type] : 0;
             var additionalResistance = m_additionalResistance.ContainsKey(type) ? m_additionalResistance[type] : 0;
             return baseResistance + additionalResistance;
         }

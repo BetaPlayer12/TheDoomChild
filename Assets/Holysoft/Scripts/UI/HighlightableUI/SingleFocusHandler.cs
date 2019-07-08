@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Holysoft.UI
 {
@@ -11,7 +12,7 @@ namespace Holysoft.UI
         {
             for (int i = 0; i < m_highlightHandler.Length; i++)
             {
-                if(m_highlightHandler[i] == highlightHandler)
+                if (m_highlightHandler[i] == highlightHandler)
                 {
                     m_highlightHandler[i].Highlight();
                 }
@@ -36,5 +37,13 @@ namespace Holysoft.UI
                 }
             }
         }
+
+#if UNITY_EDITOR
+        [Button]
+        private void GetChildrenHighlights()
+        {
+            m_highlightHandler = GetComponentsInChildren<UIHighlightHandler>();
+        }
+#endif
     }
 }

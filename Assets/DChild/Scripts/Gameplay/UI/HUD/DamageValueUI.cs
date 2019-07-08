@@ -31,6 +31,12 @@ namespace DChild.Gameplay.Combat.UI
         {
             CallPoolRequest();
         }
+
+        private void Awake()
+        {
+            //Scale Jitters on Awake, this is to make sure that the jitter stops
+            m_damageText.transform.localScale = Vector3.zero;
+        }
     }
 
 }

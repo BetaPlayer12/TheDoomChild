@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
 using Spine.Unity;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 using DChildEditor;
@@ -13,7 +14,7 @@ using DChildEditor;
 namespace DChild.Menu.Bestiary
 {
     [CreateAssetMenu(fileName = "BestiaryData", menuName = "DChild/Database/Bestiary Data")]
-    public class BestiaryData : DatabaseAsset, IBestiaryInfo
+    public class BestiaryData : DatabaseAsset
     {
         #region EditorOnly
 #if UNITY_EDITOR
@@ -64,8 +65,10 @@ namespace DChild.Menu.Bestiary
 #endif 
         #endregion
 
-        [SerializeField, PreviewField, ToggleGroup("m_enableEdit")]
+        [SerializeField, PreviewField(100), ToggleGroup("m_enableEdit")]
         private Sprite m_indexImage;
+        [SerializeField, PreviewField(100), ToggleGroup("m_enableEdit")]
+        private Sprite m_infoImage;
         [SerializeField, PreviewField, ToggleGroup("m_enableEdit")]
         private Sprite m_sketchImage;
         [SerializeField, PreviewField, ToggleGroup("m_enableEdit")]
@@ -80,15 +83,16 @@ namespace DChild.Menu.Bestiary
         public int id { get => m_ID; }
         public string creatureName { get => m_name; }
         public Sprite indexImage { get => m_indexImage; }
+        public Sprite infoImage { get => m_infoImage; }
         public Sprite sketchImage { get => m_sketchImage; }
         public string description { get => m_description; }
         public Location[] locatedIn { get => m_locatedIn; }
         public void SetupSpine(SkeletonAnimation animation)
         {
-                animation.skeletonDataAsset = m_spineAsset;
-                animation.Initialize(true);
-                var track = animation.state.SetAnimation(0, m_idleAnimation, true);
-                track.MixDuration = 0;
+            animation.skeletonDataAsset = m_spineAsset;
+            animation.Initialize(true);
+            var track = animation.state.SetAnimation(0, m_idleAnimation, true);
+            track.MixDuration = 0;
         }
 
 #if UNITY_EDITOR

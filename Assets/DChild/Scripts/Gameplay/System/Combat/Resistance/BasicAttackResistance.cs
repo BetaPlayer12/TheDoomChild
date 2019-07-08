@@ -3,6 +3,6 @@
     [System.Serializable]
     public class BasicAttackResistance : AttackResistance
     {
-        public override float GetResistance(AttackType type) => m_resistanceInfo.ContainsKey(type) ? m_resistanceInfo[type] : 0;
+        public override float GetResistance(AttackType type) => m_resistance.ContainsKey(type) ? m_resistance[type] : 0;
     }
 }

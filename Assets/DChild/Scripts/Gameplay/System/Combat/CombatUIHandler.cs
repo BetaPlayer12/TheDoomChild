@@ -32,6 +32,7 @@ namespace DChild.Gameplay.Combat
         private float m_positionOffset;
         [SerializeField, MinValue(1)]
         private int m_maxInstanceSpawned;
+        [SerializeField]
         private DamageUIConfigurations m_damageUIConfigurations;
 
         private List<UIInfo> m_uiInfoList;
@@ -53,7 +54,6 @@ namespace DChild.Gameplay.Combat
 
         public void Initialize(Scene scene)
         {
-            m_damageUIConfigurations = GameplaySystem.databaseManager.GetDatabase<DamageUIConfigurations>();
             m_uiInfoList = new List<UIInfo>();
             m_pool = GameSystem.poolManager.GetPool<UIObjectPool>();
             m_scene = scene;
@@ -61,11 +61,14 @@ namespace DChild.Gameplay.Combat
 
         public void Update()
         {
-            var count = m_uiInfoList.Count < m_maxInstanceSpawned ? m_uiInfoList.Count : m_maxInstanceSpawned;
-            for (int i = 0; i < count; i++)
+            if (m_uiInfoList != null)
             {
-                ShowCombatUI(m_uiInfoList[0]);
-                m_uiInfoList.RemoveAt(0);
+                var count = m_uiInfoList.Count < m_maxInstanceSpawned ? m_uiInfoList.Count : m_maxInstanceSpawned;
+                for (int i = 0; i < count; i++)
+                {
+                    ShowCombatUI(m_uiInfoList[0]);
+                    m_uiInfoList.RemoveAt(0);
+                }
             }
         }
 

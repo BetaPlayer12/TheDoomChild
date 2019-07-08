@@ -5,7 +5,7 @@ namespace DChild.Gameplay.Combat
     public enum AttackResistanceType
     {
         [HideInInspector]
-        None,
+        None = -1,
         Weak,
         Strong,
         Immune,

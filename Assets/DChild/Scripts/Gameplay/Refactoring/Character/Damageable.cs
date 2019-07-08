@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Combat
 {
-
     public class Damageable : MonoBehaviour, IDamageable, ITarget, IHealable
     {
         public struct DamageEventArgs : IEventActionArgs
