@@ -120,8 +120,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_skills.IsEnabled(MovementSkill.WallJump))
             {
-                if (m_wallStickState.isMoving && m_wallStickState.isDroppingFromPlatform == false && m_colliders.AreCollidersIntersecting() == false)
+                m_groundHeightSensor.Cast();
+                if (m_groundHeightSensor.isDetecting == false)
                 {
+
+                    if (m_wallStickState.isMoving && m_wallStickState.isDroppingFromPlatform == false && m_colliders.AreCollidersIntersecting() == false)
+                    {
                     if (m_physics.velocity.y <= 0)
                     {
                         m_sensor.Cast();
@@ -156,9 +160,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                             if (hit.collider.CompareTag("Droppable") == false)
                             {
-                                m_groundHeightSensor.Cast();
-                                if (m_groundHeightSensor.isDetecting == false)
-                                { 
+                               
                                     AttachToWall(hit);
                                     if (m_wallStickState.isStickingToWall == false)
                                     {
@@ -166,9 +168,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                                             StickToWall();
                                        
                                     }
-                                }
-                                else
-                                    m_physics.simulateGravity = true;
+                               
                                     
                             }
                         }
@@ -186,6 +186,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                         m_wallStickState.isStickingToWall = false;
                     }
                 }
+                }
+                else
+                    m_physics.simulateGravity = true;
             }
            
         }

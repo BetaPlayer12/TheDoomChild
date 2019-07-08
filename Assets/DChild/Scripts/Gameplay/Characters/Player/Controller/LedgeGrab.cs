@@ -17,13 +17,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private IFacing m_characterFacing;
         private RaySensor m_ledgeSensorCliff;
         private RaySensor m_ledgeSensorEdge;
+        private RaySensor m_groundHeightSensor;
         private ILedgeGrabState m_state;
         private IPlatformDropState m_dropPlatform;
         private CharacterPhysics2D m_physics;
         [SerializeField]
         private Vector2 m_groundRayOriginOffset;
 
-        
+
         [SerializeField]
         private Transform headObject;
         [SerializeField, MinValue(1)]
@@ -36,11 +37,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
             int hitcount;
             var hitBuffer = Raycaster.Cast(headObject.position, Vector2.up, distance, true, out hitcount);
-            if(hitcount > 0 )
+            if (hitcount > 0)
             {
-                
-               // Debug.Log("test hit");
-               
+
+                // Debug.Log("test hit");
+
                 m_state.canLedgeGrab = false;
             }
         }
@@ -53,10 +54,10 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             groundPosition = Vector2.zero;
             Raycaster.SetLayerCollisionMask(LayerMask.NameToLayer("Environment"));
             int hitcount;
-            var hitBuffer = Raycaster.Cast(CalculateGroundRayOrigin(),Vector2.down, m_groundRayOriginOffset.y, true, out hitcount);
-            if(hitcount > 0)
+            var hitBuffer = Raycaster.Cast(CalculateGroundRayOrigin(), Vector2.down, m_groundRayOriginOffset.y, true, out hitcount);
+            if (hitcount > 0)
             {
-                groundPosition =  hitBuffer[0].point;
+                groundPosition = hitBuffer[0].point;
             }
             return hitcount > 0;
         }
@@ -66,14 +67,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             var wallContactPoint = m_ledgeSensorCliff.GetHits()[0].point;
             wallContactPoint.y += m_groundRayOriginOffset.y;
-            wallContactPoint.x += m_groundRayOriginOffset.x*(int)m_characterFacing.currentFacingDirection;
+            wallContactPoint.x += m_groundRayOriginOffset.x * (int)m_characterFacing.currentFacingDirection;
             return wallContactPoint;
         }
 
-        
+
         private PlayerAnimation m_playerAnimation;
 
-      
+
 
 
         public void ConnectEvents()
@@ -82,12 +83,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             GetComponentInParent<ILedgeController>().LedgeGrabCall += PullFromCliff;
         }
 
-       
+
         public void Initialize(IPlayerModules player)
         {
             m_characterFacing = player;
             m_ledgeSensorCliff = player.sensors.ledgeSensorCliff;
             m_ledgeSensorEdge = player.sensors.ledgeSensorEdge;
+            m_groundHeightSensor = player.sensors.groundHeightSensor;
             m_state = player.characterState;
             m_playerAnimation = player.animation;
             m_physics = player.physics;
@@ -96,31 +98,31 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void PullFromCliff()
         {
-           
+
             m_ledgeSensorCliff.Cast();
             m_ledgeSensorEdge.Cast();
+            m_groundHeightSensor.Cast();
 
             if (m_state.canLedgeGrab)
             {
                 HeadCast();
 
-                if (m_ledgeSensorCliff.isDetecting == true && m_ledgeSensorEdge.isDetecting == false)
+                if (m_ledgeSensorCliff.isDetecting == true && m_ledgeSensorEdge.isDetecting == false && m_groundHeightSensor.isDetecting == false)
                 {
 
                     Vector2 groundPosition;
                     if (FindGroundDestination(out groundPosition))
                     {
-                      
+
                         var currentPosition = m_physics.position;
-                        currentPosition.y = groundPosition.y -1;
-                        currentPosition.x = currentPosition.x+(2* (int)m_characterFacing.currentFacingDirection) ; //i addedd a forward force by 1 to make sure that the player avoids the edge slide so the player is standing on the platform
+                        currentPosition.y = groundPosition.y - 1;
+                        currentPosition.x = currentPosition.x + (2 * (int)m_characterFacing.currentFacingDirection); //i addedd a forward force by 1 to make sure that the player avoids the edge slide so the player is standing on the platform
                         m_physics.position = currentPosition;
                         StartCoroutine(ChangeLedgingStateToFalse());
                     }
-                    
                 }
-                }
-            
+            }
+
         }
 
         private void PullFromCliff(object sender, EventActionArgs eventArgs)
@@ -130,11 +132,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private IEnumerator ChangeLedgingStateToFalse()
         {
+            m_state.waitForBehaviour = true;
+            m_state.isLedging = true;
             yield return new WaitForEndOfFrame();
             m_playerAnimation.DoLedgeGrab(m_characterFacing.currentFacingDirection);
             m_playerAnimation.EnableRootMotion(true, true);
-            m_state.waitForBehaviour = true;
-            m_state.isLedging = true;
             m_playerAnimation.AnimationSet += OnAnimationSet;
             m_playerAnimation.animationState.Complete += OnComplete;
             while (m_state.isLedging)
@@ -168,7 +170,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnLandCall(object sender, EventActionArgs eventArgs)
         {
-            
+
             m_state.canLedgeGrab = true;
         }
 

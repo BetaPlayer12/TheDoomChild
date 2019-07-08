@@ -109,6 +109,7 @@ namespace DChild.Gameplay.Characters.Players
         public IEquipment equipment => m_equipment;
         public ProjectileThrowHandler projectileThrowHandler { get; private set; }
         public LootPicker lootPicker { get; private set; }
+        [ShowInInspector]
         public PlayerCharacterState characterState { get; private set; }
         public PlayerAnimationState animationState { get; private set; }
         public PlayerSensors sensors { get; private set; }
@@ -144,7 +145,7 @@ namespace DChild.Gameplay.Characters.Players
         }
 
 
-      
+
 
         public override void EnableController() => m_controller?.Enable();
         public override void DisableController() => m_controller?.Disable();
@@ -163,7 +164,7 @@ namespace DChild.Gameplay.Characters.Players
             if (isAlive == false)
             {
                 OnDeath?.Invoke(this, EventActionArgs.Empty);
-                
+
             }
         }
 
@@ -200,7 +201,7 @@ namespace DChild.Gameplay.Characters.Players
             {
                 var eventArgs = new FlinchEventArgs(DamageSourceFacing(direction));
                 OnFlinch?.Invoke(this, eventArgs);
-                
+
             }
         }
 
@@ -262,7 +263,7 @@ namespace DChild.Gameplay.Characters.Players
 
         private void Start()
         {
-           
+
             m_health?.ResetValueToMax();
             m_magic?.ResetValueToMax();
 

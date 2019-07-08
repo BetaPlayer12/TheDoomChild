@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
 
     public class AirController : MonoBehaviour, IAirMoveController, IHighJumpController, IDoubleJumpController,
-                                 IWallStickController, IWallJumpController, IAirDashController, IFallController, ILedgeController
+                                 IWallStickController, IWallJumpController, IAirDashController, IFallController, ILedgeController, IFeetLedgeController
     {
         public event EventAction<ControllerEventArgs> MoveCall;
         public event EventAction<ControllerEventArgs> HighJumpCall;
@@ -19,6 +19,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> FallUpdate;
         public event EventAction<EventActionArgs> FallCall;
         public event EventAction<EventActionArgs> LedgeGrabCall;//
+        public event EventAction<ControllerEventArgs> FeetLedgeCall;//
+
+        
 
         public void CallFixedUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
         {
@@ -47,6 +50,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
         {
+            FeetLedgeCall?.Invoke(this, callArgs);
             if (state.isStickingToWall)
             {
                 WallStickCall?.Invoke(this, EventActionArgs.Empty);
@@ -68,19 +72,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     FallCall?.Invoke(this, EventActionArgs.Empty);
                     FallUpdate?.Invoke(this, EventActionArgs.Empty);
+                    FeetLedgeCall?.Invoke(this, callArgs);
                     LedgeGrabCall?.Invoke(this, EventActionArgs.Empty);
                     if (state.waitForBehaviour)
                     {
-                       
+                        DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
                         return;
                     }
-                    DoubleJumpReset.Invoke(this, EventActionArgs.Empty);
+                  
+                   
 
                 }
 
                 if (state.canHighJump)
                 {
                     HighJumpCall?.Invoke(this, callArgs);
+                    FeetLedgeCall?.Invoke(this, callArgs);
 
                 }
 
@@ -93,6 +100,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (callArgs.input.isJumpPressed)
                     {
                         DoubleJumpCall?.Invoke(this, EventActionArgs.Empty);
+                        FeetLedgeCall?.Invoke(this, callArgs);
                     }
                 }
 
