@@ -45,20 +45,20 @@ namespace DChild.Gameplay.Cinematics.Cameras
         protected override void ConnectToVcam(bool connect)
         {
             base.ConnectToVcam(connect);
-            if (connect)
-            {
-                if (camera.usePhysicalProperties != m_isPhysicalCamera)
-                {
-                    camera.usePhysicalProperties = m_isPhysicalCamera;
-                    if (m_isPhysicalCamera)
-                    {
-                        camera.focalLength = m_focalLength;
-                        camera.sensorSize = m_sensorSize;
-                        camera.lensShift = m_lensShift;
-                        camera.gateFit = m_gateFit;
-                    }
-                }
-            }
+            //if (connect)
+            //{
+            //    if (camera.usePhysicalProperties != m_isPhysicalCamera)
+            //    {
+            //        camera.usePhysicalProperties = m_isPhysicalCamera;
+            //        if (m_isPhysicalCamera)
+            //        {
+            //            camera.focalLength = m_focalLength;
+            //            camera.sensorSize = m_sensorSize;
+            //            camera.lensShift = m_lensShift;
+            //            camera.gateFit = m_gateFit;
+            //        }
+            //    }
+            //}
         }
 
         protected override void PostPipelineStageCallback(

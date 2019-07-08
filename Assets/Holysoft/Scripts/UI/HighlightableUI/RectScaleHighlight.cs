@@ -50,7 +50,7 @@ namespace Holysoft.UI
         {
             if (m_isHighlighted)
             {
-                m_lerp.Update(Time.deltaTime);
+                m_lerp.Update(Time.unscaledDeltaTime);
                 m_target.localScale = Vector3.Lerp(m_data.deselected, m_data.selected, m_lerp.lerpValue);
                 if (m_lerp.lerpValue == 1)
                 {
@@ -59,7 +59,7 @@ namespace Holysoft.UI
             }
             else
             {
-                m_lerp.Update(-Time.deltaTime);
+                m_lerp.Update(-Time.unscaledDeltaTime);
                 m_target.localScale = Vector3.Lerp(m_data.deselected, m_data.selected, m_lerp.lerpValue);
                 if (m_lerp.duration == 0)
                 {

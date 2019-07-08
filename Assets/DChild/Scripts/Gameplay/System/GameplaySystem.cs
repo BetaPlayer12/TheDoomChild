@@ -148,5 +148,11 @@ namespace DChild.Gameplay
                 m_activatableModules[i].Disable();
             }
         }
+
+        private void OnApplicationQuit()
+        {
+            Debug.Log("Quit");
+            Time.timeScale = 1;
+        }
     }
 }

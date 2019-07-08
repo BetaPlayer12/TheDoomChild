@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Combat
 {
     public enum AttackType
     {
-        Physical = 1,
+        Physical,
         Fire,
         Lightning,
         Ice,
@@ -19,5 +19,5 @@ namespace DChild.Gameplay.Combat
         _COUNT,
     }
 
-     
+
 }

@@ -38,6 +38,8 @@ namespace Refactor.DChild.Gameplay.Characters.AI
 
         public HorizontalDirection facing => m_target.facing;
         public Vector2 position => m_damageable.position;
+        //For parenting purposes of AI to the target.. some behaviours need this
+        public Transform transform => m_damageable.transform;
 
         public void Set(IDamageable damageable, Character target)
         {

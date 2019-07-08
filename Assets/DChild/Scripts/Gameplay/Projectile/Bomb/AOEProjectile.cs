@@ -2,33 +2,11 @@
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using Holysoft.Event;
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Projectiles
 {
-    [CreateAssetMenu(fileName = "AOEProjectileData", menuName = "DChild/Gameplay/AOE Projectile Data")]
-    public class AOEProjectileData : ProjectileData
-    {
-        [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
-        private GameObject m_explosion;
-
-        public GameObject explosion { get => m_explosion; }
-
-#if UNITY_EDITOR
-        private bool ValidateExplosion(GameObject newExplosion)
-        {
-            var hasAOEExplosion = m_explosion.GetComponent<AOEExplosion>() != null;
-            if (hasAOEExplosion == false)
-            {
-                m_explosion = null;
-            }
-            return hasAOEExplosion;
-        }
-#endif
-    }
-
     public abstract class AOEProjectile : Projectile
     {
         [SerializeField]
@@ -38,6 +16,7 @@ namespace DChild.Gameplay.Projectiles
 
         public override void ResetState()
         {
+            base.ResetState();
             gameObject.SetActive(true);
         }
 
@@ -48,7 +27,7 @@ namespace DChild.Gameplay.Projectiles
             explosion.SpawnAt(position, Quaternion.identity);
             explosion.Detonate();
             gameObject.SetActive(false);
-            CallPoolRequest();
+            UnloadProjectile();
         }
     }
 }

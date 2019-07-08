@@ -10,21 +10,21 @@ namespace DChild.Gameplay
 {
     public class RaySensorCaster : MonoBehaviour
     {
-        [SerializeField][ValueDropdown("GetChildrenSensors",ExcludeExistingValuesInList = true)]
+        [SerializeField]
+        [ValueDropdown("GetChildrenSensors", ExcludeExistingValuesInList = true)]
         private RaySensor[] m_sensors;
 
         [SerializeField]
         private bool m_useDistance;
         [SerializeField]
-        [ShowIf("m_useDistance")][Indent]
+        [ShowIf("m_useDistance")]
+        [Indent]
         private float m_castPerDistance;
 
         [Space]
         [SerializeField]
         private bool m_useTime;
-        [SerializeField]
-        [ShowIf("m_useTime")]
-        [Indent]
+        [SerializeField, ShowIf("m_useTime"), Indent]
         private CountdownTimer m_castPerSecond;
 
         private Vector3[] m_previousPosition;
@@ -64,8 +64,11 @@ namespace DChild.Gameplay
         {
             m_previousPosition = new Vector3[m_sensors.Length];
             m_hasCasted = new bool[m_sensors.Length];
-            m_castPerSecond.CountdownEnd += OnTimerEnd;
-            m_castPerSecond.Reset();
+            if (m_useTime)
+            {
+                m_castPerSecond.CountdownEnd += OnTimerEnd;
+                m_castPerSecond.Reset();
+            }
         }
 
         // Update is called once per frame

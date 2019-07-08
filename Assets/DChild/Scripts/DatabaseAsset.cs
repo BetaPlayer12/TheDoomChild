@@ -38,6 +38,8 @@ namespace DChild
             }
             else
             {
+                //Find away to not rely on GetInstanceID all the time since it actually changes Value
+
                 m_ID = GetInstanceID();
                 m_name = m_customName;
                 string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());

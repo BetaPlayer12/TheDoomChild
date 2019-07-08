@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Characters.Enemies;
 using DChild;
+using Refactor.DChild.Gameplay.Characters.AI;
 
 public class TombAttack : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class TombAttack : MonoBehaviour
     [SerializeField]
     private float m_lifeTime;
     private TombAttackAnimation m_animation;
-    private Vector2 m_target;
+    private AITargetInfo m_target;
 
     private void Awake()
     {
@@ -21,13 +22,13 @@ public class TombAttack : MonoBehaviour
     private void Start()
     {
         //m_animation.SetEmptyAnimation(0, 0);
-        int num = Random.Range(0, 3);
+        int num = Random.Range(0, 2);
         m_animation.DoTombRise(num);
         StartCoroutine(SummonSoul(num));
         StartCoroutine(TombLife());
     }
 
-    public void GetTarget(Vector2 target)
+    public void GetTarget(AITargetInfo target)
     {
         m_target = target;
     }
@@ -46,17 +47,9 @@ public class TombAttack : MonoBehaviour
         {
             yield return new WaitForAnimationComplete(m_animation.animationState, TombAttackAnimation.ANIMATION_TOMBC_RISE);
         }
-
-        var target = m_target;
-        Vector2 spitPos = transform.position;
-        Vector3 v_diff = (target - spitPos);
-        float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-
-        GameObject soul = Instantiate(m_soul, transform.position, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg));
-
-        //GameObject soul = Instantiate(m_soul, transform.position, Quaternion.identity);
+        
+        GameObject soul = Instantiate(m_soul, new Vector2(transform.position.x, transform.position.y+2), Quaternion.identity);
         soul.GetComponent<TombSoul>().GetTarget(m_target);
-        Debug.Log("Tomb Target: " + Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg));
         yield return null;
     }
 

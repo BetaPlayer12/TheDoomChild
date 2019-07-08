@@ -4,7 +4,7 @@
     {
         protected override void Collide()
         {
-            CallPoolRequest();
+            UnloadProjectile();
         }
     }
 }

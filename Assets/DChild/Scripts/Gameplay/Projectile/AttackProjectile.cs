@@ -30,6 +30,7 @@ namespace DChild.Gameplay.Projectiles
 
         public override void ResetState()
         {
+            base.ResetState();
             m_collidedWithEnvironment = false;
         }
 

@@ -8,20 +8,20 @@ namespace DChild.Gameplay.Combat
 {
     public abstract class AttackResistance : SerializedMonoBehaviour, IAttackResistance
     {
-        [OdinSerialize, HideReferenceObjectPicker, ReadOnly, PropertyOrder(2)]
-        protected Dictionary<AttackType, float> m_resistanceInfo = new Dictionary<AttackType, float>();
+        [OdinSerialize, HideReferenceObjectPicker, PropertyOrder(2), ReadOnly]
+        protected Dictionary<AttackType, float> m_resistance = new Dictionary<AttackType, float>();
 
         public abstract float GetResistance(AttackType type);
 
         public void SetResistance(AttackType type, AttackResistanceType resistanceType)
         {
-            if (m_resistanceInfo.ContainsKey(type))
+            if (m_resistance.ContainsKey(type))
             {
-                m_resistanceInfo[type] = ConvertToFloat(resistanceType);
+                m_resistance[type] = ConvertToFloat(resistanceType);
             }
             else
             {
-                m_resistanceInfo.Add(type, ConvertToFloat(resistanceType));
+                m_resistance.Add(type, ConvertToFloat(resistanceType));
             }
         }
 
@@ -44,39 +44,168 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+
 #if UNITY_EDITOR
-        [HideLabel]
-        public struct ResistanceValue
+        [System.Serializable]
+        public struct Info
         {
-            [SerializeField, ValueDropdown("GetValue")]
+            [ShowInInspector, MinValue(-1), MaxValue(2), OnValueChanged("UpdateData")]
             private float m_value;
-            public float value;
+            [ShowInInspector, ReadOnly]
+            private AttackResistanceType m_type;
 
-            private ValueDropdownItem<float> CreateItem(AttackResistanceType type) => new ValueDropdownItem<float>(type.ToString(), ConvertToFloat(type));
-
-            private IEnumerable GetValue()
+            public Info(AttackResistanceType m_type) : this()
             {
-                return new ValueDropdownList<float>
+                this.m_type = m_type;
+                m_value = ConvertToFloat(m_type);
+            }
+
+            public Info(float m_value) : this()
+            {
+                this.m_value = m_value;
+                m_type = GetClosestType(m_value);
+            }
+
+            public float value
+            {
+                get => m_value; set
                 {
-                    CreateItem(AttackResistanceType.None),
-                    CreateItem(AttackResistanceType.Weak),
-                    CreateItem(AttackResistanceType.Strong),
-                    CreateItem(AttackResistanceType.Immune),
-                    CreateItem(AttackResistanceType.Absorb)
-                };
+                    m_value = value;
+                    UpdateData();
+                }
+            }
+
+            public AttackResistanceType type => m_type;
+
+            private void UpdateData()
+            {
+                m_type = GetClosestType(m_value);
+            }
+
+            private AttackResistanceType GetClosestType(float value)
+            {
+                if (value > 1)
+                {
+                    return AttackResistanceType.Absorb;
+                }
+                else if (value == 0f)
+                {
+                    return AttackResistanceType.None;
+                }
+                else if (value == 1f)
+                {
+                    return AttackResistanceType.Immune;
+                }
+                else if (value < 0)
+                {
+                    return AttackResistanceType.Weak;
+                }
+                else
+                {
+                    return AttackResistanceType.Strong;
+                }
             }
         }
 
-        [OdinSerialize, HideReferenceObjectPicker, PropertyOrder(1)]
-        protected Dictionary<AttackType, ResistanceValue> m_resistance = new Dictionary<AttackType, ResistanceValue>();
+        [SerializeField, OnValueChanged("UpdateResistanceLists")]
+        private bool m_useType;
 
-        [Button, PropertyOrder(0)]
+        [ShowInInspector, HideReferenceObjectPicker, PropertyOrder(1), ShowIf("m_useType"), OnValueChanged("Validate")]
+        protected Dictionary<AttackType, AttackResistanceType> m_resistantType = new Dictionary<AttackType, AttackResistanceType>();
+        [ShowInInspector, HideReferenceObjectPicker, PropertyOrder(1), HideIf("m_useType"), OnValueChanged("Validate")]
+        protected Dictionary<AttackType, Info> m_resistantInfo = new Dictionary<AttackType, Info>();
+
+        [Button, PropertyOrder(1)]
         private void Validate()
         {
-            m_resistanceInfo.Clear();
+            m_resistance.Clear();
+            if (m_useType)
+            {
+                foreach (var key in m_resistantType.Keys)
+                {
+                    var type = m_resistantType[key];
+                    if (type == AttackResistanceType.None)
+                    {
+                        m_resistantType.Remove(key);
+                    }
+                    else
+                    {
+                        m_resistance.Add(key, ConvertToFloat(m_resistantType[key]));
+                    }
+                }
+            }
+            else
+            {
+                foreach (var key in m_resistantInfo.Keys)
+                {
+                    var info = m_resistantInfo[key];
+                    if (info.type == AttackResistanceType.None)
+                    {
+                        m_resistantInfo.Remove(key);
+                    }
+                    else
+                    {
+                        m_resistance.Add(key, info.value);
+                    }
+                }
+            }
+        }
+
+        private void UpdateResistanceLists()
+        {
+            if (m_useType)
+            {
+                m_resistantType.Clear();
+                foreach (var key in m_resistantInfo.Keys)
+                {
+                    m_resistantType.Add(key, m_resistantInfo[key].type);
+                }
+            }
+            else
+            {
+                m_resistantInfo.Clear();
+                foreach (var key in m_resistantType.Keys)
+                {
+                    m_resistantInfo.Add(key, new Info(m_resistantType[key]));
+                }
+            }
+            Validate();
+        }
+
+        [Button]
+        private void CopyResistance()
+        {
+            m_resistantInfo.Clear();
+            m_resistantType.Clear();
             foreach (var key in m_resistance.Keys)
             {
-                m_resistanceInfo.Add(key, m_resistance[key].value);
+                var value = m_resistance[key];
+                m_resistantInfo.Add(key, new Info(value));
+                m_resistantType.Add(key, GetClosestType(value));
+            }
+        }
+
+        private AttackResistanceType GetClosestType(float value)
+        {
+            if (value > 1)
+            {
+                return AttackResistanceType.Absorb;
+            }
+            else if (value == 0f)
+            {
+                return AttackResistanceType.None;
+            }
+            else if (value == 1f)
+            {
+                return AttackResistanceType.Immune;
+            }
+            else if (value < 0)
+            {
+                return AttackResistanceType.Weak;
+            }
+            else
+            {
+                return AttackResistanceType.Strong;
             }
         }
 #endif

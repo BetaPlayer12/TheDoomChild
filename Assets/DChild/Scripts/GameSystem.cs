@@ -12,7 +12,7 @@ namespace DChild
     {
         private static PoolManager m_poolManager;
         private static ConfirmationHandler m_confirmationHander;
-        private static ZoneLoader m_zoneLoader;
+        private static SceneLoader m_zoneLoader;
         public static GameSettings settings { get; private set; }
         public static GameDataManager dataManager { get; private set; }
 
@@ -31,11 +31,13 @@ namespace DChild
             m_zoneLoader.LoadZone(sceneName, withLoadingScene);
         }
 
+        public static void LoadMainMenu() => m_zoneLoader.LoadMainMenu();
+
         private void Awake()
         {
             settings = GetComponentInChildren<GameSettings>();
             m_confirmationHander = GetComponentInChildren<ConfirmationHandler>();
-            m_zoneLoader = GetComponentInChildren<ZoneLoader>();
+            m_zoneLoader = GetComponentInChildren<SceneLoader>();
             dataManager = GetComponentInChildren<GameDataManager>();
             m_poolManager = GetComponentInChildren<PoolManager>();
         }

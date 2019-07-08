@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay;
+using Doozy.Engine;
 using UnityEngine;
 
 namespace DChild
@@ -13,6 +14,13 @@ namespace DChild
         {
             GameplaySystem.ResumeGame();
         }
-    }
 
+        private void Update()
+        {
+            if (Input.anyKeyDown)
+            {
+                GameEventMessage.SendEvent("Demo Guide Close");
+            }
+        }
+    }
 }

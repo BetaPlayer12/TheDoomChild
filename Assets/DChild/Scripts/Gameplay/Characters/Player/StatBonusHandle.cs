@@ -11,6 +11,8 @@ namespace DChild.Gameplay.Characters.Players
         [OdinSerialize]
         private Dictionary<PlayerStat, BonusConversion> m_conversions;
 
+        public bool HasBonus(PlayerStat stat) => m_conversions.ContainsKey(stat);
+
         public int GetBonus(PlayerStat stat, IAttributes attributes)
         {
             return m_conversions[stat].GetBonus(attributes);

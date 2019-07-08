@@ -53,7 +53,8 @@ namespace DChild.Gameplay.Characters.Players
                     statusChance += value;
                     break;
                 default:
-                    throw new System.Exception($"{stat} cannot be added");
+                    Debug.LogError($"{stat} cannot be added");
+                    break;
             }
         }
 
@@ -86,7 +87,8 @@ namespace DChild.Gameplay.Characters.Players
                     statusChance = value;
                     break;
                 default:
-                    throw new System.Exception($"{stat} cannot be added");
+                    Debug.LogError($"{stat} cannot be Set");
+                    break;
             }
         }
 
@@ -110,8 +112,12 @@ namespace DChild.Gameplay.Characters.Players
                     return critChance;
                 case PlayerStat.StatusChance:
                     return statusChance;
+                case PlayerStat.MaxAttack:
+                    return attack + magicAttack;
+                case PlayerStat.MaxDefense:
+                    return defense + magicDefense;
                 default:
-                    throw new System.Exception($"{stat} cannot be added");
+                    throw new System.Exception($"{stat} does not exist");
             }
         }
     }
