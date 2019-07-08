@@ -137,7 +137,7 @@ namespace Refactor.DChild.Gameplay.Characters.AI
         {
             var list = new ValueDropdownList<AIData>();
             list.Add("None", null);
-            var infoType = m_info.GetType();
+            var infoType = typeof(T);
             var filePaths = Directory.GetFiles(m_referenceFolder);
             for (int i = 0; i < filePaths.Length; i++)
             {

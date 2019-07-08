@@ -11,7 +11,11 @@ GameObject:
   - component: {fileID: 6749943613737293270}
   - component: {fileID: 4263208086236453916}
   - component: {fileID: 452670190794622169}
-  m_Layer: 0
+  - component: {fileID: 5212348182823606743}
+  - component: {fileID: 8767778088822633314}
+  - component: {fileID: 3662534052017724668}
+  - component: {fileID: 3371934009141710917}
+  m_Layer: 12
   m_Name: TombAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,6 +65,104 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animationTracks: []
   m_skeletonAnimation: {fileID: 5649131820276201690}
+--- !u!50 &5212348182823606743
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6636652819318616434}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
+--- !u!61 &8767778088822633314
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6636652819318616434}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.18695784, y: 5.3565106}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 10, y: 11.713019}
+  m_EdgeRadius: 0
+--- !u!114 &3662534052017724668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6636652819318616434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34fad4e323aad53458602de8afcbef1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_registerToWorldTime: 1
+  m_slowFactor: 0
+  m_fastFactor: 0
+  m_fXObjects:
+    m_particleSystems: []
+  m_spineObjects:
+    m_skeletonAnimations:
+    - {fileID: 5649131820276201690}
+    m_baseTimeScale:
+    - 1
+  m_physicsObjects:
+    m_rigidbody2Ds:
+    - {fileID: 5212348182823606743}
+    m_physicsTimeObjectInfo:
+    - m_mass: 1
+      m_actualVelocity: {x: 0, y: 0}
+  m_materials: []
+--- !u!114 &3371934009141710917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6636652819318616434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00762718fcc9fe449aef23fb022b5dbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_simulateGravity: 1
+  m_gravity:
+    m_gravityScale: 100
+    m_direction: {x: 0, y: -1}
+    m_angle: -90
+    m_drawDirection: 0
+  m_useLinearDrag: 0
+  m_linearDrag:
+    m_x: 0
+    m_y: 0
 --- !u!1001 &2147975009469598385
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -72,6 +174,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TombModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028803201215574634, guid: 2fde9f80a7916f74899113e4a12d5bc1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028803201215574635, guid: 2fde9f80a7916f74899113e4a12d5bc1,
+        type: 3}
+      propertyPath: _animationName
+      value: TombA_Rise
       objectReference: {fileID: 0}
     - target: {fileID: 6028803201215574638, guid: 2fde9f80a7916f74899113e4a12d5bc1,
         type: 3}
@@ -128,10 +240,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6028803201215574635, guid: 2fde9f80a7916f74899113e4a12d5bc1,
+    - target: {fileID: 6028803201215574633, guid: 2fde9f80a7916f74899113e4a12d5bc1,
         type: 3}
-      propertyPath: _animationName
-      value: TombA_Rise
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028803201215574632, guid: 2fde9f80a7916f74899113e4a12d5bc1,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -2097023599
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028803201215574632, guid: 2fde9f80a7916f74899113e4a12d5bc1,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fde9f80a7916f74899113e4a12d5bc1, type: 3}

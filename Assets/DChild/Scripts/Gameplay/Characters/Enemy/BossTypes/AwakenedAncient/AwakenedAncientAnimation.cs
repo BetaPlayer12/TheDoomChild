@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public const string ANIMATION_MOVE = "Move";
         public const string ANIMATION_MOVE_STATIONARY = "Move_Stationary";
         public const string ANIMATION_SPIT = "Spit";
+        public const string ANIMATION_SPIT_SKELETON = "Spit_Skeleton";
         public const string ANIMATION_TURN = "Turn";
         public const string ANIMATION_UNBURROW = "Unburrow";
         public const string ANIMATION_TEST = "test";
@@ -48,6 +49,12 @@ namespace DChild.Gameplay.Characters.Enemies
         public void DoSpit()
         {
             SetAnimation(0, ANIMATION_SPIT, false);
+            AddAnimation(0, ANIMATION_IDLE, true, 0);
+        }
+
+        public void DoSpitSkeleton()
+        {
+            SetAnimation(0, ANIMATION_SPIT_SKELETON, false);
             AddAnimation(0, ANIMATION_IDLE, true, 0);
         }
 
