@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters
 {
-    [SerializeField]
+    [System.Serializable]
     public class ProjectileInfo
     {
         [SerializeField]
