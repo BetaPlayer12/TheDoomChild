@@ -11,8 +11,9 @@ using UnityEngine;
 
 
 
-public class Death : MonoBehaviour, IPlayerExternalModule, IEventModule
+public class Death : MonoBehaviour, IEventModule
 {
+    [SerializeField]
     private Player m_player;
     [SerializeField]
     private GameObject m_hitCollider;
@@ -20,36 +21,37 @@ public class Death : MonoBehaviour, IPlayerExternalModule, IEventModule
     private GameObject m_hitBox;
     [SerializeField]
     private SpineRootAnimation m_spineRoot;
+    [SerializeField]
+    private GameObject m_movementController;
+
+    
+    private IFacing m_characterFacing;
 
     public void ConnectEvents()
     {
-
         m_player.OnDeath += DeathTrigger;
+        Debug.Log("check events");
     }
 
     private void DeathTrigger(object sender, EventActionArgs eventArgs)
     {
+
+        Debug.Log("DEAD");
+
+        m_characterFacing = m_player;
+
+        m_movementController.SetActive(false);
         m_hitBox.SetActive(false);
         m_hitCollider.SetActive(false);
-        m_spineRoot.SetAnimation(0, "Death_Instant_Right", true, 0);
+        if(m_characterFacing.currentFacingDirection == HorizontalDirection.Right) {
+            m_spineRoot.SetAnimation(0, "Death_Instant_Right", false, 0);
+        }
+        if (m_characterFacing.currentFacingDirection == HorizontalDirection.Left)
+        {
+            m_spineRoot.SetAnimation(0, "Death_Instant_Left", false, 0);
+        }
+
 
     }
 
-    public void Initialize(IPlayerModules player)
-    {
-        
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
