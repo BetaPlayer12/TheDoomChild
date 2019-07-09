@@ -66,5 +66,17 @@ namespace DChild.Gameplay.Projectiles
                 }
             }
         }
+
+        private void OnValidate()
+        {
+            if(m_data != null)
+            {
+                var physics = GetComponent<IsolatedPhysics2D>();
+                if(physics.simulateGravity != !m_data.hasConstantSpeed)
+                {
+                    physics.simulateGravity = !m_data.hasConstantSpeed;
+                }
+            }
+        }
     }
 }

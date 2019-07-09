@@ -152,6 +152,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private bool m_burrowed;
         private bool m_waitRoutineEnd;
 
+        [SerializeField]
+        private int m_skeletonSize;
+        private GameObject[] m_skeletons;
+
         protected override void Start()
         {
             base.Start();
@@ -162,6 +166,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             //    m_bone[i] = GetComponentInChildren<SkeletonAnimation>().Skeleton.FindBone(m_boneName[i]);
             //    Debug.Log(m_bone);
             //}
+            m_skeletons = new GameObject[m_skeletonSize];
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -314,7 +319,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_BURROW);
-            Debug.Log("Summon Tombs");
+            //Debug.Log("Summon Tombs");
             for (int i = 0; i < 3; i++)
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
@@ -323,7 +328,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.burrowIdleAnimation, true);
             //yield return null;
             yield return new WaitForSeconds(5f);
-            Debug.Log("Waited seconds");
+            //Debug.Log("Waited seconds");
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_UNBURROW);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -345,14 +350,14 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             if (e.Data.Name == m_eventName[0])
             {
-                Debug.Log(m_eventName[0]);
+                //Debug.Log(m_eventName[0]);
 
                 GameObject obj = Instantiate(m_info.footFX, /*new Vector2(m_footTF.position.x + (3.5f * transform.localScale.x), m_footTF.position.y)*/ m_footTF.position, Quaternion.identity);
                 obj.transform.parent = m_footTF;
             }
             else if (e.Data.Name == m_eventName[1])
             {
-                Debug.Log(m_eventName[1]);
+                //Debug.Log(m_eventName[1]);
 
                 GameObject obj = Instantiate(m_info.anticipationFX, new Vector2(m_seedSpitTF.position.x + (1 * transform.localScale.x), m_seedSpitTF.position.y + .25f), Quaternion.identity);
                 obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
@@ -360,7 +365,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
             else if (e.Data.Name == m_eventName[2])
             {
-                Debug.Log(m_eventName[2]);
+                //Debug.Log(m_eventName[2]);
                 GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
                 obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
                 obj.transform.parent = m_seedSpitTF;
@@ -381,7 +386,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
             else if (e.Data.Name == m_eventName[3])
             {
-                Debug.Log(m_eventName[3]);
+                //Debug.Log(m_eventName[3]);
 
                 GameObject obj = Instantiate(m_info.stompFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), m_stompTF.position.y - 2.75f), Quaternion.identity);
                 GameObject obj2 = Instantiate(m_info.crawlingVineFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), m_stompTF.position.y - 2.5f), Quaternion.identity);
@@ -394,12 +399,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
             else if (e.Data.Name == m_eventName[5])
             {
-                Debug.Log(m_eventName[5]);
-
-                Debug.Log("Summon Skeletons");
-                for (int i = 0; i < 2; i++)
+                //Debug.Log(m_eventName[5]);
+                for (int i = 0; i < 1; i++)
                 {
-                    GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + UnityEngine.Random.Range(-10, 10), m_skeletonSpawnTF.position.y - 2.5f), Quaternion.identity);
+                    GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + (3 * transform.localScale.x) + UnityEngine.Random.Range(-5, 5), m_skeletonSpawnTF.position.y), Quaternion.identity);
+                    skeleton.GetComponent<SkeletonSpawnAI>().SetDirection(transform.localScale.x);
+                    m_skeletons[i] = skeleton;
                 }
             }
         }
@@ -457,60 +462,49 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         Array values = Enum.GetValues(typeof(Attack));
                         var random = new System.Random();
                         m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
-                        if (Wait())
+                        switch (m_currentAttack)
                         {
-                            if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
-                            {
-                                Debug.Log("Do Skeletons");
-                                StartCoroutine(SkeletonSummonRoutine());
-                                WaitTillAttackEnd(Attack.SkeletonSummon);
-                            }
+                            case Attack.GroundSlam:
+                                if (Wait())
+                                {
+                                    //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
+                                    StartCoroutine(GroundAttackRoutine());
+                                    WaitTillAttackEnd(Attack.GroundSlam);
+                                }
+                                break;
+                            case Attack.Spit:
+                                if (Wait())
+                                {
+                                    //m_attackHandle.ExecuteAttack(m_info.spit.animation);
+                                    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 15)
+                                    {
+                                        m_animation.SetAnimation(0, m_info.spit.animation, false);
+                                        m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                                        WaitTillAttackEnd(Attack.Spit);
+                                    }
+                                }
+                                break;
+                            case Attack.Tomb:
+                                if (Wait())
+                                {
+                                    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
+                                    {
+                                        StartCoroutine(TombAttackRoutine(target));
+                                        WaitTillAttackEnd(Attack.Tomb);
+                                    }
+                                }
+                                break;
+                            case Attack.SkeletonSummon:
+                                if (Wait() && m_skeletons.Length == m_skeletonSize)
+                                {
+                                    if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
+                                    {
+                                        StartCoroutine(SkeletonSummonRoutine());
+                                        WaitTillAttackEnd(Attack.SkeletonSummon);
+                                    }
+                                }
+                                break;
                         }
-                        //switch (m_currentAttack)
-                        //{
-                        //    case Attack.GroundSlam:
-                        //        if (Wait())
-                        //        {
-                        //            //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
-                        //            StartCoroutine(GroundAttackRoutine());
-                        //            WaitTillAttackEnd(Attack.GroundSlam);
-                        //        }
-                        //        break;
-                        //    case Attack.Spit:
-                        //        if (Wait())
-                        //        {
-                        //            //m_attackHandle.ExecuteAttack(m_info.spit.animation);
-                        //            if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 15)
-                        //            {
-                        //                m_animation.SetAnimation(0, m_info.spit.animation, false);
-                        //                m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-                        //                WaitTillAttackEnd(Attack.Spit);
-                        //            }
-                        //        }
-                        //        break;
-                        //    case Attack.Tomb:
-                        //        if (Wait())
-                        //        {
-                        //            if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
-                        //            {
-                        //                Debug.Log("Do Tomb");
-                        //                StartCoroutine(TombAttackRoutine(target));
-                        //                WaitTillAttackEnd(Attack.Tomb);
-                        //            }
-                        //        }
-                        //        break;
-                        //    case Attack.SkeletonSummon:
-                        //        if (Wait())
-                        //        {
-                        //            if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
-                        //            {
-                        //                Debug.Log("Do Skeletons");
-                        //                StartCoroutine(SkeletonSummonRoutine());
-                        //                WaitTillAttackEnd(Attack.SkeletonSummon);
-                        //            }
-                        //        }
-                        //        break;
-                        //}
                     }
                     break;
                 case State.Chasing:

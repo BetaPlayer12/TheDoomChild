@@ -29,5 +29,17 @@ namespace DChild.Gameplay.Projectiles
             gameObject.SetActive(false);
             UnloadProjectile();
         }
+
+        private void OnValidate()
+        {
+            if (m_data != null)
+            {
+                var physics = GetComponent<IsolatedPhysics2D>();
+                if (physics.simulateGravity != !m_data.hasConstantSpeed)
+                {
+                    physics.simulateGravity = !m_data.hasConstantSpeed;
+                }
+            }
+        }
     }
 }
