@@ -74,7 +74,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_characterPhysics2D.SetVelocity(0);
                 }
-                //m_moveHandler.Deccelerate();
+                
 
                 m_state.isMoving = false;
                 m_changeSpeedDuration.Reset();

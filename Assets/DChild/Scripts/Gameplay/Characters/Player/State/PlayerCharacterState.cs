@@ -24,6 +24,7 @@ namespace DChild.Gameplay.Characters.Players.State
         private bool m_isDashing;
         private bool m_canDash;
         private bool m_canHighJump;
+        [ShowInInspector]
         private bool m_canDoubleJump;
         private bool m_hasDoubleJumped;
         private bool m_canWallJump;
@@ -89,6 +90,6 @@ namespace DChild.Gameplay.Characters.Players.State
             }
         }
 
-        
+
     }
 }

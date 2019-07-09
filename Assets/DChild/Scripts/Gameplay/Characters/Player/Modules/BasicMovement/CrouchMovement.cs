@@ -18,13 +18,18 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_state.isCrouched)
             {
+
+                
                 if (direction == 0)
                 {
+                    Debug.Log("in stasis");
                     m_moveHandler.Deccelerate();
                     m_state.isMoving = false;
+                   
                 }
                 else
                 {
+                    Debug.Log("in moving");
                     var moveDirection = direction > 0 ? Vector2.right : Vector2.left;
                     m_moveHandler.SetDirection(moveDirection);
                     m_moveHandler.Accelerate();
@@ -49,6 +54,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnCrouchMoveCall(object sender, ControllerEventArgs eventArgs)
         {
+           
+            //m_moveHandler.Deccelerate();
             Move(eventArgs.input.direction.horizontalInput);
         }
 

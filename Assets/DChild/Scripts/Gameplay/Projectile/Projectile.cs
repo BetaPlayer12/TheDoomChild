@@ -13,9 +13,11 @@ namespace DChild.Gameplay.Projectiles
     {
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
-        [SerializeField, PropertyOrder(1)]
+        [ShowInInspector]
+        private bool m_waitForParticlesEnd;
+        [SerializeField, PropertyOrder(1), ToggleGroup("m_waitForParticlesEnd")]
         private ParticleSystem m_particleSystem;
-        [SerializeField, PropertyOrder(1)]
+        [SerializeField, PropertyOrder(1), ToggleGroup("m_waitForParticlesEnd")]
         private GameObject m_model;
 
         protected IsolatedPhysics2D m_physics;
@@ -25,8 +27,11 @@ namespace DChild.Gameplay.Projectiles
 
         public virtual void ResetState()
         {
-            m_model?.SetActive(true);
-            m_particleSystem?.Play();
+            if (m_waitForParticlesEnd)
+            {
+                m_model?.SetActive(true);
+                m_particleSystem?.Play();
+            }
         }
 
         public void ChangeTrajectory(Vector2 directionNormal) => transform.right = directionNormal;
@@ -72,6 +77,7 @@ namespace DChild.Gameplay.Projectiles
             m_physics = GetComponent<IsolatedPhysics2D>();
             m_isolatedPhysicsTime = GetComponent<IIsolatedPhysicsTime>();
             var physics = GetComponent<IsolatedPhysics2D>();
+            m_waitForParticlesEnd = m_particleSystem;
         }
     }
 }

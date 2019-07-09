@@ -100,7 +100,7 @@ namespace DChild.Gameplay.Characters.Players
         #region Skills Animations
         //Left
         public const string ANIMATION_DASH_LEFT = "Dash_Loop_Left";
-        public const string ANIMATION_DOUBLEJUMP_ANTIC_LEFT = "JumpNew_DoubleJump_Start_Left";
+        public const string ANIMATION_DOUBLEJUMP_ANTIC_LEFT = "JumpNew_DoubleJump_Loop_Left";
         public const string ANIMATION_DOUBLEJUMP_RISE_LEFT = "DoubleJump_Rising_Left";
         public const string ANIMATION_DOUBLEJUMP_RISE2_LEFT = "DoubleJump_Rising2_Left";
         public const string ANIMATION_DOUBLEJUMP_RISE3_LEFT = "JumpNew_DoubleJump_Loop_Left";
@@ -113,7 +113,7 @@ namespace DChild.Gameplay.Characters.Players
 
         //Right
         public const string ANIMATION_DASH_RIGHT = "Dash_Loop_Right";
-        public const string ANIMATION_DOUBLEJUMP_ANTIC_RIGHT = "JumpNew_DoubleJump_Start_Right";
+        public const string ANIMATION_DOUBLEJUMP_ANTIC_RIGHT = "JumpNew_DoubleJump_Loop_Right";
         public const string ANIMATION_DOUBLEJUMP_RISE_RIGHT = "DoubleJump_Rising_Right";
         public const string ANIMATION_DOUBLEJUMP_RISE2_RIGHT = "DoubleJump_Rising2_Right";
         public const string ANIMATION_DOUBLEJUMP_RISE3_RIGHT = "JumpNew_DoubleJump_Loop_Right";
@@ -597,12 +597,12 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (direction == HorizontalDirection.Left)
             {
-                SetAnimation(0, ANIMATION_ATTACK_FORWARD_LEFT, false, 0);
+                SetAnimation(0, ANIMATION_ATTACK_FORWARD_LEFT, false,0);
                 SetCurrentAttackAnimation(ANIMATION_ATTACK_FORWARD_LEFT);
             }
             else
             {
-                SetAnimation(0, ANIMATION_ATTACK_FORWARD_RIGHT, false, 0);
+                SetAnimation(0, ANIMATION_ATTACK_FORWARD_RIGHT, false,0);
                 SetCurrentAttackAnimation(ANIMATION_ATTACK_FORWARD_RIGHT);
             }
         }
@@ -739,11 +739,11 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (direction == HorizontalDirection.Left)
             {
-                SetAnimation(0, ANIMATION_JUMPNEW_LOOP_LEFT, true, 0);
+                SetAnimation(0, ANIMATION_JUMPNEW_LOOP_LEFT, true);
             }
             else
             {
-                SetAnimation(0, ANIMATION_JUMPNEW_LOOP_RIGHT, true, 0);
+                SetAnimation(0, ANIMATION_JUMPNEW_LOOP_RIGHT, true);
             }
         }
 
