@@ -3,11 +3,12 @@ using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat.StatusInfliction;
 using DChild.Inputs;
+using Holysoft.Event;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class PlayerController : MonoBehaviour, IController, IPlayerExternalModule
+    public class PlayerController : MonoBehaviour, IController, IPlayerExternalModule,IMainController
     {
         [SerializeField]
         private bool m_inputEnabled = true;
@@ -24,6 +25,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private AnimationController m_animation;
         private PlayerInput m_input;
 
+        public event EventAction<EventActionArgs> ControllerDisabled;
 
         public void Enable()
         {
@@ -33,8 +35,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Disable()
         {
+            Debug.Log("checking");
             m_input.Disable();
             m_inputEnabled = false;
+            ControllerDisabled?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Initialize(IPlayerModules player)

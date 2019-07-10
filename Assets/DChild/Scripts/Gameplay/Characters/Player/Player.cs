@@ -122,6 +122,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public event EventAction<FlinchEventArgs> OnFlinch;
         public event EventAction<EventActionArgs> OnDeath;
+        
         public event EventAction<CombatStateEventArgs> CombatModeChanged
         {
             add
@@ -163,8 +164,9 @@ namespace DChild.Gameplay.Characters.Players
             m_health.ReduceCurrentValue(totalDamage);
             if (isAlive == false)
             {
+                DisableController();
                 OnDeath?.Invoke(this, EventActionArgs.Empty);
-
+                
             }
         }
 

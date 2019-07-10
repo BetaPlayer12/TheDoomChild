@@ -25,6 +25,7 @@ namespace DChild.Gameplay.Combat
         {
             if (((IPlayer)player).characterState.canFlinch)
             {
+                StartCoroutine(DisableInputTemporarily(player));
                 if (damageSource.x > player.position.x)
                 {
                     player.Displace(new Vector2(-1, 1) * m_knockBackPower);
@@ -33,7 +34,6 @@ namespace DChild.Gameplay.Combat
                 {
                     player.Displace(Vector2.one * m_knockBackPower);
                 }
-                StartCoroutine(DisableInputTemporarily(player));
             }
             StartCoroutine(TemporaryInvulnerability(player));
         }
