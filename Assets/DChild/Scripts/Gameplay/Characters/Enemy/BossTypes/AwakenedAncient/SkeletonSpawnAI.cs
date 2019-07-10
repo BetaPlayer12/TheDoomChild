@@ -58,6 +58,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             private string m_jumpFromAwakenedAnimation;
             public string jumpFromAwakenedAnimation => m_jumpFromAwakenedAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_jumpFromAwakenedAnimation2;
+            public string jumpFromAwakenedAnimation2 => m_jumpFromAwakenedAnimation2;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_jumpFromAwakenedAnimation3;
+            public string jumpFromAwakenedAnimation3 => m_jumpFromAwakenedAnimation3;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_jumpUpmAwakenedAnimation;
             public string jumpUpmAwakenedAnimation => m_jumpUpmAwakenedAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -270,8 +276,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_waitRoutineEnd = true;
             m_animation.EnableRootMotion(false, false);
             GetComponent<Rigidbody2D>().AddForce(m_jumpSpeed * new Vector2(jumpX * transform.localScale.x, jumpY), ForceMode2D.Impulse);
-            m_animation.SetAnimation(0, m_info.jumpFromAwakenedAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, SkeletonSpawnAnimation.ANIMATION_JUMP_FROM);
+            m_animation.SetAnimation(0, m_info.jumpFromAwakenedAnimation3, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, SkeletonSpawnAnimation.ANIMATION_JUMP_FROM3);
             m_animation.SetAnimation(0, m_info.jumpUpmAwakenedAnimation, true);
             yield return new WaitUntil(() => GetComponent<IsolatedCharacterPhysics2D>().onWalkableGround);
             m_animation.SetAnimation(0, m_info.fallFromAwakenedAnimation, false);
@@ -290,6 +296,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, SkeletonSpawnAnimation.ANIMATION_ATTACK1);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -300,6 +307,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, SkeletonSpawnAnimation.ANIMATION_ATTACK2);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -310,6 +318,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, SkeletonSpawnAnimation.ANIMATION_ATTACK3);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -323,6 +332,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_movementHandle.Stop();
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -439,10 +449,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                StartCoroutine(SpawnRoutine());
-            }
+            //if (Input.GetKeyDown(KeyCode.Z))
+            //{
+            //    StartCoroutine(SpawnRoutine());
+            //}
         }
     }
 }
