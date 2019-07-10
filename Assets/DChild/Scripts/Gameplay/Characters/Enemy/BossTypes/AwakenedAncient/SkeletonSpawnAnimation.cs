@@ -15,6 +15,8 @@ namespace DChild.Gameplay.Characters.Enemies
         public const string ANIMATION_FLINCH = "Flinch";
         public const string ANIMATION_IDLE2 = "Idle2";
         public const string ANIMATION_JUMP_FROM = "Jump_From_Awakened_Ancient";
+        public const string ANIMATION_JUMP_FROM2 = "Jump_From_Awakened_Ancient2";
+        public const string ANIMATION_JUMP_FROM3 = "Jump_From_Awakened_Ancient3";
         public const string ANIMATION_JUMP_UP = "Jump_Up_Awakened_Ancient";
         public const string ANIMATION_MOVE = "Move";
         public const string ANIMATION_RUN = "Run";

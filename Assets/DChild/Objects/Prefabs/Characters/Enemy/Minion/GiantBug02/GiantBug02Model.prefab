@@ -44,7 +44,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.1642578, y: 7.087915}
+  m_Offset: {x: 1.1642578, y: 2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -733,6 +733,8 @@ GameObject:
   - component: {fileID: 8418541054457632661}
   - component: {fileID: 1650380322898143474}
   - component: {fileID: 861804432416506244}
+  - component: {fileID: 7106460866367168288}
+  - component: {fileID: 2223875786060822814}
   m_Layer: 13
   m_Name: Hitboxes
   m_TagString: Untagged
@@ -859,6 +861,37 @@ CompositeCollider2D:
       - {x: 0.5115414, y: 0.1403466}
       - {x: 1.1642054, y: 0.12553}
   m_VertexDistance: 0.0005
+--- !u!114 &7106460866367168288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170123052890793504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_collider2Ds:
+  - {fileID: 2183691986725825444}
+  - {fileID: 8199709118724235044}
+  - {fileID: 4584254079264509899}
+  m_compositeColliderID: -32538
+  m_isInvulnerable: 0
+  m_damageReduction: 0
+--- !u!114 &2223875786060822814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170123052890793504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4666997468959791844
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,7 +1020,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.0001, y: 0.1}
+  m_Size: {x: 5, y: 0.5}
   m_Direction: 1
 --- !u!114 &7992011356642319104
 MonoBehaviour:
@@ -1264,7 +1297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3949312762986039801}
   - component: {fileID: 5009239580477598615}
-  - component: {fileID: 916146062982548101}
+  - component: {fileID: 395340806613222147}
   - component: {fileID: 1263123835660698381}
   m_Layer: 13
   m_Name: Behaviours
@@ -1300,7 +1333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 0}
---- !u!114 &916146062982548101
+--- !u!114 &395340806613222147
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1309,7 +1342,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8523990434322844521}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1b0d68cd77a89d45b04c6c47d586049, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a322a651c4cdb8479da6532cebf20a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_source: {fileID: 0}

@@ -65,6 +65,9 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private GameObject m_spitGO;
             public GameObject spitGO => m_spitGO;
+            [SerializeField]
+            private GameObject m_muzzleGO;
+            public GameObject muzzleGO => m_muzzleGO;
 
             public override void Initialize()
             {
@@ -110,6 +113,11 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         private Attack m_currentAttack;
         private Attack m_afterWaitForBehaviourAttack;
+
+        [SerializeField]
+        private Transform m_spitTF;
+        [SerializeField]
+        private float m_spitSpeed;
 
         //Patience Handler
         [SerializeField]
@@ -234,7 +242,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.turnAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, MeleeBeeDroneAnimation.ANIMATION_TURN);
+            yield return new WaitForAnimationComplete(m_animation.animationState, GiantBug02Animation.ANIMATION_TURN);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
             yield return null;
@@ -250,6 +258,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -266,6 +275,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -273,7 +283,29 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             if (e.Data.Name == m_eventName[0])
             {
+                if (IsFacingTarget())
+                {
+                    Debug.Log(m_eventName[0]);
+                    //Spawn Projectile
 
+                    var target = m_targetInfo.position; //No Parabola
+                                                        //var target = TargetParabola(); //With Parabola
+                    target = new Vector2(target.x, target.y - 2);
+                    Vector2 spitPos = m_spitTF.position;
+                    Vector3 v_diff = (target - spitPos);
+                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                    //transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+                    //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                    //GameObject shoot = Instantiate(m_info.stingerGO, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+                    GameObject muzzle = Instantiate(m_info.muzzleGO, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+                    GameObject shoot = Instantiate(m_info.spitGO, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+                    shoot.GetComponent<Rigidbody2D>().AddForce((m_spitSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
+                }
+                else
+                {
+                    m_waitRoutineEnd = false;
+                    m_currentState = State.Turning;
+                }
             }
         }
 
@@ -283,20 +315,22 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             {
                 case State.Idle:
                     //Add actual CharacterInfo Later
-                    if (m_targetInfo.isValid)
-                    {
-                        //StartCoroutine(UnburrowRoutine());
-                        Debug.Log("Doing IDLE");
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    }
-                    else
-                    {
-                        //PATROL
-                        Debug.Log("Doing PATROL");
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.transform.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movementHandle, m_info.patrol.speed, characterInfo);
-                    }
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_waitRoutineEnd = false;
+                    //if (m_targetInfo.isValid)
+                    //{
+                    //    //StartCoroutine(UnburrowRoutine());
+                    //    Debug.Log("Doing IDLE");
+                    //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    //}
+                    //else
+                    //{
+                    //    //PATROL
+                    //    Debug.Log("Doing PATROL");
+                    //    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    //    var characterInfo = new PatrolHandle.CharacterInfo(m_character.transform.position, m_character.facing);
+                    //    m_patrolHandle.Patrol(m_movementHandle, m_info.patrol.speed, characterInfo);
+                    //}
                     break;
                 case State.Turning:
                     if (Wait() && !m_waitRoutineEnd)
@@ -311,7 +345,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     {
                         Debug.Log("Doing ATTACK");
                         var target = m_targetInfo.position;
-                        target = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 0.5f);
                         Array values = Enum.GetValues(typeof(Attack));
                         var random = new System.Random();
                         m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
@@ -344,23 +377,17 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     if (!m_waitRoutineEnd)
                     {
                         var target = m_targetInfo.position;
-                        target = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 0.5f);
-                        Debug.Log("Doing CHASE");
                         //Put Target Destination
                         if (IsFacingTarget() && Vector2.Distance(target, transform.position) <= m_maxRange)
                         {
                             m_currentState = State.Attacking;
+                            //m_animation.SetAnimation(0, m_info.idle1Animation, true);
                             m_movementHandle.Stop();
                         }
                         else if (IsFacingTarget() && Vector2.Distance(target, transform.position) >= m_maxRange)
                         {
-                            if (Wait())
-                            {
-                                m_animation.EnableRootMotion(false, false);
-                                m_animation.SetAnimation(0, m_info.move.animation, true);
-                                //m_movementHandle.MoveTowards(target, m_info.move.speed);
-                                MoveTo(target, m_info.move.speed);
-                            }
+                            m_animation.EnableRootMotion(true, false);
+                            m_animation.SetAnimation(0, m_info.move.animation, true);
                         }
                         else
                         {
@@ -375,7 +402,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     //How far is target, is it worth it to chase or go back to patrol
                     if (!m_waitRoutineEnd)
                     {
-                        Debug.Log("Doing REEVALUATION");
                         if (m_targetInfo.isValid)
                         {
                             m_currentState = State.Chasing;
