@@ -291,87 +291,6 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
---- !u!1 &3552793318232559406
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1726749061602195353}
-  - component: {fileID: 3527185600609625810}
-  - component: {fileID: 1137493392381504297}
-  - component: {fileID: 1963382660600197283}
-  m_Layer: 16
-  m_Name: LegCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1726749061602195353
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3552793318232559406}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4030143529446363316}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &3527185600609625810
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3552793318232559406}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.0001, y: 0.1}
-  m_Direction: 1
---- !u!114 &1137493392381504297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3552793318232559406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_collisionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  m_collider: {fileID: 3527185600609625810}
-  m_recordsContactPoints: 0
---- !u!114 &1963382660600197283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3552793318232559406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea39aaa929f53d64b9a05becc48c1d8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_mask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &4815587655526024151
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +431,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6502704721882598875}
-  - {fileID: 1726749061602195353}
   m_Father: {fileID: 2544378068226852776}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -608,7 +526,7 @@ PolygonCollider2D:
     - - {x: -0.45277908, y: -1.1926105}
       - {x: 0.5015316, y: 0.31080705}
       - {x: -0.55328375, y: 0.37301633}
-      - {x: -1.1630301, y: 0.03493034}
+      - {x: -1.454126, y: -0.6779134}
 --- !u!1 &7017168769027825317
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,6 +680,18 @@ CompositeCollider2D:
         Y: 16174601
       - X: -14593
         Y: 14718177
+  - m_Collider: {fileID: 7713662696251085282}
+    m_ColliderPaths:
+    - - X: -1370525
+        Y: 24251852
+      - X: -2579904
+        Y: 23325582
+      - X: -2312441
+        Y: 20721760
+      - X: -659306
+        Y: 20924274
+      - X: 819011
+        Y: 23445578
   - m_Collider: {fileID: 7827830899948606263}
     m_ColliderPaths:
     - - X: -1493432
@@ -770,30 +700,17 @@ CompositeCollider2D:
         Y: 16672020
       - X: 3519221
         Y: 19945504
-      - X: 2940815
-        Y: 22136350
-  - m_Collider: {fileID: 7713662696251085282}
-    m_ColliderPaths:
-    - - X: 499076
-        Y: 24419636
-      - X: -1477318
-        Y: 23109858
-      - X: -1161916
-        Y: 22183888
-      - X: 11832
-        Y: 20301074
-      - X: 2089382
-        Y: 21120562
+      - X: 927397
+        Y: 23622446
   m_CompositePaths:
     m_Paths:
     - - {x: 0.3519221, y: 1.9945505}
-      - {x: 0.2940815, y: 2.213635}
-      - {x: 0.1761036, y: 2.1801713}
-      - {x: 0.049907602, y: 2.4419637}
-      - {x: -0.1477318, y: 2.3109858}
-      - {x: -0.1161916, y: 2.2183888}
-      - {x: -0.0520275, y: 2.1154628}
-      - {x: -0.14934321, y: 2.0878599}
+      - {x: 0.0927397, y: 2.3622446}
+      - {x: 0.0783038, y: 2.3458824}
+      - {x: -0.1370525, y: 2.4251852}
+      - {x: -0.2579904, y: 2.3325582}
+      - {x: -0.2312441, y: 2.072176}
+      - {x: -0.14455791, y: 2.0827951}
       - {x: 0.248125, y: 1.667202}
     - - {x: 0.0478937, y: 1.5014753}
       - {x: 0.15504101, y: 1.5874088}
@@ -965,6 +882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 0}
   m_physics: {fileID: 0}
+  m_skeletonAnimation: {fileID: 0}
   m_animation: 
 --- !u!1 &7299100510775145456
 GameObject:
@@ -1043,8 +961,8 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.23540577, y: 0.23191547}
-      - {x: -0.25172383, y: -0.4974415}
-      - {x: 0.037597954, y: -0.58042955}
-      - {x: 0.71941835, y: -0.61467135}
-      - {x: 0.8773619, y: 0.05411005}
+    - - {x: -0.5214506, y: -0.26985162}
+      - {x: -0.49990857, y: -0.7380774}
+      - {x: 0.20484528, y: -1.127921}
+      - {x: 0.44408986, y: -0.6747359}
+      - {x: 0.066860266, y: 0.14162494}

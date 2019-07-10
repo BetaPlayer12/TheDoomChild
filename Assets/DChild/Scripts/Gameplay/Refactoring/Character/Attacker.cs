@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Combat
 {
+
     public class Attacker : MonoBehaviour, IAttacker, IDamageDealer
     {
         [SerializeField]
@@ -82,7 +83,6 @@ namespace Refactor.DChild.Gameplay.Combat
 
         private void Awake()
         {
-
             m_info = new AttackerInfo();
             if (m_data != null)
             {

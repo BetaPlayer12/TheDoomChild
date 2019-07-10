@@ -6,7 +6,7 @@ namespace DChild.Gameplay
     public interface ICharacter
     {
         IsolatedObject isolatedObject { get; }
-        CharacterPhysics2D physics { get; }
+        IsolatedPhysics2D physics { get; }
         CharacterColliders colliders { get; }
     }
 }

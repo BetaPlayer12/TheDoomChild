@@ -19,9 +19,8 @@ namespace Refactor.DChild.Gameplay.Characters
 
         private bool m_isTurning;
 
-        public void Execute(string animation, out bool waitForBehaviour)
+        public void Execute(string animation)
         {
-            waitForBehaviour = false;
             m_animation.SetAnimation(0, animation, false);
             StartCoroutine(TurnRoutine());
         }
@@ -39,6 +38,8 @@ namespace Refactor.DChild.Gameplay.Characters
             m_animation.DisableRootMotion();
             m_animation.AnimationSet -= OnAnimationSet;
             m_animation.animationState.Complete -= OnComplete;
+            var currentScale = m_character.facing == HorizontalDirection.Left ? new Vector3(-1, 1, 1) : Vector3.one;
+            m_character.transform.localScale = currentScale;
             TurnCharacter();
             CallTurnDone(new FacingEventArgs(m_character.facing));
         }
