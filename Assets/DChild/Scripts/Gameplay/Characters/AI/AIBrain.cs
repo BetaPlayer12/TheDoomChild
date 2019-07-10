@@ -127,18 +127,18 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             public abstract void Initialize();
         }
 
-        [SerializeField]
+        [SerializeField, TabGroup("Reference")]
         protected Character m_character;
-        [SerializeField]
+        [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
-        [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo")]
+        [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
         private AIData m_data;
 #if UNITY_EDITOR
-        [ShowInInspector, InlineEditor]
+        [ShowInInspector, InlineEditor, TabGroup("Data")]
         private AIData m_inlineEditor;
 #endif
 
-        [ShowInInspector, HideInEditorMode]
+        [ShowInInspector, HideInEditorMode, TabGroup("Data")]
         protected T m_info;
 
         public void SetData(AIData data)
@@ -161,7 +161,7 @@ namespace Refactor.DChild.Gameplay.Characters.AI
         }
 #if UNITY_EDITOR
 
-        [SerializeField, FolderPath, PropertyOrder(-1)]
+        [SerializeField, FolderPath, PropertyOrder(-1), TabGroup("Data")]
         private string m_referenceFolder;
 
         private IEnumerable GetData()

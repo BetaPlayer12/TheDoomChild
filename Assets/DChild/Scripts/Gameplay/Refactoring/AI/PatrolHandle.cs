@@ -21,6 +21,7 @@ namespace Refactor.DChild.Gameplay.Characters
         public event EventAction<EventActionArgs> TurnRequest;
         public event EventAction<EventActionArgs> DestinationReached;
         public abstract void Patrol(MovementHandle2D movement, float speed, CharacterInfo characterInfo);
+        public abstract void Patrol(PathFinderAgent agent, float speed, CharacterInfo characterInfo);
 
         protected void CallTurnRequest() => TurnRequest?.Invoke(this, EventActionArgs.Empty);
         protected void CallDestinationReached() => DestinationReached?.Invoke(this, EventActionArgs.Empty);

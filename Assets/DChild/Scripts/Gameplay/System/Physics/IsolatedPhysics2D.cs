@@ -59,6 +59,7 @@ namespace DChild.Gameplay
         public float mass => m_rigidbody2D.mass;
         public IGravity2D gravity => m_gravity;
         public ILinearDrag linearDrag => m_linearDrag;
+        public RigidbodyType2D bodyType { set { m_rigidbody2D.bodyType = value; } }
         public RigidbodyConstraints2D constraints { get { return m_rigidbody2D.constraints; } set { m_rigidbody2D.constraints = value; } }
         public bool simulateGravity
         {

@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,21 +9,37 @@ namespace DChild.Gameplay.Combat
 {
     public abstract class AttackResistance : SerializedMonoBehaviour, IAttackResistance
     {
-        [OdinSerialize, HideReferenceObjectPicker, PropertyOrder(2), ReadOnly]
+        public struct ResistanceEventArgs : IEventActionArgs
+        {
+            public ResistanceEventArgs(AttackType type, float resistanceValue) : this()
+            {
+                this.type = type;
+                this.resistanceValue = resistanceValue;
+            }
+
+            public AttackType type { get; }
+            public float resistanceValue { get; }
+        }
+
+        [OdinSerialize, HideReferenceObjectPicker, PropertyOrder(2), ReadOnly, OnValueChanged("SendEvent")]
         protected Dictionary<AttackType, float> m_resistance = new Dictionary<AttackType, float>();
+        public event EventAction<ResistanceEventArgs> ResistanceChange;
 
         public abstract float GetResistance(AttackType type);
 
-        public void SetResistance(AttackType type, AttackResistanceType resistanceType)
+        public void SetResistance(AttackType type, AttackResistanceType resistanceType) => SetResistance(type, ConvertToFloat(resistanceType));
+
+        public void SetResistance(AttackType type, float resistanceValue)
         {
             if (m_resistance.ContainsKey(type))
             {
-                m_resistance[type] = ConvertToFloat(resistanceType);
+                m_resistance[type] = resistanceValue;
             }
             else
             {
-                m_resistance.Add(type, ConvertToFloat(resistanceType));
+                m_resistance.Add(type, resistanceValue);
             }
+            CallResistanceChange(new ResistanceEventArgs(type, resistanceValue));
         }
 
         protected static float ConvertToFloat(AttackResistanceType type)
@@ -44,7 +61,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-
+        protected void CallResistanceChange(ResistanceEventArgs eventArgs) => ResistanceChange?.Invoke(this, eventArgs);
 #if UNITY_EDITOR
         [System.Serializable]
         public struct Info
@@ -149,6 +166,7 @@ namespace DChild.Gameplay.Combat
                     }
                 }
             }
+            SendEvent();
         }
 
         private void UpdateResistanceLists()
@@ -170,6 +188,7 @@ namespace DChild.Gameplay.Combat
                 }
             }
             Validate();
+            SendEvent();
         }
 
         [Button]
@@ -208,6 +227,8 @@ namespace DChild.Gameplay.Combat
                 return AttackResistanceType.Strong;
             }
         }
+
+        private void SendEvent() => ResistanceChange?.Invoke(this, new ResistanceEventArgs(AttackType._COUNT, 0));
 #endif
 
         /* Calculation will be::

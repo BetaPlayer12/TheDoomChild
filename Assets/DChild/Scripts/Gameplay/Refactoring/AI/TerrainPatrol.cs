@@ -29,5 +29,23 @@ namespace Refactor.DChild.Gameplay.Characters.AI
                 movement.MoveTowards(m_moveDirection, speed);
             }
         }
+
+        public override void Patrol(PathFinderAgent agent, float speed, CharacterInfo characterInfo)
+        {
+            if (m_sensors.shouldTurnAround)
+            {
+                CallTurnRequest();
+                m_directionFound = false;
+            }
+            else
+            {
+                if (m_directionFound == false)
+                {
+                    m_moveDirection = characterInfo.currentFacing == HorizontalDirection.Left ? Vector2.left : Vector2.right;
+                    m_directionFound = true;
+                }
+                agent.MoveTowardsForced(m_moveDirection, speed);
+            }
+        }
     }
 }
