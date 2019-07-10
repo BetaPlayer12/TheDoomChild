@@ -29,6 +29,8 @@ namespace DChild.Gameplay.Combat
         public BodyDefense defense => m_isInvulnerable ? new BodyDefense(m_isInvulnerable) : new BodyDefense(m_damageReduction);
         public int compositeColliderID => m_compositeColliderID;
 
+        public bool isInvulnerable => m_isInvulnerable;
+
         public void Enable()
         {
             for (int i = 0; i < m_collider2Ds.Length; i++)

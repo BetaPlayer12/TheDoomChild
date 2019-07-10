@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Projectiles
             else if (collision.CompareTag("Hitbox"))
             {
                 var m_cacheToDamage = collision.GetComponent<Hitbox>();
-                if (m_cacheToDamage != null)
+                if (m_cacheToDamage != null && m_cacheToDamage.isInvulnerable == false)
                 {
                     var damage = m_data.damage;
                     for (int i = 0; i < damage.Length; i++)
