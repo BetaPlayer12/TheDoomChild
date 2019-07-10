@@ -89,7 +89,9 @@ namespace DChild.Gameplay
             m_cacheHitboxList = new List<Hitbox>();
             m_toDamage = new List<ITarget>();
             m_rigidbody = GetComponent<Rigidbody2D>();
-            m_fx.Done += OnFXDone;
+
+            if(m_fx != null)
+                m_fx.Done += OnFXDone;
         }
     }
 }

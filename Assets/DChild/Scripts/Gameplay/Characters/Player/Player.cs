@@ -171,28 +171,30 @@ namespace DChild.Gameplay.Characters.Players
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
             var target = targetInfo.target;
-            if (target.CompareTag("Interactable"))
+
+            //Reconsider if we need to use interactable or not
+            //if (target.CompareTag("Interactable"))
+            //{
+            //    AttackDamage[] damages = AttackDamage.Add(m_statsHandle.damages, m_modifiers.damageModifier);
+            //    for (int i = 0; i < damages.Length; i++)
+            //    {
+            //        target.TakeDamage(damages[i].damage, damages[i].type);
+            //    }
+            //}
+            //else
+            //{
+            AttackDamage[] damages = AttackDamage.Add(m_statsHandle.damages, m_modifiers.damageModifier);
+            for (int i = 0; i < damages.Length; i++)
             {
-                AttackDamage[] damages = AttackDamage.Add(m_statsHandle.damages, m_modifiers.damageModifier);
-                for (int i = 0; i < damages.Length; i++)
+                AttackInfo info = new AttackInfo(position, m_statsHandle.GetStat(PlayerStat.CritChance), m_modifiers.critDamageModifier, damages[i]);
+                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                if (m_equipment.weapon.canInflictStatusEffects && DChildUtility.HasInterface<IStatusReciever>(targetInfo))
                 {
-                    target.TakeDamage(damages[i].damage, damages[i].type);
+                    GameplaySystem.combatManager.InflictStatusTo((IStatusReciever)target, m_equipment.weapon.statusToInflict);
                 }
+                CallAttackerAttacked(new CombatConclusionEventArgs(info, target, result));
             }
-            else
-            {
-                AttackDamage[] damages = AttackDamage.Add(m_statsHandle.damages, m_modifiers.damageModifier);
-                for (int i = 0; i < damages.Length; i++)
-                {
-                    AttackInfo info = new AttackInfo(position, m_statsHandle.GetStat(PlayerStat.CritChance), m_modifiers.critDamageModifier, damages[i]);
-                    var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                    if (m_equipment.weapon.canInflictStatusEffects && DChildUtility.HasInterface<IStatusReciever>(targetInfo))
-                    {
-                        GameplaySystem.combatManager.InflictStatusTo((IStatusReciever)target, m_equipment.weapon.statusToInflict);
-                    }
-                    CallAttackerAttacked(new CombatConclusionEventArgs(info, target, result));
-                }
-            }
+            //}
         }
 
         public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)

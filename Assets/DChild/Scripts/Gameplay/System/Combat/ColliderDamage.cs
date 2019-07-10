@@ -37,7 +37,7 @@ namespace DChild.Gameplay.Combat
                 return;
 
             var hitbox = collision.gameObject.GetComponent<Hitbox>();
-            if (hitbox != null)
+            if (hitbox != null && hitbox.isInvulnerable == false)
             {
                 m_damageDealer.Damage(CreateInfo(hitbox), hitbox.defense);
             }

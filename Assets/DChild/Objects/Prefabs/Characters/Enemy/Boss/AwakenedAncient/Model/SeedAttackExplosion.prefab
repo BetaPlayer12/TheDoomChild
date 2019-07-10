@@ -1,5 +1,62 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3413359411392780242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3775621301195542240}
+  - component: {fileID: 1886615141365575145}
+  m_Layer: 13
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3775621301195542240
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3413359411392780242}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5161361545554081469}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1886615141365575145
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3413359411392780242}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0000021457672, y: 1.9064331}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6.7737746, y: 4.812866}
+  m_EdgeRadius: 0
 --- !u!1 &5161361545554081470
 GameObject:
   m_ObjectHideFlags: 0
@@ -14,6 +71,8 @@ GameObject:
   - component: {fileID: 5261209526213408635}
   - component: {fileID: 269875304636844057}
   - component: {fileID: 2653385991721975364}
+  - component: {fileID: 8272687180288188404}
+  - component: {fileID: 2192557013297953407}
   m_Layer: 16
   m_Name: SeedAttackExplosion
   m_TagString: Untagged
@@ -33,6 +92,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7726947116324289121}
+  - {fileID: 3775621301195542240}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4803,6 +4863,39 @@ SortingGroup:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
+--- !u!114 &8272687180288188404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5161361545554081470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 5161361545554081469}
+  m_data: {fileID: 11400000, guid: 2069d8656f6b54c4d86e68b53248f575, type: 2}
+  m_info:
+    damage:
+    - m_type: 0
+      m_damage: 25
+    critChance: 0
+    critDamageModifier: 1
+    ignoreInvulnerability: 0
+--- !u!114 &2192557013297953407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5161361545554081470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4542469393212388379
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4890,12 +4983,7 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
-    - target: {fileID: 6066831032146113801, guid: e5b521415a364ae44aac09afda08e8a5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 6066831032164682867, guid: e5b521415a364ae44aac09afda08e8a5,
+    - target: {fileID: 6066831032534260805, guid: e5b521415a364ae44aac09afda08e8a5,
         type: 3}
       propertyPath: m_Layer
       value: 16
@@ -4905,12 +4993,12 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
-    - target: {fileID: 6066831032534260805, guid: e5b521415a364ae44aac09afda08e8a5,
+    - target: {fileID: 6066831032164682867, guid: e5b521415a364ae44aac09afda08e8a5,
         type: 3}
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
-    - target: {fileID: 6066831032732911503, guid: e5b521415a364ae44aac09afda08e8a5,
+    - target: {fileID: 6066831032146113801, guid: e5b521415a364ae44aac09afda08e8a5,
         type: 3}
       propertyPath: m_Layer
       value: 16
@@ -4925,17 +5013,7 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 16
       objectReference: {fileID: 0}
-    - target: {fileID: 6066831033120821112, guid: e5b521415a364ae44aac09afda08e8a5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 6066831033289758978, guid: e5b521415a364ae44aac09afda08e8a5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 6066831033392031130, guid: e5b521415a364ae44aac09afda08e8a5,
+    - target: {fileID: 6066831032732911503, guid: e5b521415a364ae44aac09afda08e8a5,
         type: 3}
       propertyPath: m_Layer
       value: 16
@@ -4946,6 +5024,21 @@ PrefabInstance:
       value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 6066831033592004475, guid: e5b521415a364ae44aac09afda08e8a5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6066831033392031130, guid: e5b521415a364ae44aac09afda08e8a5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6066831033289758978, guid: e5b521415a364ae44aac09afda08e8a5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6066831033120821112, guid: e5b521415a364ae44aac09afda08e8a5,
         type: 3}
       propertyPath: m_Layer
       value: 16

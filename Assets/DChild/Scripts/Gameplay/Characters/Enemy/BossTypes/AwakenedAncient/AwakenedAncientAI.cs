@@ -76,6 +76,9 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             private GameObject m_crawlingVineFX;
             public GameObject crawlingVineFX => m_crawlingVineFX;
             [SerializeField]
+            private GameObject m_skeletonSpawnFX;
+            public GameObject skeletonSpawnFX => m_skeletonSpawnFX;
+            [SerializeField]
             private GameObject m_tombAttackGO;
             public GameObject tombAttackGO => m_tombAttackGO;
             [SerializeField]
@@ -152,6 +155,13 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private bool m_burrowed;
         private bool m_waitRoutineEnd;
 
+        [SerializeField]
+        private int m_skeletonSize;
+        private GameObject[] m_skeletons;
+
+        [SerializeField]
+        private List<ParticleSystem> m_summonFX;
+
         protected override void Start()
         {
             base.Start();
@@ -162,6 +172,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             //    m_bone[i] = GetComponentInChildren<SkeletonAnimation>().Skeleton.FindBone(m_boneName[i]);
             //    Debug.Log(m_bone);
             //}
+            m_skeletons = new GameObject[m_skeletonSize];
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -306,6 +317,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_GROUND_SLAM);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -314,7 +326,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_BURROW);
-            Debug.Log("Summon Tombs");
+            //Debug.Log("Summon Tombs");
             for (int i = 0; i < 3; i++)
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
@@ -323,11 +335,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.burrowIdleAnimation, true);
             //yield return null;
             yield return new WaitForSeconds(5f);
-            Debug.Log("Waited seconds");
+            //Debug.Log("Waited seconds");
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_UNBURROW);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -335,9 +348,19 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.skeletonSummon.animation, false);
+            for (int i = 0; i < m_summonFX.Count; i++)
+            {
+                Debug.Log("SUMMON FX");
+                m_summonFX[i].Play();
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_SPIT_SKELETON);
+            //for (int i = 0; i < m_summonFX.Count; i++)
+            //{
+            //    m_summonFX[i].Stop();
+            //}
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
+            m_currentState = State.ReevaluateSituation;
             yield return null;
         }
 
@@ -345,14 +368,14 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             if (e.Data.Name == m_eventName[0])
             {
-                Debug.Log(m_eventName[0]);
+                //Debug.Log(m_eventName[0]);
 
                 GameObject obj = Instantiate(m_info.footFX, /*new Vector2(m_footTF.position.x + (3.5f * transform.localScale.x), m_footTF.position.y)*/ m_footTF.position, Quaternion.identity);
                 obj.transform.parent = m_footTF;
             }
             else if (e.Data.Name == m_eventName[1])
             {
-                Debug.Log(m_eventName[1]);
+                //Debug.Log(m_eventName[1]);
 
                 GameObject obj = Instantiate(m_info.anticipationFX, new Vector2(m_seedSpitTF.position.x + (1 * transform.localScale.x), m_seedSpitTF.position.y + .25f), Quaternion.identity);
                 obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
@@ -360,28 +383,36 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
             else if (e.Data.Name == m_eventName[2])
             {
-                Debug.Log(m_eventName[2]);
-                GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
-                obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
-                obj.transform.parent = m_seedSpitTF;
-                obj.transform.localPosition = new Vector2(4, -1.5f);
+                //Debug.Log(m_eventName[2]);
+                if (IsFacingTarget())
+                {
+                    GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
+                    obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
+                    obj.transform.parent = m_seedSpitTF;
+                    obj.transform.localPosition = new Vector2(4, -1.5f);
 
-                //Shoot Spit
-                var target = m_targetInfo.position; //No Parabola
-                //var target = TargetParabola(); //With Parabola
-                target = new Vector2(target.x, target.y - 2);
-                Vector2 spitPos = m_seedSpitTF.position;
-                Vector3 v_diff = (target - spitPos);
-                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-                //transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
-                //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-                GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
-                //GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.identity); //With Parabola
-                shoot.GetComponent<Rigidbody2D>().AddForce((m_spitSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
+                    //Shoot Spit
+                    var target = m_targetInfo.position; //No Parabola
+                                                        //var target = TargetParabola(); //With Parabola
+                    target = new Vector2(target.x, target.y - 2);
+                    Vector2 spitPos = m_seedSpitTF.position;
+                    Vector3 v_diff = (target - spitPos);
+                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                    //transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+                    //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                    GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+                                                                                                                                 //GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.identity); //With Parabola
+                    shoot.GetComponent<Rigidbody2D>().AddForce((m_spitSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
+                }
+                else
+                {
+                    m_waitRoutineEnd = false;
+                    m_currentState = State.Turning;
+                }
             }
             else if (e.Data.Name == m_eventName[3])
             {
-                Debug.Log(m_eventName[3]);
+                //Debug.Log(m_eventName[3]);
 
                 GameObject obj = Instantiate(m_info.stompFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), m_stompTF.position.y - 2.75f), Quaternion.identity);
                 GameObject obj2 = Instantiate(m_info.crawlingVineFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), m_stompTF.position.y - 2.5f), Quaternion.identity);
@@ -394,12 +425,13 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
             else if (e.Data.Name == m_eventName[5])
             {
-                Debug.Log(m_eventName[5]);
-
-                Debug.Log("Summon Skeletons");
-                for (int i = 0; i < 2; i++)
+                //Debug.Log(m_eventName[5]);
+                for (int i = 0; i < m_skeletonSize; i++)
                 {
-                    GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + UnityEngine.Random.Range(-10, 10), m_skeletonSpawnTF.position.y - 2.5f), Quaternion.identity);
+                    GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + /*(3 * transform.localScale.x)*/ + UnityEngine.Random.Range(-2, 2), m_skeletonSpawnTF.position.y), Quaternion.identity);
+                    skeleton.GetComponent<SkeletonSpawnAI>().SetDirection(transform.localScale.x);
+                    GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
+                    m_skeletons[i] = skeleton;
                 }
             }
         }
@@ -457,60 +489,49 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         Array values = Enum.GetValues(typeof(Attack));
                         var random = new System.Random();
                         m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
-                        if (Wait())
+                        switch (m_currentAttack)
                         {
-                            if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
-                            {
-                                Debug.Log("Do Skeletons");
-                                StartCoroutine(SkeletonSummonRoutine());
-                                WaitTillAttackEnd(Attack.SkeletonSummon);
-                            }
+                            case Attack.GroundSlam:
+                                if (Wait())
+                                {
+                                    //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
+                                    StartCoroutine(GroundAttackRoutine());
+                                    WaitTillAttackEnd(Attack.GroundSlam);
+                                }
+                                break;
+                            case Attack.Spit:
+                                if (Wait())
+                                {
+                                    //m_attackHandle.ExecuteAttack(m_info.spit.animation);
+                                    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 15)
+                                    {
+                                        m_animation.SetAnimation(0, m_info.spit.animation, false);
+                                        m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                                        WaitTillAttackEnd(Attack.Spit);
+                                    }
+                                }
+                                break;
+                            case Attack.Tomb:
+                                if (Wait())
+                                {
+                                    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
+                                    {
+                                        StartCoroutine(TombAttackRoutine(target));
+                                        WaitTillAttackEnd(Attack.Tomb);
+                                    }
+                                }
+                                break;
+                            case Attack.SkeletonSummon:
+                                if (Wait() && m_skeletons[0] == null)
+                                {
+                                    if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
+                                    {
+                                        StartCoroutine(SkeletonSummonRoutine());
+                                        WaitTillAttackEnd(Attack.SkeletonSummon);
+                                    }
+                                }
+                                break;
                         }
-                        //switch (m_currentAttack)
-                        //{
-                        //    case Attack.GroundSlam:
-                        //        if (Wait())
-                        //        {
-                        //            //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
-                        //            StartCoroutine(GroundAttackRoutine());
-                        //            WaitTillAttackEnd(Attack.GroundSlam);
-                        //        }
-                        //        break;
-                        //    case Attack.Spit:
-                        //        if (Wait())
-                        //        {
-                        //            //m_attackHandle.ExecuteAttack(m_info.spit.animation);
-                        //            if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 15)
-                        //            {
-                        //                m_animation.SetAnimation(0, m_info.spit.animation, false);
-                        //                m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-                        //                WaitTillAttackEnd(Attack.Spit);
-                        //            }
-                        //        }
-                        //        break;
-                        //    case Attack.Tomb:
-                        //        if (Wait())
-                        //        {
-                        //            if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
-                        //            {
-                        //                Debug.Log("Do Tomb");
-                        //                StartCoroutine(TombAttackRoutine(target));
-                        //                WaitTillAttackEnd(Attack.Tomb);
-                        //            }
-                        //        }
-                        //        break;
-                        //    case Attack.SkeletonSummon:
-                        //        if (Wait())
-                        //        {
-                        //            if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
-                        //            {
-                        //                Debug.Log("Do Skeletons");
-                        //                StartCoroutine(SkeletonSummonRoutine());
-                        //                WaitTillAttackEnd(Attack.SkeletonSummon);
-                        //            }
-                        //        }
-                        //        break;
-                        //}
                     }
                     break;
                 case State.Chasing:
@@ -527,7 +548,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         {
                             if (Wait())
                             {
-                                m_animation.EnableRootMotion(true, true);
+                                m_animation.EnableRootMotion(true, false);
                                 m_animation.SetAnimation(0, m_info.moveAnimation, true);
                             }
                         }

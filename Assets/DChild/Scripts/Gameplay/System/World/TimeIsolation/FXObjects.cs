@@ -18,8 +18,11 @@ namespace DChild.Gameplay.Systems.WorldComponents
         {
             for (int i = 0; i < m_particleSystems.Length; i++)
             {
-                var main = m_particleSystems[i].main;
-                main.simulationSpeed = timeScale;
+                if (m_particleSystems[i] != null)
+                {
+                    var main = m_particleSystems[i].main;
+                    main.simulationSpeed = timeScale;
+                }
             }
         }
     }

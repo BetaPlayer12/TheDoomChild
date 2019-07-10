@@ -63,6 +63,10 @@ namespace DChild.Gameplay
         public RigidbodyConstraints2D constraints { get { return m_rigidbody2D.constraints; } set { m_rigidbody2D.constraints = value; } }
         public bool simulateGravity
         {
+            get
+            {
+                return m_simulateGravity;
+            }
             set
             {
                 m_simulateGravity = value;
