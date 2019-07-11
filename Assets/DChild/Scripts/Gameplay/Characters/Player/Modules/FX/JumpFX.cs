@@ -26,6 +26,5 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_fxPrefab = fx;
         }
 #endif
-
     }
 }
