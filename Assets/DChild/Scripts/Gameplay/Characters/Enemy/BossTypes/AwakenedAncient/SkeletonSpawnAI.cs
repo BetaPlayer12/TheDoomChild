@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using Refactor.DChild.Gameplay.Combat;
 
 namespace Refactor.DChild.Gameplay.Characters.Enemies
 {
@@ -129,6 +130,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private AttackHandle m_attackHandle;
         [SerializeField]
+        private Damageable m_damageable;
+        [SerializeField]
+        private GameObject m_hitCollider;
+        [SerializeField]
+        private GameObject m_hitBox;
+        [SerializeField]
         private State m_currentState;
         private State m_afterWaitForBehaviourState;
         [SpineEvent, SerializeField]
@@ -139,6 +146,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         
         private bool m_hasTarget;
         private bool m_waitRoutineEnd;
+        private bool m_isDead;
 
         private float m_maxRange;
         private List<float> m_attackRanges;
@@ -167,6 +175,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 }
             }
 
+            ConnectEvents();
+
             StartCoroutine(SpawnRoutine());
 
             var skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
@@ -175,6 +185,19 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
             skeletonAnimation.AnimationState.Event += HandleEvent;
         }
+
+        //Death Handler
+        public void ConnectEvents()
+        {
+            m_damageable.Destroyed += DeathTrigger;
+        }
+
+        private void DeathTrigger(object sender, EventActionArgs eventArgs)
+        {
+            m_waitRoutineEnd = true;
+            StartCoroutine(DeathRoutine());
+        }
+        //
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -260,6 +283,18 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private IEnumerator DeathRoutine()
+        {
+
+            m_animation.SetAnimation(0, SkeletonSpawnAnimation.ANIMATION_DEATH, false, 0);
+            m_movementHandle.Stop();
+            m_hitBox.SetActive(false);
+            m_hitCollider.SetActive(false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, SkeletonSpawnAnimation.ANIMATION_DEATH);
+            Destroy(this.gameObject);
+            yield return null;
+        }
+
         private IEnumerator TurnRoutine()
         {
             m_waitRoutineEnd = true;
@@ -342,111 +377,114 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            switch (m_currentState)
+            if (!m_isDead)
             {
-                case State.Idle:
-                    //Add actual CharacterInfo Later
-                    if (!m_waitRoutineEnd)
-                    {
-                        m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                    }
-                    break;
-                case State.Turning:
-                    if (!m_waitRoutineEnd)
-                    {
-                        StartCoroutine(TurnRoutine());
-                        WaitTillBehaviourEnd(State.ReevaluateSituation);
-                    }
-                    break;
-                case State.Attacking:
-                    if (!m_waitRoutineEnd)
-                    {
-                        var target = m_targetInfo.position;
-                        Array values = Enum.GetValues(typeof(Attack));
-                        var random = new System.Random();
-                        m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
-                        switch (m_currentAttack)
+                switch (m_currentState)
+                {
+                    case State.Idle:
+                        //Add actual CharacterInfo Later
+                        if (!m_waitRoutineEnd)
                         {
-                            case Attack.Attack1:
-                                //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
-                                if (Vector2.Distance(target, transform.position) < m_info.attack1.range)
-                                {
-                                    StartCoroutine(Attack1Routine());
-                                    WaitTillAttackEnd(Attack.Attack1);
-                                }
-                                break;
-                            case Attack.Attack2:
-                                //m_attackHandle.ExecuteAttack(m_info.spit.animation);
-                                if (Vector2.Distance(target, transform.position) < m_info.attack2.range)
-                                {
-                                    StartCoroutine(Attack2Routine());
-                                    WaitTillAttackEnd(Attack.Attack2);
-                                }
-                                break;
-                            case Attack.Attack3:
-                                if (Vector2.Distance(target, transform.position) < m_info.attack3.range)
-                                {
-                                    StartCoroutine(Attack3Routine());
-                                    WaitTillAttackEnd(Attack.Attack3);
-                                }
-                                break;
-                            case Attack.RunAttack:
-                                if (Vector2.Distance(target, transform.position) < m_info.runAttack.range)
-                                {
-                                    StartCoroutine(RunAttackRoutine());
-                                    WaitTillAttackEnd(Attack.RunAttack);
-                                }
-                                break;
-                        }
-                    }
-                    break;
-                case State.Chasing:
-                    if (!m_waitRoutineEnd)
-                    {
-                        var target = m_targetInfo.position;
-                        //Put Target Destination
-                        if (IsFacingTarget() && Vector2.Distance(target, transform.position) <= m_maxRange)
-                        {
-                            m_currentState = State.Attacking;
                             m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                            m_movementHandle.Stop();
                         }
-                        else if (IsFacingTarget() && Vector2.Distance(target, transform.position) >= m_maxRange)
+                        break;
+                    case State.Turning:
+                        if (!m_waitRoutineEnd)
                         {
-                            if (Wait())
+                            StartCoroutine(TurnRoutine());
+                            WaitTillBehaviourEnd(State.ReevaluateSituation);
+                        }
+                        break;
+                    case State.Attacking:
+                        if (!m_waitRoutineEnd)
+                        {
+                            var target = m_targetInfo.position;
+                            Array values = Enum.GetValues(typeof(Attack));
+                            var random = new System.Random();
+                            m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
+                            switch (m_currentAttack)
                             {
-                                m_animation.EnableRootMotion(false, false);
-                                m_animation.SetAnimation(0, m_info.run.animation, true);
-                                //m_animation.SetAnimation(1, m_info.runAttack.animation, true);
-                                //m_movementHandle.MoveTowards(target, m_info.run.speed);
-                                MoveOnGround(target, m_info.run.speed);
+                                case Attack.Attack1:
+                                    //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
+                                    if (Vector2.Distance(target, transform.position) < m_info.attack1.range)
+                                    {
+                                        StartCoroutine(Attack1Routine());
+                                        WaitTillAttackEnd(Attack.Attack1);
+                                    }
+                                    break;
+                                case Attack.Attack2:
+                                    //m_attackHandle.ExecuteAttack(m_info.spit.animation);
+                                    if (Vector2.Distance(target, transform.position) < m_info.attack2.range)
+                                    {
+                                        StartCoroutine(Attack2Routine());
+                                        WaitTillAttackEnd(Attack.Attack2);
+                                    }
+                                    break;
+                                case Attack.Attack3:
+                                    if (Vector2.Distance(target, transform.position) < m_info.attack3.range)
+                                    {
+                                        StartCoroutine(Attack3Routine());
+                                        WaitTillAttackEnd(Attack.Attack3);
+                                    }
+                                    break;
+                                case Attack.RunAttack:
+                                    if (Vector2.Distance(target, transform.position) < m_info.runAttack.range)
+                                    {
+                                        StartCoroutine(RunAttackRoutine());
+                                        WaitTillAttackEnd(Attack.RunAttack);
+                                    }
+                                    break;
                             }
                         }
-                        else
+                        break;
+                    case State.Chasing:
+                        if (!m_waitRoutineEnd)
                         {
-                            m_currentState = State.Turning;
-                            m_movementHandle.Stop();
-                            //m_turnHandle.Execute();
+                            var target = m_targetInfo.position;
+                            //Put Target Destination
+                            if (IsFacingTarget() && Vector2.Distance(target, transform.position) <= m_maxRange)
+                            {
+                                m_currentState = State.Attacking;
+                                m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                                m_movementHandle.Stop();
+                            }
+                            else if (IsFacingTarget() && Vector2.Distance(target, transform.position) >= m_maxRange)
+                            {
+                                if (Wait())
+                                {
+                                    m_animation.EnableRootMotion(false, false);
+                                    m_animation.SetAnimation(0, m_info.run.animation, true);
+                                    //m_animation.SetAnimation(1, m_info.runAttack.animation, true);
+                                    //m_movementHandle.MoveTowards(target, m_info.run.speed);
+                                    MoveOnGround(target, m_info.run.speed);
+                                }
+                            }
+                            else
+                            {
+                                m_currentState = State.Turning;
+                                m_movementHandle.Stop();
+                                //m_turnHandle.Execute();
+                            }
+                            //Play Animation
                         }
-                        //Play Animation
-                    }
-                    break;
-                case State.ReevaluateSituation:
-                    //How far is target, is it worth it to chase or go back to patrol
-                    if (!m_waitRoutineEnd)
-                    {
-                        if (m_targetInfo.isValid)
+                        break;
+                    case State.ReevaluateSituation:
+                        //How far is target, is it worth it to chase or go back to patrol
+                        if (!m_waitRoutineEnd)
                         {
-                            m_currentState = State.Chasing;
+                            if (m_targetInfo.isValid)
+                            {
+                                m_currentState = State.Chasing;
+                            }
+                            else
+                            {
+                                m_currentState = State.Idle;
+                            }
                         }
-                        else
-                        {
-                            m_currentState = State.Idle;
-                        }
-                    }
-                    break;
-                case State.WaitBehaviourEnd:
-                    return;
+                        break;
+                    case State.WaitBehaviourEnd:
+                        return;
+                }
             }
 
             //if (Input.GetKeyDown(KeyCode.Z))
