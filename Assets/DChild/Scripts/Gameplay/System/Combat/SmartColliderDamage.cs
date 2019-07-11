@@ -67,7 +67,7 @@ namespace DChild.Gameplay.Combat
                 return;
 
             var hitbox = collision.GetComponent<Hitbox>();
-            if (hitbox)
+            if (hitbox && hitbox.isInvulnerable == false)
             {
                 var targetID = hitbox.GetInstanceID();
                 m_processingHitbox.Add(hitbox);

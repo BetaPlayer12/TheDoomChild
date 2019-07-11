@@ -13,11 +13,13 @@ namespace DChild.Gameplay.Projectiles
     {
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
-        [ShowInInspector]
+#if UNITY_EDITOR
+        [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
+#endif
         private bool m_waitForParticlesEnd;
-        [SerializeField, PropertyOrder(1), ToggleGroup("m_waitForParticlesEnd")]
+        [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
         private ParticleSystem m_particleSystem;
-        [SerializeField, PropertyOrder(1), ToggleGroup("m_waitForParticlesEnd")]
+        [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
         private GameObject m_model;
 
         protected IsolatedPhysics2D m_physics;

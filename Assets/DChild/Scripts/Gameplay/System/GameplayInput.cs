@@ -8,7 +8,11 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private KeyCode m_pause;
         [SerializeField]
-        private KeyCode m_bestiary;
+        private KeyCode m_storeOpen;
+
+        //Temporary Solution
+        [SerializeField]
+        private StoreNavigator m_storeNavigator;
 
 
         private void Update()
@@ -17,9 +21,9 @@ namespace DChild.Gameplay.Systems
             {
                 GameEventMessage.SendEvent("Pause Game");
             }
-            else if (Input.GetKeyDown(m_bestiary))
+            else if (Input.GetKeyDown(m_storeOpen))
             {
-                GameEventMessage.SendEvent("Bestiary Open");
+                m_storeNavigator.OpenPage();
             }
         }
     }

@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Pathfinding
 {
-    [RequireComponent(typeof(Seeker))]
+
     public class NavigationTracker : MonoBehaviour
     {
         public event EventAction<EventActionArgs> DestinationReached;
 
-        [SerializeField]
-        [MinValue(0.1f)]
+        [InfoBox("Make Sure there is a SEEKER component in parent gameObject")]
+        [SerializeField, MinValue(0.1f)]
         private float m_destinationTolerance;
         [SerializeField]
         private bool m_refreshPath;
@@ -27,6 +27,7 @@ namespace DChild.Gameplay.Pathfinding
         private List<Vector3> m_path;
         private int m_pathIndex;
         private bool m_lastPathHasError;
+        private bool m_pathUpdated;
         private bool m_isRefreshing;
         private Vector3 m_currentPathSegment;
         private Vector3 m_lastPathSegment;
@@ -40,6 +41,7 @@ namespace DChild.Gameplay.Pathfinding
         }
 
         public bool pathError => m_lastPathHasError;
+        public bool pathUpdated => m_pathUpdated;
         public Vector3 currentPathSegment => m_currentPathSegment;
         public Vector3 lastPathSegment => m_lastPathSegment;
         public bool isOnLastPathSegment => m_pathIndex == m_path.Count;
@@ -52,6 +54,11 @@ namespace DChild.Gameplay.Pathfinding
 
         public void SetDestination(Vector3 destination)
         {
+            SetDestination(transform.position, destination);
+        }
+
+        public void SetDestination(Vector3 fromPosition, Vector3 destination)
+        {
             if (destination == transform.position)
             {
                 m_destination = destination;
@@ -59,13 +66,14 @@ namespace DChild.Gameplay.Pathfinding
             else
             {
                 enabled = true;
-                if (destination == m_destination)
+                if (m_destination == destination)
                 {
                     return;
                 }
 
                 m_destination = destination;
                 m_seeker.StartPath(transform.position, m_destination, OnSetPathReturn);
+                m_pathUpdated = false;
             }
         }
 
@@ -91,6 +99,7 @@ namespace DChild.Gameplay.Pathfinding
             if (m_refreshTimer <= 0f)
             {
                 var path = m_seeker.StartPath(transform.position, m_destination, OnSetPathReturn);
+                m_pathUpdated = false;
                 m_isRefreshing = true;
             }
         }
@@ -132,6 +141,7 @@ namespace DChild.Gameplay.Pathfinding
                 m_lastPathHasError = false;
                 m_currentPathSegment = m_path[1];
                 m_lastPathSegment = m_path[m_path.Count - 1];
+                m_pathUpdated = true;
             }
         }
 
@@ -153,11 +163,7 @@ namespace DChild.Gameplay.Pathfinding
             }
         }
 
-        private void Awake() => m_seeker = GetComponent<Seeker>();
-
-        //private void OnEnable() => NavigationManager.Register(this);
-
-        //private void OnDisable() => NavigationManager.Unregister(this);
+        private void Awake() => m_seeker = GetComponentInParent<Seeker>();
 
         private void Update()
         {

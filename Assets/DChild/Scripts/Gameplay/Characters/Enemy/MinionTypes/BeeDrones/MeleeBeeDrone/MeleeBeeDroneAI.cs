@@ -27,7 +27,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
-            //
 
             //Attack Behaviours
             [SerializeField]
@@ -37,6 +36,9 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_rapidSting = new SimpleAttackInfo();
             public SimpleAttackInfo rapidSting => m_rapidSting;
             //
+            [SerializeField, MinValue(0)]
+            private float m_patience;
+            public float patience => m_patience;
 
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -49,19 +51,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             private string m_turnAnimation;
             public string turnAnimation => m_turnAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_damageAnimation;
-            public string damageAnimation => m_damageAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flightAnimation;
-            public string flightAnimation => m_flightAnimation;
-            //
-
-            [SerializeField]
-            private GameObject m_stingerGO;
-            public GameObject stingerGO => m_stingerGO;
 
             public override void Initialize()
             {
@@ -77,6 +68,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Idle,
+            Patrol,
             Turning,
             Attacking,
             Chasing,
@@ -88,82 +80,43 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             StingerDive,
             RapidSting,
-            WaitAttackEnd,
+            [HideInInspector]
+            _COUNT
         }
 
-        [SerializeField]
-        private SimpleTurnHandle m_turnHandle;
-        [SerializeField]
-        private MovementHandle2D m_movementHandle;
-        [SerializeField]
+        [SerializeField, TabGroup("Modules")]
+        private AnimatedTurnHandle m_turnHandle;
+        [SerializeField, TabGroup("Modules")]
+        private PathFinderAgent m_agent;
+        [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
-        [SerializeField]
+        [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
-        [SerializeField]
-        private State m_currentState;
-        private State m_afterWaitForBehaviourState;
-        [SpineEvent, SerializeField]
-        private List<string> m_eventName;
-
-        private Attack m_currentAttack;
-        private Attack m_afterWaitForBehaviourAttack;
-
-        [SerializeField]
-        private Transform m_stingerPos;
-        [SerializeField]
-        private float m_stingerSpeed;
-
+        [SerializeField, TabGroup("Modules")]
+        private DeathHandle m_deathHandle;
         //Patience Handler
-        [SerializeField]
-        private float m_patience;
         private float m_currentPatience;
         private bool m_enablePatience;
-        private bool m_waitRoutineEnd;
 
-        private float m_maxRange;
-        private List<float> m_attackRanges;
-
-        protected override void Start()
-        {
-            base.Start();
-            m_attackRanges = new List<float>();
-            m_attackRanges.Add(m_info.stingerdive.range);
-            m_attackRanges.Add(m_info.rapidSting.range);
-            Debug.Log("attack Ranges COunt: "+m_attackRanges.Count);
-            for (int i = 0; i < m_attackRanges.Count; i++)
-            {
-                if (m_maxRange < m_attackRanges[i])
-                {
-                    m_maxRange = m_attackRanges[i];
-                }
-            }
-
-            var skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
-
-            if (skeletonAnimation == null) return;
-
-            skeletonAnimation.AnimationState.Event += HandleEvent;
-        }
+        [ShowInInspector]
+        private StateHandle<State> m_stateHandle;
+        [ShowInInspector]
+        private RandomAttackDecider<Attack> m_attackDecider;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            m_currentState = State.ReevaluateSituation;
+            m_animation.DisableRootMotion();
+            m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs)
-        {
-            WaitTillBehaviourEnd(State.ReevaluateSituation);
-            m_turnHandle.Execute();
-        }
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
-            //base.SetTarget(damageable, m_target);
-            //m_currentState = State.Chasing;
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_currentState = State.Chasing;
+                m_stateHandle.SetState(State.Chasing);
                 m_currentPatience = 0;
                 m_enablePatience = false;
             }
@@ -173,221 +126,143 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
+        {
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        //Patience Handler
+        private void Patience()
+        {
+            if (m_currentPatience < m_info.patience)
+            {
+                m_currentPatience += m_character.isolatedObject.deltaTime;
+            }
+            else
+            {
+                m_targetInfo.Set(null, null);
+                m_enablePatience = false;
+                m_stateHandle.SetState(State.Patrol);
+            }
+        }
+
+        private IEnumerator RapidStingRoutine()
+        {
+            transform.SetParent(m_targetInfo.transform);
+            m_character.physics.bodyType = RigidbodyType2D.Kinematic;
+            m_animation.SetAnimation(0, m_info.rapidSting.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rapidSting.animation);
+            transform.SetParent(null);
+            m_character.physics.bodyType = RigidbodyType2D.Dynamic;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            base.OnDestroyed(sender, eventArgs);
+            m_agent.Stop();
+        }
+
+        public override void ApplyData()
+        {
+            base.ApplyData();
+            UpdateAttackDeciderList();
+        }
+        private void UpdateAttackDeciderList()
+        {
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.RapidSting, m_info.rapidSting.range),
+                                    new AttackInfo<Attack>(Attack.StingerDive, m_info.stingerdive.range));
+            m_attackDecider.hasDecidedOnAttack = false;
+        }
+
         protected override void Awake()
         {
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
+            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_attackDecider = new RandomAttackDecider<Attack>();
+            UpdateAttackDeciderList();
         }
 
-        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
-        {
-            m_currentState = m_afterWaitForBehaviourState;
-        }
-
-        private void WaitTillBehaviourEnd(State nextState)
-        {
-            m_currentState = State.WaitBehaviourEnd;
-            m_afterWaitForBehaviourState = nextState;
-        }
-
-        private void WaitTillAttackEnd(Attack nextAttack)
-        {
-            m_currentAttack = Attack.WaitAttackEnd;
-            m_afterWaitForBehaviourAttack = nextAttack;
-        }
-
-        public void MoveTo(Vector2 target, float speed)
-        {
-            var direction = (target - (Vector2)transform.position).normalized;
-            GetComponent<IsolatedPhysics2D>().SetVelocity(direction * speed);
-        }
-
-        //Patience Handler
-        private void Patience()
-        {
-            if (m_currentPatience < m_patience)
-            {
-                m_currentPatience += Time.deltaTime;
-            }
-            else
-            {
-                //m_targetInfo = null;
-                base.SetTarget(null, null);
-                m_enablePatience = false;
-                m_currentState = State.Idle;
-            }
-        }
-
-        public bool Wait()
-        {
-            if (m_animation.GetCurrentAnimation(0).ToString() != "Idle")
-            {
-                return m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        private IEnumerator TurnRoutine()
-        {
-            m_waitRoutineEnd = true;
-            m_animation.SetAnimation(0, m_info.turnAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, MeleeBeeDroneAnimation.ANIMATION_TURN);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_waitRoutineEnd = false;
-            yield return null;
-            m_turnHandle.Execute();
-        }
-
-        private IEnumerator StingerDiveRoutine()
-        {
-            m_waitRoutineEnd = true;
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.stingerdive.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, MeleeBeeDroneAnimation.ANIMATION_STINGERDIVE);
-            m_animation.EnableRootMotion(false, false);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_waitRoutineEnd = false;
-            yield return null;
-        }
-
-        private IEnumerator RapidStingRoutine()
-        {
-            m_waitRoutineEnd = true;
-            transform.SetParent(m_targetInfo.transform);
-            GetComponent<Rigidbody2D>().isKinematic = true;
-            m_animation.DisableRootMotion();
-            m_animation.SetAnimation(0, m_info.rapidSting.animation, false);
-            //yield return new WaitForSeconds(2);
-            //transform.SetParent(m_targetInfo.)
-            yield return new WaitForAnimationComplete(m_animation.animationState, MeleeBeeDroneAnimation.ANIMATION_RAPIDSTING);
-            transform.SetParent(null);
-            GetComponent<Rigidbody2D>().isKinematic = false;
-            m_animation.EnableRootMotion(false, false);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_waitRoutineEnd = false;
-            yield return null;
-        }
-
-        void HandleEvent(TrackEntry trackEntry, Spine.Event e)
-        {
-            if (e.Data.Name == m_eventName[0])
-            {
-
-            }
-        }
 
         private void Update()
         {
-            switch (m_currentState)
+            switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    //Add actual CharacterInfo Later
-                    if (m_targetInfo.isValid)
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    if (m_targetInfo.isValid == false)
                     {
-                        //StartCoroutine(UnburrowRoutine());
-                        Debug.Log("Doing IDLE");
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        m_stateHandle.SetState(State.Patrol);
+                    }
+                    break;
+
+                case State.Patrol:
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    break;
+
+                case State.Turning:
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_agent.Stop();
+                    m_turnHandle.Execute(m_info.turnAnimation);
+                    break;
+                case State.Attacking:
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    switch (m_attackDecider.chosenAttack.attack)
+                    {
+                        case Attack.StingerDive:
+                            m_animation.EnableRootMotion(true, false);
+                            m_attackHandle.ExecuteAttack(m_info.stingerdive.animation);
+                            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                            break;
+                        case Attack.RapidSting:
+                            m_stateHandle.Wait(State.ReevaluateSituation);
+                            StartCoroutine(RapidStingRoutine());
+                            break;
+                    }
+                    m_attackDecider.hasDecidedOnAttack = false;
+                    break;
+                case State.Chasing:
+                    if (IsFacingTarget())
+                    {
+                        var target = m_targetInfo.position;
+                        target.y -= 0.5f;
+                        m_animation.DisableRootMotion();
+                        m_animation.SetAnimation(0, m_info.move.animation, true);
+                        m_agent.SetDestination(target);
+                        if (m_agent.hasPath)
+                        {
+                            m_agent.Move(m_info.move.speed);
+                        }
+
+                        m_attackDecider.DecideOnAttack();
+                        if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
+                        {
+                            m_stateHandle.SetState(State.Attacking);
+                        }
                     }
                     else
                     {
-                        //PATROL
-                        Debug.Log("Doing PATROL");
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.transform.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movementHandle, m_info.patrol.speed, characterInfo);
+                        m_stateHandle.SetState(State.Turning);
                     }
                     break;
-                case State.Turning:
-                    if (Wait() && !m_waitRoutineEnd)
-                    {
-                        Debug.Log("Doing TURN");
-                        StartCoroutine(TurnRoutine());
-                        WaitTillBehaviourEnd(State.ReevaluateSituation);
-                    }
-                    break;
-                case State.Attacking:
-                    if (!m_waitRoutineEnd)
-                    {
-                        Debug.Log("Doing ATTACK");
-                        var target = m_targetInfo.position;
-                        target = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 0.5f);
-                        Array values = Enum.GetValues(typeof(Attack));
-                        var random = new System.Random();
-                        m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
-                        switch (m_currentAttack)
-                        {
-                            case Attack.StingerDive:
-                                //if (Wait())
-                                //{
-                                //}
-                                if (Vector2.Distance(target, transform.position) <= m_info.stingerdive.range)
-                                {
-                                    StartCoroutine(StingerDiveRoutine());
-                                    WaitTillAttackEnd(Attack.StingerDive);
-                                }
-                                break;
-                            case Attack.RapidSting:
-                                //if (Wait())
-                                //{
-                                //}
-                                if (Vector2.Distance(target, transform.position) <= m_info.rapidSting.range)
-                                {
-                                    StartCoroutine(RapidStingRoutine());
-                                    WaitTillAttackEnd(Attack.RapidSting);
-                                }
-                                break;
-                        }
-                    }
-                    break;
-                case State.Chasing:
-                    if (!m_waitRoutineEnd)
-                    {
-                        var target = m_targetInfo.position;
-                        target = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 0.5f);
-                        Debug.Log("Doing CHASE");
-                        //Put Target Destination
-                        if (IsFacingTarget() && Vector2.Distance(target, transform.position) <= m_maxRange)
-                        {
-                            m_currentState = State.Attacking;
-                            m_movementHandle.Stop();
-                        }
-                        else if (IsFacingTarget() && Vector2.Distance(target, transform.position) >= m_maxRange)
-                        {
-                            if (Wait())
-                            {
-                                m_animation.EnableRootMotion(false, false);
-                                m_animation.SetAnimation(0, m_info.flightAnimation, true);
-                                //m_movementHandle.MoveTowards(target, m_info.move.speed);
-                                MoveTo(target, m_info.move.speed);
-                            }
-                        }
-                        else
-                        {
-                            m_currentState = State.Turning;
-                            m_movementHandle.Stop();
-                            //m_turnHandle.Execute();
-                        }
-                        //Play Animation
-                    }
-                    break;
+
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
-                    if (!m_waitRoutineEnd)
+                    if (m_targetInfo.isValid)
                     {
-                        Debug.Log("Doing REEVALUATION");
-                        if (m_targetInfo.isValid)
-                        {
-                            m_currentState = State.Chasing;
-                        }
-                        else
-                        {
-                            m_currentState = State.Idle;
-                        }
+                        m_stateHandle.SetState(State.Chasing);
+                    }
+                    else
+                    {
+                        m_stateHandle.SetState(State.Idle);
                     }
                     break;
                 case State.WaitBehaviourEnd:
@@ -399,5 +274,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 Patience();
             }
         }
+
+
     }
 }

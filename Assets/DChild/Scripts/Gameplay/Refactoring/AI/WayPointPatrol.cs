@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters.AI
 {
-
     public class WayPointPatrol : PatrolHandle
     {
         public struct PatrolInfo
@@ -71,6 +70,24 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             else
             {
                 movement.MoveTowards(movementInfo.moveDirection, speed);
+            }
+        }
+
+        public override void Patrol(PathFinderAgent agent, float speed, CharacterInfo characterInfo)
+        {
+            var currentPosition = characterInfo.position;
+            var movementInfo = GetInfo(currentPosition);
+            agent.SetDestination(movementInfo.destination);
+            if (agent.hasPath)
+            {
+                if (GetProposedFacing(currentPosition, agent.segmentDestination) != characterInfo.currentFacing)
+                {
+                    CallTurnRequest();
+                }
+                else
+                {
+                    agent.Move(speed);
+                }
             }
         }
 
@@ -161,6 +178,8 @@ namespace Refactor.DChild.Gameplay.Characters.AI
 
             }
         }
+
+
 #endif
     }
 }

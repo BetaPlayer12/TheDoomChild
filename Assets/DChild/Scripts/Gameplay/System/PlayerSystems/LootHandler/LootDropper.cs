@@ -1,0 +1,34 @@
+﻿using Holysoft.Event;
+using Refactor.DChild.Gameplay.Combat;
+using UnityEngine;
+
+namespace DChild.Gameplay.Systems
+{
+    public class LootDropper : MonoBehaviour
+    {
+        [SerializeField]
+        private LootData m_loot;
+        [SerializeField]
+        private bool m_dropWhenDestroyed;
+        private Damageable m_damageable;
+
+        public void DropLoot()
+        {
+            m_loot.DropLoot(transform.position);
+        }
+
+        private void Awake()
+        {
+            if (m_dropWhenDestroyed)
+            {
+                m_damageable = GetComponentInParent<Damageable>();
+                m_damageable.Destroyed += OnDestroyed;
+            }
+        }
+
+        private void OnDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            DropLoot();
+        }
+    }
+}

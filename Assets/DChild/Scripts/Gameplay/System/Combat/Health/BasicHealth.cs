@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Combat
         {
             m_maxHealth = value;
             m_currentHealth = Mathf.Clamp(m_currentHealth, 0, m_maxHealth);
-            m_percentHealth = m_currentHealth / m_maxHealth;
+            m_percentHealth = m_currentHealth == 0 ? 0 : (m_currentHealth / m_maxHealth);
             base.SetMaxValue(value);
         }
     }

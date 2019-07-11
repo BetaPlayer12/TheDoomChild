@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private bool m_isThrowingBomb;
         private bool m_jumpLoop;
+        private bool m_loopBreaker;
+        
 
         public void Initialize(IPlayerModules player)
         {
@@ -37,7 +39,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             #region Flinch
             if (state.isFlinching)
             {
+               
                 m_animationState.ResetAnimations();
+                m_loopBreaker = false;
+                Debug.Log("animation check");
                 return;
             }
             #endregion
@@ -214,25 +219,45 @@ namespace DChild.Gameplay.Characters.Players.Modules
             #endregion
 
             #region Basic Movements
-            
 
+           
             else if (state.isFalling)
             {
                 
 
-                }
+            }
 
             else if (state.canHighJump)
             {
+                m_loopBreaker = true;
 
-               
                 if (state.hasDoubleJumped)
                 {
 
                 }
+
                 else
                 {
-                    m_animation.DoJumpLoop(m_facing.currentFacingDirection);
+                   
+                    
+                        if (m_loopBreaker)
+                        {
+                            m_animation.DoJumpLoop(m_facing.currentFacingDirection);
+                           
+                        }
+
+
+                       if(!m_loopBreaker){
+
+                        m_animation.DoStandIdle(m_facing.currentFacingDirection);
+                        Debug.Log("is this looping");
+                       }
+                      
+                        
+                       
+
+                   
+                   
                 }
             }
 

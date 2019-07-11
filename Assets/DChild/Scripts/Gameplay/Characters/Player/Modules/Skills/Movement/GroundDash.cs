@@ -21,10 +21,15 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CountdownTimer m_cooldownTimer;
         private bool m_isOnCooldown;
 
+
+
+       
+
         public void ConnectEvents()
         {
             GetComponentInParent<IGroundDashController>().DashCall += OnDashCall;
             GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            GetComponentInParent<IMainController>().ControllerDisabled += DisableScript;
         }
 
         public override void Initialize(IPlayerModules player)
@@ -32,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             base.Initialize(player);
             m_slopeSensor = player.sensors.slopeSensor;
             m_animationState = player.animationState;
+            m_state.canDash = true;
         }
 
         private void HandleDash()
@@ -138,5 +144,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             //    m_physics.SetVelocity(y: -m_adhesive);
             //}
         }
+
+        private void DisableScript(object sender, EventActionArgs eventArgs)
+        {
+            m_state.isDashing = false;
+           // m_physics.SetVelocity(0 , 0);
+            Debug.Log("IT WORK");
+        }
+
+        
     }
 }

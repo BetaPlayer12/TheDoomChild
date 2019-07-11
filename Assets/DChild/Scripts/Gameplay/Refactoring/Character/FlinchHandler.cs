@@ -5,6 +5,7 @@ using Holysoft.Event;
 using System.Collections;
 using Spine;
 using DChild.Gameplay.Combat;
+using Spine.Unity;
 
 namespace Refactor.DChild.Gameplay.Characters
 {
@@ -15,9 +16,12 @@ namespace Refactor.DChild.Gameplay.Characters
         [SerializeField]
         private IsolatedPhysics2D m_physics;
 #if UNITY_EDITOR
-        [SerializeField, Spine.Unity.SpineAnimation]
+        [SerializeField]
+        private SkeletonAnimation m_skeletonAnimation;
 #endif
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_animation;
+
         private bool m_isFlinching;
 
         public event EventAction<EventActionArgs> FlinchStart;
@@ -41,6 +45,7 @@ namespace Refactor.DChild.Gameplay.Characters
 
         private IEnumerator FlinchRoutine()
         {
+            Debug.Log("trigger flinch");
             m_spine.SetAnimation(0, m_animation, false, 0);
             m_spine.AddEmptyAnimation(0, 0.2f, 0);
             m_isFlinching = true;

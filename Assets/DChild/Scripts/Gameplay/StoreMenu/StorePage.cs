@@ -5,10 +5,11 @@ namespace DChild.Gameplay.Systems
 {
     public enum StorePage
     {
-        Bestiary,
         Map,
-        Inventory,
-        Character,
+        Stats,
+        Items,
+        SoulSkills,
+        Bestiary,
         [HideInInspector]
         _Count
     }

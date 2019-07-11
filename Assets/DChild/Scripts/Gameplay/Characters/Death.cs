@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.Modules;
@@ -23,8 +24,10 @@ public class Death : MonoBehaviour, IEventModule
     private SpineRootAnimation m_spineRoot;
     [SerializeField]
     private GameObject m_movementController;
+    [SerializeField]
+    private CharacterPhysics2D m_physics;
 
-    
+
     private IFacing m_characterFacing;
 
     public void ConnectEvents()
@@ -37,9 +40,8 @@ public class Death : MonoBehaviour, IEventModule
     {
 
         Debug.Log("DEAD");
-
+        m_physics.SetVelocity(0, 0);
         m_characterFacing = m_player;
-
         m_movementController.SetActive(false);
         m_hitBox.SetActive(false);
         m_hitCollider.SetActive(false);

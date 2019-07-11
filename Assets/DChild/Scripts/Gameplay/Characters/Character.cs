@@ -10,9 +10,11 @@ namespace DChild.Gameplay
         public static string objectTag => "Character";
 
         [SerializeField]
+        private Transform m_centerMass;
+        [SerializeField]
         public IsolatedObject m_isolatedObject;
         [SerializeField]
-        private CharacterPhysics2D m_physics;
+        private IsolatedPhysics2D m_physics;
         [SerializeField]
         private CharacterColliders m_colliders;
         [SerializeField]
@@ -21,9 +23,11 @@ namespace DChild.Gameplay
         public event EventAction<FacingEventArgs> CharacterTurn;
 
         public IsolatedObject isolatedObject => m_isolatedObject;
-        public CharacterPhysics2D physics => m_physics;
+        public IsolatedPhysics2D physics => m_physics;
         public CharacterColliders colliders => m_colliders;
         public HorizontalDirection facing => m_facing;
+
+        public Transform centerMass => m_centerMass;
 
         public void SetFacing(HorizontalDirection facing)
         {

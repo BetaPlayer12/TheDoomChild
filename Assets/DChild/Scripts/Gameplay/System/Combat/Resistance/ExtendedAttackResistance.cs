@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Combat
             {
                 m_additionalResistance.Add(type, resistance);
             }
+            CallResistanceChange(new ResistanceEventArgs(type, GetResistance(type)));
         }
 
         public void ReduceResistance(AttackType type, float resistance)
@@ -28,6 +29,7 @@ namespace DChild.Gameplay.Combat
             {
                 m_additionalResistance.Add(type, resistance);
             }
+            CallResistanceChange(new ResistanceEventArgs(type, GetResistance(type)));
         }
 
         public override float GetResistance(AttackType type)
