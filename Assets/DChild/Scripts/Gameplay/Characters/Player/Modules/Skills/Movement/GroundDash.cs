@@ -29,6 +29,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             GetComponentInParent<IGroundDashController>().DashCall += OnDashCall;
             GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            GetComponentInParent<IMainController>().ControllerDisabled += DisableScript;
         }
 
         public override void Initialize(IPlayerModules player)
@@ -142,6 +143,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             //{
             //    m_physics.SetVelocity(y: -m_adhesive);
             //}
+        }
+
+        private void DisableScript(object sender, EventActionArgs eventArgs)
+        {
+            m_state.isDashing = false;
+           // m_physics.SetVelocity(0 , 0);
+            Debug.Log("IT WORK");
         }
 
         
