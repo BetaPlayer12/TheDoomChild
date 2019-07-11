@@ -3,20 +3,19 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class JumpFX : PlayerFXCaller
+    public class DoubleJumpFX : PlayerFXCaller
     {
         private void OnJumpCall(object sender, EventActionArgs eventArgs)
         {
             //if (m_sensor.CompareTag("SolidPlatform"))
             //{
-            var fx = GameplaySystem.fXManager.InstantiateFX<SpineFX>(m_fxPrefab, m_spawnPosition.position);
-            fx.SetFacing(m_facing.currentFacingDirection);
+            var fx = GameplaySystem.fXManager.InstantiateFX<ParticleFX>(m_fxPrefab, m_spawnPosition.position);
             // }
         }
 
         private void Awake()
         {
-            GetComponentInParent<Player>().GetComponentInChildren<IJumpController>().JumpCall += OnJumpCall;
+            GetComponentInParent<Player>().GetComponentInChildren<IDoubleJumpController>().DoubleJumpCall += OnJumpCall;
             m_spawnPosition = GetComponentInParent<Player>().transform;
         }
 
