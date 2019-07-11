@@ -83,7 +83,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             [HideInInspector]
             _COUNT
         }
-       
+
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -94,33 +94,29 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
-        [ShowInInspector]
-        private State m_currentState;
-        [ShowInInspector]
-        private Attack m_chosenAttack;
-
-        private State m_afterWaitForBehaviourState;
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
 
-        private bool m_hasDecidedOnAttack;
-        private float m_focusedAttackRange;
+        [ShowInInspector]
+        private StateHandle<State> m_stateHandle;
+        [ShowInInspector]
+        private RandomAttackDecider<Attack> m_attackDecider;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_currentState = State.ReevaluateSituation;
+            m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_currentState = State.Turning;
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                SetState(State.Chasing);
+                m_stateHandle.SetState(State.Chasing);
                 m_currentPatience = 0;
                 m_enablePatience = false;
             }
@@ -132,25 +128,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            m_currentState = m_afterWaitForBehaviourState;
-        }
-
-        private void WaitTillBehaviourEnd(State nextState)
-        {
-            m_currentState = State.WaitBehaviourEnd;
-            m_afterWaitForBehaviourState = nextState;
-        }
-
-        private void SetState(State state)
-        {
-            if (m_currentState == State.WaitBehaviourEnd)
-            {
-                m_afterWaitForBehaviourState = state;
-            }
-            else
-            {
-                m_currentState = state;
-            }
+            m_stateHandle.ApplyQueuedState();
         }
 
         //Patience Handler
@@ -164,23 +142,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             {
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
-                m_currentState = State.Patrol;
+                m_stateHandle.SetState(State.Patrol);
             }
-        }
-
-        private void DecideOnAttack()
-        {
-            m_chosenAttack = (Attack)UnityEngine.Random.Range(0, (int)Attack._COUNT - 1);
-            switch (m_chosenAttack)
-            {
-                case Attack.RapidSting:
-                    m_focusedAttackRange = m_info.rapidSting.range;
-                    break;
-                case Attack.StingerDive:
-                    m_focusedAttackRange = m_info.stingerdive.range;
-                    break;
-            }
-            m_hasDecidedOnAttack = true;
         }
 
         private IEnumerator RapidStingRoutine()
@@ -192,7 +155,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             transform.SetParent(null);
             m_character.physics.bodyType = RigidbodyType2D.Dynamic;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_currentState = m_afterWaitForBehaviourState;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -202,6 +165,18 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
         }
 
+        public override void ApplyData()
+        {
+            base.ApplyData();
+            UpdateAttackDeciderList();
+        }
+        private void UpdateAttackDeciderList()
+        {
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.RapidSting, m_info.rapidSting.range),
+                                    new AttackInfo<Attack>(Attack.StingerDive, m_info.stingerdive.range));
+            m_attackDecider.hasDecidedOnAttack = false;
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -209,34 +184,38 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_attackDecider = new RandomAttackDecider<Attack>();
+            UpdateAttackDeciderList();
         }
+
 
         private void Update()
         {
-            switch (m_currentState)
+            switch (m_stateHandle.currentState)
             {
                 case State.Idle:
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     if (m_targetInfo.isValid == false)
                     {
-                        m_currentState = State.Patrol;
+                        m_stateHandle.SetState(State.Patrol);
                     }
                     break;
 
                 case State.Patrol:
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.transform.position, m_character.facing);
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;
 
                 case State.Turning:
-                    WaitTillBehaviourEnd(State.ReevaluateSituation);
+                    m_stateHandle.Wait(State.ReevaluateSituation);
                     m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation);
                     break;
                 case State.Attacking:
-                    WaitTillBehaviourEnd(State.ReevaluateSituation);
-                    switch (m_chosenAttack)
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.StingerDive:
                             m_animation.EnableRootMotion(true, false);
@@ -244,18 +223,18 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                         case Attack.RapidSting:
-                            WaitTillBehaviourEnd(State.ReevaluateSituation);
+                            m_stateHandle.Wait(State.ReevaluateSituation);
                             StartCoroutine(RapidStingRoutine());
                             break;
                     }
-                    m_hasDecidedOnAttack = false;
+                    m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Chasing:
                     if (IsFacingTarget())
                     {
                         var target = m_targetInfo.position;
                         target.y -= 0.5f;
-                        m_animation.EnableRootMotion(false, false);
+                        m_animation.DisableRootMotion();
                         m_animation.SetAnimation(0, m_info.move.animation, true);
                         m_agent.SetDestination(target);
                         if (m_agent.hasPath)
@@ -263,19 +242,15 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                             m_agent.Move(m_info.move.speed);
                         }
 
-                        if (m_hasDecidedOnAttack == false)
+                        m_attackDecider.DecideOnAttack();
+                        if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                         {
-                            DecideOnAttack();
-                        }
-
-                        if (m_hasDecidedOnAttack && Vector2.Distance(m_centerMass.position, m_targetInfo.position) <= m_focusedAttackRange)
-                        {
-                            m_currentState = State.Attacking;
+                            m_stateHandle.SetState(State.Attacking);
                         }
                     }
                     else
                     {
-                        m_currentState = State.Turning;
+                        m_stateHandle.SetState(State.Turning);
                     }
                     break;
 
@@ -283,11 +258,11 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     //How far is target, is it worth it to chase or go back to patrol
                     if (m_targetInfo.isValid)
                     {
-                        m_currentState = State.Chasing;
+                        m_stateHandle.SetState(State.Chasing);
                     }
                     else
                     {
-                        m_currentState = State.Idle;
+                        m_stateHandle.SetState(State.Idle);
                     }
                     break;
                 case State.WaitBehaviourEnd:

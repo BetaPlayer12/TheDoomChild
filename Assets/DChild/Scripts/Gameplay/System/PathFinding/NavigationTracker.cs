@@ -54,6 +54,11 @@ namespace DChild.Gameplay.Pathfinding
 
         public void SetDestination(Vector3 destination)
         {
+            SetDestination(transform.position, destination);
+        }
+
+        public void SetDestination(Vector3 fromPosition, Vector3 destination)
+        {
             if (destination == transform.position)
             {
                 m_destination = destination;

@@ -40,7 +40,8 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             }
         }
 
-        protected bool IsTargetInRange(float distance) => Vector2.Distance(m_targetInfo.position, m_character.transform.position) <= distance;
+
+        protected bool IsTargetInRange(float distance) => Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distance;
         protected Vector2 DirectionToTarget() => (m_targetInfo.position - (Vector2)m_character.transform.position).normalized;
 
 
