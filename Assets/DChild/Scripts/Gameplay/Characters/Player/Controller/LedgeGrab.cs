@@ -34,16 +34,19 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [Button]
         private void HeadCast()
         {
+            Debug.Log("test cast");
             Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
             int hitcount;
             var hitBuffer = Raycaster.Cast(headObject.position, Vector2.up, distance, true, out hitcount);
             if (hitcount > 0)
             {
 
-                // Debug.Log("test hit");
+                Debug.Log("test hit");
 
                 m_state.canLedgeGrab = false;
             }
+            else
+                m_state.canLedgeGrab = true;
         }
 
 
@@ -98,14 +101,17 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void PullFromCliff()
         {
+            m_state.canLedgeGrab = false;
+            HeadCast();
 
             m_ledgeSensorCliff.Cast();
             m_ledgeSensorEdge.Cast();
             m_groundHeightSensor.Cast();
 
+            Debug.Log("Can LedgeGrab is " + m_state.canLedgeGrab);
             if (m_state.canLedgeGrab)
             {
-                HeadCast();
+                
 
                 if (m_ledgeSensorCliff.isDetecting == true && m_ledgeSensorEdge.isDetecting == false && m_groundHeightSensor.isDetecting == false)
                 {
