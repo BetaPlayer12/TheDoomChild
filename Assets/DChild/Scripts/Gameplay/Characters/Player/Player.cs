@@ -24,6 +24,7 @@ namespace DChild.Gameplay.Characters.Players
         IPlayerStats stats { get; }
         IEquipment equipment { get; }
         IAttributes attributes { get; }
+        CharacterPhysics2D physics { get; }
         PlayerModifiers modifiers { get; }
         SoulSkillManager soulSkillManager { get; }
         PlayerCharacterState characterState { get; }

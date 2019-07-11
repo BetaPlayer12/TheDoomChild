@@ -48,17 +48,6 @@ namespace Refactor.DChild.Gameplay.Characters.AI
 #endif
             }
 
-
-            [System.Serializable]
-            public abstract class EventBaseInfo : SkeletonBaseInfo
-            {
-                [SerializeField, ValueDropdown("GetEvents")]
-                private string m_animation;
-
-                public string animation => m_animation;
-
-            }
-
             [System.Serializable, HideReferenceObjectPicker]
             public class SimpleAttackInfo : SkeletonBaseInfo
             {
@@ -89,11 +78,14 @@ namespace Refactor.DChild.Gameplay.Characters.AI
                 private string m_animation;
                 [SerializeField, ValueDropdown("GetEvents")]
                 private string m_launchOnEvent;
+                [SerializeField, MinValue(0)]
+                private float m_range;
                 [SerializeField]
                 private ProjectileInfo m_projectileInfo;
 
                 public string animation => m_animation;
                 public string launchOnEvent => m_launchOnEvent;
+                public float range => m_range;
                 public ProjectileInfo projectileInfo => m_projectileInfo;
             }
 
@@ -149,7 +141,7 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             }
         }
 
-        public void ApplyData()
+        public virtual void ApplyData()
         {
             m_info = (T)m_data.info;
             m_info.Initialize();
