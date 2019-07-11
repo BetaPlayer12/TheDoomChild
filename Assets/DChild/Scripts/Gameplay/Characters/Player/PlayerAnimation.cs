@@ -520,11 +520,11 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (direction == HorizontalDirection.Left)
             {
-                SetAnimation(0, ANIMATION_WALLSTICK_LEFT, true, 0);           
+                SetAnimation(0, ANIMATION_WALLSTICK_LEFT, true);           
             }
             else
             {
-                SetAnimation(0, ANIMATION_WALLSTICK_RIGHT, true, 0);
+                SetAnimation(0, ANIMATION_WALLSTICK_RIGHT, true);
             }
         }
 
