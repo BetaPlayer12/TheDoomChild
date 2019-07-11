@@ -47,12 +47,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             else if (m_characterState.isMoving)
             {
                 m_animation.DoJumpLoop(m_facing.currentFacingDirection);
+               
             }
 
             else
             {
                 //m_animation.DoStaticJump(m_facing.currentFacingDirection);
                 m_animation.DoJumpLoop(m_facing.currentFacingDirection);
+               
             }
         }
 
@@ -67,13 +69,18 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 CallJumpStart();
             }
 
-            HandleJumpAnimation(m_animation);
+           
+               
+                HandleJumpAnimation(m_animation);
 
-            m_animationState.hasJumped = true;
-            m_animationState.hasDoubleJumped = false;
-            m_animationState.isFromJog = false;
-            m_animationState.hasAttacked = false;
-            m_animationState.isFromIdle = false;
+                m_animationState.hasJumped = true;
+                m_animationState.hasDoubleJumped = false;
+                m_animationState.isFromJog = false;
+                m_animationState.hasAttacked = false;
+                m_animationState.isFromIdle = false;
+            
+            
+            
         }
 
         private void OnJumpCall(object sender, EventActionArgs eventArgs)
