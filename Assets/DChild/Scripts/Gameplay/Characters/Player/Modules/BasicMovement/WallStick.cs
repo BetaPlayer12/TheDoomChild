@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private RaySensor m_groundHeightSensor;
         private Skills m_skills;
         private IFacing m_playerFacing;
-       
+
 
         private IIsolatedTime m_time;
         private IWallStickState m_wallStickState;
@@ -73,12 +73,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
             else
             {
-                
-                   
-                    m_stickTimer.Tick(m_time.deltaTime);
-                    m_physics.simulateGravity = true;
-                   
-                
+
+
+                m_stickTimer.Tick(m_time.deltaTime);
+                m_physics.simulateGravity = true;
+
+
             }
         }
 
@@ -123,74 +123,68 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_groundHeightSensor.Cast();
                 if (m_groundHeightSensor.isDetecting == false)
                 {
-
                     if (m_wallStickState.isMoving && m_wallStickState.isDroppingFromPlatform == false && m_colliders.AreCollidersIntersecting() == false)
                     {
-                    if (m_physics.velocity.y <= 0)
-                    {
-                        m_sensor.Cast();
-
-                        if (m_sensor.allRaysDetecting)
+                        if (m_physics.velocity.y <= 0)
                         {
-                            var hit = m_sensor.GetValidHits()[0];
-                            if ((m_wallStickState.isStickingToWall && m_stickTimer.time > -1 )  )//
-                            {
-                                m_physics.SetVelocity(Vector2.zero);
-                                m_physics.simulateGravity = false;
-                            }
-                             else
-                            {
+                            m_sensor.Cast();
 
-                                m_physics.simulateGravity = false;
-                                m_physics.SetVelocity(Vector2.down);
-                                m_wallStickState.isSlidingToWall = true;
-                                m_stickTimer.EndTime(true);
-                               // m_physics.AddForce(new Vector2(0, -1000));
-                               
-                            }
-                           if(m_input.direction.isDownPressed)
+                            if (m_sensor.allRaysDetecting)
                             {
-                                m_physics.simulateGravity = false;
-                                m_physics.SetVelocity(Vector2.down);
-                                m_wallStickState.isSlidingToWall = true;
-                                m_stickTimer.EndTime(true);
+                                var hit = m_sensor.GetValidHits()[0];
+                                if ((m_wallStickState.isStickingToWall && m_stickTimer.time > -1))//
+                                {
+                                    m_physics.SetVelocity(Vector2.zero);
+                                    m_physics.simulateGravity = false;
+                                }
+                                else
+                                {
 
-                            }
-                          
+                                    m_physics.simulateGravity = false;
+                                    m_physics.SetVelocity(Vector2.down);
+                                    m_wallStickState.isSlidingToWall = true;
+                                    m_stickTimer.EndTime(true);
+                                    // m_physics.AddForce(new Vector2(0, -1000));
 
-                            if (hit.collider.CompareTag("Droppable") == false)
-                            {
-                               
+                                }
+                                if (m_input.direction.isDownPressed)
+                                {
+                                    m_physics.simulateGravity = false;
+                                    m_physics.SetVelocity(Vector2.down);
+                                    m_wallStickState.isSlidingToWall = true;
+                                    m_stickTimer.EndTime(true);
+
+                                }
+
+
+                                if (hit.collider.CompareTag("Droppable") == false)
+                                {
                                     AttachToWall(hit);
                                     if (m_wallStickState.isStickingToWall == false)
                                     {
-                                       
-                                            StickToWall();
-                                       
+                                        StickToWall();
                                     }
-                               
-                                    
+                                }
                             }
-                        }
-                        else if (m_wallStickState.isStickingToWall)
-                        {
-                            m_isSliding = false;
-                            m_wallStickState.isSlidingToWall = false;
-                            m_physics.simulateGravity = true;
-                        }
+                            else if (m_wallStickState.isStickingToWall)
+                            {
+                                m_isSliding = false;
+                                m_wallStickState.isSlidingToWall = false;
+                                m_physics.simulateGravity = true;
+                            }
 
-                        m_wallStickState.isStickingToWall = m_sensor.allRaysDetecting;
+                            m_wallStickState.isStickingToWall = m_sensor.allRaysDetecting;
+                        }
+                        else
+                        {
+                            m_wallStickState.isStickingToWall = false;
+                        }
                     }
-                    else
-                    {
-                        m_wallStickState.isStickingToWall = false;
-                    }
-                }
                 }
                 else
                     m_physics.simulateGravity = true;
             }
-           
+
         }
 
         private void AttachToWall(RaycastHit2D hit)
