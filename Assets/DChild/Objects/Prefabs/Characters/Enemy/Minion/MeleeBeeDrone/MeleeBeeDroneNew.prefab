@@ -37,16 +37,14 @@ MonoBehaviour:
   m_animation: {fileID: 8845640313807356449}
   m_data: {fileID: 11400000, guid: 8002cdef2570ce046b98cb2ab15bbf2f, type: 2}
   m_referenceFolder: Assets/DChild/Objects/ScriptableObjects/CharacterData/MinionData
-  m_turnHandle: {fileID: 2890495408384282901}
-  m_movementHandle: {fileID: 7003013189053427719}
+  m_damageable: {fileID: 0}
+  m_centerMass: {fileID: 0}
+  m_turnHandle: {fileID: 0}
+  m_agent: {fileID: 0}
   m_patrolHandle: {fileID: 8943861846611835279}
   m_attackHandle:
     m_animation: {fileID: 8845640313807356449}
-  m_currentState: 0
-  m_eventName: []
-  m_stingerPos: {fileID: 6411938026650935035}
-  m_stingerSpeed: 15
-  m_patience: 10
+  m_deathHandle: {fileID: 0}
 --- !u!114 &6697422787288623559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 0}
   m_isolatedObject: {fileID: 6541307920390248857}
   m_physics: {fileID: 7670314770483605262}
   m_colliders: {fileID: 3136474910394752645}
@@ -183,16 +182,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_Name
-      value: MeleeBeeDroneNew
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_TagString
-      value: Character
-      objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -248,6 +237,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_Name
+      value: MeleeBeeDroneNew
+      objectReference: {fileID: 0}
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_TagString
+      value: Character
+      objectReference: {fileID: 0}
     - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_spineObjects.m_skeletonAnimations.Array.size
@@ -287,11 +291,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_physicsObjects.m_physicsTimeObjectInfo.Array.data[1].m_mass
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_maxHealth
-      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
@@ -355,6 +354,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: MeleeBeeDroneModel
       objectReference: {fileID: 0}
+    - target: {fileID: 4281934890231291566, guid: 271305cd53b98884193ac5df551a3a07,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: a0ffd2547dc055e40a2e911441e494e7,
+        type: 2}
     - target: {fileID: 6205689033887809484, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -415,22 +420,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: -0.325
       objectReference: {fileID: 0}
-    - target: {fileID: 5905481359662736346, guid: 271305cd53b98884193ac5df551a3a07,
+    - target: {fileID: 4253286032896469752, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
-      propertyPath: m_character
-      value: 
-      objectReference: {fileID: 8881391243336259774}
-    - target: {fileID: 5402702126311328344, guid: 271305cd53b98884193ac5df551a3a07,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 88d85e883c2e4754c921ec0e00ad55c8, type: 2}
-    - target: {fileID: 4281934890231291566, guid: 271305cd53b98884193ac5df551a3a07,
-        type: 3}
-      propertyPath: skeletonDataAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: a0ffd2547dc055e40a2e911441e494e7,
-        type: 2}
+      propertyPath: m_compositeColliderID
+      value: -76382
+      objectReference: {fileID: 0}
     - target: {fileID: 2453714556978336882, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: m_spine
@@ -446,21 +440,26 @@ PrefabInstance:
       propertyPath: m_animation
       value: Damage
       objectReference: {fileID: 0}
-    - target: {fileID: 1785348653785825992, guid: 271305cd53b98884193ac5df551a3a07,
-        type: 3}
-      propertyPath: m_source
-      value: 
-      objectReference: {fileID: 7670314770483605262}
     - target: {fileID: 830572874334017863, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: rb
       value: 
       objectReference: {fileID: 8359076611384556932}
-    - target: {fileID: 4253286032896469752, guid: 271305cd53b98884193ac5df551a3a07,
+    - target: {fileID: 5402702126311328344, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
-      propertyPath: m_compositeColliderID
-      value: -105750
-      objectReference: {fileID: 0}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 88d85e883c2e4754c921ec0e00ad55c8, type: 2}
+    - target: {fileID: 1785348653785825992, guid: 271305cd53b98884193ac5df551a3a07,
+        type: 3}
+      propertyPath: m_source
+      value: 
+      objectReference: {fileID: 7670314770483605262}
+    - target: {fileID: 5905481359662736346, guid: 271305cd53b98884193ac5df551a3a07,
+        type: 3}
+      propertyPath: m_character
+      value: 
+      objectReference: {fileID: 8881391243336259774}
     - target: {fileID: 6429168944432162689, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.size
@@ -801,36 +800,6 @@ Rigidbody2D:
     type: 3}
   m_PrefabInstance: {fileID: 8784664974967960271}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6411938026650935035 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2383145178012511284, guid: 271305cd53b98884193ac5df551a3a07,
-    type: 3}
-  m_PrefabInstance: {fileID: 8784664974967960271}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2890495408384282901 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5905481359662736346, guid: 271305cd53b98884193ac5df551a3a07,
-    type: 3}
-  m_PrefabInstance: {fileID: 8784664974967960271}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fea4e56028fda24dbb44aef55bea204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7003013189053427719 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1785348653785825992, guid: 271305cd53b98884193ac5df551a3a07,
-    type: 3}
-  m_PrefabInstance: {fileID: 8784664974967960271}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1b0d68cd77a89d45b04c6c47d586049, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8943861846611835279 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 429984595349359424, guid: 271305cd53b98884193ac5df551a3a07,

@@ -46,36 +46,45 @@ namespace DChild.Gameplay.Characters.Players.Modules
             GetComponentInParent<IBasicAttackController>().JumpAttackUpwardCall += OnJumpAttackUpwardCall;
             GetComponentInParent<IBasicAttackController>().JumpAttackDownwardCall += OnJumpAttackDownwardCall;
             GetComponentInParent<IBasicAttackController>().JumpAttackForwardCall += OnJumpAttackForwardCall;
+            GetComponentInParent<IMainController>().ControllerDisabled += OnControllerDisabled;
+        }
+
+        private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
+        {
+            m_currentComboIndex = 0;
+            m_isCoolingOff = false;
+            m_combatState.canAttack = true;
+            m_comboResetTimer.Reset();
         }
 
         public void HandleBasicAttack(HorizontalDirection direction)
         {
             //if (m_isCoolingOff == false)
             //{
-                if (m_currentComboIndex > 2) m_comboResetTimer.Reset();
+            if (m_currentComboIndex > 2) m_comboResetTimer.Reset();
 
-                if (m_characterState.isCrouched)
-                {
-                    m_animation.DoCrouchAttack(m_currentComboIndex, direction);
-                }
-                else
-                {
-                    m_animation.DoBasicAttack(m_currentComboIndex, direction);
-                }
+            if (m_characterState.isCrouched)
+            {
+                m_animation.DoCrouchAttack(m_currentComboIndex, direction);
+            }
+            else
+            {
+                m_animation.DoBasicAttack(m_currentComboIndex, direction);
+            }
 
-                if (m_currentComboIndex < m_maxCombos)
-                {
-                    m_currentComboIndex++;
-                }
-                else
-                {
-                    m_comboResetTimer.EndTime(false);
-                    m_coolOffDuration.Reset();
-                    //m_isCoolingOff = true;
-                }
+            if (m_currentComboIndex < m_maxCombos)
+            {
+                m_currentComboIndex++;
+            }
+            else
+            {
+                m_comboResetTimer.EndTime(false);
+                m_coolOffDuration.Reset();
+                //m_isCoolingOff = true;
+            }
             //}
         }
-    
+
         public void HandleJumpUpwardAttack(HorizontalDirection direction)
         {
             if (m_isCoolingOff == false)
@@ -89,14 +98,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_comboResetTimer.EndTime(false);
                     m_coolOffDuration.Reset();
-                     //m_isCoolingOff = true;
+                    //m_isCoolingOff = true;
                 }
             }
         }
 
         private void HandleJumpDownwardAttack(HorizontalDirection direction)
         {
-           if (m_isCoolingOff == false)
+            if (m_isCoolingOff == false)
             {
                 m_animation.DoJumpAttackDownward(m_currentComboIndex, direction);
                 if (m_currentComboIndex < 1)
@@ -115,7 +124,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void HandleJumpForwardAttack(HorizontalDirection direction)
         {
-           if (m_isCoolingOff == false)
+            if (m_isCoolingOff == false)
             {
                 m_animation.DoJumpAttackForward(m_currentComboIndex, direction);
                 if (m_currentComboIndex < 1)
