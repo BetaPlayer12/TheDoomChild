@@ -154,6 +154,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_burrowed;
         private bool m_waitRoutineEnd;
+        private bool m_enableChase;
 
         [SerializeField]
         private int m_skeletonSize;
@@ -173,6 +174,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             //    Debug.Log(m_bone);
             //}
             m_skeletons = new GameObject[m_skeletonSize];
+            m_enableChase = true;
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -195,7 +197,11 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable, m_target);
                 if (!m_burrowed)
                 {
-                    m_currentState = State.Chasing;
+                    if (m_enableChase)
+                    {
+                        m_currentState = State.Chasing;
+                        m_enableChase = false;
+                    }
                     m_currentPatience = 0;
                     m_enablePatience = false;
                 }
@@ -203,6 +209,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             else
             {
                 m_enablePatience = true;
+                m_enableChase = true;
             }
         }
 
@@ -348,11 +355,11 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.skeletonSummon.animation, false);
-            for (int i = 0; i < m_summonFX.Count; i++)
-            {
-                Debug.Log("SUMMON FX");
-                m_summonFX[i].Play();
-            }
+            //for (int i = 0; i < m_summonFX.Count; i++)
+            //{
+            //    Debug.Log("SUMMON FX");
+            //    m_summonFX[i].Play();
+            //}
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_SPIT_SKELETON);
             //for (int i = 0; i < m_summonFX.Count; i++)
             //{

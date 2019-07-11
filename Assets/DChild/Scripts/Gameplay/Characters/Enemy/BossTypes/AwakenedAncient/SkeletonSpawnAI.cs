@@ -212,6 +212,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 if (m_enableChase)
                 {
                     m_currentState = State.Chasing;
+                    m_enableChase = false;
                 }
             }
         }
