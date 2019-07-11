@@ -145,6 +145,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private bool m_hasTarget;
         private bool m_waitRoutineEnd;
         private bool m_isDead;
+        private bool m_enableChase;
 
         private float m_maxRange;
         private List<float> m_attackRanges;
@@ -172,6 +173,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     m_maxRange = m_attackRanges[i];
                 }
             }
+            m_enableChase = true;
 
             StartCoroutine(SpawnRoutine());
 
@@ -207,7 +209,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_currentState = State.Chasing;
+                if (m_enableChase)
+                {
+                    m_currentState = State.Chasing;
+                }
             }
         }
 

@@ -130,6 +130,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_waitRoutineEnd;
         private bool m_isDead;
+        private bool m_enableChase;
 
         private float m_maxRange;
         private List<float> m_attackRanges;
@@ -148,6 +149,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     m_maxRange = m_attackRanges[i];
                 }
             }
+
+            m_enableChase = true;
 
             var skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
 
@@ -183,12 +186,17 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_currentState = State.Chasing;
+                if (m_enableChase)
+                {
+                    m_currentState = State.Chasing;
+                    m_enableChase = false;
+                }
                 m_currentPatience = 0;
                 m_enablePatience = false;
             }
             else
             {
+                m_enableChase = true;
                 m_enablePatience = true;
             }
         }

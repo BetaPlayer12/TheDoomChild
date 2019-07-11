@@ -19,7 +19,7 @@ MonoBehaviour:
   m_health: {fileID: 6417993600091173307}
   m_damage:
     m_type: 0
-    m_damage: 1
+    m_damage: 10
 --- !u!114 &931682361787033671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_startIndex: 0
   m_startIteration: 1
   m_wayPoints:
-  - {x: 7.15, y: -7.73}
-  - {x: 13.62, y: -7.73}
+  - {x: 340.75, y: -45.58}
+  - {x: 334.2, y: -45.58}
   m_useCurrentPosition: 0
   m_overridePatrolIndex: 0
 --- !u!114 &6549687904926912535
@@ -110,18 +110,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animationTracks: []
   m_skeletonAnimation: {fileID: 2564036128738211697}
---- !u!114 &1462512143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6747670554529529366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c374c2142697f42b772f38146544f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &185130587873902469
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -189,11 +177,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 705660997346175374, guid: 51a377dc739d3bb44a86ea035e5311c1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.47926682
+      objectReference: {fileID: 0}
+    - target: {fileID: 705660997346175374, guid: 51a377dc739d3bb44a86ea035e5311c1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.215426
+      objectReference: {fileID: 0}
     - target: {fileID: 3652729858845343148, guid: 51a377dc739d3bb44a86ea035e5311c1,
         type: 3}
       propertyPath: rb
       value: 
       objectReference: {fileID: 4587675167938723878}
+    - target: {fileID: 9115095606253799813, guid: 51a377dc739d3bb44a86ea035e5311c1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.83909255
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51a377dc739d3bb44a86ea035e5311c1, type: 3}
 --- !u!4 &2564036128738211696 stripped
@@ -232,12 +235,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &6747670554529529366 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6860457603400466835, guid: 51a377dc739d3bb44a86ea035e5311c1,
-    type: 3}
-  m_PrefabInstance: {fileID: 185130587873902469}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7987546779709122487 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7802697666813024306, guid: 51a377dc739d3bb44a86ea035e5311c1,
@@ -272,17 +269,17 @@ PrefabInstance:
     - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_Name
-      value: Mushroomman Variant
+      value: Mushroomman Variant (1)
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.7322922
+      value: 340.75
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -55.67
+      value: -45.58
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -329,11 +326,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_maxHealth
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_spineObjects.m_skeletonAnimations.Array.size
@@ -353,6 +345,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_spineObjects.m_baseTimeScale.Array.data[0]
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
