@@ -21,15 +21,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> LedgeGrabCall;//
         public event EventAction<ControllerEventArgs> FeetLedgeCall;//
 
-        
+
 
         public void CallFixedUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
         {
             if (state.isFalling)
             {
-               
+
             }
-            
+
             if (state.isStickingToWall)
             {
 
@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         }
 
-       
+
 
         public void CallUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
         {
@@ -79,8 +79,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
                         return;
                     }
-                  
-                   
+
+
 
                 }
 
@@ -88,12 +88,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     HighJumpCall?.Invoke(this, callArgs);
                     FeetLedgeCall?.Invoke(this, callArgs);
-
+                    
                 }
-
-               
-
-
 
                 if (skills.IsEnabled(MovementSkill.DoubleJump) && state.canDoubleJump)
                 {
@@ -101,6 +97,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         DoubleJumpCall?.Invoke(this, EventActionArgs.Empty);
                         FeetLedgeCall?.Invoke(this, callArgs);
+                       
                     }
                 }
 

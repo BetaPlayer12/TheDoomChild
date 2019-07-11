@@ -243,14 +243,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         if (m_loopBreaker)
                         {
                             m_animation.DoJumpLoop(m_facing.currentFacingDirection);
+                            m_loopBreaker = false;
                            
                         }
 
 
                        if(!m_loopBreaker){
-
-                        m_animation.DoStandIdle(m_facing.currentFacingDirection);
-                        Debug.Log("is this looping");
+                        m_animationState.ResetAnimations();
+                    //    m_animation.DoStandIdle(m_facing.currentFacingDirection);
+                        m_loopBreaker = true;
+                        Debug.Log("Loop Breaker  is this looping");
+                        return;
                        }
                       
                         

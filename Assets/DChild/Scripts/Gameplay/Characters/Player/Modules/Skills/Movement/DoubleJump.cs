@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Event;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,10 +10,6 @@ namespace DChild.Gameplay.Characters.Players.Skill
 {
     public class DoubleJump : Jump, IPlayerExternalModule, IEventModule
     {
-        [SerializeField]
-        private float m_delay;
-        private float m_timer;
-
         private IHighJumpState m_state;
         private IDoubleJumpState m_doubleJumpState;
         private IPlacementState m_placementState;
@@ -53,12 +50,18 @@ namespace DChild.Gameplay.Characters.Players.Skill
         {
             GetComponentInParent<IDoubleJumpController>().DoubleJumpCall += OnJumpCall;
             GetComponentInParent<IDoubleJumpController>().DoubleJumpReset += OnCallReset;
+            GetComponentInParent<IMainController>().ControllerDisabled += OnControllerDisabled;
             GetComponentInParent<ILandController>().LandCall += OnLandCall;
+        }
+
+        private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
+        {
+            m_doubleJumpState.canDoubleJump = true;
+            m_doubleJumpState.hasDoubleJumped = false;
         }
 
         private void OnLandCall(object sender, EventActionArgs eventArgs)
         {
-            m_timer = m_delay;
             //m_handler.enabled = false;
             m_doubleJumpState.canDoubleJump = true;
             m_doubleJumpState.hasDoubleJumped = false;
@@ -77,9 +80,6 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         private void Start()
         {
-            m_timer = m_delay;
-            //m_handler = GetComponent<AirMoveDoubleJumpHandler>();
-            //m_handler.enabled = false;
             m_doubleJumpState.canDoubleJump = true;
         }
     }
