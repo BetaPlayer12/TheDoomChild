@@ -78,6 +78,7 @@ namespace Refactor.DChild.Gameplay.Combat
         private void Awake()
         {
             m_hitboxes = GetComponentsInChildren<Hitbox>();
+            m_health.ResetValueToMax();
         }
     }
 }
