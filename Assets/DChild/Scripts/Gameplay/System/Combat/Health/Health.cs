@@ -61,12 +61,14 @@ namespace DChild.Gameplay.Combat
         {
             m_currentHealth = maxValue;
             m_percentHealth = 1f;
+            ValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentHealth, maxValue));
         }
 
         public void Empty()
         {
             m_currentHealth = 0;
             m_percentHealth = 0f;
+            ValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentHealth, maxValue));
         }
 
 #if UNITY_EDITOR

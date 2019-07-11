@@ -86,23 +86,27 @@ namespace DChild.Gameplay
             CallPoolRequest();
         }
 
-        private void Awake() => m_state = m_playOnAwake ? State.Play : State.Stop;
+        private void Awake()
+        {
+            m_state = m_playOnAwake ? State.Play : State.Stop;
+            m_particleSystems = GetComponentsInChildren<ParticleSystem>();
+        }
 
-//        private void OnValidate()
-//        {
-//            m_particleSystems = GetComponentsInChildren<ParticleSystem>();
-//            for (int i = 0; i < m_particleSystems.Length; i++)
-//            {
-//                var main = m_particleSystems[i].main;
-//                main.playOnAwake = m_playOnAwake;
-//#if UNITY_EDITOR
-//                if (m_poolOnStop)
-//                {
-//                    main.stopAction = ParticleSystemStopAction.Callback;
-//                }
-//#endif
-//            }
-//        }
+        private void OnValidate()
+        {
+            m_particleSystems = GetComponentsInChildren<ParticleSystem>();
+            for (int i = 0; i < m_particleSystems.Length; i++)
+            {
+                var main = m_particleSystems[i].main;
+                main.playOnAwake = m_playOnAwake;
+#if UNITY_EDITOR
+                if (m_poolOnStop)
+                {
+                    main.stopAction = ParticleSystemStopAction.Callback;
+                }
+#endif
+            }
+        }
     }
 
 }
