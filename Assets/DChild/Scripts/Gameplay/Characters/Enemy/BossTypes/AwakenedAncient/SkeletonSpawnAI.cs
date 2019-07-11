@@ -130,8 +130,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private AttackHandle m_attackHandle;
         [SerializeField]
-        private Damageable m_damageable;
-        [SerializeField]
         private GameObject m_hitCollider;
         [SerializeField]
         private GameObject m_hitBox;
@@ -143,7 +141,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         private Attack m_currentAttack;
         private Attack m_afterWaitForBehaviourAttack;
-        
+
         private bool m_hasTarget;
         private bool m_waitRoutineEnd;
         private bool m_isDead;
@@ -175,8 +173,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 }
             }
 
-            ConnectEvents();
-
             StartCoroutine(SpawnRoutine());
 
             var skeletonAnimation = GetComponentInChildren<SkeletonAnimation>();
@@ -186,18 +182,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             skeletonAnimation.AnimationState.Event += HandleEvent;
         }
 
-        //Death Handler
-        public void ConnectEvents()
-        {
-            m_damageable.Destroyed += DeathTrigger;
-        }
 
-        private void DeathTrigger(object sender, EventActionArgs eventArgs)
+        protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             m_waitRoutineEnd = true;
             StartCoroutine(DeathRoutine());
         }
-        //
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
