@@ -725,7 +725,7 @@ namespace DChild.Gameplay.Characters.Players
         #region New Jump Animations
         public void DoStartJump(HorizontalDirection direction)
         {
-            Debug.Log("jump start animation");
+           
             if (direction == HorizontalDirection.Left)
             {
                 SetAnimation(0, ANIMATION_JUMPNEW_START_LEFT, false, 0);
@@ -738,7 +738,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void DoJumpLoop(HorizontalDirection direction)
         {
-            Debug.Log("jump Loop animation");
+           
             if (direction == HorizontalDirection.Left)
             {
                 SetAnimation(0, ANIMATION_JUMPNEW_LOOP_LEFT, true);
@@ -752,7 +752,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void DoFallStart(HorizontalDirection direction)
         {
-            Debug.Log("fall  start animation");
+           
             if (direction == HorizontalDirection.Left)
             {
                 SetAnimation(0, ANIMATION_JUMPNEW_FALL_START_LEFT, false, 0);
@@ -765,7 +765,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void DoFallLoop1(HorizontalDirection direction)
         {
-            Debug.Log("fall  loop animation");
+           
             if (direction == HorizontalDirection.Left)
             {
                 SetAnimation(0, ANIMATION_JUMPNEW_FALL_LOOP1_LEFT, true, 0);
@@ -778,7 +778,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void DoFallLoop2(HorizontalDirection direction)
         {
-            Debug.Log("fall  loop 2 animation");
+           
             if (direction == HorizontalDirection.Left)
             {
                 SetAnimation(0, ANIMATION_JUMPNEW_FALL_LOOP2_LEFT, true, 0);
@@ -796,7 +796,7 @@ namespace DChild.Gameplay.Characters.Players
             if (direction == HorizontalDirection.Right)
             {
                     SetAnimation(0, ANIMATION_LEDGE_GRAB_RIGHT, false, 0);
-                    Debug.Log("Right");
+                    
             }
             else
             {
