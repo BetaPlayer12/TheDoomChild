@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_poolableItemData: {fileID: 11400000, guid: 6425468278182e448871410c7eb06aac, type: 2}
-  m_data: {fileID: 11400000, guid: 59d251f3eb9630a46ac094bd50647360, type: 2}
+  m_data: {fileID: 11400000, guid: 2fb1d0f70faeffc48bcf9901bba6b7b9, type: 2}
   m_fx: {fileID: 2721981979734039942}
 --- !u!50 &8570838486920207623
 Rigidbody2D:
@@ -127,8 +127,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2983279365290600319}
   - component: {fileID: 3633874507104659928}
-  - component: {fileID: 4883099129324865058}
-  - component: {fileID: 7582683420193762416}
+  - component: {fileID: 627320052713917632}
+  - component: {fileID: 1030530316445773489}
   m_Layer: 14
   m_Name: Collider
   m_TagString: Untagged
@@ -166,7 +166,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 2.54
---- !u!198 &4883099129324865058
+--- !u!198 &627320052713917632
 ParticleSystem:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4824,7 +4824,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!199 &7582683420193762416
+--- !u!199 &1030530316445773489
 ParticleSystemRenderer:
   serializedVersion: 6
   m_ObjectHideFlags: 2
@@ -4898,6 +4898,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Impact
       objectReference: {fileID: 0}
+    - target: {fileID: 5891073923369796968, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5678676247214529810, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: m_poolOnStop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5678676247214529810, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: m_playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5894058624064905144, guid: ca8ca7b325a084d419165672e8429019,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4953,9 +4968,59 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5678676247214529810, guid: ca8ca7b325a084d419165672e8429019,
+    - target: {fileID: 5982262425163763440, guid: ca8ca7b325a084d419165672e8429019,
         type: 3}
-      propertyPath: m_poolOnStop
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5982262425163763440, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5982302018903295738, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5982302018903295738, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5982914101726103914, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5982914101726103914, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5982827569022151394, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5982827569022151394, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2905416864491044745, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2905416864491044745, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: lengthInSec
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892564515773777704, guid: ca8ca7b325a084d419165672e8429019,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

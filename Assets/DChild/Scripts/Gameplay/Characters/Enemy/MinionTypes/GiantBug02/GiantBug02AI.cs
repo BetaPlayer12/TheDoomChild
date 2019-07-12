@@ -371,7 +371,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     case State.Turning:
                         if (Wait() && !m_waitRoutineEnd)
                         {
-                            Debug.Log("Doing TURN");
+                            //Debug.Log("Doing TURN");
                             StartCoroutine(TurnRoutine());
                             WaitTillBehaviourEnd(State.ReevaluateSituation);
                         }
@@ -379,7 +379,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     case State.Attacking:
                         if (!m_waitRoutineEnd)
                         {
-                            Debug.Log("Doing ATTACK");
+                            //Debug.Log("Doing ATTACK");
                             var target = m_targetInfo.position;
                             Array values = Enum.GetValues(typeof(Attack));
                             var random = new System.Random();

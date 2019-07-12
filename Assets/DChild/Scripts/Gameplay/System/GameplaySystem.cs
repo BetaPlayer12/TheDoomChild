@@ -9,6 +9,7 @@ using DChild.Gameplay.Systems;
 using DChild.Gameplay.VFX;
 using DChild.Inputs;
 using DChild.Serialization;
+using Holysoft.Gameplay.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -87,6 +88,16 @@ namespace DChild.Gameplay
 
         }
 
+        //Temp
+        public SliderStatUI m_bossHealth;
+        private static SliderStatUI bossHealth;
+
+        public static void SetBossHealth(Character character)
+        {
+            bossHealth.MonitorInfoOf(character.GetComponentInChildren<Health>());
+        }
+        //Temp End
+
         public static CampaignSlot SaveGame()
         {
             return null;
@@ -121,6 +132,7 @@ namespace DChild.Gameplay
             {
                 initializables[i].Initialize();
             }
+            bossHealth = m_bossHealth;
             //m_fxManager.LoadDatabase(m_database);
             //m_fxManager.Initialize(); //Temporary for grasscutFX
         }

@@ -82,12 +82,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 //var currentPath = m_navigationTracker.currentPathSegment;
                 if (FacingDestination(destination))
                 {
-                    Debug.Log("Do Patrol Routine");
+                    //Debug.Log("Do Patrol Routine");
                     m_minion.Patrol();
                 }
                 else
                 {
-                    Debug.Log("Do Patrol Turn");
+                    //Debug.Log("Do Patrol Turn");
                     m_minion.Turn();
                 }
             }

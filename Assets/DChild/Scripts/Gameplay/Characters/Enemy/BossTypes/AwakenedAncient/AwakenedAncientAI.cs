@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using Doozy.Engine;
 
 namespace Refactor.DChild.Gameplay.Characters.Enemies
 {
@@ -123,6 +124,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private AttackHandle m_attackHandle;
         [SerializeField]
+        private DeathHandle m_deathHandle;
+        [SerializeField]
         private State m_currentState;
         private State m_afterWaitForBehaviourState;
         [SpineEvent, SerializeField]
@@ -175,6 +178,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             //}
             m_skeletons = new GameObject[m_skeletonSize];
             m_enableChase = true;
+            GameplaySystem.SetBossHealth(m_character);
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -205,6 +209,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     m_currentPatience = 0;
                     m_enablePatience = false;
                 }
+                GameEventMessage.SendEvent("Boss Encounter");
             }
             else
             {
@@ -219,10 +224,19 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
+            m_deathHandle.SetAnimation(m_info.deathAnimation);
 
             if (m_animation.skeletonAnimation == null) return;
 
             m_animation.skeletonAnimation.AnimationState.Event += HandleEvent;
+        }
+
+
+
+        protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            GameEventMessage.SendEvent("Boss Gone");
+            base.OnDestroyed(sender, eventArgs);
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -435,7 +449,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 //Debug.Log(m_eventName[5]);
                 for (int i = 0; i < m_skeletonSize; i++)
                 {
-                    GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + /*(3 * transform.localScale.x)*/ + UnityEngine.Random.Range(-2, 2), m_skeletonSpawnTF.position.y), Quaternion.identity);
+                    GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + /*(3 * transform.localScale.x)*/ +UnityEngine.Random.Range(-2, 2), m_skeletonSpawnTF.position.y), Quaternion.identity);
                     skeleton.GetComponent<SkeletonSpawnAI>().SetDirection(transform.localScale.x);
                     GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
                     m_skeletons[i] = skeleton;

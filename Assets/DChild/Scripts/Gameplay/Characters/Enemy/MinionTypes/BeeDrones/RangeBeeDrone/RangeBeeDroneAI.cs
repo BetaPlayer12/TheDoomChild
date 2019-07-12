@@ -139,7 +139,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_attackRanges = new List<float>();
             m_attackRanges.Add(m_info.stingerdive.range);
             m_attackRanges.Add(m_info.toxicShot.range);
-            Debug.Log("attack Ranges COunt: "+m_attackRanges.Count);
+            //Debug.Log("attack Ranges COunt: "+m_attackRanges.Count);
             for (int i = 0; i < m_attackRanges.Count; i++)
             {
                 if (m_maxRange < m_attackRanges[i])
@@ -304,8 +304,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             if (e.Data.Name == m_eventName[0])
             {
-                Debug.Log(m_eventName[0]);
-                //Spawn Projectile
+                //Debug.Log(m_eventName[0]);
+                ////Spawn Projectile
 
                 var target = m_targetInfo.position; //No Parabola
                 //var target = TargetParabola(); //With Parabola
@@ -333,13 +333,13 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         if (m_targetInfo.isValid)
                         {
                             //StartCoroutine(UnburrowRoutine());
-                            Debug.Log("Doing IDLE");
+                            //Debug.Log("Doing IDLE");
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
                         }
                         else
                         {
                             //PATROL
-                            Debug.Log("Doing PATROL");
+                            //Debug.Log("Doing PATROL");
                             m_animation.SetAnimation(0, m_info.patrol.animation, true);
                             var characterInfo = new PatrolHandle.CharacterInfo(m_character.transform.position, m_character.facing);
                             m_patrolHandle.Patrol(m_movementHandle, m_info.patrol.speed, characterInfo);
@@ -348,7 +348,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     case State.Turning:
                         if (Wait() && !m_waitRoutineEnd)
                         {
-                            Debug.Log("Doing TURN");
+                            //Debug.Log("Doing TURN");
                             StartCoroutine(TurnRoutine());
                             WaitTillBehaviourEnd(State.ReevaluateSituation);
                         }
@@ -356,7 +356,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     case State.Attacking:
                         if (!m_waitRoutineEnd)
                         {
-                            Debug.Log("Doing ATTACK");
+                            //Debug.Log("Doing ATTACK");
                             var target = m_targetInfo.position;
                             Array values = Enum.GetValues(typeof(Attack));
                             var random = new System.Random();
@@ -390,7 +390,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         if (!m_waitRoutineEnd)
                         {
                             var target = m_targetInfo.position;
-                            Debug.Log("Doing CHASE");
+                            //Debug.Log("Doing CHASE");
                             //Put Target Destination
                             if (IsFacingTarget() && Vector2.Distance(target, transform.position) <= m_maxRange)
                             {
@@ -420,7 +420,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         //How far is target, is it worth it to chase or go back to patrol
                         if (!m_waitRoutineEnd)
                         {
-                            Debug.Log("Doing REEVALUATION");
+                            //Debug.Log("Doing REEVALUATION");
                             if (m_targetInfo.isValid)
                             {
                                 m_currentState = State.Chasing;
