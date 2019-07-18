@@ -52,15 +52,15 @@ namespace DChild.Gameplay.Projectiles
 
         protected void UnloadProjectile()
         {
-            if (m_particleSystem == null)
-            {
-                CallPoolRequest();
-            }
-            else
-            {
-                m_model?.SetActive(false);
-                m_particleSystem.Stop();
-            }
+            //if (m_particleSystem == null)
+            //{
+            CallPoolRequest();
+            //}
+            //else
+            //{
+            //    m_model?.SetActive(false);
+            //    m_particleSystem.Stop();
+            //}
         }
         protected void CallAttackerAttacked(CombatConclusionEventArgs eventArgs) => TargetDamaged?.Invoke(this, eventArgs);
         protected bool CollidedWithEnvironment(Collision2D collision) => collision.gameObject.layer == LayerMask.NameToLayer("Environment");

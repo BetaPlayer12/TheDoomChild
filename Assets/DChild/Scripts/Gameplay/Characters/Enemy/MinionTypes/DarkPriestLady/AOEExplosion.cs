@@ -4,27 +4,11 @@ using UnityEngine;
 using DChild.Gameplay.Projectiles;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Combat;
-using Sirenix.OdinInspector;
 using Holysoft.Event;
 using System;
 
 namespace DChild.Gameplay
 {
-    [CreateAssetMenu(fileName = "AOEExplosionData", menuName = "DChild/Gameplay/AOE Explosion Data")]
-    public class AOEExplosionData : ScriptableObject
-    {
-        [SerializeField]
-        private AttackDamage[] m_damage;
-        [SerializeField, MinValue(1f)]
-        private float m_damageRadius;
-        [SerializeField]
-        private ExplosionData m_explosionData;
-
-        public AttackDamage[] damage => m_damage;
-        public float damageRadius => m_damageRadius;
-        public float explosiveRadius => m_explosionData.explosiveRadius;
-        public float explosivePower => m_explosionData.explosiveRadius;
-    }
 
     public class AOEExplosion : PoolableObject
     {
@@ -45,7 +29,8 @@ namespace DChild.Gameplay
         public virtual void Detonate()
         {
             m_cacheHitboxList.Clear();
-            m_cacheHitboxList = GameplaySystem.combatManager.GetValidTargetsOfCircleAOE(m_rigidbody.position, m_data.damageRadius, Physics2D.GetLayerCollisionMask(gameObject.layer));
+            //m_cacheHitboxList = GameplaySystem.combatManager.GetValidTargetsOfCircleAOE(m_rigidbody.position, m_data.damageRadius, Physics2D.GetLayerCollisionMask(gameObject.layer));
+            m_cacheHitboxList = GameplaySystem.combatManager.GetValidTargetsOfCircleAOE(m_rigidbody.position, 5, Physics2D.GetLayerCollisionMask(gameObject.layer));
             m_toDamage.Clear();
             for (int i = 0; i < m_cacheHitboxList.Count; i++)
             {
@@ -56,7 +41,7 @@ namespace DChild.Gameplay
             }
             DamageTargets();
             OnDetonate?.Invoke(this, new AOETargetsEventArgs(m_toDamage));
-            m_rigidbody.CastExplosiveForce(m_data.explosivePower, m_data.explosiveRadius);
+            //m_rigidbody.CastExplosiveForce(m_data.explosivePower, m_data.explosiveRadius);
         }
 
         private void DamageTargets()

@@ -107,6 +107,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_waitForBehaviourEnd = true;
             m_animation.DoDeath();
             yield return new WaitForAnimationComplete(m_animation.animationState, MushroomManAnimation.ANIMATION_DEATH);
+            Destroy(this.gameObject);
             m_waitForBehaviourEnd = false;
             m_behaviour.SetActiveBehaviour(null);
         }
