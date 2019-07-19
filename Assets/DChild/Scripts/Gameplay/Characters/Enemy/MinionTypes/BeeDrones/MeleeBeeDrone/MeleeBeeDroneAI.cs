@@ -168,10 +168,15 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         public override void ApplyData()
         {
             base.ApplyData();
-            UpdateAttackDeciderList();
+            if (m_attackDecider != null)
+            {
+                Debug.Log("Update attack list trigger function");
+                UpdateAttackDeciderList();
+            }
         }
         private void UpdateAttackDeciderList()
         {
+            Debug.Log("Update attack list trigger");
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.RapidSting, m_info.rapidSting.range),
                                     new AttackInfo<Attack>(Attack.StingerDive, m_info.stingerdive.range));
             m_attackDecider.hasDecidedOnAttack = false;
@@ -179,6 +184,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         protected override void Awake()
         {
+            Debug.Log("Update override trigger");
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
