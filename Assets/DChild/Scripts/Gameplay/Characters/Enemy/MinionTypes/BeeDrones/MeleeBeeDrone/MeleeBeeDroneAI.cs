@@ -229,7 +229,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                         case Attack.RapidSting:
-                            m_stateHandle.Wait(State.ReevaluateSituation);
                             StartCoroutine(RapidStingRoutine());
                             break;
                     }
