@@ -101,11 +101,13 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             {
                 case State.Patrolling:
                     //Add actual CharacterInfo Later
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                  /*  m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.transform.position, m_character.facing);
                     m_patrolHandle.Patrol(m_movementHandle, m_info.patrol.speed, characterInfo);
                     //Play Animation
                     Debug.Log("patrolling state"); 
+                    */
+
                     break;
                 case State.Attacking:
                     WaitForBehaviour(State.ReevaluateSituation);

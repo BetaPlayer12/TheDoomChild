@@ -51,8 +51,11 @@ namespace DChild.Gameplay.Cinematics.Cameras
         {
             if (m_isAlreadyTracking == false && m_trackPlayer)
             {
-                GameplaySystem.cinema.Register(this);
-                m_isAlreadyTracking = true;
+               
+                    GameplaySystem.cinema.Register(this);
+                    m_isAlreadyTracking = true;
+               
+                
             }
         }
 

@@ -19,10 +19,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ControllerEventArgs m_callArgs;
 
         private StatusEffectController m_statusController;
-        private CombatController m_combatController;
+        private CombatController m_combatController;//
         private GroundController m_ground;
         private AirController m_air;
-        private AnimationController m_animation;
+        private AnimationController m_animation;//
         private PlayerInput m_input;
 
         public event EventAction<EventActionArgs> ControllerDisabled;
