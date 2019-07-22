@@ -14,29 +14,29 @@ namespace DChildEditor.Toolkit
 
         public static void Reset()
         {
-            m_hasSkill = new bool[(int)MovementSkill._COUNT];
+            m_hasSkill = new bool[(int)PrimarySkill._COUNT];
         }
 
         public static void UpdateConstructor(PlayerConstructor window)
         {
             var player = window.player;
-            SetSkillStatus(MovementSkill.DoubleJump, player.GetComponentInChildren<DoubleJump>());
-            SetSkillStatus(MovementSkill.WallJump, player.GetComponentInChildren<WallJump>());
+            SetSkillStatus(PrimarySkill.DoubleJump, player.GetComponentInChildren<DoubleJump>());
+            SetSkillStatus(PrimarySkill.WallJump, player.GetComponentInChildren<WallJump>());
             var hasDash = player.GetComponentInChildren<GroundDash>() != null &&
                           player.GetComponentInChildren<AirDash>() != null;
-            SetSkillStatus(MovementSkill.Dash, hasDash);
+            SetSkillStatus(PrimarySkill.Dash, hasDash);
         }
 
         public static void DrawInspector(PlayerConstructor window)
         {
             if(m_hasSkill == null)
             {
-                m_hasSkill = new bool[(int)MovementSkill._COUNT];
+                m_hasSkill = new bool[(int)PrimarySkill._COUNT];
             }
 
             var windowWidth = window.position.width;
             SirenixEditorGUI.BeginBox("Movement Skills", false, GUILayout.Width(windowWidth));
-            if (HasSkill(MovementSkill.DoubleJump) == false)
+            if (HasSkill(PrimarySkill.DoubleJump) == false)
             {
                 if (GUILayout.Button("Attach Double Jump"))
                 {
@@ -44,7 +44,7 @@ namespace DChildEditor.Toolkit
                 }
             }
 
-            if (HasSkill(MovementSkill.WallJump) == false)
+            if (HasSkill(PrimarySkill.WallJump) == false)
             {
                 if (GUILayout.Button("Attach Wall Jump"))
                 {
@@ -52,7 +52,7 @@ namespace DChildEditor.Toolkit
                 }
             }
 
-            if (HasSkill(MovementSkill.Dash) == false)
+            if (HasSkill(PrimarySkill.Dash) == false)
             {
                 if (GUILayout.Button("Attach Dash"))
                 {
@@ -62,9 +62,9 @@ namespace DChildEditor.Toolkit
             SirenixEditorGUI.EndBox();
         }
 
-        private static bool HasSkill(MovementSkill skill) => m_hasSkill[(int)skill];
-        private static void SetSkillStatus(MovementSkill skill, Component component) => m_hasSkill[(int)skill] = component != null;
-        private static void SetSkillStatus(MovementSkill skill, bool value) => m_hasSkill[(int)skill] = value;
+        private static bool HasSkill(PrimarySkill skill) => m_hasSkill[(int)skill];
+        private static void SetSkillStatus(PrimarySkill skill, Component component) => m_hasSkill[(int)skill] = component != null;
+        private static void SetSkillStatus(PrimarySkill skill, bool value) => m_hasSkill[(int)skill] = value;
 
         private static GameObject GetOrCreateMovementSkillGO(GameObject player)
         {
@@ -85,7 +85,7 @@ namespace DChildEditor.Toolkit
             var movementSkillGO = GetOrCreateMovementSkillGO(player);
             var doubleJump = movementSkillGO.AddComponent<DoubleJump>();
             doubleJump.Initialize(70);
-            SetSkillStatus(MovementSkill.DoubleJump, true);
+            SetSkillStatus(PrimarySkill.DoubleJump, true);
         }
         private static void AttachWallJump(GameObject player)
         {
@@ -94,7 +94,7 @@ namespace DChildEditor.Toolkit
             var wallJump = movementSkillGO.AddComponent<WallJump>();
             wallJump.Initialize(100);
             wallJump.Initialize(30, 0.1f);
-            SetSkillStatus(MovementSkill.WallJump, true);
+            SetSkillStatus(PrimarySkill.WallJump, true);
         }
         private static void AttachDash(GameObject player)
         {
@@ -104,7 +104,7 @@ namespace DChildEditor.Toolkit
             var airDash = Commands.GetOrCreateComponent<AirDash>(movementSkillGO);
             airDash.Initialize(150f, 0.2f);
             airDash.Initialize(0.1f); //(70f);
-            SetSkillStatus(MovementSkill.Dash, true);
+            SetSkillStatus(PrimarySkill.Dash, true);
         }
 
         private static void ValidateWallStick(GameObject player)

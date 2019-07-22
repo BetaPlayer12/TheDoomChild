@@ -30,7 +30,7 @@ namespace DChildEditor.Gameplay.Characters.Player
                     EditorGUI.indentLevel++;
                     for (int i = 0; i < movementSkills.Length; i++)
                     {
-                        movementSkills[i] = EditorGUILayout.Toggle(((MovementSkill)i).ToString(), movementSkills[i]);
+                        movementSkills[i] = EditorGUILayout.Toggle(((PrimarySkill)i).ToString(), movementSkills[i]);
                     }
                     EditorGUI.indentLevel--;
                 }

@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> ShadowDashCall;
         public event EventAction<ControllerEventArgs> PlatformDropCall;
 
-        public void CallFixedUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
+        public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             if (state.isDashing)
             {
@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        public void CallUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
+        public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             if (state.hasLanded)
             {
@@ -65,7 +65,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     JumpCall?.Invoke(this, EventActionArgs.Empty);
                 }
 
-                else if (skills.IsEnabled(MovementSkill.Dash))
+                else if (skills.IsEnabled(PrimarySkill.Dash))
                 {
                     if (callArgs.input.skillInput.isDashPressed)
                     {
