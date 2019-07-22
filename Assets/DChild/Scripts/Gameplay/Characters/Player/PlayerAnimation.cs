@@ -9,6 +9,8 @@ namespace DChild.Gameplay.Characters.Players
 
         public string currentAttackAnimation => m_currentAttackAnimation;
 
+        public static global::System.String ANIMATION_STAND_IDLE_LEFT => aNIMATION_STAND_IDLE_LEFT;
+
         #region New Jump, Fall and Land Animations
         public const string ANIMATION_JUMPNEW_START_RIGHT = "JumpNew_Start_Right";
         public const string ANIMATION_JUMPNEW_START_LEFT = "JumpNew_Start_Left";
@@ -35,7 +37,7 @@ namespace DChild.Gameplay.Characters.Players
 
         #region Basic Animations
         //Left
-        public const string ANIMATION_STAND_IDLE_LEFT = "Idle1_Left";
+        private const string aNIMATION_STAND_IDLE_LEFT = "Idle1_Left";
         public const string ANIMATION_POST_ATTACK_IDLE_LEFT = "Idle3_Left";
         public const string ANIMATION_ON_EDGE_IDLE_LEFT = "Idle4_Left";
 
