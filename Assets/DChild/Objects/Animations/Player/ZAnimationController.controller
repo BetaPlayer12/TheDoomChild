@@ -156,10 +156,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 8514170470783604527}
-    m_Position: {x: 260, y: 200, z: 0}
+    m_Position: {x: 390, y: 150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 913002593163769435}
-    m_Position: {x: 260, y: 360, z: 0}
+    m_Position: {x: 530, y: 510, z: 0}
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: -6986704016375557240}
@@ -1270,10 +1270,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -7687618588766999905}
-    m_Position: {x: 910, y: 130, z: 0}
+    m_Position: {x: 1070, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8610479593875912722}
-    m_Position: {x: 550, y: 130, z: 0}
+    m_Position: {x: 540, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6263679805180890350}
     m_Position: {x: 550, y: 240, z: 0}
@@ -1286,7 +1286,7 @@ AnimatorStateMachine:
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_EntryPosition: {x: 1180, y: -70, z: 0}
+  m_EntryPosition: {x: 1230, y: -30, z: 0}
   m_ExitPosition: {x: 480, y: 390, z: 0}
   m_ParentStateMachinePosition: {x: 720, y: 20, z: 0}
   m_DefaultState: {fileID: -7687618588766999905}
@@ -2609,7 +2609,7 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: isFacingLeft
     m_EventTreshold: 0
-  - m_ConditionMode: 3
+  - m_ConditionMode: 4
     m_ConditionEvent: SpeedX
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
@@ -2707,7 +2707,7 @@ AnimatorController:
   - m_Name: SpeedX
     m_Type: 3
     m_DefaultFloat: 0
-    m_DefaultInt: 1
+    m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: SpeedY
@@ -4382,6 +4382,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: SpeedX
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: isFacingLeft
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7687618588766999905}
