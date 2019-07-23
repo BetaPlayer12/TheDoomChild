@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters
 {
-    public class AnimatedTurnHandle : TurnHandle
+    public class AnimatedTurnHandle : TurnHandle, IFacingComponent
     {
         [SerializeField]
         private SpineRootAnimation m_animation;
@@ -38,9 +38,8 @@ namespace Refactor.DChild.Gameplay.Characters
             m_animation.DisableRootMotion();
             m_animation.AnimationSet -= OnAnimationSet;
             m_animation.animationState.Complete -= OnComplete;
-            var currentScale = m_character.facing == HorizontalDirection.Left ? new Vector3(-1, 1, 1) : Vector3.one;
-            m_character.transform.localScale = currentScale;
             TurnCharacter();
+            Update(m_character.facing);
             CallTurnDone(new FacingEventArgs(m_character.facing));
         }
 
@@ -52,6 +51,12 @@ namespace Refactor.DChild.Gameplay.Characters
         private void OnAnimationSet(object sender, AnimationEventArgs eventArgs)
         {
             m_isTurning = false;
+        }
+
+        public void Update(HorizontalDirection facing)
+        {
+            var currentScale = m_character.facing == HorizontalDirection.Left ? new Vector3(-1, 1, 1) : Vector3.one;
+            m_character.transform.localScale = currentScale;
         }
     }
 }

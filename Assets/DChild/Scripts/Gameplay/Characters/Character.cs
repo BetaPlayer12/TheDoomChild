@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -17,7 +18,7 @@ namespace DChild.Gameplay
         private IsolatedPhysics2D m_physics;
         [SerializeField]
         private CharacterColliders m_colliders;
-        [SerializeField]
+        [SerializeField, OnValueChanged("UpdateFacingComponents")]
         private HorizontalDirection m_facing = HorizontalDirection.Right;
 
         public event EventAction<FacingEventArgs> CharacterTurn;
@@ -43,5 +44,12 @@ namespace DChild.Gameplay
                 Debug.Log(gameObject.tag);
             }
         }
+
+#if UNITY_EDITOR
+        private void UpdateFacingComponents()
+        {
+            CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
+        }
+#endif
     }
 }
