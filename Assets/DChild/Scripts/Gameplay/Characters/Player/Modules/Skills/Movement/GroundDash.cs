@@ -15,8 +15,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private float m_cooldown;
         private float m_modifiedDashPower;
 
-        private IPlayerAnimationState m_animationState;
-
         private RaySensor m_slopeSensor;
         private CountdownTimer m_cooldownTimer;
         private bool m_isOnCooldown;
@@ -36,7 +34,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             base.Initialize(player);
             m_slopeSensor = player.sensors.slopeSensor;
-            m_animationState = player.animationState;
             m_state.canDash = true;
         }
 
@@ -75,8 +72,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         protected override void OnDashDurationEnd(object sender, EventActionArgs eventArgs)
         {
             CallDashEnd();
-            m_animationState.isFallingToJog = false;
-            m_animationState.hasDashed = false;
             m_physics.SetVelocity(Vector2.zero);
             m_state.isDashing = false;
             if (m_ghosting != null)

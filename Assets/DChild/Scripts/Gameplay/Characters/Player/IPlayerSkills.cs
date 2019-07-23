@@ -1,6 +1,6 @@
 ﻿namespace DChild.Gameplay.Characters.Players
 {
-    public interface IPlayerSkills : IMovementSkills
+    public interface IPlayerSkills : IPrimarySkills
     {
 
     }

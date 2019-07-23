@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
 
 
-        public void CallFixedUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
+        public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             if (state.isFalling)
             {
@@ -48,13 +48,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
 
 
-        public void CallUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
+        public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             FeetLedgeCall?.Invoke(this, callArgs);
             if (state.isStickingToWall)
             {
                 WallStickCall?.Invoke(this, EventActionArgs.Empty);
-                if (skills.IsEnabled(MovementSkill.WallJump) && callArgs.input.isJumpPressed)
+                if (skills.IsEnabled(PrimarySkill.WallJump) && callArgs.input.isJumpPressed)
                 {
                     WallJumpCall?.Invoke(this, EventActionArgs.Empty);
                     DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
@@ -91,7 +91,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     
                 }
 
-                if (skills.IsEnabled(MovementSkill.DoubleJump) && state.canDoubleJump)
+                if (skills.IsEnabled(PrimarySkill.DoubleJump) && state.canDoubleJump)
                 {
                     if (callArgs.input.isJumpPressed)
                     {
@@ -101,7 +101,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
 
-                if (skills.IsEnabled(MovementSkill.Dash))
+                if (skills.IsEnabled(PrimarySkill.Dash))
                 {
                     if (callArgs.input.skillInput.isDashPressed)
                     {
