@@ -17,6 +17,11 @@ namespace Refactor.DChild.Gameplay.Characters
         [SerializeField]
         private CountdownTimer m_bodyDuration;
 
+        [SerializeField]
+        private GameObject m_hitCollider;
+        [SerializeField]
+        private GameObject m_hitBox;
+
         private string m_animation;
 
         public void SetAnimation(string animation)
@@ -38,6 +43,8 @@ namespace Refactor.DChild.Gameplay.Characters
 
         private void OnDeathAnimationComplete(TrackEntry trackEntry)
         {
+            m_hitCollider.SetActive(false);
+            m_hitBox.SetActive(false);
             m_bodyDuration.Reset();
             m_animator.animationState.Complete -= OnDeathAnimationComplete;
             enabled = true;
