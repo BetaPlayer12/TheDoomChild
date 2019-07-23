@@ -7,7 +7,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
     [System.Serializable]
-    public class FallHandle
+    public class FallHandle : MonoBehaviour
     {
         [SerializeField, MaxValue(0)]
         private float m_velocityThreshold;
@@ -32,13 +32,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator.SetInteger(m_animationParameter, -2);
         }
 
-        public void Start()
+        public void StartFall()
         {
             m_timer.Reset();
             m_animator.SetInteger(m_animationParameter, -1);
         }
 
-        public void Reset()
+        public void ResetValue()
         {
             m_animator.SetInteger(m_animationParameter, 0);
         }

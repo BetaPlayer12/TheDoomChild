@@ -8,6 +8,11 @@ namespace DChild.Gameplay.Characters
 
         public void Update(HorizontalDirection facing)
         {
+            if (m_rotators == null)
+            {
+                m_rotators = GetComponentsInChildren<ISensorFaceRotation>();
+            }
+
             for (int i = 0; i < m_rotators.Length; i++)
             {
                 m_rotators[i].AlignRotationToFacing(facing);

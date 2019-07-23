@@ -9,6 +9,7 @@ using Spine.Unity.Modules;
 
 namespace DChild
 {
+
     public class SpineAnimationState : StateMachineBehaviour
     {
         public AnimationReferenceAsset m_animation;

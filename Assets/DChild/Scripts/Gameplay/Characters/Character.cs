@@ -48,7 +48,18 @@ namespace DChild.Gameplay
 #if UNITY_EDITOR
         private void UpdateFacingComponents()
         {
-            CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
+            if (Application.isPlaying)
+            {
+                CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
+            }
+            else
+            {
+                var facingComponents = GetComponentsInChildren<IFacingComponent>();
+                for (int i = 0; i < facingComponents.Length; i++)
+                {
+                    facingComponents[i].Update(m_facing);
+                }
+            }
         }
 #endif
     }

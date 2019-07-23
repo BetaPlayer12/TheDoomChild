@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     /// Replacement of PlacementTracker
     /// </summary>
     [System.Serializable]
-    public class LandHandle
+    public class LandHandle : MonoBehaviour
     {
         private Animator m_animator;
         private string m_animationParameter;

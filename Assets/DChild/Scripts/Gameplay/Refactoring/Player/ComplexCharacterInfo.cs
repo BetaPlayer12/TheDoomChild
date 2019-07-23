@@ -19,12 +19,9 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         private AnimationParametersData m_animationParametersData;
 
         public Character character => m_character;
-
         public CharacterState state => m_state;
         public Animator animator => m_animator;
-
         public AnimationParametersData animationParametersData => m_animationParametersData;
-
         public CharacterPhysics2D physics => m_physics;
     }
 }

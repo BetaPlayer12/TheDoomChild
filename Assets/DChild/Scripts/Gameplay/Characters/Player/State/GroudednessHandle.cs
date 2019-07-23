@@ -14,6 +14,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         [SerializeField]
         private FallHandle m_fallHandle;
+        [SerializeField]
         private LandHandle m_landHandle;
 
         public void Initialize(ComplexCharacterInfo info)
@@ -51,7 +52,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     }
                     else
                     {
-                        m_fallHandle.Start();
+                        m_fallHandle.StartFall();
                     }
                 }
 
@@ -60,7 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_state.isGrounded = true;
                     m_landHandle.Execute();
-                    m_fallHandle.Reset();
+                    m_fallHandle.ResetValue();
                     m_animator.SetBool(m_midAirParamater, false);
                 }
             }
