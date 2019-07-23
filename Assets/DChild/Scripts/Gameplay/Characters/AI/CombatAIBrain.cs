@@ -47,6 +47,7 @@ namespace Refactor.DChild.Gameplay.Characters.AI
 
         protected override void Awake()
         {
+            Debug.Log("Update Awake trigger");
             base.Awake();
             m_damageable.Destroyed += OnDestroyed;
         }
