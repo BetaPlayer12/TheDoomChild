@@ -15,8 +15,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     {
         [SerializeField]
         private CountdownTimer m_flinchDuration = new CountdownTimer(1);
-        private PlayerAnimation m_animation;
-
         private IBehaviourState m_behaviourState;
         private IFlinchState m_state;
         private IIsolatedTime m_time;
@@ -28,7 +26,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_behaviourState = player.characterState;
             m_state = player.characterState;
             m_time = player.isolatedObject;
-            m_animation = player.animation;
+            //m_animation = player.animation;
             m_facing = player;
         }
 
@@ -39,14 +37,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnFlinch(object sender, FlinchEventArgs eventArgs)
         {
-            if (eventArgs.damageSource == RelativeDirection.Front)
-            {
-                m_animation.DoFlinchBack(m_facing.currentFacingDirection);
-            }
-            else
-            {
-                m_animation.DoFlinchForward(m_facing.currentFacingDirection);
-            }
+            //if (eventArgs.damageSource == RelativeDirection.Front)
+            //{
+            //    m_animation.DoFlinchBack(m_facing.currentFacingDirection);
+            //}
+            //else
+            //{
+            //    m_animation.DoFlinchForward(m_facing.currentFacingDirection);
+            //}
 
             m_behaviourState.waitForBehaviour = true;
             m_state.isFlinching = true;

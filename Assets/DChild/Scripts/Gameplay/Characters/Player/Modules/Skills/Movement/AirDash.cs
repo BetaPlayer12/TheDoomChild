@@ -12,13 +12,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [SerializeField]
         [MinValue(0.1)]
         protected float m_stopSpeed;
-        private IPlayerAnimationState m_animationState;
-
-        public override void Initialize(IPlayerModules player)
-        {
-            base.Initialize(player);
-            m_animationState = player.animationState;
-        }
         public void ConnectEvents()
         {
             GetComponentInParent<IAirDashController>().DashCall += OnDashCall;
@@ -27,8 +20,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         protected override void OnDashDurationEnd(object sender, EventActionArgs eventArgs)
         {
             CallDashEnd();
-            m_animationState.isFallingToJog = false;
-            m_animationState.hasDashed = false;
             enabled = false;
             m_physics.SetVelocity(m_direction.x * m_stopSpeed, 0);
             m_physics.simulateGravity = true;

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters.Players
 {
-
     public class PlayerSkills : SerializedMonoBehaviour, IPrimarySkills
     {
         [SerializeField, HideReferenceObjectPicker]

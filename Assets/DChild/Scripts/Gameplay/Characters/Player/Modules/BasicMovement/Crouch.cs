@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_headSensor = player.sensors.headSensor;
             m_headSensor.enabled = false;
             m_state = player.characterState;
-            m_animator = player.animation.GetComponentInChildren<Animator>();
+            //m_animator = player.animation.GetComponentInChildren<Animator>();
             //m_rootMotion.enabled = false;
         }
 

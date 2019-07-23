@@ -16,15 +16,12 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             IsMidAir,
             Jump,
             Land,
-            LandDone,
             IsDashing,
             DashStart,
             DoubleJump,
             LedgeGrab,
-            LedgeGrabDone,
             Attack,
             AttackYDirection,
-            AttackDone
         }
 
         [SerializeField]

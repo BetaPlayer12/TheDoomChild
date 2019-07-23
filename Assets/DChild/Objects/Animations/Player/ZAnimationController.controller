@@ -93,6 +93,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 069519dc5529fcb4f984e21ff7604f07, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
   m_trigger: AttackDone
 --- !u!1102 &-8721930781724928891
 AnimatorState:
@@ -266,7 +269,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6367804553255638831}
@@ -291,7 +294,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8610479593875912722}
@@ -324,9 +327,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0
-  m_TransitionOffset: 0
-  m_ExitTime: 0.75
+  m_TransitionDuration: 0.10026633
+  m_TransitionOffset: 0.7589879
+  m_ExitTime: 0.99576926
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -416,7 +419,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -798,6 +801,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: b400afe9cc6516f43b279f785515fa3d, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1102 &-6581042630194585725
 AnimatorState:
   serializedVersion: 5
@@ -921,6 +927,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 5a44b5b47e50c814b8453034cae2440b, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &-6319116221176608345
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -939,8 +948,8 @@ AnimatorStateTransition:
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0
-  m_TransitionOffset: 0
-  m_ExitTime: 0.75
+  m_TransitionOffset: 0.003461541
+  m_ExitTime: 0.7499999
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1124,6 +1133,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: fba9f84f77a5bed44ba0df62bdcde309, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &-5650384038101909491
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1133,7 +1145,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -9050964637673404615}
@@ -1158,7 +1170,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6006985652111770353}
@@ -1299,7 +1311,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5038426858021693504}
@@ -1406,7 +1418,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4723798197743828150}
@@ -1484,7 +1496,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6367804553255638831}
@@ -1664,6 +1676,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 821e7cdf3d099cc44aef69e4ebd82408, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &-2754400871545623840
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1704,6 +1719,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 338a2d274eb15834fa3ae84accc2f4fc, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &-2728119747057009080
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1856,6 +1874,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 7961e5949a9f08847a355fd19b819f6f, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!114 &-2443602644279564291
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1871,6 +1892,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 0f09537af7a6e4547a67bcab39945ea8, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &-2411977102504074434
 AnimatorStateTransition:
   m_ObjectHideFlags: 3
@@ -1980,7 +2004,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -2033,7 +2057,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6581042630194585725}
@@ -2138,7 +2162,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -2166,7 +2190,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8514170470783604527}
@@ -2197,6 +2221,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 819c352df506b3b498ed74fec10e9936, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!114 &-1636849545661252688
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -2212,6 +2239,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 274b35025ca35a34d8bf5a99655a6c60, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &-1391070649010190732
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -2277,6 +2307,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: a246990267f4b2941b729919b6d1cfe5, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &-1238488198524174384
 AnimatorStateTransition:
   m_ObjectHideFlags: 3
@@ -2336,7 +2369,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5038426858021693504}
@@ -2482,7 +2515,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -2510,7 +2543,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -2538,7 +2571,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7687618588766999905}
@@ -2563,7 +2596,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -2597,6 +2630,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 069519dc5529fcb4f984e21ff7604f07, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
   m_trigger: AttackDone
 --- !u!1101 &-321261373571289861
 AnimatorStateTransition:
@@ -2713,7 +2749,7 @@ AnimatorController:
   - m_Name: SpeedY
     m_Type: 3
     m_DefaultFloat: 0
-    m_DefaultInt: -1
+    m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: isFacingLeft
@@ -2722,13 +2758,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: IsCrouching
+  - m_Name: Crouch
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: IsMidAir
+  - m_Name: isMidAir
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -2849,7 +2885,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 991123284552993427}
@@ -2874,7 +2910,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -958794281257821203}
@@ -2899,7 +2935,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 7675441283145156610}
@@ -2930,6 +2966,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: f56ae388737541047b3086c13efb2c6c, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
   m_trigger: LandDone
 --- !u!1101 &254082408459599044
 AnimatorStateTransition:
@@ -3047,6 +3086,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: d36c89b74fc7dc54fa1ba1ef9dabdf7e, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
   m_trigger: LedgeGrabDone
 --- !u!1102 &710774380450859229
 AnimatorState:
@@ -3204,6 +3246,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 6d68e75c0fb0cce4790809facbe08aeb, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1102 &1269401856087161981
 AnimatorState:
   serializedVersion: 5
@@ -3378,6 +3423,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: b1bed999dcd7b924a8cca5a86d7c5917, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &2433486948428414606
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -3518,6 +3566,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 17127dc47c45eef4f8d1095c1ddb3f96, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
   m_trigger: AttackDone
 --- !u!1101 &2994367743559464281
 AnimatorStateTransition:
@@ -3584,6 +3635,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 17127dc47c45eef4f8d1095c1ddb3f96, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
   m_trigger: AttackDone
 --- !u!1101 &3236989364663704079
 AnimatorStateTransition:
@@ -3646,7 +3700,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 292942233129465298}
@@ -3702,6 +3756,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 7a675004fb6a566498529abff1717250, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &3772547275730315611
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -3742,6 +3799,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: cd6a8d97ace24e443847ce2aab201339, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!114 &4005831889382173738
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -3757,6 +3817,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: c1dfc9fc31aa2fd4182a20324ae56d36, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &4331267653117188641
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -3794,7 +3857,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -3828,6 +3891,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 3a07d2fe58769df40b6cd646f33d5d22, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1102 &4516086889752592719
 AnimatorState:
   serializedVersion: 5
@@ -4061,6 +4127,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: b53440ce8c9813d479e5de581d5ea579, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1101 &5474714338545552513
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -4070,7 +4139,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -4156,6 +4225,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: a7e4c0f220f6464479c54bf79d8f99a6, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
   m_trigger: LandDone
 --- !u!1101 &5674440999271130537
 AnimatorStateTransition:
@@ -4464,7 +4536,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -4545,7 +4617,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsMidAir
+    m_ConditionEvent: isMidAir
     m_EventTreshold: 0
   - m_ConditionMode: 4
     m_ConditionEvent: SpeedY
@@ -4807,7 +4879,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCrouching
+    m_ConditionEvent: Crouch
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 913002593163769435}
@@ -4866,6 +4938,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: ea0dde1940b1771429f274d1751f2b44, type: 2}
   m_speed: 1
   loop: 1
+  useRootMotion: 0
+  useX: 0
+  useY: 0
 --- !u!1102 &8144272104622167928
 AnimatorState:
   serializedVersion: 5
@@ -5132,6 +5207,9 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: b567d1e9d20d63e44ac199684a79acc1, type: 2}
   m_speed: 1
   loop: 0
+  useRootMotion: 0
+  useX: 0
+  useY: 0
   m_trigger: LedgeGrabDone
 --- !u!1102 &8923771233392509117
 AnimatorState:
