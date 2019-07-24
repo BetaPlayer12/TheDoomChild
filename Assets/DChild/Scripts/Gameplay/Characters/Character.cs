@@ -57,7 +57,7 @@ namespace DChild.Gameplay
                 var facingComponents = GetComponentsInChildren<IFacingComponent>();
                 for (int i = 0; i < facingComponents.Length; i++)
                 {
-                    facingComponents[i].Update(m_facing);
+                    facingComponents[i].CallUpdate(m_facing);
                 }
             }
         }
