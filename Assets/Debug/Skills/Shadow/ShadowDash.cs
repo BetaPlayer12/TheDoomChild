@@ -69,8 +69,8 @@ namespace DChild.Gameplay.Characters.Players.Skill
             var dashes = GetComponentsInParent<Dash>();
             for (int i = 0; i < dashes.Length; i++)
             {
-                dashes[i].DashStart += OnDashStart;
-                dashes[i].DashEnd += OnDashEnd;
+                //dashes[i].DashStart += OnDashStart;
+                //dashes[i].DashEnd += OnDashEnd;
             }
             m_cooldownDuration.CountdownEnd += OnCooldownEnd;
             enabled = false;

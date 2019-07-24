@@ -13,7 +13,6 @@ namespace DChild.Gameplay.Characters.Players.State
         public event EventAction<CombatStateEventArgs> CombatModeChanged;
 
         private bool m_waitForBehaviour;
-        private bool m_hasLanded;
         private bool m_isGrounded;
         private bool m_isFalling;
         private bool m_isCrouched;
@@ -44,7 +43,6 @@ namespace DChild.Gameplay.Characters.Players.State
         private bool m_isAimingProjectile;
 
         public bool waitForBehaviour { get => m_waitForBehaviour; set => m_waitForBehaviour = value; }
-        public bool hasLanded { get => m_hasLanded; set => m_hasLanded = value; }
         public bool isGrounded { get => m_isGrounded; set => m_isGrounded = value; }
         public bool isFalling { get => m_isFalling; set => m_isFalling = value; }
         public bool isCrouched { get => m_isCrouched; set => m_isCrouched = value; }

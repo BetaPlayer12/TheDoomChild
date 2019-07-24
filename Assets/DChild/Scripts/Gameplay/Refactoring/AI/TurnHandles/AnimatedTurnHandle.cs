@@ -39,7 +39,7 @@ namespace Refactor.DChild.Gameplay.Characters
             m_animation.AnimationSet -= OnAnimationSet;
             m_animation.animationState.Complete -= OnComplete;
             TurnCharacter();
-            Update(m_character.facing);
+            CallUpdate(m_character.facing);
             CallTurnDone(new FacingEventArgs(m_character.facing));
         }
 
@@ -53,7 +53,7 @@ namespace Refactor.DChild.Gameplay.Characters
             m_isTurning = false;
         }
 
-        public void Update(HorizontalDirection facing)
+        public void CallUpdate(HorizontalDirection facing)
         {
             var currentScale = m_character.facing == HorizontalDirection.Left ? new Vector3(-1, 1, 1) : Vector3.one;
             m_character.transform.localScale = currentScale;

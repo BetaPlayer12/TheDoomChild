@@ -2,6 +2,6 @@
 {
     public interface IFacingComponent
     {
-        void Update(HorizontalDirection facing);
+        void CallUpdate(HorizontalDirection facing);
     }
 }
