@@ -74,7 +74,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_characterState.waitForBehaviour)
                 return;
 
-            //m_combatController?.CallUpdate(m_characterState, m_callArgs);
+            m_combatController?.CallUpdate(m_characterState, m_callArgs);
 
             if (m_characterState.waitForBehaviour)
                 return;

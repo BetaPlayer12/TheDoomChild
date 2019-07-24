@@ -45,7 +45,6 @@ namespace DChild.Gameplay.Characters.Players
         LootPicker lootPicker { get; }
         PlayerSensors sensors { get; }
         CharacterPhysics2D physics { get; }
-        PlayerCombatAnimation combatAnimation { get; }
         IsolatedObject isolatedObject { get; }
         CharacterColliders colliders { get; }
         IStatusEffectState statusEffectState { get; }
@@ -112,7 +111,6 @@ namespace DChild.Gameplay.Characters.Players
         public PlayerCharacterState characterState { get; private set; }
         public PlayerSensors sensors { get; private set; }
         public CharacterPhysics2D physics { get; private set; }
-        public PlayerCombatAnimation combatAnimation { get; private set; }
         public IsolatedObject isolatedObject { get; private set; }
         public CharacterColliders colliders { get; private set; }
         #endregion
@@ -248,7 +246,6 @@ namespace DChild.Gameplay.Characters.Players
             projectileThrowHandler = GetComponentInChildren<ProjectileThrowHandler>();
             sensors = GetComponentInChildren<PlayerSensors>();
             physics = GetComponent<CharacterPhysics2D>();
-            combatAnimation = GetComponent<PlayerCombatAnimation>();
             isolatedObject = GetComponent<IsolatedObject>();
             lootPicker = GetComponentInChildren<LootPicker>();
             colliders = GetComponentInChildren<CharacterColliders>();
