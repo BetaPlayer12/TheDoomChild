@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         [SerializeField]
         private CharacterPhysics2D m_physics;
         [SerializeField]
+        private PlayerSensorList m_sensorList;
+        [SerializeField]
         private Animator m_animator;
         [SerializeField]
         private AnimationParametersData m_animationParametersData;
@@ -21,6 +24,7 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         public Character character => m_character;
         public CharacterState state => m_state;
         public Animator animator => m_animator;
+        public RaySensor GetSensor(PlayerSensorList.SensorType sensorType) => m_sensorList.GetSensor(sensorType);
         public AnimationParametersData animationParametersData => m_animationParametersData;
         public CharacterPhysics2D physics => m_physics;
     }
