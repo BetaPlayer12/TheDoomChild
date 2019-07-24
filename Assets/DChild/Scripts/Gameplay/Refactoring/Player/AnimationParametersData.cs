@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters.Players
 {
-    [CreateAssetMenu(fileName = "AnimationParametersData", menuName ="DChild/Animation Parameters")]
+    [CreateAssetMenu(fileName = "AnimationParametersData", menuName = "DChild/Animation Parameters")]
     public class AnimationParametersData : SerializedScriptableObject
     {
         public enum Parameter
@@ -17,7 +17,6 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             Jump,
             Land,
             IsDashing,
-            DashStart,
             DoubleJump,
             LedgeGrab,
             Attack,

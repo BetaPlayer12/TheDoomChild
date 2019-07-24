@@ -56,7 +56,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             var wallStickController = GetComponentInParent<IWallStickController>();
             wallStickController.WallStickCall += OnWallStickCall;
             wallStickController.UpdateCall += OnUpdateCall;
-            GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
         }
 
         public void HandleWallStick()

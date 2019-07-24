@@ -1,5 +1,6 @@
 ﻿using System;
 using DChild.Gameplay.Characters.Players.State;
+using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private FallHandle m_fallHandle;
         [SerializeField]
         private LandHandle m_landHandle;
+
+        public event EventAction<EventActionArgs> LandExecuted;
 
         public void Initialize(ComplexCharacterInfo info)
         {
