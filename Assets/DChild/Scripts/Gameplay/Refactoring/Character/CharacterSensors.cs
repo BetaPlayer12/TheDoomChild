@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters
     {
         private ISensorFaceRotation[] m_rotators;
 
-        public void Update(HorizontalDirection facing)
+        public void CallUpdate(HorizontalDirection facing)
         {
             if (m_rotators == null)
             {
