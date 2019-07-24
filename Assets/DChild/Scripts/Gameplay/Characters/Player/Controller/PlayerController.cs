@@ -115,5 +115,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        public T GetSubController<T>() where T : ISubController
+        {
+            throw new NotImplementedException();
+        }
     }
 }

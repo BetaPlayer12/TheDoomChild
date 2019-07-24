@@ -14,34 +14,15 @@ namespace DChild
     {
         public AnimationReferenceAsset m_animation;
         public float m_speed = 1;
-        public bool loop;
-
-        [ToggleGroup("useRootMotion")]
-        public bool useRootMotion;
-        [ToggleGroup("useRootMotion")]
-        public bool useX;
-        [ToggleGroup("useRootMotion")]
-        public bool useY;
+        public bool loop = true;
 
         public sealed override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (useRootMotion)
-            {
-                var rootMotion = animator.GetComponentInChildren<SpineRootMotion>();
-                rootMotion.enabled = true;
-                rootMotion.useX = useX;
-                rootMotion.useY = useY;
-            }
             ApplyAnimation(animator, stateInfo, layerIndex, animator.GetComponentInChildren<SkeletonAnimation>());
         }
 
         public sealed override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (useRootMotion)
-            {
-                var rootMotion = animator.GetComponentInChildren<SpineRootMotion>();
-                rootMotion.enabled = false;
-            }
             base.OnStateExit(animator, stateInfo, layerIndex);
         }
 

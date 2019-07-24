@@ -1,15 +1,17 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
+using Refactor.DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class Crouch : MonoBehaviour, IPlayerExternalModule, IEventModule
+    public class Crouch : MonoBehaviour, IComplexCharacterModule, IControllableModule
     {
         //[SerializeField]
         //private SpineRootMotion m_rootMotion;
         private RaySensor m_headSensor;
         private Animator m_animator;
+        private string m_crouchParameter;
         private ICrouchState m_state;
 
         public bool HandleCrouch(bool input)
@@ -18,7 +20,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             {
                 //EnableRootMotion(true, true, false);
                 m_headSensor.enabled = true;
-                m_animator.SetBool("Crouch", true);
+                m_animator.SetBool(m_crouchParameter, true);
                 m_state.isCrouched = true;
             }
             else if (m_state.isCrouched)
@@ -46,31 +48,34 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_state.isCrouched)
             {
-                m_animator.SetBool("Crouch", false);
+                m_animator.SetBool(m_crouchParameter, false);
                 m_state.isCrouched = false;
                 //EnableRootMotion(false, false, false);
             }
         }
 
-        public void Initialize(IPlayerModules player)
+        public void ConnectTo(IMainController controller)
         {
-            m_headSensor = player.sensors.headSensor;
-            m_headSensor.enabled = false;
-            m_state = player.characterState;
-            //m_animator = player.animation.GetComponentInChildren<Animator>();
-            //m_rootMotion.enabled = false;
+            var crouchController = controller.GetSubController<ICrouchController>();
+            crouchController.CrouchCall += OnCrouchCall;
         }
 
-        public void ConnectEvents()
+        public void Initialize(ComplexCharacterInfo info)
         {
-            GetComponentInParent<ICrouchController>().CrouchCall += OnCrouchCall;
+            m_headSensor = info.GetSensor(PlayerSensorList.SensorType.Head);
+            m_headSensor.enabled = false;
+            m_animator = info.animator;
+            m_crouchParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsCrouching);
+            m_state = info.state;
         }
+
 
         private void OnCrouchCall(object sender, ControllerEventArgs eventArgs)
         {
             HandleCrouch(eventArgs.input.direction.isDownHeld);
         }
 
+       
         //private void EnableRootMotion(bool enable, bool useX, bool useY)
         //{
         //    m_rootMotion.enabled = enable;

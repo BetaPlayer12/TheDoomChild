@@ -10,8 +10,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CombatController : MonoBehaviour, IBasicAttackController, IProjectileThrowController
     {
-        [SerializeField]
-        private CountdownTimer m_attackIdleDuration;
+        //[SerializeField]
+        //private CountdownTimer m_attackIdleDuration;
 
         private IBehaviourState m_behaviourState;
         private ICombatState m_combatState;
@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallUpdate(IPlayerState state, ControllerEventArgs eventArgs)
         {
-            if (m_hasAttacked) m_attackIdleDuration.Tick(m_time.deltaTime);
+            //if (m_hasAttacked) m_attackIdleDuration.Tick(m_time.deltaTime);
 
             if (state.canAttack)
             {
@@ -169,7 +169,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void OnAttack()
         {
             m_hasAttacked = true;
-            m_attackIdleDuration.Reset();
+           // m_attackIdleDuration.Reset();
             m_physics.SetVelocity(Vector2.zero);
             m_behaviourState.waitForBehaviour = true;
         }
@@ -208,15 +208,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             //m_animation.animationState.Complete += OnComplete;
             //m_animation.animationState.Start += OnStart;
-            m_attackIdleDuration.CountdownEnd += OnCountdownEnd;
-            m_attackIdleDuration.Reset();
+           // m_attackIdleDuration.CountdownEnd += OnCountdownEnd;
+           // m_attackIdleDuration.Reset();
         }
-
-#if UNITY_EDITOR
-        public void Initialize(float duration)
-        {
-            m_attackIdleDuration = new CountdownTimer(duration);
-        }
-#endif
     }
 }
