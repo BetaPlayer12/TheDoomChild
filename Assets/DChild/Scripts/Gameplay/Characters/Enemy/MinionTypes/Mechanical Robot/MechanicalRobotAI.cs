@@ -176,11 +176,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
-
-            m_fireProjectile.SetProjectile(m_info.plasmaBall.projectileInfo);
-            m_fireProjectile.SetSpawnPoint(m_projectileSource);
-            m_sEventListener.Subscribe(m_info.plasmaBall.launchOnEvent, m_fireProjectile.LaunchProjectile);
-           
+            m_fireProjectile = new ProjectileLauncher(m_info.plasmaBall.projectileInfo, m_projectileSource);
+           // m_sEventListener.Subscribe(m_info.plasmaBall.launchOnEvent, m_fireProjectile.LaunchProjectile);
         }
 
 
