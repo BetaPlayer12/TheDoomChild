@@ -2,7 +2,6 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.State
 {
@@ -89,7 +88,5 @@ namespace DChild.Gameplay.Characters.Players.State
                 CombatModeChanged?.Invoke(this, new CombatStateEventArgs(m_inCombat));
             }
         }
-
-
     }
 }

@@ -45,7 +45,6 @@ namespace Refactor.DChild.Gameplay.Characters
 
         private IEnumerator FlinchRoutine()
         {
-            Debug.Log("trigger flinch");
             m_spine.SetAnimation(0, m_animation, false, 0);
             m_spine.AddEmptyAnimation(0, 0.2f, 0);
             m_isFlinching = true;

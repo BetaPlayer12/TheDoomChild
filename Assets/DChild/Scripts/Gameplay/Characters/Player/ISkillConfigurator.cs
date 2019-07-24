@@ -2,6 +2,6 @@
 {
     public interface ISkillConfigurator
     {
-        void Enable(MovementSkill skill, bool enableSkill);
+        void Enable(PrimarySkill skill, bool enableSkill);
     }
 }
