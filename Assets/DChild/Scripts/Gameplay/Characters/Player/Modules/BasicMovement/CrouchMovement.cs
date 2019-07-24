@@ -10,6 +10,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [SerializeField]
         private GroundMoveHandler m_moveHandler;
         private CharacterPhysics2D m_characterPhysics2D;
+        private Animator m_animator;
 
         private ICrouchState m_state;
         private IFacingConfigurator m_facingConfig;

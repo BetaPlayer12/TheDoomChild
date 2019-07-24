@@ -27,6 +27,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (state.isCrouched)
                 {
                     CrouchMoveCall?.Invoke(this, callArgs);
+                }else if (state.isMoving)
+                {
+                    Debug.Log("Moving");
                 }
                 else
                 {
@@ -37,6 +40,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
+
+
+
+
+            MoveCall?.Invoke(this, callArgs);
+            if (state.isMoving)
+            {
+                Debug.Log("Moving");
+            }
+
             if (state.hasLanded)
             {
 
