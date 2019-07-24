@@ -17,6 +17,12 @@ namespace DChild.Gameplay
 
         public void AlignRotationToFacing(HorizontalDirection direction)
         {
+#if UNITY_EDITOR
+            if(m_sensor == null)
+            {
+                m_sensor = GetComponent<RaySensor>();
+            }
+#endif
             m_sensor.SetRotation(direction == HorizontalDirection.Left ? m_leftRotation : m_rightRotation);
         }
 

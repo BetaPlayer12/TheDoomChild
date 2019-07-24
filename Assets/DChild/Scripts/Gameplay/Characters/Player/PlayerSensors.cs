@@ -2,6 +2,7 @@
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+
     [System.Serializable]
     public class PlayerSensors : MonoBehaviour
     {

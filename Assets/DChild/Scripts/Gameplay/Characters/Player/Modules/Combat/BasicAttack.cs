@@ -22,7 +22,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_currentComboIndex;
         private bool m_isCoolingOff;
 
-        private IPlayerAnimationState m_animationState;
         private IBasicAttackAnimation m_animation;
         private IBehaviourState m_behaviourState;
         private IPlayerState m_characterState;
@@ -31,10 +30,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Initialize(IPlayerModules player)
         {
-            m_animationState = player.animationState;
             m_characterState = player.characterState;
             m_combatState = player.characterState;
-            m_animation = player.animation;
+            //m_animation = player.animation;
             m_time = player.isolatedObject;
             m_behaviourState = player.characterState;
         }
@@ -165,7 +163,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnBasicAttackCall(object sender, CombatEventArgs eventArgs)
         {
-            m_animationState.hasAttacked = true;
             HandleBasicAttack(eventArgs.facing.currentFacingDirection);
         }
 
@@ -186,7 +183,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnUpwardAttackCall(object sender, CombatEventArgs eventArgs)
         {
-            m_animationState.hasAttacked = true;
             HandleUpwardAttack(eventArgs.facing.currentFacingDirection);
         }
 

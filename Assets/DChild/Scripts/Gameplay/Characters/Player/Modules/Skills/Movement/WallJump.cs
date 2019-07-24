@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters.Players.Skill
             base.Initialize(player);
             m_state = player.characterState;
             m_time = player.isolatedObject;
-            m_input = player.animation.GetComponent<PlayerInput>();
+            //m_input = player.animation.GetComponent<PlayerInput>();
         }
 
         public override void HandleJump()

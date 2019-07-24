@@ -10,16 +10,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CombatController : MonoBehaviour, IBasicAttackController, IProjectileThrowController
     {
-        [SerializeField]
-        private CountdownTimer m_attackIdleDuration;
+        //[SerializeField]
+        //private CountdownTimer m_attackIdleDuration;
 
         private IBehaviourState m_behaviourState;
         private ICombatState m_combatState;
         private IHighJumpState m_highjumpState;
-        private IPlayerAnimationState m_animationState;
         private IIsolatedTime m_time;
 
-        private PlayerAnimation m_animation;
         private CharacterPhysics2D m_physics;
         private CombatEventArgs m_combatEventArgs;
         private bool m_hasAttacked;
@@ -35,21 +33,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool isMainHandPressed { get; set; }
         public bool isOffHandPressed { get; set; }
 
-        public void Initialize(CharacterPhysics2D physics, IFacing facing, IPlayerAnimationState animationState, IBehaviourState behaviourState, ICombatState combatState, PlayerAnimation animation, IHighJumpState highjumpState, IIsolatedTime time)
+        public void Initialize(CharacterPhysics2D physics, IFacing facing,  IBehaviourState behaviourState, ICombatState combatState, IHighJumpState highjumpState, IIsolatedTime time)
         {
             m_time = time;
-            m_animation = animation;
+
             m_physics = physics;
             m_combatEventArgs = new CombatEventArgs(facing);
             m_behaviourState = behaviourState;
-            m_animationState = animationState;
             m_combatState = combatState;
             m_highjumpState = highjumpState;
         }
 
         public void CallUpdate(IPlayerState state, ControllerEventArgs eventArgs)
         {
-            if (m_hasAttacked) m_attackIdleDuration.Tick(m_time.deltaTime);
+            //if (m_hasAttacked) m_attackIdleDuration.Tick(m_time.deltaTime);
 
             if (state.canAttack)
             {
@@ -96,28 +93,28 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void Update()
         {
-            //used bc sometimes on complete function is not called
-            //causing to player to get stuck in after attack animation
-            if (m_animationState.hasAttacked)
-            {
-                if (m_animation.animationState.GetCurrent(0).ToString() == m_animation.currentAttackAnimation)
-                {
-                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                    {
-                        OnComplete(m_animation.animationState.GetCurrent(0));
-                    }
-                }
-            }
-            else
-            {
-                if (m_behaviourState.waitForBehaviour)
-                {
-                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                    {
-                        OnComplete(m_animation.animationState.GetCurrent(0));
-                    }
-                }
-            }
+            ////used bc sometimes on complete function is not called
+            ////causing to player to get stuck in after attack animation
+            //if (m_animationState.hasAttacked)
+            //{
+            //    if (m_animation.animationState.GetCurrent(0).ToString() == m_animation.currentAttackAnimation)
+            //    {
+            //        if (m_animation.animationState.GetCurrent(0).IsComplete)
+            //        {
+            //            OnComplete(m_animation.animationState.GetCurrent(0));
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    if (m_behaviourState.waitForBehaviour)
+            //    {
+            //        if (m_animation.animationState.GetCurrent(0).IsComplete)
+            //        {
+            //            OnComplete(m_animation.animationState.GetCurrent(0));
+            //        }
+            //    }
+            //}
         }
 
         private void HandleBasicJumpAttacks(PlayerInput input)
@@ -172,55 +169,47 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void OnAttack()
         {
             m_hasAttacked = true;
-            m_attackIdleDuration.Reset();
+           // m_attackIdleDuration.Reset();
             m_physics.SetVelocity(Vector2.zero);
             m_behaviourState.waitForBehaviour = true;
         }
 
         private void OnComplete(TrackEntry trackEntry)
         {
-            if (trackEntry.Animation.Name == m_animation.currentAttackAnimation)
-            {
-                m_behaviourState.waitForBehaviour = false;
-                m_physics.simulateGravity = true;
-                m_combatState.canAttack = true;
-                m_combatState.isAttacking = false;
-                m_physics.SetVelocity(0);
-                isMainHandPressed = false;
-                isOffHandPressed = false;
-            }
+            //if (trackEntry.Animation.Name == m_animation.currentAttackAnimation)
+            //{
+            //    m_behaviourState.waitForBehaviour = false;
+            //    m_physics.simulateGravity = true;
+            //    m_combatState.canAttack = true;
+            //    m_combatState.isAttacking = false;
+            //    m_physics.SetVelocity(0);
+            //    isMainHandPressed = false;
+            //    isOffHandPressed = false;
+            //}
         }
 
         private void OnStart(TrackEntry trackEntry)
         {
-            if (trackEntry.Animation.Name == m_animation.currentAttackAnimation)
-            {
-                //m_behaviourState.waitForBehaviour = true;
-                m_combatState.canAttack = false;
-                m_combatState.isAttacking = true;
-                m_physics.SetVelocity(Vector2.zero);
-            }
+            //if (trackEntry.Animation.Name == m_animation.currentAttackAnimation)
+            //{
+            //    //m_behaviourState.waitForBehaviour = true;
+            //    m_combatState.canAttack = false;
+            //    m_combatState.isAttacking = true;
+            //    m_physics.SetVelocity(Vector2.zero);
+            //}
         }
 
         private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
         {
             m_hasAttacked = false;
-            m_animationState.hasAttacked = false;
         }
 
         private void Start()
         {
-            m_animation.animationState.Complete += OnComplete;
-            m_animation.animationState.Start += OnStart;
-            m_attackIdleDuration.CountdownEnd += OnCountdownEnd;
-            m_attackIdleDuration.Reset();
+            //m_animation.animationState.Complete += OnComplete;
+            //m_animation.animationState.Start += OnStart;
+           // m_attackIdleDuration.CountdownEnd += OnCountdownEnd;
+           // m_attackIdleDuration.Reset();
         }
-
-#if UNITY_EDITOR
-        public void Initialize(float duration)
-        {
-            m_attackIdleDuration = new CountdownTimer(duration);
-        }
-#endif
     }
 }

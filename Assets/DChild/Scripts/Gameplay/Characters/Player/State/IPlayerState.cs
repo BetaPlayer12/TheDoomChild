@@ -7,7 +7,6 @@ namespace DChild.Gameplay.Characters.Players.State
     public interface IPlayerState
     {
         bool waitForBehaviour { get; }
-        bool hasLanded { get; }
         bool isGrounded { get; }
         bool isFalling { get; }
         bool isCrouched { get; }

@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Skill
             m_facing = player;
             m_physics = player.physics;
             m_time = player.isolatedObject;
-            m_animator = player.animation.GetComponentInChildren<Animator>();
+            //m_animator = player.animation.GetComponentInChildren<Animator>();
         }
 
         protected override void UseSkill()

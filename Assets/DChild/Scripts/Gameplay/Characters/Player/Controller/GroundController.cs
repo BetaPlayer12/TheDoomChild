@@ -5,18 +5,17 @@ using UnityEngine;
 namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class GroundController : MonoBehaviour, IGroundMoveController, ICrouchController, IPlatformDropController,
-                                                   IJumpController, ILandController, IGroundDashController
+                                                   IJumpController, IGroundDashController
     {
         public event EventAction<ControllerEventArgs> MoveCall;
         public event EventAction<ControllerEventArgs> CrouchCall;
         public event EventAction<ControllerEventArgs> CrouchMoveCall;
         public event EventAction<EventActionArgs> JumpCall;
-        public event EventAction<EventActionArgs> LandCall;
         public event EventAction<EventActionArgs> DashCall;
         public event EventAction<EventActionArgs> ShadowDashCall;
         public event EventAction<ControllerEventArgs> PlatformDropCall;
 
-        public void CallFixedUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
+        public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             if (state.isDashing)
             {
@@ -35,15 +34,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        public void CallUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
+        public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
-            if (state.hasLanded)
-            {
-
-                LandCall?.Invoke(this, EventActionArgs.Empty);
-                return;
-            }
-
             CrouchCall?.Invoke(this, callArgs);
 
             if (state.isCrouched)
@@ -65,7 +57,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     JumpCall?.Invoke(this, EventActionArgs.Empty);
                 }
 
-                else if (skills.IsEnabled(MovementSkill.Dash))
+                else if (skills.IsEnabled(PrimarySkill.Dash))
                 {
                     if (callArgs.input.skillInput.isDashPressed)
                     {

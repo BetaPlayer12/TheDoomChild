@@ -40,12 +40,12 @@ public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
                     if (hit[i].tag == "ShadowPassable")
                     {
                         PassWall(hit[i]);
-                        m_skills.Enable(MovementSkill.WallJump, false); // to avoid wallsticking when passing walls using shadowmorph
+                        m_skills.Enable(PrimarySkill.WallJump, false); // to avoid wallsticking when passing walls using shadowmorph
                     }
 
                     else
                     {
-                        m_skills.Enable(MovementSkill.WallJump, true);
+                        m_skills.Enable(PrimarySkill.WallJump, true);
                     }
                 }
             }
@@ -68,7 +68,7 @@ public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
 
     private void OnIgnoreColliderEnd(object sender, EventActionArgs eventArgs)
     {
-        m_skills.Enable(MovementSkill.WallJump, true);
+        m_skills.Enable(PrimarySkill.WallJump, true);
         if (m_wall != null)
         {
             m_colliders.ClearIgnoredCollider(m_wall);
