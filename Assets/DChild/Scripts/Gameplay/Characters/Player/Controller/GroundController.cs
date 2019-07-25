@@ -5,13 +5,12 @@ using UnityEngine;
 namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class GroundController : MonoBehaviour, IGroundMoveController, ICrouchController, IPlatformDropController,
-                                                   IJumpController, ILandController, IGroundDashController
+                                                   IJumpController, IGroundDashController
     {
         public event EventAction<ControllerEventArgs> MoveCall;
         public event EventAction<ControllerEventArgs> CrouchCall;
         public event EventAction<ControllerEventArgs> CrouchMoveCall;
         public event EventAction<EventActionArgs> JumpCall;
-        public event EventAction<EventActionArgs> LandCall;
         public event EventAction<EventActionArgs> DashCall;
         public event EventAction<EventActionArgs> ShadowDashCall;
         public event EventAction<ControllerEventArgs> PlatformDropCall;
@@ -40,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
+<<<<<<< HEAD
 
 
 
@@ -57,6 +57,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 return;
             }
 
+=======
+>>>>>>> 8a39fd8cd7f0cc51ad8649a6c0042de0166c2f82
             CrouchCall?.Invoke(this, callArgs);
 
             if (state.isCrouched)

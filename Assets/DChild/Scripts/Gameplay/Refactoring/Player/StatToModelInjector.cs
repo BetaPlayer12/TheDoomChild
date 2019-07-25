@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters.Players
 {
+
     public class StatToModelInjector : MonoBehaviour
     {
         [SerializeField]

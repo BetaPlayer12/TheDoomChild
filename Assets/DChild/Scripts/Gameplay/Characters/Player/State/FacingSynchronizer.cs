@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_facingLeftParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsFacingLeft);
             info.character.CharacterTurn += OnCharacterTurn;
             var facing = info.character.facing;
-            Update(facing);
+            CallUpdate(facing);
         }
 
         private void AlignTransformScales(HorizontalDirection facing)
@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             }
         }
 
-        public void Update(HorizontalDirection facing)
+        public void CallUpdate(HorizontalDirection facing)
         {
             if (m_animator)
             {
@@ -40,7 +40,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnCharacterTurn(object sender, FacingEventArgs eventArgs)
         {
-            Update(eventArgs.currentFacingDirection);
+            CallUpdate(eventArgs.currentFacingDirection);
         }
     }
 

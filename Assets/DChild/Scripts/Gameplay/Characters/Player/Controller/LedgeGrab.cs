@@ -76,7 +76,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void ConnectEvents()
         {
-            GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
             GetComponentInParent<ILedgeController>().LedgeGrabCall += PullFromCliff;
         }
 
