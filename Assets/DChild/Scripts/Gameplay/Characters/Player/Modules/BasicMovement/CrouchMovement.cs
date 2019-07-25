@@ -14,7 +14,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CharacterPhysics2D m_characterPhysics2D;
         private Animator m_animator;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+        private string m_speedParameter;
+>>>>>>> 8a39fd8cd7f0cc51ad8649a6c0042de0166c2f82
 =======
         private string m_speedParameter;
 >>>>>>> 8a39fd8cd7f0cc51ad8649a6c0042de0166c2f82
@@ -55,6 +59,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         }
 
         public void Initialize(ComplexCharacterInfo info)
+<<<<<<< HEAD
         {
             m_character = info.character;
             m_characterPhysics2D = info.physics;
@@ -69,6 +74,22 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             controller.GetSubController<ICrouchController>().CrouchMoveCall += OnCrouchMoveCall;
         }
 
+=======
+        {
+            m_character = info.character;
+            m_characterPhysics2D = info.physics;
+            m_moveHandler.SetPhysics(m_characterPhysics2D);
+            m_state = info.state;
+            m_animator = info.animator;
+            m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
+        }
+
+        public void ConnectTo(IMainController controller)
+        {
+            controller.GetSubController<ICrouchController>().CrouchMoveCall += OnCrouchMoveCall;
+        }
+
+>>>>>>> 8a39fd8cd7f0cc51ad8649a6c0042de0166c2f82
     }
 
 }
