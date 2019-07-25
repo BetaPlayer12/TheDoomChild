@@ -74,15 +74,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             return wallContactPoint;
         }
 
-
-        private PlayerAnimation m_playerAnimation;
-
-
-
-
         public void ConnectEvents()
         {
-            GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
             GetComponentInParent<ILedgeController>().LedgeGrabCall += PullFromCliff;
         }
 
@@ -94,7 +88,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_ledgeSensorEdge = player.sensors.ledgeSensorEdge;
             m_groundHeightSensor = player.sensors.groundHeightSensor;
             m_state = player.characterState;
-            m_playerAnimation = player.animation;
+            //m_playerAnimation = player.animation;
             m_physics = player.physics;
             m_dropPlatform = player.characterState;
         }
@@ -111,7 +105,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             Debug.Log("Can LedgeGrab is " + m_state.canLedgeGrab);
             if (m_state.canLedgeGrab)
             {
-                
+
 
                 if (m_ledgeSensorCliff.isDetecting == true && m_ledgeSensorEdge.isDetecting == false && m_groundHeightSensor.isDetecting == false)
                 {
@@ -141,17 +135,17 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state.waitForBehaviour = true;
             m_state.isLedging = true;
             yield return new WaitForEndOfFrame();
-            m_playerAnimation.DoLedgeGrab(m_characterFacing.currentFacingDirection);
-            m_playerAnimation.EnableRootMotion(true, true);
-            m_playerAnimation.AnimationSet += OnAnimationSet;
-            m_playerAnimation.animationState.Complete += OnComplete;
+            //m_playerAnimation.DoLedgeGrab(m_characterFacing.currentFacingDirection);
+            //m_playerAnimation.EnableRootMotion(true, true);
+            //m_playerAnimation.AnimationSet += OnAnimationSet;
+            //m_playerAnimation.animationState.Complete += OnComplete;
             while (m_state.isLedging)
             {
                 yield return null;
             }
 
-            m_playerAnimation.AnimationSet -= OnAnimationSet;
-            m_playerAnimation.animationState.Complete -= OnComplete;
+            //m_playerAnimation.AnimationSet -= OnAnimationSet;
+            //m_playerAnimation.animationState.Complete -= OnComplete;
 
         }
 
@@ -170,7 +164,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             m_state.waitForBehaviour = false;
             m_state.isLedging = false;
-            m_playerAnimation.DisableRootMotion();
+            // m_playerAnimation.DisableRootMotion();
         }
 
 

@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void Awake()
         {
-            GetComponentInParent<Player>().GetComponentInChildren<ILandController>().LandCall += OnLandCall;
+            //GetComponentInParent<Player>().GetComponentInChildren<ILandController>().LandCall += OnLandCall;
             m_spawnPosition = GetComponentInParent<Player>().transform;
         }
 
