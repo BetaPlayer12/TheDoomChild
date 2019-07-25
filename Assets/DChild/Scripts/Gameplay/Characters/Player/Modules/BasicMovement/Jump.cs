@@ -1,28 +1,28 @@
 ﻿using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public abstract class Jump : MonoBehaviour
+    public abstract class Jump : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         [MinValue(0f)]
         protected float m_power = 1f;
-        protected CharacterPhysics2D m_character;
+        protected CharacterPhysics2D m_physics;
         protected float m_movingAnimationVelocityTreshold;
 
         protected IJumpModifier m_modifier;
-        protected IFacingConfigurator m_facing;
+        protected Character m_character;
 
         public event EventAction<EventActionArgs> JumpStart;
         public event EventAction<EventActionArgs> JumpEnd;
 
-        public virtual void Initialize(IPlayerModules player)
+        public virtual void Initialize(ComplexCharacterInfo info)
         {
-            m_facing = player;
-            m_character = player.physics;
-            m_modifier = player.modifiers;
+            m_character = info.character;
+            m_physics = info.physics;
         }
 
         protected void CallJumpStart() => JumpStart?.Invoke(this, EventActionArgs.Empty);
@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public virtual void HandleJump()
         {
-            m_character.SetVelocity(y: 0);
+            m_physics.SetVelocity(y: 0);
         }
 
 #if UNITY_EDITOR
@@ -38,6 +38,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             m_power = jumpPower;
         }
+
+       
 #endif
     }
 }

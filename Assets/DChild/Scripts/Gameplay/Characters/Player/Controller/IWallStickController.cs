@@ -6,6 +6,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         event EventAction<EventActionArgs> WallStickCall;
         event EventAction<EventActionArgs> WallSlideCall;
-        event EventAction<ControllerEventArgs> UpdateCall;
+        event EventAction<ControllerEventArgs> AttempWallStickCall;
     }
 }

@@ -21,6 +21,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> LedgeGrabCall;//
         public event EventAction<ControllerEventArgs> FeetLedgeCall;//
         public event EventAction<EventActionArgs> WallSlideCall;
+        public event EventAction<ControllerEventArgs> AttempWallStickCall;
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
@@ -105,6 +106,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
 
             UpdateCall?.Invoke(this, callArgs);
+            if (skills.IsEnabled(PrimarySkill.WallJump))
+            {
+                AttempWallStickCall?.Invoke(this, callArgs);
+            }
         }
     }
 }

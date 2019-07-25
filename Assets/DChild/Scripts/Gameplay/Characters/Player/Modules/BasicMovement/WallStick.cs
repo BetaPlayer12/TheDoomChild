@@ -37,7 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             var wallStickController = controller.GetSubController<IWallStickController>();
             wallStickController.WallStickCall += OnWallStickCall;
             wallStickController.WallSlideCall += OnWallSlideCall;
-            wallStickController.UpdateCall += OnUpdateCall;
+            wallStickController.AttempWallStickCall += OnAttempWallStickCall;
         }
 
         public void Initialize(ComplexCharacterInfo info)
@@ -68,7 +68,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         #region WallStick Only
         private void AttemptToWallStick()
         {
-            //if (m_skills.IsEnabled(PrimarySkill.WallJump) && m_wallStickState.isStickingToWall == false)
+            if( m_wallStickState.isStickingToWall == false)
             {
                 m_groundHeightSensor.Cast();
                 if (m_groundHeightSensor.isDetecting == false)
@@ -167,7 +167,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics.simulateGravity = true;
         }
 
-        private void OnUpdateCall(object sender, ControllerEventArgs eventArgs)
+        private void OnAttempWallStickCall(object sender, ControllerEventArgs eventArgs)
         {
             AttemptToWallStick();
         }
