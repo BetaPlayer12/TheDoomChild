@@ -36,7 +36,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
-            MoveCall?.Invoke(this, callArgs);
             CrouchCall?.Invoke(this, callArgs);
 
             if (state.isCrouched)

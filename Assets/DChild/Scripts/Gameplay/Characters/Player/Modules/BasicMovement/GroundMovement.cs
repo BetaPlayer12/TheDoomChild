@@ -5,11 +5,10 @@ using Sirenix.OdinInspector;
 using Holysoft.Collections;
 using Holysoft.Event;
 using UnityEngine;
-using Refactor.DChild.Gameplay.Characters.Players;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class GroundMovement : MonoBehaviour, IComplexCharacterModule, IControllableModule
+    public class GroundMovement : MonoBehaviour, IPlayerExternalModule, IEventModule
     {
         [SerializeField]
         private CountdownTimer m_changeSpeedDuration;
@@ -39,34 +38,23 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private CharacterPhysics2D m_characterPhysics2D;
 
-        private Animator m_animation;
         private IMoveState m_state;
         private IIsolatedTime m_time;
-        private Character m_character;
+        private IFacingConfigurator m_facingConfig;
         private HorizontalDirection m_previousFacing;
         private IPlayerState m_characterState;
-        
-    
 
         private bool m_increaseVelocity;
-        
 
-        public void Initialize(ComplexCharacterInfo info)
+        public void Initialize(IPlayerModules player)
         {
-            m_time = info.character.isolatedObject;
-            m_characterPhysics2D = info.physics;
+            m_time = player.isolatedObject;
+            m_characterPhysics2D = player.physics;
             m_moveHandler.SetPhysics(m_characterPhysics2D);
-            m_state = info.state;
-            m_character = info.character;
-            m_previousFacing = m_character.facing;
-            m_characterState = info.state;
-            m_animation = info.animator;
-           
-        }
-
-        public void ConnectTo(IMainController controller)
-        {
-            controller.GetSubController<IGroundMoveController>().MoveCall += OnMoveCall;
+            m_state = player.characterState;
+            m_facingConfig = player;
+            m_previousFacing = player.currentFacingDirection;
+            m_characterState = player.characterState;
         }
 
         public void Move(float direction)
@@ -99,7 +87,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                 if (m_increaseVelocity)
                 {
-                    if (m_character.facing != m_previousFacing)
+                    if (m_facingConfig.currentFacingDirection != m_previousFacing)
                     {
                         ResetMoveVelocity();
                     }
@@ -111,12 +99,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                 m_moveHandler.Accelerate();
                 m_state.isMoving = true;
-                m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
-
-
-                // Movement Velocity here
-                m_characterPhysics2D.SetVelocity(moveDirection);
-
+                m_facingConfig.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
         }
 
@@ -124,7 +107,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             var moveDirection = m_characterPhysics2D.velocity.x >= 0 ? Vector2.right : Vector2.left;
             m_moveHandler.SetDirection(moveDirection);
-  
+        }
+
+        public void ConnectEvents()
+        {
+            GetComponentInParent<IGroundMoveController>().MoveCall += OnMoveCall;
         }
 
         private void Update()
@@ -158,7 +145,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state.isSprinting = true;
             m_increaseVelocity = true;
             m_moveHandler.IncreaseMoveVelocity(m_sprintSpeed, m_sprintAcceleration, m_sprintDecceleration);
-            m_previousFacing = m_character.facing;
+            m_previousFacing = m_facingConfig.currentFacingDirection;
         }
 
         private void Awake()
@@ -172,8 +159,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             m_moveHandler = new GroundMoveHandler(maxSpeed, acceleration, decceleration);
         }
-
-       
 
 #endif
     }

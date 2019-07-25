@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_groundSensor.SensorCast += OnSensorCast;
             m_state = player.characterState;
             
-            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            GetComponentInParent<ILandController>().LandCall += OnLandCall;
         }
 
         private void OnSensorCast(object sender, RaySensorCastEventArgs eventArgs)

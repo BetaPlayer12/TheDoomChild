@@ -56,7 +56,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             var wallStickController = GetComponentInParent<IWallStickController>();
             wallStickController.WallStickCall += OnWallStickCall;
             wallStickController.UpdateCall += OnUpdateCall;
-            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            GetComponentInParent<ILandController>().LandCall += OnLandCall;
         }
 
         public void HandleWallStick()
@@ -102,7 +102,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnWallStickCall(object sender, EventActionArgs eventArgs)
         {
-            if (m_skills.IsEnabled(PrimarySkill.WallJump))
+            if (m_skills.IsEnabled(MovementSkill.WallJump))
                 HandleWallStick();
         }
 
@@ -118,7 +118,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnUpdateCall(object sender, ControllerEventArgs eventArgs)
         {
-            if (m_skills.IsEnabled(PrimarySkill.WallJump))
+            if (m_skills.IsEnabled(MovementSkill.WallJump))
             {
                 m_groundHeightSensor.Cast();
                 if (m_groundHeightSensor.isDetecting == false)

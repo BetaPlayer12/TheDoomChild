@@ -4,9 +4,7 @@
     {
         bool inCombat { get; set; }
         bool canAttack { get; set; }
-        bool waitForBehaviour { set; }
         bool isAttacking { get; set; }
-        bool isGrounded { get; }
     }
 
     public interface IProjectileThrowState

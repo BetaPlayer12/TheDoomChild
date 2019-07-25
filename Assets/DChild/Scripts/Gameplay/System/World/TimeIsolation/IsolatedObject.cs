@@ -19,9 +19,9 @@ namespace DChild.Gameplay.Systems.WorldComponents
     {
         [SerializeField]
         private bool m_registerToWorldTime = true;
-        [ShowInInspector, MinValue(0f)]
+        [SerializeField, MinValue(0f)]
         private float m_slowFactor = 0;
-        [ShowInInspector, MinValue(0f)]
+        [SerializeField, MinValue(0f)]
         protected float m_fastFactor = 0;
 
         [SerializeField]

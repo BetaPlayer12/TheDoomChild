@@ -6,12 +6,10 @@ using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Spine.Unity.Modules;
-using Refactor.DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Characters.Players.Modules;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public abstract class Dash : MonoBehaviour, IComplexCharacterModule, IControllableModule
+    public abstract class Dash : MonoBehaviour, IPlayerExternalModule
     {
         [SerializeField]
         protected SkeletonGhost m_ghosting;
@@ -22,38 +20,30 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [SerializeField]
         protected CountdownTimer m_duration;
         protected CharacterPhysics2D m_physics;
-        protected Character m_character;
-        private Animator m_animator;
-        private string m_isDashingParameter;
+        protected IIsolatedTime m_time;
+        protected IFacing m_facing;
         protected Vector2 m_direction;
 
         protected IDashState m_state;
-        public virtual void Initialize(ComplexCharacterInfo info)
+        protected IDashModifier m_modifier;
+
+        public event EventAction<EventActionArgs> DashStart;
+        public event EventAction<EventActionArgs> DashEnd;
+
+        public virtual void Initialize(IPlayerModules player)
         {
-            m_physics = info.physics;
-            m_character = info.character;
-            m_animator = info.animator;
-            m_isDashingParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsDashing);
-            m_state = info.state;
+            m_physics = player.physics;
+            m_time = player.isolatedObject;
+            m_facing = player;
+            m_state = player.characterState;
+            m_modifier = player.modifiers;
         }
 
-        public virtual void ConnectTo(IMainController controller)
-        {
-            controller.ControllerDisabled += OnControllerDisabled;
-        }
-
-        protected abstract void OnDashCall(object sender, EventActionArgs eventArgs);
-
-        protected void TurnOnAnimation(bool value) => m_animator.SetBool(m_isDashingParameter, value);
-
-        protected abstract void StopDash();
+        protected void CallDashStart() => DashStart?.Invoke(this, EventActionArgs.Empty);
+        protected void CallDashEnd() => DashEnd?.Invoke(this, EventActionArgs.Empty);
 
         protected abstract void OnDashDurationEnd(object sender, EventActionArgs eventArgs);
 
-        private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
-        {
-            StopDash();
-        }
         protected virtual void Awake()
         {
             m_duration.CountdownEnd += OnDashDurationEnd;
@@ -61,7 +51,15 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         protected virtual void Update()
         {
-            m_duration.Tick(m_character.isolatedObject.deltaTime);
+            m_duration.Tick(m_time.deltaTime);
         }
+
+#if UNITY_EDITOR
+        public void Initialize(float power, float duration)
+        {
+            m_power = power;
+            m_duration = new CountdownTimer(duration);
+        }
+#endif
     }
 }

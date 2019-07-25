@@ -25,7 +25,6 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         [SerializeField]
         private GroudednessHandle m_groundednessHandle;
 
-
         public Character character => m_character;
         public CharacterState state => m_state;
         public Animator animator => m_animator;

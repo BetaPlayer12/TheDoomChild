@@ -45,6 +45,8 @@ namespace DChild.Gameplay.Characters.Players
         LootPicker lootPicker { get; }
         PlayerSensors sensors { get; }
         CharacterPhysics2D physics { get; }
+        PlayerAnimation animation { get; }
+        PlayerCombatAnimation combatAnimation { get; }
         IsolatedObject isolatedObject { get; }
         CharacterColliders colliders { get; }
         IStatusEffectState statusEffectState { get; }
@@ -52,6 +54,7 @@ namespace DChild.Gameplay.Characters.Players
         ICappedStat magic { get; }
         PlayerModifiers modifiers { get; }
         PlayerCharacterState characterState { get; }
+        PlayerAnimationState animationState { get; }
         Skills skills { get; }
     }
 
@@ -109,8 +112,11 @@ namespace DChild.Gameplay.Characters.Players
         public LootPicker lootPicker { get; private set; }
         [ShowInInspector]
         public PlayerCharacterState characterState { get; private set; }
+        public PlayerAnimationState animationState { get; private set; }
         public PlayerSensors sensors { get; private set; }
         public CharacterPhysics2D physics { get; private set; }
+        public new PlayerAnimation animation { get; private set; }
+        public PlayerCombatAnimation combatAnimation { get; private set; }
         public IsolatedObject isolatedObject { get; private set; }
         public CharacterColliders colliders { get; private set; }
         #endregion
@@ -246,11 +252,14 @@ namespace DChild.Gameplay.Characters.Players
             projectileThrowHandler = GetComponentInChildren<ProjectileThrowHandler>();
             sensors = GetComponentInChildren<PlayerSensors>();
             physics = GetComponent<CharacterPhysics2D>();
+            animation = GetComponent<PlayerAnimation>();
+            combatAnimation = GetComponent<PlayerCombatAnimation>();
             isolatedObject = GetComponent<IsolatedObject>();
             lootPicker = GetComponentInChildren<LootPicker>();
             colliders = GetComponentInChildren<CharacterColliders>();
             m_soulSkillManager = new SoulSkillManager(this);
             characterState = new PlayerCharacterState();
+            animationState = new PlayerAnimationState();
             m_statsHandle.Initialize(m_attributes, m_equipment, m_health, m_magic);
             m_statusEffectState = new StatusEffectState();
             InitializeBehaviours();
