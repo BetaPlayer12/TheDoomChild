@@ -8,20 +8,20 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
-    public class DoubleJump : Jump, IPlayerExternalModule, IEventModule
+    public class DoubleJump : Jump
     {
         private IHighJumpState m_state;
         private IDoubleJumpState m_doubleJumpState;
         private IPlacementState m_placementState;
         //private AirMoveDoubleJumpHandler m_handler;
 
-        public override void Initialize(IPlayerModules player)
-        {
-            base.Initialize(player);
-            m_state = player.characterState;
-            m_doubleJumpState = player.characterState;
-            m_placementState = player.characterState;
-        }
+        //public override void Initialize(IPlayerModules player)
+        //{
+        //    base.Initialize(player);
+        //    m_state = player.characterState;
+        //    m_doubleJumpState = player.characterState;
+        //    m_placementState = player.characterState;
+        //}
 
 
       
@@ -36,10 +36,10 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         public override void HandleJump()
         {
-            m_character.StopCoyoteTime();
+            m_physics.StopCoyoteTime();
             //m_handler.enabled = true;
             base.HandleJump();
-            m_character.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
+            m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
             m_state.canHighJump = false;
             m_doubleJumpState.canDoubleJump = false; /////
             m_doubleJumpState.hasDoubleJumped = true;
@@ -51,7 +51,7 @@ namespace DChild.Gameplay.Characters.Players.Skill
             GetComponentInParent<IDoubleJumpController>().DoubleJumpCall += OnJumpCall;
             GetComponentInParent<IDoubleJumpController>().DoubleJumpReset += OnCallReset;
             GetComponentInParent<IMainController>().ControllerDisabled += OnControllerDisabled;
-            GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
         }
 
         private void OnControllerDisabled(object sender, EventActionArgs eventArgs)

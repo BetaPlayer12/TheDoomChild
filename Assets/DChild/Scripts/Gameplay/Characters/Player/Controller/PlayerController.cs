@@ -8,52 +8,47 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class PlayerController : MonoBehaviour, IController, IPlayerExternalModule,IMainController
+    public class PlayerController : MonoBehaviour, IController, IPlayerExternalModule, IMainController
     {
         [SerializeField]
         private bool m_inputEnabled = true;
         private bool m_useStatusEffectController;
         private IPlayerState m_characterState;
         private IStatusEffectState m_statusState;
-        private IPlayerSkills m_skills;
+        private IPrimarySkills m_skills;
         private ControllerEventArgs m_callArgs;
 
         private StatusEffectController m_statusController;
         private CombatController m_combatController;//
         private GroundController m_ground;
         private AirController m_air;
-        private AnimationController m_animation;//
         private PlayerInput m_input;
 
         public event EventAction<EventActionArgs> ControllerDisabled;
 
         public void Enable()
         {
-            m_input.Enable();
             m_inputEnabled = true;
         }
 
         public void Disable()
         {
-            Debug.Log("checking");
-            m_input.Disable();
             m_inputEnabled = false;
             ControllerDisabled?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Initialize(IPlayerModules player)
         {
-            m_statusController = GetComponent<StatusEffectController>();
-            m_animation = GetComponent<AnimationController>();
-            m_input = GetComponentInParent<PlayerInput>();
-            m_ground = GetComponent<GroundController>();
-            m_air = GetComponent<AirController>();
-            m_combatController = GetComponent<CombatController>();
-            m_combatController.Initialize(player.physics, player, player.animationState, player.characterState, player.characterState, player.animation, player.characterState, player.isolatedObject);
-            m_characterState = player.characterState;
-            m_statusState = player.statusEffectState;
-            m_skills = player.skills;
-            player.statusEffectState.StateChange += OnStatusEffectChange;
+            //m_statusController = GetComponent<StatusEffectController>();
+            //m_input = GetComponentInParent<PlayerInput>();
+            //m_ground = GetComponent<GroundController>();
+            //m_air = GetComponent<AirController>();
+            //m_combatController = GetComponent<CombatController>();
+            ////m_combatController.Initialize(player.physics, player, player.animationState, player.characterState, player.characterState, player.animation, player.characterState, player.isolatedObject);
+            //m_characterState = player.characterState;
+            //m_statusState = player.statusEffectState;
+            //m_skills = player.skills;
+            //player.statusEffectState.StateChange += OnStatusEffectChange;
         }
 
         private void OnStatusEffectChange(object sender, StatusEffectAfflictionEventArgs eventArgs)
@@ -66,12 +61,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_useStatusEffectController = eventArgs.isAffected;
                     break;
             }
-
         }
 
         private void Start()
         {
             m_callArgs = new ControllerEventArgs(m_input);
+        }
+
+        private void OnDisable()
+        {
+            ControllerDisabled?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void FixedUpdate()
@@ -116,13 +115,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        private void LateUpdate()
+        public T GetSubController<T>() where T : ISubController
         {
-            if (m_characterState.waitForBehaviour)
-                return;
-
-            m_animation.CallLateUpdate(m_characterState);
+            throw new NotImplementedException();
         }
-
     }
 }
