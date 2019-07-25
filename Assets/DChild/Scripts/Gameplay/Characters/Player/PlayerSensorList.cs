@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Wall,
             Slope,
             WallStick,
+            WallStickHeight,
         }
 
         [SerializeField]
