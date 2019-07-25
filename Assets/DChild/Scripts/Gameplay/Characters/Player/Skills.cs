@@ -1,4 +1,6 @@
 ﻿using DChild.Serialization;
+using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -10,6 +12,8 @@ namespace DChild.Gameplay.Characters.Players
     {
         [SerializeField, OnValueChanged("ValidateMovementSkill")]
         private bool[] m_movementSkillEnabled;
+
+        public event EventAction<PrimarySkillUpdateEventArgs> SkillUpdate;
 
         public Skills()
         {

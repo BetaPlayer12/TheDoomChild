@@ -45,7 +45,7 @@ namespace DChild.Gameplay.Characters.Players.Skill
             CallJumpStart();
 
             m_state.waitForBehaviour = true;
-            /*if(m_input.direction.isHorizontalHeld) */m_state.isWallJumping = true;
+            /*if(m_input.direction.isHorizontalHeld) */
             m_waitBehaviourDuration.Reset();
             enabled = true;
             m_facing.TurnCharacter();

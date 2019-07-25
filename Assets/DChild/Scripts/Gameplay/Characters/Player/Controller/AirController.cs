@@ -20,10 +20,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> FallCall;
         public event EventAction<EventActionArgs> LedgeGrabCall;//
         public event EventAction<ControllerEventArgs> FeetLedgeCall;//
+        public event EventAction<EventActionArgs> WallSlideCall;
 
-
-
-        public void CallFixedUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
+        public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             if (state.isFalling)
             {
@@ -42,22 +41,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 MoveCall?.Invoke(this, callArgs);
             }
-
-
         }
 
-
-
-        public void CallUpdate(IPlayerState state, IMovementSkills skills, ControllerEventArgs callArgs)
+        public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             FeetLedgeCall?.Invoke(this, callArgs);
             if (state.isStickingToWall)
             {
                 WallStickCall?.Invoke(this, EventActionArgs.Empty);
-                if (skills.IsEnabled(MovementSkill.WallJump) && callArgs.input.isJumpPressed)
+                if (skills.IsEnabled(PrimarySkill.WallJump) && callArgs.input.isJumpPressed)
                 {
                     WallJumpCall?.Invoke(this, EventActionArgs.Empty);
                     DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
+                }
+                else if (state.isSlidingToWall ==false && callArgs.input.direction.isDownPressed)
+                {
+                    WallSlideCall?.Invoke(this, EventActionArgs.Empty);
                 }
             }
 
@@ -79,29 +78,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
                         return;
                     }
-
-
-
                 }
 
                 if (state.canHighJump)
                 {
                     HighJumpCall?.Invoke(this, callArgs);
                     FeetLedgeCall?.Invoke(this, callArgs);
-                    
                 }
 
-                if (skills.IsEnabled(MovementSkill.DoubleJump) && state.canDoubleJump)
+                if (skills.IsEnabled(PrimarySkill.DoubleJump) && state.canDoubleJump)
                 {
                     if (callArgs.input.isJumpPressed)
                     {
                         DoubleJumpCall?.Invoke(this, EventActionArgs.Empty);
                         FeetLedgeCall?.Invoke(this, callArgs);
-                       
                     }
                 }
 
-                if (skills.IsEnabled(MovementSkill.Dash))
+                if (skills.IsEnabled(PrimarySkill.Dash))
                 {
                     if (callArgs.input.skillInput.isDashPressed)
                     {
