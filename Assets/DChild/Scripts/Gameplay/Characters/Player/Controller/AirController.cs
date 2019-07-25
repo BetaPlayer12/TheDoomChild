@@ -20,8 +20,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> FallCall;
         public event EventAction<EventActionArgs> LedgeGrabCall;//
         public event EventAction<ControllerEventArgs> FeetLedgeCall;//
-
-
+        public event EventAction<EventActionArgs> WallSlideCall;
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
@@ -42,11 +41,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 MoveCall?.Invoke(this, callArgs);
             }
-
-
         }
-
-
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
@@ -58,6 +53,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     WallJumpCall?.Invoke(this, EventActionArgs.Empty);
                     DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
+                }
+                else if (state.isSlidingToWall ==false && callArgs.input.direction.isDownPressed)
+                {
+                    WallSlideCall?.Invoke(this, EventActionArgs.Empty);
                 }
             }
 
@@ -79,16 +78,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
                         return;
                     }
-
-
-
                 }
 
                 if (state.canHighJump)
                 {
                     HighJumpCall?.Invoke(this, callArgs);
                     FeetLedgeCall?.Invoke(this, callArgs);
-                    
                 }
 
                 if (skills.IsEnabled(PrimarySkill.DoubleJump) && state.canDoubleJump)
@@ -97,7 +92,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         DoubleJumpCall?.Invoke(this, EventActionArgs.Empty);
                         FeetLedgeCall?.Invoke(this, callArgs);
-                       
                     }
                 }
 
