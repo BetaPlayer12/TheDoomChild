@@ -2,7 +2,7 @@
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public interface IDashController : ISubController
+    public interface IDashController
     {
         event EventAction<EventActionArgs> DashCall;
     }

@@ -6,11 +6,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public struct CombatEventArgs : IEventActionArgs
     {
-        public CombatEventArgs(DirectionalInput directionalInput)
+        public CombatEventArgs(IFacing facing)
         {
-            this.directionalInput = directionalInput;
+            this.facing = facing;
         }
 
-        public DirectionalInput directionalInput { get; }
+        public IFacing facing { get; }
     }
 }

@@ -15,11 +15,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private float m_jumpVelocityX;
         private IHighJumpState m_state;
+        private IPlayerAnimationState m_animationState;
         protected CharacterPhysics2D m_characterPhysics2D;
 
         public void Initialize(IPlayerModules player)
         {
-            //m_animationState = player.animationState;
+            m_animationState = player.animationState;
             m_characterPhysics2D = player.physics;
             m_state = player.characterState;
         }
@@ -59,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
             m_jumpVelocityX = m_characterPhysics2D.velocity.x;
             m_jumpVelocityX = (m_jumpVelocityX < 0) ? -m_jumpVelocityX : m_jumpVelocityX;
+            m_animationState.isShortJumping = (m_jumpVelocityX < m_movingAnimationVelocityTreshold) ? true : false;
         }
 
 #if UNITY_EDITOR

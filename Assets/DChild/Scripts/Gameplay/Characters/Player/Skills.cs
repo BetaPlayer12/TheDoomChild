@@ -17,15 +17,15 @@ namespace DChild.Gameplay.Characters.Players
 
         public Skills()
         {
-            m_movementSkillEnabled = new bool[(int)PrimarySkill._COUNT];
+            m_movementSkillEnabled = new bool[(int)MovementSkill._COUNT];
         }
 
-        public bool IsEnabled(PrimarySkill skill)
+        public bool IsEnabled(MovementSkill skill)
         {
             return m_movementSkillEnabled[(int)skill];
         }
 
-        public void Enable(PrimarySkill skill, bool enableSkill)
+        public void Enable(MovementSkill skill, bool enableSkill)
         {
             m_movementSkillEnabled[(int)skill] = enableSkill;
         }
@@ -40,7 +40,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void Initialize()
         {
-            m_movementSkillEnabled = new bool[(int)PrimarySkill._COUNT];
+            m_movementSkillEnabled = new bool[(int)MovementSkill._COUNT];
         }
 #endif
     }

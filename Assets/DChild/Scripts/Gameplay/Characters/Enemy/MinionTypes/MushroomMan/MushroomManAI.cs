@@ -36,9 +36,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
-            [SerializeField]
-            private float m_targetDistanceTolerance;
-            public float targetDistanceTolerance => m_targetDistanceTolerance;
 
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -115,10 +112,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                {
-                    m_enablePatience = true;
-                }
+                m_enablePatience = true;
             }
         }
 
@@ -176,6 +170,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     {
                         m_stateHandle.SetState(State.Patrol);
                     }
+                    else
+                    {
+                        m_stateHandle.SetState(State.ReevaluateSituation);
+                    }
                     break;
 
                 case State.Patrol:
@@ -215,7 +213,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.OverrideState(State.Idle);
                             }
                         }
                         else

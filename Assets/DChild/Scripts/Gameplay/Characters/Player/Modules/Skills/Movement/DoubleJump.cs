@@ -51,7 +51,7 @@ namespace DChild.Gameplay.Characters.Players.Skill
             GetComponentInParent<IDoubleJumpController>().DoubleJumpCall += OnJumpCall;
             GetComponentInParent<IDoubleJumpController>().DoubleJumpReset += OnCallReset;
             GetComponentInParent<IMainController>().ControllerDisabled += OnControllerDisabled;
-            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            GetComponentInParent<ILandController>().LandCall += OnLandCall;
         }
 
         private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
