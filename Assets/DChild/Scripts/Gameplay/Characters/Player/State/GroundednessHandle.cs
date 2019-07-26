@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class GroudednessHandle : MonoBehaviour, IComplexCharacterModule
+    public class GroundednessHandle : MonoBehaviour, IComplexCharacterModule
     {
         private IPlacementState m_state;
         private CharacterPhysics2D m_physics;
@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [SerializeField]
         private LandHandle m_landHandle;
 
+        private SkillResetRequester m_skillRequester;
         public event EventAction<EventActionArgs> LandExecuted;
 
         public void Initialize(ComplexCharacterInfo info)
@@ -29,6 +30,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_fallHandle.Initialize(info.animator, info.animationParametersData);
             m_landHandle = new LandHandle();
             m_landHandle.Initialize(info.animator, info.animationParametersData);
+            m_skillRequester = info.skillResetRequester;
         }
 
         private void Start()
@@ -64,6 +66,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_state.isGrounded = true;
                     m_landHandle.Execute();
+                    m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
                     m_fallHandle.ResetValue();
                     m_animator.SetBool(m_midAirParamater, false);
                 }

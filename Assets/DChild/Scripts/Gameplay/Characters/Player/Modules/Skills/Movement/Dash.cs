@@ -35,6 +35,15 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator = info.animator;
             m_isDashingParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsDashing);
             m_state = info.state;
+            info.skillResetRequester.SkillResetRequest += OnSkillReset;
+        }
+
+        private void OnSkillReset(object sender, ResetSkillRequestEventArgs eventArgs)
+        {
+            if (eventArgs.IsRequestedToReset(PrimarySkill.Dash))
+            {
+                m_state.canDash = true;
+            }
         }
 
         public virtual void ConnectTo(IMainController controller)

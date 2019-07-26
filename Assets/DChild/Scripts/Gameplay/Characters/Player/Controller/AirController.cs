@@ -22,6 +22,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<ControllerEventArgs> FeetLedgeCall;//
         public event EventAction<EventActionArgs> WallSlideCall;
         public event EventAction<ControllerEventArgs> AttempWallStickCall;
+        public event EventAction<EventActionArgs> WallStickCancel;
+
+        private SkillResetRequester m_skillRequester;
+        public void Initialize(SkillResetRequester skillRequester)
+        {
+            m_skillRequester = skillRequester;
+        }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
@@ -53,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (skills.IsEnabled(PrimarySkill.WallJump) && callArgs.input.isJumpPressed)
                 {
                     WallJumpCall?.Invoke(this, EventActionArgs.Empty);
+                    WallStickCancel?.Invoke(this, EventActionArgs.Empty);
                     DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
                 }
                 else if (state.isSlidingToWall ==false && callArgs.input.direction.isDownPressed)
@@ -96,7 +104,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
 
-                if (skills.IsEnabled(PrimarySkill.Dash))
+                if (skills.IsEnabled(PrimarySkill.Dash) && state.canDash)
                 {
                     if (callArgs.input.skillInput.isDashPressed)
                     {
@@ -109,6 +117,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (skills.IsEnabled(PrimarySkill.WallJump))
             {
                 AttempWallStickCall?.Invoke(this, callArgs);
+                if (state.isStickingToWall)
+                {
+                    m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+                }
             }
         }
     }

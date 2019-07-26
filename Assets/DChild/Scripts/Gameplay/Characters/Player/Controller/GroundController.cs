@@ -15,6 +15,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<EventActionArgs> ShadowDashCall;
         public event EventAction<ControllerEventArgs> PlatformDropCall;
 
+        private SkillResetRequester m_skillRequester;
+        public void Initialize(SkillResetRequester skillRequester)
+        {
+            m_skillRequester = skillRequester;
+        }
+
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             if (state.isDashing)

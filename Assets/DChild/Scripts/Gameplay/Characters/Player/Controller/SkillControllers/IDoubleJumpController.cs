@@ -2,9 +2,8 @@
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public interface IDoubleJumpController
+    public interface IDoubleJumpController : ISubController
     {
         event EventAction<EventActionArgs> DoubleJumpCall;
-        event EventAction<EventActionArgs> DoubleJumpReset;
     }
 }

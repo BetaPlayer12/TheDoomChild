@@ -11,6 +11,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField]
         private PlayerSkills m_skills;
+        [SerializeField]
+        private SkillResetRequester m_skillRequester;
 
         [Title("Model Reference")]
         [SerializeField]
@@ -32,7 +34,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void InitializeSubControllers()
         {
             m_ground = GetComponent<GroundController>();
+            m_ground.Initialize(m_skillRequester);
             m_air = GetComponent<AirController>();
+            m_air.Initialize(m_skillRequester);
             m_combatController = GetComponent<CombatController>();
         }
 

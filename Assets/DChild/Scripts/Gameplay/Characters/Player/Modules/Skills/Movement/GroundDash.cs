@@ -28,7 +28,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             base.Initialize(info);
             m_state.canDash = true;
-            info.groundednessHandle.LandExecuted += OnLandExecuted;
         }
 
         private void HandleDash()

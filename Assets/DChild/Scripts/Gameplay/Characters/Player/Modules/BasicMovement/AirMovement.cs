@@ -1,23 +1,29 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
+using Refactor.DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class AirMovement : MonoBehaviour, IPlayerExternalModule, IEventModule
+    public class AirMovement : MonoBehaviour, IComplexCharacterModule, IControllableModule
     {
         [SerializeField]
         private AirMoveHandler m_moveHandler;
         private CharacterPhysics2D m_characterPhysics2D;
+        private Character m_character;
         private IMoveState m_state;
-        private IFacingConfigurator m_facingConfig;
 
-        public void Initialize(IPlayerModules player)
+        public void ConnectTo(IMainController controller)
         {
-            m_characterPhysics2D = player.physics;
+            controller.GetSubController<IAirMoveController>().MoveCall += OnMoveCall;
+        }
+
+        public void Initialize(ComplexCharacterInfo info)
+        {
+            m_characterPhysics2D = info.physics;
             m_moveHandler.SetPhysics(m_characterPhysics2D);
-            m_state = player.characterState;
-            m_facingConfig = player;
+            m_character = info.character;
+            m_state = info.state;
         }
 
         public void Move(float direction)
@@ -33,7 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_moveHandler.SetDirection(moveDirection);
                 m_moveHandler.Accelerate();
                 m_state.isMoving = true;
-                m_facingConfig.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+                m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
         }
 
@@ -43,21 +49,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_moveHandler.SetDirection(moveDirection);
         }
 
-        public void ConnectEvents()
-        {
-            GetComponentInParent<IAirMoveController>().MoveCall += OnMoveCall;
-        }
-
         private void OnMoveCall(object sender, ControllerEventArgs eventArgs)
         {
             Move(eventArgs.input.direction.horizontalInput);
         }
-
-#if UNITY_EDITOR
-        public void Initialize(float maxSpeed, float acceleration, float decceleration)
-        {
-            m_moveHandler = new AirMoveHandler(maxSpeed, acceleration, decceleration);
-        }
-#endif
     }
 }

@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_physics.StopCoyoteTime();
                 m_physics.SetVelocity(x: 0);
                 base.HandleJump();
-                m_physics.AddForce(Vector2.up * (m_power * m_modifier.jumpPower), ForceMode2D.Impulse);
+                m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
                 m_animator.SetTrigger(m_jumpParamater);
             }
         }

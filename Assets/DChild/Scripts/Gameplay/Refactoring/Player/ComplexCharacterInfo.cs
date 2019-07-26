@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
@@ -21,9 +22,10 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         private Animator m_animator;
         [SerializeField]
         private AnimationParametersData m_animationParametersData;
-
         [SerializeField]
-        private GroudednessHandle m_groundednessHandle;
+        private GroundednessHandle m_groundednessHandle;
+        [SerializeField]
+        private SkillResetRequester m_skillResetRequester;
 
         public Character character => m_character;
         public CharacterState state => m_state;
@@ -31,6 +33,8 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         public RaySensor GetSensor(PlayerSensorList.SensorType sensorType) => m_sensorList.GetSensor(sensorType);
         public AnimationParametersData animationParametersData => m_animationParametersData;
         public CharacterPhysics2D physics => m_physics;
-        public GroudednessHandle groundednessHandle => m_groundednessHandle;
+        public GroundednessHandle groundednessHandle => m_groundednessHandle;
+        public SkillResetRequester skillResetRequester => m_skillResetRequester;
+
     }
 }

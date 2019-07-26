@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.Players.Behaviour;
+﻿using System;
+using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Systems.WorldComponents;
@@ -42,7 +43,6 @@ namespace DChild.Gameplay.Characters.Players.Skill
             var forceDirection = m_character.facing == HorizontalDirection.Left ? 1 : -1;
             m_physics.SetVelocity(forceDirection * m_forwardPower);
             m_physics.simulateGravity = true;
-            CallJumpStart();
 
             m_state.waitForBehaviour = true;
             m_inputDisableDuration.Reset();
