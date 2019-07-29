@@ -25,8 +25,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void ConnectTo(IMainController controller)
         {
-            controller.GetSubController<IJumpController>().JumpCall += OnJumpCall;
-            controller.ControllerDisabled += OnControllerDisabled;
+            var jumpController = controller.GetSubController<IJumpController>();
+            jumpController.JumpCall += OnJumpCall;
         }
 
         private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
@@ -45,10 +45,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
                 m_animator.SetTrigger(m_jumpParamater);
             }
-            Debug.Log("Jumping");
         }
 
-        private void OnJumpCall(object sender, EventActionArgs eventArgs)
+        private void OnJumpCall(object sender, ControllerEventArgs eventArgs)
         {
             m_highJumpState.canHighJump = true;
             HandleJump();

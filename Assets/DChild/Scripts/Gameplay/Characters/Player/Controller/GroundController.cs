@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<ControllerEventArgs> MoveCall;
         public event EventAction<ControllerEventArgs> CrouchCall;
         public event EventAction<ControllerEventArgs> CrouchMoveCall;
-        public event EventAction<EventActionArgs> JumpCall;
+        public event EventAction<ControllerEventArgs> JumpCall;
         public event EventAction<EventActionArgs> DashCall;
         public event EventAction<EventActionArgs> ShadowDashCall;
         public event EventAction<ControllerEventArgs> PlatformDropCall;
@@ -61,7 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (callArgs.input.isJumpPressed)
                 {
-                    JumpCall?.Invoke(this, EventActionArgs.Empty);
+                    JumpCall?.Invoke(this, callArgs);
                     
                 }
 
