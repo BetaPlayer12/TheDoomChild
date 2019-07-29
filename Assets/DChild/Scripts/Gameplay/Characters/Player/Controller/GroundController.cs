@@ -43,7 +43,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             CrouchCall?.Invoke(this, callArgs);
-
+            MoveCall?.Invoke(this, callArgs);
+            
             if (state.isCrouched)
             {
                 if (state.canPlatformDrop && callArgs.input.isJumpPressed)
@@ -61,6 +62,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (callArgs.input.isJumpPressed)
                 {
                     JumpCall?.Invoke(this, EventActionArgs.Empty);
+                    
                 }
 
                 else if (skills.IsEnabled(PrimarySkill.Dash))

@@ -45,6 +45,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
                 m_animator.SetTrigger(m_jumpParamater);
             }
+            Debug.Log("Jumping");
         }
 
         private void OnJumpCall(object sender, EventActionArgs eventArgs)
