@@ -99,12 +99,23 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator.SetInteger(m_speedYDirectionParameter, 0);
             m_animator.SetBool(m_midAirParameter, false);
             m_groundednessHandle.enabled = false;
-            yield return new WaitForEndOfFrame();
+            m_physics.SetVelocity(Vector2.zero);
+
+            //Wait For Ledge Grab Animation to Player before moving the object's position
+            bool wait = true;
+            do
+            {
+                var animatorState = m_animator.GetCurrentAnimatorStateInfo(0);
+                //This seems hardcoded as it relies on the name of the state. Find a better way
+                wait = !(animatorState.IsName("LedgeGrab L") || animatorState.IsName("LedgeGrab R"));
+                yield return new WaitForEndOfFrame();
+            } while (wait);
+
             m_groundednessHandle.enabled = true;
             m_physics.SetVelocity(Vector2.zero);
             var currentPosition = m_physics.position;
             currentPosition.y = groundPosition.y + m_destinationOffset.y;
-            currentPosition.x = currentPosition.x + (m_destinationOffset.x * (int)m_character.facing); //i addedd a forward force by 1 to make sure that the player avoids the edge slide so the player is standing on the platform
+            currentPosition.x = currentPosition.x + (m_destinationOffset.x * (int)m_character.facing);
             m_physics.position = currentPosition;
         }
 
