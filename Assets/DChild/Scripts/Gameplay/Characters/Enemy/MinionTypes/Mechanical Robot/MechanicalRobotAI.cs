@@ -27,12 +27,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
 
-            
+
             //Attack Behaviours
             [SerializeField]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
-            
+
             //
             [SerializeField]
             private SimpleProjectileAttackInfo m_plasmaBall = new SimpleProjectileAttackInfo();
@@ -77,7 +77,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             DelayTimer,
         }
 
-       
+
 
         [SerializeField, TabGroup("Modules")]
         private SimpleTurnHandle m_turnHandle;
@@ -90,10 +90,13 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
-        private Transform m_projectileSource;
+        private SpineEventListener m_sEventListener;
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
+
+        //player reference access
+
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -102,14 +105,11 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        //
-        [SerializeField]
-        private ProjectileLauncher m_fireProjectile;
-
-        private SpineEventListener m_sEventListener;
-
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
+        private ProjectileLauncher m_fireProjectile;
+        [SerializeField, TabGroup("References")]
+        private Transform m_projectileSource;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -134,6 +134,51 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 m_enablePatience = true;
             }
         }
+
+
+
+        // benjo's alteration
+        public Vector2 GetPlayerTransform()
+        {
+            var m_playerTransform = m_targetInfo.position;
+            return m_playerTransform;
+        }
+
+        public float GetProjectileSpeed()
+        {
+            var m_bulletSpeed = m_info.plasmaBall.projectileInfo.speed;
+            return m_bulletSpeed;
+        }
+
+        /*
+        void handleEvent(TrackEntry trackEntry, Spine.Event e)
+        {
+            Debug.Log("trigger");
+            if(e.Data.Name == m_info.plasmaBall.launchOnEvent)
+            {
+                if (IsFacingTarget())
+                {
+                    var target = m_targetInfo.position;
+                    target = new Vector2(target.x, target.y - 2);
+                    Vector2 plasmaBallPos = m_projectileSource.position;
+                    Vector3 v_diff = (target - plasmaBallPos);
+                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                    Vector2 targ = m_targetInfo.position;
+                    float angle = Mathf.Atan2(targ.y, targ.x) * Mathf.Rad2Deg;
+                    m_projectileSource.rotation = Quaternion.Euler(new Vector3(0, 0, (angle-50)));
+                    GameObject shoot = Instantiate(m_info.plasmaBall.projectileInfo.projectile, plasmaBallPos, Quaternion.Euler(0f, 0f, -atan2 * Mathf.Rad2Deg));
+                    shoot.GetComponent<Rigidbody2D>().AddForce((m_info.plasmaBall.projectileInfo.speed + (Vector2.Distance(target,transform.position)* 0.35f))*shoot.transform.right, ForceMode2D.Impulse);
+
+                }
+            }
+        }
+        */
+
+        //  protected override void Start()
+        //   {
+        //  base.Start();
+        //  m_animation.animationState.Event += handleEvent;
+        //   }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
@@ -166,7 +211,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             base.ApplyData();
         }
 
-       
+
 
         protected override void Awake()
         {
@@ -177,7 +222,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             m_fireProjectile = new ProjectileLauncher(m_info.plasmaBall.projectileInfo, m_projectileSource);
-           // m_sEventListener.Subscribe(m_info.plasmaBall.launchOnEvent, m_fireProjectile.LaunchProjectile);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            m_sEventListener.Subscribe(m_info.plasmaBall.launchOnEvent, m_fireProjectile.LaunchProjectile);
         }
 
 
@@ -187,14 +237,14 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             Debug.Log("current state is " + m_stateHandle.currentState);
             switch (m_stateHandle.currentState)
             {
-                
+
                 case State.Idle:
-                   
+
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     if (m_targetInfo.isValid == false)
                     {
                         m_stateHandle.SetState(State.Patrol);
-                      
+
                     }
                     else
                     {
@@ -226,7 +276,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         Debug.Log("check if chasing");
                         if (IsFacingTarget())
                         {
-                           
+
                             m_wallSensor.Cast();
                             m_groundSensor.Cast();
                             Debug.Log("check if facing");
@@ -236,7 +286,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                                 var target = m_targetInfo.position;
                                 target.y -= 10f;
                                 m_animation.EnableRootMotion(true, false);
-                                 m_animation.SetAnimation(0, m_info.move.animation, true);
+                                m_animation.SetAnimation(0, m_info.move.animation, true);
 
 
                                 if (IsTargetInRange(m_info.attack.range))
