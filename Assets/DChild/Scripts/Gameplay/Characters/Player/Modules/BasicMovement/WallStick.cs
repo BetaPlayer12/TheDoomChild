@@ -17,7 +17,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private float m_stickPositionOffset;
         [SerializeField]
         private float m_stickDuration;
-        [SerializeField]
         private CountdownTimer m_stickTimer;
         [SerializeField, MinValue(0.1)]
         private float m_slideSpeed;
@@ -31,6 +30,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private Animator m_animator;
         private string m_speedYParameter;
+        private string m_wallStickTriggerParameter;
         private string m_wallStickParameter;
         private string m_wallSlideParameter;
 
@@ -71,6 +71,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
             m_animator = info.animator;
             m_speedYParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
+            m_wallStickTriggerParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallStickTrigger);
             m_wallStickParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallStick);
             m_wallSlideParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallSlide);
         }
@@ -81,8 +82,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             if (m_isSliding)
             {
                 m_physics.SetVelocity(Vector2.down * m_slideSpeed);
+
                 m_wallSensor.Cast();
-                if (m_wallSensor.isDetecting == false)
+                if (m_wallSensor.isDetecting == false || m_physics.inContactWithGround)
                 {
                     CancelWallStick();
                 }
@@ -150,7 +152,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_isSliding = false;
 
             m_animator.SetInteger(m_speedYParameter, 0);
-            m_animator.SetTrigger(m_wallStickParameter);
+            m_animator.SetTrigger(m_wallStickTriggerParameter);
+            m_animator.SetBool(m_wallStickParameter, true);
             m_animator.SetBool(m_wallSlideParameter, false);
         }
 
@@ -200,6 +203,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_isSliding = false;
             m_wallStickState.isSlidingToWall = false;
             m_wallStickState.isStickingToWall = false;
+            m_animator.SetBool(m_wallStickParameter, false);
+            m_animator.SetBool(m_wallSlideParameter, false);
             m_physics.simulateGravity = true;
             m_groundednessHandle.enabled = true;
         }
@@ -211,6 +216,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void Awake()
         {
+            m_stickTimer = new CountdownTimer(m_stickDuration);
             m_stickTimer.CountdownEnd += OnWallStickEnd;
         }
 

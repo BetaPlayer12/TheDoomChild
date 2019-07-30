@@ -107,6 +107,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics.gravity.gravityScale = m_groundGravity;
             m_state.isGrounded = true;
         }
+
+        private void OnDisable()
+        {
+            m_landHandle.SetRecordedVelocity(Vector2.zero);
+        }
     }
 
 }

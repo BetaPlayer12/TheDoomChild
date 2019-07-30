@@ -34,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         }
 
         public void RecordVelocity() => m_previousYVelocity = m_physics.velocity.y;
+        public void SetRecordedVelocity(Vector2 velocity) => m_previousYVelocity = velocity.y;
 
         public void Execute()
         {
