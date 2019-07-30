@@ -13,6 +13,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private Character m_character;
         private IMoveState m_state;
 
+        private Animator m_animator;
+        private string m_speedXParameter;
+
         public void ConnectTo(IMainController controller)
         {
             controller.GetSubController<IAirMoveController>().MoveCall += OnMoveCall;
@@ -24,6 +27,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_moveHandler.SetPhysics(m_characterPhysics2D);
             m_character = info.character;
             m_state = info.state;
+            m_animator = info.animator;
+            m_speedXParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
         }
 
         public void Move(float direction)
@@ -32,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             {
                 m_moveHandler.Deccelerate();
                 m_state.isMoving = false;
+                m_animator.SetInteger(m_speedXParameter, 0);
             }
             else
             {
@@ -40,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_moveHandler.Accelerate();
                 m_state.isMoving = true;
                 m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+                m_animator.SetInteger(m_speedXParameter, 1);
             }
         }
 

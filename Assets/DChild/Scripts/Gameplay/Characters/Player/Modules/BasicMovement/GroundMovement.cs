@@ -130,11 +130,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_moveHandler.SetDirection(moveDirection);
         }
 
-        public void ConnectEvents()
-        {
-            GetComponentInParent<IGroundMoveController>().MoveCall += OnMoveCall;
-        }
-
         private void Update()
         {
             if (m_increaseVelocity)

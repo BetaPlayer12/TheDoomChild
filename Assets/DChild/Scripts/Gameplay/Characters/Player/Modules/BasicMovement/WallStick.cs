@@ -81,6 +81,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             if (m_isSliding)
             {
                 m_physics.SetVelocity(Vector2.down * m_slideSpeed);
+                m_wallSensor.Cast();
+                if (m_wallSensor.isDetecting == false)
+                {
+                    CancelWallStick();
+                }
             }
             else
             {

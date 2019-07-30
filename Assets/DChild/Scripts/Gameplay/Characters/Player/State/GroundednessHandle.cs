@@ -53,6 +53,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     SetValuesToGround();
                 }
+                if (m_physics.inContactWithGround)
+                {
+                    m_physics.gravity.gravityScale = m_groundGravity;
+                }
+                else
+                {
+                    m_physics.gravity.gravityScale = m_midAirGravity;
+                }
             }
             else
             {
@@ -87,6 +95,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_fallHandle.ResetValue();
                     SetValuesToGround();
                 }
+
+                m_landHandle.RecordVelocity();
             }
         }
 
