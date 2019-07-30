@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private CharacterPhysics2D m_physics;
         private CharacterColliders m_colliders;
-        private RaySensor m_sensor;
+        private RaySensor m_wallSensor;
         private RaySensor m_groundHeightSensor;
         private GroundednessHandle m_groundednessHandle;
 
@@ -64,8 +64,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics = info.physics;
             m_time = info.character.isolatedObject;
             m_wallStickState = info.state;
-            m_sensor = info.GetSensor(PlayerSensorList.SensorType.WallStick);
-            m_groundHeightSensor = info.GetSensor(PlayerSensorList.SensorType.WallStickHeight);
+            m_wallSensor = info.GetSensor(PlayerSensorList.SensorType.WallStick);
+            m_groundHeightSensor = info.GetSensor(PlayerSensorList.SensorType.GroundHeight);
             m_colliders = info.character.colliders;
             m_groundednessHandle = info.groundednessHandle;
 
@@ -80,12 +80,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_isSliding)
             {
-                m_physics.SetVelocity(Vector2.down);
-                m_physics.AddForce(new Vector2(0, -250));
+                m_physics.SetVelocity(Vector2.down * m_slideSpeed);
             }
             else
             {
                 m_stickTimer.Tick(m_time.deltaTime);
+                m_physics.SetVelocity(Vector2.zero);
             }
         }
 
@@ -94,19 +94,19 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_wallStickState.isStickingToWall == false)
             {
-                m_groundHeightSensor.Cast();
-                if (m_groundHeightSensor.isDetecting == false)
+                if (m_physics.velocity.y <= 0)
                 {
-                    if (m_physics.velocity.y <= 0)
+                    // Be more specific on wallstick is moving
+                    if (m_wallStickState.isMoving && m_colliders.AreCollidersIntersecting() == false)
                     {
-                        // Be more specific on wallstick is moving
-                        if (m_wallStickState.isMoving && m_wallStickState.isDroppingFromPlatform == false && m_colliders.AreCollidersIntersecting() == false)
+                        m_wallSensor.Cast();
+                        if (m_wallSensor.allRaysDetecting)
                         {
-                            m_sensor.Cast();
-                            if (m_sensor.allRaysDetecting)
+                            var hit = m_wallSensor.GetValidHits()[0];
+                            if (hit.collider.CompareTag("Droppable") == false)
                             {
-                                var hit = m_sensor.GetValidHits()[0];
-                                if (hit.collider.CompareTag("Droppable") == false)
+                                m_groundHeightSensor.Cast();
+                                if (m_groundHeightSensor.isDetecting == false)
                                 {
                                     AttachToWall(hit);
                                     StartStickToWall();
@@ -137,6 +137,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             m_wallStickState.isStickingToWall = true;
             m_wallStickState.isSlidingToWall = false;
+            m_wallStickState.isFalling = false;
             m_stickTimer.SetStartTime(m_stickDuration);
             m_stickTimer.Reset();
             m_physics.SetVelocity(Vector2.zero);

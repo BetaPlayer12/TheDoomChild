@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay;
+using DChild.Gameplay.Characters;
 using DChild.Gameplay.Systems;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -45,7 +46,7 @@ namespace DChild.Gameplay
         }
 
         [Button("Stop")]
-        public void Stop()
+        public override void Stop()
         {
             if (m_state != State.Stop)
             {
@@ -58,7 +59,7 @@ namespace DChild.Gameplay
         }
 
         [Button("Pauses")]
-        public void Pause()
+        public override void Pause()
         {
             if (m_state != State.Pause)
             {
@@ -107,6 +108,9 @@ namespace DChild.Gameplay
 #endif
             }
         }
-    }
 
+        public override void SetFacing(HorizontalDirection horizontalDirection)
+        {
+        }
+    }
 }

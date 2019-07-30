@@ -41,8 +41,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private IMoveState m_state;
         private IIsolatedTime m_time;
-        private IFacingConfigurator m_facingConfig;
-        private HorizontalDirection m_previousFacing;
         private IPlayerState m_characterState;
         private Character m_character;
         private Animator m_animator;
@@ -68,6 +66,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             controller.GetSubController<IGroundMoveController>().MoveCall += OnMoveCall;
         }
+
+
         public void Move(float direction)
         {
             if (direction == 0)
@@ -85,10 +85,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_characterPhysics2D.SetVelocity(0);
                 }
-                
+
 
                 m_state.isMoving = false;
                 m_changeSpeedDuration.Reset();
+                m_animator.SetInteger(m_speedParameter, 0);
             }
             else
             {
@@ -97,7 +98,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_moveHandler.SetDirection(moveDirection);
                 m_moveHandler.Accelerate();
                 m_state.isMoving = true;
-                m_animator.SetInteger(m_speedParameter, 1);
+                if (m_increaseVelocity)
+                {
+                    m_animator.SetInteger(m_speedParameter, 2);
+                }
+                else
+                {
+                    m_animator.SetInteger(m_speedParameter, 1);
+                }
                 m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
 
                 //if (m_increasevelocity)
@@ -159,7 +167,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state.isSprinting = true;
             m_increaseVelocity = true;
             m_moveHandler.IncreaseMoveVelocity(m_sprintSpeed, m_sprintAcceleration, m_sprintDecceleration);
-            m_previousFacing = m_facingConfig.currentFacingDirection;
         }
 
         private void Awake()
@@ -167,13 +174,5 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_changeSpeedDuration.CountdownEnd += OnCountdownEnd;
             m_moveHandler.ResetMoveVelocity(m_jogSpeed, m_jogAcceleration, m_jogDecceleration);
         }
-
-#if UNITY_EDITOR
-        public void Initialize(float maxSpeed, float acceleration, float decceleration)
-        {
-            m_moveHandler = new GroundMoveHandler(maxSpeed, acceleration, decceleration);
-        }
-
-#endif
     }
 }

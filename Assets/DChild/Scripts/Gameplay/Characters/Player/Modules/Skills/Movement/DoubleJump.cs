@@ -11,6 +11,9 @@ namespace DChild.Gameplay.Characters.Players.Skill
 {
     public class DoubleJump : Jump, IControllableModule
     {
+        [SerializeField]
+        private FXSpawner m_fXSpawner;
+
         private IHighJumpState m_state;
         private IDoubleJumpState m_doubleJumpState;
 
@@ -49,7 +52,9 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
             m_animator.SetInteger(m_speedYParameter, 0);
             m_animator.SetTrigger(m_doubleJumpParameter);
+            m_fXSpawner.SpawnFX(m_character.facing);
         }
+
         public void ConnectTo(IMainController controller)
         {
             controller.GetSubController<IDoubleJumpController>().DoubleJumpCall += OnJumpCall;
