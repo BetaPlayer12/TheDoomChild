@@ -57,5 +57,20 @@ namespace DChild.Gameplay.Characters.Enemies
                 DoExplode();
             }
         }
+
+        public override void SetFacing(HorizontalDirection horizontalDirection)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Stop()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Pause()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

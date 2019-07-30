@@ -27,7 +27,18 @@ namespace DChild.Gameplay
             }
         }
 
-        public void SetFacing(HorizontalDirection direction) => m_spine.skeleton.FlipX = direction == HorizontalDirection.Left;
+        public override void Stop()
+        {
+            m_spine.AnimationState.SetEmptyAnimation(0, 0);
+        }
+
+        public override void Pause()
+        {
+            //Dunno How to really
+            throw new NotImplementedException();
+        }
+
+        public override void SetFacing(HorizontalDirection direction) => m_spine.skeleton.FlipX = direction == HorizontalDirection.Left;
 
         private void OnComplete(TrackEntry trackEntry)
         {
@@ -50,6 +61,8 @@ namespace DChild.Gameplay
         {
             m_shouldReplay = true;
         }
+
+
     }
 
 }

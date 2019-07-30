@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private CharacterPhysics2D m_character;
 
-        private IPlacementState m_state;
+        private IGroundednessState m_state;
         private IIsolatedTime m_time;
 
         public void Initialize(IPlayerModules player)

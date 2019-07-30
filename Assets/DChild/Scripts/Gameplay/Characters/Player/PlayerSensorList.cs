@@ -13,7 +13,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Wall,
             Slope,
             WallStick,
-            WallStickHeight,
+            GroundHeight,
+            LedgeCliff,
+            LedgeEdge,
         }
 
         [SerializeField]

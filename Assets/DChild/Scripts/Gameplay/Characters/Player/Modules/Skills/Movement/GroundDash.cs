@@ -123,7 +123,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_state.isDashing)
             {
-                m_physics.SetVelocity(m_direction.x * m_physics.moveAlongGround.x, m_physics.moveAlongGround.y);
+                var xVelocity = m_direction.x * m_physics.moveAlongGround.x * m_power;
+                var yVelocity = m_physics.moveAlongGround.y * m_adhesive;
+                m_physics.SetVelocity(xVelocity, yVelocity);
             }
         }
     }

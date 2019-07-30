@@ -15,7 +15,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CountdownTimer m_ignoreColliderDuration;
         
         private CharacterColliders m_playerColliders;
-        private ILedgeGrabState m_ledgeGrab;
         private IPlatformDropState m_state;
         private Collider2D m_platformCollider;
         private RaySensor m_groundSensor;
@@ -30,7 +29,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         public void Initialize(IPlayerModules player)
         {
             m_groundSensor = player.sensors.groundSensor;
-            m_ledgeGrab = player.characterState;
             m_state = player.characterState;
             m_playerColliders = player.colliders;
             m_time = player.isolatedObject;
@@ -47,10 +45,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             }
             m_ignoreColliderDuration.Reset();
             enabled = true;
-            m_ledgeGrab.canLedgeGrab = false;//
             m_state.isDroppingFromPlatform = true;
-            Debug.Log("platform trigger " + m_ledgeGrab.canLedgeGrab);
-           
         }
 
         private void OnPlatformDropCall(object sender, ControllerEventArgs eventArgs)
