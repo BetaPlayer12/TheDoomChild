@@ -1,5 +1,4 @@
-﻿using DChild.Gameplay; //Experiment
-using DChild.Gameplay.Pathfinding;
+﻿using DChild.Gameplay.Pathfinding;
 using UnityEngine;
 
 namespace Refactor.DChild.Gameplay
@@ -24,11 +23,7 @@ namespace Refactor.DChild.Gameplay
 
         public void Move(float speed)
         {
-            //m_movementHandle.MoveTowards(m_navigation.directionToPathSegment, speed);
-
-            //Experiment to fix the twiching movement of flying creatures
-            //var direction = (m_navigation.directionToPathSegment - transform.position).normalized;
-            GetComponentInParent<IsolatedPhysics2D>().SetVelocity(m_navigation.directionToPathSegment * speed);
+            m_movementHandle.MoveTowards(m_navigation.directionToPathSegment, speed);
         }
 
         public void MoveTowardsForced(Vector2 direction, float speed) => m_movementHandle.MoveTowards(direction, speed);

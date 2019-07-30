@@ -19,7 +19,7 @@ public class Cloth2D : MonoBehaviour {
 
     private void Start()
     {
-        //m_animator.SetBool("IsFacingRight", true);
+        m_animator.SetBool("IsFacingRight", true);
         //if (GetComponentInParent<PlayerAnimation>().GetCurrentAnimation(0).ToString() == "Idle1_Right")
         //{
         //    m_animator.SetBool("IsFacingRight", true);

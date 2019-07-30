@@ -72,7 +72,6 @@ namespace Refactor.DChild.Gameplay.Characters.AI
                 public float speed => m_speed;
             }
 
-            [System.Serializable, HideReferenceObjectPicker]
             public class SimpleProjectileAttackInfo : SkeletonBaseInfo
             {
                 [SerializeField, ValueDropdown("GetAnimations")]

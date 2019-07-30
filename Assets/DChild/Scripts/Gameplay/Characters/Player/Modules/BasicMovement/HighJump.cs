@@ -1,11 +1,12 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class HighJump : MonoBehaviour, IPlayerExternalModule, IEventModule
+    public class HighJump : MonoBehaviour, IComplexCharacterModule, IControllableModule
     {
         [SerializeField]
         [MinValue(0f)]
@@ -17,15 +18,24 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private IHighJumpState m_state;
         protected CharacterPhysics2D m_characterPhysics2D;
 
-        public void Initialize(IPlayerModules player)
+
+        public void ConnectTo(IMainController controller)
         {
-            //m_animationState = player.animationState;
-            m_characterPhysics2D = player.physics;
-            m_state = player.characterState;
+            var jumpController = controller.GetSubController<IJumpController>();
+            jumpController.JumpCall += OnHighJumpCall;
+        }
+
+       
+
+        public void Initialize(ComplexCharacterInfo info)
+        {
+            m_characterPhysics2D = info.physics;
+            m_state = info.state;
         }
 
         public void HandleHighJump(bool isJumpHeld)
         {
+           
             if (m_state.canHighJump)
             {
                 if (isJumpHeld)
@@ -41,7 +51,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     {
                         var yVelocity = m_characterPhysics2D.velocity.y;
                         yVelocity /= m_velocityReduction;
-                        m_characterPhysics2D.SetVelocity(y: yVelocity);
+                        m_characterPhysics2D.SetVelocity(y: yVelocity);                 
                         m_state.canHighJump = false;
                     }
                 }
@@ -67,6 +77,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_velocityReduction = velocityReduction;
             m_movingAnimationVelocityTreshold = movingAnimationVelocityTreshold;
         }
+
 #endif
     }
 }

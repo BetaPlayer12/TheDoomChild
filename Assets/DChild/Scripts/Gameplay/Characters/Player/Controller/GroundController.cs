@@ -10,10 +10,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<ControllerEventArgs> MoveCall;
         public event EventAction<ControllerEventArgs> CrouchCall;
         public event EventAction<ControllerEventArgs> CrouchMoveCall;
-        public event EventAction<EventActionArgs> JumpCall;
+        public event EventAction<ControllerEventArgs> JumpCall;
         public event EventAction<EventActionArgs> DashCall;
         public event EventAction<EventActionArgs> ShadowDashCall;
         public event EventAction<ControllerEventArgs> PlatformDropCall;
+
+        private SkillResetRequester m_skillRequester;
+        public void Initialize(SkillResetRequester skillRequester)
+        {
+            m_skillRequester = skillRequester;
+        }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
@@ -37,7 +43,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             CrouchCall?.Invoke(this, callArgs);
-
+            MoveCall?.Invoke(this, callArgs);
+            
             if (state.isCrouched)
             {
                 if (state.canPlatformDrop && callArgs.input.isJumpPressed)
@@ -54,7 +61,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (callArgs.input.isJumpPressed)
                 {
-                    JumpCall?.Invoke(this, EventActionArgs.Empty);
+                    JumpCall?.Invoke(this, callArgs);
+                    
                 }
 
                 else if (skills.IsEnabled(PrimarySkill.Dash))

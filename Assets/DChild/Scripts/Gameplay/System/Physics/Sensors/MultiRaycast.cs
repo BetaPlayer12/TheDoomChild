@@ -6,7 +6,7 @@ namespace DChild.Gameplay
     [System.Serializable]
     public class MultiRaycast
     {
-        [SerializeField, InlineEditor]
+        [SerializeField, InlineEditor, OnValueChanged("Initialize",true)]
         private MultiRayCastData m_config;
 #if UNITY_EDITOR
         [SerializeField]

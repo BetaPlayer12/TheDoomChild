@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using DChild.Gameplay.Systems.WorldComponents;
 using Spine.Unity;
+using DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay
 {
@@ -93,6 +94,21 @@ namespace DChild.Gameplay
         public override void Play()
         {
             Debug.Log("Play EFFCTS");
+        }
+
+        public override void SetFacing(HorizontalDirection horizontalDirection)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Stop()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Pause()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

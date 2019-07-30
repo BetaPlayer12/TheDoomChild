@@ -5,7 +5,7 @@ namespace Refactor.DChild.Gameplay.Characters.AI
 {
     public class BasicAggroBoundary : AggroBoundary
     {
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnTriggerStay2D(Collider2D collision)
         {
             var target = collision.GetComponentInParent<ITarget>();
             if (target != null)

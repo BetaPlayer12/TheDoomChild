@@ -2,74 +2,67 @@
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters.Players;
 using System;
 using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
-    public class DoubleJump : Jump, IPlayerExternalModule, IEventModule
+    public class DoubleJump : Jump, IControllableModule
     {
+        [SerializeField]
+        private FXSpawner m_fXSpawner;
+
         private IHighJumpState m_state;
         private IDoubleJumpState m_doubleJumpState;
-        private IPlacementState m_placementState;
-        //private AirMoveDoubleJumpHandler m_handler;
 
-        public override void Initialize(IPlayerModules player)
+        private Animator m_animator;
+        private string m_speedYParameter;
+        private string m_doubleJumpParameter;
+
+        public override void Initialize(ComplexCharacterInfo info)
         {
-            base.Initialize(player);
-            m_state = player.characterState;
-            m_doubleJumpState = player.characterState;
-            m_placementState = player.characterState;
+            base.Initialize(info);
+            m_state = info.state;
+            m_doubleJumpState = info.state;
+            m_doubleJumpState.canDoubleJump = true;
+
+            m_animator = info.animator;
+            m_speedYParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
+            m_doubleJumpParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.DoubleJump);
+            info.skillResetRequester.SkillResetRequest += OnSkillReset;
         }
 
-
-      
-
-        private void Update()
+        private void OnSkillReset(object sender, ResetSkillRequestEventArgs eventArgs)
         {
-            if (m_placementState.isGrounded)
+            if (eventArgs.IsRequestedToReset(PrimarySkill.DoubleJump))
             {
-                m_doubleJumpState.hasDoubleJumped = false;
+                m_doubleJumpState.canDoubleJump = true;
             }
         }
 
         public override void HandleJump()
         {
-            m_character.StopCoyoteTime();
-            //m_handler.enabled = true;
+            m_physics.StopCoyoteTime();
             base.HandleJump();
-            m_character.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
+            m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
             m_state.canHighJump = false;
-            m_doubleJumpState.canDoubleJump = false; /////
-            m_doubleJumpState.hasDoubleJumped = true;
-            CallJumpStart(); 
+            m_doubleJumpState.canDoubleJump = false;
+
+            m_animator.SetInteger(m_speedYParameter, 0);
+            m_animator.SetTrigger(m_doubleJumpParameter);
+            m_fXSpawner.SpawnFX(m_character.facing);
         }
 
-        public void ConnectEvents()
+        public void ConnectTo(IMainController controller)
         {
-            GetComponentInParent<IDoubleJumpController>().DoubleJumpCall += OnJumpCall;
-            GetComponentInParent<IDoubleJumpController>().DoubleJumpReset += OnCallReset;
-            GetComponentInParent<IMainController>().ControllerDisabled += OnControllerDisabled;
-            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
+            controller.GetSubController<IDoubleJumpController>().DoubleJumpCall += OnJumpCall;
+            controller.ControllerDisabled += OnControllerDisabled;
         }
 
         private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
         {
-            m_doubleJumpState.canDoubleJump = true;
-            m_doubleJumpState.hasDoubleJumped = false;
-        }
-
-        private void OnLandCall(object sender, EventActionArgs eventArgs)
-        {
-            //m_handler.enabled = false;
-            m_doubleJumpState.canDoubleJump = true;
-            m_doubleJumpState.hasDoubleJumped = false;
-        }
-
-        private void OnCallReset(object sender, EventActionArgs eventArgs)
-        {
-            Debug.Log("Can Double Jump");
             m_doubleJumpState.canDoubleJump = true;
         }
 

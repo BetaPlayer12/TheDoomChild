@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_useStatusEffectController;
         private IPlayerState m_characterState;
         private IStatusEffectState m_statusState;
-        private IPlayerSkills m_skills;
+        private IPrimarySkills m_skills;
         private ControllerEventArgs m_callArgs;
 
         private StatusEffectController m_statusController;
@@ -39,16 +39,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Initialize(IPlayerModules player)
         {
-            m_statusController = GetComponent<StatusEffectController>();
-            m_input = GetComponentInParent<PlayerInput>();
-            m_ground = GetComponent<GroundController>();
-            m_air = GetComponent<AirController>();
-            m_combatController = GetComponent<CombatController>();
-            //m_combatController.Initialize(player.physics, player, player.animationState, player.characterState, player.characterState, player.animation, player.characterState, player.isolatedObject);
-            m_characterState = player.characterState;
-            m_statusState = player.statusEffectState;
-            m_skills = player.skills;
-            player.statusEffectState.StateChange += OnStatusEffectChange;
+            //m_statusController = GetComponent<StatusEffectController>();
+            //m_input = GetComponentInParent<PlayerInput>();
+            //m_ground = GetComponent<GroundController>();
+            //m_air = GetComponent<AirController>();
+            //m_combatController = GetComponent<CombatController>();
+            ////m_combatController.Initialize(player.physics, player, player.animationState, player.characterState, player.characterState, player.animation, player.characterState, player.isolatedObject);
+            //m_characterState = player.characterState;
+            //m_statusState = player.statusEffectState;
+            //m_skills = player.skills;
+            //player.statusEffectState.StateChange += OnStatusEffectChange;
         }
 
         private void OnStatusEffectChange(object sender, StatusEffectAfflictionEventArgs eventArgs)

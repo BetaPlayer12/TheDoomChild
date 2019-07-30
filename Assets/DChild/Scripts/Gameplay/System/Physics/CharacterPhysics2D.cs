@@ -145,11 +145,6 @@ namespace DChild.Gameplay
             m_stepClimber.DrawGizmos(transform);
         }
 
-        private void OnValidate()
-        {
-            m_stepClimber.m_detectorCandidates = new List<CollisionDetector>(GetComponentsInChildren<CollisionDetector>()).Where(x => x.recordContactPoints);
-        }
-
         public void Initialize(CollisionDetector legCollision)
         {
             m_legCollision = legCollision;
