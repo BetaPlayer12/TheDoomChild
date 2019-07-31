@@ -37,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [TabGroup("TabGroup", "Sprint Configurations")]
         private float m_sprintDecceleration;
 
+        private Vector2 groundNormal;
         private CharacterPhysics2D m_characterPhysics2D;
 
         private IMoveState m_state;
@@ -99,7 +100,10 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_animator.SetInteger(m_speedParameter, 1);
                 }
                 m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+                
             }
+
+            float myAngle = Vector2.Angle(groundNormal, transform.position);
         }
 
         public void UpdateVelocity()
