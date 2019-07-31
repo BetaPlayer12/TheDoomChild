@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
 
     public class AirController : MonoBehaviour, IAirMoveController, IHighJumpController, IDoubleJumpController,
-                                 IWallStickController, IWallJumpController, IAirDashController, IFallController, ILedgeController
+                                 IWallStickController, IWallJumpController, IAirDashController, ILedgeController
     {
         public event EventAction<ControllerEventArgs> MoveCall;
         public event EventAction<ControllerEventArgs> HighJumpCall;
@@ -15,8 +15,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public event EventAction<ControllerEventArgs> UpdateCall;
         public event EventAction<EventActionArgs> WallJumpCall;
         public event EventAction<EventActionArgs> DashCall;
-        public event EventAction<EventActionArgs> FallUpdate;
-        public event EventAction<EventActionArgs> FallCall;
         public event EventAction<EventActionArgs> LedgeGrabCall;//
         public event EventAction<EventActionArgs> WallSlideCall;
         public event EventAction<ControllerEventArgs> AttempWallStickCall;
@@ -80,13 +78,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             else
             {
-                if (state.isFalling)
-                {
-                    FallCall?.Invoke(this, EventActionArgs.Empty);
-                    FallUpdate?.Invoke(this, EventActionArgs.Empty);
-                    // FeetLedgeCall?.Invoke(this, callArgs);
-
-                }
+              
 
                 if (state.canHighJump)
                 {

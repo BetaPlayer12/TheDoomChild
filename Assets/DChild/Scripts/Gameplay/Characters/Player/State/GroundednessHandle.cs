@@ -27,6 +27,15 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private SkillResetRequester m_skillRequester;
         public event EventAction<EventActionArgs> LandExecuted;
 
+        public void CallLand()
+        {
+            m_landHandle.Execute();
+            LandExecuted?.Invoke(this, EventActionArgs.Empty);
+            m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+            m_fallHandle.ResetValue();
+            SetValuesToGround();
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_physics = info.physics;
@@ -90,10 +99,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 var hasLanded = m_physics.onWalkableGround;
                 if (hasLanded)
                 {
-                    m_landHandle.Execute();
-                    m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
-                    m_fallHandle.ResetValue();
-                    SetValuesToGround();
+                    CallLand();
                 }
 
                 m_landHandle.RecordVelocity();

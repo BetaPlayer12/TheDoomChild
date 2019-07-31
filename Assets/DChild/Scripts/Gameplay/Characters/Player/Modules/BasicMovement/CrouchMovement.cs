@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class CrouchMovement : MonoBehaviour, IComplexCharacterModule, IControllableModule
+    public class CrouchMovement : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         private GroundMoveHandler m_moveHandler;
@@ -38,18 +38,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             }
         }
 
-        public void ConnectEvents()
-        {
-            GetComponentInParent<ICrouchController>().CrouchMoveCall += OnCrouchMoveCall;
-        }
-
-        private void OnCrouchMoveCall(object sender, ControllerEventArgs eventArgs)
-        {
-
-            //m_moveHandler.Deccelerate();
-            Move(eventArgs.input.direction.horizontalInput);
-        }
-
         public void Initialize(ComplexCharacterInfo info)
         {
             m_character = info.character;
@@ -59,12 +47,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
         }
-
-        public void ConnectTo(IMainController controller)
-        {
-            controller.GetSubController<ICrouchController>().CrouchMoveCall += OnCrouchMoveCall;
-        }
-
     }
 
 }

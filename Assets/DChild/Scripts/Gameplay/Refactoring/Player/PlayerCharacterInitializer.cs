@@ -19,17 +19,6 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             {
                 modules[i].Initialize(m_info);
             }
-
-            var primarySkillModules = m_moduleContainer.GetComponentsInChildren<IPrimarySkillModule>(true);
-            for (int i = 0; i < primarySkillModules.Length; i++)
-            {
-                primarySkillModules[i].ConnectToSkillData(m_skills);
-            }
         }
-    }
-
-    public interface IPrimarySkillModule
-    {
-        void ConnectToSkillData(IPrimarySkills skills);
     }
 }

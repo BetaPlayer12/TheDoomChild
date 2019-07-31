@@ -21,11 +21,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void ConnectTo(IMainController controller)
         {
-            var jumpController = controller.GetSubController<IJumpController>();
-            jumpController.JumpCall += OnHighJumpCall;
+            //var jumpController = controller.GetSubController<IJumpController>();
+            //jumpController.JumpCall += OnHighJumpCall;
         }
-
-       
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -77,7 +75,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_velocityReduction = velocityReduction;
             m_movingAnimationVelocityTreshold = movingAnimationVelocityTreshold;
         }
-
 #endif
     }
 }
