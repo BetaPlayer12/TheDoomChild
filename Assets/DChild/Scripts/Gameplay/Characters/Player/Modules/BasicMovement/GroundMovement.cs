@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class GroundMovement : MonoBehaviour, IComplexCharacterModule, IControllableModule
+    public class GroundMovement : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         private CountdownTimer m_changeSpeedDuration;
@@ -48,7 +48,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private bool m_increaseVelocity;
 
-
         public void Initialize(ComplexCharacterInfo info)
         {
             m_time = info.character.isolatedObject;
@@ -59,14 +58,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_character = info.character;
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
-
         }
-
-        public void ConnectTo(IMainController controller)
-        {
-            controller.GetSubController<IGroundMoveController>().MoveCall += OnMoveCall;
-        }
-
 
         public void Move(float direction)
         {
@@ -107,20 +99,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_animator.SetInteger(m_speedParameter, 1);
                 }
                 m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
-
-                //if (m_increasevelocity)
-                //{
-                //    if (m_facingconfig.currentfacingdirection != m_previousfacing)
-                //    {
-                //        resetmovevelocity();
-                //    }
-                //}
-                //else
-                //{
-                //    m_state.isjogging = true;
-                //}
-
-
             }
         }
 
@@ -149,11 +127,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_moveHandler.ResetMoveVelocity(m_jogSpeed, m_jogAcceleration, m_jogDecceleration);
             m_animator.SetInteger(m_speedParameter, 0);
             m_changeSpeedDuration.Reset();
-        }
-
-        private void OnMoveCall(object sender, ControllerEventArgs eventArgs)
-        {
-            Move(eventArgs.input.direction.horizontalInput);
         }
 
         private void OnCountdownEnd(object sender, EventActionArgs eventArgs)

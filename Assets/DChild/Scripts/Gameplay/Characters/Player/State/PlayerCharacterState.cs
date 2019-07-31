@@ -88,5 +88,7 @@ namespace DChild.Gameplay.Characters.Players.State
                 CombatModeChanged?.Invoke(this, new CombatStateEventArgs(m_inCombat));
             }
         }
+
+        public bool hasJumped { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }

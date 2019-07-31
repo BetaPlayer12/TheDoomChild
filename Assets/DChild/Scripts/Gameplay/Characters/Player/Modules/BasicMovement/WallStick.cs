@@ -1,8 +1,6 @@
-﻿using System;
-using DChild.Gameplay.Characters.Players.Modules;
+﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Systems.WorldComponents;
-using DChild.Inputs;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.Players;
@@ -87,6 +85,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 if (m_wallSensor.isDetecting == false || m_physics.inContactWithGround)
                 {
                     CancelWallStick();
+                    m_groundednessHandle.CallLand();
                 }
             }
             else

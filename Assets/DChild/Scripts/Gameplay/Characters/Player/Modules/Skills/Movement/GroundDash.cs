@@ -18,19 +18,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CountdownTimer m_cooldownTimer;
         private bool m_isOnCooldown;
 
-        public override void ConnectTo(IMainController controller)
-        {
-            base.ConnectTo(controller);
-            controller.GetSubController<IGroundDashController>().DashCall += OnDashCall;
-        }
-
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
             m_state.canDash = true;
         }
 
-        private void HandleDash()
+        public void StartDash()
         {
             m_direction = m_character.facing == HorizontalDirection.Left ? Vector2.left : Vector2.right;
             m_duration.Reset();
@@ -45,7 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_state.canDash && m_state.isDashing == false)
             {
-                HandleDash();
+                StartDash();
                 m_state.canDash = false;
             }
         }

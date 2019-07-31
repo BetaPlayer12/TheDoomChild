@@ -21,24 +21,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_highJumpState = info.state;
             m_animator = info.animator;
             m_jumpParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
-        }
-
-        public void ConnectTo(IMainController controller)
-        {
-            var jumpController = controller.GetSubController<IJumpController>();
-            jumpController.JumpCall += OnJumpCall;
-        }
-
-        private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
-        {
-            Debug.Log("Jumping disabled");
-            m_highJumpState.canHighJump = false;
-            m_physics.SetVelocity(x: 0);
+            info.groundednessHandle.LandExecuted += OnLand;
         }
 
         public override void HandleJump()
         {
-           
+            m_highJumpState.canHighJump = true;
             if (m_physics.onWalkableGround)
             {
                 m_physics.StopCoyoteTime();
@@ -46,14 +34,25 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 base.HandleJump();
                 m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
                 m_animator.SetTrigger(m_jumpParamater);
+                m_highJumpState.hasJumped = true;
             }
         }
 
-        private void OnJumpCall(object sender, ControllerEventArgs eventArgs)
+        private void OnLand(object sender, EventActionArgs eventArgs)
         {
-            
-            m_highJumpState.canHighJump = true;
-            HandleJump();
+            m_highJumpState.hasJumped = false;
         }
+
+        public void ConnectTo(IMainController controller)
+        {
+            controller.ControllerDisabled += OnControllerDisabled;
+        }
+
+        private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
+        {
+            m_highJumpState.canHighJump = false;
+            m_physics.SetVelocity(x: 0);
+        }
+
     }
 }
