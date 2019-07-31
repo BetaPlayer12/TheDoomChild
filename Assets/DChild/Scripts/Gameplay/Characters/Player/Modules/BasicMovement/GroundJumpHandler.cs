@@ -31,12 +31,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
         {
+            Debug.Log("Jumping disabled");
             m_highJumpState.canHighJump = false;
             m_physics.SetVelocity(x: 0);
         }
 
         public override void HandleJump()
         {
+           
             if (m_physics.onWalkableGround)
             {
                 m_physics.StopCoyoteTime();
@@ -49,6 +51,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnJumpCall(object sender, ControllerEventArgs eventArgs)
         {
+            
             m_highJumpState.canHighJump = true;
             HandleJump();
         }

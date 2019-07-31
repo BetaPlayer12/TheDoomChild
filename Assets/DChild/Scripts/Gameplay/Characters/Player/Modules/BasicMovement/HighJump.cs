@@ -38,6 +38,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
            
             if (m_state.canHighJump)
             {
+               
                 if (isJumpHeld)
                 {
                     if (m_characterPhysics2D.velocity.y <= 0f)
