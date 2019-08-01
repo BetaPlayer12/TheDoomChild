@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Physics
@@ -16,6 +17,7 @@ namespace DChild.Gameplay.Physics
 
         private List<Collider2D> m_otherColliders;
         private List<Collision2D> m_collisions;
+        [ShowInInspector, ReadOnly]
         private List<ContactPoint2D> m_contacts;
 
         public int colliderCount => m_otherColliders?.Count ?? -1;
@@ -117,6 +119,13 @@ namespace DChild.Gameplay.Physics
             if (m_otherColliders.Contains(collision.collider))
             {
                 m_otherColliders.Remove(collision.collider);
+            }
+            for (int i = m_contacts.Count - 1; i >= 0; i--)
+            {
+                if (m_contacts[i].collider == collision.collider)
+                {
+                    m_contacts.RemoveAt(i);
+                }
             }
         }
 

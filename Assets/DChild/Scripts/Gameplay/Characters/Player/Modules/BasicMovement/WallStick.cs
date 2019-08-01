@@ -24,6 +24,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CharacterColliders m_colliders;
         private RaySensor m_wallSensor;
         private RaySensor m_groundHeightSensor;
+        private RaySensor m_platformSensor;
         private GroundednessHandle m_groundednessHandle;
 
         private Animator m_animator;
@@ -38,21 +39,10 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         #region Initialization
         public void ConnectTo(IMainController controller)
         {
-            var wallStickController = controller.GetSubController<IWallStickController>();
-            wallStickController.WallStickCall += OnWallStickCall;
-            wallStickController.WallSlideCall += OnWallSlideCall;
-            wallStickController.AttempWallStickCall += OnAttempWallStickCall;
-            wallStickController.WallStickCancel += OnCancel;
-
             controller.ControllerDisabled += OnControllerDisablled;
         }
 
         private void OnControllerDisablled(object sender, EventActionArgs eventArgs)
-        {
-            CancelWallStick();
-        }
-
-        private void OnCancel(object sender, EventActionArgs eventArgs)
         {
             CancelWallStick();
         }
@@ -64,6 +54,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_wallStickState = info.state;
             m_wallSensor = info.GetSensor(PlayerSensorList.SensorType.WallStick);
             m_groundHeightSensor = info.GetSensor(PlayerSensorList.SensorType.GroundHeight);
+            m_platformSensor = info.GetSensor(PlayerSensorList.SensorType.Platform);
             m_colliders = info.character.colliders;
             m_groundednessHandle = info.groundednessHandle;
 
@@ -96,7 +87,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         }
 
         #region WallStick Only
-        private void AttemptToWallStick()
+        public void AttemptToWallStick()
         {
             if (m_wallStickState.isStickingToWall == false)
             {
@@ -114,14 +105,29 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                                 m_groundHeightSensor.Cast();
                                 if (m_groundHeightSensor.isDetecting == false)
                                 {
-                                    AttachToWall(hit);
-                                    StartStickToWall();
+                                    m_platformSensor.Cast();
+                                    if (m_platformSensor.isDetecting == false)
+                                    {
+                                        AttachToWall(hit);
+                                        StartStickToWall();
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+        }
+
+        public void CancelWallStick()
+        {
+            m_isSliding = false;
+            m_wallStickState.isSlidingToWall = false;
+            m_wallStickState.isStickingToWall = false;
+            m_animator.SetBool(m_wallStickParameter, false);
+            m_animator.SetBool(m_wallSlideParameter, false);
+            m_physics.simulateGravity = true;
+            m_groundednessHandle.enabled = true;
         }
 
         private void AttachToWall(RaycastHit2D hit)
@@ -168,15 +174,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         #endregion
 
         #region WallSlide Only
-        private void DoWallSlide()
-        {
-            m_physics.simulateGravity = true;
-            m_physics.SetVelocity(Vector2.down);
-            m_wallStickState.isSlidingToWall = true;
-            m_stickTimer.EndTime(true);
-        }
-
-        private void StartWallSlide()
+        public void StartWallSlide()
         {
             m_isSliding = true;
             m_wallStickState.isSlidingToWall = true;
@@ -185,9 +183,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator.SetBool(m_wallSlideParameter, true);
         }
 
-        private void OnWallSlideCall(object sender, EventActionArgs eventArgs)
+        private void DoWallSlide()
         {
-            StartWallSlide();
+            m_physics.simulateGravity = true;
+            m_physics.SetVelocity(Vector2.down);
+            m_wallStickState.isSlidingToWall = true;
+            m_stickTimer.EndTime(true);
         }
         #endregion
 
@@ -195,22 +196,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             CancelWallStick();
             m_physics.SetVelocity(Vector2.zero);
-        }
-
-        private void CancelWallStick()
-        {
-            m_isSliding = false;
-            m_wallStickState.isSlidingToWall = false;
-            m_wallStickState.isStickingToWall = false;
-            m_animator.SetBool(m_wallStickParameter, false);
-            m_animator.SetBool(m_wallSlideParameter, false);
-            m_physics.simulateGravity = true;
-            m_groundednessHandle.enabled = true;
-        }
-
-        private void OnAttempWallStickCall(object sender, ControllerEventArgs eventArgs)
-        {
-            AttemptToWallStick();
         }
 
         private void Awake()

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class AirMovement : MonoBehaviour, IComplexCharacterModule, IControllableModule
+    public class AirMovement : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         private AirMoveHandler m_moveHandler;
@@ -15,11 +15,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private Animator m_animator;
         private string m_speedXParameter;
-
-        public void ConnectTo(IMainController controller)
-        {
-            controller.GetSubController<IAirMoveController>().MoveCall += OnMoveCall;
-        }
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -54,11 +49,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             var moveDirection = m_characterPhysics2D.velocity.x >= 0 ? Vector2.right : Vector2.left;
             m_moveHandler.SetDirection(moveDirection);
-        }
-
-        private void OnMoveCall(object sender, ControllerEventArgs eventArgs)
-        {
-            Move(eventArgs.input.direction.horizontalInput);
         }
     }
 }

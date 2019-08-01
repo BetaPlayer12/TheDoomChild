@@ -20,20 +20,22 @@ namespace DChild.Gameplay
         private bool m_useStepClimb = true;
         [SerializeField, ToggleGroup("m_useStepClimb", GroupID = "TabGroup/Configuration/StepClimb"), HideLabel]
         private StepClimber m_stepClimber;
-        
-        [SerializeField, TabGroup("TabGroup","Restriction")]
+
+        [SerializeField, TabGroup("TabGroup", "Restriction")]
         private RangeFloat m_acceptableWalkableAngle;
-        [SerializeField, TabGroup("TabGroup","References"), ValueDropdown("LegCollisionDropdown")]
+        [SerializeField, TabGroup("TabGroup", "References"), ValueDropdown("LegCollisionDropdown")]
         private CollisionDetector m_legCollision;
-        [SerializeField, TabGroup("TabGroup","References"), ValueDropdown("LegColliderDropdown")]
+        [SerializeField, TabGroup("TabGroup", "References"), ValueDropdown("LegColliderDropdown")]
         private Collider2D m_legCollider;
 
         private ColliderIntersectDetector m_legColliderDetector;
         private float m_groundAngle;
 
-        [ShowInInspector, ReadOnly, TabGroup("TabGroup","Data")]
+        [ShowInInspector, ReadOnly, TabGroup("TabGroup", "Data")]
         private bool m_onWalkableGround;
+        [ShowInInspector, ReadOnly, TabGroup("TabGroup", "Data")]
         private bool m_inContactWithGround;
+        [ShowInInspector, ReadOnly, TabGroup("TabGroup", "Data")]
         private Vector2 m_moveAlongGround;
 
         public Vector2 moveAlongGround => m_moveAlongGround;

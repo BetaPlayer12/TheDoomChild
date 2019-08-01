@@ -1,58 +1,37 @@
-﻿using DChild.Gameplay.Characters.Players.Modules;
+﻿using System;
+using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
-using DChild.Gameplay.Systems.WorldComponents;
 using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
-using Holysoft.Collections;
-using Holysoft.Event;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
     public class GroundMovement : MonoBehaviour, IComplexCharacterModule
     {
-        [SerializeField]
-        private CountdownTimer m_changeSpeedDuration;
+        [SerializeField, ReadOnly]
+        private MovementInfo m_info;
 
-        [SerializeField]
-        private GroundMoveHandler m_moveHandler;
-
-        [SerializeField]
-        [TabGroup("TabGroup", "Jog Configurations")]
-        private float m_jogSpeed;
-        [SerializeField]
-        [TabGroup("TabGroup", "Jog Configurations")]
-        private float m_jogAcceleration;
-        [SerializeField]
-        [TabGroup("TabGroup", "Jog Configurations")]
-        private float m_jogDecceleration;
-
-        [SerializeField]
-        [TabGroup("TabGroup", "Sprint Configurations")]
-        private float m_sprintSpeed;
-        [SerializeField]
-        [TabGroup("TabGroup", "Sprint Configurations")]
-        private float m_sprintAcceleration;
-        [SerializeField]
-        [TabGroup("TabGroup", "Sprint Configurations")]
-        private float m_sprintDecceleration;
-
-        private CharacterPhysics2D m_characterPhysics2D;
+        private CharacterPhysics2D m_characterPhysics;
+        protected Vector2 m_direction;
 
         private IMoveState m_state;
-        private IIsolatedTime m_time;
         private IPlayerState m_characterState;
         private Character m_character;
         private Animator m_animator;
         private string m_speedParameter;
+        private int m_movingSpeedParameterValue;
 
-        private bool m_increaseVelocity;
+        public void SetMovingSpeedParameter(int speedValue) => m_movingSpeedParameterValue = speedValue;
+        public void SetInfo(MovementInfo info)
+        {
+            m_info = info;
+            UpdateVelocity();
+        }
 
         public void Initialize(ComplexCharacterInfo info)
         {
-            m_time = info.character.isolatedObject;
-            m_characterPhysics2D = info.physics;
-            m_moveHandler.SetPhysics(m_characterPhysics2D);
+            m_characterPhysics = info.physics;
             m_state = info.state;
             m_characterState = info.state;
             m_character = info.character;
@@ -64,83 +43,51 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (direction == 0)
             {
-                if (m_increaseVelocity)
-                {
-                    ResetMoveVelocity();
-                }
-
-                if (m_characterPhysics2D.inContactWithGround)
-                {
-                    m_characterPhysics2D.SetVelocity(Vector2.zero);
-                }
-                else
-                {
-                    m_characterPhysics2D.SetVelocity(0);
-                }
-
-
+                m_characterPhysics.SetVelocity(0);
                 m_state.isMoving = false;
-                m_changeSpeedDuration.Reset();
                 m_animator.SetInteger(m_speedParameter, 0);
             }
             else
             {
-                m_changeSpeedDuration.Tick(m_time.deltaTime);
-                var moveDirection = direction > 0 ? Vector2.right : Vector2.left;
-                m_moveHandler.SetDirection(moveDirection);
-                m_moveHandler.Accelerate();
+                m_direction = direction > 0 ? Vector2.right : Vector2.left;
+                Accelerate();
                 m_state.isMoving = true;
-                if (m_increaseVelocity)
-                {
-                    m_animator.SetInteger(m_speedParameter, 2);
-                }
-                else
-                {
-                    m_animator.SetInteger(m_speedParameter, 1);
-                }
                 m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+                m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
             }
         }
 
         public void UpdateVelocity()
         {
-            var moveDirection = m_characterPhysics2D.velocity.x >= 0 ? Vector2.right : Vector2.left;
-            m_moveHandler.SetDirection(moveDirection);
-        }
-
-        private void Update()
-        {
-            if (m_increaseVelocity)
+            m_direction = m_characterPhysics.velocity.x >= 0 ? Vector2.right : Vector2.left;
+            var currentSpeed = Mathf.Abs(m_characterPhysics.velocity.x);
+            if(currentSpeed > m_info.maxSpeed)
             {
-                if (m_characterState.waitForBehaviour || m_characterState.isDashing || !m_characterState.isGrounded)
-                {
-                    ResetMoveVelocity();
-                }
+                m_characterPhysics.SetVelocity(m_info.maxSpeed * m_direction.x);
             }
         }
 
-        private void ResetMoveVelocity()
+        private bool IsInMaxSpeed()
         {
-            m_state.isJogging = false;
-            m_state.isSprinting = false;
-            m_increaseVelocity = false;
-            m_moveHandler.ResetMoveVelocity(m_jogSpeed, m_jogAcceleration, m_jogDecceleration);
-            m_animator.SetInteger(m_speedParameter, 0);
-            m_changeSpeedDuration.Reset();
+            if (m_direction.x > 0)
+            {
+                return m_characterPhysics.velocity.x < m_info.maxSpeed * m_characterPhysics.moveAlongGround.x;
+            }
+            else
+            {
+                return m_characterPhysics.velocity.x > -m_info.maxSpeed * m_characterPhysics.moveAlongGround.x;
+            }
         }
 
-        private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
-        {
-            m_state.isJogging = false;
-            m_state.isSprinting = true;
-            m_increaseVelocity = true;
-            m_moveHandler.IncreaseMoveVelocity(m_sprintSpeed, m_sprintAcceleration, m_sprintDecceleration);
-        }
+        private Vector2 ConvertToMoveForce(float acceleration) => m_characterPhysics.moveAlongGround * (acceleration * m_direction.x);
 
-        private void Awake()
+        private void Accelerate()
         {
-            m_changeSpeedDuration.CountdownEnd += OnCountdownEnd;
-            m_moveHandler.ResetMoveVelocity(m_jogSpeed, m_jogAcceleration, m_jogDecceleration);
+            if (IsInMaxSpeed())
+            {
+                var force = ConvertToMoveForce(m_info.acceleration);
+                m_characterPhysics.AddForce(force);
+            }
         }
     }
 }

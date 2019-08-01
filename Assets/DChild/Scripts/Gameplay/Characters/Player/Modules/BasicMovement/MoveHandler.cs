@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+
     [System.Serializable]
     public abstract class MoveHandler
     {
@@ -37,15 +38,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 var force = ConvertToMoveForce(m_currentAcceleration);
                 m_characterPhysics.AddForce(force);
             }
-          
+
         }
 
         public void Deccelerate()
         {
-           
+
             if (m_direction.x > 0)
             {
-               
+
                 if (m_characterPhysics.velocity.x > TOLERABLESTOPVELOCITY)
                 {
                     m_characterPhysics.AddForce(Vector2.left * m_currentDecceleration);
@@ -58,10 +59,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                
+
                 if (m_characterPhysics.velocity.x < -TOLERABLESTOPVELOCITY)
                 {
-                    
+
                     m_characterPhysics.AddForce(Vector2.right * m_currentDecceleration);
                     if (m_characterPhysics.velocity.x >= 0)
                     {
@@ -69,7 +70,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
             }
-           
+
 
         }
 

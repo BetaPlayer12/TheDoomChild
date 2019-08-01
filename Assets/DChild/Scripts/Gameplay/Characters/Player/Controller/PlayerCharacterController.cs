@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ground = GetComponent<GroundController>();
             m_ground.Initialize(m_behaviourContainer, m_skillRequester);
             m_air = GetComponent<AirController>();
-            m_air.Initialize(m_skillRequester);
+            m_air.Initialize(m_behaviourContainer,m_skillRequester);
             m_combatController = GetComponent<CombatController>();
         }
 
@@ -45,7 +45,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_input = GetComponentInParent<PlayerInput>();
             InitializeSubControllers();
         }
-
 
         private void Start()
         {
