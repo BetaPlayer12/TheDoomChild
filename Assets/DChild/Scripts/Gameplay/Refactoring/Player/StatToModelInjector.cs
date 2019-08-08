@@ -25,7 +25,7 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         [SerializeField]
         private Magic m_magic;
         [SerializeField]
-        private AttackCalculator m_attackCalculator;
+        private Attacker m_attacker;
         [SerializeField]
         private AttackResistance m_modelAttackResistance;
 
@@ -39,6 +39,15 @@ namespace Refactor.DChild.Gameplay.Characters.Players
                 case PlayerStat.Magic:
                     m_magic.SetMaxValue(eventArgs.value);
                     break;
+                case PlayerStat.Attack:
+                case PlayerStat.MagicAttack:
+                    m_attacker.SetDamage(CalculateDamage());
+                    break;
+                case PlayerStat._COUNT:
+                    m_health.SetMaxValue(m_stats.GetStat(PlayerStat.Health));
+                    m_magic.SetMaxValue(m_stats.GetStat(PlayerStat.Magic));
+                    m_attacker.SetDamage(CalculateDamage());
+                    break;
             }
         }
 
@@ -48,7 +57,7 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             m_health.ResetValueToMax();
             m_magic.SetMaxValue(m_stats.GetStat(PlayerStat.Magic));
             m_magic.ResetValueToMax();
-            m_attackCalculator.SetDamage(m_weapon.damage);
+            m_attacker.SetDamage(CalculateDamage());
             UpdateResistance();
         }
 
@@ -62,17 +71,30 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             }
         }
 
-        private void OnBaseDamageChange(object sender, EventActionArgs eventArgs)
+        private AttackDamage[] CalculateDamage()
         {
-            m_attackCalculator.SetDamage(m_weapon.damage);
+           var damageList =  m_weapon.damage;
+            var attack = m_stats.GetStat(PlayerStat.Attack);
+            var magicAttack = m_stats.GetStat(PlayerStat.MagicAttack);
+            for (int i = 0; i < damageList.Length; i++)
+            {
+                var damage = damageList[i];
+                if (AttackDamage.IsMagicAttack(damageList[i].type))
+                {
+                    damage.value += magicAttack;
+                }
+                else
+                {
+                    damage.value += attack;
+                }
+                damageList[i] = damage;
+            }
+            return damageList;
         }
 
-        private void Start()
+        private void OnDamageChange(object sender, EventActionArgs eventArgs)
         {
-            InitializeValues();
-            m_stats.StatsChanged += OnStatsChange;
-            m_weapon.BaseDamageChange += OnBaseDamageChange;
-            m_attackResistance.ResistanceChange += OnResistanceChange;
+            m_attacker.SetDamage(CalculateDamage());
         }
 
         private void OnResistanceChange(object sender, AttackResistance.ResistanceEventArgs eventArgs)
@@ -85,6 +107,14 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             {
                 m_modelAttackResistance.SetResistance(eventArgs.type, eventArgs.resistanceValue);
             }
+        }
+
+        private void Start()
+        {
+            InitializeValues();
+            m_stats.StatsChanged += OnStatsChange;
+            m_weapon.DamageChange += OnDamageChange;
+            m_attackResistance.ResistanceChange += OnResistanceChange;
         }
     }
 }

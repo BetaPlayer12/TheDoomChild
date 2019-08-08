@@ -14,7 +14,6 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             Attack,
             MagicAttack,
-            Defense,
             Crit_Damage,
             Crit_Chance,
         }
@@ -34,14 +33,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 case Stats.MagicAttack:
                     AddStat(player.stats, PlayerStat.MagicAttack, m_value);
                     break;
-                case Stats.Defense:
-                    AddStat(player.stats, PlayerStat.Defense, m_value);
-                    break;
+              
                 case Stats.Crit_Chance:
                     AddStat(player.stats, PlayerStat.CritChance, m_value);
                     break;
                 case Stats.Crit_Damage:
-                    player.modifiers.critDamageModifier += ToFloat(m_value);
+                    //player.modifiers.critDamageModifier += ToFloat(m_value);
                     break;
             }
         }
@@ -56,14 +53,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 case Stats.MagicAttack:
                     AddStat(player.stats, PlayerStat.MagicAttack, -m_value);
                     break;
-                case Stats.Defense:
-                    AddStat(player.stats, PlayerStat.Defense, -m_value);
-                    break;
+               
                 case Stats.Crit_Chance:
                     AddStat(player.stats, PlayerStat.CritChance, -m_value);
                     break;
                 case Stats.Crit_Damage:
-                    player.modifiers.critDamageModifier -= ToFloat(m_value);
+                    //player.modifiers.critDamageModifier -= ToFloat(m_value);
                     break;
             }
         }
@@ -72,7 +67,6 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         private void AddStat(IPlayerStats reference, PlayerStat stat, int value)
         {
             reference.AddStat(stat, value);
-            reference.ApplyChanges();
         }
 #if UNITY_EDITOR
         [SerializeField, HideInInspector]

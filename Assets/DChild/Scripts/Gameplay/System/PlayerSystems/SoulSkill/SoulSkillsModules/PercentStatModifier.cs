@@ -8,12 +8,11 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
-    public class MaxStatModifier : ISoulSkillModule
+    public class PercentStatModifier : ISoulSkillModule
     {
         private enum Stats
         {
             Attack,
-            Defense,
             Magic,
             Health
         }
@@ -25,6 +24,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
         private IPlayerStats m_reference;
         private int m_currentIncreasedValue;
+        private float value => m_value / 100f;
 
         public void AttachTo(IPlayer player)
         {
@@ -34,9 +34,6 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 case Stats.Attack:
                     IncreaseAttack(m_reference);
                     break;
-                case Stats.Defense:
-                    IncreaseDefense(m_reference);
-                    break;
                 case Stats.Magic:
                     IncreaseMagic(m_reference);
                     break;
@@ -44,21 +41,19 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                     IncreaseHealth(m_reference);
                     break;
             }
-            m_reference.ApplyChanges();
             m_reference.StatsChanged += OnStatsChange;
         }
 
 
         public void DetachFrom(IPlayer player)
         {
+            m_reference.StatsChanged -= OnStatsChange;
             switch (m_toChange)
             {
                 case Stats.Attack:
                     m_reference.AddStat(PlayerStat.Attack, -m_currentIncreasedValue);
                     break;
-                case Stats.Defense:
-                    m_reference.AddStat(PlayerStat.Defense, -m_currentIncreasedValue);
-                    break;
+              
                 case Stats.Magic:
                     m_reference.AddStat(PlayerStat.Magic, -m_currentIncreasedValue);
                     break;
@@ -66,31 +61,25 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                     m_reference.AddStat(PlayerStat.Health, -m_currentIncreasedValue);
                     break;
             }
-            m_reference.StatsChanged -= OnStatsChange;
-            m_reference.ApplyChanges();
             m_reference = null;
         }
         private void IncreaseAttack(IPlayerStats stats)
         {
-            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.MaxAttack) * m_value);
+            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.MaxAttack) * value);
             stats.AddStat(PlayerStat.Attack, m_currentIncreasedValue);
         }
 
-        private void IncreaseDefense(IPlayerStats stats)
-        {
-            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.MaxDefense) * m_value);
-            stats.AddStat(PlayerStat.Defense, m_currentIncreasedValue);
-        }
+     
 
         private void IncreaseMagic(IPlayerStats stats)
         {
-            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.Magic) * m_value);
+            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.Magic) * value);
             stats.AddStat(PlayerStat.Magic, m_currentIncreasedValue);
         }
 
         private void IncreaseHealth(IPlayerStats stats)
         {
-            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.Health) * m_value);
+            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.Health) * value);
             stats.AddStat(PlayerStat.Health, m_currentIncreasedValue);
         }
 
@@ -104,11 +93,6 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                     m_reference.AddStat(PlayerStat.Attack, -m_currentIncreasedValue);
                     IncreaseAttack(m_reference);
                     break;
-                case PlayerStat.Defense:
-                case PlayerStat.MagicDefense:
-                    m_reference.AddStat(PlayerStat.Defense, -m_currentIncreasedValue);
-                    IncreaseDefense(m_reference);
-                    break;
                 case PlayerStat.Health:
                     m_reference.AddStat(PlayerStat.Health, -m_currentIncreasedValue);
                     IncreaseHealth(m_reference);
@@ -119,7 +103,6 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                     break;
 
             }
-            m_reference.ApplyChanges();
         }
     }
 }
