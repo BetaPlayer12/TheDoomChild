@@ -12,11 +12,11 @@ namespace DChild.Gameplay.Combat
         Ice,
         Holy,
         Dark,
-        Corrosion,
+        Acid,
         Poison,
-        True,
         [HideInInspector]
         _COUNT,
+        True,
     }
 
 

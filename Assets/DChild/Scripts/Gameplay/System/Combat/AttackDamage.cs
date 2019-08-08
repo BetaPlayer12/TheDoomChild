@@ -9,16 +9,16 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private AttackType m_type;
         [SerializeField, MinValue(1)]
-        private int m_damage;
+        private int m_value;
 
         public AttackDamage(AttackType m_type, int m_damage)
         {
             this.m_type = m_type;
-            this.m_damage = m_damage;
+            this.m_value = m_damage;
         }
 
         public AttackType type { get => m_type; set => m_type = value; }
-        public int damage { get => m_damage; set => m_damage = value; }
+        public int value { get => m_value; set => m_value = value; }
 
         public static bool IsMagicAttack(AttackType type)
         {
@@ -31,7 +31,7 @@ namespace DChild.Gameplay.Combat
             for (int i = 0; i < result.Length; i++)
             {
                 var data = array[i];
-                data.damage += value;
+                data.value += value;
                 result[i] = data;
             }
             return result;
@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Combat
             for (int i = 0; i < result.Length; i++)
             {
                 var data = array[i];
-                data.damage += value;
+                data.value += value;
                 result[i] = data;
             }
             return result;
@@ -55,7 +55,7 @@ namespace DChild.Gameplay.Combat
             for (int i = 0; i < result.Length; i++)
             {
                 var data = array[i];
-                data.damage /= value;
+                data.value /= value;
                 result[i] = data;
             }
             return result;
@@ -67,11 +67,12 @@ namespace DChild.Gameplay.Combat
             for (int i = 0; i < result.Length; i++)
             {
                 var data = array[i];
-                data.damage *= value;
+                data.value *= value;
                 result[i] = data;
             }
             return result;
         }
+
     }
 }
 

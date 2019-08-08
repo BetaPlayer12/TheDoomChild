@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Combat.StatusInfliction
             {
                 for (int i = 0; i < statusInflictionInfos.Length; i++)
                 {
-                    if (statusInflictionInfos[i].chance == 100 || statusInflictionInfos[i].chance <= UnityEngine.Random.Range(0, 100))
+                    if (statusInflictionInfos[i].chance >= 100 || statusInflictionInfos[i].chance <= UnityEngine.Random.Range(0, 100))
                     {
                         InflictStatusTo(statusReciever, statusInflictionInfos[i].effect);
                     }

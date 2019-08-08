@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.SoulEssence;
 using Spine;
@@ -69,6 +70,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 animation.animationState.Complete += OnAnimationComplete;
             }
+        }
+
+        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

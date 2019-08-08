@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Environment
                     var bodyDefense = hitbox.defense;
                     if (bodyDefense.isInvulnerable == false)
                     {
-                        AttackInfo info = new AttackInfo(transform.position, 0, 1, m_damage);
+                        AttackerInfo info = new AttackerInfo(transform.position, 0, 1, m_damage);
                         GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(hitbox.damageable, bodyDefense.damageReduction));
                     }
                 }

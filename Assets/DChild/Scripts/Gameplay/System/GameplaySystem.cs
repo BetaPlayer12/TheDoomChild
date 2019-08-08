@@ -23,7 +23,6 @@ namespace DChild.Gameplay
 
     public class GameplaySystem : MonoBehaviour
     {
-
         private GameplaySettings m_settings;
         private static DatabaseManager m_databaseManager;
 

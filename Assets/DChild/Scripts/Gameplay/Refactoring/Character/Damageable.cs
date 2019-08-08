@@ -41,6 +41,8 @@ namespace Refactor.DChild.Gameplay.Combat
 
         public IFlinch flinchHandler => m_flinchHandler;
 
+        public Health health => m_health;
+
         public void TakeDamage(int totalDamage, AttackType type)
         {
             m_health?.ReduceCurrentValue(totalDamage);

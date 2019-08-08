@@ -132,5 +132,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation = GetComponent<GiantBlobAnimation>();
             m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedCharacterPhysics2D>(), transform);
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

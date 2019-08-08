@@ -14,12 +14,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
         public void AttachTo(IPlayer player)
         {
-            player.equipment.weapon.AddStatusInfliction(m_type, m_chance);
+            //player.weapon.AddStatusInfliction(m_type, m_chance);
         }
 
         public void DetachFrom(IPlayer player)
         {
-            player.equipment.weapon.ReduceStatusInfliction(m_type, m_chance);
+            //player.weapon.AddStatusInfliction(m_type, -m_chance);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Refactor.DChild.Gameplay.Combat
         [Range(0, 100)]
         public int critChance;
         [MinValue(0), ShowIf("CanCrit")]
-        public int critDamageModifier =1;
+        public int critDamageModifier = 1;
         public bool ignoreInvulnerability;
 
         public void Copy(AttackerInfo source)
@@ -31,7 +31,6 @@ namespace Refactor.DChild.Gameplay.Combat
             critDamageModifier = source.critDamageModifier;
             ignoreInvulnerability = source.ignoreInvulnerability;
         }
-
 
 #if UNITY_EDITOR
         private bool CanCrit() => critChance != 0;

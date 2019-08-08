@@ -13,12 +13,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
         public void AttachTo(IPlayer player)
         {
-            player.statusResistance.SetResistance(m_type, StatusResistanceType.Immune);
+           // player.statusResistance.SetResistance(m_type, StatusResistanceType.Immune);
         }
 
         public void DetachFrom(IPlayer player)
         {
-            player.statusResistance.SetResistance(m_type, StatusResistanceType.None);
+           // player.statusResistance.SetResistance(m_type, StatusResistanceType.None);
         }
     }
 }

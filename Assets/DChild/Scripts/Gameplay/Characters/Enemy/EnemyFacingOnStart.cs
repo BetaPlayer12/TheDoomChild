@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_faceEnemyOnStart)
             {
-                var target = GameplaySystem.playerManager.player.position;
+                Vector2 target = Vector2.zero/*= GameplaySystem.playerManager.player.position*/;
                 var position = m_enemy.position;
                 var facing = m_enemy.currentFacingDirection;
 

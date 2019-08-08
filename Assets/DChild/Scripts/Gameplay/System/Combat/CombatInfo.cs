@@ -32,13 +32,13 @@ namespace DChild.Gameplay.Combat
                 var currentDamage = damage[i];
                 if (AttackDamage.IsMagicAttack(currentDamage.type))
                 {
-                    magicDamage += currentDamage.damage;
+                    magicDamage += currentDamage.value;
                 }
                 else
                 {
-                    physicalDamage += currentDamage.damage;
+                    physicalDamage += currentDamage.value;
                 }
-                totalDamage += currentDamage.damage;
+                totalDamage += currentDamage.value;
                 attackerDamageType.Add(currentDamage.type);
                 //damageDealt.Add(new AttackDamage(currentDamage.type, currentDamage.damage));
             }

@@ -7,6 +7,7 @@ using UnityEngine;
 using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Pooling;
 using Holysoft.Event;
+using System.Collections.Generic;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -253,6 +254,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animationBlendWait = new WaitForWorldSeconds(0.2f);
                 m_isStaticInitialized = true;
             }
+        }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

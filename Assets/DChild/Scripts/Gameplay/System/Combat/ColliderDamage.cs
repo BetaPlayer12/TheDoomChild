@@ -5,6 +5,7 @@
  ***************************************************/
 using Holysoft;
 using Refactor.DChild.Gameplay;
+using Refactor.DChild.Gameplay.Combat;
 using System.Collections.Generic;
 using UnityEngine;
 

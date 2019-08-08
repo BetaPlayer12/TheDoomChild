@@ -6,10 +6,11 @@ using UnityEngine;
 using DChild.Gameplay.Combat.StatusInfliction;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters;
+using Refactor.DChild.Gameplay.Combat;
 
 namespace DChild.Gameplay.Characters
 {
-    public abstract class CombatCharacter : Actor, IAttacker, ITarget, IFacing, IFacingConfigurator, 
+    public abstract class CombatCharacter : Actor, IAttacker, ITarget, IFacing, IFacingConfigurator,
                                             ICombatCharacterInfo, IStatusReciever, IDamageable
     {
         protected Hitbox[] m_hitboxes;
@@ -23,6 +24,7 @@ namespace DChild.Gameplay.Characters
         public event EventAction<StatusRecieverEventArgs> ReceiverDestroyed;
         public event EventAction<EventActionArgs> Attacks;
         public event EventAction<EventActionArgs> Damaged;
+        public event EventAction<Damageable.DamageEventArgs> DamageTaken;
 
         public Vector2 position => m_model.position;
         public HorizontalDirection currentFacingDirection => m_facing;
@@ -75,6 +77,11 @@ namespace DChild.Gameplay.Characters
         protected virtual void OnDestroy()
         {
             ReceiverDestroyed?.Invoke(this, new StatusRecieverEventArgs(this));
+        }
+
+        public void SetHitboxActive(bool enable)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

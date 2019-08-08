@@ -21,18 +21,18 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
             public override void Dispose()
             {
-                m_reference.TargetDamaged -= OnAttack;
+                m_reference.attackModule.TargetDamaged -= OnAttack;
             }
 
             public override void Initialize()
             {
-                m_reference.TargetDamaged += OnAttack;
+                m_reference.attackModule.TargetDamaged += OnAttack;
             }
 
             private void OnAttack(object sender, CombatConclusionEventArgs eventArgs)
             {
-                var heal = eventArgs.attacker.damage.damage * m_lifeSteal;
-                GameplaySystem.combatManager.Heal(m_reference, Mathf.CeilToInt(heal));
+                var heal = eventArgs.result.totalDamageDealt * m_lifeSteal;
+                GameplaySystem.combatManager.Heal(m_reference.healableModule, Mathf.CeilToInt(heal));
             }
         }
 

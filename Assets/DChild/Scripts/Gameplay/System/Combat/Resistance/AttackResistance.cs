@@ -20,26 +20,35 @@ namespace DChild.Gameplay.Combat
             public AttackType type { get; }
             public float resistanceValue { get; }
         }
-
-        [OdinSerialize, HideReferenceObjectPicker, PropertyOrder(2), ReadOnly, OnValueChanged("SendEvent")]
-        protected Dictionary<AttackType, float> m_resistance = new Dictionary<AttackType, float>();
+        protected abstract Dictionary<AttackType, float> resistance { get; }
         public event EventAction<ResistanceEventArgs> ResistanceChange;
 
-        public abstract float GetResistance(AttackType type);
+        public abstract void SetResistance(AttackType type, float resistanceValue);
 
-        public void SetResistance(AttackType type, AttackResistanceType resistanceType) => SetResistance(type, ConvertToFloat(resistanceType));
+        public float GetResistance(AttackType type) => resistance.ContainsKey(type) ? resistance[type] : 0;
 
-        public void SetResistance(AttackType type, float resistanceValue)
+        protected void CallResistanceChange(ResistanceEventArgs eventArgs) => ResistanceChange?.Invoke(this, eventArgs);
+
+        protected void SetResistance(Dictionary<AttackType, float> list, AttackType type, float resistanceValue)
         {
-            if (m_resistance.ContainsKey(type))
+            if (resistanceValue == 0)
             {
-                m_resistance[type] = resistanceValue;
+                if (list.ContainsKey(type))
+                {
+                    list.Remove(type);
+                }
             }
             else
             {
-                m_resistance.Add(type, resistanceValue);
+                if (list.ContainsKey(type))
+                {
+                    list[type] = resistanceValue;
+                }
+                else
+                {
+                    list.Add(type, resistanceValue);
+                }
             }
-            CallResistanceChange(new ResistanceEventArgs(type, resistanceValue));
         }
 
         protected static float ConvertToFloat(AttackResistanceType type)
@@ -60,180 +69,5 @@ namespace DChild.Gameplay.Combat
                     return 1;
             }
         }
-
-        protected void CallResistanceChange(ResistanceEventArgs eventArgs) => ResistanceChange?.Invoke(this, eventArgs);
-#if UNITY_EDITOR
-        [System.Serializable]
-        public struct Info
-        {
-            [ShowInInspector, MinValue(-1), MaxValue(2), OnValueChanged("UpdateData")]
-            private float m_value;
-            [ShowInInspector, ReadOnly]
-            private AttackResistanceType m_type;
-
-            public Info(AttackResistanceType m_type) : this()
-            {
-                this.m_type = m_type;
-                m_value = ConvertToFloat(m_type);
-            }
-
-            public Info(float m_value) : this()
-            {
-                this.m_value = m_value;
-                m_type = GetClosestType(m_value);
-            }
-
-            public float value
-            {
-                get => m_value; set
-                {
-                    m_value = value;
-                    UpdateData();
-                }
-            }
-
-            public AttackResistanceType type => m_type;
-
-            private void UpdateData()
-            {
-                m_type = GetClosestType(m_value);
-            }
-
-            private AttackResistanceType GetClosestType(float value)
-            {
-                if (value > 1)
-                {
-                    return AttackResistanceType.Absorb;
-                }
-                else if (value == 0f)
-                {
-                    return AttackResistanceType.None;
-                }
-                else if (value == 1f)
-                {
-                    return AttackResistanceType.Immune;
-                }
-                else if (value < 0)
-                {
-                    return AttackResistanceType.Weak;
-                }
-                else
-                {
-                    return AttackResistanceType.Strong;
-                }
-            }
-        }
-
-        [SerializeField, OnValueChanged("UpdateResistanceLists")]
-        private bool m_useType;
-
-        [ShowInInspector, HideReferenceObjectPicker, PropertyOrder(1), ShowIf("m_useType"), OnValueChanged("Validate")]
-        protected Dictionary<AttackType, AttackResistanceType> m_resistantType = new Dictionary<AttackType, AttackResistanceType>();
-        [ShowInInspector, HideReferenceObjectPicker, PropertyOrder(1), HideIf("m_useType"), OnValueChanged("Validate")]
-        protected Dictionary<AttackType, Info> m_resistantInfo = new Dictionary<AttackType, Info>();
-
-        [Button, PropertyOrder(1)]
-        private void Validate()
-        {
-            m_resistance.Clear();
-            if (m_useType)
-            {
-                foreach (var key in m_resistantType.Keys)
-                {
-                    var type = m_resistantType[key];
-                    if (type == AttackResistanceType.None)
-                    {
-                        m_resistantType.Remove(key);
-                    }
-                    else
-                    {
-                        m_resistance.Add(key, ConvertToFloat(m_resistantType[key]));
-                    }
-                }
-            }
-            else
-            {
-                foreach (var key in m_resistantInfo.Keys)
-                {
-                    var info = m_resistantInfo[key];
-                    if (info.type == AttackResistanceType.None)
-                    {
-                        m_resistantInfo.Remove(key);
-                    }
-                    else
-                    {
-                        m_resistance.Add(key, info.value);
-                    }
-                }
-            }
-            SendEvent();
-        }
-
-        private void UpdateResistanceLists()
-        {
-            if (m_useType)
-            {
-                m_resistantType.Clear();
-                foreach (var key in m_resistantInfo.Keys)
-                {
-                    m_resistantType.Add(key, m_resistantInfo[key].type);
-                }
-            }
-            else
-            {
-                m_resistantInfo.Clear();
-                foreach (var key in m_resistantType.Keys)
-                {
-                    m_resistantInfo.Add(key, new Info(m_resistantType[key]));
-                }
-            }
-            Validate();
-            SendEvent();
-        }
-
-        [Button]
-        private void CopyResistance()
-        {
-            m_resistantInfo.Clear();
-            m_resistantType.Clear();
-            foreach (var key in m_resistance.Keys)
-            {
-                var value = m_resistance[key];
-                m_resistantInfo.Add(key, new Info(value));
-                m_resistantType.Add(key, GetClosestType(value));
-            }
-        }
-
-        private AttackResistanceType GetClosestType(float value)
-        {
-            if (value > 1)
-            {
-                return AttackResistanceType.Absorb;
-            }
-            else if (value == 0f)
-            {
-                return AttackResistanceType.None;
-            }
-            else if (value == 1f)
-            {
-                return AttackResistanceType.Immune;
-            }
-            else if (value < 0)
-            {
-                return AttackResistanceType.Weak;
-            }
-            else
-            {
-                return AttackResistanceType.Strong;
-            }
-        }
-
-        private void SendEvent() => ResistanceChange?.Invoke(this, new ResistanceEventArgs(AttackType._COUNT, 0));
-#endif
-
-        /* Calculation will be::
-        Resisted Damage = Damage * ResistanceValue;
-        Actual Damage = Damage - ResistedDamage;
-    */
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Holysoft.Event;
 using UnityEngine;
+using static Refactor.DChild.Gameplay.Combat.Damageable;
 
 namespace DChild.Gameplay.Combat
 {
@@ -10,5 +11,7 @@ namespace DChild.Gameplay.Combat
         bool isAlive { get; }
         IAttackResistance attackResistance { get; }
         void TakeDamage(int totalDamage, AttackType type);
+        void SetHitboxActive(bool enable);
+        event EventAction<DamageEventArgs> DamageTaken;
     }
 }

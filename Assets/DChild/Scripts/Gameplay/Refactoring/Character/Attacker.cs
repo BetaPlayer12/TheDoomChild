@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Combat
 {
-
     public class Attacker : MonoBehaviour, IAttacker, IDamageDealer
     {
         [SerializeField]
@@ -32,12 +31,9 @@ namespace Refactor.DChild.Gameplay.Combat
             if (m_info.ignoreInvulnerability || !targetDefense.isInvulnerable)
             {
                 var position = transform.position;
-                for (int i = 0; i < m_currentDamage.Count; i++)
-                {
-                    AttackInfo info = new AttackInfo(position, 0, 1, m_currentDamage[i]);
-                    var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                    TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo.target, result));
-                }
+                global::DChild.Gameplay.Combat.AttackerInfo info = new global::DChild.Gameplay.Combat.AttackerInfo(position, 0, 1, m_currentDamage.ToArray());
+                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
             }
         }
 
@@ -76,7 +72,7 @@ namespace Refactor.DChild.Gameplay.Combat
             for (int i = 0; i < m_info.damage.Count; i++)
             {
                 var damage = m_info.damage[i];
-                damage.damage *= m_damageModifier;
+                damage.value *= m_damageModifier;
                 m_currentDamage.Add(damage);
             }
         }

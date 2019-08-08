@@ -2,8 +2,8 @@
 
 namespace DChild.Gameplay.Combat
 {
-    public interface IAttacker : IAttackerEvents
+    public interface IAttacker
     {
-
+        event EventAction<CombatConclusionEventArgs> TargetDamaged;
     }
 }
