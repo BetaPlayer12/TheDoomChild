@@ -29,7 +29,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public event EventAction<EventActionArgs> ControllerDisabled;
 
-        public T GetSubController<T>() where T : ISubController => GetComponentInChildren<T>();
+        public void Enable()
+        {
+            enabled = true;
+        }
+
+        public void Disable()
+        {
+            enabled = false;
+            ControllerDisabled?.Invoke(this, EventActionArgs.Empty);
+        }
 
         private void InitializeSubControllers()
         {
@@ -38,6 +47,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_air = GetComponent<AirController>();
             m_air.Initialize(m_behaviourContainer,m_skillRequester);
             m_combatController = GetComponent<CombatController>();
+            m_combatController.Initialize(m_behaviourContainer);
         }
 
         private void Awake()

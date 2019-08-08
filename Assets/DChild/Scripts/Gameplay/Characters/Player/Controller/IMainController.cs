@@ -8,9 +8,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public interface IMainController
     {
+        void Enable();
+        void Disable();
         event EventAction<EventActionArgs> ControllerDisabled;
-        T GetSubController<T>() where T : ISubController;
     }
-
-    public interface ISubController { }
 }

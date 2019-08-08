@@ -8,10 +8,14 @@ using UnityEngine;
 namespace DChild.Gameplay.Characters.Players.Modules
 {
 
-    public class AirController : MonoBehaviour,IHighJumpController
+    public class AirController : MonoBehaviour
     {
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private AirMovement m_airMovement;
+        private MovementHandle m_movement;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private MoveSpeedTransistor m_speedTransistor;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private HighJump m_highJump;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private DoubleJump m_doubleJump;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
@@ -23,13 +27,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private LedgeGrab m_ledgeGrab;
 
-        public event EventAction<ControllerEventArgs> HighJumpCall;
 
         private SkillResetRequester m_skillRequester;
         public void Initialize(GameObject behaviours, SkillResetRequester skillRequester)
         {
             m_skillRequester = skillRequester;
-            m_airMovement = behaviours.GetComponentInChildren<AirMovement>();
+            m_movement = behaviours.GetComponentInChildren<MovementHandle>();
+            m_speedTransistor = behaviours.GetComponentInChildren<MoveSpeedTransistor>();
+            m_highJump = behaviours.GetComponentInChildren<HighJump>();
             m_doubleJump = behaviours.GetComponentInChildren<DoubleJump>();
             m_wallStick = behaviours.GetComponentInChildren<WallStick>();
             m_wallJump = behaviours.GetComponentInChildren<WallJump>();
@@ -61,19 +66,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                m_airMovement?.Move(callArgs.input.direction.horizontalInput);
+                m_movement?.Move(callArgs.input.direction.horizontalInput);
             }
         }
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
+            m_speedTransistor.SwitchToAirMoveSpeed();
             if (state.isStickingToWall)
             {
                 m_wallStick?.HandleWallStick();
                 if (skills.IsEnabled(PrimarySkill.WallJump) && callArgs.input.isJumpPressed)
                 {
-                    m_wallJump?.HandleJump();
                     m_wallStick?.CancelWallStick();
+                    m_wallJump?.HandleJump();
                 }
                 else if (state.isSlidingToWall == false && callArgs.input.direction.isDownPressed)
                 {
@@ -90,7 +96,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (state.canHighJump)
                 {
-                    HighJumpCall?.Invoke(this, callArgs);
+                    m_highJump?.HandleHighJump(callArgs.input.isJumpHeld);
                 }
 
                 if (skills.IsEnabled(PrimarySkill.DoubleJump) && state.canDoubleJump)

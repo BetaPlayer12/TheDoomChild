@@ -126,6 +126,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_wallStickState.isStickingToWall = false;
             m_animator.SetBool(m_wallStickParameter, false);
             m_animator.SetBool(m_wallSlideParameter, false);
+            m_physics.SetVelocity(Vector2.zero);
             m_physics.simulateGravity = true;
             m_groundednessHandle.enabled = true;
         }
@@ -142,7 +143,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             {
                 m_physics.transform.position = new Vector2(hitpoint.x - m_stickPositionOffset, currentPosition.y);
             }
-            m_groundednessHandle.enabled = false;
         }
 
         private void StartStickToWall()
@@ -150,11 +150,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_wallStickState.isStickingToWall = true;
             m_wallStickState.isSlidingToWall = false;
             m_wallStickState.isFalling = false;
+            m_wallStickState.isMoving = false;
             m_stickTimer.SetStartTime(m_stickDuration);
             m_stickTimer.Reset();
             m_physics.SetVelocity(Vector2.zero);
             m_physics.simulateGravity = false;
             m_isSliding = false;
+
 
             m_animator.SetInteger(m_speedYParameter, 0);
             m_animator.SetTrigger(m_wallStickTriggerParameter);
@@ -178,6 +180,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             m_isSliding = true;
             m_wallStickState.isSlidingToWall = true;
+            m_groundednessHandle.enabled = false;
             m_physics.simulateGravity = true;
             m_stickTimer.EndTime(false);
             m_animator.SetBool(m_wallSlideParameter, true);

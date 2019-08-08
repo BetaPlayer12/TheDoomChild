@@ -98,6 +98,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state.waitForBehaviour = true;
             m_state.isFalling = false;
             m_state.isGrounded = true;
+            m_state.isMoving = false;
             m_animator.SetTrigger(m_ledgeGrabParameter);
             m_animator.SetInteger(m_speedYDirectionParameter, 0);
             m_animator.SetBool(m_midAirParameter, false);

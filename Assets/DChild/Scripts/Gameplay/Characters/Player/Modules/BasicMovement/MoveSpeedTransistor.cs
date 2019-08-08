@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class GroundSpeedTransistor : MonoBehaviour, IComplexCharacterModule
+    public class MoveSpeedTransistor : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField, BoxGroup("Data")]
         private MovementData m_crouchData;
@@ -16,9 +16,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private MovementData m_jogData;
         [SerializeField, BoxGroup("Data")]
         private MovementData m_sprintData;
+        [SerializeField, BoxGroup("Data")]
+        private MovementData m_airMoveData;
 
         [SerializeField]
-        private GroundMovement m_movement;
+        private MovementHandle m_movement;
         [SerializeField]
         private CountdownTimer m_transistionToSprintTime;
 
@@ -32,14 +34,24 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void SwitchToCrouchSpeed()
         {
-            m_movement.SetInfo(m_crouchData.info);
-            m_movement.SetMovingSpeedParameter(1);
+            m_movement?.SetInfo(m_crouchData.info);
+            m_movement?.SetMovingSpeedParameter(1);
+            m_transistionToSprintTime.Reset();
+            m_isSprinting = false;
+        }
+
+        public void SwitchToAirMoveSpeed()
+        {
+            m_movement?.SetInfo(m_airMoveData.info);
+            m_movement?.SetMovingSpeedParameter(1);
+            m_transistionToSprintTime.Reset();
+            m_isSprinting = false;
         }
 
         public void SwitchToJogSpeed()
         {
-            m_movement.SetInfo(m_jogData.info);
-            m_movement.SetMovingSpeedParameter(1);
+            m_movement?.SetInfo(m_jogData.info);
+            m_movement?.SetMovingSpeedParameter(1);
             m_transistionToSprintTime.Reset();
             m_isSprinting = false;
         }
@@ -54,13 +66,14 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void Awake()
         {
+            m_transistionToSprintTime.Reset();
             m_transistionToSprintTime.CountdownEnd += OnCountdownEnd;
         }
 
         private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
         {
-            m_movement.SetInfo(m_sprintData.info);
-            m_movement.SetMovingSpeedParameter(2);
+            m_movement?.SetInfo(m_sprintData.info);
+            m_movement?.SetMovingSpeedParameter(2);
             m_isSprinting = true;
         }
 

@@ -1,11 +1,12 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Projectiles;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class ProjectileThrow : MonoBehaviour, IPlayerExternalModule
+    public class ProjectileThrow : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         [PreviewField(50, ObjectFieldAlignment.Left), ValidateInput("ValidateProjectile")]
@@ -18,7 +19,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Vector2 m_currentAim;
         private float m_currentThrowForce;
 
-        private IFacing m_facing;
+        private Character m_character;
         public Vector2 currentAim => m_currentAim;
         public float currentThrowForce => m_currentThrowForce;
 
@@ -46,16 +47,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             projectile.SetVelocity(m_currentAim, m_currentThrowForce);
         }
 
-        public void Initialize(IPlayerModules player)
+        public void Initialize(ComplexCharacterInfo info)
         {
-            m_facing = player;
+            m_character = info.character;
         }
-#if UNITY_EDITOR
-        private bool ValidateProjectile(GameObject projectile)
-        {
-            return projectile.GetComponent<Projectile>();
-        }
-
-#endif
     }
 }

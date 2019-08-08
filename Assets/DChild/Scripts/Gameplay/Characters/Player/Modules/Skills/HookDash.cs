@@ -1,12 +1,13 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
     [RequireComponent(typeof(LineRenderer))]
-    public class HookDash : MonoBehaviour, IPlayerExternalModule
+    public class HookDash : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         [MinValue(0.1)]
@@ -16,14 +17,14 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         private IWhipGrapple m_state;
 
-        private CharacterPhysics2D m_character;
+        private CharacterPhysics2D m_physics;
         private LineRenderer m_hookLine;
         private float m_count;
 
-        public void Initialize(IPlayerModules player)
+        public void Initialize(ComplexCharacterInfo info)
         {
-            m_state = player.characterState;
-            m_character = player.physics;
+            m_state = info.state;
+            m_physics = info.physics;
         }
 
         private void Update()
@@ -37,12 +38,12 @@ namespace DChild.Gameplay.Characters.Players.Skill
             {
                 CreateHookLine();
                 HandleHookDash();
-                m_character.simulateGravity = false;
+                m_physics.simulateGravity = false;
             }
 
             else
             {
-                m_character.simulateGravity = true;
+                m_physics.simulateGravity = true;
             }
         }
 
@@ -54,12 +55,12 @@ namespace DChild.Gameplay.Characters.Players.Skill
                 m_count = m_delay;
 
                 var targetPosition = GetMousePosition();
-                targetPosition.z = m_character.transform.position.z;
-                m_character.transform.position = Vector3.Lerp(m_character.transform.position, targetPosition, m_power);
+                targetPosition.z = m_physics.transform.position.z;
+                m_physics.transform.position = Vector3.Lerp(m_physics.transform.position, targetPosition, m_power);
 
 
-                m_hookLine.SetPosition(0, m_character.transform.position);
-                m_hookLine.SetPosition(1, m_character.transform.position);
+                m_hookLine.SetPosition(0, m_physics.transform.position);
+                m_hookLine.SetPosition(1, m_physics.transform.position);
             }
             else
             {
@@ -69,14 +70,15 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         private void CreateHookLine()
         {
-            m_hookLine.SetPosition(0, m_character.transform.position);
+            m_hookLine.SetPosition(0, m_physics.transform.position);
             m_hookLine.SetPosition(1, GetMousePosition());
         }
 
         private Vector3 GetMousePosition()
         {
-            var mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, m_character.transform.position.z));
-            return mousePosition;
+            //var mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, m_character.transform.position.z));
+            //return mousePosition;
+            return Vector3.zero;
         }
 
         private void Start()
@@ -86,5 +88,7 @@ namespace DChild.Gameplay.Characters.Players.Skill
             m_hookLine.widthMultiplier = 0.1f;
             m_hookLine.material = new Material(Shader.Find("Sprites/Default"));
         }
+
+      
     }
 }

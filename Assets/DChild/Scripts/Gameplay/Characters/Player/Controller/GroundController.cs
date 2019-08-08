@@ -10,9 +10,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
 
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private GroundMovement m_movement;
+        private MovementHandle m_movement;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private GroundSpeedTransistor m_speedTransistor;
+        private MoveSpeedTransistor m_speedTransistor;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private Crouch m_crouch;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
@@ -31,8 +31,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_groundJump = behaviours.GetComponentInChildren<GroundJumpHandler>();
             m_groundDash = behaviours.GetComponentInChildren<GroundDash>();
             m_platformDrop = behaviours.GetComponentInChildren<PlatformDrop>();
-            m_movement = behaviours.GetComponentInChildren<GroundMovement>();
-            m_speedTransistor = behaviours.GetComponentInChildren<GroundSpeedTransistor>();
+            m_movement = behaviours.GetComponentInChildren<MovementHandle>();
+            m_speedTransistor = behaviours.GetComponentInChildren<MoveSpeedTransistor>();
         }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-               
+
                 if (state.hasJumped == false)
                 {
                     m_movement?.Move(callArgs.input.direction.horizontalInput);
@@ -57,13 +57,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (state.isCrouched)
             {
-                m_crouch?.HandleCrouch(callArgs.input.direction.isDownHeld);
-                if (state.canPlatformDrop && callArgs.input.isJumpPressed)
+                if (m_crouch?.HandleCrouch(callArgs.input.direction.isDownHeld) ?? false)
+                {
+                    if (state.canPlatformDrop && callArgs.input.isJumpPressed)
+                    {
+                        m_platformDrop?.DropFromPlatform();
+                        m_speedTransistor?.SwitchToJogSpeed();
+                        m_crouch?.StopCrouch();
+                    }
+                }
+                else
                 {
                     m_speedTransistor?.SwitchToJogSpeed();
-                    m_crouch?.StopCrouch();
-                    m_platformDrop?.DropFromPlatform();
                 }
+               
             }
             else if (state.isDashing)
             {
@@ -79,7 +86,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else
                     {
-                        m_speedTransistor?.SwitchToJogSpeed();
+                        if (callArgs.input.direction.horizontalInput != 0)
+                        {
+                            m_speedTransistor?.SwitchToJogSpeed();
+                        }
                     }
                 }
 

@@ -11,7 +11,7 @@ using System;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class ImmobilityBreak : MonoBehaviour, IPlayerExternalModule
+    public class ImmobilityBreak : MonoBehaviour
     {
         [SerializeField, MinValue(1)]
         private int m_breakThreshold;
@@ -28,13 +28,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private IStatusReciever m_reciever;
 
-        public void Initialize(IPlayerModules player)
-        {
-            m_reciever = (IStatusReciever)player;
-            GetComponentInParent<IPetrifyController>().CallPetrifyHandler += OnPetrifyHandle;
-            GetComponentInParent<IFrozenController>().CallFrozenHandler += OnFrozenHandle;
-            m_inputResetTimer.CountdownEnd += OnInputReset;
-        }
+        //public void Initialize(IPlayerModules player)
+        //{
+        //    m_reciever = (IStatusReciever)player;
+        //    GetComponentInParent<IPetrifyController>().CallPetrifyHandler += OnPetrifyHandle;
+        //    GetComponentInParent<IFrozenController>().CallFrozenHandler += OnFrozenHandle;
+        //    m_inputResetTimer.CountdownEnd += OnInputReset;
+        //}
 
         private void OnInputReset(object sender, EventActionArgs eventArgs)
         {

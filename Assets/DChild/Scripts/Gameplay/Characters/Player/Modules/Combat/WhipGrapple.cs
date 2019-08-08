@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         event EventAction<EventActionArgs> WhipGrappleCall;
     }
 
-    public class WhipGrapple : MonoBehaviour, IPlayerExternalModule
+    public class WhipGrapple : MonoBehaviour
     {
         [SerializeField]
         private GrappleHook m_hook;
@@ -34,22 +34,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private CharacterPhysics2D m_physics;
         private bool m_isDashing;
 
-        public void Initialize(IPlayerModules player)
-        {
-            m_launched = false;
-            m_hooked = false;
-            m_isDeciding = false;
-            m_pull = false;
-            m_physics = player.physics;
+        //public void Initialize(IPlayerModules player)
+        //{
+        //    m_launched = false;
+        //    m_hooked = false;
+        //    m_isDeciding = false;
+        //    m_pull = false;
+        //    m_physics = player.physics;
 
-            m_hook.ObjectCatched += OnHookCatchedObject;
-            m_hook.HookReturned += OnHookReturned;
+        //    m_hook.ObjectCatched += OnHookCatchedObject;
+        //    m_hook.HookReturned += OnHookReturned;
 
-            var controller = GetComponentInParent<IAutoGrappleController>();
-            controller.AutoGrappleCall += OnAutoGrappleCall;
-            controller.UpdateCall += OnUpdateCall;
-            controller.FixedUpdateCall += OnFixedUpdateCall;
-        }
+        //    var controller = GetComponentInParent<IAutoGrappleController>();
+        //    controller.AutoGrappleCall += OnAutoGrappleCall;
+        //    controller.UpdateCall += OnUpdateCall;
+        //    controller.FixedUpdateCall += OnFixedUpdateCall;
+        //}
 
 
 

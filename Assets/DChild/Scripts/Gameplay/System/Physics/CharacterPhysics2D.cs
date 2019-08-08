@@ -37,6 +37,8 @@ namespace DChild.Gameplay
         private bool m_inContactWithGround;
         [ShowInInspector, ReadOnly, TabGroup("TabGroup", "Data")]
         private Vector2 m_moveAlongGround;
+        [SerializeField, TabGroup("TabGroup", "References")]
+        private LayerMask m_legColliderLayerMask;
 
         public Vector2 moveAlongGround => m_moveAlongGround;
         public bool onWalkableGround => m_onWalkableGround;
@@ -79,7 +81,8 @@ namespace DChild.Gameplay
                 m_onWalkableGround = false;
                 m_inContactWithGround = false;
             }
-            if (m_legCollision.collisionCount > 0)
+
+            if (m_legCollider.IsTouchingLayers(m_legColliderLayerMask) && velocity.y <= 0.1f)
             {
                 m_inContactWithGround = true;
                 if (m_acceptableWalkableAngle.InRange(m_groundAngle))
@@ -119,6 +122,7 @@ namespace DChild.Gameplay
             m_onWalkableGround = true;
             m_legColliderDetector = GetComponentInChildren<CapsuleColliderDetector>();
             m_stepClimber.Initialize();
+            m_legColliderLayerMask = Physics2D.GetLayerCollisionMask(m_legCollider.gameObject.layer);
             base.Awake();
         }
         public override void UpdatePhysics()

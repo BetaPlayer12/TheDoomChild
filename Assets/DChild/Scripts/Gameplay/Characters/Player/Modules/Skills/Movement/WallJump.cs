@@ -49,6 +49,7 @@ namespace DChild.Gameplay.Characters.Players.Skill
         private void OnDisableInputEnd(object sender, EventActionArgs eventArgs)
         {
             m_state.waitForBehaviour = false;
+            enabled = false;
         }
 
         private void Awake()

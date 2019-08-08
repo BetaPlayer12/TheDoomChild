@@ -5,5 +5,6 @@
         bool waitForBehaviour { get; set; }
         bool isGrounded { set; }
         bool isFalling { set; }
+        bool isMoving { set; }
     }
 }

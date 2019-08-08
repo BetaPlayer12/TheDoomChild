@@ -5,7 +5,7 @@ using DChild.Gameplay;
 using Holysoft.Event;
 using UnityEngine;
 
-public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
+public class ShadowCollider : MonoBehaviour
 {
     [SerializeField]
     private LayerMask m_mask;
@@ -86,10 +86,5 @@ public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(m_bodyTransform.position, m_overlapSize);
-    }
-
-    public void Initialize(IPlayerModules player)
-    {
-        m_skills = player.skills;
     }
 }
