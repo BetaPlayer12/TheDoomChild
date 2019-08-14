@@ -52,10 +52,10 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             DamageChange?.Invoke(this, EventActionArgs.Empty);
         }
 
-        public void SetInfliction(StatusEffectType type, int resistanceValue)
+        public void SetInfliction(StatusEffectType type, int chanceValue)
         {
-            resistanceValue = Mathf.Clamp(resistanceValue, 0, 100);
-            if (resistanceValue == 0)
+            chanceValue = Mathf.Clamp(chanceValue, 0, 100);
+            if (chanceValue == 0)
             {
                 if (Contains(type, out int index))
                 {
@@ -67,12 +67,12 @@ namespace Refactor.DChild.Gameplay.Characters.Players
                 if (Contains(type, out int index))
                 {
                     var info = m_statusInflictions[index];
-                    info.chance = resistanceValue;
+                    info.chance = chanceValue;
                     m_statusInflictions[index] = info;
                 }
                 else
                 {
-                    m_statusInflictions.Add(new StatusEffectChance(type, resistanceValue));
+                    m_statusInflictions.Add(new StatusEffectChance(type, chanceValue));
                 }
             }
             StatusInflictionUpdate?.Invoke(this, EventActionArgs.Empty);
@@ -99,7 +99,16 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             m_combinedDamage.Add(m_baseDamage);
             if (m_addedDamage.value > 0)
             {
-                m_combinedDamage.Add(m_addedDamage);
+                if (m_addedDamage.type == m_baseDamage.type)
+                {
+                    var damage = m_combinedDamage[0];
+                    damage.value += m_addedDamage.value;
+                    m_combinedDamage[0] = damage;
+                }
+                else
+                {
+                    m_combinedDamage.Add(m_addedDamage);
+                }
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Combat;
+﻿using System;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR

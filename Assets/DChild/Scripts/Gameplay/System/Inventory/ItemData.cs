@@ -17,8 +17,18 @@ namespace DChild.Menu.Item
 
         protected override IEnumerable GetIDs()
         {
+            var connection = DChildDatabase.GetItemConnection();
+            connection.Initialize();
+            var infoList = connection.GetAllInfo();
+            connection.Close();
+
             var list = new ValueDropdownList<int>();
             list.Add("Not Assigned", -1);
+            for (int i = 0; i < infoList.Length; i++)
+            {
+                var info = infoList[i];
+                list.Add(info.name, info.ID);
+            }
             return list;
         }
 
@@ -27,7 +37,7 @@ namespace DChild.Menu.Item
             string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
             if (m_ID != -1)
             {
-                var connection = DChildDatabase.GetBestiaryConnection();
+                var connection = DChildDatabase.GetItemConnection();
                 connection.Initialize();
                 var databaseName = connection.GetNameOf(m_ID);
                 if (connection.GetNameOf(m_ID) != m_name)
@@ -46,12 +56,35 @@ namespace DChild.Menu.Item
             }
             AssetDatabase.SaveAssets();
         }
+
+        [Button, ToggleGroup("m_enableEdit")]
+        private void SaveToDatabase()
+        {
+            var connection = DChildDatabase.GetItemConnection();
+            connection.Initialize();
+            connection.Update(m_ID, m_description, m_quantityLimit, m_cost);
+            connection.Close();
+        }
+
+        [Button, ToggleGroup("m_enableEdit")]
+        private void LoadFromDatabase()
+        {
+            var connection = DChildDatabase.GetItemConnection();
+            connection.Initialize();
+            var info = connection.GetInfoOf(m_ID);
+            m_description = info.description;
+            m_quantityLimit = info.quantityLimit;
+            m_cost = info.cost;
+            connection.Close();
+        }
 #endif
 
         [SerializeField, PreviewField(100, ObjectFieldAlignment.Center), ToggleGroup("m_enableEdit")]
         private Sprite m_icon;
         [SerializeField, MinValue(1), ToggleGroup("m_enableEdit")]
         private int m_quantityLimit;
+        [SerializeField, MinValue(0), ToggleGroup("m_enableEdit")]
+        private int m_cost;
         [SerializeField, TextArea, ToggleGroup("m_enableEdit")]
         private string m_description;
 
@@ -59,6 +92,7 @@ namespace DChild.Menu.Item
         public string itemName { get => m_name; }
         public Sprite icon { get => m_icon; }
         public int quantityLimit { get => m_quantityLimit; }
+        public int cost { get => m_cost; }
         public string description { get => m_description; }
     }
 }

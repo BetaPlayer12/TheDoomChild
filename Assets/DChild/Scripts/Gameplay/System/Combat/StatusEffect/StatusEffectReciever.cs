@@ -93,10 +93,13 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         private void Update()
         {
-            var deltaTime = m_isolatedObject.deltaTime;
-            for (int i = 0; i < m_inflictedStatusEffects.Count; i++)
+            if (m_inflictedStatusEffects.Count > 0)
             {
-                m_inflictedStatusEffects[i].Update(deltaTime);
+                var deltaTime = m_isolatedObject.deltaTime;
+                for (int i = 0; i < m_inflictedStatusEffects.Count; i++)
+                {
+                    m_inflictedStatusEffects[i].Update(deltaTime);
+                }
             }
         }
     }

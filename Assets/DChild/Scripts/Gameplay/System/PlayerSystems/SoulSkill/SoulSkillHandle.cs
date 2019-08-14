@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Characters.Players
         private SoulSkill m_armorSkill;
         [SerializeField, OnValueChanged("UpdateSkills"), BoxGroup("Attached Skills")]
         private SoulSkill m_supportSkill;
-        [SerializeField, OnValueChanged("UpdateSkills"), BoxGroup("Attached Skills")]
+        [SerializeField, OnValueChanged("UpdateSkills",true), BoxGroup("Attached Skills")]
         private SoulSkill[] m_weaponSkills;
 
         public SoulSkillHandle()

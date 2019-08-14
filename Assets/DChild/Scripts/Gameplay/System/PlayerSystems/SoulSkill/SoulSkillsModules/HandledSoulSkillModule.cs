@@ -6,35 +6,54 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
     public abstract class HandledSoulSkillModule : ISoulSkillModule
     {
+        protected abstract class SoulSkillHandleManager
+        {
+            public abstract void AddHandle(IPlayer refernce, BaseHandle handle);
+            public abstract void RemoveHandle(IPlayer reference);
+        }
+
+        protected class SinglePlayerMananger : SoulSkillHandleManager
+        {
+            private BaseHandle m_instance;
+
+            public override void AddHandle(IPlayer refernce, BaseHandle handle)
+            {
+                m_instance?.Dispose();
+                handle.Initialize();
+                m_instance = handle;
+            }
+
+            public override void RemoveHandle(IPlayer reference)
+            {
+                m_instance.Dispose();
+                m_instance = null;
+            }
+        }
+
         protected abstract class BaseHandle
         {
             public abstract void Initialize();
             public abstract void Dispose();
         }
 
-        private Dictionary<IPlayer, BaseHandle> m_handles;
+        private SoulSkillHandleManager m_manager;
         private bool m_isInitialized;
 
         public void AttachTo(IPlayer player)
         {
             if (m_isInitialized == false)
             {
-                m_handles = new Dictionary<IPlayer, BaseHandle>();
+                m_manager = new SinglePlayerMananger();
                 m_isInitialized = true;
             }
 
-            if (m_handles.ContainsKey(player) == false)
-            {
-                var handle = CreateHandle(player);
-                handle.Initialize();
-                m_handles.Add(player, handle);
-            }
+            var handle = CreateHandle(player);
+            m_manager.AddHandle(player, handle);
         }
 
         public void DetachFrom(IPlayer player)
         {
-            m_handles[player].Dispose();
-            m_handles.Remove(player);
+            m_manager.RemoveHandle(player);
         }
 
         protected abstract BaseHandle CreateHandle(IPlayer player);

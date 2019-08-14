@@ -97,6 +97,7 @@ namespace DChild
         public static SoulSkillConnection GetSoulSkillConnection() => soulSkillConnection;
         #endregion
 
+        #region Bestiary
         public struct BestiaryConnection
         {
             public struct CoreInfo
@@ -239,5 +240,100 @@ namespace DChild
         }
         private static BestiaryConnection bestiaryConnection = new BestiaryConnection();
         public static BestiaryConnection GetBestiaryConnection() => bestiaryConnection;
+        #endregion
+
+        #region Item
+        public struct ItemConnection
+        {
+            public struct CoreInfo
+            {
+                public CoreInfo(int iD, string name) : this()
+                {
+                    ID = iD;
+                    this.name = name;
+                }
+
+                public int ID { get; }
+                public string name { get; }
+            }
+
+            private SQLConnection.DatabaseConnection m_connection;
+            private bool m_connectionOpened;
+            private static string database => "DChildSetup";
+            private static string table => "Items";
+
+            public void Initialize()
+            {
+                if (m_connectionOpened == false)
+                {
+                    SQLConnection.Open(database);
+                    m_connection = SQLConnection.GetConnection(database);
+                    m_connectionOpened = true;
+                }
+            }
+
+            public void Close()
+            {
+                if (m_connectionOpened)
+                {
+                    SQLConnection.Close(database);
+                    m_connection.Dispose();
+                    m_connectionOpened = false;
+                }
+            }
+
+            public CoreInfo[] GetAllInfo()
+            {
+                List<CoreInfo> list = new List<CoreInfo>();
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table}");
+                while (reader.Read())
+                {
+                    list.Add(new CoreInfo(reader.GetData<int>("ID"), reader.GetData<string>("Name")));
+                }
+                return list.ToArray();
+            }
+
+            public string GetNameOf(int ID)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT Name FROM {table} WHERE ID = {ID}");
+                if (reader.Read())
+                {
+                    return reader.GetData<string>("Name");
+                }
+                else
+                {
+                    return "Not Found";
+                }
+            }
+
+            public (string description, int quantityLimit, int cost) GetInfoOf(int ID)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID = {ID}");
+                if (reader.Read())
+                {
+                    return (reader.GetData<string>("Description"), reader.GetData<int>("MaxStack"), reader.GetData<int>("Cost"));
+                }
+                else
+                {
+                    throw new System.Exception($"Record with ID:{ID} does not exists");
+                }
+            }
+
+            public void Update(int ID, string description, int quantityLimit, int cost)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    m_connection.ExecuteCommand($"UPDATE {table} SET Description = \"{description}\", MaxStack = {quantityLimit}, Cost = {cost} WHERE ID ={ID}");
+                }
+                else
+                {
+                    throw new System.Exception($"Record with ID:{ID} does not exists, use Insert instead");
+                }
+            }
+        }
+        private static ItemConnection itemConnection = new ItemConnection();
+        public static ItemConnection GetItemConnection() => itemConnection;
+        #endregion
     }
 }

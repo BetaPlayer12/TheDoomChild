@@ -20,6 +20,7 @@ namespace DChild.Gameplay.Combat
         protected float m_percentHealth;
 
         public bool isEmpty => m_currentHealth <= 0f;
+        public bool isFull => m_currentHealth >= maxValue;
         public int currentValue => m_currentHealth;
         public abstract int maxValue { get; }
 

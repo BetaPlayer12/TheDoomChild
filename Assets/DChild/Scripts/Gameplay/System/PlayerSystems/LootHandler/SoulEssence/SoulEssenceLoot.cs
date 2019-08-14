@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Pooling;
+﻿using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Systems;
 using Holysoft;
 using Holysoft.Collections;
@@ -36,7 +37,7 @@ namespace DChild.Gameplay.SoulEssence
         public void DisableEnvironmentCollider() => m_collider.isTrigger = true;
         public void EnableEnvironmentCollider() => m_collider.isTrigger = false;
 
-        public override void PickUp()
+        public override void PickUp(IPlayer player)
         {
             GameplaySystem.playerManager.soulEssence.Add(m_value);
             CallPoolRequest();

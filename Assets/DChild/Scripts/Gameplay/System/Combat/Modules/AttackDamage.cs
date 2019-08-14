@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Combat
     {
         [SerializeField]
         private AttackType m_type;
-        [SerializeField, MinValue(1)]
+        [SerializeField, MinValue(0)]
         private int m_value;
 
         public AttackDamage(AttackType m_type, int m_damage)

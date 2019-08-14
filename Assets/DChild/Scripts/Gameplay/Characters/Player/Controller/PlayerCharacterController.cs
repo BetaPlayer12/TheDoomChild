@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SkillResetRequester m_skillRequester;
         [SerializeField]
         private StatusEffectReciever m_statusReciever;
-        [ShowInInspector]
+        [ShowInInspector, HideInEditorMode]
         private bool m_enabled;
 
         [Title("Model Reference")]
@@ -34,7 +34,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private PlayerInput m_input;
 
         public event EventAction<EventActionArgs> ControllerDisabled;
-
 
         public void Enable()
         {
@@ -80,7 +79,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_enabled)
             {
-
                 if (m_characterState.waitForBehaviour)
                     return;
 
