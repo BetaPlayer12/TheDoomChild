@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+
     public class Character : MonoBehaviour, ICharacter, ITurningCharacter
     {
         public static string objectTag => "Character";
@@ -21,6 +22,7 @@ namespace DChild.Gameplay
         private HorizontalDirection m_facing = HorizontalDirection.Right;
 
         public event EventAction<FacingEventArgs> CharacterTurn;
+        public event EventAction<ObjectIDEventArgs> InstanceDestroyed;
 
         public IsolatedObject isolatedObject => m_isolatedObject;
         public IsolatedPhysics2D physics => m_physics;
@@ -33,6 +35,11 @@ namespace DChild.Gameplay
         {
             m_facing = facing;
             CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
+        }
+
+        private void OnDestroy()
+        {
+            InstanceDestroyed?.Invoke(this, new ObjectIDEventArgs(this));
         }
 
         private void OnValidate()

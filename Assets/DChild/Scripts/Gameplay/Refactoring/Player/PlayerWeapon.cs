@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.Combat.StatusInfliction;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -55,11 +54,6 @@ namespace Refactor.DChild.Gameplay.Characters.Players
                 CalculateCombinedDamage();
                 m_isInitialized = true;
             }
-        }
-
-        public void AddStatusInfliction(StatusEffectType type, float value)
-        {
-
         }
 
         private void Awake()

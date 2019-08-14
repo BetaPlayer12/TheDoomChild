@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DChild.Gameplay.Combat;
 using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
@@ -20,7 +21,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_physics.SetVelocity(0);
             Vector2 knockBackDirection = Vector2.zero;
             knockBackDirection.x = directionToSource.x > 0 ? -1 : 1;
-     
+
             if (m_physics.onWalkableGround)
             {
                 knockBackDirection.y = 1;

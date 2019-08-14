@@ -3,7 +3,6 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Systems.WorldComponents;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using DChild.Gameplay.Combat.StatusInfliction;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters;
 using Refactor.DChild.Gameplay.Combat;
@@ -11,7 +10,7 @@ using Refactor.DChild.Gameplay.Combat;
 namespace DChild.Gameplay.Characters
 {
     public abstract class CombatCharacter : Actor, IAttacker, ITarget, IFacing, IFacingConfigurator,
-                                            ICombatCharacterInfo, IStatusReciever, IDamageable
+                                            ICombatCharacterInfo, IDamageable
     {
         protected Hitbox[] m_hitboxes;
 
@@ -21,10 +20,10 @@ namespace DChild.Gameplay.Characters
         protected IsolatedObject m_objectTime;
 
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
-        public event EventAction<StatusRecieverEventArgs> ReceiverDestroyed;
         public event EventAction<EventActionArgs> Attacks;
         public event EventAction<EventActionArgs> Damaged;
         public event EventAction<Damageable.DamageEventArgs> DamageTaken;
+        public event EventAction<EventActionArgs> Destroyed;
 
         public Vector2 position => m_model.position;
         public HorizontalDirection currentFacingDirection => m_facing;
@@ -33,8 +32,6 @@ namespace DChild.Gameplay.Characters
         public virtual float critDamageModifier => 1f;
         public abstract bool isAlive { get; }
         public abstract IAttackResistance attackResistance { get; }
-        public abstract IStatusEffectState statusEffectState { get; }
-        public abstract IStatusResistance statusResistance { get; }
         public abstract void Heal(int health);
         public abstract void TakeDamage(int totalDamage, AttackType type);
         public abstract void SetFacing(HorizontalDirection facing);
@@ -73,11 +70,6 @@ namespace DChild.Gameplay.Characters
 
         protected void CallAttackerAttacked(CombatConclusionEventArgs eventArgs) => TargetDamaged?.Invoke(this, eventArgs);
         protected void CallDamaged() => Damaged?.Invoke(this, EventActionArgs.Empty);
-
-        protected virtual void OnDestroy()
-        {
-            ReceiverDestroyed?.Invoke(this, new StatusRecieverEventArgs(this));
-        }
 
         public void SetHitboxActive(bool enable)
         {

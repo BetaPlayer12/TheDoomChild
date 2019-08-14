@@ -79,7 +79,9 @@ namespace DChild.Gameplay.Characters.Players
         {
             OnDeath?.Invoke(this, eventArgs);
             GameEventMessage.SendEvent("Game Over");
+            m_controlledCharacter.physics.SetVelocity(Vector2.zero);
             m_controller.Disable();
+            m_damageable.SetHitboxActive(false);
         }
     }
 }

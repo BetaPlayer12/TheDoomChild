@@ -4,6 +4,9 @@ using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat.StatusAilment;
+using Holysoft.Event;
+using Refactor.DChild.Gameplay.Combat;
 using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters.Players
@@ -13,6 +16,8 @@ namespace Refactor.DChild.Gameplay.Characters.Players
     {
         [SerializeField]
         private Character m_character;
+        [SerializeField]
+        private Damageable m_damageable;
         [SerializeField]
         private CharacterState m_state;
         [SerializeField]
@@ -29,6 +34,8 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         private GroundednessHandle m_groundednessHandle;
         [SerializeField]
         private SkillResetRequester m_skillResetRequester;
+        [SerializeField]
+        private StatusEffectReciever m_statusEffectReciever;
 
         public Character character => m_character;
         public CharacterState state => m_state;
@@ -40,5 +47,7 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         public SkillResetRequester skillResetRequester => m_skillResetRequester;
 
         public Magic magic => m_magic;
+        public Damageable damageable => m_damageable;
+        public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
     }
 }

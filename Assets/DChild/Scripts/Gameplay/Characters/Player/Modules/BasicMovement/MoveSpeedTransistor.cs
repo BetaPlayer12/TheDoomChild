@@ -1,4 +1,6 @@
-﻿using DChild.Gameplay.Characters.Players.Modules;
+﻿using System;
+using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Collections;
 using Holysoft.Event;
@@ -8,7 +10,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class MoveSpeedTransistor : MonoBehaviour, IComplexCharacterModule
+    public class MoveSpeedTransistor : MonoBehaviour, IComplexCharacterModule, IControllableModule
     {
         [SerializeField, BoxGroup("Data")]
         private MovementData m_crouchData;
@@ -25,43 +27,56 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CountdownTimer m_transistionToSprintTime;
 
         private IIsolatedTime m_time;
+        private IMoveState m_state;
         private bool m_isSprinting;
 
         public void Initialize(ComplexCharacterInfo info)
         {
             m_time = info.character.isolatedObject;
+            m_state = info.state;
+        }
+
+        public void ConnectTo(IMainController controller)
+        {
+            controller.ControllerDisabled += OnControllDisabled;
+        }
+
+        private void OnControllDisabled(object sender, EventActionArgs eventArgs)
+        {
+            DisableSprint();
         }
 
         public void SwitchToCrouchSpeed()
         {
             m_movement?.SetInfo(m_crouchData.info);
-            m_movement?.SetMovingSpeedParameter(1);
-            m_transistionToSprintTime.Reset();
-            m_isSprinting = false;
+            DisableSprint();
         }
 
         public void SwitchToAirMoveSpeed()
         {
             m_movement?.SetInfo(m_airMoveData.info);
-            m_movement?.SetMovingSpeedParameter(1);
-            m_transistionToSprintTime.Reset();
-            m_isSprinting = false;
+            DisableSprint();
         }
 
         public void SwitchToJogSpeed()
         {
             m_movement?.SetInfo(m_jogData.info);
-            m_movement?.SetMovingSpeedParameter(1);
-            m_transistionToSprintTime.Reset();
-            m_isSprinting = false;
+            DisableSprint();
         }
 
         public void HandleSprintTransistion()
         {
-            if (m_isSprinting == false)
+            if (m_isSprinting == false && m_state.isMoving)
             {
                 m_transistionToSprintTime.Tick(m_time.deltaTime);
             }
+        }
+
+        private void DisableSprint()
+        {
+            m_movement?.SetMovingSpeedParameter(1);
+            m_transistionToSprintTime.Reset();
+            m_isSprinting = false;
         }
 
         private void Awake()

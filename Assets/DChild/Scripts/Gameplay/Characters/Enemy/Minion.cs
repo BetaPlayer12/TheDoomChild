@@ -13,7 +13,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override EnemyType enemyType => EnemyType.Minion;
         public override IAttackResistance attackResistance => null;
-        public override IStatusResistance statusResistance => null;
         protected abstract AttackDamage startDamage { get; }
 
         public override void InitializeAs(bool isAlive)

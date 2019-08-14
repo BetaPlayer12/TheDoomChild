@@ -43,10 +43,9 @@ namespace DChild.Gameplay.Characters.Players
             StatsChanged?.Invoke(this, new StatValueEventArgs(stat, m_totalStats.GetStat(stat)));
         }
 
-#if UNITY_EDITOR
-        private void SendEvent()
+        private void Awake()
         {
-            StatsChanged?.Invoke(this, new StatValueEventArgs(PlayerStat._COUNT, 0));
+            CalculateStats();
         }
 
         private void CalculateStats()
@@ -58,6 +57,12 @@ namespace DChild.Gameplay.Characters.Players
                 m_totalStats.SetStat(stat, m_addedStats.GetStat(stat) + m_baseStat.GetStat(stat));
             }
         }
+#if UNITY_EDITOR
+        private void SendEvent()
+        {
+            StatsChanged?.Invoke(this, new StatValueEventArgs(PlayerStat._COUNT, 0));
+        }
+
 #endif
     }
 }

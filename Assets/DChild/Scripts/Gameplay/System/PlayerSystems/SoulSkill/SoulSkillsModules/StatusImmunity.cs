@@ -1,15 +1,12 @@
-﻿using DChild.Gameplay.Combat;
-using DChild.Gameplay.Combat.StatusInfliction;
-using UnityEngine;
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 #endif
 
 namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
     public struct StatusImmunity : ISoulSkillModule
     {
-        [SerializeField]
-        private StatusEffectType m_type;
+        //[SerializeField]
+        //private StatusEffectType m_type;
 
         public void AttachTo(IPlayer player)
         {
