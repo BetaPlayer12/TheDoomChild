@@ -12,6 +12,12 @@ namespace DChild.Gameplay.Combat.StatusAilment
         [ShowInInspector, HideInEditorMode]
         private List<StatusEffectChance> m_statusInflictions;
 
+        public void SetInflictionList(IReadOnlyList<StatusEffectChance> list)
+        {
+            m_statusInflictions.Clear();
+            m_statusInflictions.AddRange(list);
+        }
+
         public void SetInfliction(StatusEffectType type, int resistanceValue)
         {
             resistanceValue = Mathf.Clamp(resistanceValue, 0, 100);

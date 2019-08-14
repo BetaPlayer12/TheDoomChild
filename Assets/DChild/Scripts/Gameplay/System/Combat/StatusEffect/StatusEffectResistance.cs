@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,12 +7,32 @@ namespace DChild.Gameplay.Combat.StatusAilment
 {
     public class StatusEffectResistance : SerializedMonoBehaviour, IStatusEffectResistance
     {
+        public struct ResistanceEventArgs : IEventActionArgs
+        {
+            public ResistanceEventArgs(StatusEffectType type, int value) : this()
+            {
+                this.type = type;
+                this.value = value;
+            }
+
+            public StatusEffectType type { get; }
+            public int value { get; }
+        }
+
         [SerializeField]
         private StatusEffectChanceData m_data;
         [ShowInInspector, HideInEditorMode]
         private Dictionary<StatusEffectType, int> m_resistances;
 
+        public event EventAction<ResistanceEventArgs> ResistanceChange;
+
         public int GetResistance(StatusEffectType type) => m_resistances.ContainsKey(type) ? m_resistances[type] : 0;
+
+        public void SetResistanceList(Dictionary<StatusEffectType, int> list)
+        {
+            Copy(list, m_resistances);
+            ResistanceChange?.Invoke(this, new ResistanceEventArgs(StatusEffectType._COUNT,0));
+        }
 
         public void SetResistance(StatusEffectType type, int resistanceValue)
         {
@@ -34,6 +55,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
                     m_resistances.Add(type, resistanceValue);
                 }
             }
+            ResistanceChange?.Invoke(this, new ResistanceEventArgs(type, resistanceValue));
         }
 
         public void SetData(StatusEffectChanceData data)
@@ -42,6 +64,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
             {
                 m_data = data;
                 Copy(m_data.chance, m_resistances);
+                ResistanceChange?.Invoke(this, new ResistanceEventArgs(StatusEffectType._COUNT, 0));
             }
         }
 
