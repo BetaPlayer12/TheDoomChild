@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Inventories;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 namespace DChild.Menu.Item
 {
     [RequireComponent(typeof(Button))]
-    public class ItemSlot : MonoBehaviour
+    public class ItemSlotUI : MonoBehaviour
     {
         [SerializeField, OnValueChanged("UpdateInfo")]
         private ItemData m_data;

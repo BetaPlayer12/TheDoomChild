@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Inventories;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace DChild.Menu.Item

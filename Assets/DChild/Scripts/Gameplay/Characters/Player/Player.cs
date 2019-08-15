@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Inventories;
 using Doozy.Engine;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.Players;
@@ -25,6 +26,7 @@ namespace DChild.Gameplay.Characters.Players
         PlayerWeapon weapon { get; }
         ExtendedAttackResistance attackResistance { get; }
         IMainController controller { get; }
+        PlayerInventory inventory { get; }
     }
 
     public class Player : SerializedMonoBehaviour, IPlayer
@@ -37,6 +39,8 @@ namespace DChild.Gameplay.Characters.Players
         private ExtendedAttackResistance m_attackResistance;
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
+        [SerializeField]
+        private PlayerInventory m_inventory;
         [SerializeField]
         private PlayerCharacterController m_controller;
 
@@ -65,7 +69,7 @@ namespace DChild.Gameplay.Characters.Players
         public PlayerModifierHandle modifiers => m_modifiers;
         public PlayerWeapon weapon => m_weapon;
         public ExtendedAttackResistance attackResistance => m_attackResistance;
-
+        public PlayerInventory inventory => m_inventory;
         public IMainController controller => m_controller;
 
         private void Awake()

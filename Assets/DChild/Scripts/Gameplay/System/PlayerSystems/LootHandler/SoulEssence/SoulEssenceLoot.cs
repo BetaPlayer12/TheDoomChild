@@ -17,14 +17,13 @@ namespace DChild.Gameplay.SoulEssence
         private int m_value;
         private Collider2D m_collider;
 
+        [SerializeField, HideInInspector]
+        private Rigidbody2D m_rigidbody;
         [SerializeField]
         private RangeFloat m_popVelocityX;
         [SerializeField]
         private RangeFloat m_popVelocityY;
 
-        [SerializeField]
-        [HideInInspector]
-        private Rigidbody2D m_rigidbody;
 
         public int value
         {
@@ -39,13 +38,14 @@ namespace DChild.Gameplay.SoulEssence
 
         public override void PickUp(IPlayer player)
         {
-            GameplaySystem.playerManager.soulEssence.Add(m_value);
+            player.inventory.AddSoulEssence(m_value);
             CallPoolRequest();
         }
 
         public override void SpawnAt(Vector2 position, Quaternion rotation)
         {
             base.SpawnAt(position, rotation);
+            EnableEnvironmentCollider();
             var xVelocity = transform.right * MathfExt.RandomSign() * m_popVelocityX.GenerateRandomValue();
             var yVelocity = transform.up * m_popVelocityY.GenerateRandomValue();
             m_rigidbody.velocity = Vector2.zero;

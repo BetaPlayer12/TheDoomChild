@@ -19,7 +19,6 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField]
         private Challenge[] m_challenges;
 
-
         public Sprite icon => m_icon;
         public string crystalName => m_name;
         public string challengeInfo

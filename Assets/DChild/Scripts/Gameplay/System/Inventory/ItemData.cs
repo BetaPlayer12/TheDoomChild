@@ -6,8 +6,9 @@ using UnityEngine.UI;
 using UnityEditor;
 using DChildEditor;
 #endif
-namespace DChild.Menu.Item
+namespace DChild.Gameplay.Inventories
 {
+
     [CreateAssetMenu(fileName = "ItemData", menuName = "DChild/Database/Item Data")]
     public class ItemData : DatabaseAsset
     {

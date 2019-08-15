@@ -7,7 +7,7 @@ namespace DChild.Menu.Item
         [SerializeField]
         private ItemInfoPage m_info;
 
-        public void Select(ItemSlot slot)
+        public void Select(ItemSlotUI slot)
         {
             m_info.SetInfo(slot.data);
         }
