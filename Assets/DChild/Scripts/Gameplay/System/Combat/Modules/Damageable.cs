@@ -25,8 +25,6 @@ namespace Refactor.DChild.Gameplay.Combat
         private Health m_health;
         [SerializeField]
         private AttackResistance m_resistance;
-        [SerializeField]
-        private FlinchHandler m_flinchHandler;
 
         protected Hitbox[] m_hitboxes;
 
@@ -38,8 +36,6 @@ namespace Refactor.DChild.Gameplay.Combat
         public bool isAlive => !m_health?.isEmpty ?? true;
 
         public IAttackResistance attackResistance => m_resistance;
-
-        public IFlinch flinchHandler => m_flinchHandler;
 
         public Health health => m_health;
 

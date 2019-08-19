@@ -16,13 +16,6 @@ namespace DChild.Gameplay.SoulEssence
         private int m_value;
         private Collider2D m_collider;
 
-        [SerializeField]
-        private Rigidbody2D m_rigidbody;
-        [SerializeField]
-        private RangeFloat m_popVelocityX;
-        [SerializeField]
-        private RangeFloat m_popVelocityY;
-
         public int value => m_value;
 
         public void DisableEnvironmentCollider() => m_collider.isTrigger = true;
@@ -38,10 +31,6 @@ namespace DChild.Gameplay.SoulEssence
         {
             base.SpawnAt(position, rotation);
             EnableEnvironmentCollider();
-            var xVelocity = transform.right * MathfExt.RandomSign() * m_popVelocityX.GenerateRandomValue();
-            var yVelocity = transform.up * m_popVelocityY.GenerateRandomValue();
-            m_rigidbody.velocity = Vector2.zero;
-            m_rigidbody.AddForce(xVelocity + yVelocity, ForceMode2D.Impulse);
             m_collider.isTrigger = false;
         }
 
