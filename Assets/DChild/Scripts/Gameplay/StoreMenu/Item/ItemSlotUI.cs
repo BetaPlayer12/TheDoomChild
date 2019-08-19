@@ -9,15 +9,47 @@ namespace DChild.Menu.Item
     [RequireComponent(typeof(Button))]
     public class ItemSlotUI : MonoBehaviour
     {
-        [SerializeField, OnValueChanged("UpdateInfo")]
-        private ItemData m_data;
+        [ShowInInspector, OnValueChanged("UpdateInfo")]
+        private ItemSlot m_slot;
         [SerializeField]
         private ItemSlotInfo m_info;
-        private Button m_button;
         [SerializeField, OnValueChanged("UpdateInteractability")]
         private bool m_isInteractable;
+        private Button m_button;
+        private Canvas m_canvas;
 
-        public ItemData data => m_data;
+        public ItemData item => m_slot.item;
+
+        public void SetSlot(ItemSlot slot)
+        {
+            m_slot = slot;
+            m_info.SetInfo(m_slot);
+        }
+
+        [Button,HideInEditorMode]
+        public void UpdateInfo()
+        {
+            m_info.SetInfo(m_slot);
+        }
+
+        public void SetInteractable(bool value)
+        {
+            if (m_isInteractable != value)
+            {
+                m_isInteractable = value;
+                UpdateInteractability();
+            }
+        }
+
+        public void Show()
+        {
+            m_canvas.enabled = true;
+        }
+
+        public void Hide()
+        {
+            m_canvas.enabled = false;
+        }
 
         private void UpdateInteractability()
         {
@@ -41,23 +73,16 @@ namespace DChild.Menu.Item
         private void Awake()
         {
             m_button = GetComponent<Button>();
+            m_canvas = GetComponent<Canvas>();
             UpdateInteractability();
         }
 
         private void Start()
         {
-            if (m_data != null)
+            if (m_slot != null)
             {
-                m_info.SetInfo(m_data);
+                m_info.SetInfo(m_slot);
             }
         }
-
-#if UNITY_EDITOR
-        [Button]
-        private void UpdateInfo()
-        {
-            m_info.SetInfo(m_data);
-        }
-#endif
     }
 }

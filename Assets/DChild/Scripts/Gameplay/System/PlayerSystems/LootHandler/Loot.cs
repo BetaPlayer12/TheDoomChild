@@ -12,11 +12,11 @@ namespace DChild.Gameplay.Systems
 
         private void OnValidate()
         {
-            if (gameObject.CompareTag(objectTag) == false)
-            {
-                gameObject.tag = objectTag;
-                Debug.Log(gameObject.tag);
-            }
+            //if (gameObject.CompareTag(objectTag) == false)
+            //{
+            //    gameObject.tag = objectTag;
+            //    Debug.Log(gameObject.tag);
+            //}
         }
     }
 }

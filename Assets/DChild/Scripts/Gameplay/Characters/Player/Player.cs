@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Inventories;
+using DChild.Serialization;
 using Doozy.Engine;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.Players;
@@ -40,9 +41,13 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
         [SerializeField]
-        private PlayerInventory m_inventory;
-        [SerializeField]
         private PlayerCharacterController m_controller;
+        [SerializeField]
+        private PlayerInventory m_inventory;
+
+        [Title("Serialzables")]
+        [SerializeField]
+        private PlayerCharacterSerializer m_serializer;
 
         [Title("Model")]
         [SerializeField]
@@ -71,6 +76,16 @@ namespace DChild.Gameplay.Characters.Players
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
         public IMainController controller => m_controller;
+
+        public PlayerCharacterData SaveData()
+        {
+            return m_serializer.SaveData();
+        }
+
+        public void LoadData(PlayerCharacterData data)
+        {
+            m_serializer.LoadData(data);
+        }
 
         private void Awake()
         {

@@ -10,7 +10,7 @@ using Sirenix.Utilities.Editor;
 
 namespace DChild.Gameplay.Systems
 {
-    [CreateAssetMenu(fileName = "LootDropData", menuName = "DChild/Gameplay/Loot Drop Data")]
+    [CreateAssetMenu(fileName = "LootDropData", menuName = "DChild/Gameplay/Loot/Loot Drop Data")]
     public class LootDropData : LootData
     {
         [System.Serializable]

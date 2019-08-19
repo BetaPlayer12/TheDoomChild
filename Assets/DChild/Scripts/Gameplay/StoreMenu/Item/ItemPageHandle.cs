@@ -9,7 +9,7 @@ namespace DChild.Menu.Item
 
         public void Select(ItemSlotUI slot)
         {
-            m_info.SetInfo(slot.data);
+            m_info.SetInfo(slot.item);
         }
     }
 }

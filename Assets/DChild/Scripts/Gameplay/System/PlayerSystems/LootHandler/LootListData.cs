@@ -2,7 +2,7 @@
 
 namespace DChild.Gameplay.Systems
 {
-    [CreateAssetMenu(fileName = "LootListData", menuName = "DChild/Gameplay/Loot List Data")]
+    [CreateAssetMenu(fileName = "LootListData", menuName = "DChild/Gameplay/Loot/Loot List Data")]
     public class LootListData : LootData
     {
         [SerializeField]

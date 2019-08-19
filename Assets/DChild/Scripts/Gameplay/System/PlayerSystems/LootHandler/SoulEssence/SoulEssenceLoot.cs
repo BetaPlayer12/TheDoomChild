@@ -3,6 +3,7 @@ using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Systems;
 using Holysoft;
 using Holysoft.Collections;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,27 +12,18 @@ namespace DChild.Gameplay.SoulEssence
 {
     public class SoulEssenceLoot : Loot
     {
-#if UNITY_EDITOR
         [SerializeField, Min(1)]
-#endif
         private int m_value;
         private Collider2D m_collider;
 
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private Rigidbody2D m_rigidbody;
         [SerializeField]
         private RangeFloat m_popVelocityX;
         [SerializeField]
         private RangeFloat m_popVelocityY;
 
-
-        public int value
-        {
-            get => m_value; set
-            {
-                m_value = Mathf.Max(value, 1);
-            }
-        }
+        public int value => m_value;
 
         public void DisableEnvironmentCollider() => m_collider.isTrigger = true;
         public void EnableEnvironmentCollider() => m_collider.isTrigger = false;
@@ -56,11 +48,6 @@ namespace DChild.Gameplay.SoulEssence
         private void Awake()
         {
             m_collider = GetComponentInChildren<Collider2D>();
-        }
-
-        private void OnValidate()
-        {
-            ComponentUtility.AssignNullComponent(this, ref m_rigidbody);
         }
     }
 }

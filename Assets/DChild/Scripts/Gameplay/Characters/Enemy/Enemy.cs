@@ -26,9 +26,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
     public abstract class Enemy : CombatCharacter, IDamageDealer
     {
-        [SerializeField, TitleGroup("Enemy")]
-        private SoulEssenceDropInfo m_soulEssence;
-
         [SerializeField, TitleGroup("Stat"), InlineEditor(InlineEditorModes.GUIOnly, Expanded = true)]
         protected BasicHealth m_health;
 
@@ -47,7 +44,6 @@ namespace DChild.Gameplay.Characters.Enemies
         public abstract EnemyType enemyType { get; }
         public abstract void InitializeAs(bool isAlive);
         protected abstract new CombatCharacterAnimation animation { get; }
-        public SoulEssenceDropInfo soulEssence => m_soulEssence;
 
         public override void DisableController() => m_brain.Enable(false);
         public override void EnableController() => m_brain.Enable(true);

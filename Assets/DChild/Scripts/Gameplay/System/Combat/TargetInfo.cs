@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Combat
     {
         public ITarget instance { get; }
         public bool isCharacter { get; }
+        public bool hasID { get; }
+        public int characterID { get; }
         public HorizontalDirection facing { get; }
         public IFlinch flinchHandler { get; }
         public float damageReduction { get; }
@@ -30,8 +32,9 @@ namespace DChild.Gameplay.Combat
                 {
                     owner = character.GetComponent<PlayerControlledObject>().owner;
                 }
+                hasID = character.hasID;
+                characterID = character.ID;
             }
-
             this.flinchHandler = flinchHandler;
         }
 

@@ -107,6 +107,7 @@ namespace DChild.Gameplay
             AssignModule(out m_combatManager);
             AssignModule(out m_fxManager);
             AssignModule(out m_databaseManager);
+            AssignModule(out m_lootHandler);
             AssignModule(out m_cinema);
             AssignModule(out m_world);
             AssignModule(out m_simulation);

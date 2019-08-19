@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-
     public class Character : MonoBehaviour, ICharacter, ITurningCharacter
     {
         public static string objectTag => "Character";
@@ -20,6 +19,8 @@ namespace DChild.Gameplay
         private CharacterColliders m_colliders;
         [SerializeField]
         private HorizontalDirection m_facing = HorizontalDirection.Right;
+        private int m_ID;
+        private bool m_hasID;
 
         public event EventAction<FacingEventArgs> CharacterTurn;
         public event EventAction<ObjectIDEventArgs> InstanceDestroyed;
@@ -30,6 +31,15 @@ namespace DChild.Gameplay
         public HorizontalDirection facing => m_facing;
 
         public Transform centerMass => m_centerMass;
+
+        public int ID => m_ID;
+        public bool hasID => m_hasID;
+
+        public void SetID(int ID)
+        {
+            m_ID = ID;
+            m_hasID = true;
+        }
 
         public void SetFacing(HorizontalDirection facing)
         {

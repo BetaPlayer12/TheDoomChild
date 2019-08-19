@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class LootPicker : MonoBehaviour, IComplexCharacterModule
+    public class LootPicker : MonoBehaviour
     {
         private IPlayer m_owner;
 
-        public void Initialize(ComplexCharacterInfo info)
+        private void Start()
         {
-            m_owner = info.character.GetComponent<PlayerControlledObject>().owner;
+            m_owner = GetComponentInParent<PlayerControlledObject>().owner;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

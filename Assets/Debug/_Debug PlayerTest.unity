@@ -2745,6 +2745,7 @@ MonoBehaviour:
   m_weapon: {fileID: 1614938567}
   m_attackResistance: {fileID: 1614938568}
   m_modifiers: {fileID: 1614938569}
+  m_inventory: {fileID: 0}
   m_controller: {fileID: 1805288372}
   m_controlledCharacter: {fileID: 1005444700}
   m_state: {fileID: 1005444702}
@@ -4125,6 +4126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_groundGravity: 0
   m_midAirGravity: 3
+  m_startPeakVelocity: 0
   m_fallHandle: {fileID: 720354449}
   m_landHandle: {fileID: 720354448}
 --- !u!114 &417896909
@@ -4524,6 +4526,8 @@ GameObject:
   - component: {fileID: 476047118}
   - component: {fileID: 476047117}
   - component: {fileID: 476047119}
+  - component: {fileID: 476047121}
+  - component: {fileID: 476047120}
   m_Layer: 0
   m_Name: Progression
   m_TagString: Untagged
@@ -4641,6 +4645,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_list: {fileID: 11400000, guid: ff4b65653ede1d8468a25cb642e91872, type: 2}
+--- !u!114 &476047120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476047116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9763dbfc8d288d744ade2bebd16c9dec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_progress: {fileID: 476047121}
+  m_attacker: {fileID: 1005444699}
+--- !u!114 &476047121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476047116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b752ff3595a2f468743bf74dd5189a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_list: {fileID: 11400000, guid: 0896bdf8e65b9464da6eeb39a04ab950, type: 2}
 --- !u!1 &495022656
 GameObject:
   m_ObjectHideFlags: 0

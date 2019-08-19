@@ -15,7 +15,21 @@ namespace DChild.Gameplay.Inventories
         ValidateInput("ValidateList", "There are duplicate ItemData or Size has exceeded maxSize", InfoMessageType.Error, IncludeChildren = true), HideReferenceObjectPicker]
         private List<ItemSlot> m_list = new List<ItemSlot>();
 
-        public List<ItemSlot> list => m_list;
+        public bool restrictSize => m_restrictSize;
+        public int MaxSize => m_maxSize;
+        public int Count => m_list.Count;
+
+        public ItemSlot GetSlot(int index)
+        {
+            if (index < m_list.Count)
+            {
+                return m_list[index];
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public void AddItem(ItemData item, int count)
         {
@@ -129,6 +143,8 @@ namespace DChild.Gameplay.Inventories
             }
             return true;
         }
+
+
 #endif
 
     }

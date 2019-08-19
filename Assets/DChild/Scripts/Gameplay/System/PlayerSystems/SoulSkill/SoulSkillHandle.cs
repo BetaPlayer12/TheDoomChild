@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Characters.Players
             ClearSlot(ref m_weaponSkills[0]);
             ClearSlot(ref m_weaponSkills[1]);
         }
-
+        
         public void AttachSkill(SoulSkill skill, int slotIndex = 0)
         {
             // We need to make this better

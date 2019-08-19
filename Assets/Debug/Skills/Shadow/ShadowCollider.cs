@@ -16,7 +16,7 @@ public class ShadowCollider : MonoBehaviour
     [SerializeField]
     private float m_castYExtent;
 
-    private Skills m_skills;
+    //private Skills m_skills;
     private CharacterColliders m_colliders;
     private Collider2D m_wall;
     private Vector2 m_overlapSize;
@@ -40,12 +40,12 @@ public class ShadowCollider : MonoBehaviour
                     if (hit[i].tag == "ShadowPassable")
                     {
                         PassWall(hit[i]);
-                        m_skills.Enable(MovementSkill.WallJump, false); // to avoid wallsticking when passing walls using shadowmorph
+                        //m_skills.Enable(MovementSkill.WallJump, false); // to avoid wallsticking when passing walls using shadowmorph
                     }
 
                     else
                     {
-                        m_skills.Enable(MovementSkill.WallJump, true);
+                       // m_skills.Enable(MovementSkill.WallJump, true);
                     }
                 }
             }
@@ -68,7 +68,7 @@ public class ShadowCollider : MonoBehaviour
 
     private void OnIgnoreColliderEnd(object sender, EventActionArgs eventArgs)
     {
-        m_skills.Enable(MovementSkill.WallJump, true);
+        //m_skills.Enable(MovementSkill.WallJump, true);
         if (m_wall != null)
         {
             m_colliders.ClearIgnoredCollider(m_wall);
