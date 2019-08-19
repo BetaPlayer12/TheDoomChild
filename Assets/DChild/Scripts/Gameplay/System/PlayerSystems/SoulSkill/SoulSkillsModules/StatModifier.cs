@@ -12,6 +12,8 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     {
         private enum Stats
         {
+            Health,
+            Magic,
             Attack,
             MagicAttack,
             Crit_Damage,
@@ -33,12 +35,17 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 case Stats.MagicAttack:
                     AddStat(player.stats, PlayerStat.MagicAttack, m_value);
                     break;
-              
                 case Stats.Crit_Chance:
                     AddStat(player.stats, PlayerStat.CritChance, m_value);
                     break;
                 case Stats.Crit_Damage:
                     //player.modifiers.critDamageModifier += ToFloat(m_value);
+                    break;
+                case Stats.Health:
+                    AddStat(player.stats, PlayerStat.Health, m_value);
+                    break;
+                case Stats.Magic:
+                    AddStat(player.stats, PlayerStat.Magic, m_value);
                     break;
             }
         }
@@ -59,6 +66,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                     break;
                 case Stats.Crit_Damage:
                     //player.modifiers.critDamageModifier -= ToFloat(m_value);
+                    break;
+                case Stats.Health:
+                    AddStat(player.stats, PlayerStat.Health, -m_value);
+                    break;
+                case Stats.Magic:
+                    AddStat(player.stats, PlayerStat.Magic, -m_value);
                     break;
             }
         }

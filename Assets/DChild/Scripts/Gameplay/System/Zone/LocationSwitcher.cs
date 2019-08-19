@@ -8,13 +8,13 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private LocationData m_destination;
 
-        public void GoToDestination(Transform agent)
+        public void GoToDestination(Character agent)
         {
             if (GameSystem.IsCurrentZone(m_destination.scene) == false)
             {
                 GameSystem.LoadZone(m_destination.scene, true);
             }
-            agent.position = m_destination.position;
+            agent.transform.position = m_destination.position;
         }
     }
 }

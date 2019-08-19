@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Inventories
             AssetDatabase.SaveAssets();
         }
 
-        [Button, ToggleGroup("m_enableEdit")]
+        [Button, ToggleGroup("m_enableEdit"), ShowIf("m_connectToDatabase")]
         private void SaveToDatabase()
         {
             var connection = DChildDatabase.GetItemConnection();
@@ -67,7 +67,7 @@ namespace DChild.Gameplay.Inventories
             connection.Close();
         }
 
-        [Button, ToggleGroup("m_enableEdit")]
+        [Button, ToggleGroup("m_enableEdit"), ShowIf("m_connectToDatabase")]
         private void LoadFromDatabase()
         {
             var connection = DChildDatabase.GetItemConnection();

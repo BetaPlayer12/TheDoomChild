@@ -33,9 +33,7 @@ namespace DChild.Gameplay.Combat
         private ResistanceHandler m_resistanceHandler;
 
         private List<AttackType> m_damageList;
-
         private ITarget m_cacheTarget;
-
 
         public AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo)
         {
@@ -63,10 +61,8 @@ namespace DChild.Gameplay.Combat
                     {
                         FlinchTarget(targetInfo.flinchHandler, targetInfo.facing, m_cacheTarget.position, attacker.position, m_damageList);
                     }
-
                 }
             }
-
             return result;
         }
 

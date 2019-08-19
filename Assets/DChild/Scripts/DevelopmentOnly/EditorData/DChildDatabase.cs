@@ -36,6 +36,7 @@ namespace DChild
             private SQLConnection.DatabaseConnection m_connection;
             private bool m_connectionOpened;
             private static string database => "DChildSetup";
+            private static string table => "SoulSkills";
 
             public void Initialize()
             {
@@ -59,7 +60,7 @@ namespace DChild
 
             public string GetNameOf(int ID)
             {
-                var bestiaryReader = m_connection.ExecuteQuery($"SELECT Name FROM SoulSkills WHERE ID = {ID}");
+                var bestiaryReader = m_connection.ExecuteQuery($"SELECT Name FROM {table} WHERE ID = {ID}");
                 if (bestiaryReader.Read())
                 {
                     return bestiaryReader.GetData<string>("Name");
@@ -72,14 +73,42 @@ namespace DChild
 
             public Element[] GetAllSkills()
             {
-                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM SoulSkills Where Blocked = false");
+                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM {table} Where Blocked = false");
                 return CreateListFromReader(reader);
             }
 
             public Element[] GetSkillsOfType(SoulSkillType type)
             {
-                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM SoulSkills Where Type = \"{type.ToString()}\" AND Blocked = false");
+                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM {table} Where Type = \"{type.ToString()}\" AND Blocked = false");
                 return CreateListFromReader(reader);
+            }
+
+            public void Update(int ID, SoulSkillType type, string description)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    m_connection.ExecuteCommand($"UPDATE {table} SET Description = \"{description}\", Type = \"{type.ToString()}\" WHERE ID = {ID}");
+                }
+                else
+                {
+                    throw new System.Exception($"Record with ID:{ID} does not exists, use Insert instead");
+                }
+            }
+
+            public (SoulSkillType type, string description) GetInfoOf(int ID)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID = {ID}");
+                if (reader.Read())
+                {
+                    SoulSkillType result;
+                    Enum.TryParse(reader.GetData<string>("Type"), true, out result);
+                    return (result, reader.GetData<string>("Description"));
+                }
+                else
+                {
+                    throw new System.Exception($"Record with ID:{ID} does not exists");
+                }
             }
 
             private Element[] CreateListFromReader(IDataReader reader)
@@ -92,6 +121,7 @@ namespace DChild
                 }
                 return list.ToArray();
             }
+
         }
         private static SoulSkillConnection soulSkillConnection = new SoulSkillConnection();
         public static SoulSkillConnection GetSoulSkillConnection() => soulSkillConnection;

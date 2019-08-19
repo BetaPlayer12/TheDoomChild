@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Inventories;
 using DChild.Serialization;
 using Doozy.Engine;
@@ -26,6 +27,7 @@ namespace DChild.Gameplay.Characters.Players
         PlayerModifierHandle modifiers { get; }
         PlayerWeapon weapon { get; }
         ExtendedAttackResistance attackResistance { get; }
+        StatusEffectResistance statusResistance { get; }
         IMainController controller { get; }
         PlayerInventory inventory { get; }
     }
@@ -38,6 +40,8 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerWeapon m_weapon;
         [SerializeField]
         private ExtendedAttackResistance m_attackResistance;
+        [SerializeField]
+        private StatusEffectResistance m_statusResistance;
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
         [SerializeField]
@@ -76,6 +80,8 @@ namespace DChild.Gameplay.Characters.Players
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
         public IMainController controller => m_controller;
+
+        public StatusEffectResistance statusResistance => m_statusResistance;
 
         public PlayerCharacterData SaveData()
         {
