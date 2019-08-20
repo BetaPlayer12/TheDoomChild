@@ -4,7 +4,7 @@ using DChild.Gameplay.Environment.Interractables;
 
 namespace DChild.Gameplay.Environment.Interractables
 {
-    public class RopeSegment : MonoBehaviour, IInteractable
+    public class RopeSegment : MonoBehaviour
     {
 
         public Vector3 position => transform.position;
@@ -14,13 +14,13 @@ namespace DChild.Gameplay.Environment.Interractables
             get { return m_rigidbody; }
         }
 
-        public IInteractable Interact(IInteractingAgent agent)
-        {
-            agent.transform.SetParent(transform);
-            var body = agent.GetComponent<IsolatedPhysics2D>();
-            body.Disable();
-            return this;
-        }
+        //public IInteractable Interact(IInteractingAgent agent)
+        //{
+        //    agent.transform.SetParent(transform);
+        //    var body = agent.GetComponent<IsolatedPhysics2D>();
+        //    body.Disable();
+        //    return this;
+        //}
 
         private void Start()
         {

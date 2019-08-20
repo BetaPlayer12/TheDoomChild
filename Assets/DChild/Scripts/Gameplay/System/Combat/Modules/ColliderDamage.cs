@@ -3,6 +3,8 @@
  * Attackers should look for this in order to damage an Object
  * 
  ***************************************************/
+using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Environment.Interractables;
 using Holysoft;
 using Refactor.DChild.Gameplay;
 using Refactor.DChild.Gameplay.Combat;
@@ -13,6 +15,8 @@ namespace DChild.Gameplay.Combat
 {
     public class ColliderDamage : MonoBehaviour
     {
+        [SerializeField]
+        private bool m_canDetectInteractables;
         private IDamageDealer m_damageDealer;
 
         private void Awake()
@@ -30,6 +34,11 @@ namespace DChild.Gameplay.Combat
             {
                 m_damageDealer?.Damage(CreateInfo(hitbox), hitbox.defense);
             }
+
+            if (m_canDetectInteractables)
+            {
+                collision.GetComponentInParent<IInteractable>()?.Interact();
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -41,6 +50,11 @@ namespace DChild.Gameplay.Combat
             if (hitbox != null && hitbox.isInvulnerable == false)
             {
                 m_damageDealer.Damage(CreateInfo(hitbox), hitbox.defense);
+            }
+
+            if (m_canDetectInteractables)
+            {
+                collision.gameObject.GetComponentInParent<IInteractable>()?.Interact();
             }
         }
 

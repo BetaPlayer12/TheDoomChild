@@ -8,7 +8,6 @@ using DChildEditor;
 #endif
 namespace DChild.Gameplay.Inventories
 {
-
     [CreateAssetMenu(fileName = "ItemData", menuName = "DChild/Database/Item Data")]
     public class ItemData : DatabaseAsset
     {

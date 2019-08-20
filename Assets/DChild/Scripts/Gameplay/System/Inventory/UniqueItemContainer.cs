@@ -107,7 +107,6 @@ namespace DChild.Gameplay.Inventories
             return (false, -1);
         }
 
-#if UNITY_EDITOR
         private bool IsFull()
         {
             if (m_restrictSize)
@@ -116,6 +115,8 @@ namespace DChild.Gameplay.Inventories
             }
             return false;
         }
+
+#if UNITY_EDITOR
 
         private bool ValidateSize(int size)
         {

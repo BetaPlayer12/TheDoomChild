@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Combat
     {
         AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo);
         void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect);
-        void Inflict(StatusEffectReciever reciever,params StatusEffectChance[] statusEffectChance);
+        void Inflict(StatusEffectReciever reciever, params StatusEffectChance[] statusEffectChance);
         List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes);
         List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer);
         void Damage(IDamageable damageable, AttackDamage damage);
@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Combat
                 m_resistanceHandler.CalculatateResistanceReduction(m_cacheTarget.attackResistance, ref result);
             }
 
-            result = ApplyResults(result);
+            result = ApplyResults(result, targetInfo.isCharacter);
 
             if (m_cacheTarget.isAlive)
             {
@@ -121,10 +121,10 @@ namespace DChild.Gameplay.Combat
             m_aOETargetHandler = new AOETargetHandler();
         }
 
-        private AttackInfo ApplyResults(AttackInfo result)
+        private AttackInfo ApplyResults(AttackInfo result, bool isCharacter)
         {
             m_damageList.Clear();
-            if (GameSystem.settings?.gameplay.showDamageValues ?? true)
+            if (isCharacter && (GameSystem.settings?.gameplay.showDamageValues ?? true))
             {
                 for (int i = 0; i < result.damageList.Count; i++)
                 {
@@ -186,6 +186,6 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-       
+
     }
 }
