@@ -50,6 +50,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private Animator m_animator;
         private RaySensor m_raycantHit;
         private string m_speedParameter;
+        private Vector3 m_startpos;
+        private Vector3 m_endpos;
         
 
         private bool m_increaseVelocity;
@@ -84,8 +86,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_characterPhysics2D.SetVelocity(0);
                 }
-
-
                 m_state.isMoving = false;
                 m_changeSpeedDuration.Reset();
                 m_animator.SetInteger(m_speedParameter, 0);
@@ -107,32 +107,27 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 }
                 m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
                 SlopeMovement(moveDirection);
-
             }
-
-           
         }
 
         private void SlopeMovement(Vector2 moveDirection)
 
         {
             RaycastHit2D hitInfoInc = Physics2D.Raycast(transform.position, moveDirection, 1.3f, 1 << 11);
-            RaycastHit2D hitInfoDec = Physics2D.Raycast(transform.position, Vector2.down, 1.0f, 1 << 11);
-
-            Debug.DrawRay(transform.position, moveDirection * 1.3f, Color.red);
+            RaycastHit2D hitInfoDec = Physics2D.Raycast(transform.position, Vector2.down, 1.0f, 1 << 11);           
             if (hitInfoInc)
             {
+                m_startpos = transform.root.eulerAngles;
                 float slopeAngle = Vector2.Angle(hitInfoInc.normal, Vector2.up);
-                transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeAngle);
-                //Debug.Log("Parent name " + slopeAngle);
+                m_endpos = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeAngle);
+                transform.root.eulerAngles = Vector3.Lerp(m_startpos, m_endpos, Time.deltaTime*3);
             }
             else
             {
-
+                m_startpos = transform.root.eulerAngles;
                 float slopeDecAngle = Vector2.Angle(hitInfoDec.normal, Vector2.up);
-                transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeDecAngle);
-                //Debug.Log("Not Hit on collider: " + slopeDecAngle);
-                //transform.parent.parent.eulerAngles = Vector3.zero;
+                m_endpos = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeDecAngle);
+                transform.root.eulerAngles = Vector3.Lerp(m_startpos, m_endpos, Time.deltaTime * 10);
             }
         }
 

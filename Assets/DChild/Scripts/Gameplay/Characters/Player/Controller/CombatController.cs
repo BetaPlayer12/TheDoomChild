@@ -11,8 +11,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
     public class CombatController : MonoBehaviour, IBasicAttackController, IProjectileThrowController
     {
         public event EventAction<CombatEventArgs> BasicAttackCall;
+        public event EventAction<CombatEventArgs> WhipAttackCall;
         public event EventAction<EventActionArgs> ProjectileAimCall;
         public event EventAction<ControllerEventArgs> ProjectileAimUpdate;
+        
 
         public void CallUpdate(IPlayerState state, ControllerEventArgs eventArgs)
         {
@@ -42,6 +44,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (eventArgs.input.combat.isMainHandPressed)
                     {
                         BasicAttackCall?.Invoke(this, new CombatEventArgs(eventArgs.input.direction));
+                    }
+                    if (eventArgs.input.combat.isOffHandPressed)
+                    {
+                        WhipAttackCall?.Invoke(this, new CombatEventArgs(eventArgs.input.direction)); 
                     }
                 }
             }

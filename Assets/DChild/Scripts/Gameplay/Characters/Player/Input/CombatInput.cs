@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace DChild.Inputs
 {
@@ -14,6 +16,8 @@ namespace DChild.Inputs
         private bool m_isThrowProjectilePressed;
         private bool m_isThrowProjectileHeld;
         private float m_timer;
+        public Transform attackPos;
+        public float attackRange;
 
         public bool isMainHandPressed => m_isMainHandPressed;
         public bool isOffHandPressed => m_isOffHandPressed;
@@ -50,30 +54,29 @@ namespace DChild.Inputs
             }
             else if (m_isThrowProjectileHeld)
             {
-
-            }
-
-            if (Input.GetMouseButton(1))
-            {
-                m_timer += Time.deltaTime;
-                Debug.Log("Pressed left click. Timer: " + m_timer);
-            }
-            else
-            {
                 
-                if(m_timer > 3.0f)
-                {
-                    Debug.Log("Charge Attack!!! POWER!!!!!!!");
-                }
-                else
-                {
-                    Debug.Log("Normal Attack!!!!!!");
-                    Debug.Log("Timer: " + m_timer);
-                }
-                
-                m_timer = 0.0f;
             }
+           
+            //if (Input.GetButton(INPUT_OFFHAND))
+            //{
+            //    m_timer += Time.deltaTime;
+            //    //Debug.Log("Pressed left click. Timer: " + m_timer);
+            //}
+            //if (Input.GetButtonUp(INPUT_OFFHAND))
+            //{
+            //   // Debug.Log("Timer: " + m_timer);
+            //    if(m_timer > 3.0f)
+            //    {
+            //        Debug.Log("Charge Attack");
+            //    }
+            //    else
+            //    {
+            //        //Debug.Log("Normal Attack");
+            //    }
+            //    m_timer = 0.0f;
+            //}
 
+           
 
 
         }

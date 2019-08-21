@@ -42,8 +42,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_pull = false;
             m_physics = player.physics;
 
-            m_hook.ObjectCatched += OnHookCatchedObject;
-            m_hook.HookReturned += OnHookReturned;
+            //m_hook.ObjectCatched += OnHookCatchedObject;
+            //m_hook.HookReturned += OnHookReturned;
 
             var controller = GetComponentInParent<IAutoGrappleController>();
             controller.AutoGrappleCall += OnAutoGrappleCall;
@@ -60,17 +60,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (m_pull)
                 {
                     //Pull Object using Physics
-                    if (Vector2.Distance(m_hook.catchedObject.physics.position, m_destination) <= 0.5f)
-                    {
-                        var velocity = m_hook.catchedObject.physics.velocity;
-                        velocity.y = 0;
-                        m_hook.catchedObject.physics.SetVelocity(velocity);
-                        ResetState();
-                    }
-                    else
-                    {
-                        m_hook.catchedObject.physics.SetVelocity(m_direction * m_pullSpeed);
-                    }
+                    //if (Vector2.Distance(m_hook.catchedObject.physics.position, m_destination) <= 0.5f)
+                    //{
+                    //    var velocity = m_hook.catchedObject.physics.velocity;
+                    //    velocity.y = 0;
+                    //    m_hook.catchedObject.physics.SetVelocity(velocity);
+                    //    ResetState();
+                    //}
+                    //else
+                    //{
+                    //    m_hook.catchedObject.physics.SetVelocity(m_direction * m_pullSpeed);
+                    //}
                 }
                 else
                 {
@@ -98,9 +98,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_pull = true;
                             m_hook.ResetState();
 
-                            m_startPosition = m_hook.catchedObject.position;
-                            m_direction = ((Vector2)transform.position - m_startPosition).normalized;
-                            m_destination = m_startPosition + (m_direction * m_hook.catchedObject.pullOffset);
+                            //m_startPosition = m_hook.catchedObject.position;
+                            //m_direction = ((Vector2)transform.position - m_startPosition).normalized;
+                            //m_destination = m_startPosition + (m_direction * m_hook.catchedObject.pullOffset);
                         }
                         else if (eventArgs.input.direction.isRightPressed)
                         {
@@ -108,9 +108,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_updatePhysics = true;
                             m_pull = false;
 
-                            var objectPos = m_hook.catchedObject.position;
-                            var toObject = objectPos - (Vector2)transform.position;
-                            m_dashHandler.Set(transform.position, objectPos + (toObject.normalized * m_hook.catchedObject.dashOffset));
+                            //var objectPos = m_hook.catchedObject.position;
+                            //var toObject = objectPos - (Vector2)transform.position;
+                            //m_dashHandler.Set(transform.position, objectPos + (toObject.normalized * m_hook.catchedObject.dashOffset));
                         }
                     }
                 }
@@ -128,20 +128,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
             ResetState();
         }
 
-        private void OnHookCatchedObject(object sender, GrappleHook.ObjectCatchedEventArgs eventArgs)
-        {
-            if (eventArgs.canBePulled)
-            {
-                m_isDeciding = true;
-            }
-            else
-            {
-                m_isDeciding = false;
-                m_pull = false;
-                m_isDashing = true;
-            }
-            m_hooked = true;
-        }
+        //private void OnHookCatchedObject(object sender, GrappleHook.ObjectCatchedEventArgs eventArgs)
+        //{
+        //    if (eventArgs.canBePulled)
+        //    {
+        //        m_isDeciding = true;
+        //    }
+        //    else
+        //    {
+        //        m_isDeciding = false;
+        //        m_pull = false;
+        //        m_isDashing = true;
+        //    }
+        //    m_hooked = true;
+        //}
 
         private void ResetState()
         {

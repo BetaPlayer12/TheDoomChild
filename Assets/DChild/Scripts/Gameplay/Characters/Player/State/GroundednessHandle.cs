@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             if (hitInfoInc)
             {
                 float slopeAngle = Vector2.Angle(hitInfoInc.normal, Vector2.up);
-               // Debug.Log("Angle " + slopeAngle);
+              
                 if (slopeAngle != 90)
                 {
                     transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeAngle);
@@ -91,7 +91,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             }
             else
             {
-                Debug.Log("Angle:" + transform.root.eulerAngles.z);
+               
                 
                 if (m_isInMidAir == false)
                 {
