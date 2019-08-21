@@ -32,59 +32,59 @@ public class Cloth2D : MonoBehaviour {
 
     private void Update()
     {
-        if (m_player.currentFacingDirection == HorizontalDirection.Right)
-        {
-            if(Input.GetAxisRaw("Horizontal") > 0)
-            {
-                m_animator.SetBool("IsRunningRight", true);
-                m_animator.SetBool("IsFacingRight", false);
-            }
-            else
-            {
-                m_animator.SetBool("IsFacingRight", true);
-                m_animator.SetBool("IsRunningRight", false);
-            }
-            m_animator.SetBool("IsFacingLeft", false);
-            m_animator.SetBool("IsRunningLeft", false);
-            //Debug.Log("Is Facing Right");
-            m_frontColliderTF.localPosition = new Vector3(2, m_frontColliderTF.localPosition.y, 0);
-        }
-        else if (m_player.currentFacingDirection == HorizontalDirection.Left)
-        {
-            if (Input.GetAxisRaw("Horizontal") < 0)
-            {
-                m_animator.SetBool("IsRunningLeft", true);
-                m_animator.SetBool("IsFacingLeft", false);
-            }
-            else
-            {
-                m_animator.SetBool("IsFacingLeft", true);
-                m_animator.SetBool("IsRunningLeft", false);
-            }
-            m_animator.SetBool("IsFacingRight", false);
-            m_animator.SetBool("IsRunningRight", false);
-            //Debug.Log("Is Facing Left");
-            m_frontColliderTF.localPosition = new Vector3(-2, m_frontColliderTF.localPosition.y, 0);
-        }
+        //if (m_player.currentFacingDirection == HorizontalDirection.Right)
+        //{
+        //    if(Input.GetAxisRaw("Horizontal") > 0)
+        //    {
+        //        m_animator.SetBool("IsRunningRight", true);
+        //        m_animator.SetBool("IsFacingRight", false);
+        //    }
+        //    else
+        //    {
+        //        m_animator.SetBool("IsFacingRight", true);
+        //        m_animator.SetBool("IsRunningRight", false);
+        //    }
+        //    m_animator.SetBool("IsFacingLeft", false);
+        //    m_animator.SetBool("IsRunningLeft", false);
+        //    //Debug.Log("Is Facing Right");
+        //    m_frontColliderTF.localPosition = new Vector3(2, m_frontColliderTF.localPosition.y, 0);
+        //}
+        //else if (m_player.currentFacingDirection == HorizontalDirection.Left)
+        //{
+        //    if (Input.GetAxisRaw("Horizontal") < 0)
+        //    {
+        //        m_animator.SetBool("IsRunningLeft", true);
+        //        m_animator.SetBool("IsFacingLeft", false);
+        //    }
+        //    else
+        //    {
+        //        m_animator.SetBool("IsFacingLeft", true);
+        //        m_animator.SetBool("IsRunningLeft", false);
+        //    }
+        //    m_animator.SetBool("IsFacingRight", false);
+        //    m_animator.SetBool("IsRunningRight", false);
+        //    //Debug.Log("Is Facing Left");
+        //    m_frontColliderTF.localPosition = new Vector3(-2, m_frontColliderTF.localPosition.y, 0);
+        //}
 
-        if (m_player.characterState.isAttacking)
-        {
-            
-            if (m_player.currentFacingDirection == HorizontalDirection.Right)
-            {
-                m_animator.SetBool("IsAttackingRight", true);
-                m_animator.SetBool("IsAttackingLeft", false);
-            }
-            if (m_player.currentFacingDirection == HorizontalDirection.Left)
-            {
-                m_animator.SetBool("IsAttackingLeft", true);
-                m_animator.SetBool("IsAttackingRight", false);
-            }
-        }
-        else
-        {
-            m_animator.SetBool("IsAttackingRight", false);
-            m_animator.SetBool("IsAttackingLeft", false);
-        }
+        //if (m_player.characterState.isAttacking)
+        //{
+        //    Debug.Log("Player is attacking");
+        //    if (m_player.currentFacingDirection == HorizontalDirection.Right)
+        //    {
+        //        m_animator.SetBool("IsAttackingRight", true);
+        //        m_animator.SetBool("IsAttackingLeft", false);
+        //    }
+        //    if (m_player.currentFacingDirection == HorizontalDirection.Left)
+        //    {
+        //        m_animator.SetBool("IsAttackingLeft", true);
+        //        m_animator.SetBool("IsAttackingRight", false);
+        //    }
+        //}
+        //else
+        //{
+        //    m_animator.SetBool("IsAttackingRight", false);
+        //    m_animator.SetBool("IsAttackingLeft", false);
+        //}
     }
 }

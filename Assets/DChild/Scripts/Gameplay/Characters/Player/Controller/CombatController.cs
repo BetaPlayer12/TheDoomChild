@@ -1,20 +1,21 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
-using DChild.Gameplay.Systems.WorldComponents;
-using Holysoft.Collections;
 using Holysoft.Event;
-using DChild.Inputs;
 using UnityEngine;
-using Spine;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class CombatController : MonoBehaviour, IBasicAttackController, IProjectileThrowController
+    public class CombatController : MonoBehaviour, IProjectileThrowController
     {
-        public event EventAction<CombatEventArgs> BasicAttackCall;
-        public event EventAction<CombatEventArgs> WhipAttackCall;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private BasicAttack m_basicAttack;
         public event EventAction<EventActionArgs> ProjectileAimCall;
         public event EventAction<ControllerEventArgs> ProjectileAimUpdate;
-        
+
+        public void Initialize(GameObject behaviours)
+        {
+            m_basicAttack = behaviours.GetComponentInChildren<BasicAttack>();
+        }
 
         public void CallUpdate(IPlayerState state, ControllerEventArgs eventArgs)
         {
@@ -43,11 +44,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                     if (eventArgs.input.combat.isMainHandPressed)
                     {
-                        BasicAttackCall?.Invoke(this, new CombatEventArgs(eventArgs.input.direction));
-                    }
-                    if (eventArgs.input.combat.isOffHandPressed)
-                    {
-                        WhipAttackCall?.Invoke(this, new CombatEventArgs(eventArgs.input.direction)); 
+                        m_basicAttack?.SetAttackDirection(eventArgs.input.direction);
+                        m_basicAttack?.Execute();
                     }
                 }
             }

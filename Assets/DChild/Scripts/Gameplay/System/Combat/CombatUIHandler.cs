@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Combat
 
         public void ShowDamageValues(Vector3 position, AttackDamage damages, bool isCrit)
         {
-            var info = new UIInfo(OffsetPosition(position), m_damageUIConfigurations.FindDamageConfiguration(damages.type), damages.damage, isCrit);
+            var info = new UIInfo(OffsetPosition(position), m_damageUIConfigurations.FindDamageConfiguration(damages.type), damages.value, isCrit);
             m_uiInfoList.Insert(0, info);
         }
 

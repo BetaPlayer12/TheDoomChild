@@ -20,7 +20,7 @@ namespace DChild.Gameplay
         private Rigidbody2D m_rigidbody;
         public event EventAction<AOETargetsEventArgs> OnDetonate;
 
-        private List<ITarget> m_toDamage;
+        private List<IDamageable> m_toDamage;
         private List<Hitbox> m_cacheHitboxList;
         private Hitbox m_cacheHitbox;
 
@@ -52,7 +52,7 @@ namespace DChild.Gameplay
                 var damage = m_data.damage;
                 for (int j = 0; j < damage.Length; j++)
                 {
-                    AttackInfo info = new AttackInfo(transform.position, 0, 1, damage[j]);
+                    AttackerInfo info = new AttackerInfo(transform.position, 0, 1, damage[j]);
                     var result = GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(m_cacheHitbox.damageable, m_cacheHitbox.defense.damageReduction));
                     //CallAttackerAttacked(new CombatConclusionEventArgs(info, m_toDamage[j], result));
                 }
@@ -72,7 +72,7 @@ namespace DChild.Gameplay
         private void Awake()
         {
             m_cacheHitboxList = new List<Hitbox>();
-            m_toDamage = new List<ITarget>();
+            m_toDamage = new List<IDamageable>();
             m_rigidbody = GetComponent<Rigidbody2D>();
 
             if(m_fx != null)

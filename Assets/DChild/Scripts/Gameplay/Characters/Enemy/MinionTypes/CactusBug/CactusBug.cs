@@ -189,5 +189,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_sensorRotator = GetComponentsInChildren<ISensorFaceRotation>();
             m_spineRoot = GetComponentInChildren<SpineRootMotion>();
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

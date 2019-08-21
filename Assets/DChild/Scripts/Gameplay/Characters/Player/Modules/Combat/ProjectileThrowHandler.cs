@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class ProjectileThrowHandler : MonoBehaviour, IEventModule, IPlayerExternalModule
+    public class ProjectileThrowHandler : MonoBehaviour, IEventModule
     {
         [SerializeField]
         private ProjectileThrow m_module;
@@ -23,11 +23,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_useKeysProjectile;
 
         private CharacterPhysics2D m_physics;
-        private PlayerAnimation m_animation;
+        //private PlayerAnimation m_animation;
         private TrajectorySimulator m_simulator;
         private Vector2 m_trajectoryForce;
 
-        private IPlayerAnimationState m_animationState;
         private IProjectileThrowState m_state;
         private IFacing m_facing;
 
@@ -42,14 +41,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             controller.ProjectileAimUpdate += OnUpdate;
         }
 
-        public void Initialize(IPlayerModules player)
-        {
-            m_physics = player.physics;
-            m_animationState = player.animationState;
-            m_animation = player.animation;
-            m_state = player.characterState;
-            m_facing = player;
-        }
+        //public void Initialize(IPlayerModules player)
+        //{
+        //    m_physics = player.physics;
+        //    m_animationState = player.animationState;
+        //    m_animation = player.animation;
+        //    m_state = player.characterState;
+        //    m_facing = player;
+        //}
 
         public void SetProjectile(GameObject projectile)
         {
@@ -84,15 +83,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_state.waitForBehaviour = true;
                 if (m_isCalled)
                 {
-                    m_animation.DoSkullThrowAim(m_facing.currentFacingDirection);
+                    //m_animation.DoSkullThrowAim(m_facing.currentFacingDirection);
                 }
                 else
                 {
-                    m_animation.DoSkullThrowCall(m_facing.currentFacingDirection);
-                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                    {
-                        m_isCalled = true;
-                    }
+                    //m_animation.DoSkullThrowCall(m_facing.currentFacingDirection);
+                    //if (m_animation.animationState.GetCurrent(0).IsComplete)
+                    //{
+                    //    m_isCalled = true;
+                    //}
                 }
 
                 if (eventArgs.input.combat.isThrowProjectileHeld)
@@ -141,13 +140,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private IEnumerator ThrowRoutine()
         {
-            m_animationState.isThrowingBomb = true;
-            m_isCalled = false;
-            m_animation.DoSkullThrowOnHit(m_facing.currentFacingDirection);
-            yield return new WaitForAnimationEvent(m_animation.animationState, PlayerAnimation.EVENT_SKULLTHROW);
-            m_module.Throw();
-            m_state.isAimingProjectile = false;
-            m_animationState.isThrowingBomb = false;
+            ////m_animationState.isThrowingBomb = true;
+            //m_isCalled = false;
+            //m_animation.DoSkullThrowOnHit(m_facing.currentFacingDirection);
+            //yield return new WaitForAnimationEvent(m_animation.animationState, PlayerAnimation.EVENT_SKULLTHROW);
+            //m_module.Throw();
+            //m_state.isAimingProjectile = false;
+            ////m_animationState.isThrowingBomb = false;
+            ///
+            yield return null;
         }
     }
 }

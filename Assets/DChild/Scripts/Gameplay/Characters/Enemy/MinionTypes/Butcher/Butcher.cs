@@ -172,6 +172,11 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedPhysics2D>(), transform);
             m_animation = GetComponent<ButcherAnimation>();
-        }     
+        }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

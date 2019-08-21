@@ -61,15 +61,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             var colliders = m_playerColliders.colliders;
             for (int i = 0; i < colliders.Length; i++)
             {
-
                 Physics2D.IgnoreCollision(colliders[i], m_platformCollider, true);
-
             }
             m_ignoreColliderDuration.Reset();
             enabled = true;
             m_state.isDroppingFromPlatform = true;
             m_physics.StopCoyoteTime();
-            m_animator.SetTrigger(m_platformDropParameter);
+           // m_animator.SetTrigger(m_platformDropParameter); //Think of a good way to trigger this
         }
 
         private void OnDoubleJumpCall(object sender, EventActionArgs eventArgs)
@@ -112,7 +110,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 ResetBehaviour();
             }
         }
-
     }
 
 }

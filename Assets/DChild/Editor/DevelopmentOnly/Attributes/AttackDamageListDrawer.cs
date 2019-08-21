@@ -85,8 +85,8 @@ namespace DChildEditor.Gameplay.Combat
             GUI.enabled = false;
             EditorGUILayout.EnumPopup("Type: ", attackDamage.type);
             GUI.enabled = true;
-            var value = EditorGUILayout.IntField("Value: ", attackDamage.damage);
-            attackDamage.damage = value < 0 ? 0 : value;
+            var value = EditorGUILayout.IntField("Value: ", attackDamage.value);
+            attackDamage.value = value < 0 ? 0 : value;
             SirenixEditorGUI.EndListItem();
         }
     }

@@ -24,7 +24,9 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             WallStickTrigger,
             WallSlide,
             WallStick,
-            PlatformDrop
+            PlatformDrop,
+            Flinch,
+            Death
         }
 
         [SerializeField]

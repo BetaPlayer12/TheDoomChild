@@ -96,7 +96,10 @@ namespace DChild.Gameplay
             }
         }
 
-        public void SetVelocity(Vector2 velocity) => this.velocity = m_physicsTime.GetRelativeForce(velocity);
+        public void SetVelocity(Vector2 velocity)
+        {
+            this.velocity = m_physicsTime.GetRelativeForce(velocity);
+        }
 
         public void SetVelocity(float x = float.NaN, float y = float.NaN)
         {

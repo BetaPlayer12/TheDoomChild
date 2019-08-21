@@ -30,18 +30,10 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_duration.Reset();
             TurnOnAnimation(true);
             enabled = true;
+            m_state.canDash = false;
             m_state.isDashing = true;
             if (m_ghosting != null)
                 m_ghosting.enabled = true;
-        }
-
-        protected override void OnDashCall(object sender, EventActionArgs eventArgs)
-        {
-            if (m_state.canDash && m_state.isDashing == false)
-            {
-                StartDash();
-                m_state.canDash = false;
-            }
         }
 
         private void OnLandExecuted(object sender, EventActionArgs eventArgs)

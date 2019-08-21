@@ -48,7 +48,7 @@ namespace DChild.Gameplay
             m_hitbuffers = new RaycastHit2D[16];
         }
 
-        private bool FindGround(out ContactPoint2D groundCP)
+        public bool FindGround(out ContactPoint2D groundCP)
         {
             groundCP = default(ContactPoint2D);
             bool found = false;

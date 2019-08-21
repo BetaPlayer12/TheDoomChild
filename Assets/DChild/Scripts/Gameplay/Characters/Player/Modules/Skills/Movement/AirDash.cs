@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_ghosting.enabled = false;
         }
 
-        public void HandleDash()
+        public void StartDash()
         {
             m_direction = m_character.facing == HorizontalDirection.Left ? Vector2.left : Vector2.right;
             m_duration.Reset();
@@ -40,12 +40,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics.simulateGravity = false;
             if (m_ghosting != null)
                 m_ghosting.enabled = true;
-        }
-
-        public override void ConnectTo(IMainController controller)
-        {
-            base.ConnectTo(controller);
-            controller.GetSubController<IAirDashController>().DashCall += OnDashCall;
         }
 
         protected override void Awake()
@@ -60,14 +54,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             {
                 m_physics.SetVelocity(m_direction.x * m_power, 0);
                 m_state.canDash = false;
-            }
-        }
-
-        protected override void OnDashCall(object sender, EventActionArgs eventArgs)
-        {
-            if (m_state.canDash)
-            {
-                HandleDash();
             }
         }
     }

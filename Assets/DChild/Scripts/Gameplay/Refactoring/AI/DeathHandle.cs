@@ -32,6 +32,7 @@ namespace Refactor.DChild.Gameplay.Characters
 
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            m_source.SetHitboxActive(false);
             m_animator.SetAnimation(0, m_animation, false, 0);
             m_animator.animationState.Complete += OnDeathAnimationComplete;
         }
