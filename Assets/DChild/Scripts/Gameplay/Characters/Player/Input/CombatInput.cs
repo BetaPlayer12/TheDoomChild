@@ -13,6 +13,7 @@ namespace DChild.Inputs
         private bool m_isOffHandPressed;
         private bool m_isThrowProjectilePressed;
         private bool m_isThrowProjectileHeld;
+        private float m_timer;
 
         public bool isMainHandPressed => m_isMainHandPressed;
         public bool isOffHandPressed => m_isOffHandPressed;
@@ -25,6 +26,7 @@ namespace DChild.Inputs
             m_isOffHandPressed = false;
             m_isThrowProjectilePressed = false;
             m_isThrowProjectileHeld = false;
+           
         }
 
         public void Update()
@@ -50,6 +52,30 @@ namespace DChild.Inputs
             {
 
             }
+
+            if (Input.GetMouseButton(1))
+            {
+                m_timer += Time.deltaTime;
+                Debug.Log("Pressed left click. Timer: " + m_timer);
+            }
+            else
+            {
+                
+                if(m_timer > 3.0f)
+                {
+                    Debug.Log("Charge Attack!!! POWER!!!!!!!");
+                }
+                else
+                {
+                    Debug.Log("Normal Attack!!!!!!");
+                    Debug.Log("Timer: " + m_timer);
+                }
+                
+                m_timer = 0.0f;
+            }
+
+
+
         }
     }
 }

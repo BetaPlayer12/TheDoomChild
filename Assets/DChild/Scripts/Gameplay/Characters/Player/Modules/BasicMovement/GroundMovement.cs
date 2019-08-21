@@ -37,6 +37,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [TabGroup("TabGroup", "Sprint Configurations")]
         private float m_sprintDecceleration;
 
+        [SerializeField]
+        private LayerMask layerMask;
+
         private Vector2 groundNormal;
         private CharacterPhysics2D m_characterPhysics2D;
 
@@ -45,7 +48,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private IPlayerState m_characterState;
         private Character m_character;
         private Animator m_animator;
+        private RaySensor m_raycantHit;
         private string m_speedParameter;
+        
 
         private bool m_increaseVelocity;
 
@@ -59,6 +64,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_character = info.character;
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
+            m_raycantHit = info.GetSensor(PlayerSensorList.SensorType.Slope);
         }
 
         public void Move(float direction)
@@ -100,10 +106,34 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_animator.SetInteger(m_speedParameter, 1);
                 }
                 m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
-                
+                SlopeMovement(moveDirection);
+
             }
 
-            float myAngle = Vector2.Angle(groundNormal, transform.position);
+           
+        }
+
+        private void SlopeMovement(Vector2 moveDirection)
+
+        {
+            RaycastHit2D hitInfoInc = Physics2D.Raycast(transform.position, moveDirection, 1.3f, 1 << 11);
+            RaycastHit2D hitInfoDec = Physics2D.Raycast(transform.position, Vector2.down, 1.0f, 1 << 11);
+
+            Debug.DrawRay(transform.position, moveDirection * 1.3f, Color.red);
+            if (hitInfoInc)
+            {
+                float slopeAngle = Vector2.Angle(hitInfoInc.normal, Vector2.up);
+                transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeAngle);
+                //Debug.Log("Parent name " + slopeAngle);
+            }
+            else
+            {
+
+                float slopeDecAngle = Vector2.Angle(hitInfoDec.normal, Vector2.up);
+                transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeDecAngle);
+                //Debug.Log("Not Hit on collider: " + slopeDecAngle);
+                //transform.parent.parent.eulerAngles = Vector3.zero;
+            }
         }
 
         public void UpdateVelocity()

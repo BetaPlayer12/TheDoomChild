@@ -32,9 +32,27 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_landHandle.Execute();
             LandExecuted?.Invoke(this, EventActionArgs.Empty);
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+            checkAngle();
             m_fallHandle.ResetValue();
             SetValuesToGround();
         }
+
+        private void checkAngle()
+        {           
+            RaycastHit2D hitInfoInc = Physics2D.Raycast(new Vector3(transform.position.x, transform.position.y + 0.9f, transform.position.z), Vector2.right, 1.3f, 1 << 11);
+            if (hitInfoInc)
+            {
+                float slopeAngle = Vector2.Angle(hitInfoInc.normal, Vector2.up);
+               // Debug.Log("Angle " + slopeAngle);
+                if (slopeAngle != 90)
+                {
+                    transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeAngle);
+                }
+
+            }
+           
+        }
+
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -73,6 +91,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             }
             else
             {
+                Debug.Log("Angle:" + transform.root.eulerAngles.z);
+                
                 if (m_isInMidAir == false)
                 {
                     m_isInMidAir = true;
@@ -101,8 +121,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     CallLand();
                 }
-
                 m_landHandle.RecordVelocity();
+               // Debug.Log("MIdAir: " + m_isInMidAir);
             }
         }
 

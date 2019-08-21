@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     public class GroundJumpHandler : Jump, IControllableModule
     {
         private IHighJumpState m_highJumpState;
-
+        private Character m_character;
         private Animator m_animator;
         private string m_jumpParamater;
 
@@ -20,6 +20,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             base.Initialize(info);
             m_highJumpState = info.state;
             m_animator = info.animator;
+            m_character = info.character;
             m_jumpParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
             info.groundednessHandle.LandExecuted += OnLand;
         }
@@ -36,13 +37,15 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_animator.SetTrigger(m_jumpParamater);
                 m_highJumpState.hasJumped = true;
             }
+            m_character.transform.eulerAngles = Vector3.zero;
+           // Debug.Log("jump handle");
         }
 
         private void OnLand(object sender, EventActionArgs eventArgs)
         {
-            m_highJumpState.hasJumped = false;
+            m_highJumpState.hasJumped = false;        
         }
-
+       
         public void ConnectTo(IMainController controller)
         {
             controller.ControllerDisabled += OnControllerDisabled;

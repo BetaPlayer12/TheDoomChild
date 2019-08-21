@@ -69,7 +69,7 @@ public class Cloth2D : MonoBehaviour {
 
         if (m_player.characterState.isAttacking)
         {
-            Debug.Log("Player is attacking");
+            
             if (m_player.currentFacingDirection == HorizontalDirection.Right)
             {
                 m_animator.SetBool("IsAttackingRight", true);

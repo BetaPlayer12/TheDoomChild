@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
             if (m_state.isAttacking)
             {
-
+               
             }
             else if (!m_state.canDoubleJump && !m_state.isFalling)
             {

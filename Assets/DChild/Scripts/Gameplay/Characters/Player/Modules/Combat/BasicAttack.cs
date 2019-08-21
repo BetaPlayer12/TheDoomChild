@@ -48,6 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void SetAttackDirection(CombatEventArgs eventArgs)
         {
+           
             if (eventArgs.directionalInput.isDownHeld)
             {
                 m_animator.SetInteger(m_attackDirectionParameter, -1);
