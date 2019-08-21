@@ -5,7 +5,7 @@ using DChild.Gameplay;
 using Holysoft.Event;
 using UnityEngine;
 
-public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
+public class ShadowCollider : MonoBehaviour
 {
     [SerializeField]
     private LayerMask m_mask;
@@ -16,7 +16,7 @@ public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
     [SerializeField]
     private float m_castYExtent;
 
-    private Skills m_skills;
+    //private Skills m_skills;
     private CharacterColliders m_colliders;
     private Collider2D m_wall;
     private Vector2 m_overlapSize;
@@ -40,12 +40,12 @@ public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
                     if (hit[i].tag == "ShadowPassable")
                     {
                         PassWall(hit[i]);
-                        m_skills.Enable(MovementSkill.WallJump, false); // to avoid wallsticking when passing walls using shadowmorph
+                        //m_skills.Enable(MovementSkill.WallJump, false); // to avoid wallsticking when passing walls using shadowmorph
                     }
 
                     else
                     {
-                        m_skills.Enable(MovementSkill.WallJump, true);
+                       // m_skills.Enable(MovementSkill.WallJump, true);
                     }
                 }
             }
@@ -68,7 +68,7 @@ public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
 
     private void OnIgnoreColliderEnd(object sender, EventActionArgs eventArgs)
     {
-        m_skills.Enable(MovementSkill.WallJump, true);
+        //m_skills.Enable(MovementSkill.WallJump, true);
         if (m_wall != null)
         {
             m_colliders.ClearIgnoredCollider(m_wall);
@@ -86,10 +86,5 @@ public class ShadowCollider : MonoBehaviour, IPlayerExternalModule
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(m_bodyTransform.position, m_overlapSize);
-    }
-
-    public void Initialize(IPlayerModules player)
-    {
-        m_skills = player.skills;
     }
 }

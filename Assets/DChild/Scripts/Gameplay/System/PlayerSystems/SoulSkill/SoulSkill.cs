@@ -50,6 +50,27 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             }
             AssetDatabase.SaveAssets();
         }
+
+
+        [Button, ToggleGroup("m_enableEdit"), ShowIf("m_connectToDatabase")]
+        private void SaveToDatabase()
+        {
+            var connection = DChildDatabase.GetSoulSkillConnection();
+            connection.Initialize();
+            connection.Update(m_ID, m_type,m_description);
+            connection.Close();
+        }
+
+        [Button, ToggleGroup("m_enableEdit"), ShowIf("m_connectToDatabase")]
+        private void LoadFromDatabase()
+        {
+            var connection = DChildDatabase.GetSoulSkillConnection();
+            connection.Initialize();
+            var info = connection.GetInfoOf(m_ID);
+            m_type = info.type;
+            m_description = info.description;
+            connection.Close();
+        }
 #endif
         #endregion
         [SerializeField, ToggleGroup("m_enableEdit")]

@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.Players;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
@@ -12,12 +13,15 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CharacterPhysics2D m_physics;
         private Animator m_animator;
         private string m_midAirParamater;
+        private string m_speedYParamater;
         private bool m_isInMidAir;
 
         [SerializeField]
         private float m_groundGravity;
         [SerializeField]
         private float m_midAirGravity;
+        [SerializeField, MinValue(0.1)]
+        private float m_startPeakVelocity;
 
         [SerializeField]
         private FallHandle m_fallHandle;
@@ -42,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state = info.state;
             m_animator = info.animator;
             m_midAirParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsMidAir);
+            m_speedYParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
             m_fallHandle.Initialize(info);
             m_landHandle.Initialize(info);
             m_skillRequester = info.skillResetRequester;
@@ -92,6 +97,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 }
                 else
                 {
+                    m_animator.SetInteger(m_speedYParamater, m_physics.velocity.y > m_startPeakVelocity ? 2 : 1);
                     m_physics.gravity.gravityScale = m_midAirGravity;
                     m_state.isFalling = false;
                 }

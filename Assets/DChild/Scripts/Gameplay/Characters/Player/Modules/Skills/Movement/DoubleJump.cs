@@ -57,18 +57,12 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         public void ConnectTo(IMainController controller)
         {
-            controller.GetSubController<IDoubleJumpController>().DoubleJumpCall += OnJumpCall;
             controller.ControllerDisabled += OnControllerDisabled;
         }
 
         private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
         {
             m_doubleJumpState.canDoubleJump = true;
-        }
-
-        private void OnJumpCall(object sender, EventActionArgs eventArgs)
-        {
-            HandleJump();
         }
 
         private void Start()

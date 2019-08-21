@@ -7,12 +7,13 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Collections;
 using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
-    public class ShadowMorph : ShadowSkill, IShadow, IPlayerExternalModule
+    public class ShadowMorph : ShadowSkill, IShadow
     {
         [SerializeField]
         private CountdownTimer m_magicConsumptionInterval;
@@ -26,23 +27,22 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         private SpriteRenderer m_visual;
         private IAttackResistance m_resistance;
-        private IShadowSkillModifier m_shadowModifier;
         private IIsolatedTime m_time;
 
         public bool hasMorphed => m_hasMorphed;
 
-        public override void Initialize(IPlayerModules player)
+        public override void Initialize(ComplexCharacterInfo info)
         {
-            base.Initialize(player);
-            m_time = player.isolatedObject;
-            m_resistance = player.attackResistance;
+            base.Initialize(info);
+            m_time = info.character.isolatedObject;
+           // m_resistance = player.attackResistance;
         }
 
         public void BecomeAShadow(bool needsMagicToSustain)
         {
             m_hasMorphed = true;
             m_magicConsumptionInterval.Reset();
-            m_resistance.SetResistance(AttackType.Physical, AttackResistanceType.Immune);
+            //m_resistance.SetResistance(AttackType.Physical, AttackResistanceType.Immune);
             //m_visual.color = m_color;
             enabled = needsMagicToSustain;
         }
@@ -50,16 +50,16 @@ namespace DChild.Gameplay.Characters.Players.Skill
         public void BecomeNormal()
         {
             m_hasMorphed = false;
-            m_resistance.SetResistance(AttackType.Physical, AttackResistanceType.None);
+            //m_resistance.SetResistance(AttackType.Physical, AttackResistanceType.None);
             //m_visual.color = Color.white;
             enabled = false;
         }
 
         private void OnCoolOffEnd(object sender, EventActionArgs eventArgs)
         {
-            m_module.magic.ReduceCurrentValue(m_sustainMagicRequirement * m_sustainMagicRequirement);
+            m_magic.ReduceCurrentValue(m_sustainMagicRequirement * m_sustainMagicRequirement);
             m_magicConsumptionInterval.Reset();
-            if (m_module.magic.currentValue <= 0)
+            if (m_magic.currentValue <= 0)
             {
                 BecomeNormal();
             }

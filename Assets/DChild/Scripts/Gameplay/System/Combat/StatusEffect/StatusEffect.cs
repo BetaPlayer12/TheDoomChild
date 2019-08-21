@@ -1,68 +1,59 @@
-﻿using DChild.Gameplay.Pooling;
-using Holysoft.Collections;
-using Holysoft.Event;
-using Holysoft.Pooling;
-using System;
-using System.Collections;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
-
-namespace DChild.Gameplay.Combat.StatusInfliction
-{
-    public abstract class StatusEffect : PoolableObject, IStatusEffectEvents
-    {
-        [SerializeField]
-        private CountdownTimer m_duration;
-        private IStatusReciever m_reciever;
-
-        public abstract StatusEffectType type { get; }
-        public event EventAction<StatusEffectEventArgs> EffectStart;
-        public event EventAction<StatusEffectEventArgs> EffectEnd;
-
-        public virtual void StopEffect()
-        {
-            enabled = false;
-            m_reciever.statusEffectState?.ChangeStatus(type, false);         
-            EffectEnd?.Invoke(this, new StatusEffectEventArgs(m_reciever, this) );
-        }
-
-        public virtual void StartEffect()
-        {
-            enabled = true;
-            m_duration.Reset();
-            m_reciever.statusEffectState?.ChangeStatus(type, true);
-            EffectStart?.Invoke(this, new StatusEffectEventArgs(m_reciever, this));
-        }
-
-        public void SetDuration(float duration) => m_duration.SetStartTime(duration);
-
-        public virtual void SetReciever(IStatusReciever reciever) => m_reciever = reciever;
-        public virtual void UpdateEffect(float deltaTime)
-        {
-            m_duration.Tick(GameplaySystem.time.deltaTime);
-        }
-
-        private void OnDurationEnd(object sender, EventActionArgs eventArgs)
-        {
-            StopEffect();
-        }
-
-        protected virtual void Awake()
-        {
-
-            m_duration.CountdownEnd += OnDurationEnd;
 #if UNITY_EDITOR
-            m_reciever = GetComponentInParent<IStatusReciever>();
-            if (m_reciever != null)
-            {
-                SetReciever(m_reciever);
-            }
+using UnityEditor;
+using DChildEditor;
 #endif
+
+namespace DChild.Gameplay.Combat.StatusAilment
+{
+
+    [CreateAssetMenu(fileName = "StatusEffectData", menuName = "DChild/Gameplay/Combat/Inflictions/Status Effect")]
+    public class StatusEffect : SerializedScriptableObject
+    {
+        [SerializeField, OnValueChanged("UpdateAssetName")]
+        private StatusEffectType m_type;
+        [SerializeField]
+        private bool m_hasDuration;
+        [SerializeField, ShowIf("m_hasDuration"), OnInspectorGUI("ValidateUpdatbleModules"), Min(0), Indent]
+        private float m_duration;
+
+        [SerializeField]
+        private IStatusEffectModule[] m_modules;
+        [SerializeField]
+        private IStatusEffectUpdatableModule[] m_updatableModule;
+
+        public StatusEffectType type => m_type;
+
+        public StatusEffectHandle CreateHandle()
+        {
+            var duration = m_hasDuration ? m_duration : -1;
+            IStatusEffectUpdatableModule[] list = new IStatusEffectUpdatableModule[m_updatableModule.Length];
+            for (int i = 0; i < list.Length; i++)
+            {
+                list[i] = m_updatableModule[i].CreateCopy();
+            }
+            return new StatusEffectHandle(m_type, duration, m_modules, list);
         }
 
 #if UNITY_EDITOR
-        public static string[] GetStatusEffectTypes()
+        private void ValidateUpdatbleModules()
         {
-            return DChildUtility.GetDerivedClassNames<StatusEffect>();
+            if (m_updatableModule != null)
+            {
+                for (int i = 0; i < m_updatableModule.Length; i++)
+                {
+                    m_updatableModule[i].CalculateWithDuration(m_duration);
+                }
+            }
+        }
+
+        private void UpdateAssetName()
+        {
+            string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
+            var fileName = m_type.ToString().Replace(" ", string.Empty) + "EffectData";
+            FileUtility.RenameAsset(this, assetPath, fileName);
+            AssetDatabase.SaveAssets();
         }
 #endif
     }

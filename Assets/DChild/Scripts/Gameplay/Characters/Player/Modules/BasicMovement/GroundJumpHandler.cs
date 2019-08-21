@@ -10,6 +10,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 {
     public class GroundJumpHandler : Jump, IControllableModule
     {
+        [SerializeField]
+        private FXSpawner m_fXSpawner;
+
         private IHighJumpState m_highJumpState;
 
         private Animator m_animator;
@@ -35,6 +38,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
                 m_animator.SetTrigger(m_jumpParamater);
                 m_highJumpState.hasJumped = true;
+                m_fXSpawner.SpawnFX(m_character.facing);
             }
         }
 

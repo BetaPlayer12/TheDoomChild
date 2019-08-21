@@ -33,5 +33,25 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             m_skills[skill] = enableSkill;
             SkillUpdate?.Invoke(this, new PrimarySkillUpdateEventArgs(skill, enableSkill));
         }
+
+        public PrimarySkillsData SaveData()
+        {
+            var size = (int)PrimarySkill._COUNT;
+            var data = new bool[size];
+            for (int i = 0; i < size; i++)
+            {
+                data[i] = m_skills[(PrimarySkill)i];
+            }
+            return new PrimarySkillsData(data);
+        }
+
+        public void LoadData(PrimarySkillsData savedData)
+        {
+            var data = savedData.movementSkills;
+            for (int i = 0; i < data.Length; i++)
+            {
+                m_skills[(PrimarySkill)i] = data[i];
+            }
+        }
     }
 }

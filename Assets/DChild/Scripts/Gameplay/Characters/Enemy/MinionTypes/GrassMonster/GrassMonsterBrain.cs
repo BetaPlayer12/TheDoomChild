@@ -132,7 +132,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (distanceToTarget <= 1f)
                 {
                     m_hasLocatedGrass = false;
-                    Turn(GameplaySystem.playerManager.player.position);
+                    //Turn(GameplaySystem.playerManager.player.position);
                 }
                 else
                 {

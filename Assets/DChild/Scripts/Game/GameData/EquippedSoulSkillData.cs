@@ -5,7 +5,7 @@ using DChild.Gameplay.Characters.Players;
 
 namespace DChild.Serialization
 {
-    [System.Serializable, HideLabel, Title("Equipped Soul Skills")]
+    [System.Serializable]
     public struct EquippedSoulSkillData
     {
         [SerializeField, ValueDropdown("GetArmorSkills")]

@@ -49,6 +49,21 @@ namespace DChild.Gameplay.Characters
             return false;
         }
 
+        public bool AreCollidersIntersecting(Collider2D otherCollider)
+        {
+            for (int i = 0; i < m_detectors.Length; i++)
+            {
+                for (int j = 0; j < m_detectors[i].intersectingColliderCount; j++)
+                {
+                    if (m_detectors[i].IsIntersecting(otherCollider))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public void Enable()
         {
             for (int i = 0; i < m_colliders.Length; i++)

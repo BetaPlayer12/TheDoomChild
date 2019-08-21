@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Collections;
 using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -22,11 +23,11 @@ namespace DChild.Gameplay.Characters.Players.Skill
         private IIsolatedTime m_time;
         private bool m_hasShadowDashed;
 
-        public override void Initialize(IPlayerModules player)
+        public override void Initialize(ComplexCharacterInfo info)
         {
-            base.Initialize(player);
-            m_state = player.characterState;
-            m_time = player.isolatedObject;
+            base.Initialize(info);
+            m_state = info.state;
+            m_time = info.character.isolatedObject;
         }
 
         protected override void UseSkill()

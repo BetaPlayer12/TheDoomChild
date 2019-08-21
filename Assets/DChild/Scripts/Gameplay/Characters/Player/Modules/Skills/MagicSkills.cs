@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Combat;
 using Holysoft.Gameplay;
+using Refactor.DChild.Gameplay.Characters.Players;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,36 +9,36 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
-    public abstract class MagicSkill : MonoBehaviour, IPlayerExternalModule
+    public abstract class MagicSkill : MonoBehaviour, IComplexCharacterModule, IModifiableModule
     {
-        protected class Module
+        [SerializeField, Min(0)]
+        protected int m_baseMagicRequired;
+        protected ICappedStat m_magic;
+
+        protected int m_magicRequired;
+
+        public virtual void ConnectTo(IPlayerModifer modifier)
         {
-            private IPlayerModules m_source;
-
-            public Module(IPlayerModules m_source)
-            {
-                this.m_source = m_source;
-            }
-
-            public IMagicModifier modifier => m_source.modifiers;
-            public ICappedStat magic => m_source.magic;
+            m_magicRequired = Mathf.FloorToInt(m_baseMagicRequired * modifier.Get(PlayerModifier.Magic_Requirement));
+            modifier.ModifierChange += OnModifierChange;
         }
 
-
-        [SerializeField, Min(0)]
-        protected int m_magicRequired;
-        protected Module m_module;
-
-        protected virtual float CalculateMagicRequired() => m_magicRequired * m_module.modifier.magicRequirement;
-
-        public virtual void Initialize(IPlayerModules player)
+        protected virtual void OnModifierChange(object sender, ModifierChangeEventArgs eventArgs)
         {
-            m_module = new Module(player);
+            if(eventArgs.modifier == PlayerModifier.Magic_Requirement)
+            {
+                m_magicRequired = Mathf.FloorToInt(m_baseMagicRequired * eventArgs.value);
+            }
+        }
+
+        public virtual void Initialize(ComplexCharacterInfo info)
+        {
+            m_magic = info.magic;
         }
 
         public void DoSkill()
         {
-            if (m_module.magic.currentValue < (CalculateMagicRequired()))
+            if (m_magic.currentValue < (m_magicRequired))
             {
                 DenySkillUse();
             }
@@ -49,12 +50,14 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         protected virtual void UseSkill()
         {
-            m_module.magic.ReduceCurrentValue(Mathf.FloorToInt((CalculateMagicRequired())));
+            m_magic.ReduceCurrentValue(m_magicRequired);
         }
 
         protected virtual void DenySkillUse()
         {
 
         }
+
+
     }
 }

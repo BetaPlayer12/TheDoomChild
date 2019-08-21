@@ -5,6 +5,6 @@
         bool isGrounded { get; set; }
         bool isFalling { get; set; }
         bool isNearEdge { get; set; }
-        bool waitForBehaviour { set; }
+        bool waitForBehaviour { get; set; }
     }
 }

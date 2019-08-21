@@ -18,12 +18,18 @@ namespace DChild
 
         private string m_activeZone;
 
-        private bool m_isZoneLoaded;
+        public string activeZone => m_activeZone;
 
         public void LoadZone(string sceneName, bool withLoadingScene)
         {
             if (withLoadingScene)
             {
+                if (m_activeZone != string.Empty)
+                {
+                    LoadingHandle.UnloadScenes(m_activeZone);
+                    m_activeZone = string.Empty;
+                }
+
                 if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
                 {
                     LoadingHandle.LoadScenes(m_gameplayScene.sceneName);
@@ -33,8 +39,16 @@ namespace DChild
             }
             else
             {
+                if (m_activeZone != string.Empty)
+                {
+                    LoadingHandle.UnloadScenes(m_activeZone);
+                    m_activeZone = string.Empty;
+                }
+                if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
+                {
+                    SceneManager.LoadSceneAsync(m_gameplayScene.sceneName, LoadSceneMode.Additive);
+                }
                 SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-                SceneManager.LoadSceneAsync(m_gameplayScene.sceneName, LoadSceneMode.Additive);
             }
             m_activeZone = sceneName;
         }
@@ -43,22 +57,13 @@ namespace DChild
         {
             if (m_activeZone != null)
             {
-                LoadingHandle.UnLoadScenes(m_activeZone);
+                LoadingHandle.UnloadScenes(m_activeZone);
+                m_activeZone = string.Empty;
             }
-            LoadingHandle.UnLoadScenes(m_gameplayScene.sceneName);
+            LoadingHandle.UnloadScenes(m_gameplayScene.sceneName);
             LoadingHandle.LoadScenes(m_mainMenu.sceneName);
             Time.timeScale = 1;
             SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
-        }
-
-        private void OnSceneDone(object sender, EventActionArgs eventArgs)
-        {
-            m_isZoneLoaded = true;
-        }
-
-        private void Awake()
-        {
-            LoadingHandle.SceneDone = OnSceneDone;
         }
     }
 

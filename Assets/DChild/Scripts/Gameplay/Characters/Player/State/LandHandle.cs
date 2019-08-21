@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
 using Refactor.DChild.Gameplay.Characters.Players;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
@@ -44,8 +45,21 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_fXSpawner.SpawnFX();
                 m_state.waitForBehaviour = true;
                 m_animator.SetInteger(m_speedXParamater, 0);
-                m_physics.SetVelocity(Vector2.zero);
+
+                //When GroundednessHandle is disabled for some reason
+                //Landing Slides the Character
+                StartCoroutine(ForceStopRoutine());
             }
+        }
+
+        private IEnumerator ForceStopRoutine()
+        {
+            var nextFrame = new WaitForEndOfFrame();
+            do
+            {
+                m_physics.SetVelocity(0);
+                yield return nextFrame;
+            } while (m_state.waitForBehaviour);
         }
     }
 

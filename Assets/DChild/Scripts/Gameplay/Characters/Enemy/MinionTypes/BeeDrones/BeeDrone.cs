@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using Spine.Unity.Modules;
@@ -127,6 +128,11 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedPhysics2D>(), transform);
             m_rootMotion = GetComponentInChildren<SpineRootMotion>();
+        }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

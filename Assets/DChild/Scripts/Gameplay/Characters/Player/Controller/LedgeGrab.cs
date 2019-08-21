@@ -13,12 +13,13 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class LedgeGrab : MonoBehaviour, IComplexCharacterModule, IControllableModule
+    public class LedgeGrab : MonoBehaviour, IComplexCharacterModule
     {
         private Character m_character;
         private CharacterPhysics2D m_physics;
         private RaySensor m_ledgeSensorCliff;
         private RaySensor m_ledgeSensorEdge;
+        private RaySensor m_platformSensor;
         private ILedgeGrabState m_state;
 
         private Animator m_animator;
@@ -59,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_character = info.character;
             m_ledgeSensorCliff = info.GetSensor(PlayerSensorList.SensorType.LedgeCliff);
             m_ledgeSensorEdge = info.GetSensor(PlayerSensorList.SensorType.LedgeEdge);
+            m_platformSensor = info.GetSensor(PlayerSensorList.SensorType.Platform);
             m_state = info.state;
             m_physics = info.physics;
             m_animator = info.animator;
@@ -68,26 +70,27 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_groundednessHandle = info.groundednessHandle;
         }
 
-        public void ConnectTo(IMainController controller)
-        {
-            // GetComponentInParent<ILandController>().LandCall += OnLandCall;
-            controller.GetSubController<ILedgeController>().LedgeGrabCall += AttemptToLedgeGrab;
-        }
-
-        public void AttemptToLedgeGrab()
+        public bool AttemptToLedgeGrab()
         {
             m_ledgeSensorCliff.Cast();
-            m_ledgeSensorEdge.Cast();
-
-            var canLedgeGrab = m_ledgeSensorCliff.isDetecting == true && m_ledgeSensorEdge.isDetecting == false;
-            if (canLedgeGrab)
+            if (m_ledgeSensorCliff.isDetecting)
             {
-                Vector2 groundPosition;
-                if (FindGroundDestination(out groundPosition))
+                m_ledgeSensorEdge.Cast();
+                if (m_ledgeSensorEdge.isDetecting == false)
                 {
-                    StartCoroutine(PullFromCliff(groundPosition));
+                    m_platformSensor.Cast();
+                    if (m_platformSensor.isDetecting == false)
+                    {
+                        Vector2 groundPosition;
+                        if (FindGroundDestination(out groundPosition))
+                        {
+                            StartCoroutine(PullFromCliff(groundPosition));
+                            return true;
+                        }
+                    }
                 }
             }
+            return false;
         }
 
         private IEnumerator PullFromCliff(Vector2 groundPosition)
@@ -95,6 +98,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state.waitForBehaviour = true;
             m_state.isFalling = false;
             m_state.isGrounded = true;
+            m_state.isMoving = false;
             m_animator.SetTrigger(m_ledgeGrabParameter);
             m_animator.SetInteger(m_speedYDirectionParameter, 0);
             m_animator.SetBool(m_midAirParameter, false);
@@ -119,9 +123,5 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics.position = currentPosition;
         }
 
-        private void AttemptToLedgeGrab(object sender, EventActionArgs eventArgs)
-        {
-            AttemptToLedgeGrab();
-        }
     }
 }
