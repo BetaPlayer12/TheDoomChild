@@ -253,7 +253,7 @@ MonoBehaviour:
   - {fileID: 2325617047411989877}
   - {fileID: 2875589605253226400}
   - {fileID: 8200397300833568898}
-  m_compositeColliderID: -5160
+  m_compositeColliderID: -89888
   m_isInvulnerable: 0
   m_damageReduction: 0
 --- !u!114 &313252527394093108
@@ -322,6 +322,9 @@ MonoBehaviour:
     m_max: 0
   m_legCollision: {fileID: 4936823764855760830}
   m_legCollider: {fileID: 8915222520846248517}
+  m_legColliderLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &2588418933362133325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,7 +340,6 @@ MonoBehaviour:
   m_centerMass: {fileID: 5643366765685513632}
   m_health: {fileID: 1955743248327194380}
   m_resistance: {fileID: 4932144229262218055}
-  m_flinchHandler: {fileID: 1647740127706897662}
 --- !u!114 &3723768553110705863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,7 +388,7 @@ MonoBehaviour:
   m_info:
     damage:
     - m_type: 1
-      m_damage: 25
+      m_value: 0
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
@@ -410,34 +412,8 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: m_resistance
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.AttackType,
-        Assembly-CSharp],[System.Single, mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Combat.AttackType,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  m_useType: 0
+    SerializationNodes: []
+  m_data: {fileID: 0}
 --- !u!1001 &1243054176040191128
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -454,51 +430,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Character
-      objectReference: {fileID: 0}
-    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_spineObjects.m_skeletonAnimations.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_spineObjects.m_baseTimeScale.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_physicsObjects.m_rigidbody2Ds.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_physicsObjects.m_physicsTimeObjectInfo.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_spineObjects.m_skeletonAnimations.Array.data[0]
-      value: 
-      objectReference: {fileID: 393547319274252893}
-    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_spineObjects.m_baseTimeScale.Array.data[0]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_physicsObjects.m_rigidbody2Ds.Array.data[1]
-      value: 
-      objectReference: {fileID: 8290372634494768774}
-    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_physicsObjects.m_physicsTimeObjectInfo.Array.data[1].m_mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_maxHealth
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -554,6 +485,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_spineObjects.m_skeletonAnimations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_spineObjects.m_baseTimeScale.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_physicsObjects.m_rigidbody2Ds.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_physicsObjects.m_physicsTimeObjectInfo.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_spineObjects.m_skeletonAnimations.Array.data[0]
+      value: 
+      objectReference: {fileID: 393547319274252893}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_spineObjects.m_baseTimeScale.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_physicsObjects.m_rigidbody2Ds.Array.data[1]
+      value: 
+      objectReference: {fileID: 8290372634494768774}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_physicsObjects.m_physicsTimeObjectInfo.Array.data[1].m_mass
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
@@ -616,6 +592,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RangeBeeDroneModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5427278370112290412, guid: d1e47ddcd893636449a3bbb5ae3a08a3,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.71813834
+      objectReference: {fileID: 0}
+    - target: {fileID: 5427278370112290412, guid: d1e47ddcd893636449a3bbb5ae3a08a3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.058596767
       objectReference: {fileID: 0}
     - target: {fileID: 2544378068226852776, guid: d1e47ddcd893636449a3bbb5ae3a08a3,
         type: 3}
@@ -981,16 +967,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.002377987
-      objectReference: {fileID: 0}
-    - target: {fileID: 5427278370112290412, guid: d1e47ddcd893636449a3bbb5ae3a08a3,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.71813834
-      objectReference: {fileID: 0}
-    - target: {fileID: 5427278370112290412, guid: d1e47ddcd893636449a3bbb5ae3a08a3,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.058596767
       objectReference: {fileID: 0}
     - target: {fileID: 1403553921777473693, guid: d1e47ddcd893636449a3bbb5ae3a08a3,
         type: 3}
