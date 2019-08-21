@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private CharacterPhysics2D m_character;
 
-        private IPlacementState m_state;
+        private IGroundednessState m_state;
         private IIsolatedTime m_time;
 
         public void Initialize(IPlayerModules player)
@@ -43,12 +43,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_character.gravity.gravityScale = m_FallGravity;
                 }
             }
-            else if (m_state.hasLanded)
-            {
-                m_duration.Reset();
-                m_stopAssist = false;
-                m_character.gravity.gravityScale = m_defaultGravity;
-            }
+            //else if (m_state.hasLanded)
+            //{
+            //    m_duration.Reset();
+            //    m_stopAssist = false;
+            //    m_character.gravity.gravityScale = m_defaultGravity;
+            //}
         }
 
         private void Awake()

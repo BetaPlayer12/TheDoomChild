@@ -1,70 +1,52 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Spine.Unity.Modules;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class CrouchMovement : MonoBehaviour, IPlayerExternalModule, IEventModule
+    public class CrouchMovement : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         private GroundMoveHandler m_moveHandler;
+        private Character m_character;
         private CharacterPhysics2D m_characterPhysics2D;
-
+        private Animator m_animator;
+        private string m_speedParameter;
         private ICrouchState m_state;
-        private IFacingConfigurator m_facingConfig;
 
         public void Move(float direction)
         {
             if (m_state.isCrouched)
             {
-
-                
                 if (direction == 0)
                 {
-                    Debug.Log("in stasis");
+                    m_animator.SetInteger(m_speedParameter, 0);
                     m_moveHandler.Deccelerate();
                     m_state.isMoving = false;
-                   
                 }
                 else
                 {
-                    Debug.Log("in moving");
                     var moveDirection = direction > 0 ? Vector2.right : Vector2.left;
                     m_moveHandler.SetDirection(moveDirection);
                     m_moveHandler.Accelerate();
                     m_state.isMoving = true;
-                    m_facingConfig.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+                    m_animator.SetInteger(m_speedParameter, 1);
+                    m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
                 }
             }
         }
 
-        public void Initialize(IPlayerModules player)
+        public void Initialize(ComplexCharacterInfo info)
         {
-            m_characterPhysics2D = player.physics;
+            m_character = info.character;
+            m_characterPhysics2D = info.physics;
             m_moveHandler.SetPhysics(m_characterPhysics2D);
-            m_state = player.characterState;
-            m_facingConfig = player;
+            m_state = info.state;
+            m_animator = info.animator;
+            m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
         }
-
-        public void ConnectEvents()
-        {
-            GetComponentInParent<ICrouchController>().CrouchMoveCall += OnCrouchMoveCall;
-        }
-
-        private void OnCrouchMoveCall(object sender, ControllerEventArgs eventArgs)
-        {
-           
-            //m_moveHandler.Deccelerate();
-            Move(eventArgs.input.direction.horizontalInput);
-        }
-
-#if UNITY_EDITOR
-        public void Initialize(float maxSpeed, float acceleration, float decceleration)
-        {
-            m_moveHandler = new GroundMoveHandler(maxSpeed, acceleration, decceleration);
-        }
-#endif
     }
 
 }

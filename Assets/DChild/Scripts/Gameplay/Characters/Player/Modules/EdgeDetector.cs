@@ -16,7 +16,7 @@ public class EdgeDetector : MonoBehaviour, IPlayerExternalModule
             this.source = source;
         }
 
-        public IPlacementState state => source.characterState;
+        public IGroundednessState state => source.characterState;
         public HorizontalDirection currentFacingDirection => source.currentFacingDirection;
         public CharacterPhysics2D physics => source.physics;
         public RaySensor edgeSensor => source.sensors.edgeSensor;

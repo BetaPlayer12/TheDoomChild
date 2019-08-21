@@ -1,85 +1,65 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
+using Refactor.DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class Crouch : MonoBehaviour, IPlayerExternalModule, IEventModule
+    public class Crouch : MonoBehaviour, IComplexCharacterModule
     {
-        //[SerializeField]
-        //private SpineRootMotion m_rootMotion;
         private RaySensor m_headSensor;
         private Animator m_animator;
+        private string m_crouchParameter;
         private ICrouchState m_state;
 
         public bool HandleCrouch(bool input)
         {
-            if (input)
+            if (input == false)
             {
-                //EnableRootMotion(true, true, false);
-                m_headSensor.enabled = true;
-                m_animator.SetBool("Crouch", true);
-                m_state.isCrouched = true;
-            }
-            else if (m_state.isCrouched)
-            {
-                m_headSensor.Cast();
-
-                if (m_headSensor.isDetecting)
+                if (m_state.isCrouched)
                 {
-                    //EnableRootMotion(true, true, false);
-                    return m_state.isCrouched;
+                    m_headSensor.Cast();
+                    if (m_headSensor.isDetecting)
+                    {
+                        return m_state.isCrouched;
+                    }
+                    else
+                    {
+                        StopCrouch();
+                    }
                 }
                 else
                 {
-                    StopCrouch();
+                    m_headSensor.enabled = false;
                 }
             }
-            else
-            {
-                m_headSensor.enabled = false;
-            }
             return m_state.isCrouched;
+        }
+
+        public void StartCrouch()
+        {
+            m_headSensor.enabled = true;
+            m_animator.SetBool(m_crouchParameter, true);
+            m_state.isCrouched = true;
         }
 
         public void StopCrouch()
         {
             if (m_state.isCrouched)
             {
-                m_animator.SetBool("Crouch", false);
+                m_animator.SetBool(m_crouchParameter, false);
                 m_state.isCrouched = false;
-                //EnableRootMotion(false, false, false);
             }
         }
 
-        public void Initialize(IPlayerModules player)
+        public void Initialize(ComplexCharacterInfo info)
         {
-            m_headSensor = player.sensors.headSensor;
+            m_headSensor = info.GetSensor(PlayerSensorList.SensorType.Head);
             m_headSensor.enabled = false;
-            m_state = player.characterState;
-            m_animator = player.animation.GetComponentInChildren<Animator>();
-            //m_rootMotion.enabled = false;
+            m_animator = info.animator;
+            m_crouchParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsCrouching);
+            m_state = info.state;
         }
-
-        public void ConnectEvents()
-        {
-            GetComponentInParent<ICrouchController>().CrouchCall += OnCrouchCall;
-        }
-
-        private void OnCrouchCall(object sender, ControllerEventArgs eventArgs)
-        {
-            HandleCrouch(eventArgs.input.direction.isDownHeld);
-        }
-
-        //private void EnableRootMotion(bool enable, bool useX, bool useY)
-        //{
-        //    m_rootMotion.enabled = enable;
-        //    if (enable)
-        //    {
-        //        m_rootMotion.useX = useX;
-        //        m_rootMotion.useY = useY;
-        //    }
-        //}
     }
 
 }

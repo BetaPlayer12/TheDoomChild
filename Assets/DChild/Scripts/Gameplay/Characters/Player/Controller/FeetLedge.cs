@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_characterFacing = player;
             m_kneeSensor = player.sensors.kneeSensor;
             m_feetLedgeSensor = player.sensors.feetEdgeSensor;
-            m_state = player.characterState;
+            //m_state = player.characterState;
             
             m_physics = player.physics;
             m_dropPlatform = player.characterState;

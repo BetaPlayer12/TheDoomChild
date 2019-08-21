@@ -16,8 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void Awake()
         {
-            GetComponentInParent<Player>().GetComponentInChildren<IJumpController>().JumpCall += OnJumpCall;
-            m_spawnPosition = GetComponentInParent<Player>().transform;
+           // GetComponentInParent<Player>().GetComponentInChildren<IJumpController>().JumpCall += OnJumpCall;
+            //m_spawnPosition = GetComponentInParent<Player>().transform;
         }
 
 #if UNITY_EDITOR

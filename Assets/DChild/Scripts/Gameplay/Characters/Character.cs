@@ -12,7 +12,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private Transform m_centerMass;
         [SerializeField]
-        public IsolatedObject m_isolatedObject;
+        private IsolatedObject m_isolatedObject;
         [SerializeField]
         private IsolatedPhysics2D m_physics;
         [SerializeField]

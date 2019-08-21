@@ -1,8 +1,6 @@
-﻿using System;
-using DChild.Gameplay.Characters.Players.Modules;
+﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Systems.WorldComponents;
-using DChild.Inputs;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.Players;
@@ -17,16 +15,22 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private float m_stickPositionOffset;
         [SerializeField]
         private float m_stickDuration;
-        [SerializeField]
         private CountdownTimer m_stickTimer;
         [SerializeField, MinValue(0.1)]
         private float m_slideSpeed;
         private bool m_isSliding;
- 
+
         private CharacterPhysics2D m_physics;
         private CharacterColliders m_colliders;
-        private RaySensor m_sensor;
+        private RaySensor m_wallSensor;
         private RaySensor m_groundHeightSensor;
+        private GroundednessHandle m_groundednessHandle;
+
+        private Animator m_animator;
+        private string m_speedYParameter;
+        private string m_wallStickTriggerParameter;
+        private string m_wallStickParameter;
+        private string m_wallSlideParameter;
 
         private IIsolatedTime m_time;
         private IWallStickState m_wallStickState;
@@ -37,7 +41,20 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             var wallStickController = controller.GetSubController<IWallStickController>();
             wallStickController.WallStickCall += OnWallStickCall;
             wallStickController.WallSlideCall += OnWallSlideCall;
-            wallStickController.UpdateCall += OnUpdateCall;
+            wallStickController.AttempWallStickCall += OnAttempWallStickCall;
+            wallStickController.WallStickCancel += OnCancel;
+
+            controller.ControllerDisabled += OnControllerDisablled;
+        }
+
+        private void OnControllerDisablled(object sender, EventActionArgs eventArgs)
+        {
+            CancelWallStick();
+        }
+
+        private void OnCancel(object sender, EventActionArgs eventArgs)
+        {
+            CancelWallStick();
         }
 
         public void Initialize(ComplexCharacterInfo info)
@@ -45,44 +62,57 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics = info.physics;
             m_time = info.character.isolatedObject;
             m_wallStickState = info.state;
-            m_sensor = info.GetSensor(PlayerSensorList.SensorType.WallStick);
-            m_groundHeightSensor = info.GetSensor(PlayerSensorList.SensorType.WallStickHeight);
+            m_wallSensor = info.GetSensor(PlayerSensorList.SensorType.WallStick);
+            m_groundHeightSensor = info.GetSensor(PlayerSensorList.SensorType.GroundHeight);
             m_colliders = info.character.colliders;
-            info.groundednessHandle.LandExecuted += OnLandCall;
-        } 
+            m_groundednessHandle = info.groundednessHandle;
+
+            m_animator = info.animator;
+            m_speedYParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
+            m_wallStickTriggerParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallStickTrigger);
+            m_wallStickParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallStick);
+            m_wallSlideParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallSlide);
+        }
         #endregion
 
         public void HandleWallStick()
         {
             if (m_isSliding)
             {
-                m_physics.SetVelocity(Vector2.down);
-                m_physics.AddForce(new Vector2(0, -250));
+                m_physics.SetVelocity(Vector2.down * m_slideSpeed);
+
+                m_wallSensor.Cast();
+                if (m_wallSensor.isDetecting == false || m_physics.inContactWithGround)
+                {
+                    CancelWallStick();
+                    m_groundednessHandle.CallLand();
+                }
             }
             else
             {
                 m_stickTimer.Tick(m_time.deltaTime);
+                m_physics.SetVelocity(Vector2.zero);
             }
         }
 
         #region WallStick Only
         private void AttemptToWallStick()
         {
-            //if (m_skills.IsEnabled(PrimarySkill.WallJump) && m_wallStickState.isStickingToWall == false)
+            if (m_wallStickState.isStickingToWall == false)
             {
-                m_groundHeightSensor.Cast();
-                if (m_groundHeightSensor.isDetecting == false)
+                if (m_physics.velocity.y <= 0)
                 {
-                    if (m_physics.velocity.y <= 0)
+                    // Be more specific on wallstick is moving
+                    if (m_wallStickState.isMoving && m_colliders.AreCollidersIntersecting() == false)
                     {
-                        // Be more specific on wallstick is moving
-                        if (m_wallStickState.isMoving && m_wallStickState.isDroppingFromPlatform == false && m_colliders.AreCollidersIntersecting() == false)
+                        m_wallSensor.Cast();
+                        if (m_wallSensor.allRaysDetecting)
                         {
-                            m_sensor.Cast();
-                            if (m_sensor.allRaysDetecting)
+                            var hit = m_wallSensor.GetValidHits()[0];
+                            if (hit.collider.CompareTag("Droppable") == false)
                             {
-                                var hit = m_sensor.GetValidHits()[0];
-                                if (hit.collider.CompareTag("Droppable") == false)
+                                m_groundHeightSensor.Cast();
+                                if (m_groundHeightSensor.isDetecting == false)
                                 {
                                     AttachToWall(hit);
                                     StartStickToWall();
@@ -106,17 +136,24 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             {
                 m_physics.transform.position = new Vector2(hitpoint.x - m_stickPositionOffset, currentPosition.y);
             }
+            m_groundednessHandle.enabled = false;
         }
 
         private void StartStickToWall()
         {
             m_wallStickState.isStickingToWall = true;
             m_wallStickState.isSlidingToWall = false;
+            m_wallStickState.isFalling = false;
             m_stickTimer.SetStartTime(m_stickDuration);
             m_stickTimer.Reset();
             m_physics.SetVelocity(Vector2.zero);
             m_physics.simulateGravity = false;
             m_isSliding = false;
+
+            m_animator.SetInteger(m_speedYParameter, 0);
+            m_animator.SetTrigger(m_wallStickTriggerParameter);
+            m_animator.SetBool(m_wallStickParameter, true);
+            m_animator.SetBool(m_wallSlideParameter, false);
         }
 
         private void OnWallStickEnd(object sender, EventActionArgs eventArgs)
@@ -145,12 +182,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_wallStickState.isSlidingToWall = true;
             m_physics.simulateGravity = true;
             m_stickTimer.EndTime(false);
+            m_animator.SetBool(m_wallSlideParameter, true);
         }
 
         private void OnWallSlideCall(object sender, EventActionArgs eventArgs)
         {
             StartWallSlide();
-        } 
+        }
         #endregion
 
         private void OnLandCall(object sender, EventActionArgs eventArgs)
@@ -164,16 +202,20 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_isSliding = false;
             m_wallStickState.isSlidingToWall = false;
             m_wallStickState.isStickingToWall = false;
+            m_animator.SetBool(m_wallStickParameter, false);
+            m_animator.SetBool(m_wallSlideParameter, false);
             m_physics.simulateGravity = true;
+            m_groundednessHandle.enabled = true;
         }
 
-        private void OnUpdateCall(object sender, ControllerEventArgs eventArgs)
+        private void OnAttempWallStickCall(object sender, ControllerEventArgs eventArgs)
         {
             AttemptToWallStick();
         }
 
         private void Awake()
         {
+            m_stickTimer = new CountdownTimer(m_stickDuration);
             m_stickTimer.CountdownEnd += OnWallStickEnd;
         }
 

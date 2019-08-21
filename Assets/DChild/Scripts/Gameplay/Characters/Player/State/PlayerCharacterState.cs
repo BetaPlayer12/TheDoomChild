@@ -2,16 +2,15 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.State
 {
     [System.Serializable]
-    public class PlayerCharacterState : IPlayerState, IMoveState, IPlacementState,
+    public class PlayerCharacterState : IPlayerState, IMoveState, IGroundednessState,
                                 ICrouchState, IFlinchState, IWallStickState,
                                 IDashState, IDoubleJumpState, IWallJumpState,
                                 IHighJumpState, IBehaviourState, ICombatState, IPlatformDropState,
-                                IWhipGrapple, IProjectileThrowState, ILedgeGrabState
+                                IWhipGrapple, IProjectileThrowState
     {
         public event EventAction<CombatStateEventArgs> CombatModeChanged;
 
@@ -90,6 +89,6 @@ namespace DChild.Gameplay.Characters.Players.State
             }
         }
 
-
+        public bool hasJumped { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }

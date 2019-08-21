@@ -2,7 +2,7 @@
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public interface IJumpController
+    public interface IJumpController : ISubController
     {
         event EventAction<EventActionArgs> JumpCall;
     }

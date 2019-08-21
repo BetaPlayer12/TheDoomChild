@@ -7,7 +7,6 @@ namespace DChild.Gameplay.Characters.Players.State
     public interface IPlayerState
     {
         bool waitForBehaviour { get; }
-        bool hasLanded { get; }
         bool isGrounded { get; }
         bool isFalling { get; }
         bool isCrouched { get; }
@@ -15,8 +14,8 @@ namespace DChild.Gameplay.Characters.Players.State
         bool isDashing { get; }
         bool canDash { get; }
         bool canHighJump { get; }
+        bool hasJumped { get;}
         bool canDoubleJump { get; }
-        bool hasDoubleJumped { get; }
         bool canWallJump { get; }
         bool isFlinching { get; }
         bool inCombat { get; }
@@ -32,6 +31,5 @@ namespace DChild.Gameplay.Characters.Players.State
         bool isAimingProjectile { get; }
         bool isJogging { get; }
         bool isSprinting { get; }
-        bool isLedging { get; }///
     }
 }

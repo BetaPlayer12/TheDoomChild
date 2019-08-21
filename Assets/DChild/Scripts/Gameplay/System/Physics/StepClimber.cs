@@ -12,7 +12,7 @@ namespace DChild.Gameplay
         private float m_maxStepHeight;
         [SerializeField, MinValue(0.01f)]
         private float stepSearchOvershoot = 0.01f;
-        [SerializeField, ValueDropdown("m_detectorCandidates")]
+        [SerializeField]
         private CollisionDetector m_detector;
 
         private RaycastHit2D[] m_hitbuffers;
@@ -60,6 +60,7 @@ namespace DChild.Gameplay
                 {
                     groundCP = cp;
                     found = true;
+                    break;
                 }
             }
             return found;
@@ -135,8 +136,6 @@ namespace DChild.Gameplay
         }
 
 #if UNITY_EDITOR
-        public IEnumerable m_detectorCandidates;
-
         public void DrawGizmos(Transform transform)
         {
             var maxHeight = transform.position + (transform.up * m_maxStepHeight);
