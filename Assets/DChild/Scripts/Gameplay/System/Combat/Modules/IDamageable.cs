@@ -14,5 +14,7 @@ namespace DChild.Gameplay.Combat
         void SetHitboxActive(bool enable);
         event EventAction<DamageEventArgs> DamageTaken;
         event EventAction<EventActionArgs> Destroyed;
+        int GetInstanceID();
+        bool CompareTag(string tag);
     }
 }

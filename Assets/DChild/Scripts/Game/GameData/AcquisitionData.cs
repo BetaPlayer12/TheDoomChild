@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace DChild.Serialization
 {
@@ -8,17 +9,22 @@ namespace DChild.Serialization
         [System.Serializable]
         public struct SerializeData
         {
-            public int ID { get; }
-            public bool hasData { get; }
+            [SerializeField]
+            private int m_ID;
+            [SerializeField]
+            private bool m_hasData;
 
             public SerializeData(int iD, bool hasData)
             {
-                ID = iD;
-                this.hasData = hasData;
+                m_ID = iD;
+                this.m_hasData = hasData;
             }
+
+            public int ID => m_ID;
+            public bool hasData => m_hasData;
         }
 
-        [SerializeField]
+        [SerializeField, TableList(NumberOfItemsPerPage = 5, ShowPaging = true), ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, NumberOfItemsPerPage = 5, ShowPaging = true)]
         private SerializeData[] m_serializeDatas;
 
         public int count => m_serializeDatas.Length;

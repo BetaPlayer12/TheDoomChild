@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Combat
 {
     public struct TargetInfo
     {
-        public ITarget instance { get; }
+        public IDamageable instance { get; }
         public bool isCharacter { get; }
         public bool hasID { get; }
         public int characterID { get; }
@@ -19,7 +19,7 @@ namespace DChild.Gameplay.Combat
         public IPlayer owner { get; }
         public StatusEffectReciever statusEffectReciever { get; }
 
-        public TargetInfo(ITarget target, Character character = null, IFlinch flinchHandler = null) : this()
+        public TargetInfo(IDamageable target, Character character = null, IFlinch flinchHandler = null) : this()
         {
             this.instance = target;
             isCharacter = character;
@@ -38,7 +38,7 @@ namespace DChild.Gameplay.Combat
             this.flinchHandler = flinchHandler;
         }
 
-        public TargetInfo(ITarget target, float damageReduction) : this()
+        public TargetInfo(IDamageable target, float damageReduction) : this()
         {
             this.instance = target;
             this.damageReduction = damageReduction;

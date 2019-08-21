@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Combat
         private ResistanceHandler m_resistanceHandler;
 
         private List<AttackType> m_damageList;
-        private ITarget m_cacheTarget;
+        private IDamageable m_cacheTarget;
 
         public AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo)
         {
@@ -129,13 +129,7 @@ namespace DChild.Gameplay.Combat
                 for (int i = 0; i < result.damageList.Count; i++)
                 {
                     var damageInfo = result.damageList[i];
-                    if (damageInfo.isHeal)
-                    {
-                        var healValue = damageInfo.damage.value;
-                        m_cacheTarget.Heal(healValue);
-                        m_uiHandler.ShowHealValues(m_cacheTarget.position, healValue, result.isCrit);
-                    }
-                    else
+                    if (damageInfo.isHeal == false)
                     {
                         var damage = damageInfo.damage;
                         m_damageList.Add(damage.type);
@@ -149,12 +143,7 @@ namespace DChild.Gameplay.Combat
                 for (int i = 0; i < result.damageList.Count; i++)
                 {
                     var damageInfo = result.damageList[i];
-                    if (damageInfo.isHeal)
-                    {
-                        var healValue = damageInfo.damage.value;
-                        m_cacheTarget.Heal(healValue);
-                    }
-                    else
+                    if (damageInfo.isHeal == false)
                     {
                         var damage = damageInfo.damage;
                         m_damageList.Add(damage.type);

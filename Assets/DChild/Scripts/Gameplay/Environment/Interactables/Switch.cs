@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private Collider2D m_collider;
 #if UNITY_EDITOR
-        [SerializeField, ReadOnly] 
+        [SerializeField, ReadOnly]
 #endif
         private bool m_isOn;
 
@@ -116,10 +116,6 @@ namespace DChild.Gameplay.Environment
         {
             SetAs(m_isOn);
         }
-
-
-
-
 
 #if UNITY_EDITOR
         [SerializeField, HideInInspector]
