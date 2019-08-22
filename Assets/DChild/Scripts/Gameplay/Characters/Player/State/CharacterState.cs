@@ -20,8 +20,8 @@ namespace DChild.Gameplay.Characters.Players.State
         private bool m_isDashing;
         private bool m_canDash;
         private bool m_canHighJump;
+        private bool m_hasJumped;
         private bool m_canDoubleJump;
-        private bool m_hasDoubleJumped;
         private bool m_canWallJump;
         private bool m_isFlinching;
         private bool m_canFlinch;
@@ -48,8 +48,8 @@ namespace DChild.Gameplay.Characters.Players.State
         public bool isDashing { get => m_isDashing; set => m_isDashing = value; }
         public bool canDash { get => m_canDash; set => m_canDash = value; }
         public bool canHighJump { get => m_canHighJump; set => m_canHighJump = value; }
+        public bool hasJumped { get => m_hasJumped; set => m_hasJumped = value; }
         public bool canDoubleJump { get => m_canDoubleJump; set => m_canDoubleJump = value; }
-        public bool hasDoubleJumped { get => m_hasDoubleJumped; set => m_hasDoubleJumped = value; }
         public bool canWallJump { get => m_canWallJump; set => m_canWallJump = value; }
         public bool isFlinching { get => m_isFlinching; set => m_isFlinching = value; }
         public bool canFlinch { get => m_canFlinch; set => m_canFlinch = value; }
@@ -74,5 +74,6 @@ namespace DChild.Gameplay.Characters.Players.State
                 CombatModeChanged?.Invoke(this, new CombatStateEventArgs(m_inCombat));
             }
         }
+
     }
 }

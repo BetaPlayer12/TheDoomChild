@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             GroundHeight,
             LedgeCliff,
             LedgeEdge,
+            Platform
         }
 
         [SerializeField]

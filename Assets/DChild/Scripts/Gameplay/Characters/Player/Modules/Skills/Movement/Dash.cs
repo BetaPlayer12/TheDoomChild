@@ -51,8 +51,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             controller.ControllerDisabled += OnControllerDisabled;
         }
 
-        protected abstract void OnDashCall(object sender, EventActionArgs eventArgs);
-
         protected void TurnOnAnimation(bool value) => m_animator.SetBool(m_isDashingParameter, value);
 
         protected abstract void StopDash();

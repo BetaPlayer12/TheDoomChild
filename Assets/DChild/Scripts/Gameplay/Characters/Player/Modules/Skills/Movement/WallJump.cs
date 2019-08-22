@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
-    public class WallJump : Jump, IControllableModule
+    public class WallJump : Jump
     {
         [SerializeField]
         private float m_forwardPower;
@@ -21,11 +21,6 @@ namespace DChild.Gameplay.Characters.Players.Skill
         private IIsolatedTime m_time;
         private Animator m_animator;
         private string m_jumpParamater;
-
-        public void ConnectTo(IMainController controller)
-        {
-            controller.GetSubController<IWallJumpController>().WallJumpCall += OnWallJumpCall;
-        }
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -51,14 +46,10 @@ namespace DChild.Gameplay.Characters.Players.Skill
             m_animator.SetTrigger(m_jumpParamater);
         }
 
-        private void OnWallJumpCall(object sender, EventActionArgs eventArgs)
-        {
-            HandleJump();
-        }
-
         private void OnDisableInputEnd(object sender, EventActionArgs eventArgs)
         {
             m_state.waitForBehaviour = false;
+            enabled = false;
         }
 
         private void Awake()

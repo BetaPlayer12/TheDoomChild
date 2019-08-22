@@ -16,10 +16,6 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField, MinValue(0)]
         private int magicAttack;
         [SerializeField, MinValue(0)]
-        private int defense;
-        [SerializeField, MinValue(0)]
-        private int magicDefense;
-        [SerializeField, MinValue(0)]
         private int critChance;
         [SerializeField, MinValue(0)]
         private int statusChance;
@@ -39,12 +35,6 @@ namespace DChild.Gameplay.Characters.Players
                     break;
                 case PlayerStat.MagicAttack:
                     magicAttack += value;
-                    break;
-                case PlayerStat.Defense:
-                    defense += value;
-                    break;
-                case PlayerStat.MagicDefense:
-                    magicDefense += value;
                     break;
                 case PlayerStat.CritChance:
                     critChance += value;
@@ -74,12 +64,6 @@ namespace DChild.Gameplay.Characters.Players
                 case PlayerStat.MagicAttack:
                     magicAttack = value;
                     break;
-                case PlayerStat.Defense:
-                    defense = value;
-                    break;
-                case PlayerStat.MagicDefense:
-                    magicDefense = value;
-                    break;
                 case PlayerStat.CritChance:
                     critChance = value;
                     break;
@@ -104,18 +88,12 @@ namespace DChild.Gameplay.Characters.Players
                     return attack;
                 case PlayerStat.MagicAttack:
                     return magicAttack;
-                case PlayerStat.Defense:
-                    return defense;
-                case PlayerStat.MagicDefense:
-                    return magicDefense;
                 case PlayerStat.CritChance:
                     return critChance;
                 case PlayerStat.StatusChance:
                     return statusChance;
                 case PlayerStat.MaxAttack:
                     return attack + magicAttack;
-                case PlayerStat.MaxDefense:
-                    return defense + magicDefense;
                 default:
                     throw new System.Exception($"{stat} does not exist");
             }

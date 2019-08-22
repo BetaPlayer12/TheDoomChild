@@ -227,5 +227,10 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_enemyFacing.enabled = true;
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

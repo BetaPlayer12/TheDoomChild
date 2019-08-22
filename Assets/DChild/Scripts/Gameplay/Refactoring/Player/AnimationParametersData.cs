@@ -21,8 +21,12 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             LedgeGrab,
             Attack,
             AttackYDirection,
+            WallStickTrigger,
+            WallSlide,
             WallStick,
-            WallSlide
+            PlatformDrop,
+            Flinch,
+            Death
         }
 
         [SerializeField]

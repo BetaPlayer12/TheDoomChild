@@ -126,5 +126,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedPhysics2D>(), transform);
             m_animation = GetComponent<GraveDiggerAnimation>();
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

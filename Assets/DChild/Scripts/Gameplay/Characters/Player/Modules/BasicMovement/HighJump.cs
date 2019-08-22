@@ -11,21 +11,16 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [SerializeField]
         [MinValue(0f)]
         private float m_velocityReduction = 1f;
-        [SerializeField]
-        private float m_movingAnimationVelocityTreshold;
 
-        private float m_jumpVelocityX;
         private IHighJumpState m_state;
         protected CharacterPhysics2D m_characterPhysics2D;
 
 
         public void ConnectTo(IMainController controller)
         {
-            var jumpController = controller.GetSubController<IJumpController>();
-            jumpController.JumpCall += OnHighJumpCall;
+            //var jumpController = controller.GetSubController<IJumpController>();
+            //jumpController.JumpCall += OnHighJumpCall;
         }
-
-       
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -35,9 +30,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void HandleHighJump(bool isJumpHeld)
         {
-           
             if (m_state.canHighJump)
             {
+               
                 if (isJumpHeld)
                 {
                     if (m_characterPhysics2D.velocity.y <= 0f)
@@ -58,26 +53,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             }
         }
 
-        public void ConnectEvents()
-        {
-            GetComponentInParent<IHighJumpController>().HighJumpCall += OnHighJumpCall;
-        }
-
         private void OnHighJumpCall(object sender, ControllerEventArgs eventArgs)
         {
             HandleHighJump(eventArgs.input.isJumpHeld);
-
-            m_jumpVelocityX = m_characterPhysics2D.velocity.x;
-            m_jumpVelocityX = (m_jumpVelocityX < 0) ? -m_jumpVelocityX : m_jumpVelocityX;
         }
-
-#if UNITY_EDITOR
-        public void Initialize(float velocityReduction, float movingAnimationVelocityTreshold)
-        {
-            m_velocityReduction = velocityReduction;
-            m_movingAnimationVelocityTreshold = movingAnimationVelocityTreshold;
-        }
-
-#endif
     }
 }

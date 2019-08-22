@@ -861,7 +861,7 @@ MonoBehaviour:
   - {fileID: 2183691986725825444}
   - {fileID: 8199709118724235044}
   - {fileID: 4584254079264509899}
-  m_compositeColliderID: -114596
+  m_compositeColliderID: -42424
   m_isInvulnerable: 0
   m_damageReduction: 0
 --- !u!114 &2223875786060822814
@@ -967,6 +967,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1791921942361571880}
+  - component: {fileID: 5971535416747961516}
+  - component: {fileID: 6276400784569290442}
+  - component: {fileID: 5016106736409630957}
   m_Layer: 13
   m_Name: Sensor
   m_TagString: Untagged
@@ -991,6 +994,55 @@ Transform:
   m_Father: {fileID: 4787064263254062977}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5971535416747961516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4666997468959791844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c374c2142697f42b772f38146544f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6276400784569290442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4666997468959791844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef34c6b21e5c9f41bea592ec22b4bd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_sensors:
+  - m_sensor: {fileID: 397682471644321447}
+    m_turnWhenDetection: 1
+  - m_sensor: {fileID: 152029469613910791}
+    m_turnWhenDetection: 1
+--- !u!114 &5016106736409630957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4666997468959791844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 031d913f8e944d94ea27af5ede12eecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_sensors:
+  - {fileID: 397682471644321447}
+  - {fileID: 152029469613910791}
+  m_useDistance: 0
+  m_castPerDistance: 0
+  m_useTime: 0
+  m_castPerSecond:
+    m_startTime: 0
 --- !u!1 &5740478024505261206
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,8 @@ namespace DChild.Gameplay
         [SerializeField]
         [Spine.Unity.SpineAnimation]
         private string m_playFX;
+        [SerializeField]
+        private bool m_isLooping;
         private SkeletonAnimation m_spine;
 
         private bool m_shouldReplay;
@@ -22,7 +24,7 @@ namespace DChild.Gameplay
         {
             if (m_shouldReplay)
             {
-                var trackEntry = m_spine.AnimationState.SetAnimation(0, m_playFX, false);
+                var trackEntry = m_spine.AnimationState.SetAnimation(0, m_playFX, m_isLooping);
                 trackEntry.MixDuration = 0;
             }
         }
@@ -30,6 +32,8 @@ namespace DChild.Gameplay
         public override void Stop()
         {
             m_spine.AnimationState.SetEmptyAnimation(0, 0);
+            CallFXDone();
+            CallPoolRequest();
         }
 
         public override void Pause()
@@ -54,7 +58,10 @@ namespace DChild.Gameplay
 
         private void Start()
         {
-            m_spine.AnimationState.Complete += OnComplete;
+            if (m_isLooping == false)
+            {
+                m_spine.AnimationState.Complete += OnComplete;
+            }
         }
 
         private void OnDisable()

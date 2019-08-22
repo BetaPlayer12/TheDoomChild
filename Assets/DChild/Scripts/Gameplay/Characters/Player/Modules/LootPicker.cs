@@ -2,26 +2,26 @@
 using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems;
 using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
     public class LootPicker : MonoBehaviour
     {
-        public event EventAction<PrimitiveEventActionArgs<int>> SoulEssenceCollected;
+        private IPlayer m_owner;
+
+        private void Start()
+        {
+            m_owner = GetComponentInParent<PlayerControlledObject>().owner;
+        }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var loot = collision.GetComponentInParent<Loot>();
             if (loot)
             {
-                loot.PickUp();
-                if (DChildUtility.IsSubclassOf<SoulEssenceLoot>(loot))
-                {
-                    var eventArgs = new PrimitiveEventActionArgs<int>();
-                    eventArgs.SetValue(((SoulEssenceLoot)loot).value);
-                    SoulEssenceCollected?.Invoke(this, eventArgs);
-                }
+                loot.PickUp(m_owner);
             }
         }
     }

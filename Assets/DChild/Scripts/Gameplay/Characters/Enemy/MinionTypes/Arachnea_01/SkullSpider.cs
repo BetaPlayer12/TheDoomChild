@@ -171,6 +171,11 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             RotateSensor();
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

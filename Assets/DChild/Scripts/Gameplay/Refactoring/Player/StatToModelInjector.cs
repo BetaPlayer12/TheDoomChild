@@ -1,6 +1,7 @@
 ﻿using System;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat.StatusAilment;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
@@ -17,7 +18,8 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         private PlayerWeapon m_weapon;
         [SerializeField]
         private AttackResistance m_attackResistance;
-
+        [SerializeField]
+        private StatusEffectResistance m_statusResistance;
 
         [Title("Model Reference")]
         [SerializeField]
@@ -25,9 +27,13 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         [SerializeField]
         private Magic m_magic;
         [SerializeField]
-        private AttackCalculator m_attackCalculator;
+        private Attacker m_attacker;
+        [SerializeField]
+        private StatusInflictor m_statusInflictor;
         [SerializeField]
         private AttackResistance m_modelAttackResistance;
+        [SerializeField]
+        private StatusEffectResistance m_modelStatusResistance;
 
         private void OnStatsChange(object sender, StatValueEventArgs eventArgs)
         {
@@ -39,6 +45,15 @@ namespace Refactor.DChild.Gameplay.Characters.Players
                 case PlayerStat.Magic:
                     m_magic.SetMaxValue(eventArgs.value);
                     break;
+                case PlayerStat.Attack:
+                case PlayerStat.MagicAttack:
+                    m_attacker.SetDamage(CalculateDamage());
+                    break;
+                case PlayerStat._COUNT:
+                    m_health.SetMaxValue(m_stats.GetStat(PlayerStat.Health));
+                    m_magic.SetMaxValue(m_stats.GetStat(PlayerStat.Magic));
+                    m_attacker.SetDamage(CalculateDamage());
+                    break;
             }
         }
 
@@ -48,13 +63,16 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             m_health.ResetValueToMax();
             m_magic.SetMaxValue(m_stats.GetStat(PlayerStat.Magic));
             m_magic.ResetValueToMax();
-            m_attackCalculator.SetDamage(m_weapon.damage);
-            UpdateResistance();
+            m_attacker.SetDamage(CalculateDamage());
+            m_statusInflictor.SetInflictionList(m_weapon.statusInflictions);
+            UpdateAttackResistance();
+            UpdateStatusResistance();
         }
 
-        private void UpdateResistance()
+        private void UpdateAttackResistance()
         {
-            for (int i = 0; i < (int)AttackType._COUNT; i++)
+            var size = (int)AttackType._COUNT;
+            for (int i = 0; i < size; i++)
             {
                 var attackType = (AttackType)i;
                 var resistance = m_attackResistance.GetResistance(attackType);
@@ -62,29 +80,80 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             }
         }
 
-        private void OnBaseDamageChange(object sender, EventActionArgs eventArgs)
+        private void UpdateStatusResistance()
         {
-            m_attackCalculator.SetDamage(m_weapon.damage);
+            var size = (int)StatusEffectType._COUNT;
+            for (int i = 0; i < size; i++)
+            {
+                var statusEffect = (StatusEffectType)i;
+                var resistance = m_statusResistance.GetResistance(statusEffect);
+                m_modelStatusResistance.SetResistance(statusEffect, resistance);
+            }
+        }
+
+        private AttackDamage[] CalculateDamage()
+        {
+            var damageList = m_weapon.damage;
+            var attack = m_stats.GetStat(PlayerStat.Attack);
+            var magicAttack = m_stats.GetStat(PlayerStat.MagicAttack);
+            for (int i = 0; i < damageList.Length; i++)
+            {
+                var damage = damageList[i];
+                if (AttackDamage.IsMagicAttack(damageList[i].type))
+                {
+                    damage.value += magicAttack;
+                }
+                else
+                {
+                    damage.value += attack;
+                }
+                damageList[i] = damage;
+            }
+            return damageList;
+        }
+
+        private void OnDamageChange(object sender, EventActionArgs eventArgs)
+        {
+            m_attacker.SetDamage(CalculateDamage());
+        }
+
+        private void OnStatusInflictionUpdate(object sender, EventActionArgs eventArgs)
+        {
+            m_statusInflictor.SetInflictionList(m_weapon.statusInflictions);
+        }
+
+        private void OnAttackResistanceChange(object sender, AttackResistance.ResistanceEventArgs eventArgs)
+        {
+            if (eventArgs.type == AttackType._COUNT)
+            {
+                UpdateAttackResistance();
+            }
+            else
+            {
+                m_modelAttackResistance.SetResistance(eventArgs.type, eventArgs.resistanceValue);
+            }
+        }
+
+        private void OnStatusResistanceChange(object sender, StatusEffectResistance.ResistanceEventArgs eventArgs)
+        {
+            if (eventArgs.type == StatusEffectType._COUNT)
+            {
+                UpdateStatusResistance();
+            }
+            else
+            {
+                m_modelStatusResistance.SetResistance(eventArgs.type, eventArgs.value);
+            }
         }
 
         private void Start()
         {
             InitializeValues();
             m_stats.StatsChanged += OnStatsChange;
-            m_weapon.BaseDamageChange += OnBaseDamageChange;
-            m_attackResistance.ResistanceChange += OnResistanceChange;
-        }
-
-        private void OnResistanceChange(object sender, AttackResistance.ResistanceEventArgs eventArgs)
-        {
-            if (eventArgs.type == AttackType._COUNT)
-            {
-                UpdateResistance();
-            }
-            else
-            {
-                m_modelAttackResistance.SetResistance(eventArgs.type, eventArgs.resistanceValue);
-            }
+            m_weapon.DamageChange += OnDamageChange;
+            m_weapon.StatusInflictionUpdate += OnStatusInflictionUpdate;
+            m_attackResistance.ResistanceChange += OnAttackResistanceChange;
+            m_statusResistance.ResistanceChange += OnStatusResistanceChange;
         }
     }
 }
