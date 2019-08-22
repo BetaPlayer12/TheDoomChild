@@ -18,9 +18,9 @@ namespace DChild.Serialization
         public bool[] movementSkills { get => m_movementSkills;}
 #if UNITY_EDITOR
         [System.Serializable]
-        public class Elements : EnumElement<MovementSkill, bool> { }
+        public class Elements : EnumElement<PrimarySkill, bool> { }
         [System.Serializable]
-        public class ElementList : EnumList<Elements, MovementSkill, bool>
+        public class ElementList : EnumList<Elements, PrimarySkill, bool>
         {
 
         }

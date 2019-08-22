@@ -85,7 +85,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!targetDefense.isInvulnerable)
             {
-                AttackerInfo info = new AttackerInfo(position, 0, 1, m_currentDamage);
+                AttackerCombatInfo info = new AttackerCombatInfo(position, 0, 1, m_currentDamage);
                 var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
                 CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
             }

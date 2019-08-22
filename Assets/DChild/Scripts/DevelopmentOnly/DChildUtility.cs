@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.Characters.Players;
-using static DChildDChildDatabase.SoulSkillConnection;
+using static DChild.DChildDatabase.SoulSkillConnection;
 
 namespace DChild
 {

@@ -1,15 +1,11 @@
-﻿using DChild.Gameplay;
-using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Characters.Players.Behaviour;
+﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
-using Holysoft.Event;
-using Refactor.DChild.Gameplay.Combat;
 using UnityEngine;
 
-namespace Refactor.DChild.Gameplay.Characters.Players
+namespace DChild.Gameplay.Characters.Players
 {
     [System.Serializable]
     public class ComplexCharacterInfo

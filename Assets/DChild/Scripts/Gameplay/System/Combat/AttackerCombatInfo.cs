@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Combat;
+using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-    public struct AttackerInfo
+    public struct AttackerCombatInfo
     {
-        public AttackerInfo(Vector2 position, int critChance, float critDamageModifier,params AttackDamage[] damage) : this()
+        public AttackerCombatInfo(Vector2 position, int critChance, float critDamageModifier,params AttackDamage[] damage) : this()
         {
             this.position = position;
             this.critChance = critChance;
