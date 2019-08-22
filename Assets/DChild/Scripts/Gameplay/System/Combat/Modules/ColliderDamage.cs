@@ -6,8 +6,8 @@
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
 using Holysoft;
-using Refactor.DChild.Gameplay;
-using Refactor.DChild.Gameplay.Combat;
+using DChild.Gameplay;
+using DChild.Gameplay.Combat;
 using System.Collections.Generic;
 using UnityEngine;
 

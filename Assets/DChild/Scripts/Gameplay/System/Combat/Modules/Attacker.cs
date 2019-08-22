@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Refactor.DChild.Gameplay.Combat
+namespace DChild.Gameplay.Combat
 {
     public class Attacker : MonoBehaviour, IAttacker, IDamageDealer
     {

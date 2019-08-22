@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
-using Refactor.DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players;
 #if UNITY_EDITOR
 #endif
 
