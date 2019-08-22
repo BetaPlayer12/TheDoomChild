@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players;
 using System.Collections;
 using UnityEngine;
+using System;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
@@ -32,6 +33,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_speedXParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
             m_state = info.state;
             m_physics = info.physics;
+            info.surfaceDector.NewSurfaceDetected += OnNewSurfaceDetected;
+            m_fXSpawner.SetFX(info.surfaceDector.currentSurface.GetFX(Environment.SurfaceData.FXType.Land));
+        }
+
+        private void OnNewSurfaceDetected(object sender, SurfaceDetector.SurfaceDetectedEventArgs eventArgs)
+        {
+            m_fXSpawner.SetFX(eventArgs.surface.GetFX(Environment.SurfaceData.FXType.Land));
         }
 
         public void RecordVelocity() => m_previousYVelocity = m_physics.velocity.y;

@@ -1977,7 +1977,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &146178564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3085,6 +3085,7 @@ MonoBehaviour:
     m_groundednessHandle: {fileID: 417896908}
     m_skillResetRequester: {fileID: 1005444696}
     m_statusEffectReciever: {fileID: 1005444703}
+    m_surfaceDector: {fileID: 1167034018}
   m_skills: {fileID: 476047117}
   m_moduleContainer: {fileID: 417896906}
 --- !u!114 &223135174
@@ -4683,14 +4684,14 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 6.5962, y: -4.34928}
-      - {x: 9.21323, y: 1.0580698}
-      - {x: -6.17617, y: 0.21866}
-      - {x: -5.49536, y: -3.2238705}
-      - {x: -3.5469203, y: -6.0863404}
-      - {x: -0.98266995, y: -7.24971}
-      - {x: 1.3039, y: -7.37555}
-      - {x: 3.9474492, y: -6.49506}
+    - - {x: 6.5962, y: -4.3492794}
+      - {x: 9.21323, y: 1.05807}
+      - {x: -6.1761694, y: 0.21865998}
+      - {x: -5.49536, y: -3.2238698}
+      - {x: -3.5469198, y: -6.0863395}
+      - {x: -0.9826701, y: -7.2497096}
+      - {x: 1.3038999, y: -7.3755493}
+      - {x: 3.9474494, y: -6.49506}
 --- !u!1 &417021663
 GameObject:
   m_ObjectHideFlags: 0
@@ -5756,14 +5757,14 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 6.5962, y: -4.3492794}
-      - {x: 9.21323, y: 1.05807}
-      - {x: -6.1761694, y: 0.21865998}
-      - {x: -5.49536, y: -3.2238698}
-      - {x: -3.5469198, y: -6.0863395}
-      - {x: -0.9826701, y: -7.2497096}
-      - {x: 1.3038999, y: -7.3755493}
-      - {x: 3.9474494, y: -6.49506}
+    - - {x: 6.5962, y: -4.34928}
+      - {x: 9.21323, y: 1.0580698}
+      - {x: -6.17617, y: 0.21866}
+      - {x: -5.49536, y: -3.2238705}
+      - {x: -3.5469203, y: -6.0863404}
+      - {x: -0.98266995, y: -7.24971}
+      - {x: 1.3039, y: -7.37555}
+      - {x: 3.9474492, y: -6.49506}
 --- !u!1 &532929361
 GameObject:
   m_ObjectHideFlags: 0
@@ -14414,6 +14415,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1167034016}
   - component: {fileID: 1167034017}
+  - component: {fileID: 1167034018}
   m_Layer: 8
   m_Name: Detectors
   m_TagString: Untagged
@@ -14447,6 +14449,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3215de0770c5e0341b600ac4989461d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1167034018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167034015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446bc8b0b131c9940b195eee5d6b99fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_sensor: {fileID: 1537277337}
+  m_currentSurface: {fileID: 11400000, guid: a210caed72217af42acafc5f763392c1, type: 2}
 --- !u!1 &1194496213
 GameObject:
   m_ObjectHideFlags: 0

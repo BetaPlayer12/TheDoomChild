@@ -1,6 +1,4 @@
-﻿using DChild.Gameplay;
-using DChild.Gameplay.Characters.Players;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
