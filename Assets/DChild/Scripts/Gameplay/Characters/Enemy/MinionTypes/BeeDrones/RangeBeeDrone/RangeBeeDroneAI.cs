@@ -248,10 +248,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             {
                 case State.Idle:
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    if (m_targetInfo.isValid == false)
-                    {
-                        m_stateHandle.SetState(State.Patrol);
-                    }
+                    //if (m_targetInfo.isValid == false)
+                    //{
+                    //    m_stateHandle.SetState(State.Patrol);
+                    //}
                     break;
 
                 case State.Patrol:
@@ -262,6 +262,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
+                    Debug.Log("Turn Bee Drone");
                     m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation);
                     break;
@@ -287,7 +288,14 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         var target = m_targetInfo.position;
                         target.y -= 0.5f;
                         m_animation.DisableRootMotion();
-                        m_animation.SetAnimation(0, m_info.move.animation, true);
+                        if(GetComponent<IsolatedPhysics2D>().velocity != Vector2.zero)
+                        {
+                            m_animation.SetAnimation(0, m_info.move.animation, true);
+                        }
+                        else
+                        {
+                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        }
                         m_agent.SetDestination(target);
                         if (m_agent.hasPath)
                         {
@@ -314,7 +322,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_stateHandle.SetState(State.Idle);
+                        m_stateHandle.SetState(State.Patrol);
                     }
                     break;
                 case State.WaitBehaviourEnd:

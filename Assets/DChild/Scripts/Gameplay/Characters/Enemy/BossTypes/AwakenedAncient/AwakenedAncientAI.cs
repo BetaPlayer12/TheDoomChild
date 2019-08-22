@@ -45,6 +45,13 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             public string unburrowAnimation => m_unburrowAnimation;
             //
 
+            [SerializeField, MinValue(0)]
+            private float m_patience;
+            public float patience => m_patience;
+            [SerializeField]
+            private float m_targetDistanceTolerance;
+            public float targetDistanceTolerance => m_targetDistanceTolerance;
+
             //Attack Behaviours
             [SerializeField]
             private SimpleAttackInfo m_groundSlam = new SimpleAttackInfo();
@@ -115,6 +122,11 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             WaitAttackEnd,
         }
 
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_wallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_groundSensor;
+
         [SerializeField]
         private SimpleTurnHandle m_turnHandle;
         [SerializeField]
@@ -149,22 +161,37 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         private Attack m_currentAttack;
         private Attack m_afterWaitForBehaviourAttack;
+        [ShowInInspector]
+        private RandomAttackDecider<Attack> m_attackDecider;
 
         //Patience Handler
-        [SerializeField]
-        private float m_patience;
-        private float m_currentPatience;
-        private bool m_enablePatience;
         private bool m_burrowed;
         private bool m_waitRoutineEnd;
-        private bool m_enableChase;
 
         [SerializeField]
         private int m_skeletonSize;
+        private int m_currentSkeletonSize;
         private GameObject[] m_skeletons;
+        [SerializeField]
+        private int m_tombSize;
+        private int m_currentTombSize;
+        private GameObject[] m_tombs;
 
         [SerializeField]
         private List<ParticleSystem> m_summonFX;
+
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_speed;
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_gravityScale;
+        [SerializeField, TabGroup("Cannon Values")]
+        private Vector2 m_posOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_velOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private Vector2 m_targetOffset;
+
+        private float m_targetDistance;
 
         protected override void Start()
         {
@@ -176,8 +203,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             //    m_bone[i] = GetComponentInChildren<SkeletonAnimation>().Skeleton.FindBone(m_boneName[i]);
             //    Debug.Log(m_bone);
             //}
+            m_info.seedSpitFX.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
             m_skeletons = new GameObject[m_skeletonSize];
-            m_enableChase = true;
             GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -199,23 +226,27 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                if (!m_burrowed)
-                {
-                    if (m_enableChase)
-                    {
-                        m_currentState = State.Chasing;
-                        m_enableChase = false;
-                    }
-                    m_currentPatience = 0;
-                    m_enablePatience = false;
-                }
                 GameEventMessage.SendEvent("Boss Encounter");
             }
-            else
+        }
+
+        public override void ApplyData()
+        {
+            base.ApplyData();
+            if (m_attackDecider != null)
             {
-                m_enablePatience = true;
-                m_enableChase = true;
+                Debug.Log("Update attack list trigger function");
+                UpdateAttackDeciderList();
             }
+        }
+        private void UpdateAttackDeciderList()
+        {
+            Debug.Log("Update attack list trigger");
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.GroundSlam, m_info.groundSlam.range),
+                                    new AttackInfo<Attack>(Attack.SkeletonSummon, m_info.skeletonSummon.range),
+                                    new AttackInfo<Attack>(Attack.Spit, m_info.spit.range),
+                                    new AttackInfo<Attack>(Attack.Tomb, m_info.skeletonSummon.range));
+            m_attackDecider.hasDecidedOnAttack = false;
         }
 
         protected override void Awake()
@@ -225,6 +256,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_attackDecider = new RandomAttackDecider<Attack>();
+            UpdateAttackDeciderList();
 
             if (m_animation.skeletonAnimation == null) return;
 
@@ -272,22 +305,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             shoot.GetComponent<Rigidbody2D>().AddForce((m_spitSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
         }
 
-        //Patience Handler
-        private void Patience()
-        {
-            if (m_currentPatience < m_patience)
-            {
-                m_currentPatience += Time.deltaTime;
-            }
-            else
-            {
-                //m_targetInfo = null;
-                base.SetTarget(null, null);
-                m_enablePatience = false;
-                m_currentState = State.Idle;
-            }
-        }
-
         public bool Wait()
         {
             if (m_animation.GetCurrentAnimation(0).ToString() != "Idle")
@@ -298,6 +315,52 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             {
                 return true;
             }
+        }
+
+        private Vector2 BallisticVel()
+        {
+            //TEST
+            m_info.seedSpitFX.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
+            //
+
+            //Speed: 1.5 | Gravity Scale: 2 | Pos Offset: (0.25, 0.1)
+            //var dir = m_targetInfo.position - new Vector2(transform.position.x + (m_posOffset.x * transform.localScale.x), transform.position.y + m_posOffset.y);
+            //var h = (dir.x * dir.y) * ((dir.x * dir.y) * m_velOffset)/*+ dir.x > 0 ? dir.y : -dir.y*/;
+            //dir.y = 0;
+            //var dist = dir.magnitude;
+            //dir.y = dist;
+            //dist += h;
+            //var vel = Mathf.Sqrt(dist * (m_info.seedSpitFX.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale /* * (dist * 0.1f)*/));
+            ////vel *= m_speed;
+            //Debug.Log("projectile direction: " + dir.x);
+            //return vel * new Vector2(dir.x, /*dir.y*/ 0).normalized;
+
+            m_targetDistance = Vector2.Distance(m_targetInfo.position, m_seedSpitTF.position);
+            Debug.Log("Target Distance: " + m_targetDistance);
+            //Speed: 3 | Gravity Scale: 3 | Pos Offset: (1, 0.4)
+            var dir = (m_targetInfo.position - new Vector2(m_seedSpitTF.position.x, m_seedSpitTF.position.y));
+            var h = dir.y;
+            dir.y = 0;
+            var dist = dir.magnitude;
+            dir.y = dist;
+            dist += h;
+
+            var currentSpeed = m_speed;
+            //Debug.Log("current Speed: " + currentSpeed);
+
+            var vel = Mathf.Sqrt(dist * m_info.seedSpitFX.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale);
+            return (vel * new Vector3(dir.x * m_posOffset.x, dir.y * m_posOffset.y).normalized) * m_targetOffset.sqrMagnitude; //closest to accurate
+        }
+
+        private float GroundDistance()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_seedSpitTF.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            if (hit.collider != null)
+            {
+                return hit.distance;
+            }
+
+            return 0;
         }
 
         private IEnumerator TurnRoutine()
@@ -329,6 +392,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
             yield return null;
+            m_currentState = State.Chasing;
         }
 
         private IEnumerator GroundAttackRoutine()
@@ -348,7 +412,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_BURROW);
             //Debug.Log("Summon Tombs");
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < m_tombSize; i++)
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
                 tomb.GetComponent<TombAttack>().GetTarget(m_targetInfo);
@@ -367,21 +431,34 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SkeletonSummonRoutine()
         {
-            m_waitRoutineEnd = true;
-            m_animation.SetAnimation(0, m_info.skeletonSummon.animation, false);
-            //for (int i = 0; i < m_summonFX.Count; i++)
-            //{
-            //    Debug.Log("SUMMON FX");
-            //    m_summonFX[i].Play();
-            //}
-            yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_SPIT_SKELETON);
-            //for (int i = 0; i < m_summonFX.Count; i++)
-            //{
-            //    m_summonFX[i].Stop();
-            //}
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_waitRoutineEnd = false;
-            m_currentState = State.ReevaluateSituation;
+            if (m_currentSkeletonSize < m_skeletonSize)
+            {
+                m_waitRoutineEnd = true;
+                m_currentSkeletonSize++;
+                m_animation.SetAnimation(0, m_info.skeletonSummon.animation, false);
+                for (int i = 0; i < m_summonFX.Count; i++)
+                {
+                    Debug.Log("SUMMON FX");
+                    m_summonFX[i].Play();
+                    var mainFx = m_summonFX[i].main;
+                    mainFx.simulationSpeed = 2.5f;
+                }
+                yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_SPIT_SKELETON);
+                for (int i = 0; i < m_summonFX.Count; i++)
+                {
+                    m_summonFX[i].Stop();
+                }
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_waitRoutineEnd = false;
+                m_currentState = State.ReevaluateSituation;
+            }
+            else
+            {
+                if (m_skeletons[0] == null)
+                {
+                    m_currentSkeletonSize = 0;
+                }
+            }
             yield return null;
         }
 
@@ -416,14 +493,17 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     var target = m_targetInfo.position; //No Parabola
                                                         //var target = TargetParabola(); //With Parabola
                     target = new Vector2(target.x, target.y - 2);
-                    Vector2 spitPos = m_seedSpitTF.position;
+                    Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_seedSpitTF.position.x - 1.5f : m_seedSpitTF.position.x + 1.5f, m_seedSpitTF.position.y -0.75f);
                     Vector3 v_diff = (target - spitPos);
                     float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
                     //transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
                     //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-                    GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
-                                                                                                                                 //GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.identity); //With Parabola
-                    shoot.GetComponent<Rigidbody2D>().AddForce((m_spitSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
+                    //GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+                    //shoot.GetComponent<Rigidbody2D>().AddForce((m_spitSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
+
+                    GameObject projectile = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.identity);
+                    //projectile.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
+                    projectile.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
                 }
                 else
                 {
@@ -447,13 +527,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             else if (e.Data.Name == m_eventName[5])
             {
                 //Debug.Log(m_eventName[5]);
-                for (int i = 0; i < m_skeletonSize; i++)
-                {
-                    GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + /*(3 * transform.localScale.x)*/ +UnityEngine.Random.Range(-2, 2), m_skeletonSpawnTF.position.y), Quaternion.identity);
-                    skeleton.GetComponent<SkeletonSpawnAI>().SetDirection(transform.localScale.x);
-                    GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
-                    m_skeletons[i] = skeleton;
-                }
+                GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + /*(3 * transform.localScale.x)*/ +UnityEngine.Random.Range(-2, 2), m_skeletonSpawnTF.position.y), Quaternion.identity);
+                skeleton.GetComponent<SkeletonSpawnAI>().SetDirection(transform.localScale.x);
+                GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
+                m_skeletons[m_currentSkeletonSize - 1] = skeleton;
             }
         }
 
@@ -510,48 +587,53 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         Array values = Enum.GetValues(typeof(Attack));
                         var random = new System.Random();
                         m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
-                        switch (m_currentAttack)
+                        m_attackDecider.DecideOnAttack();
+                        if (m_attackDecider.hasDecidedOnAttack)
                         {
-                            case Attack.GroundSlam:
-                                if (Wait())
-                                {
-                                    //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
-                                    StartCoroutine(GroundAttackRoutine());
-                                    WaitTillAttackEnd(Attack.GroundSlam);
-                                }
-                                break;
-                            case Attack.Spit:
-                                if (Wait())
-                                {
-                                    //m_attackHandle.ExecuteAttack(m_info.spit.animation);
-                                    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 15)
+                            switch (m_attackDecider.chosenAttack.attack)
+                            {
+                                case Attack.GroundSlam:
+                                    //if (Wait() && !m_wallSensor.isDetecting)
+                                    //{
+                                    //    //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
+                                    //    StartCoroutine(GroundAttackRoutine());
+                                    //    WaitTillAttackEnd(Attack.GroundSlam);
+                                    //}
+                                    break;
+                                case Attack.Spit:
+                                    if (Wait() && !m_wallSensor.isDetecting)
                                     {
-                                        m_animation.SetAnimation(0, m_info.spit.animation, false);
-                                        m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-                                        WaitTillAttackEnd(Attack.Spit);
+                                        //m_attackHandle.ExecuteAttack(m_info.spit.animation);
+                                        if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 15)
+                                        {
+                                            m_animation.SetAnimation(0, m_info.spit.animation, false);
+                                            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                                            WaitTillAttackEnd(Attack.Spit);
+                                        }
                                     }
-                                }
-                                break;
-                            case Attack.Tomb:
-                                if (Wait())
-                                {
-                                    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
-                                    {
-                                        StartCoroutine(TombAttackRoutine(target));
-                                        WaitTillAttackEnd(Attack.Tomb);
-                                    }
-                                }
-                                break;
-                            case Attack.SkeletonSummon:
-                                if (Wait() && m_skeletons[0] == null)
-                                {
-                                    if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
-                                    {
-                                        StartCoroutine(SkeletonSummonRoutine());
-                                        WaitTillAttackEnd(Attack.SkeletonSummon);
-                                    }
-                                }
-                                break;
+                                    break;
+                                case Attack.Tomb:
+                                    //if (Wait())
+                                    //{
+                                    //    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
+                                    //    {
+                                    //        StartCoroutine(TombAttackRoutine(target));
+                                    //        WaitTillAttackEnd(Attack.Tomb);
+                                    //    }
+                                    //}
+                                    break;
+                                case Attack.SkeletonSummon:
+                                    //if (Wait())
+                                    //{
+                                    //    if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
+                                    //    {
+                                    //        StartCoroutine(SkeletonSummonRoutine());
+                                    //        WaitTillAttackEnd(Attack.SkeletonSummon);
+                                    //    }
+                                    //}
+                                    break;
+                            }
+                            m_attackDecider.hasDecidedOnAttack = false;
                         }
                     }
                     break;
@@ -567,10 +649,18 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         }
                         else if (IsFacingTarget() && Vector2.Distance(target, transform.position) >= m_info.groundSlam.range)
                         {
-                            if (Wait())
+
+                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
                             {
-                                m_animation.EnableRootMotion(true, false);
-                                m_animation.SetAnimation(0, m_info.moveAnimation, true);
+                                if (Wait())
+                                {
+                                    m_animation.EnableRootMotion(true, false);
+                                    m_animation.SetAnimation(0, m_info.moveAnimation, true);
+                                }
+                            }
+                            else
+                            {
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
                         }
                         else
@@ -598,11 +688,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     break;
                 case State.WaitBehaviourEnd:
                     return;
-            }
-
-            if (m_enablePatience)
-            {
-                Patience();
             }
         }
     }

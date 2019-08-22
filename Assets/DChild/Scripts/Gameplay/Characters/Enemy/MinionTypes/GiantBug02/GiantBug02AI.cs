@@ -169,6 +169,33 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             }
         }
 
+        void HandleEvent(TrackEntry trackEntry, Spine.Event e)
+        {
+            if (e.Data.Name == m_info.spit.launchOnEvent)
+            {
+                //Debug.Log(m_eventName[0]);
+                ////Spawn Projectile
+
+                if (IsFacingTarget())
+                {
+                    var target = m_targetInfo.position; //No Parabola
+                    target = new Vector2(target.x, target.y - 2);
+                    Vector2 spitPos = m_spitTF.position;
+                    Vector3 v_diff = (target - spitPos);
+                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                    GameObject burst = Instantiate(m_info.muzzleGO, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+                    GameObject shoot = Instantiate(m_info.spit.projectileInfo.projectile, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+                    shoot.GetComponent<Rigidbody2D>().AddForce((m_info.spit.projectileInfo.speed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
+                }
+            }
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            m_animation.animationState.Event += HandleEvent;
+        }
+
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
@@ -184,9 +211,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
 
-            m_spitLauncher.SetProjectile(m_info.spit.projectileInfo);
-            m_spitLauncher.SetSpawnPoint(m_spitTF);
-            m_spineEventListener.Subscribe(m_info.spit.launchOnEvent, m_spitLauncher.LaunchProjectile);
+            //Null Referencing.. TO BE FIXED
+            //m_spitLauncher.SetProjectile(m_info.spit.projectileInfo);
+            //m_spitLauncher.SetSpawnPoint(m_spitTF);
+            //m_spineEventListener.Subscribe(m_info.spit.launchOnEvent, m_spitLauncher.LaunchProjectile);
         }
 
         private void Update()
@@ -226,8 +254,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                             if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
                             {
                                 m_animation.EnableRootMotion(true, false);
-                                m_animation.SetAnimation(0, m_info.move.animation, true);
-                                
+                                m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2;
+
                                 if (IsTargetInRange(m_info.spit.range))
                                 {
                                     m_stateHandle.SetState(State.Attacking);
