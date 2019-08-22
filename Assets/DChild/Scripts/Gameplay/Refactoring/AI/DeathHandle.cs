@@ -16,10 +16,6 @@ namespace Refactor.DChild.Gameplay.Characters
         private SpineRootAnimation m_animator;
         [SerializeField]
         private CountdownTimer m_bodyDuration;
-        [SerializeField]
-        private GameObject m_bodyCollider;
-        [SerializeField]
-        private GameObject m_hitBox;
 
         private string m_animation;
 
@@ -30,16 +26,13 @@ namespace Refactor.DChild.Gameplay.Characters
 
         private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
         {
-            m_bodyCollider.SetActive(true);
-            m_hitBox.SetActive(true);
             m_source.gameObject.SetActive(false);
             enabled = false;
         }
 
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            m_bodyCollider.SetActive(false);
-            m_hitBox.SetActive(false);
+            m_source.SetHitboxActive(false);
             m_animator.SetAnimation(0, m_animation, false, 0);
             m_animator.animationState.Complete += OnDeathAnimationComplete;
         }

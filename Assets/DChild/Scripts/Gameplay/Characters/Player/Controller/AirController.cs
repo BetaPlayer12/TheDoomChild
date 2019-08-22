@@ -1,33 +1,59 @@
-﻿using DChild.Gameplay.Characters.Players.State;
+﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using DChild.Gameplay.Characters.Players.Skill;
+using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
 
-    public class AirController : MonoBehaviour, IAirMoveController, IHighJumpController, IDoubleJumpController,
-                                 IWallStickController, IWallJumpController, IAirDashController, IFallController, ILedgeController, IFeetLedgeController
+    public class AirController : MonoBehaviour
     {
-        public event EventAction<ControllerEventArgs> MoveCall;
-        public event EventAction<ControllerEventArgs> HighJumpCall;
-        public event EventAction<EventActionArgs> DoubleJumpCall;
-        public event EventAction<EventActionArgs> WallStickCall;
-        public event EventAction<ControllerEventArgs> UpdateCall;
-        public event EventAction<EventActionArgs> WallJumpCall;
-        public event EventAction<EventActionArgs> DashCall;
-        public event EventAction<EventActionArgs> DoubleJumpReset;
-        public event EventAction<EventActionArgs> FallUpdate;
-        public event EventAction<EventActionArgs> FallCall;
-        public event EventAction<EventActionArgs> LedgeGrabCall;//
-        public event EventAction<ControllerEventArgs> FeetLedgeCall;//
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private MovementHandle m_movement;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private MoveSpeedTransistor m_speedTransistor;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private HighJump m_highJump;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private DoubleJump m_doubleJump;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private WallStick m_wallStick;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private WallJump m_wallJump;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private AirDash m_dash;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private LedgeGrab m_ledgeGrab;
 
 
+        private SkillResetRequester m_skillRequester;
+        public void Initialize(GameObject behaviours, SkillResetRequester skillRequester)
+        {
+            m_skillRequester = skillRequester;
+            m_movement = behaviours.GetComponentInChildren<MovementHandle>();
+            m_speedTransistor = behaviours.GetComponentInChildren<MoveSpeedTransistor>();
+            m_highJump = behaviours.GetComponentInChildren<HighJump>();
+            m_doubleJump = behaviours.GetComponentInChildren<DoubleJump>();
+            m_wallStick = behaviours.GetComponentInChildren<WallStick>();
+            m_wallJump = behaviours.GetComponentInChildren<WallJump>();
+            m_dash = behaviours.GetComponentInChildren<AirDash>();
+            m_ledgeGrab = behaviours.GetComponentInChildren<LedgeGrab>();
+        }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
             if (state.isFalling)
             {
-
+                if (state.isMoving)
+                {
+                    if (m_ledgeGrab?.AttemptToLedgeGrab() ?? false)
+                    {
+                        m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+                        return;
+                    }
+                }
             }
 
             if (state.isStickingToWall)
@@ -40,24 +66,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                MoveCall?.Invoke(this, callArgs);
+                m_movement?.Move(callArgs.input.direction.horizontalInput);
             }
-
-
         }
-
-
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
-            FeetLedgeCall?.Invoke(this, callArgs);
+            m_speedTransistor.SwitchToAirMoveSpeed();
             if (state.isStickingToWall)
             {
-                WallStickCall?.Invoke(this, EventActionArgs.Empty);
+                m_wallStick?.HandleWallStick();
                 if (skills.IsEnabled(PrimarySkill.WallJump) && callArgs.input.isJumpPressed)
                 {
-                    WallJumpCall?.Invoke(this, EventActionArgs.Empty);
-                    DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
+                    m_wallStick?.CancelWallStick();
+                    m_wallJump?.HandleJump();
+                }
+                else if (state.isSlidingToWall == false && callArgs.input.direction.isDownPressed)
+                {
+                    m_wallStick?.StartWallSlide();
                 }
             }
 
@@ -68,49 +94,37 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             else
             {
-                if (state.isFalling)
-                {
-                    FallCall?.Invoke(this, EventActionArgs.Empty);
-                    FallUpdate?.Invoke(this, EventActionArgs.Empty);
-                    FeetLedgeCall?.Invoke(this, callArgs);
-                    LedgeGrabCall?.Invoke(this, EventActionArgs.Empty);
-                    if (state.waitForBehaviour)
-                    {
-                        DoubleJumpReset?.Invoke(this, EventActionArgs.Empty);
-                        return;
-                    }
-
-
-
-                }
-
                 if (state.canHighJump)
                 {
-                    HighJumpCall?.Invoke(this, callArgs);
-                    FeetLedgeCall?.Invoke(this, callArgs);
-                    
+                    m_highJump?.HandleHighJump(callArgs.input.isJumpHeld);
                 }
 
                 if (skills.IsEnabled(PrimarySkill.DoubleJump) && state.canDoubleJump)
                 {
                     if (callArgs.input.isJumpPressed)
                     {
-                        DoubleJumpCall?.Invoke(this, EventActionArgs.Empty);
-                        FeetLedgeCall?.Invoke(this, callArgs);
-                       
+                        m_doubleJump?.HandleJump();
                     }
                 }
 
-                if (skills.IsEnabled(PrimarySkill.Dash))
+                if (skills.IsEnabled(PrimarySkill.Dash) && state.canDash)
                 {
                     if (callArgs.input.skillInput.isDashPressed)
                     {
-                        DashCall?.Invoke(this, EventActionArgs.Empty);
+                        m_dash?.StartDash();
                     }
                 }
             }
 
-            UpdateCall?.Invoke(this, callArgs);
+            //UpdateCall?.Invoke(this, callArgs);
+            if (skills.IsEnabled(PrimarySkill.WallJump) && state.isDroppingFromPlatform == false)
+            {
+                m_wallStick?.AttemptToWallStick();
+                if (state.isStickingToWall)
+                {
+                    m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+                }
+            }
         }
     }
 }

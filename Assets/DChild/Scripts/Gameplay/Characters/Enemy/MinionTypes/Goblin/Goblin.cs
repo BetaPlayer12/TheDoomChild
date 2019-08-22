@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
@@ -120,6 +121,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement = new PhysicsMovementHandler2D(GetComponent<ObjectPhysics2D>(), transform);
             m_turn = new SimpleTurnHandler(this);
             m_animation = GetComponent<GoblinAnimation>();
+        }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

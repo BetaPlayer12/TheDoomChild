@@ -6,6 +6,7 @@ using System.Collections;
 using Spine;
 using DChild.Gameplay.Combat;
 using Spine.Unity;
+using System.Collections.Generic;
 
 namespace Refactor.DChild.Gameplay.Characters
 {
@@ -29,7 +30,7 @@ namespace Refactor.DChild.Gameplay.Characters
 
         public void SetAnimation(string animation) => m_animation = animation;
 
-        public virtual void Flinch(RelativeDirection damageSource, AttackType damageTypeRecieved)
+        public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
             Flinch();
         }
@@ -67,5 +68,7 @@ namespace Refactor.DChild.Gameplay.Characters
         {
             m_isFlinching = false;
         }
+
+
     }
 }

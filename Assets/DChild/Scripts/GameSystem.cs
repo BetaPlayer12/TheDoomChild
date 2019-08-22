@@ -31,6 +31,8 @@ namespace DChild
             m_zoneLoader.LoadZone(sceneName, withLoadingScene);
         }
 
+        public static bool IsCurrentZone(string sceneName) => m_zoneLoader.activeZone == sceneName;
+
         public static void LoadMainMenu() => m_zoneLoader.LoadMainMenu();
 
         private void Awake()

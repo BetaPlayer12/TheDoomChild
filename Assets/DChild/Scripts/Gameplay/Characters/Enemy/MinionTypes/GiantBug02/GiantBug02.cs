@@ -211,5 +211,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rootMotion.useX = true;
             m_rootMotion.useY = true;
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

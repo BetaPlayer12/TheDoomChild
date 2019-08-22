@@ -6,7 +6,9 @@ namespace Holysoft.Gameplay.UI
 {
     public abstract class CappedStatUI : SerializedMonoBehaviour
     {
+//#if UNITY_EDITOR
         [OdinSerialize, OnValueChanged("UpdateUI")]
+//#endif
         private ICappedStat m_stat;
 
         protected abstract float maxValue { set; }
@@ -38,7 +40,7 @@ namespace Holysoft.Gameplay.UI
 
         private void OnValueChange(object sender, StatInfoEventArgs eventArgs) => currentValue = eventArgs.currentValue;
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
         private ICappedStat m_previous;
 
         private void Awake()
@@ -64,7 +66,7 @@ namespace Holysoft.Gameplay.UI
 
             m_previous = m_stat;
         }
-#endif
+//#endif
     }
 
 }

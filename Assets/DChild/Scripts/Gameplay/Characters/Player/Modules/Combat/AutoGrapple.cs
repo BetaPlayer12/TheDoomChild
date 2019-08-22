@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+
     public interface IAutoGrappleController
     {
         event EventAction<ControllerEventArgs> UpdateCall;
@@ -14,11 +15,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         event EventAction<EventActionArgs> AutoGrappleCall;
     }
 
-    public class AutoGrapple : MonoBehaviour, IPlayerExternalModule
+    public class AutoGrapple : MonoBehaviour
     {
         [SerializeField]
         private GrappleSensor m_sensor;
-        [SerializeField,HideLabel]
+        [SerializeField, HideLabel]
         private GrappleDashHandler m_dashHandler;
 
         private bool m_isDashing;
@@ -26,16 +27,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private CharacterPhysics2D m_physics;
         private IGrappleObject m_grappleTarget;
 
-        public void Initialize(IPlayerModules player)
-        {
-            m_isDashing = false;
-            m_isChoosingTarget = false;
-            m_physics = player.physics;
-            var controller = GetComponentInParent<IAutoGrappleController>();
-            controller.AutoGrappleCall += OnAutoGrappleCall;
-            controller.UpdateCall += OnUpdateCall;
-            controller.FixedUpdateCall += OnFixedUpdateCall;
-        }
+        //public void Initialize(IPlayerModules player)
+        //{
+        //    m_isDashing = false;
+        //    m_isChoosingTarget = false;
+        //    m_physics = player.physics;
+        //    var controller = GetComponentInParent<IAutoGrappleController>();
+        //    controller.AutoGrappleCall += OnAutoGrappleCall;
+        //    controller.UpdateCall += OnUpdateCall;
+        //    controller.FixedUpdateCall += OnFixedUpdateCall;
+        //}
 
         public void ChangeGrappleTarget(Inputs.DirectionalInput input)
         {
@@ -67,7 +68,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnAutoReflexEnd(object sender, EventActionArgs eventArgs)
         {
-            DashToGrappleTarget();       
+            DashToGrappleTarget();
         }
 
         public void DashToGrappleTarget()

@@ -4,84 +4,62 @@ using Holysoft.Event;
 using DChild.Inputs;
 using UnityEngine;
 using System;
+using Refactor.DChild.Gameplay.Characters.Players;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class GroundJumpHandler : Jump, IPlayerExternalModule, IEventModule
+    public class GroundJumpHandler : Jump, IControllableModule
     {
-        private PlayerInput m_input;
+        [SerializeField]
+        private FXSpawner m_fXSpawner;
 
         private IHighJumpState m_highJumpState;
-        private IPlayerState m_characterState;
+        private Character m_character;
+        private Animator m_animator;
+        private string m_jumpParamater;
 
-        public override void Initialize(IPlayerModules player)
+        public override void Initialize(ComplexCharacterInfo info)
         {
-            base.Initialize(player);
-            m_highJumpState = player.characterState;
-            m_characterState = player.characterState;
-            //m_animationState = player.animationState;
-            //m_animation = player.animation;
+            base.Initialize(info);
+            m_highJumpState = info.state;
+            m_animator = info.animator;
+            m_character = info.character;
+            m_jumpParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
+            info.groundednessHandle.LandExecuted += OnLand;
         }
 
-        public void ConnectEvents()
+        public override void HandleJump()
         {
-            GetComponentInParent<IJumpController>().JumpCall += OnJumpCall;
-            GetComponentInParent<IMainController>().ControllerDisabled += OnControllerDisabled;
+            m_highJumpState.canHighJump = true;
+            if (m_physics.onWalkableGround)
+            {
+                m_physics.StopCoyoteTime();
+                m_physics.SetVelocity(x: 0);
+                base.HandleJump();
+                m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
+                m_animator.SetTrigger(m_jumpParamater);
+                m_highJumpState.hasJumped = true;
+                m_fXSpawner.SpawnFX(m_character.facing);
+            }
+            m_character.transform.eulerAngles = Vector3.zero;
+           // Debug.Log("jump handle");
+        }
+
+        private void OnLand(object sender, EventActionArgs eventArgs)
+        {
+            m_highJumpState.hasJumped = false;        
+        }
+       
+        public void ConnectTo(IMainController controller)
+        {
+            controller.ControllerDisabled += OnControllerDisabled;
         }
 
         private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
         {
             m_highJumpState.canHighJump = false;
-            m_character.SetVelocity(x: 0);
+            m_physics.SetVelocity(x: 0);
         }
 
-        //private void BasicJump(PlayerAnimation animation)
-        //{
-        //    if (m_animationState.hasAttacked)
-        //    {
-
-        //    }
-
-        //    else if (m_characterState.isMoving)
-        //    {
-        //        m_animation.DoJumpLoop(m_facing.currentFacingDirection);
-
-        //    }
-
-        //    else
-        //    {
-        //        //m_animation.DoStaticJump(m_facing.currentFacingDirection);
-        //        m_animation.DoJumpLoop(m_facing.currentFacingDirection);
-
-        //    }
-        //}
-
-        public override void HandleJump()
-        {
-            if (m_character.onWalkableGround)
-            {
-                m_character.StopCoyoteTime();
-                m_character.SetVelocity(x: 0);
-                base.HandleJump();
-                m_character.AddForce(Vector2.up * (m_power * m_modifier.jumpPower), ForceMode2D.Impulse);
-                CallJumpStart();
-            }
-
-
-
-            //HandleJumpAnimation(m_animation);
-
-            //m_animationState.hasJumped = true;
-            //m_animationState.hasDoubleJumped = false;
-            //m_animationState.isFromJog = false;
-            //m_animationState.hasAttacked = false;
-            //m_animationState.isFromIdle = false;
-        }
-
-        private void OnJumpCall(object sender, EventActionArgs eventArgs)
-        {
-            m_highJumpState.canHighJump = true;
-            HandleJump();
-        }
     }
 }

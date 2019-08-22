@@ -6,11 +6,11 @@ using System.Collections.Generic;
 namespace DChild.Gameplay.Characters.Players.State
 {
     [System.Serializable]
-    public class PlayerCharacterState : IPlayerState, IMoveState, IPlacementState,
+    public class PlayerCharacterState : IPlayerState, IMoveState, IGroundednessState,
                                 ICrouchState, IFlinchState, IWallStickState,
                                 IDashState, IDoubleJumpState, IWallJumpState,
                                 IHighJumpState, IBehaviourState, ICombatState, IPlatformDropState,
-                                IWhipGrapple, IProjectileThrowState, ILedgeGrabState
+                                IWhipGrapple, IProjectileThrowState
     {
         public event EventAction<CombatStateEventArgs> CombatModeChanged;
 
@@ -88,5 +88,7 @@ namespace DChild.Gameplay.Characters.Players.State
                 CombatModeChanged?.Invoke(this, new CombatStateEventArgs(m_inCombat));
             }
         }
+
+        public bool hasJumped { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }

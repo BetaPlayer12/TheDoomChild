@@ -1,4 +1,6 @@
-﻿using Refactor.DChild.Gameplay.Characters.Players;
+﻿using DChild.Gameplay.Characters.Players.State;
+using Refactor.DChild.Gameplay.Characters.Players;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
@@ -9,18 +11,55 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     [System.Serializable]
     public class LandHandle : MonoBehaviour
     {
+        [SerializeField]
+        private float m_velocityTreshold;
+
         private Animator m_animator;
         private string m_animationParameter;
+        private string m_speedXParamater;
+        private IGroundednessState m_state;
+        private IsolatedPhysics2D m_physics;
 
-        public void Initialize(Animator animator, AnimationParametersData animationParameters)
+        [SerializeField]
+        private FXSpawner m_fXSpawner;
+
+        private float m_previousYVelocity;
+
+        public void Initialize(ComplexCharacterInfo info)
         {
-            m_animator = animator;
-            m_animationParameter = animationParameters.GetParameterLabel(AnimationParametersData.Parameter.Land);
+            m_animator = info.animator;
+            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Land);
+            m_speedXParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
+            m_state = info.state;
+            m_physics = info.physics;
         }
+
+        public void RecordVelocity() => m_previousYVelocity = m_physics.velocity.y;
+        public void SetRecordedVelocity(Vector2 velocity) => m_previousYVelocity = velocity.y;
 
         public void Execute()
         {
-            m_animator.SetTrigger(m_animationParameter);
+            if (m_previousYVelocity <= m_velocityTreshold)
+            {
+                m_animator.SetTrigger(m_animationParameter);
+                m_fXSpawner.SpawnFX();
+                m_state.waitForBehaviour = true;
+                m_animator.SetInteger(m_speedXParamater, 0);
+
+                //When GroundednessHandle is disabled for some reason
+                //Landing Slides the Character
+                StartCoroutine(ForceStopRoutine());
+            }
+        }
+
+        private IEnumerator ForceStopRoutine()
+        {
+            var nextFrame = new WaitForEndOfFrame();
+            do
+            {
+                m_physics.SetVelocity(0);
+                yield return nextFrame;
+            } while (m_state.waitForBehaviour);
         }
     }
 

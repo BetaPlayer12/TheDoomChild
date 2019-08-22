@@ -1,7 +1,6 @@
 ﻿using DChild.Gameplay.Characters;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Event;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -13,15 +12,18 @@ namespace DChild.Gameplay
         [SerializeField]
         private Transform m_centerMass;
         [SerializeField]
-        public IsolatedObject m_isolatedObject;
+        private IsolatedObject m_isolatedObject;
         [SerializeField]
         private IsolatedPhysics2D m_physics;
         [SerializeField]
         private CharacterColliders m_colliders;
-        [SerializeField, OnValueChanged("UpdateFacingComponents")]
+        [SerializeField]
         private HorizontalDirection m_facing = HorizontalDirection.Right;
+        private int m_ID;
+        private bool m_hasID;
 
         public event EventAction<FacingEventArgs> CharacterTurn;
+        public event EventAction<ObjectIDEventArgs> InstanceDestroyed;
 
         public IsolatedObject isolatedObject => m_isolatedObject;
         public IsolatedPhysics2D physics => m_physics;
@@ -30,10 +32,24 @@ namespace DChild.Gameplay
 
         public Transform centerMass => m_centerMass;
 
+        public int ID => m_ID;
+        public bool hasID => m_hasID;
+
+        public void SetID(int ID)
+        {
+            m_ID = ID;
+            m_hasID = true;
+        }
+
         public void SetFacing(HorizontalDirection facing)
         {
             m_facing = facing;
             CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
+        }
+
+        private void OnDestroy()
+        {
+            InstanceDestroyed?.Invoke(this, new ObjectIDEventArgs(this));
         }
 
         private void OnValidate()
@@ -44,23 +60,5 @@ namespace DChild.Gameplay
                 Debug.Log(gameObject.tag);
             }
         }
-
-#if UNITY_EDITOR
-        private void UpdateFacingComponents()
-        {
-            if (Application.isPlaying)
-            {
-                CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
-            }
-            else
-            {
-                var facingComponents = GetComponentsInChildren<IFacingComponent>();
-                for (int i = 0; i < facingComponents.Length; i++)
-                {
-                    facingComponents[i].CallUpdate(m_facing);
-                }
-            }
-        }
-#endif
     }
 }

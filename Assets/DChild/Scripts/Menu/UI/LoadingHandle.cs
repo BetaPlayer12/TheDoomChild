@@ -33,7 +33,7 @@ namespace DChild.Menu
             scenesToLoad.AddRange(scenes);
         }
 
-        public static void UnLoadScenes(params string[] scenes)
+        public static void UnloadScenes(params string[] scenes)
         {
             if (scenesToUnload == null)
             {

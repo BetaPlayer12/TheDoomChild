@@ -3,6 +3,5 @@
     public interface IDoubleJumpState
     {
         bool canDoubleJump { get; set; }
-        bool hasDoubleJumped { get; set; }
     }
 }

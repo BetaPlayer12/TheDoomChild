@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Collections;
 using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using Spine;
 using System;
@@ -12,45 +13,26 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    public class LedgeGrab : MonoBehaviour, IPlayerExternalModule, IEventModule
+    public class LedgeGrab : MonoBehaviour, IComplexCharacterModule
     {
-        private IFacing m_characterFacing;
+        private Character m_character;
+        private CharacterPhysics2D m_physics;
         private RaySensor m_ledgeSensorCliff;
         private RaySensor m_ledgeSensorEdge;
-        private RaySensor m_groundHeightSensor;
+        private RaySensor m_platformSensor;
         private ILedgeGrabState m_state;
-        private IPlatformDropState m_dropPlatform;
-        private CharacterPhysics2D m_physics;
+
+        private Animator m_animator;
+        private string m_ledgeGrabParameter;
+        private string m_speedYDirectionParameter;
+        private string m_midAirParameter;
+
+        private GroundednessHandle m_groundednessHandle;
+
         [SerializeField]
         private Vector2 m_groundRayOriginOffset;
-
-
         [SerializeField]
-        private Transform headObject;
-        [SerializeField, MinValue(1)]
-        private int distance;
-
-
-        [Button]
-        private void HeadCast()
-        {
-            Debug.Log("test cast");
-            Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
-            int hitcount;
-            var hitBuffer = Raycaster.Cast(headObject.position, Vector2.up, distance, true, out hitcount);
-            if (hitcount > 0)
-            {
-
-                Debug.Log("test hit");
-
-                m_state.canLedgeGrab = false;
-            }
-            else
-                m_state.canLedgeGrab = true;
-        }
-
-
-
+        private Vector2 m_destinationOffset;
 
         private bool FindGroundDestination(out Vector2 groundPosition)
         {
@@ -65,113 +47,80 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             return hitcount > 0;
         }
 
-
         private Vector2 CalculateGroundRayOrigin()
         {
             var wallContactPoint = m_ledgeSensorCliff.GetHits()[0].point;
             wallContactPoint.y += m_groundRayOriginOffset.y;
-            wallContactPoint.x += m_groundRayOriginOffset.x * (int)m_characterFacing.currentFacingDirection;
+            wallContactPoint.x += m_groundRayOriginOffset.x * (int)m_character.facing;
             return wallContactPoint;
         }
 
-        public void ConnectEvents()
+        public void Initialize(ComplexCharacterInfo info)
         {
-            //GetComponentInParent<ILandController>().LandCall += OnLandCall;
-            GetComponentInParent<ILedgeController>().LedgeGrabCall += PullFromCliff;
+            m_character = info.character;
+            m_ledgeSensorCliff = info.GetSensor(PlayerSensorList.SensorType.LedgeCliff);
+            m_ledgeSensorEdge = info.GetSensor(PlayerSensorList.SensorType.LedgeEdge);
+            m_platformSensor = info.GetSensor(PlayerSensorList.SensorType.Platform);
+            m_state = info.state;
+            m_physics = info.physics;
+            m_animator = info.animator;
+            m_ledgeGrabParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.LedgeGrab);
+            m_speedYDirectionParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
+            m_midAirParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsMidAir);
+            m_groundednessHandle = info.groundednessHandle;
         }
 
-
-        public void Initialize(IPlayerModules player)
+        public bool AttemptToLedgeGrab()
         {
-            m_characterFacing = player;
-            m_ledgeSensorCliff = player.sensors.ledgeSensorCliff;
-            m_ledgeSensorEdge = player.sensors.ledgeSensorEdge;
-            m_groundHeightSensor = player.sensors.groundHeightSensor;
-            m_state = player.characterState;
-            //m_playerAnimation = player.animation;
-            m_physics = player.physics;
-            m_dropPlatform = player.characterState;
-        }
-
-        public void PullFromCliff()
-        {
-            m_state.canLedgeGrab = false;
-            HeadCast();
-
             m_ledgeSensorCliff.Cast();
-            m_ledgeSensorEdge.Cast();
-            m_groundHeightSensor.Cast();
-
-            Debug.Log("Can LedgeGrab is " + m_state.canLedgeGrab);
-            if (m_state.canLedgeGrab)
+            if (m_ledgeSensorCliff.isDetecting)
             {
-
-
-                if (m_ledgeSensorCliff.isDetecting == true && m_ledgeSensorEdge.isDetecting == false && m_groundHeightSensor.isDetecting == false)
+                m_ledgeSensorEdge.Cast();
+                if (m_ledgeSensorEdge.isDetecting == false)
                 {
-
-                    Vector2 groundPosition;
-                    if (FindGroundDestination(out groundPosition))
+                    m_platformSensor.Cast();
+                    if (m_platformSensor.isDetecting == false)
                     {
-
-                        var currentPosition = m_physics.position;
-                        currentPosition.y = groundPosition.y - 1;
-                        currentPosition.x = currentPosition.x + (2 * (int)m_characterFacing.currentFacingDirection); //i addedd a forward force by 1 to make sure that the player avoids the edge slide so the player is standing on the platform
-                        m_physics.position = currentPosition;
-                        StartCoroutine(ChangeLedgingStateToFalse());
+                        Vector2 groundPosition;
+                        if (FindGroundDestination(out groundPosition))
+                        {
+                            StartCoroutine(PullFromCliff(groundPosition));
+                            return true;
+                        }
                     }
                 }
             }
-
+            return false;
         }
 
-        private void PullFromCliff(object sender, EventActionArgs eventArgs)
-        {
-            PullFromCliff();
-        }
-
-        private IEnumerator ChangeLedgingStateToFalse()
+        private IEnumerator PullFromCliff(Vector2 groundPosition)
         {
             m_state.waitForBehaviour = true;
-            m_state.isLedging = true;
-            yield return new WaitForEndOfFrame();
-            //m_playerAnimation.DoLedgeGrab(m_characterFacing.currentFacingDirection);
-            //m_playerAnimation.EnableRootMotion(true, true);
-            //m_playerAnimation.AnimationSet += OnAnimationSet;
-            //m_playerAnimation.animationState.Complete += OnComplete;
-            while (m_state.isLedging)
+            m_state.isFalling = false;
+            m_state.isGrounded = true;
+            m_state.isMoving = false;
+            m_animator.SetTrigger(m_ledgeGrabParameter);
+            m_animator.SetInteger(m_speedYDirectionParameter, 0);
+            m_animator.SetBool(m_midAirParameter, false);
+            m_groundednessHandle.enabled = false;
+            m_physics.SetVelocity(Vector2.zero);
+
+            //Wait For Ledge Grab Animation to Player before moving the object's position
+            bool wait = true;
+            do
             {
-                yield return null;
-            }
+                var animatorState = m_animator.GetCurrentAnimatorStateInfo(0);
+                //This seems hardcoded as it relies on the name of the state. Find a better way
+                wait = !(animatorState.IsName("LedgeGrab L") || animatorState.IsName("LedgeGrab R"));
+                yield return new WaitForEndOfFrame();
+            } while (wait);
 
-            //m_playerAnimation.AnimationSet -= OnAnimationSet;
-            //m_playerAnimation.animationState.Complete -= OnComplete;
-
-        }
-
-        private void OnComplete(TrackEntry trackEntry)
-        {
-            EndLedgeGrab();
-
-        }
-
-        private void OnAnimationSet(object sender, AnimationEventArgs eventArgs)
-        {
-            EndLedgeGrab();
-        }
-
-        private void EndLedgeGrab()
-        {
-            m_state.waitForBehaviour = false;
-            m_state.isLedging = false;
-            // m_playerAnimation.DisableRootMotion();
-        }
-
-
-        private void OnLandCall(object sender, EventActionArgs eventArgs)
-        {
-
-            m_state.canLedgeGrab = true;
+            m_groundednessHandle.enabled = true;
+            m_physics.SetVelocity(Vector2.zero);
+            var currentPosition = m_physics.position;
+            currentPosition.y = groundPosition.y + m_destinationOffset.y;
+            currentPosition.x = currentPosition.x + (m_destinationOffset.x * (int)m_character.facing);
+            m_physics.position = currentPosition;
         }
 
     }

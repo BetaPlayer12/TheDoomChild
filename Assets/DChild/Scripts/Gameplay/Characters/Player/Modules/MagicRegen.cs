@@ -4,11 +4,12 @@ using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Holysoft.Gameplay;
+using Refactor.DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-    public class MagicRegen : MonoBehaviour, IPlayerExternalModule
+    public class MagicRegen : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         private CountdownTimer m_regenInterval = new CountdownTimer(5);
@@ -19,10 +20,11 @@ namespace DChild.Gameplay.Characters.Players
         private bool m_isFull;
         private IIsolatedTime m_time;
 
-        public void Initialize(IPlayerModules player)
+
+        public void Initialize(ComplexCharacterInfo info)
         {
-            m_time = player.isolatedObject;
-            m_magic = player.magic;
+            m_time = info.character.isolatedObject;
+            m_magic = info.magic;
             m_isFull = m_magic.currentValue == m_magic.maxValue;
             m_magic.ValueChanged += OnValueChange;
         }
@@ -68,6 +70,7 @@ namespace DChild.Gameplay.Characters.Players
         {
             m_regenInterval.Tick(m_time.deltaTime);
         }
+
     }
 
 }

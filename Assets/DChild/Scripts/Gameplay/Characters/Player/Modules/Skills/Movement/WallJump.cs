@@ -1,92 +1,66 @@
-﻿using DChild.Gameplay.Characters.Players.Behaviour;
+﻿using System;
+using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Systems.WorldComponents;
-using DChild.Inputs;
 using Holysoft.Collections;
 using Holysoft.Event;
+using Refactor.DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
-    public class WallJump : Jump, IPlayerExternalModule, IEventModule
+    public class WallJump : Jump
     {
         [SerializeField]
         private float m_forwardPower;
         [SerializeField]
-        private CountdownTimer m_waitBehaviourDuration;
+        private CountdownTimer m_inputDisableDuration;
 
-        private PlayerInput m_input;
         private IWallJumpState m_state;
         private IIsolatedTime m_time;
+        private Animator m_animator;
+        private string m_jumpParamater;
 
-        public void ConnectEvents()
+        public override void Initialize(ComplexCharacterInfo info)
         {
-            var controller = GetComponentInParent<IWallJumpController>();
-            controller.UpdateCall += OnUpdateCall;
-            controller.WallJumpCall += OnWallJumpCall;
-        }
-
-        public override void Initialize(IPlayerModules player)
-        {
-            base.Initialize(player);
-            m_state = player.characterState;
-            m_time = player.isolatedObject;
-            //m_input = player.animation.GetComponent<PlayerInput>();
+            base.Initialize(info);
+            m_state = info.state;
+            m_time = info.character.isolatedObject;
+            m_animator = info.animator;
+            m_jumpParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Jump);
         }
 
         public override void HandleJump()
         {
             base.HandleJump();
-            m_character.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
-            var forceDirection = m_facing.currentFacingDirection == HorizontalDirection.Left ? 1 : -1;
-            m_character.SetVelocity(forceDirection * m_forwardPower);
-            m_character.simulateGravity = true;
-            CallJumpStart();
+            m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
+            var forceDirection = m_character.facing == HorizontalDirection.Left ? 1 : -1;
+            m_physics.SetVelocity(forceDirection * m_forwardPower);
+            m_physics.simulateGravity = true;
 
             m_state.waitForBehaviour = true;
-            /*if(m_input.direction.isHorizontalHeld) */m_state.isWallJumping = true;
-            m_waitBehaviourDuration.Reset();
+            m_inputDisableDuration.Reset();
             enabled = true;
-            m_facing.TurnCharacter();
+            m_character.SetFacing(m_character.facing == HorizontalDirection.Left ? HorizontalDirection.Right : HorizontalDirection.Left);
+            m_animator.SetTrigger(m_jumpParamater);
         }
 
-        private void OnUpdateCall(object sender, ControllerEventArgs eventArgs)
-        {
-            m_state.canWallJump = m_state.isStickingToWall;
-        }
-
-        private void OnWallJumpCall(object sender, EventActionArgs eventArgs)
-        {
-            if (m_state.canWallJump)
-            {
-                HandleJump();
-            }
-        }
-
-        private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
+        private void OnDisableInputEnd(object sender, EventActionArgs eventArgs)
         {
             m_state.waitForBehaviour = false;
+            enabled = false;
         }
 
         private void Awake()
         {
-            m_waitBehaviourDuration.CountdownEnd += OnCountdownEnd;
+            m_inputDisableDuration.CountdownEnd += OnDisableInputEnd;
             enabled = false;
         }
 
         private void Update()
         {
-            m_waitBehaviourDuration.Tick(m_time.deltaTime);
+            m_inputDisableDuration.Tick(m_time.deltaTime);
         }
-
-#if UNITY_EDITOR
-        public void Initialize(float power, float waitBehaviourDuration)
-        {
-            m_forwardPower = power;
-            m_waitBehaviourDuration = new CountdownTimer(waitBehaviourDuration);
-        }
-#endif
     }
-
 }

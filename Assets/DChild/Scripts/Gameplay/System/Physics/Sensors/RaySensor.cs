@@ -43,6 +43,7 @@ namespace DChild.Gameplay
         private bool m_updatedValidHits;
         private Collider2D m_prominentHitCollider;
         private bool m_updatedProminentHitCollider;
+        
 
         private static List<Collider2D> m_colliderList;
         private static List<int> m_colliderCountList;
@@ -55,6 +56,7 @@ namespace DChild.Gameplay
 
         public int DetectionCount => m_detectionCount;
 
+        public RaycastHit2D m_castHit;
         public RaycastHit2D[] GetHits() => m_multiRaycast.hits;
 
         public RaycastHit2D[] GetUniqueHits()
@@ -192,8 +194,6 @@ namespace DChild.Gameplay
 #if UNITY_EDITOR
         public void Initialize(int count, LayerMask mask, bool ignoreTrigger, float castWidth, float castDistance)
         {
-
-
         }
 
         public void Initialize(float rotation)

@@ -67,9 +67,9 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         {
             if (!targetDefense.isInvulnerable)
             {
-                AttackInfo info = new AttackInfo(transform.position, 0, 1, m_damage);
+                AttackerInfo info = new AttackerInfo(transform.position, 0, 1, m_damage);
                 var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo.target, result));
+                TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
             }
         }
 

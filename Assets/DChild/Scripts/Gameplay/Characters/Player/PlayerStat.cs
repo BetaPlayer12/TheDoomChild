@@ -8,13 +8,10 @@ namespace DChild.Gameplay.Characters.Players
         Magic,
         Attack,
         MagicAttack,
-        Defense,
-        MagicDefense,
         CritChance,
         StatusChance,
-        MaxAttack,
-        MaxDefense,
         [HideInInspector]
-        _COUNT
+        _COUNT,
+        MaxAttack,
     }
 }

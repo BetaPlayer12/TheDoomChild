@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Characters.Players;
+using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Characters.Players
 {
@@ -6,6 +7,8 @@ namespace Refactor.DChild.Gameplay.Characters.Players
     {
         [SerializeField]
         private ComplexCharacterInfo m_info;
+        [SerializeField]
+        private PlayerSkills m_skills;
         [SerializeField]
         private GameObject m_moduleContainer;
 

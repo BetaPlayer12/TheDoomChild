@@ -20,7 +20,8 @@ namespace DChild.Gameplay
     {
         public event EventAction<RayTriggerEventArgs> TriggerEnter;
 
-        [SerializeField][MinValue(1)]
+        [SerializeField]
+        [MinValue(1)]
         private int m_rayCount;
         [SerializeField]
         private float m_checkWidth;
@@ -55,7 +56,7 @@ namespace DChild.Gameplay
                     castPosition.y += m_offsets[j];
                     var toRayTarget = castPosition - rayOrigin;
                     m_hitbuffers = Raycaster.Cast(rayOrigin, toRayTarget, true, out hitCount);
-                    if(hitCount> 0)
+                    if (hitCount > 0)
                     {
                         if (m_hitbuffers[0].collider == m_checkForEnter[i])
                         {

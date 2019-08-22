@@ -17,6 +17,11 @@ namespace DChild.Gameplay.Systems
             m_loot.DropLoot(transform.position);
         }
 
+        public void SetLootData(LootData lootData)
+        {
+            m_loot = lootData;
+        }
+
         private void Awake()
         {
             if (m_dropWhenDestroyed)

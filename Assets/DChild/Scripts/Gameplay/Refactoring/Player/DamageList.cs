@@ -10,7 +10,12 @@ namespace Refactor.DChild.Gameplay.Characters.Players
         [SerializeField]
         List<AttackDamage> m_values;
 
-        public AttackDamage[] values { get => m_values.ToArray(); }
+        public DamageList()
+        {
+            m_values = new List<AttackDamage>();
+        }
+
+        public List<AttackDamage> values => m_values;
 
         public void AddValue(AttackType type, int value)
         {
@@ -18,8 +23,8 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             if (index >= 0)
             {
                 var damageElement = m_values[index];
-                damageElement.damage += value;
-                if (damageElement.damage == 0)
+                damageElement.value += value;
+                if (damageElement.value == 0)
                 {
                     m_values.RemoveAt(index);
                 }
@@ -40,8 +45,8 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             if (index >= 0)
             {
                 var damageElement = m_values[index];
-                damageElement.damage = value;
-                if (damageElement.damage == 0)
+                damageElement.value = value;
+                if (damageElement.value == 0)
                 {
                     m_values.RemoveAt(index);
                 }
@@ -61,7 +66,7 @@ namespace Refactor.DChild.Gameplay.Characters.Players
             var index = FindIndex(type);
             if (index >= 0)
             {
-                return m_values[index].damage;
+                return m_values[index].value;
             }
             return 0;
         }

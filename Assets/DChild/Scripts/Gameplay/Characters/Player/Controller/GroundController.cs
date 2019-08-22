@@ -1,19 +1,39 @@
-﻿using DChild.Gameplay.Characters.Players.State;
+﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class GroundController : MonoBehaviour, IGroundMoveController, ICrouchController, IPlatformDropController,
-                                                   IJumpController, IGroundDashController
+    public class GroundController : MonoBehaviour
     {
-        public event EventAction<ControllerEventArgs> MoveCall;
-        public event EventAction<ControllerEventArgs> CrouchCall;
-        public event EventAction<ControllerEventArgs> CrouchMoveCall;
-        public event EventAction<EventActionArgs> JumpCall;
-        public event EventAction<EventActionArgs> DashCall;
-        public event EventAction<EventActionArgs> ShadowDashCall;
-        public event EventAction<ControllerEventArgs> PlatformDropCall;
+
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private MovementHandle m_movement;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private MoveSpeedTransistor m_speedTransistor;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private Crouch m_crouch;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private GroundJumpHandler m_groundJump;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private GroundDash m_groundDash;
+        [ShowInInspector, ReadOnly, BoxGroup("Modules")]
+        private PlatformDrop m_platformDrop;
+
+        private SkillResetRequester m_skillRequester;
+        public void Initialize(GameObject behaviours, SkillResetRequester skillRequester)
+        {
+            m_skillRequester = skillRequester;
+
+            m_crouch = behaviours.GetComponentInChildren<Crouch>();
+            m_groundJump = behaviours.GetComponentInChildren<GroundJumpHandler>();
+            m_groundDash = behaviours.GetComponentInChildren<GroundDash>();
+            m_platformDrop = behaviours.GetComponentInChildren<PlatformDrop>();
+            m_movement = behaviours.GetComponentInChildren<MovementHandle>();
+            m_speedTransistor = behaviours.GetComponentInChildren<MoveSpeedTransistor>();
+        }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
@@ -23,28 +43,34 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                if (state.isCrouched)
+
+                if (state.hasJumped == false)
                 {
-                    CrouchMoveCall?.Invoke(this, callArgs);
-                }
-                else
-                {
-                    MoveCall?.Invoke(this, callArgs);
+                    m_movement?.Move(callArgs.input.direction.horizontalInput);
                 }
             }
         }
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
-            CrouchCall?.Invoke(this, callArgs);
+
 
             if (state.isCrouched)
             {
-                if (state.canPlatformDrop && callArgs.input.isJumpPressed)
+                if (m_crouch?.HandleCrouch(callArgs.input.direction.isDownHeld) ?? false)
                 {
-
-                    PlatformDropCall?.Invoke(this, callArgs);
+                    if (state.canPlatformDrop && callArgs.input.isJumpPressed)
+                    {
+                        m_platformDrop?.DropFromPlatform();
+                        m_speedTransistor?.SwitchToJogSpeed();
+                        m_crouch?.StopCrouch();
+                    }
                 }
+                else
+                {
+                    m_speedTransistor?.SwitchToJogSpeed();
+                }
+               
             }
             else if (state.isDashing)
             {
@@ -52,27 +78,39 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                if (callArgs.input.isJumpPressed)
+                if (state.isCrouched == false)
                 {
-                    JumpCall?.Invoke(this, EventActionArgs.Empty);
-                }
-
-                else if (skills.IsEnabled(PrimarySkill.Dash))
-                {
-                    if (callArgs.input.skillInput.isDashPressed)
+                    if (state.isMoving)
                     {
-                        DashCall?.Invoke(this, EventActionArgs.Empty);
+                        m_speedTransistor?.HandleSprintTransistion();
+                    }
+                    else
+                    {
+                        if (callArgs.input.direction.horizontalInput != 0)
+                        {
+                            m_speedTransistor?.SwitchToJogSpeed();
+                        }
                     }
                 }
-                //else if (skills.IsEnabled(MovementSkill.ShadowDash))
-                //{
-                //    if (callArgs.input.skillInput.isDashPressed)
-                //    {
-                //        ShadowDashCall?.Invoke(this, EventActionArgs.Empty);
-                //    }
-                //}
 
+                if (callArgs.input.isJumpPressed)
+                {
+                    m_groundJump?.HandleJump();
+                }
+                else if (callArgs.input.direction.isDownHeld)
+                {
+                    m_speedTransistor.SwitchToCrouchSpeed();
+                    m_crouch?.StartCrouch();
+                }
+                else if (skills.IsEnabled(PrimarySkill.Dash))
+                {
+                    if (callArgs.input.skillInput.isDashPressed && state.canDash)
+                    {
+                        m_groundDash?.StartDash();
+                    }
+                }
             }
+           
         }
     }
 }

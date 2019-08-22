@@ -18,37 +18,22 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private CountdownTimer m_cooldownTimer;
         private bool m_isOnCooldown;
 
-        public override void ConnectTo(IMainController controller)
-        {
-            base.ConnectTo(controller);
-            controller.GetSubController<IGroundDashController>().DashCall += OnDashCall;
-        }
-
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
             m_state.canDash = true;
-            info.groundednessHandle.LandExecuted += OnLandExecuted;
         }
 
-        private void HandleDash()
+        public void StartDash()
         {
             m_direction = m_character.facing == HorizontalDirection.Left ? Vector2.left : Vector2.right;
             m_duration.Reset();
             TurnOnAnimation(true);
             enabled = true;
+            m_state.canDash = false;
             m_state.isDashing = true;
             if (m_ghosting != null)
                 m_ghosting.enabled = true;
-        }
-
-        protected override void OnDashCall(object sender, EventActionArgs eventArgs)
-        {
-            if (m_state.canDash && m_state.isDashing == false)
-            {
-                HandleDash();
-                m_state.canDash = false;
-            }
         }
 
         private void OnLandExecuted(object sender, EventActionArgs eventArgs)
@@ -124,7 +109,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_state.isDashing)
             {
-                m_physics.SetVelocity(m_direction.x * m_physics.moveAlongGround.x, m_physics.moveAlongGround.y);
+                var xVelocity = m_direction.x * m_physics.moveAlongGround.x * m_power;
+                var yVelocity = m_physics.moveAlongGround.y * m_adhesive;
+                m_physics.SetVelocity(xVelocity, yVelocity);
             }
         }
     }

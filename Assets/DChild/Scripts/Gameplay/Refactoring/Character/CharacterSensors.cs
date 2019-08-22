@@ -1,28 +1,21 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters;
+using UnityEngine;
+using Refactor.DChild.Gameplay.Characters;
 
-namespace DChild.Gameplay.Characters
+namespace Refactor.DChild.Gameplay
 {
-    public class CharacterSensors : MonoBehaviour, IFacingComponent
+    public class CharacterSensors : MonoBehaviour
     {
+        [SerializeField]
+        private TurnHandle m_turn;
+
         private ISensorFaceRotation[] m_rotators;
-
-        public void CallUpdate(HorizontalDirection facing)
-        {
-            if (m_rotators == null)
-            {
-                m_rotators = GetComponentsInChildren<ISensorFaceRotation>();
-            }
-
-            for (int i = 0; i < m_rotators.Length; i++)
-            {
-                m_rotators[i].AlignRotationToFacing(facing);
-            }
-        }
 
         private void Awake()
         {
             m_rotators = GetComponentsInChildren<ISensorFaceRotation>();
-            GetComponentInParent<ITurningCharacter>().CharacterTurn += OnCharacterTurn;
+            m_turn.TurnDone += OnCharacterTurn;
         }
 
         private void OnCharacterTurn(object sender, FacingEventArgs eventArgs)

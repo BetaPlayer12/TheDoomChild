@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Systems.WorldComponents;
+using DChild.Inputs;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.Players;
@@ -30,13 +31,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ConnectTo(IMainController controller)
         {
-            controller.GetSubController<IBasicAttackController>().BasicAttackCall += OnBasicAttackCall;
             controller.ControllerDisabled += OnControllerDisabled;
         }
 
-        private void OnBasicAttackCall(object sender, CombatEventArgs eventArgs)
+        public void Execute()
         {
-            SetAttackDirection(eventArgs);
             m_animator.SetTrigger(m_attackTriggerParameter);
             m_state.canAttack = false;
             m_state.waitForBehaviour = true;
@@ -46,13 +45,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        private void SetAttackDirection(CombatEventArgs eventArgs)
+        public void SetAttackDirection(DirectionalInput input)
         {
-            if (eventArgs.directionalInput.isDownHeld)
+            if (input.isDownHeld)
             {
                 m_animator.SetInteger(m_attackDirectionParameter, -1);
             }
-            else if (eventArgs.directionalInput.isUpHeld)
+            else if (input.isUpHeld)
             {
                 m_animator.SetInteger(m_attackDirectionParameter, 1);
             }
