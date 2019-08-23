@@ -20,6 +20,10 @@ namespace DChild
 
         public string activeZone => m_activeZone;
 
+#if UNITY_EDITOR
+        public void SetAsActiveZone(string sceneName) => m_activeZone = sceneName; 
+#endif
+
         public void LoadZone(string sceneName, bool withLoadingScene)
         {
             if (withLoadingScene)

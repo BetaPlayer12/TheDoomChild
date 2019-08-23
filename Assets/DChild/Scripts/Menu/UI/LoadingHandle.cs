@@ -16,7 +16,7 @@ namespace DChild.Menu
 
         private static List<string> scenesToLoad;
         private static List<string> scenesToUnload;
-        public static EventAction<EventActionArgs> SceneDone;
+        public static event EventAction<EventActionArgs> SceneDone;
 
         private static List<AsyncOperation> m_loadOperations;
         private static List<AsyncOperation> m_unloadOperations;
