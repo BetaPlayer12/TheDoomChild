@@ -7,8 +7,8 @@ using DChild.Gameplay.Inventories;
 using DChild.Serialization;
 using Doozy.Engine;
 using Holysoft.Event;
-using Refactor.DChild.Gameplay.Characters.Players;
-using Refactor.DChild.Gameplay.Combat;
+using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Refactor.DChild.Gameplay.Combat
+namespace DChild.Gameplay.Combat
 {
     public class Attacker : MonoBehaviour, IAttacker, IDamageDealer
     {
@@ -31,7 +31,7 @@ namespace Refactor.DChild.Gameplay.Combat
             if (m_info.ignoreInvulnerability || !targetDefense.isInvulnerable)
             {
                 var position = transform.position;
-                global::DChild.Gameplay.Combat.AttackerInfo info = new global::DChild.Gameplay.Combat.AttackerInfo(position, 0, 1, m_currentDamage.ToArray());
+                AttackerCombatInfo info = new AttackerCombatInfo(position, 0, 1, m_currentDamage.ToArray());
                 var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
                 TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
             }

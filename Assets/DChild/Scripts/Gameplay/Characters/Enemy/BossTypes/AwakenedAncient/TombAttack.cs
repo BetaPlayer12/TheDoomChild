@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Characters.Enemies;
 using DChild;
-using Refactor.DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Characters.AI;
 
 public class TombAttack : MonoBehaviour
 {

@@ -4,7 +4,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Refactor.DChild.Gameplay.Characters.AI
+namespace DChild.Gameplay.Characters.AI
 {
     public interface IAIInfo { void Initialize(); }
 

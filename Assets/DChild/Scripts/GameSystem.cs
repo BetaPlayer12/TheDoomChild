@@ -33,6 +33,10 @@ namespace DChild
 
         public static bool IsCurrentZone(string sceneName) => m_zoneLoader.activeZone == sceneName;
 
+#if UNITY_EDITOR
+        public static void ForceCurrentZoneName(string sceneName) => m_zoneLoader.SetAsActiveZone(sceneName);
+#endif
+
         public static void LoadMainMenu() => m_zoneLoader.LoadMainMenu();
 
         private void Awake()

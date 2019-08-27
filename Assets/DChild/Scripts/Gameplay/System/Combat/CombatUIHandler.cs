@@ -2,6 +2,7 @@
 using DChild.Gameplay.Pooling;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,7 +13,7 @@ namespace DChild.Gameplay.Combat
     {
         public struct UIInfo
         {
-            public UIInfo(Vector3 position, IDamageUIConfig configurations, int value, bool isCrit) : this()
+            public UIInfo(Vector3 position, TMP_ColorGradient configurations, int value, bool isCrit) : this()
             {
                 this.position = position;
                 this.configurations = configurations;
@@ -21,7 +22,7 @@ namespace DChild.Gameplay.Combat
             }
 
             public Vector3 position { get; }
-            public IDamageUIConfig configurations { get; }
+            public TMP_ColorGradient configurations { get; }
             public int value { get; }
             public bool isCrit { get; }
         }

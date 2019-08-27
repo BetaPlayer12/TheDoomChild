@@ -1,7 +1,7 @@
 ﻿using DChild.Gameplay.Characters;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat.StatusAilment;
-using Refactor.DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat
