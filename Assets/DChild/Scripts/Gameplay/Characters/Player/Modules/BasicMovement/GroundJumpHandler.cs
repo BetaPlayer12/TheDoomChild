@@ -14,7 +14,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private FXSpawner m_fXSpawner;
 
         private IHighJumpState m_highJumpState;
-        private Character m_character;
         private Animator m_animator;
         private string m_jumpParamater;
 

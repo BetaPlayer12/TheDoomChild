@@ -20,34 +20,8 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: m_resistance
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.AttackType,
-        Assembly-CSharp],[System.Single, mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Combat.AttackType,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  m_useType: 0
+    SerializationNodes: []
+  m_data: {fileID: 0}
 --- !u!114 &2801569496548029237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +39,7 @@ MonoBehaviour:
   m_info:
     damage:
     - m_type: 0
-      m_damage: 25
+      m_value: 0
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
@@ -110,7 +84,6 @@ MonoBehaviour:
   m_centerMass: {fileID: 174760960899820539}
   m_health: {fileID: 7839981553133359746}
   m_resistance: {fileID: 3032839569805362249}
-  m_flinchHandler: {fileID: 8064797494873807729}
 --- !u!114 &7655086984310091578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +150,9 @@ MonoBehaviour:
     m_max: 0
   m_legCollision: {fileID: 6052833760649522353}
   m_legCollider: {fileID: 6052833760649522352}
+  m_legColliderLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &5350243844968920593
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,8 +255,6 @@ MonoBehaviour:
   m_animator: {fileID: 7764022919646852517}
   m_bodyDuration:
     m_startTime: 3
-  m_bodyCollider: {fileID: 1178027712469080459}
-  m_hitBox: {fileID: 5174705079675638012}
 --- !u!114 &374050819650880628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,6 +439,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5947609140908006228}
     m_Modifications:
+    - target: {fileID: 7686376236515929533, guid: 35ffae770e526914e9f233fb95a232c8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.39337492
+      objectReference: {fileID: 0}
+    - target: {fileID: 7686376236515929533, guid: 35ffae770e526914e9f233fb95a232c8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.0077003
+      objectReference: {fileID: 0}
     - target: {fileID: 4267268818298709551, guid: 35ffae770e526914e9f233fb95a232c8,
         type: 3}
       propertyPath: m_Name
@@ -525,16 +509,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7686376236515929533, guid: 35ffae770e526914e9f233fb95a232c8,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.39337492
-      objectReference: {fileID: 0}
-    - target: {fileID: 7686376236515929533, guid: 35ffae770e526914e9f233fb95a232c8,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.0077003
-      objectReference: {fileID: 0}
     - target: {fileID: 837124297744438313, guid: 35ffae770e526914e9f233fb95a232c8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -558,7 +532,7 @@ PrefabInstance:
     - target: {fileID: 477111880189221748, guid: 35ffae770e526914e9f233fb95a232c8,
         type: 3}
       propertyPath: m_compositeColliderID
-      value: -42736
+      value: -45090
       objectReference: {fileID: 0}
     - target: {fileID: 1742598212859481588, guid: 35ffae770e526914e9f233fb95a232c8,
         type: 3}
@@ -2522,12 +2496,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35ffae770e526914e9f233fb95a232c8, type: 3}
---- !u!50 &930889516730671671 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 7218339229210698865, guid: 35ffae770e526914e9f233fb95a232c8,
-    type: 3}
-  m_PrefabInstance: {fileID: 7550177424735143494}
-  m_PrefabAsset: {fileID: 0}
 --- !u!60 &4859754018363821096 stripped
 PolygonCollider2D:
   m_CorrespondingSourceObject: {fileID: 3149932406179973742, guid: 35ffae770e526914e9f233fb95a232c8,
@@ -2600,12 +2568,6 @@ PolygonCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 7550177424735143494}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &4221447912442929489 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 5931811214492083991, guid: 35ffae770e526914e9f233fb95a232c8,
-    type: 3}
-  m_PrefabInstance: {fileID: 7550177424735143494}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6052833759295217771 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4267268818298709549, guid: 35ffae770e526914e9f233fb95a232c8,
@@ -2618,6 +2580,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!60 &4665203655423226914 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 2916569338613461604, guid: 35ffae770e526914e9f233fb95a232c8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7550177424735143494}
+  m_PrefabAsset: {fileID: 0}
 --- !u!60 &1448920496257462712 stripped
 PolygonCollider2D:
   m_CorrespondingSourceObject: {fileID: 8997074806712465406, guid: 35ffae770e526914e9f233fb95a232c8,
@@ -2642,24 +2610,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!70 &6052833760649522352 stripped
-CapsuleCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4267268819652881142, guid: 35ffae770e526914e9f233fb95a232c8,
-    type: 3}
-  m_PrefabInstance: {fileID: 7550177424735143494}
-  m_PrefabAsset: {fileID: 0}
---- !u!60 &4665203655423226914 stripped
+--- !u!60 &4221447912442929489 stripped
 PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 2916569338613461604, guid: 35ffae770e526914e9f233fb95a232c8,
+  m_CorrespondingSourceObject: {fileID: 5931811214492083991, guid: 35ffae770e526914e9f233fb95a232c8,
     type: 3}
   m_PrefabInstance: {fileID: 7550177424735143494}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1178027712469080459 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8691577480010145741, guid: 35ffae770e526914e9f233fb95a232c8,
+--- !u!114 &6052833760649522353 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4267268819652881143, guid: 35ffae770e526914e9f233fb95a232c8,
     type: 3}
   m_PrefabInstance: {fileID: 7550177424735143494}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2716040642364717889 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5581876178558336263, guid: 35ffae770e526914e9f233fb95a232c8,
@@ -2684,21 +2652,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &5174705079675638012 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3393357349887071930, guid: 35ffae770e526914e9f233fb95a232c8,
+--- !u!50 &930889516730671671 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 7218339229210698865, guid: 35ffae770e526914e9f233fb95a232c8,
     type: 3}
   m_PrefabInstance: {fileID: 7550177424735143494}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6052833760649522353 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4267268819652881143, guid: 35ffae770e526914e9f233fb95a232c8,
+--- !u!70 &6052833760649522352 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4267268819652881142, guid: 35ffae770e526914e9f233fb95a232c8,
     type: 3}
   m_PrefabInstance: {fileID: 7550177424735143494}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
