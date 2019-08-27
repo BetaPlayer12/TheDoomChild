@@ -1,17 +1,9 @@
-﻿using System;
-using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.AI;
 using UnityEngine;
-using Spine;
-using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
-using System.Collections.Generic;
-using DChild;
-using DChild.Gameplay.Characters.Enemies;
 
 namespace DChild.Gameplay.Characters.Enemies
 {

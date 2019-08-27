@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 3456071863341190403}
-  m_data: {fileID: 11400000, guid: e8d099a7497a4fa4680dcfba65248059, type: 2}
+  m_centerMass: {fileID: 0}
+  m_data: {fileID: 0}
   m_info:
-    damage:
-    - m_type: 1
-      m_damage: 25
+    damage: []
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
@@ -33,17 +31,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c06cee7740798424ca242778ac985a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_character: {fileID: 8881391243336259774}
-  m_animation: {fileID: 8845640313807356449}
-  m_data: {fileID: 11400000, guid: 8002cdef2570ce046b98cb2ab15bbf2f, type: 2}
-  m_referenceFolder: Assets/DChild/Objects/ScriptableObjects/CharacterData/MinionData
+  m_character: {fileID: 0}
+  m_animation: {fileID: 0}
+  m_data: {fileID: 0}
+  m_referenceFolder: 
   m_damageable: {fileID: 0}
   m_centerMass: {fileID: 0}
   m_turnHandle: {fileID: 0}
   m_agent: {fileID: 0}
-  m_patrolHandle: {fileID: 8943861846611835279}
+  m_patrolHandle: {fileID: 0}
   m_attackHandle:
-    m_animation: {fileID: 8845640313807356449}
+    m_animation: {fileID: 0}
   m_deathHandle: {fileID: 0}
 --- !u!114 &6697422787288623559
 MonoBehaviour:
@@ -57,10 +55,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 3456071863341190403}
-  m_health: {fileID: 1349565367284812825}
-  m_resistance: {fileID: 4281675090823295949}
-  m_flinchHandler: {fileID: 6621485675460028093}
+  m_centerMass: {fileID: 0}
+  m_health: {fileID: 0}
+  m_resistance: {fileID: 0}
 --- !u!114 &7670314770483605262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,7 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29150e23aad4b154eb74a477f7989649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_simulateGravity: 0
+  m_simulateGravity: 1
   m_gravity:
     m_gravityScale: 1
     m_direction: {x: 0, y: -1}
@@ -88,7 +85,7 @@ MonoBehaviour:
     m_duration: 0
   m_useStepClimb: 1
   m_stepClimber:
-    m_maxStepHeight: 0.01
+    m_maxStepHeight: 0
     stepSearchOvershoot: 0.01
     m_detector: {fileID: 0}
   m_acceptableWalkableAngle:
@@ -96,6 +93,9 @@ MonoBehaviour:
     m_max: 0
   m_legCollision: {fileID: 0}
   m_legCollider: {fileID: 0}
+  m_legColliderLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &8845640313807356449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,9 +123,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 0}
-  m_isolatedObject: {fileID: 6541307920390248857}
-  m_physics: {fileID: 7670314770483605262}
-  m_colliders: {fileID: 3136474910394752645}
+  m_isolatedObject: {fileID: 0}
+  m_physics: {fileID: 0}
+  m_colliders: {fileID: 0}
   m_facing: 1
 --- !u!114 &4281675090823295949
 MonoBehaviour:
@@ -147,34 +147,8 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: m_resistance
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.AttackType,
-        Assembly-CSharp],[System.Single, mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Combat.AttackType,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  m_useType: 0
+    SerializationNodes: []
+  m_data: {fileID: 0}
 --- !u!1001 &1792040940697190285
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -287,10 +261,20 @@ PrefabInstance:
       propertyPath: m_physicsObjects.m_physicsTimeObjectInfo.Array.data[1].m_mass
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_physicsObjects.m_rigidbody2Ds.Array.data[0]
+      value: 
+      objectReference: {fileID: 8359076611384556932}
+    - target: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_physicsObjects.m_physicsTimeObjectInfo.Array.data[0].m_mass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_maxHealth
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
@@ -312,36 +296,12 @@ Rigidbody2D:
     type: 3}
   m_PrefabInstance: {fileID: 1792040940697190285}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6541307920390248857 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4763118838042142228, guid: 581273cea94d1294a9c56f1ba54042dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1792040940697190285}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4790902675702366269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34fad4e323aad53458602de8afcbef1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7535883741854911751 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8091365355203670666, guid: 581273cea94d1294a9c56f1ba54042dc,
     type: 3}
   m_PrefabInstance: {fileID: 1792040940697190285}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1349565367284812825 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1792040940697190285}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7535883741854911751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7d65502d98619e438c6388e3da86e37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &8784664974967960271
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -423,7 +383,7 @@ PrefabInstance:
     - target: {fileID: 4253286032896469752, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: m_compositeColliderID
-      value: -3446
+      value: -3854
       objectReference: {fileID: 0}
     - target: {fileID: 5402702126311328344, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
@@ -434,16 +394,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_spine
       value: 
-      objectReference: {fileID: 8845640313807356449}
+      objectReference: {fileID: 0}
     - target: {fileID: 2453714556978336882, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: m_physics
       value: 
-      objectReference: {fileID: 7670314770483605262}
+      objectReference: {fileID: 0}
     - target: {fileID: 2453714556978336882, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: m_animation
-      value: Damage
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 830572874334017863, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
@@ -454,12 +414,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_character
       value: 
-      objectReference: {fileID: 8881391243336259774}
+      objectReference: {fileID: 0}
     - target: {fileID: 1785348653785825992, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: m_source
       value: 
-      objectReference: {fileID: 7670314770483605262}
+      objectReference: {fileID: 0}
     - target: {fileID: 6429168944432162689, guid: 271305cd53b98884193ac5df551a3a07,
         type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.size
@@ -752,12 +712,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 271305cd53b98884193ac5df551a3a07, type: 3}
---- !u!4 &3456071863341190403 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6205689033887809484, guid: 271305cd53b98884193ac5df551a3a07,
-    type: 3}
-  m_PrefabInstance: {fileID: 8784664974967960271}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4793267447275826273 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4281934890231291566, guid: 271305cd53b98884193ac5df551a3a07,
@@ -770,45 +724,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6621485675460028093 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2453714556978336882, guid: 271305cd53b98884193ac5df551a3a07,
-    type: 3}
-  m_PrefabInstance: {fileID: 8784664974967960271}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3136474910394752645 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5940134728979377226, guid: 271305cd53b98884193ac5df551a3a07,
-    type: 3}
-  m_PrefabInstance: {fileID: 8784664974967960271}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &7644015684586278188 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 1440476246273196003, guid: 271305cd53b98884193ac5df551a3a07,
     type: 3}
   m_PrefabInstance: {fileID: 8784664974967960271}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8943861846611835279 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 429984595349359424, guid: 271305cd53b98884193ac5df551a3a07,
-    type: 3}
-  m_PrefabInstance: {fileID: 8784664974967960271}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da3778b9d8e916d40b3e6efa0d7ba423, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

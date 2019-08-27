@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Refactor.DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Characters.Enemies;
 
 
 public class AIBrainHandler : MonoBehaviour
