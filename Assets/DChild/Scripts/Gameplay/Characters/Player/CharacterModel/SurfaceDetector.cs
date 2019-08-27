@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters.Players
 
         private void OnSensorCast(object sender, RaySensorCastEventArgs eventArgs)
         {
-            var surfaceData = m_sensor.GetProminentHitCollider().GetComponentInParent<Surface>()?.data ?? null;
+            var surfaceData = m_sensor.GetProminentHitCollider()?.GetComponentInParent<Surface>()?.data ?? null;
             if (surfaceData != null && m_currentSurface != surfaceData)
             {
                 m_currentSurface = surfaceData;

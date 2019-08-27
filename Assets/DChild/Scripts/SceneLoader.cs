@@ -17,11 +17,15 @@ namespace DChild
         private SceneInfo m_mainMenu;
 
         private string m_activeZone;
+#if UNITY_EDITOR
+        [SerializeField]
+#endif
+        private bool m_gameplaySceneActive;
 
         public string activeZone => m_activeZone;
 
 #if UNITY_EDITOR
-        public void SetAsActiveZone(string sceneName) => m_activeZone = sceneName; 
+        public void SetAsActiveZone(string sceneName) => m_activeZone = sceneName;
 #endif
 
         public void LoadZone(string sceneName, bool withLoadingScene)
@@ -34,9 +38,10 @@ namespace DChild
                     m_activeZone = string.Empty;
                 }
 
-                if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
+                if (m_gameplaySceneActive == false)
                 {
                     LoadingHandle.LoadScenes(m_gameplayScene.sceneName);
+                    m_gameplaySceneActive = true;
                 }
                 LoadingHandle.LoadScenes(sceneName);
                 SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
