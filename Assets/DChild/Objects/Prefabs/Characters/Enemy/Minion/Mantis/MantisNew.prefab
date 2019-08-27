@@ -43,7 +43,7 @@ MonoBehaviour:
   m_info:
     damage:
     - m_type: 0
-      m_damage: 25
+      m_value: 0
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
@@ -62,7 +62,6 @@ MonoBehaviour:
   m_centerMass: {fileID: 5376872238913969167}
   m_health: {fileID: 6744514784847035948}
   m_resistance: {fileID: 3032839571073919987}
-  m_flinchHandler: {fileID: 8064797495874385099}
 --- !u!114 &7655086983175225472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +128,9 @@ MonoBehaviour:
     m_max: 0
   m_legCollision: {fileID: 7172163306269167637}
   m_legCollider: {fileID: 7172163306269167636}
+  m_legColliderLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &3032839571073919987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,34 +151,8 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: m_resistance
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.AttackType,
-        Assembly-CSharp],[System.Single, mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Combat.AttackType,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  m_useType: 0
+    SerializationNodes: []
+  m_data: {fileID: 0}
 --- !u!1 &5350243846249978283
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,8 +255,6 @@ MonoBehaviour:
   m_animator: {fileID: 7764022920659999263}
   m_bodyDuration:
     m_startTime: 3
-  m_bodyCollider: {fileID: 2318906633684215087}
-  m_hitBox: {fileID: 5227002190324347764}
 --- !u!114 &374050820659391438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,6 +445,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7196267153610012666}
     m_Modifications:
+    - target: {fileID: 1372897860477990631, guid: 280b0c7a9d1187d43b4fe329738a72a8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.6669589
+      objectReference: {fileID: 0}
+    - target: {fileID: 1372897860477990631, guid: 280b0c7a9d1187d43b4fe329738a72a8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.055790804
+      objectReference: {fileID: 0}
     - target: {fileID: 4187040343650580005, guid: 280b0c7a9d1187d43b4fe329738a72a8,
         type: 3}
       propertyPath: m_Name
@@ -530,16 +514,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1372897860477990631, guid: 280b0c7a9d1187d43b4fe329738a72a8,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.6669589
-      objectReference: {fileID: 0}
-    - target: {fileID: 1372897860477990631, guid: 280b0c7a9d1187d43b4fe329738a72a8,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.055790804
       objectReference: {fileID: 0}
     - target: {fileID: 4187040343650580007, guid: 280b0c7a9d1187d43b4fe329738a72a8,
         type: 3}
@@ -2879,7 +2853,7 @@ PrefabInstance:
     - target: {fileID: 4261339568013951279, guid: 280b0c7a9d1187d43b4fe329738a72a8,
         type: 3}
       propertyPath: m_compositeColliderID
-      value: -50294
+      value: -288180
       objectReference: {fileID: 0}
     - target: {fileID: 2980067910926340757, guid: 280b0c7a9d1187d43b4fe329738a72a8,
         type: 3}
@@ -3288,12 +3262,6 @@ PrefabInstance:
       objectReference: {fileID: 7172163304336055503}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 280b0c7a9d1187d43b4fe329738a72a8, type: 3}
---- !u!50 &6895892598969181893 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 441597185226886189, guid: 280b0c7a9d1187d43b4fe329738a72a8,
-    type: 3}
-  m_PrefabInstance: {fileID: 6454783636533111528}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5376872238913969167 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1372897860477990631, guid: 280b0c7a9d1187d43b4fe329738a72a8,
@@ -3372,12 +3340,6 @@ PolygonCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 6454783636533111528}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &7289607214216852047 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4375841491898751143, guid: 280b0c7a9d1187d43b4fe329738a72a8,
-    type: 3}
-  m_PrefabInstance: {fileID: 6454783636533111528}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7172163304336055503 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4187040343650580007, guid: 280b0c7a9d1187d43b4fe329738a72a8,
@@ -3390,6 +3352,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!60 &9080834891602578411 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 2852578172677824771, guid: 280b0c7a9d1187d43b4fe329738a72a8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6454783636533111528}
+  m_PrefabAsset: {fileID: 0}
 --- !u!60 &2015351348897944570 stripped
 PolygonCollider2D:
   m_CorrespondingSourceObject: {fileID: 4783958442964810002, guid: 280b0c7a9d1187d43b4fe329738a72a8,
@@ -3414,21 +3382,15 @@ PolygonCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 6454783636533111528}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6327373407543114564 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1034885717124403628, guid: 280b0c7a9d1187d43b4fe329738a72a8,
+--- !u!60 &7289607214216852047 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4375841491898751143, guid: 280b0c7a9d1187d43b4fe329738a72a8,
     type: 3}
   m_PrefabInstance: {fileID: 6454783636533111528}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!60 &9080834891602578411 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 2852578172677824771, guid: 280b0c7a9d1187d43b4fe329738a72a8,
+--- !u!70 &7172163306269167636 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4187040343806229244, guid: 280b0c7a9d1187d43b4fe329738a72a8,
     type: 3}
   m_PrefabInstance: {fileID: 6454783636533111528}
   m_PrefabAsset: {fileID: 0}
@@ -3444,12 +3406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2318906633684215087 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8772333437702115271, guid: 280b0c7a9d1187d43b4fe329738a72a8,
-    type: 3}
-  m_PrefabInstance: {fileID: 6454783636533111528}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1568950489736693733 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5500574841757052173, guid: 280b0c7a9d1187d43b4fe329738a72a8,
@@ -3474,15 +3430,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &5227002190324347764 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1232285666540771740, guid: 280b0c7a9d1187d43b4fe329738a72a8,
+--- !u!50 &6895892598969181893 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 441597185226886189, guid: 280b0c7a9d1187d43b4fe329738a72a8,
     type: 3}
   m_PrefabInstance: {fileID: 6454783636533111528}
   m_PrefabAsset: {fileID: 0}
---- !u!70 &7172163306269167636 stripped
-CapsuleCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4187040343806229244, guid: 280b0c7a9d1187d43b4fe329738a72a8,
+--- !u!114 &6327373407543114564 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1034885717124403628, guid: 280b0c7a9d1187d43b4fe329738a72a8,
     type: 3}
   m_PrefabInstance: {fileID: 6454783636533111528}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
