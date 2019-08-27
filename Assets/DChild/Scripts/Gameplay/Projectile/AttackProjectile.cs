@@ -54,7 +54,7 @@ namespace DChild.Gameplay.Projectiles
                     var damage = m_data.damage;
                     for (int i = 0; i < damage.Length; i++)
                     {
-                        AttackerInfo info = new AttackerInfo(transform.position, 0, 1, damage[i]);
+                        AttackerCombatInfo info = new AttackerCombatInfo(transform.position, 0, 1, damage[i]);
                         var targetInfo = new TargetInfo(m_cacheToDamage.damageable, m_cacheToDamage.defense.damageReduction);
                         var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
                         CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));

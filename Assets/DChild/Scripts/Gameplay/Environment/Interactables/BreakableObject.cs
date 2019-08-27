@@ -8,7 +8,7 @@
 
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using Refactor.DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
