@@ -5,8 +5,7 @@ using System.Collections.Generic;
 
 namespace Anima2D
 {
-#if UNITY_EDITOR
-    [CanEditMultipleObjects]
+	[CanEditMultipleObjects]
 	[CustomEditor(typeof(Bone2D))]
 	public class Bone2DEditor : Editor
 	{
@@ -33,8 +32,8 @@ namespace Anima2D
 		{
 			Tools.hidden = false;
 		}
-
-        override public void OnInspectorGUI()
+		
+		override public void OnInspectorGUI()
 		{
 			bool childChanged = false;
 			
@@ -81,8 +80,8 @@ namespace Anima2D
 				BoneUtils.OrientToChild(m_Bone,true,"set child",false);
 			}
 		}
-
-        void OnSceneGUI()
+		
+		void OnSceneGUI()
 		{
 			if(Tools.current == Tool.Move)
 			{
@@ -128,6 +127,5 @@ namespace Anima2D
 				Tools.hidden = false;
 			}
 		}
-    }
-#endif
+	}
 }

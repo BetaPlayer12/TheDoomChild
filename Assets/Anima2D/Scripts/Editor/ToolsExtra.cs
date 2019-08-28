@@ -5,8 +5,7 @@ using System.Collections;
 
 namespace Anima2D
 {
-#if UNITY_EDITOR
-    [InitializeOnLoad]
+	[InitializeOnLoad]
 	public class ToolsExtra
 	{
 		static PropertyInfo s_ViewToolActivePropertyInfo;
@@ -22,5 +21,4 @@ namespace Anima2D
 			}
 		}
 	}
-#endif
 }

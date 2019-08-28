@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters;
-using UnityChan;
+//using UnityChan;
 
 public class Cloth2D : MonoBehaviour {
     private Animator m_animator;
