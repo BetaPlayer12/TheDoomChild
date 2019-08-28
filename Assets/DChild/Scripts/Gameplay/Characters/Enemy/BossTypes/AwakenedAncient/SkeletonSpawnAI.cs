@@ -151,6 +151,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
         private bool m_spawnDone;
+        private bool m_isRunAttacking;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -240,13 +241,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
-        private IEnumerator Wait()
-        {
-            while (m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete)
-            {
-                yield return null;
-            }
-        }
+        //private IEnumerator Wait()
+        //{
+        //    while (m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete)
+        //    {
+        //        yield return null;
+        //    }
+        //}
 
         private IEnumerator SpawnRoutine()
         {
@@ -278,15 +279,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RunAttackRoutine()
         {
             Debug.Log("DO RUN ATTACK SKELETON");
+            m_isRunAttacking = true;
             //MoveOnGround(m_targetInfo.position, m_info.run.speed);
             GetComponent<IsolatedPhysics2D>().AddForce((Vector2.right * transform.localScale.x) * 15, ForceMode2D.Impulse);
             m_animation.SetAnimation(0, m_info.runAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.runAttack.animation);
-            m_movement.Stop();
             Debug.Log("STOP RUN ATTACK SKELETON");
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
+            m_isRunAttacking = false;
+            m_movement.Stop();
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         protected override void Start()
@@ -310,7 +313,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            if (m_spawnDone)
+            if (m_spawnDone && !m_isRunAttacking)
             {
                 switch (m_stateHandle.currentState)
                 {
