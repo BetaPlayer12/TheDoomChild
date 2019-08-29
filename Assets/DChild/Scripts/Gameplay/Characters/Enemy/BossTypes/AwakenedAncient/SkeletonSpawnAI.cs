@@ -379,8 +379,16 @@ namespace DChild.Gameplay.Characters.Enemies
                                     else
                                     {
                                         m_animation.EnableRootMotion(false, false);
-                                        m_animation.SetAnimation(0, m_info.run.animation, true);
-                                        m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                        if (!IsTargetInRange(m_info.targetDistanceTolerance))
+                                        {
+                                            m_animation.SetAnimation(0, m_info.run.animation, true);
+                                            m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                        }
+                                        else
+                                        {
+                                            m_animation.SetAnimation(0, m_info.move.animation, true);
+                                            m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                        }
                                     }
                                 }
                                 else
