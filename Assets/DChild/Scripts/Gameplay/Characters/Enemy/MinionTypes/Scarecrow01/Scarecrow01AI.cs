@@ -225,7 +225,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
 
-                    StartCoroutine(Wait()); //This is just to fix the transition issue with attacking
+                    //StartCoroutine(Wait()); //This is just to fix the transition issue with attacking
                     m_movement.Stop();
 
                     switch (m_attackDecider.chosenAttack.attack)

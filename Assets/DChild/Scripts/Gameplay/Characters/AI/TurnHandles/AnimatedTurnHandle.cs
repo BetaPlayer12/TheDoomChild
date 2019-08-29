@@ -22,6 +22,7 @@ namespace DChild.Gameplay.Characters
         public void Execute(string animation)
         {
             m_animation.SetAnimation(0, animation, false);
+            m_animation.AddEmptyAnimation(0, 0, 0);
             StartCoroutine(TurnRoutine());
         }
 

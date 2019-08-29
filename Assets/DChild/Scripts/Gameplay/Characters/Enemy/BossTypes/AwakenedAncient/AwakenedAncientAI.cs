@@ -175,7 +175,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private int m_tombSize;
         private int m_currentTombSize;
-        private GameObject[] m_tombs;
+        private List<GameObject> m_tombs;
 
         [SerializeField]
         private List<ParticleSystem> m_summonFX;
@@ -258,6 +258,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
+
+            m_tombs = new List<GameObject>();
 
             if (m_animation.skeletonAnimation == null) return;
 
@@ -416,17 +418,30 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
                 tomb.GetComponent<TombAttack>().GetTarget(m_targetInfo);
+                m_tombs.Add(tomb);
             }
             //m_animation.SetAnimation(0, m_info.burrowIdleAnimation, true);
             //yield return null;
-            yield return new WaitForSeconds(5f);
-            //Debug.Log("Waited seconds");
+            //yield return new WaitForSeconds(5f);
+            while (m_tombs.Count > 0)
+            {
+                for (int i = 0; i < m_tombs.Count; i++)
+                {
+                    if (m_tombs[i] == null)
+                    {
+                        m_tombs.RemoveAt(i);
+                    }
+                }
+                yield return null;
+            }
+            //Debug.Log("Waited for Tomb Attack to Finish");
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_UNBURROW);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
             m_currentState = State.ReevaluateSituation;
             yield return null;
+            m_tombs.Clear();
         }
 
         private IEnumerator SkeletonSummonRoutine()
@@ -593,12 +608,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             switch (m_attackDecider.chosenAttack.attack)
                             {
                                 case Attack.GroundSlam:
-                                    //if (Wait() && !m_wallSensor.isDetecting)
-                                    //{
-                                    //    //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
-                                    //    StartCoroutine(GroundAttackRoutine());
-                                    //    WaitTillAttackEnd(Attack.GroundSlam);
-                                    //}
+                                    if (Wait() && !m_wallSensor.isDetecting)
+                                    {
+                                        //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
+                                        StartCoroutine(GroundAttackRoutine());
+                                        WaitTillAttackEnd(Attack.GroundSlam);
+                                    }
                                     break;
                                 case Attack.Spit:
                                     if (Wait() && !m_wallSensor.isDetecting)
@@ -663,7 +678,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
                         }
-                        else
+                        else //hail santa
                         {
                             m_currentState = State.Turning;
                             m_movementHandle.Stop();
