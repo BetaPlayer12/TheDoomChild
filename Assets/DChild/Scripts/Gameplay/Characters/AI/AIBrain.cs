@@ -19,7 +19,7 @@ namespace DChild.Gameplay.Characters.AI
             [System.Serializable]
             public abstract class SkeletonBaseInfo
             {
-//#if UNITY_EDITOR
+                //#if UNITY_EDITOR
                 protected SkeletonDataAsset m_skeletonDataAsset;
 
                 public void SetData(SkeletonDataAsset skeletonData) => m_skeletonDataAsset = skeletonData;
@@ -45,7 +45,7 @@ namespace DChild.Gameplay.Characters.AI
                     }
                     return list;
                 }
-//#endif
+                //#endif
             }
 
             [System.Serializable, HideReferenceObjectPicker]
@@ -92,7 +92,7 @@ namespace DChild.Gameplay.Characters.AI
             [SerializeField, PreviewField, OnValueChanged("Initialize")]
             protected SkeletonDataAsset m_skeletonDataAsset;
 
-//#if UNITY_EDITOR
+            //#if UNITY_EDITOR
             protected IEnumerable GetEvents()
             {
                 ValueDropdownList<string> list = new ValueDropdownList<string>();
@@ -114,7 +114,7 @@ namespace DChild.Gameplay.Characters.AI
                 }
                 return list;
             }
-//#endif
+            //#endif
 
             public abstract void Initialize();
         }
@@ -125,10 +125,10 @@ namespace DChild.Gameplay.Characters.AI
         protected SpineRootAnimation m_animation;
         [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
         private AIData m_data;
-//#if UNITY_EDITOR
+        //#if UNITY_EDITOR
         [ShowInInspector, InlineEditor, TabGroup("Data")]
         private AIData m_inlineEditor;
-//#endif
+        //#endif
 
         [ShowInInspector, HideInEditorMode, TabGroup("Data")]
         protected T m_info;
@@ -145,6 +145,7 @@ namespace DChild.Gameplay.Characters.AI
         {
             m_info = (T)m_data.info;
             m_info.Initialize();
+            m_character.SetID(m_data.bestiaryData.id);
         }
 
         protected virtual void Awake()
