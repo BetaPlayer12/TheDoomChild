@@ -1,7 +1,5 @@
-﻿using System;
-using DChild.Gameplay.Characters.AI;
+﻿using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.Combat.StatusInfliction;
 using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft;
@@ -28,9 +26,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
     public abstract class Enemy : CombatCharacter, IDamageDealer
     {
-        [SerializeField, TitleGroup("Enemy")]
-        private SoulEssenceDropInfo m_soulEssence;
-
         [SerializeField, TitleGroup("Stat"), InlineEditor(InlineEditorModes.GUIOnly, Expanded = true)]
         protected BasicHealth m_health;
 
@@ -46,11 +41,9 @@ namespace DChild.Gameplay.Characters.Enemies
         public ICappedStat health => m_health;
         public bool waitForBehaviourEnd => m_waitForBehaviourEnd;
         public override bool isAlive => (m_health?.currentValue ?? 1) > 0;
-        public override IStatusEffectState statusEffectState => null;
         public abstract EnemyType enemyType { get; }
         public abstract void InitializeAs(bool isAlive);
         protected abstract new CombatCharacterAnimation animation { get; }
-        public SoulEssenceDropInfo soulEssence => m_soulEssence;
 
         public override void DisableController() => m_brain.Enable(false);
         public override void EnableController() => m_brain.Enable(true);
@@ -92,9 +85,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!targetDefense.isInvulnerable)
             {
-                AttackInfo info = new AttackInfo(position, 0, 1, m_currentDamage);
+                AttackerCombatInfo info = new AttackerCombatInfo(position, 0, 1, m_currentDamage);
                 var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo.target, result));
+                CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
             }
         }
 

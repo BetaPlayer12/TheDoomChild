@@ -18,16 +18,30 @@ namespace DChild.Menu.Bestiary
         private Button m_button;
         [SerializeField, OnValueChanged("UpdateInteractability")]
         private bool m_isInteractable;
+        private Canvas m_canvas;
 
         public BestiaryData data => m_data;
 
-        public void SetData(BestiaryData data)
+        public void Show()
         {
-            m_data = data;
-            m_info.SetInfo(data);
+            m_canvas.enabled = true;
         }
 
-        public void SetInteractability(bool isInteractable)
+        public void Hide()
+        {
+            m_canvas.enabled = false;
+        }
+
+        public void SetData(BestiaryData data)
+        {
+            if (m_data != data)
+            {
+                m_data = data;
+                m_info.SetInfo(data);
+            }
+        }
+
+        public void SetInteractable(bool isInteractable)
         {
             m_isInteractable = isInteractable;
             UpdateInteractability();
@@ -55,6 +69,7 @@ namespace DChild.Menu.Bestiary
         private void Awake()
         {
             m_button = GetComponent<Button>();
+            m_canvas = GetComponent<Canvas>();
         }
 
         private void Start()

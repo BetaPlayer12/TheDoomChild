@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChildEditor.Toolkit
 {
+
     public class ObjectCreationToolkit
     {
         [MenuItem("Tools/Kit/Create/Isolated Object")]

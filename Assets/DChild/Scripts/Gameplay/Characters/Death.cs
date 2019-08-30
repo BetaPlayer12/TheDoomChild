@@ -28,8 +28,7 @@ public class Death : MonoBehaviour, IEventModule
     [SerializeField]
     private CharacterPhysics2D m_physics;
 
-
-    private IFacing m_characterFacing;
+    //private IFacing m_characterFacing;
 
     public void ConnectEvents()
     {
@@ -39,21 +38,21 @@ public class Death : MonoBehaviour, IEventModule
 
     private void DeathTrigger(object sender, EventActionArgs eventArgs)
     {
-        Debug.Log("DEAD");
-        m_physics.SetVelocity(0, 0);
-        m_characterFacing = m_player;
-        m_movementController.SetActive(false);
-        m_hitBox.SetActive(false);
-        m_hitCollider.SetActive(false);
-        if (m_characterFacing.currentFacingDirection == HorizontalDirection.Right)
-        {
-            m_spineRoot.SetAnimation(0, "Death_Instant_Right", false, 0);
-        }
-        if (m_characterFacing.currentFacingDirection == HorizontalDirection.Left)
-        {
-            m_spineRoot.SetAnimation(0, "Death_Instant_Left", false, 0);
-        }
-        GameEventMessage.SendEvent("Game Over");
+        //Debug.Log("DEAD");
+        //m_physics.SetVelocity(0, 0);
+        //m_characterFacing = m_player;
+        //m_movementController.SetActive(false);
+        //m_hitBox.SetActive(false);
+        //m_hitCollider.SetActive(false);
+        //if (m_characterFacing.currentFacingDirection == HorizontalDirection.Right)
+        //{
+        //    m_spineRoot.SetAnimation(0, "Death_Instant_Right", false, 0);
+        //}
+        //if (m_characterFacing.currentFacingDirection == HorizontalDirection.Left)
+        //{
+        //    m_spineRoot.SetAnimation(0, "Death_Instant_Left", false, 0);
+        //}
+
     }
 
 }

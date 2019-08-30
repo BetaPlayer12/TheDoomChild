@@ -276,5 +276,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //skeletonAnimation.AnimationState.Event += HandleEvent;
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

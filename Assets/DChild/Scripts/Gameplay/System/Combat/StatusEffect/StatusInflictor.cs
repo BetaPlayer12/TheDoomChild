@@ -1,60 +1,101 @@
-﻿using System;
-using Holysoft.Event;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace DChild.Gameplay.Combat.StatusInfliction
+namespace DChild.Gameplay.Combat.StatusAilment
 {
-    [System.Serializable]
-    public struct StatusInflictionInfo
+    public class StatusInflictor : SerializedMonoBehaviour
     {
         [SerializeField]
-        private StatusEffectType m_effect;
-        [SerializeField, Range(0.1f, 100f)]
-        private float m_chance;
+        private StatusEffectChanceData m_data;
+        [ShowInInspector, HideInEditorMode]
+        private List<StatusEffectChance> m_statusInflictions;
 
-        public StatusInflictionInfo(StatusEffectType m_effect, float m_chance)
+        public void SetInflictionList(IReadOnlyList<StatusEffectChance> list)
         {
-            this.m_effect = m_effect;
-            this.m_chance = m_chance;
+            m_statusInflictions.Clear();
+            m_statusInflictions.AddRange(list);
         }
 
-        public StatusEffectType effect => m_effect;
-        public float chance
+        public void SetInfliction(StatusEffectType type, int resistanceValue)
         {
-            get => m_chance; set
+            resistanceValue = Mathf.Clamp(resistanceValue, 0, 100);
+            if (resistanceValue == 0)
             {
-                m_chance = Mathf.Clamp01(value);
+                if (Contains(type, out int index))
+                {
+                    m_statusInflictions.RemoveAt(index);
+                }
             }
-        }
-    }
-
-    public class StatusInflictor : MonoBehaviour
-    {
-        [SerializeField]
-        private StatusInflictionInfo[] m_statusToInflict;
-
-        private IAttacker m_source;
-
-        public void InflictStatusTo(IStatusReciever reciever) => GameplaySystem.combatManager.InflictStatusTo(reciever, m_statusToInflict);
-
-        private void OnAttackerAttacked(object sender, CombatConclusionEventArgs eventArgs)
-        {
-            if (DChildUtility.HasInterface<IStatusReciever>(eventArgs.target))
+            else
             {
-                InflictStatusTo((IStatusReciever)eventArgs.target);
+                if (Contains(type, out int index))
+                {
+                    var info = m_statusInflictions[index];
+                    info.chance = resistanceValue;
+                    m_statusInflictions[index] = info;
+                }
+                else
+                {
+                    m_statusInflictions.Add(new StatusEffectChance(type, resistanceValue));
+                }
             }
         }
 
-        private void OnEnable()
+        public void SetData(StatusEffectChanceData data)
         {
-            m_source = GetComponentInParent<IAttacker>();
-            m_source.TargetDamaged += OnAttackerAttacked;
+            if (m_data != data)
+            {
+                m_data = data;
+                CopyData();
+            }
         }
 
-        private void OnDisable()
+        private bool Contains(StatusEffectType type, out int index)
         {
-            m_source.TargetDamaged += OnAttackerAttacked;
+            for (int i = 0; i < m_statusInflictions.Count; i++)
+            {
+                if (m_statusInflictions[i].type == type)
+                {
+                    index = i;
+                    return true;
+                }
+            }
+
+            index = -1;
+            return false;
+        }
+
+        private void CopyData()
+        {
+            m_statusInflictions.Clear();
+            var chances = m_data.chance;
+            foreach (var key in chances.Keys)
+            {
+                m_statusInflictions.Add(new StatusEffectChance(key, chances[key]));
+            }
+        }
+
+        private void OnTargetDamage(object sender, CombatConclusionEventArgs eventArgs)
+        {
+            if (m_statusInflictions.Count > 0)
+            {
+                if (eventArgs.target.instance.isAlive && eventArgs.target.statusEffectReciever != null)
+                {
+                    GameplaySystem.combatManager.Inflict(eventArgs.target.statusEffectReciever, m_statusInflictions.ToArray());
+                }
+            }
+        }
+
+        private void Awake()
+        {
+            GetComponent<IAttacker>().TargetDamaged += OnTargetDamage; 
+            m_statusInflictions = new List<StatusEffectChance>();
+            if (m_data != null)
+            {
+                CopyData();
+            }
         }
     }
 }

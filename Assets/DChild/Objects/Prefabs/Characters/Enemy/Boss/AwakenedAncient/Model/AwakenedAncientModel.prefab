@@ -474,6 +474,7 @@ CompositeCollider2D:
       - {x: -0.6299356, y: -0.3705244}
       - {x: 0.95199573, y: -1.5648601}
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.000005
 --- !u!114 &8246593781607944904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,7 +498,7 @@ MonoBehaviour:
   - {fileID: 7378892735345575332}
   - {fileID: 7768226510420392132}
   - {fileID: 7346108296281517374}
-  m_compositeColliderID: -426604
+  m_compositeColliderID: -81804
   m_isInvulnerable: 0
   m_damageReduction: 0
 --- !u!114 &852638317347064398
@@ -512,6 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
 --- !u!1 &2042582994533542693
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,6 +993,7 @@ CompositeCollider2D:
   m_CompositePaths:
     m_Paths: []
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.000005
 --- !u!1 &3991463414736996413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1246,8 +1249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_leftRotation: 270
-  m_rightRotation: 90
+  m_leftRotation: 180
+  m_rightRotation: 0
 --- !u!1 &4925459705825582881
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,8 +1544,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_leftRotation: 270
-  m_rightRotation: 90
+  m_leftRotation: 90
+  m_rightRotation: 270
 --- !u!1 &5972141414170304800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2090,7 +2093,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 6a18d460a3377fd45805b709d8dffe13, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2098,6 +2101,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2557,6 +2561,11 @@ PrefabInstance:
         type: 3}
       propertyPath: looping
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085169527131617052, guid: b55fef2c8ec01a440b0e461d02e0560a,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b55fef2c8ec01a440b0e461d02e0560a, type: 3}

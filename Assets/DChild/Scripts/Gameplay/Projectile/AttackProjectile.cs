@@ -12,10 +12,10 @@ namespace DChild.Gameplay.Projectiles
         private bool m_canPassThroughEnvironment;
         [SerializeField]
         private bool m_isPiercing;
-       
+
 
         public bool canPassThroughEnvironment => m_canPassThroughEnvironment;
-        public bool isPiercing => m_isPiercing;  
+        public bool isPiercing => m_isPiercing;
     }
 
     public abstract class AttackProjectile : Projectile
@@ -54,9 +54,10 @@ namespace DChild.Gameplay.Projectiles
                     var damage = m_data.damage;
                     for (int i = 0; i < damage.Length; i++)
                     {
-                        AttackInfo info = new AttackInfo(transform.position, 0, 1, damage[i]);
-                        var result = GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(m_cacheToDamage.damageable, m_cacheToDamage.defense.damageReduction));
-                        CallAttackerAttacked(new CombatConclusionEventArgs(info, m_cacheToDamage.damageable, result));
+                        AttackerCombatInfo info = new AttackerCombatInfo(transform.position, 0, 1, damage[i]);
+                        var targetInfo = new TargetInfo(m_cacheToDamage.damageable, m_cacheToDamage.defense.damageReduction);
+                        var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                        CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
                     }
                 }
                 if (m_data.isPiercing == false)
@@ -69,10 +70,10 @@ namespace DChild.Gameplay.Projectiles
 
         private void OnValidate()
         {
-            if(m_data != null)
+            if (m_data != null)
             {
                 var physics = GetComponent<IsolatedPhysics2D>();
-                if(physics.simulateGravity != !m_data.hasConstantSpeed)
+                if (physics.simulateGravity != !m_data.hasConstantSpeed)
                 {
                     physics.simulateGravity = !m_data.hasConstantSpeed;
                 }

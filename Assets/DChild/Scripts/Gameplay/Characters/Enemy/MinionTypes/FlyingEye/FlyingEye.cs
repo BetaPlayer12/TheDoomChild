@@ -32,6 +32,11 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedPhysics2D>(), transform);
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 }

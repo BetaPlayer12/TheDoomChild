@@ -35,6 +35,7 @@ Transform:
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children:
   - {fileID: 521014357669795130}
+  - {fileID: 5592090463380574102}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4878,8 +4879,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_registerToWorldTime: 1
-  m_slowFactor: 0
-  m_fastFactor: 0
   m_fXObjects:
     m_particleSystems:
     - {fileID: 7443824131795795262}
@@ -4934,9 +4933,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_poolableItemData: {fileID: 11400000, guid: 52869b313e6a95c45b34478f9fa48e5f, type: 2}
+  m_waitForParticlesEnd: 0
   m_particleSystem: {fileID: 0}
   m_model: {fileID: 0}
   m_data: {fileID: 11400000, guid: e8c13b2605b62ed4d9d93a63ba196721, type: 2}
+--- !u!1 &7800199856484723772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5592090463380574102}
+  - component: {fileID: 7388512784617842458}
+  m_Layer: 16
+  m_Name: EnvironmentCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5592090463380574102
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7800199856484723772}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3590177640453323991}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &7388512784617842458
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7800199856484723772}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.4434969, y: 0.15290534}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.097102344, y: 0.085591555}
+  m_EdgeRadius: 0
 --- !u!1001 &1432087052135882879
 PrefabInstance:
   m_ObjectHideFlags: 0

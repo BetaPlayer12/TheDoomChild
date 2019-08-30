@@ -4,13 +4,13 @@ using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using Refactor.DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Refactor.DChild.Gameplay.Characters.AI
+namespace DChild.Gameplay.Characters.AI
 {
     public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain where T : IAIInfo
     {

@@ -3,7 +3,7 @@ using DChild.Gameplay.Combat;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Refactor.DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay.Environment
 {

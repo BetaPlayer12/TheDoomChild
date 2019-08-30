@@ -334,7 +334,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_target == null)
             {
-                m_target = m_character;
+                //m_target = m_character;
             }
             else if (m_target != null)
             {

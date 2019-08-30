@@ -19,13 +19,6 @@ namespace DChild.Gameplay.Cinematics
 
         public void SetDefaultCam(VirtualCamera vCam) => m_defaultCam = vCam;
 
-        public void AlignToPlayer()
-        {
-            var camPosition = m_mainCamera.transform.position;
-            var playerPosition = GameplaySystem.playerManager.player.position;
-            m_mainCamera.transform.position = new Vector3(playerPosition.x, playerPosition.y, camPosition.z);
-        }
-
         public void AllowTrackingTo(VirtualCamera vCam, Transform model) => vCam.Track(model);
 
         public void SetBlend(CinemachineBlendDefinition.Style style, float duration)

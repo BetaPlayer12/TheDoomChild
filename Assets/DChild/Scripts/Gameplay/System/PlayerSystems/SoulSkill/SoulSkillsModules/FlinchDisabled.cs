@@ -7,12 +7,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     {
         public void AttachTo(IPlayer player)
         {
-            player.characterState.canFlinch = false;
+            player.state.canFlinch = false;
         }
 
         public void DetachFrom(IPlayer player)
         {
-            player.characterState.canFlinch = true;
+            player.state.canFlinch = true;
         }
     }
 }

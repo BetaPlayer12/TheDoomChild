@@ -4,7 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IMainController 
+namespace DChild.Gameplay.Characters.Players.Modules
 {
-    event EventAction<EventActionArgs> ControllerDisabled;
+    public interface IMainController
+    {
+        void Enable();
+        void Disable();
+        event EventAction<EventActionArgs> ControllerDisabled;
+    }
 }

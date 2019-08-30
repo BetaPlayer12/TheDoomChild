@@ -1,5 +1,5 @@
 ﻿using Holysoft.Event;
-using Refactor.DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
@@ -15,6 +15,11 @@ namespace DChild.Gameplay.Systems
         public void DropLoot()
         {
             m_loot.DropLoot(transform.position);
+        }
+
+        public void SetLootData(LootData lootData)
+        {
+            m_loot = lootData;
         }
 
         private void Awake()
