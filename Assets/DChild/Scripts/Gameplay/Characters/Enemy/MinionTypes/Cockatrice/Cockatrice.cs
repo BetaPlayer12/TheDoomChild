@@ -235,5 +235,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_isStaticInitialized = true;
             }
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

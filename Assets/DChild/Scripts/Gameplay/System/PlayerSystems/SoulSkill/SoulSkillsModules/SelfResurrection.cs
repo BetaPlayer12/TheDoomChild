@@ -37,7 +37,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 var magic = m_reference.magic;
                 var toTransfer = Mathf.CeilToInt(magic.currentValue * m_magicTransfer);
                 magic.ReduceCurrentValue(toTransfer);
-                GameplaySystem.combatManager.Heal(m_reference, Mathf.CeilToInt(toTransfer * m_magicToHealthModifier));
+                GameplaySystem.combatManager.Heal(m_reference.healableModule, Mathf.CeilToInt(toTransfer * m_magicToHealthModifier));
             }
         }
 

@@ -19,8 +19,11 @@ namespace DChild.Gameplay
         private CharacterColliders m_colliders;
         [SerializeField]
         private HorizontalDirection m_facing = HorizontalDirection.Right;
+        private int m_ID;
+        private bool m_hasID;
 
         public event EventAction<FacingEventArgs> CharacterTurn;
+        public event EventAction<ObjectIDEventArgs> InstanceDestroyed;
 
         public IsolatedObject isolatedObject => m_isolatedObject;
         public IsolatedPhysics2D physics => m_physics;
@@ -29,10 +32,24 @@ namespace DChild.Gameplay
 
         public Transform centerMass => m_centerMass;
 
+        public int ID => m_ID;
+        public bool hasID => m_hasID;
+
+        public void SetID(int ID)
+        {
+            m_ID = ID;
+            m_hasID = true;
+        }
+
         public void SetFacing(HorizontalDirection facing)
         {
             m_facing = facing;
             CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
+        }
+
+        private void OnDestroy()
+        {
+            InstanceDestroyed?.Invoke(this, new ObjectIDEventArgs(this));
         }
 
         private void OnValidate()

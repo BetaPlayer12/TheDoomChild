@@ -1,5 +1,7 @@
 ﻿using Holysoft.Event;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,14 +32,16 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
             public override void Initialize()
             {
-                m_player.Damaged += OnDamaged;
-                m_player.CombatModeChanged += OnCombatModeChanged;
+                m_player.damageableModule.DamageTaken += OnDamaged;
+                //m_player.CombatModeChanged += OnCombatModeChanged;
             }
+
+           
 
             public override void Dispose()
             {
-                m_player.Damaged -= OnDamaged;
-                m_player.CombatModeChanged -= OnCombatModeChanged;
+                m_player.damageableModule.DamageTaken -= OnDamaged;
+                // m_player.CombatModeChanged -= OnCombatModeChanged;
             }
 
             private void OnCombatModeChanged(object sender, CombatStateEventArgs eventArgs)
@@ -46,29 +50,30 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 {
                     if (m_routine != null)
                     {
-                        m_player.StopCoroutine(m_routine);
+                        //m_player.StopCoroutine(m_routine);
                         m_routine = null;
                     }
                 }
                 else
                 {
-                    m_routine = m_player.StartCoroutine(ResetRoutine());
+                    //m_routine = m_player.StartCoroutine(ResetRoutine());
                 }
             }
 
-            private void OnDamaged(object sender, EventActionArgs eventArgs)
+            private void OnDamaged(object sender, Damageable.DamageEventArgs eventArgs)
             {
                 if (m_currentStacks < m_maxStacks)
                 {
                     m_currentStacks++;
-                    m_player.modifiers.damageModifier += m_increaseValue;
+                    //m_player.modifiers.damageModifier += m_increaseValue;
                 }
             }
+
 
             private IEnumerator ResetRoutine()
             {
                 yield return waitforSeconds;
-                m_player.modifiers.damageModifier -= m_increaseValue * m_currentStacks;
+               // m_player.modifiers.damageModifier -= m_increaseValue * m_currentStacks;
                 m_currentStacks = 0;
             }
         }

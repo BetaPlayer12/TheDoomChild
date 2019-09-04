@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using DChild.Gameplay.Inventories;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

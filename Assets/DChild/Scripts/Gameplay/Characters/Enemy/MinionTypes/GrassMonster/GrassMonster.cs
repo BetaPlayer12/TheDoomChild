@@ -165,7 +165,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_turn.LookAt(GameplaySystem.playerManager.player.position);
+            //m_turn.LookAt(GameplaySystem.playerManager.player.position);
         }
     }
 }

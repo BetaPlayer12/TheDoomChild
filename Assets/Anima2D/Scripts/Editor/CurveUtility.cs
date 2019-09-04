@@ -6,8 +6,7 @@ using System.Reflection;
 
 namespace Anima2D
 {
-#if UNITY_EDITOR
-    [InitializeOnLoad]
+	[InitializeOnLoad]
 	public class CurveUtility
 	{
 		static Type m_CurveUtilityType = typeof(EditorWindow).Assembly.GetType("UnityEditor.CurveUtility");
@@ -132,5 +131,4 @@ namespace Anima2D
 			return false;
 		}
 	}
-#endif
 }

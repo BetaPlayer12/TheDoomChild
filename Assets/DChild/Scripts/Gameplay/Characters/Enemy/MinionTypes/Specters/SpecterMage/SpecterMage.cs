@@ -53,7 +53,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_waitForBehaviourEnd = true;
             m_movement.Stop();
             yield return new WaitForSeconds(1f);
-            m_projectileLauncher.FireProjectileTo(m_spellProjectile.projectile, gameObject.scene, m_spellSpawnPoint.position, target.position, m_spellProjectile.speed);
+            //m_projectileLauncher.FireProjectileTo(m_spellProjectile.projectile, gameObject.scene, m_spellSpawnPoint.position, target.position, m_spellProjectile.speed);
             m_behaviour.SetActiveBehaviour(null);
             m_waitForBehaviourEnd = false;
         }
@@ -61,7 +61,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_projectileLauncher = new ProjectileLauncher();
+           // m_projectileLauncher = new ProjectileLauncher();
         }
     }
 

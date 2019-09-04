@@ -1,16 +1,19 @@
 ﻿using DChild.Configurations;
 using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Databases;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems;
+using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Inputs;
 using DChild.Serialization;
 using Holysoft.Gameplay.UI;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -23,7 +26,6 @@ namespace DChild.Gameplay
 
     public class GameplaySystem : MonoBehaviour
     {
-
         private GameplaySettings m_settings;
         private static DatabaseManager m_databaseManager;
 
@@ -38,6 +40,7 @@ namespace DChild.Gameplay
         private static PlayerManager m_playerManager;
         private static LootHandler m_lootHandler;
         private static GameplayModifiers m_modifiers;
+        private static ZoneMoverHandle m_zoneMover;
 
         public static ICombatManager combatManager => m_combatManager;
 
@@ -74,6 +77,7 @@ namespace DChild.Gameplay
             Time.timeScale = 1;
             m_playerManager?.EnableInput();
             isGamePaused = false;
+            GameSystem.SetCursorVisibility(false);
         }
 
         public static void PauseGame()
@@ -81,11 +85,17 @@ namespace DChild.Gameplay
             Time.timeScale = 0;
             m_playerManager?.DisableInput();
             isGamePaused = true;
+            GameSystem.SetCursorVisibility(true);
         }
 
         public static void LoadGame(CampaignSlot campaignSlot)
         {
 
+        }
+
+        public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
+        {
+            m_zoneMover.MoveCharacterToLocation(character, location, entranceType);
         }
 
         //Temp
@@ -108,10 +118,12 @@ namespace DChild.Gameplay
             AssignModule(out m_combatManager);
             AssignModule(out m_fxManager);
             AssignModule(out m_databaseManager);
+            AssignModule(out m_lootHandler);
             AssignModule(out m_cinema);
             AssignModule(out m_world);
             AssignModule(out m_simulation);
             AssignModule(out m_playerManager);
+            AssignModule(out m_zoneMover);
             //Debug.Log("Modules Assigned");
         }
 

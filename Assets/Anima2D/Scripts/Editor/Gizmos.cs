@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
@@ -41,8 +40,8 @@ namespace Anima2D
 		[UnityEditor.Callbacks.DidReloadScripts]
 		static void HierarchyChanged()
 		{
-			s_Bones = GameObject.FindObjectsOfType<Bone2D>().ToList();
-			s_Controls = GameObject.FindObjectsOfType<Control>().ToList();
+			s_Bones = EditorExtra.FindComponentsOfType<Bone2D>().ToList();
+			s_Controls = EditorExtra.FindComponentsOfType<Control>().ToList();
 
 			SceneView.RepaintAll();
 		}
@@ -277,4 +276,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

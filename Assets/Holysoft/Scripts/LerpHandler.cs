@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Holysoft
 {
-
     [System.Serializable]
     public class LerpHandler
     {

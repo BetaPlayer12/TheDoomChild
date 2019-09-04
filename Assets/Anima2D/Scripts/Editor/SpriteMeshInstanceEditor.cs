@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -7,10 +6,10 @@ using System.Collections.Generic;
 
 namespace Anima2D
 {
-    [DisallowMultipleComponent]
+	[DisallowMultipleComponent]
 	[CanEditMultipleObjects]
 	[CustomEditor(typeof(SpriteMeshInstance))]
-    public class SpriteMeshInstanceEditor : Editor
+	public class SpriteMeshInstanceEditor : Editor
 	{
 		SpriteMeshInstance m_SpriteMeshInstance;
 		SpriteMeshData m_SpriteMeshData;
@@ -269,4 +268,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

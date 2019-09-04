@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections;
@@ -24,7 +23,11 @@ namespace Anima2D
 		static EditorCallbacks()
 		{
 			EditorApplication.update += () => { update(); };
+#if UNITY_2019_1_OR_NEWER
+			SceneView.duringSceneGui += (sv) => { onSceneGUIDelegate(sv); };
+#else
 			SceneView.onSceneGUIDelegate += (sv) => { onSceneGUIDelegate(sv); };
+#endif
 #if UNITY_2018_1_OR_NEWER
 			EditorApplication.hierarchyChanged += () => { hierarchyChanged(); };
 #else
@@ -60,9 +63,9 @@ namespace Anima2D
 		[UnityEditor.Callbacks.DidReloadScripts]
 		static void HierarchyChanged()
 		{
-			s_Ik2Ds = GameObject.FindObjectsOfType<Ik2D>().ToList();
-			s_Bones = GameObject.FindObjectsOfType<Bone2D>().ToList();
-			s_Controls = GameObject.FindObjectsOfType<Control>().ToList();
+			s_Ik2Ds = EditorExtra.FindComponentsOfType<Ik2D>().ToList();
+			s_Bones = EditorExtra.FindComponentsOfType<Bone2D>().ToList();
+			s_Controls = EditorExtra.FindComponentsOfType<Control>().ToList();
 		}
 
 		static void UndoRedoPerformed()
@@ -236,4 +239,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

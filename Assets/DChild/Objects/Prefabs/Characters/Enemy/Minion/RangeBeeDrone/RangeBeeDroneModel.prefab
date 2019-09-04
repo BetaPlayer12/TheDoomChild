@@ -292,7 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_mask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
 --- !u!1 &4815587655526024151
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,7 +391,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 5.13}
   serializedVersion: 2
-  m_Radius: 24.31707
+  m_Radius: 35
 --- !u!114 &1221463063079220037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,6 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
 --- !u!50 &4055349373691877905
 Rigidbody2D:
   serializedVersion: 4
@@ -721,6 +722,7 @@ CompositeCollider2D:
       - {x: 0.1228158, y: 1.6174601}
       - {x: -0.0014593, y: 1.4718177}
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.000005
 --- !u!1 &7189003159738749311
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,6 +737,7 @@ GameObject:
   - component: {fileID: 5637387481399289546}
   - component: {fileID: 1788415349932028872}
   - component: {fileID: 9139688978606104867}
+  - component: {fileID: 6295226821927087126}
   m_Layer: 13
   m_Name: RangeBeeDroneModel
   m_TagString: Untagged
@@ -792,6 +795,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -870,6 +874,22 @@ MonoBehaviour:
   useY: 0
   rb: {fileID: 0}
   siblingBoneNames: []
+--- !u!114 &6295226821927087126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7189003159738749311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spine: {fileID: 0}
+  m_physics: {fileID: 0}
+  m_skeletonAnimation: {fileID: 0}
+  m_animation: 
 --- !u!1 &7299100510775145456
 GameObject:
   m_ObjectHideFlags: 0

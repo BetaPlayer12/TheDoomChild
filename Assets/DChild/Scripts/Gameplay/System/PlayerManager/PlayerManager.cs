@@ -11,18 +11,20 @@ namespace DChild.Gameplay.Systems
     public interface IPlayerManager
     {
         Player player { get; }
-        WholeNumber soulEssence { get; }
         IAutoReflexHandler autoReflex { get; }
         void Register(Player player);
+        PlayerCharacterOverride OverrideCharacterControls();
+        void StopCharacterControlOverride();
     }
 
     public class PlayerManager : MonoBehaviour, IGameplaySystemModule, IPlayerManager
     {
         [SerializeField, BoxGroup("Player Data")]
         private Player m_player;
-        [SerializeField, BoxGroup("Player Data")]
-        private WholeNumber m_soulEssence;
+        [SerializeField]
         private PlayerInput m_input;
+        [SerializeField]
+        private PlayerCharacterOverride m_overrideController;
 
         [SerializeField, HideInInspector]
         private PlayerStatUIHandler m_uiHandler;
@@ -30,11 +32,23 @@ namespace DChild.Gameplay.Systems
         private AutoReflexHandler m_autoReflex;
 
         public Player player => m_player;
-        public WholeNumber soulEssence => m_soulEssence;
         public IAutoReflexHandler autoReflex => m_autoReflex;
 
         public void DisableInput() => m_input?.Disable();
         public void EnableInput() => m_input?.Enable();
+
+        public PlayerCharacterOverride OverrideCharacterControls()
+        {
+            m_player.controller.Disable();
+            m_overrideController.enabled = true;
+            return m_overrideController;
+        }
+
+        public void StopCharacterControlOverride()
+        {
+            m_overrideController.enabled = false;
+            m_player.controller.Enable();
+        }
 
         public void Register(Player player)
         {
@@ -61,5 +75,7 @@ namespace DChild.Gameplay.Systems
         {
             ComponentUtility.AssignNullComponent(this, ref m_uiHandler, ComponentUtility.ComponentSearchMethod.Child);
         }
+
+     
     }
 }

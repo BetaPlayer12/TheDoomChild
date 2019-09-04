@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.Sprites;
 using UnityEditor;
@@ -9,9 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Anima2D
+namespace Anima2D 
 {
-    public class SpriteMeshEditorWindow : TextureEditorWindow
+	public class SpriteMeshEditorWindow : TextureEditorWindow
 	{		
 		public enum Mode {
 			Mesh,
@@ -1656,4 +1655,3 @@ namespace Anima2D
 		
 	}
 }
-#endif

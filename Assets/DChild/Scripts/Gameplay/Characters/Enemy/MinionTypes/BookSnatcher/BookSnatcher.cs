@@ -1,12 +1,9 @@
 ﻿using System.Collections;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.Characters.Enemies.Collections;
-using Sirenix.OdinInspector;
 using Spine.Unity.Modules;
 using UnityEngine;
 using DChild.Gameplay.Characters.AI;
-using DChild.Gameplay.Pooling;
-using Holysoft.Event;
+using System.Collections.Generic;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -212,6 +209,11 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         public void Move()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

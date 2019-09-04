@@ -6,8 +6,7 @@ using System.Collections.Generic;
 
 namespace Anima2D
 {
-#if UNITY_EDITOR
-    [InitializeOnLoad]
+	[InitializeOnLoad]
 	public class AnimationFixer
 	{
 		static AnimationFixer()
@@ -87,6 +86,5 @@ namespace Anima2D
 			AnimationUtility.onCurveWasModified += OnCurveWasModified;
 		}
 	}
-#endif
 }
 #endif

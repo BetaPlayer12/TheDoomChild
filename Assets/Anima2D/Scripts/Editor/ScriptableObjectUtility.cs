@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 namespace Anima2D
@@ -60,4 +59,3 @@ namespace Anima2D
 
 	}
 }
-#endif
