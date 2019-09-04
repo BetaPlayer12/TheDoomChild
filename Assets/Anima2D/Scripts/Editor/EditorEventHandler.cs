@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
@@ -87,7 +86,7 @@ namespace Anima2D
 		[UnityEditor.Callbacks.DidReloadScripts]
 		static void HierarchyChanged()
 		{
-			s_SpriteMeshInstances = GameObject.FindObjectsOfType<SpriteMeshInstance>().ToList();
+			s_SpriteMeshInstances = EditorExtra.FindComponentsOfType<SpriteMeshInstance>().ToList();
 		}
 
 		private static void HierarchyWindowItemCallback(int pID, Rect pRect)
@@ -329,4 +328,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

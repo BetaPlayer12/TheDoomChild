@@ -70,29 +70,25 @@ namespace DChild.Gameplay
                 yield return new WaitForSeconds(m_entranceWaitTime);
             }
 
-            if (GameSystem.IsCurrentZone(location.scene) == false)
+            controller.moveDirectionInput = 0;
+            currentVelocity = character.physics.velocity;
+            character.physics.SetVelocity(Vector2.zero);
+            character.physics.simulateGravity = false;
+            var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
+            groundednessHandle.enabled = false;
+            m_isSceneDone = false;
+            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
+            GameSystem.LoadZone(location.scene, true);
+
+            while (m_isSceneDone == false)
             {
-                controller.moveDirectionInput = 0;
-                currentVelocity = character.physics.velocity;
-                character.physics.SetVelocity(Vector2.zero);
-                character.physics.simulateGravity = false;
-                var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-                groundednessHandle.enabled = false;
-                m_isSceneDone = false;
-                GameSystem.LoadZone(location.scene, true);
-                while (m_isSceneDone == false)
-                {
-                    yield return null;
-                }
-                character.transform.position = location.position;
-                character.physics.SetVelocity(currentVelocity);
-                character.physics.simulateGravity = true;
-                groundednessHandle.enabled = true;
+                yield return null;
             }
-            else
-            {
-                character.transform.position = location.position;
-            }
+            character.transform.position = location.position;
+            character.physics.SetVelocity(currentVelocity);
+            character.physics.simulateGravity = true;
+            groundednessHandle.enabled = true;
+
 
             switch (location.exitDirection)
             {

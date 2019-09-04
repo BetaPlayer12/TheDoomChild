@@ -26,7 +26,8 @@ namespace DChild.Gameplay.Characters.Players
             WallStick,
             PlatformDrop,
             Flinch,
-            Death
+            Death,
+            Turn
         }
 
         [SerializeField]

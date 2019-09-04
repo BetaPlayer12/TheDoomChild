@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -6,9 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Anima2D
+namespace Anima2D 
 {
-    public class WeightEditor : WindowEditorTool
+	public class WeightEditor : WindowEditorTool
 	{
 		public SpriteMeshCache spriteMeshCache;
 
@@ -158,4 +157,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

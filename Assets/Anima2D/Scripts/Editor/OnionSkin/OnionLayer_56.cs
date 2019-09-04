@@ -1,5 +1,4 @@
 ﻿#if UNITY_5_6_OR_NEWER
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
@@ -191,5 +190,4 @@ namespace Anima2D
 		}
 	}
 }
-#endif
 #endif

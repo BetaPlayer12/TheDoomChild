@@ -290,6 +290,7 @@ namespace Anima2D
 				}
 
 				m_CurrentMesh.Clear();
+				m_CurrentMesh.UploadMeshData(false);
 				m_CurrentMesh.name = m_InitialMesh.name;
 				m_CurrentMesh.vertices = m_InitialMesh.vertices;
 				m_CurrentMesh.uv = m_InitialMesh.uv;
