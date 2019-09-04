@@ -74,7 +74,7 @@ namespace DChild
                 Plane xy = new Plane(cameraForward, point);
                 float distance;
                 xy.Raycast(ray, out distance);
-                transform.position = ray.GetPoint(distance);
+                transform.position = ray.GetPoint(distance) + m_offset3D;
             }
         }
     }

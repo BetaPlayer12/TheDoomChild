@@ -7,17 +7,19 @@ namespace DChild.Gameplay.Systems
 {
     public abstract class Loot : PoolableObject
     {
-        [SerializeField,MinValue(0.1f),BoxGroup("Basic Loot Info")]
+        [SerializeField, MinValue(0.1f), BoxGroup("Basic Loot Info")]
         private float m_pickUpVelocity;
         [SerializeField, BoxGroup("Basic Loot Info")]
         protected Rigidbody2D m_rigidbody;
+        [SerializeField, BoxGroup("Basic Loot Info")]
+        private Animator m_animator;
         private float m_originalDrag;
         private bool m_isPopping;
         private bool m_hasBeenPickUp;
 
         public static string objectTag => "Loot";
         private Collider2D m_collider;
-        private IPlayer m_pickedBy;
+        protected IPlayer m_pickedBy;
 
         public void DisableEnvironmentCollider() => m_collider.isTrigger = true;
         public void EnableEnvironmentCollider() => m_collider.isTrigger = false;
@@ -27,9 +29,13 @@ namespace DChild.Gameplay.Systems
             m_pickedBy = player;
             m_hasBeenPickUp = true;
             DisableEnvironmentCollider();
+            m_animator.SetBool("PickedUp",true);
         }
 
-        protected abstract void ApplyPickUp(IPlayer player);
+        protected virtual void ApplyPickUp()
+        {
+            m_animator.SetTrigger("Apply");
+        }
 
         public void Pop(Vector2 force)
         {
@@ -42,6 +48,7 @@ namespace DChild.Gameplay.Systems
             base.SpawnAt(position, rotation);
             m_rigidbody.drag = m_originalDrag;
             EnableEnvironmentCollider();
+            m_animator.SetBool("PickedUp", false);
             m_hasBeenPickUp = false;
             m_isPopping = true;
             m_pickedBy = null;
@@ -74,7 +81,7 @@ namespace DChild.Gameplay.Systems
         {
             if (collision.tag != "Sensor" && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                ApplyPickUp(m_pickedBy);
+                ApplyPickUp();
                 m_pickedBy = null;
             }
         }

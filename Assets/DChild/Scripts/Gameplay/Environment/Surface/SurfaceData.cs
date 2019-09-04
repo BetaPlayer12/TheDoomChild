@@ -17,18 +17,23 @@ namespace DChild.Gameplay.Environment
         }
 
         [SerializeField, HideReferenceObjectPicker]
-        private Dictionary<FXType, GameObject> m_list = new Dictionary<FXType, GameObject>();
+        private Dictionary<FXType, GameObject> m_fXlist = new Dictionary<FXType, GameObject>();
+        [SerializeField, HideReferenceObjectPicker]
+        private Dictionary<FXType, AudioClip> m_audiolist = new Dictionary<FXType, AudioClip>();
 
-        public GameObject GetFX(FXType type) => m_list[type];
+        public GameObject GetFX(FXType type) => m_fXlist[type];
+        public AudioClip GetAudio(FXType type) => m_audiolist[type];
 
-        [Button,PropertyOrder(-1)]
+        [Button, PropertyOrder(-1)]
         private void ResetValues()
         {
-            m_list.Clear();
+            m_fXlist.Clear();
+            m_audiolist.Clear();
             var size = (int)FXType._COUNT;
             for (int i = 0; i < size; i++)
             {
-                m_list.Add((FXType)i, null);
+                m_fXlist.Add((FXType)i, null);
+                m_audiolist.Add((FXType)i, null);
             }
         }
     }

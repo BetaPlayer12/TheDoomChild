@@ -9,10 +9,11 @@ namespace DChild.Gameplay.SoulEssence
         [SerializeField, Min(1)]
         private int m_value;
 
-        protected override void ApplyPickUp(IPlayer player)
+        protected override void ApplyPickUp()
         {
-            player.inventory.AddSoulEssence(m_value);
-            CallPoolRequest();
+            base.ApplyPickUp();
+            m_pickedBy.inventory.AddSoulEssence(m_value);
+            //CallPoolRequest();
         }
 
         //private void OnTriggerEnter2D(Collider2D collision)
