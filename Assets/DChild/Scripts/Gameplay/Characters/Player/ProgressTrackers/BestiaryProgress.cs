@@ -1,5 +1,6 @@
 ﻿using DChild.Menu.Bestiary;
 using DChild.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,23 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
+    public struct BestiaryUpdateEventArgs : IEventActionArgs
+    {
+        public BestiaryUpdateEventArgs(int iD) : this()
+        {
+            ID = iD;
+        }
+
+        public int ID { get; }
+    }
+
     public class BestiaryProgress : MonoBehaviour
     {
         [SerializeField]
         private BestiaryList m_list;
         [ShowInInspector, HideInEditorMode]
         private Dictionary<int, bool> m_progress;
+        public event EventAction<BestiaryUpdateEventArgs> NewUpdate;
 
         public BestiaryList list => m_list;
 
@@ -23,6 +35,7 @@ namespace DChild.Gameplay.Characters.Players
             if (m_progress.ContainsKey(ID))
             {
                 m_progress[ID] = value;
+                NewUpdate?.Invoke(this, new BestiaryUpdateEventArgs(ID));
             }
         }
 

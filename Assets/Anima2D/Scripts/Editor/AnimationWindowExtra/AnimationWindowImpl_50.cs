@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections;
@@ -194,16 +193,5 @@ namespace Anima2D
 			}
 			return 0f;
 		}
-		
-		public void CreateDefaultCurve(EditorCurveBinding binding)
-		{
-			Debug.Log("Anima2D: CreateDefaultCurve method not needed in 5.0");
-		}
-		
-		public void AddKey(EditorCurveBinding binding, float time)
-		{
-			Debug.Log("Anima2D: AddKey method not needed in 5.0");
-		}
 	}
 }
-#endif

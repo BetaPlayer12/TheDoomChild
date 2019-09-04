@@ -32,7 +32,7 @@ namespace DChild
         {
             if (withLoadingScene)
             {
-                if (m_activeZone != string.Empty)
+                if (m_activeZone != string.Empty && m_activeZone != sceneName)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;
@@ -43,12 +43,15 @@ namespace DChild
                     LoadingHandle.LoadScenes(m_gameplayScene.sceneName);
                     m_gameplaySceneActive = true;
                 }
-                LoadingHandle.LoadScenes(sceneName);
+                if (m_activeZone != sceneName)
+                {
+                    LoadingHandle.LoadScenes(sceneName);
+                }
                 SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
             }
             else
             {
-                if (m_activeZone != string.Empty)
+                if (m_activeZone != string.Empty && m_activeZone != sceneName)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;

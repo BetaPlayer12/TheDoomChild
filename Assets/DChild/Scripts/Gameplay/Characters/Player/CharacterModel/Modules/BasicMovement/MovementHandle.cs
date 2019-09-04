@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
+    //Modify
     public class MovementHandle : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField, ReadOnly]
@@ -22,6 +23,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private Character m_character;
         private Animator m_animator;
         private string m_speedParameter;
+        private string m_turnParameter;
         private int m_movingSpeedParameterValue;
 
         private bool m_hasStopped;
@@ -44,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_character = info.character;
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
+            m_turnParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Turn);
             info.groundednessHandle.LandExecuted += OnLand;
         }
 
@@ -91,7 +94,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                 m_state.isMoving = true;
                 m_hasStopped = false;
-                m_character.SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+                var newFacing = direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left;
+                if (m_character.facing != newFacing)
+                {
+                    m_animator.SetTrigger(m_turnParameter);
+                }
+                m_character.SetFacing(newFacing);
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
             }
         }

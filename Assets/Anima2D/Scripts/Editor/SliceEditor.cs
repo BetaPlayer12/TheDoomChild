@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Sprites;
@@ -85,4 +84,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

@@ -4,8 +4,7 @@ using System.Collections;
 
 namespace Anima2D
 {
-#if UNITY_EDITOR
-    public class AnimationBaker
+	public class AnimationBaker
 	{
 		[MenuItem("Window/Anima2D/Bake Animation", true)]
 		static bool BakeAnimationValidate()
@@ -63,5 +62,4 @@ namespace Anima2D
 			EditorUpdater.Update("", false);
 		}
 	}
-#endif
 }

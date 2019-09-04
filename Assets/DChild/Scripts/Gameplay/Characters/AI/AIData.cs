@@ -22,11 +22,11 @@ namespace DChild.Gameplay.Characters.AI
         [Button, PropertyOrder(-1)]
         private void Referesh()
         {
-            m_info.Initialize();
+            m_info?.Initialize();
         }
         private void OnEnable()
         {
-            m_info.Initialize();
+            m_info?.Initialize();
         }
 #endif
     }
