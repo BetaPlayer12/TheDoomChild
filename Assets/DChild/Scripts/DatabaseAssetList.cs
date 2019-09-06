@@ -39,8 +39,8 @@ namespace DChild
             }
         }
 
-        [ShowInInspector, ListDrawerSettings(OnTitleBarGUI = "TitleBar")]
-        private HashSet<T> m_hash = new HashSet<T>();
+        [ShowInInspector, ListDrawerSettings(OnTitleBarGUI = "TitleBar", DraggableItems = true)]
+        private List<T> m_hash = new List<T>();
 
         private void TitleBar()
         {

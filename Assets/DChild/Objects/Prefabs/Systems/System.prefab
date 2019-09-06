@@ -48,11 +48,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361bf799921acd8419c03fca16ed3f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_instanceCursor: {fileID: 0}
   m_introHandler:
     m_introScene:
       m_sceneName: _Scene Intro
       m_scenePath: Assets/DChild/Scenes/_Scene Intro.unity
-    m_hasPlayedIntro: 1
+    m_hasPlayedIntro: 0
 --- !u!114 &1849424553460633975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +80,7 @@ MonoBehaviour:
       Data: 0|Holysoft.Pooling.IPool[], HolysoftEditor
     - Name: 
       Entry: 12
-      Data: 5
+      Data: 4
     - Name: 
       Entry: 7
       Data: 1|DChild.Gameplay.FXPool, Assembly-CSharp
@@ -91,16 +92,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 2|DChild.Gameplay.Combat.StatusInfliction.StatusEffectPool, Assembly-CSharp
-    - Name: m_poolDuration
-      Entry: 4
-      Data: 5
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 3|DChild.Gameplay.Pooling.PoolableObjectPool, Assembly-CSharp
+      Data: 2|DChild.Gameplay.Pooling.PoolableObjectPool, Assembly-CSharp
     - Name: m_poolDuration
       Entry: 4
       Data: 1
@@ -109,7 +101,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 4|DChild.Gameplay.Pooling.ProjectilePool, Assembly-CSharp
+      Data: 3|DChild.Gameplay.Pooling.ProjectilePool, Assembly-CSharp
     - Name: m_poolDuration
       Entry: 4
       Data: 1
@@ -118,7 +110,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 5|DChild.Gameplay.Pooling.UIObjectPool, Assembly-CSharp
+      Data: 4|DChild.Gameplay.Pooling.UIObjectPool, Assembly-CSharp
     - Name: m_poolDuration
       Entry: 4
       Data: 1
@@ -152,6 +144,7 @@ MonoBehaviour:
   m_mainMenu:
     m_sceneName: _Scene MainMenuUI
     m_scenePath: Assets/DChild/Scenes/_Scene MainMenuUI.unity
+  m_gameplaySceneActive: 0
 --- !u!1 &2579
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,11 +204,8 @@ MonoBehaviour:
         m_seconds: 0
         m_secondsTimer: 0
       m_characterData:
-        m_attributeData:
-          m_vitality: 0
-          m_intelligence: 0
-          m_strength: 0
-          m_luck: 0
+        m_bestiaryProgressData:
+          m_serializeDatas: []
         m_skills:
           m_movementSkills: 
           m_movementSkillList:
@@ -226,11 +216,15 @@ MonoBehaviour:
               m_value: 0
             - m_name: 2
               m_value: 0
+        m_soulSkillAcquisitionData:
+          m_serializeDatas: []
         m_equippedSoulSkillData:
           m_armorSkill: 0
           m_supportSkill: 0
           m_weaponSkill1: 0
           m_weaponSkill2: 0
+        m_bestiaryList: {fileID: 0}
+        m_soulSkillList: {fileID: 0}
 --- !u!1 &182492772
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +299,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 182492772}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
@@ -810,7 +804,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 182492772}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -830,6 +824,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &182492780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1223,7 +1218,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1932440838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -1243,6 +1238,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5984050234669874882
 GameObject:
   m_ObjectHideFlags: 0
@@ -1313,7 +1309,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5984050234669874882}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 0
@@ -1335,7 +1331,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5984050234669874882}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
@@ -1712,7 +1708,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &4308361398231958405
@@ -2064,7 +2060,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &9167446486346896484
