@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Doozy.Engine;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,18 +49,28 @@ namespace DChild.Menu.Campaign
                     PlayClip(m_intro1);
                     break;
                 case Type.First:
+                    m_vidPlayer.loopPointReached += OnEnd;
                     PlayClip(m_first);
                     break;
                 case Type.Last:
+                    m_vidPlayer.loopPointReached += OnEnd;
                     PlayClip(m_last);
                     break;
                 case Type.Next:
+                    m_vidPlayer.loopPointReached += OnEnd;
                     PlayClip(m_next);
                     break;
                 case Type.Previous:
+                    m_vidPlayer.loopPointReached += OnEnd;
                     PlayClip(m_previous);
                     break;
             }
+        }
+
+        private void OnEnd(VideoPlayer source)
+        {
+            GameEventMessage.SendEvent("Show Info");
+            m_vidPlayer.loopPointReached -= OnIntro1End;
         }
 
         private void PlayClip(VideoClip clip)
