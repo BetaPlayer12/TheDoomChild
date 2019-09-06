@@ -26,6 +26,12 @@ namespace DChild.Gameplay.Characters.Enemies
             AddAnimation(0, ANIMATION_TOMBA_IDLE, true, 0);
         }
 
+        public void DoTombFall()
+        {
+            SetAnimation(0, ANIMATION_TOMBA_RISE, false);
+            AddAnimation(0, ANIMATION_TOMBA_IDLE, true, 0);
+        }
+
         public void DoTombBIdle()
         {
             SetAnimation(0, ANIMATION_TOMBB_IDLE, true);

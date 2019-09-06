@@ -29,6 +29,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_flinchAnimation;
+            public string flinchAnimation => m_flinchAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_moveAnimation;
             public string moveAnimation => m_moveAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -122,6 +125,20 @@ namespace DChild.Gameplay.Characters.Enemies
             WaitAttackEnd,
         }
 
+        private enum Phase
+        {
+            Second,
+            Third,
+            Final,
+            Wait,
+        }
+
+        [SerializeField, TabGroup("Reference")]
+        private BasicHealth m_health;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
+        private float m_maxHealth;
+        private float m_phaseHealth;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -142,6 +159,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private State m_afterWaitForBehaviourState;
         [SpineEvent, SerializeField]
         private List<string> m_eventName;
+        [SpineSkin, SerializeField]
+        private List<string> m_skinName;
+        private int m_chosenSkin;
 
         [SerializeField]
         private Transform m_footTF;
@@ -167,18 +187,15 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private bool m_burrowed;
         private bool m_waitRoutineEnd;
+        private bool m_isPhaseChanging;
 
-        [SerializeField]
-        private int m_skeletonSize;
-        private int m_currentSkeletonSize;
-        private GameObject[] m_skeletons;
-        [SerializeField]
-        private int m_tombSize;
-        private int m_currentTombSize;
-        private GameObject[] m_tombs;
+        private List<GameObject> m_skeletons;
+        private List<GameObject> m_tombs;
 
         [SerializeField]
         private List<ParticleSystem> m_summonFX;
+        [SerializeField]
+        private ParticleSystem m_smokeFX;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -190,6 +207,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_velOffset;
         [SerializeField, TabGroup("Cannon Values")]
         private Vector2 m_targetOffset;
+        [SerializeField, TabGroup("Phase Values")]
+        private List<int> m_tombVolleys;
+        private int m_currentTombVolleys;
+        [SerializeField, TabGroup("Phase Values")]
+        private List<int> m_tombSize;
+        private int m_currentTombSize;
+        [SerializeField, TabGroup("Phase Values")]
+        private List<int> m_skeletonSize;
+        private int m_currentSkeletonSize;
+        [SerializeField, TabGroup("Phase Values")]
+        private List<int> m_summonThreshhold;
+        private int m_currentSummonThreshhold;
 
         private float m_targetDistance;
 
@@ -197,6 +226,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_burrowed = true;
+            m_currentSkeletonSize = m_skeletonSize[0];
+            m_currentSummonThreshhold = m_summonThreshhold[0];
+            m_maxHealth = m_health.currentValue;
+            m_phaseHealth = m_maxHealth;
+            m_animation.skeletonAnimation.skeleton.SetSkin(m_skinName[0]);
             //Debug.Log(m_boneName.Count);
             //for (int i = 0; i < m_boneName.Count; i++)
             //{
@@ -204,7 +238,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //    Debug.Log(m_bone);
             //}
             m_info.seedSpitFX.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
-            m_skeletons = new GameObject[m_skeletonSize];
             GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -235,13 +268,13 @@ namespace DChild.Gameplay.Characters.Enemies
             base.ApplyData();
             if (m_attackDecider != null)
             {
-                Debug.Log("Update attack list trigger function");
+                //Debug.Log("Update attack list trigger function");
                 UpdateAttackDeciderList();
             }
         }
         private void UpdateAttackDeciderList()
         {
-            Debug.Log("Update attack list trigger");
+            //Debug.Log("Update attack list trigger");
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.GroundSlam, m_info.groundSlam.range),
                                     new AttackInfo<Attack>(Attack.SkeletonSummon, m_info.skeletonSummon.range),
                                     new AttackInfo<Attack>(Attack.Spit, m_info.spit.range),
@@ -259,8 +292,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
-            if (m_animation.skeletonAnimation == null) return;
+            m_tombs = new List<GameObject>();
+            m_skeletons = new List<GameObject>();
 
+            if (m_animation.skeletonAnimation == null) return;
+ 
             m_animation.skeletonAnimation.AnimationState.Event += HandleEvent;
         }
 
@@ -336,7 +372,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //return vel * new Vector2(dir.x, /*dir.y*/ 0).normalized;
 
             m_targetDistance = Vector2.Distance(m_targetInfo.position, m_seedSpitTF.position);
-            Debug.Log("Target Distance: " + m_targetDistance);
+            //Debug.Log("Target Distance: " + m_targetDistance);
             //Speed: 3 | Gravity Scale: 3 | Pos Offset: (1, 0.4)
             var dir = (m_targetInfo.position - new Vector2(m_seedSpitTF.position.x, m_seedSpitTF.position.y));
             var h = dir.y;
@@ -361,6 +397,29 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             return 0;
+        }
+
+        private Phase PhaseHandler(float health)
+        {
+            if(m_health.currentValue < m_maxHealth * 0.75f && m_phaseHealth == m_maxHealth)
+            {
+                m_phaseHealth = m_maxHealth * 0.75f;
+                return Phase.Second;
+            }
+            else if (m_health.currentValue < m_maxHealth * 0.50f && m_phaseHealth == m_maxHealth * 0.75f)
+            {
+                m_phaseHealth = m_maxHealth * 0.50f;
+                return Phase.Third;
+            }
+            else if (m_health.currentValue < m_maxHealth * 0.25f && m_phaseHealth == m_maxHealth * 0.50f)
+            {
+                m_phaseHealth = 0;
+                return Phase.Final;
+            }
+            else
+            {
+                return Phase.Wait;
+            }
         }
 
         private IEnumerator TurnRoutine()
@@ -406,39 +465,57 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator TombAttackRoutine(Vector3 target)
+        private IEnumerator TombAttackRoutine(Vector3 target, int tombSize)
         {
             m_waitRoutineEnd = true;
+            m_hitbox.SetInvulnerability(true);
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_BURROW);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnimation);
             //Debug.Log("Summon Tombs");
-            for (int i = 0; i < m_tombSize; i++)
+            for (int i = 0; i < tombSize; i++)
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
-                tomb.GetComponent<TombAttack>().GetTarget(m_targetInfo);
+                tomb.GetComponent<TombAttack>().GetTarget(m_targetInfo, m_currentTombVolleys);
+                m_tombs.Add(tomb);
             }
             //m_animation.SetAnimation(0, m_info.burrowIdleAnimation, true);
             //yield return null;
-            yield return new WaitForSeconds(5f);
-            //Debug.Log("Waited seconds");
+            //yield return new WaitForSeconds(5f);
+            while (m_tombs.Count > 0)
+            {
+                for (int i = 0; i < m_tombs.Count; i++)
+                {
+                    if (m_tombs[i] == null)
+                    {
+                        m_tombs.RemoveAt(i);
+                    }
+                }
+                yield return null;
+            }
+            m_animation.skeletonAnimation.skeleton.SetSkin(m_skinName[m_chosenSkin]);
+            //Debug.Log("Waited for Tomb Attack to Finish");
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_UNBURROW);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.SetInvulnerability(false);
+            m_isPhaseChanging = false;
             m_waitRoutineEnd = false;
             m_currentState = State.ReevaluateSituation;
             yield return null;
+            m_tombs.Clear();
         }
 
-        private IEnumerator SkeletonSummonRoutine()
+        private IEnumerator SkeletonSummonRoutine(int skeletonSize)
         {
-            if (m_currentSkeletonSize < m_skeletonSize)
+            if (m_currentSkeletonSize > m_skeletons.Count)
             {
                 m_waitRoutineEnd = true;
-                m_currentSkeletonSize++;
                 m_animation.SetAnimation(0, m_info.skeletonSummon.animation, false);
                 for (int i = 0; i < m_summonFX.Count; i++)
                 {
-                    Debug.Log("SUMMON FX");
+                    Debug.Log("SUMMON FX " + i);
                     m_summonFX[i].Play();
                     var mainFx = m_summonFX[i].main;
                     mainFx.simulationSpeed = 2.5f;
@@ -451,13 +528,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_waitRoutineEnd = false;
                 m_currentState = State.ReevaluateSituation;
-            }
-            else
-            {
-                if (m_skeletons[0] == null)
-                {
-                    m_currentSkeletonSize = 0;
-                }
             }
             yield return null;
         }
@@ -515,10 +585,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 //Debug.Log(m_eventName[3]);
 
-                GameObject obj = Instantiate(m_info.stompFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), m_stompTF.position.y - 2.75f), Quaternion.identity);
-                GameObject obj2 = Instantiate(m_info.crawlingVineFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), m_stompTF.position.y - 2.5f), Quaternion.identity);
+                GameObject obj = Instantiate(m_info.stompFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), transform.position.y - 1f), Quaternion.identity);
+                GameObject obj2 = Instantiate(m_info.crawlingVineFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), transform.position.y), Quaternion.identity);
                 obj2.transform.localScale = new Vector3(obj2.transform.localScale.x * transform.localScale.x, obj2.transform.localScale.y, obj2.transform.localScale.z);
                 obj2.GetComponent<Rigidbody2D>().AddForce(new Vector2(m_vineCrawlSpeed * transform.localScale.x, 0), ForceMode2D.Impulse);
+                //obj2.GetComponent<Rigidbody2D>().velocity = new Vector2(m_vineCrawlSpeed * transform.localScale.x, 0);
             }
             else if (e.Data.Name == m_eventName[4])
             {
@@ -530,164 +601,223 @@ namespace DChild.Gameplay.Characters.Enemies
                 GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + /*(3 * transform.localScale.x)*/ +UnityEngine.Random.Range(-2, 2), m_skeletonSpawnTF.position.y), Quaternion.identity);
                 skeleton.GetComponent<SkeletonSpawnAI>().SetDirection(transform.localScale.x);
                 GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
-                m_skeletons[m_currentSkeletonSize - 1] = skeleton;
+                m_skeletons.Add(skeleton);
+            }
+            else if (e.Data.Name == m_eventName[6])
+            {
+                //Debug.Log(m_eventName[5]);
+                m_smokeFX.Play();
             }
         }
 
         private void Update()
         {
-            switch (m_currentState)
+            if (!m_isPhaseChanging)
             {
-                case State.Idle:
-                    //Add actual CharacterInfo Later
-                    if (m_targetInfo.isValid)
-                    {
-                        //StartCoroutine(UnburrowRoutine());
-                        if (m_burrowed)
+                switch (m_currentState)
+                {
+                    case State.Idle:
+                        //Add actual CharacterInfo Later
+                        if (m_targetInfo.isValid)
                         {
-                            StartCoroutine(UnburrowRoutine());
-                            m_burrowed = false;
-                        }
-                        else
-                        {
-                            if (Wait())
+                            //StartCoroutine(UnburrowRoutine());
+                            if (m_burrowed)
                             {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                StartCoroutine(UnburrowRoutine());
+                                m_burrowed = false;
                             }
-                        }
-                    }
-                    else
-                    {
-                        //StartCoroutine(BurrowRoutine());
-                        if (!m_burrowed)
-                        {
-                            StartCoroutine(BurrowRoutine());
-                            m_burrowed = true;
-                        }
-                        else
-                        {
-                            if (Wait())
-                            {
-                                m_animation.SetAnimation(0, m_info.burrowIdleAnimation, true);
-                            }
-                        }
-                    }
-                    break;
-                case State.Turning:
-                    if (Wait() && !m_waitRoutineEnd)
-                    {
-                        StartCoroutine(TurnRoutine());
-                        WaitTillBehaviourEnd(State.ReevaluateSituation);
-                    }
-                    break;
-                case State.Attacking:
-                    if (!m_waitRoutineEnd)
-                    {
-                        var target = m_targetInfo.position;
-                        Array values = Enum.GetValues(typeof(Attack));
-                        var random = new System.Random();
-                        m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
-                        m_attackDecider.DecideOnAttack();
-                        if (m_attackDecider.hasDecidedOnAttack)
-                        {
-                            switch (m_attackDecider.chosenAttack.attack)
-                            {
-                                case Attack.GroundSlam:
-                                    //if (Wait() && !m_wallSensor.isDetecting)
-                                    //{
-                                    //    //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
-                                    //    StartCoroutine(GroundAttackRoutine());
-                                    //    WaitTillAttackEnd(Attack.GroundSlam);
-                                    //}
-                                    break;
-                                case Attack.Spit:
-                                    if (Wait() && !m_wallSensor.isDetecting)
-                                    {
-                                        //m_attackHandle.ExecuteAttack(m_info.spit.animation);
-                                        if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 15)
-                                        {
-                                            m_animation.SetAnimation(0, m_info.spit.animation, false);
-                                            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-                                            WaitTillAttackEnd(Attack.Spit);
-                                        }
-                                    }
-                                    break;
-                                case Attack.Tomb:
-                                    //if (Wait())
-                                    //{
-                                    //    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
-                                    //    {
-                                    //        StartCoroutine(TombAttackRoutine(target));
-                                    //        WaitTillAttackEnd(Attack.Tomb);
-                                    //    }
-                                    //}
-                                    break;
-                                case Attack.SkeletonSummon:
-                                    //if (Wait())
-                                    //{
-                                    //    if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
-                                    //    {
-                                    //        StartCoroutine(SkeletonSummonRoutine());
-                                    //        WaitTillAttackEnd(Attack.SkeletonSummon);
-                                    //    }
-                                    //}
-                                    break;
-                            }
-                            m_attackDecider.hasDecidedOnAttack = false;
-                        }
-                    }
-                    break;
-                case State.Chasing:
-                    if (!m_waitRoutineEnd)
-                    {
-                        var target = m_targetInfo.position;
-                        //Put Target Destination
-                        if (IsFacingTarget() && Vector2.Distance(target, transform.position) <= m_info.groundSlam.range)
-                        {
-                            m_currentState = State.Attacking;
-                            m_movementHandle.Stop();
-                        }
-                        else if (IsFacingTarget() && Vector2.Distance(target, transform.position) >= m_info.groundSlam.range)
-                        {
-
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            else
                             {
                                 if (Wait())
                                 {
-                                    m_animation.EnableRootMotion(true, false);
-                                    m_animation.SetAnimation(0, m_info.moveAnimation, true);
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //StartCoroutine(BurrowRoutine());
+                            if (!m_burrowed)
+                            {
+                                StartCoroutine(BurrowRoutine());
+                                m_burrowed = true;
+                            }
+                            else
+                            {
+                                if (Wait())
+                                {
+                                    m_animation.SetAnimation(0, m_info.burrowIdleAnimation, true);
+                                }
+                            }
+                        }
+                        break;
+                    case State.Turning:
+                        if (Wait() && !m_waitRoutineEnd)
+                        {
+                            StartCoroutine(TurnRoutine());
+                            WaitTillBehaviourEnd(State.ReevaluateSituation);
+                        }
+                        break;
+                    case State.Attacking:
+                        if (!m_waitRoutineEnd)
+                        {
+                            var target = m_targetInfo.position;
+                            Array values = Enum.GetValues(typeof(Attack));
+                            var random = new System.Random();
+                            m_currentAttack = (Attack)values.GetValue(random.Next(values.Length));
+                            m_attackDecider.DecideOnAttack();
+                            if (m_attackDecider.hasDecidedOnAttack)
+                            {
+                                switch (m_attackDecider.chosenAttack.attack)
+                                {
+                                    case Attack.GroundSlam:
+                                        if (Wait() && !m_wallSensor.isDetecting)
+                                        {
+                                            //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
+                                            StartCoroutine(GroundAttackRoutine());
+                                            WaitTillAttackEnd(Attack.GroundSlam);
+                                        }
+                                        break;
+                                    case Attack.Spit:
+                                        if (Wait() && !m_wallSensor.isDetecting)
+                                        {
+                                            //m_attackHandle.ExecuteAttack(m_info.spit.animation);
+                                            if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 15)
+                                            {
+                                                m_animation.SetAnimation(0, m_info.spit.animation, false);
+                                                m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                                                WaitTillAttackEnd(Attack.Spit);
+                                            }
+                                        }
+                                        break;
+                                    case Attack.Tomb:
+                                        //if (Wait())
+                                        //{
+                                        //    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
+                                        //    {
+                                        //        StartCoroutine(TombAttackRoutine(target, m_tombSize[0]));
+                                        //        WaitTillAttackEnd(Attack.Tomb);
+                                        //    }
+                                        //}
+                                        break;
+                                    case Attack.SkeletonSummon:
+                                        if (Wait())
+                                        {
+                                            if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
+                                            {
+                                                StartCoroutine(SkeletonSummonRoutine(m_currentSkeletonSize));
+                                                WaitTillAttackEnd(Attack.SkeletonSummon);
+                                            }
+                                        }
+                                        break;
+                                }
+                                m_attackDecider.hasDecidedOnAttack = false;
+                            }
+                        }
+                        break;
+                    case State.Chasing:
+                        if (!m_waitRoutineEnd)
+                        {
+                            var target = m_targetInfo.position;
+                            //Put Target Destination
+                            if (IsFacingTarget() && Vector2.Distance(target, transform.position) <= m_info.groundSlam.range)
+                            {
+                                m_currentState = State.Attacking;
+                                m_movementHandle.Stop();
+                            }
+                            else if (IsFacingTarget() && Vector2.Distance(target, transform.position) >= m_info.groundSlam.range)
+                            {
+
+                                if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                                {
+                                    if (Wait())
+                                    {
+                                        m_animation.EnableRootMotion(true, false);
+                                        m_animation.SetAnimation(0, m_info.moveAnimation, true);
+                                    }
+                                }
+                                else
+                                {
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
                             else
                             {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_currentState = State.Turning;
+                                m_movementHandle.Stop();
+                                //m_turnHandle.Execute();
+                            }
+                            //Play Animation
+                        }
+                        break;
+                    case State.ReevaluateSituation:
+                        //How far is target, is it worth it to chase or go back to patrol
+                        if (!m_waitRoutineEnd)
+                        {
+                            if (m_targetInfo.isValid)
+                            {
+                                m_currentState = State.Chasing;
+                            }
+                            else
+                            {
+                                m_currentState = State.Idle;
                             }
                         }
-                        else
-                        {
-                            m_currentState = State.Turning;
-                            m_movementHandle.Stop();
-                            //m_turnHandle.Execute();
-                        }
-                        //Play Animation
-                    }
-                    break;
-                case State.ReevaluateSituation:
-                    //How far is target, is it worth it to chase or go back to patrol
-                    if (!m_waitRoutineEnd)
+                        break;
+                    case State.WaitBehaviourEnd:
+                        return;
+                }
+            }
+
+            //m_animation.skeletonAnimation.initialSkinName = m_skinName[0];
+            switch (PhaseHandler(m_health.currentValue))
+            {
+                case Phase.Second:
+                    m_chosenSkin = 1;
+                    m_currentTombSize = m_tombSize[0];
+                    m_currentSkeletonSize = m_skeletonSize[1];
+                    m_currentSummonThreshhold = m_summonThreshhold[1];
+                    m_currentTombVolleys = m_tombVolleys[0];
+                    if (!m_isPhaseChanging)
                     {
-                        if (m_targetInfo.isValid)
-                        {
-                            m_currentState = State.Chasing;
-                        }
-                        else
-                        {
-                            m_currentState = State.Idle;
-                        }
+                        m_isPhaseChanging = true;
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
                     }
                     break;
-                case State.WaitBehaviourEnd:
-                    return;
+                case Phase.Third:
+                    m_chosenSkin = 2;
+                    m_currentTombSize = m_tombSize[1];
+                    m_currentSkeletonSize = m_skeletonSize[2];
+                    m_currentSummonThreshhold = m_summonThreshhold[2];
+                    m_currentTombVolleys = m_tombVolleys[1];
+                    if (!m_isPhaseChanging)
+                    {
+                        m_isPhaseChanging = true;
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                    }
+                    break;
+                case Phase.Final:
+                    m_chosenSkin = 3;
+                    m_currentTombSize = m_tombSize[2];
+                    m_currentSkeletonSize = m_skeletonSize[3];
+                    m_currentSummonThreshhold = m_summonThreshhold[3];
+                    m_currentTombVolleys = m_tombVolleys[2];
+                    if (!m_isPhaseChanging)
+                    {
+                        m_isPhaseChanging = true;
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            for (int i = 0; i < m_skeletons.Count; i++)
+            {
+                if (m_skeletons[i].activeSelf == false)
+                {
+                    m_skeletons.RemoveAt(i);
+                }
             }
         }
     }
