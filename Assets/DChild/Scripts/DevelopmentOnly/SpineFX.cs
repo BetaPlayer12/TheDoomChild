@@ -32,11 +32,8 @@ namespace DChild.Gameplay
         public override void Stop()
         {
             m_spine.AnimationState.SetEmptyAnimation(0, 0);
-<<<<<<< HEAD
-=======
             CallFXDone();
             CallPoolRequest();
->>>>>>> 4653686e5010b0329a8f8f935f22a3799c3b1818
         }
 
         public override void Pause()

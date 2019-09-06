@@ -7,28 +7,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-
-<<<<<<< HEAD
-    public class AirController : MonoBehaviour, IAirMoveController, IHighJumpController, IDoubleJumpController,
-                                 IWallStickController, IWallJumpController, IAirDashController, ILedgeController
-    {
-        public event EventAction<ControllerEventArgs> MoveCall;
-        public event EventAction<ControllerEventArgs> HighJumpCall;
-        public event EventAction<EventActionArgs> DoubleJumpCall;
-        public event EventAction<EventActionArgs> WallStickCall;
-        public event EventAction<ControllerEventArgs> UpdateCall;
-        public event EventAction<EventActionArgs> WallJumpCall;
-        public event EventAction<EventActionArgs> DashCall;
-        public event EventAction<EventActionArgs> LedgeGrabCall;//
-        public event EventAction<EventActionArgs> WallSlideCall;
-        public event EventAction<ControllerEventArgs> AttempWallStickCall;
-        public event EventAction<EventActionArgs> WallStickCancel;
-
-        private SkillResetRequester m_skillRequester;
-        public void Initialize(SkillResetRequester skillRequester)
-        {
-            m_skillRequester = skillRequester;
-=======
     public class AirController : MonoBehaviour
     {
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
@@ -61,7 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_wallJump = behaviours.GetComponentInChildren<WallJump>();
             m_dash = behaviours.GetComponentInChildren<AirDash>();
             m_ledgeGrab = behaviours.GetComponentInChildren<LedgeGrab>();
->>>>>>> 4653686e5010b0329a8f8f935f22a3799c3b1818
+
         }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
@@ -70,12 +48,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (state.isMoving)
                 {
-<<<<<<< HEAD
-                    LedgeGrabCall?.Invoke(this, EventActionArgs.Empty);
-                    if (state.waitForBehaviour)
-=======
+
                     if (m_ledgeGrab?.AttemptToLedgeGrab() ?? false)
->>>>>>> 4653686e5010b0329a8f8f935f22a3799c3b1818
                     {
                         m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
                         return;
@@ -99,22 +73,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
-<<<<<<< HEAD
-=======
+
             m_speedTransistor.SwitchToAirMoveSpeed();
->>>>>>> 4653686e5010b0329a8f8f935f22a3799c3b1818
             if (state.isStickingToWall)
             {
                 m_wallStick?.HandleWallStick();
                 if (skills.IsEnabled(PrimarySkill.WallJump) && callArgs.input.isJumpPressed)
                 {
-<<<<<<< HEAD
-                    WallJumpCall?.Invoke(this, EventActionArgs.Empty);
-                    WallStickCancel?.Invoke(this, EventActionArgs.Empty);
-=======
+
                     m_wallStick?.CancelWallStick();
                     m_wallJump?.HandleJump();
->>>>>>> 4653686e5010b0329a8f8f935f22a3799c3b1818
                 }
                 else if (state.isSlidingToWall == false && callArgs.input.direction.isDownPressed)
                 {
@@ -129,28 +97,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             else
             {
-<<<<<<< HEAD
-              
-
-                if (state.canHighJump)
-                {
-                    HighJumpCall?.Invoke(this, callArgs);
-=======
                 if (state.canHighJump)
                 {
                     m_highJump?.HandleHighJump(callArgs.input.isJumpHeld);
->>>>>>> 4653686e5010b0329a8f8f935f22a3799c3b1818
                 }
 
                 if (skills.IsEnabled(PrimarySkill.DoubleJump) && state.canDoubleJump)
                 {
                     if (callArgs.input.isJumpPressed)
                     {
-<<<<<<< HEAD
-                        DoubleJumpCall?.Invoke(this, EventActionArgs.Empty);
-=======
                         m_doubleJump?.HandleJump();
->>>>>>> 4653686e5010b0329a8f8f935f22a3799c3b1818
                     }
                 }
 
@@ -162,18 +118,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
             }
-
-<<<<<<< HEAD
-            UpdateCall?.Invoke(this, callArgs);
-            if (skills.IsEnabled(PrimarySkill.WallJump) && state.isDroppingFromPlatform == false)
-            {
-                AttempWallStickCall?.Invoke(this, callArgs);
-=======
             //UpdateCall?.Invoke(this, callArgs);
             if (skills.IsEnabled(PrimarySkill.WallJump) && state.isDroppingFromPlatform == false)
             {
                 m_wallStick?.AttemptToWallStick();
->>>>>>> 4653686e5010b0329a8f8f935f22a3799c3b1818
                 if (state.isStickingToWall)
                 {
                     m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
