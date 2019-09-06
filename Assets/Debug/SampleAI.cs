@@ -3,11 +3,11 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using DChild.Gameplay.Characters.AI;
+using Refactor.DChild.Gameplay.Characters.AI;
 using Spine.Unity;
 using UnityEngine;
 
-namespace DChild.Gameplay.Characters.Enemies
+namespace Refactor.DChild.Gameplay.Characters.Enemies
 {
     public class SampleAI : CombatAIBrain<SampleAI.Info>
     {
