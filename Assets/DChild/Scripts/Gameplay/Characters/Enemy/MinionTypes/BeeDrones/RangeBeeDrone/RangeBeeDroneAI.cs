@@ -3,7 +3,7 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using DChild.Gameplay.Characters.AI;
+using Refactor.DChild.Gameplay.Characters.AI;
 using UnityEngine;
 using Spine;
 using Spine.Unity;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 
-namespace DChild.Gameplay.Characters.Enemies
+namespace Refactor.DChild.Gameplay.Characters.Enemies
 {
     public class RangeBeeDroneAI : CombatAIBrain<RangeBeeDroneAI.Info>
     {

@@ -50,15 +50,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public AttackProjectile CastSpellAt(ITarget target)
         {
-            // return m_projectileLauncher.FireProjectileTo(m_spellProjectile.projectile, gameObject.scene, m_spellSpawnPoint.position, target.position, m_spellProjectile.speed);
-            return null;
+            return m_projectileLauncher.FireProjectileTo(m_spellProjectile.projectile, gameObject.scene, m_spellSpawnPoint.position, target.position, m_spellProjectile.speed);
         }
 
         protected override void Awake()
         {
             base.Awake();
             m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedPhysics2D>(), transform);
-           // m_projectileLauncher = new ProjectileLauncher();
+            m_projectileLauncher = new ProjectileLauncher();
         }
 
         public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)

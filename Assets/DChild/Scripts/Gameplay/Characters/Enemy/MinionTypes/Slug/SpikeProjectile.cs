@@ -3,10 +3,12 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Projectiles;
 using Holysoft.Event;
 using Spine;
 using Spine.Unity;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
@@ -59,7 +61,7 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
     {
         if (!targetDefense.isInvulnerable)
         {
-            AttackerCombatInfo info = new AttackerCombatInfo(transform.position, 0, 1, m_damage);
+            AttackerInfo info = new AttackerInfo(transform.position, 0, 1, m_damage);
             var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
             TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
         }

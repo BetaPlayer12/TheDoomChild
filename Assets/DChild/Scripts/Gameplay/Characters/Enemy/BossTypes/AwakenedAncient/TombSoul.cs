@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay;
-using DChild.Gameplay.Characters.AI;
+using Refactor.DChild.Gameplay.Characters.AI;
 
 public class TombSoul : MonoBehaviour
 {

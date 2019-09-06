@@ -9,7 +9,7 @@ using DChild.Gameplay;
 using UnityEditor;
 #endif
 
-namespace DChild.Gameplay.Characters.AI
+namespace Refactor.DChild.Gameplay.Characters.AI
 {
     public abstract class AIBrain<T> : MonoBehaviour where T : IAIInfo
     {

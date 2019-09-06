@@ -5,14 +5,14 @@ namespace DChild.Gameplay.Combat
 {
     public struct CombatConclusionEventArgs : IEventActionArgs
     {
-        public CombatConclusionEventArgs(AttackerCombatInfo attacker, TargetInfo target, AttackInfo result) : this()
+        public CombatConclusionEventArgs(AttackerInfo attacker, TargetInfo target, AttackInfo result) : this()
         {
             this.attacker = attacker;
             this.target = target;
             this.result = result;
         }
 
-        public AttackerCombatInfo attacker { get; }
+        public AttackerInfo attacker { get; }
         public TargetInfo target { get; }
         public AttackInfo result { get; }
     }

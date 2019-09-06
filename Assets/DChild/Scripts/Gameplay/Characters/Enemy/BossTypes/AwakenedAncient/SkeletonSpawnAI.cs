@@ -3,7 +3,7 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using DChild.Gameplay.Characters.AI;
+using Refactor.DChild.Gameplay.Characters.AI;
 using UnityEngine;
 using Spine;
 using Spine.Unity;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 
-namespace DChild.Gameplay.Characters.Enemies
+namespace Refactor.DChild.Gameplay.Characters.Enemies
 {
     public class SkeletonSpawnAI : CombatAIBrain<SkeletonSpawnAI.Info>
     {
@@ -151,7 +151,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
         private bool m_spawnDone;
-        private bool m_isRunAttacking;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -241,13 +240,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
-        //private IEnumerator Wait()
-        //{
-        //    while (m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete)
-        //    {
-        //        yield return null;
-        //    }
-        //}
+        private IEnumerator Wait()
+        {
+            while (m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete)
+            {
+                yield return null;
+            }
+        }
 
         private IEnumerator SpawnRoutine()
         {
@@ -279,17 +278,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RunAttackRoutine()
         {
             Debug.Log("DO RUN ATTACK SKELETON");
-            m_isRunAttacking = true;
             //MoveOnGround(m_targetInfo.position, m_info.run.speed);
             GetComponent<IsolatedPhysics2D>().AddForce((Vector2.right * transform.localScale.x) * 15, ForceMode2D.Impulse);
             m_animation.SetAnimation(0, m_info.runAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.runAttack.animation);
+            m_movement.Stop();
             Debug.Log("STOP RUN ATTACK SKELETON");
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
-            yield return null;
-            m_isRunAttacking = false;
-            m_movement.Stop();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
         }
 
         protected override void Start()
@@ -313,7 +310,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            if (m_spawnDone && !m_isRunAttacking)
+            if (m_spawnDone)
             {
                 switch (m_stateHandle.currentState)
                 {
@@ -379,16 +376,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                     else
                                     {
                                         m_animation.EnableRootMotion(false, false);
-                                        if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                                        {
-                                            m_animation.SetAnimation(0, m_info.run.animation, true);
-                                            m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
-                                        }
-                                        else
-                                        {
-                                            m_animation.SetAnimation(0, m_info.move.animation, true);
-                                            m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
-                                        }
+                                        m_animation.SetAnimation(0, m_info.run.animation, true);
+                                        m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
                                     }
                                 }
                                 else

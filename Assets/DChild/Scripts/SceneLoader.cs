@@ -17,41 +17,29 @@ namespace DChild
         private SceneInfo m_mainMenu;
 
         private string m_activeZone;
-#if UNITY_EDITOR
-        [SerializeField]
-#endif
-        private bool m_gameplaySceneActive;
 
         public string activeZone => m_activeZone;
-
-#if UNITY_EDITOR
-        public void SetAsActiveZone(string sceneName) => m_activeZone = sceneName;
-#endif
 
         public void LoadZone(string sceneName, bool withLoadingScene)
         {
             if (withLoadingScene)
             {
-                if (m_activeZone != string.Empty && m_activeZone != sceneName)
+                if (m_activeZone != string.Empty)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;
                 }
 
-                if (m_gameplaySceneActive == false)
+                if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
                 {
                     LoadingHandle.LoadScenes(m_gameplayScene.sceneName);
-                    m_gameplaySceneActive = true;
                 }
-                if (m_activeZone != sceneName)
-                {
-                    LoadingHandle.LoadScenes(sceneName);
-                }
+                LoadingHandle.LoadScenes(sceneName);
                 SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
             }
             else
             {
-                if (m_activeZone != string.Empty && m_activeZone != sceneName)
+                if (m_activeZone != string.Empty)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;

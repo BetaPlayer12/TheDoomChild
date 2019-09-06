@@ -7,11 +7,10 @@ using DChild.Gameplay.Inventories;
 using DChild.Serialization;
 using Doozy.Engine;
 using Holysoft.Event;
-using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Combat;
+using Refactor.DChild.Gameplay.Characters.Players;
+using Refactor.DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using DChild.Gameplay.Characters.Players.Behaviour;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -65,8 +64,6 @@ namespace DChild.Gameplay.Characters.Players
         private Attacker m_attacker;
         [SerializeField]
         private Magic m_magic;
-        [SerializeField]
-        private LootPicker m_lootPicker;
 
         public event EventAction<EventActionArgs> OnDeath;
 
@@ -83,7 +80,6 @@ namespace DChild.Gameplay.Characters.Players
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
         public IMainController controller => m_controller;
-        public LootPicker lootPicker => m_lootPicker;
 
         public StatusEffectResistance statusResistance => m_statusResistance;
 

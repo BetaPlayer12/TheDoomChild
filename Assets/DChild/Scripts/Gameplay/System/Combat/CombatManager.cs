@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Combat
 {
     public interface ICombatManager
     {
-        AttackInfo ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo);
+        AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo);
         void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect);
         void Inflict(StatusEffectReciever reciever, params StatusEffectChance[] statusEffectChance);
         List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes);
@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Combat
         private List<AttackType> m_damageList;
         private IDamageable m_cacheTarget;
 
-        public AttackInfo ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo)
+        public AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo)
         {
             AttackInfo result = new AttackInfo(attacker.damage);
             m_criticalDamageHandle.Execute(ref result, attacker.critChance, attacker.critDamageModifier);

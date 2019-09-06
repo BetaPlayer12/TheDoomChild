@@ -1,5 +1,4 @@
-﻿using Doozy.Engine;
-using Holysoft.Collections;
+﻿using Holysoft.Collections;
 using Holysoft.Event;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,12 +9,6 @@ namespace DChild.Menu
 {
     public class LoadingHandle : MonoBehaviour
     {
-        public enum LoadType
-        {
-            Smart,
-            Force
-        }
-
         [SerializeField]
         private LoadingAnimation m_animation;
         [SerializeField]
@@ -23,16 +16,13 @@ namespace DChild.Menu
 
         private static List<string> scenesToLoad;
         private static List<string> scenesToUnload;
-        public static event EventAction<EventActionArgs> SceneDone;
-        public static LoadType loadType { get; private set; }
+        public static EventAction<EventActionArgs> SceneDone;
 
         private static List<AsyncOperation> m_loadOperations;
         private static List<AsyncOperation> m_unloadOperations;
         private static bool m_isInitialized;
 
         private bool m_unloadThis;
-
-        public static void SetLoadType(LoadType value) => loadType = value;
 
         public static void LoadScenes(params string[] scenes)
         {
@@ -53,40 +43,16 @@ namespace DChild.Menu
             scenesToUnload.AddRange(scenes);
         }
 
-        public void DoLoad()
+        private void Awake()
         {
-            m_unloadThis = false;
-            m_unloadOperations.Clear();
-            scenesToUnload?.RemoveAll(x => x == string.Empty);
-            for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
+            if (m_isInitialized == false)
             {
-                var operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
-                m_unloadOperations.Add(operation);
+                m_loadOperations = new List<AsyncOperation>();
+                m_unloadOperations = new List<AsyncOperation>();
+                m_isInitialized = true;
             }
-            scenesToUnload?.Clear();
 
-            m_loadOperations.Clear();
-            scenesToLoad?.RemoveAll(x => x == string.Empty);
-            for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
-            {
-                m_loadOperations.Add(SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive));
-                m_loadOperations[i].allowSceneActivation = false;
-            }
-            scenesToLoad?.Clear();
-            StartCoroutine(MonitorProgess());
-        }
-
-        public void SendEvents()
-        {
-            switch (loadType)
-            {
-                case LoadType.Force:
-                    GameEventMessage.SendEvent("Force Load");
-                    break;
-                case LoadType.Smart:
-                    GameEventMessage.SendEvent("Smart Load");
-                    break;
-            }
+            m_animation.AnimationEnd += OnAnimationEnd;
         }
 
         private void OnAnimationEnd(object sender, EventActionArgs eventArgs)
@@ -133,37 +99,37 @@ namespace DChild.Menu
                 } while (isLoading);
             }
             m_animation.PlayEnd();
-            if (loadType == LoadType.Force)
-            {
-                yield return new WaitForSeconds(2.25f);
-            }
+            yield return new WaitForSeconds(2.25f);
             for (int i = 0; i < m_loadOperations.Count; i++)
             {
                 m_loadOperations[i].allowSceneActivation = true;
-            }
-            if (loadType == LoadType.Smart)
-            {
-                GameEventMessage.SendEvent("Load Done");
-                yield return new WaitForSeconds(1f);
             }
             yield return endOfFrame;
             //Cant Call Unload Here for some reason, so i have to resort to using a flag to trigger the unloading
             m_unloadThis = true;
         }
 
-        private void Awake()
+        private void Start()
         {
-            if (m_isInitialized == false)
+            m_unloadThis = false;
+            m_unloadOperations.Clear();
+            scenesToUnload.RemoveAll(x => x == string.Empty);
+            for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
             {
-                m_loadOperations = new List<AsyncOperation>();
-                m_unloadOperations = new List<AsyncOperation>();
-                m_isInitialized = true;
+                var operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+                m_unloadOperations.Add(operation);
             }
+            scenesToUnload?.Clear();
 
-            if (loadType == LoadType.Force)
+            m_loadOperations.Clear();
+            scenesToLoad.RemoveAll(x => x == string.Empty);
+            for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
             {
-                m_animation.AnimationEnd += OnAnimationEnd;
+                m_loadOperations.Add(SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive));
+                m_loadOperations[i].allowSceneActivation = false;
             }
+            scenesToLoad?.Clear();
+            StartCoroutine(MonitorProgess());
         }
 
         private void Update()

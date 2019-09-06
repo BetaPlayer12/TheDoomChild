@@ -3,7 +3,7 @@
  * Attackers should look for this in order to damage an Object
  * 
  ***************************************************/
-using DChild.Gameplay;
+using Refactor.DChild.Gameplay;
 using System.Collections.Generic;
 using UnityEngine;
 

@@ -55,18 +55,13 @@ namespace DChild.Gameplay.Environment
             {
                 m_colorInfos.Add(m_sprites[i], new ColorInfo(m_sprites[i].color, m_invisibleAlpha));
             }
-
-            m_lerpDuration.SetValue(1);
-        }
-
-        private void Start()
-        {
             for (int i = 0; i < m_spines.Length; i++)
             {
                 var skeleton = m_spines[i].skeleton;
                 Color color = new Color(skeleton.R, skeleton.G, skeleton.B, skeleton.A);
                 m_colorInfos.Add(m_spines[i], new ColorInfo(color, m_invisibleAlpha));
             }
+            m_lerpDuration.SetValue(1);
         }
 
         private IEnumerator LerpTo(bool isVisible)

@@ -52,7 +52,7 @@ namespace DChild.Gameplay
                 var damage = m_data.damage;
                 for (int j = 0; j < damage.Length; j++)
                 {
-                    AttackerCombatInfo info = new AttackerCombatInfo(transform.position, 0, 1, damage[j]);
+                    AttackerInfo info = new AttackerInfo(transform.position, 0, 1, damage[j]);
                     var result = GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(m_cacheHitbox.damageable, m_cacheHitbox.defense.damageReduction));
                     //CallAttackerAttacked(new CombatConclusionEventArgs(info, m_toDamage[j], result));
                 }
