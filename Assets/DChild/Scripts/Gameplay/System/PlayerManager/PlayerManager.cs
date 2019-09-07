@@ -26,8 +26,6 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private PlayerCharacterOverride m_overrideController;
 
-        [SerializeField, HideInInspector]
-        private PlayerStatUIHandler m_uiHandler;
         [SerializeField]
         private AutoReflexHandler m_autoReflex;
 
@@ -54,7 +52,6 @@ namespace DChild.Gameplay.Systems
         {
             m_player = player;
             m_input = m_player.GetComponent<PlayerInput>();
-            m_uiHandler.ConnectTo(player);
         }
 
         private void Start()
@@ -70,12 +67,5 @@ namespace DChild.Gameplay.Systems
         {
             //m_autoReflex.Update(Time.deltaTime);
         }
-
-        private void OnValidate()
-        {
-            ComponentUtility.AssignNullComponent(this, ref m_uiHandler, ComponentUtility.ComponentSearchMethod.Child);
-        }
-
-     
     }
 }
