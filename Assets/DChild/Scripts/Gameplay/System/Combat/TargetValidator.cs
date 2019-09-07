@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+
     public class TargetValidator
     {
         private class GroupedHitboxInfo
