@@ -5,8 +5,9 @@ using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class CombatController : MonoBehaviour, IProjectileThrowController
+    public class CombatController : MonoBehaviour
     {
+
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private BasicAttack m_basicAttack;
         public event EventAction<EventActionArgs> ProjectileAimCall;
@@ -16,6 +17,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_basicAttack = behaviours.GetComponentInChildren<BasicAttack>();
         }
+
 
         public void CallUpdate(IPlayerState state, ControllerEventArgs eventArgs)
         {
@@ -39,7 +41,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         {
                             ProjectileAimCall?.Invoke(this, EventActionArgs.Empty);
                         }
-
                     }
 
                     if (eventArgs.input.combat.isMainHandPressed)

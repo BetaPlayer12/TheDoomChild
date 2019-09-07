@@ -33,8 +33,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_speedXParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
             m_state = info.state;
             m_physics = info.physics;
-            info.surfaceDector.NewSurfaceDetected += OnNewSurfaceDetected;
-            m_fXSpawner.SetFX(info.surfaceDector.currentSurface.GetFX(Environment.SurfaceData.FXType.Land));
+            if (info.surfaceDector != null)
+            {
+                info.surfaceDector.NewSurfaceDetected += OnNewSurfaceDetected;
+                m_fXSpawner.SetFX(info.surfaceDector.currentSurface.GetFX(Environment.SurfaceData.FXType.Land));
+            }
         }
 
         private void OnNewSurfaceDetected(object sender, SurfaceDetector.SurfaceDetectedEventArgs eventArgs)

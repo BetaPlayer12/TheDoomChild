@@ -1,5 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
-using DChild.Gameplay.Combat;
+using Doozy.Engine;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
@@ -21,6 +21,7 @@ namespace DChild.Gameplay.Characters.Players
             if (eventArgs.target.instance.isAlive == false && eventArgs.target.hasID)
             {
                 m_progress.SetProgress(eventArgs.target.characterID, true);
+                GameEventMessage.SendEvent("Notification");
             }
         }
     }

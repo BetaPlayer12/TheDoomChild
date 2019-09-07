@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Inventories;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,16 @@ namespace DChild.Menu.Item
 {
     public class ItemContainerUI : SerializedMonoBehaviour
     {
+        public struct SlotEventActionArgs : IEventActionArgs
+        {
+            public SlotEventActionArgs(ItemData firstSlot) : this()
+            {
+                this.firstSlot = firstSlot;
+            }
+
+            public ItemData firstSlot { get; }
+        }
+
         [SerializeField, InlineEditor]
         private IItemContainer m_itemContainer;
         [SerializeField, MinValue(1), PropertyOrder(-1)]
@@ -15,6 +26,8 @@ namespace DChild.Menu.Item
         private int m_slotCount;
         private int m_startIndex;
         private int m_availableSlot;
+
+        public event EventAction<SlotEventActionArgs> NewPage;
 
         public void SetPage(int pageNumber)
         {
@@ -62,6 +75,7 @@ namespace DChild.Menu.Item
             {
                 m_slotUI[i].Hide();
             }
+            NewPage?.Invoke(this, new SlotEventActionArgs(m_slotUI[0].item));
         }
 
         private void Awake()

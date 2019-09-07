@@ -77,6 +77,7 @@ namespace DChild.Gameplay
             Time.timeScale = 1;
             m_playerManager?.EnableInput();
             isGamePaused = false;
+            GameSystem.SetCursorVisibility(false);
         }
 
         public static void PauseGame()
@@ -84,14 +85,15 @@ namespace DChild.Gameplay
             Time.timeScale = 0;
             m_playerManager?.DisableInput();
             isGamePaused = true;
+            GameSystem.SetCursorVisibility(true);
         }
 
         public static void LoadGame(CampaignSlot campaignSlot)
         {
 
         }
-        
-        public static void MovePlayerToLocation(Character character, LocationData location,TravelDirection entranceType)
+
+        public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
         {
             m_zoneMover.MoveCharacterToLocation(character, location, entranceType);
         }

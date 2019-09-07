@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Characters
 {
     public class SpineEventListener : MonoBehaviour
     {
-        public class EventAction
+        private class EventAction
         {
             public event Action action;
             public void Invoke() => action?.Invoke();

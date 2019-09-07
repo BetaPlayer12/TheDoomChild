@@ -15,7 +15,6 @@ public class TombAttack : MonoBehaviour
     private AITargetInfo m_target;
 
     //Volleys Test
-    [SerializeField]
     private float m_volleys;
 
     private void Awake()
@@ -32,9 +31,10 @@ public class TombAttack : MonoBehaviour
         StartCoroutine(SummonSoulIntro(num));
     }
 
-    public void GetTarget(AITargetInfo target)
+    public void GetTarget(AITargetInfo target, int volleys)
     {
         m_target = target;
+        m_volleys = volleys;
     }
 
     private IEnumerator SummonSoulIntro(int num)

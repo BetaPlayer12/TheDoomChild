@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class ProjectileThrowHandler : MonoBehaviour, IEventModule
+    public class ProjectileThrowHandler : MonoBehaviour
     {
         [SerializeField]
         private ProjectileThrow m_module;
@@ -34,12 +34,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public GameObject currentProjectile => m_module.projectile;
 
-        public void ConnectEvents()
-        {
-            var controller = GetComponentInParent<IProjectileThrowController>();
-            controller.ProjectileAimCall += OnCall;
-            controller.ProjectileAimUpdate += OnUpdate;
-        }
+        //public void ConnectEvents()
+        //{
+        //    var controller = GetComponentInParent<IProjectileThrowController>();
+        //    controller.ProjectileAimCall += OnCall;
+        //    controller.ProjectileAimUpdate += OnUpdate;
+        //}
 
         //public void Initialize(IPlayerModules player)
         //{
