@@ -14,7 +14,9 @@ namespace DChild.Gameplay.Characters.AI
             var target = collision.GetComponentInParent<IEnemyTarget>();
             if (target != null && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
+                
                 m_brain.SetTarget(target);
+               
             }
         }
 

@@ -7,6 +7,7 @@ using Holysoft.Event;
 using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using DChild.Menu.Bestiary;
 #if UNITY_EDITOR
 #endif
 

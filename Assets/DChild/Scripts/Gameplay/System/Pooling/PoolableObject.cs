@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Pooling
         public void DestroyInstance()
         {
             InstanceDestroyed?.Invoke(this, new PoolItemEventArgs(this, transform));
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
 
         public virtual void SpawnAt(Vector2 position, Quaternion rotation)
