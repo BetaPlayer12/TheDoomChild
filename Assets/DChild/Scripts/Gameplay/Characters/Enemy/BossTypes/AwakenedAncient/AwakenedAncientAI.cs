@@ -238,7 +238,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //    Debug.Log(m_bone);
             //}
             m_info.seedSpitFX.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
-            GameplaySystem.SetBossHealth(m_character);
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)

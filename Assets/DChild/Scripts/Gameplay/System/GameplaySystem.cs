@@ -133,7 +133,6 @@ namespace DChild.Gameplay
             {
                 initializables[i].Initialize();
             }
-            bossHealth = m_bossHealth;
             //m_fxManager.LoadDatabase(m_database);
             //m_fxManager.Initialize(); //Temporary for grasscutFX
         }
