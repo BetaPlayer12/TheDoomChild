@@ -6,6 +6,7 @@ using UnityEngine;
 using DChild.Gameplay.Physics;
 using DChild.Gameplay.Systems.WorldComponents;
 using DChild.Gameplay.Systems;
+using Sirenix.Serialization;
 
 namespace DChild.Gameplay
 {

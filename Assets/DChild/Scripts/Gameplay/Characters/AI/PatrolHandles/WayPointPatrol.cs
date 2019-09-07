@@ -83,11 +83,9 @@ namespace DChild.Gameplay.Characters.AI
                 if (GetProposedFacing(currentPosition, agent.segmentDestination) != characterInfo.currentFacing)
                 {
                     CallTurnRequest();
-                    Debug.Log("fd");
                 }
                 else
                 {
-                    Debug.Log("move");
                     agent.Move(speed);
                 }
             }

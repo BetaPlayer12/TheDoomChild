@@ -10,6 +10,7 @@ namespace DChild.Gameplay.Characters.AI
             var target = collision.GetComponentInParent<ITarget>();
             if (target != null)
             {
+                Debug.Log("check target");
                 SetTargetToBrain(collision, target);
             }
         }
