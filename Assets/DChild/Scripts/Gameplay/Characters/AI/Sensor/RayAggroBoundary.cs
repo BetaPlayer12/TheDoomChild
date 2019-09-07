@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Characters.AI
 
         private bool RegisterSpottedPlayer(int hitCount)
         {
-            var success = hitCount > 0;
+            var success = hitCount == 0;
             if (success)
             {
                 SetTargetToBrain(m_spottedTarget,m_targetComponent);

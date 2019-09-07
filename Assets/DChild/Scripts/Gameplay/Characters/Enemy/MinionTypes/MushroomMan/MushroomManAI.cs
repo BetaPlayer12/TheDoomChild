@@ -177,6 +177,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    m_animation.EnableRootMotion(true, false);
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
@@ -189,7 +190,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-
+                    m_movement.Stop();
                     m_animation.EnableRootMotion(true, false);
                     m_attackHandle.ExecuteAttack(m_info.attack.animation);
                     m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);

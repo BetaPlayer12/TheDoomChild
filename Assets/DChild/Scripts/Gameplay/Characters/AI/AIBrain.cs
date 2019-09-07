@@ -110,6 +110,7 @@ namespace DChild.Gameplay.Characters.AI
                 var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Animations.ToArray();
                 for (int i = 0; i < reference.Length; i++)
                 {
+
                     list.Add(reference[i].Name);
                 }
                 return list;
