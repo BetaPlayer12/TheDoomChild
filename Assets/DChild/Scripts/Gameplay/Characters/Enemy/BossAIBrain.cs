@@ -10,8 +10,8 @@ namespace DChild.Gameplay.Characters.Enemies
     /// Has Booleans for States
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Boss))]
-    public abstract class BossAIBrain<T> : MonoBehaviour, IAIBrain where T : Boss
+    [RequireComponent(typeof(BossTemplate))]
+    public abstract class BossAIBrain<T> : MonoBehaviour, IAIBrain where T : BossTemplate
     {
         protected T m_boss;
         protected IEnemyTarget m_target;

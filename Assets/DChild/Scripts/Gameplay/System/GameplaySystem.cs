@@ -18,7 +18,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-
     public class GameplayModifiers
     {
         public float minionSoulEssenceDrop = 1;
@@ -97,16 +96,6 @@ namespace DChild.Gameplay
         {
             m_zoneMover.MoveCharacterToLocation(character, location, entranceType);
         }
-
-        //Temp
-        public SliderStatUI m_bossHealth;
-        private static SliderStatUI bossHealth;
-
-        public static void SetBossHealth(Character character)
-        {
-            bossHealth.MonitorInfoOf(character.GetComponentInChildren<Health>());
-        }
-        //Temp End
 
         public static CampaignSlot SaveGame()
         {
