@@ -13,9 +13,16 @@ namespace DChild.Gameplay.Combat
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            GameplaySystem.combatManager.MonitorBoss(m_boss);
-            //m_boss.SetTarget();
-            m_uponTrigger?.Invoke();
+            if (collision.tag != "Sensor")
+            {
+                var target = collision.GetComponentInParent<ITarget>();
+                if (target.CompareTag(Character.objectTag))
+                {
+                    GameplaySystem.combatManager.MonitorBoss(m_boss);
+                    m_boss.SetTarget(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
+                    m_uponTrigger?.Invoke();
+                }
+            }
         }
     }
 }

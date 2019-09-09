@@ -146,7 +146,10 @@ namespace DChild.Gameplay.Characters.AI
         {
             m_info = (T)m_data.info;
             m_info.Initialize();
-            m_character.SetID(m_data.bestiaryData.id);
+            if (m_data.bestiaryData != null)
+            {
+                m_character.SetID(m_data.bestiaryData.id);
+            }
         }
 
         protected virtual void Awake()

@@ -117,6 +117,11 @@ namespace DChild.Gameplay.Combat
         public List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes) => m_aOETargetHandler.ValidateTargets(source, hitboxes);
         public List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer) => m_aOETargetHandler.GetValidTargetsOfCircleAOE(source, radius, layer);
 
+        public void MonitorBoss(Boss boss)
+        {
+            m_bossCombat.SetBoss(boss);
+        }
+
         public void Initialize()
         {
             m_uiHandler.Initialize(gameObject.scene);
@@ -179,9 +184,6 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public void MonitorBoss(Boss boss)
-        {
-            throw new System.NotImplementedException();
-        }
+       
     }
 }
