@@ -1,12 +1,11 @@
-﻿using DChild.Gameplay.Databases;
-using Sirenix.OdinInspector;
-using System;
+﻿using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat.UI
 {
+
     [CreateAssetMenu(fileName = "DamageUIConfigurations", menuName = "DChild/Database/Damage UI Configurations")]
     public class DamageUIConfigurations : SerializedScriptableObject
     {

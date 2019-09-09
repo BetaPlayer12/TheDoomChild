@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-
     public class AirController : MonoBehaviour
     {
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
@@ -40,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_wallJump = behaviours.GetComponentInChildren<WallJump>();
             m_dash = behaviours.GetComponentInChildren<AirDash>();
             m_ledgeGrab = behaviours.GetComponentInChildren<LedgeGrab>();
+
         }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
@@ -48,6 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (state.isMoving)
                 {
+
                     if (m_ledgeGrab?.AttemptToLedgeGrab() ?? false)
                     {
                         m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
@@ -72,12 +73,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
+
             m_speedTransistor.SwitchToAirMoveSpeed();
             if (state.isStickingToWall)
             {
                 m_wallStick?.HandleWallStick();
                 if (skills.IsEnabled(PrimarySkill.WallJump) && callArgs.input.isJumpPressed)
                 {
+
                     m_wallStick?.CancelWallStick();
                     m_wallJump?.HandleJump();
                 }
@@ -115,7 +118,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
             }
-
             //UpdateCall?.Invoke(this, callArgs);
             if (skills.IsEnabled(PrimarySkill.WallJump) && state.isDroppingFromPlatform == false)
             {

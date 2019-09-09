@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
+
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Inputs;
 using Holysoft.Event;
@@ -14,10 +15,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private PlayerSkills m_skills;
         [SerializeField]
         private SkillResetRequester m_skillRequester;
+
         [SerializeField]
         private StatusEffectReciever m_statusReciever;
         [ShowInInspector, HideInEditorMode]
         private bool m_enabled;
+
 
         [Title("Model Reference")]
         [SerializeField]
@@ -30,7 +33,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private GroundController m_ground;
         private AirController m_air;
         private CombatController m_combatController;
+
         private StatusController m_statusController;
+
         private PlayerInput m_input;
 
         public event EventAction<EventActionArgs> ControllerDisabled;
@@ -56,6 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_combatController.Initialize(m_behaviourContainer);
             m_statusController = GetComponent<StatusController>();
             m_statusController.Initialize(m_behaviourContainer, m_statusReciever);
+
         }
 
         private void Awake()
@@ -64,7 +70,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_enabled = true;
             InitializeSubControllers();
         }
-
         private void Start()
         {
             m_callArgs = new ControllerEventArgs(m_input);

@@ -15,6 +15,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private MoveSpeedTransistor m_speedTransistor;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private Crouch m_crouch;
+
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private GroundJumpHandler m_groundJump;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
@@ -33,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_platformDrop = behaviours.GetComponentInChildren<PlatformDrop>();
             m_movement = behaviours.GetComponentInChildren<MovementHandle>();
             m_speedTransistor = behaviours.GetComponentInChildren<MoveSpeedTransistor>();
+
         }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
@@ -43,18 +45,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-
                 if (state.hasJumped == false)
                 {
                     m_movement?.Move(callArgs.input.direction.horizontalInput);
+
                 }
             }
         }
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
-
-
             if (state.isCrouched)
             {
                 if (m_crouch?.HandleCrouch(callArgs.input.direction.isDownHeld) ?? false)
@@ -65,6 +65,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_speedTransistor?.SwitchToJogSpeed();
                         m_crouch?.StopCrouch();
                     }
+
                 }
                 else
                 {

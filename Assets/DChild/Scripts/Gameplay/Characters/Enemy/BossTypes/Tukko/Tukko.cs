@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public class Tukko : Boss, IFlinch
+    public class Tukko : BossTemplate, IFlinch
     {
         [SerializeField]
         private AttackDamage m_damage;

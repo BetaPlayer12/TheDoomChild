@@ -1,5 +1,7 @@
 ﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Combat.StatusAilment;
+using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -17,6 +19,7 @@ namespace DChild.Gameplay.Combat
         List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer);
         void Damage(IDamageable damageable, AttackDamage damage);
         void Heal(IHealable healable, int health);
+        void MonitorBoss(Boss boss);
     }
 
     public class CombatManager : SerializedMonoBehaviour, ICombatManager, IGameplaySystemModule, IGameplayInitializable
@@ -27,8 +30,9 @@ namespace DChild.Gameplay.Combat
         private CriticalDamageHandle m_criticalDamageHandle;
         [SerializeField, HideLabel, Title("UI")]
         private CombatUIHandler m_uiHandler;
+        [SerializeField]
+        private BossCombatUI m_bossCombat;
         private AOETargetHandler m_aOETargetHandler;
-
         private PlayerCombatHandler m_playerCombatHandler;
         private ResistanceHandler m_resistanceHandler;
 
@@ -175,6 +179,9 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-
+        public void MonitorBoss(Boss boss)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
