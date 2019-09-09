@@ -4,19 +4,21 @@ using UnityEngine;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters.AI;
+using DChild;
 
 public class TombSoul : MonoBehaviour
 {
     [SerializeField]
     private float m_soulSpeed;
     [SerializeField]
-    private float m_riseSpeed;
+    private Vector2 m_riseSpeed;
 
     private IsolatedObjectPhysics2D m_physics;
     private AITargetInfo m_target;
     private TombSoulAnimation m_animation;
     private PhysicsMovementHandler2D m_movement;
     private bool m_willChase;
+    private float m_launchTime;
 
     private void Awake()
     {
@@ -33,6 +35,11 @@ public class TombSoul : MonoBehaviour
     public void GetTarget(AITargetInfo target)
     {
         m_target = target;
+    }
+
+    public void Launch(float count)
+    {
+        m_launchTime = count;
     }
 
     //private void ThrowSoul()
@@ -53,10 +60,17 @@ public class TombSoul : MonoBehaviour
 
     private IEnumerator SoulRoutine()
     {
-        GetComponent<Rigidbody2D>().AddForce(m_riseSpeed * Vector2.up, ForceMode2D.Impulse);
+        GetComponent<Rigidbody2D>().AddForce(Random.Range(m_riseSpeed.x, m_riseSpeed.y) * Vector2.up, ForceMode2D.Impulse);
+        GetComponent<Collider2D>().enabled = false;
         yield return new WaitForSeconds(3);
+        GetComponent<Collider2D>().enabled = true;
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        m_animation.SetAnimation(0, "Charge", false).TimeScale = 2;
+        yield return new WaitForAnimationComplete(m_animation.animationState, TombSoulAnimation.ANIMATION_CHARGE);
+        m_animation.DoChargeRed();
+        //yield return new WaitUntil(() => m_hasLaunched);
+        yield return new WaitForSeconds(m_launchTime);
         m_willChase = true;
-        m_animation.DoCharge();
         yield return null;
     }
 

@@ -248,6 +248,15 @@ namespace DChild.Gameplay.Characters.Enemies
         //        yield return null;
         //    }
         //}
+        public IEnumerator Die()
+        {
+            m_spawnDone = false;
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            Destroy(this.gameObject);
+            yield return null;
+        }
 
         private IEnumerator SpawnRoutine()
         {
@@ -272,8 +281,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_stateHandle.SetState(State.Patrol);
             }
-            yield return null;
             m_spawnDone = true;
+            yield return null;
         }
 
         private IEnumerator RunAttackRoutine()
