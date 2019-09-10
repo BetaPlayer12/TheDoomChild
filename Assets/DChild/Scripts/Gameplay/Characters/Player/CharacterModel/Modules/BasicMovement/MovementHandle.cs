@@ -118,7 +118,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
 
 
-                m_audioSource.Play();
+                
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
                 
                 
