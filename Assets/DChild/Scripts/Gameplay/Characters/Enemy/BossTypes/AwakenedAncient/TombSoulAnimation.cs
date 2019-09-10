@@ -8,12 +8,18 @@ namespace DChild.Gameplay.Characters.Enemies
     {
         #region "Animation Names"
         public const string ANIMATION_CHARGE = "Charge";
+        public const string ANIMATION_CHARGE_RED = "Charge_Red_Loop";
         public const string ANIMATION_POP = "Pop";
         #endregion
 
         public void DoCharge()
         {
-            SetAnimation(0, ANIMATION_CHARGE, true);
+            SetAnimation(0, ANIMATION_CHARGE, false);
+        }
+
+        public void DoChargeRed()
+        {
+            SetAnimation(0, ANIMATION_CHARGE_RED, true);
         }
 
         public void DoPop()

@@ -193,8 +193,8 @@ MonoBehaviour:
       type: 3}
     m_positionOffset: 0.5
     m_maxInstanceSpawned: 5
-    m_damageUIConfigurations: {fileID: 11400000, guid: 127b5b3426834e343b0a4ca66c45f60a,
-      type: 2}
+    m_damageUIConfigurations: {fileID: 0}
+  m_bossCombat: {fileID: 0}
 --- !u!114 &1282068314815717093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,6 +405,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -565,6 +566,7 @@ GameObject:
   - component: {fileID: 8422006114234957730}
   - component: {fileID: 736789538}
   - component: {fileID: 329289794}
+  - component: {fileID: 1344667973}
   m_Layer: 0
   m_Name: GameplaySystem
   m_TagString: Untagged
@@ -601,7 +603,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3607c5780ee2f143a5dd129b329bfe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_bossHealth: {fileID: 0}
 --- !u!114 &7300060033477175834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -657,7 +658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_pause: 27
-  m_storeOpen: 0
+  m_storeOpen: 9
   m_storeNavigator: {fileID: 0}
 --- !u!114 &329289794
 MonoBehaviour:
@@ -678,3 +679,22 @@ MonoBehaviour:
   m_popVelocityY:
     m_min: 5
     m_max: 10
+--- !u!114 &1344667973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9027099112888996189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba92d81c35caaa458d047a076cd9afb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_player: {fileID: 0}
+  m_input: {fileID: 0}
+  m_overrideController: {fileID: 0}
+  m_uiHandler: {fileID: 0}
+  m_autoReflex:
+    m_slowValue: 0
+    m_duration: 0.1
