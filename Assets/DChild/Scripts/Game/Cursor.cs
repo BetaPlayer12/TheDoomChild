@@ -48,33 +48,42 @@ namespace DChild
         {
             m_cacheCamera = GameSystem.mainCamera;
             GameSystem.CameraChange += OnCameraChange;
+            enabled = m_cacheCamera;
         }
 
         private void OnCameraChange(object sender, CameraChangeEventArgs eventArgs)
         {
             m_cacheCamera = eventArgs.camera;
+            enabled = m_cacheCamera;
         }
 
         public void LateUpdate()
         {
-            var position = Input.mousePosition;
-            transform.rotation = m_cacheCamera.transform.rotation;
-            if (m_cacheCamera.orthographic)
+            if (m_cacheCamera)
             {
-                var worldPosition = m_cacheCamera.ScreenToWorldPoint(position); //We are on the camera's position itself
-                worldPosition += m_cacheCamera.transform.forward * m_forwardOffset;
-                worldPosition += m_offset3D;
-                transform.position = worldPosition;
+                var position = Input.mousePosition;
+                transform.rotation = m_cacheCamera.transform.rotation;
+                if (m_cacheCamera.orthographic)
+                {
+                    var worldPosition = m_cacheCamera.ScreenToWorldPoint(position); //We are on the camera's position itself
+                    worldPosition += m_cacheCamera.transform.forward * m_forwardOffset;
+                    worldPosition += m_offset3D;
+                    transform.position = worldPosition;
+                }
+                else
+                {
+                    Ray ray = m_cacheCamera.ScreenPointToRay(position);
+                    var cameraForward = m_cacheCamera.transform.forward;
+                    var point = m_cacheCamera.transform.position + (cameraForward * m_forwardOffset);  //Positioning Plane Infront of Camera;
+                    Plane xy = new Plane(cameraForward, point);
+                    float distance;
+                    xy.Raycast(ray, out distance);
+                    transform.position = ray.GetPoint(distance) + m_offset3D;
+                } 
             }
             else
             {
-                Ray ray = m_cacheCamera.ScreenPointToRay(position);
-                var cameraForward = m_cacheCamera.transform.forward;
-                var point = m_cacheCamera.transform.position + (cameraForward * m_forwardOffset);  //Positioning Plane Infront of Camera;
-                Plane xy = new Plane(cameraForward, point);
-                float distance;
-                xy.Raycast(ray, out distance);
-                transform.position = ray.GetPoint(distance) + m_offset3D;
+                enabled = false;
             }
         }
     }
