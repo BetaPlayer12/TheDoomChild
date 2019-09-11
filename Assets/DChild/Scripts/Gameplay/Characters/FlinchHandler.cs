@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters
         {
             if (m_isFlinching == false)
             {
+                //StopAllCoroutines(); //Gian Editz
                 m_physics?.SetVelocity(Vector2.zero);
                 StartCoroutine(FlinchRoutine());
             }
