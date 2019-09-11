@@ -44,13 +44,13 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 5
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -117,7 +117,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 1.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -4831,11 +4831,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5081019108544738542}
     m_Modifications:
-    - target: {fileID: 2748759493701547798, guid: a554b5d8b0c51b84ca4d252d890e4426,
-        type: 3}
-      propertyPath: m_Name
-      value: Foot_Effects
-      objectReference: {fileID: 0}
     - target: {fileID: 2748759493701547795, guid: a554b5d8b0c51b84ca4d252d890e4426,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4891,16 +4886,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2748759493701547793, guid: a554b5d8b0c51b84ca4d252d890e4426,
+    - target: {fileID: 2748759493701547798, guid: a554b5d8b0c51b84ca4d252d890e4426,
         type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: de613f45904d1cf4496ba39d060e3acd, type: 2}
+      propertyPath: m_Name
+      value: Foot_Effects
+      objectReference: {fileID: 0}
     - target: {fileID: 2748759493701547793, guid: a554b5d8b0c51b84ca4d252d890e4426,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 10758, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 2748759493701547793, guid: a554b5d8b0c51b84ca4d252d890e4426,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: de613f45904d1cf4496ba39d060e3acd, type: 2}
+    - target: {fileID: 2748759493701547792, guid: a554b5d8b0c51b84ca4d252d890e4426,
+        type: 3}
+      propertyPath: simulationSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748759493701547792, guid: a554b5d8b0c51b84ca4d252d890e4426,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748759493701547792, guid: a554b5d8b0c51b84ca4d252d890e4426,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748759493701547792, guid: a554b5d8b0c51b84ca4d252d890e4426,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a554b5d8b0c51b84ca4d252d890e4426, type: 3}
 --- !u!4 &9134917490583991204 stripped
