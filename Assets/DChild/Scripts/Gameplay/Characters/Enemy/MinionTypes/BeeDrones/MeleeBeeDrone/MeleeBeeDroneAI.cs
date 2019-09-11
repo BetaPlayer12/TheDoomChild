@@ -205,14 +205,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            Debug.Log("Check State: " + m_stateHandle.currentState);
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    //if (m_targetInfo.isValid == false)
-                    //{
-                    //    m_stateHandle.SetState(State.Patrol);
-                    //}
+                    if (m_targetInfo.isValid == false)
+                    {
+                        m_stateHandle.SetState(State.Patrol);
+                    }
                     break;
 
                 case State.Patrol:
@@ -232,6 +233,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Turning:
+                   
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     Debug.Log("Turn Bee Drone");
                     m_agent.Stop();
@@ -240,7 +242,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_agent.Stop();
-                    m_animation.EnableRootMotion(true, true);
+                    m_animation.EnableRootMotion(false, false);
                     m_animation.SetAnimation(0, m_info.meleeAttack.animation, true);
 
                     break;
@@ -268,6 +270,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         if (IsTargetInRange(m_info.meleeAttack.range))
                         {
+                            Debug.Log("Attack check 45645");
                             m_stateHandle.SetState(State.Attacking);
                         }
                     }
@@ -291,8 +294,23 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    return;
+                    if (IsTargetInRange(m_info.meleeAttack.range))
+                    {
+                        Debug.Log("fail safe false");
+                        return;
+                    }
+                    else
+                    {
+                        Debug.Log("fail safe");
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        break;
+                    }
+                   
+
+                   
             }
+
+           
 
             if (m_enablePatience)
             {

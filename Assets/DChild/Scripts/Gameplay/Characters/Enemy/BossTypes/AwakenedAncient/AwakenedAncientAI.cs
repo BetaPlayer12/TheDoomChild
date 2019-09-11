@@ -71,9 +71,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //
 
-            [SerializeField]
-            private GameObject m_footFX;
-            public GameObject footFX => m_footFX;
+            //[SerializeField]
+            //private GameObject m_footFX;
+            //public GameObject footFX => m_footFX;
             [SerializeField]
             private GameObject m_anticipationFX;
             public GameObject anticipationFX => m_anticipationFX;
@@ -201,6 +201,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleSystem m_smokeFX;
         [SerializeField]
         private ParticleSystem m_screamFX;
+        [SerializeField]
+        private ParticleSystem m_screamSpitFX;
+        [SerializeField]
+        private ParticleSystem m_footFX;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -243,6 +247,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //    Debug.Log(m_bone);
             //}
             m_info.seedSpitFX.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
+            //GameplaySystem.SetBossHealth(m_character);
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -568,8 +573,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 //Debug.Log(m_eventName[0]);
 
-                GameObject obj = Instantiate(m_info.footFX, /*new Vector2(m_footTF.position.x + (3.5f * transform.localScale.x), m_footTF.position.y)*/ m_footTF.position, Quaternion.identity);
-                obj.transform.parent = m_footTF;
+                //GameObject obj = Instantiate(m_info.footFX, /*new Vector2(m_footTF.position.x + (3.5f * transform.localScale.x), m_footTF.position.y)*/ m_footTF.position, Quaternion.Euler(0, 0, 92.72319f));
+                //obj.transform.position = new Vector3(10.25f, 0, 0);
+                //obj.transform.parent = m_footTF;
+                m_footFX.Play();
             }
             else if (e.Data.Name == m_eventName[1])
             {
@@ -638,6 +645,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 //Debug.Log(m_eventName[5]);
                 m_smokeFX.Play();
             }
+            else if (e.Data.Name == m_eventName[7])
+            {
+                m_screamSpitFX.Play();
+            }
+            else if (e.Data.Name == m_eventName[8])
+            {
+                m_screamSpitFX.Stop();
+            }
         }
 
         private void Update()
@@ -652,6 +667,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentTombVolleys = m_tombVolleys[0];
                     if (!m_isPhaseChanging)
                     {
+                        StopAllCoroutines();
                         StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
                     }
                     break;
@@ -663,6 +679,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentTombVolleys = m_tombVolleys[1];
                     if (!m_isPhaseChanging)
                     {
+                        StopAllCoroutines();
                         StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
                     }
                     break;
@@ -674,6 +691,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentTombVolleys = m_tombVolleys[2];
                     if (!m_isPhaseChanging)
                     {
+                        StopAllCoroutines();
                         StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
                     }
                     break;

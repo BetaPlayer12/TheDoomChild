@@ -61,6 +61,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private GameObject m_burstGO;
             public GameObject burstGO => m_burstGO;
 
+
+            [SerializeField]
+            private float m_leftRotatorVariable;
+            public float leftVariable => m_leftRotatorVariable;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -105,12 +110,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
 
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_floorSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_cielingSensor;
+       
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -229,19 +229,45 @@ namespace DChild.Gameplay.Characters.Enemies
             
             Vector2 spitPos = m_stingerPos.position;
             Vector3 v_diff = (target - spitPos);
-            
+            //float player_x_Position = 10*m_targetInfo.position.x;
+           // float player_y_Position = 10*m_targetInfo.position.y;
+           // float player_Position_Data = (player_x_Position - player_y_Position);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+
+           // Debug.Log("x coordinates check: "+player_x_Position);
+          //  Debug.Log("y coordinates check: " + player_y_Position);
+           // Debug.Log("position coordinates check: " + player_Position_Data);
+
+
             if (m_character.facing == HorizontalDirection.Right)
             {
-                m_stingerPos.eulerAngles = new Vector3(0,0,-400);
+                m_stingerPos.eulerAngles = new Vector3(0, 0, 0);
+                m_stingerPos.SetPositionAndRotation(spitPos, Quaternion.Euler(0f, 0f, -25));
+                // m_stingerPos.localScale = new Vector3(1, 1, 1);
+               // player_y_Position = 1*player_y_Position;
+                Debug.Log("fire right");
+               
+
+               // GameObject burst = Instantiate(m_info.burstGO, spitPos, Quaternion.Euler(0f, 0f, player_Position_Data)); //No Parabola
+                Debug.Log("atan value " + atan2);
             }
             else if (m_character.facing == HorizontalDirection.Left)
             {
-                m_stingerPos.eulerAngles = new Vector3(0, 0, -150);
+               //var new_Player_x_Position = -1 * player_x_Position;
+              //  player_Position_Data = new_Player_x_Position - player_y_Position;
+               // player_y_Position = 180 - player_y_Position;
+                Debug.Log("fire left");
+                m_stingerPos.eulerAngles = new Vector3(0, 0, 0);
+                m_stingerPos.SetPositionAndRotation(spitPos, Quaternion.Euler(0f, 0f, -150));
+                // m_stingerPos.localScale = new Vector3(-1, 1, 1);
+               
+                GameObject burst = Instantiate(m_info.burstGO, spitPos, Quaternion.Euler(0f, 0f, 0f)); //No Parabola
+                          // burst.transform.position = Vector2.MoveTowards(transform.position, m_targetInfo.position, m_info.stingerProjectile.projectileInfo.speed);
+              //  Debug.Log("atan value " + atan2);
             }
 
-            GameObject burst = Instantiate(m_info.burstGO, spitPos, Quaternion.Euler(0f, 0f, 0f)); //No Parabola
-            //burst.GetComponent<ProjectileBeeScript>().Reciever(m_targetInfo.position, m_info.stingerProjectile.projectileInfo.speed);
+           
+            
             
             
             m_stingerLauncher.LaunchProjectile();
@@ -272,26 +298,20 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Idle:
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    //if (m_targetInfo.isValid == false)
-                    //{
-                    //    m_stateHandle.SetState(State.Patrol);
-                    //}
+                    if (m_targetInfo.isValid == false)
+                    {
+                      m_stateHandle.SetState(State.Patrol);
+                    }
+                    Debug.Log("stuck in idle");
                     break;
 
                 case State.Patrol:
                     Debug.Log("patrol mode");
-                    // if (!m_wallSensor.isDetecting && !m_floorSensor.isDetecting && !m_cielingSensor.isDetecting) //This means that as long as your sensors are detecting something it will patrol
-                    // {
+                   
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
-                    // break;
-                    // }
-                    // else
-                    // {
-                    //    m_stateHandle.SetState(State.Turning);
-                    //   Debug.Log("sensor test patrol");
-                    //  }
+                   
                     break;
 
                 case State.Turning:
@@ -308,28 +328,32 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (IsFacingTarget())
                     {
 
-                        var target = m_targetInfo.position;
-                        target.y -= 0.5f;
-                        m_animation.DisableRootMotion();
-                        if (GetComponent<IsolatedPhysics2D>().velocity != Vector2.zero)
-                        {
-                            m_animation.SetAnimation(0, m_info.move.animation, true);
-                        }
-                        else
-                        {
-                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        }
-                        m_agent.SetDestination(target);
-                        if (m_agent.hasPath)
-                        {
-                            m_agent.Move(m_info.move.speed);
-                        }
-
-
                         if (IsTargetInRange(m_info.stingerProjectile.range))
                         {
                             m_stateHandle.SetState(State.Attacking);
                         }
+                        else
+                        {
+
+                            var target = m_targetInfo.position;
+                            target.y -= 0.5f;
+                            m_animation.DisableRootMotion();
+                            if (GetComponent<IsolatedPhysics2D>().velocity != Vector2.zero)
+                            {
+                                m_animation.SetAnimation(0, m_info.move.animation, true);
+                            }
+                            else
+                            {
+                                m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                            }
+                            m_agent.SetDestination(target);
+                            if (m_agent.hasPath)
+                            {
+                                m_agent.Move(m_info.move.speed);
+                            }
+
+                        }
+                        
                     }
                     else
                     {
