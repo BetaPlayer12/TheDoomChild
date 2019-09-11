@@ -32,6 +32,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_screamAnimation;
+            public string screamAnimation => m_screamAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_moveAnimation;
             public string moveAnimation => m_moveAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -68,9 +71,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //
 
-            [SerializeField]
-            private GameObject m_footFX;
-            public GameObject footFX => m_footFX;
+            //[SerializeField]
+            //private GameObject m_footFX;
+            //public GameObject footFX => m_footFX;
             [SerializeField]
             private GameObject m_anticipationFX;
             public GameObject anticipationFX => m_anticipationFX;
@@ -120,7 +123,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             GroundSlam,
             Spit,
-            Tomb,
             SkeletonSummon,
             WaitAttackEnd,
         }
@@ -191,11 +193,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private List<GameObject> m_skeletons;
         private List<GameObject> m_tombs;
+        private List<GameObject> m_tombSouls;
 
         [SerializeField]
         private List<ParticleSystem> m_summonFX;
         [SerializeField]
         private ParticleSystem m_smokeFX;
+        [SerializeField]
+        private ParticleSystem m_screamFX;
+        [SerializeField]
+        private ParticleSystem m_screamSpitFX;
+        [SerializeField]
+        private ParticleSystem m_footFX;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -238,7 +247,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //    Debug.Log(m_bone);
             //}
             m_info.seedSpitFX.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
-            GameplaySystem.SetBossHealth(m_character);
+            //GameplaySystem.SetBossHealth(m_character);
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -277,8 +286,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("Update attack list trigger");
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.GroundSlam, m_info.groundSlam.range),
                                     new AttackInfo<Attack>(Attack.SkeletonSummon, m_info.skeletonSummon.range),
-                                    new AttackInfo<Attack>(Attack.Spit, m_info.spit.range),
-                                    new AttackInfo<Attack>(Attack.Tomb, m_info.skeletonSummon.range));
+                                    new AttackInfo<Attack>(Attack.Spit, m_info.spit.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -293,14 +301,13 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
 
             m_tombs = new List<GameObject>();
+            m_tombSouls = new List<GameObject>();
             m_skeletons = new List<GameObject>();
 
             if (m_animation.skeletonAnimation == null) return;
  
             m_animation.skeletonAnimation.AnimationState.Event += HandleEvent;
         }
-
-
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
@@ -351,6 +358,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 return true;
             }
+        }
+
+        public void AddSoul(GameObject soul)
+        {
+            m_tombSouls.Add(soul);
         }
 
         private Vector2 BallisticVel()
@@ -467,24 +479,48 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TombAttackRoutine(Vector3 target, int tombSize)
         {
+            m_isPhaseChanging = true;
             m_waitRoutineEnd = true;
             m_hitbox.SetInvulnerability(true);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            while(m_skeletons.Count > 0)
+            {
+                for (int i = 0; i < m_skeletons.Count; i++)
+                {
+                    //m_skeletons[i].GetComponent<Damageable>().Destroyed += m_skeletons[i].GetComponentInChildren<DeathHandle>().OnDestroyed;
+                    //m_skeletons[i].GetComponent<Damageable>().Heal(-10000);
+                    StartCoroutine(m_skeletons[i].GetComponent<SkeletonSpawnAI>().Die());
+                    m_skeletons.RemoveAt(i);
+                }
+                yield return null;
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.screamAnimation, false);
+            yield return new WaitForSeconds(.5f);
+            m_screamFX.Play();
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.screamAnimation);
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnimation);
-            //Debug.Log("Summon Tombs");
             for (int i = 0; i < tombSize; i++)
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
-                tomb.GetComponent<TombAttack>().GetTarget(m_targetInfo, m_currentTombVolleys);
+                tomb.GetComponent<TombAttack>().GetTarget(m_targetInfo, m_currentTombVolleys, this.gameObject, i);
                 m_tombs.Add(tomb);
             }
-            //m_animation.SetAnimation(0, m_info.burrowIdleAnimation, true);
-            //yield return null;
-            //yield return new WaitForSeconds(5f);
             while (m_tombs.Count > 0)
             {
+                for (int i = 0; i < m_tombSouls.Count; i++)
+                {
+                    if (m_tombSouls[i] != null)
+                    {
+                        //yield return new WaitForSeconds(3);
+                        m_tombSouls[i].GetComponent<TombSoul>().Launch(i);
+                    }
+                    else
+                    {
+                        m_tombSouls.RemoveAt(i);
+                    }
+                }
                 for (int i = 0; i < m_tombs.Count; i++)
                 {
                     if (m_tombs[i] == null)
@@ -495,16 +531,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_animation.skeletonAnimation.skeleton.SetSkin(m_skinName[m_chosenSkin]);
-            //Debug.Log("Waited for Tomb Attack to Finish");
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(false);
             m_isPhaseChanging = false;
             m_waitRoutineEnd = false;
+            m_tombs.Clear();
             m_currentState = State.ReevaluateSituation;
             yield return null;
-            m_tombs.Clear();
         }
 
         private IEnumerator SkeletonSummonRoutine(int skeletonSize)
@@ -538,8 +573,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 //Debug.Log(m_eventName[0]);
 
-                GameObject obj = Instantiate(m_info.footFX, /*new Vector2(m_footTF.position.x + (3.5f * transform.localScale.x), m_footTF.position.y)*/ m_footTF.position, Quaternion.identity);
-                obj.transform.parent = m_footTF;
+                //GameObject obj = Instantiate(m_info.footFX, /*new Vector2(m_footTF.position.x + (3.5f * transform.localScale.x), m_footTF.position.y)*/ m_footTF.position, Quaternion.Euler(0, 0, 92.72319f));
+                //obj.transform.position = new Vector3(10.25f, 0, 0);
+                //obj.transform.parent = m_footTF;
+                m_footFX.Play();
             }
             else if (e.Data.Name == m_eventName[1])
             {
@@ -608,10 +645,60 @@ namespace DChild.Gameplay.Characters.Enemies
                 //Debug.Log(m_eventName[5]);
                 m_smokeFX.Play();
             }
+            else if (e.Data.Name == m_eventName[7])
+            {
+                m_screamSpitFX.Play();
+            }
+            else if (e.Data.Name == m_eventName[8])
+            {
+                m_screamSpitFX.Stop();
+            }
         }
 
         private void Update()
         {
+            switch (PhaseHandler(m_health.currentValue))
+            {
+                case Phase.Second:
+                    m_chosenSkin = 1;
+                    m_currentTombSize = m_tombSize[0];
+                    m_currentSkeletonSize = m_skeletonSize[1];
+                    m_currentSummonThreshhold = m_summonThreshhold[1];
+                    m_currentTombVolleys = m_tombVolleys[0];
+                    if (!m_isPhaseChanging)
+                    {
+                        StopAllCoroutines();
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                    }
+                    break;
+                case Phase.Third:
+                    m_chosenSkin = 2;
+                    m_currentTombSize = m_tombSize[1];
+                    m_currentSkeletonSize = m_skeletonSize[2];
+                    m_currentSummonThreshhold = m_summonThreshhold[2];
+                    m_currentTombVolleys = m_tombVolleys[1];
+                    if (!m_isPhaseChanging)
+                    {
+                        StopAllCoroutines();
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                    }
+                    break;
+                case Phase.Final:
+                    m_chosenSkin = 3;
+                    m_currentTombSize = m_tombSize[2];
+                    m_currentSkeletonSize = m_skeletonSize[3];
+                    m_currentSummonThreshhold = m_summonThreshhold[3];
+                    m_currentTombVolleys = m_tombVolleys[2];
+                    if (!m_isPhaseChanging)
+                    {
+                        StopAllCoroutines();
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                    }
+                    break;
+                default:
+                    break;
+            }
+
             if (!m_isPhaseChanging)
             {
                 switch (m_currentState)
@@ -690,16 +777,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                             }
                                         }
                                         break;
-                                    case Attack.Tomb:
-                                        //if (Wait())
-                                        //{
-                                        //    if (Vector2.Distance(target, transform.position) >= m_info.groundSlam.range - 10)
-                                        //    {
-                                        //        StartCoroutine(TombAttackRoutine(target, m_tombSize[0]));
-                                        //        WaitTillAttackEnd(Attack.Tomb);
-                                        //    }
-                                        //}
-                                        break;
                                     case Attack.SkeletonSummon:
                                         if (Wait())
                                         {
@@ -767,58 +844,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     case State.WaitBehaviourEnd:
                         return;
                 }
-            }
 
-            //m_animation.skeletonAnimation.initialSkinName = m_skinName[0];
-            switch (PhaseHandler(m_health.currentValue))
-            {
-                case Phase.Second:
-                    m_chosenSkin = 1;
-                    m_currentTombSize = m_tombSize[0];
-                    m_currentSkeletonSize = m_skeletonSize[1];
-                    m_currentSummonThreshhold = m_summonThreshhold[1];
-                    m_currentTombVolleys = m_tombVolleys[0];
-                    if (!m_isPhaseChanging)
-                    {
-                        m_isPhaseChanging = true;
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
-                    }
-                    break;
-                case Phase.Third:
-                    m_chosenSkin = 2;
-                    m_currentTombSize = m_tombSize[1];
-                    m_currentSkeletonSize = m_skeletonSize[2];
-                    m_currentSummonThreshhold = m_summonThreshhold[2];
-                    m_currentTombVolleys = m_tombVolleys[1];
-                    if (!m_isPhaseChanging)
-                    {
-                        m_isPhaseChanging = true;
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
-                    }
-                    break;
-                case Phase.Final:
-                    m_chosenSkin = 3;
-                    m_currentTombSize = m_tombSize[2];
-                    m_currentSkeletonSize = m_skeletonSize[3];
-                    m_currentSummonThreshhold = m_summonThreshhold[3];
-                    m_currentTombVolleys = m_tombVolleys[2];
-                    if (!m_isPhaseChanging)
-                    {
-                        m_isPhaseChanging = true;
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            for (int i = 0; i < m_skeletons.Count; i++)
-            {
-                if (m_skeletons[i].activeSelf == false)
+                for (int i = 0; i < m_skeletons.Count; i++)
                 {
-                    m_skeletons.RemoveAt(i);
+                    if (m_skeletons[i].activeSelf == false)
+                    {
+                        m_skeletons.RemoveAt(i);
+                    }
                 }
             }
+            
         }
     }
 }

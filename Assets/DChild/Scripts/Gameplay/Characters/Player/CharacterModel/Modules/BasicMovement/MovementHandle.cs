@@ -21,11 +21,17 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private IPlayerState m_characterState;
         private Character m_character;
         private Animator m_animator;
+        private AudioSource m_audioSource;
         private string m_speedParameter;
         private string m_turnParameter;
         private int m_movingSpeedParameterValue;
-
         private bool m_hasStopped;
+        private float oldDirection;
+
+        //[SerializeField]
+        //private AudioClip m_walkEfx;
+        //[SerializeField]
+        //private AudioSource m_audiSource;
 
         public void SetMovingSpeedParameter(int speedValue) => m_movingSpeedParameterValue = speedValue;
         public void SetInfo(MovementInfo info)
@@ -46,6 +52,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
             m_turnParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Turn);
+           
             info.groundednessHandle.LandExecuted += OnLand;
         }
 
@@ -58,6 +65,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void Move(float direction)
         {
+            
+           
             if (direction == 0)
             {
                 if (m_characterPhysics.inContactWithGround)
@@ -74,6 +83,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             else
             {
                 var newDirection = direction > 0 ? Vector2.right : Vector2.left;
+                 Transform parentObj = gameObject.transform.parent.parent;
 
                 if (newDirection != m_direction && m_hasStopped == false)
                 {
@@ -93,14 +103,28 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                 m_state.isMoving = true;
                 m_hasStopped = false;
+
                 var newFacing = direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left;
+
+
+
+                
                 if (m_character.facing != newFacing)
                 {
-                    m_animator.SetTrigger(m_turnParameter);
+                    parentObj.localScale = new Vector3( -direction, parentObj.localScale.y, parentObj.localScale.z);
                 }
                 m_character.SetFacing(newFacing);
+
+
+
+
+                
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
+                
+                
+
             }
+
         }
 
         public void UpdateVelocity()

@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Systems
             m_pickedBy = player;
             m_hasBeenPickUp = true;
             DisableEnvironmentCollider();
-            m_animator.SetBool("PickedUp",true);
+            m_animator.SetBool("PickedUp", true);
         }
 
         protected virtual void ApplyPickUp()
@@ -82,6 +82,7 @@ namespace DChild.Gameplay.Systems
             if (collision.tag != "Sensor" && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 ApplyPickUp();
+                CallPoolRequest();
                 m_pickedBy = null;
             }
         }

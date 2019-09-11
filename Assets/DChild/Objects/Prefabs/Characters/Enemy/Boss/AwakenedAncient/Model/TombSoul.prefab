@@ -67,6 +67,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -4807,7 +4808,7 @@ ParticleSystem:
 --- !u!199 &1497104962408133542
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4831,6 +4832,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -4955,6 +4957,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_registerToWorldTime: 1
+  m_slowFactor: 0
+  m_fastFactor: 0
   m_fXObjects:
     m_particleSystems:
     - {fileID: 5187765738929168357}
@@ -5021,8 +5025,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8076c1e73516bd418ba8e6324fd4596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_soulSpeed: 10
-  m_riseSpeed: 2.5
+  m_soulSpeed: 15
+  m_riseSpeed: {x: 0.5, y: 2.5}
 --- !u!210 &6489105750502369726
 SortingGroup:
   m_ObjectHideFlags: 0
