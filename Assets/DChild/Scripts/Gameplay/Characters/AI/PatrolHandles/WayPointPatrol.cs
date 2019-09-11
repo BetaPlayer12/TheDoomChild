@@ -178,8 +178,6 @@ namespace DChild.Gameplay.Characters.AI
 
             }
         }
-
-
 #endif
     }
 }

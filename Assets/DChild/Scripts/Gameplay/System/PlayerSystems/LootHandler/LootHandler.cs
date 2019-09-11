@@ -54,9 +54,10 @@ namespace DChild.Gameplay.Systems
         {
             if (request.count >= m_maxLootSpawnPerFrame)
             {
+                var pool = GameSystem.poolManager.GetPool<PoolableObjectPool>();
                 for (int i = 0; i < maxInstance; i++)
                 {
-                    m_cachedLoot = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(request.loot).GetComponent<Loot>();
+                    m_cachedLoot = pool.GetOrCreateItem(request.loot).GetComponent<Loot>();
                     m_cachedLoot.SpawnAt(request.location, Quaternion.identity);
                     m_cachedLoot.Pop(GetRandomPopVelocity());
                 }

@@ -22,8 +22,11 @@ namespace Holysoft.Pooling
 
     public abstract class ObjectPool<T> : ObjectPool where T : class, IPoolableItem
     {
-        [SerializeField,MinValue(1)]
+        [SerializeField, MinValue(1)]
         private float m_poolDuration;
+#if UNITY_EDITOR
+        [SerializeField, ReadOnly]
+#endif
         protected List<T> m_items;
         protected List<float> m_timers;
 
@@ -43,15 +46,15 @@ namespace Holysoft.Pooling
             else if (m_items.Count > 0)
             {
                 var retrievedInstance = RetrieveFromPool(component);
-                return retrievedInstance != null ? retrievedInstance : CretateInstance(gameObject);
+                return retrievedInstance != null ? retrievedInstance : CreateInstance(gameObject);
             }
             else
             {
-                return CretateInstance(gameObject);
+                return CreateInstance(gameObject);
             }
         }
 
-        private T CretateInstance(GameObject gameObject)
+        private T CreateInstance(GameObject gameObject)
         {
             var instance = UnityEngine.Object.Instantiate(gameObject);
             var newComponent = instance.GetComponent<T>();
