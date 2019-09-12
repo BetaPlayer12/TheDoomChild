@@ -19,13 +19,15 @@ namespace DChild.Gameplay.Characters.AI
             willTransistion = false;
         }
 
-        public void ChangePhase(T phase)
+        public bool ChangePhase(T phase)
         {
             if(m_currentPhase.Equals(phase) != false)
             {
                 m_currentPhase = phase;
                 willTransistion = true;
+                return true;
             }
+            return false;
         }
     }
 }
