@@ -225,51 +225,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchStingerProjectile()
         {
-            var target = m_targetInfo.position; //No Parabola
-            
+            var target = m_targetInfo.position; //No Parabola      
             Vector2 spitPos = m_stingerPos.position;
             Vector3 v_diff = (target - spitPos);
-            //float player_x_Position = 10*m_targetInfo.position.x;
-           // float player_y_Position = 10*m_targetInfo.position.y;
-           // float player_Position_Data = (player_x_Position - player_y_Position);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-
-           // Debug.Log("x coordinates check: "+player_x_Position);
-          //  Debug.Log("y coordinates check: " + player_y_Position);
-           // Debug.Log("position coordinates check: " + player_Position_Data);
-
-
-            if (m_character.facing == HorizontalDirection.Right)
-            {
-                m_stingerPos.eulerAngles = new Vector3(0, 0, 0);
-                m_stingerPos.SetPositionAndRotation(spitPos, Quaternion.Euler(0f, 0f, -25));
-                // m_stingerPos.localScale = new Vector3(1, 1, 1);
-               // player_y_Position = 1*player_y_Position;
-                Debug.Log("fire right");
-               
-
-               // GameObject burst = Instantiate(m_info.burstGO, spitPos, Quaternion.Euler(0f, 0f, player_Position_Data)); //No Parabola
-                Debug.Log("atan value " + atan2);
-            }
-            else if (m_character.facing == HorizontalDirection.Left)
-            {
-               //var new_Player_x_Position = -1 * player_x_Position;
-              //  player_Position_Data = new_Player_x_Position - player_y_Position;
-               // player_y_Position = 180 - player_y_Position;
-                Debug.Log("fire left");
-                m_stingerPos.eulerAngles = new Vector3(0, 0, 0);
-                m_stingerPos.SetPositionAndRotation(spitPos, Quaternion.Euler(0f, 0f, -150));
-                // m_stingerPos.localScale = new Vector3(-1, 1, 1);
-               
-                GameObject burst = Instantiate(m_info.burstGO, spitPos, Quaternion.Euler(0f, 0f, 0f)); //No Parabola
-                          // burst.transform.position = Vector2.MoveTowards(transform.position, m_targetInfo.position, m_info.stingerProjectile.projectileInfo.speed);
-              //  Debug.Log("atan value " + atan2);
-            }
-
-           
-            
-            
-            
+            m_stingerPos.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+            GameObject burst = Instantiate(m_info.burstGO, spitPos, m_stingerPos.rotation);
             m_stingerLauncher.LaunchProjectile();
         }
         
