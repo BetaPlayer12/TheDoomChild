@@ -99,6 +99,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private GameObject m_skeletonGO;
             public GameObject skeletonGO => m_skeletonGO;
 
+            [SerializeField]
+            private Dictionary<Phase, BossPhaseData> m_phasingInfo;
+
+            public BossPhaseData GetPhaseData(Phase phase) => m_phasingInfo[phase];
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -109,6 +114,27 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        [System.Serializable]
+        public class PhaseInfo : IPhaseInfo
+        {
+            [SerializeField]
+            private int m_skin;
+            [SerializeField]
+            private int m_tombCount;
+            [SerializeField]
+            private int m_tombVolleys;
+            [SerializeField]
+            private int m_maxSkeletonCount;
+            [SerializeField]
+            private int m_maxSummon;
+
+            public int skin => m_skin;
+            public int tombCount => m_tombCount;
+            public int tombVolleys => m_tombVolleys;
+            public int maxSkeletonCount => m_maxSkeletonCount;
+            public int maxSummon => m_maxSummon;
+        }
+
         private enum State
         {
             Idle,
@@ -116,6 +142,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Attacking,
             Chasing,
             ReevaluateSituation,
+            Phase,
             WaitBehaviourEnd,
         }
 
@@ -127,7 +154,7 @@ namespace DChild.Gameplay.Characters.Enemies
             WaitAttackEnd,
         }
 
-        private enum Phase
+        public enum Phase
         {
             Second,
             Third,
@@ -157,13 +184,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private DeathHandle m_deathHandle;
         [SerializeField]
-        private State m_currentState;
-        private State m_afterWaitForBehaviourState;
+        private StateHandle<State> m_stateHandle;
         [SpineEvent, SerializeField]
         private List<string> m_eventName;
         [SpineSkin, SerializeField]
         private List<string> m_skinName;
-        private int m_chosenSkin;
 
         [SerializeField]
         private Transform m_footTF;
@@ -185,10 +210,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private Attack m_afterWaitForBehaviourAttack;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
+        private PhaseHandle<Phase> m_phaseHandle;
 
         //Patience Handler
         private bool m_burrowed;
         private bool m_waitRoutineEnd;
+
         private bool m_isPhaseChanging;
 
         private List<GameObject> m_skeletons;
@@ -216,18 +243,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_velOffset;
         [SerializeField, TabGroup("Cannon Values")]
         private Vector2 m_targetOffset;
-        [SerializeField, TabGroup("Phase Values")]
-        private List<int> m_tombVolleys;
-        private int m_currentTombVolleys;
-        [SerializeField, TabGroup("Phase Values")]
-        private List<int> m_tombSize;
-        private int m_currentTombSize;
-        [SerializeField, TabGroup("Phase Values")]
-        private List<int> m_skeletonSize;
-        private int m_currentSkeletonSize;
-        [SerializeField, TabGroup("Phase Values")]
-        private List<int> m_summonThreshhold;
-        private int m_currentSummonThreshhold;
+        private PhaseInfo m_currentPhaseInfo;
 
         private float m_targetDistance;
 
@@ -235,8 +251,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_burrowed = true;
-            m_currentSkeletonSize = m_skeletonSize[0];
-            m_currentSummonThreshhold = m_summonThreshhold[0];
             m_maxHealth = m_health.currentValue;
             m_phaseHealth = m_maxHealth;
             m_animation.skeletonAnimation.skeleton.SetSkin(m_skinName[0]);
@@ -252,12 +266,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            m_currentState = State.ReevaluateSituation;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs)
         {
-            WaitTillBehaviourEnd(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.ReevaluateSituation);
             m_turnHandle.Execute();
         }
 
@@ -278,6 +292,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_attackDecider != null)
             {
                 //Debug.Log("Update attack list trigger function");
+                m_currentPhaseInfo = (PhaseInfo)m_info.GetPhaseData(m_phaseHandle.currentPhase).info;
                 UpdateAttackDeciderList();
             }
         }
@@ -297,7 +312,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_stateHandle = new StateHandle<State>(State.WaitBehaviourEnd, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
+            m_phaseHandle = new PhaseHandle<Phase>(Phase.Wait);
+            m_currentPhaseInfo = (PhaseInfo)m_info.GetPhaseData(m_phaseHandle.currentPhase).info;
+
+
             UpdateAttackDeciderList();
 
             m_tombs = new List<GameObject>();
@@ -317,13 +337,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            m_currentState = m_afterWaitForBehaviourState;
-        }
-
-        private void WaitTillBehaviourEnd(State nextState)
-        {
-            m_currentState = State.WaitBehaviourEnd;
-            m_afterWaitForBehaviourState = nextState;
+            m_stateHandle.ApplyQueuedState();
         }
 
         private void WaitTillAttackEnd(Attack nextAttack)
@@ -463,7 +477,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
             yield return null;
-            m_currentState = State.Chasing;
+            m_stateHandle.OverrideState(State.Chasing);
         }
 
         private IEnumerator GroundAttackRoutine()
@@ -473,7 +487,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_GROUND_SLAM);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
-            m_currentState = State.ReevaluateSituation;
+            m_stateHandle.OverrideState(State.Chasing);
             yield return null;
         }
 
@@ -504,7 +518,7 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int i = 0; i < tombSize; i++)
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
-                tomb.GetComponent<TombAttack>().GetTarget(m_targetInfo, m_currentTombVolleys, this.gameObject, i);
+                tomb.GetComponent<TombAttack>().GetTarget(m_targetInfo, m_currentPhaseInfo.tombVolleys, this.gameObject, i);
                 m_tombs.Add(tomb);
             }
             while (m_tombs.Count > 0)
@@ -530,7 +544,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 yield return null;
             }
-            m_animation.skeletonAnimation.skeleton.SetSkin(m_skinName[m_chosenSkin]);
+            m_animation.skeletonAnimation.skeleton.SetSkin(m_skinName[m_currentPhaseInfo.skin]);
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -538,13 +552,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isPhaseChanging = false;
             m_waitRoutineEnd = false;
             m_tombs.Clear();
-            m_currentState = State.ReevaluateSituation;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
 
         private IEnumerator SkeletonSummonRoutine(int skeletonSize)
         {
-            if (m_currentSkeletonSize > m_skeletons.Count)
+            if (m_currentPhaseInfo.maxSkeletonCount > m_skeletons.Count)
             {
                 m_waitRoutineEnd = true;
                 m_animation.SetAnimation(0, m_info.skeletonSummon.animation, false);
@@ -562,7 +576,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_waitRoutineEnd = false;
-                m_currentState = State.ReevaluateSituation;
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
             }
             yield return null;
         }
@@ -615,7 +629,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 else
                 {
                     m_waitRoutineEnd = false;
-                    m_currentState = State.Turning;
+                    m_stateHandle.OverrideState(State.Turning);
                 }
             }
             else if (e.Data.Name == m_eventName[3])
@@ -660,39 +674,27 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (PhaseHandler(m_health.currentValue))
             {
                 case Phase.Second:
-                    m_chosenSkin = 1;
-                    m_currentTombSize = m_tombSize[0];
-                    m_currentSkeletonSize = m_skeletonSize[1];
-                    m_currentSummonThreshhold = m_summonThreshhold[1];
-                    m_currentTombVolleys = m_tombVolleys[0];
+                    m_currentPhaseInfo = (PhaseInfo)m_info.GetPhaseData(Phase.Second).info;
                     if (!m_isPhaseChanging)
                     {
                         StopAllCoroutines();
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentPhaseInfo.tombCount));
                     }
                     break;
                 case Phase.Third:
-                    m_chosenSkin = 2;
-                    m_currentTombSize = m_tombSize[1];
-                    m_currentSkeletonSize = m_skeletonSize[2];
-                    m_currentSummonThreshhold = m_summonThreshhold[2];
-                    m_currentTombVolleys = m_tombVolleys[1];
+                    m_currentPhaseInfo = (PhaseInfo)m_info.GetPhaseData(Phase.Third).info;
                     if (!m_isPhaseChanging)
                     {
                         StopAllCoroutines();
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentPhaseInfo.tombCount));
                     }
                     break;
                 case Phase.Final:
-                    m_chosenSkin = 3;
-                    m_currentTombSize = m_tombSize[2];
-                    m_currentSkeletonSize = m_skeletonSize[3];
-                    m_currentSummonThreshhold = m_summonThreshhold[3];
-                    m_currentTombVolleys = m_tombVolleys[2];
+                    m_currentPhaseInfo = (PhaseInfo)m_info.GetPhaseData(Phase.Final).info;
                     if (!m_isPhaseChanging)
                     {
                         StopAllCoroutines();
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentPhaseInfo.tombCount));
                     }
                     break;
                 default:
@@ -701,7 +703,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (!m_isPhaseChanging)
             {
-                switch (m_currentState)
+                switch (m_stateHandle.currentState)
                 {
                     case State.Idle:
                         //Add actual CharacterInfo Later
@@ -742,7 +744,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (Wait() && !m_waitRoutineEnd)
                         {
                             StartCoroutine(TurnRoutine());
-                            WaitTillBehaviourEnd(State.ReevaluateSituation);
+                            m_stateHandle.Wait(State.ReevaluateSituation);
                         }
                         break;
                     case State.Attacking:
@@ -782,7 +784,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                         {
                                             if (Vector2.Distance(target, transform.position) >= m_info.skeletonSummon.range - 10)
                                             {
-                                                StartCoroutine(SkeletonSummonRoutine(m_currentSkeletonSize));
+                                                StartCoroutine(SkeletonSummonRoutine(m_currentPhaseInfo.maxSkeletonCount));
                                                 WaitTillAttackEnd(Attack.SkeletonSummon);
                                             }
                                         }
@@ -799,7 +801,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             //Put Target Destination
                             if (IsFacingTarget() && Vector2.Distance(target, transform.position) <= m_info.groundSlam.range)
                             {
-                                m_currentState = State.Attacking;
+                                m_stateHandle.SetState(State.Attacking);
                                 m_movementHandle.Stop();
                             }
                             else if (IsFacingTarget() && Vector2.Distance(target, transform.position) >= m_info.groundSlam.range)
@@ -820,7 +822,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_currentState = State.Turning;
+                                m_stateHandle.SetState(State.Turning);
                                 m_movementHandle.Stop();
                                 //m_turnHandle.Execute();
                             }
@@ -833,11 +835,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (m_targetInfo.isValid)
                             {
-                                m_currentState = State.Chasing;
+                                m_stateHandle.SetState(State.Chasing);
                             }
                             else
                             {
-                                m_currentState = State.Idle;
+                                m_stateHandle.SetState(State.Idle);
                             }
                         }
                         break;
