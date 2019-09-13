@@ -21,17 +21,16 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private IPlayerState m_characterState;
         private Character m_character;
         private Animator m_animator;
-        private AudioSource m_audioSource;
+        private RaySensor m_groundSensor;
+
         private string m_speedParameter;
         private string m_turnParameter;
         private int m_movingSpeedParameterValue;
         private bool m_hasStopped;
         private float oldDirection;
+        private bool m_Play;
+        private bool m_ToggleChange;
 
-        //[SerializeField]
-        //private AudioClip m_walkEfx;
-        //[SerializeField]
-        //private AudioSource m_audiSource;
 
         public void SetMovingSpeedParameter(int speedValue) => m_movingSpeedParameterValue = speedValue;
         public void SetInfo(MovementInfo info)
@@ -52,7 +51,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
             m_turnParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Turn);
-           
+            m_groundSensor = info.GetSensor(PlayerSensorList.SensorType.Ground);
             info.groundednessHandle.LandExecuted += OnLand;
         }
 
@@ -79,6 +78,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 }
                 m_state.isMoving = false;
                 m_animator.SetInteger(m_speedParameter, 0);
+               
             }
             else
             {
@@ -106,24 +106,15 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                 var newFacing = direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left;
 
-
-
-                
                 if (m_character.facing != newFacing)
                 {
-                    parentObj.localScale = new Vector3( -direction, parentObj.localScale.y, parentObj.localScale.z);
+                    parentObj.localScale = new Vector3( direction, parentObj.localScale.y, parentObj.localScale.z);
                 }
                 m_character.SetFacing(newFacing);
-
-
-
-
-                
+               
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
-                
-                
-
             }
+            
 
         }
 
