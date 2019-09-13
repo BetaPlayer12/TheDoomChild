@@ -4996,15 +4996,7 @@ MonoBehaviour:
   m_attackHandle:
     m_animation: {fileID: 8806589068311600585}
   m_deathHandle: {fileID: 162080084387454503}
-  m_currentState: 0
-  m_eventName:
-  - Foot_Effects
-  - SA_Anticipation
-  - Seed_Spit
-  - Stomp_Efx
-  - Skeleton_Anticipation_VFX
-  - Spawn_Skeletons
-  - smoke_effects
+  m_eventName: []
   m_skinName:
   - Awakened_Ancient_Phase_01
   - Awakened_Ancient_Phase_02
@@ -5022,15 +5014,13 @@ MonoBehaviour:
   - {fileID: 6598179777337984917}
   m_smokeFX: {fileID: 302383593796410511}
   m_screamFX: {fileID: 6584563091139409046}
+  m_screamSpitFX: {fileID: 0}
+  m_footFX: {fileID: 0}
   m_speed: 3
   m_gravityScale: 3
   m_posOffset: {x: 1, y: 0.4}
   m_velOffset: 0.4
   m_targetOffset: {x: 1.6, y: 1}
-  m_tombVolleys: 020000000400000004000000
-  m_tombSize: 030000000300000004000000
-  m_skeletonSize: 03000000040000000500000006000000
-  m_summonThreshhold: 00000000010000000200000003000000
 --- !u!114 &8945520754824478488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5270,10 +5260,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2314127693125412679}
     m_Modifications:
-    - target: {fileID: 7501249103534530850, guid: 8252bfa1795f60941b6e0a4070e41a34,
+    - target: {fileID: 7501249103534530851, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
-      propertyPath: m_Name
-      value: AwakenedAncientModel
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: db4dc649170f2f74aaa9a85324011961,
+        type: 2}
+    - target: {fileID: 7501249103534530851, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: _animationName
+      value: Burrow_Idle
       objectReference: {fileID: 0}
     - target: {fileID: 7501249103534530854, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
@@ -5330,27 +5326,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7501249103534530851, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: skeletonDataAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: db4dc649170f2f74aaa9a85324011961,
-        type: 2}
-    - target: {fileID: 7501249103534530851, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: _animationName
-      value: Burrow_Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 7501249103534530852, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 774ca57f9aced8840a2dc411e5cd0964, type: 2}
-    - target: {fileID: 7501249103534530852, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8397399914938665892, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5364,7 +5339,7 @@ PrefabInstance:
     - target: {fileID: 8246593781607944904, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_compositeColliderID
-      value: -90638
+      value: -2484014
       objectReference: {fileID: 0}
     - target: {fileID: 4932820218245104561, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
@@ -5396,11 +5371,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -3.5949993
       objectReference: {fileID: 0}
-    - target: {fileID: 5736676924033632631, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: rb
-      value: 
-      objectReference: {fileID: 8710389533956841228}
     - target: {fileID: 6360412020367550851, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -5431,6 +5401,36 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -2.9020023
       objectReference: {fileID: 0}
+    - target: {fileID: 2682650929471531082, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.793567
+      objectReference: {fileID: 0}
+    - target: {fileID: 2682650929471531082, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5787239
+      objectReference: {fileID: 0}
+    - target: {fileID: 7501249103534530850, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_Name
+      value: AwakenedAncientModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7501249103534530852, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 774ca57f9aced8840a2dc411e5cd0964, type: 2}
+    - target: {fileID: 7501249103534530852, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5736676924033632631, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 8710389533956841228}
     - target: {fileID: 343262521742798877, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6876,16 +6876,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 82.26401
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682650929471531082, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 8.793567
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682650929471531082, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5787239
       objectReference: {fileID: 0}
     - target: {fileID: 3839393089208398652, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}

@@ -185,13 +185,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    //m_agent.Stop();
+                    Debug.Log("is turning");
                     m_turnHandle.Execute();
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    m_animation.EnableRootMotion(true, false);
+                    m_animation.EnableRootMotion(true, true);
                     m_attackHandle.ExecuteAttack(m_info.attack.animation);
                     m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                     break;
@@ -201,16 +201,22 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
                             {
-                                var target = m_targetInfo.position;
-                                target.y -= 0.5f;
-                                m_animation.EnableRootMotion(true, false);
-                                m_animation.SetAnimation(0, m_info.move.animation, true);
-
-
                                 if (IsTargetInRange(m_info.attack.range))
                                 {
                                     m_stateHandle.SetState(State.Attacking);
                                 }
+                                else
+                                {
+                                    var target = m_targetInfo.position;
+                                    target.y -= 0.5f;
+                                    m_animation.EnableRootMotion(true, false);
+                                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                                }
+
+                                
+
+
+                               
                             }
                             else
                             {

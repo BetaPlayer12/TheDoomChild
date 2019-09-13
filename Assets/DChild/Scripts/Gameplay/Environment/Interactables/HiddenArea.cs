@@ -92,10 +92,7 @@ namespace DChild.Gameplay.Environment
             {
                 Color color = m_colorInfos[m_spines[i]].GetValue(m_lerpDuration.lerpValue);
                 var skeleton = m_spines[i].skeleton;
-                skeleton.R = color.r;
-                skeleton.G = color.g;
-                skeleton.B = color.b;
-                skeleton.A = color.a;
+                m_spines[i].skeleton.SetColor(color);
             }
         }
 

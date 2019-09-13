@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Physics;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -214,7 +215,9 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            StopAllCoroutines();
             m_movement.Stop();
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
         }
 
         public void SetDirection(float direction)
@@ -227,13 +230,11 @@ namespace DChild.Gameplay.Characters.Enemies
             base.ApplyData();
             if (m_attackDecider != null)
             {
-                Debug.Log("Update attack list trigger function");
                 UpdateAttackDeciderList();
             }
         }
         private void UpdateAttackDeciderList()
         {
-            Debug.Log("Update attack list trigger");
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range),
                                     new AttackInfo<Attack>(Attack.Attack3, m_info.attack3.range),
@@ -250,6 +251,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //}
         public IEnumerator Die()
         {
+            StopAllCoroutines();
             m_spawnDone = false;
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
@@ -272,7 +274,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_box2D.offset = new Vector2(0, 10);
             m_box2D.size = new Vector2(50, 25);
-            Debug.Log("Spawn Done");
             if (m_targetInfo.isValid)
             {
                 m_stateHandle.SetState(State.Chasing);
@@ -287,13 +288,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RunAttackRoutine()
         {
-            Debug.Log("DO RUN ATTACK SKELETON");
             m_isRunAttacking = true;
             //MoveOnGround(m_targetInfo.position, m_info.run.speed);
             GetComponent<IsolatedPhysics2D>().AddForce((Vector2.right * transform.localScale.x) * 15, ForceMode2D.Impulse);
             m_animation.SetAnimation(0, m_info.runAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.runAttack.animation);
-            Debug.Log("STOP RUN ATTACK SKELETON");
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
             yield return null;
             m_isRunAttacking = false;
@@ -424,7 +423,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         break;
                     case State.WaitBehaviourEnd:
-                        Debug.Log("Still wetting");
                         return;
                 }
 

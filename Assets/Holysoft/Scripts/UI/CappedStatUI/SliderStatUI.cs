@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace Holysoft.Gameplay.UI
 {
+
     public class SliderStatUI : CappedStatUI
     {
         [SerializeField]
