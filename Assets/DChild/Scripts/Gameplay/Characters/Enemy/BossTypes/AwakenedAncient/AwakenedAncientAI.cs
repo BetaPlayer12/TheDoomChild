@@ -210,7 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Attack m_afterWaitForBehaviourAttack;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
-        private PhaseHandle<Phase> m_phaseHandle;
+        private PhaseHandle<Phase,PhaseInfo> m_phaseHandle;
 
         //Patience Handler
         private bool m_burrowed;
@@ -314,7 +314,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.WaitBehaviourEnd, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
-            m_phaseHandle = new PhaseHandle<Phase>(Phase.Wait);
+            //m_phaseHandle = new PhaseHandle<Phase>(Phase.Wait);
             m_currentPhaseInfo = (PhaseInfo)m_info.GetPhaseData(m_phaseHandle.currentPhase).info;
 
 
