@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [System.Serializable]
         public class Info : BaseInfo
         {
-            //Basic Behaviours
+            [Title("Animations")]
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
@@ -51,6 +51,36 @@ namespace DChild.Gameplay.Characters.Enemies
             public string unburrowAnimation => m_unburrowAnimation;
             //
 
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_footEvent;
+            public string footEvent => m_footEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_saAnticipationEvent;
+            public string saAnticipationEvent => m_saAnticipationEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_seedSpitEvent;
+            public string seedSpitEvent => m_seedSpitEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_stompEvent;
+            public string stompEvent => m_stompEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_skeletonAnticipationEvent;
+            public string skeletonAnticipationEvent => m_skeletonAnticipationEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_spawnSkeletonEvent;
+            public string spawnSkeletonEvent => m_spawnSkeletonEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_smokeEvent;
+            public string smokeEvent => m_smokeEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_screamStartEvent;
+            public string screamStartEvent => m_screamStartEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_screamEndEvent;
+            public string screamEndEvent => m_screamEndEvent;
+
+            [Title("Patience Values")]
             [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
@@ -58,7 +88,7 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
 
-            //Attack Behaviours
+            [Title("Attack Behaviours")]
             [SerializeField]
             private SimpleAttackInfo m_groundSlam = new SimpleAttackInfo();
             public SimpleAttackInfo groundSlam => m_groundSlam;
@@ -71,9 +101,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //
 
-            //[SerializeField]
-            //private GameObject m_footFX;
-            //public GameObject footFX => m_footFX;
+
+            [Title("Prefabs and Shit")]
             [SerializeField]
             private GameObject m_anticipationFX;
             public GameObject anticipationFX => m_anticipationFX;
@@ -141,6 +170,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         private float m_maxHealth;
         private float m_phaseHealth;
+        [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -159,8 +190,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private State m_currentState;
         private State m_afterWaitForBehaviourState;
-        [SpineEvent, SerializeField]
-        private List<string> m_eventName;
+        //[SpineEvent, SerializeField]
+        //private List<string> m_eventName;
         [SpineSkin, SerializeField]
         private List<string> m_skinName;
         private int m_chosenSkin;
@@ -304,9 +335,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_tombSouls = new List<GameObject>();
             m_skeletons = new List<GameObject>();
 
-            if (m_animation.skeletonAnimation == null) return;
- 
-            m_animation.skeletonAnimation.AnimationState.Event += HandleEvent;
+            m_spineEventListener.Subscribe(m_info.footEvent, m_footFX.Play);
+            m_spineEventListener.Subscribe(m_info.saAnticipationEvent, AnticipationPlay);
+            m_spineEventListener.Subscribe(m_info.seedSpitEvent, SeedSpit);
+            m_spineEventListener.Subscribe(m_info.stompEvent, Stomp);
+            m_spineEventListener.Subscribe(m_info.spawnSkeletonEvent, SpawnSkeleton);
+            m_spineEventListener.Subscribe(m_info.smokeEvent, m_smokeFX.Play);
+            m_spineEventListener.Subscribe(m_info.screamStartEvent, m_screamSpitFX.Play);
+            m_spineEventListener.Subscribe(m_info.screamEndEvent, m_screamSpitFX.Stop);
         }
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
@@ -438,7 +474,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.turnAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_TURN);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.turnAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
             yield return null;
@@ -449,7 +485,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_BURROW);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnimation);
             m_animation.SetAnimation(0, m_info.burrowIdleAnimation, true);
             m_waitRoutineEnd = false;
             yield return null;
@@ -459,7 +495,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_UNBURROW);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
             yield return null;
@@ -470,7 +506,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.groundSlam.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_GROUND_SLAM);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.groundSlam.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
             m_currentState = State.ReevaluateSituation;
@@ -555,7 +591,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     var mainFx = m_summonFX[i].main;
                     mainFx.simulationSpeed = 2.5f;
                 }
-                yield return new WaitForAnimationComplete(m_animation.animationState, AwakenedAncientAnimation.ANIMATION_SPIT_SKELETON);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.skeletonSummon.animation);
                 for (int i = 0; i < m_summonFX.Count; i++)
                 {
                     m_summonFX[i].Stop();
@@ -567,96 +603,67 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        void HandleEvent(TrackEntry trackEntry, Spine.Event e)
+        private void AnticipationPlay()
         {
-            if (e.Data.Name == m_eventName[0])
-            {
-                //Debug.Log(m_eventName[0]);
+            GameObject obj = Instantiate(m_info.anticipationFX, new Vector2(m_seedSpitTF.position.x + (1 * transform.localScale.x), m_seedSpitTF.position.y + .25f), Quaternion.identity);
+            obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
+            obj.transform.parent = m_seedSpitTF;
+        }
 
-                //GameObject obj = Instantiate(m_info.footFX, /*new Vector2(m_footTF.position.x + (3.5f * transform.localScale.x), m_footTF.position.y)*/ m_footTF.position, Quaternion.Euler(0, 0, 92.72319f));
-                //obj.transform.position = new Vector3(10.25f, 0, 0);
-                //obj.transform.parent = m_footTF;
-                m_footFX.Play();
-            }
-            else if (e.Data.Name == m_eventName[1])
+        private void SeedSpit()
+        {
+            if (IsFacingTarget())
             {
-                //Debug.Log(m_eventName[1]);
-
-                GameObject obj = Instantiate(m_info.anticipationFX, new Vector2(m_seedSpitTF.position.x + (1 * transform.localScale.x), m_seedSpitTF.position.y + .25f), Quaternion.identity);
+                GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
                 obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
                 obj.transform.parent = m_seedSpitTF;
-            }
-            else if (e.Data.Name == m_eventName[2])
-            {
-                //Debug.Log(m_eventName[2]);
-                if (IsFacingTarget())
-                {
-                    GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
-                    obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
-                    obj.transform.parent = m_seedSpitTF;
-                    obj.transform.localPosition = new Vector2(4, -1.5f);
+                obj.transform.localPosition = new Vector2(4, -1.5f);
 
-                    //Shoot Spit
-                    var target = m_targetInfo.position; //No Parabola
-                                                        //var target = TargetParabola(); //With Parabola
-                    target = new Vector2(target.x, target.y - 2);
-                    Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_seedSpitTF.position.x - 1.5f : m_seedSpitTF.position.x + 1.5f, m_seedSpitTF.position.y -0.75f);
-                    Vector3 v_diff = (target - spitPos);
-                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-                    //transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
-                    //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-                    //GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
-                    //shoot.GetComponent<Rigidbody2D>().AddForce((m_spitSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
+                //Shoot Spit
+                var target = m_targetInfo.position; //No Parabola
+                                                    //var target = TargetParabola(); //With Parabola
+                target = new Vector2(target.x, target.y - 2);
+                Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_seedSpitTF.position.x - 1.5f : m_seedSpitTF.position.x + 1.5f, m_seedSpitTF.position.y - 0.75f);
+                Vector3 v_diff = (target - spitPos);
+                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                //transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+                //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                //GameObject shoot = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+                //shoot.GetComponent<Rigidbody2D>().AddForce((m_spitSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
 
-                    GameObject projectile = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.identity);
-                    //projectile.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
-                    projectile.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
-                }
-                else
-                {
-                    m_waitRoutineEnd = false;
-                    m_currentState = State.Turning;
-                }
+                GameObject projectile = Instantiate(m_info.seedSpitFX, spitPos, Quaternion.identity);
+                //projectile.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
+                projectile.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
             }
-            else if (e.Data.Name == m_eventName[3])
+            else
             {
-                //Debug.Log(m_eventName[3]);
+                m_waitRoutineEnd = false;
+                m_currentState = State.Turning;
+            }
+        }
 
-                GameObject obj = Instantiate(m_info.stompFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), transform.position.y - 1f), Quaternion.identity);
-                GameObject obj2 = Instantiate(m_info.crawlingVineFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), transform.position.y), Quaternion.identity);
-                obj2.transform.localScale = new Vector3(obj2.transform.localScale.x * transform.localScale.x, obj2.transform.localScale.y, obj2.transform.localScale.z);
-                obj2.GetComponent<Rigidbody2D>().AddForce(new Vector2(m_vineCrawlSpeed * transform.localScale.x, 0), ForceMode2D.Impulse);
-                //obj2.GetComponent<Rigidbody2D>().velocity = new Vector2(m_vineCrawlSpeed * transform.localScale.x, 0);
-            }
-            else if (e.Data.Name == m_eventName[4])
-            {
-                Debug.Log(m_eventName[4]);
-            }
-            else if (e.Data.Name == m_eventName[5])
-            {
-                //Debug.Log(m_eventName[5]);
-                GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + /*(3 * transform.localScale.x)*/ +UnityEngine.Random.Range(-2, 2), m_skeletonSpawnTF.position.y), Quaternion.identity);
-                skeleton.GetComponent<SkeletonSpawnAI>().SetDirection(transform.localScale.x);
-                GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
-                m_skeletons.Add(skeleton);
-            }
-            else if (e.Data.Name == m_eventName[6])
-            {
-                //Debug.Log(m_eventName[5]);
-                m_smokeFX.Play();
-            }
-            else if (e.Data.Name == m_eventName[7])
-            {
-                m_screamSpitFX.Play();
-            }
-            else if (e.Data.Name == m_eventName[8])
-            {
-                m_screamSpitFX.Stop();
-            }
+        private void Stomp()
+        {
+            GameObject obj = Instantiate(m_info.stompFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), transform.position.y - 1f), Quaternion.identity);
+            GameObject obj2 = Instantiate(m_info.crawlingVineFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), transform.position.y), Quaternion.identity);
+            obj2.transform.localScale = new Vector3(obj2.transform.localScale.x * transform.localScale.x, obj2.transform.localScale.y, obj2.transform.localScale.z);
+            obj2.GetComponent<Rigidbody2D>().AddForce(new Vector2(m_vineCrawlSpeed * transform.localScale.x, 0), ForceMode2D.Impulse);
+        }
+
+        private void SpawnSkeleton()
+        {
+            GameObject skeleton = Instantiate(m_info.skeletonGO, new Vector2(m_skeletonSpawnTF.position.x + /*(3 * transform.localScale.x)*/ +UnityEngine.Random.Range(-2, 2), m_skeletonSpawnTF.position.y), Quaternion.identity);
+            //skeleton.GetComponent<ICombatAIBrain>().SetTarget(m_targetInfo.transform.gameObject.GetComponent<IDamageable>(), m_targetInfo.transform.gameObject.GetComponent<Character>());
+            skeleton.GetComponent<SkeletonSpawnAI>().SetDirection(transform.localScale.x);
+            skeleton.GetComponent<SkeletonSpawnAI>().AddTarget(m_targetInfo.transform.gameObject);
+            GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
+            m_skeletons.Add(skeleton);
         }
 
         private void Update()
         {
+            //Debug.Log(m_targetInfo.transform.GetComponent<Damageable>());
+            //Debug.Log(m_targetInfo.transform.GetComponent<Character>());
             switch (PhaseHandler(m_health.currentValue))
             {
                 case Phase.Second:
