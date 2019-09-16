@@ -47,7 +47,7 @@ namespace Holysoft.Gameplay.UI
         {
             if (m_stat != null)
             {
-                UpdateUI();
+                MonitorInfoOf(m_stat);
             }
         }
 
