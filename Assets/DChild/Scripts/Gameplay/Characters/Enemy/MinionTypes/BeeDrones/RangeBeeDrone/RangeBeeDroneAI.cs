@@ -63,8 +63,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             [SerializeField]
-            private float m_leftRotatorVariable;
-            public float leftVariable => m_leftRotatorVariable;
+            private float m_delayShotTime;
+            public float delayShotTimer => m_delayShotTime;
 
             public override void Initialize()
             {
@@ -110,7 +110,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
 
-       
+        //stored timer
+        private float postAtan2;
+
+        //
+        private float timeCounter;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -229,7 +233,18 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 spitPos = m_stingerPos.position;
             Vector3 v_diff = (target - spitPos);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-            m_stingerPos.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+            if (m_info.delayShotTimer <= timeCounter)
+            {
+                postAtan2 = atan2;
+                timeCounter = 0;
+                Debug.Log("Replacement trigger");
+            }
+            else
+            {
+                timeCounter += 1*Time.deltaTime;
+                Debug.Log("time counter trigger "+timeCounter);
+            }
+            m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
             GameObject burst = Instantiate(m_info.burstGO, spitPos, m_stingerPos.rotation);
             m_stingerLauncher.LaunchProjectile();
         }
@@ -249,6 +264,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            timeCounter = m_info.delayShotTimer + 1;
             m_animation.animationState.Event += HandleEvent;
             m_spineListener.Subscribe(m_info.stingerProjectile.launchOnEvent, LaunchStingerProjectile );
         }

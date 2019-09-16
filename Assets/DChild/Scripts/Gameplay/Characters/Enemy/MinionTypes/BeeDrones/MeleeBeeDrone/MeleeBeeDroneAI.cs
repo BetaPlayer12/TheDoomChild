@@ -28,6 +28,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
 
+            [SerializeField]
+            private int m_timePause;
+            public int timePause => m_timePause;
+
             //Attack Behaviours
             [SerializeField]
             private SimpleAttackInfo m_meleeAttack = new SimpleAttackInfo();
@@ -102,6 +106,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private ProjectileLauncher m_stingerLauncher;
         private float m_currentPatience;
         private bool m_enablePatience;
+        private float timeCounter;
 
       
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -205,7 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            Debug.Log("Check State: " + m_stateHandle.currentState);
+           Debug.Log("Before Check State: " + m_stateHandle.currentState);
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
@@ -240,38 +245,59 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_turnHandle.Execute(m_info.turnAnimation);
                     break;
                 case State.Attacking:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    Debug.Log("attacker check4");
                     m_agent.Stop();
                     m_animation.EnableRootMotion(false, false);
                     m_animation.SetAnimation(0, m_info.meleeAttack.animation, true);
+                    m_stateHandle.Wait(State.ReevaluateSituation);
 
                     break;
                 case State.Chasing:
                     if (IsFacingTarget())
                     {
 
-                        var target = m_targetInfo.position;
-                        target.y -= 0.5f;
-                        m_animation.DisableRootMotion();
-                        if (GetComponent<IsolatedPhysics2D>().velocity != Vector2.zero)
-                        {
-                            m_animation.SetAnimation(0, m_info.move.animation, true);
+                        if (m_info.timePause<=timeCounter) {
+
+                            var target = m_targetInfo.position;
+                            target.y -= 0.5f;
+                            m_animation.DisableRootMotion();
+
+                            if (IsTargetInRange(m_info.meleeAttack.range))
+                            {
+                               // m_agent.Stop();
+                                Debug.Log("Attack check 45645");
+                                m_stateHandle.SetState(State.Attacking);
+                               
+                            }
+                            else
+                            {
+                               
+                                if (GetComponent<IsolatedPhysics2D>().velocity != Vector2.zero)
+                                {
+                                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                                }
+                                else
+                                {
+                                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                                }
+                                m_agent.SetDestination(target);
+                                if (m_agent.hasPath)
+                                {
+                                    m_agent.Move(m_info.move.speed);
+                                }
+                            }
+
+                           
+
+
+                           
+                           
                         }
                         else
                         {
-                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        }
-                        m_agent.SetDestination(target);
-                        if (m_agent.hasPath)
-                        {
-                            m_agent.Move(m_info.move.speed);
-                        }
-
-
-                        if (IsTargetInRange(m_info.meleeAttack.range))
-                        {
-                            Debug.Log("Attack check 45645");
-                            m_stateHandle.SetState(State.Attacking);
+                            m_agent.Stop();
+                            timeCounter += Time.deltaTime;
+                            Debug.Log("pausing");
                         }
                     }
                     else
@@ -284,33 +310,29 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
-                    if (m_targetInfo.isValid)
+
+                   
+
+                   if (m_targetInfo.isValid)
                     {
                         m_stateHandle.SetState(State.Chasing);
                     }
                     else
                     {
                         m_stateHandle.SetState(State.Patrol);
+                        //timeCounter = 0;
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    if (IsTargetInRange(m_info.meleeAttack.range))
-                    {
-                        Debug.Log("fail safe false");
-                        return;
-                    }
-                    else
-                    {
-                        Debug.Log("fail safe");
-                        m_stateHandle.OverrideState(State.ReevaluateSituation);
-                        break;
-                    }
+                     return;
+                  
                    
 
                    
             }
+            Debug.Log("Check State: " + m_stateHandle.currentState);
 
-           
+
 
             if (m_enablePatience)
             {
