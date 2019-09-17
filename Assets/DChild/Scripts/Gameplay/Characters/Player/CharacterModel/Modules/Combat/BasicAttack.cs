@@ -19,6 +19,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IsolatedPhysics2D m_physics;
         private string m_attackTriggerParameter;
         private string m_attackDirectionParameter;
+        [SerializeField]
+        private GameObject m_SlashFx1;
+        [SerializeField]
+        private GameObject m_SlashFx2;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -47,6 +51,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SetAttackDirection(DirectionalInput input)
         {
+           
             if (input.isDownHeld)
             {
                 m_animator.SetInteger(m_attackDirectionParameter, -1);
