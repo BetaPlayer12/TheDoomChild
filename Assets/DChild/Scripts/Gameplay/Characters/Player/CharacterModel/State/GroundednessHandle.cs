@@ -100,6 +100,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 
                 if (m_isInMidAir == false)
                 {
+                    Debug.Log("attack jump");
                     m_isInMidAir = true;
                     m_animator.SetBool(m_midAirParamater, true);
                 }

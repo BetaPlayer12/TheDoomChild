@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private AirDash m_dash;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private LedgeGrab m_ledgeGrab;
+        //private LedgeGrab m_ledgeGrab;
 
 
         private SkillResetRequester m_skillRequester;
@@ -38,7 +38,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_wallStick = behaviours.GetComponentInChildren<WallStick>();
             m_wallJump = behaviours.GetComponentInChildren<WallJump>();
             m_dash = behaviours.GetComponentInChildren<AirDash>();
-            m_ledgeGrab = behaviours.GetComponentInChildren<LedgeGrab>();
+            //m_ledgeGrab = behaviours.GetComponentInChildren<LedgeGrab>();
 
         }
 
@@ -49,11 +49,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (state.isMoving)
                 {
 
-                    if (m_ledgeGrab?.AttemptToLedgeGrab() ?? false)
-                    {
+                    //if (m_ledgeGrab?.AttemptToLedgeGrab() ?? false)
+                    //{
                         m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
                         return;
-                    }
+                   // }
                 }
             }
 

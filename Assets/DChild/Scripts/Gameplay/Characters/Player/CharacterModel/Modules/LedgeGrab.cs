@@ -64,7 +64,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_state = info.state;
             m_physics = info.physics;
             m_animator = info.animator;
-            m_ledgeGrabParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.LedgeGrab);
+           // m_ledgeGrabParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.LedgeGrab);
             m_speedYDirectionParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
             m_midAirParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsMidAir);
             m_groundednessHandle = info.groundednessHandle;
