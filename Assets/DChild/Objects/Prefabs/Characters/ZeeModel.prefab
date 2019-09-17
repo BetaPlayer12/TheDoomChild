@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3867976476120059397}
   - component: {fileID: 3867976476120059396}
   - component: {fileID: 3867976476120059515}
-  - component: {fileID: 6501825888014543153}
+  - component: {fileID: 1764374399211918341}
   m_Layer: 8
   m_Name: ZeeModel
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3867976476120059513}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.04, y: 0, z: 0}
   m_LocalScale: {x: 0.325, y: 0.325, z: 1}
   m_Children:
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: ef7734189207f204389694fa6a219c19, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: bc2d426c47181444995c8cee5e534e10, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -118,8 +118,8 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: Idle
-  loop: 1
+  _animationName: Idle5_Right
+  loop: 0
   timeScale: 1
 --- !u!114 &3867976476120059397
 MonoBehaviour:
@@ -169,16 +169,16 @@ Animator:
   m_GameObject: {fileID: 3867976476120059513}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bd15fae50625fd343a107870a015d7e4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 21a378f767323e149a4616b13370fdc7, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6501825888014543153
+--- !u!114 &1764374399211918341
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sourceBoneName: root
-  useX: 1
+  useX: 0
   useY: 0
   rb: {fileID: 0}
   siblingBoneNames: []
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 3867976476331950654}
   - component: {fileID: 3867976476331950648}
   - component: {fileID: 3867976476331950655}
-  m_Layer: 8
+  m_Layer: 16
   m_Name: BodyCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -270,8 +270,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0630002, y: -0.5030251}
-  m_Size: {x: 4.329028, y: 12.52695}
+  m_Offset: {x: 0.0630002, y: -1.868722}
+  m_Size: {x: 4.329028, y: 9.795553}
   m_Direction: 0
 --- !u!114 &3867976476331950655
 MonoBehaviour:
@@ -302,7 +302,8 @@ GameObject:
   - component: {fileID: 3867976476604300853}
   - component: {fileID: 3867976476604300852}
   - component: {fileID: 3867976476604300843}
-  m_Layer: 8
+  - component: {fileID: 1764374399764455568}
+  m_Layer: 16
   m_Name: LegCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -355,7 +356,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   m_collider: {fileID: 3867976476604300853}
-  m_recordsContactPoints: 0
+  m_recordsContactPoints: 1
 --- !u!251 &3867976476604300843
 PlatformEffector2D:
   m_ObjectHideFlags: 0
@@ -375,6 +376,21 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 1
+--- !u!114 &1764374399764455568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3867976476604300841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea39aaa929f53d64b9a05becc48c1d8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_mask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!1 &3867976477272878790
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,8 +401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3867976477272878791}
   - component: {fileID: 3867976477272878784}
-  - component: {fileID: 4036257586656496332}
-  m_Layer: 8
+  m_Layer: 16
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,24 +436,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4036257586656496332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3867976477272878790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aad6ce11438456d48a308f534017ef47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_mask:
-    serializedVersion: 2
-    m_Bits: 884535
-  m_bodyTransform: {fileID: 3867976476331950654}
-  m_castXExtent: 76.6
-  m_castYExtent: 55.3
 --- !u!1 &3867976477562980365
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,7 +481,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.07641488, y: 6.301981}
+  m_Offset: {x: 0.07641488, y: 5.10137}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -495,7 +492,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.903785, y: 12.54331}
+  m_Size: {x: 3.903785, y: 10.142088}
   m_EdgeRadius: 0
 --- !u!114 &3867976477562980367
 MonoBehaviour:
