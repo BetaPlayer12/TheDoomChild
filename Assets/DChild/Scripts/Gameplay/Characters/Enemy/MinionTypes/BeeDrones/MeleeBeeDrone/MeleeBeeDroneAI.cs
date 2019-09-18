@@ -57,8 +57,10 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_chargeAnimation;
+            public string chargeAnimation => m_chargeAnimation;
 
-           
             [SerializeField]
             private GameObject m_burstGO;
             public GameObject burstGO => m_burstGO;
@@ -77,6 +79,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Idle,
+            chargeIdle,
             Patrol,
             Turning,
             Attacking,
@@ -107,7 +110,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
         private float timeCounter;
-
+        private bool m_chargeOnce;
+        private bool m_chargeFacing;
       
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -121,10 +125,23 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (damageable != null)
             {
+                
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.SetState(State.Chasing);
+                
                 m_currentPatience = 0;
                 m_enablePatience = false;
+
+                if(m_chargeOnce == false)
+                {
+                    m_chargeOnce = true;
+                    m_stateHandle.SetState(State.chargeIdle);
+                }
+                else
+                {
+                    m_stateHandle.SetState(State.Chasing);
+                }
+
+               
             }
             else
             {
@@ -196,7 +213,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-
+            timeCounter = 0;
+            m_chargeOnce = false;
+            m_chargeFacing = false;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             
         }
@@ -220,14 +239,41 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.SetState(State.Patrol);
                     }
                     break;
+                case State.chargeIdle:
+                   if (IsFacingTarget())
+                   {
+                        m_animation.SetAnimation(0, m_info.chargeAnimation, true);
+                    if (m_info.timePause <= timeCounter)
+                    {
+                            m_chargeFacing = false;
+                        m_stateHandle.SetState(State.Chasing);
+                    }
+                    else
+                    {
+                        m_agent.Stop();
+                        timeCounter += Time.deltaTime;
+                        Debug.Log("pausing");
+                    }
+                   }
+                    else
+                    {
+                        m_chargeFacing = true;
+                        m_stateHandle.SetState(State.Turning);
+                       
+                        Debug.Log("sensor test");
+                    }
+                    break;
+                
 
                 case State.Patrol:
                     Debug.Log("patrol mode");
                     // if (!m_wallSensor.isDetecting && !m_floorSensor.isDetecting && !m_cielingSensor.isDetecting) //This means that as long as your sensors are detecting something it will patrol
                     // {
+                    m_chargeOnce = false;
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    timeCounter = 0;
                     // break;
                     // }
                     // else
@@ -248,15 +294,17 @@ namespace DChild.Gameplay.Characters.Enemies
                     Debug.Log("attacker check4");
                     m_agent.Stop();
                     m_animation.EnableRootMotion(false, false);
+                    m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation);
                     m_animation.SetAnimation(0, m_info.meleeAttack.animation, true);
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(State.WaitBehaviourEnd);
 
                     break;
                 case State.Chasing:
                     if (IsFacingTarget())
                     {
+                        Debug.Log("phase 2");
 
-                        if (m_info.timePause<=timeCounter) {
+                       
 
                             var target = m_targetInfo.position;
                             target.y -= 0.5f;
@@ -272,7 +320,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             else
                             {
                                
-                                if (GetComponent<IsolatedPhysics2D>().velocity != Vector2.zero)
+                                if (m_character.physics.velocity != Vector2.zero)
                                 {
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
                                 }
@@ -281,10 +329,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                                 }
                                 m_agent.SetDestination(target);
-                                if (m_agent.hasPath)
-                                {
+                                
                                     m_agent.Move(m_info.move.speed);
-                                }
+                                
                             }
 
                            
@@ -292,13 +339,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                            
                            
-                        }
-                        else
-                        {
-                            m_agent.Stop();
-                            timeCounter += Time.deltaTime;
-                            Debug.Log("pausing");
-                        }
+                      
                     }
                     else
                     {
@@ -310,21 +351,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
-
-                   
-
-                   if (m_targetInfo.isValid)
+                    if (m_chargeFacing)
                     {
-                        m_stateHandle.SetState(State.Chasing);
+                        m_stateHandle.SetState(State.chargeIdle);
                     }
                     else
+                    if (m_targetInfo.isValid)
+                    {
+                        Debug.Log("phase1");
+                        m_stateHandle.OverrideState(State.Chasing);
+                    }
+                    else
+                   
                     {
                         m_stateHandle.SetState(State.Patrol);
                         //timeCounter = 0;
                     }
                     break;
                 case State.WaitBehaviourEnd:
+                    Debug.Log("on loop");
                      return;
+                    
                   
                    
 

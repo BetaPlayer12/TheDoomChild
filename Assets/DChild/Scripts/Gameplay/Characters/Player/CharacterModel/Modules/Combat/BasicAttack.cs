@@ -20,9 +20,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private string m_attackTriggerParameter;
         private string m_attackDirectionParameter;
         [SerializeField]
-        private GameObject m_SlashFx1;
+        private ParticleSystem m_forwardSlashFx1;
         [SerializeField]
-        private GameObject m_SlashFx2;
+        private ParticleSystem m_forwardSlashFx2;
+        [SerializeField]
+        private ParticleSystem m_upwardSlashfx;
+        [SerializeField]
+        private ParticleSystem m_downardSlashfx;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -51,19 +55,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SetAttackDirection(DirectionalInput input)
         {
-           
+
             if (input.isDownHeld)
             {
                 m_animator.SetInteger(m_attackDirectionParameter, -1);
+                m_downardSlashfx.Play();
             }
             else if (input.isUpHeld)
             {
                 m_animator.SetInteger(m_attackDirectionParameter, 1);
+                m_upwardSlashfx.Play();
             }
             else
             {
                 m_animator.SetInteger(m_attackDirectionParameter, 0);
-               
+                m_forwardSlashFx1.Play();
             }
         }
 
