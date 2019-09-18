@@ -63,6 +63,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 m_animator.SetInteger(m_attackDirectionParameter, 0);
+               
             }
         }
 
