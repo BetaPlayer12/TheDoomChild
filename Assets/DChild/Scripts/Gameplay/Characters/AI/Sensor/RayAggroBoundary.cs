@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.AI
             var success = hitCount == 0;
             if (success)
             {
-                SetTargetToBrain(m_spottedTarget,m_targetComponent);
+                SetTargetToBrain(m_spottedTarget, m_targetComponent);
                 m_targetRegistered = true;
             }
             return success;
@@ -75,7 +75,9 @@ namespace DChild.Gameplay.Characters.AI
                 if (m_spottedTarget == collision)
                 {
                     m_spottedTarget = null;
+                    m_targetComponent = null;
                     m_targetRegistered = false;
+                    m_brain.SetTarget(null);
                 }
             }
         }

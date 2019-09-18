@@ -206,7 +206,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    Debug.Log("Still wetting");
+                   
                     return;
             }
 
