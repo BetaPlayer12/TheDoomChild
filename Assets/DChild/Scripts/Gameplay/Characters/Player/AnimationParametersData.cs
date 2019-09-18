@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Players
             Land,
             IsDashing,
             DoubleJump,
-            //LedgeGrab,
+            LedgeGrab,
             Attack,
             AttackYDirection,
             WallStickTrigger,
