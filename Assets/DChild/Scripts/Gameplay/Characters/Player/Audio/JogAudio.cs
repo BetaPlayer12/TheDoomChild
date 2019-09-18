@@ -40,17 +40,17 @@ public class JogAudio : MonoBehaviour
         bool eventMatch = (eventData == e.Data);
         if (eventMatch)
         {
-            PlayFootSteps();
-            PlayFootSteps2();
+            FootStepR();
+            FootStepL();
         }
     }
 
-    public void PlayFootSteps()
+    public void FootStepR()
     {
         m_audioSource.clip = m_audioClip;
         m_audioSource.Play();
     }
-    public void PlayFootSteps2()
+    public void FootStepL()
     {
         m_audioSource.clip = m_audioClip2;
         m_audioSource.Play();

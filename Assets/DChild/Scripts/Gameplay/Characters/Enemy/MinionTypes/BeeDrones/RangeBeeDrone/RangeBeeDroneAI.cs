@@ -63,8 +63,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             [SerializeField]
-            private float m_leftRotatorVariable;
-            public float leftVariable => m_leftRotatorVariable;
+            private float m_delayShotTime;
+            public float delayShotTimer => m_delayShotTime;
 
             public override void Initialize()
             {
@@ -109,7 +109,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private ProjectileLauncher m_stingerLauncher;
         private float m_currentPatience;
         private bool m_enablePatience;
-      
+
+        //stored timer
+        private float postAtan2;
+
+        //
+        private float timeCounter;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -167,6 +172,27 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        void HandleEvent(TrackEntry trackEntry, Spine.Event e)
+        {
+            //if (e.Data.Name == m_eventName[0])
+            //{
+            //    //Debug.Log(m_eventName[0]);
+            //    ////Spawn Projectile
+
+            //    if (IsFacingTarget())
+            //    {
+            //        var target = m_targetInfo.position; //No Parabola
+            //        target = new Vector2(target.x, target.y - 2);
+            //        Vector2 spitPos = m_stingerPos.position;
+            //        Vector3 v_diff = (target - spitPos);
+            //        float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+            //        GameObject burst = Instantiate(m_info.burstGO, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+            //        GameObject shoot = Instantiate(m_info.stingerProjectile, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
+            //        shoot.GetComponent<Rigidbody2D>().AddForce((m_stingerSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
+            //    }
+            //}
+        }
+
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
@@ -207,13 +233,25 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 spitPos = m_stingerPos.position;
             Vector3 v_diff = (target - spitPos);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-            m_stingerPos.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+            if (m_info.delayShotTimer <= timeCounter)
+            {
+                postAtan2 = atan2;
+                timeCounter = 0;
+                Debug.Log("Replacement trigger");
+            }
+            else
+            {
+                timeCounter += 1*Time.deltaTime;
+                Debug.Log("time counter trigger "+timeCounter);
+            }
+            m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
             GameObject burst = Instantiate(m_info.burstGO, spitPos, m_stingerPos.rotation);
             m_stingerLauncher.LaunchProjectile();
         }
         
         protected override void Awake()
         {
+            Debug.Log("Update override trigger");
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
@@ -226,6 +264,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            timeCounter = m_info.delayShotTimer + 1;
+            m_animation.animationState.Event += HandleEvent;
             m_spineListener.Subscribe(m_info.stingerProjectile.launchOnEvent, LaunchStingerProjectile );
         }
 
@@ -239,9 +279,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                       m_stateHandle.SetState(State.Patrol);
                     }
+                    Debug.Log("stuck in idle");
                     break;
 
                 case State.Patrol:
+                    Debug.Log("patrol mode");
+                   
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
@@ -250,6 +293,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
+                    Debug.Log("Turn Bee Drone");
                     m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation);
                     break;
@@ -260,6 +304,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     if (IsFacingTarget())
                     {
+
                         if (IsTargetInRange(m_info.stingerProjectile.range))
                         {
                             m_stateHandle.SetState(State.Attacking);
@@ -290,7 +335,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_stateHandle.SetState(State.Turning);
+                        Debug.Log("sensor test");
                     }
+
                     break;
 
                 case State.ReevaluateSituation:
