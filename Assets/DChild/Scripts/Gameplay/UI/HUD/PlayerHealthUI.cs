@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI
 {
+
     public class PlayerHealthUI : CappedStatUI
     {
         [System.Serializable]
@@ -54,9 +55,9 @@ namespace DChild.Gameplay.UI
                 var uiValue = value / m_maxValue;
                 var percentValue = float.IsNaN(uiValue) ? 0 : uiValue;
                 m_material.SetFloat(m_fillString, percentValue);
-                if(percentValue <= m_colorChangeThreshold)
+                if (percentValue <= m_colorChangeThreshold)
                 {
-                    if(m_colorChanged == false)
+                    if (m_colorChanged == false)
                     {
                         for (int i = 0; i < m_materials.Length; i++)
                         {
