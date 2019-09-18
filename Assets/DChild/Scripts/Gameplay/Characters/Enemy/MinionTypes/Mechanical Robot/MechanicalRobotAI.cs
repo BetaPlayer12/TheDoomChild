@@ -311,7 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    Debug.Log("Still wetting");
+                    //Debug.Log("Still wetting");
                     //m_stateHandle.Wait(State.Attacking);
                     //m_stateHandle.Set(State.Chasing);
                     //m_stateHandle.ApplyQueuedState();

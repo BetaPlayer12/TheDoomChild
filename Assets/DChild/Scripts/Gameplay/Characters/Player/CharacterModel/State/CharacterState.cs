@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Characters.Players.State
                                 ICrouchState, IFlinchState, IWallStickState,
                                 IDashState, IDoubleJumpState, IWallJumpState,
                                 IHighJumpState, IBehaviourState, ICombatState, IPlatformDropState,
-                                IWhipGrapple, IProjectileThrowState, ILedgeGrabState
+                                IWhipGrapple, IProjectileThrowState , ILedgeGrabState
     {
         public event EventAction<CombatStateEventArgs> CombatModeChanged;
 

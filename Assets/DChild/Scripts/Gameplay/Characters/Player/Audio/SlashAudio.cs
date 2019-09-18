@@ -39,11 +39,11 @@ public class SlashAudio : MonoBehaviour
         bool eventMatch = (eventData == e.Data);
         if (eventMatch)
         {
-            PlaySlash();
+            SlashEvt();
         }
     }
 
-    public void PlaySlash()
+    public void SlashEvt()
     {
         m_audioSource.clip = m_audioClip;
         m_audioSource.Play();

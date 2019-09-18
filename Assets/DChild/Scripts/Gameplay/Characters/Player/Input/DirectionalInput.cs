@@ -81,6 +81,7 @@ namespace DChild.Inputs
 
         private void HandleVerticalInput()
         {
+
             m_verticalInput = Input.GetAxisRaw(INPUT_VERTICAL);
             m_isUpHeld = m_verticalInput > 0;
             m_isDownHeld = m_verticalInput < 0;
