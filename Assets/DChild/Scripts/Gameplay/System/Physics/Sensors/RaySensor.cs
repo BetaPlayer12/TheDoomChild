@@ -51,7 +51,9 @@ namespace DChild.Gameplay
         private static bool m_isInitialized;
         private int m_detectionCount;
 
+        [ShowInInspector,ReadOnly]
         public bool isDetecting => m_multiRaycast.isDetecting;
+        [ShowInInspector, ReadOnly]
         public bool allRaysDetecting => m_multiRaycast.areAllRaysDetecting;
 
         public int DetectionCount => m_detectionCount;
