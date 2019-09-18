@@ -63,8 +63,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 m_animator.SetInteger(m_attackDirectionParameter, 0);
-                GameObject slashEffect = Instantiate(m_SlashFx1, new Vector3(transform.position.x+1.0f, transform.position.y+1.0f, transform.position.z), Quaternion.identity);
-                Destroy(slashEffect, 0.5f);
+               
             }
         }
 
