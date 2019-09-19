@@ -92,6 +92,13 @@ namespace DChild.Gameplay.Combat
 
 
 #if UNITY_EDITOR
+
+        [Button]
+        private void UseSelfAsCenterMass()
+        {
+            m_centerMass = transform;
+        }
+
         private void ApplyData()
         {
             m_info.Copy(m_data.info);

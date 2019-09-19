@@ -24,6 +24,7 @@ namespace DChild.Menu
 
         public void Play()
         {
+            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
             GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad.sceneName, true);
             LoadingHandle.UnloadScenes(gameObject.scene.name);
         }
