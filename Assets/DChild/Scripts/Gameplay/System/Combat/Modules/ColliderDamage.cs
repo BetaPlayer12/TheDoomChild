@@ -15,13 +15,37 @@ namespace DChild.Gameplay.Combat
 {
     public class ColliderDamage : MonoBehaviour
     {
+        [System.Serializable]
+        public class Collider2DInfo
+        {
+            [SerializeField]
+            private Collider2D m_target;
+            [SerializeField]
+            private Collider2D[] m_ignoreList;
+
+            public void IgnoreColliders(bool value)
+            {
+                for (int i = 0; i < m_ignoreList.Length; i++)
+                {
+                    Physics2D.IgnoreCollision(m_target, m_ignoreList[i],value);
+                }
+            }
+        }
+
         [SerializeField]
         private bool m_canDetectInteractables;
+        [SerializeField]
+        private Collider2DInfo[] m_ignoreColliderList;
+
         private IDamageDealer m_damageDealer;
 
         private void Awake()
         {
             m_damageDealer = GetComponentInParent<IDamageDealer>();
+            for (int i = 0; i < m_ignoreColliderList.Length; i++)
+            {
+                m_ignoreColliderList[i].IgnoreColliders(true);
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

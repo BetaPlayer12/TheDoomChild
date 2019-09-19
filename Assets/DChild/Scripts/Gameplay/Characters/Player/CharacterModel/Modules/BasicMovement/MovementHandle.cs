@@ -64,8 +64,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void Move(float direction)
         {
-            
-           
             if (direction == 0)
             {
                 if (m_characterPhysics.inContactWithGround)
@@ -83,7 +81,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             else
             {
                 var newDirection = direction > 0 ? Vector2.right : Vector2.left;
-                 Transform parentObj = gameObject.transform.parent.parent;
 
                 if (newDirection != m_direction && m_hasStopped == false)
                 {
@@ -108,13 +105,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                 if (m_character.facing != newFacing)
                 {
-                    parentObj.localScale = new Vector3( direction, parentObj.localScale.y, parentObj.localScale.z);
+                    var characterTransform = m_character.transform;
+                    characterTransform.localScale = new Vector3( direction, characterTransform.localScale.y, characterTransform.localScale.z);
                 }
                 m_character.SetFacing(newFacing);
                
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
             }
-            
 
         }
 
