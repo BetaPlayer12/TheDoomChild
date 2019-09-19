@@ -17,7 +17,7 @@ public class CapeController : MonoBehaviour
         if(Input.GetAxisRaw("Horizontal") == 0)
         {
             m_animator.SetTrigger(m_character.facing == HorizontalDirection.Right ? "isFacingRight" : "isFacingLeft");
-            Debug.Log(m_character.facing == HorizontalDirection.Right ? "isFacingRight" : "isFacingLeft");
+            //Debug.Log(m_character.facing == HorizontalDirection.Right ? "isFacingRight" : "isFacingLeft");
         }
         else
         {
