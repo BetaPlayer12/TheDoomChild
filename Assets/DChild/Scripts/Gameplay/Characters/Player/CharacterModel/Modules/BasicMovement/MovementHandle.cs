@@ -22,6 +22,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private Character m_character;
         private Animator m_animator;
         private RaySensor m_groundSensor;
+        private RaySensor m_slopeSensor;
 
         private string m_speedParameter;
         private string m_turnParameter;
@@ -51,6 +52,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
             m_turnParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Turn);
+            m_slopeSensor = info.GetSensor(PlayerSensorList.SensorType.Slope);
             m_groundSensor = info.GetSensor(PlayerSensorList.SensorType.Ground);
             info.groundednessHandle.LandExecuted += OnLand;
         }
@@ -111,6 +113,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_character.SetFacing(newFacing);
                
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
+                
+                Debug.Log("Moving: " + m_slopeSensor.GetHits().Length);
             }
 
         }
