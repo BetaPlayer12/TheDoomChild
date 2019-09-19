@@ -114,7 +114,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
                 
-                Debug.Log("Moving: " + m_slopeSensor.GetHits().Length);
+               
             }
 
         }
