@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
-    public class Cinema : MonoBehaviour, ICinema, IGameplaySystemModule
+    public class Cinema : MonoBehaviour, ICinema, IGameplaySystemModule, IGameplayInitializable
     {
         [SerializeField]
         private Camera m_mainCamera;
@@ -69,13 +69,17 @@ namespace DChild.Gameplay.Cinematics
             m_brain = m_mainCamera?.GetComponent<CinemachineBrain>() ?? null;
         }
 
+        public void Initialize()
+        {
+            m_trackingCameras = new List<ITrackingCamera>();
+        }
+
         private void Awake()
         {
             if (m_mainCamera)
             {
                 m_brain = m_mainCamera?.GetComponent<CinemachineBrain>() ?? null;
             }
-            m_trackingCameras = new List<ITrackingCamera>();
         }
 
 #if UNITY_EDITOR
@@ -83,6 +87,8 @@ namespace DChild.Gameplay.Cinematics
         {
             m_mainCamera = mainCamera;
         }
+
+     
 #endif
     }
 }

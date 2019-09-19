@@ -110,6 +110,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
 
+        [SerializeField]
+        private AudioSource m_Audiosource;
+        [SerializeField]
+        private AudioClip m_RangeAttackClip;
+        [SerializeField]
+        private AudioClip m_RangeBeeDroneDeadClip;
+
+
         //stored timer
         private float postAtan2;
 
@@ -168,6 +176,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.rangeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rangeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -195,6 +204,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            m_Audiosource.clip = m_RangeBeeDroneDeadClip;
+            m_Audiosource.Play();
+           
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
         }
@@ -239,14 +251,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 timeCounter = 0;
                 Debug.Log("Replacement trigger");
             }
-            else
-            {
-                timeCounter += 1*Time.deltaTime;
-                Debug.Log("time counter trigger "+timeCounter);
-            }
+           
             m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
             GameObject burst = Instantiate(m_info.burstGO, spitPos, m_stingerPos.rotation);
             m_stingerLauncher.LaunchProjectile();
+            m_Audiosource.clip = m_RangeAttackClip;
+            m_Audiosource.Play();
         }
         
         protected override void Awake()
@@ -279,12 +289,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                       m_stateHandle.SetState(State.Patrol);
                     }
-                    Debug.Log("stuck in idle");
                     break;
 
                 case State.Patrol:
-                    Debug.Log("patrol mode");
-                   
+
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
@@ -293,7 +301,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    Debug.Log("Turn Bee Drone");
                     m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation);
                     break;
@@ -302,42 +309,40 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(RangeAttackRoutine());
                     break;
                 case State.Chasing:
-                    if (IsFacingTarget())
-                    {
-
-                        if (IsTargetInRange(m_info.stingerProjectile.range))
-                        {
-                            m_stateHandle.SetState(State.Attacking);
-                        }
-                        else
+                   
+                        if (IsFacingTarget())
                         {
 
-                            var target = m_targetInfo.position;
-                            target.y -= 0.5f;
-                            m_animation.DisableRootMotion();
-                            if (GetComponent<IsolatedPhysics2D>().velocity != Vector2.zero)
+                            if (IsTargetInRange(m_info.stingerProjectile.range))
                             {
-                                m_animation.SetAnimation(0, m_info.move.animation, true);
+                                m_stateHandle.SetState(State.Attacking);
                             }
                             else
                             {
-                                m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                            }
-                            m_agent.SetDestination(target);
-                            if (m_agent.hasPath)
-                            {
-                                m_agent.Move(m_info.move.speed);
+
+                                var target = m_targetInfo.position;
+                                target.y -= 0.5f;
+                                m_animation.DisableRootMotion();
+                                if (m_character.physics.velocity != Vector2.zero)
+                                {
+                                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                                }
+                                else
+                                {
+                                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                                }
+                                m_agent.SetDestination(target);
+                              
+                                    m_agent.Move(m_info.move.speed);
+                              
                             }
 
                         }
-                        
-                    }
-                    else
-                    {
-                        m_stateHandle.SetState(State.Turning);
-                        Debug.Log("sensor test");
-                    }
-
+                        else
+                        {
+                            m_stateHandle.SetState(State.Turning);
+                        }
+                    
                     break;
 
                 case State.ReevaluateSituation:
@@ -359,8 +364,12 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
-        }
 
+            timeCounter += 1 * Time.deltaTime;
+
+           
+        }
+       
 
     }
 }
