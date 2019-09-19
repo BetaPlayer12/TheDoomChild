@@ -165,6 +165,8 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         [SerializeField, TabGroup("Reference")]
+        private Boss m_boss;
+        [SerializeField, TabGroup("Reference")]
         private BasicHealth m_health;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
@@ -331,6 +333,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
+            //Phase Event Testttttt
+            m_boss.PhaseChange += M_boss_PhaseChange;
+
             m_tombs = new List<GameObject>();
             m_tombSouls = new List<GameObject>();
             m_skeletons = new List<GameObject>();
@@ -343,6 +348,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineEventListener.Subscribe(m_info.smokeEvent, m_smokeFX.Play);
             m_spineEventListener.Subscribe(m_info.screamStartEvent, m_screamSpitFX.Play);
             m_spineEventListener.Subscribe(m_info.screamEndEvent, m_screamSpitFX.Stop);
+        }
+
+        private void M_boss_PhaseChange(object sender, Boss.PhaseEventArgs eventArgs)
+        {
+            Debug.Log("Phase is Changing");
         }
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
@@ -513,8 +523,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator TombAttackRoutine(Vector3 target, int tombSize)
+        private IEnumerator TombAttackRoutine(Vector3 target, int tombSize, int phaseIndex)
         {
+            m_boss.SendPhaseTriggered(phaseIndex);
             m_isPhaseChanging = true;
             m_waitRoutineEnd = true;
             m_hitbox.SetInvulnerability(true);
@@ -578,6 +589,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private void AwakenedAncientAI_PhaseChange(object sender, Boss.PhaseEventArgs eventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
         private IEnumerator SkeletonSummonRoutine(int skeletonSize)
         {
             if (m_currentSkeletonSize > m_skeletons.Count)
@@ -586,7 +602,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.skeletonSummon.animation, false);
                 for (int i = 0; i < m_summonFX.Count; i++)
                 {
-                    Debug.Log("SUMMON FX " + i);
+                    //Debug.Log("SUMMON FX " + i);
                     m_summonFX[i].Play();
                     var mainFx = m_summonFX[i].main;
                     mainFx.simulationSpeed = 2.5f;
@@ -675,7 +691,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_isPhaseChanging)
                     {
                         StopAllCoroutines();
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize, 0));
                     }
                     break;
                 case Phase.Third:
@@ -687,7 +703,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_isPhaseChanging)
                     {
                         StopAllCoroutines();
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize, 1));
                     }
                     break;
                 case Phase.Final:
@@ -699,7 +715,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_isPhaseChanging)
                     {
                         StopAllCoroutines();
-                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize));
+                        StartCoroutine(TombAttackRoutine(m_targetInfo.position, m_currentTombSize, 2));
                     }
                     break;
                 default:
