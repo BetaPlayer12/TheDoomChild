@@ -1,15 +1,30 @@
-﻿using DChild.Gameplay.Characters.Enemies;
+﻿using System;
+using DChild.Gameplay.Characters.Enemies;
+using Holysoft.Event;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace DChild.Gameplay.Combat
 {
+
     public class BossFightTrigger : MonoBehaviour
     {
         [SerializeField]
         private Boss m_boss;
         [SerializeField]
         private UnityEvent m_uponTrigger;
+        [SerializeField]
+        private UnityEvent m_onDefeat;
+
+        private void Awake()
+        {
+            m_boss.GetComponent<Damageable>().Destroyed += OnDestroy;
+        }
+
+        private void OnDestroy(object sender, EventActionArgs eventArgs)
+        {
+            m_onDefeat?.Invoke();
+        }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
