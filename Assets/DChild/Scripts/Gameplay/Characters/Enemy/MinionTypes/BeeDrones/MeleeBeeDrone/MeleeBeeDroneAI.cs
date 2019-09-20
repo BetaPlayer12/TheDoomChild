@@ -112,7 +112,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private float timeCounter;
         private bool m_chargeOnce;
         private bool m_chargeFacing;
-      
+
+        [SerializeField]
+        private AudioSource m_Audiosource;
+        [SerializeField]
+        private AudioClip m_AttackClip;
+        [SerializeField]
+        private AudioClip m_DeadClip;
+
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
@@ -196,6 +203,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            m_Audiosource.clip = m_DeadClip;
+            m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
         }
@@ -297,7 +306,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation);
                     m_animation.SetAnimation(0, m_info.meleeAttack.animation, true);
                     m_stateHandle.Wait(State.WaitBehaviourEnd);
-
+                    m_Audiosource.clip = m_AttackClip;
+                    m_Audiosource.Play();
                     break;
                 case State.Chasing:
                     if (IsFacingTarget())
