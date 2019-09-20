@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics.SetVelocity(m_direction.x * m_stopSpeed, 0);
             m_physics.simulateGravity = true;
             m_state.isDashing = false;
-            m_state.canDash = false;
+            //m_state.canDash = false;
             if (m_ghosting != null)
                 m_ghosting.enabled = false;
         }
@@ -37,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             enabled = true;
             TurnOnAnimation(true);
             m_state.isDashing = true;
+            m_state.canDash = false;
             m_physics.simulateGravity = false;
             if (m_ghosting != null)
                 m_ghosting.enabled = true;
@@ -50,11 +51,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         protected void FixedUpdate()
         {
-            if (m_state.canDash)
-            {
-                m_physics.SetVelocity(m_direction.x * m_power, 0);
-                m_state.canDash = false;
-            }
+            //if (m_state.canDash)
+            //{
+            m_physics.SetVelocity(m_direction.x * m_power, 0);
+            m_state.canDash = false;
+            //}
         }
     }
 }

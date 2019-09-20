@@ -196,7 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    Debug.Log("is turning");
+                   
                     m_turnHandle.Execute();
                     break;
                 case State.Attacking:

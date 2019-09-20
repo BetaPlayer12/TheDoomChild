@@ -249,7 +249,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 postAtan2 = atan2;
                 timeCounter = 0;
-                Debug.Log("Replacement trigger");
+               
             }
            
             m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
@@ -261,7 +261,7 @@ namespace DChild.Gameplay.Characters.Enemies
         
         protected override void Awake()
         {
-            Debug.Log("Update override trigger");
+           
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
