@@ -98,6 +98,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_physics.gravity.gravityScale = m_midAirGravity;
                 }
+                //This is a hack shit code
                 if (m_animator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
                 {
                     m_animator.SetTrigger(m_landParameter);
