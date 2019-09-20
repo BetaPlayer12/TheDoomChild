@@ -143,7 +143,7 @@ MonoBehaviour:
   m_legCollider: {fileID: 2372849355435392495}
   m_legColliderLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 65536
 --- !u!114 &8539509539944535660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,12 +276,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_useX: 1
   m_useY: 0
-  m_nearDistanceTolerance: 0.1
+  m_nearDistanceTolerance: 1
   m_startIndex: 0
   m_startIteration: 1
   m_wayPoints:
-  - {x: 525.64, y: -27.26}
-  - {x: 559.6, y: -27.26}
+  - {x: 525.32, y: -27.098907}
+  - {x: 538.2, y: -27.098907}
   m_useCurrentPosition: 0
   m_overridePatrolIndex: 0
 --- !u!114 &7330991833132551503
@@ -346,25 +346,15 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Character
       objectReference: {fileID: 0}
-    - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_BodyType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_UseFullKinematicContacts
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 532.39
+      value: 531.6802
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -27.26
+      value: -27.098907
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -415,6 +405,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_maxHealth
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_UseFullKinematicContacts
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
@@ -525,6 +525,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_collisionMask.m_Bits
       value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 3394700099283359459, guid: 8f0218a0102bb1f48907ef3ded375e5a,
+        type: 3}
+      propertyPath: initialFlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303258578637803786, guid: 8f0218a0102bb1f48907ef3ded375e5a,
+        type: 3}
+      propertyPath: siblingBoneNames.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303258578637803786, guid: 8f0218a0102bb1f48907ef3ded375e5a,
+        type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 3760658870507333606}
+    - target: {fileID: 2303258578637803786, guid: 8f0218a0102bb1f48907ef3ded375e5a,
+        type: 3}
+      propertyPath: siblingBoneNames.Array.data[0]
+      value: r_foot1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7106460866367168288, guid: 8f0218a0102bb1f48907ef3ded375e5a,
+        type: 3}
+      propertyPath: m_compositeColliderID
+      value: -292126
       objectReference: {fileID: 0}
     - target: {fileID: 861804432416506244, guid: 8f0218a0102bb1f48907ef3ded375e5a,
         type: 3}
@@ -885,11 +910,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.data[20].y
       value: 0.1403465
-      objectReference: {fileID: 0}
-    - target: {fileID: 7106460866367168288, guid: 8f0218a0102bb1f48907ef3ded375e5a,
-        type: 3}
-      propertyPath: m_compositeColliderID
-      value: -1384388
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f0218a0102bb1f48907ef3ded375e5a, type: 3}
