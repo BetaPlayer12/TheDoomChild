@@ -229,7 +229,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-           Debug.Log("Before Check State: " + m_stateHandle.currentState);
+          
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
@@ -252,7 +252,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_agent.Stop();
                         timeCounter += Time.deltaTime;
-                        Debug.Log("pausing");
+                       
                     }
                    }
                     else
@@ -260,13 +260,13 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_chargeFacing = true;
                         m_stateHandle.SetState(State.Turning);
                        
-                        Debug.Log("sensor test");
+                      
                     }
                     break;
                 
 
                 case State.Patrol:
-                    Debug.Log("patrol mode");
+                    
                     // if (!m_wallSensor.isDetecting && !m_floorSensor.isDetecting && !m_cielingSensor.isDetecting) //This means that as long as your sensors are detecting something it will patrol
                     // {
                     m_chargeOnce = false;
@@ -286,12 +286,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                    
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    Debug.Log("Turn Bee Drone");
+                   
                     m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation);
                     break;
                 case State.Attacking:
-                    Debug.Log("attacker check4");
+                 
                     m_agent.Stop();
                     m_animation.EnableRootMotion(false, false);
                     m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation);
@@ -302,7 +302,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     if (IsFacingTarget())
                     {
-                        Debug.Log("phase 2");
+                      
 
                        
 
@@ -313,7 +313,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (IsTargetInRange(m_info.meleeAttack.range))
                             {
                                // m_agent.Stop();
-                                Debug.Log("Attack check 45645");
+                               
                                 m_stateHandle.SetState(State.Attacking);
                                
                             }
@@ -344,7 +344,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_stateHandle.SetState(State.Turning);
-                        Debug.Log("sensor test");
+                       
                     }
 
                     break;
@@ -358,7 +358,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     if (m_targetInfo.isValid)
                     {
-                        Debug.Log("phase1");
+                      
                         m_stateHandle.OverrideState(State.Chasing);
                     }
                     else
@@ -369,7 +369,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    Debug.Log("on loop");
+                   
                      return;
                     
                   
@@ -377,7 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                    
             }
-            Debug.Log("Check State: " + m_stateHandle.currentState);
+            
 
 
 
