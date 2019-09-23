@@ -89,7 +89,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
-       
+
+        [SerializeField]
+        private AudioSource m_Audiosource;
+        [SerializeField]
+        private AudioClip m_AttackClip;
+        [SerializeField]
+        private AudioClip m_DeadClip;
+
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -139,6 +146,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            m_Audiosource.clip = m_DeadClip;
+            m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
