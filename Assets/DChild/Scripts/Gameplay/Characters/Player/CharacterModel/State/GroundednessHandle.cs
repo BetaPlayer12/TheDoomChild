@@ -58,6 +58,10 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
            
         }
 
+        public void ResetAnimationParameters()
+        {
+            m_fallHandle.ResetValue();
+        }
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -81,7 +85,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void FixedUpdate()
         {
-            
             if (m_state.isGrounded)
             {
                 m_state.isFalling = false;
