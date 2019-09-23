@@ -67,6 +67,8 @@ namespace DChild.Gameplay.Characters.Players
         private Magic m_magic;
         [SerializeField]
         private LootPicker m_lootPicker;
+        [SerializeField]
+        private GroundednessHandle m_groundednessHandle;
 
         public event EventAction<EventActionArgs> OnDeath;
 
@@ -109,6 +111,8 @@ namespace DChild.Gameplay.Characters.Players
             OnDeath?.Invoke(this, eventArgs);
             GameEventMessage.SendEvent("Game Over");
             m_controlledCharacter.physics.SetVelocity(Vector2.zero);
+            m_groundednessHandle.enabled = false;
+            m_groundednessHandle.ResetAnimationParameters();
             m_controller.Disable();
             m_damageable.SetHitboxActive(false);
         }
