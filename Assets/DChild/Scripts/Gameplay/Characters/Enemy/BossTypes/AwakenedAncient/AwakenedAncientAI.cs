@@ -264,6 +264,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float m_targetDistance;
 
+        [SerializeField]
+        private AudioSource m_Audiosource;
+        [SerializeField]
+        private AudioClip m_AwakeAudioClip;
+        [SerializeField]
+        private AudioClip m_WalkAudioClip;
+        [SerializeField]
+        private AudioClip m_SpitAudioClip;
+        [SerializeField]
+        private AudioClip m_VineCrawlAudioClip;
+        [SerializeField]
+        private AudioClip m_SkeletonSummonAudioClip;
+
         protected override void Start()
         {
             base.Start();
@@ -507,6 +520,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //Audio
+            m_Audiosource.clip = m_AwakeAudioClip;
+            m_Audiosource.Play();
+            //
             m_waitRoutineEnd = false;
             yield return null;
             m_currentState = State.Chasing;
@@ -674,6 +691,8 @@ namespace DChild.Gameplay.Characters.Enemies
             skeleton.GetComponent<SkeletonSpawnAI>().AddTarget(m_targetInfo.transform.gameObject);
             GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
             m_skeletons.Add(skeleton);
+            m_Audiosource.clip = m_SkeletonSummonAudioClip;
+            m_Audiosource.Play();
         }
 
         private void Update()
@@ -784,6 +803,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                         if (Wait() && !m_wallSensor.isDetecting)
                                         {
                                             //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
+                                            //Audio
+                                             m_Audiosource.clip = m_VineCrawlAudioClip;
+                                            m_Audiosource.Play();
+                                            //
                                             StartCoroutine(GroundAttackRoutine());
                                             WaitTillAttackEnd(Attack.GroundSlam);
                                         }
@@ -796,6 +819,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                             {
                                                 m_animation.SetAnimation(0, m_info.spit.animation, false);
                                                 m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                                                m_Audiosource.clip = m_SpitAudioClip;
+                                                m_Audiosource.Play();
                                                 WaitTillAttackEnd(Attack.Spit);
                                             }
                                         }
@@ -832,9 +857,17 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     if (Wait())
                                     {
+                                        //Audio
+                                        // m_Audiosource.clip = m_WalkAudioClip;
+                                       // m_Audiosource.PlayOneShot(m_WalkAudioClip);
+                                        //
+
                                         m_animation.EnableRootMotion(true, false);
                                         m_animation.SetAnimation(0, m_info.moveAnimation, true);
+
                                     }
+
+                                    
                                 }
                                 else
                                 {
