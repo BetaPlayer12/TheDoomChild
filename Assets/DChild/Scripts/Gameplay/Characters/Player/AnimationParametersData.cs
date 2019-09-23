@@ -28,6 +28,8 @@ namespace DChild.Gameplay.Characters.Players
             Flinch,
             Death,
             Turn
+           //, IsGrounded
+
         }
 
         [SerializeField]

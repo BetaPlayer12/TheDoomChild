@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         protected abstract void OnDashDurationEnd(object sender, EventActionArgs eventArgs);
 
-        private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
+        protected virtual void OnControllerDisabled(object sender, EventActionArgs eventArgs)
         {
             StopDash();
         }

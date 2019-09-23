@@ -28,6 +28,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private string m_turnParameter;
         private int m_movingSpeedParameterValue;
         private bool m_hasStopped;
+       // private bool m_groundedParameter;
         private float oldDirection;
         private bool m_Play;
         private bool m_ToggleChange;
@@ -52,6 +53,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
             m_turnParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Turn);
+           // m_groundedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrounded);
             m_slopeSensor = info.GetSensor(PlayerSensorList.SensorType.Slope);
             m_groundSensor = info.GetSensor(PlayerSensorList.SensorType.Ground);
             info.groundednessHandle.LandExecuted += OnLand;
@@ -113,9 +115,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_character.SetFacing(newFacing);
                
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
-                
-                Debug.Log("Moving: " + m_slopeSensor.GetHits().Length);
             }
+            //Fuck shit hack agian
+           // m_animator.SetBool()
 
         }
 

@@ -39,16 +39,12 @@ namespace DChild
         private void Awake()
         {
             m_offset3D = new Vector3(m_offset.x, m_offset.y, 0);
-#if UNITY_EDITOR
-            SetVisibility(m_makeSystemCursorVisible);
-#endif
-        }
-
-        private void Start()
-        {
             m_cacheCamera = GameSystem.mainCamera;
             GameSystem.CameraChange += OnCameraChange;
             enabled = m_cacheCamera;
+#if UNITY_EDITOR
+            SetVisibility(m_makeSystemCursorVisible);
+#endif
         }
 
         private void OnCameraChange(object sender, CameraChangeEventArgs eventArgs)
@@ -78,8 +74,9 @@ namespace DChild
                     Plane xy = new Plane(cameraForward, point);
                     float distance;
                     xy.Raycast(ray, out distance);
+                    Debug.DrawRay(ray.origin, ray.direction * distance);
                     transform.position = ray.GetPoint(distance) + m_offset3D;
-                } 
+                }
             }
             else
             {

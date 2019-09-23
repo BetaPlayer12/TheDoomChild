@@ -51,8 +51,20 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             {
                 m_ghosting.enabled = false;
             }
-
             HandleCooldown();
+        }
+
+        protected override void OnControllerDisabled(object sender, EventActionArgs eventArgs)
+        {
+            m_physics.SetVelocity(Vector2.zero);
+            m_state.isDashing = false;
+            TurnOnAnimation(false);
+            if (m_ghosting != null)
+            {
+                m_ghosting.enabled = false;
+            }
+            m_isOnCooldown = false;
+            m_state.canDash = true;
         }
 
         protected override void OnDashDurationEnd(object sender, EventActionArgs eventArgs)

@@ -32,7 +32,7 @@ namespace DChild
         {
             if (withLoadingScene)
             {
-                if (m_activeZone != string.Empty && m_activeZone != sceneName)
+                if (m_activeZone != null && m_activeZone != string.Empty && m_activeZone != sceneName)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;

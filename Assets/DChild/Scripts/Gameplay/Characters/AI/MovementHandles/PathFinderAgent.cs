@@ -23,7 +23,6 @@ namespace DChild.Gameplay
 
         public void Move(float speed)
         {
-            Debug.Log("Move: "+ m_navigation.directionToPathSegment);
             m_movementHandle.MoveTowards(m_navigation.directionToPathSegment, speed);
         }
 

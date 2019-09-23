@@ -14,6 +14,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private Animator m_animator;
         private string m_midAirParamater;
         private string m_speedYParamater;
+        private string m_landParameter;
         private bool m_isInMidAir;
 
         [SerializeField]
@@ -65,6 +66,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_animator = info.animator;
             m_midAirParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsMidAir);
             m_speedYParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
+            m_landParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Land);
+
+
             m_fallHandle.Initialize(info);
             m_landHandle.Initialize(info);
             m_skillRequester = info.skillResetRequester;
@@ -77,6 +81,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void FixedUpdate()
         {
+            
             if (m_state.isGrounded)
             {
                 m_state.isFalling = false;
@@ -93,6 +98,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_physics.gravity.gravityScale = m_midAirGravity;
                 }
+                //This is a hack shit code
+                if (m_animator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
+                {
+                    m_animator.SetTrigger(m_landParameter);
+                }
+
             }
             else
             {
@@ -105,6 +116,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_animator.SetBool(m_midAirParamater, true);
                 }
                 var isFalling = m_fallHandle.isFalling(m_physics);
+               
                 if (isFalling)
                 {
                     if (m_state.isFalling)
@@ -113,7 +125,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     }
                     else
                     {
+                        
                         m_fallHandle.StartFall();
+                       
                     }
                 }
                 else
