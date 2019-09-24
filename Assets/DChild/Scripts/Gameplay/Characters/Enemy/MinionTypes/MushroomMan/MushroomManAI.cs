@@ -48,6 +48,7 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
 
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -92,6 +93,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
+
+
+        [SerializeField]
+        private AudioSource m_Audiosource;
+        [SerializeField]
+        private AudioClip m_AttackClip;
+        [SerializeField]
+        private AudioClip m_DeadClip;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -138,6 +147,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            m_Audiosource.clip = m_DeadClip;
+            m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -185,15 +196,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    //m_agent.Stop();
+                   
                     m_turnHandle.Execute();
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    m_animation.EnableRootMotion(true, false);
+                    m_animation.EnableRootMotion(true, true);
                     m_attackHandle.ExecuteAttack(m_info.attack.animation);
                     m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+                    //Audio Play need changes
+                    m_Audiosource.clip = m_AttackClip;
+                    m_Audiosource.Play();
+                    
                     break;
                 case State.Chasing:
                     {
@@ -201,16 +216,22 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
                             {
-                                var target = m_targetInfo.position;
-                                target.y -= 0.5f;
-                                m_animation.EnableRootMotion(true, false);
-                                m_animation.SetAnimation(0, m_info.move.animation, true);
-
-
                                 if (IsTargetInRange(m_info.attack.range))
                                 {
                                     m_stateHandle.SetState(State.Attacking);
                                 }
+                                else
+                                {
+                                    var target = m_targetInfo.position;
+                                    target.y -= 0.5f;
+                                    m_animation.EnableRootMotion(true, false);
+                                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                                }
+
+                                
+
+
+                               
                             }
                             else
                             {
@@ -236,7 +257,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    Debug.Log("Still wetting");
+                    //Debug.Log("Still wetting");
                     //m_stateHandle.Wait(State.Attacking);
                     //m_stateHandle.Set(State.Chasing);
                     //m_stateHandle.ApplyQueuedState();

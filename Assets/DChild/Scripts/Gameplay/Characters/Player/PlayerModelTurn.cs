@@ -39,7 +39,8 @@ public class PlayerModelTurn : MonoBehaviour
 
     [SerializeField]
     private HorizontalDirection m_initialFacingDirection;
-
+    [SerializeField]
+    private bool m_executeOnTurn;
     [SerializeField, Spine.Unity.SpineAnimation]
     private string m_turnAnimation;
     [SerializeField, SpineEvent]
@@ -61,8 +62,16 @@ public class PlayerModelTurn : MonoBehaviour
         m_skeleton = animation.skeleton;
 
         m_character = GetComponentInParent<Character>();
-        m_rightShoulder.SetAttachment(m_skeleton, m_character.facing);
-        m_leftShoulder.SetAttachment(m_skeleton, m_character.facing);
+        UpdateAttachments();
+        if (m_executeOnTurn)
+        {
+            m_character.CharacterTurn += OnCharacterTurn;
+        }
+    }
+
+    private void OnCharacterTurn(object sender, FacingEventArgs eventArgs)
+    {
+        UpdateAttachments();
     }
 
     private void OnComplete(TrackEntry trackEntry)
@@ -77,8 +86,13 @@ public class PlayerModelTurn : MonoBehaviour
     {
         if (e.Data.Name == m_turnEvent)
         {
-            m_rightShoulder.SetAttachment(m_skeleton, m_character.facing);
-            m_leftShoulder.SetAttachment(m_skeleton, m_character.facing);
+            UpdateAttachments();
         }
+    }
+
+    private void UpdateAttachments()
+    {
+        m_rightShoulder.SetAttachment(m_skeleton, m_character.facing);
+        m_leftShoulder.SetAttachment(m_skeleton, m_character.facing);
     }
 }

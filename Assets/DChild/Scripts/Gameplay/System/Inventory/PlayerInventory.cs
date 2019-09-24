@@ -1,10 +1,10 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Systems;
+using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
 namespace DChild.Gameplay.Inventories
 {
-    public class PlayerInventory : SerializedMonoBehaviour
+    public class PlayerInventory : SerializedMonoBehaviour, ICurrency
     {
         [SerializeField, MinValue(0)]
         private int m_soulEssence;
@@ -15,7 +15,21 @@ namespace DChild.Gameplay.Inventories
         [SerializeField]
         private IItemContainer m_questItems;
 
-        public void AddSoulEssence(int value) => m_soulEssence = Mathf.Max(m_soulEssence + value, 0);
-        public void SetSoulEssence(int value) => m_soulEssence = value;
+        public int amount => m_soulEssence;
+
+        public event EventAction<CurrencyUpdateEventArgs> OnAmountSet;
+        public event EventAction<CurrencyUpdateEventArgs> OnAmountAdded;
+
+        public void AddSoulEssence(int value)
+        {
+            m_soulEssence = Mathf.Max(m_soulEssence + value, 0);
+            OnAmountAdded?.Invoke(this, new CurrencyUpdateEventArgs(value));
+        }
+
+        public void SetSoulEssence(int value)
+        {
+            m_soulEssence = value;
+            OnAmountSet?.Invoke(this, new CurrencyUpdateEventArgs(value));
+        }
     }
 }

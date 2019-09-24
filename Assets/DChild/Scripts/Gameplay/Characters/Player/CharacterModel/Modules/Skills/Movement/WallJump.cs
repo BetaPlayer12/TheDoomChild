@@ -43,6 +43,9 @@ namespace DChild.Gameplay.Characters.Players.Skill
             m_inputDisableDuration.Reset();
             enabled = true;
             m_character.SetFacing(m_character.facing == HorizontalDirection.Left ? HorizontalDirection.Right : HorizontalDirection.Left);
+            var direction = m_character.facing == HorizontalDirection.Left ? -1 : 1;
+            var characterTransform = m_character.transform;
+            characterTransform.localScale = new Vector3(direction, characterTransform.localScale.y, characterTransform.localScale.z);
             m_animator.SetTrigger(m_jumpParamater);
         }
 

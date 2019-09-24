@@ -14,7 +14,7 @@ namespace Holysoft.Gameplay.UI
         protected abstract float maxValue { set; }
         protected abstract float currentValue { set; }
 
-        public void MonitorInfoOf(ICappedStat stat)
+        public virtual void MonitorInfoOf(ICappedStat stat)
         {
             if (m_stat != null)
             {
@@ -43,11 +43,11 @@ namespace Holysoft.Gameplay.UI
 //#if UNITY_EDITOR
         private ICappedStat m_previous;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (m_stat != null)
             {
-                UpdateUI();
+                MonitorInfoOf(m_stat);
             }
         }
 

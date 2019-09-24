@@ -61,6 +61,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private GameObject m_burstGO;
             public GameObject burstGO => m_burstGO;
 
+
+            [SerializeField]
+            private float m_delayShotTime;
+            public float delayShotTimer => m_delayShotTime;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -105,12 +110,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
 
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_floorSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_cielingSensor;
+        [SerializeField]
+        private AudioSource m_Audiosource;
+        [SerializeField]
+        private AudioClip m_RangeAttackClip;
+        [SerializeField]
+        private AudioClip m_RangeBeeDroneDeadClip;
+
+
+        //stored timer
+        private float postAtan2;
+
+        //
+        private float timeCounter;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -164,6 +176,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.rangeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rangeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -191,6 +204,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            m_Audiosource.clip = m_RangeBeeDroneDeadClip;
+            m_Audiosource.Play();
+           
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
         }
@@ -225,31 +241,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchStingerProjectile()
         {
-            var target = m_targetInfo.position; //No Parabola
-            
+            var target = m_targetInfo.position; //No Parabola      
             Vector2 spitPos = m_stingerPos.position;
             Vector3 v_diff = (target - spitPos);
-            
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-            if (m_character.facing == HorizontalDirection.Right)
+            if (m_info.delayShotTimer <= timeCounter)
             {
-                m_stingerPos.eulerAngles = new Vector3(0,0,-400);
+                postAtan2 = atan2;
+                timeCounter = 0;
+               
             }
-            else if (m_character.facing == HorizontalDirection.Left)
-            {
-                m_stingerPos.eulerAngles = new Vector3(0, 0, -150);
-            }
-
-            GameObject burst = Instantiate(m_info.burstGO, spitPos, Quaternion.Euler(0f, 0f, 0f)); //No Parabola
-            //burst.GetComponent<ProjectileBeeScript>().Reciever(m_targetInfo.position, m_info.stingerProjectile.projectileInfo.speed);
-            
-            
+           
+            m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+            GameObject burst = Instantiate(m_info.burstGO, spitPos, m_stingerPos.rotation);
             m_stingerLauncher.LaunchProjectile();
+            m_Audiosource.clip = m_RangeAttackClip;
+            m_Audiosource.Play();
         }
         
         protected override void Awake()
         {
-            Debug.Log("Update override trigger");
+           
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
@@ -262,6 +274,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            timeCounter = m_info.delayShotTimer + 1;
             m_animation.animationState.Event += HandleEvent;
             m_spineListener.Subscribe(m_info.stingerProjectile.launchOnEvent, LaunchStingerProjectile );
         }
@@ -272,31 +285,22 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Idle:
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    //if (m_targetInfo.isValid == false)
-                    //{
-                    //    m_stateHandle.SetState(State.Patrol);
-                    //}
+                    if (m_targetInfo.isValid == false)
+                    {
+                      m_stateHandle.SetState(State.Patrol);
+                    }
                     break;
 
                 case State.Patrol:
-                    Debug.Log("patrol mode");
-                    // if (!m_wallSensor.isDetecting && !m_floorSensor.isDetecting && !m_cielingSensor.isDetecting) //This means that as long as your sensors are detecting something it will patrol
-                    // {
+
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
-                    // break;
-                    // }
-                    // else
-                    // {
-                    //    m_stateHandle.SetState(State.Turning);
-                    //   Debug.Log("sensor test patrol");
-                    //  }
+                   
                     break;
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    Debug.Log("Turn Bee Drone");
                     m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation);
                     break;
@@ -305,38 +309,40 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(RangeAttackRoutine());
                     break;
                 case State.Chasing:
-                    if (IsFacingTarget())
-                    {
-
-                        var target = m_targetInfo.position;
-                        target.y -= 0.5f;
-                        m_animation.DisableRootMotion();
-                        if (GetComponent<IsolatedPhysics2D>().velocity != Vector2.zero)
+                   
+                        if (IsFacingTarget())
                         {
-                            m_animation.SetAnimation(0, m_info.move.animation, true);
+
+                            if (IsTargetInRange(m_info.stingerProjectile.range))
+                            {
+                                m_stateHandle.SetState(State.Attacking);
+                            }
+                            else
+                            {
+
+                                var target = m_targetInfo.position;
+                                target.y -= 0.5f;
+                                m_animation.DisableRootMotion();
+                                if (m_character.physics.velocity != Vector2.zero)
+                                {
+                                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                                }
+                                else
+                                {
+                                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                                }
+                                m_agent.SetDestination(target);
+                              
+                                    m_agent.Move(m_info.move.speed);
+                              
+                            }
+
                         }
                         else
                         {
-                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                            m_stateHandle.SetState(State.Turning);
                         }
-                        m_agent.SetDestination(target);
-                        if (m_agent.hasPath)
-                        {
-                            m_agent.Move(m_info.move.speed);
-                        }
-
-
-                        if (IsTargetInRange(m_info.stingerProjectile.range))
-                        {
-                            m_stateHandle.SetState(State.Attacking);
-                        }
-                    }
-                    else
-                    {
-                        m_stateHandle.SetState(State.Turning);
-                        Debug.Log("sensor test");
-                    }
-
+                    
                     break;
 
                 case State.ReevaluateSituation:
@@ -358,8 +364,12 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
-        }
 
+            timeCounter += 1 * Time.deltaTime;
+
+           
+        }
+       
 
     }
 }

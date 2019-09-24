@@ -119,7 +119,7 @@ namespace DChild.Gameplay.Combat
 
         public void MonitorBoss(Boss boss)
         {
-            m_bossCombat.SetBoss(boss);
+            m_bossCombat?.SetBoss(boss);
         }
 
         public void Initialize()

@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "QfeOObOXqVzBTbDq3rHAxQ251LA", "spine": "3.7.94", "width": 2695.25, "height": 3384.56, "images": "./images/", "audio": "D:/Earl Genesis/holysoft earl/VFX for doomed child/Awakened Ancient" },
+"skeleton": { "hash": "27qogPySXACVz1pwnLIrk7ngGxI", "spine": "3.7.94", "width": 2695.25, "height": 3384.56, "images": "./images/", "audio": "D:/Earl Genesis/holysoft earl/VFX for doomed child/Awakened Ancient" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "main body", "parent": "root", "length": 737.98, "rotation": 18.74, "x": -171.58, "y": 1158.5 },
@@ -1246,10 +1246,12 @@
 "events": {
 	"Foot_Effects": {},
 	"SA_Anticipation": {},
+	"Scream_Efx": {},
 	"Seed_Spit": {},
 	"Skeleton_Anticipation_VFX": {},
 	"Spawn_Skeletons": {},
 	"Stomp_Efx": {},
+	"Stop_Scream_Effects": {},
 	"smoke_effects": {}
 },
 "animations": {
@@ -6756,14 +6758,7 @@
 						"curve": [ 0, 0.23, 0.375, 0.58 ]
 					},
 					{ "time": 0.4, "x": 369, "y": 855 },
-					{ "time": 0.4667, "x": 0, "y": 0 },
-					{
-						"time": 2.4667,
-						"x": 128.88,
-						"y": 298.63,
-						"curve": [ 0, 0.28, 0.75, 1 ]
-					},
-					{ "time": 2.8667, "x": 0, "y": 0 }
+					{ "time": 0.4667, "x": 0, "y": 0 }
 				],
 				"scale": [
 					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
@@ -8313,7 +8308,11 @@
 					{ "time": 2.8667, "x": 0, "y": 0 }
 				]
 			}
-		}
+		},
+		"events": [
+			{ "time": 0.6333, "name": "Scream_Efx" },
+			{ "time": 2.3, "name": "Stop_Scream_Effects" }
+		]
 	},
 	"Spit": {
 		"bones": {
@@ -8961,36 +8960,10 @@
 					{ "time": 2.3, "color": "ffffffff" }
 				]
 			},
-			"tombstone 1": {
-				"color": [
-					{ "time": 0.9, "color": "ffffffff", "curve": "stepped" },
-					{ "time": 0.9333, "color": "ffffffff" },
-					{ "time": 0.9667, "color": "ffffff00", "curve": "stepped" },
-					{
-						"time": 2,
-						"color": "ffffff00",
-						"curve": [ 0, 0.26, 0.75, 1 ]
-					},
-					{ "time": 2.3, "color": "ffffffff" }
-				]
-			},
 			"tombstone 1.2": {
 				"attachment": [
 					{ "time": 0.9667, "name": "tombstone 1.2" },
 					{ "time": 2.2667, "name": null }
-				]
-			},
-			"tombstone clump": {
-				"color": [
-					{ "time": 0.9, "color": "ffffffff", "curve": "stepped" },
-					{ "time": 0.9333, "color": "ffffffff" },
-					{ "time": 0.9667, "color": "ffffff00", "curve": "stepped" },
-					{
-						"time": 2.1,
-						"color": "ffffff00",
-						"curve": [ 0, 0.3, 0.75, 1 ]
-					},
-					{ "time": 2.3, "color": "ffffffff" }
 				]
 			},
 			"tombstone clump2": {

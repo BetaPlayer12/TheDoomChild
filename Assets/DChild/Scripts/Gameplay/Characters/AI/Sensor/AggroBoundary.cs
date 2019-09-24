@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Characters.AI
             m_brain = GetComponentInParent<ICombatAIBrain>();
         }
 
+
         protected void SetTargetToBrain(Collider2D spottedTarget, ITarget targetComponent)
         {
             if (targetComponent.CompareTag(Character.objectTag))

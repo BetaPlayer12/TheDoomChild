@@ -1,6 +1,7 @@
 ﻿using Holysoft.Event;
 using Pathfinding;
 using Sirenix.OdinInspector;
+using Spine.Unity;
 using System.Collections.Generic;
 using UnityEngine;
 

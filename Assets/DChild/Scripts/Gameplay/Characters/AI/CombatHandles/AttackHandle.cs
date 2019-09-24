@@ -20,13 +20,13 @@ namespace DChild.Gameplay.Characters
             if (m_cacheTrack != null)
             {
                 m_cacheTrack.Complete -= OnTrackDone;
-                //m_cacheTrack.Interrupt -= OnTrackDone; //Commented dis to fix the transitional issue of attacks
+                m_cacheTrack.Interrupt -= OnTrackDone; //Commented dis to fix the transitional issue of attacks
             }
-            m_cacheTrack = m_animation.AddAnimation(0, attackAnimation, false, 0);
+            m_cacheTrack = m_animation.SetAnimation(0, attackAnimation, false, 0);
             m_cacheTrack.MixDuration = 0;
             m_cacheTrack.Complete += OnTrackDone;
             m_cacheTrack.Interrupt += OnTrackDone;
-            //m_animation.AddEmptyAnimation(0, 0, 1); //Commented dis to fix the transitional issue of attacks
+            m_animation.AddEmptyAnimation(0, 0, 1); //Commented dis to fix the transitional issue of attacks
         }
 
         private void OnTrackDone(TrackEntry trackEntry)
