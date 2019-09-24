@@ -542,7 +542,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TombAttackRoutine(Vector3 target, int tombSize, int phaseIndex)
         {
-            m_boss.SendPhaseTriggered(phaseIndex);
             m_isPhaseChanging = true;
             m_waitRoutineEnd = true;
             m_hitbox.SetInvulnerability(true);
@@ -562,6 +561,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.screamAnimation, false);
             yield return new WaitForSeconds(.5f);
             m_screamFX.Play();
+            m_boss.SendPhaseTriggered(phaseIndex);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.screamAnimation);
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnimation);

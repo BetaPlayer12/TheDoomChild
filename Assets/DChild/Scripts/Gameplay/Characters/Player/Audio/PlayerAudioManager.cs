@@ -13,6 +13,8 @@ public class PlayerAudioManager : MonoBehaviour
     private AudioMixerSnapshot playIdle;
     [SerializeField]
     private AudioMixerSnapshot playFalls;
+    [SerializeField]
+    private AudioMixerSnapshot playBossFight;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -25,6 +27,10 @@ public class PlayerAudioManager : MonoBehaviour
         {
             playFalls.TransitionTo(0.5f);
         }
+        if (collision.CompareTag("Fire"))
+        {
+            playBossFight.TransitionTo(0.5f);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -35,6 +41,10 @@ public class PlayerAudioManager : MonoBehaviour
             playIdle.TransitionTo(0.5f);
         }
         if (collision.CompareTag("Falls"))
+        {
+            playIdle.TransitionTo(0.5f);
+        }
+        if (collision.CompareTag("Fire"))
         {
             playIdle.TransitionTo(0.5f);
         }
