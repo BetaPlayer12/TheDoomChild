@@ -79,6 +79,18 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_screamEndEvent;
             public string screamEndEvent => m_screamEndEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_frontLeftFoodAudioEvent;
+            public string frontLeftFoodAudioEvent => m_frontLeftFoodAudioEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_backLeftFoodAudioEvent;
+            public string backLeftFoodAudioEvent => m_backLeftFoodAudioEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_frontRightFoodAudioEvent;
+            public string frontRightFoodAudioEvent => m_frontRightFoodAudioEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_backRightFoodAudioEvent;
+            public string backRightFoodAudioEvent => m_backRightFoodAudioEvent;
 
             [Title("Patience Values")]
             [SerializeField, MinValue(0)]
@@ -269,13 +281,17 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private AudioClip m_AwakeAudioClip;
         [SerializeField]
-        private AudioClip m_WalkAudioClip;
+        private AudioClip m_burrowAudioClip;
         [SerializeField]
         private AudioClip m_SpitAudioClip;
         [SerializeField]
         private AudioClip m_VineCrawlAudioClip;
         [SerializeField]
         private AudioClip m_SkeletonSummonAudioClip;
+        [SerializeField]
+        private AudioClip m_leftFootAudioClip;
+        [SerializeField]
+        private AudioClip m_rightFootAudioClip;
 
         protected override void Start()
         {
@@ -331,7 +347,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //Debug.Log("Update attack list trigger");
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.GroundSlam, m_info.groundSlam.range),
-                                    new AttackInfo<Attack>(Attack.SkeletonSummon, m_info.skeletonSummon.range),
+                                    /*new AttackInfo<Attack>(Attack.SkeletonSummon, m_info.skeletonSummon.range),*/
                                     new AttackInfo<Attack>(Attack.Spit, m_info.spit.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
@@ -361,6 +377,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineEventListener.Subscribe(m_info.smokeEvent, m_smokeFX.Play);
             m_spineEventListener.Subscribe(m_info.screamStartEvent, m_screamSpitFX.Play);
             m_spineEventListener.Subscribe(m_info.screamEndEvent, m_screamSpitFX.Stop);
+            m_spineEventListener.Subscribe(m_info.frontLeftFoodAudioEvent, LeftFootAudio);
+            m_spineEventListener.Subscribe(m_info.backLeftFoodAudioEvent, RightFootAudio);
+            m_spineEventListener.Subscribe(m_info.frontRightFoodAudioEvent, RightFootAudio);
+            m_spineEventListener.Subscribe(m_info.backRightFoodAudioEvent, LeftFootAudio);
         }
 
         private void M_boss_PhaseChange(object sender, Boss.PhaseEventArgs eventArgs)
@@ -518,12 +538,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_waitRoutineEnd = true;
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             //Audio
             m_Audiosource.clip = m_AwakeAudioClip;
             m_Audiosource.Play();
             //
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_waitRoutineEnd = false;
             yield return null;
             m_currentState = State.Chasing;
@@ -564,7 +584,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_boss.SendPhaseTriggered(phaseIndex);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.screamAnimation);
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
+            m_Audiosource.clip = m_burrowAudioClip;
+            m_Audiosource.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnimation);
+            m_Audiosource.clip = m_AwakeAudioClip;
+            m_Audiosource.Play();
             for (int i = 0; i < tombSize; i++)
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
@@ -647,6 +671,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (IsFacingTarget())
             {
+                m_Audiosource.clip = m_SpitAudioClip;
+                m_Audiosource.Play();
                 GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
                 obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
                 obj.transform.parent = m_seedSpitTF;
@@ -677,6 +703,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Stomp()
         {
+            m_Audiosource.clip = m_VineCrawlAudioClip;
+            m_Audiosource.Play();
             GameObject obj = Instantiate(m_info.stompFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), transform.position.y - 1f), Quaternion.identity);
             GameObject obj2 = Instantiate(m_info.crawlingVineFX, new Vector2(m_stompTF.position.x + (0.5f * transform.localScale.x), transform.position.y), Quaternion.identity);
             obj2.transform.localScale = new Vector3(obj2.transform.localScale.x * transform.localScale.x, obj2.transform.localScale.y, obj2.transform.localScale.z);
@@ -692,6 +720,18 @@ namespace DChild.Gameplay.Characters.Enemies
             GameObject skeletonFX = Instantiate(m_info.skeletonSpawnFX, skeleton.transform.position, Quaternion.identity);
             m_skeletons.Add(skeleton);
             m_Audiosource.clip = m_SkeletonSummonAudioClip;
+            m_Audiosource.Play();
+        }
+
+        private void LeftFootAudio()
+        {
+            m_Audiosource.clip = m_leftFootAudioClip;
+            m_Audiosource.Play();
+        }
+
+        private void RightFootAudio()
+        {
+            m_Audiosource.clip = m_rightFootAudioClip;
             m_Audiosource.Play();
         }
 
@@ -804,7 +844,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                         {
                                             //m_attackHandle.ExecuteAttack(m_info.groundSlam.animation);
                                             //Audio
-                                             m_Audiosource.clip = m_VineCrawlAudioClip;
+                                            m_Audiosource.clip = m_VineCrawlAudioClip;
                                             m_Audiosource.Play();
                                             //
                                             StartCoroutine(GroundAttackRoutine());
@@ -819,8 +859,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                             {
                                                 m_animation.SetAnimation(0, m_info.spit.animation, false);
                                                 m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-                                                m_Audiosource.clip = m_SpitAudioClip;
-                                                m_Audiosource.Play();
                                                 WaitTillAttackEnd(Attack.Spit);
                                             }
                                         }
