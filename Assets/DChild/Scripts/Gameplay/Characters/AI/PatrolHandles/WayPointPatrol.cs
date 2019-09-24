@@ -66,6 +66,7 @@ namespace DChild.Gameplay.Characters.AI
             if (GetProposedFacing(currentPosition, movementInfo.destination) != character.currentFacing)
             {
                 CallTurnRequest();
+               
             }
             else
             {

@@ -73,6 +73,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -111,8 +112,12 @@ MonoBehaviour:
   singleSubmesh: 0
   addNormals: 0
   calculateTangents: 0
+  maskInteraction: 0
+  maskMaterials:
+    materialsMaskDisabled: []
+    materialsInsideMask: []
+    materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  m_flipX: 0
   _animationName: Buggiant3_Idle_Ground
   loop: 1
   timeScale: 1
@@ -296,16 +301,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_count: 0
-    m_castDistance: 0
-    m_castWidth: 0
+    m_config: {fileID: 0}
     m_rayColor: {r: 0, g: 0, b: 0, a: 0}
-    m_initializeCastConfig: 0
-    m_mask:
-      serializedVersion: 2
-      m_Bits: 0
-    m_ignoreTrigger: 0
-    m_offsets: []
   m_enable: 1
 --- !u!114 &2414378510825817175
 MonoBehaviour:
@@ -395,6 +392,7 @@ CompositeCollider2D:
   m_CompositePaths:
     m_Paths: []
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.000005
 --- !u!1 &3475092377469941219
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +654,7 @@ CompositeCollider2D:
       - {x: -2.116063, y: 1.3011059}
       - {x: -2.1629715, y: 0.7752235}
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.000005
 --- !u!114 &7197183893582743397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,7 +670,7 @@ MonoBehaviour:
   m_collider2Ds:
   - {fileID: 7719607115402772143}
   - {fileID: 28649773006282396}
-  m_compositeColliderID: -38884
+  m_compositeColliderID: -1305476
   m_isInvulnerable: 0
   m_damageReduction: 0
 --- !u!114 &1333813864753302710
@@ -686,6 +685,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_ignoreColliderList: []
 --- !u!1 &3808039746746299021
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,16 +868,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_count: 0
-    m_castDistance: 0
-    m_castWidth: 0
+    m_config: {fileID: 0}
     m_rayColor: {r: 0, g: 0, b: 0, a: 0}
-    m_initializeCastConfig: 0
-    m_mask:
-      serializedVersion: 2
-      m_Bits: 0
-    m_ignoreTrigger: 0
-    m_offsets: []
   m_enable: 1
 --- !u!114 &7651059569968770702
 MonoBehaviour:
@@ -1104,16 +1097,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_count: 0
-    m_castDistance: 0
-    m_castWidth: 0
+    m_config: {fileID: 0}
     m_rayColor: {r: 0, g: 0, b: 0, a: 0}
-    m_initializeCastConfig: 0
-    m_mask:
-      serializedVersion: 2
-      m_Bits: 0
-    m_ignoreTrigger: 0
-    m_offsets: []
   m_enable: 1
 --- !u!114 &4731683993640108333
 MonoBehaviour:

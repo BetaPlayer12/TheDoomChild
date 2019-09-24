@@ -98,9 +98,7 @@ MonoBehaviour:
   m_centerMass: {fileID: 6675838426810418443}
   m_data: {fileID: 11400000, guid: c84f2850588f61c4d9b2670433aa1700, type: 2}
   m_info:
-    damage:
-    - m_type: 0
-      m_value: 0
+    damage: []
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
@@ -117,6 +115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_ignoreColliderList: []
 --- !u!198 &1853745224818669680
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4856,7 +4855,7 @@ MonoBehaviour:
   - {fileID: 2353365730344233072}
   - {fileID: 5041432145502781671}
   m_playOnAwake: 1
-  m_poolOnStop: 1
+  m_poolOnStop: 0
 --- !u!1001 &2353365730255680041
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4864,16 +4863,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2058704440264991909}
     m_Modifications:
-    - target: {fileID: 8938943790929393443, guid: 30dc7da22d1afc340ae17a8fef0797c6,
-        type: 3}
-      propertyPath: m_Name
-      value: projectile_impact
-      objectReference: {fileID: 0}
-    - target: {fileID: 8938943790929393443, guid: 30dc7da22d1afc340ae17a8fef0797c6,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: 8938943790929393442, guid: 30dc7da22d1afc340ae17a8fef0797c6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4937,6 +4926,16 @@ PrefabInstance:
         type: 3}
       propertyPath: stopAction
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938943790929393443, guid: 30dc7da22d1afc340ae17a8fef0797c6,
+        type: 3}
+      propertyPath: m_Name
+      value: projectile_impact
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938943790929393443, guid: 30dc7da22d1afc340ae17a8fef0797c6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 97081942, guid: 30dc7da22d1afc340ae17a8fef0797c6, type: 3}
       propertyPath: m_Layer

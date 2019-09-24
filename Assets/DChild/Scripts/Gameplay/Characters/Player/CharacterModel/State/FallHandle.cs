@@ -44,14 +44,18 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void StartFall()
         {
-            m_timer.Reset();
-            m_animator.SetInteger(m_animationParameter, -1);
-            m_state.isFalling = true;
+            if (!m_state.isGrounded) {
+                m_timer.Reset();
+                m_animator.SetInteger(m_animationParameter, -1);
+                m_state.isFalling = true;
+            }
+            
 
         }
 
         public void ResetValue()
         {
+            
             m_animator.SetInteger(m_animationParameter, 0);
             m_state.isFalling = false;
         }
@@ -64,8 +68,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_physics.gravity.gravityScale = m_gravityScale;
             }
         }
-
+       
         public bool isFalling(CharacterPhysics2D physics) => physics.velocity.y < m_velocityToConsiderAsFall;
+      
     }
 
 }

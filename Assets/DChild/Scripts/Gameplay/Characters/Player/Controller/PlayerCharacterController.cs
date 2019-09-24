@@ -89,10 +89,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_characterState.isGrounded)
                 {
+                   
                     m_ground.CallFixedUpdate(m_characterState, m_skills, m_callArgs);
+                   
                 }
                 else
                 {
+                
                     m_air.CallFixedUpdate(m_characterState, m_skills, m_callArgs);
                 }
             }

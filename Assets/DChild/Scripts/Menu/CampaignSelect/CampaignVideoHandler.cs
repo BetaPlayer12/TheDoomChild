@@ -1,5 +1,6 @@
 ﻿using Doozy.Engine;
 using Sirenix.OdinInspector;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,6 +34,16 @@ namespace DChild.Menu.Campaign
         private VideoClip m_first;
         [SerializeField]
         private VideoClip m_last;
+
+        [SerializeField]
+        private RenderTexture m_texture;
+        [SerializeField]
+        private Texture m_blank;
+
+        public void ClearRenderer()
+        {
+            Graphics.Blit(m_blank, m_texture);
+        }
 
         [Button]
         public void PlayIntro()
