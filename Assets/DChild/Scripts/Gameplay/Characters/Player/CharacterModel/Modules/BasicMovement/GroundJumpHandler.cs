@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_animator.SetTrigger(m_jumpParamater);
                 m_highJumpState.hasJumped = true;
                 m_fXSpawner.SpawnFX(m_character.facing);
+               
             }
             m_character.transform.eulerAngles = Vector3.zero;
            // Debug.Log("jump handle");
