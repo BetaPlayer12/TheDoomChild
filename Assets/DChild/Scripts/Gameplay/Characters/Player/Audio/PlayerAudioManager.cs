@@ -6,12 +6,6 @@ using UnityEngine.Audio;
 public class PlayerAudioManager : MonoBehaviour
 {
     [SerializeField]
-    private AudioSource audioSource;
-    [SerializeField]
-    private AudioClip m_MainGardenClip;
-    [SerializeField]
-    private AudioClip m_NearBoClip;
-    [SerializeField]
     private AudioMixerSnapshot playAmb;
     [SerializeField]
     private AudioMixerSnapshot playIdle;
@@ -50,7 +44,7 @@ public class PlayerAudioManager : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("2d collision off: " + collision.transform.name);
+        
         if (collision.CompareTag("Amb1"))
         {
             playIdle.TransitionTo(0.5f);

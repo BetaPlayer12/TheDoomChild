@@ -10,6 +10,7 @@ using DChild.Gameplay;
 using DChild.Gameplay.Combat;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace DChild.Gameplay.Combat
 {
@@ -38,6 +39,7 @@ namespace DChild.Gameplay.Combat
         private Collider2DInfo[] m_ignoreColliderList;
 
         private IDamageDealer m_damageDealer;
+        public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
         private void Awake()
         {
@@ -57,6 +59,7 @@ namespace DChild.Gameplay.Combat
             if (hitbox != null)
             {
                 m_damageDealer?.Damage(CreateInfo(hitbox), hitbox.defense);
+                DamageableDetected?.Invoke(collision);
             }
 
             if (m_canDetectInteractables)
