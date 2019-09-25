@@ -347,7 +347,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //Debug.Log("Update attack list trigger");
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.GroundSlam, m_info.groundSlam.range),
-                                    /*new AttackInfo<Attack>(Attack.SkeletonSummon, m_info.skeletonSummon.range),*/
+                                    new AttackInfo<Attack>(Attack.SkeletonSummon, m_info.skeletonSummon.range),
                                     new AttackInfo<Attack>(Attack.Spit, m_info.spit.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }

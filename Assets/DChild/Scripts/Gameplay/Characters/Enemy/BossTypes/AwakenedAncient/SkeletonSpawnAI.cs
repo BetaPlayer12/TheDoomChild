@@ -239,6 +239,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void SetDirection(float direction)
         {
             transform.localScale = new Vector3(direction, transform.localScale.y, transform.localScale.z);
+            GetComponent<Character>().SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         public override void ApplyData()
