@@ -292,6 +292,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AudioClip m_leftFootAudioClip;
         [SerializeField]
         private AudioClip m_rightFootAudioClip;
+        [SerializeField]
+        private AudioClip m_deathAudioClip;
 
         protected override void Start()
         {
@@ -390,6 +392,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            m_Audiosource.clip = m_deathAudioClip;
+            m_Audiosource.Play();
             GameEventMessage.SendEvent("Boss Gone");
             base.OnDestroyed(sender, eventArgs);
         }
@@ -587,8 +591,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_Audiosource.clip = m_burrowAudioClip;
             m_Audiosource.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.burrowAnimation);
-            m_Audiosource.clip = m_AwakeAudioClip;
-            m_Audiosource.Play();
             for (int i = 0; i < tombSize; i++)
             {
                 GameObject tomb = Instantiate(m_info.tombAttackGO, new Vector2(target.x + UnityEngine.Random.Range(-10, 10), target.y - 2.5f), Quaternion.identity);
@@ -620,6 +622,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.skeletonAnimation.skeleton.SetSkin(m_skinName[m_chosenSkin]);
             m_animation.SetAnimation(0, m_info.unburrowAnimation, false);
+            m_Audiosource.clip = m_AwakeAudioClip;
+            m_Audiosource.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unburrowAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(false);
