@@ -292,6 +292,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AudioClip m_leftFootAudioClip;
         [SerializeField]
         private AudioClip m_rightFootAudioClip;
+        [SerializeField]
+        private AudioClip m_deathAudioClip;
 
         protected override void Start()
         {
@@ -390,6 +392,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            m_Audiosource.clip = m_deathAudioClip;
+            m_Audiosource.Play();
             GameEventMessage.SendEvent("Boss Gone");
             base.OnDestroyed(sender, eventArgs);
         }
