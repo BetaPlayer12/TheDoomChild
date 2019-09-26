@@ -294,6 +294,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AudioClip m_rightFootAudioClip;
         [SerializeField]
         private AudioClip m_deathAudioClip;
+        [SerializeField]
+        private AudioClip m_screamAudioClip;
 
         protected override void Start()
         {
@@ -304,6 +306,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_maxHealth = m_health.currentValue;
             m_phaseHealth = m_maxHealth;
             m_animation.skeletonAnimation.skeleton.SetSkin(m_skinName[0]);
+
+            m_spineEventListener.Subscribe(m_info.footEvent, m_footFX.Play);
+            m_spineEventListener.Subscribe(m_info.saAnticipationEvent, AnticipationPlay);
+            m_spineEventListener.Subscribe(m_info.seedSpitEvent, SeedSpit);
+            m_spineEventListener.Subscribe(m_info.stompEvent, Stomp);
+            m_spineEventListener.Subscribe(m_info.spawnSkeletonEvent, SpawnSkeleton);
+            m_spineEventListener.Subscribe(m_info.smokeEvent, m_smokeFX.Play);
+            m_spineEventListener.Subscribe(m_info.screamStartEvent, m_screamSpitFX.Play);
+            m_spineEventListener.Subscribe(m_info.screamEndEvent, m_screamSpitFX.Stop);
+            m_spineEventListener.Subscribe(m_info.frontLeftFoodAudioEvent, LeftFootAudio);
+            m_spineEventListener.Subscribe(m_info.backLeftFoodAudioEvent, RightFootAudio);
+            m_spineEventListener.Subscribe(m_info.frontRightFoodAudioEvent, RightFootAudio);
+            m_spineEventListener.Subscribe(m_info.backRightFoodAudioEvent, LeftFootAudio);
+
             //Debug.Log(m_boneName.Count);
             //for (int i = 0; i < m_boneName.Count; i++)
             //{
@@ -370,19 +386,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_tombs = new List<GameObject>();
             m_tombSouls = new List<GameObject>();
             m_skeletons = new List<GameObject>();
-
-            m_spineEventListener.Subscribe(m_info.footEvent, m_footFX.Play);
-            m_spineEventListener.Subscribe(m_info.saAnticipationEvent, AnticipationPlay);
-            m_spineEventListener.Subscribe(m_info.seedSpitEvent, SeedSpit);
-            m_spineEventListener.Subscribe(m_info.stompEvent, Stomp);
-            m_spineEventListener.Subscribe(m_info.spawnSkeletonEvent, SpawnSkeleton);
-            m_spineEventListener.Subscribe(m_info.smokeEvent, m_smokeFX.Play);
-            m_spineEventListener.Subscribe(m_info.screamStartEvent, m_screamSpitFX.Play);
-            m_spineEventListener.Subscribe(m_info.screamEndEvent, m_screamSpitFX.Stop);
-            m_spineEventListener.Subscribe(m_info.frontLeftFoodAudioEvent, LeftFootAudio);
-            m_spineEventListener.Subscribe(m_info.backLeftFoodAudioEvent, RightFootAudio);
-            m_spineEventListener.Subscribe(m_info.frontRightFoodAudioEvent, RightFootAudio);
-            m_spineEventListener.Subscribe(m_info.backRightFoodAudioEvent, LeftFootAudio);
         }
 
         private void M_boss_PhaseChange(object sender, Boss.PhaseEventArgs eventArgs)
@@ -585,6 +588,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.screamAnimation, false);
             yield return new WaitForSeconds(.5f);
             m_screamFX.Play();
+            m_Audiosource.clip = m_screamAudioClip;
+            m_Audiosource.Play();
             m_boss.SendPhaseTriggered(phaseIndex);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.screamAnimation);
             m_animation.SetAnimation(0, m_info.burrowAnimation, false);
