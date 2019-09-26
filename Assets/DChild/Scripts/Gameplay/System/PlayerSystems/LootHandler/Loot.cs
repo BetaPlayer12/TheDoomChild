@@ -1,5 +1,8 @@
-﻿using DChild.Gameplay.Characters.Players;
+﻿using System;
+using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Pooling;
+using Holysoft.Collections;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -7,6 +10,8 @@ namespace DChild.Gameplay.Systems
 {
     public abstract class Loot : PoolableObject
     {
+        [SerializeField]
+        private CountdownTimer m_popTimer;
         [SerializeField, MinValue(0.1f), BoxGroup("Basic Loot Info")]
         private float m_pickUpVelocity;
         [SerializeField, BoxGroup("Basic Loot Info")]
@@ -50,25 +55,34 @@ namespace DChild.Gameplay.Systems
             EnableEnvironmentCollider();
             m_animator.SetBool("PickedUp", false);
             m_hasBeenPickUp = false;
+            m_popTimer.Reset();
             m_isPopping = true;
             m_pickedBy = null;
+        }
+
+        protected virtual void ExecutePop(float delta)
+        {
+            m_popTimer.Tick(delta);
+        }
+
+        private void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_isPopping = false;
         }
 
         protected virtual void Awake()
         {
             m_originalDrag = m_rigidbody.drag;
             m_collider = GetComponentInChildren<Collider2D>();
+            m_popTimer.CountdownEnd += OnPopDurationEnd;
         }
+
 
         protected virtual void FixedUpdate()
         {
             if (m_isPopping)
             {
-                if (m_rigidbody.velocity.magnitude <= 1)
-                {
-                    m_rigidbody.drag = 0;
-                    m_isPopping = false;
-                }
+                ExecutePop(Time.deltaTime);
             }
             else if (m_hasBeenPickUp)
             {
@@ -77,13 +91,16 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.tag != "Sensor" && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if (m_isPopping == false)
             {
-                ApplyPickUp();
-                CallPoolRequest();
-                m_pickedBy = null;
+                if (collision.tag != "Sensor" && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    ApplyPickUp();
+                    CallPoolRequest();
+                    m_pickedBy = null;
+                }
             }
         }
     }
