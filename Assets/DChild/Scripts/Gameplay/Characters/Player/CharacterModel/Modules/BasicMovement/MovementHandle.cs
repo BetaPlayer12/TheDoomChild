@@ -75,7 +75,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 if (m_characterPhysics.inContactWithGround)
                 {
                     m_characterPhysics.SetVelocity(y: 0);
-                    m_animator.SetTrigger(m_landParameter);
                 }
                 if (m_characterPhysics.velocity.x != 0)
                 {

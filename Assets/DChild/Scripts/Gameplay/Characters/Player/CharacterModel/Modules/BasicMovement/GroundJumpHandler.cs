@@ -41,8 +41,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_fXSpawner.SpawnFX(m_character.facing);
                
             }
-            m_character.transform.eulerAngles = Vector3.zero;
-           // Debug.Log("jump handle");
+            //m_character.transform.eulerAngles = Vector3.zero;
+          
         }
 
         private void OnLand(object sender, EventActionArgs eventArgs)

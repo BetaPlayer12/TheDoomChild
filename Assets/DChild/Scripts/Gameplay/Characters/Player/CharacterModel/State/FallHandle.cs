@@ -49,13 +49,10 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_animator.SetInteger(m_animationParameter, -1);
                 m_state.isFalling = true;
             }
-            
-
         }
 
         public void ResetValue()
         {
-            
             m_animator.SetInteger(m_animationParameter, 0);
             m_state.isFalling = false;
         }
