@@ -5207,7 +5207,7 @@ MonoBehaviour:
   m_AwakeAudioClip: {fileID: 8300000, guid: ffa3cea068eda2e41bd7e274e56fb243, type: 3}
   m_burrowAudioClip: {fileID: 8300000, guid: 6ac9dfac2a052a446ab931c1d5871eaa, type: 3}
   m_SpitAudioClip: {fileID: 8300000, guid: 71202d70c0d31c546b5a507c154bc21d, type: 3}
-  m_VineCrawlAudioClip: {fileID: 8300000, guid: cafecd588bc248c468835cc3bbc8f36c,
+  m_VineCrawlAudioClip: {fileID: 8300000, guid: 72ee022ddb3addd4aa26b3151043feae,
     type: 3}
   m_SkeletonSummonAudioClip: {fileID: 8300000, guid: ec28c0d1f57ba55479a71b0bd24e94f4,
     type: 3}
@@ -5215,6 +5215,7 @@ MonoBehaviour:
   m_rightFootAudioClip: {fileID: 8300000, guid: 24757b8a40e42ea4e8b86c8ce15654cf,
     type: 3}
   m_deathAudioClip: {fileID: 8300000, guid: 6509dc1327f578947874d5001d571a9b, type: 3}
+  m_screamAudioClip: {fileID: 8300000, guid: e16f5950ae5890d4e8a0cbf8b49bc3ed, type: 3}
 --- !u!114 &8945520754824478488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5359,10 +5360,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2314127693125412679}
     m_Modifications:
-    - target: {fileID: 7501249103534530850, guid: 8252bfa1795f60941b6e0a4070e41a34,
+    - target: {fileID: 7501249103534530851, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
-      propertyPath: m_Name
-      value: AwakenedAncientModel
+      propertyPath: skeletonDataAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: db4dc649170f2f74aaa9a85324011961,
+        type: 2}
+    - target: {fileID: 7501249103534530851, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: _animationName
+      value: Burrow_Idle
       objectReference: {fileID: 0}
     - target: {fileID: 7501249103534530854, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
@@ -5419,27 +5426,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7501249103534530851, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: skeletonDataAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: db4dc649170f2f74aaa9a85324011961,
-        type: 2}
-    - target: {fileID: 7501249103534530851, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: _animationName
-      value: Burrow_Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 7501249103534530852, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 774ca57f9aced8840a2dc411e5cd0964, type: 2}
-    - target: {fileID: 7501249103534530852, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8397399914938665892, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_LocalRotation.z
@@ -5463,7 +5449,7 @@ PrefabInstance:
     - target: {fileID: 8246593781607944904, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_compositeColliderID
-      value: -5563096
+      value: -2992512
       objectReference: {fileID: 0}
     - target: {fileID: 4932820218245104561, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
@@ -5585,11 +5571,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -3.5949993
       objectReference: {fileID: 0}
-    - target: {fileID: 5736676924033632631, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: rb
-      value: 
-      objectReference: {fileID: 8710389533956841228}
     - target: {fileID: 6360412020367550851, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -5620,6 +5601,36 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -2.9020023
       objectReference: {fileID: 0}
+    - target: {fileID: 2682650929471531082, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.793567
+      objectReference: {fileID: 0}
+    - target: {fileID: 2682650929471531082, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5787239
+      objectReference: {fileID: 0}
+    - target: {fileID: 7501249103534530850, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_Name
+      value: AwakenedAncientModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7501249103534530852, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 774ca57f9aced8840a2dc411e5cd0964, type: 2}
+    - target: {fileID: 7501249103534530852, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5736676924033632631, guid: 8252bfa1795f60941b6e0a4070e41a34,
+        type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 8710389533956841228}
     - target: {fileID: 343262521742798877, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6996,16 +7007,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 82.26401
       objectReference: {fileID: 0}
-    - target: {fileID: 2682650929471531082, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 8.793567
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682650929471531082, guid: 8252bfa1795f60941b6e0a4070e41a34,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5787239
-      objectReference: {fileID: 0}
     - target: {fileID: 3839393089208398652, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_LocalRotation.z
@@ -7243,11 +7244,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4745572713892085264}
     m_Modifications:
-    - target: {fileID: 7236900738634940714, guid: af07e282db6f307418162bd5035f6df1,
-        type: 3}
-      propertyPath: m_Name
-      value: Scream_Efx_Awakened_Ancient
-      objectReference: {fileID: 0}
     - target: {fileID: 7236900738634940713, guid: af07e282db6f307418162bd5035f6df1,
         type: 3}
       propertyPath: playOnAwake
@@ -7277,6 +7273,11 @@ PrefabInstance:
         type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7236900738634940714, guid: af07e282db6f307418162bd5035f6df1,
+        type: 3}
+      propertyPath: m_Name
+      value: Scream_Efx_Awakened_Ancient
       objectReference: {fileID: 0}
     - target: {fileID: 1686594833116199806, guid: af07e282db6f307418162bd5035f6df1,
         type: 3}
