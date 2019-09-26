@@ -249,7 +249,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 postAtan2 = atan2;
                 timeCounter = 0;
-               
+                Debug.Log("update Check");
             }
            
             m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
@@ -281,6 +281,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            timeCounter += 1 * Time.deltaTime;
+
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
@@ -301,8 +303,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    m_agent.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation);
+                    m_agent.Stop();
+                   
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
@@ -360,12 +363,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
+            
+
             if (m_enablePatience)
             {
                 Patience();
             }
 
-            timeCounter += 1 * Time.deltaTime;
+            
 
            
         }
