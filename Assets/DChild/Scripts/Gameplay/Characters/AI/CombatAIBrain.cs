@@ -48,7 +48,7 @@ namespace DChild.Gameplay.Characters.AI
 
         protected override void Awake()
         {
-            Debug.Log("Update Awake trigger");
+            m_targetInfo = new AITargetInfo();
             base.Awake();
             m_damageable.Destroyed += OnDestroyed;
         }
@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Characters.AI
 
         protected virtual void Start()
         {
-            m_targetInfo = new AITargetInfo();
+
         }
     }
 }

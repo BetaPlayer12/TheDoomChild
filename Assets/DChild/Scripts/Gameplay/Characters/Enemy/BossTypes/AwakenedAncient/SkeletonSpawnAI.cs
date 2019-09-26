@@ -105,6 +105,14 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_fallFromAwakenedAnimation;
             public string fallFromAwakenedAnimation => m_fallFromAwakenedAnimation;
 
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_rightFootEvent;
+            public string rightFootEvent => m_rightFootEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_leftFootEvent;
+            public string leftFootEvent => m_leftFootEvent;
+
 
 
             public override void Initialize()
@@ -143,6 +151,9 @@ namespace DChild.Gameplay.Characters.Enemies
             _COUNT
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -168,6 +179,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
+
+        [SerializeField]
+        private AudioSource m_audioSource;
+        [SerializeField]
+        private AudioClip m_leftFootAudioClip;
+        [SerializeField]
+        private AudioClip m_rightFootAudioClip;
+        [SerializeField]
+        private AudioClip m_landingAudioClip;
+        [SerializeField]
+        private AudioClip m_deathAudioClip;
 
         [Title("For Testing Purposes")]
         [SerializeField]
@@ -231,6 +253,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            m_audioSource.clip = m_deathAudioClip;
+            m_audioSource.Play();
             StopAllCoroutines();
             m_movement.Stop();
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
@@ -239,6 +263,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void SetDirection(float direction)
         {
             transform.localScale = new Vector3(direction, transform.localScale.y, transform.localScale.z);
+            GetComponent<Character>().SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         public override void ApplyData()
@@ -272,6 +297,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spawnDone = false;
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            m_audioSource.clip = m_deathAudioClip;
+            m_audioSource.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             Destroy(this.gameObject);
             yield return null;
@@ -286,6 +313,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.jumpUpmAwakenedAnimation, true);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_movement.Stop();
+            m_audioSource.clip = m_landingAudioClip;
+            m_audioSource.Play();
             m_animation.SetAnimation(0, m_info.fallFromAwakenedAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, SkeletonSpawnAnimation.ANIMATION_FALL_FROM);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
@@ -299,6 +328,18 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_spawnDone = true;
             yield return null;
+        }
+
+        private void LeftFootAudio()
+        {
+            m_audioSource.clip = m_leftFootAudioClip;
+            m_audioSource.Play();
+        }
+
+        private void RightFootAudio()
+        {
+            m_audioSource.clip = m_rightFootAudioClip;
+            m_audioSource.Play();
         }
 
         //private IEnumerator RunAttackRoutine()
@@ -320,7 +361,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             //m_enableChase = true;
-            if(m_testTarget != null)
+            m_spineEventListener.Subscribe(m_info.leftFootEvent, LeftFootAudio);
+            m_spineEventListener.Subscribe(m_info.rightFootEvent, RightFootAudio);
+
+            if (m_testTarget != null)
             {
                 SetTarget(m_testTarget.GetComponent<Damageable>(), m_testTarget.GetComponent<Character>());
             }

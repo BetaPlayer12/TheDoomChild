@@ -14,8 +14,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private Animator m_animator;
         private string m_midAirParamater;
         private string m_speedYParamater;
-        private string m_landParameter;
         private bool m_isInMidAir;
+        private bool m_canDoubleJump;
 
         [SerializeField]
         private float m_groundGravity;
@@ -37,26 +37,26 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_landHandle.Execute();
             LandExecuted?.Invoke(this, EventActionArgs.Empty);
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
-            checkAngle();
+            //checkAngle();
             m_fallHandle.ResetValue();
             SetValuesToGround();
         }
 
-        private void checkAngle()
-        {           
-            RaycastHit2D hitInfoInc = Physics2D.Raycast(new Vector3(transform.position.x, transform.position.y + 0.9f, transform.position.z), Vector2.right, 1.3f, 1 << 11);
-            if (hitInfoInc)
-            {
-                float slopeAngle = Vector2.Angle(hitInfoInc.normal, Vector2.up);
+        //private void checkAngle()
+        //{           
+        //    RaycastHit2D hitInfoInc = Physics2D.Raycast(new Vector3(transform.position.x, transform.position.y + 0.9f, transform.position.z), Vector2.right, 1.3f, 1 << 11);
+        //    if (hitInfoInc)
+        //    {
+        //        float slopeAngle = Vector2.Angle(hitInfoInc.normal, Vector2.up);
               
-                if (slopeAngle != 90)
-                {
-                    transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeAngle);
-                }
+        //        if (slopeAngle != 90)
+        //        {
+        //            transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeAngle);
+        //        }
 
-            }
+        //    }
            
-        }
+        //}
 
         public void ResetAnimationParameters()
         {
@@ -68,9 +68,10 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics = info.physics;
             m_state = info.state;
             m_animator = info.animator;
+            
             m_midAirParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsMidAir);
             m_speedYParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
-            m_landParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Land);
+
 
 
             m_fallHandle.Initialize(info);
@@ -101,12 +102,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_physics.gravity.gravityScale = m_midAirGravity;
                 }
-                //This is a hack shit code
-                if (m_animator.GetCurrentAnimatorStateInfo(0).IsName("Fall"))
-                {
-                    m_animator.SetTrigger(m_landParameter);
-                }
-
+          
             }
             else
             {
@@ -114,7 +110,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 
                 if (m_isInMidAir == false)
                 {
-                    Debug.Log("attack jump");
                     m_isInMidAir = true;
                     m_animator.SetBool(m_midAirParamater, true);
                 }
@@ -135,6 +130,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 }
                 else
                 {
+                    
                     m_animator.SetInteger(m_speedYParamater, m_physics.velocity.y > m_startPeakVelocity ? 2 : 1);
                     m_physics.gravity.gravityScale = m_midAirGravity;
                     m_state.isFalling = false;

@@ -49,12 +49,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (state.isMoving)
                 {
 
-                    //if (m_ledgeGrab?.AttemptToLedgeGrab() ?? false)
-                    //{
-                    //    m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
-                    //    return;
-                    //}
-                    m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+                    if (m_ledgeGrab?.AttemptToLedgeGrab() ?? false)
+                    {
+                        m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+                        return;
+                    }
+                    //m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
                     return;
 
                 }
