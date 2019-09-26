@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI
 {
-
     public class PlayerHealthUI : CappedStatUI
     {
         [System.Serializable]
@@ -15,23 +14,14 @@ namespace DChild.Gameplay.UI
             private Material m_material;
             [SerializeField]
             private string m_colorField;
-            private Color m_original;
-
-            public void SaveColor()
-            {
-                m_original = m_material.GetColor(m_colorField);
-            }
 
             public void ChangeColor(Color color)
             {
                 m_material.SetColor(m_colorField, color);
             }
-
-            public void RevertColor()
-            {
-                m_material.SetColor(m_colorField, m_original);
-            }
         }
+        [SerializeField, ColorUsage(true, true), BoxGroup("Color Changer")]
+        private Color m_fromColor;
         [SerializeField, ColorUsage(true, true), BoxGroup("Color Changer")]
         private Color m_toColor;
         [SerializeField, Range(0f, 1f), BoxGroup("Color Changer")]
@@ -72,7 +62,7 @@ namespace DChild.Gameplay.UI
                     {
                         for (int i = 0; i < m_materials.Length; i++)
                         {
-                            m_materials[i].RevertColor();
+                            m_materials[i].ChangeColor(m_fromColor);
                         }
                         m_colorChanged = false;
                     }
@@ -83,10 +73,6 @@ namespace DChild.Gameplay.UI
 
         protected override void Awake()
         {
-            for (int i = 0; i < m_materials.Length; i++)
-            {
-                m_materials[i].SaveColor();
-            }
             base.Awake();
             m_colorChanged = false;
         }
@@ -95,7 +81,7 @@ namespace DChild.Gameplay.UI
         {
             for (int i = 0; i < m_materials.Length; i++)
             {
-                m_materials[i].RevertColor();
+                m_materials[i].ChangeColor(m_fromColor);
             }
             m_colorChanged = false;
         }

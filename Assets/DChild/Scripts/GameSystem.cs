@@ -47,9 +47,17 @@ namespace DChild
             m_cursor?.SetVisibility(isVisible);
         }
 
-        public static void RequestConfirmation(EventAction<EventActionArgs> listener, string message)
+        public static bool RequestConfirmation(EventAction<EventActionArgs> listener, string message)
         {
-            m_confirmationHander.RequestConfirmation(listener, message);
+            if (m_confirmationHander == null)
+            {
+                return false;
+            }
+            else
+            {
+                m_confirmationHander.RequestConfirmation(listener, message);
+                return true;
+            }
         }
 
         public static void LoadZone(string sceneName, bool withLoadingScene)
