@@ -21,6 +21,7 @@ namespace DChild.Gameplay.Systems
         private float m_originalDrag;
         private bool m_isPopping;
         private bool m_hasBeenPickUp;
+        private bool m_hasBeenApplied;
 
         public static string objectTag => "Loot";
         private Collider2D m_collider;
@@ -34,12 +35,16 @@ namespace DChild.Gameplay.Systems
             m_pickedBy = player;
             m_hasBeenPickUp = true;
             DisableEnvironmentCollider();
-            m_animator.SetBool("PickedUp", true);
+            if (m_isPopping == false)
+            {
+                m_animator.SetBool("PickedUp", true);
+            }
         }
 
         protected virtual void ApplyPickUp()
         {
             m_animator.SetTrigger("Apply");
+            m_pickedBy.lootPicker.Glow();
         }
 
         public void Pop(Vector2 force)
@@ -57,6 +62,8 @@ namespace DChild.Gameplay.Systems
             m_hasBeenPickUp = false;
             m_popTimer.Reset();
             m_isPopping = true;
+            m_hasBeenApplied = false;
+            enabled = true;
             m_pickedBy = null;
         }
 
@@ -68,6 +75,10 @@ namespace DChild.Gameplay.Systems
         private void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             m_isPopping = false;
+            if (m_hasBeenPickUp)
+            {
+                m_animator.SetBool("PickedUp", true);
+            }
         }
 
         protected virtual void Awake()
@@ -93,13 +104,15 @@ namespace DChild.Gameplay.Systems
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (m_isPopping == false)
+            if (m_hasBeenApplied == false && m_isPopping == false)
             {
                 if (collision.tag != "Sensor" && collision.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
+                    //CallPoolRequest is in the PickUp Animation
                     ApplyPickUp();
-                    CallPoolRequest();
                     m_pickedBy = null;
+                    m_hasBeenApplied = true;
+                    enabled = false;
                 }
             }
         }
