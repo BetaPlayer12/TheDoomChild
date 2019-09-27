@@ -31,6 +31,7 @@ namespace DChild.Gameplay.Characters.Players
         StatusEffectResistance statusResistance { get; }
         IMainController controller { get; }
         PlayerInventory inventory { get; }
+        LootPicker lootPicker { get; }
     }
 
     public class Player : SerializedMonoBehaviour, IPlayer

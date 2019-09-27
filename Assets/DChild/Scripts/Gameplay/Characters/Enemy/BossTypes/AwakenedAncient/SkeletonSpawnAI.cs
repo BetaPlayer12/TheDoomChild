@@ -439,44 +439,47 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case State.Chasing:
                         {
-                            if (IsFacingTarget())
+                            if(m_animation.GetCurrentAnimation(0).ToString() != m_info.flinchAnimation)
                             {
-                                if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting /*&& !m_isRunAttacking*/)
+                                if (IsFacingTarget())
                                 {
+                                    if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting /*&& !m_isRunAttacking*/)
+                                    {
 
-                                    m_attackDecider.DecideOnAttack();
-                                    if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
-                                    {
-                                        m_movement.Stop();
-                                        m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
-                                        m_stateHandle.SetState(State.Attacking);
-                                        //m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                                    }
-                                    else
-                                    {
-                                        m_animation.EnableRootMotion(false, false);
-                                        //m_animation.SetAnimation(0, m_info.run.animation, true);
-                                        //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
-                                        if (!IsTargetInRange(m_info.targetDistanceTolerance))
+                                        m_attackDecider.DecideOnAttack();
+                                        if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                                         {
-                                            m_animation.SetAnimation(0, m_info.run.animation, true).MixDuration = 0.05f;
-                                            m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                            m_movement.Stop();
+                                            m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
+                                            m_stateHandle.SetState(State.Attacking);
+                                            //m_animation.SetAnimation(0, m_info.idle1Animation, true);
                                         }
                                         else
                                         {
-                                            m_animation.SetAnimation(0, m_info.move.animation, true).MixDuration = 0.05f;
-                                            m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                            m_animation.EnableRootMotion(false, false);
+                                            //m_animation.SetAnimation(0, m_info.run.animation, true);
+                                            //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                            if (!IsTargetInRange(m_info.targetDistanceTolerance))
+                                            {
+                                                m_animation.SetAnimation(0, m_info.run.animation, true).MixDuration = 0.05f;
+                                                m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                            }
+                                            else
+                                            {
+                                                m_animation.SetAnimation(0, m_info.move.animation, true).MixDuration = 0.05f;
+                                                m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                            }
                                         }
+                                    }
+                                    else
+                                    {
+                                        m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
                                     }
                                 }
                                 else
                                 {
-                                    m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
+                                    m_stateHandle.SetState(State.Turning);
                                 }
-                            }
-                            else
-                            {
-                                m_stateHandle.SetState(State.Turning);
                             }
                         }
                         break;
