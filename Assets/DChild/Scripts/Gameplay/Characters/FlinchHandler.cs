@@ -47,6 +47,7 @@ namespace DChild.Gameplay.Characters
 
         private IEnumerator FlinchRoutine()
         {
+            FlinchStart?.Invoke(this, new EventActionArgs());
             m_spine.SetAnimation(0, m_animation, false, 0);
             m_spine.AddEmptyAnimation(0, 0.2f, 0);
             m_isFlinching = true;
@@ -58,6 +59,7 @@ namespace DChild.Gameplay.Characters
             }
             m_spine.AnimationSet -= OnAnimationSet;
             m_spine.animationState.Complete -= OnAnimationComplete;
+            FlinchEnd?.Invoke(this, new EventActionArgs());
         }
 
         private void OnAnimationComplete(TrackEntry trackEntry)
