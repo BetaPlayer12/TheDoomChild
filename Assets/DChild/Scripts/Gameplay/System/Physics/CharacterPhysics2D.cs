@@ -104,7 +104,6 @@ namespace DChild.Gameplay
                     }
                 }
 
-                Debug.Log("incontact? : " + m_inContactWithGround);
             }
             else
             {
