@@ -103,6 +103,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_physics.gravity.gravityScale = m_midAirGravity;
                 }
 
+                Debug.Log("stock to midair");
             }
             else
             {
@@ -141,6 +142,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     CallLand();
                 }
+
                 m_landHandle.RecordVelocity();
             }
         }

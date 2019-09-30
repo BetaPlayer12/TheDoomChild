@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_state.waitForBehaviour = true;
                 Debug.Log("waiting here to land");
                 m_animator.SetInteger(m_speedXParamater, 0);
-                m_animator.ResetTrigger(m_animationParameter);
+                //m_animator.ResetTrigger(m_animationParameter);
                 //When GroundednessHandle is disabled for some reason
                 //Landing Slides the Character
                 StartCoroutine(ForceStopRoutine());
