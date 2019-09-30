@@ -38,7 +38,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             LandExecuted?.Invoke(this, EventActionArgs.Empty);
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
             //checkAngle();
-            m_fallHandle.ResetValue();
+           // m_fallHandle.ResetValue();
             SetValuesToGround();
         }
 
