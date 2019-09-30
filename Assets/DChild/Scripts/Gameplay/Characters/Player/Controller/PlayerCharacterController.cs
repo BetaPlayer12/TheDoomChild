@@ -6,6 +6,7 @@ using Holysoft.Event;
 using DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using DChild.Gameplay.Characters.Players.Behaviour;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -21,12 +22,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [ShowInInspector, HideInEditorMode]
         private bool m_enabled;
 
-
         [Title("Model Reference")]
         [SerializeField]
         private GameObject m_behaviourContainer;
         [SerializeField]
         private CharacterState m_characterState;
+        [SerializeField]
+        private GroundednessHandle m_groundedness;
 
         private ControllerEventArgs m_callArgs;
 
@@ -78,10 +80,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 controllableModules[i].ConnectTo(this);
             }
+            m_groundedness.Initialize();
         }
 
         private void FixedUpdate()
         {
+            if (m_characterState.isGrounded)
+            {
+                m_groundedness.HandleGround();
+            }
+            else
+            {
+                m_groundedness.HandleMidAir();
+                if(m_characterState.isDashing == false)
+                {
+                    m_groundedness.HandleLand();
+                }
+            }
+
             if (m_enabled)
             {
                 if (m_characterState.waitForBehaviour)
