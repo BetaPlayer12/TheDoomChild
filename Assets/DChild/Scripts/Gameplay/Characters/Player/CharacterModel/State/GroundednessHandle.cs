@@ -34,7 +34,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void CallLand()
         {
-            m_landHandle.Execute();
+            m_landHandle.Execute(true);
             LandExecuted?.Invoke(this, EventActionArgs.Empty);
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
             //checkAngle();
@@ -102,7 +102,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 {
                     m_physics.gravity.gravityScale = m_midAirGravity;
                 }
-          
+
             }
             else
             {
@@ -142,7 +142,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     CallLand();
                 }
                 m_landHandle.RecordVelocity();
-               // Debug.Log("MIdAir: " + m_isInMidAir);
             }
         }
 
