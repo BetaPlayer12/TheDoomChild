@@ -159,7 +159,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             var force = ConvertToMoveForce(m_info.acceleration);
             m_characterPhysics.AddForce(force);
-            Debug.Log("Accelerate");
         }
 
         public void Deccelerate()
