@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private string m_landParameter;
         private int m_movingSpeedParameterValue;
         private bool m_hasStopped;
-       // private bool m_groundedParameter;
+        // private bool m_groundedParameter;
         private float oldDirection;
         private bool m_Play;
         private bool m_ToggleChange;
@@ -55,7 +55,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
             m_turnParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Turn);
             m_landParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Land);
-           // m_groundedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrounded);
+            // m_groundedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrounded);
             //m_slopeSensor = info.GetSensor(PlayerSensorList.SensorType.Slope);
             m_groundSensor = info.GetSensor(PlayerSensorList.SensorType.Ground);
             info.groundednessHandle.LandExecuted += OnLand;
@@ -74,15 +74,22 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             {
                 if (m_characterPhysics.inContactWithGround)
                 {
-                    m_characterPhysics.SetVelocity(y: 0);
+                    if (m_hasStopped)
+                    {
+                        m_characterPhysics.SetVelocity(0, 0);
+                    }
+                    else
+                    {
+                        m_characterPhysics.SetVelocity(y: 0);
+                    }
                 }
-                if (m_characterPhysics.velocity.x != 0)
+
+                if (m_hasStopped ==false && m_characterPhysics.velocity.x != 0)
                 {
                     Deccelerate();
                 }
                 m_state.isMoving = false;
                 m_animator.SetInteger(m_speedParameter, 0);
-               
             }
             else
             {
@@ -112,15 +119,15 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 if (m_character.facing != newFacing)
                 {
                     var characterTransform = m_character.transform;
-                    characterTransform.localScale = new Vector3( direction, characterTransform.localScale.y, characterTransform.localScale.z);
+                    characterTransform.localScale = new Vector3(direction, characterTransform.localScale.y, characterTransform.localScale.z);
                 }
                 m_character.SetFacing(newFacing);
-               
+
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
             }
             //Fuck shit hack agian
-           // m_animator.SetBool()
-           
+            // m_animator.SetBool()
+
 
         }
 
@@ -152,6 +159,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             var force = ConvertToMoveForce(m_info.acceleration);
             m_characterPhysics.AddForce(force);
+            Debug.Log("Accelerate");
         }
 
         public void Deccelerate()
@@ -163,7 +171,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_characterPhysics.AddForce(Vector2.left * m_info.decceleration);
 
                 }
-                if (m_characterPhysics.velocity.x <= 0)
+                if (m_hasStopped == false && m_characterPhysics.velocity.x <= 0)
                 {
                     m_characterPhysics.SetVelocity(0);
                     m_hasStopped = true;
@@ -176,7 +184,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_characterPhysics.AddForce(Vector2.right * m_info.decceleration);
                 }
 
-                if (m_characterPhysics.velocity.x >= 0)
+                if (m_hasStopped == false && m_characterPhysics.velocity.x >= 0)
                 {
                     m_characterPhysics.SetVelocity(0);
                     m_hasStopped = true;

@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Systems;
+using Holysoft.Event;
 using UnityEngine;
 
 namespace DChild.Gameplay.SoulEssence
@@ -39,6 +40,13 @@ namespace DChild.Gameplay.SoulEssence
             base.ApplyPickUp();
             m_pickedBy.inventory.AddSoulEssence(m_value);
             //CallPoolRequest();
+        }
+
+        protected override void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
+        {
+            base.OnPopDurationEnd(sender, eventArgs);
+            m_rigidbody.velocity = Vector2.zero;
+            m_rigidbody.gravityScale = 0;
         }
 
         protected override void Awake()
