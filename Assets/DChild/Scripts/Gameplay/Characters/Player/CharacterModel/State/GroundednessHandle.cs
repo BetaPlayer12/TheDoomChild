@@ -34,11 +34,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void CallLand()
         {
-            m_landHandle.Execute();
+            m_landHandle.Execute(true);
             LandExecuted?.Invoke(this, EventActionArgs.Empty);
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
             //checkAngle();
-            m_fallHandle.ResetValue();
+           // m_fallHandle.ResetValue();
             SetValuesToGround();
         }
 
@@ -79,70 +79,69 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_skillRequester = info.skillResetRequester;
         }
 
-        private void Start()
+        public void Initialize()
         {
             m_state.isGrounded = m_physics.onWalkableGround;
         }
 
-        public void FixedUpdate()
+        public void HandleLand()
         {
-            if (m_state.isGrounded)
+            var hasLanded = m_physics.onWalkableGround;
+            if (hasLanded)
             {
-                m_state.isFalling = false;
-                m_state.isGrounded = m_physics.onWalkableGround;
-                if (m_isInMidAir)
+                CallLand();
+            }
+            m_landHandle.RecordVelocity();
+        }
+
+        public void HandleMidAir()
+        {
+            if (m_isInMidAir == false)
+            {
+                m_isInMidAir = true;
+                m_animator.SetBool(m_midAirParamater, true);
+            }
+            var isFalling = m_fallHandle.isFalling(m_physics);
+
+            if (isFalling)
+            {
+                if (m_state.isFalling)
                 {
-                    SetValuesToGround();
-                }
-                if (m_physics.inContactWithGround)
-                {
-                    m_physics.gravity.gravityScale = m_groundGravity;
+                    m_fallHandle.Execute(Time.deltaTime);
                 }
                 else
                 {
-                    m_physics.gravity.gravityScale = m_midAirGravity;
+
+                    m_fallHandle.StartFall();
+
                 }
-          
             }
             else
             {
-               
-                
-                if (m_isInMidAir == false)
-                {
-                    m_isInMidAir = true;
-                    m_animator.SetBool(m_midAirParamater, true);
-                }
-                var isFalling = m_fallHandle.isFalling(m_physics);
-               
-                if (isFalling)
-                {
-                    if (m_state.isFalling)
-                    {
-                        m_fallHandle.Execute(Time.deltaTime);
-                    }
-                    else
-                    {
-                        
-                        m_fallHandle.StartFall();
-                       
-                    }
-                }
-                else
-                {
-                    
-                    m_animator.SetInteger(m_speedYParamater, m_physics.velocity.y > m_startPeakVelocity ? 2 : 1);
-                    m_physics.gravity.gravityScale = m_midAirGravity;
-                    m_state.isFalling = false;
-                }
 
-                var hasLanded = m_physics.onWalkableGround;
-                if (hasLanded)
-                {
-                    CallLand();
-                }
-                m_landHandle.RecordVelocity();
-               // Debug.Log("MIdAir: " + m_isInMidAir);
+                m_animator.SetInteger(m_speedYParamater, m_physics.velocity.y > m_startPeakVelocity ? 2 : 1);
+                m_physics.gravity.gravityScale = m_midAirGravity;
+                m_state.isFalling = false;
+            }
+        }
+
+        public void HandleGround()
+        {
+            m_state.isFalling = false;
+            m_state.isGrounded = m_physics.onWalkableGround;
+            if (m_isInMidAir)
+            {
+                SetValuesToGround();
+                LandExecuted?.Invoke(this, EventActionArgs.Empty);
+                m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+            }
+            if (m_physics.inContactWithGround)
+            {
+                m_physics.gravity.gravityScale = m_groundGravity;
+            }
+            else
+            {
+                m_physics.gravity.gravityScale = m_midAirGravity;
             }
         }
 

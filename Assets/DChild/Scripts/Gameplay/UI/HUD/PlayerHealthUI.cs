@@ -70,11 +70,28 @@ namespace DChild.Gameplay.UI
             }
         }
 
-
-        protected override void Awake()
+        protected override void Initialize(float maxValue, float currentValue)
         {
-            base.Awake();
-            m_colorChanged = false;
+            base.Initialize(maxValue, currentValue);
+            var uiValue = currentValue / maxValue;
+            var percentValue = float.IsNaN(uiValue) ? 0 : uiValue;
+            if (percentValue <= m_colorChangeThreshold)
+            {
+                for (int i = 0; i < m_materials.Length; i++)
+                {
+                    m_materials[i].ChangeColor(m_toColor);
+                }
+                m_colorChanged = true;
+
+            }
+            else
+            {
+                for (int i = 0; i < m_materials.Length; i++)
+                {
+                    m_materials[i].ChangeColor(m_fromColor);
+                }
+                m_colorChanged = false;
+            }
         }
 
         private void OnDisable()

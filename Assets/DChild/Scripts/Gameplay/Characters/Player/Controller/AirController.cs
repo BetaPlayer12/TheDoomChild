@@ -54,9 +54,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
                         return;
                     }
-                    //m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
-                    return;
-
                 }
             }
 

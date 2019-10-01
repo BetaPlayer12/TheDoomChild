@@ -75,7 +75,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
-       
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
+
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
         //Patience Handler
@@ -129,6 +131,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void OnFlinch(object sender, EventActionArgs eventArgs)
+        {
+           
+            m_animation.SetAnimation(0, m_info.flinchAnimation, true);
+           
+        }
+
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
@@ -177,7 +186,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            
+           m_flinchHandle.FlinchStart += OnFlinch;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
