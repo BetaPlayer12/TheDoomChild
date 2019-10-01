@@ -93,6 +93,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     m_direction = newDirection;
                     var currentSpeed = Mathf.Abs(m_characterPhysics.velocity.x);
                     m_characterPhysics.SetVelocity(currentSpeed * m_direction.x);
+                   
+
                 }
 
                 if (IsInMaxSpeed())
@@ -118,8 +120,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
             }
-            //Fuck shit hack agian
-           // m_animator.SetBool()
            
 
         }
