@@ -75,7 +75,9 @@ namespace DChild.Gameplay
         }
 
         private void EvaluateGroundedness()
+
         {
+           
             if (m_legColliderDetector != null && m_legColliderDetector.IsIntersecting(m_legCollider))
             {
                 m_onWalkableGround = false;
@@ -101,6 +103,7 @@ namespace DChild.Gameplay
                         m_onWalkableGround = false;
                     }
                 }
+
             }
             else
             {
