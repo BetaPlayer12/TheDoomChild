@@ -66,6 +66,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_delayShotTime;
             public float delayShotTimer => m_delayShotTime;
 
+
+           
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -76,6 +79,7 @@ namespace DChild.Gameplay.Characters.Enemies
 #endif
             }
         }
+       
 
         private enum State
         {
@@ -123,6 +127,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         //
         private float timeCounter;
+
+        // player position
+        private Vector2 playerPosition;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -241,7 +248,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchStingerProjectile()
         {
-            var target = m_targetInfo.position; //No Parabola      
+            var target = playerPosition; //No Parabola      
             Vector2 spitPos = m_stingerPos.position;
             Vector3 v_diff = (target - spitPos);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
@@ -308,6 +315,7 @@ namespace DChild.Gameplay.Characters.Enemies
                    
                     break;
                 case State.Attacking:
+                    playerPosition = m_targetInfo.position;
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(RangeAttackRoutine());
                     break;
