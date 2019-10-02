@@ -55,6 +55,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 m_animator.SetTrigger(m_animationParameter);
                 m_fXSpawner.SpawnFX();
                 m_state.waitForBehaviour = true;
+                //Debug.Log("Logging velocity x: " + m_physics.velocity.x);
                 m_animator.SetInteger(m_speedXParamater, 0);
                 //m_animator.ResetTrigger(m_animationParameter);
                 //When GroundednessHandle is disabled for some reason
