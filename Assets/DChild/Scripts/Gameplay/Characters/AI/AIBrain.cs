@@ -45,6 +45,17 @@ namespace DChild.Gameplay.Characters.AI
                     }
                     return list;
                 }
+
+                protected IEnumerable GetSkins()
+                {
+                    ValueDropdownList<string> list = new ValueDropdownList<string>();
+                    var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Skins.ToArray();
+                    for (int i = 0; i < reference.Length; i++)
+                    {
+                        list.Add(reference[i].Name);
+                    }
+                    return list;
+                }
                 //#endif
             }
 

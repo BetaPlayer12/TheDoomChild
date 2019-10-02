@@ -234,6 +234,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            //m_character.SetFacing(m_character.facing == HorizontalDirection.Left  ? HorizontalDirection.Right : HorizontalDirection.Left);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -245,6 +246,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
+            m_spawnDone = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
