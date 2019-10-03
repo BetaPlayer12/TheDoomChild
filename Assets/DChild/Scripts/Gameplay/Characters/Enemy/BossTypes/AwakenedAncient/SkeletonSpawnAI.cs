@@ -164,6 +164,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandler;
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
@@ -233,6 +235,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
+        }
+
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_animation.SetAnimation(0, m_info.idle1Animation, true);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         //Patience Handler
@@ -380,6 +393,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
+            m_flinchHandler.FlinchStart += OnFlinchStart;
+            m_flinchHandler.FlinchEnd += OnFlinchEnd;
             UpdateAttackDeciderList();
         }
 
@@ -439,47 +454,44 @@ namespace DChild.Gameplay.Characters.Enemies
                         break;
                     case State.Chasing:
                         {
-                            if(m_animation.GetCurrentAnimation(0).ToString() != m_info.flinchAnimation)
+                            if (IsFacingTarget())
                             {
-                                if (IsFacingTarget())
+                                if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting /*&& !m_isRunAttacking*/)
                                 {
-                                    if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting /*&& !m_isRunAttacking*/)
-                                    {
 
-                                        m_attackDecider.DecideOnAttack();
-                                        if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
-                                        {
-                                            m_movement.Stop();
-                                            m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
-                                            m_stateHandle.SetState(State.Attacking);
-                                            //m_animation.SetAnimation(0, m_info.idle1Animation, true);
-                                        }
-                                        else
-                                        {
-                                            m_animation.EnableRootMotion(false, false);
-                                            //m_animation.SetAnimation(0, m_info.run.animation, true);
-                                            //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
-                                            if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                                            {
-                                                m_animation.SetAnimation(0, m_info.run.animation, true).MixDuration = 0.05f;
-                                                m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
-                                            }
-                                            else
-                                            {
-                                                m_animation.SetAnimation(0, m_info.move.animation, true).MixDuration = 0.05f;
-                                                m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
-                                            }
-                                        }
+                                    m_attackDecider.DecideOnAttack();
+                                    if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
+                                    {
+                                        m_movement.Stop();
+                                        m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
+                                        m_stateHandle.SetState(State.Attacking);
+                                        //m_animation.SetAnimation(0, m_info.idle1Animation, true);
                                     }
                                     else
                                     {
-                                        m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
+                                        m_animation.EnableRootMotion(false, false);
+                                        //m_animation.SetAnimation(0, m_info.run.animation, true);
+                                        //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                        if (!IsTargetInRange(m_info.targetDistanceTolerance))
+                                        {
+                                            m_animation.SetAnimation(0, m_info.run.animation, true).MixDuration = 0.05f;
+                                            m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                        }
+                                        else
+                                        {
+                                            m_animation.SetAnimation(0, m_info.move.animation, true).MixDuration = 0.05f;
+                                            m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    m_stateHandle.SetState(State.Turning);
+                                    m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
                                 }
+                            }
+                            else
+                            {
+                                m_stateHandle.SetState(State.Turning);
                             }
                         }
                         break;
