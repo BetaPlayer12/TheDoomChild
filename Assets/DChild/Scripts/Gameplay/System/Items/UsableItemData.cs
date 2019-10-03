@@ -1,13 +1,13 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using Sirenix.OdinInspector;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
+
 namespace DChild.Gameplay.Items
 {
     [CreateAssetMenu(fileName = "UsableItemData", menuName = "DChild/Database/Usable Item Data")]
     public class UsableItemData : ItemData
     {
-        [SerializeField]
+        [SerializeField, ToggleGroup("m_enableEdit")]
         private IUsableItemModule[] m_moduleList;
 
         public void Use(IPlayer player)

@@ -87,11 +87,11 @@ namespace DChild.Gameplay.Inventories
             var info = GetInfoOf(item);
             if (info.isContainedInList)
             {
-                return true;
+                return m_list[info.index].count < item.quantityLimit;
             }
             else
             {
-                return m_list[info.index].count < item.quantityLimit;
+                return true;
             }
         }
 

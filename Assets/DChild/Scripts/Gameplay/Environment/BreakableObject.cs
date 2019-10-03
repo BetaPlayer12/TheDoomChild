@@ -20,6 +20,29 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("On Fix")]
         private UnityEvent m_onFix;
 
+        public void SetObjectState(bool isDestroyed)
+        {
+            m_isDestroyed = isDestroyed;
+            if (m_isDestroyed == true)
+            {
+                m_onDestroy?.Invoke();
+            }
+            else
+            {
+                m_onFix?.Invoke();
+            }
+        }
+
+        public void InstantiateDebris(GameObject debris)
+        {
+            Instantiate(debris, m_object.position, Quaternion.identity);
+        }
+
+        private void OnDestroyObject(object sender, EventActionArgs eventArgs)
+        {
+            m_onDestroy?.Invoke();
+        }
+
         // Start is called before the first frame update
         private void Awake()
         {
@@ -33,22 +56,6 @@ namespace DChild.Gameplay.Environment
                 m_onFix?.Invoke();
             }
         }
-        private void OnDestroyObject(object sender, EventActionArgs eventArgs)
-        {
-            m_onDestroy?.Invoke();
-        }
-
-        public void SetObjectState(bool isDestroyed)
-        {
-            m_isDestroyed = isDestroyed;
-            if (m_isDestroyed == true)
-            {
-                m_onDestroy?.Invoke();
-            }
-            else
-            {
-                m_onFix?.Invoke();
-            }
-        }
+       
     }
 }
