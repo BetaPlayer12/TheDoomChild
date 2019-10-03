@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Items;
+using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
@@ -81,6 +82,20 @@ namespace DChild.Gameplay.Inventories
             }
         }
 
+        public bool HasSpaceFor(ItemData item)
+        {
+            var info = GetInfoOf(item);
+            if (info.isContainedInList)
+            {
+                return true;
+            }
+            else
+            {
+                return m_list[info.index].count < item.quantityLimit;
+            }
+        }
+
+
         public void SetList(ItemContainerData data)
         {
             m_list.Clear();
@@ -144,8 +159,6 @@ namespace DChild.Gameplay.Inventories
             }
             return true;
         }
-
-
 #endif
 
     }

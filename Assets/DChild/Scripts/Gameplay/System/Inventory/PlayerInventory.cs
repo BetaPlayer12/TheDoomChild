@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Systems;
+﻿using DChild.Gameplay.Items;
+using DChild.Gameplay.Systems;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -31,5 +32,19 @@ namespace DChild.Gameplay.Inventories
             m_soulEssence = value;
             OnAmountSet?.Invoke(this, new CurrencyUpdateEventArgs(value));
         }
+
+        public void AddItem(ItemData item)
+        {
+            //TODO: Items are not yet categorized
+            m_items.AddItem(item, 1);
+        }
+
+        public void RemoveItem(ItemData item)
+        {
+            //TODO: Items are not yet categorized
+            m_items.AddItem(item, -1);
+        }
+
+        public bool HasSpaceFor(ItemData item) => m_items.HasSpaceFor(item);
     }
 }

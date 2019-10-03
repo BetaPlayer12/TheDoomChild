@@ -8,7 +8,7 @@ namespace DChild
     public class SpineSounds : MonoBehaviour
     {
         [System.Serializable]
-        private class Info
+        private class EventInfo
         {
             [SerializeField, SpineEvent]
             private string m_eventName;
@@ -24,17 +24,17 @@ namespace DChild
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
         [SerializeField]
-        private Info[] m_info;
+        private EventInfo[] m_eventInfo;
 
         private string m_cacheEvent;
-        private Info m_cacheInfo;
+        private EventInfo m_cacheInfo;
 
         private void OnEvents(TrackEntry trackEntry, Spine.Event e)
         {
             m_cacheEvent = e.Data.Name;
-            for (int i = 0; i < m_info.Length; i++)
+            for (int i = 0; i < m_eventInfo.Length; i++)
             {
-                m_cacheInfo = m_info[i];
+                m_cacheInfo = m_eventInfo[i];
                 if (m_cacheEvent == m_cacheInfo.eventName)
                 {
                     m_cacheInfo.PlaySound(transform);
