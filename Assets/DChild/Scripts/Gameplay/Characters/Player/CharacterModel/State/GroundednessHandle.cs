@@ -11,6 +11,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     public class GroundednessHandle : MonoBehaviour, IComplexCharacterModule
     {
         private IGroundednessState m_state;
+        private IHighJumpState m_jumpState;
         private CharacterPhysics2D m_physics;
         private RaySensor m_groundSensor;
         private Animator m_animator;
@@ -40,6 +41,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             LandExecuted?.Invoke(this, EventActionArgs.Empty);
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
             SetValuesToGround();
+            
         }
 
         public void ResetAnimationParameters()
@@ -71,9 +73,16 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         public void HandleLand()
         {
             var hasLanded = m_physics.onWalkableGround;
+           
             if (hasLanded)
             {
-                CallLand();
+                //code should be here has jump false
+                //this is where i have to check if has landed have velocity
+                m_animator.SetBool(m_midAirParamater, false);
+                if(m_physics.velocity.x == 0)
+                {
+                    CallLand();
+                }
             }
             m_landHandle.RecordVelocity();
         }
@@ -121,6 +130,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         public void HandleGround()
         {
             m_state.isFalling = false;
+           
             m_state.isGrounded = m_physics.onWalkableGround;
             if (m_isInMidAir)
             {

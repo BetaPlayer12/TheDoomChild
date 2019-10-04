@@ -65,8 +65,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnLand(object sender, EventActionArgs eventArgs)
         {
-            Debug.Log("Setting y to zero");
-            m_state.isMoving = false;
+            //m_state.isMoving = false;
             m_animator.SetInteger(m_ySpeedParameter, 0);
             //m_animator.SetInteger(m_speedParameter, 0);
             m_characterPhysics.SetVelocity(Vector2.zero);

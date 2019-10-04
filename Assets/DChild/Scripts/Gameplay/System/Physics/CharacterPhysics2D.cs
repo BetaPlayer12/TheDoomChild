@@ -77,15 +77,17 @@ namespace DChild.Gameplay
         private void EvaluateGroundedness()
 
         {
-           
+           //This is where all started 
             if (m_legColliderDetector != null && m_legColliderDetector.IsIntersecting(m_legCollider))
             {
+               
                 m_onWalkableGround = false;
                 m_inContactWithGround = false;
             }
-
+            
             if (m_legCollider.IsTouchingLayers(m_legColliderLayerMask) && velocity.y <= 0.1f)
             {
+              
                 m_inContactWithGround = true;
                 if (m_acceptableWalkableAngle.InRange(m_groundAngle))
                 {
@@ -104,6 +106,8 @@ namespace DChild.Gameplay
                     }
                 }
 
+              
+
             }
             else
             {
@@ -117,6 +121,8 @@ namespace DChild.Gameplay
                     m_onWalkableGround = false;
                 }
             }
+           
+           
         }
 
         protected override void Awake()
