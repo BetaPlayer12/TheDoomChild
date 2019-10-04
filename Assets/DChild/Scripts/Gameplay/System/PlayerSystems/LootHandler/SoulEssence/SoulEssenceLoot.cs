@@ -56,7 +56,7 @@ namespace DChild.Gameplay.SoulEssence
         protected override void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             base.OnPopDurationEnd(sender, eventArgs);
-            if (m_hasBeenPickUp)
+            if (m_isPopping ==false && m_hasBeenPickUp)
             {
                 m_animator?.SetBool("PickedUp", true);
             }

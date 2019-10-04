@@ -13,6 +13,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Character m_character;
         [SerializeField]
+        private Attacker m_attacker;
+        [SerializeField]
         private Damageable m_damageable;
         [SerializeField]
         private CharacterState m_state;
@@ -45,8 +47,10 @@ namespace DChild.Gameplay.Characters.Players
         public SkillResetRequester skillResetRequester => m_skillResetRequester;
 
         public Magic magic => m_magic;
+        public Attacker attacker => m_attacker;
         public Damageable damageable => m_damageable;
         public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
         public SurfaceDetector surfaceDector => m_surfaceDector;
+
     }
 }

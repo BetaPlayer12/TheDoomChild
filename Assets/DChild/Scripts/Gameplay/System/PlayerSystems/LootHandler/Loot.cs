@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Systems
         [SerializeField, BoxGroup("Basic Loot Info")]
         protected Animator m_animator;
         private float m_originalDrag;
-        private bool m_isPopping;
+        protected bool m_isPopping;
         private bool m_hasBeenApplied;
 
         public static string objectTag => "Loot";

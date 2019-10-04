@@ -20,6 +20,9 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("On Fix")]
         private UnityEvent m_onFix;
 
+        private Vector2 m_forceDirection;
+        private float m_force;
+
         public void SetObjectState(bool isDestroyed)
         {
             m_isDestroyed = isDestroyed;
@@ -35,7 +38,14 @@ namespace DChild.Gameplay.Environment
 
         public void InstantiateDebris(GameObject debris)
         {
-            Instantiate(debris, m_object.position, Quaternion.identity);
+            var instance = Instantiate(debris, m_object.position, Quaternion.identity);
+            instance.GetComponent<Debris>().SetInitialForceReference(m_forceDirection, m_force);
+        }
+
+        public void RecordForceReceived(Vector2 forceDirection, float force)
+        {
+            m_forceDirection = forceDirection;
+            m_force = force;
         }
 
         private void OnDestroyObject(object sender, EventActionArgs eventArgs)
@@ -56,6 +66,6 @@ namespace DChild.Gameplay.Environment
                 m_onFix?.Invoke();
             }
         }
-       
+
     }
 }
