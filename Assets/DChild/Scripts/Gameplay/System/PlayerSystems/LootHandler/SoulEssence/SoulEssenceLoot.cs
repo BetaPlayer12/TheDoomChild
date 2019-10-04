@@ -56,7 +56,7 @@ namespace DChild.Gameplay.SoulEssence
         protected override void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             base.OnPopDurationEnd(sender, eventArgs);
-            if (m_isPopping ==false && m_hasBeenPickUp)
+            if (m_isPopping == false && m_hasBeenPickUp)
             {
                 m_animator?.SetBool("PickedUp", true);
             }
@@ -73,7 +73,7 @@ namespace DChild.Gameplay.SoulEssence
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (m_hasBeenPickUp)
+            if (m_isPopping == false && m_hasBeenPickUp)
             {
                 var toPLayer = (m_pickedBy.damageableModule.position - m_rigidbody.position).normalized;
                 m_rigidbody.velocity = toPLayer * m_pickUpVelocity;
