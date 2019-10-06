@@ -61,6 +61,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                 //When GroundednessHandle is disabled for some reason
                 //Landing Slides the Character
                 StartCoroutine(ForceStopRoutine());
+
+                Debug.Log("bypassing");
             }
         }
 

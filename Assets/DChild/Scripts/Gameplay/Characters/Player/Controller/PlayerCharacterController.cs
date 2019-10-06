@@ -87,7 +87,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_characterState.isGrounded)
             {
-                Debug.Log("Grounded");
                 m_groundedness.HandleGround();
             }
             else

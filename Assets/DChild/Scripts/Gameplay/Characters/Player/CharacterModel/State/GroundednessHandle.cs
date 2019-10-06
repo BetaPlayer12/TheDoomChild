@@ -73,17 +73,23 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         public void HandleLand()
         {
             var hasLanded = m_physics.onWalkableGround;
-           
-            if (hasLanded)
+
+            if (hasLanded == true)
             {
-                //code should be here has jump false
-                //this is where i have to check if has landed have velocity
                 m_animator.SetBool(m_midAirParamater, false);
-                if(m_physics.velocity.x == 0)
-                {
-                    CallLand();
-                }
+                CallLand();
             }
+
+            //if (hasLanded)
+            //{
+            //    //code should be here has jump false
+            //    //this is where i have to check if has landed have velocity
+            //    m_animator.SetBool(m_midAirParamater, false);
+            //    if (m_physics.velocity.x == 0)
+            //    {
+            //        CallLand();
+            //    }
+            //}
             m_landHandle.RecordVelocity();
         }
 
