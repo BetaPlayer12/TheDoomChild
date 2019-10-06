@@ -12,6 +12,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     {
         private IGroundednessState m_state;
         private IHighJumpState m_jumpState;
+        private IDoubleJumpState m_doubleJumpState;
         private CharacterPhysics2D m_physics;
         private RaySensor m_groundSensor;
         private Animator m_animator;
@@ -42,6 +43,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
             SetValuesToGround();
             
+        }
+
+        public void CallLandJog() {
+            m_jumpState.hasJumped = false;
+            m_doubleJumpState.canDoubleJump = true;
+
         }
 
         public void ResetAnimationParameters()
@@ -77,7 +84,19 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             if (hasLanded == true)
             {
                 m_animator.SetBool(m_midAirParamater, false);
+                //if(m_physics.velocity.x != 0)
+                //{
+                //    Debug.Log("Running land");
+                //    CallLandJog();
+
+                //}
+                //else
+                //{
+                //    Debug.Log("JUmp land");
+                //    CallLand();
+                //}
                 CallLand();
+
             }
 
             //if (hasLanded)
