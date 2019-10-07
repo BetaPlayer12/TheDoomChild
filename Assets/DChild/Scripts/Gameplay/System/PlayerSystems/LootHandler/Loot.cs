@@ -12,15 +12,12 @@ namespace DChild.Gameplay.Systems
     {
         [SerializeField]
         private CountdownTimer m_popTimer;
-        [SerializeField, MinValue(0.1f), BoxGroup("Basic Loot Info")]
-        private float m_pickUpVelocity;
         [SerializeField, BoxGroup("Basic Loot Info")]
         protected Rigidbody2D m_rigidbody;
         [SerializeField, BoxGroup("Basic Loot Info")]
-        private Animator m_animator;
+        protected Animator m_animator;
         private float m_originalDrag;
-        private bool m_isPopping;
-        private bool m_hasBeenPickUp;
+        protected bool m_isPopping;
         private bool m_hasBeenApplied;
 
         public static string objectTag => "Loot";
@@ -33,17 +30,16 @@ namespace DChild.Gameplay.Systems
         public virtual void PickUp(IPlayer player)
         {
             m_pickedBy = player;
-            m_hasBeenPickUp = true;
             DisableEnvironmentCollider();
             if (m_isPopping == false)
             {
-                m_animator.SetBool("PickedUp", true);
+                m_animator?.SetBool("PickedUp", true);
             }
         }
 
         protected virtual void ApplyPickUp()
         {
-            m_animator.SetTrigger("Apply");
+            m_animator?.SetTrigger("Apply");
             m_pickedBy.lootPicker.Glow();
         }
 
@@ -58,8 +54,7 @@ namespace DChild.Gameplay.Systems
             base.SpawnAt(position, rotation);
             m_rigidbody.drag = m_originalDrag;
             EnableEnvironmentCollider();
-            m_animator.SetBool("PickedUp", false);
-            m_hasBeenPickUp = false;
+            m_animator?.SetBool("PickedUp", false);
             m_popTimer.Reset();
             m_isPopping = true;
             m_hasBeenApplied = false;
@@ -75,10 +70,6 @@ namespace DChild.Gameplay.Systems
         protected virtual void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             m_isPopping = false;
-            if (m_hasBeenPickUp)
-            {
-                m_animator.SetBool("PickedUp", true);
-            }
         }
 
         protected virtual void Awake()
@@ -94,11 +85,6 @@ namespace DChild.Gameplay.Systems
             if (m_isPopping)
             {
                 ExecutePop(Time.deltaTime);
-            }
-            else if (m_hasBeenPickUp)
-            {
-                var toPLayer = (m_pickedBy.damageableModule.position - m_rigidbody.position).normalized;
-                m_rigidbody.velocity = toPLayer * m_pickUpVelocity;
             }
         }
 
