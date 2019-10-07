@@ -30,14 +30,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6749943613737293270}
   - component: {fileID: 4263208086236453916}
-  - component: {fileID: 452670190794622169}
   - component: {fileID: 5212348182823606743}
   - component: {fileID: 8767778088822633314}
   - component: {fileID: 3662534052017724668}
   - component: {fileID: 3371934009141710917}
+  - component: {fileID: 4166747111307296106}
   - component: {fileID: 783724662262254847}
   m_Layer: 12
-  m_Name: TombAttack
+  m_Name: Tomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,21 +73,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_soul: {fileID: 5388550555166296440, guid: e328535a1db22d347a22e9e1f13f3acb, type: 3}
   m_lifeTime: 5
-  m_tombFX: {fileID: 6563674443871553162}
---- !u!114 &452670190794622169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6636652819318616434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b70d64a6dd90ba4493dce370c65982b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animationTracks: []
+  m_spineAnims:
+  - m_risingAnimation: TombA_Rise
+    m_hidingAnimation: TombA_Burrow
+  - m_risingAnimation: TombB_Rise
+    m_hidingAnimation: TombB_Burrow
+  - m_risingAnimation: TombC_Rise
+    m_hidingAnimation: TombC_Burrow
+  m_animation: {fileID: 4166747111307296106}
   m_skeletonAnimation: {fileID: 5649131820276201690}
+  m_tombFX: {fileID: 6563674443871553162}
 --- !u!50 &5212348182823606743
 Rigidbody2D:
   serializedVersion: 4
@@ -190,6 +185,20 @@ MonoBehaviour:
   m_linearDrag:
     m_x: 0
     m_y: 0
+--- !u!114 &4166747111307296106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6636652819318616434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animationTracks: []
+  m_skeletonAnimation: {fileID: 5649131820276201690}
 --- !u!82 &783724662262254847
 AudioSource:
   m_ObjectHideFlags: 0
@@ -352,6 +361,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028803201215574633, guid: 2fde9f80a7916f74899113e4a12d5bc1,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fde9f80a7916f74899113e4a12d5bc1, type: 3}

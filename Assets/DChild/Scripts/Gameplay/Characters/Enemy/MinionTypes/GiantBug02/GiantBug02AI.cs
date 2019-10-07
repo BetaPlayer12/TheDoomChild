@@ -131,11 +131,15 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void OnFlinch(object sender, EventActionArgs eventArgs)
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-           
-            m_animation.SetAnimation(0, m_info.flinchAnimation, true);
-           
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -186,7 +190,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-           m_flinchHandle.FlinchStart += OnFlinch;
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
@@ -224,7 +229,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                
                 

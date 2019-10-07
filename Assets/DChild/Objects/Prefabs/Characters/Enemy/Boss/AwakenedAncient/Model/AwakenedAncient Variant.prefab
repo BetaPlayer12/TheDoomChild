@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1717789850714297781}
-  - component: {fileID: 8464513165865093498}
   - component: {fileID: 103650200355693992}
   - component: {fileID: 1678465070577552092}
   - component: {fileID: 162080084387454503}
   - component: {fileID: 2107489981148940884}
+  - component: {fileID: 8430917524922644699}
   m_Layer: 13
   m_Name: Behaviours
   m_TagString: Untagged
@@ -35,19 +35,6 @@ Transform:
   m_Father: {fileID: 2314127693125412679}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8464513165865093498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2421198536590537197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fea4e56028fda24dbb44aef55bea204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_character: {fileID: 2246416537603285694}
 --- !u!114 &103650200355693992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,6 +97,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animation: {fileID: 934729620168898425}
+--- !u!114 &8430917524922644699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2421198536590537197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc4547d9c85dc7448f8ee8e7cd55f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_character: {fileID: 2246416537603285694}
+  m_animation: {fileID: 8806589068311600585}
+  m_useRootMotionX: 0
+  m_useRootMotionY: 0
 --- !u!1 &3769230901946494835
 GameObject:
   m_ObjectHideFlags: 0
@@ -5167,7 +5170,7 @@ MonoBehaviour:
   m_spineEventListener: {fileID: 2107489981148940884}
   m_wallSensor: {fileID: 56916117368170300}
   m_groundSensor: {fileID: 8117431507103277068}
-  m_turnHandle: {fileID: 8464513165865093498}
+  m_turnHandle: {fileID: 8430917524922644699}
   m_movementHandle: {fileID: 103650200355693992}
   m_attackHandle:
     m_animation: {fileID: 8806589068311600585}
@@ -5452,7 +5455,7 @@ PrefabInstance:
     - target: {fileID: 8246593781607944904, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
       propertyPath: m_compositeColliderID
-      value: -7819374
+      value: -101696
       objectReference: {fileID: 0}
     - target: {fileID: 4932820218245104561, guid: 8252bfa1795f60941b6e0a4070e41a34,
         type: 3}
