@@ -352,7 +352,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         m_movement.Stop();
                         m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
-                        m_turnHandle.Execute(m_info.turnAnimation, m_info.idle1Animation);
+                        m_turnHandle.Execute(m_info.turnAnimation);
                         break;
                     case State.Attacking:
                         m_stateHandle.Wait(State.ReevaluateSituation);
