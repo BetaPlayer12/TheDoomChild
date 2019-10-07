@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Items;
+using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif

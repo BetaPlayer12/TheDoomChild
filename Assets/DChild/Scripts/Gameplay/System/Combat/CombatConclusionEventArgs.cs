@@ -1,4 +1,5 @@
-﻿using Holysoft.Event;
+﻿using DChild.Gameplay.Environment;
+using Holysoft.Event;
 using System.Collections.Generic;
 
 namespace DChild.Gameplay.Combat
@@ -15,5 +16,15 @@ namespace DChild.Gameplay.Combat
         public AttackerCombatInfo attacker { get; }
         public TargetInfo target { get; }
         public AttackInfo result { get; }
+    }
+
+    public struct BreakableObjectEventArgs : IEventActionArgs
+    {
+        public BreakableObjectEventArgs(BreakableObject instance) : this()
+        {
+            this.instance = instance;
+        }
+
+        public BreakableObject instance { get; }
     }
 }

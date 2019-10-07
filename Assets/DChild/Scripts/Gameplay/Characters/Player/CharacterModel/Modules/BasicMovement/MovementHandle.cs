@@ -65,10 +65,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnLand(object sender, EventActionArgs eventArgs)
         {
+            Debug.Log("Set animation cast");
             //m_state.isMoving = false;
             m_animator.SetInteger(m_ySpeedParameter, 0);
+            m_animator.SetTrigger(m_landParameter);
             //m_animator.SetInteger(m_speedParameter, 0);
-            m_characterPhysics.SetVelocity(Vector2.zero);
+           // m_characterPhysics.SetVelocity(Vector2.zero);
         }
 
         public void Move(float direction)
@@ -86,9 +88,10 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                         m_characterPhysics.SetVelocity(y: 0);
                     }
                 }
-
+               
                 if (m_hasStopped ==false && m_characterPhysics.velocity.x != 0)
                 {
+                    Debug.Log("Decelerating");
                     Deccelerate();
                 }
                 m_state.isMoving = false;
@@ -128,7 +131,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
             }
-
+           
 
         }
 

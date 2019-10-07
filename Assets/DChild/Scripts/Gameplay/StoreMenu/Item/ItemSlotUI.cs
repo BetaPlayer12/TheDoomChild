@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Inventories;
+using DChild.Gameplay.Items;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace DChild.Menu.Item
         private Button m_button;
         private Canvas m_canvas;
 
-        public ItemData item => m_slot.item;
+        public ItemData item => m_slot?.item ?? null;
 
         public void SetSlot(ItemSlot slot)
         {

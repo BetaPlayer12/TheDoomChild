@@ -20,8 +20,12 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (eventArgs.target.instance.isAlive == false && eventArgs.target.hasID)
             {
-                m_progress.SetProgress(eventArgs.target.characterID, true);
-                GameEventMessage.SendEvent("Notification");
+                var ID = eventArgs.target.characterID;
+                if (m_progress.HasInfoOf(ID))
+                {
+                    GameEventMessage.SendEvent("Notification");
+                }
+                m_progress.SetProgress(ID, true);
             }
         }
     }
