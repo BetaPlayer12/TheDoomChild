@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Cinematics
             m_currentVCam = m_defaultCam;
         }
 
-        public void SetShake(bool enable)
+        public void EnableCameraShake(bool enable)
         {
             for (int i = 0; i < m_noiseList.Count; i++)
             {
