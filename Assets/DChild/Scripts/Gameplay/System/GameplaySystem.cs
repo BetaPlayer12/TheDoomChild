@@ -87,6 +87,11 @@ namespace DChild.Gameplay
             GameSystem.SetCursorVisibility(true);
         }
 
+        public static void ClearCaches()
+        {
+            m_cinema?.ClearLists();
+        }
+
         public static void LoadGame(CampaignSlot campaignSlot)
         {
 
