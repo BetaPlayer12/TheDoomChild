@@ -37,6 +37,7 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_patience;
             public float patience => m_patience;
 
+           
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
@@ -66,6 +67,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Turning,
             Attacking,
             Chasing,
+            Flinch,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -80,6 +82,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
@@ -108,7 +112,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -153,6 +157,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
         }
 
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            m_animation.SetAnimation(0, m_info.damageAnimation, false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
         public override void ApplyData()
         {
             base.ApplyData();
@@ -165,6 +180,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
 
@@ -196,9 +213,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                   
                     m_turnHandle.Execute();
                     break;
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
@@ -227,11 +244,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_animation.EnableRootMotion(true, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
                                 }
-
-                                
-
-
-                               
                             }
                             else
                             {
@@ -257,10 +269,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    //Debug.Log("Still wetting");
-                    //m_stateHandle.Wait(State.Attacking);
-                    //m_stateHandle.Set(State.Chasing);
-                    //m_stateHandle.ApplyQueuedState();
                     return;
             }
 

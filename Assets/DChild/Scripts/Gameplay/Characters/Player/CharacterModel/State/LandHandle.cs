@@ -48,18 +48,21 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         public void RecordVelocity() => m_previousYVelocity = m_physics.velocity.y;
         public void SetRecordedVelocity(Vector2 velocity) => m_previousYVelocity = velocity.y;
 
-        public void Execute()
+        public void Execute(bool bypassConditions)
         {
-            if (m_previousYVelocity <= m_velocityTreshold)
+            if (bypassConditions == true || m_previousYVelocity <= m_velocityTreshold)
             {
                 m_animator.SetTrigger(m_animationParameter);
                 m_fXSpawner.SpawnFX();
                 m_state.waitForBehaviour = true;
+                //Debug.Log("Logging velocity x: " + m_physics.velocity.x);
                 m_animator.SetInteger(m_speedXParamater, 0);
-                m_animator.ResetTrigger(m_animationParameter);
+                //m_animator.ResetTrigger(m_animationParameter);
                 //When GroundednessHandle is disabled for some reason
                 //Landing Slides the Character
                 StartCoroutine(ForceStopRoutine());
+
+                Debug.Log("bypassing");
             }
         }
 

@@ -75,7 +75,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
-       
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
+
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
         //Patience Handler
@@ -129,6 +131,17 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
@@ -177,7 +190,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
@@ -215,7 +229,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                
                 

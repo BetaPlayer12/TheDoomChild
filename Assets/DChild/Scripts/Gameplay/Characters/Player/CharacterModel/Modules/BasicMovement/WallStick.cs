@@ -102,7 +102,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                             var hit = m_wallSensor.GetValidHits()[0];
                             if (hit.collider.CompareTag("Droppable") == false && hit.collider.CompareTag("InvisibleWall") == false)
                             {
-                                Debug.Log("Called");
+                                
                                 m_groundHeightSensor.Cast();
                                 if (m_groundHeightSensor.isDetecting == false)
                                 {

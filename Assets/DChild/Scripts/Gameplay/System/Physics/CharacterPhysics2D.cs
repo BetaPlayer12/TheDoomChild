@@ -43,7 +43,7 @@ namespace DChild.Gameplay
         public Vector2 moveAlongGround => m_moveAlongGround;
         public bool onWalkableGround => m_onWalkableGround;
         public bool inContactWithGround => m_inContactWithGround;
-        public bool isFalling => m_onWalkableGround == false && velocity.y < -15f; //-0.1f;
+        public bool isFalling => m_onWalkableGround == false && velocity.y < -0.1f; //-0.1f;
         public float groundAngle => m_groundAngle;
         public RangeFloat acceptableAngle => m_acceptableWalkableAngle;
 
@@ -75,15 +75,19 @@ namespace DChild.Gameplay
         }
 
         private void EvaluateGroundedness()
+
         {
+           //This is where all started 
             if (m_legColliderDetector != null && m_legColliderDetector.IsIntersecting(m_legCollider))
             {
+               
                 m_onWalkableGround = false;
                 m_inContactWithGround = false;
             }
-
+            
             if (m_legCollider.IsTouchingLayers(m_legColliderLayerMask) && velocity.y <= 0.1f)
             {
+              
                 m_inContactWithGround = true;
                 if (m_acceptableWalkableAngle.InRange(m_groundAngle))
                 {
@@ -101,6 +105,9 @@ namespace DChild.Gameplay
                         m_onWalkableGround = false;
                     }
                 }
+
+              
+
             }
             else
             {
@@ -114,6 +121,8 @@ namespace DChild.Gameplay
                     m_onWalkableGround = false;
                 }
             }
+           
+           
         }
 
         protected override void Awake()

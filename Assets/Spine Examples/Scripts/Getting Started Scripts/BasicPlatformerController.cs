@@ -176,10 +176,11 @@ namespace Spine.Unity.Examples {
 				OnJump.Invoke();
 			}
 			if (landed) {
+                
 				if (hardLand) {
 					OnHardLand.Invoke();
 				} else {
-					OnLand.Invoke();
+                    OnLand.Invoke();
 				}
 			}
 		}
