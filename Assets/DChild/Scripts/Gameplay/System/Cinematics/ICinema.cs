@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Cinematics
     public interface ICinema
     {
         Camera mainCamera { get; }
-        void SetShake(bool enable);
+        void EnableCameraShake(bool enable);
         void ClearLists();
         void SetDefaultCam(IVirtualCamera vCam);
         void TransistionTo(IVirtualCamera vCam);
