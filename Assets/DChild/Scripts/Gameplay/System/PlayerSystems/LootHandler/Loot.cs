@@ -72,7 +72,7 @@ namespace DChild.Gameplay.Systems
             m_popTimer.Tick(delta);
         }
 
-        private void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
+        protected virtual void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             m_isPopping = false;
             if (m_hasBeenPickUp)

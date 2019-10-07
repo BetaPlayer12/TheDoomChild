@@ -51,6 +51,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_turnAnimation;
             public string turnAnimation => m_turnAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_flinchAnimation;
+            public string flinchAnimation => m_flinchAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
 
@@ -66,6 +69,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_delayShotTime;
             public float delayShotTimer => m_delayShotTime;
 
+
+           
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -76,6 +82,7 @@ namespace DChild.Gameplay.Characters.Enemies
 #endif
             }
         }
+       
 
         private enum State
         {
@@ -98,6 +105,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
         //Patience Handler
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -124,6 +133,9 @@ namespace DChild.Gameplay.Characters.Enemies
         //
         private float timeCounter;
 
+        // player position
+        private Vector2 playerPosition;
+
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
@@ -131,6 +143,17 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
+
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -241,7 +264,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchStingerProjectile()
         {
-            var target = m_targetInfo.position; //No Parabola      
+            var target = playerPosition; //No Parabola      
             Vector2 spitPos = m_stingerPos.position;
             Vector3 v_diff = (target - spitPos);
             float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
@@ -264,6 +287,8 @@ namespace DChild.Gameplay.Characters.Enemies
            
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
@@ -303,11 +328,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_agent.Stop();
                    
                     break;
                 case State.Attacking:
+                    playerPosition = m_targetInfo.position;
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(RangeAttackRoutine());
                     break;

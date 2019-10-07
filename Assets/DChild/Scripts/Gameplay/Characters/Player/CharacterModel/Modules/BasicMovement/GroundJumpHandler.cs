@@ -47,6 +47,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnLand(object sender, EventActionArgs eventArgs)
         {
+           
             m_highJumpState.hasJumped = false;        
         }
        

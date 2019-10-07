@@ -18,7 +18,6 @@ public class TombSoul : MonoBehaviour
     private TombSoulAnimation m_animation;
     private PhysicsMovementHandler2D m_movement;
     private bool m_willChase;
-    private float m_launchTime;
 
     private void Awake()
     {
@@ -37,29 +36,9 @@ public class TombSoul : MonoBehaviour
         m_target = target;
     }
 
-    public void Launch(float count)
-    {
-        m_launchTime = count;
-    }
-
-    //private void ThrowSoul()
-    //{
-    //    //Shoot Spit
-    //    m_animation.DoCharge();
-    //    var target = m_target.position; //No Parabola
-    //    target = new Vector2(target.x, target.y - 2);
-    //    Vector2 soulPos = transform.position;
-    //    Vector3 v_diff = (target - soulPos);
-    //    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-    //    //transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
-    //    //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-    //    transform.localRotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
-
-    //    GetComponent<Rigidbody2D>().AddForce((m_soulSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * transform.right, ForceMode2D.Impulse);
-    //}
-
     private IEnumerator SoulRoutine()
     {
+        var delay = GetComponentInParent<TombAttack>().delay;
         GetComponent<Rigidbody2D>().AddForce(Random.Range(m_riseSpeed.x, m_riseSpeed.y) * Vector2.up, ForceMode2D.Impulse);
         GetComponent<Collider2D>().enabled = false;
         yield return new WaitForSeconds(3);
@@ -69,8 +48,9 @@ public class TombSoul : MonoBehaviour
         yield return new WaitForAnimationComplete(m_animation.animationState, TombSoulAnimation.ANIMATION_CHARGE);
         m_animation.DoChargeRed();
         //yield return new WaitUntil(() => m_hasLaunched);
-        yield return new WaitForSeconds(m_launchTime);
+        yield return new WaitForSeconds(delay);
         m_willChase = true;
+        //m_movement.MoveTo(m_target.position, m_soulSpeed);
         yield return null;
     }
 
