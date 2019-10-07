@@ -28,6 +28,7 @@ namespace DChild.Gameplay.Projectiles
             explosion.Detonate();
             gameObject.SetActive(false);
             UnloadProjectile();
+            CallImpactedEvent();
         }
 
         private void OnValidate()
