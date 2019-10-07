@@ -25,6 +25,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         //private RaySensor m_slopeSensor;
 
         private string m_speedParameter;
+        private string m_ySpeedParameter;
         private string m_turnParameter;
         private string m_landParameter;
         private int m_movingSpeedParameterValue;
@@ -53,6 +54,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_character = info.character;
             m_animator = info.animator;
             m_speedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedX);
+            m_ySpeedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
             m_turnParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Turn);
             m_landParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Land);
             // m_groundedParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrounded);
@@ -63,8 +65,9 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnLand(object sender, EventActionArgs eventArgs)
         {
-            m_state.isMoving = false;
-            m_animator.SetInteger(m_speedParameter, 0);
+            //m_state.isMoving = false;
+            m_animator.SetInteger(m_ySpeedParameter, 0);
+            //m_animator.SetInteger(m_speedParameter, 0);
             m_characterPhysics.SetVelocity(Vector2.zero);
         }
 
@@ -125,8 +128,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
                 m_animator.SetInteger(m_speedParameter, m_movingSpeedParameterValue);
             }
-            //Fuck shit hack agian
-            // m_animator.SetBool()
 
 
         }
@@ -159,7 +160,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             var force = ConvertToMoveForce(m_info.acceleration);
             m_characterPhysics.AddForce(force);
-            Debug.Log("Accelerate");
         }
 
         public void Deccelerate()
