@@ -18,10 +18,10 @@ namespace DChild.Gameplay.Combat
 
         private void Awake()
         {
-            m_boss.GetComponent<Damageable>().Destroyed += OnDestroy;
+            m_boss.GetComponent<Damageable>().Destroyed += OnBossKilled;
         }
 
-        private void OnDestroy(object sender, EventActionArgs eventArgs)
+        private void OnBossKilled(object sender, EventActionArgs eventArgs)
         {
             m_onDefeat?.Invoke();
         }

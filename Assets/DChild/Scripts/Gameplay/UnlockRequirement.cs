@@ -44,6 +44,6 @@ namespace DChild.Gameplay
             m_eventArgs.Set(m_isComplete);
             CompletionChange?.Invoke(this, m_eventArgs);
         }
-    }
 #endif
+    }
 }
