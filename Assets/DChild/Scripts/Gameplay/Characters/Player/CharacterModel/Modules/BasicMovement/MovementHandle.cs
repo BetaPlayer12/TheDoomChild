@@ -68,6 +68,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             Debug.Log("Set animation cast");
             //m_state.isMoving = false;
             m_animator.SetInteger(m_ySpeedParameter, 0);
+            m_animator.SetTrigger(m_landParameter);
             //m_animator.SetInteger(m_speedParameter, 0);
            // m_characterPhysics.SetVelocity(Vector2.zero);
         }
