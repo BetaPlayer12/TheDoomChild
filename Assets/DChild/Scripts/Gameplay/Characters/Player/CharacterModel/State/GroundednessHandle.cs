@@ -38,16 +38,26 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void CallLand()
         {
-            m_landHandle.Execute(true);
+            if (m_physics.velocity.x == 0)
+            {
+                m_landHandle.Execute(true);
+                
+            }
+            //else
+            //{
+            //    Debug.Log("Jump jogging");
+            //    LandExecuted?.Invoke(this, EventActionArgs.Empty);
+            //}
             LandExecuted?.Invoke(this, EventActionArgs.Empty);
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
             SetValuesToGround();
-            
+
         }
 
         public void CallLandJog() {
             m_jumpState.hasJumped = false;
             m_doubleJumpState.canDoubleJump = true;
+            m_state.isGrounded = true;
 
         }
 
@@ -84,7 +94,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             if (hasLanded == true)
             {
                 m_animator.SetBool(m_midAirParamater, false);
-                //if(m_physics.velocity.x != 0)
+                //if (m_physics.velocity.x != 0)
                 //{
                 //    Debug.Log("Running land");
                 //    CallLandJog();
