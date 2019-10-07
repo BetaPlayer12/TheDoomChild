@@ -1,4 +1,5 @@
 ﻿using DChild.Configurations;
+using DChild.Gameplay;
 using DChild.Gameplay.Pooling;
 using DChild.Menu;
 using Holysoft.Event;
@@ -63,6 +64,7 @@ namespace DChild
         public static void LoadZone(string sceneName, bool withLoadingScene)
         {
             m_zoneLoader.LoadZone(sceneName, withLoadingScene);
+            GameplaySystem.ClearCaches();
         }
 
         public static bool IsCurrentZone(string sceneName) => m_zoneLoader.activeZone == sceneName;

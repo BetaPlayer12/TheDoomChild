@@ -11,6 +11,7 @@ using DChild.Gameplay.Combat;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DChild.Gameplay.Environment;
 
 namespace DChild.Gameplay.Combat
 {
@@ -94,7 +95,7 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                return new TargetInfo(hitbox.damageable);
+                return new TargetInfo(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
             }
         }
     }

@@ -4,6 +4,7 @@
  * 
  ***************************************************/
 using DChild.Gameplay;
+using DChild.Gameplay.Environment;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,7 +58,7 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                return new TargetInfo(hitbox.damageable);
+                return new TargetInfo(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
             }
         }
 

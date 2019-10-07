@@ -7,11 +7,13 @@ namespace DChild.Gameplay.Cinematics
     public interface ICinema
     {
         Camera mainCamera { get; }
-        PlayerCamera camera { get; }
+        void SetShake(bool enable);
+        void ClearLists();
         void SetDefaultCam(IVirtualCamera vCam);
-        void SetBlend(CinemachineBlendDefinition.Style style, float duration);
         void TransistionTo(IVirtualCamera vCam);
         void TransistionToDefaultCamera();
+        void AllowTracking(ITrackingCamera trackingCamera);
+        void RemoveTracking(ITrackingCamera trackingCamera);
         void Register(ITrackingCamera trackingCamera);
         void Unregister(ITrackingCamera trackingCamera);
     }

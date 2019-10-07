@@ -1,7 +1,7 @@
 ﻿using DChild.Gameplay.Characters;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat.StatusAilment;
-using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Environment;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat
@@ -18,6 +18,9 @@ namespace DChild.Gameplay.Combat
         public bool isPlayer { get; }
         public IPlayer owner { get; }
         public StatusEffectReciever statusEffectReciever { get; }
+        public bool isBreakableObject { get; }
+        public BreakableObject breakableObject;
+
 
         public TargetInfo(IDamageable target, Character character = null, IFlinch flinchHandler = null) : this()
         {
@@ -36,6 +39,16 @@ namespace DChild.Gameplay.Combat
                 characterID = character.ID;
             }
             this.flinchHandler = flinchHandler;
+        }
+
+        public TargetInfo(IDamageable target, BreakableObject breakableObject = null) : this()
+        {
+            this.instance = target;
+            isBreakableObject = breakableObject;
+            if (isBreakableObject)
+            {
+                this.breakableObject = breakableObject;
+            }
         }
 
         public TargetInfo(IDamageable target, float damageReduction) : this()
