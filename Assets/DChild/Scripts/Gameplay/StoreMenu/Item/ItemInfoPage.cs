@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 namespace DChild.Menu.Item
 {
+
+    /// <summary>
+    /// Show Info Of Item in UI
+    /// </summary>
     public class ItemInfoPage : MonoBehaviour
     {
         [SerializeField]

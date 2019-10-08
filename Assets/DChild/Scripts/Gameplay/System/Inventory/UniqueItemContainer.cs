@@ -95,6 +95,18 @@ namespace DChild.Gameplay.Inventories
             }
         }
 
+        public int GetCurrentAmount(ItemData item)
+        {
+            var info = GetInfoOf(item);
+            if (info.isContainedInList)
+            {
+               return GetSlot(info.index).count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
         public void SetList(ItemContainerData data)
         {
@@ -159,6 +171,8 @@ namespace DChild.Gameplay.Inventories
             }
             return true;
         }
+
+       
 #endif
 
     }

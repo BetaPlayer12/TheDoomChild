@@ -45,6 +45,8 @@ namespace DChild.Gameplay.Inventories
             m_items.AddItem(item, -1);
         }
 
+        public int GetCurrentAmount(ItemData item) => m_items.GetCurrentAmount(item);
+
         public bool HasSpaceFor(ItemData item) => m_items.HasSpaceFor(item);
     }
 }
