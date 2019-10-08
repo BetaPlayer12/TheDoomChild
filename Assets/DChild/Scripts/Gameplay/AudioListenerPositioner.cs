@@ -11,12 +11,14 @@ public class AudioListenerPositioner : MonoBehaviour
     private void OnCameraChange(object sender, CameraChangeEventArgs eventArgs)
     {
         m_camera = eventArgs.camera?.transform ?? null;
+        enabled = m_camera;
     }
 
     private void Start()
     {
-        m_camera = GameSystem.mainCamera?.transform ?? null;
         GameSystem.CameraChange += OnCameraChange;
+        m_camera = GameSystem.mainCamera?.transform ?? null;
+        enabled = m_camera;
     }
 
     private void LateUpdate()
