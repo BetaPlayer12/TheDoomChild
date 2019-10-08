@@ -19,7 +19,7 @@ namespace DChild
 
             public string eventName { get => m_eventName; }
 
-            public void PlaySound(Transform transform) { }
+            public void PlaySound(Transform transform) => MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
         }
 
         [System.Serializable]
@@ -33,7 +33,7 @@ namespace DChild
 
             public string animationName { get => m_animationName; }
 
-            public void PlaySound(Transform transform) { }
+            public void PlaySound(Transform transform) => MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
         }
 
         [SerializeField]

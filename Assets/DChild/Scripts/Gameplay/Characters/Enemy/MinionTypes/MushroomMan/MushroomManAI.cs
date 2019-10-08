@@ -157,13 +157,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
         }
 
-        private  void OnFlinchHandle(object sender, EventActionArgs eventArgs)
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-           
-           
-            m_animation.SetAnimation(0, m_info.damageAnimation, true);
-          
+            m_animation.SetAnimation(0, m_info.damageAnimation, false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
 
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         public override void ApplyData()
@@ -178,7 +180,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_flinchHandle.FlinchStart += OnFlinchHandle;
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
 
@@ -201,15 +204,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
 
-
-         /*       case State.Flinch:
-                    Debug.Log("flinch check");
-                    m_movement.Stop();
-                    m_animation.SetAnimation(0, m_info.damageAnimation, true);
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                   
-                    break;
-                    */
                 case State.Patrol:
                     m_animation.EnableRootMotion(true, false);
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
@@ -219,9 +213,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                   
                     m_turnHandle.Execute();
                     break;
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
@@ -250,11 +244,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_animation.EnableRootMotion(true, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
                                 }
-
-                                
-
-
-                               
                             }
                             else
                             {
@@ -280,10 +269,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    //Debug.Log("Still wetting");
-                    //m_stateHandle.Wait(State.Attacking);
-                    //m_stateHandle.Set(State.Chasing);
-                    //m_stateHandle.ApplyQueuedState();
                     return;
             }
 

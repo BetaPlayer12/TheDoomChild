@@ -19,9 +19,9 @@ namespace DChild.Gameplay.Characters
 
         private bool m_isTurning;
 
-        public void Execute(string animation)
+        public void Execute(string turn)
         {
-            m_animation.SetAnimation(0, animation, false);
+            m_animation.SetAnimation(0, turn, false);
             m_animation.AddEmptyAnimation(0, 0, 0);
             StartCoroutine(TurnRoutine());
         }

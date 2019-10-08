@@ -24,6 +24,12 @@ namespace DChild.Gameplay.Projectiles
 
         protected IsolatedPhysics2D m_physics;
         private IIsolatedPhysicsTime m_isolatedPhysicsTime;
+        public event EventAction<EventActionArgs> Impacted;
+
+        protected void CallImpactedEvent()
+        {
+            Impacted?.Invoke(this, EventActionArgs.Empty);
+        }
 
         protected abstract ProjectileData projectileData { get; }
 
