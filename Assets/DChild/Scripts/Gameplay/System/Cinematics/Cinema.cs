@@ -19,7 +19,7 @@ namespace DChild.Gameplay.Cinematics
         [SerializeField]
         private Transform m_trackingTarget;
 #if UNITY_EDITOR
-        [ShowInInspector, OnValueChanged("SetShake")]
+        [ShowInInspector, OnValueChanged("EnableCameraShake")]
         private bool m_cameraShake;
 #endif
 
