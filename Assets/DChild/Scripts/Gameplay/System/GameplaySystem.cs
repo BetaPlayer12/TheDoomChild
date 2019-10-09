@@ -41,6 +41,8 @@ namespace DChild.Gameplay
         private static GameplayModifiers m_modifiers;
         private static ZoneMoverHandle m_zoneMover;
 
+        private static GameplaySystem m_instance;
+
         public static ICombatManager combatManager => m_combatManager;
 
         public static IFXManager fXManager => m_fxManager;
@@ -94,7 +96,7 @@ namespace DChild.Gameplay
 
         public static void LoadGame(CampaignSlot campaignSlot)
         {
-
+            //Load data for the thing
         }
 
         public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
@@ -118,7 +120,6 @@ namespace DChild.Gameplay
             AssignModule(out m_simulation);
             AssignModule(out m_playerManager);
             AssignModule(out m_zoneMover);
-            //Debug.Log("Modules Assigned");
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
@@ -129,17 +130,23 @@ namespace DChild.Gameplay
 
         protected void Awake()
         {
-            AssignModules();
-            m_modules = GetComponentsInChildren<IGameplaySystemModule>();
-            m_activatableModules = GetComponentsInChildren<IGameplayActivatable>();
-
-            var initializables = GetComponentsInChildren<IGameplayInitializable>();
-            for (int i = 0; i < initializables.Length; i++)
+            if (m_instance)
             {
-                initializables[i].Initialize();
+                Destroy(gameObject);
             }
-            //m_fxManager.LoadDatabase(m_database);
-            //m_fxManager.Initialize(); //Temporary for grasscutFX
+            else
+            {
+                m_instance = this;
+                AssignModules();
+                m_modules = GetComponentsInChildren<IGameplaySystemModule>();
+                m_activatableModules = GetComponentsInChildren<IGameplayActivatable>();
+
+                var initializables = GetComponentsInChildren<IGameplayInitializable>();
+                for (int i = 0; i < initializables.Length; i++)
+                {
+                    initializables[i].Initialize();
+                }
+            }
         }
 
         private void Start()
@@ -168,8 +175,25 @@ namespace DChild.Gameplay
 
         private void OnApplicationQuit()
         {
-            Debug.Log("Quit");
             Time.timeScale = 1;
+        }
+
+        private void OnDestroy()
+        {
+            if (this == m_instance)
+            {
+                m_combatManager = null;
+                m_fxManager = null;
+                m_databaseManager = null;
+                m_lootHandler = null;
+                m_cinema = null;
+                m_world = null;
+                m_simulation = null;
+                m_playerManager = null;
+                m_zoneMover = null;
+                m_modules = null;
+                m_activatableModules = null;
+            }
         }
     }
 }

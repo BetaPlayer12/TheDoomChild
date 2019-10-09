@@ -20,5 +20,13 @@ namespace DChild.Gameplay.Characters.Players
                 modules[i].Initialize(m_info);
             }
         }
+
+#if UNITY_EDITOR
+        public void Initialize(GameObject character, AnimationParametersData animationParametersData, GameObject behaviour)
+        {
+            m_info = new ComplexCharacterInfo(character, animationParametersData);
+            m_moduleContainer = behaviour;
+        }
+#endif
     }
 }
