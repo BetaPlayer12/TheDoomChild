@@ -38,6 +38,13 @@ namespace DChild.Gameplay.Characters.Players
                 RecordCreatureToBestiary(eventArgs.target.characterID);
             }
         }
-        
+
+#if UNITY_EDITOR
+        public void Initialize(GameObject character)
+        {
+            m_attacker = character.GetComponent<Attacker>();
+        }
+#endif
+
     }
 }
