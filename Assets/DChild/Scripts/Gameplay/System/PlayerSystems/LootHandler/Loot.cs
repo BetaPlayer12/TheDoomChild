@@ -41,6 +41,7 @@ namespace DChild.Gameplay.Systems
         {
             m_animator?.SetTrigger("Apply");
             m_pickedBy.lootPicker.Glow();
+            m_rigidbody.velocity = Vector2.zero;
         }
 
         public void Pop(Vector2 force)
