@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Combat
         private UnityEvent m_uponTrigger;
         [SerializeField]
         private UnityEvent m_onDefeat;
+        private bool m_isTriggered;
 
         private void Awake()
         {
@@ -37,22 +38,25 @@ namespace DChild.Gameplay.Combat
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.tag != "Sensor")
+            if (m_isTriggered == false)
             {
-                var target = collision.GetComponentInParent<ITarget>();
-                if (target.CompareTag(Character.objectTag))
+                if (collision.tag != "Sensor")
                 {
-                    GameplaySystem.combatManager.MonitorBoss(m_boss);
-                    if (m_startDelay == 0)
+                    var target = collision.GetComponentInParent<ITarget>();
+                    if (target.CompareTag(Character.objectTag))
                     {
-                        m_boss.SetTarget(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
+                        GameplaySystem.combatManager.MonitorBoss(m_boss);
+                        if (m_startDelay == 0)
+                        {
+                            m_boss.SetTarget(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
+                        }
+                        else
+                        {
+                            StartCoroutine(DelayedAwakeRoutine(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>()));
+                        }
+                        m_uponTrigger?.Invoke();
+                        m_isTriggered = true;
                     }
-                    else
-                    {
-                        StartCoroutine(DelayedAwakeRoutine(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>()));
-                    }
-                    m_uponTrigger?.Invoke();
-                    gameObject.SetActive(false);
                 }
             }
         }
