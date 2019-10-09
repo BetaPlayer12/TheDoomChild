@@ -113,12 +113,10 @@ namespace DChild.Gameplay.Cinematics
             m_mainCamera = mainCamera;
         }
 
-    
-
-
-
-
-
+        public void Initialize(Transform centerOfMass)
+        {
+            m_trackingTarget = centerOfMass;
+        }
 #endif
     }
 }

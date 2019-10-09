@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Cinematics;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +18,11 @@ namespace DChildDebug
         [SerializeField]
         private GameObject m_characterBehaviour;
         [SerializeField]
+        private Transform m_characterCenterMass;
+        [SerializeField]
         private AnimationParametersData m_animationParametersData;
+        [SerializeField]
+        private GameObject m_gameplaySystem;
 
         private static GameObject m_playerInstance;
         private static GameObject m_characterInstance;
@@ -61,7 +66,11 @@ namespace DChildDebug
             m_player.GetComponentInChildren<StatToModelInjector>().Initialize(m_character);
             m_player.GetComponentInChildren<PlayerCharacterInitializer>().Initialize(m_character, m_animationParametersData, m_characterBehaviour);
             m_player.GetComponentInChildren<BestiaryProgressTracker>().Initialize(m_character);
-            m_player.GetComponentInChildren<PlayerCharacterController>().Initialize(m_character,m_characterBehaviour);
+            m_player.GetComponentInChildren<PlayerCharacterController>().Initialize(m_character, m_characterBehaviour);
+            if (m_gameplaySystem)
+            {
+                m_gameplaySystem.GetComponentInChildren<Cinema>().Initialize(m_characterCenterMass);
+            }
         }
     }
 }
