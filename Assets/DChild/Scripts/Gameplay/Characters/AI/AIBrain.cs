@@ -165,7 +165,6 @@ namespace DChild.Gameplay.Characters.AI
 
         protected virtual void Awake()
         {
-            Debug.Log("Update ApplyData trigger");
             ApplyData();
         }
 

@@ -25,11 +25,16 @@ namespace DChild.Gameplay.Combat
         private List<AttackDamage> m_currentDamage;
 
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
+        public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
             if (m_info.ignoreInvulnerability || !targetDefense.isInvulnerable)
             {
+                if (targetInfo.isBreakableObject)
+                {
+                    BreakableObjectDamage?.Invoke(this, new BreakableObjectEventArgs(targetInfo.breakableObject));
+                }
                 var position = transform.position;
                 AttackerCombatInfo info = new AttackerCombatInfo(position, 0, 1, m_currentDamage.ToArray());
                 var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
