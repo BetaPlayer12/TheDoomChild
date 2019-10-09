@@ -37,7 +37,7 @@ namespace DChildDebug
             {
                 m_playerInstance = m_player;
             }
-            if (m_character)
+            if (m_characterInstance)
             {
                 Destroy(m_character);
             }
