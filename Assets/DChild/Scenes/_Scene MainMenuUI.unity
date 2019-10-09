@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 112000000, guid: 6cd9e592b4c9a6045897a4c5a2420769,
     type: 2}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -11343,6 +11343,17 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 1
             m_CallState: 2
+          - m_Target: {fileID: 436622885}
+            m_MethodName: set_interactable
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
         m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
       GameEvents: []
@@ -11364,7 +11375,18 @@ MonoBehaviour:
         CustomSortingLayer: Default
       Event:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 436622885}
+            m_MethodName: set_interactable
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
         m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
       GameEvents: []
@@ -28653,7 +28675,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1965879
 --- !u!223 &1304392624
 Canvas:
   m_ObjectHideFlags: 0
@@ -34315,14 +34337,14 @@ MonoBehaviour:
   StartScale: {x: 1, y: 1, z: 1}
   StartAlpha: 1
   AllowMultipleClicks: 1
-  ButtonCategory: General
-  ButtonName: Unnamed
+  ButtonCategory: Campaign Select
+  ButtonName: Continue
   ClickMode: 0
   DeselectButtonAfterClick: 0
   DisableButtonBetweenClicksInterval: 0.2
   DoubleClickRegisterInterval: 0.2
   InputData:
-    EnableAlternateInputs: 1
+    EnableAlternateInputs: 0
     InputMode: 2
     KeyCode: 13
     KeyCodeAlt: 32
@@ -36443,18 +36465,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1705499295}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1359655859}
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1705499295
