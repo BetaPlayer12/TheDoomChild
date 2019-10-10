@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 #endif
+using DChild.Gameplay.Items;
 using System.Collections.Generic;
 
 namespace DChild.Gameplay.Inventories
@@ -12,6 +13,8 @@ namespace DChild.Gameplay.Inventories
         ItemSlot GetSlot(int index);
         void AddItem(ItemData item, int count);
         void SetItem(ItemData item, int count);
+        int GetCurrentAmount(ItemData item);
+        bool HasSpaceFor(ItemData item);
         void SetList(ItemContainerData data);
     }
 }

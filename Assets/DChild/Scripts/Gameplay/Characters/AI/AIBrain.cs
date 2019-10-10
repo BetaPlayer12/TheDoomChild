@@ -165,7 +165,6 @@ namespace DChild.Gameplay.Characters.AI
 
         protected virtual void Awake()
         {
-            Debug.Log("Update ApplyData trigger");
             ApplyData();
         }
 
@@ -182,7 +181,7 @@ namespace DChild.Gameplay.Characters.AI
             for (int i = 0; i < filePaths.Length; i++)
             {
                 var asset = AssetDatabase.LoadAssetAtPath<AIData>(filePaths[i]);
-                if (asset != null && asset.info.GetType() == infoType)
+                if (asset != null && asset.info != null && asset.info.GetType() == infoType)
                 {
                     list.Add(asset);
                 }

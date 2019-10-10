@@ -15,6 +15,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private IDoubleJumpState m_doubleJumpState;
         private CharacterPhysics2D m_physics;
         private RaySensor m_groundSensor;
+        private RaySensor m_slopeSensor;
         private Animator m_animator;
         private string m_midAirParamater;
         private string m_speedYParamater;
@@ -38,16 +39,21 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void CallLand()
         {
-            m_landHandle.Execute(true);
+            if (m_physics.velocity.x == 0)
+            {
+                m_landHandle.Execute(true);
+
+            }
             LandExecuted?.Invoke(this, EventActionArgs.Empty);
             m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
             SetValuesToGround();
-            
+
         }
 
         public void CallLandJog() {
             m_jumpState.hasJumped = false;
             m_doubleJumpState.canDoubleJump = true;
+            m_state.isGrounded = true;
 
         }
 
@@ -61,10 +67,11 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             m_physics = info.physics;
             m_state = info.state;
             m_animator = info.animator;
-            
+
             m_midAirParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsMidAir);
             m_speedYParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
             m_groundSensor = info.GetSensor(PlayerSensorList.SensorType.Ground);
+            m_slopeSensor = info.GetSensor(PlayerSensorList.SensorType.Slope);
 
 
             m_fallHandle.Initialize(info);
@@ -79,36 +86,23 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void HandleLand()
         {
+            m_slopeSensor.Cast();
+            //if(m_slopeSensor.isDetecting == true)
+            // {
+            //     Debug.Log("slope detecting:"+ m_slopeSensor.GetHits().Length);
+            // }
             var hasLanded = m_physics.onWalkableGround;
-
-            if (hasLanded == true)
+            var incontactwithground = m_physics.inContactWithGround;
+            float slopeAngle = Vector3.Angle(Vector3.up, m_slopeSensor.GetHits()[0].normal);
+           // Debug.Log("haslanded: " + hasLanded);
+            if (hasLanded == true || m_slopeSensor.isDetecting == true && slopeAngle < 35.0f)
             {
+                Debug.Log("hitting from slope:" + Vector3.Angle(Vector3.up, m_slopeSensor.GetHits()[0].normal));
                 m_animator.SetBool(m_midAirParamater, false);
-                //if(m_physics.velocity.x != 0)
-                //{
-                //    Debug.Log("Running land");
-                //    CallLandJog();
-
-                //}
-                //else
-                //{
-                //    Debug.Log("JUmp land");
-                //    CallLand();
-                //}
-                CallLand();
-
+                CallLand(); 
             }
+           
 
-            //if (hasLanded)
-            //{
-            //    //code should be here has jump false
-            //    //this is where i have to check if has landed have velocity
-            //    m_animator.SetBool(m_midAirParamater, false);
-            //    if (m_physics.velocity.x == 0)
-            //    {
-            //        CallLand();
-            //    }
-            //}
             m_landHandle.RecordVelocity();
         }
 

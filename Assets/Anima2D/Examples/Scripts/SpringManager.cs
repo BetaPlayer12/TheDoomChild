@@ -26,25 +26,33 @@ namespace UnityChan
 		public float			dragForce;
 		public AnimationCurve	dragCurve;
 		public SpringBone[] springBones;
+        //Edit
+        public Transform m_followThisTransformScaleX;
 
-		void Start ()
+        private float m_scaleX;
+
+        void Start ()
 		{
 			UpdateParameters ();
-		}
+
+        }
 
 #if UNITY_EDITOR
 		void Update ()
-		{
+        {
+            if (m_followThisTransformScaleX != null)
+            {
+                m_scaleX = Mathf.Sign(m_followThisTransformScaleX.transform.localScale.x);
+            }
 
-		//Kobayashi
-		if(dynamicRatio >= 1.0f)
-			dynamicRatio = 1.0f;
-		else if(dynamicRatio <= 0.0f)
-			dynamicRatio = 0.0f;
-		//Ebata
-		UpdateParameters();
-
-		}
+            //Kobayashi
+            if (dynamicRatio >= 1.0f)
+                dynamicRatio = 1.0f;
+            else if (dynamicRatio <= 0.0f)
+                dynamicRatio = 0.0f;
+            //Ebata
+            UpdateParameters();
+        }
 #endif	
 		private void LateUpdate ()
 		{
@@ -54,7 +62,7 @@ namespace UnityChan
 					if (dynamicRatio > springBones [i].threshold) {
 						if(springBones [i])
 						{
-							springBones [i].UpdateSpring ();
+							springBones [i].UpdateSpring (m_scaleX);
 						}
 					}
 				}

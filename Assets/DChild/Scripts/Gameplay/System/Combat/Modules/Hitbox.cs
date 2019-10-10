@@ -17,8 +17,6 @@ namespace DChild.Gameplay.Combat
         private IDamageable m_damageable;
         [SerializeField, HideInInspector]
         private Collider2D[] m_collider2Ds;
-        [SerializeField, HideInInspector]
-        private int m_compositeColliderID;
 
         [SerializeField]
         private bool m_isInvulnerable;
@@ -27,7 +25,6 @@ namespace DChild.Gameplay.Combat
 
         public IDamageable damageable => m_damageable;
         public BodyDefense defense => m_isInvulnerable ? new BodyDefense(m_isInvulnerable) : new BodyDefense(m_damageReduction);
-        public int compositeColliderID => m_compositeColliderID;
 
         public bool isInvulnerable => m_isInvulnerable;
 
@@ -65,12 +62,10 @@ namespace DChild.Gameplay.Combat
                 var colliders = new List<Collider2D>(GetComponentsInChildren<Collider2D>());
                 colliders.Remove(compositeCollider);
                 m_collider2Ds = colliders.ToArray();
-                m_compositeColliderID = compositeCollider.GetInstanceID();
             }
             else
             {
                 m_collider2Ds = new Collider2D[] { GetComponent<Collider2D>() };
-                m_compositeColliderID = -1;
             }
         }
     }

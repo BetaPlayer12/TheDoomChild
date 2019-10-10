@@ -20,23 +20,8 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("On Fix")]
         private UnityEvent m_onFix;
 
-        // Start is called before the first frame update
-        private void Awake()
-        {
-            m_object.Destroyed += OnDestroyObject;
-            if (m_isDestroyed == true)
-            {
-                m_onDestroy?.Invoke();
-            }
-            else
-            {
-                m_onFix?.Invoke();
-            }
-        }
-        private void OnDestroyObject(object sender, EventActionArgs eventArgs)
-        {
-            m_onDestroy?.Invoke();
-        }
+        private Vector2 m_forceDirection;
+        private float m_force;
 
         public void SetObjectState(bool isDestroyed)
         {
@@ -50,5 +35,37 @@ namespace DChild.Gameplay.Environment
                 m_onFix?.Invoke();
             }
         }
+
+        public void InstantiateDebris(GameObject debris)
+        {
+            var instance = Instantiate(debris, m_object.position, Quaternion.identity);
+            instance.GetComponent<Debris>().SetInitialForceReference(m_forceDirection, m_force);
+        }
+
+        public void RecordForceReceived(Vector2 forceDirection, float force)
+        {
+            m_forceDirection = forceDirection;
+            m_force = force;
+        }
+
+        private void OnDestroyObject(object sender, EventActionArgs eventArgs)
+        {
+            m_onDestroy?.Invoke();
+        }
+
+        // Start is called before the first frame update
+        private void Awake()
+        {
+            m_object.Destroyed += OnDestroyObject;
+            if (m_isDestroyed == true)
+            {
+                m_onDestroy?.Invoke();
+            }
+            else
+            {
+                m_onFix?.Invoke();
+            }
+        }
+
     }
 }

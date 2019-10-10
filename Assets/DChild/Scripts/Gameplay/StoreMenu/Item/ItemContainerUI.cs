@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Inventories;
+using DChild.Gameplay.Items;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;

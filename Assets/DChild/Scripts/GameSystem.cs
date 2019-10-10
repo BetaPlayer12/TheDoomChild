@@ -1,4 +1,5 @@
 ﻿using DChild.Configurations;
+using DChild.Gameplay;
 using DChild.Gameplay.Pooling;
 using DChild.Menu;
 using Holysoft.Event;
@@ -30,6 +31,7 @@ namespace DChild
         public static Camera mainCamera { get; private set; }
         public static event EventAction<CameraChangeEventArgs> CameraChange;
 
+        private static GameSystem m_instance;
 
         [SerializeField]
         private Cursor m_instanceCursor;
@@ -63,6 +65,7 @@ namespace DChild
         public static void LoadZone(string sceneName, bool withLoadingScene)
         {
             m_zoneLoader.LoadZone(sceneName, withLoadingScene);
+            GameplaySystem.ClearCaches();
         }
 
         public static bool IsCurrentZone(string sceneName) => m_zoneLoader.activeZone == sceneName;
@@ -75,17 +78,37 @@ namespace DChild
 
         private void Awake()
         {
-            settings = GetComponentInChildren<GameSettings>();
-            m_confirmationHander = GetComponentInChildren<ConfirmationHandler>();
-            m_zoneLoader = GetComponentInChildren<SceneLoader>();
-            dataManager = GetComponentInChildren<GameDataManager>();
-            m_poolManager = GetComponentInChildren<PoolManager>();
-            m_cursor = m_instanceCursor;
+            if (m_instance)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                m_instance = this;
+                settings = GetComponentInChildren<GameSettings>();
+                m_confirmationHander = GetComponentInChildren<ConfirmationHandler>();
+                m_zoneLoader = GetComponentInChildren<SceneLoader>();
+                dataManager = GetComponentInChildren<GameDataManager>();
+                m_poolManager = GetComponentInChildren<PoolManager>();
+                m_cursor = m_instanceCursor;
+            }
         }
 
         private void Start()
         {
             m_introHandler.Execute();
+        }
+
+        private void nDestroy()
+        {
+            if (this == m_instance)
+            {
+                settings = null;
+                m_confirmationHander = null;
+                m_zoneLoader = null;
+                dataManager = null;
+                m_poolManager = null;
+            }
         }
     }
 

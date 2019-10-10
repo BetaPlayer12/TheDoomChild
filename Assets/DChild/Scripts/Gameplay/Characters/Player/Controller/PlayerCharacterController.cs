@@ -149,5 +149,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
             }
         }
+
+#if UNITY_EDITOR
+        public void Initialize(GameObject character, GameObject behaviour)
+        {
+            m_behaviourContainer = behaviour;
+            m_characterState = character.GetComponentInChildren<CharacterState>();
+            m_groundedness = character.GetComponentInChildren<GroundednessHandle>();
+    }
+#endif
     }
 }
