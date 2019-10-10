@@ -80,7 +80,7 @@ namespace UnityChan
 			prevTipPos = m_Bone.endPosition;
 		}
 
-		public void UpdateSpring ()
+		public void UpdateSpring (float scaleX)
 		{
 			//Kobayashi
 			org = trs;
@@ -95,8 +95,11 @@ namespace UnityChan
 			//stiffness
 			Vector3 force = trs.rotation * (Vector3.right * stiffnessForce) / sqrDt;
 
-			//drag
-			force += (prevTipPos - currTipPos) * dragForce / sqrDt;
+            //for turning character
+            force *= scaleX;
+
+            //drag
+            force += (prevTipPos - currTipPos) * dragForce / sqrDt;
 
 			force += springForce / sqrDt;
 
