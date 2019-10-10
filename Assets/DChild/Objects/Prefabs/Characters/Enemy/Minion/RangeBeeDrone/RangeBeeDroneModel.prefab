@@ -25,11 +25,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1677905957270328655}
-  m_LocalRotation: {x: -0, y: -0, z: -0.3751526, w: 0.9269631}
-  m_LocalPosition: {x: -0.36916596, y: 4.856852, z: 0}
-  m_LocalScale: {x: 1, y: -1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.27324337, w: 0.96194494}
+  m_LocalPosition: {x: 0.86301225, y: -0.004359684, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1409610333070490153}
+  m_Father: {fileID: 5427278370112290412}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1504811554340065058
@@ -49,7 +49,7 @@ MonoBehaviour:
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
-  followLocalScale: 1
+  followLocalScale: 0
   initializeOnAwake: 1
 --- !u!60 &4217487862770041877
 PolygonCollider2D:
@@ -80,6 +80,56 @@ PolygonCollider2D:
       - {x: -0.09663139, y: 0.055285845}
       - {x: -0.089697175, y: -0.08011488}
       - {x: 0.4967317, y: -0.024074394}
+--- !u!1 &1752468417404058373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8619704639297509595}
+  - component: {fileID: 5225538203434276712}
+  m_Layer: 13
+  m_Name: root
+  m_TagString: Untagged
+  m_Icon: {fileID: 2800000, guid: d1de1604dfe4cb64c9d31246a8e43c78, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8619704639297509595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752468417404058373}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1528, y: 7.1663995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1409610333070490153}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5225538203434276712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752468417404058373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 5637387481399289546}
+  boneName: root
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
 --- !u!1 &2442326153452825293
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,6 +161,57 @@ Transform:
   m_Father: {fileID: 2544378068226852776}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3076405876540690344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7672079451087980904}
+  - component: {fileID: 6881259015288573105}
+  m_Layer: 13
+  m_Name: bosy main bone
+  m_TagString: Untagged
+  m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7672079451087980904
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3076405876540690344}
+  m_LocalRotation: {x: -0, y: -0, z: 0.023010274, w: 0.99973524}
+  m_LocalPosition: {x: 0.15608557, y: 7.1605234, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3845194840769526311}
+  m_Father: {fileID: 1409610333070490153}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6881259015288573105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3076405876540690344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 5637387481399289546}
+  boneName: bosy main bone
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
 --- !u!1 &3552793318232559406
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,12 +317,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4815587655526024151}
-  m_LocalRotation: {x: -0, y: -0, z: -0.70855135, w: 0.7056593}
-  m_LocalPosition: {x: -0.6410176, y: 6.410735, z: 0}
-  m_LocalScale: {x: 1, y: -1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1409610333070490153}
-  m_RootOrder: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.29721016, w: 0.95481217}
+  m_LocalPosition: {x: 0.94846064, y: 0.0023916662, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5427278370112290412}
+  m_Father: {fileID: 3845194840769526311}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5039988694228400921
 MonoBehaviour:
@@ -240,7 +342,7 @@ MonoBehaviour:
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
-  followLocalScale: 1
+  followLocalScale: 0
   initializeOnAwake: 1
 --- !u!1 &4830789473834944000
 GameObject:
@@ -372,12 +474,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6616406011362973714}
-  m_LocalRotation: {x: -0, y: -0, z: -0.6141625, w: 0.78917956}
-  m_LocalPosition: {x: -0.5853555, y: 5.6923585, z: 0}
-  m_LocalScale: {x: 1, y: -1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1409610333070490153}
-  m_RootOrder: 1
+  m_LocalRotation: {x: -0, y: -0, z: -0.12578456, w: 0.99205756}
+  m_LocalPosition: {x: 0.718143, y: -0.058599584, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1403553921777473693}
+  m_Father: {fileID: 368005528611311927}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9185847986250415701
 MonoBehaviour:
@@ -396,7 +499,7 @@ MonoBehaviour:
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
-  followLocalScale: 1
+  followLocalScale: 0
   initializeOnAwake: 1
 --- !u!60 &7827830899948606263
 PolygonCollider2D:
@@ -514,10 +617,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1403553921777473693}
-  - {fileID: 5427278370112290412}
-  - {fileID: 368005528611311927}
-  - {fileID: 3845194840769526311}
+  - {fileID: 8619704639297509595}
+  - {fileID: 7672079451087980904}
   m_Father: {fileID: 2544378068226852776}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -576,49 +677,51 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 4217487862770041877}
     m_ColliderPaths:
-    - - X: 14366
-        Y: 14718317
-      - X: -1228180
-        Y: 16174583
-      - X: -1550383
-        Y: 15874068
-      - X: -478937
-        Y: 15014757
+    - - X: 478937
+        Y: 15014753
+      - X: 1550410
+        Y: 15874088
+      - X: 1228158
+        Y: 16174601
+      - X: -14593
+        Y: 14718177
   - m_Collider: {fileID: 7827830899948606263}
     m_ColliderPaths:
-    - - X: -2481267
-        Y: 16672074
-      - X: 1493380
-        Y: 20878612
-      - X: -2940822
-        Y: 22136321
-      - X: -3519219
-        Y: 19945495
+    - - X: -1493432
+        Y: 20878598
+      - X: 2481250
+        Y: 16672020
+      - X: 3519221
+        Y: 19945504
+      - X: 2940815
+        Y: 22136350
   - m_Collider: {fileID: 7713662696251085282}
     m_ColliderPaths:
-    - - X: 2074425
-        Y: 11979172
-      - X: 5113936
-        Y: 18470440
-      - X: 6196156
-        Y: 21268577
-      - X: 4497841
-        Y: 30981583
-      - X: -8187735
-        Y: 32108263
-      - X: -9364080
-        Y: 19941461
-      - X: -5201446
-        Y: 12791180
+    - - X: 499076
+        Y: 24419636
+      - X: -1477318
+        Y: 23109858
+      - X: -1161916
+        Y: 22183888
+      - X: 11832
+        Y: 20301074
+      - X: 2089382
+        Y: 21120562
   m_CompositePaths:
     m_Paths:
-    - - {x: 0.2074404, y: 1.1979175}
-      - {x: 0.5113934, y: 1.8470436}
-      - {x: 0.61961544, y: 2.1268582}
-      - {x: 0.4497819, y: 3.0981584}
-      - {x: -0.8187738, y: 3.2108235}
-      - {x: -0.9364076, y: 1.9941454}
-      - {x: -0.52014333, y: 1.279118}
+    - - {x: 0.3519221, y: 1.9945505}
+      - {x: 0.2940815, y: 2.213635}
+      - {x: 0.1761036, y: 2.1801713}
+      - {x: 0.049907602, y: 2.4419637}
+      - {x: -0.1477318, y: 2.3109858}
+      - {x: -0.1161916, y: 2.2183888}
+      - {x: -0.0520275, y: 2.1154628}
+      - {x: -0.14934321, y: 2.0878599}
+      - {x: 0.248125, y: 1.667202}
+    - - {x: 0.0478937, y: 1.5014753}
+      - {x: 0.15504101, y: 1.5874088}
+      - {x: 0.1228158, y: 1.6174601}
+      - {x: -0.0014593, y: 1.4718177}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.000005
 --- !u!1 &7189003159738749311
@@ -685,7 +788,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c3001ec0c0ebe6742b4c78984ffba963, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -720,7 +823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 0}
   initialSkinName: default
-  initialFlipX: 1
+  initialFlipX: 0
   initialFlipY: 0
   separatorSlotNames: []
   zSpacing: 0
@@ -768,7 +871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sourceBoneName: root
-  useX: 0
+  useX: 1
   useY: 0
   rb: {fileID: 0}
   siblingBoneNames: []
@@ -813,12 +916,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7299100510775145456}
-  m_LocalRotation: {x: -0, y: -0, z: -0.8862624, w: 0.46318352}
-  m_LocalPosition: {x: -0.09755684, y: 7.18806, z: 0}
-  m_LocalScale: {x: 1, y: -1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1409610333070490153}
-  m_RootOrder: 3
+  m_LocalRotation: {x: -0, y: -0, z: -0.48345396, w: 0.87536985}
+  m_LocalPosition: {x: -0.05719987, y: 0.030200044, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 368005528611311927}
+  m_Father: {fileID: 7672079451087980904}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3125141542257028596
 MonoBehaviour:
@@ -837,7 +941,7 @@ MonoBehaviour:
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
-  followLocalScale: 1
+  followLocalScale: 0
   initializeOnAwake: 1
 --- !u!60 &7713662696251085282
 PolygonCollider2D:
@@ -864,10 +968,8 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 2.4531553, y: 1.6846919}
-      - {x: -0.8270352, y: 3.5248513}
-      - {x: -2.7708664, y: 0.122330666}
-      - {x: -0.61553514, y: -2.0129547}
-      - {x: 0.28143072, y: -2.2311106}
-      - {x: 2.4551775, y: -2.6035957}
-      - {x: 3.5281959, y: -0.6229358}
+    - - {x: -0.23540577, y: 0.23191547}
+      - {x: -0.25172383, y: -0.4974415}
+      - {x: 0.037597954, y: -0.58042955}
+      - {x: 0.71941835, y: -0.61467135}
+      - {x: 0.8773619, y: 0.05411005}
