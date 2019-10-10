@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         private IGroundednessState m_state;
         private IHighJumpState m_jumpState;
         private IDoubleJumpState m_doubleJumpState;
+        private IWallStickState m_wallStickState;
         private CharacterPhysics2D m_physics;
         private RaySensor m_groundSensor;
         private RaySensor m_slopeSensor;
@@ -66,6 +67,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             m_physics = info.physics;
             m_state = info.state;
+            m_wallStickState = info.state;
             m_animator = info.animator;
 
             m_midAirParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsMidAir);
@@ -87,19 +89,22 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         public void HandleLand()
         {
             m_slopeSensor.Cast();
-            //if(m_slopeSensor.isDetecting == true)
-            // {
-            //     Debug.Log("slope detecting:"+ m_slopeSensor.GetHits().Length);
-            // }
+
             var hasLanded = m_physics.onWalkableGround;
             var incontactwithground = m_physics.inContactWithGround;
             float slopeAngle = Vector3.Angle(Vector3.up, m_slopeSensor.GetHits()[0].normal);
-           // Debug.Log("haslanded: " + hasLanded);
+
             if (hasLanded == true || m_slopeSensor.isDetecting == true && slopeAngle < 35.0f)
             {
-                Debug.Log("hitting from slope:" + Vector3.Angle(Vector3.up, m_slopeSensor.GetHits()[0].normal));
+             
                 m_animator.SetBool(m_midAirParamater, false);
-                CallLand(); 
+                if(m_wallStickState.isSlidingToWall == false && m_wallStickState.isStickingToWall == false)
+                {
+                    Debug.Log("call land here");
+                    CallLand();
+                }
+                    
+               
             }
            
 

@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnLandCall(object sender, EventActionArgs eventArgs)
         {
-            Debug.Log("Ground sensor cast");
+            //Debug.Log("Ground sensor cast");
             m_groundSensor.Cast();
         }
 

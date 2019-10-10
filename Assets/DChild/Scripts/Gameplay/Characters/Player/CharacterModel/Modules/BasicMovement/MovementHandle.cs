@@ -65,7 +65,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnLand(object sender, EventActionArgs eventArgs)
         {
-            Debug.Log("Set animation cast");
+            //Debug.Log("Set animation cast");
             //m_state.isMoving = false;
             m_animator.SetInteger(m_ySpeedParameter, 0);
             m_animator.SetTrigger(m_landParameter);
@@ -91,7 +91,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                
                 if (m_hasStopped ==false && m_characterPhysics.velocity.x != 0)
                 {
-                    Debug.Log("Decelerating");
+                    //Debug.Log("Decelerating");
                     Deccelerate();
                 }
                 m_state.isMoving = false;
