@@ -94,13 +94,12 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
             var incontactwithground = m_physics.inContactWithGround;
             float slopeAngle = Vector3.Angle(Vector3.up, m_slopeSensor.GetHits()[0].normal);
 
-            if (hasLanded == true || m_slopeSensor.isDetecting == true && slopeAngle < 35.0f)
+            if (incontactwithground == true || hasLanded == true || m_slopeSensor.isDetecting == true && slopeAngle < 35.0f)
             {
              
                 m_animator.SetBool(m_midAirParamater, false);
                 if(m_wallStickState.isSlidingToWall == false && m_wallStickState.isStickingToWall == false)
                 {
-                    Debug.Log("call land here");
                     CallLand();
                 }
                     
