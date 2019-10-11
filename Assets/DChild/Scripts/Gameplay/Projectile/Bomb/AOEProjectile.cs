@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Projectiles
 
         public virtual void Detonate(Vector2 position)
         {
-            var explosion = (AOEExplosion)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_data.explosion);
+            var explosion = (AOEExplosion)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_data.impactFX);
             explosion.transform.parent = null;
             explosion.SpawnAt(position, Quaternion.identity);
             explosion.Detonate();
