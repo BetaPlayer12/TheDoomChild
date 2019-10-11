@@ -22,8 +22,9 @@ namespace DChild.Gameplay.Combat
         [ShowInInspector, HideInEditorMode, MinValue(0), OnValueChanged("ApplyDamageModification")]
         private int m_damageModifier;
 
-        private List<AttackDamage> m_currentDamage;
+        private bool m_isInstantiated;
 
+        private List<AttackDamage> m_currentDamage;
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
@@ -46,6 +47,12 @@ namespace DChild.Gameplay.Combat
         {
             m_info.damage.Clear();
             m_info.damage.AddRange(damage);
+            if (m_isInstantiated == false)
+            {
+                m_damageModifier = 1;
+                m_currentDamage = new List<AttackDamage>();
+                m_isInstantiated = true;
+            }
             ApplyDamageModification();
         }
 
@@ -59,6 +66,12 @@ namespace DChild.Gameplay.Combat
         {
             m_data = data;
             m_info.Copy(m_data.info);
+            if (m_isInstantiated == false)
+            {
+                m_damageModifier = 1;
+                m_currentDamage = new List<AttackDamage>();
+                m_isInstantiated = true;
+            }
             ApplyDamageModification();
         }
 
@@ -90,9 +103,13 @@ namespace DChild.Gameplay.Combat
                 m_info.Copy(m_data.info);
             }
 
-            m_currentDamage = new List<AttackDamage>();
-            m_damageModifier = 1;
-            ApplyDamageModification();
+            if (m_isInstantiated == false)
+            {
+                m_damageModifier = 1;
+                m_currentDamage = new List<AttackDamage>();
+                ApplyDamageModification();
+                m_isInstantiated = true;
+            }
         }
 
 
