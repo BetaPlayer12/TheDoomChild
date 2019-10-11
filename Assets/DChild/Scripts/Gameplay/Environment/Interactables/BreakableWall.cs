@@ -80,5 +80,10 @@ namespace DChild.Gameplay.Environment
         {
             m_hitsLeft = m_hitsToBeDestroyed;
         }
+
+        public void SetInvulnerability(bool isInvulnerable)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

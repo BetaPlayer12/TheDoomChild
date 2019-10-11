@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 189128793554471987}
   - component: {fileID: 189128793554471996}
   - component: {fileID: 189128793554471997}
+  - component: {fileID: 2613860799283880969}
   m_Layer: 13
   m_Name: TombSoulModel
   m_TagString: Untagged
@@ -114,6 +115,22 @@ MonoBehaviour:
   _animationName: Idle
   loop: 1
   timeScale: 1
+--- !u!58 &2613860799283880969
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189128793554471998}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.67076206}
+  serializedVersion: 2
+  m_Radius: 0.79286814
 --- !u!1 &3550174309921987883
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +142,7 @@ GameObject:
   - component: {fileID: 1392520476364437184}
   - component: {fileID: 5187765738929168357}
   - component: {fileID: 1497104962408133542}
+  - component: {fileID: 3640024213408394089}
   m_Layer: 13
   m_Name: Particle System
   m_TagString: Untagged
@@ -4867,6 +4885,18 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &3640024213408394089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3550174309921987883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70443ecacf099b2478b8834eeb630323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5388550555166296440
 GameObject:
   m_ObjectHideFlags: 0
@@ -4877,7 +4907,6 @@ GameObject:
   m_Component:
   - component: {fileID: 46373566477307442}
   - component: {fileID: 4506409131613948030}
-  - component: {fileID: 4110291829191729142}
   - component: {fileID: 4830289419269340229}
   - component: {fileID: 8405817451597907055}
   - component: {fileID: 6874876728721476125}
@@ -4930,22 +4959,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &4110291829191729142
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5388550555166296440}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.67076206}
-  serializedVersion: 2
-  m_Radius: 0.79286814
 --- !u!114 &4830289419269340229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5012,6 +5025,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_soulSpeed: 15
   m_riseSpeed: {x: 0.5, y: 2.5}
+  m_riseDuration: 0
 --- !u!210 &6489105750502369726
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -5052,6 +5066,7 @@ MonoBehaviour:
   m_poolableItemData: {fileID: 11400000, guid: 06f7b359b05abc541963c5e31709af0f, type: 2}
   m_waitForParticlesEnd: 1
   m_particleSystem: {fileID: 5187765738929168357}
+  m_particleCallback: {fileID: 3640024213408394089}
   m_model: {fileID: 189128793554471998}
   m_data: {fileID: 11400000, guid: 0a162a2190c99ea449d0e7261663ebdc, type: 2}
 --- !u!114 &1950725265138076823
@@ -5072,7 +5087,7 @@ MonoBehaviour:
     damage: []
     critChance: 0
     critDamageModifier: 1
-    ignoreInvulnerability: 0
+    ignoreInvulnerability: 1
 --- !u!114 &3355736592760050208
 MonoBehaviour:
   m_ObjectHideFlags: 0

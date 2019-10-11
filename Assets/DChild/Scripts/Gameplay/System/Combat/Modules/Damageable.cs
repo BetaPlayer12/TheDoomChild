@@ -73,10 +73,20 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public void SetInvulnerability(bool enable)
+        {
+            for (int i = 0; i < m_hitboxes.Length; i++)
+            {
+                m_hitboxes[i].SetInvulnerability(enable);
+            }
+        }
+
         private void Awake()
         {
             m_hitboxes = GetComponentsInChildren<Hitbox>();
             m_health.ResetValueToMax();
         }
+
+       
     }
 }
