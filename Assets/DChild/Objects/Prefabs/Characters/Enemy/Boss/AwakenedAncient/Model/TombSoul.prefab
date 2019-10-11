@@ -29,8 +29,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1392520476364437184}
+  m_Children: []
   m_Father: {fileID: 46373566477307442}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -140,12 +139,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3550174309921987883}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 189128793554471986}
-  m_RootOrder: 0
+  m_Father: {fileID: 46373566477307442}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &5187765738929168357
 ParticleSystem:
@@ -4881,10 +4880,12 @@ GameObject:
   - component: {fileID: 4110291829191729142}
   - component: {fileID: 4830289419269340229}
   - component: {fileID: 8405817451597907055}
-  - component: {fileID: 1419314278811709110}
   - component: {fileID: 6874876728721476125}
   - component: {fileID: 6489105750502369726}
   - component: {fileID: 5003271460732335313}
+  - component: {fileID: 915697652851830971}
+  - component: {fileID: 1950725265138076823}
+  - component: {fileID: 3355736592760050208}
   m_Layer: 14
   m_Name: TombSoul
   m_TagString: Untagged
@@ -4904,6 +4905,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children:
   - {fileID: 189128793554471986}
+  - {fileID: 1392520476364437184}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4941,9 +4943,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.67076206}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.79286814
 --- !u!114 &4830289419269340229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4996,23 +4998,6 @@ MonoBehaviour:
   m_linearDrag:
     m_x: 0
     m_y: 0
---- !u!114 &1419314278811709110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5388550555166296440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b15f432bfd3053343aab954121a38f7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 06f7b359b05abc541963c5e31709af0f, type: 2}
-  m_waitForParticlesEnd: 1
-  m_particleSystem: {fileID: 5187765738929168357}
-  m_model: {fileID: 3550174309921987883}
-  m_data: {fileID: 11400000, guid: 622e1935637f0c546ad3d2d28767015a, type: 2}
 --- !u!114 &6874876728721476125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5052,3 +5037,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animationTracks: []
   m_skeletonAnimation: {fileID: 189128793554471997}
+--- !u!114 &915697652851830971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5388550555166296440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: 06f7b359b05abc541963c5e31709af0f, type: 2}
+  m_waitForParticlesEnd: 1
+  m_particleSystem: {fileID: 5187765738929168357}
+  m_model: {fileID: 189128793554471998}
+  m_data: {fileID: 11400000, guid: 0a162a2190c99ea449d0e7261663ebdc, type: 2}
+--- !u!114 &1950725265138076823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5388550555166296440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 46373566477307442}
+  m_data: {fileID: 0}
+  m_info:
+    damage: []
+    critChance: 0
+    critDamageModifier: 1
+    ignoreInvulnerability: 0
+--- !u!114 &3355736592760050208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5388550555166296440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_ignoreColliderList: []
