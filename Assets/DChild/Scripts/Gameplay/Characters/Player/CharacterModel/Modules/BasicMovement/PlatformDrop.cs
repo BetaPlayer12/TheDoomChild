@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnLand(object sender, EventActionArgs eventArgs)
         {
-            Debug.Log("Reset behavior cast");
+            //Debug.Log("Reset behavior cast");
             ResetBehaviour();
         }
 

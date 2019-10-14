@@ -49,6 +49,7 @@ namespace Spine.Unity {
 		[SpineSlot(dataField: "skeletonRenderer", containsBoundingBoxes: true)]
 		public string slotName;
 		public bool isTrigger;
+        public bool usedByCompositeCollider;
 		public bool clearStateOnDisable = true;
 		#endregion
 
@@ -156,6 +157,7 @@ namespace Spine.Unity {
 						bbCollider.enabled = false;
 						bbCollider.hideFlags = HideFlags.NotEditable;
 						bbCollider.isTrigger = IsTrigger;
+						bbCollider.usedByComposite = usedByCompositeCollider;
 						colliderTable.Add(boundingBoxAttachment, bbCollider);
 						nameTable.Add(boundingBoxAttachment, skinKey);
 					}
