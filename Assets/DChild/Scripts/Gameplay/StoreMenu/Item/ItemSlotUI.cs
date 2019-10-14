@@ -1,5 +1,7 @@
 ﻿using DChild.Gameplay.Inventories;
+using DChild.Gameplay.Items;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,11 +20,16 @@ namespace DChild.Menu.Item
         private Button m_button;
         private Canvas m_canvas;
 
-        public ItemData item => m_slot.item;
+        public ItemData item => m_slot?.item ?? null;
 
         public void SetSlot(ItemSlot slot)
         {
+            if(m_slot != null)
+            {
+                m_slot.CountChange -= OnSlotInfoChange;
+            }
             m_slot = slot;
+            m_slot.CountChange += OnSlotInfoChange;
             m_info.SetInfo(m_slot);
         }
 
@@ -49,6 +56,11 @@ namespace DChild.Menu.Item
         public void Hide()
         {
             m_canvas.enabled = false;
+        }
+
+        private void OnSlotInfoChange(object sender, ItemSlot.InfoChangeEventArgs eventArgs)
+        {
+            m_info.SetCount(eventArgs.count);
         }
 
         private void UpdateInteractability()
