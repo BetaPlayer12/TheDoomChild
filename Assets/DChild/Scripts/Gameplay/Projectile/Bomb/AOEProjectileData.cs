@@ -6,21 +6,14 @@ namespace DChild.Gameplay.Projectiles
     [CreateAssetMenu(fileName = "AOEProjectileData", menuName = "DChild/Gameplay/AOE Projectile Data")]
     public class AOEProjectileData : ProjectileData
     {
-        [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
-        private GameObject m_explosion;
-
-        public GameObject explosion { get => m_explosion; }
-
-#if UNITY_EDITOR
-        private bool ValidateExplosion(GameObject newExplosion)
+        protected override bool ValidateExplosion(GameObject newExplosion)
         {
-            var hasAOEExplosion = m_explosion.GetComponent<AOEExplosion>() != null;
+            var hasAOEExplosion = m_impactFX.GetComponent<AOEExplosion>() != null;
             if (hasAOEExplosion == false)
             {
-                m_explosion = null;
+                m_impactFX = null;
             }
             return hasAOEExplosion;
         }
-#endif
     }
 }

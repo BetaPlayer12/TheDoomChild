@@ -117,5 +117,18 @@ namespace DChild.Gameplay.Characters.Players
             m_controller.Disable();
             m_damageable.SetHitboxActive(false);
         }
+
+#if UNITY_EDITOR
+        public void Initialize(GameObject character)
+        {
+            m_controlledCharacter = character.GetComponentInChildren<Character>();
+            m_state = character.GetComponentInChildren<CharacterState>();
+            m_damageable = character.GetComponentInChildren<Damageable>();
+            m_attacker = character.GetComponentInChildren<Attacker>();
+            m_magic = character.GetComponentInChildren<Magic>();
+            m_lootPicker = character.GetComponentInChildren<LootPicker>();
+            m_groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
+        }
+#endif
     }
 }

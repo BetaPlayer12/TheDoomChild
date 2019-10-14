@@ -9,7 +9,7 @@ using System.Linq;
 namespace DChild.Gameplay
 {
 
-    public abstract class CharacterPhysics2D : IsolatedPhysics2D
+    public abstract class CharacterPhysics2D : IsolatedPhysics2D 
     {
         [TabGroup("TabGroup", "Configuration")]
         [SerializeField, ToggleGroup("m_useCoyoteTime", "Coyote Time", GroupID = "TabGroup/Configuration/Coyote")]
@@ -39,6 +39,7 @@ namespace DChild.Gameplay
         private Vector2 m_moveAlongGround;
         [SerializeField, TabGroup("TabGroup", "References")]
         private LayerMask m_legColliderLayerMask;
+        private RaySensor m_slopeSensor;
 
         public Vector2 moveAlongGround => m_moveAlongGround;
         public bool onWalkableGround => m_onWalkableGround;
@@ -56,6 +57,7 @@ namespace DChild.Gameplay
 
         private void UseCoyoteTime()
         {
+           
             if (m_coyoteTime.isAvailable)
             {
                 m_onWalkableGround = true;
@@ -77,15 +79,18 @@ namespace DChild.Gameplay
         private void EvaluateGroundedness()
 
         {
-           
+            
+            //This is where all started 
             if (m_legColliderDetector != null && m_legColliderDetector.IsIntersecting(m_legCollider))
             {
+               
                 m_onWalkableGround = false;
                 m_inContactWithGround = false;
             }
-
+            
             if (m_legCollider.IsTouchingLayers(m_legColliderLayerMask) && velocity.y <= 0.1f)
             {
+              
                 m_inContactWithGround = true;
                 if (m_acceptableWalkableAngle.InRange(m_groundAngle))
                 {
@@ -117,6 +122,8 @@ namespace DChild.Gameplay
                     m_onWalkableGround = false;
                 }
             }
+           
+           
         }
 
         protected override void Awake()

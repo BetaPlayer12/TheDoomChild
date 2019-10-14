@@ -45,7 +45,7 @@ public class PlayerFootsteps : MonoBehaviour
         if (eventMatch)
         {
             PlayFootSteps();
-            Debug.Log("jogging");
+            
         }
     }
 

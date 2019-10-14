@@ -37,7 +37,7 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_patience;
             public float patience => m_patience;
 
-           
+
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
@@ -87,13 +87,6 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
-
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_wallSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_groundSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_edgeSensor;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -157,13 +150,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
         }
 
-        private  void OnFlinchHandle(object sender, EventActionArgs eventArgs)
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-           
-           
-            m_animation.SetAnimation(0, m_info.damageAnimation, true);
-          
+            m_animation.SetAnimation(0, m_info.damageAnimation, false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
 
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         public override void ApplyData()
@@ -178,7 +173,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_flinchHandle.FlinchStart += OnFlinchHandle;
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
 
@@ -201,15 +197,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
 
-
-         /*       case State.Flinch:
-                    Debug.Log("flinch check");
-                    m_movement.Stop();
-                    m_animation.SetAnimation(0, m_info.damageAnimation, true);
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                   
-                    break;
-                    */
                 case State.Patrol:
                     m_animation.EnableRootMotion(true, false);
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
@@ -219,9 +206,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                   
                     m_turnHandle.Execute();
                     break;
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
@@ -231,34 +218,22 @@ namespace DChild.Gameplay.Characters.Enemies
                     //Audio Play need changes
                     m_Audiosource.clip = m_AttackClip;
                     m_Audiosource.Play();
-                    
+
                     break;
                 case State.Chasing:
                     {
                         if (IsFacingTarget())
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            if (IsTargetInRange(m_info.attack.range))
                             {
-                                if (IsTargetInRange(m_info.attack.range))
-                                {
-                                    m_stateHandle.SetState(State.Attacking);
-                                }
-                                else
-                                {
-                                    var target = m_targetInfo.position;
-                                    target.y -= 0.5f;
-                                    m_animation.EnableRootMotion(true, false);
-                                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                                }
-
-                                
-
-
-                               
+                                m_stateHandle.SetState(State.Attacking);
                             }
                             else
                             {
-                                m_stateHandle.OverrideState(State.Idle);
+                                var target = m_targetInfo.position;
+                                target.y -= 0.5f;
+                                m_animation.EnableRootMotion(true, false);
+                                m_animation.SetAnimation(0, m_info.move.animation, true);
                             }
                         }
                         else
@@ -280,10 +255,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    //Debug.Log("Still wetting");
-                    //m_stateHandle.Wait(State.Attacking);
-                    //m_stateHandle.Set(State.Chasing);
-                    //m_stateHandle.ApplyQueuedState();
                     return;
             }
 
@@ -291,9 +262,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
-
-            m_wallSensor.transform.localScale = new Vector3(transform.localScale.x, m_wallSensor.transform.localScale.y, m_wallSensor.transform.localScale.z);
-            m_groundSensor.transform.localScale = new Vector3(transform.localScale.x, m_groundSensor.transform.localScale.y, m_groundSensor.transform.localScale.z);
         }
     }
 }

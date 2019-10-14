@@ -155,5 +155,17 @@ namespace DChild.Gameplay.Characters.Players
             m_attackResistance.ResistanceChange += OnAttackResistanceChange;
             m_statusResistance.ResistanceChange += OnStatusResistanceChange;
         }
+
+#if UNITY_EDITOR
+        public void Initialize(GameObject character)
+        {
+            m_health = character.GetComponentInChildren<Health>();
+            m_magic = character.GetComponentInChildren<Magic>();
+            m_attacker = character.GetComponentInChildren<Attacker>();
+            m_statusInflictor = character.GetComponentInChildren<StatusInflictor>();
+            m_modelAttackResistance = character.GetComponentInChildren<AttackResistance>();
+            m_modelStatusResistance = character.GetComponentInChildren<StatusEffectResistance>();
+        }
+#endif
     }
 }

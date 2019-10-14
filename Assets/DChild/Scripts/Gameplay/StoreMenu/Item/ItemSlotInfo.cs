@@ -43,6 +43,8 @@ namespace DChild.Menu.Item
             m_countText.text = slot.count.ToString();
         }
 
+        public void SetCount(int count) => m_countText.text = count.ToString();
+
         private void Awake()
         {
             m_canvas = GetComponent<Canvas>();

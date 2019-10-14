@@ -8,5 +8,10 @@ namespace DChild
         {
             GameSystem.SetCamera(GetComponent<Camera>());
         }
+
+        private void nDestroy()
+        {
+            GameSystem.SetCamera(null);
+        }
     }
 }
