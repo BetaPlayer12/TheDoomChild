@@ -84,8 +84,8 @@ namespace DChild.Gameplay.Projectiles
         {
             m_physics = GetComponent<IsolatedPhysics2D>();
             m_isolatedPhysicsTime = GetComponent<IIsolatedPhysicsTime>();
-            var physics = GetComponent<IsolatedPhysics2D>();
             m_waitForParticlesEnd = m_particleSystem;
+            GetComponent<Attacker>().SetDamage(projectileData.damage);
         }
     }
 }

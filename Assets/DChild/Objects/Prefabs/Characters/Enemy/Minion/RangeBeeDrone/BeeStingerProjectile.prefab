@@ -13,8 +13,10 @@ GameObject:
   - component: {fileID: 7564754125234175428}
   - component: {fileID: 5176114270350802891}
   - component: {fileID: 8975454111994530234}
-  - component: {fileID: 7191955573105978215}
   - component: {fileID: 7690820384792762685}
+  - component: {fileID: 3820910696329335870}
+  - component: {fileID: 1889599794523640436}
+  - component: {fileID: 1254180077942953299}
   m_Layer: 13
   m_Name: BeeStingerProjectile
   m_TagString: Untagged
@@ -120,23 +122,6 @@ MonoBehaviour:
   m_linearDrag:
     m_x: 0
     m_y: 0
---- !u!114 &7191955573105978215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 56097758616331937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b15f432bfd3053343aab954121a38f7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 0463c9a3fe2d4f345b56bb3a2ea1b7d1, type: 2}
-  m_waitForParticlesEnd: 1
-  m_particleSystem: {fileID: 535781202714739595}
-  m_model: {fileID: 56097758616331937}
-  m_data: {fileID: 11400000, guid: 30308a744a819f94d9ab6b64b173c4d1, type: 2}
 --- !u!60 &7690820384792762685
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -147,7 +132,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -165,6 +150,56 @@ PolygonCollider2D:
     - - {x: -0.05, y: -0.06}
       - {x: 0.15, y: 0}
       - {x: -0.05, y: 0.06}
+--- !u!114 &3820910696329335870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56097758616331937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: 0463c9a3fe2d4f345b56bb3a2ea1b7d1, type: 2}
+  m_waitForParticlesEnd: 0
+  m_particleSystem: {fileID: 0}
+  m_model: {fileID: 0}
+  m_data: {fileID: 11400000, guid: 180299995f418714d85ba602df799254, type: 2}
+--- !u!114 &1889599794523640436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56097758616331937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 7249804826797229116}
+  m_data: {fileID: 0}
+  m_info:
+    damage: []
+    critChance: 0
+    critDamageModifier: 1
+    ignoreInvulnerability: 0
+--- !u!114 &1254180077942953299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56097758616331937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_ignoreColliderList: []
 --- !u!1 &1171558346941368067
 GameObject:
   m_ObjectHideFlags: 0
