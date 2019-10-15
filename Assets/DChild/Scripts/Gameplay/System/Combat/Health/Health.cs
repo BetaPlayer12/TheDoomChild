@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Combat
             m_currentHealth = Mathf.CeilToInt(m_percentHealth * maxValue);
         }
 
-        public void ReduceCurrentValue(int damage)
+        public virtual void ReduceCurrentValue(int damage)
         {
             m_currentHealth -= damage;
             if (m_currentHealth <= 0)
