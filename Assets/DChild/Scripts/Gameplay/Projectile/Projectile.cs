@@ -102,7 +102,6 @@ namespace DChild.Gameplay.Projectiles
             {
                 m_particleCallback.CallBack += OnCallback;
             }
-            GetComponent<Attacker>().SetDamage(projectileData.damage);
         }
     }
 }

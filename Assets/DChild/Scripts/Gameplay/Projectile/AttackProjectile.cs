@@ -55,6 +55,12 @@ namespace DChild.Gameplay.Projectiles
             }
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+            GetComponent<Attacker>().SetDamage(projectileData.damage);
+        }
+
         private void OnValidate()
         {
             if (m_data != null)
