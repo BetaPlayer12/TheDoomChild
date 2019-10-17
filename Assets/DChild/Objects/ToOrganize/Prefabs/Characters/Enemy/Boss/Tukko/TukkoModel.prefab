@@ -164,6 +164,7 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 8901287275915368455}
   slotName: stab_combo_bb1
   isTrigger: 1
+  usedByCompositeCollider: 0
   clearStateOnDisable: 1
 --- !u!114 &7195097734225004311
 MonoBehaviour:
@@ -349,6 +350,7 @@ CompositeCollider2D:
       - {x: -1.1730804, y: 4.476154}
       - {x: 1.7404174, y: 3.0307446}
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.000005
 --- !u!1 &4078222925652526426
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,6 +546,7 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 8901287275915368455}
   slotName: stab_combo_bb3
   isTrigger: 1
+  usedByCompositeCollider: 0
   clearStateOnDisable: 1
 --- !u!114 &155748232349174922
 MonoBehaviour:
@@ -642,6 +645,7 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 8901287275915368455}
   slotName: Stab_bb
   isTrigger: 1
+  usedByCompositeCollider: 0
   clearStateOnDisable: 1
 --- !u!114 &2164722409278434198
 MonoBehaviour:
@@ -756,7 +760,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2b460ff13f01dc54fa8a1ea171d66bbc, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -764,6 +768,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -788,7 +793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 01ca8736020f70d4e99fb9b2b8b9f288, type: 2}
+  skeletonDataAsset: {fileID: 0}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
@@ -802,8 +807,12 @@ MonoBehaviour:
   singleSubmesh: 0
   addNormals: 0
   calculateTangents: 0
+  maskInteraction: 0
+  maskMaterials:
+    materialsMaskDisabled: []
+    materialsInsideMask: []
+    materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  m_flipX: 0
   _animationName: Attack5_Jab
   loop: 1
   timeScale: 1
@@ -886,6 +895,7 @@ MonoBehaviour:
   skeletonRenderer: {fileID: 8901287275915368455}
   slotName: stab_combo_bb2
   isTrigger: 1
+  usedByCompositeCollider: 0
   clearStateOnDisable: 1
 --- !u!114 &3789307468394507343
 MonoBehaviour:
@@ -1854,6 +1864,7 @@ CompositeCollider2D:
       - {x: 0.9133046, y: -1.6167393}
       - {x: 1.821062, y: -1.6845595}
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.000005
 --- !u!114 &5983637617120365619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1885,7 +1896,6 @@ MonoBehaviour:
   - {fileID: 5983637617751578581}
   - {fileID: 5983637617329025992}
   - {fileID: 5983637616418791854}
-  m_compositeColliderID: -80206
   m_isInvulnerable: 0
   m_damageReduction: 0
 --- !u!114 &5983637617120365616
@@ -1900,6 +1910,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_ignoreColliderList: []
 --- !u!1 &5983637617268642100
 GameObject:
   m_ObjectHideFlags: 0
@@ -2925,16 +2937,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_count: 0
-    m_castDistance: 0
-    m_castWidth: 0
+    m_config: {fileID: 0}
     m_rayColor: {r: 0, g: 0, b: 0, a: 0}
-    m_initializeCastConfig: 0
-    m_mask:
-      serializedVersion: 2
-      m_Bits: 0
-    m_ignoreTrigger: 0
-    m_offsets: []
   m_enable: 1
 --- !u!114 &4506479246515578731
 MonoBehaviour:
