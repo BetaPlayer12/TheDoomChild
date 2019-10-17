@@ -51,7 +51,7 @@ namespace DChild.Menu.Bestiary
                     m_name = databaseName;
                     var fileName = m_name.Replace(" ", string.Empty);
                     fileName += "Data";
-                    //FileUtility.RenameAsset(this, assetPath, fileName);
+                    FileUtility.RenameAsset(this, assetPath, fileName);
                 }
                 connection.Close();
             }

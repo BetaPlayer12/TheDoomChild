@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using DChild.Menu.Bestiary;
 using DChild.Gameplay.Characters.Players.SoulSkills;
+using System;
 
 namespace DChild.Serialization
 {
@@ -27,9 +28,9 @@ namespace DChild.Serialization
 
 
 #if UNITY_EDITOR
-        [SerializeField, BoxGroup("Debug")]
+        [NonSerialized,ShowInInspector, BoxGroup("Debug")]
         private BestiaryList m_bestiaryList;
-        [SerializeField, BoxGroup("Debug")]
+        [NonSerialized,ShowInInspector, BoxGroup("Debug")]
         private SoulSkillList m_soulSkillList;
 
         [Button, BoxGroup("Debug")]

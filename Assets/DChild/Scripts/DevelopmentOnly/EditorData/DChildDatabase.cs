@@ -244,6 +244,11 @@ namespace DChild
                 m_connection.ExecuteCommand($"UPDATE Bestiary SET ID = {ID} WHERE Name = \"{reference}\"");
             }
 
+            public void UpdateID(int reference, int ID)
+            {
+                m_connection.ExecuteCommand($"UPDATE Bestiary SET ID = {ID} WHERE ID = {reference}");
+            }
+
             public void Insert(int ID, string name, string description)
             {
                 var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
