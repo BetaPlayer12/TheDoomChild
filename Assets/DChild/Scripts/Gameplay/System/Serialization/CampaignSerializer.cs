@@ -38,6 +38,7 @@ namespace DChild.Gameplay
         [Button]
         public void Save()
         {
+            m_eventArgs.Set(m_slot);
             PreSerialization?.Invoke(this, m_eventArgs);
             SerializationHandle.Save(m_slot.id, m_slot);
         }
@@ -46,6 +47,7 @@ namespace DChild.Gameplay
         public void Load()
         {
             SerializationHandle.Load(m_slot.id, ref m_slot);
+            m_eventArgs.Set(m_slot);
             PostDeserialization?.Invoke(this, m_eventArgs);
         }
 

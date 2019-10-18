@@ -26,7 +26,8 @@ namespace DChild.Gameplay.Characters.Players
             var bestiaryProgressData = m_bestiaryProgress.SaveData();
             var primarySkillsData = m_playerSkills.SaveData();
             var soulSkillAcquisitionData = m_soulSkillAcquisitionList.SaveData();
-            return new PlayerCharacterData();
+            return new PlayerCharacterData(bestiaryProgressData,primarySkillsData,soulSkillAcquisitionData, m_soulSkillHandle.SaveData())
+                ;
         }
 
         public void LoadData(PlayerCharacterData data)

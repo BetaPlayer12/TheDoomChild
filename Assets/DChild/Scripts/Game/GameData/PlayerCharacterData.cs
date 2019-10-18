@@ -26,12 +26,20 @@ namespace DChild.Serialization
         public AcquisitionData soulSkillAcquisitionData { get => m_soulSkillAcquisitionData; }
         public EquippedSoulSkillData equippedSoulSkillData { get => m_equippedSoulSkillData; }
 
+        public PlayerCharacterData(AcquisitionData m_bestiaryProgressData, PrimarySkillsData m_skills, AcquisitionData m_soulSkillAcquisitionData, EquippedSoulSkillData m_equippedSoulSkillData)
+        {
+            this.m_bestiaryProgressData = m_bestiaryProgressData;
+            this.m_skills = m_skills;
+            this.m_soulSkillAcquisitionData = m_soulSkillAcquisitionData;
+            this.m_equippedSoulSkillData = m_equippedSoulSkillData;
+        }
 
 #if UNITY_EDITOR
         [NonSerialized,ShowInInspector, BoxGroup("Debug")]
         private BestiaryList m_bestiaryList;
         [NonSerialized,ShowInInspector, BoxGroup("Debug")]
         private SoulSkillList m_soulSkillList;
+
 
         [Button, BoxGroup("Debug")]
         private void Initialize()
