@@ -44,6 +44,17 @@ namespace DChild.Serialization
             m_duration = new TimeKeeper();
         }
 
+        public CampaignSlot()
+        {
+            this.m_id = 0;
+            m_newGame = true;
+            m_location = Location.None;
+            m_completion = 0;
+            m_duration = new TimeKeeper();
+            m_characterData = new PlayerCharacterData();
+            m_zoneDataList = new ZoneDataList();
+        }
+
         public int id => m_id;
         public bool demoGame => m_demoGame;
         public bool newGame => m_newGame;

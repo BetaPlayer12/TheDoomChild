@@ -2,6 +2,7 @@
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -16,9 +17,9 @@ namespace DChild.Gameplay
         }
     }
 
-    public class CampaignSerializer : MonoBehaviour, IGameplaySystemModule, IGameplayInitializable
+    public class CampaignSerializer : SerializedMonoBehaviour, IGameplaySystemModule, IGameplayInitializable
     {
-        [SerializeField]
+        [OdinSerialize]
         private CampaignSlot m_slot;
 
         private CampaignSlotUpdateEventArgs m_eventArgs;

@@ -34,6 +34,14 @@ namespace DChild.Serialization
             this.m_equippedSoulSkillData = m_equippedSoulSkillData;
         }
 
+        public PlayerCharacterData()
+        {
+            m_bestiaryProgressData = new AcquisitionData();
+            m_skills = new PrimarySkillsData();
+            m_soulSkillAcquisitionData = new AcquisitionData();
+            m_equippedSoulSkillData = new EquippedSoulSkillData();
+        }
+
 #if UNITY_EDITOR
         [NonSerialized,ShowInInspector, BoxGroup("Debug")]
         private BestiaryList m_bestiaryList;
