@@ -15,124 +15,147 @@ using Anima2D;
 
 namespace UnityChan
 {
-	[RequireComponent(typeof(Bone2D))]
-	public class SpringBone : MonoBehaviour
-	{
-		public float radius = 0.05f;
+    [RequireComponent(typeof(Bone2D))]
+    public class SpringBone : MonoBehaviour
+    {
+        public float radius = 0.05f;
 
-		//各SpringBoneに設定されているstiffnessForceとdragForceを使用するか？
-		public bool isUseEachBoneForceSettings = false; 
+        //各SpringBoneに設定されているstiffnessForceとdragForceを使用するか？
+        public bool isUseEachBoneForceSettings = false;
 
-		//バネが戻る力
-		public float stiffnessForce = 0.01f;
+        //バネが戻る力
+        public float stiffnessForce = 0.01f;
 
-		//力の減衰力
-		public float dragForce = 0.4f;
-		public Vector3 springForce = new Vector3 (0.0f, -0.0001f, 0.0f);
-		public SpringCollider[] colliders;
+        //力の減衰力
+        public float dragForce = 0.4f;
+        public Vector3 springForce = new Vector3(0.0f, -0.0001f, 0.0f);
+        public SpringCollider[] colliders;
 
-		//Kobayashi:Thredshold Starting to activate activeRatio
-		public float threshold = 0.01f;
+        //Kobayashi:Thredshold Starting to activate activeRatio
+        public float threshold = 0.01f;
 
-		public bool isAnimated = false;
+        public bool isAnimated = false;
 
-		private float springLength;
-		private Quaternion localRotation;
-		private Transform trs;
-		private Vector3 currTipPos;
-		private Vector3 prevTipPos;
-		//Kobayashi
-		private Transform org;
-		//Kobayashi:Reference for "SpringManager" component with unitychan 
-		private SpringManager managerRef;
+        private float springLength;
+        private Quaternion localRotation;
+        private Transform trs;
+        private Vector3 currTipPos;
+        private Vector3 prevTipPos;
+        //Kobayashi
+        private Transform org;
+        //Kobayashi:Reference for "SpringManager" component with unitychan 
+        private SpringManager managerRef;
 
-		private Bone2D m_Bone;
+        private float m_originalScaleSign;
+        private Vector3 m_previousSpringForce;
+        private float m_previousScaleSign;
 
-		private void Awake ()
-		{
-			m_Bone = GetComponent<Bone2D>();
+        private Bone2D m_Bone;
 
-			trs = transform;
-			localRotation = transform.localRotation;
-			//Kobayashi:Reference for "SpringManager" component with unitychan
-			// GameObject.Find("unitychan_dynamic").GetComponent<SpringManager>();
-			managerRef = GetParentSpringManager (transform);
-		}
+        private void Awake()
+        {
+            m_Bone = GetComponent<Bone2D>();
 
-		private SpringManager GetParentSpringManager (Transform t)
-		{
-			var springManager = t.GetComponent<SpringManager> ();
+            trs = transform;
+            localRotation = transform.localRotation;
+            //Kobayashi:Reference for "SpringManager" component with unitychan
+            // GameObject.Find("unitychan_dynamic").GetComponent<SpringManager>();
+            managerRef = GetParentSpringManager(transform);
+            m_originalScaleSign = managerRef.m_followThisTransformScaleX.localScale.x >= 0 ? 1 : -1;
+            m_previousScaleSign = m_originalScaleSign;
+            m_previousSpringForce = springForce;
 
-			if (springManager != null)
-				return springManager;
+        }
 
-			if (t.parent != null) {
-				return GetParentSpringManager (t.parent);
-			}
+        private SpringManager GetParentSpringManager(Transform t)
+        {
+            var springManager = t.GetComponent<SpringManager>();
 
-			return null;
-		}
+            if (springManager != null)
+                return springManager;
 
-		private void Start ()
-		{
-			springLength = Vector3.Distance (trs.position, m_Bone.endPosition);
-			currTipPos = m_Bone.endPosition;
-			prevTipPos = m_Bone.endPosition;
-		}
+            if (t.parent != null)
+            {
+                return GetParentSpringManager(t.parent);
+            }
 
-		public void UpdateSpring (float scaleX)
-		{
-			//Kobayashi
-			org = trs;
-			//回転をリセット
-			if(!isAnimated)
-			{
-				trs.localRotation = Quaternion.identity * localRotation;
-			}
+            return null;
+        }
 
-			float sqrDt = Time.deltaTime * Time.deltaTime;
+        private void Start()
+        {
+            springLength = Vector3.Distance(trs.position, m_Bone.endPosition);
+            currTipPos = m_Bone.endPosition;
+            prevTipPos = m_Bone.endPosition;
+        }
 
-			//stiffness
-			Vector3 force = trs.rotation * (Vector3.right * stiffnessForce) / sqrDt;
+        public void UpdateSpring(float scaleX)
+        {
+            var scaleSign = scaleX >= 0 ? 1 : -1;
+            var currentScaleSign = scaleSign == m_originalScaleSign ? 1 : -1;
+            if (currentScaleSign != m_previousScaleSign)
+            {
+                m_previousScaleSign = currentScaleSign;
+                springForce.x *= springForce == m_previousSpringForce ? -1 : currentScaleSign;
+                m_previousSpringForce = springForce;
+            }
+            else if(springForce != m_previousSpringForce)
+            {
+                springForce.x *= currentScaleSign;
+                m_previousSpringForce = springForce;
+            }
 
-            //for turning character
-            force *= scaleX;
+            //Kobayashi
+            org = trs;
+            //回転をリセット
+            if (!isAnimated)
+            {
+                trs.localRotation = Quaternion.identity * localRotation;
+            }
+
+            float sqrDt = Time.deltaTime * Time.deltaTime;
+
+            //stiffness
+            Vector3 force = trs.rotation * (Vector3.right * (stiffnessForce * managerRef.transform.localScale.x)) / sqrDt;
+
 
             //drag
             force += (prevTipPos - currTipPos) * dragForce / sqrDt;
 
-			force += springForce / sqrDt;
+            force += springForce / sqrDt;
 
-			//前フレームと値が同じにならないように
-			Vector3 temp = currTipPos;
+            //前フレームと値が同じにならないように
+            Vector3 temp = currTipPos;
 
-			//verlet
-			currTipPos = (currTipPos - prevTipPos) + currTipPos + (force * sqrDt);
+            //verlet
+            currTipPos = (currTipPos - prevTipPos) + currTipPos + (force * sqrDt);
 
-			//長さを元に戻す
-			currTipPos = ((currTipPos - trs.position).normalized * springLength) + trs.position;
+            //長さを元に戻す
+            currTipPos = ((currTipPos - trs.position).normalized * springLength) + trs.position;
 
-			//衝突判定
-			for (int i = 0; i < colliders.Length; i++) {
-				if (Vector3.Distance (currTipPos, colliders [i].transform.position) <= (radius + colliders [i].radius)) {
-					Vector3 normal = (currTipPos - colliders [i].transform.position).normalized;
-					currTipPos = colliders [i].transform.position + (normal * (radius + colliders [i].radius));
-					currTipPos = ((currTipPos - trs.position).normalized * springLength) + trs.position;
-				}
+            //衝突判定
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (Vector3.Distance(currTipPos, colliders[i].transform.position) <= (radius + colliders[i].radius))
+                {
+                    Vector3 normal = (currTipPos - colliders[i].transform.position).normalized;
+                    currTipPos = colliders[i].transform.position + (normal * (radius + colliders[i].radius));
+                    currTipPos = ((currTipPos - trs.position).normalized * springLength) + trs.position;
+                }
 
 
-			}
+            }
 
-			prevTipPos = temp;
+            prevTipPos = temp;
 
-			//回転を適用；
-			Vector3 aimVector = trs.TransformDirection (Vector3.right);
-			Quaternion aimRotation = Quaternion.FromToRotation (aimVector, currTipPos - trs.position);
-			//original
-			//trs.rotation = aimRotation * trs.rotation;
-			//Kobayahsi:Lerp with mixWeight
-			Quaternion secondaryRotation = aimRotation * trs.rotation;
-			trs.rotation = Quaternion.Lerp (org.rotation, secondaryRotation, managerRef.dynamicRatio);
-		}
-	}
+            //回転を適用；
+            Vector3 aimVector = trs.TransformDirection(Vector3.right);
+            Quaternion aimRotation = Quaternion.FromToRotation(aimVector, currTipPos - trs.position);
+            //original
+            //trs.rotation = aimRotation * trs.rotation;
+            //Kobayahsi:Lerp with mixWeight
+            Quaternion secondaryRotation = aimRotation * trs.rotation;
+            trs.rotation = Quaternion.Lerp(org.rotation, secondaryRotation, managerRef.dynamicRatio);
+        }
+    }
 }
