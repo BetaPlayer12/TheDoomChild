@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-
     public class CampaignSlotUpdateEventArgs : IEventActionArgs
     {
         public CampaignSlot slot { get; private set; }

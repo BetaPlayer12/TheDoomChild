@@ -2,6 +2,7 @@
 
 namespace DChild.Serialization
 {
+
     [System.Serializable]
     public struct SerializedVector2
     {

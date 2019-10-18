@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Holysoft.Collections;
 using DChild.Gameplay.Environment;
+using UnityEditor;
 
 namespace DChild.Serialization
 {
@@ -31,6 +32,8 @@ namespace DChild.Serialization
 
         [SerializeField, HideIf("m_newGame")]
         private PlayerCharacterData m_characterData;
+        [SerializeField]
+        private ZoneDataList m_zoneDataList;
 
         public CampaignSlot(int m_id)
         {
@@ -78,10 +81,9 @@ namespace DChild.Serialization
 
         }
 
-        public void UpdateZoneData(int zoneID /*zoneData*/)
-        {
+        public void UpdateZoneData(ZoneDataID ID, IZoneSaveData saveData) => m_zoneDataList.UpdateZoneData(ID, saveData);
 
-        }
+        public T GetZoneData<T>(ZoneDataID ID) where T : IZoneSaveData => (T)m_zoneDataList.GetZoneData(ID);
 
 #if UNITY_EDITOR
         public void SetID(int ID)
