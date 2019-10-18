@@ -64,11 +64,6 @@ namespace DChild.Gameplay.Characters.Players
 
         public void LoadData(AcquisitionData saveData)
         {
-            foreach (var key in m_soulSkills.Keys)
-            {
-                m_soulSkills[key] = false;
-            }
-
             var size = saveData.count;
             for (int i = 0; i < size; i++)
             {

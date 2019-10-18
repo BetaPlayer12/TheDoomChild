@@ -18,7 +18,7 @@ namespace DChild
         protected int[] m_IDs;
 
         public int Count => m_IDs.Length;
-        public T GetInfo(int ID) => m_list[ID];
+        public T GetInfo(int ID) => m_list.ContainsKey(ID) ? m_list[ID] : null;
         public int[] GetIDs() => m_IDs;
 
 #if UNITY_EDITOR

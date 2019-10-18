@@ -3,6 +3,7 @@ using DChild.Serialization;
 using DChild.Gameplay.Characters.Players;
 using System.Collections.Generic;
 using UnityEngine;
+using DChild.Gameplay.Characters.Players.SoulSkills;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -25,7 +26,8 @@ namespace DChild.Gameplay.Characters.Players
             var bestiaryProgressData = m_bestiaryProgress.SaveData();
             var primarySkillsData = m_playerSkills.SaveData();
             var soulSkillAcquisitionData = m_soulSkillAcquisitionList.SaveData();
-            return new PlayerCharacterData();
+            return new PlayerCharacterData(bestiaryProgressData,primarySkillsData,soulSkillAcquisitionData, m_soulSkillHandle.SaveData())
+                ;
         }
 
         public void LoadData(PlayerCharacterData data)
@@ -34,6 +36,15 @@ namespace DChild.Gameplay.Characters.Players
             m_playerSkills.LoadData(data.skills);
             m_soulSkillAcquisitionList.LoadData(data.soulSkillAcquisitionData);
             m_soulSkillHandle.ClearAllSlots();
+            m_soulSkillHandle.AttachSkill(GetSoulSkillFromList(data.equippedSoulSkillData.armorSkill));
+            m_soulSkillHandle.AttachSkill(GetSoulSkillFromList(data.equippedSoulSkillData.supportSkill));
+            m_soulSkillHandle.AttachSkill(GetSoulSkillFromList(data.equippedSoulSkillData.weaponSkill1),0);
+            m_soulSkillHandle.AttachSkill(GetSoulSkillFromList(data.equippedSoulSkillData.weaponSkill2),0);
+        }
+
+       private SoulSkill GetSoulSkillFromList(int ID)
+        {
+            return m_soulSkillAcquisitionList.list.GetInfo(ID);
         }
     }
 }

@@ -4,28 +4,36 @@ using UnityEngine;
 using System;
 using Holysoft.Collections;
 using DChild.Gameplay.Environment;
+using UnityEditor;
 
 namespace DChild.Serialization
 {
     [System.Serializable]
     public class CampaignSlot
     {
-        [SerializeField, ReadOnly]
+        [SerializeField, ReadOnly, BoxGroup("Slot Info")]
         private int m_id;
-        [SerializeField, OnValueChanged("OnNewGameChange")]
+        [SerializeField, OnValueChanged("OnNewGameChange"), BoxGroup("Slot Info")]
         private bool m_demoGame;
-        [SerializeField, OnValueChanged("OnNewGameChange")]
+        [SerializeField, OnValueChanged("OnNewGameChange"), BoxGroup("Slot Info")]
         private bool m_newGame;
-        [SerializeField]
+        [SerializeField, BoxGroup("Slot Info")]
         private SceneInfo m_sceneToLoad;
-        [SerializeField, HideIf("m_newGame")]
+        [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info")]
         private Location m_location;
-        [SerializeField, HideIf("m_newGame"), MinValue(0)]
+        [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info")]
+        private SerializedVector2 m_spawnPosition;
+        [SerializeField, HideIf("m_newGame"), MinValue(0), BoxGroup("Slot Info")]
         private int m_completion;
-        [SerializeField, HideIf("m_newGame")]
+        [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info")]
         private TimeKeeper m_duration;
+
+
+
         [SerializeField, HideIf("m_newGame")]
         private PlayerCharacterData m_characterData;
+        [SerializeField]
+        private ZoneDataList m_zoneDataList;
 
         public CampaignSlot(int m_id)
         {
@@ -44,6 +52,10 @@ namespace DChild.Serialization
         public int completion => m_completion;
         public TimeKeeper duration => m_duration;
 
+        public Vector2 spawnPosition { get => m_spawnPosition;}
+        public PlayerCharacterData characterData => m_characterData;
+
+
         public void Reset()
         {
             m_newGame = true;
@@ -51,6 +63,27 @@ namespace DChild.Serialization
             m_completion = 0;
             m_duration = new TimeKeeper();
         }
+
+        public void UpdateLocation(SceneInfo scene, Location location, Vector2 spawnPosition)
+        {
+            m_sceneToLoad = scene;
+            m_location = location;
+            m_spawnPosition = spawnPosition;
+        }
+
+        public void UpdateCharacterData(PlayerCharacterData data)
+        {
+            m_characterData = data;
+        }
+
+        public void UpdateCampaignProgress()
+        {
+
+        }
+
+        public void UpdateZoneData(ZoneDataID ID, IZoneSaveData saveData) => m_zoneDataList.UpdateZoneData(ID, saveData);
+
+        public T GetZoneData<T>(ZoneDataID ID) where T : IZoneSaveData => (T)m_zoneDataList.GetZoneData(ID);
 
 #if UNITY_EDITOR
         public void SetID(int ID)
@@ -67,5 +100,4 @@ namespace DChild.Serialization
         }
 #endif
     }
-
 }
