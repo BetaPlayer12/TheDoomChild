@@ -100,6 +100,11 @@ namespace DChild.Gameplay.Characters.Players
             m_serializer.LoadData(data);
         }
 
+        public void SetPosition(Vector2 position)
+        {
+            m_controlledCharacter.transform.position = position;
+        }
+
         private void Awake()
         {
             var controlledObject = m_controlledCharacter.gameObject.AddComponent<PlayerControlledObject>();

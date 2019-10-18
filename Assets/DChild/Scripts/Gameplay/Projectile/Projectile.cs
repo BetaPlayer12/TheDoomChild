@@ -26,7 +26,6 @@ namespace DChild.Gameplay.Projectiles
         private GameObject m_model;
 
         protected IsolatedPhysics2D m_physics;
-        private IIsolatedPhysicsTime m_isolatedPhysicsTime;
         public event EventAction<EventActionArgs> Impacted;
 
         protected void CallImpactedEvent()
@@ -59,6 +58,12 @@ namespace DChild.Gameplay.Projectiles
             transform.right = m_physics.velocity.normalized;
         }
 
+        public override void SpawnAt(Vector2 position, Quaternion rotation)
+        {
+            base.SpawnAt(position, rotation);
+            ResetState();
+        }
+
         protected void UnloadProjectile()
         {
             if (m_particleSystem == null)
@@ -68,7 +73,7 @@ namespace DChild.Gameplay.Projectiles
             else
             {
                 m_model?.SetActive(false);
-                m_particleSystem.Stop();
+                m_particleSystem?.Stop();
             }
         }
 
@@ -92,13 +97,11 @@ namespace DChild.Gameplay.Projectiles
         protected virtual void Awake()
         {
             m_physics = GetComponent<IsolatedPhysics2D>();
-            m_isolatedPhysicsTime = GetComponent<IIsolatedPhysicsTime>();
             m_waitForParticlesEnd = m_particleSystem;
             if (m_particleCallback)
             {
                 m_particleCallback.CallBack += OnCallback;
             }
-            GetComponent<Attacker>().SetDamage(projectileData.damage);
         }
     }
 }

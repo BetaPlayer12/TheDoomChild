@@ -30,6 +30,12 @@ namespace Holysoft.Collections
 #endif
         }
 
+        public SceneInfo(Scene scene)
+        {
+            m_sceneName = scene.name;
+            m_scenePath = scene.path;
+        }
+
         public void Set(Scene scene)
         {
             m_sceneName = scene.name;

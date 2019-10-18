@@ -1,19 +1,11 @@
 ﻿using DChild.Configurations;
-using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Databases;
-using DChild.Gameplay.Pooling;
-using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
-using DChild.Inputs;
 using DChild.Serialization;
-using Holysoft.Gameplay.UI;
-using Sirenix.OdinInspector;
-using System;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -39,12 +31,14 @@ namespace DChild.Gameplay
         private static PlayerManager m_playerManager;
         private static LootHandler m_lootHandler;
         private static GameplayModifiers m_modifiers;
+        private static CampaignSerializer m_campaignSerializer;
         private static ZoneMoverHandle m_zoneMover;
 
         private static GameplaySystem m_instance;
+        private static CampaignSlot m_campaignToLoad;
+
 
         public static ICombatManager combatManager => m_combatManager;
-
         public static IFXManager fXManager => m_fxManager;
         public static IDatabaseManager databaseManager => m_databaseManager;
         public static ICinema cinema => m_cinema;
@@ -54,6 +48,7 @@ namespace DChild.Gameplay
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
         public static GameplayModifiers modifiers { get => m_modifiers; }
+        public static CampaignSerializer campaignSerializer { get => m_campaignSerializer; }
 
         public static bool isGamePaused { get; private set; }
 
@@ -96,17 +91,12 @@ namespace DChild.Gameplay
 
         public static void LoadGame(CampaignSlot campaignSlot)
         {
-            //Load data for the thing
+            m_campaignToLoad = campaignSlot;
         }
 
         public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
         {
             m_zoneMover.MoveCharacterToLocation(character, location, entranceType);
-        }
-
-        public static CampaignSlot SaveGame()
-        {
-            return null;
         }
 
         private void AssignModules()
@@ -120,6 +110,7 @@ namespace DChild.Gameplay
             AssignModule(out m_simulation);
             AssignModule(out m_playerManager);
             AssignModule(out m_zoneMover);
+            AssignModule(out m_campaignSerializer);
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
@@ -155,6 +146,11 @@ namespace DChild.Gameplay
             m_settings = GameSystem.settings?.gameplay ?? null;
             m_modifiers = new GameplayModifiers();
             isGamePaused = true;
+            if (m_campaignToLoad != null)
+            {
+                m_campaignSerializer.SetSlot(m_campaignToLoad);
+                m_campaignToLoad = null;
+            }
         }
 
         private void OnEnable()

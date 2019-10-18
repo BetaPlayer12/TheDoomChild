@@ -126,11 +126,10 @@ namespace DChild.Gameplay
             damageable.SetHitboxActive(true);
             GameplaySystem.playerManager.StopCharacterControlOverride();
         }
+
         private void Awake()
         {
             LoadingHandle.SceneDone += OnSceneDone;
         }
-
-
     }
 }
