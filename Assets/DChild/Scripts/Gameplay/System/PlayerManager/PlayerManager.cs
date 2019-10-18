@@ -1,8 +1,10 @@
-﻿using DChild.Gameplay.Characters.Players;
+﻿using System;
+using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Inputs;
 using Holysoft;
 using Holysoft.Collections;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -17,7 +19,7 @@ namespace DChild.Gameplay.Systems
         void StopCharacterControlOverride();
     }
 
-    public class PlayerManager : MonoBehaviour, IGameplaySystemModule, IPlayerManager
+    public class PlayerManager : MonoBehaviour, IGameplaySystemModule,IGameplayInitializable,IPlayerManager
     {
         [SerializeField, BoxGroup("Player Data")]
         private Player m_player;
@@ -52,6 +54,23 @@ namespace DChild.Gameplay.Systems
         {
             m_player = player;
             m_input = m_player.GetComponent<PlayerInput>();
+        }
+
+        public void Initialize()
+        {
+            GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
+            GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
+        }
+
+        private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
+        {
+            m_player.SetPosition(eventArgs.slot.spawnPosition);
+            m_player.LoadData(eventArgs.slot.characterData);
+        }
+
+        private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
+        {
+            eventArgs.slot.UpdateCharacterData(m_player.SaveData());
         }
 
         private void Start()

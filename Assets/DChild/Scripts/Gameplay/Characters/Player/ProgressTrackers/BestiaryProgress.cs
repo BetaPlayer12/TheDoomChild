@@ -51,17 +51,16 @@ namespace DChild.Gameplay.Characters.Players
 
         public void LoadData(AcquisitionData saveData)
         {
-            foreach (var key in m_progress.Keys)
-            {
-                m_progress[key] = false;
-            }
-
             var size = saveData.count;
             for (int i = 0; i < size; i++)
             {
                 var data = saveData.GetData(i);
                 if (m_progress.ContainsKey(data.ID))
                 {
+                    if (data.hasData)
+                    {
+                        Debug.Log("HAHAHA");
+                    }
                     m_progress[data.ID] = data.hasData;
                 }
             }

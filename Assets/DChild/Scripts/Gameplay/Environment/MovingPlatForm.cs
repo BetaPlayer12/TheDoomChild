@@ -1,108 +1,167 @@
-﻿using System.Collections;
-using DChild.Gameplay.Characters.AI;
+﻿using DChild.Gameplay.Systems.WorldComponents;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class MovingPlatForm : MonoBehaviour
+namespace DChild.Gameplay.Environment
 {
-    
-
-    [SerializeField]
-    private float m_speed;
-    [SerializeField]
-    private Vector2[] m_waypoints;
-    [ShowInInspector, OnValueChanged("ChangeDestination")]
-    private int m_wayPointDestination;
-    [ShowInInspector, ReadOnly]
-    private int m_currentWayPoint;
-    private int m_incrementerValue;
-
-    private Rigidbody2D m_rigidbody;
-    private Vector2 m_cacheDestination;
-    private Vector2 m_cacheCurrentWaypoint;
-    private int ListSize;
-
-    private void ChangeDestination()
+    public class MovingPlatform : MonoBehaviour
     {
-        if (m_currentWayPoint != m_wayPointDestination)
+        public struct UpdateEventArgs : IEventActionArgs
         {
-
-            int proposedIncrementerValue = 0;
-            if (m_currentWayPoint > m_wayPointDestination)
+            public UpdateEventArgs(int instance, int currentWaypointIndex, int waypointCount, bool isGoingForward) : this()
             {
-                proposedIncrementerValue = -1;
+                this.instance = instance;
+                this.currentWaypointIndex = currentWaypointIndex;
+                this.waypointCount = waypointCount;
+                this.isGoingForward = isGoingForward;
+            }
+
+            public int instance { get; }
+            public int currentWaypointIndex { get; }
+            public int waypointCount { get; }
+            public bool isGoingForward { get; }
+        }
+
+        [SerializeField, MinValue(0.1f), TabGroup("Setting")]
+        private float m_speed;
+        [SerializeField, OnValueChanged("ValidateStartingWaypoint"), TabGroup("Setting")]
+        private int m_startWaypoint;
+        [SerializeField, ListDrawerSettings(CustomAddFunction = "AddWaypoint"), TabGroup("Setting"), HideInInlineEditors]
+        private Vector2[] m_waypoints;
+        [ShowInInspector, OnValueChanged("ChangeDestination"), TabGroup("Debug")]
+        private int m_wayPointDestination;
+        [ShowInInspector, ReadOnly, TabGroup("Debug")]
+        private int m_currentWayPoint;
+        private int m_incrementerValue;
+
+        private Rigidbody2D m_rigidbody;
+        private IIsolatedTime m_isolatedTime;
+        private Vector2 m_cacheDestination;
+        private Vector2 m_cacheCurrentWaypoint;
+        private int m_listSize;
+
+        public event EventAction<UpdateEventArgs> DestinationReached;
+
+#if UNITY_EDITOR
+        public Vector2[] waypoints { get => m_waypoints; set => m_waypoints = value; }
+
+        private Vector2 AddWaypoint() => transform.position;
+
+        private void ValidateStartingWaypoint()
+        {
+            m_startWaypoint = (int)Mathf.Repeat(m_startWaypoint, m_waypoints.Length);
+            transform.position = m_waypoints[m_startWaypoint];
+        }
+#endif
+
+        public void GoToNextWayPoint()
+        {
+            if (m_currentWayPoint < m_listSize - 1)
+            {
+                m_wayPointDestination++;
+                ChangeDestination();
+            }
+        }
+
+        public void GoToPreviousWaypoint()
+        {
+            if (m_currentWayPoint > 0)
+            {
+                m_wayPointDestination--;
+                ChangeDestination();
+            }
+        }
+
+        public void GoDestination(int destination)
+        {
+            m_wayPointDestination = destination;
+            ChangeDestination();
+        }
+
+        public void Initialize(int startingIndex, int destination)
+        {
+            m_currentWayPoint = startingIndex;
+            transform.position = m_waypoints[m_currentWayPoint];
+            GoDestination(destination);
+        }
+
+        private void ChangeDestination()
+        {
+            if (m_currentWayPoint != m_wayPointDestination)
+            {
+
+                int proposedIncrementerValue = 0;
+                if (m_currentWayPoint > m_wayPointDestination)
+                {
+                    proposedIncrementerValue = -1;
+                }
+                else
+                {
+                    proposedIncrementerValue = 1;
+                }
+
+                if (proposedIncrementerValue != m_incrementerValue)
+                {
+                    m_incrementerValue = proposedIncrementerValue;
+                }
+
+                if (enabled == false)
+                {
+                    m_currentWayPoint += m_incrementerValue;
+                    m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
+                }
+                m_cacheDestination = m_waypoints[m_wayPointDestination];
+            }
+
+            enabled = true;
+        }
+
+        private void Awake()
+        {
+            m_rigidbody = GetComponent<Rigidbody2D>();
+            m_rigidbody.position = m_waypoints[m_startWaypoint];
+            m_isolatedTime = GetComponent<IIsolatedTime>();
+            m_wayPointDestination = m_startWaypoint;
+            m_currentWayPoint = m_wayPointDestination;
+            m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
+            m_listSize = m_waypoints.Length;
+            ChangeDestination();
+        }
+
+        private void Update()
+        {
+            var currentPosition = m_rigidbody.position;
+            if (currentPosition != m_cacheDestination)
+            {
+                m_rigidbody.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
+                if (currentPosition == m_cacheCurrentWaypoint)
+                {
+                    m_currentWayPoint += m_incrementerValue;
+                    m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
+                }
             }
             else
             {
-                proposedIncrementerValue = 1;
+                enabled = false;
+                DestinationReached?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
             }
+        }
 
-            if (proposedIncrementerValue != m_incrementerValue)
+        private void OnValidate()
+        {
+            if (GetComponent<Rigidbody2D>() == null)
             {
-                m_incrementerValue = proposedIncrementerValue;
-                m_currentWayPoint += m_incrementerValue;
-                m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
-
-
+                var rigidbody = gameObject.AddComponent<Rigidbody2D>();
+                rigidbody.isKinematic = true;
             }
 
-            m_cacheDestination = m_waypoints[m_wayPointDestination]; //
-        }
-
-        enabled = true;
-    }
-
-    private void Awake()
-    {
-        m_rigidbody = GetComponent<Rigidbody2D>();
-        m_currentWayPoint = m_wayPointDestination;
-        m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
-        ListSize = m_waypoints.Length;
-        ChangeDestination();
-    }
-
-    private void Update()
-    {
-        if (m_rigidbody.position != m_cacheDestination)
-        {
-            m_rigidbody.position = Vector2.MoveTowards(m_rigidbody.position, m_cacheCurrentWaypoint, m_speed);
-            if (m_rigidbody.position == m_cacheCurrentWaypoint && m_currentWayPoint != m_wayPointDestination)
+            if(GetComponent<IsolatedObject>() == null)
             {
-                m_currentWayPoint += m_incrementerValue;
-                m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
+                gameObject.AddComponent<IsolatedObject>();
             }
         }
-        else
-        {
-            enabled = false;
-        }
-    }
-
-    public void GoToNextWayPoint()
-    {
-        if (m_currentWayPoint < ListSize - 1)
-        {
-            m_wayPointDestination++;
-            ChangeDestination();
-        }
-    }
-
-    public void GoToPreviousWaypoint()
-    {
-        if (m_currentWayPoint > 0)
-        {
-            m_wayPointDestination--;
-            ChangeDestination();
-        }
-    }
-
-    public void GoDestination(int destination)
-    {
-        m_wayPointDestination = destination;
-
-        ChangeDestination();
     }
 }
 
