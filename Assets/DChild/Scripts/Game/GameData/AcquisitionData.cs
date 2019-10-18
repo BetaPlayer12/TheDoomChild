@@ -35,5 +35,10 @@ namespace DChild.Serialization
         {
             this.m_serializeDatas = m_serializeDatas;
         }
+
+        public AcquisitionData()
+        {
+            m_serializeDatas = new SerializeData[1];
+        }
     }
 }

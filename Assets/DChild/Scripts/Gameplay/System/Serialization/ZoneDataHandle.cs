@@ -20,12 +20,10 @@ namespace DChild.Serialization
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            throw new NotImplementedException();
         }
 
         private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            throw new NotImplementedException();
         }
     }
 }
