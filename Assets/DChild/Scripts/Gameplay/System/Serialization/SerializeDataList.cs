@@ -6,17 +6,17 @@ using UnityEngine;
 namespace DChild.Serialization
 {
     [System.Serializable]
-    public class ZoneDataList
+    public class SerializeDataList
     {
         [OdinSerialize]
-        private Dictionary<int, IZoneSaveData> m_saveDatas = new Dictionary<int, IZoneSaveData>();
+        private Dictionary<int, ISaveData> m_saveDatas = new Dictionary<int, ISaveData>();
 
-        public ZoneDataList()
+        public SerializeDataList()
         {
-            m_saveDatas = new Dictionary<int, IZoneSaveData>();
+            m_saveDatas = new Dictionary<int, ISaveData>();
         }
 
-        public void UpdateZoneData(ZoneDataID ID, IZoneSaveData data)
+        public void UpdateZoneData(SerializeDataID ID, ISaveData data)
         {
             var IDvalue = ID.value;
             if (m_saveDatas.ContainsKey(ID.value))
@@ -29,7 +29,7 @@ namespace DChild.Serialization
             }
         }
 
-        public IZoneSaveData GetZoneData(ZoneDataID ID)
+        public ISaveData GetZoneData(SerializeDataID ID)
         {
             var IDvalue = ID.value;
             return m_saveDatas.ContainsKey(IDvalue) ? m_saveDatas[IDvalue] : null;
