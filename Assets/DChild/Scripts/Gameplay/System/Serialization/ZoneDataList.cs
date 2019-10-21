@@ -9,7 +9,12 @@ namespace DChild.Serialization
     public class ZoneDataList
     {
         [OdinSerialize]
-        private Dictionary<int, IZoneSaveData> m_saveDatas;
+        private Dictionary<int, IZoneSaveData> m_saveDatas = new Dictionary<int, IZoneSaveData>();
+
+        public ZoneDataList()
+        {
+            m_saveDatas = new Dictionary<int, IZoneSaveData>();
+        }
 
         public void UpdateZoneData(ZoneDataID ID, IZoneSaveData data)
         {
