@@ -11,6 +11,7 @@ namespace DChild.Serialization
     {
         [SerializeField]
         private ZoneDataID m_ID;
+        private IZoneSaveData m_saveDataHandler;
 
         private void Awake()
         {
@@ -20,10 +21,12 @@ namespace DChild.Serialization
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
+            GameplaySystem.campaignSerializer.slot.GetZoneData<IZoneSaveData>(m_ID);
         }
 
         private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
+            GameplaySystem.campaignSerializer.slot.UpdateZoneData(m_ID, m_saveDataHandler);
         }
     }
 }
