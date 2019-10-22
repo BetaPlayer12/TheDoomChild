@@ -19,8 +19,8 @@ namespace DChild.Gameplay
 
     public class CampaignSerializer : SerializedMonoBehaviour, IGameplaySystemModule, IGameplayInitializable
     {
-        [OdinSerialize]
-        private CampaignSlot m_slot;
+        [OdinSerialize,HideReferenceObjectPicker]
+        private CampaignSlot m_slot = new CampaignSlot();
 
         private CampaignSlotUpdateEventArgs m_eventArgs;
 

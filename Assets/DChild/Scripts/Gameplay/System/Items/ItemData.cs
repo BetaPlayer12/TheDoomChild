@@ -9,7 +9,6 @@ using DChildEditor;
 namespace DChild.Gameplay.Items
 {
 
-
     [CreateAssetMenu(fileName = "ItemData", menuName = "DChild/Database/Item Data")]
     public class ItemData : DatabaseAsset
     {

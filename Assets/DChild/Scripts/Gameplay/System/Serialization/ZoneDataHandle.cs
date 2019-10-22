@@ -10,7 +10,8 @@ namespace DChild.Serialization
     public class ZoneDataHandle : MonoBehaviour
     {
         [SerializeField]
-        private ZoneDataID m_ID;
+        private SerializeDataID m_ID;
+        private ISaveData m_saveDataHandler;
 
         private void Awake()
         {
@@ -20,10 +21,12 @@ namespace DChild.Serialization
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
+            GameplaySystem.campaignSerializer.slot.GetZoneData<ISaveData>(m_ID);
         }
 
         private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
+            GameplaySystem.campaignSerializer.slot.UpdateZoneData(m_ID, m_saveDataHandler);
         }
     }
 }
