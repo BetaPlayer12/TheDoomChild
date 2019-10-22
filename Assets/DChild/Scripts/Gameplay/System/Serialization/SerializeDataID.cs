@@ -8,6 +8,7 @@ using UnityEditor;
 
 namespace DChild.Serialization
 {
+
     [CreateAssetMenu(fileName = "SerializeDataID", menuName = "DChild/Serialize Data ID")]
     public class SerializeDataID : ScriptableObject
     {

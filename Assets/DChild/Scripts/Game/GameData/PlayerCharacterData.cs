@@ -74,22 +74,4 @@ namespace DChild.Serialization
         }
 #endif
     }
-
-    [System.Serializable]
-    public struct PlayerInventoryData
-    {
-        [SerializeField]
-        private int m_ID;
-        [SerializeField, MinValue(0)]
-        private int m_count;
-
-        public PlayerInventoryData(int m_ID, int m_count)
-        {
-            this.m_ID = m_ID;
-            this.m_count = m_count;
-        }
-
-        public int ID { get => m_ID; }
-        public int count { get => m_count; }
-    }
 }

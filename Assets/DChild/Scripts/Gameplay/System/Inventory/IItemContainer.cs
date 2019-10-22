@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 #endif
 using DChild.Gameplay.Items;
+using DChild.Serialization;
 using System.Collections.Generic;
 
 namespace DChild.Gameplay.Inventories
@@ -16,5 +17,8 @@ namespace DChild.Gameplay.Inventories
         int GetCurrentAmount(ItemData item);
         bool HasSpaceFor(ItemData item);
         void SetList(ItemContainerData data);
+
+        ItemContainerSaveData Save();
+        void ClearList();
     }
 }

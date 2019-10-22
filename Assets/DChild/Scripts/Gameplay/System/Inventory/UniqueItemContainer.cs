@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Items;
+using DChild.Serialization;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System.Collections.Generic;
@@ -113,6 +114,23 @@ namespace DChild.Gameplay.Inventories
             m_list.Clear();
             m_list.AddRange(data.list);
         }
+
+        public ItemContainerSaveData Save()
+        {
+            List<ItemContainerSaveData.Item> savedData = new List<ItemContainerSaveData.Item>();
+            for (int i = 0; i < m_list.Count; i++)
+            {
+                savedData.Add( new ItemContainerSaveData.Item(m_list[i].item.id, m_list[i].count));
+            }
+            return new ItemContainerSaveData(savedData.ToArray());
+        }
+
+        public void ClearList()
+        {
+            m_list.Clear();
+        }
+
+
 
         private void AddNewSlot(ItemData item, int count)
         {
