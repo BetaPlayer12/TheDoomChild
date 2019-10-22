@@ -92,17 +92,17 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
 
-        [SerializeField]
-        private AudioSource m_Audiosource;
-        [SerializeField]
-        private AudioClip m_Minion_Sound_Q_Clip;
-        [SerializeField]
-        private AudioClip m_Minion_Hit_Sound_Clip;
-        [SerializeField]
-        private AudioClip m_Minion_Death_Sound_Clip;
-        [SerializeField]
-        private CircleCollider2D m_sound_Q_trigerCollider;
-        private bool m_sound_q_played = false;
+        //[SerializeField]
+        //private AudioSource m_Audiosource;
+        //[SerializeField]
+        //private AudioClip m_Minion_Sound_Q_Clip;
+        //[SerializeField]
+        //private AudioClip m_Minion_Hit_Sound_Clip;
+        //[SerializeField]
+        //private AudioClip m_Minion_Death_Sound_Clip;
+        //[SerializeField]
+        //private CircleCollider2D m_sound_Q_trigerCollider;
+        //private bool m_sound_q_played = false;
 
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -165,7 +165,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
            
-            m_Audiosource.PlayOneShot(m_Minion_Death_Sound_Clip);
+            //m_Audiosource.PlayOneShot(m_Minion_Death_Sound_Clip);
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -195,7 +195,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
-            m_sound_Q_trigerCollider = gameObject.AddComponent<CircleCollider2D>() as CircleCollider2D;
+            //m_sound_Q_trigerCollider = gameObject.AddComponent<CircleCollider2D>() as CircleCollider2D;
 
         }
 
@@ -211,16 +211,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.EnableRootMotion(true, false);
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
 
-                    if (m_sound_Q_trigerCollider.isTrigger)
-                    {
-                        Debug.Log("nice2x");
-                        if (!m_Audiosource.isPlaying)
-                        {
-                            m_Audiosource.clip = m_Minion_Sound_Q_Clip;
-                            m_Audiosource.Play();
+                    //if (m_sound_Q_trigerCollider.isTrigger)
+                    //{
+                    //    Debug.Log("nice2x");
+                    //    if (!m_Audiosource.isPlaying)
+                    //    {
+                    //        m_Audiosource.clip = m_Minion_Sound_Q_Clip;
+                    //        m_Audiosource.Play();
 
-                        }
-                    }
+                    //    }
+                    //}
                    
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
