@@ -1,10 +1,13 @@
 ﻿using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
+using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 namespace DChild.Gameplay.Inventories
 {
+
+
     public class PlayerInventory : SerializedMonoBehaviour, ICurrency
     {
         [SerializeField, MinValue(0)]
@@ -20,6 +23,16 @@ namespace DChild.Gameplay.Inventories
 
         public event EventAction<CurrencyUpdateEventArgs> OnAmountSet;
         public event EventAction<CurrencyUpdateEventArgs> OnAmountAdded;
+
+        public PlayerInventoryData Save()
+        {
+            return null;
+        }
+
+        public void Load(PlayerInventoryData data)
+        {
+
+        }
 
         public void AddSoulEssence(int value)
         {

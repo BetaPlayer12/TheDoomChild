@@ -28,12 +28,12 @@ namespace DChild.Serialization
         [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info")]
         private TimeKeeper m_duration;
 
-
-
         [SerializeField, HideIf("m_newGame")]
         private PlayerCharacterData m_characterData;
-        [SerializeField]
-        private ZoneDataList m_zoneDataList;
+        [SerializeField, HideReferenceObjectPicker]
+        private SerializeDataList m_campaignProgress;
+        [SerializeField, HideReferenceObjectPicker]
+        private SerializeDataList m_zoneDatas;
 
         public CampaignSlot(int m_id)
         {
@@ -44,6 +44,18 @@ namespace DChild.Serialization
             m_duration = new TimeKeeper();
         }
 
+        public CampaignSlot()
+        {
+            this.m_id = 0;
+            m_newGame = true;
+            m_location = Location.None;
+            m_completion = 0;
+            m_duration = new TimeKeeper();
+            m_characterData = new PlayerCharacterData();
+            m_campaignProgress = new SerializeDataList();
+            m_zoneDatas = new SerializeDataList();
+        }
+
         public int id => m_id;
         public bool demoGame => m_demoGame;
         public bool newGame => m_newGame;
@@ -52,7 +64,7 @@ namespace DChild.Serialization
         public int completion => m_completion;
         public TimeKeeper duration => m_duration;
 
-        public Vector2 spawnPosition { get => m_spawnPosition;}
+        public Vector2 spawnPosition { get => m_spawnPosition; }
         public PlayerCharacterData characterData => m_characterData;
 
 
@@ -76,14 +88,13 @@ namespace DChild.Serialization
             m_characterData = data;
         }
 
-        public void UpdateCampaignProgress()
-        {
+        public void UpdateCampaignProgress(SerializeDataID ID, ISaveData saveData) => m_campaignProgress.UpdateZoneData(ID, saveData);
 
-        }
+        public T GetCampaignProgress<T>(SerializeDataID ID) where T : ISaveData => (T)m_campaignProgress.GetZoneData(ID);
 
-        public void UpdateZoneData(ZoneDataID ID, IZoneSaveData saveData) => m_zoneDataList.UpdateZoneData(ID, saveData);
+        public void UpdateZoneData(SerializeDataID ID, ISaveData saveData) => m_zoneDatas.UpdateZoneData(ID, saveData);
 
-        public T GetZoneData<T>(ZoneDataID ID) where T : IZoneSaveData => (T)m_zoneDataList.GetZoneData(ID);
+        public T GetZoneData<T>(SerializeDataID ID) where T : ISaveData => (T)m_zoneDatas.GetZoneData(ID);
 
 #if UNITY_EDITOR
         public void SetID(int ID)

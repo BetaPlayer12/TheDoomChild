@@ -6,22 +6,33 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters.AI;
 using DChild;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Projectiles;
 
-public class TombSoul : MonoBehaviour
+public class TombSoul : AttackProjectile
 {
+    private static FXSpawnHandle<FX> m_spawnHandle;
+    private static bool m_fxHandleInstantiated;
+
+    protected override void Collide()
+    {
+        var explosion = m_spawnHandle.InstantiateFX(projectileData.impactFX, transform.position);
+        explosion.transform.parent = null;
+        UnloadProjectile();
+        CallImpactedEvent();
+        Destroy(this.gameObject); //Quick Fix cuz not pooling atm
+    }
+
     [SerializeField]
     private float m_soulSpeed;
     [SerializeField]
     private Vector2 m_riseSpeed;
     [SerializeField]
     private float m_riseDuration;
-    [SerializeField]
-    private GameObject m_impactFX;
 
     private float m_delay;
 
 
-    private IsolatedObjectPhysics2D m_physics;
+    //private IsolatedObjectPhysics2D m_physics;
     private Collider2D m_collider;
     private AITargetInfo m_target;
     private PhysicsMovementHandler2D m_movement;
@@ -29,25 +40,30 @@ public class TombSoul : MonoBehaviour
 
     private bool m_willChase;
 
-    private void Awake()
-    {
-        m_damageable = GetComponent<Damageable>();
-        m_physics = GetComponent<IsolatedObjectPhysics2D>();
-        //m_animation = GetComponent<TombSoulAnimation>();
-        m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedObjectPhysics2D>(), transform);
-        m_collider = GetComponentInChildren<Collider2D>();
-    }
-
     private void Start()
     {
         m_damageable.Destroyed += Destroyed;
         StartCoroutine(SoulRoutine());
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        if (m_fxHandleInstantiated == false)
+        {
+            m_spawnHandle = new FXSpawnHandle<FX>();
+            m_fxHandleInstantiated = true;
+        }
+
+        m_damageable = GetComponent<Damageable>();
+        //m_physics = GetComponent<IsolatedObjectPhysics2D>();
+        m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedObjectPhysics2D>(), transform);
+        m_collider = GetComponentInChildren<Collider2D>();
+    }
+
     private void Destroyed(object sender, Holysoft.Event.EventActionArgs eventArgs)
     {
-        var impact = Instantiate(m_impactFX, transform.position, Quaternion.identity);
-        Destroy(this.gameObject);
+        Collide();
     }
 
     public void SetAttackInfo(AITargetInfo target, float delay)
@@ -64,11 +80,6 @@ public class TombSoul : MonoBehaviour
         m_collider.enabled = true;
         GetComponent<Rigidbody2D>().velocity =Vector2.zero;
         //m_animation.SetAnimation(0, "Charge", false).TimeScale = 2;
-        while (transform.localScale.x > 3f)
-        {
-            transform.localScale *= Time.deltaTime;
-            yield return null;
-        }
         //yield return new WaitForAnimationComplete(m_animation.animationState, TombSoulAnimation.ANIMATION_CHARGE);
         //m_animation.DoChargeRed();
         //yield return new WaitUntil(() => m_hasLaunched);
