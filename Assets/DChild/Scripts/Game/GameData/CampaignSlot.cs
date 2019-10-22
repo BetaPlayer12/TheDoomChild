@@ -8,6 +8,7 @@ using UnityEditor;
 
 namespace DChild.Serialization
 {
+
     [System.Serializable]
     public class CampaignSlot
     {
@@ -35,13 +36,19 @@ namespace DChild.Serialization
         [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
         private SerializeDataList m_zoneDatas;
 
+    
+
         public CampaignSlot(int m_id)
         {
             this.m_id = m_id;
             m_newGame = true;
             m_location = Location.None;
+            m_spawnPosition = new SerializedVector2();
             m_completion = 0;
             m_duration = new TimeKeeper();
+            m_characterData = new PlayerCharacterData();
+            m_campaignProgress = new SerializeDataList();
+            m_zoneDatas = new SerializeDataList();
         }
 
         public CampaignSlot()
@@ -49,6 +56,7 @@ namespace DChild.Serialization
             this.m_id = 0;
             m_newGame = true;
             m_location = Location.None;
+            m_spawnPosition = new SerializedVector2();
             m_completion = 0;
             m_duration = new TimeKeeper();
             m_characterData = new PlayerCharacterData();
@@ -88,15 +96,31 @@ namespace DChild.Serialization
             m_characterData = data;
         }
 
-        public void UpdateCampaignProgress(SerializeDataID ID, ISaveData saveData) => m_campaignProgress.UpdateZoneData(ID, saveData);
+        public void UpdateCampaignProgress(SerializeDataID ID, ISaveData saveData) => m_campaignProgress.UpdateData(ID, saveData);
 
-        public T GetCampaignProgress<T>(SerializeDataID ID) where T : ISaveData => (T)m_campaignProgress.GetZoneData(ID);
+        public T GetCampaignProgress<T>(SerializeDataID ID) where T : ISaveData => (T)m_campaignProgress.GetData(ID);
 
-        public void UpdateZoneData(SerializeDataID ID, ISaveData saveData) => m_zoneDatas.UpdateZoneData(ID, saveData);
+        public void UpdateZoneData(SerializeDataID ID, ISaveData saveData) => m_zoneDatas.UpdateData(ID, saveData);
 
-        public T GetZoneData<T>(SerializeDataID ID) where T : ISaveData => (T)m_zoneDatas.GetZoneData(ID);
+        public T GetZoneData<T>(SerializeDataID ID) where T : ISaveData => (T)m_zoneDatas.GetData(ID);
 
 #if UNITY_EDITOR
+        public CampaignSlot(CampaignSlot slot)
+        {
+            this.m_id = slot.id;
+            m_newGame = slot.newGame;
+            m_location = slot.location;
+            m_spawnPosition = slot.spawnPosition;
+            m_completion = slot.completion;
+            m_duration = slot.duration;
+            m_characterData = new PlayerCharacterData( slot.characterData);
+            m_campaignProgress = new SerializeDataList(slot.campaignProgress);
+            m_zoneDatas = new SerializeDataList(slot.zoneDatas);
+        }
+
+        public SerializeDataList campaignProgress => m_campaignProgress;
+        public SerializeDataList zoneDatas => m_zoneDatas;
+
         public void SetID(int ID)
         {
             m_id = ID;

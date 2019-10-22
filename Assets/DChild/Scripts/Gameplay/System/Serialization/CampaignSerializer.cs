@@ -4,7 +4,9 @@ using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
-
+#if UNITY_EDITOR
+using DChildDebug;
+#endif
 namespace DChild.Gameplay
 {
     public class CampaignSlotUpdateEventArgs : IEventActionArgs
@@ -19,7 +21,19 @@ namespace DChild.Gameplay
 
     public class CampaignSerializer : SerializedMonoBehaviour, IGameplaySystemModule, IGameplayInitializable
     {
-        [OdinSerialize,HideReferenceObjectPicker]
+#if UNITY_EDITOR
+        [SerializeField, PropertyOrder(-1), FoldoutGroup("Debug")]
+        private CampaignSlotData m_toLoad;
+        [Button, PropertyOrder(-1), FoldoutGroup("Debug")]
+        private void SetDataAsCurrentSlot()
+        {
+            m_slot = new CampaignSlot(m_toLoad.slot);
+            m_eventArgs.Set(m_slot);
+            PostDeserialization?.Invoke(this, m_eventArgs);
+        }
+#endif
+
+        [OdinSerialize, HideReferenceObjectPicker]
         private CampaignSlot m_slot = new CampaignSlot();
 
         private CampaignSlotUpdateEventArgs m_eventArgs;

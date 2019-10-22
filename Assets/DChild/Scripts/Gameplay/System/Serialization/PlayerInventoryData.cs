@@ -35,6 +35,16 @@ namespace DChild.Serialization
             this.m_questItems = m_questItems;
         }
 
+#if UNITY_EDITOR
+        public PlayerInventoryData(PlayerInventoryData data)
+        {
+            this.m_soulEssence = data.soulEssence;
+            this.m_items = new ItemContainerSaveData(data.items);
+            this.m_soulCrystals = new ItemContainerSaveData(data.soulCrystals);
+            this.m_questItems = new ItemContainerSaveData(data.questItems);
+        }
+#endif
+
         public int soulEssence { get => m_soulEssence; }
         public ItemContainerSaveData items { get => m_items;  }
         public ItemContainerSaveData soulCrystals { get => m_soulCrystals;}
