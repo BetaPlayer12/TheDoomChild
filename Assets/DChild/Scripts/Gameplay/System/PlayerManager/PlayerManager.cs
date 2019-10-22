@@ -64,13 +64,19 @@ namespace DChild.Gameplay.Systems
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            m_player.SetPosition(eventArgs.slot.spawnPosition);
-            m_player.LoadData(eventArgs.slot.characterData);
+            if (m_player)
+            {
+                m_player.SetPosition(eventArgs.slot.spawnPosition);
+                m_player.LoadData(eventArgs.slot.characterData);
+            }
         }
 
         private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            eventArgs.slot.UpdateCharacterData(m_player.SaveData());
+            if (m_player)
+            {
+                eventArgs.slot.UpdateCharacterData(m_player.SaveData());
+            }
         }
 
         private void Start()

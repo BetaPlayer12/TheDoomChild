@@ -30,9 +30,9 @@ namespace DChild.Serialization
 
         [SerializeField, HideIf("m_newGame")]
         private PlayerCharacterData m_characterData;
-        [SerializeField, HideReferenceObjectPicker]
+        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
         private SerializeDataList m_campaignProgress;
-        [SerializeField, HideReferenceObjectPicker]
+        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
         private SerializeDataList m_zoneDatas;
 
         public CampaignSlot(int m_id)
