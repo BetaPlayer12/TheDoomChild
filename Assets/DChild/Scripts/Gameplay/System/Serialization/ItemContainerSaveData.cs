@@ -29,6 +29,11 @@ namespace DChild.Serialization
         [SerializeField]
         private Item[] m_datas;
 
+        public ItemContainerSaveData()
+        {
+            m_datas = new Item[0];
+        }
+
         public ItemContainerSaveData(Item[] m_datas)
         {
             this.m_datas = m_datas;

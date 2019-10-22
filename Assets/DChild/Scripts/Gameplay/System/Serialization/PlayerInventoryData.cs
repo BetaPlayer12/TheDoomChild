@@ -19,6 +19,14 @@ namespace DChild.Serialization
         [SerializeField]
         private ItemContainerSaveData m_questItems;
 
+        public PlayerInventoryData()
+        {
+            m_soulEssence = 0;
+            this.m_items = new ItemContainerSaveData();
+            this.m_soulCrystals = new ItemContainerSaveData();
+            this.m_questItems = new ItemContainerSaveData();
+        }
+
         public PlayerInventoryData(int m_soulEssence, ItemContainerSaveData m_items, ItemContainerSaveData m_soulCrystals, ItemContainerSaveData m_questItems)
         {
             this.m_soulEssence = m_soulEssence;
