@@ -8,7 +8,6 @@ using UnityEditor;
 
 namespace DChild.Serialization
 {
-
     [System.Serializable]
     public class CampaignSlot
     {
@@ -35,8 +34,6 @@ namespace DChild.Serialization
         private SerializeDataList m_campaignProgress;
         [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
         private SerializeDataList m_zoneDatas;
-
-    
 
         public CampaignSlot(int m_id)
         {
@@ -75,7 +72,6 @@ namespace DChild.Serialization
         public Vector2 spawnPosition { get => m_spawnPosition; }
         public PlayerCharacterData characterData => m_characterData;
 
-
         public void Reset()
         {
             m_newGame = true;
@@ -91,10 +87,7 @@ namespace DChild.Serialization
             m_spawnPosition = spawnPosition;
         }
 
-        public void UpdateCharacterData(PlayerCharacterData data)
-        {
-            m_characterData = data;
-        }
+        public void UpdateCharacterData(PlayerCharacterData data) => m_characterData = data;
 
         public void UpdateCampaignProgress(SerializeDataID ID, ISaveData saveData) => m_campaignProgress.UpdateData(ID, saveData);
 
@@ -103,7 +96,7 @@ namespace DChild.Serialization
         public void UpdateZoneData(SerializeDataID ID, ISaveData saveData) => m_zoneDatas.UpdateData(ID, saveData);
 
         public T GetZoneData<T>(SerializeDataID ID) where T : ISaveData => (T)m_zoneDatas.GetData(ID);
-
+        #region EditorOnly
 #if UNITY_EDITOR
         public CampaignSlot(CampaignSlot slot)
         {
@@ -113,7 +106,7 @@ namespace DChild.Serialization
             m_spawnPosition = slot.spawnPosition;
             m_completion = slot.completion;
             m_duration = slot.duration;
-            m_characterData = new PlayerCharacterData( slot.characterData);
+            m_characterData = new PlayerCharacterData(slot.characterData);
             m_campaignProgress = new SerializeDataList(slot.campaignProgress);
             m_zoneDatas = new SerializeDataList(slot.zoneDatas);
         }
@@ -133,6 +126,7 @@ namespace DChild.Serialization
                 Reset();
             }
         }
-#endif
+#endif 
+        #endregion
     }
 }

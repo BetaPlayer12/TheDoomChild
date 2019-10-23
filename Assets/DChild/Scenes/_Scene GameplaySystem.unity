@@ -987,7 +987,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 83.85
+  m_fontSize: 68.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3725,7 +3725,7 @@ PrefabInstance:
     - target: {fileID: 1906321197020835971, guid: 9cb2eaa4dde813f4a95b2523cc8f845e,
         type: 3}
       propertyPath: m_list.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1906321197020835971, guid: 9cb2eaa4dde813f4a95b2523cc8f845e,
         type: 3}
@@ -4103,7 +4103,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 16.2
+  m_fontSize: 7.55
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4149,7 +4149,7 @@ MonoBehaviour:
     spaceCount: 45
     wordCount: 46
     linkCount: 0
-    lineCount: 13
+    lineCount: 19
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -4314,7 +4314,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 19.2
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4360,7 +4360,7 @@ MonoBehaviour:
     spaceCount: 1
     wordCount: 2
     linkCount: 0
-    lineCount: 1
+    lineCount: 2
     pageCount: 1
     materialCount: 2
   m_isUsingLegacyAnimationComponent: 0
@@ -14057,7 +14057,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 27.95
+  m_fontSize: 18
   m_fontSizeBase: 120
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -14103,7 +14103,7 @@ MonoBehaviour:
     spaceCount: 1
     wordCount: 2
     linkCount: 0
-    lineCount: 2
+    lineCount: 8
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -31243,7 +31243,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 20.1
+  m_fontSize: 18
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -31260,7 +31260,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 5
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -31289,7 +31289,7 @@ MonoBehaviour:
     spaceCount: 0
     wordCount: 1
     linkCount: 0
-    lineCount: 1
+    lineCount: 2
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -35066,7 +35066,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 9
+  m_firstOverflowCharacterIndex: 5
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -35095,7 +35095,7 @@ MonoBehaviour:
     spaceCount: 1
     wordCount: 2
     linkCount: 0
-    lineCount: 2
+    lineCount: 3
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -41137,7 +41137,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 38.5
+  m_fontSize: 25.6
   m_fontSizeBase: 40.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -45367,13 +45367,19 @@ PrefabInstance:
     - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
         type: 3}
       propertyPath: serializationData.PrefabModifications.Array.size
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
         type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
+        type: 3}
+      propertyPath: m_toLoad
+      value: 
+      objectReference: {fileID: 11400000, guid: 631ecec63b16ca94797087cc2c9c61ff,
+        type: 2}
     - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -45384,30 +45390,56 @@ PrefabInstance:
         type: 3}
       propertyPath: serializationData.PrefabModifications.Array.data[0]
       value: '"path":"m_slot","value":{"$id":0,"$type":"DChild.Serialization.CampaignSlot,
-        Assembly-CSharp","m_id":0,"m_demoGame":false,"m_newGame":false,"m_sceneToLoad":{"$id":1,"$type":"Holysoft.Collections.SceneInfo,
-        HolysoftEditor","m_sceneName":null,"m_scenePath":null},"m_location":18,"m_spawnPosition":{"$type":"DChild.Serialization.SerializedVector2,
+        Assembly-CSharp","m_id":0,"m_demoGame":false,"m_newGame":false,"m_sceneToLoad":null,"m_location":18,"m_spawnPosition":{"$type":"DChild.Serialization.SerializedVector2,
         Assembly-CSharp","x":0,"y":0},"m_completion":0,"m_duration":{"$type":"Holysoft.Collections.TimeKeeper,
-        HolysoftEditor","m_hours":0,"m_minutes":0,"m_seconds":0,"m_secondsTimer":0},"m_characterData":{"$id":2,"$type":"DChild.Serialization.PlayerCharacterData,
-        Assembly-CSharp","m_bestiaryProgressData":{"$id":3,"$type":"DChild.Serialization.AcquisitionData,
-        Assembly-CSharp","m_serializeDatas":null},"m_skills":{"$type":"DChild.Serialization.PrimarySkillsData,
-        Assembly-CSharp","m_movementSkills":null,"m_movementSkillList":null},"m_soulSkillAcquisitionData":{"$id":4,"$type":"DChild.Serialization.AcquisitionData,
-        Assembly-CSharp","m_serializeDatas":null},"m_equippedSoulSkillData":{"$type":"DChild.Serialization.EquippedSoulSkillData,
-        Assembly-CSharp","m_armorSkill":0,"m_supportSkill":0,"m_weaponSkill1":0,"m_weaponSkill2":0}},"m_zoneDataList":{"$id":5,"$type":"DChild.Serialization.ZoneDataList,
-        Assembly-CSharp","m_saveDatas":{"$id":6,"$type":"System.Collections.Generic.Dictionary`2[[System.Int32,
-        mscorlib],[DChild.Serialization.IZoneSaveData, Assembly-CSharp]], mscorlib","comparer":{"$id":7,"$type":"System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        HolysoftEditor","m_hours":0,"m_minutes":0,"m_seconds":0,"m_secondsTimer":0},"m_characterData":null,"m_campaignProgress":{"$id":1,"$type":"DChild.Serialization.SerializeDataList,
+        Assembly-CSharp","m_saveDatas":{"$id":2,"$type":"System.Collections.Generic.Dictionary`2[[System.Int32,
+        mscorlib],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib","comparer":{"$id":3,"$type":"System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        mscorlib]], mscorlib"},"$rlength":0,"$rcontent":[]}},"m_zoneDatas":{"$id":4,"$type":"DChild.Serialization.SerializeDataList,
+        Assembly-CSharp","m_saveDatas":{"$id":5,"$type":"System.Collections.Generic.Dictionary`2[[System.Int32,
+        mscorlib],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib","comparer":{"$id":6,"$type":"System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
         mscorlib]], mscorlib"},"$rlength":0,"$rcontent":[]}}}'
       objectReference: {fileID: 0}
     - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
         type: 3}
       propertyPath: serializationData.PrefabModifications.Array.data[1]
+      value: '"path":"m_slot.m_campaignProgress","value":{"$id":0,"$type":"DChild.Serialization.SerializeDataList,
+        Assembly-CSharp","m_saveDatas":{"$id":1,"$type":"System.Collections.Generic.Dictionary`2[[System.Int32,
+        mscorlib],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib","comparer":{"$id":2,"$type":"System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        mscorlib]], mscorlib"},"$rlength":0,"$rcontent":[]}}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[2]
+      value: '"path":"m_slot.m_campaignProgress.m_saveDatas","value":{"$id":0,"$type":"System.Collections.Generic.Dictionary`2[[System.Int32,
+        mscorlib],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib","comparer":{"$id":1,"$type":"System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        mscorlib]], mscorlib"},"$rlength":0,"$rcontent":[]}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[3]
       value: '"path":"m_slot.m_location","value":{"$id":0,"$type":"DChild.Gameplay.Environment.Location,
         Assembly-CSharp",18}'
       objectReference: {fileID: 0}
     - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
         type: 3}
-      propertyPath: serializationData.PrefabModifications.Array.data[2]
-      value: '"path":"m_slot.m_zoneDataList.m_saveDatas","value":{"$id":0,"$type":"System.Collections.Generic.Dictionary`2[[System.Int32,
-        mscorlib],[DChild.Serialization.IZoneSaveData, Assembly-CSharp]], mscorlib","comparer":{"$id":1,"$type":"System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+      propertyPath: serializationData.PrefabModifications.Array.data[4]
+      value: '"path":"m_slot.m_newGame","value":{"$id":0,"$type":"System.Boolean,
+        mscorlib",false}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[5]
+      value: '"path":"m_slot.m_zoneDatas","value":{"$id":0,"$type":"DChild.Serialization.SerializeDataList,
+        Assembly-CSharp","m_saveDatas":{"$id":1,"$type":"System.Collections.Generic.Dictionary`2[[System.Int32,
+        mscorlib],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib","comparer":{"$id":2,"$type":"System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        mscorlib]], mscorlib"},"$rlength":0,"$rcontent":[]}}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 362299302311717258, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[6]
+      value: '"path":"m_slot.m_zoneDatas.m_saveDatas","value":{"$id":0,"$type":"System.Collections.Generic.Dictionary`2[[System.Int32,
+        mscorlib],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib","comparer":{"$id":1,"$type":"System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
         mscorlib]], mscorlib"},"$rlength":0,"$rcontent":[]}'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -47006,7 +47038,7 @@ MonoBehaviour:
     spaceCount: 0
     wordCount: 1
     linkCount: 0
-    lineCount: 2
+    lineCount: 3
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -47672,7 +47704,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 63
+  m_fontSize: 38.45
   m_fontSizeBase: 64.6
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -47799,7 +47831,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -50.300293, y: -186.9}
+  m_AnchoredPosition: {x: -50.300354, y: -186.9}
   m_SizeDelta: {x: 307.3, y: 435}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1815850105
@@ -49259,7 +49291,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 29.95
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -49305,7 +49337,7 @@ MonoBehaviour:
     spaceCount: 0
     wordCount: 1
     linkCount: 0
-    lineCount: 1
+    lineCount: 6
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -54317,7 +54349,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 2
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 1422674923}
 --- !u!114 &2023317873
 MonoBehaviour:
   m_ObjectHideFlags: 0
