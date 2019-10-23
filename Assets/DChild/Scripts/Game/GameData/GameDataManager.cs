@@ -29,6 +29,7 @@ namespace DChild
                 else
                 {
                     slots[i] = new CampaignSlot(ID);
+                    slots[i].Reset();
                 }
             }
             m_campaignSlotList.SetSlots(slots);

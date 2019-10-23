@@ -1,10 +1,8 @@
-﻿using DChild.Serialization;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Sirenix.Serialization;
+using Sirenix.Serialization.Internal;
+using Sirenix.Serialization.Utilities;
+using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 namespace DChild.Serialization
@@ -21,7 +19,6 @@ namespace DChild.Serialization
             var filePath = GetSaveFilePath(slotID);
             byte[] bytes = SerializationUtility.SerializeValue(data, DataFormat.Binary);
             File.WriteAllBytes(filePath, bytes);
-
             Debug.Log("Game Save " +
                        $"\n {filePath}");
         }
@@ -40,11 +37,28 @@ namespace DChild.Serialization
             var filePath = GetSaveFilePath(slotID);
             if (File.Exists(filePath))
             {
-                byte[] bytes = File.ReadAllBytes(filePath);
-                output = SerializationUtility.DeserializeValue<CampaignSlot>(bytes, DataFormat.Binary);
-
-                Debug.Log("Game Loaded " +
-                       $"\n {filePath}");
+                try
+                {
+                    byte[] bytes = File.ReadAllBytes(filePath);
+                    output = SerializationUtility.DeserializeValue<CampaignSlot>(bytes, DataFormat.Binary);
+                    Debug.Log("Game Loaded " +
+                           $"\n {filePath}");
+                }
+                catch (InvalidOperationException)
+                {
+                    Debug.LogError("File was corrupted in a way renewing data and deleting corrupted file" +
+                     $"\n {filePath}");
+                    if (output == null)
+                    {
+                        output = new CampaignSlot(slotID);
+                        output.Reset();
+                    }
+                    else
+                    {
+                        output.Reset();
+                    }
+                    Delete(slotID);
+                }
             }
             else
             {

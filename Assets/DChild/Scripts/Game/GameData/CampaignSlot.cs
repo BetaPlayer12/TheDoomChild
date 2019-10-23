@@ -50,7 +50,7 @@ namespace DChild.Serialization
 
         public CampaignSlot()
         {
-            this.m_id = 0;
+            this.m_id = 1;
             m_newGame = true;
             m_location = Location.None;
             m_spawnPosition = new SerializedVector2();
@@ -76,8 +76,12 @@ namespace DChild.Serialization
         {
             m_newGame = true;
             m_location = m_demoGame ? Location.Garden : Location.None;
+            m_spawnPosition = new SerializedVector2();
             m_completion = 0;
             m_duration = new TimeKeeper();
+            m_characterData = new PlayerCharacterData();
+            m_campaignProgress = new SerializeDataList();
+            m_zoneDatas = new SerializeDataList();
         }
 
         public void UpdateLocation(SceneInfo scene, Location location, Vector2 spawnPosition)
