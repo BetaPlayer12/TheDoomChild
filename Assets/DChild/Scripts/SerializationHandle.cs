@@ -1,6 +1,4 @@
 ﻿using Sirenix.Serialization;
-using Sirenix.Serialization.Internal;
-using Sirenix.Serialization.Utilities;
 using System;
 using System.IO;
 using UnityEngine;

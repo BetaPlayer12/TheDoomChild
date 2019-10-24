@@ -6,23 +6,23 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-    public struct TargetInfo
+    public class TargetInfo
     {
-        public IDamageable instance { get; }
-        public bool isCharacter { get; }
-        public bool hasID { get; }
-        public int characterID { get; }
-        public HorizontalDirection facing { get; }
-        public IFlinch flinchHandler { get; }
-        public float damageReduction { get; }
-        public bool isPlayer { get; }
-        public IPlayer owner { get; }
-        public StatusEffectReciever statusEffectReciever { get; }
-        public bool isBreakableObject { get; }
-        public BreakableObject breakableObject;
+        public IDamageable instance { get; private set; }
+        public bool isCharacter { get; private set; }
+        public bool hasID { get; private set; }
+        public int characterID { get; private set; }
+        public HorizontalDirection facing { get; private set; }
+        public IFlinch flinchHandler { get; private set; }
+        public float damageReduction { get; private set; }
+        public bool isPlayer { get; private set; }
+        public IPlayer owner { get; private set; }
+        public StatusEffectReciever statusEffectReciever { get; private set; }
+        public bool isBreakableObject { get; private set; }
+        public BreakableObject breakableObject { get; private set; }
 
 
-        public TargetInfo(IDamageable target, Character character = null, IFlinch flinchHandler = null) : this()
+        public void Initialize(IDamageable target, Character character = null, IFlinch flinchHandler = null)
         {
             this.instance = target;
             isCharacter = character;
@@ -39,9 +39,12 @@ namespace DChild.Gameplay.Combat
                 characterID = character.ID;
             }
             this.flinchHandler = flinchHandler;
+
+            isBreakableObject = false;
+            breakableObject = null;
         }
 
-        public TargetInfo(IDamageable target, BreakableObject breakableObject = null) : this()
+        public void Initialize(IDamageable target, BreakableObject breakableObject = null)
         {
             this.instance = target;
             isBreakableObject = breakableObject;
@@ -49,12 +52,29 @@ namespace DChild.Gameplay.Combat
             {
                 this.breakableObject = breakableObject;
             }
+
+            isCharacter = false;
+            isPlayer = false;
+            statusEffectReciever = null;
+            owner = null;
+            hasID = false;
+            flinchHandler = null;
         }
 
-        public TargetInfo(IDamageable target, float damageReduction) : this()
+        public void Initialize(IDamageable target, float damageReduction)
         {
             this.instance = target;
             this.damageReduction = damageReduction;
+
+            isCharacter = false;
+            isPlayer = false;
+            statusEffectReciever = null;
+            owner = null;
+            hasID = false;
+            flinchHandler = null;
+
+            isBreakableObject = false;
+            breakableObject = null;
         }
     }
 }

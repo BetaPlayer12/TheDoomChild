@@ -2,6 +2,7 @@
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,12 +35,30 @@ namespace DChild.Gameplay.Combat
             {
                 if (targetInfo.isBreakableObject)
                 {
-                    BreakableObjectDamage?.Invoke(this, new BreakableObjectEventArgs(targetInfo.breakableObject));
+                    using (Cache<BreakableObjectEventArgs> cacheEventArgs = Cache<BreakableObjectEventArgs>.Claim())
+                    {
+                        cacheEventArgs.Value.Initialize(targetInfo.breakableObject);
+                        BreakableObjectDamage?.Invoke(this, cacheEventArgs.Value);
+                        cacheEventArgs.Release();
+                    }
                 }
                 var position = transform.position;
-                AttackerCombatInfo info = new AttackerCombatInfo(position, 0, 1, m_currentDamage.ToArray());
-                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
+                using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
+                {
+                    cacheInfo.Value.Initialize(position, 0, 1, m_currentDamage.ToArray());
+                    using (Cache<AttackInfo> cacheResult = GameplaySystem.combatManager.ResolveConflict(cacheInfo.Value, targetInfo))
+                    {
+                        using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
+                        {
+                            cacheEventArgs.Value.Initialize(cacheInfo, targetInfo, cacheResult);
+                            TargetDamaged?.Invoke(this, cacheEventArgs.Value);
+                            cacheEventArgs.Release();
+                        }
+                        cacheResult.Release();
+                    }
+                    cacheInfo.Release();
+                }
+
             }
         }
 

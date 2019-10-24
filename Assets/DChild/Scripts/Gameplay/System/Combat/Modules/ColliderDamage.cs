@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using DChild.Gameplay.Environment;
+using Sirenix.Utilities;
 
 namespace DChild.Gameplay.Combat
 {
@@ -59,8 +60,13 @@ namespace DChild.Gameplay.Combat
             var hitbox = collision.GetComponent<Hitbox>();
             if (hitbox != null)
             {
-                m_damageDealer?.Damage(CreateInfo(hitbox), hitbox.defense);
-                DamageableDetected?.Invoke(collision);
+                using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                {
+                    InitializeTargetInfo(cacheTargetInfo, hitbox);
+                    m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                    DamageableDetected?.Invoke(collision);
+                    cacheTargetInfo?.Release();
+                }
             }
 
             if (m_canDetectInteractables)
@@ -77,7 +83,12 @@ namespace DChild.Gameplay.Combat
             var hitbox = collision.gameObject.GetComponent<Hitbox>();
             if (hitbox != null && hitbox.isInvulnerable == false)
             {
-                m_damageDealer.Damage(CreateInfo(hitbox), hitbox.defense);
+                using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                {
+                    InitializeTargetInfo(cacheTargetInfo, hitbox);
+                    m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                    cacheTargetInfo?.Release();
+                }
             }
 
             if (m_canDetectInteractables)
@@ -86,16 +97,16 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        protected TargetInfo CreateInfo(Hitbox hitbox)
+        protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
             if (hitbox.damageable.CompareTag(Character.objectTag))
             {
                 var character = hitbox.GetComponentInParent<Character>();
-                return new TargetInfo(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
+                cache.Value.Initialize(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
             }
             else
             {
-                return new TargetInfo(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
+                cache.Value.Initialize(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
             }
         }
     }

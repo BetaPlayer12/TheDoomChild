@@ -6,6 +6,7 @@ using Holysoft;
 using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
@@ -85,9 +86,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!targetDefense.isInvulnerable)
             {
-                AttackerCombatInfo info = new AttackerCombatInfo(position, 0, 1, m_currentDamage);
-                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
+                //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
+                //{
+                //    info.Value.Initialize(position, 0, 1, m_currentDamage);
+                //    var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                //    CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
+                //    info.Release();
+                //}
             }
         }
 
