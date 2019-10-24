@@ -2,21 +2,22 @@
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-    public struct SoulSkillAcquiredEventArgs : IEventActionArgs
+    public class SoulSkillAcquiredEventArgs : IEventActionArgs
     {
-        public SoulSkillAcquiredEventArgs(SoulSkill skill, bool isAcquired) : this()
+        public void Initialize(SoulSkill skill, bool isAcquired)
         {
             this.skill = skill;
             this.isAcquired = isAcquired;
         }
 
-        public SoulSkill skill { get; }
-        public bool isAcquired { get; }
+        public SoulSkill skill { get; private set; }
+        public bool isAcquired { get; private set; }
     }
 
     public class SoulSkillAcquisitionList : MonoBehaviour
@@ -48,7 +49,7 @@ namespace DChild.Gameplay.Characters.Players
             if (m_soulSkills.ContainsKey(ID))
             {
                 m_soulSkills[ID] = value;
-                SkillAcquisistionChanged?.Invoke(this, new SoulSkillAcquiredEventArgs(m_list.GetInfo(ID), value));
+                SendSkillAcquisitionEventArgs(m_list.GetInfo(ID), value);
             }
         }
 
@@ -74,7 +75,17 @@ namespace DChild.Gameplay.Characters.Players
                 }
             }
 
-            SkillAcquisistionChanged?.Invoke(this, new SoulSkillAcquiredEventArgs(null, false));
+            SendSkillAcquisitionEventArgs(null, false);
+        }
+
+        private void SendSkillAcquisitionEventArgs(SoulSkill skill, bool isAcquired)
+        {
+            using (Cache<SoulSkillAcquiredEventArgs> cacheEventArgs = Cache<SoulSkillAcquiredEventArgs>.Claim())
+            {
+                cacheEventArgs.Value.Initialize(skill, isAcquired);
+                SkillAcquisistionChanged?.Invoke(this, cacheEventArgs.Value);
+                cacheEventArgs.Release();
+            }
         }
 
         private void Awake()
@@ -90,7 +101,7 @@ namespace DChild.Gameplay.Characters.Players
 #if UNITY_EDITOR
         private void SendEvents()
         {
-            SkillAcquisistionChanged?.Invoke(this, new SoulSkillAcquiredEventArgs(null, false));
+            SendSkillAcquisitionEventArgs(null, false);
         }
 #endif
     }

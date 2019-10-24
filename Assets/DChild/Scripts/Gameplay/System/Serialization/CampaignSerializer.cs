@@ -3,6 +3,7 @@ using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using UnityEngine;
 #if UNITY_EDITOR
 using DChildDebug;
@@ -13,13 +14,13 @@ namespace DChild.Gameplay
     {
         public CampaignSlot slot { get; private set; }
 
-        public void Set(CampaignSlot slot)
+        public void Initialize(CampaignSlot slot)
         {
             this.slot = slot;
         }
     }
 
-    public class CampaignSerializer : SerializedMonoBehaviour, IGameplaySystemModule, IGameplayInitializable
+    public class CampaignSerializer : SerializedMonoBehaviour, IGameplaySystemModule
     {
 #if UNITY_EDITOR
         [SerializeField, PropertyOrder(-1), FoldoutGroup("Debug")]
@@ -28,15 +29,17 @@ namespace DChild.Gameplay
         private void SetDataAsCurrentSlot()
         {
             m_slot = new CampaignSlot(m_toLoad.slot);
-            m_eventArgs.Set(m_slot);
-            PostDeserialization?.Invoke(this, m_eventArgs);
+            using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
+            {
+                cacheEventArgs.Value.Initialize(m_slot);
+                PostDeserialization?.Invoke(this, cacheEventArgs.Value);
+                cacheEventArgs.Release();
+            }
         }
 #endif
 
         [OdinSerialize, HideReferenceObjectPicker]
         private CampaignSlot m_slot = new CampaignSlot();
-
-        private CampaignSlotUpdateEventArgs m_eventArgs;
 
         public event EventAction<CampaignSlotUpdateEventArgs> PreSerialization;
         public event EventAction<CampaignSlotUpdateEventArgs> PostDeserialization;
@@ -45,15 +48,23 @@ namespace DChild.Gameplay
         public void SetSlot(CampaignSlot slot)
         {
             m_slot = slot;
-            m_eventArgs.Set(m_slot);
-            PostDeserialization?.Invoke(this, m_eventArgs);
+            using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
+            {
+                cacheEventArgs.Value.Initialize(m_slot);
+                PostDeserialization?.Invoke(this, cacheEventArgs.Value);
+                cacheEventArgs.Release();
+            }
         }
 
         [Button]
         public void Save()
         {
-            m_eventArgs.Set(m_slot);
-            PreSerialization?.Invoke(this, m_eventArgs);
+            using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
+            {
+                cacheEventArgs.Value.Initialize(m_slot);
+                PreSerialization?.Invoke(this, cacheEventArgs.Value);
+                cacheEventArgs.Release();
+            }
             SerializationHandle.Save(m_slot.id, m_slot);
         }
 
@@ -61,14 +72,12 @@ namespace DChild.Gameplay
         public void Load()
         {
             SerializationHandle.Load(m_slot.id, ref m_slot);
-            m_eventArgs.Set(m_slot);
-            PostDeserialization?.Invoke(this, m_eventArgs);
-        }
-
-        public void Initialize()
-        {
-            m_eventArgs = new CampaignSlotUpdateEventArgs();
-            m_eventArgs.Set(m_slot);
+            using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
+            {
+                cacheEventArgs.Value.Initialize(m_slot);
+                PostDeserialization?.Invoke(this, cacheEventArgs.Value);
+                cacheEventArgs.Release();
+            }
         }
     }
 }

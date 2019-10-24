@@ -7,7 +7,6 @@ using Sirenix.Utilities;
 
 namespace DChild.Gameplay
 {
-
     public class AOEExplosion : PoolableObject
     {
         [SerializeField]

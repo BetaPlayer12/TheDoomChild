@@ -1,16 +1,17 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 
 namespace DChild.Gameplay.Combat.StatusAilment
 {
-    public struct StatusEffectReferenceEventArgs : IEventActionArgs
+    public class StatusEffectReferenceEventArgs : IEventActionArgs
     {
-        public StatusEffectReferenceEventArgs(StatusEffectHandle statusEffect) : this()
+        public void Initialize(StatusEffectHandle statusEffect)
         {
             this.statusEffect = statusEffect;
         }
 
-        public StatusEffectHandle statusEffect { get; }
+        public StatusEffectHandle statusEffect { get; private set; }
     }
 
     public class StatusEffectHandle
@@ -87,7 +88,12 @@ namespace DChild.Gameplay.Combat.StatusAilment
                     m_duration -= deltaTime;
                     if (m_duration <= 0)
                     {
-                        DurationExpired?.Invoke(this, new StatusEffectReferenceEventArgs(this));
+                        using (Cache<StatusEffectReferenceEventArgs> cacheEventArgs = Cache<StatusEffectReferenceEventArgs>.Claim())
+                        {
+                            cacheEventArgs.Value.Initialize(this);
+                            DurationExpired?.Invoke(this, cacheEventArgs.Value);
+                            cacheEventArgs.Release();
+                        }
                     }
                 }
             }
