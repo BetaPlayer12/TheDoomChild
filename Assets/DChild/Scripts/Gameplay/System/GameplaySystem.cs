@@ -18,7 +18,6 @@ namespace DChild.Gameplay
     public class GameplaySystem : MonoBehaviour
     {
         private GameplaySettings m_settings;
-        private static DatabaseManager m_databaseManager;
 
         private static IGameplaySystemModule[] m_modules;
         private static IGameplayActivatable[] m_activatableModules;
@@ -40,7 +39,6 @@ namespace DChild.Gameplay
 
         public static ICombatManager combatManager => m_combatManager;
         public static IFXManager fXManager => m_fxManager;
-        public static IDatabaseManager databaseManager => m_databaseManager;
         public static ICinema cinema => m_cinema;
         public static IWorld world => m_world;
         public static ITime time => m_world;
@@ -103,7 +101,6 @@ namespace DChild.Gameplay
         {
             AssignModule(out m_combatManager);
             AssignModule(out m_fxManager);
-            AssignModule(out m_databaseManager);
             AssignModule(out m_lootHandler);
             AssignModule(out m_cinema);
             AssignModule(out m_world);
@@ -180,7 +177,6 @@ namespace DChild.Gameplay
             {
                 m_combatManager = null;
                 m_fxManager = null;
-                m_databaseManager = null;
                 m_lootHandler = null;
                 m_cinema = null;
                 m_world = null;

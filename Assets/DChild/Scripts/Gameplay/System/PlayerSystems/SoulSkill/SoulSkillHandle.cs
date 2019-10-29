@@ -145,8 +145,11 @@ namespace DChild.Gameplay.Characters.Players
 
         private void AttachSkill(ref SoulSkill slot, SoulSkill skill)
         {
-            slot?.DetachFrom(m_source);
-            skill?.AttachTo(m_source);
+            if (m_source != null)
+            {
+                slot?.DetachFrom(m_source);
+                skill?.AttachTo(m_source);
+            }
             slot = skill;
         }
 
