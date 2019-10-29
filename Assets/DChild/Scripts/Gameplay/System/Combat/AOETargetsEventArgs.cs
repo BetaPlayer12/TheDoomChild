@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace DChild.Gameplay.Combat
 {
-    public struct AOETargetsEventArgs  : IEventActionArgs
+    public class AOETargetsEventArgs  : IEventActionArgs
     {
         private List<IDamageable> m_targets;
 
-        public AOETargetsEventArgs(List<IDamageable> m_targets)
+        public void Initialize(List<IDamageable> m_targets)
         {
             this.m_targets = m_targets;
         }

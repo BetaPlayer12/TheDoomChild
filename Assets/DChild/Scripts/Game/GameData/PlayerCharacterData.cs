@@ -47,6 +47,15 @@ namespace DChild.Serialization
         }
 
 #if UNITY_EDITOR
+        public PlayerCharacterData(PlayerCharacterData data)
+        {
+            this.m_inventoryData = new PlayerInventoryData(data.inventoryData);
+            this.m_bestiaryProgressData = new AcquisitionData(data.bestiaryProgressData);
+            this.m_skills = data.skills;
+            this.m_soulSkillAcquisitionData = new AcquisitionData(data.soulSkillAcquisitionData);
+            this.m_equippedSoulSkillData = data.equippedSoulSkillData;
+        }
+
         [NonSerialized, ShowInInspector, BoxGroup("Debug")]
         private BestiaryList m_bestiaryList;
         [NonSerialized, ShowInInspector, BoxGroup("Debug")]

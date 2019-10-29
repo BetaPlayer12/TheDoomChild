@@ -2,6 +2,7 @@
 using DChild.Gameplay.Pooling;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using Spine;
 using Spine.Unity;
 using System.Collections;
@@ -67,9 +68,13 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         {
             if (!targetDefense.isInvulnerable)
             {
-                AttackerCombatInfo info = new AttackerCombatInfo(transform.position, 0, 1, m_damage);
-                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
+                //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
+                //{
+                //    info.Value.Initialize(transform.position, 0, 1, m_damage);
+                //    var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                //    TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
+                //    info.Release();
+                //}
             }
         }
 

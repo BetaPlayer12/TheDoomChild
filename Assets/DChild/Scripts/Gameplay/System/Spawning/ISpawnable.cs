@@ -12,10 +12,10 @@ namespace DChild.Gameplay
         Type GetType();
     }
 
-    public struct SpawnableEventArgs : IEventActionArgs
+    public class SpawnableEventArgs : IEventActionArgs
     {
-        public ISpawnable spawnable { get; }
-        public SpawnableEventArgs(ISpawnable spawnable)
+        public ISpawnable spawnable { get; private set; }
+        public void Initialize(ISpawnable spawnable)
         {
             this.spawnable = spawnable;
         }

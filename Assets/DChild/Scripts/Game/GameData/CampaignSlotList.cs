@@ -7,20 +7,37 @@ namespace DChild
     [System.Serializable]
     public class CampaignSlotList
     {
-        [SerializeField, ValidateInput("ValidateSlots")]
-        private CampaignSlot[] m_slots;
+        [SerializeField, MinValue(1), OnValueChanged("ValidateSlots")]
+        private int m_slotCount;
+        [SerializeField, ListDrawerSettings(HideRemoveButton = true, HideAddButton = true, DraggableItems = false, NumberOfItemsPerPage = 1)]
+        private CampaignSlot[] m_slots = new CampaignSlot[1];
 
-        public int slotCount => m_slots.Length;
+        public int slotCount => m_slotCount;
         public CampaignSlot GetSlot(int id) => m_slots[id];
 
+        public void SetSlots(CampaignSlot[] slots) => m_slots = slots;
+
 #if UNITY_EDITOR
-        private bool ValidateSlots(CampaignSlot[] slots)
+        private void ValidateSlots()
         {
-            for (int i = 0; i < (slots?.Length ?? 0); i++)
+            var newSlot = new CampaignSlot[m_slotCount];
+            var copySize = m_slots.Length < m_slotCount ? m_slots.Length : m_slotCount;
+            for (int i = 0; i < copySize; i++)
             {
-                slots[i].SetID(i + 1);
+                newSlot[i] = m_slots[i];
             }
-            return true;
+            for (int i = 0; i < m_slotCount; i++)
+            {
+                if (newSlot[i] == null)
+                {
+                    newSlot[i] = new CampaignSlot(i + 1);
+                }
+                else
+                {
+                    newSlot[i].SetID(i + 1);
+                }
+            }
+            m_slots = newSlot;
         }
 #endif
     }

@@ -33,6 +33,7 @@ namespace DChild.Menu
         {
             m_campaignSelect.selectedSlot.Reset();
             m_campaignSelect.SendCampaignSelectedEvent();
+            SerializationHandle.Delete(m_selectedSlotID);
         }
 
         protected override void Awake()

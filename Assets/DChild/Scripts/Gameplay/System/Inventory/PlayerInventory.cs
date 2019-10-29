@@ -6,8 +6,6 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 namespace DChild.Gameplay.Inventories
 {
-
-
     public class PlayerInventory : SerializedMonoBehaviour, ICurrency
     {
         [SerializeField]
