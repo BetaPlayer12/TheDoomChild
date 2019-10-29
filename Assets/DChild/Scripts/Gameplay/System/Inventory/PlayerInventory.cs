@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 namespace DChild.Gameplay.Inventories
 {
-    public class PlayerInventory : SerializedMonoBehaviour, ICurrency
+    public class PlayerInventory : SerializedMonoBehaviour, ICurrency, ITradableInventory
     {
         [SerializeField]
         private ItemList m_itemList;
@@ -21,10 +21,39 @@ namespace DChild.Gameplay.Inventories
         [SerializeField, BoxGroup("Inventory")]
         private IItemContainer m_questItems;
 
-        public int amount => m_soulEssence;
+        public int soulEssence => m_soulEssence;
+
+        int ICurrency.amount => m_soulEssence;
+        IItemContainer ITradableInventory.items => m_items;
 
         public event EventAction<CurrencyUpdateEventArgs> OnAmountSet;
         public event EventAction<CurrencyUpdateEventArgs> OnAmountAdded;
+
+        event EventAction<CurrencyUpdateEventArgs> ICurrency.OnAmountSet
+        {
+            add
+            {
+                throw new System.NotImplementedException();
+            }
+
+            remove
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        event EventAction<CurrencyUpdateEventArgs> ICurrency.OnAmountAdded
+        {
+            add
+            {
+                throw new System.NotImplementedException();
+            }
+
+            remove
+            {
+                throw new System.NotImplementedException();
+            }
+        }
 
         public PlayerInventoryData Save()
         {
