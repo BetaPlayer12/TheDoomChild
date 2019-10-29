@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -8,8 +9,18 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-    public class BreakableObject : MonoBehaviour
+    public class BreakableObject : MonoBehaviour, ISerializableComponent
     {
+        public struct SaveData : ISaveData
+        {
+            public SaveData(bool isDestroyed) : this()
+            {
+                this.isDestroyed = isDestroyed;
+            }
+
+            public bool isDestroyed { get; }
+        }
+
         [SerializeField]
         private Damageable m_object;
         [ShowInInspector, OnValueChanged("SetObjectState")]
@@ -58,6 +69,21 @@ namespace DChild.Gameplay.Environment
         {
             m_forceDirection = forceDirection;
             m_force = force;
+        }
+
+        public ISaveData Save() => new SaveData(m_isDestroyed);
+
+        public void Load(ISaveData data)
+        {
+            var saveData = (SaveData)data;
+            if (saveData.isDestroyed)
+            {
+                m_onAlreadyDestroyed?.Invoke();
+            }
+            else
+            {
+                m_onFix?.Invoke();
+            }
         }
 
         private void OnDestroyObject(object sender, EventActionArgs eventArgs)
