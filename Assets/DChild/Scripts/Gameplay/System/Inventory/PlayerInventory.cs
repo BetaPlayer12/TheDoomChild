@@ -11,7 +11,6 @@ namespace DChild.Gameplay.Inventories
         [SerializeField]
         private ItemList m_itemList;
 
-
         [SerializeField, MinValue(0), BoxGroup("Inventory")]
         private int m_soulEssence;
         [SerializeField, BoxGroup("Inventory")]

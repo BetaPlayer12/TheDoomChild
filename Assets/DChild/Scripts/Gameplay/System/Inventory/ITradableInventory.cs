@@ -4,5 +4,6 @@
     {
         int soulEssence { get; }
         IItemContainer items { get; }
+        void AddSoulEssence(int value);
     }
 }
