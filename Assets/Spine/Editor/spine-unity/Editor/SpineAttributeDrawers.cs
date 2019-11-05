@@ -74,7 +74,7 @@ namespace Spine.Unity.Editor {
 			}
 
 			// Handle multi-editing when instances don't use the same SkeletonDataAsset.
-			if (!SpineInspectorUtility.TargetsUseSameData(property.serializedObject)) { 
+			if (!SpineInspectorUtility.TargetsUseSameData(property.serializedObject)) {
 				EditorGUI.DelayedTextField(position, property, label);
 				return;
 			}
@@ -118,7 +118,7 @@ namespace Spine.Unity.Editor {
 				skeletonDataAsset = property.serializedObject.targetObject as SkeletonDataAsset;
 				if (skeletonDataAsset == null) return;
 			}
-				
+
 			position = EditorGUI.PrefixLabel(position, label);
 
 			Texture2D image = Icon;
@@ -136,7 +136,7 @@ namespace Spine.Unity.Editor {
 					return skeletonComponent;
 			} else {
 				var component = property.serializedObject.targetObject as Component;
-				if (component != null)					
+				if (component != null)
 					return component.GetComponentInChildren(typeof(ISkeletonComponent)) as ISkeletonComponent;
 			}
 
@@ -177,19 +177,19 @@ namespace Spine.Unity.Editor {
 			if (TargetAttribute.includeNone)
 				menu.AddItem(new GUIContent(NoneString), !property.hasMultipleDifferentValues && string.IsNullOrEmpty(property.stringValue), HandleSelect, new SpineDrawerValuePair(string.Empty, property));
 
-			for (int i = 0; i < data.Slots.Count; i++) {
-				string name = data.Slots.Items[i].Name;
+			for (int slotIndex = 0; slotIndex < data.Slots.Count; slotIndex++) {
+				string name = data.Slots.Items[slotIndex].Name;
 				if (name.StartsWith(targetAttribute.startsWith, StringComparison.Ordinal)) {
 
 					if (targetAttribute.containsBoundingBoxes) {
-						int slotIndex = i;
-						var attachments = new List<Attachment>();
-						foreach (var skin in data.Skins)
-							skin.FindAttachmentsForSlot(slotIndex, attachments);
+						var skinEntries = new List<Skin.SkinEntry>();
+						foreach (var skin in data.Skins) {
+							skin.GetAttachments(slotIndex, skinEntries);
+						}
 
 						bool hasBoundingBox = false;
-						foreach (var attachment in attachments) {
-							var bbAttachment = attachment as BoundingBoxAttachment;
+						foreach (var entry in skinEntries) {
+							var bbAttachment = entry.Attachment as BoundingBoxAttachment;
 							if (bbAttachment != null) {
 								string menuLabel = bbAttachment.IsWeighted() ? name + " (!)" : name;
 								menu.AddItem(new GUIContent(menuLabel), !property.hasMultipleDifferentValues && name == property.stringValue, HandleSelect, new SpineDrawerValuePair(name, property));
@@ -255,8 +255,8 @@ namespace Spine.Unity.Editor {
 					string choiceValue = TargetAttribute.defaultAsEmptyString && isDefault ? string.Empty : name;
 					menu.AddItem(new GUIContent(name), !property.hasMultipleDifferentValues && choiceValue == property.stringValue, HandleSelect, new SpineDrawerValuePair(choiceValue, property));
 				}
-					
-			}			
+
+			}
 		}
 
 	}
@@ -342,7 +342,7 @@ namespace Spine.Unity.Editor {
 						menu.AddItem(new GUIContent(name), !property.hasMultipleDifferentValues && name == property.stringValue, HandleSelect, new SpineDrawerValuePair(name, property));
 					}
 				}
-					
+
 			}
 		}
 
@@ -470,10 +470,21 @@ namespace Spine.Unity.Editor {
 					attachmentNames.Clear();
 					placeholderNames.Clear();
 
-					skin.FindNamesForSlot(i, attachmentNames);
+					var skinEntries = new List<Skin.SkinEntry>();
+					skin.GetAttachments(i, skinEntries);
+					foreach (var entry in skinEntries) {
+						attachmentNames.Add(entry.Name);
+					}
+
 					if (skin != defaultSkin) {
-						defaultSkin.FindNamesForSlot(i, attachmentNames);
-						skin.FindNamesForSlot(i, placeholderNames);
+						foreach (var entry in skinEntries) {
+							placeholderNames.Add(entry.Name);
+						}
+						skinEntries.Clear();
+						defaultSkin.GetAttachments(i, skinEntries);
+						foreach (var entry in skinEntries) {
+							attachmentNames.Add(entry.Name);
+						}
 					}
 
 					for (int a = 0; a < attachmentNames.Count; a++) {

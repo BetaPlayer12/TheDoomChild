@@ -31,7 +31,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Spine.Unity.Modules.AttachmentTools;
+using Spine.Unity.AttachmentTools;
 
 namespace Spine.Unity.Examples {
 	public class EquipsVisualsComponentExample : MonoBehaviour {
@@ -60,7 +60,7 @@ namespace Spine.Unity.Examples {
 		}
 
 		public void Equip (int slotIndex, string attachmentName, Attachment attachment) {
-			equipsSkin.AddAttachment(slotIndex, attachmentName, attachment);
+			equipsSkin.SetAttachment(slotIndex, attachmentName, attachment);
 			skeletonAnimation.Skeleton.SetSkin(equipsSkin);
 			RefreshSkeletonAttachments();
 		}
