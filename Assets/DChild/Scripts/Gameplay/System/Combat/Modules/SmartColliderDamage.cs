@@ -5,6 +5,7 @@
  ***************************************************/
 using DChild.Gameplay;
 using DChild.Gameplay.Environment;
+using Sirenix.Serialization.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,35 +31,44 @@ namespace DChild.Gameplay.Combat
             {
                 if (m_processingHitbox.Count > 1)
                 {
-                    m_cacheResults = GameplaySystem.combatManager.GetValidTargets(transform.position, m_processingHitbox);
-                    for (int i = 0; i < m_cacheResults.Count; i++)
+                    using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                     {
-                        m_cacheHitbox = m_cacheResults[i];
-                        m_damageDealer.Damage(CreateInfo(m_cacheHitbox), m_cacheHitbox.defense);
+                        m_cacheResults = GameplaySystem.combatManager.GetValidTargets(transform.position, m_processingHitbox);
+                        for (int i = 0; i < m_cacheResults.Count; i++)
+                        {
+                            m_cacheHitbox = m_cacheResults[i];
+                            InitializeTargetInfo(cacheTargetInfo, m_cacheHitbox);
+                            m_damageDealer.Damage(cacheTargetInfo.Value, m_cacheHitbox.defense);
+                        }
+                        cacheTargetInfo.Release();
                     }
                 }
                 else if (m_processingHitbox.Count == 1)
                 {
-                    m_cacheHitbox = m_processingHitbox[0];
-                    m_damageDealer.Damage(CreateInfo(m_cacheHitbox), m_cacheHitbox.defense);
-                }
+                    using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                    {
+                        InitializeTargetInfo(cacheTargetInfo, m_cacheHitbox);
+                        m_damageDealer.Damage(cacheTargetInfo.Value, m_cacheHitbox.defense);
+                        cacheTargetInfo.Release();
+                    }
 
-                m_processingHitbox.Clear();
-                m_cacheHitbox = null;
-                m_processTargets = false;
+                    m_processingHitbox.Clear();
+                    m_cacheHitbox = null;
+                    m_processTargets = false;
+                }
             }
         }
 
-        protected TargetInfo CreateInfo(Hitbox hitbox)
+        protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
             if (hitbox.damageable.CompareTag(Character.objectTag))
             {
                 var character = hitbox.GetComponentInParent<Character>();
-                return new TargetInfo(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
+                cache.Value.Initialize(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
             }
             else
             {
-                return new TargetInfo(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
+                cache.Value.Initialize(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
             }
         }
 

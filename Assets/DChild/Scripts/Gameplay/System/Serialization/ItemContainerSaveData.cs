@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
@@ -29,11 +30,24 @@ namespace DChild.Serialization
         [SerializeField]
         private Item[] m_datas;
 
+        public ItemContainerSaveData()
+        {
+            m_datas = new Item[0];
+        }
+
         public ItemContainerSaveData(Item[] m_datas)
         {
             this.m_datas = m_datas;
         }
 
         public Item[] datas { get => m_datas;  }
+
+#if UNITY_EDITOR
+        public ItemContainerSaveData(ItemContainerSaveData m_datas)
+        {
+            List<Item> itemList = new List<Item>(m_datas.datas);
+            this.m_datas = itemList.ToArray();
+        }
+#endif
     }
 }

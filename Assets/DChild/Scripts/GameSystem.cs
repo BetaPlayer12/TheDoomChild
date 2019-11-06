@@ -3,20 +3,19 @@ using DChild.Gameplay;
 using DChild.Gameplay.Pooling;
 using DChild.Menu;
 using Holysoft.Event;
-using System;
-using System.Collections.Generic;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace DChild
 {
-    public struct CameraChangeEventArgs : IEventActionArgs
+    public class CameraChangeEventArgs : IEventActionArgs
     {
-        public CameraChangeEventArgs(Camera camera) : this()
+        public void Initialize(Camera camera) 
         {
             this.camera = camera;
         }
 
-        public Camera camera { get; }
+        public Camera camera { get; private set; }
     }
 
     public class GameSystem : MonoBehaviour
@@ -41,7 +40,12 @@ namespace DChild
         public static void SetCamera(Camera camera)
         {
             mainCamera = camera;
-            CameraChange?.Invoke(null, new CameraChangeEventArgs(mainCamera));
+            using (Cache<CameraChangeEventArgs> cacheEventArgs = Cache<CameraChangeEventArgs>.Claim())
+            {
+                cacheEventArgs.Value.Initialize(mainCamera);
+                CameraChange?.Invoke(null, cacheEventArgs.Value);
+                cacheEventArgs.Release();
+            }
         }
 
         public static void SetCursorVisibility(bool isVisible)
@@ -111,5 +115,4 @@ namespace DChild
             }
         }
     }
-
 }

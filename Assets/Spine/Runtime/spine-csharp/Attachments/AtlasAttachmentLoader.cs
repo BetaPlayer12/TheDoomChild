@@ -68,6 +68,7 @@ namespace Spine {
 			attachment.RegionU2 = region.u2;
 			attachment.RegionV2 = region.v2;
 			attachment.RegionRotate = region.rotate;
+			attachment.RegionDegrees = region.degrees;
 			attachment.regionOffsetX = region.offsetX;
 			attachment.regionOffsetY = region.offsetY;
 			attachment.regionWidth = region.width;
@@ -75,7 +76,7 @@ namespace Spine {
 			attachment.regionOriginalWidth = region.originalWidth;
 			attachment.regionOriginalHeight = region.originalHeight;
 			return attachment;
-		}			
+		}
 
 		public BoundingBoxAttachment NewBoundingBoxAttachment (Skin skin, string name) {
 			return new BoundingBoxAttachment(name);

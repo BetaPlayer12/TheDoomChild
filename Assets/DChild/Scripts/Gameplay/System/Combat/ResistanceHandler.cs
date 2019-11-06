@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Combat
 {
     public struct ResistanceHandler
     {
-        public void CalculatateResistanceReduction(IAttackResistance targetResistance, ref AttackInfo info)
+        public void CalculatateResistanceReduction(IAttackResistance targetResistance, AttackInfo info)
         {
             for (int i = 0; i < info.damageList.Count; i++)
             {

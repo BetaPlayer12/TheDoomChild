@@ -1,11 +1,11 @@
-﻿#if UNITY_EDITOR
-#endif
+﻿
 using DChild.Gameplay.Items;
 using DChild.Serialization;
 using System.Collections.Generic;
 
 namespace DChild.Gameplay.Inventories
 {
+
     public interface IItemContainer
     {
         bool restrictSize { get; }

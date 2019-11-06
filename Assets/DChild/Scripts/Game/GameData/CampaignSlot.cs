@@ -30,9 +30,9 @@ namespace DChild.Serialization
 
         [SerializeField, HideIf("m_newGame")]
         private PlayerCharacterData m_characterData;
-        [SerializeField, HideReferenceObjectPicker]
+        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
         private SerializeDataList m_campaignProgress;
-        [SerializeField, HideReferenceObjectPicker]
+        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
         private SerializeDataList m_zoneDatas;
 
         public CampaignSlot(int m_id)
@@ -40,15 +40,20 @@ namespace DChild.Serialization
             this.m_id = m_id;
             m_newGame = true;
             m_location = Location.None;
+            m_spawnPosition = new SerializedVector2();
             m_completion = 0;
             m_duration = new TimeKeeper();
+            m_characterData = new PlayerCharacterData();
+            m_campaignProgress = new SerializeDataList();
+            m_zoneDatas = new SerializeDataList();
         }
 
         public CampaignSlot()
         {
-            this.m_id = 0;
+            this.m_id = 1;
             m_newGame = true;
             m_location = Location.None;
+            m_spawnPosition = new SerializedVector2();
             m_completion = 0;
             m_duration = new TimeKeeper();
             m_characterData = new PlayerCharacterData();
@@ -67,13 +72,16 @@ namespace DChild.Serialization
         public Vector2 spawnPosition { get => m_spawnPosition; }
         public PlayerCharacterData characterData => m_characterData;
 
-
         public void Reset()
         {
             m_newGame = true;
             m_location = m_demoGame ? Location.Garden : Location.None;
+            m_spawnPosition = new SerializedVector2();
             m_completion = 0;
             m_duration = new TimeKeeper();
+            m_characterData = new PlayerCharacterData();
+            m_campaignProgress = new SerializeDataList();
+            m_zoneDatas = new SerializeDataList();
         }
 
         public void UpdateLocation(SceneInfo scene, Location location, Vector2 spawnPosition)
@@ -83,20 +91,33 @@ namespace DChild.Serialization
             m_spawnPosition = spawnPosition;
         }
 
-        public void UpdateCharacterData(PlayerCharacterData data)
+        public void UpdateCharacterData(PlayerCharacterData data) => m_characterData = data;
+
+        public void UpdateCampaignProgress(SerializeDataID ID, ISaveData saveData) => m_campaignProgress.UpdateData(ID, saveData);
+
+        public T GetCampaignProgress<T>(SerializeDataID ID) where T : ISaveData => (T)m_campaignProgress.GetData(ID);
+
+        public void UpdateZoneData(SerializeDataID ID, ISaveData saveData) => m_zoneDatas.UpdateData(ID, saveData);
+
+        public T GetZoneData<T>(SerializeDataID ID) where T : ISaveData => (T)m_zoneDatas.GetData(ID);
+        #region EditorOnly
+#if UNITY_EDITOR
+        public CampaignSlot(CampaignSlot slot)
         {
-            m_characterData = data;
+            this.m_id = slot.id;
+            m_newGame = slot.newGame;
+            m_location = slot.location;
+            m_spawnPosition = slot.spawnPosition;
+            m_completion = slot.completion;
+            m_duration = slot.duration;
+            m_characterData = new PlayerCharacterData(slot.characterData);
+            m_campaignProgress = new SerializeDataList(slot.campaignProgress);
+            m_zoneDatas = new SerializeDataList(slot.zoneDatas);
         }
 
-        public void UpdateCampaignProgress(SerializeDataID ID, ISaveData saveData) => m_campaignProgress.UpdateZoneData(ID, saveData);
+        public SerializeDataList campaignProgress => m_campaignProgress;
+        public SerializeDataList zoneDatas => m_zoneDatas;
 
-        public T GetCampaignProgress<T>(SerializeDataID ID) where T : ISaveData => (T)m_campaignProgress.GetZoneData(ID);
-
-        public void UpdateZoneData(SerializeDataID ID, ISaveData saveData) => m_zoneDatas.UpdateZoneData(ID, saveData);
-
-        public T GetZoneData<T>(SerializeDataID ID) where T : ISaveData => (T)m_zoneDatas.GetZoneData(ID);
-
-#if UNITY_EDITOR
         public void SetID(int ID)
         {
             m_id = ID;
@@ -109,6 +130,7 @@ namespace DChild.Serialization
                 Reset();
             }
         }
-#endif
+#endif 
+        #endregion
     }
 }

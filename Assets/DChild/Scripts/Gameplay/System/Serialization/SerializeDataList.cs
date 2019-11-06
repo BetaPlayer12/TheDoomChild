@@ -16,7 +16,7 @@ namespace DChild.Serialization
             m_saveDatas = new Dictionary<int, ISaveData>();
         }
 
-        public void UpdateZoneData(SerializeDataID ID, ISaveData data)
+        public void UpdateData(SerializeDataID ID, ISaveData data)
         {
             var IDvalue = ID.value;
             if (m_saveDatas.ContainsKey(ID.value))
@@ -29,10 +29,23 @@ namespace DChild.Serialization
             }
         }
 
-        public ISaveData GetZoneData(SerializeDataID ID)
+        public ISaveData GetData(SerializeDataID ID)
         {
             var IDvalue = ID.value;
             return m_saveDatas.ContainsKey(IDvalue) ? m_saveDatas[IDvalue] : null;
         }
+
+#if UNITY_EDITOR
+        public Dictionary<int, ISaveData> saveDatas => m_saveDatas;
+
+        public SerializeDataList(SerializeDataList data)
+        {
+            m_saveDatas = new Dictionary<int, ISaveData>();
+            foreach (var key in data.saveDatas.Keys)
+            {
+                m_saveDatas.Add(key, data.saveDatas[key]);
+            }
+        }
+#endif
     }
 }

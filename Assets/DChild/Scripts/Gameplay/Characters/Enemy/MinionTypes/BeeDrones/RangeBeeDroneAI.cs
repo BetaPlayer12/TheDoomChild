@@ -119,12 +119,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
 
-        [SerializeField]
-        private AudioSource m_Audiosource;
-        [SerializeField]
-        private AudioClip m_RangeAttackClip;
-        [SerializeField]
-        private AudioClip m_RangeBeeDroneDeadClip;
+        //[SerializeField]
+        //private AudioSource m_Audiosource;
+        //[SerializeField]
+        //private AudioClip m_RangeAttackClip;
+        //[SerializeField]
+        //private AudioClip m_RangeBeeDroneDeadClip;
 
 
         //stored timer
@@ -227,8 +227,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            m_Audiosource.clip = m_RangeBeeDroneDeadClip;
-            m_Audiosource.Play();
+            //m_Audiosource.clip = m_RangeBeeDroneDeadClip;
+            //m_Audiosource.Play();
            
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
@@ -278,8 +278,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
             GameObject burst = Instantiate(m_info.burstGO, spitPos, m_stingerPos.rotation);
             m_stingerLauncher.LaunchProjectile();
-            m_Audiosource.clip = m_RangeAttackClip;
-            m_Audiosource.Play();
+            //m_Audiosource.clip = m_RangeAttackClip;
+            //m_Audiosource.Play();
         }
         
         protected override void Awake()

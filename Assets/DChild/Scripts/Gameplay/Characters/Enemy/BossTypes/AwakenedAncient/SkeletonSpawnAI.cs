@@ -358,7 +358,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
                                 {
-
                                     m_attackDecider.DecideOnAttack();
                                     if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                                     {

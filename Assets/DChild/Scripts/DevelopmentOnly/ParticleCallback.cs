@@ -7,9 +7,32 @@ namespace DChild.Gameplay
     {
         public event EventAction<EventActionArgs> CallBack;
 
+        private TrailRenderer m_renderer;
+        private int m_previousSegmentCount;
+
         private void OnParticleSystemStopped()
         {
             CallBack?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        private void Awake()
+        {
+            m_renderer = GetComponent<TrailRenderer>();
+            m_previousSegmentCount = 0;
+        }
+
+        private void LateUpdate()
+        {
+            var positionCount = m_renderer.positionCount;
+            if (m_previousSegmentCount == 0)
+            {
+                m_previousSegmentCount = positionCount;
+            }
+            else if (positionCount == 0)
+            {
+                m_previousSegmentCount = positionCount;
+                CallBack?.Invoke(this, EventActionArgs.Empty);
+            }
         }
 
         private void OnValidate()

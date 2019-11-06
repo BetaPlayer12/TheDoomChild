@@ -4,27 +4,24 @@ using System.Collections.Generic;
 
 namespace DChild.Gameplay.Combat
 {
-    public struct CombatConclusionEventArgs : IEventActionArgs
+    public class CombatConclusionEventArgs : IEventActionArgs
     {
-        public CombatConclusionEventArgs(AttackerCombatInfo attacker, TargetInfo target, AttackInfo result) : this()
+        public void Initialize(AttackerCombatInfo attacker, TargetInfo target, AttackInfo result)
         {
             this.attacker = attacker;
             this.target = target;
             this.result = result;
         }
 
-        public AttackerCombatInfo attacker { get; }
-        public TargetInfo target { get; }
-        public AttackInfo result { get; }
+        public AttackerCombatInfo attacker { get; private set; }
+        public TargetInfo target { get; private set; }
+        public AttackInfo result { get; private set; }
     }
 
-    public struct BreakableObjectEventArgs : IEventActionArgs
+    public class BreakableObjectEventArgs : IEventActionArgs
     {
-        public BreakableObjectEventArgs(BreakableObject instance) : this()
-        {
-            this.instance = instance;
-        }
+        public void Initialize(BreakableObject instance) => this.instance = instance;
 
-        public BreakableObject instance { get; }
+        public BreakableObject instance { get; private set; }
     }
 }

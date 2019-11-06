@@ -1,11 +1,9 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 #if UNITY_EDITOR
 using Sirenix.Utilities.Editor;
-using UnityEditor;
 #endif
 
 namespace DChild
@@ -22,24 +20,8 @@ namespace DChild
         public int[] GetIDs() => m_IDs;
 
 #if UNITY_EDITOR
-        [SerializeField, FolderPath]
-        private string m_reference;
 
-        [Button]
-        private void UseAllDataFromReference()
-        {
-            var filePaths = Directory.GetFiles(m_reference);
-            for (int i = 0; i < filePaths.Length; i++)
-            {
-                var asset = AssetDatabase.LoadAssetAtPath<T>(filePaths[i]);
-                if (asset != null)
-                {
-                    m_hash.Add(asset);
-                }
-            }
-        }
-
-        [ShowInInspector, ListDrawerSettings(OnTitleBarGUI = "TitleBar", DraggableItems = true)]
+        [ShowInInspector, ListDrawerSettings(OnTitleBarGUI = "TitleBar", DraggableItems = true),AssetSelector]
         private List<T> m_hash = new List<T>();
 
         private void TitleBar()

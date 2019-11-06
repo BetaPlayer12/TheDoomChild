@@ -40,5 +40,16 @@ namespace DChild.Serialization
         {
             m_serializeDatas = new SerializeData[1];
         }
+
+#if UNITY_EDITOR
+        public AcquisitionData(AcquisitionData data)
+        {
+            m_serializeDatas = new SerializeData[data.count];
+            for (int i = 0; i < data.count; i++)
+            {
+                m_serializeDatas[i] = data.GetData(i);
+            }
+        }
+#endif
     }
 }
