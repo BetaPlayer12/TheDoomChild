@@ -2,16 +2,23 @@
 
 namespace DChild.Gameplay.Combat
 {
-    public struct AttackInfo
+    public class AttackInfo
     {
         public bool isCrit { get; set; }
-        public List<DamageInfo> damageList { get; }
+        public List<DamageInfo> damageList { get; private set; }
         public int totalDamageDealt { get; private set; }
 
-        public AttackInfo(params AttackDamage[] attackDamage)
+        public AttackInfo()
         {
             isCrit = false;
             damageList = new List<DamageInfo>();
+            totalDamageDealt = 0;
+        }
+
+        public void Initialize(params AttackDamage[] attackDamage)
+        {
+            isCrit = false;
+            damageList.Clear();
             totalDamageDealt = 0;
             for (int i = 0; i < attackDamage.Length; i++)
             {

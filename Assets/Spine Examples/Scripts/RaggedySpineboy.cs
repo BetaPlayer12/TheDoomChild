@@ -38,17 +38,17 @@ namespace Spine.Unity.Examples {
 		public float restoreDuration = 0.5f;
 		public Vector2 launchVelocity = new Vector2(50,100);
 
-		Spine.Unity.Modules.SkeletonRagdoll2D ragdoll;
+		Spine.Unity.Examples.SkeletonRagdoll2D ragdoll;
 		Collider2D naturalCollider;
 
 		void Start () {
-			ragdoll = GetComponent<Spine.Unity.Modules.SkeletonRagdoll2D>();
+			ragdoll = GetComponent<Spine.Unity.Examples.SkeletonRagdoll2D>();
 			naturalCollider = GetComponent<Collider2D>();
 		}
 
 		void AddRigidbody () {
 			var rb = gameObject.AddComponent<Rigidbody2D>();
-	        rb.freezeRotation = true;
+			rb.freezeRotation = true;
 			naturalCollider.enabled = true;
 		}
 
@@ -77,7 +77,7 @@ namespace Spine.Unity.Examples {
 			RaycastHit2D hit = Physics2D.Raycast((Vector2)rbPosition, (Vector2)(estimatedPos - rbPosition), Vector3.Distance(estimatedPos, rbPosition), groundMask);
 			if (hit.collider != null)
 				skeletonPoint = hit.point;
-			
+
 			ragdoll.RootRigidbody.isKinematic = true;
 			ragdoll.SetSkeletonPosition(skeletonPoint);
 
