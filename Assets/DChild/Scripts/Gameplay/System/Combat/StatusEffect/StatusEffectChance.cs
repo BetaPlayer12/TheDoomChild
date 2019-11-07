@@ -18,6 +18,5 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public StatusEffectType type => m_type;
         public int chance { get => m_chance; set => m_chance = value; }
-
     }
 }

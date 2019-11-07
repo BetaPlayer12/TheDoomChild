@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters
 {
+    [AddComponentMenu("DChild/Gameplay/Object/Character Colliders")]
     public class CharacterColliders : MonoBehaviour
     {
         private Collider2D[] m_colliders;

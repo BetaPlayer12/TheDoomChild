@@ -73,7 +73,6 @@ namespace DChild.Gameplay.Combat
             return result;
         }
 
-
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)
         {
             m_statusInflictionHandle.Inflict(reciever, statusEffect);

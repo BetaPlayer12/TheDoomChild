@@ -366,6 +366,21 @@ namespace DChild
                     throw new System.Exception($"Record with ID:{ID} does not exists, use Insert instead");
                 }
             }
+
+            public int Insert(int ID, string name, string description, int quantityLimit, int cost)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    //ChangeID and try Insert Again
+                    return Insert((int)UnityEngine.Random.Range(0, 999999), name, description, quantityLimit, cost);
+                }
+                else
+                {
+                    m_connection.ExecuteCommand($"INSERT INTO {table} (ID,Name, Description, MaxStack,Cost) VALUES({ID},\"{name}\",\"{description}\",{quantityLimit},{cost});");
+                    return ID;
+                }
+            }
         }
         private static ItemConnection itemConnection = new ItemConnection();
         public static ItemConnection GetItemConnection() => itemConnection;

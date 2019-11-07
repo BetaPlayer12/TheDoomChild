@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Player Weapon")]
     public class PlayerWeapon : MonoBehaviour
     {
         [HorizontalGroup("Split")]

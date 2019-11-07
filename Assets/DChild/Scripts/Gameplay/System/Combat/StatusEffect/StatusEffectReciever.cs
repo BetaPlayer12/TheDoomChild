@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         public StatusEffectType type { get; }
     }
 
+    [AddComponentMenu("DChild/Gameplay/Combat/Status Effect Reciever")]
     public class StatusEffectReciever : MonoBehaviour
     {
         [SerializeField]

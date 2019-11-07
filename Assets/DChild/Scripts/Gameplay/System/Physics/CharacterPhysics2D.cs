@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace DChild.Gameplay
 {
-
     public abstract class CharacterPhysics2D : IsolatedPhysics2D 
     {
         [TabGroup("TabGroup", "Configuration")]

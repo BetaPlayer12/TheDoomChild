@@ -15,6 +15,7 @@ namespace DChild.Gameplay.Systems.WorldComponents
 {
 
     [System.Serializable]
+    [AddComponentMenu("DChild/Gameplay/Objects/Isolated Object")]
     public class IsolatedObject : MonoBehaviour, IIsolatedObject, IIsolatedTimeModifier, IIsolatedTime, IIsolatedPhysicsTime
     {
         [SerializeField]
