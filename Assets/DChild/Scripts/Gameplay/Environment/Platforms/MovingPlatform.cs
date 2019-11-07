@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
+    [AddComponentMenu("DChild/Gameplay/Environment/Moving Platform")]
     public class MovingPlatform : MonoBehaviour
     {
         public struct UpdateEventArgs : IEventActionArgs

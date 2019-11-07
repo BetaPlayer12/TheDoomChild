@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
+    [AddComponentMenu("DChild/Gameplay/Environment/Debris")]
     public class Debris : MonoBehaviour
     {
         [SerializeField, MinValue(0)]

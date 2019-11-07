@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
+    [AddComponentMenu("DChild/Gameplay/Environment/Constant Motion Platform")]
     public class ConstantMotionPlatformHandle : MonoBehaviour
     {
         [System.Serializable]

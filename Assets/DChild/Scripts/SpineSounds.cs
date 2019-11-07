@@ -6,6 +6,7 @@ using System;
 
 namespace DChild
 {
+    [AddComponentMenu("DChild/Audio/Spine Sounds")]
     public class SpineSounds : MonoBehaviour, IHasSkeletonDataAsset
     {
         [System.Serializable]
