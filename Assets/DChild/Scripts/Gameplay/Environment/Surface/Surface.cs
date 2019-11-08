@@ -4,6 +4,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Environment
 {
     [DisallowMultipleComponent]
+    [AddComponentMenu("DChild/Gameplay/Environment/Surface")]
     public class Surface : MonoBehaviour
     {
         [SerializeField]

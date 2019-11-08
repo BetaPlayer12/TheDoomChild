@@ -58,7 +58,7 @@ namespace DChild
         {
             if (m_initialized == false)
             {
-                m_ID = GetInstanceID();
+                m_ID = Mathf.Abs(GetInstanceID());
                 m_name = m_customName;
                 m_initialized = true;
             }

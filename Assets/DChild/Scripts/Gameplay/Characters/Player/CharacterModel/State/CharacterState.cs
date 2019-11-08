@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.State
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Character State")]
     public class CharacterState : MonoBehaviour, IPlayerState, IMoveState, IGroundednessState,
                                 ICrouchState, IFlinchState, IWallStickState,
                                 IDashState, IDoubleJumpState, IWallJumpState,

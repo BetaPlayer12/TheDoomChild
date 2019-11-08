@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO:: Find a way to change this to acleaner one
+
 public class PlatFormStick : MonoBehaviour
 {
     [SerializeField]

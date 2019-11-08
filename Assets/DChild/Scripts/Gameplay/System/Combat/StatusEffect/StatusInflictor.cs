@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusAilment
 {
+    [AddComponentMenu("DChild/Gameplay/Combat/Status Inflictor")]
     public class StatusInflictor : SerializedMonoBehaviour
     {
         [SerializeField]

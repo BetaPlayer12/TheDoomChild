@@ -7,6 +7,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Combat
 {
     [System.Serializable]
+    [AddComponentMenu("DChild/Gameplay/Combat/Basic Attack Resistance")]
     public class BasicAttackResistance : AttackResistance
     {
         [SerializeField]

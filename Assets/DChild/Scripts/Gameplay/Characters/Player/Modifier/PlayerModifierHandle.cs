@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Player Modifier Handle")]
     public class PlayerModifierHandle : MonoBehaviour, IPlayerModifer
     {  
         [ShowInInspector]

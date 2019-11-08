@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
+
     public class ResetSkillRequestEventArgs : IEventActionArgs
     {
         private List<PrimarySkill> m_skillsToReset;
@@ -33,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players
         }
     }
 
+    [AddComponentMenu("DChild/Gameplay/Player/Skill Reset Requester")]
     public class SkillResetRequester : MonoBehaviour
     {
         private ResetSkillRequestEventArgs m_eventArgs;

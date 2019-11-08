@@ -2,6 +2,7 @@
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/Physics/Isolated Character Physics 2D")]
     public class IsolatedCharacterPhysics2D : CharacterPhysics2D
     {
         public sealed override Vector2 velocity

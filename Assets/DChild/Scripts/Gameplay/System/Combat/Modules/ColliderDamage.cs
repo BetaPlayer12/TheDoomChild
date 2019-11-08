@@ -16,6 +16,7 @@ using Sirenix.Utilities;
 
 namespace DChild.Gameplay.Combat
 {
+    [AddComponentMenu("DChild/Gameplay/Combat/Collider Damage")]
     public class ColliderDamage : MonoBehaviour
     {
         [System.Serializable]

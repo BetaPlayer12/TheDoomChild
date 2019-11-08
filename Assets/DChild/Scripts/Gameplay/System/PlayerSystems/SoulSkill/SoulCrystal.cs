@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+using DChild.Gameplay.Items;
 #if UNITY_EDITOR
 using UnityEditor;
 using DChildEditor;
@@ -8,18 +9,14 @@ using DChildEditor;
 namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
     [CreateAssetMenu(fileName = "SoulCrystal", menuName = "DChild/Database/Soul Crystal")]
-    public class SoulCrystal : SerializedScriptableObject
+    public class SoulCrystal : ItemData
     {
-        [SerializeField, OnValueChanged("UpdateReference")]
+        [SerializeField, OnValueChanged("UpdateData"), ToggleGroup("m_enableEdit")]
         private SoulSkill m_activateSoulSkill;
-        [SerializeField, ReadOnly]
-        private string m_name;
-        [SerializeField]
-        private Sprite m_icon;
-        [SerializeField]
-        private Challenge[] m_challenges;
+        
+        [SerializeField, ToggleGroup("m_enableEdit")]
+        private IChallenge[] m_challenges;
 
-        public Sprite icon => m_icon;
         public string crystalName => m_name;
         public string challengeInfo
         {
@@ -46,32 +43,25 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             return true;
         }
 
-        public void ActivateSoulSkill()
+        public IChallenge[] CreateChallenges()
         {
-
+            var challenges = new IChallenge[m_challenges.Length];
+            for (int i = 0; i < m_challenges.Length; i++)
+            {
+                m_challenges[i] = challenges[i].CreateCopy();
+            }
+            return challenges;
         }
 
 #if UNITY_EDITOR
-        private void UpdateReference()
-        {
-            if (m_activateSoulSkill == null)
-            {
-                m_name = "Unknown Crystal";
-            }
-            else
-            {
-                m_name = m_activateSoulSkill.name + " Crystal";
-            }
-            UpdateAssetName();
+        protected override string fileSuffix => "CrystalData";
 
-        }
-
-        private void UpdateAssetName()
+        private void UpdateData()
         {
-            string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
-            var fileName = m_name.Replace(" ", string.Empty);
-            FileUtility.RenameAsset(this, assetPath, fileName);
-            AssetDatabase.SaveAssets();
+            m_name = m_activateSoulSkill.name;
+            m_customName = m_name;
+            UpdateReference();
+            m_name += " Crystal";
         }
 #endif
     }

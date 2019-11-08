@@ -4,6 +4,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Combat
 {
     [System.Serializable]
+    [AddComponentMenu("DChild/Gameplay/Combat/Basic Health")]
     public class BasicHealth : Health
     {
         [SerializeField, MinValue(0f), OnValueChanged("SendValueEvent")]
