@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/AI/Movement/Ground Movement Handler 2D")]
     public class GroundMovementHandler2D : MovementHandle2D
     {
         [SerializeField]
