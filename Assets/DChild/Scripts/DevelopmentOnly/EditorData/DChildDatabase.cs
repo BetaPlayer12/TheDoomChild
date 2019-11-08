@@ -272,6 +272,21 @@ namespace DChild
                     m_connection.ExecuteCommand($"DELETE FROM Bestiary_Location WHERE Bestiary_ID = {ID}");
                 }
             }
+
+            public (int HP,int DMG) GetRatings(int ID)
+            {
+                var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
+                if (bestiaryReader.Read())
+                {
+                    return (bestiaryReader.GetData<int>("HP Rating"), bestiaryReader.GetData<int>("DMG Rating"));
+
+                }
+                else
+                {
+                    return (-1, -1);
+
+                }
+            }
         }
         private static BestiaryConnection bestiaryConnection = new BestiaryConnection();
         public static BestiaryConnection GetBestiaryConnection() => bestiaryConnection;
