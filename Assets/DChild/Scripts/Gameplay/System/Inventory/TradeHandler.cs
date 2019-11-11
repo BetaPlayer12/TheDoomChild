@@ -1,45 +1,48 @@
-﻿using DChild.Gameplay.Inventories;
+﻿
 using DChild.Gameplay.Items;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class TradeHandler : MonoBehaviour
+namespace DChild.Gameplay.Inventories
 {
-    
-    private ITradableInventory m_playerInventory;
-    private ITradableInventory m_merchantInventory;
-
-    public void BuyItem(ItemData Item)
+    public class TradeHandler : MonoBehaviour
     {
-        if (Item.cost <= m_playerInventory.soulEssence)
+        private ITradableInventory m_buyer;
+        private ITradableInventory m_seller;
+
+        public void BuyItem(ItemData item)
         {
-            m_playerInventory.AddSoulEssence(-Item.cost);
-            m_playerInventory.items.AddItem(Item, 1);
-            m_merchantInventory.items.AddItem(Item, -1);
+            var cost = item.cost;
+            if (m_buyer.CanAfford(cost))
+            {
+                m_buyer.AddSoulEssence(-cost);
+                m_buyer.AddItem(item, 1);
+                m_seller.AddSoulEssence(cost);
+                m_seller.AddItem(item, -1);
+            }
         }
-    }
 
-    public void SellItem(ItemData Item)
-    {
-        if (m_playerInventory.items.GetCurrentAmount(Item) > 0)
+        public void SellItem(ItemData item)
         {
-            m_playerInventory.AddSoulEssence(Item.cost);
-            m_playerInventory.items.AddItem(Item, -1);
-            m_merchantInventory.items.AddItem(Item, 1);           
+            var cost = item.cost;
+            if (m_seller.CanAfford(cost))
+            {
+                m_buyer.AddSoulEssence(cost);
+                m_buyer.AddItem(item, -1);
+                m_seller.AddSoulEssence(-cost);
+                m_seller.AddItem(item, 1);
+            }
         }
-    }
 
-    public void InputMerchantData(ITradableInventory MerchItemContainer)
-    {
-        m_merchantInventory = MerchItemContainer;
-    }
+        public void SetSeller(ITradableInventory seller)
+        {
+            m_seller = seller;
+        }
 
-    public void InputPlayerData(ITradableInventory Player)
-    {
-        m_playerInventory = Player;
-    }
+        public void SetBuyer(ITradableInventory buyer)
+        {
+            m_buyer = buyer;
+        }
 
+    }
 }
 

@@ -26,7 +26,6 @@ namespace DChild.Gameplay.Inventories
         public int soulEssence => m_soulEssence;
 
         int ICurrency.amount => m_soulEssence;
-        IItemContainer ITradableInventory.items => m_items;
 
         public event EventAction<CurrencyUpdateEventArgs> OnAmountSet;
         public event EventAction<CurrencyUpdateEventArgs> OnAmountAdded;
@@ -86,6 +85,16 @@ namespace DChild.Gameplay.Inventories
         public int GetCurrentAmount(ItemData item) => m_items.GetCurrentAmount(item);
 
         public bool HasSpaceFor(ItemData item) => m_items.HasSpaceFor(item);
+
+        public void AddItem(ItemData item, int count)
+        {
+           if(count != 0)
+            {
+                m_items.AddItem(item, count);
+            }
+        }
+
+        public bool CanAfford(int cost) => cost <= m_soulEssence;
 
         private void Load(IItemContainer itemContainer, ItemContainerSaveData saveData)
         {
