@@ -10,6 +10,7 @@ using DChild.Gameplay.Characters.Players.Behaviour;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Player Character Controller")]
     public class PlayerCharacterController : MonoBehaviour, IMainController
     {
         [SerializeField]

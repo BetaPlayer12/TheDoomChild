@@ -18,6 +18,8 @@ namespace DChild.Gameplay
         {
             GameplaySystem.campaignSerializer.slot.UpdateLocation(m_sceneInfo, m_location, m_spawnPosition);
             GameplaySystem.campaignSerializer.Save();
+            GameplaySystem.playerManager.player.health.ResetValueToMax();
+            GameplaySystem.playerManager.player.magic.ResetValueToMax();
         }
 
         private void Awake()
@@ -29,7 +31,7 @@ namespace DChild.Gameplay
         private void OnValidate()
         {
             Vector2 position = transform.position;
-            if(m_spawnPosition != position)
+            if (m_spawnPosition != position)
             {
                 m_spawnPosition = position;
             }

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/AI/Movement/Omni Movement Handler 2D")]
     public class OmniMovementHandle2D : MovementHandle2D
     {
         [SerializeField]

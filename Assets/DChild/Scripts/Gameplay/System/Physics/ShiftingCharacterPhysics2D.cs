@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/Physics/Shifting Character Physics 2D")]
     public class ShiftingCharacterPhysics2D : CharacterPhysics2D, IWorldShifter
     {
         [SerializeField]

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/Objects/Character")]
     public class Character : MonoBehaviour, ICharacter, ITurningCharacter
     {
         public static string objectTag => "Character";

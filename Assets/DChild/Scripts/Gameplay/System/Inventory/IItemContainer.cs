@@ -1,6 +1,7 @@
 ﻿
 using DChild.Gameplay.Items;
 using DChild.Serialization;
+using Holysoft.Event;
 using System.Collections.Generic;
 
 namespace DChild.Gameplay.Inventories
@@ -11,6 +12,8 @@ namespace DChild.Gameplay.Inventories
         bool restrictSize { get; }
         int MaxSize { get; }
         int Count { get; }
+        event EventAction<ItemEventArgs> ItemUpdate;
+
         ItemSlot GetSlot(int index);
         void AddItem(ItemData item, int count);
         void SetItem(ItemData item, int count);

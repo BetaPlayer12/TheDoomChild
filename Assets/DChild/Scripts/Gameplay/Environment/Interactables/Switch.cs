@@ -14,6 +14,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
+    [AddComponentMenu("DChild/Gameplay/Environment/Interactable/Switch")]
     public class Switch : MonoBehaviour, IInteractable
     {
         public enum Type

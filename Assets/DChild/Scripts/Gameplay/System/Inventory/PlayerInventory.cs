@@ -1,11 +1,14 @@
-﻿using DChild.Gameplay.Items;
+﻿using DChild.Gameplay.Characters.Players.SoulSkills;
+using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
 namespace DChild.Gameplay.Inventories
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Player Inventory")]
     public class PlayerInventory : SerializedMonoBehaviour, ICurrency, ITradableInventory
     {
         [SerializeField]
@@ -23,36 +26,9 @@ namespace DChild.Gameplay.Inventories
         public int soulEssence => m_soulEssence;
 
         int ICurrency.amount => m_soulEssence;
-        IItemContainer ITradableInventory.items => m_items;
 
         public event EventAction<CurrencyUpdateEventArgs> OnAmountSet;
         public event EventAction<CurrencyUpdateEventArgs> OnAmountAdded;
-
-        event EventAction<CurrencyUpdateEventArgs> ICurrency.OnAmountSet
-        {
-            add
-            {
-                throw new System.NotImplementedException();
-            }
-
-            remove
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        event EventAction<CurrencyUpdateEventArgs> ICurrency.OnAmountAdded
-        {
-            add
-            {
-                throw new System.NotImplementedException();
-            }
-
-            remove
-            {
-                throw new System.NotImplementedException();
-            }
-        }
 
         public PlayerInventoryData Save()
         {
@@ -83,18 +59,42 @@ namespace DChild.Gameplay.Inventories
         public void AddItem(ItemData item)
         {
             //TODO: Items are not yet categorized
-            m_items.AddItem(item, 1);
+            if (item is SoulCrystal)
+            {
+                m_soulCrystals.AddItem(item, 1);
+            }
+            else
+            {
+                m_items.AddItem(item, 1);
+            }
         }
 
         public void RemoveItem(ItemData item)
         {
             //TODO: Items are not yet categorized
-            m_items.AddItem(item, -1);
+            if (item is SoulCrystal)
+            {
+                m_soulCrystals.AddItem(item, -1);
+            }
+            else
+            {
+                m_items.AddItem(item, -1);
+            }
         }
 
         public int GetCurrentAmount(ItemData item) => m_items.GetCurrentAmount(item);
 
         public bool HasSpaceFor(ItemData item) => m_items.HasSpaceFor(item);
+
+        public void AddItem(ItemData item, int count)
+        {
+           if(count != 0)
+            {
+                m_items.AddItem(item, count);
+            }
+        }
+
+        public bool CanAfford(int cost) => cost <= m_soulEssence;
 
         private void Load(IItemContainer itemContainer, ItemContainerSaveData saveData)
         {
