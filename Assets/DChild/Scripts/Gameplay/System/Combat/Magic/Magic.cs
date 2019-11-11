@@ -8,6 +8,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Combat
 {
     [System.Serializable]
+    [AddComponentMenu("DChild/Gameplay/Combat/Magic")]
     public class Magic : MonoBehaviour, ICappedStat
     {
         [SerializeField, MinValue(0), OnValueChanged("SendValueEvent")]

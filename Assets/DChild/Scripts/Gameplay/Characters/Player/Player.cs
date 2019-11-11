@@ -32,8 +32,10 @@ namespace DChild.Gameplay.Characters.Players
         IMainController controller { get; }
         PlayerInventory inventory { get; }
         LootPicker lootPicker { get; }
+        StatusEffectReciever statusEffectReciever { get; }
     }
 
+    [AddComponentMenu("DChild/Gameplay/Player/Player")]
     public class Player : SerializedMonoBehaviour, IPlayer
     {
         [SerializeField]
@@ -50,6 +52,8 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerCharacterController m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
+        [SerializeField]
+        private SoulCrystalHandle m_soulCrystalHandle;
 
         [Title("Serialzables")]
         [SerializeField]
@@ -66,6 +70,8 @@ namespace DChild.Gameplay.Characters.Players
         private Attacker m_attacker;
         [SerializeField]
         private Magic m_magic;
+        [SerializeField]
+        private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private LootPicker m_lootPicker;
         [SerializeField]
@@ -88,6 +94,8 @@ namespace DChild.Gameplay.Characters.Players
         public IMainController controller => m_controller;
         public LootPicker lootPicker => m_lootPicker;
 
+        public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
+
         public StatusEffectResistance statusResistance => m_statusResistance;
 
         public PlayerCharacterData SaveData()
@@ -98,6 +106,7 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PlayerCharacterData data)
         {
             m_serializer.LoadData(data);
+            m_soulCrystalHandle.InitializeHandles();
         }
 
         public void SetPosition(Vector2 position)

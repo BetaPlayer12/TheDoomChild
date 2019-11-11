@@ -4,49 +4,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioListenerPositioner : MonoBehaviour
+namespace DChild.Gameplay
 {
-    private Transform m_camera;
-
-    private static AudioListenerPositioner m_instance;
-
-    private void OnCameraChange(object sender, CameraChangeEventArgs eventArgs)
+    [AddComponentMenu("DChild/Gameplay/Audio/Audio Listener Positioner")]
+    public class AudioListenerPositioner : MonoBehaviour
     {
-        m_camera = eventArgs.camera?.transform ?? null;
-        enabled = m_camera;
-    }
+        private Transform m_camera;
 
-    private void Awake()
-    {
-        if (m_instance)
+        private static AudioListenerPositioner m_instance;
+
+        private void OnCameraChange(object sender, CameraChangeEventArgs eventArgs)
         {
-            Destroy(gameObject);
+            m_camera = eventArgs.camera?.transform ?? null;
+            enabled = m_camera;
         }
-        else
+
+        private void Awake()
         {
-            m_instance = this;
+            if (m_instance)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                m_instance = this;
+            }
         }
-    }
 
-    private void Start()
-    {
-        GameSystem.CameraChange += OnCameraChange;
-        m_camera = GameSystem.mainCamera?.transform ?? null;
-        enabled = m_camera;
-    }
-
-    private void LateUpdate()
-    {
-        var position = m_camera.position;
-        position.z = 0;
-        transform.position = position;
-    }
-
-    private void OnDestroy()
-    {
-        if (this == m_instance)
+        private void Start()
         {
-            m_instance = null;
+            GameSystem.CameraChange += OnCameraChange;
+            m_camera = GameSystem.mainCamera?.transform ?? null;
+            enabled = m_camera;
         }
-    }
+
+        private void LateUpdate()
+        {
+            var position = m_camera.position;
+            position.z = 0;
+            transform.position = position;
+        }
+
+        private void OnDestroy()
+        {
+            if (this == m_instance)
+            {
+                m_instance = null;
+            }
+        }
+    } 
 }

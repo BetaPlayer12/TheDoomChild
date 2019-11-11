@@ -80,7 +80,7 @@ namespace DChild.Gameplay
             }
             if (m_useTime)
             {
-                m_castPerSecond.Tick(GameplaySystem.time.deltaTime);
+                m_castPerSecond.Tick(GameplaySystem.time?.deltaTime ?? Time.deltaTime);
             }
         }
 

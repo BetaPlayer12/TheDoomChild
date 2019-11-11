@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+    [AddComponentMenu("DChild/Gameplay/Combat/Extended Attack Resistance")]
     public class ExtendedAttackResistance : AttackResistance
     {
         [HorizontalGroup("Split")]

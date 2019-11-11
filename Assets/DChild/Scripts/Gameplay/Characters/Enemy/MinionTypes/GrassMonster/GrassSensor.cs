@@ -32,11 +32,12 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
 
             var dir = (m_minion.currentFacingDirection == HorizontalDirection.Left ? 180f : 0f);
             m_grassSensor.SetRotation(dir);
-            
+
             if (m_grassSensor.isDetecting)
             {
-                var foliageGrass = m_grassSensor.GetProminentHitCollider().transform.gameObject.GetComponentInChildren<IFoliage>();          
-                return (foliageGrass != null) ? true : false;
+                //var foliageGrass = m_grassSensor.GetProminentHitCollider().transform.gameObject.GetComponentInChildren<IFoliage>();          
+                //return (foliageGrass != null) ? true : false;
+                return false;
             }
             else
             {
@@ -54,5 +55,5 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
             m_minion = GetComponentInParent<GrassMonster>();
             m_grassSensor = GetComponent<RaySensor>();
         }
-    }  
+    }
 }
