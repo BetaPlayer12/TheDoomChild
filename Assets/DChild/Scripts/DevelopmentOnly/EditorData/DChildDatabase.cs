@@ -111,6 +111,21 @@ namespace DChild
                 }
             }
 
+            public int Insert(int ID, string name, string description, SoulSkillType type)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    //ChangeID and try Insert Again
+                    return Insert((int)UnityEngine.Random.Range(0, 999999), name, description, type);
+                }
+                else
+                {
+                    m_connection.ExecuteCommand($"INSERT INTO {table} (ID,Name, Description, Type) VALUES({ID},\"{name}\",\"{description}\",\"{type.ToString()}\");");
+                    return ID;
+                }
+            }
+
             private Element[] CreateListFromReader(IDataReader reader)
             {
                 List<Element> list = new List<Element>();
