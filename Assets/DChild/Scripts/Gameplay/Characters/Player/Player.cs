@@ -33,6 +33,7 @@ namespace DChild.Gameplay.Characters.Players
         PlayerInventory inventory { get; }
         LootPicker lootPicker { get; }
         StatusEffectReciever statusEffectReciever { get; }
+        Character character { get; }
     }
 
     [AddComponentMenu("DChild/Gameplay/Player/Player")]
@@ -97,6 +98,8 @@ namespace DChild.Gameplay.Characters.Players
         public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
 
         public StatusEffectResistance statusResistance => m_statusResistance;
+
+        public Character character => m_controlledCharacter;
 
         public PlayerCharacterData SaveData()
         {

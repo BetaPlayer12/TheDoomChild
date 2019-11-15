@@ -96,7 +96,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         {
             if (m_inflictedStatusEffects.Count > 0)
             {
-                var deltaTime = m_isolatedObject.deltaTime;
+                var deltaTime = m_isolatedObject?.deltaTime ?? Time.deltaTime;
                 for (int i = 0; i < m_inflictedStatusEffects.Count; i++)
                 {
                     m_inflictedStatusEffects[i].Update(deltaTime);

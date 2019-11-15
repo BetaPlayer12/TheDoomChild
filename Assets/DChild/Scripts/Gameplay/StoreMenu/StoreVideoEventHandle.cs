@@ -21,7 +21,6 @@ namespace DChild.Gameplay.Systems
 
         private void Awake()
         {
-            Debug.Log("Awaken");
             m_openVideo.loopPointReached += OnVideoDone;
             m_closeVideo.loopPointReached += OnVideoDone;
         }
