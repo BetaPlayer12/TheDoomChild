@@ -10,7 +10,8 @@ namespace DChild.Gameplay.Systems
             var damageable = collision.GetComponentInParent<Damageable>();
             if (damageable)
             {
-                //Add UI to thingy
+                Debug.Log(GameplaySystem.healthTracker);
+                GameplaySystem.healthTracker.TrackHealth(damageable);
             }
         }
 
@@ -19,7 +20,7 @@ namespace DChild.Gameplay.Systems
             var damageable = collision.GetComponentInParent<Damageable>();
             if (damageable)
             {
-                //Remove UI to thingy
+                GameplaySystem.healthTracker.RemoveTracker(damageable);
             }
         }
     }
