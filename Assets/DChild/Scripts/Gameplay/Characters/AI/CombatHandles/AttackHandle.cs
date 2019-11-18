@@ -1,12 +1,9 @@
-﻿using DChild.Gameplay.Characters;
-using DChild.Gameplay.Projectiles;
-using Holysoft.Event;
+﻿using Holysoft.Event;
 using Spine;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters
 {
-
     [System.Serializable]
     public class AttackHandle
     {

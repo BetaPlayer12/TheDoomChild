@@ -14,6 +14,7 @@ namespace DChild.Gameplay.Characters.Players
         int GetStat(PlayerStat stat);
     }
 
+    [AddComponentMenu("DChild/Gameplay/Player/Player Stats")]
     public class PlayerStats : MonoBehaviour, IPlayerStats
     {
         [HorizontalGroup("Split")]

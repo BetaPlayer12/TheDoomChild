@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Player Character Initializer")]
     public class PlayerCharacterInitializer : MonoBehaviour
     {
         [SerializeField]

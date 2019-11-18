@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DChild.Inputs
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Player Input")]
     public class PlayerInput : MonoBehaviour
     {
         private const string INPUT_JUMP = "Jump";

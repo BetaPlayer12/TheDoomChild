@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusAilment
 {
+    [AddComponentMenu("DChild/Gameplay/Combat/Status Effect Resistance")]
     public class StatusEffectResistance : SerializedMonoBehaviour, IStatusEffectResistance
     {
         public struct ResistanceEventArgs : IEventActionArgs

@@ -5,6 +5,7 @@ using UnityEngine;
 namespace DChild
 {
     [ExecuteInEditMode]
+    [AddComponentMenu("DChild/Misc/Cursor")]
     public class Cursor : MonoBehaviour
     {
 #if UNITY_EDITOR

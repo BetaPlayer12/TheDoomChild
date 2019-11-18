@@ -1,15 +1,12 @@
-﻿using System;
-using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using Holysoft.Event;
-using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-
+    [AddComponentMenu("DChild/Gameplay/Player/Stat To Model Injector")]
     public class StatToModelInjector : MonoBehaviour
     {
         [SerializeField]
