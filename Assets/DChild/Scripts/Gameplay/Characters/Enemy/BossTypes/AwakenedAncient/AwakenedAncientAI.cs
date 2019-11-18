@@ -649,7 +649,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         m_movementHandle.Stop();
-                        m_turnHandle.Execute(m_info.turnAnimation);
+                        m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     }
                     break;
                 case State.Attacking:

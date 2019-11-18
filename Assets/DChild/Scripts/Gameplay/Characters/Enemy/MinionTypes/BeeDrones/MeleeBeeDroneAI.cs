@@ -315,13 +315,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.ReevaluateSituation);
                    
                     m_agent.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                 case State.Attacking:
                  
                     m_agent.Stop();
                     m_animation.EnableRootMotion(false, false);
-                    m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation);
+                    m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation, m_info.idleAnimation);
                     m_animation.SetAnimation(0, m_info.meleeAttack.animation, true);
                     m_stateHandle.Wait(State.WaitBehaviourEnd);
                     //m_Audiosource.clip = m_AttackClip;
