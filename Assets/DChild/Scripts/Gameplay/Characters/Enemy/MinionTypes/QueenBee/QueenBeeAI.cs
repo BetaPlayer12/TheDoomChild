@@ -282,7 +282,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     m_agent.Stop();
                     m_animation.EnableRootMotion(false, false);
-                    m_attackHandle.ExecuteAttack(m_info.attack.animation);
+                    m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                     m_animation.SetAnimation(0, m_info.attack.animation, true);
                     m_stateHandle.Wait(State.WaitBehaviourEnd);
                     //m_Audiosource.clip = m_AttackClip;

@@ -232,7 +232,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
@@ -244,7 +244,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Scratch:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation);
+                            m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation);
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                         //case Attack.ScratchDeflect: TO BE IMPLEMENTED

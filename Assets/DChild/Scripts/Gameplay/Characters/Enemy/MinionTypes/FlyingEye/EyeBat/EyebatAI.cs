@@ -35,6 +35,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_attackMove = new SimpleAttackInfo();
             public SimpleAttackInfo attackMove => m_attackMove;
+            [SerializeField]
+            private float m_attackRiseSpeed;
+            public float attackRiseSpeed => m_attackRiseSpeed;
             //
             [SerializeField, MinValue(0)]
             private float m_patience;
@@ -196,6 +199,25 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator AttackRoutine()
+        {
+            m_animation.EnableRootMotion(true, true);
+            //m_attackHandle.ExecuteAttack(m_info.attackMove.animation);
+            m_animation.SetAnimation(0, m_info.attackMove.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMove.animation);
+            m_agent.Stop();
+            if (!IsFacingTarget())
+            {
+                m_turnHandle.Execute();
+            }
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.EnableRootMotion(true, false);
+            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, m_info.attackRiseSpeed), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(5);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
+        }
+
         public bool Wait()
         {
             if (m_animation.GetCurrentAnimation(0).ToString() != "Idle")
@@ -250,12 +272,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.ReevaluateSituation);
 
                     m_agent.Stop();
-                    m_animation.EnableRootMotion(true, true);
-                    m_attackHandle.ExecuteAttack(m_info.attackMove.animation);
-                    m_animation.SetAnimation(0, m_info.attackMove.animation, true);
+                    //m_animation.EnableRootMotion(true, true);
+                    //m_attackHandle.ExecuteAttack(m_info.attackMove.animation);
+                    //m_animation.SetAnimation(0, m_info.attackMove.animation, true);
                     m_stateHandle.Wait(State.WaitBehaviourEnd);
-                    //m_Audiosource.clip = m_AttackClip;
-                    //m_Audiosource.Play();
+                    StartCoroutine(AttackRoutine());
                     break;
                 case State.Chasing:
                     if (IsFacingTarget())
