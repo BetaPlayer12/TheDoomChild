@@ -180,6 +180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: lower body bone
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -370,7 +371,6 @@ GameObject:
   - component: {fileID: 5637387481399289546}
   - component: {fileID: 1788415349932028872}
   - component: {fileID: 9139688978606104867}
-  - component: {fileID: 6295226821927087126}
   m_Layer: 13
   m_Name: RangeBeeDroneModel
   m_TagString: Untagged
@@ -421,7 +421,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 6ae5d9142ac0e344d8b2bc1a21f27e72, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -454,7 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 0}
+  skeletonDataAsset: {fileID: 11400000, guid: 861cafbd722284d4d926843e77dd97fe, type: 2}
   initialSkinName: default
   initialFlipX: 1
   initialFlipY: 0
@@ -466,6 +466,7 @@ MonoBehaviour:
   clearStateOnDisable: 0
   tintBlack: 0
   singleSubmesh: 0
+  fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
   maskInteraction: 0
@@ -490,6 +491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneRoot: {fileID: 0}
+  flipBy180DegreeRotation: 0
   skeletonRenderer: {fileID: 5637387481399289546}
 --- !u!114 &9139688978606104867
 MonoBehaviour:
@@ -508,22 +510,6 @@ MonoBehaviour:
   useY: 0
   rb: {fileID: 0}
   siblingBoneNames: []
---- !u!114 &6295226821927087126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7189003159738749311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_spine: {fileID: 0}
-  m_physics: {fileID: 0}
-  m_skeletonAnimation: {fileID: 0}
-  m_animation: 
 --- !u!1 &7299100510775145456
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,6 +556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 5637387481399289546}
   boneName: upper body bone
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
