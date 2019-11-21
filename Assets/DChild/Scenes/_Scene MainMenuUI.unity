@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 112000000, guid: 6cd9e592b4c9a6045897a4c5a2420769,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -6464,7 +6464,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.21716924, y: 0.38988426}
   m_AnchorMax: {x: 0.30253378, y: 0.59812504}
-  m_AnchoredPosition: {x: 9, y: -24}
+  m_AnchoredPosition: {x: 8.999985, y: -24}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &243300589
@@ -6896,11 +6896,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - Continue
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7080,6 +7075,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: Continue
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -8135,11 +8135,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - Delete
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8319,6 +8314,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: Delete
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -10389,11 +10389,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10638,6 +10633,11 @@ PrefabInstance:
         type: 3}
       propertyPath: OnClick.OnTrigger.SoundData.DatabaseName
       value: DChild
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -11481,6 +11481,9 @@ MonoBehaviour:
       m_sceneName: 
       m_scenePath: 
     m_location: 0
+    m_spawnPosition:
+      x: 0
+      y: 0
     m_completion: 0
     m_duration:
       m_hours: 0
@@ -11488,18 +11491,18 @@ MonoBehaviour:
       m_seconds: 0
       m_secondsTimer: 0
     m_characterData:
+      m_inventoryData:
+        m_soulEssence: 0
+        m_items:
+          m_datas: []
+        m_soulCrystals:
+          m_datas: []
+        m_questItems:
+          m_datas: []
       m_bestiaryProgressData:
         m_serializeDatas: []
       m_skills:
         m_movementSkills: 
-        m_movementSkillList:
-          m_list:
-          - m_name: 0
-            m_value: 0
-          - m_name: 1
-            m_value: 0
-          - m_name: 2
-            m_value: 0
       m_soulSkillAcquisitionData:
         m_serializeDatas: []
       m_equippedSoulSkillData:
@@ -11507,9 +11510,8 @@ MonoBehaviour:
         m_supportSkill: 0
         m_weaponSkill1: 0
         m_weaponSkill2: 0
-      m_bestiaryList: {fileID: 0}
-      m_soulSkillList: {fileID: 0}
   m_slotList:
+    m_slotCount: 1
     m_slots:
     - m_id: 1
       m_demoGame: 1
@@ -11518,6 +11520,9 @@ MonoBehaviour:
         m_sceneName: _Zone GardenPrototype
         m_scenePath: Assets/DChild/Scenes/Zones/_Zone GardenPrototype.unity
       m_location: 14
+      m_spawnPosition:
+        x: 0
+        y: 0
       m_completion: 0
       m_duration:
         m_hours: 0
@@ -11525,18 +11530,18 @@ MonoBehaviour:
         m_seconds: 0
         m_secondsTimer: 0
       m_characterData:
+        m_inventoryData:
+          m_soulEssence: 0
+          m_items:
+            m_datas: []
+          m_soulCrystals:
+            m_datas: []
+          m_questItems:
+            m_datas: []
         m_bestiaryProgressData:
           m_serializeDatas: []
         m_skills:
           m_movementSkills: 
-          m_movementSkillList:
-            m_list:
-            - m_name: 0
-              m_value: 0
-            - m_name: 1
-              m_value: 0
-            - m_name: 2
-              m_value: 0
         m_soulSkillAcquisitionData:
           m_serializeDatas: []
         m_equippedSoulSkillData:
@@ -11544,8 +11549,6 @@ MonoBehaviour:
           m_supportSkill: 0
           m_weaponSkill1: 0
           m_weaponSkill2: 0
-        m_bestiaryList: {fileID: 0}
-        m_soulSkillList: {fileID: 0}
 --- !u!1 &445860593
 GameObject:
   m_ObjectHideFlags: 0
@@ -12071,11 +12074,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - Delete
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12255,6 +12253,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: Delete
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -14752,11 +14755,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - New Game
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -14897,6 +14895,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 215.7
       objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580535, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -14951,6 +14954,11 @@ PrefabInstance:
         type: 3}
       propertyPath: OnClick.OnTrigger.SoundData.SoundSource
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -15045,11 +15053,6 @@ PrefabInstance:
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580535, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -18699,6 +18702,7 @@ MonoBehaviour:
   clearStateOnDisable: 0
   tintBlack: 0
   singleSubmesh: 0
+  fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
   maskInteraction: 0
@@ -18764,7 +18768,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 732999104}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.9, y: -13.23, z: 0}
+  m_LocalPosition: {x: -21.08, y: -13.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 582414871}
@@ -19933,8 +19937,8 @@ MonoBehaviour:
   m_vidPlayer: {fileID: 1374257586}
   m_intro1: {fileID: 32900000, guid: 9d07e1750a2af4c42acb608f3cafdec9, type: 3}
   m_intro2: {fileID: 32900000, guid: eacd5d4f83639f44c8058ea6556696f4, type: 3}
-  m_next: {fileID: 32900000, guid: 6b44c402ae906ff42af825f875c25406, type: 3}
-  m_previous: {fileID: 32900000, guid: f08c2786ab187704abb40a63cbc51a61, type: 3}
+  m_next: {fileID: 32900000, guid: f08c2786ab187704abb40a63cbc51a61, type: 3}
+  m_previous: {fileID: 32900000, guid: 6b44c402ae906ff42af825f875c25406, type: 3}
   m_first: {fileID: 32900000, guid: 20830fc32ee8d914a8d3b0b7a7888030, type: 3}
   m_last: {fileID: 32900000, guid: 7cac18fe0a8ec434d98b40e3becf3083, type: 3}
   m_texture: {fileID: 8400000, guid: ad0a7f52f338601488bb7059d88b5285, type: 2}
@@ -25559,11 +25563,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -25759,6 +25758,11 @@ PrefabInstance:
       propertyPath: TextMeshProLabel
       value: 
       objectReference: {fileID: 1324817477}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -25875,11 +25879,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Button - Continue
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -26060,6 +26059,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ButtonName
       value: Continue
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -26607,11 +26611,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26866,6 +26865,11 @@ PrefabInstance:
         type: 3}
       propertyPath: OnDeselected.OnTrigger.Event.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -33934,6 +33938,14 @@ PrefabInstance:
       propertyPath: m_textInfo.materialCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1760122384, guid: 7c11fc85a8e24e44981b6291b5b2649a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1760122384, guid: 7c11fc85a8e24e44981b6291b5b2649a, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1589300816878159469, guid: 7c11fc85a8e24e44981b6291b5b2649a,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -37777,11 +37789,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button - New Game
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -37986,6 +37993,11 @@ PrefabInstance:
         type: 3}
       propertyPath: OnClick.OnTrigger.SoundData.DatabaseName
       value: DChild
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630377, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -41750,11 +41762,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -41950,6 +41957,11 @@ PrefabInstance:
       propertyPath: TextMeshProLabel
       value: 
       objectReference: {fileID: 1478225445}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_fontColor.r
@@ -45039,11 +45051,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_highlight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580534, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -45234,6 +45241,11 @@ PrefabInstance:
       propertyPath: TextMeshProLabel
       value: 
       objectReference: {fileID: 890354259}
+    - target: {fileID: 3297773408028580536, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_highlight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_textInfo.characterCount

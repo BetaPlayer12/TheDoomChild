@@ -1,24 +1,22 @@
-﻿using Holysoft.Event;
+﻿using DChild.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace DChild.Gameplay
 {
-    public class UnlockableEvent : MonoBehaviour
+    public class UnlockableEvent : MonoBehaviour, ISerializableComponent
     {
         [System.Serializable]
-        private class Requirement
+        public class Requirement
         {
-            [SerializeField,SceneObjectsOnly]
+            [SerializeField, SceneObjectsOnly]
             private UnlockRequirement m_requirement;
 
             [FoldoutGroup("Reactions")]
 
-            [SerializeField,HorizontalGroup("Reactions/Split")]
+            [SerializeField, HorizontalGroup("Reactions/Split")]
             private UnityEvent m_onComplete;
             [SerializeField, HorizontalGroup("Reactions/Split")]
             private UnityEvent m_onIncomplete;
@@ -51,6 +49,24 @@ namespace DChild.Gameplay
                     m_onIncomplete?.Invoke();
                 }
             }
+
+            public void SetComplete(bool value) => m_requirement.SetCompletion(value);
+        }
+
+        public struct SaveData : ISaveData
+        {
+            public SaveData(bool isUnlocked, Requirement[] requirements) : this()
+            {
+                this.isUnlocked = isUnlocked;
+                requirementState = new bool[requirements.Length];
+                for (int i = 0; i < requirementState.Length; i++)
+                {
+                    requirementState[i] = requirements[i].isComplete;
+                }
+            }
+
+            public bool[] requirementState { get; }
+            public bool isUnlocked { get; }
         }
 
         [ShowInInspector, OnValueChanged("OnStateChange")]
@@ -59,10 +75,33 @@ namespace DChild.Gameplay
         private Requirement[] m_requirements;
         [SerializeField, TabGroup("Unlocked")]
         private UnityEvent m_onUnlocked;
+        [SerializeField, TabGroup("Unlocked")]
+        private UnityEvent m_alreadyUnlocked;
         [SerializeField, TabGroup("Locked")]
         private UnityEvent m_onLocked;
 
         private int m_requirementCompleteCount;
+
+
+        public ISaveData Save()
+        {
+            return new SaveData(m_isUnlocked, m_requirements);
+        }
+
+        public void Load(ISaveData data)
+        {
+            SaveData saveData = (SaveData)data;
+            m_isUnlocked = saveData.isUnlocked;
+            if (m_isUnlocked)
+            {
+                m_alreadyUnlocked?.Invoke();
+            }
+            var requirementState = saveData.requirementState;
+            for (int i = 0; i < requirementState.Length; i++)
+            {
+                m_requirements[i].SetComplete(requirementState[i]);
+            }
+        }
 
         public void SetLock(bool isLocked)
         {
@@ -135,6 +174,7 @@ namespace DChild.Gameplay
                 m_onLocked?.Invoke();
             }
         }
+
 #endif
     }
 }
