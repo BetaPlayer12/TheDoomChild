@@ -6,12 +6,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
     public struct FurryWhisperer : ISoulSkillModule
     {
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             DialogueLua.SetVariable("FurryWhispererEquipped", true);
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             DialogueLua.SetVariable("FurryWhispererEquipped", false);
         }

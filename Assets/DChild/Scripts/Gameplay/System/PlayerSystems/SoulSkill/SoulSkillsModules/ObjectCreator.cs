@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             private GameObject m_instanceReference;
             private GameObject m_instance;
 
-            public Handle(Character m_playerCharacter, GameObject m_instance)
+            public Handle(Character m_playerCharacter, GameObject m_instance) : base(null)
             {
                 this.m_playerCharacter = m_playerCharacter;
                 this.m_instanceReference = m_instance;

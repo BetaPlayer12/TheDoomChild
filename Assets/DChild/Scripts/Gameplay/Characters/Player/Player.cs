@@ -34,6 +34,8 @@ namespace DChild.Gameplay.Characters.Players
         LootPicker lootPicker { get; }
         StatusEffectReciever statusEffectReciever { get; }
         Character character { get; }
+
+        int GetInstanceID();
     }
 
     [AddComponentMenu("DChild/Gameplay/Player/Player")]

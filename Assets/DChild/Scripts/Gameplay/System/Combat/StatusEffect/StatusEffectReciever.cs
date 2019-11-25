@@ -46,6 +46,26 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public bool IsInflictedWith(StatusEffectType type) => Contains(type, out int index);
 
+        public float GetCurrentDurationOf(StatusEffectType type)
+        {
+            if(Contains(type, out int index))
+            {
+                return m_inflictedStatusEffects[index].duration;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public void SetCurrentDurationOf(StatusEffectType type, float duration)
+        {
+            if (Contains(type, out int index))
+            {
+               m_inflictedStatusEffects[index].duration = duration;
+            }
+        }
+
         public void StopStatusEffect(StatusEffectType type)
         {
             if (Contains(type, out int index))
@@ -58,7 +78,6 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public void SetActive(StatusEffectType type, bool active)
         {
-
             if (Contains(type, out int index))
             {
                 m_inflictedStatusEffects[index].isActive = active;
