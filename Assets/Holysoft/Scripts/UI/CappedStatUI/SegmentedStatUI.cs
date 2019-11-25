@@ -40,7 +40,7 @@ namespace Holysoft.Gameplay.UI
                 var cacheValue = value;
                 for (int i = 0; i < m_segements.Length; i++)
                 {
-                    if (cacheValue == 0)
+                    if (cacheValue <= 0)
                     {
                         m_segements[i].SetActive(false);
                     }

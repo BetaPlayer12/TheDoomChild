@@ -11,10 +11,10 @@ namespace DChild.Gameplay.Combat
     [AddComponentMenu("DChild/Gameplay/Combat/Magic")]
     public class Magic : MonoBehaviour, ICappedStat
     {
-        [SerializeField, MinValue(0), OnValueChanged("SendValueEvent")]
+        [SerializeField, MinValue(0), OnValueChanged("SendMaxValue")]
         private int m_maxPoints;
 
-        [ShowInInspector, HideInEditorMode, OnValueChanged("SendValueEvent"), MinValue(0)]
+        [ShowInInspector, HideInEditorMode, OnValueChanged("SendValueEvent"), MinValue(0),MaxValue("$m_maxPoints")]
         private int m_currentPoints;
         [ShowInInspector, ReadOnly, ProgressBar(0f, 1f)]
         protected float m_percentage;
@@ -60,6 +60,13 @@ namespace DChild.Gameplay.Combat
         {
             m_percentage = (float)m_currentPoints / maxValue;
             ValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentPoints, maxValue));
+        }
+
+        protected void SendMaxValue()
+        {
+            m_percentage = (float)m_currentPoints / maxValue;
+            ValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentPoints, maxValue));
+            MaxValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentPoints, maxValue));
         }
 #endif
     }

@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Combat
         public event EventAction<StatInfoEventArgs> MaxValueChanged;
         public event EventAction<StatInfoEventArgs> ValueChanged;
 
-        [ShowInInspector, HideInEditorMode, OnValueChanged("SendValueEvent"), MinValue(0)]
+        [ShowInInspector, HideInEditorMode, OnValueChanged("SendValueEvent"), MinValue(0), MaxValue("$maxValue")]
         protected int m_currentHealth;
         [ShowInInspector, ReadOnly, ProgressBar(0f, 1f)]
         protected float m_percentHealth;
