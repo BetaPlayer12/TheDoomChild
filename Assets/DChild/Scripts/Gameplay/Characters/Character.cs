@@ -3,8 +3,6 @@ using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
 
 namespace DChild.Gameplay
 {
@@ -69,5 +67,15 @@ namespace DChild.Gameplay
                 Debug.Log(gameObject.tag);
             }
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(Transform centermass, IsolatedObject isolatedObject, IsolatedPhysics2D physics, CharacterColliders colliders)
+        {
+            m_centerMass = centermass;
+            m_isolatedObject = isolatedObject;
+            m_physics = physics;
+            m_colliders = colliders;
+        }
+#endif
     }
 }

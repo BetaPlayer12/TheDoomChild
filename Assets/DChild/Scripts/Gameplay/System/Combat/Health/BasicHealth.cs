@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Combat
     [AddComponentMenu("DChild/Gameplay/Combat/Basic Health")]
     public class BasicHealth : Health
     {
-        [SerializeField, MinValue(0f), OnValueChanged("SendValueEvent")]
+        [SerializeField, MinValue(0f), OnValueChanged("SendMaxValue")]
         private int m_maxHealth;
 
         public override int maxValue => m_maxHealth;

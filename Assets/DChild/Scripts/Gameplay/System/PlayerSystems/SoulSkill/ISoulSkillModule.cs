@@ -5,7 +5,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
     public interface ISoulSkillModule
     {
-        void AttachTo(IPlayer player);
-        void DetachFrom(IPlayer player);
+        void AttachTo(int soulSkillInstanceID, IPlayer player);
+        void DetachFrom(int soulSkillInstanceID, IPlayer player);
     }
 }

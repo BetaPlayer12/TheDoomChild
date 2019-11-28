@@ -55,5 +55,13 @@ namespace DChild.Gameplay.Characters
         {
             m_bodyDuration.Tick(Time.deltaTime);
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(Damageable damageable, SpineRootAnimation spineRoot)
+        {
+            m_source = damageable;
+            m_animator = spineRoot;
+        }
+#endif
     }
 }

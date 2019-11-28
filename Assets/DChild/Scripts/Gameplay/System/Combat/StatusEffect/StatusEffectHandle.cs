@@ -29,6 +29,9 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         private Character m_character;
         public bool isActive { set => m_isActive = value; }
+        public float duration { get => m_duration; set => m_duration = value; }
+        public event EventAction<StatusEffectReferenceEventArgs> DurationExpired;
+        public StatusEffectType type => m_type;
 
         public StatusEffectHandle(StatusEffectType m_type, float m_duration, IStatusEffectModule[] m_modules, IStatusEffectUpdatableModule[] m_updatableModules)
         {
@@ -40,9 +43,6 @@ namespace DChild.Gameplay.Combat.StatusAilment
             m_moduleSize = m_modules?.Length ?? 0;
         }
 
-        public event EventAction<StatusEffectReferenceEventArgs> DurationExpired;
-
-        public StatusEffectType type => m_type;
 
         public void Initialize(Character character)
         {

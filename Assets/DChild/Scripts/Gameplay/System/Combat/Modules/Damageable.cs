@@ -88,6 +88,17 @@ namespace DChild.Gameplay.Combat
             m_health.ResetValueToMax();
         }
 
-       
+#if UNITY_EDITOR
+        public void InitializeField(Transform centermass,Health health)
+        {
+            m_centerMass = centermass;
+            m_health = health;
+        }
+
+        public void InitializeField(AttackResistance resistance)
+        {
+            m_resistance = resistance;
+        }
+#endif
     }
 }

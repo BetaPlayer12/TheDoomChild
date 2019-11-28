@@ -70,11 +70,14 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         private void CopyData()
         {
-            m_statusInflictions.Clear();
-            var chances = m_data.chance;
-            foreach (var key in chances.Keys)
+            if (m_statusInflictions != null)
             {
-                m_statusInflictions.Add(new StatusEffectChance(key, chances[key]));
+                m_statusInflictions.Clear();
+                var chances = m_data.chance;
+                foreach (var key in chances.Keys)
+                {
+                    m_statusInflictions.Add(new StatusEffectChance(key, chances[key]));
+                }
             }
         }
 

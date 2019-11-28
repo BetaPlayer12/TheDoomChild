@@ -64,8 +64,11 @@ namespace DChild.Gameplay.Combat.StatusAilment
             if (m_data != data)
             {
                 m_data = data;
-                Copy(m_data.chance, m_resistances);
-                ResistanceChange?.Invoke(this, new ResistanceEventArgs(StatusEffectType._COUNT, 0));
+                if (m_resistances != null)
+                {
+                    Copy(m_data.chance, m_resistances);
+                    ResistanceChange?.Invoke(this, new ResistanceEventArgs(StatusEffectType._COUNT, 0));
+                }
             }
         }
 
