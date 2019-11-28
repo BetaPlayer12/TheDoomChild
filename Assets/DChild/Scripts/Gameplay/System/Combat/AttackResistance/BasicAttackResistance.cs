@@ -20,10 +20,13 @@ namespace DChild.Gameplay.Combat
         public void SetData(AttackResistanceData data)
         {
             m_data = data;
-            m_resistance.Clear();
-            if (m_data != null)
+            if (m_resistance != null)
             {
-                Copy(m_data.resistance, m_resistance);
+                m_resistance.Clear();
+                if (m_data != null)
+                {
+                    Copy(m_data.resistance, m_resistance);
+                }
             }
         }
 

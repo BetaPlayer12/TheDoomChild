@@ -48,7 +48,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public float GetCurrentDurationOf(StatusEffectType type)
         {
-            if(Contains(type, out int index))
+            if (Contains(type, out int index))
             {
                 return m_inflictedStatusEffects[index].duration;
             }
@@ -62,7 +62,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         {
             if (Contains(type, out int index))
             {
-               m_inflictedStatusEffects[index].duration = duration;
+                m_inflictedStatusEffects[index].duration = duration;
             }
         }
 
@@ -122,5 +122,17 @@ namespace DChild.Gameplay.Combat.StatusAilment
                 }
             }
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(Character character)
+        {
+            m_character = character;
+        }
+
+        public void InitializeField(StatusEffectResistance resistance)
+        {
+            m_resistance = resistance;
+        }
+#endif
     }
 }

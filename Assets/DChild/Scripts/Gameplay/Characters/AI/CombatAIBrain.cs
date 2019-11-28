@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
@@ -51,5 +52,16 @@ namespace DChild.Gameplay.Characters.AI
         {
 
         }
+
+#if UNITY_EDITOR
+        public Type aiDataType => m_data.GetType();
+        public void InitializeField(Character character, SpineRootAnimation spineRoot, Damageable damageable, Transform centerMass)
+        {
+            m_character = character;
+            m_animation = spineRoot;
+            m_damageable = damageable;
+            m_centerMass = centerMass;
+        }
+#endif
     }
 }

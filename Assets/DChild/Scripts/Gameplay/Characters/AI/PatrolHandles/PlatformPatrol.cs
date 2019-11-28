@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.AI
         [SerializeField, FoldoutGroup("Reference")]
         private CharacterPhysics2D m_characterPhysics2D;
         [SerializeField, PropertyTooltip("Needs To sense ground to determine if it will detect wall or not"), FoldoutGroup("Reference")]
-        private RaySensor m_groundSensor;
+        private RaySensor m_leadGroundSensor;
         [SerializeField, PropertyTooltip("Senses the edge wall it will snap on to"), FoldoutGroup("Reference")]
         private RaySensor m_edgeWallSensor;
         [SerializeField, PropertyTooltip("Senses the wall it will snap on to"), FoldoutGroup("Reference")]
@@ -87,7 +87,7 @@ namespace DChild.Gameplay.Characters.AI
 
         private void OnGroundSensorCast(object sender, RaySensorCastEventArgs eventArgs)
         {
-            if (m_groundSensor.isDetecting == false)
+            if (m_leadGroundSensor.isDetecting == false)
             {
                 m_edgeWallSensor.Cast();
                 if (m_edgeWallSensor.isDetecting)
@@ -105,7 +105,7 @@ namespace DChild.Gameplay.Characters.AI
             }
             else
             {
-                var normal = m_groundSensor.GetHits()[0].normal;
+                var normal = m_leadGroundSensor.GetHits()[0].normal;
                 if (m_groundNormal != normal)
                 {
                     m_characterPhysics2D.SetGroundNormal(normal);
@@ -134,9 +134,9 @@ namespace DChild.Gameplay.Characters.AI
 
         private void Start()
         {
-            if (m_groundSensor)
+            if (m_leadGroundSensor)
             {
-                m_groundSensor.SensorCast += OnGroundSensorCast;
+                m_leadGroundSensor.SensorCast += OnGroundSensorCast;
             }
             if (m_wallSensor)
             {

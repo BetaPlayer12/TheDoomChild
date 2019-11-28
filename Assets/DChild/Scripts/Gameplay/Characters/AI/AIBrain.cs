@@ -136,18 +136,14 @@ namespace DChild.Gameplay.Characters.AI
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
         [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
-        private AIData m_data;
-        //#if UNITY_EDITOR
-        [ShowInInspector, InlineEditor, TabGroup("Data")]
-        private AIData m_inlineEditor;
-        //#endif
+        protected AIData m_data;
 
         [ShowInInspector, HideInEditorMode, TabGroup("Data")]
         protected T m_info;
 
         public void SetData(AIData data)
         {
-            if (m_data.info.GetType() == m_info.GetType())
+            if (data.info.GetType() == typeof(T))
             {
                 m_data = data;
             }
@@ -168,19 +164,17 @@ namespace DChild.Gameplay.Characters.AI
             ApplyData();
         }
 
-        [SerializeField, FolderPath, PropertyOrder(-1), TabGroup("Data")]
-        private string m_referenceFolder;
-
 #if UNITY_EDITOR
         private IEnumerable GetData()
         {
             var list = new ValueDropdownList<AIData>();
             list.Add("None", null);
             var infoType = typeof(T);
-            var filePaths = Directory.GetFiles(m_referenceFolder);
+            var filePaths = AssetDatabase.FindAssets("t:AIData");
             for (int i = 0; i < filePaths.Length; i++)
             {
-                var asset = AssetDatabase.LoadAssetAtPath<AIData>(filePaths[i]);
+
+                var asset = AssetDatabase.LoadAssetAtPath<AIData>(AssetDatabase.GUIDToAssetPath(filePaths[i]));
                 if (asset != null && asset.info != null && asset.info.GetType() == infoType)
                 {
                     list.Add(asset);
@@ -191,7 +185,6 @@ namespace DChild.Gameplay.Characters.AI
 
         private void InitializeInfo()
         {
-            m_inlineEditor = m_data;
             m_info = (T)m_data.info;
         }
 #endif
