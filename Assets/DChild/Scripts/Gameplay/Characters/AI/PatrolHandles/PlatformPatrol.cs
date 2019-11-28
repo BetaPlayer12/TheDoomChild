@@ -32,10 +32,7 @@ namespace DChild.Gameplay.Characters.AI
 
         public override void Patrol(MovementHandle2D movement, float speed, CharacterInfo characterInfo)
         {
-            if (m_characterPhysics2D.simulateGravity)
-            {
-                m_characterPhysics2D.simulateGravity = false;
-            }
+            m_characterPhysics2D.simulateGravity = m_characterPhysics2D.GetComponent<Transform>().localRotation.z != 0 ? false : true;
 
             if (m_shouldSnapToLedge || m_shouldSnapToWall)
             {
@@ -49,10 +46,7 @@ namespace DChild.Gameplay.Characters.AI
 
         public override void Patrol(PathFinderAgent agent, float speed, CharacterInfo characterInfo)
         {
-            if (m_characterPhysics2D.simulateGravity)
-            {
-                m_characterPhysics2D.simulateGravity = false;
-            }
+            m_characterPhysics2D.simulateGravity = m_characterPhysics2D.GetComponent<Transform>().localRotation.z != 0 ? false : true;
 
             // I dont really if this works on an Agent
             if (m_shouldSnapToLedge || m_shouldSnapToWall)
