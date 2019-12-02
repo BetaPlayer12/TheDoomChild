@@ -4,6 +4,7 @@ using System;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using Sirenix.Serialization;
+using System.Collections;
 
 namespace DChild.Serialization
 {
@@ -41,11 +42,14 @@ namespace DChild.Serialization
 
         [SerializeField]
         private SerializeDataID m_ID;
-        [SerializeField]
+        [SerializeField, ValueDropdown("GetComponents", IsUniqueList = true), TabGroup("Serializer", "Component")]
         private ComponentSerializer[] m_componentSerializers;
-        [OdinSerialize]
+        [SerializeField, ValueDropdown("GetDynamicSerializers", IsUniqueList = true), TabGroup("Serializer", "Dynamic")]
+        private DynamicSerializableComponent[] m_dynamicSerializers;
+        [OdinSerialize, HideInEditorMode]
         private ZoneData m_zoneData;
 
+        private CampaignSlot m_cacheSlot;
         private ComponentSerializer m_cacheComponentSerializer;
 
         private void Awake()
@@ -54,7 +58,17 @@ namespace DChild.Serialization
             if (proposedData != null)
             {
                 m_zoneData = proposedData;
-                UpdateSerializers();
+                for (int i = 0; i < m_componentSerializers.Length; i++)
+                {
+                    m_cacheComponentSerializer = m_componentSerializers[i];
+                    m_cacheComponentSerializer.Initiatlize();
+                    m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+                }
+            }
+            for (int i = 0; i < m_dynamicSerializers.Length; i++)
+            {
+                m_dynamicSerializers[i].Initialize();
+                m_dynamicSerializers[i].Load();
             }
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
@@ -62,8 +76,16 @@ namespace DChild.Serialization
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            m_zoneData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
-            UpdateSerializers();
+            m_cacheSlot = GameplaySystem.campaignSerializer.slot;
+            m_zoneData = m_cacheSlot.GetZoneData<ZoneData>(m_ID);
+            if (m_zoneData != null)
+            {
+                UpdateSerializers();
+            }
+            for (int i = 0; i < m_dynamicSerializers.Length; i++)
+            {
+                m_dynamicSerializers[i].Load();
+            }
         }
 
         private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
@@ -74,6 +96,11 @@ namespace DChild.Serialization
                 m_zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
             }
             GameplaySystem.campaignSerializer.slot.UpdateZoneData(m_ID, m_zoneData);
+            UpdateSerializers();
+            for (int i = 0; i < m_dynamicSerializers.Length; i++)
+            {
+                m_dynamicSerializers[i].Save();
+            }
         }
 
         private void UpdateSerializers()
@@ -84,5 +111,11 @@ namespace DChild.Serialization
                 m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
             }
         }
+
+#if UNITY_EDITOR
+        private IEnumerable GetComponents() => FindObjectsOfType<ComponentSerializer>();
+
+        private IEnumerable GetDynamicSerializers() => FindObjectsOfType<DynamicSerializableComponent>();
+#endif
     }
 }

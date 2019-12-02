@@ -15,7 +15,6 @@ namespace DChild.Gameplay
             private UnlockRequirement m_requirement;
 
             [FoldoutGroup("Reactions")]
-
             [SerializeField, HorizontalGroup("Reactions/Split")]
             private UnityEvent m_onComplete;
             [SerializeField, HorizontalGroup("Reactions/Split")]
@@ -95,6 +94,11 @@ namespace DChild.Gameplay
             if (m_isUnlocked)
             {
                 m_alreadyUnlocked?.Invoke();
+            }
+            else
+            {
+                m_onLocked?.Invoke();
+                //Lock up
             }
             var requirementState = saveData.requirementState;
             for (int i = 0; i < requirementState.Length; i++)

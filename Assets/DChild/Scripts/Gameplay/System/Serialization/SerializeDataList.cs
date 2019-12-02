@@ -35,6 +35,11 @@ namespace DChild.Serialization
             return m_saveDatas.ContainsKey(IDvalue) ? m_saveDatas[IDvalue] : null;
         }
 
+        public ISaveData GetData(int ID)
+        {
+            return m_saveDatas.ContainsKey(ID) ? m_saveDatas[ID] : null;
+        }
+
 #if UNITY_EDITOR
         public Dictionary<int, ISaveData> saveDatas => m_saveDatas;
 
