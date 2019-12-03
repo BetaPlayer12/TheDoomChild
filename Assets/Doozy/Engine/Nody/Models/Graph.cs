@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -68,6 +68,17 @@ namespace Doozy.Engine.Nody.Models
         /// <summary> Returns the class version of this graph </summary>
         public int Version { get { return m_version; } }
 
+        /// <summary> Toggle Enable/Disable state for the Graph. Controlled by the GraphController </summary>
+        public bool Enabled
+        {
+            get { return m_enabled; }
+            set
+            {
+                m_enabled = value;
+                if (ActiveSubGraph != null) ActiveSubGraph.Enabled = m_enabled;
+            }
+        }
+
         #endregion
 
         #region Public Variables
@@ -93,6 +104,7 @@ namespace Doozy.Engine.Nody.Models
         [NonSerialized] private bool m_isDirty;
         [NonSerialized] private double m_infiniteLoopTimerStart;
         [NonSerialized] private float m_infiniteLoopTimeBreak = 0.1f;
+        [NonSerialized] private bool m_enabled;
 
         [SerializeField] private List<Node> m_nodes;
         [SerializeField] private bool m_isSubGraph;

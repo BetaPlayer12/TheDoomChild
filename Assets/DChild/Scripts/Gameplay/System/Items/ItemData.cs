@@ -9,13 +9,14 @@ using DChildEditor;
 namespace DChild.Gameplay.Items
 {
 
-
     [CreateAssetMenu(fileName = "ItemData", menuName = "DChild/Database/Item Data")]
     public class ItemData : DatabaseAsset
     {
 #if UNITY_EDITOR
         [ShowInInspector, ToggleGroup("m_enableEdit")]
         private bool m_enableEdit;
+
+        protected virtual string fileSuffix => "Data";
 
         protected override IEnumerable GetIDs()
         {
@@ -46,7 +47,7 @@ namespace DChild.Gameplay.Items
                 {
                     m_name = databaseName;
                     var fileName = m_name.Replace(" ", string.Empty);
-                    fileName += "Data";
+                    fileName += fileSuffix;
                     FileUtility.RenameAsset(this, assetPath, fileName);
                 }
                 connection.Close();
@@ -58,6 +59,28 @@ namespace DChild.Gameplay.Items
             }
             AssetDatabase.SaveAssets();
         }
+
+        [Button, ToggleGroup("m_enableEdit"), HideIf("m_connectToDatabase")]
+        private void InsertToDatabase()
+        {
+            var connection = DChildDatabase.GetItemConnection();
+            connection.Initialize();
+            m_ID = connection.Insert(Mathf.Abs(m_ID), m_name, m_description, m_quantityLimit, m_cost);
+            m_databaseID = m_ID;
+            m_customName = m_name;
+            m_connectToDatabase = true;
+            connection.Close();
+
+            string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
+            if (m_ID != -1)
+            {
+                var fileName = m_name.Replace(" ", string.Empty);
+                fileName += "Data";
+                FileUtility.RenameAsset(this, assetPath, fileName);
+                AssetDatabase.SaveAssets();
+            }
+        }
+
 
         [Button, ToggleGroup("m_enableEdit"), ShowIf("m_connectToDatabase")]
         private void SaveToDatabase()

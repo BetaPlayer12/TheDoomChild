@@ -115,5 +115,4 @@ public class WhipGrapple : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(m_sensorPosition, m_overlapSize);
     }
-
 }

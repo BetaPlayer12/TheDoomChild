@@ -19,6 +19,13 @@ namespace DChild.Gameplay.Characters
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
+
+        public void InitializeField(SpineRootAnimation spineRoot,IsolatedPhysics2D physics, SkeletonAnimation animation)
+        {
+            m_spine = spineRoot;
+            m_physics = physics;
+            m_skeletonAnimation = animation;
+        }
 #endif
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_animation;

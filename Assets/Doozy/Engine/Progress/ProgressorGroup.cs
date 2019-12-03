@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -132,7 +132,7 @@ namespace Doozy.Engine.Progress
 
         #region Public Methods
 
-        /// <summary> Updates the progress value by checking all the Progressors Progress values </summary>
+        /// <summary> Update the progress value by checking all the Progressors Progress values </summary>
         public void UpdateProgress()
         {
             if (Progressors == null || Progressors.Count == 0) return;
@@ -153,7 +153,7 @@ namespace Doozy.Engine.Progress
             Progress = newProgressValue;
         }
         
-        /// <summary> Depending on the direction, returns either the Progress or the InverseProgress value </summary>
+        /// <summary> Get either the Progress or the InverseProgress value, depending on the requested direction </summary>
         /// <param name="direction"> Progress Direction to return </param>
         public float GetProgress(TargetProgress direction)
         {

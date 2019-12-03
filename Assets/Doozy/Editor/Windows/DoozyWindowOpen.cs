@@ -1,7 +1,8 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
+using Doozy.Editor.Internal;
 using Doozy.Engine.Utils;
 using UnityEditor;
 using UnityEngine.Events;
@@ -23,6 +24,12 @@ namespace Doozy.Editor.Windows
         {
             Open(view);
             if (callback != null) callback.Invoke();
+        }
+
+        [MenuItem(MenuUtils.Refresh_MenuItem_ItemName, false, MenuUtils.Refresh_MenuItem_Order)]
+        public static void Refresh()
+        {
+            DoozyAssetsProcessor.Run();
         }
     }
 }

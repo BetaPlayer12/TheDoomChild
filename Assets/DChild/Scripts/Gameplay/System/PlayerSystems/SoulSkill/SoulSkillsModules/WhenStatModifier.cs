@@ -1,14 +1,27 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
 
 namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
     public class WhenStatModifier : ISoulSkillModule
     {
+        public class ReferenceInfo
+        {
+            public IPlayer player { get; }
+            public object eventSender { get; }
+            public bool effectApplied;
+
+            public ReferenceInfo(IPlayer player, object eventSender)
+            {
+                this.player = player;
+                this.eventSender = eventSender;
+                effectApplied = false;
+            }
+        }
+
         private enum Stats
         {
             HP,
@@ -30,24 +43,49 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [OdinSerialize]
         private ISoulSkillModule[] m_modules;
 
-        private IPlayer m_reference;
-        private bool m_hasAppliedEffect;
+        private int m_connectedSoulSkillID;
+        private List<ReferenceInfo> m_reference;
+        private bool m_initialized;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
+            if (m_initialized == false)
+            {
+                m_connectedSoulSkillID = soulSkillInstanceID;
+                m_reference = new List<ReferenceInfo>();
+            }
+
             if (m_toChange == Stats.HP)
             {
-                TryApplyEffect((float)player.health.currentValue / player.health.maxValue);
+                var referenceInfo = new ReferenceInfo(player, player.health);
+                if (IsValid((float)player.health.currentValue / player.health.maxValue))
+                {
+                    for (int i = 0; i < m_modules.Length; i++)
+                    {
+                        m_modules[i].AttachTo(soulSkillInstanceID, player);
+                    }
+                    referenceInfo.effectApplied = true;
+                }
                 player.health.ValueChanged += OnStatChange;
+                m_reference.Add(referenceInfo);
             }
             else
             {
-                TryApplyEffect((float)player.magic.currentValue / player.magic.maxValue);
+                var referenceInfo = new ReferenceInfo(player, player.magic);
+                if (IsValid((float)player.magic.currentValue / player.magic.maxValue))
+                {
+                    for (int i = 0; i < m_modules.Length; i++)
+                    {
+                        m_modules[i].AttachTo(soulSkillInstanceID, player);
+                    }
+                    referenceInfo.effectApplied = true;
+                }
                 player.magic.ValueChanged += OnStatChange;
+                m_reference.Add(referenceInfo);
             }
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             if (m_toChange == Stats.HP)
             {
@@ -56,6 +94,15 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             else
             {
                 player.magic.ValueChanged -= OnStatChange;
+            }
+
+            for (int i = 0; i < m_reference.Count; i++)
+            {
+                if (m_reference[i].player == player)
+                {
+                    m_reference.RemoveAt(i);
+                    break;
+                }
             }
         }
 
@@ -73,33 +120,40 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
         private void OnStatChange(object sender, StatInfoEventArgs eventArgs)
         {
-            if (m_hasAppliedEffect)
+            var referenceInfo = GetReferenceInfo(sender);
+
+            if (IsValid(eventArgs.percentValue))
             {
-                if (IsValid(eventArgs.percentValue))
+                if (referenceInfo.effectApplied == false)
                 {
                     for (int i = 0; i < m_modules.Length; i++)
                     {
-                        m_modules[i].DetachFrom(m_reference);
+                        m_modules[i].AttachTo(m_connectedSoulSkillID, referenceInfo.player);
                     }
-                    m_hasAppliedEffect = false;
+                    referenceInfo.effectApplied = true;
                 }
             }
             else
             {
-                TryApplyEffect(eventArgs.percentValue);
+                for (int i = 0; i < m_modules.Length; i++)
+                {
+                    m_modules[i].DetachFrom(m_connectedSoulSkillID, referenceInfo.player);
+                }
+                referenceInfo.effectApplied = false;
             }
         }
 
-        private void TryApplyEffect(float percentValue)
+        private ReferenceInfo GetReferenceInfo(object sender)
         {
-            if (IsValid(percentValue))
+            for (int i = 0; i < m_reference.Count; i++)
             {
-                for (int i = 0; i < m_modules.Length; i++)
+                if (m_reference[i].eventSender == sender)
                 {
-                    m_modules[i].AttachTo(m_reference);
+                    return m_reference[i];
                 }
-                m_hasAppliedEffect = true;
             }
+
+            return null;
         }
     }
 }

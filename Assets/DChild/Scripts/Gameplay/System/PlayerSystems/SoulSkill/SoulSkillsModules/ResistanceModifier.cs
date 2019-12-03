@@ -13,12 +13,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField, SuffixLabel("%", overlay: true)]
         private int m_addedResistance;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             player.attackResistance.AddResistance(m_type, m_addedResistance/100f);
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             player.attackResistance.ReduceResistance(m_type, m_addedResistance/100f);
         }

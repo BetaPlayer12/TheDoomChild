@@ -26,6 +26,14 @@ namespace DChild.Gameplay.Characters.Players
 #endif
         }
 
+        public EquippedSoulSkillData SaveData()
+        {
+            return new EquippedSoulSkillData(GetID(m_armorSkill), GetID(m_supportSkill),
+                                            GetID(m_weaponSkills[0]), GetID(m_weaponSkills[1]));
+        }
+
+        private int GetID(SoulSkill soulSkill) => soulSkill?.id ?? -1;
+
         public void Initialize(IPlayer m_source)
         {
             m_weaponSkills = new SoulSkill[2];
@@ -45,6 +53,9 @@ namespace DChild.Gameplay.Characters.Players
         
         public void AttachSkill(SoulSkill skill, int slotIndex = 0)
         {
+            if (skill == null)
+                return;
+
             // We need to make this better
             switch (skill.type)
             {
@@ -134,8 +145,11 @@ namespace DChild.Gameplay.Characters.Players
 
         private void AttachSkill(ref SoulSkill slot, SoulSkill skill)
         {
-            slot?.DetachFrom(m_source);
-            skill?.AttachTo(m_source);
+            if (m_source != null)
+            {
+                slot?.DetachFrom(m_source);
+                skill?.AttachTo(m_source);
+            }
             slot = skill;
         }
 

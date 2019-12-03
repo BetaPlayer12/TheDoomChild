@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -115,7 +115,7 @@ namespace Doozy.Engine.Soundy
         /// <summary> Add SoundyManager to scene and returns a reference to it </summary>
         public static SoundyManager AddToScene(bool selectGameObjectAfterCreation = false) { return DoozyUtils.AddToScene<SoundyManager>(MenuUtils.SoundyManager_GameObject_Name, true, selectGameObjectAfterCreation); }
 
-        /// <summary> Create a new SoundyController in the current scene and returns a reference to it </summary>
+        /// <summary> Create a new SoundyController in the current scene and get a reference to it </summary>
         public static SoundyController GetController() { return SoundyController.GetController(); }
 
         /// <summary> Returns a proper formatted filename for a given database name </summary>
@@ -174,12 +174,12 @@ namespace Doozy.Engine.Soundy
         }
 
         /// <summary>
-        /// Play the specified sound with the given category, name and type, at the set position.
+        /// Play the specified sound at the given position.
         /// Returns a reference to the SoundyController that is playing the sound.
         /// Returns null if no sound is found.
         /// </summary>
         /// <param name="databaseName"> The sound category </param>
-        /// <param name="soundName"> SocketName of the sound </param>
+        /// <param name="soundName"> Sound Name of the sound </param>
         /// <param name="position"> The position from where this sound will play from </param>
         public static SoundyController Play(string databaseName, string soundName, Vector3 position)
         {
@@ -193,7 +193,7 @@ namespace Doozy.Engine.Soundy
         }
 
         /// <summary>
-        /// Play the specified sound, at the set position.
+        /// Play the specified sound, at the given position.
         /// Returns a reference to the SoundyController that is playing the sound.
         /// Returns null if the AudioClip is null.
         /// </summary>
@@ -206,12 +206,12 @@ namespace Doozy.Engine.Soundy
         }
 
         /// <summary>
-        /// Play the specified sound while following the follow target transform while playing.
+        /// Play the specified sound and follow a given target Transform while playing.
         /// Returns a reference to the SoundyController that is playing the sound.
         /// Returns null if no sound is found.
         /// </summary>
         /// <param name="databaseName"> The sound category </param>
-        /// <param name="soundName"> SocketName of the sound </param>
+        /// <param name="soundName"> Sound Name of the sound </param>
         /// <param name="followTarget"> The target transform that the sound will follow while playing </param>
         public static SoundyController Play(string databaseName, string soundName, Transform followTarget)
         {
@@ -243,7 +243,7 @@ namespace Doozy.Engine.Soundy
         /// Returns null if no sound is found.
         /// </summary>
         /// <param name="databaseName"> The sound category </param>
-        /// <param name="soundName"> SocketName of the sound </param>
+        /// <param name="soundName"> Sound Name of the sound </param>
         public static SoundyController Play(string databaseName, string soundName)
         {
             if (!s_initialized) s_instance = Instance;
@@ -302,7 +302,7 @@ namespace Doozy.Engine.Soundy
         }
 
         /// <summary>
-        /// Play the specified audio clip with the given parameters.
+        /// Play the specified audio clip with the given parameters (and follow a given Transform while playing).
         /// Returns a reference to the SoundyController that is playing the sound.
         /// Returns null if the AudioClip is null.
         /// </summary>

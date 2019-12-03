@@ -1,4 +1,7 @@
-﻿using DChild.Gameplay.Items;
+﻿
+using DChild.Gameplay.Items;
+using DChild.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System.Collections.Generic;
@@ -15,6 +18,8 @@ namespace DChild.Gameplay.Inventories
         [SerializeField, TableList(ShowIndexLabels = true, NumberOfItemsPerPage = 5, ShowPaging = true),
         ValidateInput("ValidateList", "There are duplicate ItemData or Size has exceeded maxSize", InfoMessageType.Error, IncludeChildren = true), HideReferenceObjectPicker]
         private List<ItemSlot> m_list = new List<ItemSlot>();
+
+        public event EventAction<ItemEventArgs> ItemUpdate;
 
         public bool restrictSize => m_restrictSize;
         public int MaxSize => m_maxSize;
@@ -44,14 +49,20 @@ namespace DChild.Gameplay.Inventories
                     if (m_list[info.index].count == 0)
                     {
                         m_list.RemoveAt(info.index);
+                        SendItemUpdateEvent(item, 0);
+                    }
+                    else
+                    {
+                        SendItemUpdateEvent(item, m_list[info.index].count);
                     }
                 }
-                else
+                else if (count > 0)
                 {
                     var willAddNewSlot = m_restrictSize && IsFull() ? false : true;
                     if (willAddNewSlot)
                     {
                         AddNewSlot(item, count);
+                        SendItemUpdateEvent(item, GetSlot(GetInfoOf(item).index).count);
                     }
                 }
             }
@@ -65,11 +76,13 @@ namespace DChild.Gameplay.Inventories
                 if (count == 0)
                 {
                     m_list.RemoveAt(info.index);
+                    SendItemUpdateEvent(item, 0);
                 }
                 else
                 {
                     m_list[info.index].SetCount(count);
                     m_list[info.index].RestrictCount();
+                    SendItemUpdateEvent(item, GetSlot(GetInfoOf(item).index).count);
                 }
             }
             else if (count > 0)
@@ -79,6 +92,18 @@ namespace DChild.Gameplay.Inventories
                 {
                     AddNewSlot(item, count);
                 }
+
+                SendItemUpdateEvent(item, GetSlot(GetInfoOf(item).index).count);
+            }
+        }
+
+        private void SendItemUpdateEvent(ItemData item, int count)
+        {
+            using (Cache<ItemEventArgs> eventArgs = Cache<ItemEventArgs>.Claim())
+            {
+                eventArgs.Value.Initialize(item, count);
+                ItemUpdate?.Invoke(this, eventArgs);
+                eventArgs.Release();
             }
         }
 
@@ -100,7 +125,7 @@ namespace DChild.Gameplay.Inventories
             var info = GetInfoOf(item);
             if (info.isContainedInList)
             {
-               return GetSlot(info.index).count;
+                return GetSlot(info.index).count;
             }
             else
             {
@@ -112,6 +137,21 @@ namespace DChild.Gameplay.Inventories
         {
             m_list.Clear();
             m_list.AddRange(data.list);
+        }
+
+        public ItemContainerSaveData Save()
+        {
+            List<ItemContainerSaveData.Item> savedData = new List<ItemContainerSaveData.Item>();
+            for (int i = 0; i < m_list.Count; i++)
+            {
+                savedData.Add(new ItemContainerSaveData.Item(m_list[i].item.id, m_list[i].count));
+            }
+            return new ItemContainerSaveData(savedData.ToArray());
+        }
+
+        public void ClearList()
+        {
+            m_list.Clear();
         }
 
         private void AddNewSlot(ItemData item, int count)
@@ -172,7 +212,7 @@ namespace DChild.Gameplay.Inventories
             return true;
         }
 
-       
+
 #endif
 
     }

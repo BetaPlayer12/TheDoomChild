@@ -1,16 +1,17 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 
 namespace DChild.Gameplay.Combat.StatusAilment
 {
-    public struct StatusEffectReferenceEventArgs : IEventActionArgs
+    public class StatusEffectReferenceEventArgs : IEventActionArgs
     {
-        public StatusEffectReferenceEventArgs(StatusEffectHandle statusEffect) : this()
+        public void Initialize(StatusEffectHandle statusEffect)
         {
             this.statusEffect = statusEffect;
         }
 
-        public StatusEffectHandle statusEffect { get; }
+        public StatusEffectHandle statusEffect { get; private set; }
     }
 
     public class StatusEffectHandle
@@ -28,6 +29,9 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         private Character m_character;
         public bool isActive { set => m_isActive = value; }
+        public float duration { get => m_duration; set => m_duration = value; }
+        public event EventAction<StatusEffectReferenceEventArgs> DurationExpired;
+        public StatusEffectType type => m_type;
 
         public StatusEffectHandle(StatusEffectType m_type, float m_duration, IStatusEffectModule[] m_modules, IStatusEffectUpdatableModule[] m_updatableModules)
         {
@@ -39,9 +43,6 @@ namespace DChild.Gameplay.Combat.StatusAilment
             m_moduleSize = m_modules?.Length ?? 0;
         }
 
-        public event EventAction<StatusEffectReferenceEventArgs> DurationExpired;
-
-        public StatusEffectType type => m_type;
 
         public void Initialize(Character character)
         {
@@ -87,7 +88,12 @@ namespace DChild.Gameplay.Combat.StatusAilment
                     m_duration -= deltaTime;
                     if (m_duration <= 0)
                     {
-                        DurationExpired?.Invoke(this, new StatusEffectReferenceEventArgs(this));
+                        using (Cache<StatusEffectReferenceEventArgs> cacheEventArgs = Cache<StatusEffectReferenceEventArgs>.Claim())
+                        {
+                            cacheEventArgs.Value.Initialize(this);
+                            DurationExpired?.Invoke(this, cacheEventArgs.Value);
+                            cacheEventArgs.Release();
+                        }
                     }
                 }
             }

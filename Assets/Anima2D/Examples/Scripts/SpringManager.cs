@@ -26,7 +26,6 @@ namespace UnityChan
 		public float			dragForce;
 		public AnimationCurve	dragCurve;
 		public SpringBone[] springBones;
-        //Edit
         public Transform m_followThisTransformScaleX;
 
         private float m_scaleX;
@@ -38,13 +37,12 @@ namespace UnityChan
         }
 
 #if UNITY_EDITOR
-		void Update ()
+        void Update ()
         {
             if (m_followThisTransformScaleX != null)
             {
                 m_scaleX = Mathf.Sign(m_followThisTransformScaleX.transform.localScale.x);
             }
-
             //Kobayashi
             if (dynamicRatio >= 1.0f)
                 dynamicRatio = 1.0f;

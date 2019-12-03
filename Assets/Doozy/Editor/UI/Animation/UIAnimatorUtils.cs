@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -34,6 +34,7 @@ namespace Doozy.Editor.UI.Animation
         {
             if (s_previewIsPlaying) return;
             if (s_delayedCall != null) s_delayedCall.Cancel();
+            view.UpdateStartValues();
             StopViewPreview(view);
             StopAllAnimations(view.RectTransform);
 
@@ -71,10 +72,20 @@ namespace Doozy.Editor.UI.Animation
         {
             if (s_previewIsPlaying) return;
             if (s_delayedCall != null) s_delayedCall.Cancel();
+            popup.UpdateStartValues();
             StopPopupPreview(popup);
             StopAllAnimations(popup.RectTransform);
-            if (popup.HasContainer) StopAllAnimations(popup.Container.RectTransform);
-            if (popup.HasOverlay) StopAllAnimations(popup.RectTransform);
+            if (popup.HasContainer)
+            {
+                popup.Container.UpdateStartValues();
+                StopAllAnimations(popup.Container.RectTransform);
+            }
+
+            if (popup.HasOverlay)
+            {
+                popup.Overlay.UpdateStartValues();
+                StopAllAnimations(popup.RectTransform);
+            }
 
             Vector3 moveFrom = UIAnimator.GetAnimationMoveFrom(popup.Container.RectTransform, animation, popup.Container.StartPosition);
             Vector3 moveTo = UIAnimator.GetAnimationMoveTo(popup.Container.RectTransform, animation, popup.Container.StartPosition);

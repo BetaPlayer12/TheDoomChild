@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 112000000, guid: 6cd9e592b4c9a6045897a4c5a2420769,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1595,7 +1595,7 @@ PrefabInstance:
     - target: {fileID: 8638918552621670128, guid: 79a4749d7b0c9924288be4706d0de4ce,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -160.9669
+      value: -160.96687
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79a4749d7b0c9924288be4706d0de4ce, type: 3}
@@ -11481,6 +11481,9 @@ MonoBehaviour:
       m_sceneName: 
       m_scenePath: 
     m_location: 0
+    m_spawnPosition:
+      x: 0
+      y: 0
     m_completion: 0
     m_duration:
       m_hours: 0
@@ -11488,18 +11491,18 @@ MonoBehaviour:
       m_seconds: 0
       m_secondsTimer: 0
     m_characterData:
+      m_inventoryData:
+        m_soulEssence: 0
+        m_items:
+          m_datas: []
+        m_soulCrystals:
+          m_datas: []
+        m_questItems:
+          m_datas: []
       m_bestiaryProgressData:
         m_serializeDatas: []
       m_skills:
         m_movementSkills: 
-        m_movementSkillList:
-          m_list:
-          - m_name: 0
-            m_value: 0
-          - m_name: 1
-            m_value: 0
-          - m_name: 2
-            m_value: 0
       m_soulSkillAcquisitionData:
         m_serializeDatas: []
       m_equippedSoulSkillData:
@@ -11507,9 +11510,8 @@ MonoBehaviour:
         m_supportSkill: 0
         m_weaponSkill1: 0
         m_weaponSkill2: 0
-      m_bestiaryList: {fileID: 0}
-      m_soulSkillList: {fileID: 0}
   m_slotList:
+    m_slotCount: 1
     m_slots:
     - m_id: 1
       m_demoGame: 1
@@ -11518,6 +11520,9 @@ MonoBehaviour:
         m_sceneName: _Zone GardenPrototype
         m_scenePath: Assets/DChild/Scenes/Zones/_Zone GardenPrototype.unity
       m_location: 14
+      m_spawnPosition:
+        x: 0
+        y: 0
       m_completion: 0
       m_duration:
         m_hours: 0
@@ -11525,18 +11530,18 @@ MonoBehaviour:
         m_seconds: 0
         m_secondsTimer: 0
       m_characterData:
+        m_inventoryData:
+          m_soulEssence: 0
+          m_items:
+            m_datas: []
+          m_soulCrystals:
+            m_datas: []
+          m_questItems:
+            m_datas: []
         m_bestiaryProgressData:
           m_serializeDatas: []
         m_skills:
           m_movementSkills: 
-          m_movementSkillList:
-            m_list:
-            - m_name: 0
-              m_value: 0
-            - m_name: 1
-              m_value: 0
-            - m_name: 2
-              m_value: 0
         m_soulSkillAcquisitionData:
           m_serializeDatas: []
         m_equippedSoulSkillData:
@@ -11544,8 +11549,6 @@ MonoBehaviour:
           m_supportSkill: 0
           m_weaponSkill1: 0
           m_weaponSkill2: 0
-        m_bestiaryList: {fileID: 0}
-        m_soulSkillList: {fileID: 0}
 --- !u!1 &445860593
 GameObject:
   m_ObjectHideFlags: 0
@@ -11901,6 +11904,65 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 463254428}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &467199690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 467199692}
+  - component: {fileID: 467199691}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &467199691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467199690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70914bb016a9f3c47a84b308657f4bf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_stat
+      Entry: 6
+      Data: 
+  m_segements:
+  - m_ui: {fileID: 0}
+    m_canvas: {fileID: 0}
+    m_maxValue: 1
+--- !u!4 &467199692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467199690}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1417.275, y: 695.28564, z: -588.37274}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &473571483
 GameObject:
   m_ObjectHideFlags: 0
@@ -11935,7 +11997,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.0999756, y: -2.5099955}
+  m_AnchoredPosition: {x: -3.0999756, y: -2.5099952}
   m_SizeDelta: {x: 0, y: 5.67}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &473571485
@@ -16004,7 +16066,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -24, y: -4001}
+  m_AnchoredPosition: {x: -23.999985, y: -4001}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &596924612
@@ -18651,7 +18713,7 @@ PrefabInstance:
     - target: {fileID: 8638918552621670128, guid: 79a4749d7b0c9924288be4706d0de4ce,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -160.9669
+      value: -160.96687
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79a4749d7b0c9924288be4706d0de4ce, type: 3}
@@ -18699,6 +18761,7 @@ MonoBehaviour:
   clearStateOnDisable: 0
   tintBlack: 0
   singleSubmesh: 0
+  fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
   maskInteraction: 0
@@ -18764,7 +18827,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 732999104}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.9, y: -13.23, z: 0}
+  m_LocalPosition: {x: -21.08, y: -13.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 582414871}
@@ -19933,8 +19996,8 @@ MonoBehaviour:
   m_vidPlayer: {fileID: 1374257586}
   m_intro1: {fileID: 32900000, guid: 9d07e1750a2af4c42acb608f3cafdec9, type: 3}
   m_intro2: {fileID: 32900000, guid: eacd5d4f83639f44c8058ea6556696f4, type: 3}
-  m_next: {fileID: 32900000, guid: 6b44c402ae906ff42af825f875c25406, type: 3}
-  m_previous: {fileID: 32900000, guid: f08c2786ab187704abb40a63cbc51a61, type: 3}
+  m_next: {fileID: 32900000, guid: f08c2786ab187704abb40a63cbc51a61, type: 3}
+  m_previous: {fileID: 32900000, guid: 6b44c402ae906ff42af825f875c25406, type: 3}
   m_first: {fileID: 32900000, guid: 20830fc32ee8d914a8d3b0b7a7888030, type: 3}
   m_last: {fileID: 32900000, guid: 7cac18fe0a8ec434d98b40e3becf3083, type: 3}
   m_texture: {fileID: 8400000, guid: ad0a7f52f338601488bb7059d88b5285, type: 2}
@@ -32116,7 +32179,7 @@ PrefabInstance:
     - target: {fileID: 8638918552621670128, guid: 79a4749d7b0c9924288be4706d0de4ce,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -160.9669
+      value: -160.96687
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79a4749d7b0c9924288be4706d0de4ce, type: 3}
@@ -33933,6 +33996,14 @@ PrefabInstance:
     - target: {fileID: 390643615, guid: 7c11fc85a8e24e44981b6291b5b2649a, type: 3}
       propertyPath: m_textInfo.materialCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1760122384, guid: 7c11fc85a8e24e44981b6291b5b2649a, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1760122384, guid: 7c11fc85a8e24e44981b6291b5b2649a, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1589300816878159469, guid: 7c11fc85a8e24e44981b6291b5b2649a,
         type: 3}
@@ -37408,7 +37479,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.0999756, y: -2.5100107}
+  m_AnchoredPosition: {x: -3.0999756, y: -2.5100105}
   m_SizeDelta: {x: 0, y: 5.67}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1842043554
@@ -38524,7 +38595,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2096.9995, y: -47}
+  m_AnchoredPosition: {x: -2096.9995, y: -46.999985}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1912020999

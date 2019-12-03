@@ -4,7 +4,7 @@ namespace DChild.Gameplay.Characters.Enemies
 {
     public class EyeSentryBrain : MinionAIBrain<EyeSentry>
     {
-        private TerrainPatrolSensor m_terrainSensor;
+        //private TerrainPatrolSensor m_terrainSensor;
 
         public override void Enable(bool value)
         {       
@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Start()
         {
-            m_terrainSensor = GetComponentInChildren<TerrainPatrolSensor>();
+           // m_terrainSensor = GetComponentInChildren<TerrainPatrolSensor>();
         }
 
         private void Update()
@@ -24,14 +24,14 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_minion.waitForBehaviourEnd)
                 return;
 
-            if (m_terrainSensor.shouldTurnAround)
-            {
-                m_minion.Turn();
-            }
-            else
-            {
-                m_minion.Move();
-            }
+            //if (m_terrainSensor.shouldTurnAround)
+            //{
+            //    m_minion.Turn();
+            //}
+            //else
+            //{
+            //    m_minion.Move();
+            //}
         }
     }
 

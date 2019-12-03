@@ -14,16 +14,15 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     {
         private class Handle : BaseHandle
         {
-            private IPlayer m_player;
             private int m_increaseValue;
             private int m_maxStacks;
             private WaitForWorldSeconds waitforSeconds;
             public int m_currentStacks;
             private Coroutine m_routine;
 
-            public Handle(IPlayer m_player, int m_increaseValue, int m_maxStacks, float m_outOfCombatResetThreshold)
+            public Handle(IPlayer m_player, int m_increaseValue, int m_maxStacks, float m_outOfCombatResetThreshold) : base(m_player)
             {
-                this.m_player = m_player;
+
                 this.m_increaseValue = m_increaseValue;
                 this.m_maxStacks = m_maxStacks;
                 waitforSeconds = new WaitForWorldSeconds(m_outOfCombatResetThreshold);
@@ -36,7 +35,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 //m_player.CombatModeChanged += OnCombatModeChanged;
             }
 
-           
+
 
             public override void Dispose()
             {
@@ -73,7 +72,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             private IEnumerator ResetRoutine()
             {
                 yield return waitforSeconds;
-               // m_player.modifiers.damageModifier -= m_increaseValue * m_currentStacks;
+                // m_player.modifiers.damageModifier -= m_increaseValue * m_currentStacks;
                 m_currentStacks = 0;
             }
         }

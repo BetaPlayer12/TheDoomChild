@@ -11,29 +11,27 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     {
         private class Handle : BaseHandle
         {
-            private IPlayer m_reference;
             private float m_lifeSteal;
 
-            public Handle(IPlayer m_reference, int m_lifeSteal)
+            public Handle(IPlayer m_reference, int m_lifeSteal) : base(m_reference)
             {
-                this.m_reference = m_reference;
                 this.m_lifeSteal = m_lifeSteal / 100f;
             }
 
             public override void Dispose()
             {
-                m_reference.attackModule.TargetDamaged -= OnAttack;
+                m_player.attackModule.TargetDamaged -= OnAttack;
             }
 
             public override void Initialize()
             {
-                m_reference.attackModule.TargetDamaged += OnAttack;
+                m_player.attackModule.TargetDamaged += OnAttack;
             }
 
             private void OnAttack(object sender, CombatConclusionEventArgs eventArgs)
             {
                 var heal = eventArgs.result.totalDamageDealt * m_lifeSteal;
-                GameplaySystem.combatManager.Heal(m_reference.healableModule, Mathf.CeilToInt(heal));
+                GameplaySystem.combatManager.Heal(m_player.healableModule, Mathf.CeilToInt(heal));
             }
         }
 

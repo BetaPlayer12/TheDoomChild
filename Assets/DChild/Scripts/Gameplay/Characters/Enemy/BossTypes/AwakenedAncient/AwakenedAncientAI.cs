@@ -253,11 +253,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
+        private PhaseHandle<Phase, PhaseInfo> m_phaseHandle;
+        [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private bool m_burrowed;
-
-        private PhaseHandle<Phase, PhaseInfo> m_phaseHandle;
 
         private List<SkeletonSpawnAI> m_skeletons;
         private List<GameObject> m_tombs;
@@ -378,7 +378,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
-            
+
             m_tombs = new List<GameObject>();
             //m_tombSouls = new List<GameObject>();
             m_skeletons = new List<SkeletonSpawnAI>();
@@ -649,7 +649,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         m_movementHandle.Stop();
-                        m_turnHandle.Execute(m_info.turnAnimation);
+                        m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     }
                     break;
                 case State.Attacking:

@@ -11,8 +11,8 @@ namespace Holysoft.Gameplay.UI
         //#endif
         private ICappedStat m_stat;
 
-        protected abstract float maxValue { set; }
-        protected abstract float currentValue { set; }
+        public abstract float maxValue { set; }
+        public abstract float currentValue { set; }
 
         public virtual void MonitorInfoOf(ICappedStat stat)
         {

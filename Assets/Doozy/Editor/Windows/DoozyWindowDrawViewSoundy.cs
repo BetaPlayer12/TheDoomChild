@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -306,7 +306,7 @@ namespace Doozy.Editor.Windows
                     GUILayout.Space(DGUI.Properties.Space(2) * createSoundDatabase.faded);
                     GUILayout.BeginHorizontal(GUILayout.Height(DGUI.Properties.SingleLineHeight + DGUI.Properties.Space(2)));
                     {
-                        GUILayout.Space((ViewWidth - NewCategoryNameTextFieldWidth - 32) / 2);
+                        GUILayout.Space((FullViewWidth - NewCategoryNameTextFieldWidth - 32) / 2);
 
                         GUI.color = DGUI.Colors.GetDColor(ColorName.Green).Normal.WithAlpha(GUI.color.a);
                         GUI.SetNextControlName(NEW_SOUND_DATABASE);
@@ -657,7 +657,7 @@ namespace Doozy.Editor.Windows
 
 
                                 //draw check - if the item was scrolled out of view (up or down) -> do not draw it
-                                bool drawItem = y > m_scrollPosition.y + 16 || y < m_scrollPosition.y + ViewRect.height - 16;
+                                bool drawItem = y > m_viewScrollPosition.y + 16 || y < m_viewScrollPosition.y + FullViewRect.height - 16;
                                 if (!drawItem) continue;
 
                                 bool removedEntry = false;

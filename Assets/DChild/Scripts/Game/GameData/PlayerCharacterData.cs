@@ -4,33 +4,63 @@ using UnityEngine;
 using System.Collections;
 using DChild.Menu.Bestiary;
 using DChild.Gameplay.Characters.Players.SoulSkills;
+using System;
 
 namespace DChild.Serialization
 {
     [System.Serializable]
     public class PlayerCharacterData
     {
-        [SerializeField]
+        [SerializeField,TabGroup("Inventory"),HideReferenceObjectPicker,HideLabel]
+        private PlayerInventoryData m_inventoryData;
+        [SerializeField, TabGroup("Bestiary"),HideReferenceObjectPicker,HideLabel]
         private AcquisitionData m_bestiaryProgressData;
-        [SerializeField]
+        [SerializeField, TabGroup("Skills")]
         private PrimarySkillsData m_skills;
-        [Title("Soul Skills")]
-        [SerializeField, Indent]
+        [SerializeField, TabGroup("Soul Skill")]
         private AcquisitionData m_soulSkillAcquisitionData;
-        [SerializeField, Indent]
+        [SerializeField, TabGroup("Soul Skill")]
         private EquippedSoulSkillData m_equippedSoulSkillData;
 
+        public PlayerInventoryData inventoryData => m_inventoryData;
         public AcquisitionData bestiaryProgressData { get => m_bestiaryProgressData; }
         public PrimarySkillsData skills { get => m_skills; }
         public AcquisitionData soulSkillAcquisitionData { get => m_soulSkillAcquisitionData; }
         public EquippedSoulSkillData equippedSoulSkillData { get => m_equippedSoulSkillData; }
 
+        public PlayerCharacterData()
+        {
+            m_inventoryData = new PlayerInventoryData();
+            m_bestiaryProgressData = new AcquisitionData();
+            m_skills = new PrimarySkillsData();
+            m_soulSkillAcquisitionData = new AcquisitionData();
+            m_equippedSoulSkillData = new EquippedSoulSkillData();
+        }
+
+        public PlayerCharacterData(PlayerInventoryData m_inventoryData, AcquisitionData m_bestiaryProgressData, PrimarySkillsData m_skills,  AcquisitionData m_soulSkillAcquisitionData, EquippedSoulSkillData m_equippedSoulSkillData)
+        {
+            this.m_inventoryData = m_inventoryData;
+            this.m_bestiaryProgressData = m_bestiaryProgressData;
+            this.m_skills = m_skills;
+            this.m_soulSkillAcquisitionData = m_soulSkillAcquisitionData;
+            this.m_equippedSoulSkillData = m_equippedSoulSkillData;
+        }
 
 #if UNITY_EDITOR
-        [SerializeField, BoxGroup("Debug")]
+        public PlayerCharacterData(PlayerCharacterData data)
+        {
+            this.m_inventoryData = new PlayerInventoryData(data.inventoryData);
+            this.m_bestiaryProgressData = new AcquisitionData(data.bestiaryProgressData);
+            this.m_skills = data.skills;
+            this.m_soulSkillAcquisitionData = new AcquisitionData(data.soulSkillAcquisitionData);
+            this.m_equippedSoulSkillData = data.equippedSoulSkillData;
+        }
+
+        [NonSerialized, ShowInInspector, BoxGroup("Debug")]
         private BestiaryList m_bestiaryList;
-        [SerializeField, BoxGroup("Debug")]
+        [NonSerialized, ShowInInspector, BoxGroup("Debug")]
         private SoulSkillList m_soulSkillList;
+
 
         [Button, BoxGroup("Debug")]
         private void Initialize()
@@ -56,23 +86,5 @@ namespace DChild.Serialization
             acquisitionData = new AcquisitionData(data.ToArray());
         }
 #endif
-    }
-
-    [System.Serializable]
-    public struct PlayerInventoryData
-    {
-        [SerializeField]
-        private int m_ID;
-        [SerializeField, MinValue(0)]
-        private int m_count;
-
-        public PlayerInventoryData(int m_ID, int m_count)
-        {
-            this.m_ID = m_ID;
-            this.m_count = m_count;
-        }
-
-        public int ID { get => m_ID; }
-        public int count { get => m_count; }
     }
 }

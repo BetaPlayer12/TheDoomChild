@@ -13,12 +13,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField, Range(0, 100)]
         private int m_chance;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             player.weapon.SetInfliction(m_type, m_chance);
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             player.weapon.SetInfliction(m_type, m_chance);
         }
