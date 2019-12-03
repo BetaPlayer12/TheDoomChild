@@ -32,12 +32,12 @@ namespace DChild.Gameplay.Trohpies.Modules
         public void Initialize()
         {
             m_isComplete = false;
-            GameEventMessage.AddListener<GameEventMessage>(OnEventCalled);      
+            GameEventMessage.AddListener<GameEventMessage>(OnEventCalled);
         }
 
         private void OnEventCalled(GameEventMessage message)
         {
-            if(m_isComplete == false && message.EventName == m_eventToListen)
+            if (m_isComplete == false && message.EventName == m_eventToListen)
             {
                 m_isComplete = true;
                 Complete?.Invoke(this, EventActionArgs.Empty);

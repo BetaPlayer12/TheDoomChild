@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -29,7 +29,7 @@ namespace Doozy.Editor.Windows
         private const Size BAR_SIZE = Size.L;
         private static float BarHeight { get { return DGUI.Sizes.BarHeight(BAR_SIZE); } }
         
-        private float NewCategoryNameTextFieldWidth { get { return Mathf.Max(ViewWidth * 0.6f, DGUI.Properties.DefaultFieldWidth * 4); } }
+        private float NewCategoryNameTextFieldWidth { get { return Mathf.Max(FullViewWidth * 0.6f, DGUI.Properties.DefaultFieldWidth * 4); } }
         private static float SearchRowHeight { get { return DGUI.Properties.SingleLineHeight; } }
         private static float NormalRowHeight { get { return DGUI.Properties.SingleLineHeight + DGUI.Properties.Space(2); } }
         

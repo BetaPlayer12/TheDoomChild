@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -69,8 +69,10 @@ namespace Doozy.Engine.Nody.Models
         [SerializeField] private string m_graphId;
         [SerializeField] private string m_id;
         [SerializeField] private string m_name;
+        [SerializeField] private string m_notes;
 
         [NonSerialized] private Graph m_activeGraph;
+        [NonSerialized] protected bool m_activated;
 
         #endregion
 
@@ -149,7 +151,9 @@ namespace Doozy.Engine.Nody.Models
         /// <summary> Activate is called when the parent graph is started and this is a global node </summary>
         public virtual void Activate(Graph portalGraph)
         {
+            if (m_activated) return;
             if (m_debugMode) DDebug.Log("Node '" + m_name + "': Activated");
+            m_activated = true;
         }
 
         /// <summary> [Editor Only] AddDefaultSockets is used when the node is created, only in the editor, and is intended to inject the default or custom sockets for this particular node type </summary>
@@ -198,7 +202,9 @@ namespace Doozy.Engine.Nody.Models
         /// <summary> Deactivate is called when the parent graph is stopped and this is a global node </summary>
         public virtual void Deactivate()
         {
+            if (!m_activated) return;
             if (m_debugMode) DDebug.Log("Node '" + m_name + "': Deactivated ");
+            m_activated = false;
         }
 
         /// <summary> [Editor Only] Returns the default node height set in NodySettings </summary>

@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -81,6 +81,7 @@ namespace Doozy.Engine.UI.Settings
         public bool ShowOnClick = true;
         public bool ShowOnDoubleClick = true;
         public bool ShowOnLongClick = true;
+        public bool ShowOnRightClick = true;
         public bool ShowOnPointerDown = true;
         public bool ShowOnPointerEnter = true;
         public bool ShowOnPointerExit = true;
@@ -134,6 +135,7 @@ namespace Doozy.Engine.UI.Settings
             button.OnDeselected = new UIButtonBehavior(UIButtonBehaviorType.OnDeselected);
             button.OnDoubleClick = new UIButtonBehavior(UIButtonBehaviorType.OnDoubleClick);
             button.OnLongClick = new UIButtonBehavior(UIButtonBehaviorType.OnLongClick);
+            button.OnRightClick = new UIButtonBehavior(UIButtonBehaviorType.OnRightClick);
             button.OnPointerDown = new UIButtonBehavior(UIButtonBehaviorType.OnPointerDown);
             button.OnPointerEnter = new UIButtonBehavior(UIButtonBehaviorType.OnPointerEnter);
             button.OnPointerExit = new UIButtonBehavior(UIButtonBehaviorType.OnPointerExit);

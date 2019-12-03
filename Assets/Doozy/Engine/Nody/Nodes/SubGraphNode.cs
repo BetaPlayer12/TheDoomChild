@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -72,6 +72,7 @@ namespace Doozy.Engine.Nody.Nodes
             if (enterNode == null) return;
             ActiveGraph.DeactivateGlobalNodes();
             ActiveGraph.ActiveSubGraph = m_subGraph;
+            ActiveGraph.ActiveSubGraph.Enabled = true;
             m_subGraph.ParentGraph = ActiveGraph;
             m_subGraph.ParentSubGraphNode = this;
             m_subGraph.SetActiveNode(enterNode, null);
@@ -80,6 +81,7 @@ namespace Doozy.Engine.Nody.Nodes
         public void ExitSubGraphNode()
         {
             if (!FirstOutputSocket.IsConnected) return;
+            ActiveGraph.ActiveSubGraph.Enabled = false;
             ActiveGraph.ActiveSubGraph = null;
             ActiveGraph.ActivateGlobalNodes();
             ActiveGraph.SetActiveNodeByConnection(FirstOutputSocket.FirstConnection);
