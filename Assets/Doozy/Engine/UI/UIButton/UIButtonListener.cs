@@ -1,12 +1,12 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using Doozy.Engine.Utils;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 namespace Doozy.Engine.UI
@@ -52,6 +52,13 @@ namespace Doozy.Engine.UI
 
         #endregion
 
+        #region Private Variables
+
+        /// <summary> Internal variable used to test if this UIButton listener is listening for the 'Back' button </summary>
+        private bool m_listeningForBackButton;
+
+        #endregion
+
         #region Unity Methods
 
         private void Reset()
@@ -74,29 +81,44 @@ namespace Doozy.Engine.UI
         private void RegisterListener()
         {
             Message.AddListener<UIButtonMessage>(OnMessage);
-            if (DebugMode) DDebug.Log( "[" + name + "] Started listening for UIButton actions", this);
+            m_listeningForBackButton = ButtonName.Equals(UIButton.BackButtonName);
+            if (DebugMode) DDebug.Log("[" + name + "] Started listening for UIButton actions", this);
         }
 
         private void UnregisterListener()
         {
             Message.RemoveListener<UIButtonMessage>(OnMessage);
-            if (DebugMode) DDebug.Log( "[" + name + "] Stopped listening for UIButton actions", this);
+            if (DebugMode) DDebug.Log("[" + name + "] Stopped listening for UIButton actions", this);
         }
 
         private void OnMessage(UIButtonMessage message)
         {
-            if (ListenForAllUIButtons ||
-                message.Button != null && message.Button.ButtonCategory.Equals(ButtonCategory) && message.Button.ButtonName.Equals(ButtonName))
+            if (m_listeningForBackButton && (message.ButtonName.Equals(UIButton.BackButtonName) || message.Button != null && message.Button.IsBackButton))
+            {
+                InvokeEvent(message);
+                return;
+            }
+
+            if (ListenForAllUIButtons)
+            {
+                InvokeEvent(message);
+                return;
+            }
+
+            if (message.Button != null && message.Button.ButtonCategory.Equals(ButtonCategory) && message.Button.ButtonName.Equals(ButtonName))
                 InvokeEvent(message);
         }
 
         private void InvokeEvent(UIButtonMessage message)
         {
             if (Event == null) return;
-            if (message.Button == null) return;
             if (TriggerAction != message.Type) return;
             Event.Invoke(message.Button);
-            if (DebugMode) DDebug.Log( "[" + name + "] Triggered Event: " + "[" + message.Type + "] " + message.Button.ButtonCategory + " - " + message.Button.ButtonName, this);
+            if (DebugMode)
+                DDebug.Log("[" + name + "] Triggered Event: " + "[" + message.Type + "] " + (message.Button != null
+                                                                                                 ? (message.Button.ButtonCategory + " - " + message.Button.ButtonName)
+                                                                                                 : message.ButtonName),
+                           this);
         }
 
         #endregion

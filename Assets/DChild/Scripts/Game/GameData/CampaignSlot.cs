@@ -34,6 +34,8 @@ namespace DChild.Serialization
         private SerializeDataList m_campaignProgress;
         [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
         private SerializeDataList m_zoneDatas;
+        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
+        private SerializeDataList m_miscDatas;
 
         public CampaignSlot(int m_id)
         {
@@ -46,6 +48,7 @@ namespace DChild.Serialization
             m_characterData = new PlayerCharacterData();
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
+            m_miscDatas = new SerializeDataList();
         }
 
         public CampaignSlot()
@@ -59,6 +62,7 @@ namespace DChild.Serialization
             m_characterData = new PlayerCharacterData();
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
+            m_miscDatas = new SerializeDataList();
         }
 
         public int id => m_id;
@@ -82,6 +86,7 @@ namespace DChild.Serialization
             m_characterData = new PlayerCharacterData();
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
+
         }
 
         public void UpdateLocation(SceneInfo scene, Location location, Vector2 spawnPosition)
@@ -100,6 +105,10 @@ namespace DChild.Serialization
         public void UpdateZoneData(SerializeDataID ID, ISaveData saveData) => m_zoneDatas.UpdateData(ID, saveData);
 
         public T GetZoneData<T>(SerializeDataID ID) where T : ISaveData => (T)m_zoneDatas.GetData(ID);
+
+        public void UpdateData(SerializeDataID ID, ISaveData saveData) => m_miscDatas.UpdateData(ID, saveData);
+
+        public T GetData<T>(SerializeDataID ID) where T : ISaveData => (T)m_miscDatas.GetData(ID);
         #region EditorOnly
 #if UNITY_EDITOR
         public CampaignSlot(CampaignSlot slot)

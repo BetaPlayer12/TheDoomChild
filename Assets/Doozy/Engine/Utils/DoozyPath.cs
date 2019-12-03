@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -32,6 +32,7 @@ namespace Doozy.Engine.Utils
         private const string SETTINGS = "Settings";
         private const string SKINS = "Skins";
         private const string SOUNDY = "Soundy";
+        private const string THEMES = "Themes";
         private const string TEMPLATES = "Templates";
         private const string TOUCHY = "Touchy";
         private const string UI = "UI";
@@ -51,6 +52,7 @@ namespace Doozy.Engine.Utils
         private const string STATE = "State";
 
         public const string SOUNDY_DATABASE = SOUNDY + DATABASE;
+        public const string THEMES_DATABASE = THEMES + DATABASE;
         public const string UIBUTTON_DATABASE = UIBUTTON + DATABASE;
         public const string UICANVAS_DATABASE = UICANVAS + DATABASE;
         public const string UIDRAWER_DATABASE = UIDRAWER + DATABASE;
@@ -83,6 +85,9 @@ namespace Doozy.Engine.Utils
         public static string ENGINE_TOUCHY_PATH = Path.Combine(ENGINE_PATH, TOUCHY);                     // -- Doozy/Engine/Touchy/
         public static string ENGINE_TOUCHY_RESOURCES_PATH = Path.Combine(ENGINE_TOUCHY_PATH, RESOURCES); // -- Doozy/Engine/Touchy/Resources/
 
+        public static string ENGINE_THEMES_PATH = Path.Combine(ENGINE_PATH, THEMES);                     // -- Doozy/Engine/Themes/
+        public static string ENGINE_THEMES_RESOURCES_PATH = Path.Combine(ENGINE_THEMES_PATH, RESOURCES); // -- Doozy/Engine/Themes/Resources/
+
         public static string ENGINE_RESOURCES_PATH = Path.Combine(ENGINE_PATH, RESOURCES);                             // -- Doozy/Engine/Resources/
         public static string ENGINE_RESOURCES_DATA_PATH = Path.Combine(ENGINE_RESOURCES_PATH, DATA);                   // -- Doozy/Engine/Resources/Data/
         public static string ENGINE_RESOURCES_DATA_SOUNDY_PATH = Path.Combine(ENGINE_RESOURCES_DATA_PATH, SOUNDY);     // -- Doozy/Engine/Resources/Data/Soundy/
@@ -91,10 +96,12 @@ namespace Doozy.Engine.Utils
         public static string ENGINE_RESOURCES_DATA_UIDRAWER_PATH = Path.Combine(ENGINE_RESOURCES_DATA_PATH, UIDRAWER); // -- Doozy/Engine/Resources/Data/UIDrawer/
         public static string ENGINE_RESOURCES_DATA_UIPOPUP_PATH = Path.Combine(ENGINE_RESOURCES_DATA_PATH, UIPOPUP);   // -- Doozy/Engine/Resources/Data/UIPopup/
         public static string ENGINE_RESOURCES_DATA_UIVIEW_PATH = Path.Combine(ENGINE_RESOURCES_DATA_PATH, UIVIEW);     // -- Doozy/Engine/Resources/Data/UIView/
+        public static string ENGINE_RESOURCES_DATA_THEMES_PATH = Path.Combine(ENGINE_RESOURCES_DATA_PATH, THEMES);     // -- Doozy/Engine/Resources/Data/Themes/
 
         public enum ComponentName
         {
             Soundy,
+            Themes,
             UIButton,
             UICanvas,
             UIDrawer,
@@ -166,81 +173,87 @@ namespace Doozy.Engine.Utils
             }
         }
 
-        public static void CreateMissingFolders()
+        public static void CreateMissingFolders(bool silentMode = false)
         {
 #if UNITY_EDITOR
 //            DoozyUtils.ClearProgressBar();
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_PATH, 0.1f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_PATH, 0.1f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_PATH, RESOURCES); // -- Doozy/Engine/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_PATH, 0.11f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_PATH, 0.11f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_DATA_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_RESOURCES_PATH, DATA); // -- Doozy/Engine/Resources/Data/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_SOUNDY_PATH, 0.12f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_SOUNDY_PATH, 0.12f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_DATA_SOUNDY_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_RESOURCES_DATA_PATH, SOUNDY); // -- Doozy/Engine/Resources/Data/Soundy/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UIBUTTON_PATH, 0.13f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UIBUTTON_PATH, 0.13f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_DATA_UIBUTTON_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_RESOURCES_DATA_PATH, UIBUTTON); // -- Doozy/Engine/Resources/Data/UIButton/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UICANVAS_PATH, 0.14f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UICANVAS_PATH, 0.14f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_DATA_UICANVAS_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_RESOURCES_DATA_PATH, UICANVAS); // -- Doozy/Engine/Resources/Data/UICanvas/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UIDRAWER_PATH, 0.15f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UIDRAWER_PATH, 0.15f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_DATA_UIDRAWER_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_RESOURCES_DATA_PATH, UIDRAWER); // -- Doozy/Engine/Resources/Data/UIDrawer/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UIPOPUP_PATH, 0.16f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UIPOPUP_PATH, 0.16f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_DATA_UIPOPUP_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_RESOURCES_DATA_PATH, UIPOPUP); // -- Doozy/Engine/Resources/Data/UIPopup/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UIVIEW_PATH, 0.17f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_UIVIEW_PATH, 0.17f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_DATA_UIVIEW_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_RESOURCES_DATA_PATH, UIVIEW); // -- Doozy/Engine/Resources/Data/UIView
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_NODY_RESOURCES_PATH, 0.2f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_RESOURCES_DATA_THEMES_PATH, 0.18f);
+            if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_RESOURCES_DATA_THEMES_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_RESOURCES_DATA_PATH, THEMES); // -- Doozy/Engine/Resources/Data/Themes
+
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_NODY_RESOURCES_PATH, 0.2f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_NODY_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_NODY_PATH, RESOURCES); // -- Doozy/Engine/Nody/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_SOUNDY_RESOURCES_PATH, 0.25f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_SOUNDY_RESOURCES_PATH, 0.25f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_SOUNDY_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_SOUNDY_PATH, RESOURCES); // -- Doozy/Engine/Soundy/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_TOUCHY_RESOURCES_PATH, 0.3f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_TOUCHY_RESOURCES_PATH, 0.3f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_TOUCHY_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_TOUCHY_PATH, RESOURCES); // -- Doozy/Engine/Touchy/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_UI_RESOURCES_PATH, 0.4f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_THEMES_RESOURCES_PATH, 0.35f);
+            if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_THEMES_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_THEMES_PATH, RESOURCES); // -- Doozy/Engine/Themes/Resources/
+
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", ENGINE_UI_RESOURCES_PATH, 0.4f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(ENGINE_UI_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_UI_PATH, RESOURCES); // -- Doozy/Engine/UI/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", UIANIMATIONS_RESOURCES_PATH, 0.5f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", UIANIMATIONS_RESOURCES_PATH, 0.5f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(UIANIMATIONS_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(ENGINE_UI_RESOURCES_PATH, UIANIMATIONS); // -- Doozy/Engine/UI/Resources/UIAnimations/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", HIDE_UIANIMATIONS_RESOURCES_PATH, 0.51f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", HIDE_UIANIMATIONS_RESOURCES_PATH, 0.51f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(HIDE_UIANIMATIONS_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIANIMATIONS_RESOURCES_PATH, HIDE); // -- Doozy/Engine/UI/Resources/UIAnimations/Hide/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", LOOP_UIANIMATIONS_RESOURCES_PATH, 0.52f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", LOOP_UIANIMATIONS_RESOURCES_PATH, 0.52f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(LOOP_UIANIMATIONS_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIANIMATIONS_RESOURCES_PATH, LOOP); // -- Doozy/Engine/UI/Resources/UIAnimations/Loop/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", PUNCH_UIANIMATIONS_RESOURCES_PATH, 0.53f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", PUNCH_UIANIMATIONS_RESOURCES_PATH, 0.53f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(PUNCH_UIANIMATIONS_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIANIMATIONS_RESOURCES_PATH, PUNCH); // -- Doozy/Engine/UI/Resources/UIAnimations/Punch/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", SHOW_UIANIMATIONS_RESOURCES_PATH, 0.54f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", SHOW_UIANIMATIONS_RESOURCES_PATH, 0.54f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(SHOW_UIANIMATIONS_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIANIMATIONS_RESOURCES_PATH, SHOW); // -- Doozy/Engine/UI/Resources/UIAnimations/Show/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", STATE_UIANIMATIONS_RESOURCES_PATH, 0.55f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", STATE_UIANIMATIONS_RESOURCES_PATH, 0.55f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(STATE_UIANIMATIONS_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIANIMATIONS_RESOURCES_PATH, STATE); // -- Doozy/Engine/UI/Resources/UIAnimations/State/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", UIBUTTON_RESOURCES_PATH, 0.61f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", UIBUTTON_RESOURCES_PATH, 0.61f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(UIBUTTON_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIBUTTON_PATH, RESOURCES); // -- Doozy/Engine/UI/UIButton/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", UICANVAS_RESOURCES_PATH, 0.62f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", UICANVAS_RESOURCES_PATH, 0.62f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(UICANVAS_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UICANVAS_PATH, RESOURCES); // -- Doozy/Engine/UI/UICanvas/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", UIDRAWER_RESOURCES_PATH, 0.63f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", UIDRAWER_RESOURCES_PATH, 0.63f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(UIDRAWER_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIDRAWER_PATH, RESOURCES); // -- Doozy/Engine/UI/UIDrawer/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", UIPOPUP_RESOURCES_PATH, 0.64f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", UIPOPUP_RESOURCES_PATH, 0.64f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(UIPOPUP_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIPOPUP_PATH, RESOURCES); // -- Doozy/Engine/UI/UIPopup/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", UITOGGLE_RESOURCES_PATH, 0.65f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", UITOGGLE_RESOURCES_PATH, 0.65f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(UITOGGLE_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UITOGGLE_PATH, RESOURCES); // -- Doozy/Engine/UI/UIToggle/Resources/
 
-            DoozyUtils.DisplayProgressBar("Validate Folder", UIVIEW_RESOURCES_PATH, 0.66f);
+            if (!silentMode) DoozyUtils.DisplayProgressBar("Validate Folder", UIVIEW_RESOURCES_PATH, 0.66f);
             if (!UnityEditor.AssetDatabase.IsValidFolder(UIVIEW_RESOURCES_PATH)) UnityEditor.AssetDatabase.CreateFolder(UIVIEW_PATH, RESOURCES); // -- Doozy/Engine/UI/UIView/Resources/
 
             DoozyUtils.ClearProgressBar();

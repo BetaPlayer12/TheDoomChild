@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -23,10 +23,24 @@ namespace Doozy.Editor.Nody.Windows
             {
                 if (!ConnectionsDatabase.ContainsKey(connectionId)) continue;
                 VirtualConnection vc = ConnectionsDatabase[connectionId];
-                vc.OutputSocket.RemoveConnection(connectionId);
-                vc.InputSocket.RemoveConnection(connectionId);
-                EditorUtility.SetDirty(vc.OutputNode);
-                EditorUtility.SetDirty(vc.InputNode);
+                if (vc == null)
+                {
+                    ConnectionsDatabase.Remove(connectionId);
+                    continue;
+                }
+
+                if (vc.OutputSocket != null)
+                {
+                    vc.OutputSocket.RemoveConnection(connectionId);
+                    EditorUtility.SetDirty(vc.OutputNode);
+                }
+
+                if (vc.InputSocket != null)
+                {
+                    vc.InputSocket.RemoveConnection(connectionId);
+                    EditorUtility.SetDirty(vc.InputNode);
+                }
+                
                 ConnectionsDatabase.Remove(connectionId);
             }
 
@@ -49,7 +63,7 @@ namespace Doozy.Editor.Nody.Windows
             CurrentGraph.SetDirty(saveAssets);
             GraphEvent.Send(GraphEvent.EventType.EVENT_NODE_UPDATED, socket.NodeId);
         }
-        
+
         private void ClearNodesConnections(IEnumerable<Node> nodes, bool recordUndo, bool saveAssets = false)
         {
             if (recordUndo) RecordUndo(GraphAction.Disconnect.ToString());
@@ -77,9 +91,11 @@ namespace Doozy.Editor.Nody.Windows
         private void ConnectSockets(Socket outputSocket, Socket inputSocket, bool recordUndo = true, bool saveAssets = false)
         {
             if (recordUndo) RecordUndo(GraphAction.Connect.ToString());
+            if (outputSocket.OverrideConnection) DisconnectSocket(outputSocket, false);
+            if (inputSocket.OverrideConnection) DisconnectSocket(inputSocket, false);
             GraphUtils.ConnectSockets(CurrentGraph, outputSocket, inputSocket, saveAssets);
         }
-      
+
         private void DisconnectVirtualPoint(VirtualPoint virtualPoint, bool recordUndo, bool saveAssets = false)
         {
             if (!virtualPoint.Socket.IsConnected) return;
@@ -113,7 +129,7 @@ namespace Doozy.Editor.Nody.Windows
             if (node == null) return;
             List<Socket> sockets = socket.IsInput ? node.InputSockets : node.OutputSockets;
             int socketIndex = sockets.IndexOf(socket);
-            if (moveUp && socketIndex == 0) return; //moving up and this is the first socket - it cannot go up in the sockets order
+            if (moveUp && socketIndex == 0) return;                  //moving up and this is the first socket - it cannot go up in the sockets order
             if (!moveUp && socketIndex == sockets.Count - 1) return; //moving down and this is the last socket - it cannot go down in the sockets order
             if (recordUndo) RecordUndo(moveUp ? UILabels.MoveUp : UILabels.MoveDown);
             if (moveUp) //MOVE UP
