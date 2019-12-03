@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -74,6 +74,7 @@ namespace Doozy.Editor.UI
             m_onClick,
             m_onDoubleClick,
             m_onLongClick,
+            m_onRightClick,
             m_onSelected,
             m_onDeselected,
             m_normalLoopAnimation,
@@ -91,6 +92,7 @@ namespace Doozy.Editor.UI
             m_onClickExpanded,
             m_onDoubleClickExpanded,
             m_onLongClickExpanded,
+            m_onRightClickExpanded,
             m_onSelectedExpanded,
             m_onDeselectedExpanded,
             m_normalLoopAnimationExpanded,
@@ -130,6 +132,7 @@ namespace Doozy.Editor.UI
             m_onClick = GetProperty(PropertyName.OnClick);
             m_onDoubleClick = GetProperty(PropertyName.OnDoubleClick);
             m_onLongClick = GetProperty(PropertyName.OnLongClick);
+            m_onRightClick = GetProperty(PropertyName.OnRightClick);
             m_onSelected = GetProperty(PropertyName.OnSelected);
             m_onDeselected = GetProperty(PropertyName.OnDeselected);
             m_normalLoopAnimation = GetProperty(PropertyName.NormalLoopAnimation);
@@ -154,6 +157,7 @@ namespace Doozy.Editor.UI
             m_onClickExpanded = GetAnimBool(m_onClick.propertyPath, m_onClick.isExpanded);
             m_onDoubleClickExpanded = GetAnimBool(m_onDoubleClick.propertyPath, m_onDoubleClick.isExpanded);
             m_onLongClickExpanded = GetAnimBool(m_onLongClick.propertyPath, m_onLongClick.isExpanded);
+            m_onRightClickExpanded = GetAnimBool(m_onRightClick.propertyPath, m_onRightClick.isExpanded);
             m_onSelectedExpanded = GetAnimBool(m_onSelected.propertyPath, m_onSelected.isExpanded);
             m_onDeselectedExpanded = GetAnimBool(m_onDeselected.propertyPath, m_onDeselected.isExpanded);
             m_normalLoopAnimationExpanded = GetAnimBool(m_normalLoopAnimation.propertyPath, m_normalLoopAnimation.isExpanded);
@@ -186,6 +190,7 @@ namespace Doozy.Editor.UI
             AddInfoMessage(UIButtonBehaviorType.OnClick.ToString(), new InfoMessage(DGUI.Icon.OnClick, DGUI.Colors.LightOrDarkColorName, DGUI.Colors.DarkOrLightColorName, "", false, Repaint));
             AddInfoMessage(UIButtonBehaviorType.OnDoubleClick.ToString(), new InfoMessage(DGUI.Icon.OnDoubleClick, DGUI.Colors.LightOrDarkColorName, DGUI.Colors.DarkOrLightColorName, "", false, Repaint));
             AddInfoMessage(UIButtonBehaviorType.OnLongClick.ToString(), new InfoMessage(DGUI.Icon.OnLongClick, DGUI.Colors.LightOrDarkColorName, DGUI.Colors.DarkOrLightColorName, "", false, Repaint));
+            AddInfoMessage(UIButtonBehaviorType.OnRightClick.ToString(), new InfoMessage(DGUI.Icon.OnClick, DGUI.Colors.LightOrDarkColorName, DGUI.Colors.DarkOrLightColorName, "", false, Repaint));
             AddInfoMessage(UIButtonBehaviorType.OnSelected.ToString(), new InfoMessage(DGUI.Icon.OnButtonSelect, DGUI.Colors.LightOrDarkColorName, DGUI.Colors.DarkOrLightColorName, "", false, Repaint));
             AddInfoMessage(UIButtonBehaviorType.OnDeselected.ToString(), new InfoMessage(DGUI.Icon.OnButtonDeselect, DGUI.Colors.LightOrDarkColorName, DGUI.Colors.DarkOrLightColorName, "", false, Repaint));
             AddInfoMessage(ButtonLoopAnimationType.Normal.ToString(), new InfoMessage(DGUI.Icon.Loop, DGUI.Colors.LightOrDarkColorName, DGUI.Colors.DarkOrLightColorName, "", false, Repaint));
@@ -453,8 +458,10 @@ namespace Doozy.Editor.UI
             else DrawBehavior(UILabels.OnDoubleClick, Target.OnDoubleClick, m_onDoubleClick, DGUI.Icon.OnDoubleClick, m_onDoubleClickExpanded);
             if (!Settings.ShowOnLongClick) Target.OnLongClick.Enabled = false;
             else DrawBehavior(UILabels.OnLongClick, Target.OnLongClick, m_onLongClick, DGUI.Icon.OnLongClick, m_onLongClickExpanded);
-
-            if (Settings.ShowOnClick || Settings.ShowOnDoubleClick || Settings.ShowOnLongClick) GUILayout.Space(DGUI.Properties.Space(4));
+            if (!Settings.ShowOnRightClick) Target.OnRightClick.Enabled = false;
+            else DrawBehavior(UILabels.OnRightClick, Target.OnRightClick, m_onRightClick, DGUI.Icon.OnClick, m_onRightClickExpanded);
+            
+            if (Settings.ShowOnClick || Settings.ShowOnDoubleClick || Settings.ShowOnLongClick || Settings.ShowOnRightClick) GUILayout.Space(DGUI.Properties.Space(4));
 
             if (!Settings.ShowOnButtonSelected) Target.OnSelected.Enabled = false;
             else DrawBehavior(UILabels.OnSelected, Target.OnSelected, m_onSelected, DGUI.Icon.OnButtonSelect, m_onSelectedExpanded);

@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -156,7 +156,7 @@ namespace Doozy.Editor.Windows
                 GUILayout.Space(DGUI.Properties.Space(2) * DatabaseCreateCategory.faded);
                 GUILayout.BeginHorizontal(GUILayout.Height(DGUI.Properties.SingleLineHeight + DGUI.Properties.Space(2)));
                 {
-                    GUILayout.Space((ViewWidth - NewCategoryNameTextFieldWidth - 32) / 2);
+                    GUILayout.Space((FullViewWidth - NewCategoryNameTextFieldWidth - 32) / 2);
 
                     GUI.color = DGUI.Colors.GetDColor(ColorName.Green).Normal.WithAlpha(GUI.color.a);
                     m_newCategoryName = EditorGUILayout.TextField(GUIContent.none, m_newCategoryName, GUILayout.Width(NewCategoryNameTextFieldWidth));

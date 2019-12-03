@@ -1,8 +1,9 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using System.Collections.Generic;
+using System.Linq;
 using Doozy.Editor.Nody.NodeGUI;
 using Doozy.Editor.Nody.Settings;
 using Doozy.Editor.Nody.Utils;
@@ -34,7 +35,7 @@ namespace Doozy.Editor.Nody.Windows
         
         private Node GetNodeAtWorldPosition(Vector2 worldPosition)
         {
-            foreach (BaseNodeGUI nodeGUI in NodesGUIsDatabase.Values)
+            foreach (BaseNodeGUI nodeGUI in NodesGUIsDatabase.Values.Reverse())
             {
                 if (!nodeGUI.IsVisible) continue; //node not visible -> do not process it
                 if (GetNodeGridRect(nodeGUI.Node).Contains(worldPosition)) return nodeGUI.Node;

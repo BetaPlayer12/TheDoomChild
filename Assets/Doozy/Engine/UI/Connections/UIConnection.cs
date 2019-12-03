@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -61,7 +61,11 @@ namespace Doozy.Engine.UI.Connections
 
         /// <summary> Returns an UIConnection instance from a socket by using JsonUtility.FromJson(socket.Value, socket.ValueType) </summary>
         /// <param name="socket"> Socket that has an UIConnection type Value </param>
-        public static UIConnection GetValue(Socket socket) { return (UIConnection) JsonUtility.FromJson(socket.Value, socket.ValueType); }
+        public static UIConnection GetValue(Socket socket)
+        {
+//            return (UIConnection) JsonUtility.FromJson(socket.Value, socket.ValueType);
+            return (UIConnection) JsonUtility.FromJson(socket.Value, typeof(UIConnection));
+        }
 
         /// <summary> Sets a socket.Value by using JsonUtility.ToJson(value) </summary>
         /// <param name="socket"> Socket that has an UIConnection type Value </param>

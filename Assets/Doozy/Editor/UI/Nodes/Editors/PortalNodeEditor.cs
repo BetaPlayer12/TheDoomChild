@@ -1,11 +1,14 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using Doozy.Editor.Internal;
 using Doozy.Editor.Nody.Editors;
 using Doozy.Engine.Extensions;
+using Doozy.Engine.UI;
+using Doozy.Engine.UI.Base;
 using Doozy.Engine.UI.Nodes;
+using Doozy.Engine.UI.Settings;
 using Doozy.Engine.Utils;
 using UnityEditor;
 using UnityEngine;
@@ -15,16 +18,52 @@ namespace Doozy.Editor.UI.Nodes
     [CustomEditor(typeof(PortalNode))]
     public class PortalNodeEditor : BaseNodeEditor
     {
+        private static NamesDatabase UIViewDatabase { get { return UIViewSettings.Database; } }
+        private static NamesDatabase UIButtonDatabase { get { return UIButtonSettings.Database; } }
+        private static NamesDatabase UIDrawerDatabase { get { return UIDrawerSettings.Database; } }
+
         private PortalNode TargetNode { get { return (PortalNode) target; } }
 
         private InfoMessage m_infoMessageUnnamedNodeName,
                             m_infoMessageDuplicateNodeName,
                             m_infoMessageNotListeningForAnyGameEvent;
 
+        private SerializedProperty
+            m_listenFor,
+            m_anyValue,
+            m_gameEvent,
+            m_uiViewTriggerAction,
+            m_viewCategory,
+            m_viewName,
+            m_uiButtonTriggerAction,
+            m_buttonCategory,
+            m_buttonName,
+            m_uiDrawerTriggerAction,
+            m_drawerName,
+            m_customDrawerName;
+
+        protected override void LoadSerializedProperty()
+        {
+            base.LoadSerializedProperty();
+
+            m_listenFor = GetProperty(PropertyName.ListenFor);
+            m_anyValue = GetProperty(PropertyName.AnyValue);
+            m_gameEvent = GetProperty(PropertyName.m_gameEvent);
+            m_uiViewTriggerAction = GetProperty(PropertyName.UIViewTriggerAction);
+            m_viewCategory = GetProperty(PropertyName.ViewCategory);
+            m_viewName = GetProperty(PropertyName.ViewName);
+            m_uiButtonTriggerAction = GetProperty(PropertyName.UIButtonTriggerAction);
+            m_buttonCategory = GetProperty(PropertyName.ButtonCategory);
+            m_buttonName = GetProperty(PropertyName.ButtonName);
+            m_uiDrawerTriggerAction = GetProperty(PropertyName.UIDrawerTriggerAction);
+            m_drawerName = GetProperty(PropertyName.DrawerName);
+            m_customDrawerName = GetProperty(PropertyName.CustomDrawerName);
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
-            UpdateNodeName(TargetNode.GameEventToListenFor);
+            UpdateNodeName(GetNodeName());
             m_infoMessageUnnamedNodeName = new InfoMessage(InfoMessage.MessageType.Error, UILabels.UnnamedNodeTitle, UILabels.UnnamedNodeMessage);
             m_infoMessageDuplicateNodeName = new InfoMessage(InfoMessage.MessageType.Error, UILabels.DuplicateNodeTitle, UILabels.DuplicateNodeMessage);
             m_infoMessageNotListeningForAnyGameEvent = new InfoMessage(InfoMessage.MessageType.Error, UILabels.NotListeningForAnyGameEventTitle, UILabels.NotListeningForAnyGameEventMessage);
@@ -43,11 +82,36 @@ namespace Doozy.Editor.UI.Nodes
             GUILayout.Space(DGUI.Properties.Space(8));
             DrawOutputSockets(BaseNode);
             GUILayout.Space(DGUI.Properties.Space(16));
-            DrawGameEvent(GetProperty(PropertyName.m_gameEvent), Styles.GetStyle(Styles.StyleName.IconGameEvent), UILabels.ListeningForGameEvent);
+            EditorGUI.BeginChangeCheck();
+            DrawOptions();
+            if (EditorGUI.EndChangeCheck())
+                NodeUpdated = true;
             GUILayout.Space(DGUI.Properties.Space(2));
             serializedObject.ApplyModifiedProperties();
-            if (NodeUpdated) UpdateNodeName(TargetNode.GameEventToListenFor + " " + UILabels.Portal);
+            if (NodeUpdated) UpdateNodeName(GetNodeName());
             SendGraphEventNodeUpdated();
+        }
+
+        private string GetNodeName()
+        {
+            switch (TargetNode.ListenFor)
+            {
+                case PortalNode.ListenerType.GameEvent:
+                    return TargetNode.GameEventToListenFor + " " + TargetNode.ListenFor;
+                case PortalNode.ListenerType.UIButton:
+                    return TargetNode.UIButtonTriggerAction + " " + (TargetNode.AnyValue
+                                                                         ? UILabels.AnyUIButton
+                                                                         : TargetNode.ButtonCategory + " / " + TargetNode.ButtonName) + " " + TargetNode.ListenFor;
+                case PortalNode.ListenerType.UIView:
+                    return TargetNode.UIViewTriggerAction + " " + (TargetNode.AnyValue
+                                                                       ? UILabels.AnyUIView
+                                                                       : TargetNode.ViewCategory + " / " + TargetNode.ViewName) + " " + TargetNode.ListenFor;
+                case PortalNode.ListenerType.UIDrawer:
+                    return TargetNode.UIDrawerTriggerAction + " " + (TargetNode.AnyValue
+                                                                         ? UILabels.AnyUIDrawer
+                                                                         : TargetNode.DrawerName) + " " + TargetNode.ListenFor;
+                default: return string.Empty;
+            }
         }
 
         private void DrawGameEvent(SerializedProperty property, GUIStyle iconStyle, string label)
@@ -56,12 +120,6 @@ namespace Doozy.Editor.UI.Nodes
             ColorName colorName = !hasErrors ? DGUI.Colors.ActionColorName : ColorName.Red;
             GUILayout.BeginVertical();
             {
-                GUILayout.Space(DGUI.Properties.Space(2));
-                float alpha = GUI.color.a;
-                GUI.color = GUI.color.WithAlpha(DGUI.Properties.TextIconAlphaValue(hasErrors));
-                DrawSmallTitle(iconStyle, label, colorName);
-                GUI.color = GUI.color.WithAlpha(alpha);
-
                 GUILayout.BeginHorizontal();
                 {
                     EditorGUI.BeginChangeCheck();
@@ -94,6 +152,97 @@ namespace Doozy.Editor.UI.Nodes
                 m_infoMessageNotListeningForAnyGameEvent.Draw(TargetNode.ErrorNotListeningForAnyGameEvent, InspectorWidth);
             }
             GUILayout.EndVertical();
+        }
+
+        private void DrawOptions()
+        {
+            ColorName backgroundColorName = DGUI.Colors.ActionColorName;
+            ColorName textColorName = DGUI.Colors.ActionColorName;
+            DrawBigTitleWithBackground(Styles.GetStyle(Styles.StyleName.IconFaEar), UILabels.GlobalListener, backgroundColorName, textColorName);
+            GUILayout.Space(DGUI.Properties.Space(2));
+            EditorGUILayout.BeginHorizontal();
+            {
+                DGUI.Property.Draw(m_listenFor, UILabels.ListenFor, backgroundColorName, textColorName);
+                GUILayout.Space(DGUI.Properties.Space());
+                switch (TargetNode.ListenFor)
+                {
+                    case PortalNode.ListenerType.UIView:
+                        DGUI.Property.Draw(m_uiViewTriggerAction, UILabels.TriggerAction, backgroundColorName, textColorName);
+                        GUILayout.Space(DGUI.Properties.Space());
+                        if ((UIViewBehaviorType) m_uiViewTriggerAction.enumValueIndex == UIViewBehaviorType.Unknown)
+                            m_uiViewTriggerAction.enumValueIndex = (int) UIViewBehaviorType.Show;
+                        DGUI.Toggle.Switch.Draw(m_anyValue, UILabels.AnyUIView, textColorName, true, false);
+                        if (m_anyValue.boolValue)
+                        {
+                            backgroundColorName = DGUI.Colors.DisabledBackgroundColorName;
+                            textColorName = DGUI.Colors.DisabledTextColorName;
+                        }
+                        break;
+                    case PortalNode.ListenerType.UIButton:
+                        DGUI.Property.Draw(m_uiButtonTriggerAction, UILabels.TriggerAction, backgroundColorName, textColorName);
+                        GUILayout.Space(DGUI.Properties.Space());
+                        DGUI.Toggle.Switch.Draw(m_anyValue, UILabels.AnyUIButton, textColorName, true, false);
+                        if (m_anyValue.boolValue)
+                        {
+                            backgroundColorName = DGUI.Colors.DisabledBackgroundColorName;
+                            textColorName = DGUI.Colors.DisabledTextColorName;
+                        }
+                        break;
+                    case PortalNode.ListenerType.UIDrawer:
+                        DGUI.Property.Draw(m_uiDrawerTriggerAction, UILabels.TriggerAction, backgroundColorName, textColorName);
+                        GUILayout.Space(DGUI.Properties.Space());
+                        DGUI.Toggle.Switch.Draw(m_anyValue, UILabels.AnyUIDrawer, textColorName, true, false);
+                        if (m_anyValue.boolValue)
+                        {
+                            backgroundColorName = DGUI.Colors.DisabledBackgroundColorName;
+                            textColorName = DGUI.Colors.DisabledTextColorName;
+                        }
+                        break;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(DGUI.Properties.Space());
+            EditorGUILayout.BeginHorizontal();
+            {
+                // ReSharper disable once SwitchStatementMissingSomeCases
+                switch (TargetNode.ListenFor)
+                {
+                    case PortalNode.ListenerType.GameEvent:
+                        DrawGameEvent(m_gameEvent, Styles.GetStyle(Styles.StyleName.IconGameEvent), UILabels.GameEvent);
+//                        GUI.enabled = !TargetNode.AnyValue;
+//                        DGUI.Property.Draw(m_gameEvent, UILabels.GameEvent, backgroundColorName, textColorName, TargetNode.ErrorNoGameEvent);
+//                        GUI.enabled = true;
+                        break;
+                    case PortalNode.ListenerType.UIView:
+                        GUI.enabled = !TargetNode.AnyValue;
+                        DGUI.Database.DrawItemsDatabaseSelector(serializedObject,
+                                                                m_viewCategory, UILabels.ViewCategory,
+                                                                m_viewName, UILabels.ViewName,
+                                                                UIViewDatabase,
+                                                                backgroundColorName);
+                        GUI.enabled = true;
+                        break;
+                    case PortalNode.ListenerType.UIButton:
+                        GUI.enabled = !TargetNode.AnyValue;
+                        DGUI.Database.DrawItemsDatabaseSelector(serializedObject,
+                                                                m_buttonCategory, UILabels.ButtonCategory,
+                                                                m_buttonName, UILabels.ButtonName,
+                                                                UIButtonDatabase,
+                                                                backgroundColorName);
+                        GUI.enabled = true;
+                        break;
+                    case PortalNode.ListenerType.UIDrawer:
+                        GUI.enabled = !TargetNode.AnyValue;
+                        DGUI.Database.DrawItemsDatabaseSelectorForGeneralCategoryOnly(UIDrawer.DefaultDrawerCategory,
+                                                                                      m_drawerName, UILabels.DrawerName,
+                                                                                      m_customDrawerName,
+                                                                                      UIDrawerDatabase,
+                                                                                      backgroundColorName);
+                        GUI.enabled = true;
+                        break;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
         }
     }
 }

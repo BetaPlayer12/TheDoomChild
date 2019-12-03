@@ -1,9 +1,10 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using System.Collections.Generic;
 using Doozy.Editor.Internal;
+using Doozy.Editor.Nody.Settings;
 using Doozy.Engine.Extensions;
 using Doozy.Engine.Nody;
 using Doozy.Engine.Nody.Models;
@@ -43,6 +44,7 @@ namespace Doozy.Editor.Nody.Editors
         #region Public Variables
 
         protected bool NodeUpdated;
+//        protected bool HasNotes { get { return GetProperty(PropertyName.m_notes).stringValue.Length > 0; } }
 
         #endregion
 
@@ -365,7 +367,7 @@ namespace Doozy.Editor.Nody.Editors
             DrawNodeIdSizeAndPositionInDebugMode();
         }
 
-        protected void DrawNodeName(bool allowEdit = true)
+        protected void DrawNodeName(bool allowEdit = true, bool showNotes = true)
         {
             SerializedProperty nameProperty = GetProperty(PropertyName.m_name);
             bool enabled = GUI.enabled;
@@ -384,8 +386,31 @@ namespace Doozy.Editor.Nody.Editors
                 }
             }
             GUILayout.EndHorizontal();
+            
+            if(!showNotes || !NodyWindowSettings.Instance.ShowNodeNotes) return;
+            GUILayout.Space(DGUI.Properties.Space(2));
+            DrawNodeNotes();
         }
 
+        protected void DrawNodeNotes()
+        {
+            GUI.color = new Color().ColorFrom256(242, 232, 82);
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Space(DGUI.Properties.Space(2));
+                DGUI.Label.Draw(UILabels.Notes, Size.S, TextAlign.Left, DGUI.Colors.DisabledTextColorName, DGUI.Properties.SingleLineHeight);
+                SerializedProperty notesProperty = GetProperty(PropertyName.m_notes);
+                string notes = notesProperty.stringValue;
+                EditorGUI.BeginChangeCheck();
+                notes = EditorGUILayout.TextArea(notes);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    notesProperty.stringValue = notes;
+                }
+            }
+            GUILayout.EndHorizontal();
+            GUI.color = InitialGUIColor;
+        }
 
         protected static void DrawConnectionIcon(Socket socket)
         {

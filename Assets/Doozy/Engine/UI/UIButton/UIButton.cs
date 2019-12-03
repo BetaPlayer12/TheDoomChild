@@ -1,9 +1,10 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Doozy.Engine.Extensions;
 using Doozy.Engine.Settings;
 using Doozy.Engine.UI.Animation;
@@ -14,12 +15,13 @@ using Doozy.Engine.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+    
 #if dUI_TextMeshPro
 using TMPro;
 #endif
+
 #if UNITY_EDITOR
 using UnityEditor;
-
 #endif
 
 // ReSharper disable UnusedMember.Global
@@ -243,14 +245,17 @@ namespace Doozy.Engine.UI
         /// <summary> Behavior when the pointer is up over the button (happens only after OnPointerDown) </summary>
         public UIButtonBehavior OnPointerUp = new UIButtonBehavior(UIButtonBehaviorType.OnPointerUp);
 
-        /// <summary> Behavior when the pointer performs a click over the button </summary>
+        /// <summary> Behavior when the pointer performs a left mouse button click over the button </summary>
         public UIButtonBehavior OnClick = new UIButtonBehavior(UIButtonBehaviorType.OnClick);
 
-        /// <summary> Behavior when the pointer performs a double click over the button </summary>
+        /// <summary> Behavior when the pointer performs a left mouse button double click over the button </summary>
         public UIButtonBehavior OnDoubleClick = new UIButtonBehavior(UIButtonBehaviorType.OnDoubleClick);
 
-        /// <summary> Behavior when the pointer performs a long click over the button </summary>
+        /// <summary> Behavior when the pointer performs a left mouse button long click over the button </summary>
         public UIButtonBehavior OnLongClick = new UIButtonBehavior(UIButtonBehaviorType.OnLongClick);
+
+        /// <summary> Behavior when the pointer performs a right mouse button click over the button </summary>
+        public UIButtonBehavior OnRightClick = new UIButtonBehavior(UIButtonBehaviorType.OnRightClick);
 
         /// <summary> Behavior when the button gets selected </summary>
         public UIButtonBehavior OnSelected = new UIButtonBehavior(UIButtonBehaviorType.OnSelected);
@@ -359,22 +364,14 @@ namespace Doozy.Engine.UI
 
             ResetToStartValues();
 
-            OnPointerEnter.Ready = true;
-            OnPointerExit.Ready = true;
-            OnPointerUp.Ready = true;
-            OnPointerDown.Ready = true;
-            OnClick.Ready = true;
-            OnDoubleClick.Ready = true;
-            OnLongClick.Ready = true;
-            OnSelected.Ready = true;
-            OnDeselected.Ready = true;
-
+            ReadyAllBehaviors();
+            
             if (m_disableButtonCoroutine == null) return;
             StopCoroutine(m_disableButtonCoroutine);
             m_disableButtonCoroutine = null;
             EnableButton();
         }
-
+        
         private void Update()
         {
             if (InputData.InputMode == InputMode.None) return;
@@ -407,7 +404,19 @@ namespace Doozy.Engine.UI
 
         void IPointerUpHandler.OnPointerUp(PointerEventData eventData) { TriggerButtonBehavior(OnPointerUp); }
 
-        void IPointerClickHandler.OnPointerClick(PointerEventData eventData) { TriggerButtonBehavior(OnClick); }
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+        {
+            switch (eventData.button)
+            {
+                case PointerEventData.InputButton.Left:
+                    TriggerButtonBehavior(OnClick);
+                    break;
+                case PointerEventData.InputButton.Right:
+                    TriggerButtonBehavior(OnRightClick);
+                    break;
+                case PointerEventData.InputButton.Middle: break;
+            }
+        }
 
         void ISelectHandler.OnSelect(BaseEventData eventData)
         {
@@ -474,7 +483,6 @@ namespace Doozy.Engine.UI
             {
                 StopNormalLoopAnimation();
                 StopSelectedLoopAnimation();
-
                 return;
             }
 
@@ -489,7 +497,6 @@ namespace Doozy.Engine.UI
         public void ExecutePointerExit(bool debug = false)
         {
             if (!OnPointerExit.Enabled) return;
-
             PrintBehaviorDebugMessage(OnPointerExit, "initiated", debug);
             StartCoroutine(ExecuteButtonBehaviorEnumerator(OnPointerExit));
             if (OnPointerExit.DisableInterval > 0) StartCoroutine(DisableButtonBehaviorEnumerator(OnPointerExit));
@@ -500,6 +507,7 @@ namespace Doozy.Engine.UI
         /// <param name="debug"> Enables relevant debug messages to be printed to the console </param>
         public void ExecutePointerDown(bool debug = false)
         {
+            ResetLongClick(debug);
             if (OnLongClick.Enabled && Interactable) RegisterLongClick();
             if (!OnPointerDown.Enabled) return;
             PrintBehaviorDebugMessage(OnPointerDown, "initiated", debug);
@@ -581,6 +589,27 @@ namespace Doozy.Engine.UI
             PrintBehaviorDebugMessage(OnPointerExit, "executed", debug);
         }
 
+        /// <summary> Execute OnRightClick actions, if enabled </summary>
+        /// <param name="debug"> Enables relevant debug messages to be printed to the console </param>
+        public void ExecuteRightClick(bool debug = false)
+        {
+            if (OnRightClick.Enabled)
+            {
+                PrintBehaviorDebugMessage(OnRightClick, "initiated", debug);
+                if (Interactable)
+                {
+                    StartCoroutine(ExecuteButtonBehaviorEnumerator(OnRightClick));
+                    PrintBehaviorDebugMessage(OnClick, "OnRightClick", debug);
+                }
+
+                if (!AllowMultipleClicks) DisableButton(DisableButtonBetweenClicksInterval);
+            }
+
+            if (Interactable || !OnPointerExit.Enabled || !OnPointerExit.Ready) return;
+            StartCoroutine(ExecuteButtonBehaviorEnumerator(OnPointerExit));
+            PrintBehaviorDebugMessage(OnPointerExit, "executed", debug);
+        }
+
         /// <summary> Execute OnDeselected actions, if enabled </summary>
         /// <param name="debug"> Enables relevant debug messages to be printed to the console </param>
         public void ExecuteOnButtonDeselected(bool debug = false)
@@ -631,10 +660,7 @@ namespace Doozy.Engine.UI
         }
 
         /// <summary> Selects this button in the EventSystem </summary>
-        public void SelectButton()
-        {
-            UnityEventSystem.SetSelectedGameObject(gameObject);
-        }
+        public void SelectButton() { UnityEventSystem.SetSelectedGameObject(gameObject); }
 
         /// <summary> If this UIButton has a label referenced, its text will get updated to the given text value </summary>
         /// <param name="text"> The new text value for the referenced label (if there is one) </param>
@@ -738,6 +764,12 @@ namespace Doozy.Engine.UI
                     if (behavior.Enabled) PrintBehaviorDebugMessage(behavior, "triggered", debug);
                     ExecutePointerUp();
                     break;
+                case UIButtonBehaviorType.OnRightClick:
+                    if (!Interactable || UIInteractionsDisabled) return;
+                    if (!behavior.Ready) return;
+                    if (behavior.Enabled) PrintBehaviorDebugMessage(behavior, "triggered", debug);
+                    ExecuteRightClick();
+                    break;
                 case UIButtonBehaviorType.OnSelected:
                     if (behavior.Enabled) PrintBehaviorDebugMessage(behavior, "triggered", debug);
                     ExecuteOnButtonSelected();
@@ -760,6 +792,20 @@ namespace Doozy.Engine.UI
             StartCoroutine(RunOnClickEnumerator(debug));
         }
 
+        private void ReadyAllBehaviors()
+        {
+            OnPointerEnter.Ready = true;
+            OnPointerExit.Ready = true;
+            OnPointerUp.Ready = true;
+            OnPointerDown.Ready = true;
+            OnClick.Ready = true;
+            OnDoubleClick.Ready = true;
+            OnLongClick.Ready = true;
+            OnRightClick.Ready = true;
+            OnSelected.Ready = true;
+            OnDeselected.Ready = true;
+        }
+        
         private void RegisterLongClick(bool debug = false)
         {
             if (OnLongClick.Enabled) PrintBehaviorDebugMessage(OnLongClick, "registered", debug);
@@ -793,13 +839,14 @@ namespace Doozy.Engine.UI
                 case UIButtonBehaviorType.OnClick:        return OnClick.Enabled;
                 case UIButtonBehaviorType.OnDoubleClick:  return OnDoubleClick.Enabled;
                 case UIButtonBehaviorType.OnLongClick:    return OnLongClick.Enabled;
+                case UIButtonBehaviorType.OnRightClick:   return OnRightClick.Enabled;
                 case UIButtonBehaviorType.OnPointerEnter: return OnPointerEnter.Enabled;
                 case UIButtonBehaviorType.OnPointerExit:  return OnPointerExit.Enabled;
                 case UIButtonBehaviorType.OnPointerDown:  return OnPointerDown.Enabled;
                 case UIButtonBehaviorType.OnPointerUp:    return OnPointerUp.Enabled;
                 case UIButtonBehaviorType.OnSelected:     return OnSelected.Enabled;
                 case UIButtonBehaviorType.OnDeselected:   return OnDeselected.Enabled;
-                default:                                  throw new ArgumentOutOfRangeException("behaviorType", behaviorType, null);
+                default: throw new ArgumentOutOfRangeException("behaviorType", behaviorType, null);
             }
         }
 
@@ -832,6 +879,7 @@ namespace Doozy.Engine.UI
                 case UIButtonBehaviorType.OnClick:
                 case UIButtonBehaviorType.OnDoubleClick:
                 case UIButtonBehaviorType.OnLongClick:
+                case UIButtonBehaviorType.OnRightClick:
                 case UIButtonBehaviorType.OnPointerEnter:
                 case UIButtonBehaviorType.OnPointerExit:
                 case UIButtonBehaviorType.OnPointerDown:
@@ -851,6 +899,9 @@ namespace Doozy.Engine.UI
 
             behavior.OnTrigger.SendGameEvents(gameObject);
 
+            behavior.OnTrigger.InvokeAction(gameObject);
+            behavior.OnTrigger.InvokeUnityEvent();
+
             if (IsBackButton &&
                 (behavior.BehaviorType == UIButtonBehaviorType.OnClick ||
                  behavior.BehaviorType == UIButtonBehaviorType.OnDoubleClick ||
@@ -860,8 +911,6 @@ namespace Doozy.Engine.UI
             }
             else
             {
-                behavior.OnTrigger.InvokeAction(gameObject);
-                behavior.OnTrigger.InvokeUnityEvent();
                 NotifySystemOfTriggeredBehavior(behavior.BehaviorType);
             }
 
@@ -878,6 +927,7 @@ namespace Doozy.Engine.UI
                 case UIButtonBehaviorType.OnClick:
                 case UIButtonBehaviorType.OnDoubleClick:
                 case UIButtonBehaviorType.OnLongClick:
+                case UIButtonBehaviorType.OnRightClick:
                     if (DeselectButtonAfterClick)
                     {
                         if (DebugComponent) DDebug.Log("(" + ButtonName + ") UIButton - " + behavior.BehaviorType + " - Deselect Button.", this);
@@ -999,6 +1049,29 @@ namespace Doozy.Engine.UI
             m_executedLongClick = true;
         }
 
+        #endregion
+        
+        #region Static Methods
+        
+        /// <summary>
+        /// Returns a list of all the UIButton, registered in the UIButton.Database, with the given button category and button name.
+        /// <para/> If no UIButton is found, it will return an empty list.
+        /// </summary>
+        /// <param name="buttonCategory"> UIButton category to search for</param>
+        /// <param name="buttonName"> UIButton name to search for (found in the button category) </param>
+        public static List<UIButton> GetButtons(string buttonCategory, string buttonName)
+        {
+            var views = new List<UIButton>(); //create temp list
+            foreach (UIButton button in Database)
+            {
+                if (!button.ButtonCategory.Equals(buttonCategory)) continue;
+                if (!button.ButtonName.Equals(buttonName)) continue;
+                views.Add(button); //categories and names match -> add to list
+            }
+
+            return views; //return list
+        }
+        
         #endregion
     }
 }

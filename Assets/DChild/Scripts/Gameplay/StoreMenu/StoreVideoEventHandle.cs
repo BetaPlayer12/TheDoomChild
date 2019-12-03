@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Systems
 
         private void OnVideoDone(VideoPlayer source)
         {
-            SendSavedEvent();
+           SendSavedEvent();
         }
     }
 }

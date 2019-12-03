@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -334,6 +334,7 @@ namespace Doozy.Editor
                 }
 
                 public static bool Draw(GUIStyle style, ColorName iconColorName, float rowHeight = -1) { return Draw(style, Colors.IconColor(iconColorName), rowHeight); }
+                public static bool Draw(GUIStyle style, ColorName iconColorName, float rowHeight, float iconSize) { return Draw(style, Colors.IconColor(iconColorName), rowHeight, iconSize); }
 
                 public static bool Draw(GUIStyle style, Color iconColor, float rowHeight = -1)
                 {
@@ -345,17 +346,41 @@ namespace Doozy.Editor
                     }
 
                     GUI.color = iconColor;
-                    bool result = GUILayout.Button(GUIContent.none, style);
+                    bool buttonClicked = GUILayout.Button(GUIContent.none, style);
                     GUI.color = color;
                     if (rowHeight > 0) GUILayout.EndVertical();
 
-                    if (result)
-                    {
-                        Properties.ResetKeyboardFocus();
-                        Event.current.Use();
-                    }
-                    return result;
+                    if (!buttonClicked) return false;
+                    Properties.ResetKeyboardFocus();
+                    Event.current.Use();
+                    return true;
                 }
+                
+                public static bool Draw(GUIStyle style, Color iconColor, float rowHeight, float iconSize)
+                {
+                    Color color = GUI.color;
+                    if (rowHeight > 0)
+                    {
+                        GUILayout.BeginVertical(GUILayout.Width(iconSize), GUILayout.Height(rowHeight));
+                        GUILayout.Space((rowHeight - iconSize) / 2);
+                    }
+
+                    GUI.color = iconColor;
+                    var resizedStyle = new GUIStyle(style)
+                                       {
+                                           fixedWidth = iconSize,
+                                           fixedHeight = iconSize
+                                       };
+                    bool buttonClicked = GUILayout.Button(GUIContent.none, resizedStyle);
+                    GUI.color = color;
+                    if (rowHeight > 0) GUILayout.EndVertical();
+
+                    if (!buttonClicked) return false;
+                    Properties.ResetKeyboardFocus();
+                    Event.current.Use();
+                    return true;
+                }
+
 
                 public static bool Cancel(float rowHeight = -1, ColorName colorName = ColorName.Red) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonCancel), colorName, rowHeight); }
                 public static bool Close(float rowHeight = -1, ColorName colorName = ColorName.Red) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonClose), colorName, rowHeight); }
@@ -366,6 +391,8 @@ namespace Doozy.Editor
                 public static bool Reset(float rowHeight = -1, ColorName colorName = ColorName.White) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonReset), colorName, rowHeight); }
                 public static bool Sort(float rowHeight = -1, ColorName colorName = ColorName.White) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonSort), colorName, rowHeight); }
                 public static bool Stop(float rowHeight = -1, ColorName colorName = ColorName.White) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonStop), colorName, rowHeight); }
+                public static bool Link(float rowHeight = -1, ColorName colorName = ColorName.White) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonLink), colorName, rowHeight); }
+                public static bool Unlink(float rowHeight = -1, ColorName colorName = ColorName.White) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonUnlink), colorName, rowHeight); }
 
                 public static bool Play(Color iconColor, float rowHeight = -1) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonPlaySound), iconColor, rowHeight); }
                 public static bool Reset(Color iconColor, float rowHeight = -1) { return Draw(Styles.GetStyle(Styles.StyleName.IconButtonReset), iconColor, rowHeight); }

@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -114,6 +114,7 @@ namespace Doozy.Engine.UI.Animation
 #else
             UIAnimationDatabase database = ScriptableObject.CreateInstance<UIAnimationDatabase>();
 #endif
+            if(database == null) return;
             database.DatabaseName = UIAnimations.DEFAULT_DATABASE_NAME;
             database.name = database.DatabaseName;
             database.DataType = DatabaseType;
@@ -169,6 +170,13 @@ namespace Doozy.Engine.UI.Animation
             for (int i = Databases.Count - 1; i >= 0; i--)
             {
                 UIAnimationDatabase database = Databases[i];
+                
+                if (database == null)
+                {
+                    Databases.RemoveAt(i);
+                    continue;
+                }
+                
                 if (database != null && database.Database.Count > 0) continue;
 #if UNITY_EDITOR
                 AssetDatabase.MoveAssetToTrash(AssetDatabase.GetAssetPath(database));

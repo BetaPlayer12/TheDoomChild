@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 // ReSharper disable UnusedMember.Global
 
@@ -96,7 +97,7 @@ namespace Doozy.Engine
         {
             if (callback == null) //check that the passed callback is not null
             {
-                DDebug.LogError("Failed to add UIPopupMessage Listener because the given callback is null!"); //print the relevant debug.error message
+                DDebug.LogError("Failed to add listener because the given callback is null!"); //print the relevant debug.error message
                 return; //stop here
             }
 

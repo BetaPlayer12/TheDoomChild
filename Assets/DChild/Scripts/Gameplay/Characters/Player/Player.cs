@@ -5,10 +5,9 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Inventories;
 using DChild.Serialization;
-using Doozy.Engine;
+//using Doozy.Engine;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using DChild.Gameplay.Characters.Players.Behaviour;
@@ -129,7 +128,7 @@ namespace DChild.Gameplay.Characters.Players
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             OnDeath?.Invoke(this, eventArgs);
-            GameEventMessage.SendEvent("Game Over");
+            //GameEventMessage.SendEvent("Game Over");
             m_controlledCharacter.physics.SetVelocity(Vector2.zero);
             m_groundednessHandle.enabled = false;
             m_groundednessHandle.ResetAnimationParameters();
