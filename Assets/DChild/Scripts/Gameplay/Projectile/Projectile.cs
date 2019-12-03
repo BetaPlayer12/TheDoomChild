@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Combat;
+﻿using System;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft;
@@ -20,10 +21,11 @@ namespace DChild.Gameplay.Projectiles
         [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
         private ParticleSystem m_particleSystem;
         [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
+        private ParticleCallback m_particleCallback;
+        [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
         private GameObject m_model;
 
         protected IsolatedPhysics2D m_physics;
-        private IIsolatedPhysicsTime m_isolatedPhysicsTime;
         public event EventAction<EventActionArgs> Impacted;
 
         protected void CallImpactedEvent()
@@ -56,18 +58,30 @@ namespace DChild.Gameplay.Projectiles
             transform.right = m_physics.velocity.normalized;
         }
 
+        public override void SpawnAt(Vector2 position, Quaternion rotation)
+        {
+            base.SpawnAt(position, rotation);
+            ResetState();
+        }
+
         protected void UnloadProjectile()
         {
-            //if (m_particleSystem == null)
-            //{
-            CallPoolRequest();
-            //}
-            //else
-            //{
-            //    m_model?.SetActive(false);
-            //    m_particleSystem.Stop();
-            //}
+            if (m_particleSystem == null)
+            {
+                CallPoolRequest();
+            }
+            else
+            {
+                m_model?.SetActive(false);
+                m_particleSystem?.Stop();
+            }
         }
+
+        private void OnCallback(object sender, EventActionArgs eventArgs)
+        {
+            CallPoolRequest();
+        }
+
         protected void CallAttackerAttacked(CombatConclusionEventArgs eventArgs) => TargetDamaged?.Invoke(this, eventArgs);
         protected bool CollidedWithEnvironment(Collision2D collision) => collision.gameObject.layer == LayerMask.NameToLayer("Environment");
         protected bool CollidedWithEnvironment(Collider2D collision) => CollidedWithSensor(collision) == false && collision.gameObject.layer == LayerMask.NameToLayer("Environment");
@@ -83,9 +97,11 @@ namespace DChild.Gameplay.Projectiles
         protected virtual void Awake()
         {
             m_physics = GetComponent<IsolatedPhysics2D>();
-            m_isolatedPhysicsTime = GetComponent<IIsolatedPhysicsTime>();
             m_waitForParticlesEnd = m_particleSystem;
-            GetComponent<Attacker>().SetDamage(projectileData.damage);
+            if (m_particleCallback)
+            {
+                m_particleCallback.CallBack += OnCallback;
+            }
         }
     }
 }

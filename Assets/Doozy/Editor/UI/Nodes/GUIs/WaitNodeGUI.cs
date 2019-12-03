@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -6,6 +6,7 @@ using System;
 using Doozy.Editor.Nody.NodeGUI;
 using Doozy.Engine.Extensions;
 using Doozy.Engine.SceneManagement;
+using Doozy.Engine.UI;
 using Doozy.Engine.UI.Nodes;
 using UnityEditor;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Doozy.Editor.UI.Nodes
         private static GUIStyle s_iconStyle;
         private static GUIStyle IconStyle { get { return s_iconStyle ?? (s_iconStyle = Styles.GetStyle(Styles.StyleName.NodeIconWaitNode)); } }
         protected override GUIStyle GetIconStyle() { return IconStyle; }
-        
+
         private WaitNode TargetNode { get { return (WaitNode) Node; } }
 
         private GUIStyle m_actionIcon;
@@ -33,10 +34,13 @@ namespace Doozy.Editor.UI.Nodes
                 switch (TargetNode.WaitFor)
                 {
                     case WaitNode.WaitType.Time:              return Styles.StyleName.IconTime;
-                    case WaitNode.WaitType.GameEvent:         return Styles.StyleName.IconGameEvent;
+                    case WaitNode.WaitType.GameEvent:         return Styles.StyleName.IconGameEventListener;
                     case WaitNode.WaitType.SceneLoad:         return Styles.StyleName.NodeIconLoadSceneNode;
                     case WaitNode.WaitType.SceneUnload:       return Styles.StyleName.NodeIconUnloadSceneNode;
                     case WaitNode.WaitType.ActiveSceneChange: return Styles.StyleName.NodeIconActivateLoadedScenesNode;
+                    case WaitNode.WaitType.UIView:            return Styles.StyleName.IconUIViewListener;
+                    case WaitNode.WaitType.UIButton:          return Styles.StyleName.IconUIButtonListener;
+                    case WaitNode.WaitType.UIDrawer:          return Styles.StyleName.IconUIDrawerListener;
                     default:                                  throw new ArgumentOutOfRangeException();
                 }
             }
@@ -70,9 +74,28 @@ namespace Doozy.Editor.UI.Nodes
 
             m_actionIcon = Styles.GetStyle(WaitForActionIconStyleName);
 
-            m_title = UILabels.WaitFor + ": " + (TargetNode.WaitFor == WaitNode.WaitType.Time && EditorApplication.isPlayingOrWillChangePlaymode
-                                                     ? "[" + TargetNode.CurrentDuration + "] " + UILabels.Seconds
-                                                     : TargetNode.WaitForInfoTitle);
+            m_title = UILabels.WaitFor + ": ";
+
+            switch (TargetNode.WaitFor)
+            {
+                case WaitNode.WaitType.Time:
+                    m_title += (TargetNode.WaitFor == WaitNode.WaitType.Time && EditorApplication.isPlayingOrWillChangePlaymode
+                                    ? "[" + TargetNode.CurrentDuration + "] " + UILabels.Seconds
+                                    : TargetNode.WaitForInfoTitle);
+                    break;
+                case WaitNode.WaitType.GameEvent:   break;
+                case WaitNode.WaitType.SceneLoad:   break;
+                case WaitNode.WaitType.SceneUnload: break;
+                case WaitNode.WaitType.ActiveSceneChange:
+                    m_title += TargetNode.WaitForInfoTitle;
+                    break;
+                case WaitNode.WaitType.UIView:
+                case WaitNode.WaitType.UIButton:
+                case WaitNode.WaitType.UIDrawer:
+                    m_title = TargetNode.WaitForInfoTitle;
+                    break;
+            }
+
             m_description = TargetNode.WaitForInfoDescription;
 
             Color iconAndTextColor = (DGUI.Utility.IsProSkin ? Color.white.Darker() : Color.black.Lighter()).WithAlpha(0.6f);
@@ -100,6 +123,10 @@ namespace Doozy.Editor.UI.Nodes
                             break;
                     }
 
+                    break;
+                case WaitNode.WaitType.UIView:
+                    if (TargetNode.UIViewTriggerAction == UIViewBehaviorType.Unknown)
+                        iconAndTextColor = Color.red;
                     break;
             }
 

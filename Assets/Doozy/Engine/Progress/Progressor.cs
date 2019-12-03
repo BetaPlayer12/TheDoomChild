@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -8,9 +8,9 @@ using DG.Tweening;
 using Doozy.Engine.Settings;
 using Doozy.Engine.Utils;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 // ReSharper disable UnusedMethodReturnValue.Local
@@ -168,7 +168,13 @@ namespace Doozy.Engine.Progress
 
         /// <summary> Internal variable used to update the m_previousValue variable when the script is enabled </summary>
         private bool m_updatePreviousValue = true;
-        
+
+        /// <summary> Internal variable used to keep track of the Tween used by this Progressor </summary>
+        private Tweener m_tween;
+
+        /// <summary> Internal variable used to keep track if the Tween used by this Progressor has been initialized or not </summary>
+        private bool m_tweenInitialized = false;
+
         #endregion
 
         #region Unity Methods
@@ -178,12 +184,14 @@ namespace Doozy.Engine.Progress
             KillAnimation();
             ResetValueTo(OnEnableResetValue);
             m_updatePreviousValue = true;
+            KillTweener(true);
         }
 
         private void OnDisable()
         {
             KillAnimation();
             ResetValueTo(OnDisableResetValue);
+            KillTweener(true);
         }
 
         private void Update()
@@ -208,7 +216,7 @@ namespace Doozy.Engine.Progress
             UpdateProgressTargets();
         }
 
-        /// <summary> Updates all the progress targets by calling the UpdateTarget method for each target </summary>
+        /// <summary> Update all the progress targets by calling the UpdateTarget method for each target </summary>
         public void UpdateProgressTargets()
         {
             if (ProgressTargets == null) return;
@@ -234,15 +242,15 @@ namespace Doozy.Engine.Progress
 
         #region SetValue
 
-        /// <summary> Updates the current Value for this Progressor </summary>
+        /// <summary> Update the current Value for this Progressor </summary>
         /// <param name="value"> The new current Value </param>
         public void SetValue(float value) { SetValue(value, false); }
 
-        /// <summary> Updates the current Value for this Progressor instantly, without animating the value </summary>
+        /// <summary> Update the current Value for this Progressor instantly, without animating the value </summary>
         /// <param name="value"> The new current Value </param>
         public void InstantSetValue(float value) { SetValue(value, true); }
 
-        /// <summary> Updates the current Value for this Progressor. Ignores the AnimateValue option if instantUpdate is passed as TRUE </summary>
+        /// <summary> Update the current Value for this Progressor. Ignores the AnimateValue option if instantUpdate is passed as TRUE </summary>
         /// <param name="value"> The new current Value </param>
         /// <param name="instantUpdate"> If TRUE, the current Value will not get animated even if AnimateValue is set to TRUE </param>
         public void SetValue(float value, bool instantUpdate)
@@ -259,7 +267,12 @@ namespace Doozy.Engine.Progress
                 return;
             }
 
-            m_animationSequence.Append(GetAnimationTween(value, AnimationDuration, AnimationEase, AnimationIgnoresUnityTimescale))
+            if (!m_tweenInitialized)
+                m_tween = GetAnimationTween(value, AnimationDuration, AnimationEase, AnimationIgnoresUnityTimescale);
+            else
+                m_tween.ChangeEndValue(value, true);
+
+            m_animationSequence.Append(m_tween)
                                .Play();
         }
 
@@ -305,7 +318,7 @@ namespace Doozy.Engine.Progress
             }
         }
 
-        /// <summary> Invokes the OnProgressChanged and OnInverseProgressChanged events </summary>
+        /// <summary> Invoke the OnProgressChanged and OnInverseProgressChanged events </summary>
         public void UpdateProgress()
         {
             if (DebugComponent) DDebug.Log("[" + name + "] Value: " + Value + " / Progress: " + Progress + " / Inverse Progress: " + InverseProgress, this);
@@ -317,7 +330,7 @@ namespace Doozy.Engine.Progress
 
         #region SetMin, SetMax
 
-        /// <summary> Updates the MinValue </summary>
+        /// <summary> Update the MinValue </summary>
         /// <param name="value"> The new MinValue </param>
         public void SetMin(float value)
         {
@@ -327,7 +340,7 @@ namespace Doozy.Engine.Progress
             UpdateProgress();
         }
 
-        /// <summary> Updates the MaxValue </summary>
+        /// <summary> Update the MaxValue </summary>
         /// <param name="value"> The new MaxValue </param>
         public void SetMax(float value)
         {
@@ -341,10 +354,10 @@ namespace Doozy.Engine.Progress
 
         #region EnableWholeNumbers, DisableWholeNumbers
 
-        /// <summary> Forces the current Value only be allowed to be whole numbers </summary>
+        /// <summary> Force the current Value only be allowed to be whole numbers </summary>
         public void EnableWholeNumbers() { m_wholeNumbers = true; }
 
-        /// <summary> Allows the current Value to be any fractional number </summary>
+        /// <summary> Allow the current Value to be any fractional number </summary>
         public void DisableWholeNumbers() { m_wholeNumbers = false; }
 
         #endregion
@@ -395,13 +408,15 @@ namespace Doozy.Engine.Progress
         /// <param name="duration"> The tween's duration </param>
         /// <param name="ease"> Ease curve used by the animation </param>
         /// <param name="ignoreTimescale"> Should the tween ignore Unity's timescale </param>
-        public Tween GetAnimationTween(float targetValue, float duration, Ease ease, bool ignoreTimescale)
+        public Tweener GetAnimationTween(float targetValue, float duration, Ease ease, bool ignoreTimescale)
         {
             return DOTween.To(() => m_currentValue, x => m_currentValue = x, targetValue, duration)
 //                          .SetSpeedBased(true)
                           .SetId(this)
                           .SetEase(ease)
-                          .SetUpdate(ignoreTimescale);
+                          .SetUpdate(ignoreTimescale)
+                          .SetAutoKill(false)
+                          .SetRecyclable(true);
         }
 
         #endregion
@@ -412,10 +427,17 @@ namespace Doozy.Engine.Progress
         /// <param name="complete"> If TRUE completes the tween before killing it </param>
         private void KillAnimation(bool complete = false)
         {
-            DOTween.Kill(this);
+            DOTween.Kill(this, complete);
             if (m_animationSequence == null) return;
             m_animationSequence.Kill(complete);
             m_animationSequence = null;
+        }
+
+        private void KillTweener(bool complete = false)
+        {
+            if(!m_tweenInitialized) return;
+            m_tween.Kill(complete);
+            m_tweenInitialized = false;
         }
 
         #endregion

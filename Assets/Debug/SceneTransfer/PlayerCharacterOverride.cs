@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Player Character Override")]
     public class PlayerCharacterOverride : MonoBehaviour
     {
         [SerializeField, Range(-1f, 1f)]

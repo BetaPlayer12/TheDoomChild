@@ -323,7 +323,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         m_movement.Stop();
                         m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
-                        m_turnHandle.Execute(m_info.turnAnimation);
+                        m_turnHandle.Execute(m_info.turnAnimation, m_info.idle1Animation);
                         break;
                     case State.Attacking:
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -333,20 +333,20 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             case Attack.Attack1:
                                 m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.attack1.animation);
+                                m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idle1Animation);
                                 break;
                             case Attack.Attack2:
                                 m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.attack2.animation);
+                                m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idle1Animation);
                                 break;
                             case Attack.Attack3:
                                 m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.attack3.animation);
+                                m_attackHandle.ExecuteAttack(m_info.attack3.animation, m_info.idle1Animation);
                                 break;
                             case Attack.RunAttack:
                                 m_animation.EnableRootMotion(false, false);
                                 GetComponent<IsolatedPhysics2D>().AddForce((Vector2.right * transform.localScale.x) * 15, ForceMode2D.Impulse);
-                                m_attackHandle.ExecuteAttack(m_info.runAttack.animation);
+                                m_attackHandle.ExecuteAttack(m_info.runAttack.animation, m_info.idle1Animation);
                                 break;
                         }
                         m_attackDecider.hasDecidedOnAttack = false;
@@ -358,7 +358,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
                                 {
-
                                     m_attackDecider.DecideOnAttack();
                                     if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                                     {

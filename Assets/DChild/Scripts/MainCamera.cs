@@ -2,6 +2,7 @@
 
 namespace DChild
 {
+    [AddComponentMenu("DChild/Misc/Main Camera")]
     public class MainCamera : MonoBehaviour
     {
         private void Awake()

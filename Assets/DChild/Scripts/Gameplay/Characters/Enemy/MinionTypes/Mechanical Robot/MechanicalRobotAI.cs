@@ -259,7 +259,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_animation.EnableRootMotion(true, false);
-                    m_attackHandle.ExecuteAttack(m_info.attack.animation);
+                    m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                     m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                     Debug.Log("is combat");
                     break;

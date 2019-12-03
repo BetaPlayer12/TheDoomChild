@@ -5,6 +5,7 @@ using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace DChild.Gameplay.Combat
 {
     public interface ICombatManager
     {
-        AttackInfo ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo);
+        Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo);
         void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect);
         void Inflict(StatusEffectReciever reciever, params StatusEffectChance[] statusEffectChance);
         List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes);
@@ -39,18 +40,20 @@ namespace DChild.Gameplay.Combat
         private List<AttackType> m_damageList;
         private IDamageable m_cacheTarget;
 
-        public AttackInfo ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo)
+        public Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo)
         {
-            AttackInfo result = new AttackInfo(attacker.damage);
-            m_criticalDamageHandle.Execute(ref result, attacker.critChance, attacker.critDamageModifier);
+            //AttackInfo result = new AttackInfo(attacker.damage);
+            Cache<AttackInfo> result = Cache<AttackInfo>.Claim();
+            result.Value.Initialize(attacker.damage);
+            m_criticalDamageHandle.Execute(result, attacker.critChance, attacker.critDamageModifier);
 
             m_cacheTarget = targetInfo.instance;
             if (m_cacheTarget.attackResistance != null)
             {
-                m_resistanceHandler.CalculatateResistanceReduction(m_cacheTarget.attackResistance, ref result);
+                m_resistanceHandler.CalculatateResistanceReduction(m_cacheTarget.attackResistance, result);
             }
 
-            result = ApplyResults(result, targetInfo.isCharacter);
+            ApplyResults(result, targetInfo.isCharacter);
 
             if (m_cacheTarget.isAlive)
             {
@@ -70,7 +73,6 @@ namespace DChild.Gameplay.Combat
             return result;
         }
 
-
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)
         {
             m_statusInflictionHandle.Inflict(reciever, statusEffect);
@@ -83,25 +85,29 @@ namespace DChild.Gameplay.Combat
 
         public void Damage(IDamageable damageable, AttackDamage attackDamage)
         {
-            AttackInfo result = new AttackInfo(attackDamage);
-            if (damageable.attackResistance != null)
+            using (Cache<AttackInfo> cacheResult = Cache<AttackInfo>.Claim())
             {
-                m_resistanceHandler.CalculatateResistanceReduction(damageable.attackResistance, ref result);
-            }
-
-            var damageInfo = result.damageList[0];
-            if (damageInfo.isHeal)
-            {
-
-            }
-            else
-            {
-                var damage = damageInfo.damage;
-                damageable.TakeDamage(damage.value, damage.type);
-                if (GameSystem.settings?.gameplay.showDamageValues ?? true)
+                cacheResult.Value.Initialize(attackDamage);
+                if (damageable.attackResistance != null)
                 {
-                    m_uiHandler.ShowDamageValues(damageable.position, damage, false);
+                    m_resistanceHandler.CalculatateResistanceReduction(damageable.attackResistance, cacheResult);
                 }
+
+                var damageInfo = cacheResult.Value.damageList[0];
+                if (damageInfo.isHeal)
+                {
+
+                }
+                else
+                {
+                    var damage = damageInfo.damage;
+                    damageable.TakeDamage(damage.value, damage.type);
+                    if (GameSystem.settings?.gameplay.showDamageValues ?? true)
+                    {
+                        m_uiHandler.ShowDamageValues(damageable.position, damage, false);
+                    }
+                }
+                cacheResult.Release();
             }
         }
 

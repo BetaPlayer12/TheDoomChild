@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -138,9 +138,21 @@ namespace Doozy.Engine.Nody
             if (DebugComponent) DDebug.Log(UILabels.LoadedGraph + ": " + Graph.name);
 
             Database.Add(this);
-            StartCoroutine(InitializeGraphEnumerator());
+            InitializeGraph();
 
             if (DontDestroyControllerOnLoad) DontDestroyOnLoad(gameObject);
+        }
+
+        private void OnEnable()
+        {
+            if (Graph == null) return;
+            Graph.Enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            if (Graph == null) return;
+            Graph.Enabled = false;
         }
 
         public virtual void OnDestroy() { Database.Remove(this); }
@@ -225,8 +237,9 @@ namespace Doozy.Engine.Nody
             }
 
 
-            Graph.ActivateStartOrEnterNode();
-            Initialized = true;
+            StartCoroutine(ActivateStartOrEnterNodeEnumerator());
+//            Graph.ActivateStartOrEnterNode();
+//            Initialized = true;
         }
 
         private void ResetController()
@@ -240,12 +253,11 @@ namespace Doozy.Engine.Nody
 
         #region IEnumerators
 
-        private IEnumerator InitializeGraphEnumerator()
+        private IEnumerator ActivateStartOrEnterNodeEnumerator()
         {
             yield return null;
-            yield return null;
-
-            InitializeGraph();
+            Initialized = true;
+            if (Graph.ActiveNode == null) Graph.ActivateStartOrEnterNode();
         }
 
         #endregion

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public class EyeSentry : Minion, ITerrainPatroller, ISerializableEnemy
+    public class EyeSentry : Minion, ITerrainPatroller
     {
         [SerializeField]
         private AttackDamage m_damage;

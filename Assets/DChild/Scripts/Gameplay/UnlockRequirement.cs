@@ -1,19 +1,30 @@
-﻿using Holysoft.Event;
+﻿using DChild.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
+using System.Collections;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChild.Gameplay
 {
     public class UnlockRequirementCompleteEventArgs : IEventActionArgs
     {
-        public UnlockRequirementCompleteEventArgs(UnlockRequirement instance)
+        public void Initialize(UnlockRequirement instance, bool isComplete)
         {
             this.instance = instance;
+            this.isComplete = isComplete;
         }
 
         public UnlockRequirement instance { get; private set; }
         public bool isComplete { get; private set; }
-        public void Set(bool isComplete) => this.isComplete = isComplete;
+    }
+
+    public interface IUnlockableRequirementSaveData : ISaveData
+    {
+        bool isComplete { get; }
     }
 
     public class UnlockRequirement : MonoBehaviour
@@ -24,25 +35,27 @@ namespace DChild.Gameplay
         public bool isComplete { get => m_isComplete; }
 
         public event EventAction<UnlockRequirementCompleteEventArgs> CompletionChange;
-        private UnlockRequirementCompleteEventArgs m_eventArgs;
 
         public void SetCompletion(bool isComplete)
         {
             m_isComplete = isComplete;
-            m_eventArgs.Set(m_isComplete);
-            CompletionChange?.Invoke(this, m_eventArgs);
-        }
-
-        private void Awake()
-        {
-            m_eventArgs = new UnlockRequirementCompleteEventArgs(this);
+            using (Cache<UnlockRequirementCompleteEventArgs> cacheEvent = Cache<UnlockRequirementCompleteEventArgs>.Claim())
+            {
+                cacheEvent.Value.Initialize(this, m_isComplete);
+                CompletionChange?.Invoke(this, cacheEvent);
+                cacheEvent.Release();
+            }
         }
 
 #if UNITY_EDITOR
         private void OnForceCompleteChange()
         {
-            m_eventArgs.Set(m_isComplete);
-            CompletionChange?.Invoke(this, m_eventArgs);
+            using (Cache<UnlockRequirementCompleteEventArgs> cacheEvent = Cache<UnlockRequirementCompleteEventArgs>.Claim())
+            {
+                cacheEvent.Value.Initialize(this, m_isComplete);
+                CompletionChange?.Invoke(this, cacheEvent);
+                cacheEvent.Release();
+            }
         }
 #endif
     }

@@ -11,12 +11,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField, HideLabel]
         private AttackDamage m_damage;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             player.weapon.SetAddedDamage(m_damage);
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             var negativeDamage = m_damage;
             negativeDamage.value *= -1;

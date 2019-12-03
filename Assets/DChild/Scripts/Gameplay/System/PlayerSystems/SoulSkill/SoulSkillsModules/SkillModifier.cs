@@ -11,12 +11,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField]
         private float m_value;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             ChangeSkillValue(player.modifiers, m_value);
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             ChangeSkillValue(player.modifiers, 1);
         }

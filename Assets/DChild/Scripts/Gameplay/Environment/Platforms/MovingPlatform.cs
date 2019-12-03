@@ -1,195 +1,171 @@
-﻿using Holysoft;
-using DChild.Gameplay.Systems;
+﻿using DChild.Gameplay.Systems.WorldComponents;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-namespace DChild.Gameplay.Environment.Platforms
+namespace DChild.Gameplay.Environment
 {
+    [AddComponentMenu("DChild/Gameplay/Environment/Moving Platform")]
     public class MovingPlatform : MonoBehaviour
     {
-        [System.Serializable]
-        public struct Sequence
+        public struct UpdateEventArgs : IEventActionArgs
         {
-            [SerializeField]
-            private Vector2 m_position;
-            [SerializeField]
-            [MinValue(0f)]
-            private float m_waitDuration;
-
-#if UNITY_EDITOR
-            public Sequence(Vector2 m_position)
+            public UpdateEventArgs(int instance, int currentWaypointIndex, int waypointCount, bool isGoingForward) : this()
             {
-                this.m_position = m_position;
-                m_waitDuration = 0f;
-            }
-#endif
-
-            public Vector2 position
-            {
-                get
-                {
-                    return m_position;
-                }
-#if UNITY_EDITOR
-                set
-                {
-                    m_position = value;
-                }
-#endif
+                this.instance = instance;
+                this.currentWaypointIndex = currentWaypointIndex;
+                this.waypointCount = waypointCount;
+                this.isGoingForward = isGoingForward;
             }
 
-            public float waitDuration => m_waitDuration;
+            public int instance { get; }
+            public int currentWaypointIndex { get; }
+            public int waypointCount { get; }
+            public bool isGoingForward { get; }
         }
 
-        public enum SequenceType
-        {
-            Loop,
-            PingPong
-        }
-
-        [SerializeField]
-        private SequenceType m_sequenceType;
-        [SerializeField]
-        [MinValue(0f)]
+        [SerializeField, MinValue(0.1f), TabGroup("Setting")]
         private float m_speed;
-        [SerializeField]
-        [ListDrawerSettings(CustomAddFunction = "CreateSequence")]
-        private Sequence[] m_sequences;
+        [SerializeField, OnValueChanged("ValidateStartingWaypoint"), TabGroup("Setting")]
+        private int m_startWaypoint;
+        [SerializeField, ListDrawerSettings(CustomAddFunction = "AddWaypoint"), TabGroup("Setting"), HideInInlineEditors]
+        private Vector2[] m_waypoints;
+        [ShowInInspector, OnValueChanged("ChangeDestination"), TabGroup("Debug")]
+        private int m_wayPointDestination;
+        [ShowInInspector, ReadOnly, TabGroup("Debug")]
+        private int m_currentWayPoint;
+        private int m_incrementerValue;
 
-        private int m_currentSequenceIndex;
-        private Vector2 m_destination;
-        private Vector3 m_velocity;
-        private bool m_hasReachedDesitantion;
-        private float m_waitTimer;
+        private Rigidbody2D m_rigidbody;
+        private IIsolatedTime m_isolatedTime;
+        private Vector2 m_cacheDestination;
+        private Vector2 m_cacheCurrentWaypoint;
+        private int m_listSize;
 
-        private bool m_pingPongForward;
+        public event EventAction<UpdateEventArgs> DestinationReached;
 
-        private void UpdateSequenceInformation(int sequenceIndex)
+#if UNITY_EDITOR
+        public Vector2[] waypoints { get => m_waypoints; set => m_waypoints = value; }
+
+        private Vector2 AddWaypoint() => transform.position;
+
+        private void ValidateStartingWaypoint()
         {
-            m_currentSequenceIndex = sequenceIndex;
-            var currentSequence = m_sequences[m_currentSequenceIndex];
-            m_destination = currentSequence.position;
-            m_velocity = ((Vector3)m_destination - transform.position).normalized * m_speed;
-            m_hasReachedDesitantion = false;
-            m_waitTimer = currentSequence.waitDuration;
+            m_startWaypoint = (int)Mathf.Repeat(m_startWaypoint, m_waypoints.Length);
+            transform.position = m_waypoints[m_startWaypoint];
+        }
+#endif
+
+        public void GoToNextWayPoint()
+        {
+            if (m_currentWayPoint < m_listSize - 1)
+            {
+                m_wayPointDestination++;
+                ChangeDestination();
+            }
         }
 
-        private void HandlePingPongSequence()
+        public void GoToPreviousWaypoint()
         {
-            if (m_pingPongForward)
+            if (m_currentWayPoint > 0)
             {
-                if (m_currentSequenceIndex == m_sequences.Length - 1)
+                m_wayPointDestination--;
+                ChangeDestination();
+            }
+        }
+
+        public void GoDestination(int destination)
+        {
+            m_wayPointDestination = destination;
+            ChangeDestination();
+        }
+
+        public void Initialize(int startingIndex, int destination)
+        {
+            m_currentWayPoint = startingIndex;
+            transform.position = m_waypoints[m_currentWayPoint];
+            GoDestination(destination);
+        }
+
+        private void ChangeDestination()
+        {
+            if (m_currentWayPoint != m_wayPointDestination)
+            {
+
+                int proposedIncrementerValue = 0;
+                if (m_currentWayPoint > m_wayPointDestination)
                 {
-                    m_pingPongForward = false;
-                    UpdateSequenceInformation(m_currentSequenceIndex - 1);
+                    proposedIncrementerValue = -1;
                 }
                 else
                 {
-                    UpdateSequenceInformation(m_currentSequenceIndex + 1);
+                    proposedIncrementerValue = 1;
                 }
-            }
-            else
-            {
-                if (m_currentSequenceIndex == 0)
+
+                if (proposedIncrementerValue != m_incrementerValue)
                 {
-                    m_pingPongForward = true;
-                    UpdateSequenceInformation(1);
+                    m_incrementerValue = proposedIncrementerValue;
                 }
-                else
+
+                if (enabled == false)
                 {
-                    UpdateSequenceInformation(m_currentSequenceIndex - 1);
+                    m_currentWayPoint += m_incrementerValue;
+                    m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
                 }
+                m_cacheDestination = m_waypoints[m_wayPointDestination];
             }
+
+            enabled = true;
         }
 
         private void Awake()
         {
-            transform.position = m_sequences[0].position;
-            UpdateSequenceInformation(1);
-            m_pingPongForward = true;
+            m_rigidbody = GetComponent<Rigidbody2D>();
+            m_rigidbody.position = m_waypoints[m_startWaypoint];
+            m_isolatedTime = GetComponent<IIsolatedTime>();
+            m_wayPointDestination = m_startWaypoint;
+            m_currentWayPoint = m_wayPointDestination;
+            m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
+            m_listSize = m_waypoints.Length;
+            ChangeDestination();
         }
 
         private void Update()
         {
-            if (m_hasReachedDesitantion)
+            var currentPosition = m_rigidbody.position;
+            if (currentPosition != m_cacheDestination)
             {
-                m_waitTimer -= GameplaySystem.time.deltaTime;
-                if (m_waitTimer <= 0)
+                m_rigidbody.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
+                if (currentPosition == m_cacheCurrentWaypoint)
                 {
-                    if (m_sequenceType == SequenceType.Loop)
-                    {
-                        UpdateSequenceInformation((int)Mathf.Repeat(m_currentSequenceIndex + 1f, m_sequences.Length));
-                    }
-                    else if (m_sequenceType == SequenceType.PingPong)
-                    {
-                        HandlePingPongSequence();
-                    }
+                    m_currentWayPoint += m_incrementerValue;
+                    m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
                 }
             }
             else
             {
-                transform.position += m_velocity * GameplaySystem.time.deltaTime;
-                if (Vector3.Distance(transform.position, m_destination) < 0.1f)
-                {
-                    m_hasReachedDesitantion = true;
-                }
+                enabled = false;
+                DestinationReached?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
             }
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void OnValidate()
         {
-            var actor = collision.gameObject.GetComponentInParent<Actor>();
-            if (actor)
+            if (GetComponent<Rigidbody2D>() == null)
             {
-                actor.transform.parent = transform;
-            }
-        }
-
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-            var actor = collision.gameObject.GetComponentInParent<Actor>();
-            if (actor)
-            {
-                actor.transform.parent = null;
-            }
-        }
-#if UNITY_EDITOR
-        [FoldoutGroup("ToolKit")]
-        [SerializeField]
-        private bool m_useCurrentPosition;
-        [FoldoutGroup("ToolKit")]
-        [SerializeField]
-        [MinValue(0)]
-        [ShowIf("m_useCurrentPosition")]
-        private int m_overrideSequenceIndex;
-
-        public SequenceType sequenceType => m_sequenceType;
-        public Sequence[] sequences => m_sequences;
-        public bool useCurrentPosition => m_useCurrentPosition;
-        public int overrideSequenceIndex
-        {
-            get
-            {
-                return m_overrideSequenceIndex;
+                var rigidbody = gameObject.AddComponent<Rigidbody2D>();
+                rigidbody.isKinematic = true;
             }
 
-            set
+            if(GetComponent<IsolatedObject>() == null)
             {
-                m_overrideSequenceIndex = value;
+                gameObject.AddComponent<IsolatedObject>();
             }
         }
-
-        private Sequence CreateSequence() => new Sequence(this.transform.position);
-        [FoldoutGroup("ToolKit")]
-        [Button("Go To Starting Position")]
-        private void GoToStartingPosition()
-        {
-            m_useCurrentPosition = false;
-            transform.position = m_sequences[0].position;
-            m_overrideSequenceIndex = m_sequences.Length - 1;
-        }
-#endif
     }
 }
+
+
+
+

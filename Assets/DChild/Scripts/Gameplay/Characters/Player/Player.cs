@@ -5,10 +5,9 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Inventories;
 using DChild.Serialization;
-using Doozy.Engine;
+//using Doozy.Engine;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using DChild.Gameplay.Characters.Players.Behaviour;
@@ -32,8 +31,13 @@ namespace DChild.Gameplay.Characters.Players
         IMainController controller { get; }
         PlayerInventory inventory { get; }
         LootPicker lootPicker { get; }
+        StatusEffectReciever statusEffectReciever { get; }
+        Character character { get; }
+
+        int GetInstanceID();
     }
 
+    [AddComponentMenu("DChild/Gameplay/Player/Player")]
     public class Player : SerializedMonoBehaviour, IPlayer
     {
         [SerializeField]
@@ -50,6 +54,8 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerCharacterController m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
+        [SerializeField]
+        private SoulCrystalHandle m_soulCrystalHandle;
 
         [Title("Serialzables")]
         [SerializeField]
@@ -66,6 +72,8 @@ namespace DChild.Gameplay.Characters.Players
         private Attacker m_attacker;
         [SerializeField]
         private Magic m_magic;
+        [SerializeField]
+        private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private LootPicker m_lootPicker;
         [SerializeField]
@@ -88,7 +96,11 @@ namespace DChild.Gameplay.Characters.Players
         public IMainController controller => m_controller;
         public LootPicker lootPicker => m_lootPicker;
 
+        public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
+
         public StatusEffectResistance statusResistance => m_statusResistance;
+
+        public Character character => m_controlledCharacter;
 
         public PlayerCharacterData SaveData()
         {
@@ -98,6 +110,12 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PlayerCharacterData data)
         {
             m_serializer.LoadData(data);
+            m_soulCrystalHandle.InitializeHandles();
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            m_controlledCharacter.transform.position = position;
         }
 
         private void Awake()
@@ -110,7 +128,7 @@ namespace DChild.Gameplay.Characters.Players
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             OnDeath?.Invoke(this, eventArgs);
-            GameEventMessage.SendEvent("Game Over");
+            //GameEventMessage.SendEvent("Game Over");
             m_controlledCharacter.physics.SetVelocity(Vector2.zero);
             m_groundednessHandle.enabled = false;
             m_groundednessHandle.ResetAnimationParameters();

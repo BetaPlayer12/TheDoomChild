@@ -47,7 +47,6 @@ public class TombAttack : MonoBehaviour
 
     private float m_volleys;
     private float m_delay;
-    public float delay => m_delay;
 
     public event EventAction<EventActionArgs> TombStart;
     public event EventAction<EventActionArgs> TombEnd;
@@ -100,10 +99,8 @@ public class TombAttack : MonoBehaviour
     {
         //yield return new WaitForSeconds(m_delay);
         GameObject soul = Instantiate(m_soul, new Vector2(transform.position.x, transform.position.y + 2), Quaternion.identity);
-        soul.GetComponent<TombSoul>().GetTarget(m_target);
-        soul.transform.SetParent(this.transform);
+        soul.GetComponent<TombSoul>().SetAttackInfo(m_target,m_delay);
         soul.GetComponent<Projectile>().Impacted += Impacted;
-
         yield return null;
     }
 }
