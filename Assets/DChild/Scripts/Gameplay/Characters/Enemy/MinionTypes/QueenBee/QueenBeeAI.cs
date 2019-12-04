@@ -16,6 +16,7 @@ using Doozy.Engine;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/QueenBee")]
     public class QueenBeeAI : CombatAIBrain<QueenBeeAI.Info>
     {
         [System.Serializable]
@@ -242,7 +243,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void ApplyData()
         {
-            base.ApplyData();
             if (m_attackDecider != null)
             {
                 //Debug.Log("Update attack list trigger function");
@@ -257,6 +257,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stingerLauncher.SetProjectile(m_info.stingerProjectile.projectileInfo);
                 m_spineListener.Subscribe(m_info.stingerProjectile.launchOnEvent, m_stingerLauncher.LaunchProjectile);
             }
+            base.ApplyData();
         }
 
         private void UpdateAttackDeciderList()
@@ -414,13 +415,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         if (IsTargetInRange(m_info.stingerProjectile.range))
                         {
+                            m_agent.Stop();
                             m_stateHandle.SetState(State.Attacking);
                         }
                         else
                         {
 
                             var target = m_targetInfo.position;
-                            //target.y -= 0.5f;
+                            target.y += 2f;
                             m_animation.DisableRootMotion();
                             if (m_character.physics.velocity != Vector2.zero)
                             {
