@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Pathfinding
 {
-
     public class NavigationTracker : MonoBehaviour
     {
         public event EventAction<EventActionArgs> DestinationReached;
@@ -31,7 +30,10 @@ namespace DChild.Gameplay.Pathfinding
         private bool m_pathUpdated;
         private bool m_isRefreshing;
         private Vector3 m_currentPathSegment;
+        private Vector3 m_previousPathSegment;
         private Vector3 m_lastPathSegment;
+
+        private bool m_canSearchPath;
 
         public bool refreshPath
         {
@@ -44,9 +46,12 @@ namespace DChild.Gameplay.Pathfinding
         public bool pathError => m_lastPathHasError;
         public bool pathUpdated => m_pathUpdated;
         public Vector3 currentPathSegment => m_currentPathSegment;
+        public Vector3 previousPathSegment => m_previousPathSegment;
         public Vector3 lastPathSegment => m_lastPathSegment;
         public bool isOnLastPathSegment => m_pathIndex == m_path.Count;
         public Vector3 directionToPathSegment => (m_currentPathSegment - transform.position).normalized;
+
+        private Vector3 m_prevDirectionToPathSegment;
 
         public bool IsCurrentDestination(Vector3 destination)
         {
@@ -73,8 +78,11 @@ namespace DChild.Gameplay.Pathfinding
                 }
 
                 m_destination = destination;
-                m_seeker.StartPath(transform.position, m_destination, OnSetPathReturn);
-                m_pathUpdated = false;
+                if (m_canSearchPath)
+                {
+                    SearchPathTo(m_destination);
+                    m_pathUpdated = false;
+                }
             }
         }
 
@@ -88,40 +96,28 @@ namespace DChild.Gameplay.Pathfinding
 
         public void RecalcuatePath()
         {
-            if (enabled)
+            if (enabled && m_canSearchPath)
             {
-                m_seeker.StartPath(transform.position, m_destination, OnSetPathReturn);
+                SearchPathTo(m_destination);
             }
         }
 
         private void RefreshPath(float deltaTime)
         {
             m_refreshTimer -= deltaTime;
-            if (m_refreshTimer <= 0f)
+            if (m_refreshTimer <= 0f && m_canSearchPath)
             {
-                var path = m_seeker.StartPath(transform.position, m_destination, OnSetPathReturn);
+                SearchPathTo(m_destination);
                 m_pathUpdated = false;
                 m_isRefreshing = true;
             }
         }
 
-        private void UseMostRelevantSegment()
+        private void SearchPathTo(Vector3 destination)
         {
-            var previousDistance = Vector3.Distance(m_path[0], transform.position);
-            for (int i = 1; i < m_path.Count; i++)
-            {
-                var currentDistance = Vector3.Distance(m_path[i], transform.position);
-                if (previousDistance >= currentDistance)
-                {
-                    previousDistance = currentDistance;
-                }
-                else
-                {
-                    m_pathIndex = i;
-                    m_currentPathSegment = m_path[i];
-                    break;
-                }
-            }
+            m_seeker.CancelCurrentPathRequest();
+            m_seeker.StartPath(transform.position, destination);
+            m_canSearchPath = false;
         }
 
         private void OnSetPathReturn(Path p)
@@ -132,6 +128,7 @@ namespace DChild.Gameplay.Pathfinding
                 m_refreshTimer = 0;
                 m_lastPathHasError = true;
                 m_currentPathSegment = Vector3.zero;
+                m_previousPathSegment = Vector3.zero;
                 m_lastPathSegment = Vector3.zero;
             }
             else
@@ -141,14 +138,24 @@ namespace DChild.Gameplay.Pathfinding
                 m_refreshTimer = m_refreshRate;
                 m_lastPathHasError = false;
                 m_currentPathSegment = m_path[1];
+                m_previousPathSegment = m_path[0];
                 m_lastPathSegment = m_path[m_path.Count - 1];
+                m_prevDirectionToPathSegment = directionToPathSegment;
                 m_pathUpdated = true;
             }
+            m_canSearchPath = true;
         }
 
         private void TrackPath()
         {
-            if (Vector3.Distance(transform.position, m_currentPathSegment) <= m_destinationTolerance)
+            bool hasReachedDestination = Vector3.Distance(transform.position, m_currentPathSegment) <= m_destinationTolerance;
+            if (hasReachedDestination == false)
+            {
+                hasReachedDestination = (m_prevDirectionToPathSegment + directionToPathSegment == Vector3.zero);
+            }
+
+            m_prevDirectionToPathSegment = directionToPathSegment;
+            if (hasReachedDestination)
             {
                 if (m_pathIndex == m_path.Count - 1)
                 {
@@ -159,18 +166,26 @@ namespace DChild.Gameplay.Pathfinding
                 else
                 {
                     m_pathIndex++;
+                    m_previousPathSegment = m_currentPathSegment;
                     m_currentPathSegment = m_path[m_pathIndex];
+                    m_prevDirectionToPathSegment = directionToPathSegment;
                 }
             }
         }
 
-        private void Awake() => m_seeker = GetComponentInParent<Seeker>();
+        private void Awake()
+        {
+            m_seeker = GetComponentInParent<Seeker>();
+            m_seeker.startEndModifier.adjustStartPoint = () => transform.position;
+            m_seeker.pathCallback += OnSetPathReturn;
+            m_canSearchPath = true;
+        }
 
         private void Update()
         {
             if (m_lastPathHasError)
             {
-                m_seeker.StartPath(transform.position, m_destination, OnSetPathReturn);
+                m_seeker.StartPath(transform.position, m_destination);
             }
             else if (m_refreshPath)
             {
