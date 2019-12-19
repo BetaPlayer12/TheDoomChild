@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
+using DarkTonic.MasterAudio;
 
 namespace DChild.Menu.Campaign
 {
@@ -23,17 +24,17 @@ namespace DChild.Menu.Campaign
         [SerializeField]
         private VideoPlayer m_vidPlayer;
         [SerializeField, BoxGroup("Intro")]
-        private VideoClip m_intro1;
+        private VideoInfo m_intro1;
         [SerializeField, BoxGroup("Intro")]
-        private VideoClip m_intro2;
+        private VideoInfo m_intro2;
         [SerializeField]
-        private VideoClip m_next;
+        private VideoInfo m_next;
         [SerializeField]
-        private VideoClip m_previous;
+        private VideoInfo m_previous;
         [SerializeField]
-        private VideoClip m_first;
+        private VideoInfo m_first;
         [SerializeField]
-        private VideoClip m_last;
+        private VideoInfo m_last;
 
         [SerializeField]
         private RenderTexture m_texture;
@@ -57,23 +58,23 @@ namespace DChild.Menu.Campaign
             {
                 case Type.Intro:
                     m_vidPlayer.loopPointReached += OnIntro1End;
-                    PlayClip(m_intro1);
+                    m_intro1.Play(m_vidPlayer, transform);
                     break;
                 case Type.First:
                     m_vidPlayer.loopPointReached += OnEnd;
-                    PlayClip(m_first);
+                    m_first.Play(m_vidPlayer, transform);
                     break;
                 case Type.Last:
                     m_vidPlayer.loopPointReached += OnEnd;
-                    PlayClip(m_last);
+                    m_last.Play(m_vidPlayer, transform);
                     break;
                 case Type.Next:
                     m_vidPlayer.loopPointReached += OnEnd;
-                    PlayClip(m_next);
+                    m_next.Play(m_vidPlayer, transform);
                     break;
                 case Type.Previous:
                     m_vidPlayer.loopPointReached += OnEnd;
-                    PlayClip(m_previous);
+                    m_previous.Play(m_vidPlayer, transform);
                     break;
             }
         }
@@ -84,16 +85,10 @@ namespace DChild.Menu.Campaign
             m_vidPlayer.loopPointReached -= OnIntro1End;
         }
 
-        private void PlayClip(VideoClip clip)
-        {
-            m_vidPlayer.clip = clip;
-            m_vidPlayer.Play();
-        }
-
         private void OnIntro1End(VideoPlayer source)
         {
-            PlayClip(m_intro2);
+            m_intro2.Play(source, transform);
             m_vidPlayer.loopPointReached -= OnIntro1End;
         }
-    } 
+    }
 }
