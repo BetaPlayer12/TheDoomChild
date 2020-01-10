@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+    [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Combat/Damageable")]
     public class Damageable : MonoBehaviour, IDamageable, ITarget, IHealable
     {
