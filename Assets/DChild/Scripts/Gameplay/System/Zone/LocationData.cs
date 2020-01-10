@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Environment;
 using Holysoft.Collections;
+using Holysoft.Event;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -30,5 +31,12 @@ namespace DChild.Gameplay.Systems.Serialization
             m_position = position;
         }
 #endif
+
+        public event EventAction<EventActionArgs> OnArrival;
+
+        public void CallArriveEvent(Character character)
+        {
+            OnArrival?.Invoke(this, EventActionArgs.Empty);
+        }
     }
 }
