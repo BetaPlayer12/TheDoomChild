@@ -93,15 +93,7 @@ namespace DChild.Gameplay.Environment
             if (m_currentWayPoint != m_wayPointDestination)
             {
 
-                int proposedIncrementerValue = 0;
-                if (m_currentWayPoint > m_wayPointDestination)
-                {
-                    proposedIncrementerValue = -1;
-                }
-                else
-                {
-                    proposedIncrementerValue = 1;
-                }
+                int proposedIncrementerValue = m_currentWayPoint > m_wayPointDestination ? -1 : 1;
 
                 if (proposedIncrementerValue != m_incrementerValue)
                 {
@@ -158,7 +150,7 @@ namespace DChild.Gameplay.Environment
                 rigidbody.isKinematic = true;
             }
 
-            if(GetComponent<IsolatedObject>() == null)
+            if (GetComponent<IsolatedObject>() == null)
             {
                 gameObject.AddComponent<IsolatedObject>();
             }

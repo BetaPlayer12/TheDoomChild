@@ -83,6 +83,7 @@ namespace DChild.Menu.Campaign
         {
             GameEventMessage.SendEvent("Show Info");
             m_vidPlayer.loopPointReached -= OnIntro1End;
+
         }
 
         private void OnIntro1End(VideoPlayer source)

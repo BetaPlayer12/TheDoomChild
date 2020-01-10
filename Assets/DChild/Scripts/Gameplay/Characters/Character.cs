@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-
+    [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Objects/Character")]
     public class Character : MonoBehaviour, ICharacter, ITurningCharacter
     {
