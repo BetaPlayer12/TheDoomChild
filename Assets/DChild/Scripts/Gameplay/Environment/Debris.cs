@@ -37,6 +37,18 @@ namespace DChild.Gameplay.Environment
 
         private int m_trackedObjectCount;
 
+        public Rigidbody2D[] GetDetachables()
+        {
+            if (m_toDetach.Length > 0)
+            {
+                return m_toDetach;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public void SetInitialForceReference(Vector2 forceDirection, float force)
         {
             m_angle = Vector2.Angle(Vector2.right, forceDirection) * Mathf.Sign(forceDirection.y);
