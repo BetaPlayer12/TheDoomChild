@@ -16,8 +16,6 @@ namespace DChild.Gameplay.Systems
         public void GoToDestination(Character agent)
         {
             GameplaySystem.MovePlayerToLocation(agent, m_destination, m_entranceDirection);
-
-
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
