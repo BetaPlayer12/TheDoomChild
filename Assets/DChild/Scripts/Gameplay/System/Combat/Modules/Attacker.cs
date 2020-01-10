@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+    [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Combat/Attacker")]
     public class Attacker : MonoBehaviour, IAttacker, IDamageDealer
     {
