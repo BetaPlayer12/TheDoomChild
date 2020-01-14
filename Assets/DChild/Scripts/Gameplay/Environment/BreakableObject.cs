@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Environment
         private bool m_isDestroyed;
         [SerializeField]
         private bool m_createDebris;
-        [SerializeField, ShowIf("m_createDebris"),Indent]
+        [SerializeField, ShowIf("m_createDebris"), Indent]
         private GameObject m_debris;
 
         [SerializeField, TabGroup("On Destroy")]
@@ -101,7 +101,7 @@ namespace DChild.Gameplay.Environment
             {
                 for (int i = m_leftOverDebris.Length - 1; i >= 0; i--)
                 {
-                    Destroy(m_leftOverDebris[i]);
+                    Destroy(m_leftOverDebris[i].gameObject);
                 }
                 m_leftOverDebris = null;
                 Destroy(m_instantiatedDebris.gameObject);
@@ -136,8 +136,19 @@ namespace DChild.Gameplay.Environment
         }
 
 #if UNITY_EDITOR
-        [Button, HideInEditorMode]
+        [Button, HideInEditorMode, HideIf("m_isDestroyed")]
         private void BreakObject()
+        {
+            m_isDestroyed = true;
+            m_onDestroy?.Invoke();
+            if (m_createDebris)
+            {
+                InstantiateDebris(m_debris);
+            }
+        }
+
+        [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
+        private void FixObject()
         {
             m_isDestroyed = true;
             m_onDestroy?.Invoke();
