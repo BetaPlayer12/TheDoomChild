@@ -31,6 +31,15 @@ namespace DChildEditor
             return directory;
         }
 
+        public static string GetFileName(string filePath)
+        {
+            var splitPath = filePath.Split('/');
+            string filename = splitPath[splitPath.Length - 1];
+            if (filename.Contains(".")) ;
+            var fileNameSplit = filename.Split('.');
+            return fileNameSplit[0];
+        }
+
         public static string GetAssetExtention(string filePath)
         {
             if (AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(filePath) != null)
@@ -58,5 +67,5 @@ namespace DChildEditor
             return indexedName;
         }
     }
-} 
+}
 #endif
