@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Combat
         public event EventAction<StatInfoEventArgs> MaxValueChanged;
         public event EventAction<StatInfoEventArgs> ValueChanged;
 
-        [ShowInInspector, HideInEditorMode, OnValueChanged("SendValueEvent"),MinValue(0)]
+        [ShowInInspector, HideInEditorMode, OnValueChanged("SendValueEvent"), MinValue(0), MaxValue("$maxValue")]
         protected int m_currentHealth;
         [ShowInInspector, ReadOnly, ProgressBar(0f, 1f)]
         protected float m_percentHealth;
@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Combat
             m_currentHealth = Mathf.CeilToInt(m_percentHealth * maxValue);
         }
 
-        public void ReduceCurrentValue(int damage)
+        public virtual void ReduceCurrentValue(int damage)
         {
             m_currentHealth -= damage;
             if (m_currentHealth <= 0)
@@ -76,6 +76,12 @@ namespace DChild.Gameplay.Combat
         protected void SendValueEvent()
         {
             m_percentHealth = (float)m_currentHealth / maxValue;
+            ValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentHealth, maxValue));
+        }
+        protected void SendMaxValue()
+        {
+            m_percentHealth = (float)m_currentHealth / maxValue;
+            MaxValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentHealth, maxValue));
             ValueChanged?.Invoke(this, new StatInfoEventArgs(m_currentHealth, maxValue));
         }
 #endif

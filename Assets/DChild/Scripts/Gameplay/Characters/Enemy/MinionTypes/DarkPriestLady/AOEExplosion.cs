@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using DChild.Gameplay.Projectiles;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using System;
+using Sirenix.Utilities;
 
 namespace DChild.Gameplay
 {
-
     public class AOEExplosion : PoolableObject
     {
         [SerializeField]
@@ -40,21 +37,40 @@ namespace DChild.Gameplay
                 }
             }
             DamageTargets();
-            OnDetonate?.Invoke(this, new AOETargetsEventArgs(m_toDamage));
+            using (Cache<AOETargetsEventArgs> cacheEventArgs = Cache<AOETargetsEventArgs>.Claim())
+            {
+                cacheEventArgs.Value.Initialize(m_toDamage);
+                OnDetonate?.Invoke(this, cacheEventArgs.Value);
+                cacheEventArgs.Release();
+            }
             //m_rigidbody.CastExplosiveForce(m_data.explosivePower, m_data.explosiveRadius);
         }
 
         private void DamageTargets()
         {
-            for (int i = 0; i < m_cacheHitboxList.Count; i++)
+            if (m_cacheHitboxList.Count > 0)
             {
-                m_cacheHitbox = m_cacheHitboxList[i];
-                var damage = m_data.damage;
-                for (int j = 0; j < damage.Length; j++)
+                using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
                 {
-                    AttackerCombatInfo info = new AttackerCombatInfo(transform.position, 0, 1, damage[j]);
-                    var result = GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(m_cacheHitbox.damageable, m_cacheHitbox.defense.damageReduction));
-                    //CallAttackerAttacked(new CombatConclusionEventArgs(info, m_toDamage[j], result));
+                    using (Cache<TargetInfo> targetInfo = Cache<TargetInfo>.Claim())
+                    {
+                        for (int i = 0; i < m_cacheHitboxList.Count; i++)
+                        {
+                            m_cacheHitbox = m_cacheHitboxList[i];
+                            var damage = m_data.damage;
+                            for (int j = 0; j < damage.Length; j++)
+                            {
+                                info.Value.Initialize(transform.position, 0, 1, damage[j]);
+                                targetInfo.Value.Initialize(m_cacheHitbox.damageable, m_cacheHitbox.defense.damageReduction);
+                                using (Cache<AttackInfo> cacheAttackInfo = GameplaySystem.combatManager.ResolveConflict(info, targetInfo.Value))
+                                {
+                                    cacheAttackInfo.Release();
+                                }
+                            }
+                        }
+                        targetInfo.Release();
+                    }
+                    info.Release();
                 }
             }
         }
@@ -75,7 +91,7 @@ namespace DChild.Gameplay
             m_toDamage = new List<IDamageable>();
             m_rigidbody = GetComponent<Rigidbody2D>();
 
-            if(m_fx != null)
+            if (m_fx != null)
                 m_fx.Done += OnFXDone;
         }
     }

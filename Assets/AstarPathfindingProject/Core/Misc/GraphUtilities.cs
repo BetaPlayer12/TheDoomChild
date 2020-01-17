@@ -160,6 +160,7 @@ namespace Pathfinding {
 			// Set of all allowed nodes or null if all nodes are allowed
 			HashSet<GridNodeBase> nodeSet = nodes != null ? new HashSet<GridNodeBase>(nodes) : null;
 			// Use all nodes if the nodes parameter is null
+			if (grid is LayerGridGraph) nodes = nodes ?? (grid as LayerGridGraph).nodes;
 			nodes = nodes ?? grid.nodes;
 			int[] neighbourXOffsets = grid.neighbourXOffsets;
 			int[] neighbourZOffsets = grid.neighbourZOffsets;
@@ -228,6 +229,30 @@ namespace Pathfinding {
 									}
 								}
 
+								// Simplify the contour a bit around the start point.
+								// Otherwise we might return a cycle which was not as simplified as possible and the number of vertices
+								// would depend on where in the cycle the algorithm started to traverse the contour.
+								if (trace.Count >= 3) {
+									var v0 = trace[trace.Count-2];
+									var v1 = trace[trace.Count-1];
+									var v1d = v1 - v0;
+									var v2d = trace[0] - v0;
+									// Replace the previous point if it is colinear with the point just before it and just after it (the current point), because that point wouldn't add much information, but it would add CPU overhead
+									if (!(((Mathf.Abs(v1d.x) > 0.01f || Mathf.Abs(v2d.x) > 0.01f) && (Mathf.Abs(v1d.z) > 0.01f || Mathf.Abs(v2d.z) > 0.01f)) || (Mathf.Abs(v1d.y) > yMergeThreshold || Mathf.Abs(v2d.y) > yMergeThreshold))) {
+										trace.RemoveAt(trace.Count - 1);
+									}
+								}
+
+								if (trace.Count >= 3) {
+									var v0 = trace[trace.Count-1];
+									var v1 = trace[0];
+									var v1d = v1 - v0;
+									var v2d = trace[1] - v0;
+									// Replace the previous point if it is colinear with the point just before it and just after it (the current point), because that point wouldn't add much information, but it would add CPU overhead
+									if (!(((Mathf.Abs(v1d.x) > 0.01f || Mathf.Abs(v2d.x) > 0.01f) && (Mathf.Abs(v1d.z) > 0.01f || Mathf.Abs(v2d.z) > 0.01f)) || (Mathf.Abs(v1d.y) > yMergeThreshold || Mathf.Abs(v2d.y) > yMergeThreshold))) {
+										trace.RemoveAt(0);
+									}
+								}
 								var result = trace.ToArray();
 								grid.transform.Transform(result);
 								callback(result);

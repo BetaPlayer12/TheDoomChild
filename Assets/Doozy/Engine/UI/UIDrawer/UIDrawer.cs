@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -162,6 +162,12 @@ namespace Doozy.Engine.UI
             drawer.UpdateContainer();
             drawer.UpdateArrowContainer();
 
+            drawer.Container.Canvas.enabled = true;
+            drawer.Container.GraphicRaycaster.enabled = true;
+            
+            drawer.Overlay.Canvas.enabled = true;
+            drawer.Overlay.GraphicRaycaster.enabled = true;
+
             Selection.activeObject = go; //select the newly created gameObject
         }
 #endif
@@ -276,6 +282,9 @@ namespace Doozy.Engine.UI
         /// <summary> Settings for the animated arrow used to show the open and close directions for this UIDrawer </summary>
         public UIDrawerArrow Arrow;
 
+        /// <summary> If TRUE, the 'Back' button event will be blocked by this UIDrawer is visible (default: TRUE) </summary>
+        public bool BlockBackButton = true;
+        
         /// <summary> Behavior when this UIDrawer gets hidden (goes off screen) </summary>
         public UIDrawerBehavior CloseBehavior;
 
@@ -308,6 +317,9 @@ namespace Doozy.Engine.UI
         /// <summary> Behavior when this UIDrawer is being dragged </summary>
         public UIDrawerBehavior DragBehavior;
 
+        /// <summary> If TRUE, the next 'Back' button event will hide (close) this UIDrawer (default: TRUE) </summary>
+        public bool HideOnBackButton = true;
+        
         /// <summary>
         ///     Callback executed when the drawer is animating (opening or closing) and its progress has been updated.
         ///     <para />
@@ -447,6 +459,9 @@ namespace Doozy.Engine.UI
             Container.DisableGraphicRaycaster = Container.DisableCanvas;
             Container.Init();
             Overlay.Init();
+
+            if (!Container.DisableCanvas) Container.Canvas.enabled = true;
+            if (!Container.DisableGraphicRaycaster) Container.GraphicRaycaster.enabled = true;
 
             UpdateContainerSize();
             InitContainerPositions();

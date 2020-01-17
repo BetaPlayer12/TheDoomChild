@@ -30,7 +30,7 @@
 using System;
 
 namespace Spine {
-	
+
 	/// <summary>Stores the setup pose and all of the stateless data for a skeleton.</summary>
 	public class SkeletonData {
 		internal string name;
@@ -43,7 +43,7 @@ namespace Spine {
 		internal ExposedList<IkConstraintData> ikConstraints = new ExposedList<IkConstraintData>();
 		internal ExposedList<TransformConstraintData> transformConstraints = new ExposedList<TransformConstraintData>();
 		internal ExposedList<PathConstraintData> pathConstraints = new ExposedList<PathConstraintData>();
-		internal float width, height;
+		internal float x , y, width, height;
 		internal string version, hash;
 
 		// Nonessential.
@@ -73,6 +73,8 @@ namespace Spine {
 		public ExposedList<TransformConstraintData> TransformConstraints { get { return transformConstraints; } set { transformConstraints = value; } }
 		public ExposedList<PathConstraintData> PathConstraints { get { return pathConstraints; } set { pathConstraints = value; } }
 
+		public float X { get { return x; } set { x = value; } }
+		public float Y { get { return y; } set { y = value; } }
 		public float Width { get { return width; } set { width = value; } }
 		public float Height { get { return height; } set { height = value; } }
 		/// <summary>The Spine version used to export this data, or null.</summary>
@@ -81,7 +83,7 @@ namespace Spine {
 
 		/// <summary>The path to the images directory as defined in Spine. Available only when nonessential data was exported. May be null</summary>
 		public string ImagesPath { get { return imagesPath; } set { imagesPath = value; } }
-		
+
 		/// <summary>The path to the audio directory defined in Spine. Available only when nonessential data was exported. May be null.</summary>
 		public string AudioPath { get { return audioPath; } set { audioPath = value; } }
 

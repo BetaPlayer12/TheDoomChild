@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+    [SelectionBase]
+    [AddComponentMenu("DChild/Gameplay/Combat/Damageable")]
     public class Damageable : MonoBehaviour, IDamageable, ITarget, IHealable
     {
         public struct DamageEventArgs : IEventActionArgs
@@ -73,10 +75,31 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public void SetInvulnerability(bool enable)
+        {
+            for (int i = 0; i < m_hitboxes.Length; i++)
+            {
+                m_hitboxes[i].SetInvulnerability(enable);
+            }
+        }
+
         private void Awake()
         {
             m_hitboxes = GetComponentsInChildren<Hitbox>();
             m_health.ResetValueToMax();
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(Transform centermass,Health health)
+        {
+            m_centerMass = centermass;
+            m_health = health;
+        }
+
+        public void InitializeField(AttackResistance resistance)
+        {
+            m_resistance = resistance;
+        }
+#endif
     }
 }

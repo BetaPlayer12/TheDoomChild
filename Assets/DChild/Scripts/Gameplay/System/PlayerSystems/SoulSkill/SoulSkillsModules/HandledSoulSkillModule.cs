@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Sirenix.Utilities;
+using Spine.Unity;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 #endif
 
@@ -6,54 +8,103 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
     public abstract class HandledSoulSkillModule : ISoulSkillModule
     {
-        protected abstract class SoulSkillHandleManager
+        protected struct ModuleReference
         {
-            public abstract void AddHandle(IPlayer refernce, BaseHandle handle);
-            public abstract void RemoveHandle(IPlayer reference);
+            public ModuleReference(int soulSKillID, int moduleID, int playerInstanceID) : this()
+            {
+                this.soulSKillID = soulSKillID;
+                this.moduleID = moduleID;
+                this.playerInstanceID = playerInstanceID;
+            }
+            public int soulSKillID { get; }
+            public int moduleID { get; }
+            public int playerInstanceID { get; }
         }
 
-        protected class SinglePlayerMananger : SoulSkillHandleManager
+        protected static class SoulSkillHandleManager
         {
-            private BaseHandle m_instance;
+            private static int m_currentID;
+            private static Dictionary<int, BaseHandle> m_handles;
+            private static bool m_isInitialize;
 
-            public override void AddHandle(IPlayer refernce, BaseHandle handle)
+            public static int GenerateID()
             {
-                m_instance?.Dispose();
-                handle.Initialize();
-                m_instance = handle;
+                m_currentID++;
+                return m_currentID;
             }
 
-            public override void RemoveHandle(IPlayer reference)
+            public static void AddHandle(ModuleReference reference, BaseHandle handle)
             {
-                m_instance.Dispose();
-                m_instance = null;
+                if (m_isInitialize == false)
+                {
+                    m_handles = new Dictionary<int, BaseHandle>();
+                    m_isInitialize = true;
+                }
+                handle.Initialize();
+                m_handles.Add(reference.moduleID, handle);
+            }
+
+            public static void RemoveHandle(ModuleReference reference)
+            {
+                m_handles[reference.moduleID].Dispose();
+                m_handles.Remove(reference.moduleID);
             }
         }
 
         protected abstract class BaseHandle
         {
+            private int m_ID;
+            protected IPlayer m_player;
+
+            protected BaseHandle(IPlayer m_reference)
+            {
+                this.m_ID = SoulSkillHandleManager.GenerateID();
+                this.m_player = m_reference;
+            }
+
+            public int ID => m_ID;
+
             public abstract void Initialize();
             public abstract void Dispose();
         }
 
-        private SoulSkillHandleManager m_manager;
-        private bool m_isInitialized;
+        private Cache<List<ModuleReference>> m_referenceList;
+        private bool m_initialized;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
-            if (m_isInitialized == false)
-            {
-                m_manager = new SinglePlayerMananger();
-                m_isInitialized = true;
-            }
-
             var handle = CreateHandle(player);
-            m_manager.AddHandle(player, handle);
+            var reference = new ModuleReference(soulSkillInstanceID, handle.ID, player.GetInstanceID());
+            SoulSkillHandleManager.AddHandle(reference, handle);
+            if (m_initialized == false)
+            {
+                m_referenceList = Cache<List<ModuleReference>>.Claim();
+                m_initialized = true;
+            }
+            m_referenceList.Value.Add(reference);
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
-            m_manager.RemoveHandle(player);
+            if (m_initialized)
+            {
+                var playerID = player.GetInstanceID();
+                for (int i = 0; i < m_referenceList.Value.Count; i++)
+                {
+                    var reference = m_referenceList.Value[i];
+                    if (reference.soulSKillID == soulSkillInstanceID && reference.playerInstanceID == playerID)
+                    {
+                        m_referenceList.Value.RemoveAt(i);
+                        SoulSkillHandleManager.RemoveHandle(reference);
+                        if (m_referenceList.Value.Count == 0)
+                        {
+                            m_referenceList.Release();
+                            m_initialized = false;
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         protected abstract BaseHandle CreateHandle(IPlayer player);

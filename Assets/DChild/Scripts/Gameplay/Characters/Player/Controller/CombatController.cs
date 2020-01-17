@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Combat Controller")]
     public class CombatController : MonoBehaviour
     {
 

@@ -13,6 +13,7 @@ using DChildEditor;
 
 namespace DChild.Menu.Bestiary
 {
+
     [CreateAssetMenu(fileName = "BestiaryData", menuName = "DChild/Database/Bestiary Data")]
     public class BestiaryData : DatabaseAsset
     {
@@ -51,7 +52,7 @@ namespace DChild.Menu.Bestiary
                     m_name = databaseName;
                     var fileName = m_name.Replace(" ", string.Empty);
                     fileName += "Data";
-                    //FileUtility.RenameAsset(this, assetPath, fileName);
+                    FileUtility.RenameAsset(this, assetPath, fileName);
                 }
                 connection.Close();
             }

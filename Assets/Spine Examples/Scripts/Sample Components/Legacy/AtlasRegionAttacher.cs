@@ -30,9 +30,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Spine;
-using Spine.Unity.Modules.AttachmentTools;
+using Spine.Unity.AttachmentTools;
 
-namespace Spine.Unity.Modules {
+namespace Spine.Unity.Examples {
 	/// <summary>
 	/// Example code for a component that replaces the default attachment of a slot with an image from a Spine atlas.</summary>
 	public class AtlasRegionAttacher : MonoBehaviour {
@@ -54,8 +54,6 @@ namespace Spine.Unity.Modules {
 			skeletonRenderer.OnRebuild += Apply;
 			if (skeletonRenderer.valid) Apply(skeletonRenderer);
 		}
-
-		void Start () { } // Allow checkbox in inspector
 
 		void Apply (SkeletonRenderer skeletonRenderer) {
 			if (!this.enabled) return;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/Physics/Isolated Object Physics 2D")]
     public class IsolatedObjectPhysics2D : ObjectPhysics2D
     {
         public sealed override Vector2 velocity

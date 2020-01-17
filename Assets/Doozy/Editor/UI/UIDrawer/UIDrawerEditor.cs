@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -47,6 +47,8 @@ namespace Doozy.Editor.UI
             m_drawerName,
             m_customDrawerName,
             m_closeDirection,
+            m_blockBackButton,
+            m_hideOnBackButton,
             m_detectGestures,
             m_useCustomStartAnchoredPosition,
             m_customStartAnchoredPosition,
@@ -92,6 +94,8 @@ namespace Doozy.Editor.UI
             m_drawerName = GetProperty(PropertyName.DrawerName);
             m_customDrawerName = GetProperty(PropertyName.CustomDrawerName);
             m_closeDirection = GetProperty(PropertyName.CloseDirection);
+            m_blockBackButton = GetProperty(PropertyName.BlockBackButton);
+            m_hideOnBackButton = GetProperty(PropertyName.HideOnBackButton);
             m_detectGestures = GetProperty(PropertyName.DetectGestures);
             m_useCustomStartAnchoredPosition = GetProperty(PropertyName.UseCustomStartAnchoredPosition);
             m_customStartAnchoredPosition = GetProperty(PropertyName.CustomStartAnchoredPosition);
@@ -252,7 +256,7 @@ namespace Doozy.Editor.UI
             DrawRuntimeOptions();
             DrawDebugMode();
             GUILayout.Space(DGUI.Properties.Space(2));
-            DrawCloseDirectionAndDetectGestures();
+            DrawCloseDirectionHideOnBackButtonAndDetectGestures();
             GUILayout.Space(DGUI.Properties.Space());
             DrawDrawerName();
             GUILayout.Space(DGUI.Properties.Space());
@@ -351,11 +355,15 @@ namespace Doozy.Editor.UI
             DGUI.AlphaGroup.End();
         }
 
-        private void DrawCloseDirectionAndDetectGestures()
+        private void DrawCloseDirectionHideOnBackButtonAndDetectGestures()
         {
             GUILayout.BeginHorizontal();
             {
                 DGUI.Property.Draw(m_closeDirection, UILabels.CloseDirection, ComponentColorName, Target.CloseDirection == SimpleSwipe.None);
+                GUILayout.Space(DGUI.Properties.Space());
+                DGUI.Toggle.Switch.Draw(m_blockBackButton, UILabels.BlockBackButton, ComponentColorName, true, false);
+                GUILayout.Space(DGUI.Properties.Space());
+                DGUI.Toggle.Switch.Draw(m_hideOnBackButton, UILabels.HideOnBackButton, ComponentColorName, true, false);
                 GUILayout.Space(DGUI.Properties.Space());
                 DGUI.Toggle.Switch.Draw(m_detectGestures, UILabels.DetectGestures, ComponentColorName, true, false);
             }

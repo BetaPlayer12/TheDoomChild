@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -30,6 +30,8 @@ namespace Doozy.Editor.Windows
                     DrawNodyGraphZoom();
                     DrawDynamicViewVerticalSpace(0.5f);
                     DrawNodyGraphDotAnimationSpeed();
+                    DrawDynamicViewVerticalSpace(0.5f);
+                    DrawNodyShowNodeNotes();
                 }
                 GUILayout.EndVertical();
             }
@@ -145,6 +147,27 @@ namespace Doozy.Editor.Windows
             GUILayout.EndHorizontal();
             GUILayout.Space(DGUI.Properties.Space());
             DGUI.WindowUtils.DrawSettingDescription(UILabels.DefaultDotAnimationSpeedDescription);
+        }
+        
+        private void DrawNodyShowNodeNotes()
+        {
+            GUILayout.BeginHorizontal();
+            {
+                bool value = NodyWindowSettings.Instance.ShowNodeNotes;
+                EditorGUI.BeginChangeCheck();
+                value = DGUI.Toggle.Switch.Draw(value, CurrentViewColorName);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    NodyWindowSettings.Instance.UndoRecord(UILabels.ShowNodeNotes);
+                    NodyWindowSettings.Instance.ShowNodeNotes = value;
+                    NodyWindowSettings.Instance.SetDirty(false);
+                }
+                GUILayout.Space(DGUI.Properties.Space(4));
+                DGUI.WindowUtils.DrawSettingLabel(UILabels.ShowNodeNotes, DGUI.Colors.GetTextColorName(value, CurrentViewColorName), NormalRowHeight);
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.Space(DGUI.Properties.Space());
+            DGUI.WindowUtils.DrawSettingDescription(UILabels.ShowNodeNotesDescription);
         }
     }
 }

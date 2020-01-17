@@ -1,23 +1,11 @@
 ﻿
 using DChild.Gameplay.Combat;
 using Holysoft.Pooling;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace DChild.Gameplay.Projectiles
 {
-    [CreateAssetMenu(fileName = "AttackProjectileData", menuName = "DChild/Gameplay/Attack Projectile Data")]
-    public class AttackProjectileData : ProjectileData
-    {
-        [SerializeField]
-        private bool m_canPassThroughEnvironment;
-        [SerializeField]
-        private bool m_isPiercing;
-
-
-        public bool canPassThroughEnvironment => m_canPassThroughEnvironment;
-        public bool isPiercing => m_isPiercing;
-    }
-
     public abstract class AttackProjectile : Projectile
     {
         [SerializeField]
@@ -52,12 +40,28 @@ namespace DChild.Gameplay.Projectiles
                 if (m_cacheToDamage != null && m_cacheToDamage.isInvulnerable == false)
                 {
                     var damage = m_data.damage;
-                    for (int i = 0; i < damage.Length; i++)
+                    using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
                     {
-                        AttackerCombatInfo info = new AttackerCombatInfo(transform.position, 0, 1, damage[i]);
-                        var targetInfo = new TargetInfo(m_cacheToDamage.damageable, m_cacheToDamage.defense.damageReduction);
-                        var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                        CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
+                        using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                        {
+                            using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
+                            {
+                                for (int i = 0; i < damage.Length; i++)
+                                {
+                                    cacheInfo.Value.Initialize(transform.position, 0, 1, damage[i]);
+                                    cacheTargetInfo.Value.Initialize(m_cacheToDamage.damageable, m_cacheToDamage.defense.damageReduction);
+                                    using (Cache<AttackInfo> cacheResult = GameplaySystem.combatManager.ResolveConflict(cacheInfo, cacheTargetInfo.Value))
+                                    {
+                                        cacheEventArgs.Value.Initialize(cacheInfo, cacheTargetInfo.Value, cacheResult);
+                                        CallAttackerAttacked(cacheEventArgs.Value);
+                                        cacheResult.Release();
+                                    }
+                                }
+                                cacheEventArgs.Release();
+                            }
+                            cacheTargetInfo?.Release();
+                        }
+                        cacheInfo.Release();
                     }
                 }
                 if (m_data.isPiercing == false)
@@ -66,6 +70,12 @@ namespace DChild.Gameplay.Projectiles
                     Collide();
                 }
             }
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            GetComponent<Attacker>().SetDamage(projectileData.damage);
         }
 
         private void OnValidate()

@@ -19,10 +19,12 @@ namespace DChild.Menu
 
         public void BackToMainMenu()
         {
-            if(GameSystem.RequestConfirmation(OnMainMenuConfirm,"Do you want to return to main menu") == false)
+            if (GameSystem.RequestConfirmation(OnMainMenuConfirm, "Do you want to return to main menu") == false)
             {
+                LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
                 GameSystem.LoadMainMenu();
             }
+            //GameSystem.LoadMainMenu();
         }
 
         private void OnMainMenuConfirm(object sender, EventActionArgs eventArgs)

@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -43,8 +43,12 @@ namespace Doozy.Engine.UI.Nodes
             GameEvent,
             SceneLoad,
             SceneUnload,
-            ActiveSceneChange
+            ActiveSceneChange,
+            UIView,
+            UIButton,
+            UIDrawer
         }
+
 
         public GetSceneBy GetSceneBy;
         public WaitType WaitFor = DEFAULT_WAIT_TYPE;
@@ -57,6 +61,15 @@ namespace Doozy.Engine.UI.Nodes
         public int SceneBuildIndex;
         public string GameEvent = DEFAULT_GAME_EVENT;
         public string SceneName;
+        public UIViewBehaviorType UIViewTriggerAction = UIViewBehaviorType.Show;
+        public string ViewCategory = UIView.DefaultViewCategory;
+        public string ViewName = UIView.DefaultViewName;
+        public UIButtonBehaviorType UIButtonTriggerAction = UIButtonBehaviorType.OnClick;
+        public string ButtonCategory = UIButton.DefaultButtonCategory;
+        public string ButtonName = UIButton.DefaultButtonName;
+        public UIDrawerBehaviorType UIDrawerTriggerAction = UIDrawerBehaviorType.Open;
+        public string DrawerName = UIDrawer.DefaultDrawerName;
+        public bool CustomDrawerName = false;
 
         [NonSerialized] public float CurrentDuration;
         [NonSerialized] private bool m_timerIsActive;
@@ -81,6 +94,9 @@ namespace Doozy.Engine.UI.Nodes
                     case WaitType.SceneLoad:         return UILabels.SceneLoad;
                     case WaitType.SceneUnload:       return UILabels.SceneUnload;
                     case WaitType.ActiveSceneChange: return UILabels.ActiveSceneChange;
+                    case WaitType.UIView:            return "UIView " + UIViewTriggerAction;
+                    case WaitType.UIButton:          return "UIButton " + UIButtonTriggerAction;
+                    case WaitType.UIDrawer:          return "UIDrawer " + UIDrawerTriggerAction;
                 }
 
                 return "---";
@@ -117,6 +133,9 @@ namespace Doozy.Engine.UI.Nodes
                         }
 
                         break;
+                    case WaitType.UIView:   return AnyValue ? UILabels.AnyUIView : ViewCategory + " / " + ViewName;
+                    case WaitType.UIButton: return AnyValue ? UILabels.AnyUIButton : ButtonCategory + " / " + ButtonName;
+                    case WaitType.UIDrawer: return AnyValue ? UILabels.AnyUIDrawer : DrawerName;
                 }
 
                 return "---";
@@ -154,6 +173,15 @@ namespace Doozy.Engine.UI.Nodes
             SceneBuildIndex = node.SceneBuildIndex;
             GameEvent = node.GameEvent;
             SceneName = node.SceneName;
+            UIViewTriggerAction = node.UIViewTriggerAction;
+            ViewCategory = node.ViewCategory;
+            ViewName = node.ViewName;
+            UIButtonTriggerAction = node.UIButtonTriggerAction;
+            ButtonCategory = node.ButtonCategory;
+            ButtonName = node.ButtonName;
+            UIDrawerTriggerAction = node.UIDrawerTriggerAction;
+            DrawerName = node.DrawerName;
+            CustomDrawerName = node.CustomDrawerName;
         }
 
         protected override void OnEnable()
@@ -211,6 +239,15 @@ namespace Doozy.Engine.UI.Nodes
                 case WaitType.ActiveSceneChange:
                     SceneDirector.Instance.OnSceneUnloaded.AddListener(SceneUnloaded);
                     break;
+                case WaitType.UIView:
+                    Message.AddListener<UIViewMessage>(OnUIViewMessage);
+                    break;
+                case WaitType.UIButton:
+                    Message.AddListener<UIButtonMessage>(OnUIButtonMessage);
+                    break;
+                case WaitType.UIDrawer:
+                    Message.AddListener<UIDrawerMessage>(OnUIDrawerMessage);
+                    break;
             }
         }
 
@@ -235,6 +272,15 @@ namespace Doozy.Engine.UI.Nodes
                 case WaitType.ActiveSceneChange:
                     SceneDirector.Instance.OnActiveSceneChanged.RemoveListener(ActiveSceneChanged);
                     break;
+                case WaitType.UIView:
+                    Message.RemoveListener<UIViewMessage>(OnUIViewMessage);
+                    break;
+                case WaitType.UIButton:
+                    Message.RemoveListener<UIButtonMessage>(OnUIButtonMessage);
+                    break;
+                case WaitType.UIDrawer:
+                    Message.RemoveListener<UIDrawerMessage>(OnUIDrawerMessage);
+                    break;
             }
         }
 
@@ -254,14 +300,15 @@ namespace Doozy.Engine.UI.Nodes
 
         private void OnGameEventMessage(GameEventMessage message)
         {
-            if (DebugMode) DDebug.Log("GameEvent received: " + message.EventName + " / Listening for: " + GameEvent, this);
+            if (ActiveGraph != null && !ActiveGraph.Enabled) return;
+            if (DebugMode) DDebug.Log("GameEvent received: " + message.EventName + " // Listening for: " + GameEvent, this);
             if (AnyValue || GameEvent.Equals(message.EventName))
                 ContinueToNextNode();
         }
 
         private void SceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (DebugMode) DDebug.Log("Scene Loaded - Scene: " + scene.name + " / LoadSceneMode: " + mode, this);
+            if (DebugMode) DDebug.Log("Scene Loaded - Scene: " + scene.name + " // LoadSceneMode: " + mode, this);
             if (AnyValue || IsTargetScene(scene))
                 ContinueToNextNode();
         }
@@ -275,7 +322,7 @@ namespace Doozy.Engine.UI.Nodes
 
         private void ActiveSceneChanged(Scene current, Scene next)
         {
-            if (DebugMode) DDebug.Log("Active Scene Changed - Replaced Scene: " + current.name + " / Next Scene: " + next.name, this);
+            if (DebugMode) DDebug.Log("Active Scene Changed - Replaced Scene: " + current.name + " // Next Scene: " + next.name, this);
             if (AnyValue || IsTargetScene(next))
                 ContinueToNextNode();
         }
@@ -297,6 +344,54 @@ namespace Doozy.Engine.UI.Nodes
 
             return false;
         }
+
+        private void OnUIViewMessage(UIViewMessage message)
+        {
+            if (ActiveGraph != null && !ActiveGraph.Enabled) return;
+            if (WaitFor != WaitType.UIView) return;
+            if (DebugMode) DDebug.Log("UIViewMessage received: " + message.Type + " " + message.View.ViewCategory + " / " + message.View.ViewName + " // Listening for: " + ViewCategory + " / " + ViewName, this);
+            if (message.Type == UIViewBehaviorType.Unknown) return;
+            if (message.Type != UIViewTriggerAction) return;
+            if (AnyValue ||
+                message.View.ViewCategory.Equals(ViewCategory) &&
+                message.View.ViewName.Equals(ViewName))
+                ContinueToNextNode();
+        }
+
+        private void OnUIButtonMessage(UIButtonMessage message)
+        {
+            if (ActiveGraph != null && !ActiveGraph.Enabled) return;
+            if (WaitFor != WaitType.UIButton) return;
+            if (DebugMode) DDebug.Log("UIButtonMessage received: " + message.Type + " " + message.ButtonName + " // Listening for: " + ButtonName, this);
+            if (message.Type != UIButtonTriggerAction) return;
+
+            bool listeningForBackButton = ButtonName.Equals(UIButton.BackButtonName);
+            if (listeningForBackButton && (message.ButtonName.Equals(UIButton.BackButtonName) || message.Button != null && message.Button.IsBackButton))
+            {
+                ContinueToNextNode();
+                return;
+            }
+
+            if (AnyValue)
+            {
+                ContinueToNextNode();
+                return;
+            }
+
+            if (message.Button == null || !message.Button.ButtonCategory.Equals(ButtonCategory) || !message.Button.ButtonName.Equals(ButtonName)) return;
+            ContinueToNextNode();
+        }
+
+        private void OnUIDrawerMessage(UIDrawerMessage message)
+        {
+            if (ActiveGraph != null && !ActiveGraph.Enabled) return;
+            if (WaitFor != WaitType.UIDrawer) return;
+            if (DebugMode) DDebug.Log("UIDrawerMessage received: " + message.Type + " " + message.Drawer.DrawerName + " // Listening for: " + DrawerName, this);
+            if (message.Type != UIDrawerTriggerAction) return;
+            if (AnyValue || message.Drawer.DrawerName.Equals(DrawerName))
+                ContinueToNextNode();
+        }
+
 
         private void ContinueToNextNode()
         {

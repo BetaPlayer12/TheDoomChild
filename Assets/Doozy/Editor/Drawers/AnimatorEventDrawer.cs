@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -18,10 +18,7 @@ namespace Doozy.Editor.Drawers
     {
         private readonly Dictionary<string, bool> m_initialized = new Dictionary<string, bool>();
 
-        private static DColor DrawerColor
-        {
-            get { return EditorColors.Instance.Gray; }
-        }
+        private static DColor DrawerColor { get { return EditorColors.Instance.Gray; } }
 
 
         private void Init(SerializedProperty property)
@@ -62,8 +59,11 @@ namespace Doozy.Editor.Drawers
                 animator.objectReferenceValue == null) //or if no animator has been referenced
                 return;                                //stop here
 
-            AnimatorControllerParameter[] parameters = ((Animator) animator.objectReferenceValue).parameters; //get the parameters from the animator
-            if (parameters == null || parameters.Length == 0) return;                                         //if the animator does not have any parameters -> stop here
+            var anim = (Animator) animator.objectReferenceValue;
+            if (!anim.gameObject.activeSelf) return;
+
+            AnimatorControllerParameter[] parameters = anim.parameters; //get the parameters from the animator
+            if (parameters == null || parameters.Length == 0) return;   //if the animator does not have any parameters -> stop here
 
             List<string> parameterNames = parameters.Select(parameter => parameter.name).ToList();
 

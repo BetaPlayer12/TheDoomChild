@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Air Controller")]
     public class AirController : MonoBehaviour
     {
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
@@ -54,9 +55,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
                         return;
                     }
-                    //m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
-                    return;
-
                 }
             }
 

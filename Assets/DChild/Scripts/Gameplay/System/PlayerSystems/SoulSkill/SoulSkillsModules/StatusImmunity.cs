@@ -11,12 +11,12 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField]
         private StatusEffectType m_type;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             player.statusResistance.SetResistance(m_type, 100);
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             player.statusResistance.SetResistance(m_type, 0);
         }

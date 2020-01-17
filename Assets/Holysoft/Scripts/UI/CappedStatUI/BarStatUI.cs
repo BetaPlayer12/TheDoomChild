@@ -10,14 +10,14 @@ namespace Holysoft.Gameplay.UI
 
         private float m_maxValue;
 
-        protected override float maxValue
+        public override float maxValue
         {
             set
             {
                 m_maxValue = value;
             }
         }
-        protected override float currentValue
+        public override float currentValue
         {
             set
             {

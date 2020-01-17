@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -108,10 +108,10 @@ namespace Doozy.Engine.UI
 
         /// <summary> Animator animation settings </summary>
         public List<AnimatorEvent> Animators;
-        
+
         /// <summary> Determines what type of animation is enabled on this behavior </summary>
         public ButtonAnimationType ButtonAnimationType;
-        
+
         /// <summary> Determines if the button should get deselected after this behavior has been triggered (works only for OnPointerExit and OnPointerUp) </summary>
         public bool DeselectButton;
 
@@ -123,19 +123,19 @@ namespace Doozy.Engine.UI
 
         /// <summary> Determines if the selected preset should override at runtime the current editor settings or not </summary>
         public bool LoadSelectedPresetAtRuntime;
-        
+
         /// <summary> Actions performed when the behavior is triggered and the toggle is off </summary>
         public UIAction OnToggleOff;
-        
+
         /// <summary> Actions performed when the behavior is triggered and the toggle is on </summary>
         public UIAction OnToggleOn;
-        
+
         /// <summary> Preset category name </summary>
         public string PresetCategory;
 
         /// <summary> Preset name </summary>
         public string PresetName;
-        
+
         // <summary> Punch animation settings </summary>
         public UIAnimation PunchAnimation;
 
@@ -190,49 +190,38 @@ namespace Doozy.Engine.UI
 
         /// <summary> Triggers this behavior by executing its actions </summary>
         /// <param name="toggle"> UIToggle that triggered this behavior </param>
-        public void Invoke(UIToggle toggle)
+        /// <param name="playAnimation"> Play the set animation </param>
+        /// <param name="playSound"> Play the set sound </param>
+        /// <param name="executeEffect"> Run the effect </param>
+        /// <param name="executeAnimatorEvents"> Trigger all the animator events </param>
+        /// <param name="sendGameEvents"> Send all the game events </param>
+        /// <param name="executeUnityEvent"> Execute the Action and the UnityEvent </param>
+        public void Invoke(UIToggle toggle, bool playAnimation = true, bool playSound = true, bool executeEffect = true, bool executeAnimatorEvents = true, bool sendGameEvents = true, bool executeUnityEvent = true)
         {
-            PlayAnimation(toggle);
+            if (toggle == null) return;
+            UIAction uiAction = toggle.IsOn ? OnToggleOn : OnToggleOff;
 
-            if (toggle.IsOn)
+            if (playAnimation) PlayAnimation(toggle, false);                                  //Animation
+            if (playSound) uiAction.PlaySound();                                              //Sound
+            if (executeEffect) uiAction.ExecuteEffect(uiAction.GetCanvas(toggle.gameObject)); //Effect
+            if (executeAnimatorEvents) uiAction.InvokeAnimatorEvents();                       //Animator Events
+            if (!sendGameEvents && !executeUnityEvent) return;
+            if (!TriggerEventsAfterAnimation)
             {
-                OnToggleOn.ExecuteEffect(OnToggleOn.GetCanvas(toggle.gameObject));
-                OnToggleOn.InvokeAnimatorEvents();
-                if (!TriggerEventsAfterAnimation)
-                {
-                    OnToggleOn.SendGameEvents(toggle.gameObject);
-                    OnToggleOn.InvokeAction(toggle.gameObject);
-                    OnToggleOn.InvokeUnityEvent();
-                    return;
-                }
-
-                Coroutiner.Start(InvokeCallbackAfterDelay(() =>
-                                                          {
-                                                              if (toggle == null) return;
-                                                              OnToggleOn.SendGameEvents(toggle.gameObject);
-                                                              OnToggleOn.InvokeAction(toggle.gameObject);
-                                                              OnToggleOn.InvokeUnityEvent();
-                                                          },
-                                                          GetAnimationTotalDuration()));
+                if (sendGameEvents) uiAction.SendGameEvents(toggle.gameObject); //Game Events
+                if (!executeUnityEvent) return;
+                uiAction.InvokeAction(toggle.gameObject); //Action
+                uiAction.InvokeUnityEvent();              //UnityEvent
             }
             else
             {
-                OnToggleOff.ExecuteEffect(OnToggleOff.GetCanvas(toggle.gameObject));
-                OnToggleOff.InvokeAnimatorEvents();
-                if (!TriggerEventsAfterAnimation)
-                {
-                    OnToggleOff.SendGameEvents(toggle.gameObject);
-                    OnToggleOff.InvokeAction(toggle.gameObject);
-                    OnToggleOff.InvokeUnityEvent();
-                    return;
-                }
-
                 Coroutiner.Start(InvokeCallbackAfterDelay(() =>
                                                           {
                                                               if (toggle == null) return;
-                                                              OnToggleOff.SendGameEvents(toggle.gameObject);
-                                                              OnToggleOff.InvokeAction(toggle.gameObject);
-                                                              OnToggleOff.InvokeUnityEvent();
+                                                              if (sendGameEvents) uiAction.SendGameEvents(toggle.gameObject); //Game Events
+                                                              if (!executeUnityEvent) return;
+                                                              uiAction.InvokeAction(toggle.gameObject); //Action
+                                                              uiAction.InvokeUnityEvent();              //UnityEvent
                                                           },
                                                           GetAnimationTotalDuration()));
             }
@@ -370,7 +359,7 @@ namespace Doozy.Engine.UI
             {
                 case ButtonAnimationType.Punch: return AnimationType.Punch;
                 case ButtonAnimationType.State: return AnimationType.State;
-                default: return AnimationType.Undefined;
+                default:                        return AnimationType.Undefined;
             }
         }
 

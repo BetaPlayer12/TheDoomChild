@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -280,18 +280,18 @@ namespace Doozy.Engine.Touchy
 
         #region Static Methods
 
-        /// <summary> Initializes the TouchDetector </summary>
+        /// <summary> Initialize the TouchDetector </summary>
         public static void Init()
         {
             if (s_instance != null) return;
             s_instance = Instance;
         }
 
-        /// <summary> Returns the Vector2 representation of the given swipe direction </summary>
+        /// <summary> Get the Vector2 representation of the given swipe direction </summary>
         /// <param name="swipe"> Target swipe direction </param>
         public static Vector2 GetCardinalDirection(Swipe swipe) { return CardinalDirection.Get(swipe); }
 
-        /// <summary> Converts a SimpleSwipe into a Swipe </summary>
+        /// <summary> Convert a SimpleSwipe into a Swipe </summary>
         /// <param name="simpleSwipe"> Target simple swipe </param>
         /// <param name="reverse"> Should the reversed value be returned? (eg. if SimpleSwipe.Left and reverse is true, it will return Swipe.Right) </param>
         public static Swipe GetSwipe(SimpleSwipe simpleSwipe, bool reverse = false)
@@ -307,7 +307,7 @@ namespace Doozy.Engine.Touchy
             }
         }
 
-        /// <summary> Converts a Swipe into a SimpleSwipe </summary>
+        /// <summary> Convert a Swipe into a SimpleSwipe </summary>
         /// <param name="swipe"> Target swipe </param>
         /// <param name="reverse"> Should the reversed value be returned? (eg. if Swipe.Left and reverse is true, it will return SimpleSwipe.Right) </param>
         public static SimpleSwipe GetSimpleSwipe(Swipe swipe, bool reverse = false)
@@ -327,7 +327,7 @@ namespace Doozy.Engine.Touchy
             }
         }
 
-        /// <summary> Returns a Swipe direction by analyzing the given direction </summary>
+        /// <summary> Get a Swipe direction by analyzing a given direction </summary>
         /// <param name="direction"> Swipe direction </param>
         public static Swipe GetSwipeDirection(Vector2 direction)
         {
@@ -364,7 +364,7 @@ namespace Doozy.Engine.Touchy
             return swipeDirection;
         }
 
-        /// <summary> Returns a SimpleSwipe direction by analyzing the given direction </summary>
+        /// <summary> Get a SimpleSwipe direction by analyzing a given direction </summary>
         /// <param name="direction"> Swipe direction </param>
         public static SimpleSwipe GetSimpleSwipeDirection(Vector2 direction)
         {

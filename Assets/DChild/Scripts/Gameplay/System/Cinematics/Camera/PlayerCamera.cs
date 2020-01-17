@@ -11,17 +11,17 @@ namespace DChild.Gameplay.Cinematics.Cameras
         #region NonStatic
         [SerializeField]
         private CinemachineBrain m_camera;
-        private CameraShake m_shaker;
+       // private CameraShake m_shaker;
         private Coroutine m_shakeRotoutine;
 
         public new CinemachineBrain camera => m_camera;
 
-        private IEnumerator ShakeRoutine(float range, float duration)
-        {
-            m_shaker.m_Range = range;
-            yield return new WaitForSeconds(duration);
-            m_shaker.m_Range = 0;
-        }
+        //private IEnumerator ShakeRoutine(float range, float duration)
+        //{
+        //    m_shaker.m_Range = range;
+        //    yield return new WaitForSeconds(duration);
+        //    m_shaker.m_Range = 0;
+        //}
 
         public void ShakeCamera(float range, float duration)
         {
@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             {
                 StopCoroutine(m_shakeRotoutine);
             }
-            m_shakeRotoutine = StartCoroutine(ShakeRoutine(range, duration));
+           // m_shakeRotoutine = StartCoroutine(ShakeRoutine(range, duration));
         }
         #endregion
 

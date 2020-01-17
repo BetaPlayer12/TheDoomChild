@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -54,6 +54,14 @@ namespace Doozy.Editor.UI
         private readonly Dictionary<UIAction, List<DGUI.IconGroup.Data>> m_behaviorActionsIconsDatabase = new Dictionary<UIAction, List<DGUI.IconGroup.Data>>();
         private readonly Dictionary<UIViewBehavior, List<DGUI.IconGroup.Data>> m_viewBehaviorIconsDatabase = new Dictionary<UIViewBehavior, List<DGUI.IconGroup.Data>>();
 
+        /// <summary> Returns TRUE if this UIView has at least one child UIView </summary> 
+        private bool HasChildUIViews {
+            get
+            {
+                UIView[] childUIViews = Target.GetComponentsInChildren<UIView>();
+                return childUIViews != null && childUIViews.Length > 1;
+            } }
+        
         private SerializedProperty
             m_autoHideAfterShow,
             m_autoHideAfterShowDelay,
@@ -168,7 +176,9 @@ namespace Doozy.Editor.UI
         {
             base.OnEnable();
             AdjustPositionRotationAndScaleToRoundValues(Target.RectTransform);
-
+            
+            if (HasChildUIViews && Target.DisableGameObjectWhenHidden) Target.DisableGameObjectWhenHidden = false;
+            
             m_showDatabase = Animations.Get(AnimationType.Show);
             m_hideDatabase = Animations.Get(AnimationType.Hide);
             m_loopDatabase = Animations.Get(AnimationType.Loop);
@@ -419,7 +429,13 @@ namespace Doozy.Editor.UI
             GUILayout.Space(DGUI.Properties.Space());
             GUILayout.BeginHorizontal();
             {
+                EditorGUI.BeginChangeCheck();
                 DGUI.Toggle.Switch.Draw(m_disableGameObjectWhenHidden, UILabels.GameObject, m_disableGameObjectWhenHidden.boolValue ? ComponentColorName : DGUI.Colors.DisabledBackgroundColorName, false, true);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (HasChildUIViews && m_disableGameObjectWhenHidden.boolValue) 
+                        m_disableGameObjectWhenHidden.boolValue = false;
+                }
                 GUILayout.Space(DGUI.Properties.Space());
                 DGUI.Toggle.Switch.Draw(m_disableCanvasWhenHidden, UILabels.Canvas, m_disableCanvasWhenHidden.boolValue ? ComponentColorName : DGUI.Colors.DisabledBackgroundColorName, false, true);
                 GUILayout.Space(DGUI.Properties.Space());

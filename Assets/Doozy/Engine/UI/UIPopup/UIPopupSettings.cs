@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -55,13 +55,13 @@ namespace Doozy.Engine.UI.Settings
         }
 
 
-        public const PopupDisplayOn DISPLAY_ON_DEFAULT_VALUE = PopupDisplayOn.PopupCanvas;
-        public const VisibilityState VISIBILITY_DEFAULT_VALUE = VisibilityState.Visible;
         public const bool ADD_TO_POPUP_QUEUE_DEFAULT_VALUE = true;
         public const bool AUTO_HIDE_AFTER_SHOW_DEFAULT_VALUE = false;
         public const bool AUTO_SELECT_BUTTON_AFTER_SHOW_DEFAULT_VALUE = false;
+        public const bool BLOCK_BACK_BUTTON_DEFAULT_VALUE = true;
         public const bool CUSTOM_CANVAS_NAME_DEFAULT_VALUE = false;
         public const bool DESTROY_AFTER_HIDE_DEFAULT_VALUE = true;
+        public const bool HIDE_ON_ANY_BUTTON_DEFAULT_VALUE = false;
         public const bool HIDE_ON_BACK_BUTTON_DEFAULT_VALUE = true;
         public const bool HIDE_ON_CLICK_ANYWHERE_DEFAULT_VALUE = false;
         public const bool HIDE_ON_CLICK_CONTAINER_DEFAULT_VALUE = true;
@@ -71,13 +71,17 @@ namespace Doozy.Engine.UI.Settings
         public const bool USE_OVERLAY_DEFAULT_VALUE = true;
         public const float AUTO_HIDE_AFTER_SHOW_DELAY_DEFAULT_VALUE = 3f;
         public const float DISABLE_WHEN_HIDDEN_TIME_BUFFER = 0.05f; //after an UIPopup has been hidden, the system will wait for an additional time buffer before it sets the Source's active state to false. This is a failsafe measure and fixes a small bug on iOS
+        public const PopupDisplayOn DISPLAY_ON_DEFAULT_VALUE = PopupDisplayOn.PopupCanvas;
+        public const VisibilityState VISIBILITY_DEFAULT_VALUE = VisibilityState.Visible;
 
         public PopupDisplayOn DisplayTarget = DISPLAY_ON_DEFAULT_VALUE;
         public bool AddToPopupQueue = ADD_TO_POPUP_QUEUE_DEFAULT_VALUE;
         public bool AutoHideAfterShow = AUTO_HIDE_AFTER_SHOW_DEFAULT_VALUE;
         public bool AutoSelectButtonAfterShow = AUTO_SELECT_BUTTON_AFTER_SHOW_DEFAULT_VALUE;
+        public bool BlockBackButton = BLOCK_BACK_BUTTON_DEFAULT_VALUE;
         public bool CustomCanvasName = CUSTOM_CANVAS_NAME_DEFAULT_VALUE;
         public bool DestroyAfterHide = DESTROY_AFTER_HIDE_DEFAULT_VALUE;
+        public bool HideOnAnyButton = HIDE_ON_ANY_BUTTON_DEFAULT_VALUE;
         public bool HideOnBackButton = HIDE_ON_BACK_BUTTON_DEFAULT_VALUE;
         public bool HideOnClickAnywhere = HIDE_ON_CLICK_ANYWHERE_DEFAULT_VALUE;
         public bool HideOnClickContainer = HIDE_ON_CLICK_CONTAINER_DEFAULT_VALUE;
@@ -94,10 +98,12 @@ namespace Doozy.Engine.UI.Settings
             AutoHideAfterShow = AUTO_HIDE_AFTER_SHOW_DEFAULT_VALUE;
             AutoHideAfterShowDelay = AUTO_HIDE_AFTER_SHOW_DELAY_DEFAULT_VALUE;
             AutoSelectButtonAfterShow = AUTO_SELECT_BUTTON_AFTER_SHOW_DEFAULT_VALUE;
+            BlockBackButton = BLOCK_BACK_BUTTON_DEFAULT_VALUE;
             CanvasName = UIPopup.DefaultTargetCanvasName;
             CustomCanvasName = CUSTOM_CANVAS_NAME_DEFAULT_VALUE;
             DestroyAfterHide = DESTROY_AFTER_HIDE_DEFAULT_VALUE;
             DisplayTarget = DISPLAY_ON_DEFAULT_VALUE;
+            HideOnAnyButton = HIDE_ON_ANY_BUTTON_DEFAULT_VALUE;
             HideOnBackButton = HIDE_ON_BACK_BUTTON_DEFAULT_VALUE;
             HideOnClickAnywhere = HIDE_ON_CLICK_ANYWHERE_DEFAULT_VALUE;
             HideOnClickContainer = HIDE_ON_CLICK_CONTAINER_DEFAULT_VALUE;
@@ -119,10 +125,12 @@ namespace Doozy.Engine.UI.Settings
             popup.AutoHideAfterShow = AutoHideAfterShow;
             popup.AutoHideAfterShowDelay = AutoHideAfterShowDelay;
             popup.AutoSelectButtonAfterShow = AutoSelectButtonAfterShow;
+            popup.BlockBackButton = BlockBackButton;
             popup.CanvasName = CanvasName;
             popup.CustomCanvasName = CustomCanvasName;
             popup.DestroyAfterHide = DestroyAfterHide;
             popup.DisplayTarget = DisplayTarget;
+            popup.HideOnAnyButton = HideOnAnyButton;
             popup.HideOnBackButton = HideOnBackButton;
             popup.HideOnClickAnywhere = HideOnClickAnywhere;
             popup.HideOnClickContainer = HideOnClickContainer;
