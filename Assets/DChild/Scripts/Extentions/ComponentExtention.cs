@@ -72,5 +72,17 @@ namespace DChild
             var existingComponent = mono.GetComponent<T>();
             return existingComponent != null ? existingComponent : mono.gameObject.AddComponent<T>();
         }
+
+        public static bool TryGetComponentInParent<T>(this Component mono, out T component) where T : Component
+        {
+            component = mono.GetComponentInParent<T>();
+            return component;
+        }
+
+        public static bool TryGetComponentInChildren<T>(this Component mono, out T component) where T : Component
+        {
+            component = mono.GetComponentInChildren<T>();
+            return component;
+        }
     }
 }
