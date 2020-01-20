@@ -9,6 +9,8 @@ namespace DChild.Gameplay.Systems
         [SerializeField, InlineEditor(), OnInspectorGUI("OnValidate")]
         private LocationData m_data;
 
+        public LocationData data { get => m_data; }
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
