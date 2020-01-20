@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
+
     [AddComponentMenu("DChild/Gameplay/Environment/Breakable Object")]
     public class BreakableObject : MonoBehaviour, ISerializableComponent
     {

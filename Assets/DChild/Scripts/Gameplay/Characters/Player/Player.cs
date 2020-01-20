@@ -128,7 +128,6 @@ namespace DChild.Gameplay.Characters.Players
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             OnDeath?.Invoke(this, eventArgs);
-            //GameEventMessage.SendEvent("Game Over");
             m_controlledCharacter.physics.SetVelocity(Vector2.zero);
             m_groundednessHandle.enabled = false;
             m_groundednessHandle.ResetAnimationParameters();

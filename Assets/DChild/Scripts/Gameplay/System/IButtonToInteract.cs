@@ -1,7 +1,7 @@
 ﻿namespace DChild.Gameplay.Environment.Interractables
 {
-    public interface IInteractable
+    public interface IButtonToInteract : IInteractable
     {
-        void Interact();
+
     }
 }

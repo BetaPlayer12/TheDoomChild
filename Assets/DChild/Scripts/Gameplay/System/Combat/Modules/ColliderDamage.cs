@@ -44,6 +44,19 @@ namespace DChild.Gameplay.Combat
         private IDamageDealer m_damageDealer;
         public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
+        protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
+        {
+            if (hitbox.damageable.CompareTag(Character.objectTag))
+            {
+                var character = hitbox.GetComponentInParent<Character>();
+                cache.Value.Initialize(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
+            }
+            else
+            {
+                cache.Value.Initialize(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
+            }
+        }
+
         private void Awake()
         {
             m_damageDealer = GetComponentInParent<IDamageDealer>();
@@ -58,8 +71,7 @@ namespace DChild.Gameplay.Combat
             if (collision.CompareTag("DamageCollider"))
                 return;
 
-            var hitbox = collision.GetComponent<Hitbox>();
-            if (hitbox != null)
+            if (collision.TryGetComponent(out Hitbox hitbox))
             {
                 using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                 {
@@ -81,8 +93,7 @@ namespace DChild.Gameplay.Combat
             if (collision.gameObject.CompareTag("DamageCollider"))
                 return;
 
-            var hitbox = collision.gameObject.GetComponent<Hitbox>();
-            if (hitbox != null && hitbox.isInvulnerable == false)
+            if (collision.gameObject.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)
             {
                 using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                 {
@@ -98,17 +109,5 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
-        {
-            if (hitbox.damageable.CompareTag(Character.objectTag))
-            {
-                var character = hitbox.GetComponentInParent<Character>();
-                cache.Value.Initialize(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
-            }
-            else
-            {
-                cache.Value.Initialize(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
-            }
-        }
     }
 }
