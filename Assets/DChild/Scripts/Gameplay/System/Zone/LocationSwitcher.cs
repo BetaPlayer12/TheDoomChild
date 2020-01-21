@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Environment;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu;
 using Sirenix.OdinInspector;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Systems
 {
     [RequireComponent(typeof(LocationPoster))]
-    public class LocationSwitch : SerializedMonoBehaviour
+    public class LocationSwitcher : SerializedMonoBehaviour
     {
         [SerializeField]
         private LocationData m_destination;

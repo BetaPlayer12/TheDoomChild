@@ -1,14 +1,17 @@
 ﻿using DChild.Gameplay;
 
-public enum TransitionType
+namespace DChild.Gameplay.Environment
 {
-    Enter,
-    PostEnter,
-    Exit
-}
+    public enum TransitionType
+    {
+        Enter,
+        PostEnter,
+        Exit
+    }
 
-public interface ISwitchHandle
-{
-    void DoSceneTransition(Character character, TransitionType type);
-    float transitionDelay { get; }
+    public interface ISwitchHandle
+    {
+        void DoSceneTransition(Character character, TransitionType type);
+        float transitionDelay { get; }
+    } 
 }
