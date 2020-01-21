@@ -16,6 +16,11 @@ namespace DChild.Serialization
             [SerializeField]
             private Dictionary<int, ISaveData> m_savedDatas;
 
+            public ZoneData()
+            {
+                m_savedDatas = new Dictionary<int, ISaveData>();
+            }
+
             public ZoneData(ComponentSerializer[] serializers)
             {
                 m_savedDatas = new Dictionary<int, ISaveData>();
@@ -47,7 +52,7 @@ namespace DChild.Serialization
         [SerializeField, ValueDropdown("GetDynamicSerializers", IsUniqueList = true), TabGroup("Serializer", "Dynamic")]
         private DynamicSerializableComponent[] m_dynamicSerializers;
         [OdinSerialize, HideInEditorMode]
-        private ZoneData m_zoneData;
+        private ZoneData m_zoneData = new ZoneData();
 
         private CampaignSlot m_cacheSlot;
         private ComponentSerializer m_cacheComponentSerializer;
@@ -97,13 +102,19 @@ namespace DChild.Serialization
         private void Awake()
         {
             var proposedData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
+            bool hasData = false;
             if (proposedData != null)
             {
+                hasData = true;
                 m_zoneData = proposedData;
-                for (int i = 0; i < m_componentSerializers.Length; i++)
+            }
+
+            for (int i = 0; i < m_componentSerializers.Length; i++)
+            {
+                m_cacheComponentSerializer = m_componentSerializers[i];
+                m_cacheComponentSerializer.Initiatlize();
+                if (hasData)
                 {
-                    m_cacheComponentSerializer = m_componentSerializers[i];
-                    m_cacheComponentSerializer.Initiatlize();
                     m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
                 }
             }

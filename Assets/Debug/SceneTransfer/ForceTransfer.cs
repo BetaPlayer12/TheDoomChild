@@ -8,7 +8,7 @@ namespace DChildDebug.Gameplay
     public class SceneTransferDebugger : MonoBehaviour
     {
         [SerializeField]
-        private LocationSwitch m_switcher;
+        private LocationSwitcher m_switcher;
         [SerializeField]
         private Character m_character;
 

@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Systems
         public LocationData data { get => m_data; }
 
 #if UNITY_EDITOR
-        [SerializeField]
+        [SerializeField,PropertyOrder(-1)]
         private Transform m_locationPoint;
 
         private void OnValidate()

@@ -11,6 +11,7 @@ namespace DChild.Gameplay.Environment
     [AddComponentMenu("DChild/Gameplay/Environment/Breakable Object")]
     public class BreakableObject : MonoBehaviour, ISerializableComponent
     {
+        [System.Serializable]
         public struct SaveData : ISaveData
         {
             public SaveData(bool isDestroyed) : this()
@@ -18,6 +19,7 @@ namespace DChild.Gameplay.Environment
                 this.isDestroyed = isDestroyed;
             }
 
+            [ShowInInspector]
             public bool isDestroyed { get; }
         }
 
@@ -74,7 +76,8 @@ namespace DChild.Gameplay.Environment
         public void Load(ISaveData data)
         {
             var saveData = (SaveData)data;
-            if (saveData.isDestroyed)
+            m_isDestroyed = saveData.isDestroyed;
+            if (m_isDestroyed)
             {
                 m_onAlreadyDestroyed?.Invoke();
             }
@@ -122,18 +125,18 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_object.Destroyed += OnDestroyObject;
-            if (m_isDestroyed == true)
-            {
-                m_onDestroy?.Invoke();
-            }
-            else
-            {
-                m_onFix?.Invoke();
-                if (m_createDebris)
-                {
-                    DestroyInstantiatedDebris();
-                }
-            }
+            //if (m_isDestroyed == true)
+            //{
+            //    m_onDestroy?.Invoke();
+            //}
+            //else
+            //{
+            //    m_onFix?.Invoke();
+            //    if (m_createDebris)
+            //    {
+            //        DestroyInstantiatedDebris();
+            //    }
+            //}
         }
 
 #if UNITY_EDITOR
