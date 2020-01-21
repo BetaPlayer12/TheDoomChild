@@ -1,29 +1,33 @@
 ﻿using DChild.Gameplay;
+using DChild.Gameplay.Environment;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-[System.Serializable]
-public class AnimatedSwitchHandle : ISwitchHandle
+namespace DChild.Gameplay.Environment
 {
-    [SerializeField, MinValue(0.1)]
-    private float m_transitionDelay;
-    [SerializeField, HideReferenceObjectPicker]
-    private UnityEvent m_onEntrance = new UnityEvent();
-    [SerializeField, HideReferenceObjectPicker]
-    private UnityEvent m_onExit = new UnityEvent();
-    
-    public float transitionDelay => m_transitionDelay;
-
-    public void DoSceneTransition(Character character, TransitionType type)
+    [System.Serializable]
+    public class AnimatedSwitchHandle : ISwitchHandle
     {
-        if(type == TransitionType.Enter)
+        [SerializeField, MinValue(0.1)]
+        private float m_transitionDelay;
+        [SerializeField, HideReferenceObjectPicker]
+        private UnityEvent m_onEntrance = new UnityEvent();
+        [SerializeField, HideReferenceObjectPicker]
+        private UnityEvent m_onExit = new UnityEvent();
+
+        public float transitionDelay => m_transitionDelay;
+
+        public void DoSceneTransition(Character character, TransitionType type)
         {
-            m_onEntrance?.Invoke();
+            if (type == TransitionType.Enter)
+            {
+                m_onEntrance?.Invoke();
+            }
+            else if (type == TransitionType.Exit)
+            {
+                m_onExit?.Invoke();
+            }
         }
-        else if(type == TransitionType.Exit)
-        {
-            m_onExit?.Invoke();
-        }
-    }
+    } 
 }

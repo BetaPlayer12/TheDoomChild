@@ -1,100 +1,104 @@
 ﻿using DChild.Gameplay;
 using DChild.Gameplay.Characters.Players.Behaviour;
+using DChild.Gameplay.Environment;
 using DChild.Gameplay.Systems;
 using System;
 using UnityEngine;
 
-[System.Serializable]
-public class PassagewayHandle : ISwitchHandle
+namespace DChild.Gameplay.Environment
 {
-    [SerializeField]
-    private TravelDirection m_entranceDirection;
-    [SerializeField]
-    private TravelDirection m_exitDirection;
-
-    public float transitionDelay => 1;
-
-    private void OnPassagewayEnter(Character character, TravelDirection travelDirection)
+    [System.Serializable]
+    public class PassagewayHandle : ISwitchHandle
     {
-        var controller = GameplaySystem.playerManager.OverrideCharacterControls();
+        [SerializeField]
+        private TravelDirection m_entranceDirection;
+        [SerializeField]
+        private TravelDirection m_exitDirection;
 
-        if (travelDirection == TravelDirection.Left || travelDirection == TravelDirection.Right)
+        public float transitionDelay => 1;
+
+        private void OnPassagewayEnter(Character character, TravelDirection travelDirection)
         {
-            controller.moveDirectionInput = GetDirectionInput(travelDirection);
-        }
-        if(travelDirection == TravelDirection.Top)
-        {
+            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
 
-        }
-        if(travelDirection == TravelDirection.Bottom)
-        {
+            if (travelDirection == TravelDirection.Left || travelDirection == TravelDirection.Right)
+            {
+                controller.moveDirectionInput = GetDirectionInput(travelDirection);
+            }
+            if (travelDirection == TravelDirection.Top)
+            {
 
-        }
-    }
+            }
+            if (travelDirection == TravelDirection.Bottom)
+            {
 
-    private void OnPassageWayPostEnter(Character character)
-    {
-        var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-
-        controller.moveDirectionInput = 0;
-        character.physics.SetVelocity(Vector2.zero);
-        character.physics.simulateGravity = false;
-        var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-        groundednessHandle.enabled = false;
-    }
-
-    private void OnPassagewayExit(Character character, TravelDirection exitDirection)
-    {
-        var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-
-        if (exitDirection == TravelDirection.Left)
-        {
-            controller.moveDirectionInput = GetDirectionInput(exitDirection);
-        }
-        if(exitDirection == TravelDirection.Right)
-        {
-            controller.moveDirectionInput = GetDirectionInput(exitDirection);
-        }
-        if (exitDirection == TravelDirection.Top)
-        {
-
-        }
-        if (exitDirection == TravelDirection.Bottom)
-        {
-
+            }
         }
 
-        character.physics.simulateGravity = true;
-        var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-        groundednessHandle.enabled = true;
-    }
+        private void OnPassageWayPostEnter(Character character)
+        {
+            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
 
-    public int GetDirectionInput(TravelDirection direction)
-    {
-        switch (direction)
-        {
-            case TravelDirection.Left:
-                return -1;
-            case TravelDirection.Right:
-                return 1;
-            default:
-                return 0;
+            controller.moveDirectionInput = 0;
+            character.physics.SetVelocity(Vector2.zero);
+            character.physics.simulateGravity = false;
+            var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
+            groundednessHandle.enabled = false;
         }
-    }
 
-    public void DoSceneTransition(Character character, TransitionType type)
-    {
-        if(type == TransitionType.Enter)
+        private void OnPassagewayExit(Character character, TravelDirection exitDirection)
         {
-            OnPassagewayEnter(character, m_entranceDirection);
+            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
+
+            if (exitDirection == TravelDirection.Left)
+            {
+                controller.moveDirectionInput = GetDirectionInput(exitDirection);
+            }
+            if (exitDirection == TravelDirection.Right)
+            {
+                controller.moveDirectionInput = GetDirectionInput(exitDirection);
+            }
+            if (exitDirection == TravelDirection.Top)
+            {
+
+            }
+            if (exitDirection == TravelDirection.Bottom)
+            {
+
+            }
+
+            character.physics.simulateGravity = true;
+            var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
+            groundednessHandle.enabled = true;
         }
-        else if(type == TransitionType.PostEnter)
+
+        public int GetDirectionInput(TravelDirection direction)
         {
-            OnPassageWayPostEnter(character);
+            switch (direction)
+            {
+                case TravelDirection.Left:
+                    return -1;
+                case TravelDirection.Right:
+                    return 1;
+                default:
+                    return 0;
+            }
         }
-        else if(type == TransitionType.Exit)
+
+        public void DoSceneTransition(Character character, TransitionType type)
         {
-            OnPassagewayExit(character, m_exitDirection);
+            if (type == TransitionType.Enter)
+            {
+                OnPassagewayEnter(character, m_entranceDirection);
+            }
+            else if (type == TransitionType.PostEnter)
+            {
+                OnPassageWayPostEnter(character);
+            }
+            else if (type == TransitionType.Exit)
+            {
+                OnPassagewayExit(character, m_exitDirection);
+            }
         }
-    }
+    } 
 }
