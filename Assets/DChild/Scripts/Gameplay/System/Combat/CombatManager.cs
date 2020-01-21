@@ -187,9 +187,7 @@ namespace DChild.Gameplay.Combat
             if (GameSystem.settings?.gameplay.showDamageValues ?? true)
             {
                 m_uiHandler.Update();
-            }
-        }
-
-       
+            }    
+        } 
     }
 }
