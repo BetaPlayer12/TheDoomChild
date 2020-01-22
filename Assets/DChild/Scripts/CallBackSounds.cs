@@ -57,5 +57,7 @@ namespace DChild
             StopSounds(toInterrupt);
             PlaySound(toPlay);
         }
+
+        public bool IsTransformPlaying(string soundGroup) => MasterAudio.IsTransformPlayingSoundGroup(soundGroup, transform);
     }
 }
