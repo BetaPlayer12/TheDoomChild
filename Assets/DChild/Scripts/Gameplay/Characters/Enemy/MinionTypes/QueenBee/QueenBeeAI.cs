@@ -59,6 +59,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_groundStingerRecoverTime;
             public float groundStingerRecoverTime => m_groundStingerRecoverTime;
+            [SerializeField]
+            private float m_chargeLoops;
+            public float chargeLoops => m_chargeLoops;
             //
 
             //Animations
@@ -363,7 +366,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            m_stateHandle.ApplyQueuedState();
+            if(m_stateHandle.currentState != State.Phasing)
+                m_stateHandle.ApplyQueuedState();
         }
 
         private void MoveToAttackPosition(Attack attack/*, Vector2 target*/)
@@ -506,12 +510,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_phaseHandle.ApplyChange();
+            m_stateHandle.Wait(State.Phasing);
+            //m_turnState = State.Phasing;
             m_agent.Stop();
+            m_hitbox.SetInvulnerability(true);
             m_animation.EnableRootMotion(false, false);
             if (m_currentPhaseIndex >= 3)
             {
                 m_chosenAttack = Attack.GroundStingerAttack;
-                m_hitbox.SetInvulnerability(true);
                 //m_animation.EnableRootMotion(true, true);
                 var spear = Instantiate(m_info.spearDrop, transform.position, Quaternion.identity);
                 m_RightArmFX.Play();
@@ -519,6 +525,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 spear.GetComponent<Rigidbody2D>().AddForce(new Vector2(15 * transform.localScale.x, 10f), ForceMode2D.Impulse);
                 m_animation.SetAnimation(0, m_info.phase4TransitionAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase4TransitionAnimation);
+                //yield return new WaitForSeconds(5);
                 //m_animation.EnableRootMotion(false, false);
                 StartCoroutine(GroundStingerRoutine());
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -526,10 +533,11 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_chosenAttack = Attack.SpearThrow;
-                m_hitbox.SetInvulnerability(true);
                 var flinch = IsFacingTarget() ? m_info.flinchForwardAnimation : m_info.flinchBackwardAnimation;
                 m_animation.SetAnimation(0, flinch, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
+                //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0);
+                //yield return new WaitForSeconds(2);
                 StartCoroutine(SpearThrowRoutine());
             }
             yield return null;
@@ -602,24 +610,43 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.phase2AtkChargeStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase2AtkChargeStartAnimation);
             m_animation.DisableRootMotion();
-            m_animation.SetAnimation(0, m_info.phase2AtkChargeLoopAnimation, false);
             m_QBStingerChargeFX.gameObject.SetActive(true);
             m_QBStingerChargeFX.Play();
+            //int i;
+            //var i = 0;
+            //while (m_info.chargeLoops > i)
+            //{
+            //    m_animation.SetAnimation(0, m_info.phase2AtkChargeLoopAnimation, false);
+            //    //var chargeFXScale = m_QBStingerChargeFX.GetComponentInParent<Transform>();
+            //    var mainFX = m_QBStingerChargeFX.main;
+            //    mainFX.startRotation = transform.localScale.x > 0 ? /*180 * Mathf.Deg2Rad*/ (float)Mathf.PI/*nis*/: 0;
+            //    //chargeFXScale.localScale = new Vector3(transform.localScale.x > 0 ? -chargeFXScale.localScale.x : chargeFXScale.localScale.x, chargeFXScale.localScale.y, chargeFXScale.localScale.z);
+            //    GetComponent<IsolatedPhysics2D>().SetVelocity(100 * transform.localScale.x, 0);
+            //    yield return new WaitForSeconds(i == 0 ? 1.25f : 2f);
+            //    CustomTurn();
+            //    m_agent.Stop();
+            //    yield return new WaitForSeconds(.25f);
+            //    transform.position = new Vector2(transform.position.x, m_targetInfo.position.y);
+            //    i++;
+            //    yield return null;
+            //}
 
             for (int i = 0; i < /*UnityEngine.Random.Range(1,3)*/ 3; i++)
             {
+                m_animation.SetAnimation(0, m_info.phase2AtkChargeLoopAnimation, true);
                 //var chargeFXScale = m_QBStingerChargeFX.GetComponentInParent<Transform>();
                 var mainFX = m_QBStingerChargeFX.main;
                 mainFX.startRotation = transform.localScale.x > 0 ? /*180 * Mathf.Deg2Rad*/ (float)Mathf.PI/*nis*/: 0;
                 //chargeFXScale.localScale = new Vector3(transform.localScale.x > 0 ? -chargeFXScale.localScale.x : chargeFXScale.localScale.x, chargeFXScale.localScale.y, chargeFXScale.localScale.z);
                 GetComponent<IsolatedPhysics2D>().SetVelocity(100 * transform.localScale.x, 0);
                 yield return new WaitForSeconds(i == 0 ? 1.25f : 2f);
+                m_animation.SetEmptyAnimation(0, 0);
                 CustomTurn();
                 m_agent.Stop();
                 yield return new WaitForSeconds(.25f);
                 transform.position = new Vector2(transform.position.x, m_targetInfo.position.y);
             }
-            
+
             transform.position = m_returnPoint.position;
             m_QBStingerChargeFX.gameObject.SetActive(false);
             m_QBStingerChargeFX.Stop();
@@ -685,7 +712,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             transform.position = m_stingerDivePoint.position;
-            m_animation.SetAnimation(0, m_info.phase4AtkStingerLoopAnimation, false);
+            m_animation.SetAnimation(0, m_info.phase4AtkStingerLoopAnimation, true);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase4AtkStingerLoopAnimation);
             var shadow = Instantiate(m_info.shadowTelegraph, new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2), Quaternion.identity);
             while (shadow.transform.localScale.x > 0.35f)
@@ -750,29 +777,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator LaunchBeeProjectileRoutine()
         {
-            if (IsFacingTarget())
+            for (int i = 0; i < m_spawnPoints.Count; i++)
             {
-                for (int i = 0; i < m_spawnPoints.Count; i++)
-                {
-                    float rotation = transform.localScale.x < 1 ? 180 : 0;
-                    m_spawnPoints[i].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
-                    GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[i].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
-                    m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[i]);
-                    m_launcher.LaunchProjectile();
-                    yield return new WaitForSeconds(.25f);
+                float rotation = transform.localScale.x < 1 ? 180 : 0;
+                m_spawnPoints[i].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+                GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[i].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
+                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[i]);
+                m_launcher.LaunchProjectile();
+                yield return new WaitForSeconds(.25f);
 
-                }
-                //int num = UnityEngine.Random.Range(0, m_spawnPoints.Count);
-                //float rotation = transform.localScale.x < 1 ? 180 : 0;
-                //m_spawnPoints[num].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
-                //GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[num].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
-                //m_stingerLauncher = new ProjectileLauncher(m_info.stingerProjectile.projectileInfo, m_spawnPoints[num]);
-                //m_stingerLauncher.LaunchProjectile();
-            }
-            else
-            {
-                m_stateHandle.OverrideState(State.Turning);
-                yield return null;
             }
         }
 
@@ -894,7 +907,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_agent.Stop();
-
                     break;
                 case State.Attacking:
 

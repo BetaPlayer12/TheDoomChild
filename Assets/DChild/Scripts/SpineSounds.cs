@@ -15,12 +15,22 @@ namespace DChild
             [SerializeField, SpineEvent]
             private string m_eventName;
 
-            [SerializeField,SoundGroup]
+            [SerializeField, SoundGroup]
             private string m_soundToPlay;
 
             public string eventName { get => m_eventName; }
 
-            public void PlaySound(Transform transform) => MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
+            public void PlaySound(Transform transform, bool audioFollowsTransform)
+            {
+                if (audioFollowsTransform)
+                {
+                    MasterAudio.PlaySound3DFollowTransformAndForget(m_soundToPlay, transform);
+                }
+                else
+                {
+                    MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
+                }
+            }
         }
 
         [System.Serializable]
@@ -34,14 +44,23 @@ namespace DChild
 
             public string animationName { get => m_animationName; }
 
-            public void PlaySound(Transform transform)
+            public void PlaySound(Transform transform,bool audioFollowsTransform)
             {
-                MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
+                if (audioFollowsTransform)
+                {
+                    MasterAudio.PlaySound3DFollowTransformAndForget(m_soundToPlay, transform);
+                }
+                else
+                {
+                    MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
+                }
             }
         }
 
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
+        [SerializeField]
+        private bool m_audioFollowsTransform = true;
         [SerializeField]
         private EventInfo[] m_eventInfo;
         [SerializeField]
@@ -62,7 +81,7 @@ namespace DChild
                 m_cacheEventInfo = m_eventInfo[i];
                 if (m_cacheEvent == m_cacheEventInfo.eventName)
                 {
-                    m_cacheEventInfo.PlaySound(transform);
+                    m_cacheEventInfo.PlaySound(transform,m_audioFollowsTransform);
                     break;
                 }
             }
@@ -74,9 +93,9 @@ namespace DChild
             for (int i = 0; i < m_animationStartInfo.Length; i++)
             {
                 m_cacheAnimationInfo = m_animationStartInfo[i];
-                if(m_cacheAnimation == m_cacheAnimationInfo.animationName)
+                if (m_cacheAnimation == m_cacheAnimationInfo.animationName)
                 {
-                    m_cacheAnimationInfo.PlaySound(transform);
+                    m_cacheAnimationInfo.PlaySound(transform,m_audioFollowsTransform);
                     break;
                 }
             }
@@ -87,7 +106,5 @@ namespace DChild
             m_skeletonAnimation.state.Event += OnEvents;
             m_skeletonAnimation.state.Start += OnAnimationStart;
         }
-
-     
     }
 }
