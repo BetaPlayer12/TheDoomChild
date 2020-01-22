@@ -30,6 +30,19 @@ namespace DChild
             MasterAudio.StopSoundGroupOfTransform(transform, soundGroup);
         }
 
+        public void StopBus(string bus)
+        {
+            MasterAudio.StopBusOfTransform(transform, bus);
+        }
+
+        public void StopBus(string[] buses)
+        {
+            for (int i = 0; i < buses.Length; i++)
+            {
+                MasterAudio.StopBusOfTransform(transform, buses[i]);
+            }
+
+        }
 
         public void StopSounds(params string[] soundGroups)
         {
@@ -44,5 +57,5 @@ namespace DChild
             StopSounds(toInterrupt);
             PlaySound(toPlay);
         }
-    } 
+    }
 }

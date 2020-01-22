@@ -34,7 +34,10 @@ namespace DChild
 
             public string animationName { get => m_animationName; }
 
-            public void PlaySound(Transform transform) => MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
+            public void PlaySound(Transform transform)
+            {
+                MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
+            }
         }
 
         [SerializeField]

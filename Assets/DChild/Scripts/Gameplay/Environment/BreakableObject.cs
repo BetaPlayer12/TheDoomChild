@@ -2,6 +2,7 @@
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,8 +20,8 @@ namespace DChild.Gameplay.Environment
                 this.isDestroyed = isDestroyed;
             }
 
-            [ShowInInspector]
-            public bool isDestroyed { get; }
+            [ShowInInspector,]
+            public bool isDestroyed { get; private set; }
         }
 
         [SerializeField]
