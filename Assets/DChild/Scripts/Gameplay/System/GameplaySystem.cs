@@ -100,12 +100,6 @@ namespace DChild.Gameplay
             m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
         }
 
-        public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
-        {
-            m_zoneMover.MoveCharacterToLocation(character, location, entranceType);
-            ClearCaches();
-        }
-
         private void AssignModules()
         {
             AssignModule(out m_combatManager);
