@@ -17,6 +17,9 @@ MonoBehaviour:
   m_physics: {fileID: 1293306633580735498}
   m_colliders: {fileID: 6003137656109700123}
   m_facing: 1
+  m_bodyReference:
+    m_default: {fileID: 0}
+    m_list: []
 --- !u!114 &90872287518769445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46,7 +49,6 @@ MonoBehaviour:
   m_character: {fileID: 54565898424785850}
   m_animation: {fileID: 90872287518769445}
   m_data: {fileID: 11400000, guid: c5ada7796960ee0408c541f01d788aed, type: 2}
-  m_referenceFolder: Assets/DChild/Objects/Characters/Minions/PlantIllusion
   m_damageable: {fileID: 2842571433942903491}
   m_centerMass: {fileID: 4833139140427148787}
   m_turnHandle: {fileID: 323309799537556673}
@@ -88,6 +90,7 @@ MonoBehaviour:
     m_maxStepHeight: 0.01
     stepSearchOvershoot: 0.01
     m_detector: {fileID: 0}
+  m_calculateGroundAngle: 1
   m_acceptableWalkableAngle:
     m_min: 0
     m_max: 0
@@ -276,6 +279,7 @@ MonoBehaviour:
   m_spine: {fileID: 90872287518769445}
   m_physics: {fileID: 1293306633580735498}
   m_skeletonAnimation: {fileID: 7424344471433016208}
+  m_autoFlinch: 0
   m_animation: Flinch
 --- !u!114 &1694186408989408415
 MonoBehaviour:
@@ -366,6 +370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 7424344471433016208}
+  m_audioFollowsTransform: 1
   m_eventInfo: []
   m_animationStartInfo: []
 --- !u!114 &4677905126970503369
