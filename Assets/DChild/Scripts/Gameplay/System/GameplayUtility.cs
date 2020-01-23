@@ -3,11 +3,13 @@ using DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay
 {
-    public class GameplayUtility
+    public struct GameplayUtility
     {
-        public static RelativeDirection GetRelativeDirection(HorizontalDirection sourceFacing, Vector2 sourcePosition,Vector2 target)
+        public static HorizontalDirection GetHorizontalDirection(Vector2 source, Vector2 target) => source.x < target.x ? HorizontalDirection.Left : HorizontalDirection.Right;
+
+        public static RelativeDirection GetRelativeDirection(HorizontalDirection sourceFacing, Vector2 sourcePosition, Vector2 target)
         {
-            if(sourceFacing == HorizontalDirection.Left)
+            if (sourceFacing == HorizontalDirection.Left)
             {
                 return sourcePosition.x > target.x ? RelativeDirection.Front : RelativeDirection.Back;
             }
