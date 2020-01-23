@@ -40,91 +40,92 @@ namespace DChild.Gameplay
 
         private IEnumerator Routine(Character character, LocationData location, TravelDirection entranceType)
         {
-            var currentVelocity = character.physics.velocity;
+            yield return null;
+            //var currentVelocity = character.physics.velocity;
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-            character.physics.SetVelocity(currentVelocity);
+            //character.physics.SetVelocity(currentVelocity);
             var damageable = character.GetComponent<IDamageable>();
             damageable.SetHitboxActive(false);
-            switch (entranceType)
-            {
-                case TravelDirection.Right:
-                    controller.moveDirectionInput = 1;
-                    break;
-                case TravelDirection.Left:
-                    controller.moveDirectionInput = -1;
-                    break;
-            }
+            //switch (entranceType)
+            //{
+            //    case TravelDirection.Right:
+            //        controller.moveDirectionInput = 1;
+            //        break;
+            //    case TravelDirection.Left:
+            //        controller.moveDirectionInput = -1;
+            //        break;
+            //}
 
-            if (entranceType == TravelDirection.Top)
-            {
-                float time = m_entranceWaitTime;
-                do
-                {
-                    time -= Time.deltaTime;
-                    character.physics.SetVelocity(Vector2.up * m_flightVelocity);
-                    yield return new WaitForFixedUpdate();
-                } while (time > 0);
-            }
-            else
-            {
-                yield return new WaitForSeconds(m_entranceWaitTime);
-            }
+            //if (entranceType == TravelDirection.Top)
+            //{
+            //    float time = m_entranceWaitTime;
+            //    do
+            //    {
+            //        time -= Time.deltaTime;
+            //        character.physics.SetVelocity(Vector2.up * m_flightVelocity);
+            //        yield return new WaitForFixedUpdate();
+            //    } while (time > 0);
+            //}
+            //else
+            //{
+            //    yield return new WaitForSeconds(m_entranceWaitTime);
+            //}
 
-            controller.moveDirectionInput = 0;
-            currentVelocity = character.physics.velocity;
-            character.physics.SetVelocity(Vector2.zero);
-            character.physics.simulateGravity = false;
-            var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-            groundednessHandle.enabled = false;
+            //controller.moveDirectionInput = 0;
+            //currentVelocity = character.physics.velocity;
+            //character.physics.SetVelocity(Vector2.zero);
+            //character.physics.simulateGravity = false;
+            //var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
+            //groundednessHandle.enabled = false;
             m_isSceneDone = false;
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
             GameSystem.LoadZone(location.scene, true);
 
-            while (m_isSceneDone == false)
-            {
-                yield return null;
-            }
+            //while (m_isSceneDone == false)
+            //{
+            //    yield return null;
+            //}
             character.transform.position = location.position;
-            character.physics.SetVelocity(currentVelocity);
-            character.physics.simulateGravity = true;
-            groundednessHandle.enabled = true;
+            //character.physics.SetVelocity(currentVelocity);
+            //character.physics.simulateGravity = true;
+            //groundednessHandle.enabled = true;
 
 
-            switch (location.exitDirection)
-            {
-                case TravelDirection.Right:
-                    controller.moveDirectionInput = 1;
-                    yield return new WaitForSeconds(m_exitWaitTime);
-                    controller.moveDirectionInput = 0;
-                    break;
-                case TravelDirection.Left:
-                    controller.moveDirectionInput = -1;
-                    yield return new WaitForSeconds(m_exitWaitTime);
-                    controller.moveDirectionInput = 0;
-                    break;
-                case TravelDirection.Top:
-                    controller.enabled = false;
-                    var characterPhysics = character.GetComponent<CharacterPhysics2D>();
-                    characterPhysics.SetVelocity(Vector2.zero);
-                    var exitVelocity = m_popVelocity;
-                    exitVelocity.x *= (int)character.facing;
-                    characterPhysics.AddForce(exitVelocity, ForceMode2D.Impulse);
-                    while (characterPhysics.onWalkableGround == false)
-                    {
-                        yield return null;
-                    }
-                    break;
-                case TravelDirection.Bottom:
-                    var physics = character.GetComponent<CharacterPhysics2D>();
-                    physics.SetVelocity(Vector2.zero);
-                    while (physics.onWalkableGround == false)
-                    {
-                        yield return null;
-                    }
-                    break;
-            }
+            //switch (location.exitDirection)
+            //{
+            //    case TravelDirection.Right:
+            //        controller.moveDirectionInput = 1;
+            //        yield return new WaitForSeconds(m_exitWaitTime);
+            //        controller.moveDirectionInput = 0;
+            //        break;
+            //    case TravelDirection.Left:
+            //        controller.moveDirectionInput = -1;
+            //        yield return new WaitForSeconds(m_exitWaitTime);
+            //        controller.moveDirectionInput = 0;
+            //        break;
+            //    case TravelDirection.Top:
+            //        controller.enabled = false;
+            //        var characterPhysics = character.GetComponent<CharacterPhysics2D>();
+            //        characterPhysics.SetVelocity(Vector2.zero);
+            //        var exitVelocity = m_popVelocity;
+            //        exitVelocity.x *= (int)character.facing;
+            //        characterPhysics.AddForce(exitVelocity, ForceMode2D.Impulse);
+            //        while (characterPhysics.onWalkableGround == false)
+            //        {
+            //            yield return null;
+            //        }
+            //        break;
+            //    case TravelDirection.Bottom:
+            //        var physics = character.GetComponent<CharacterPhysics2D>();
+            //        physics.SetVelocity(Vector2.zero);
+            //        while (physics.onWalkableGround == false)
+            //        {
+            //            yield return null;
+            //        }
+            //        break;
+            //}
             damageable.SetHitboxActive(true);
-            GameplaySystem.playerManager.StopCharacterControlOverride();
+            //GameplaySystem.playerManager.StopCharacterControlOverride();
         }
 
         private void Awake()
