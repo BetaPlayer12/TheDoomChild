@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/SavePoint")]
     public class SavePoint : MonoBehaviour
     {
         private SceneInfo m_sceneInfo;
@@ -30,11 +31,7 @@ namespace DChild.Gameplay
 
         private void OnValidate()
         {
-            Vector2 position = transform.position;
-            if (m_spawnPosition != position)
-            {
-                m_spawnPosition = position;
-            }
+            m_spawnPosition = transform.position;
         }
     }
 }
