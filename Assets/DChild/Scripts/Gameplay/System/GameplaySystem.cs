@@ -5,6 +5,7 @@ using DChild.Gameplay.Databases;
 using DChild.Gameplay.Systems;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
+using DChild.Menu;
 using DChild.Serialization;
 using UnityEngine;
 
@@ -94,8 +95,9 @@ namespace DChild.Gameplay
             m_campaignToLoad = campaignSlot;
             ClearCaches();
             m_healthTracker.RemoveAllTrackers();
+            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
+            GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
             m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
-            m_playerManager.player.gameObject.SetActive(false);
         }
 
         public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
@@ -190,7 +192,6 @@ namespace DChild.Gameplay
                 m_simulation = null;
                 m_playerManager = null;
                 m_zoneMover = null;
-
                 m_activatableModules = null;
             }
         }
