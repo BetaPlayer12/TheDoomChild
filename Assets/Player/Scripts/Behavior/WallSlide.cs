@@ -2,33 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallSlide : WallStick
+namespace PlayerNew
 {
-    public float slideVelocity = -5f;
-    public float slideMultiplier = 5f;
-    override protected void Update()
+    public class WallSlide : WallStick
     {
-        base.Update();
-
-        if (onWallDetected)
+        public float slideVelocity = -5f;
+        public float slideMultiplier = 5f;
+        override protected void Update()
         {
-            var velY = slideVelocity;
-            if (inputState.GetButtonValue(inputButtons[0]))
+            base.Update();
+
+            if (onWallDetected)
             {
-                velY *= slideMultiplier;
+                var velY = slideVelocity;
+                if (inputState.GetButtonValue(inputButtons[0]))
+                {
+                    velY *= slideMultiplier;
+                }
+                body2d.velocity = new Vector2(body2d.velocity.x, velY);
             }
-            body2d.velocity = new Vector2(body2d.velocity.x, velY);
+        }
+
+        override protected void Onstick()
+        {
+            base.Onstick();
+            body2d.velocity = Vector2.zero;
+        }
+
+        protected override void Offwall()
+        {
+            base.Offwall();
         }
     }
 
-    override protected void Onstick()
-    {
-        base.Onstick();
-        body2d.velocity = Vector2.zero;
-    }
-
-    protected override void Offwall()
-    {
-        base.Offwall();
-    }
 }

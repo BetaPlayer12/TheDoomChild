@@ -2,32 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Crouch : PlayerBehaviour
+namespace PlayerNew
 {
-
-    public bool crouching;
-   
-
-    protected override void Awake()
+    public class Crouch : PlayerBehaviour
     {
-        base.Awake();
-    }
 
-    protected virtual void OnCrouch(bool value)
-    {
-        crouching = value;
-        ToggleScripts(!crouching);
-    }
-    
-    void Update()
-    {
-        var canCrouch = inputState.GetButtonValue(inputButtons[0]);
-        if(canCrouch && collisionState.grounded && !crouching)
+        public bool crouching;
+
+
+        protected override void Awake()
         {
-            OnCrouch(true);
-        }else if(crouching && !canCrouch)
+            base.Awake();
+        }
+
+        protected virtual void OnCrouch(bool value)
         {
-            OnCrouch(false);
+            crouching = value;
+            ToggleScripts(!crouching);
+        }
+
+        void Update()
+        {
+            var canCrouch = inputState.GetButtonValue(inputButtons[0]);
+            if (canCrouch && collisionState.grounded && !crouching)
+            {
+                OnCrouch(true);
+            }
+            else if (crouching && !canCrouch)
+            {
+                OnCrouch(false);
+            }
         }
     }
+
 }

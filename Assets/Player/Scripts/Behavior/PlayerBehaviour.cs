@@ -2,28 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PlayerBehaviour : MonoBehaviour
+namespace PlayerNew
 {
-    public Buttons[] inputButtons;
-    public MonoBehaviour[] dissableScripts;
-    protected InputState inputState;
-    protected Rigidbody2D body2d;
-    protected Transform trans;
-    protected CollisionState collisionState;
-
-    protected virtual void Awake()
+    public abstract class PlayerBehaviour : MonoBehaviour
     {
-        inputState = GetComponent<InputState>();
-        body2d = GetComponent<Rigidbody2D>();
-        trans = GetComponent<Transform>();
-        collisionState = GetComponent<CollisionState>();
-    }
+        public Buttons[] inputButtons;
+        public MonoBehaviour[] dissableScripts;
+        protected InputState inputState;
+        protected Rigidbody2D body2d;
+        protected Transform trans;
+        protected CollisionState collisionState;
 
-    protected virtual void ToggleScripts(bool value)
-    {
-        foreach(var script in dissableScripts)
+        protected virtual void Awake()
         {
-            script.enabled = value;
+            inputState = GetComponent<InputState>();
+            body2d = GetComponent<Rigidbody2D>();
+            trans = GetComponent<Transform>();
+            collisionState = GetComponent<CollisionState>();
+        }
+
+        protected virtual void ToggleScripts(bool value)
+        {
+            foreach (var script in dissableScripts)
+            {
+                script.enabled = value;
+            }
         }
     }
+
 }
