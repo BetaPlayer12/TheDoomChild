@@ -2,13 +2,14 @@
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Systems;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
 
     [System.Serializable]
-    public class HorizontalPassagewayHandle : ISwitchHandle
+    public struct HorizontalPassagewayHandle : ISwitchHandle
     {
         private enum TravelDirection
         {
@@ -16,9 +17,9 @@ namespace DChild.Gameplay.Environment
             Right = 1,
         }
 
-        [SerializeField]
+        [SerializeField,OnValueChanged("OnDirectionChange")]
         private TravelDirection m_entranceDirection;
-        [SerializeField]
+        [SerializeField,ShowIf("m_customTravelDirections")]
         private TravelDirection m_exitDirection;
 
         public float transitionDelay => 1;
@@ -66,6 +67,25 @@ namespace DChild.Gameplay.Environment
             groundednessHandle.enabled = true;
         }
 
+#if UNITY_EDITOR
+        [SerializeField, PropertyOrder(-1)]
+        private bool m_customTravelDirections;
+
+        private void OnDirectionChange()
+        {
+            if(m_customTravelDirections == false)
+            {
+                if(m_entranceDirection == TravelDirection.Left)
+                {
+                    m_exitDirection = TravelDirection.Right;
+                }
+                else
+                {
+                    m_exitDirection = TravelDirection.Left;
+                }
+            }
+        }
+#endif
 
     }
 }

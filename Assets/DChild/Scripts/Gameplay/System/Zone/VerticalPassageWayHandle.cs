@@ -1,4 +1,5 @@
-﻿using Sirenix.Serialization;
+﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Environment
 {
     [System.Serializable]
-    public class VerticalPassageWayHandle : ISwitchHandle
+    public struct VerticalPassageWayHandle : ISwitchHandle
     {
         private enum TravelDirection
         {
@@ -14,9 +15,9 @@ namespace DChild.Gameplay.Environment
             Down
         }
 
-        [SerializeField]
+        [SerializeField, OnValueChanged("OnDirectionChange")]
         private TravelDirection m_entranceDirection;
-        [SerializeField]
+        [SerializeField, ShowIf("m_customTravelDirections")]
         private TravelDirection m_exitDirection;
         [SerializeField]
         private Vector2 m_upVelocity;
@@ -61,5 +62,25 @@ namespace DChild.Gameplay.Environment
                 time -= Time.deltaTime;
             }
         }
+
+#if UNITY_EDITOR
+        [SerializeField, PropertyOrder(-1)]
+        private bool m_customTravelDirections;
+
+        private void OnDirectionChange()
+        {
+            if (m_customTravelDirections == false)
+            {
+                if (m_entranceDirection == TravelDirection.Up)
+                {
+                    m_exitDirection = TravelDirection.Down;
+                }
+                else
+                {
+                    m_exitDirection = TravelDirection.Up;
+                }
+            }
+        }
+#endif
     }
 }

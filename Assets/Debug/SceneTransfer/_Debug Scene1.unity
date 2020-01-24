@@ -290,16 +290,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes:
     - Name: m_handle
-      Entry: 7
-      Data: 0|DChild.Gameplay.Environment.PassagewayHandle, Assembly-CSharp
-    - Name: m_entranceDirection
-      Entry: 3
-      Data: 0
-    - Name: m_exitDirection
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
+      Entry: 6
       Data: 
   m_destination: {fileID: 0}
   m_transitionDelay: 0.5
@@ -831,13 +822,16 @@ MonoBehaviour:
     SerializationNodes:
     - Name: m_handle
       Entry: 7
-      Data: 0|DChild.Gameplay.Environment.PassagewayHandle, Assembly-CSharp
+      Data: 0|DChild.Gameplay.Environment.HorizontalPassagewayHandle, Assembly-CSharp
     - Name: m_entranceDirection
       Entry: 3
-      Data: 2
+      Data: 0
     - Name: m_exitDirection
       Entry: 3
-      Data: 3
+      Data: 0
+    - Name: m_customTravelDirections
+      Entry: 5
+      Data: false
     - Name: 
       Entry: 8
       Data: 
@@ -1117,7 +1111,7 @@ PrefabInstance:
     - target: {fileID: 3244529448671937003, guid: d4c78f8b3e7279e41b611cce66403e7f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -34.145504
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3244529448671937003, guid: d4c78f8b3e7279e41b611cce66403e7f,
         type: 3}
@@ -1515,7 +1509,7 @@ PrefabInstance:
     - target: {fileID: 3244529448671937003, guid: d4c78f8b3e7279e41b611cce66403e7f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -34.145504
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3244529448671937003, guid: d4c78f8b3e7279e41b611cce66403e7f,
         type: 3}
@@ -1696,7 +1690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169904169d11e8b46aaa137c9857a428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_id: 0
+  m_id: 1
 --- !u!1 &1712148352
 GameObject:
   m_ObjectHideFlags: 0
@@ -1865,7 +1859,91 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169904169d11e8b46aaa137c9857a428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_id: 0
+  m_id: 2
+--- !u!1 &1912394609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1912394612}
+  - component: {fileID: 1912394611}
+  - component: {fileID: 1912394610}
+  m_Layer: 0
+  m_Name: GameObject (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1912394610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912394609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49f821a56b5551e44b483c0307c7459a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_handle
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.HorizontalPassagewayHandle, Assembly-CSharp
+    - Name: m_entranceDirection
+      Entry: 3
+      Data: 1
+    - Name: m_exitDirection
+      Entry: 3
+      Data: 18446744073709551615
+    - Name: m_customTravelDirections
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+  m_destination: {fileID: 0}
+  m_transitionDelay: 0.5
+--- !u!114 &1912394611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912394609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3562ad78cbfa81441aaff7610ceeeac7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 0}
+  m_locationPoint: {fileID: 1912394612}
+--- !u!4 &1912394612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912394609}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -225.55077, y: 11.344654, z: -35.39398}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2017086559
 GameObject:
   m_ObjectHideFlags: 0
