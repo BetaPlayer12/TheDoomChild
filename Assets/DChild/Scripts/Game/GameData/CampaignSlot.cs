@@ -98,17 +98,17 @@ namespace DChild.Serialization
 
         public void UpdateCharacterData(PlayerCharacterData data) => m_characterData = data;
 
-        public void UpdateCampaignProgress(SerializeDataID ID, ISaveData saveData) => m_campaignProgress.UpdateData(ID, saveData);
+        public void UpdateCampaignProgress(SerializeID ID, ISaveData saveData) => m_campaignProgress.UpdateData(ID, saveData);
 
-        public T GetCampaignProgress<T>(SerializeDataID ID) where T : ISaveData => (T)m_campaignProgress.GetData(ID);
+        public T GetCampaignProgress<T>(SerializeID ID) where T : ISaveData => (T)m_campaignProgress.GetData(ID);
 
-        public void UpdateZoneData(SerializeDataID ID, ISaveData saveData) => m_zoneDatas.UpdateData(ID, saveData);
+        public void UpdateZoneData(SerializeID ID, ISaveData saveData) => m_zoneDatas.UpdateData(ID, saveData);
 
-        public T GetZoneData<T>(SerializeDataID ID) where T : ISaveData => (T)m_zoneDatas.GetData(ID);
+        public T GetZoneData<T>(SerializeID ID) where T : ISaveData => (T)m_zoneDatas.GetData(ID);
 
-        public void UpdateData(SerializeDataID ID, ISaveData saveData) => m_miscDatas.UpdateData(ID, saveData);
+        public void UpdateData(SerializeID ID, ISaveData saveData) => m_miscDatas.UpdateData(ID, saveData);
 
-        public T GetData<T>(SerializeDataID ID) where T : ISaveData => (T)m_miscDatas.GetData(ID);
+        public T GetData<T>(SerializeID ID) where T : ISaveData => (T)m_miscDatas.GetData(ID);
         #region EditorOnly
 #if UNITY_EDITOR
         public CampaignSlot(CampaignSlot slot)

@@ -7,12 +7,12 @@ namespace DChild.Serialization
 {
     public class ComponentSerializer : MonoBehaviour
     {
-        [InfoBox("This GameObject must be ACTIVE", InfoMessageType = InfoMessageType.Warning)]
-        [SerializeField, ReadOnly]
-        private int m_id;
+        [SerializeField, DisableInPlayMode]
+        private SerializeID m_id = new SerializeID(true);
         private ISerializableComponent m_component;
 
-        public int ID => m_id;
+        [InfoBox("This GameObject must be ACTIVE", InfoMessageType = InfoMessageType.Warning, VisibleIf = "@gameObject.activeSelf")]
+        public SerializeID ID => m_id;
 
         public ISaveData SaveData() => m_component.Save();
         public void LoadData(ISaveData data) => m_component.Load(data);
@@ -22,34 +22,17 @@ namespace DChild.Serialization
             m_component = GetComponent<ISerializableComponent>();
         }
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
-            List<ComponentSerializer> list = new List<ComponentSerializer>(FindObjectsOfType<ComponentSerializer>());
-            if (m_id == 0)
+            if (Application.isPlaying)
             {
-                AssignNewID();
-            }
-            else
-            {
-                bool hasDuplicate = false;
-                for (int i = 0; i < list.Count; i++)
+                if (m_id.value == SerializeID.defaultValue)
                 {
-                    if (ID == list[i].ID && this != list[i])
-                    {
-                        hasDuplicate = true;
-                    }
+                    Debug.LogError($"{gameObject.name} Component Serializer ID is not on the Database");
                 }
-
-                if (hasDuplicate)
-                {
-                    AssignNewID();
-                }
-            }
-
-            void AssignNewID()
-            {
-                m_id = list.Max(x => x.ID) + 1;
             }
         }
+#endif
     }
 }
