@@ -1108,8 +1108,6 @@ namespace Spine {
 		/// </summary>
 		public bool HoldPrevious { get { return holdPrevious; } set { holdPrevious = value; } }
 
-        public float InterruptAlpha { get; set; }
-
         /// <summary>
         /// <para>
         /// Resets the rotation directions for mixing this entry's rotate timelines. This can be useful to avoid bones rotating the
