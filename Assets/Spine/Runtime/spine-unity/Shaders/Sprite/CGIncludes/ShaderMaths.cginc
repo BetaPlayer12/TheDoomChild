@@ -2,9 +2,7 @@
 #define SHADER_MATHS_INCLUDED
 
 #if defined(USE_LWRP)
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#elif defined(USE_URP)
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+#include "Packages/com.unity.render-pipelines.lightweight/ShaderLibrary/Core.hlsl"
 #else
 #include "UnityCG.cginc"
 #endif
@@ -42,7 +40,7 @@ inline half pow5 (half x)
 }
 
 inline float4 quat_from_axis_angle(float3 axis, float angleRadians)
-{
+{ 
   float4 qr;
   float half_angle = (angleRadians * 0.5);
   qr.x = axis.x * sin(half_angle);
@@ -53,7 +51,7 @@ inline float4 quat_from_axis_angle(float3 axis, float angleRadians)
 }
 
 inline float3 rotate_vertex_position(float3 position, float3 axis, float angleRadians)
-{
+{ 
   float4 q = quat_from_axis_angle(axis, angleRadians);
   float3 v = position.xyz;
   return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
