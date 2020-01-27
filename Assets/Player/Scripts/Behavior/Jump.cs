@@ -1,63 +1,69 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Jump : PlayerBehaviour
+namespace PlayerNew
 {
-
-    public float jumpSpeed = 200f;
-    public float jumpDelay = .1f;
-    public int jumpCount = 2;
-
-    private Jog jogging;
-
-    protected float lastJumpTime = 0;
-    protected int jumpsRemaining = 0;
-
-    // Use this for initialization
-    void Start()
+    public class Jump : PlayerBehaviour
     {
-        jogging = GetComponent<Jog>();
-    }
 
-    // Update is called once per frame
-    protected virtual void Update()
-    {
-       
-        var canJump = inputState.GetButtonValue(inputButtons[0]);
-        var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
+        public float jumpSpeed = 200f;
+        public float jumpDelay = .1f;
+        public int jumpCount = 2;
 
-        if (collisionState.grounded)
+        private Jog jogging;
+
+        protected float lastJumpTime = 0;
+        protected int jumpsRemaining = 0;
+
+        // Use this for initialization
+        void Start()
         {
-            if (canJump && holdTime < 0.1f)
-            {
-                jumpsRemaining = jumpCount - 1;
-                OnJump();
-            }
+            jogging = GetComponent<Jog>();
         }
-        else
+
+        // Update is called once per frame
+        protected virtual void Update()
         {
 
-            if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay)
+            var canJump = inputState.GetButtonValue(inputButtons[0]);
+            var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
+
+
+
+            if (collisionState.grounded)
             {
-               
-                if (jumpsRemaining > 0)
+                if (canJump && holdTime < 0.1f)
                 {
+                    jumpsRemaining = jumpCount - 1;
                     OnJump();
-                    jumpsRemaining--;
-                    
                 }
             }
+            else
+            {
+
+                if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay)
+                {
+
+                    if (jumpsRemaining > 0)
+                    {
+                        OnJump();
+                        jumpsRemaining--;
+
+                    }
+                }
+            }
+
+
         }
-       
 
-    }
-
-    protected virtual void OnJump()
-    {
-        var vel = body2d.velocity;
-        lastJumpTime = Time.time;
-        body2d.velocity = new Vector2(vel.x, jumpSpeed);
+        protected virtual void OnJump()
+        {
+            var vel = body2d.velocity;
+            lastJumpTime = Time.time;
+            body2d.velocity = new Vector2(vel.x, jumpSpeed);
 
 
+        }
     }
 }
+

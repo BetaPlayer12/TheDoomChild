@@ -2,53 +2,87 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slash : PlayerBehaviour
+namespace PlayerNew
 {
-
-    private float timeBtwnAtck;
-    public float startTimeBtwAttck;
-
-
-    public bool attacking;
-    public float attackHold = 0.5f;
-    public float resetTime;
-
-    public Transform attackPos;
-    public LayerMask whatIsEnemies;
-    public float attackRange;
-
-    // Update is called once per frame
-    void Update()
+    public class Slash : PlayerBehaviour
     {
-        var canSlash = inputState.GetButtonValue(inputButtons[0]);
-        var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
-        
-       if(timeBtwnAtck <= 0)
+
+        private float timeBtwnAtck;
+        private float attackTimeCounter;
+        private float attackingTime;
+        private int attackCounter;
+        public float startTimeBtwAttck;
+
+
+        public bool attacking;
+        public float attackHold = 0.5f;
+
+        public float resetTime;
+
+        public Transform attackPos;
+        public LayerMask whatIsEnemies;
+        public float attackRange;
+
+        // Update is called once per frame
+        void Update()
         {
-            if (canSlash)
+            var canSlash = inputState.GetButtonValue(inputButtons[0]);
+            var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
+
+            //if(attackTimeCounter > 0.1f)
+            //{
+            //    attackTimeCounter -= Time.deltaTime;
+            //    attacking = true;
+            //    if (canSlash)
+            //    {
+            //        attackCounter++;
+            //    }
+            //    Debug.Log(attackCounter);
+            //}
+            //else
+            //{
+            //    attackTimeCounter = resetTime;
+            //    attackCounter = 0;
+            //}
+
+            if (timeBtwnAtck < 0)
             {
-                Collider2D[] objToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
-                attacking = true;
-                
+                if (canSlash && holdTime < 0.1f && attacking == false)
+                {
+                    ToggleScripts(false);
+                    Collider2D[] objToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
+                    attacking = true;
+
+                }
+
+                if (holdTime > attackHold)
+                {
+                    Debug.Log("holding attack");
+                }
+
+
+
+                timeBtwnAtck = startTimeBtwAttck;
             }
-            timeBtwnAtck = startTimeBtwAttck;
+            else
+            {
+                timeBtwnAtck -= Time.deltaTime;
+            }
+
         }
-        else
+
+        private void OnDrawGizmosSelected()
         {
-            timeBtwnAtck -= Time.deltaTime;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(attackPos.position, attackRange);
         }
 
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPos.position, attackRange);
-    }
-
-    private void FinishAttackAnim()
-    {
-        attacking = false;
-        Debug.Log("finish attack");
+        private void FinishAttackAnim()
+        {
+            attacking = false;
+            ToggleScripts(true);
+            Debug.Log("attack end");
+        }
     }
 }
+

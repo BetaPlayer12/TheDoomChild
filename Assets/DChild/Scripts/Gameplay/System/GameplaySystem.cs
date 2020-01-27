@@ -5,6 +5,7 @@ using DChild.Gameplay.Databases;
 using DChild.Gameplay.Systems;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
+using DChild.Menu;
 using DChild.Serialization;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace DChild.Gameplay
         private static Cinema m_cinema;
         private static World m_world;
         private static SimulationHandler m_simulation;
-        private static PlayerManager m_playerManager;
+        private static DChild.Gameplay.Systems.PlayerManager m_playerManager;
         private static LootHandler m_lootHandler;
         private static CampaignSerializer m_campaignSerializer;
         private static ZoneMoverHandle m_zoneMover;
@@ -94,8 +95,9 @@ namespace DChild.Gameplay
             m_campaignToLoad = campaignSlot;
             ClearCaches();
             m_healthTracker.RemoveAllTrackers();
+            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
+            GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
             m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
-            m_playerManager.player.gameObject.SetActive(false);
         }
 
         public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
@@ -190,7 +192,6 @@ namespace DChild.Gameplay
                 m_simulation = null;
                 m_playerManager = null;
                 m_zoneMover = null;
-
                 m_activatableModules = null;
             }
         }
