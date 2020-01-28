@@ -260,8 +260,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-
-
+                    
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Bite:
@@ -286,7 +286,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                                 {
                                     m_movement.Stop();
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                     m_stateHandle.SetState(State.Attacking);
                                 }
                                 else

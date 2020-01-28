@@ -270,15 +270,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 Vector2 spitPos = m_stingerPos.position;
                 Vector3 v_diff = (target - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-                if (m_info.delayShotTimer <= timeCounter)
-                {
-                    postAtan2 = atan2;
-                    timeCounter = 0;
-                    Debug.Log("update Check");
-                }
+                postAtan2 = atan2;
+                //if (m_info.delayShotTimer <= timeCounter)
+                //{
+                //    timeCounter = 0;
+                //    Debug.Log("update Check");
+                //}
 
                 m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
                 GameObject burst = Instantiate(m_info.burstGO, spitPos, m_stingerPos.rotation);
+                m_stingerLauncher.AimAt(m_targetInfo.position);
                 m_stingerLauncher.LaunchProjectile();
                 //m_Audiosource.clip = m_RangeAttackClip;
                 //m_Audiosource.Play();
