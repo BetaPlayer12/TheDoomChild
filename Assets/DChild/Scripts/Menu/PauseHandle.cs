@@ -1,4 +1,6 @@
-﻿using DChild.Gameplay;
+﻿using System;
+using DChild.Gameplay;
+using Holysoft.Event;
 using UnityEngine;
 
 namespace DChild.Menu
@@ -16,6 +18,16 @@ namespace DChild.Menu
         }
 
         public void BackToMainMenu()
+        {
+            if (GameSystem.RequestConfirmation(OnMainMenuConfirm, "Do you want to return to main menu") == false)
+            {
+                LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
+                GameSystem.LoadMainMenu();
+            }
+            //GameSystem.LoadMainMenu();
+        }
+
+        private void OnMainMenuConfirm(object sender, EventActionArgs eventArgs)
         {
             GameSystem.LoadMainMenu();
         }

@@ -3,7 +3,13 @@
  * Attackers should look for this in order to damage an Object
  * 
  ***************************************************/
+<<<<<<< HEAD
 using Refactor.DChild.Gameplay;
+=======
+using DChild.Gameplay;
+using DChild.Gameplay.Environment;
+using Sirenix.Serialization.Utilities;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,35 +35,44 @@ namespace DChild.Gameplay.Combat
             {
                 if (m_processingHitbox.Count > 1)
                 {
-                    m_cacheResults = GameplaySystem.combatManager.GetValidTargets(transform.position, m_processingHitbox);
-                    for (int i = 0; i < m_cacheResults.Count; i++)
+                    using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                     {
-                        m_cacheHitbox = m_cacheResults[i];
-                        m_damageDealer.Damage(CreateInfo(m_cacheHitbox), m_cacheHitbox.defense);
+                        m_cacheResults = GameplaySystem.combatManager.GetValidTargets(transform.position, m_processingHitbox);
+                        for (int i = 0; i < m_cacheResults.Count; i++)
+                        {
+                            m_cacheHitbox = m_cacheResults[i];
+                            InitializeTargetInfo(cacheTargetInfo, m_cacheHitbox);
+                            m_damageDealer.Damage(cacheTargetInfo.Value, m_cacheHitbox.defense);
+                        }
+                        cacheTargetInfo.Release();
                     }
                 }
                 else if (m_processingHitbox.Count == 1)
                 {
-                    m_cacheHitbox = m_processingHitbox[0];
-                    m_damageDealer.Damage(CreateInfo(m_cacheHitbox), m_cacheHitbox.defense);
-                }
+                    using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                    {
+                        InitializeTargetInfo(cacheTargetInfo, m_cacheHitbox);
+                        m_damageDealer.Damage(cacheTargetInfo.Value, m_cacheHitbox.defense);
+                        cacheTargetInfo.Release();
+                    }
 
-                m_processingHitbox.Clear();
-                m_cacheHitbox = null;
-                m_processTargets = false;
+                    m_processingHitbox.Clear();
+                    m_cacheHitbox = null;
+                    m_processTargets = false;
+                }
             }
         }
 
-        protected TargetInfo CreateInfo(Hitbox hitbox)
+        protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
             if (hitbox.damageable.CompareTag(Character.objectTag))
             {
                 var character = hitbox.GetComponentInParent<Character>();
-                return new TargetInfo(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
+                cache.Value.Initialize(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
             }
             else
             {
-                return new TargetInfo(hitbox.damageable);
+                cache.Value.Initialize(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
             }
         }
 
@@ -66,8 +81,7 @@ namespace DChild.Gameplay.Combat
             if (collision.CompareTag("DamageCollider"))
                 return;
 
-            var hitbox = collision.GetComponent<Hitbox>();
-            if (hitbox && hitbox.isInvulnerable == false)
+            if (collision.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)
             {
                 var targetID = hitbox.GetInstanceID();
                 m_processingHitbox.Add(hitbox);

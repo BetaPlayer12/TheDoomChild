@@ -12,6 +12,7 @@ namespace DChild.Gameplay.Combat
         IAttackResistance attackResistance { get; }
         void TakeDamage(int totalDamage, AttackType type);
         void SetHitboxActive(bool enable);
+        void SetInvulnerability(bool isInvulnerable);
         event EventAction<DamageEventArgs> DamageTaken;
         event EventAction<EventActionArgs> Destroyed;
         int GetInstanceID();

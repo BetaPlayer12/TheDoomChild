@@ -99,9 +99,12 @@ namespace DChild.Gameplay
             for (int i = 0; i < m_particleSystems.Length; i++)
             {
                 var main = m_particleSystems[i].main;
-                main.playOnAwake = m_playOnAwake;
+                if (main.playOnAwake != m_playOnAwake)
+                {
+                    main.playOnAwake = m_playOnAwake;
+                }
 #if UNITY_EDITOR
-                if (m_poolOnStop)
+                if (m_poolOnStop && main.stopAction != ParticleSystemStopAction.Callback)
                 {
                     main.stopAction = ParticleSystemStopAction.Callback;
                 }

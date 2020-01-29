@@ -1,4 +1,5 @@
 ﻿using System;
+using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.Players;
@@ -10,11 +11,17 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
     public class GroundednessHandle : MonoBehaviour, IComplexCharacterModule
     {
         private IGroundednessState m_state;
+        private IHighJumpState m_jumpState;
+        private IDoubleJumpState m_doubleJumpState;
+        private IWallStickState m_wallStickState;
         private CharacterPhysics2D m_physics;
+        private RaySensor m_groundSensor;
+        private RaySensor m_slopeSensor;
         private Animator m_animator;
         private string m_midAirParamater;
         private string m_speedYParamater;
         private bool m_isInMidAir;
+        private bool m_canDoubleJump;
 
         [SerializeField]
         private float m_groundGravity;
@@ -33,102 +40,134 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void CallLand()
         {
-            m_landHandle.Execute();
-            LandExecuted?.Invoke(this, EventActionArgs.Empty);
-            m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
-            checkAngle();
-            m_fallHandle.ResetValue();
-            SetValuesToGround();
-        }
-
-        private void checkAngle()
-        {           
-            RaycastHit2D hitInfoInc = Physics2D.Raycast(new Vector3(transform.position.x, transform.position.y + 0.9f, transform.position.z), Vector2.right, 1.3f, 1 << 11);
-            if (hitInfoInc)
+            if (m_physics.velocity.x == 0)
             {
-                float slopeAngle = Vector2.Angle(hitInfoInc.normal, Vector2.up);
-              
-                if (slopeAngle != 90)
-                {
-                    transform.root.eulerAngles = new Vector3(transform.root.rotation.x, transform.root.rotation.y, slopeAngle);
-                }
+                m_landHandle.Execute(true);
 
             }
-           
+            LandExecuted?.Invoke(this, EventActionArgs.Empty);
+            m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+            SetValuesToGround();
+
         }
 
+        public void CallLandJog() {
+            m_jumpState.hasJumped = false;
+            m_doubleJumpState.canDoubleJump = true;
+            m_state.isGrounded = true;
+
+        }
+
+        public void ResetAnimationParameters()
+        {
+            m_fallHandle.ResetValue();
+        }
 
         public void Initialize(ComplexCharacterInfo info)
         {
             m_physics = info.physics;
             m_state = info.state;
+            m_wallStickState = info.state;
             m_animator = info.animator;
+
             m_midAirParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsMidAir);
             m_speedYParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SpeedY);
+            m_groundSensor = info.GetSensor(PlayerSensorList.SensorType.Ground);
+            m_slopeSensor = info.GetSensor(PlayerSensorList.SensorType.Slope);
+
+
             m_fallHandle.Initialize(info);
             m_landHandle.Initialize(info);
             m_skillRequester = info.skillResetRequester;
         }
 
-        private void Start()
+        public void Initialize()
         {
             m_state.isGrounded = m_physics.onWalkableGround;
         }
 
-        public void FixedUpdate()
+        public void HandleLand()
         {
-            if (m_state.isGrounded)
+            m_slopeSensor.Cast();
+
+            var hasLanded = m_physics.onWalkableGround;
+            var incontactwithground = m_physics.inContactWithGround;
+            float slopeAngle = Vector3.Angle(Vector3.up, m_slopeSensor.GetHits()[0].normal);
+
+            if (incontactwithground == true || hasLanded == true || m_slopeSensor.isDetecting == true && slopeAngle < 35.0f)
             {
-                m_state.isFalling = false;
-                m_state.isGrounded = m_physics.onWalkableGround;
-                if (m_isInMidAir)
+             
+                m_animator.SetBool(m_midAirParamater, false);
+                if(m_wallStickState.isSlidingToWall == false && m_wallStickState.isStickingToWall == false)
                 {
-                    SetValuesToGround();
+                    CallLand();
                 }
-                if (m_physics.inContactWithGround)
-                {
-                    m_physics.gravity.gravityScale = m_groundGravity;
-                }
-                else
-                {
-                    m_physics.gravity.gravityScale = m_midAirGravity;
-                }
-            }
-            else
-            {
+                    
                
-                
-                if (m_isInMidAir == false)
-                {
-                    m_isInMidAir = true;
-                    m_animator.SetBool(m_midAirParamater, true);
-                }
+            }
+           
+
+            m_landHandle.RecordVelocity();
+        }
+
+        public void HandleMidAir()
+        {
+            if (m_isInMidAir == false)
+            {
+                m_isInMidAir = true;
+                m_animator.SetBool(m_midAirParamater, true);
+            }
+
+
+            //Pontz
+
+            m_groundSensor.Cast();
+           
                 var isFalling = m_fallHandle.isFalling(m_physics);
-                if (isFalling)
+
+                if (isFalling && !m_groundSensor.isDetecting)
                 {
+
                     if (m_state.isFalling)
                     {
                         m_fallHandle.Execute(Time.deltaTime);
                     }
                     else
                     {
+
                         m_fallHandle.StartFall();
+
                     }
                 }
                 else
                 {
+
                     m_animator.SetInteger(m_speedYParamater, m_physics.velocity.y > m_startPeakVelocity ? 2 : 1);
                     m_physics.gravity.gravityScale = m_midAirGravity;
                     m_state.isFalling = false;
                 }
+            
+           
+        }
 
-                var hasLanded = m_physics.onWalkableGround;
-                if (hasLanded)
-                {
-                    CallLand();
-                }
-                m_landHandle.RecordVelocity();
-               // Debug.Log("MIdAir: " + m_isInMidAir);
+        public void HandleGround()
+        {
+            m_state.isFalling = false;
+           
+            m_state.isGrounded = m_physics.onWalkableGround;
+            if (m_isInMidAir)
+            {
+                SetValuesToGround();
+                LandExecuted?.Invoke(this, EventActionArgs.Empty);
+                m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
+            }
+            if (m_physics.inContactWithGround)
+            {
+                m_physics.gravity.gravityScale = m_groundGravity;
+            }
+            else
+            {
+                m_physics.gravity.gravityScale = m_midAirGravity;
             }
         }
 

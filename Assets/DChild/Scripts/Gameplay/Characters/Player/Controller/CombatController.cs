@@ -5,7 +5,12 @@ using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+<<<<<<< HEAD
     public class CombatController : MonoBehaviour, IProjectileThrowController
+=======
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Combat Controller")]
+    public class CombatController : MonoBehaviour
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
     {
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private BasicAttack m_basicAttack;

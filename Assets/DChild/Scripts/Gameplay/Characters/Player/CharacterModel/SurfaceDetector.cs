@@ -1,19 +1,21 @@
 ﻿using DChild.Gameplay.Environment;
 using Holysoft.Event;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
+
     public class SurfaceDetector : MonoBehaviour
     {
-        public struct SurfaceDetectedEventArgs : IEventActionArgs
+        public class SurfaceDetectedEventArgs : IEventActionArgs
         {
-            public SurfaceDetectedEventArgs(SurfaceData m_surface) : this()
+            public void Initialize(SurfaceData m_surface)
             {
                 this.surface = m_surface;
             }
 
-            public SurfaceData surface { get; }
+            public SurfaceData surface { get; private set; }
         }
 
         [SerializeField]
@@ -36,7 +38,12 @@ namespace DChild.Gameplay.Characters.Players
             if (surfaceData != null && m_currentSurface != surfaceData)
             {
                 m_currentSurface = surfaceData;
-                NewSurfaceDetected?.Invoke(this, new SurfaceDetectedEventArgs(m_currentSurface));
+                using (Cache<SurfaceDetectedEventArgs> cacheEventArgs = Cache<SurfaceDetectedEventArgs>.Claim())
+                {
+                    cacheEventArgs.Value.Initialize(m_currentSurface);
+                    NewSurfaceDetected?.Invoke(this, cacheEventArgs.Value);
+                    cacheEventArgs.Release();
+                }
             }
         }
     }

@@ -7,7 +7,11 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+<<<<<<< HEAD
 
+=======
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Air Controller")]
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
     public class AirController : MonoBehaviour
     {
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]

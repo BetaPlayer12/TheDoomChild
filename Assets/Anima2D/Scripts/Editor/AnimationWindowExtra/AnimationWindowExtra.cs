@@ -15,8 +15,12 @@ namespace Anima2D
 		{
 #if UNITY_5_0
 			s_Impl = new AnimationWindowImpl_50();
-#elif UNITY_5_1 || UNITY_5_2 || UNITY_5_3 || UNITY_5_4 || UNITY_5_5
-			s_Impl = new AnimationWindowImpl_51_52_53_54_55();
+#elif UNITY_5_1 || UNITY_5_2 || UNITY_5_3
+			s_Impl = new AnimationWindowImpl_51_52_53();
+#elif UNITY_5_4
+			s_Impl = new AnimationWindowImpl_54();
+#elif UNITY_5_5
+			s_Impl = new AnimationWindowImpl_55();
 #elif UNITY_5_6
 			s_Impl = new AnimationWindowImpl_56();
 #elif UNITY_2017_1_OR_NEWER
@@ -74,6 +78,16 @@ namespace Anima2D
 		public static float TimeToFrame(float time)
 		{
 			return s_Impl.TimeToFrame(time);
+		}
+
+		public static void CreateDefaultCurve(EditorCurveBinding binding)
+		{
+			s_Impl.CreateDefaultCurve(binding);	
+		}
+
+		public static void AddKey(EditorCurveBinding binding, float time)
+		{
+			s_Impl.AddKey(binding,time);
 		}
 	}
 }

@@ -36,8 +36,8 @@ public class GrassDetector : MonoBehaviour
 
         if (hitcount > 0)
         {
-            var foliageGrass = hit[hitcount - 1].transform.gameObject.GetComponentInChildren<IFoliage>();
-            m_grassLocation = foliageGrass.Location;
+            //var foliageGrass = hit[hitcount - 1].transform.gameObject.GetComponentInChildren<IFoliage>();
+            //m_grassLocation = foliageGrass.Location;
             return true;
         }
         else

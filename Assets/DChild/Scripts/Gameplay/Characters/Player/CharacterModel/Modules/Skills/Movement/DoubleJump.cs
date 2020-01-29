@@ -44,15 +44,18 @@ namespace DChild.Gameplay.Characters.Players.Skill
 
         public override void HandleJump()
         {
+           
             m_physics.StopCoyoteTime();
             base.HandleJump();
             m_physics.AddForce(Vector2.up * m_power, ForceMode2D.Impulse);
             m_state.canHighJump = false;
             m_doubleJumpState.canDoubleJump = false;
-
+            
             m_animator.SetInteger(m_speedYParameter, 0);
             m_animator.SetTrigger(m_doubleJumpParameter);
             m_fXSpawner.SpawnFX(m_character.facing);
+            
+
         }
 
         public void ConnectTo(IMainController controller)

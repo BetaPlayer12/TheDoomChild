@@ -1,6 +1,8 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using DChild.Gameplay.Characters.Players;
+using Sirenix.Serialization;
+using System;
 
 namespace DChild.Serialization
 {
@@ -31,7 +33,7 @@ namespace DChild.Serialization
             m_movementSkills = m_movementSkillList.ToArray();
         }
 
-        [SerializeField, HideInPlayMode, PropertyOrder(1)]
+        [NonSerialized,OdinSerialize, HideInPlayMode, PropertyOrder(1)]
         private ElementList m_movementSkillList;
 #endif
     }

@@ -2,11 +2,14 @@
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Refactor.DChild.Gameplay.Combat
 {
+    [SelectionBase]
+    [AddComponentMenu("DChild/Gameplay/Combat/Attacker")]
     public class Attacker : MonoBehaviour, IAttacker, IDamageDealer
     {
         [SerializeField]
@@ -22,18 +25,48 @@ namespace Refactor.DChild.Gameplay.Combat
         [ShowInInspector, HideInEditorMode, MinValue(0), OnValueChanged("ApplyDamageModification")]
         private int m_damageModifier;
 
-        private List<AttackDamage> m_currentDamage;
+        private bool m_isInstantiated;
 
+        private List<AttackDamage> m_currentDamage;
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
+        public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
             if (m_info.ignoreInvulnerability || !targetDefense.isInvulnerable)
             {
+                if (targetInfo.isBreakableObject)
+                {
+                    using (Cache<BreakableObjectEventArgs> cacheEventArgs = Cache<BreakableObjectEventArgs>.Claim())
+                    {
+                        cacheEventArgs.Value.Initialize(targetInfo.breakableObject);
+                        BreakableObjectDamage?.Invoke(this, cacheEventArgs.Value);
+                        cacheEventArgs.Release();
+                    }
+                }
                 var position = transform.position;
+<<<<<<< HEAD
                 global::DChild.Gameplay.Combat.AttackerInfo info = new global::DChild.Gameplay.Combat.AttackerInfo(position, 0, 1, m_currentDamage.ToArray());
                 var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
                 TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
+=======
+                using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
+                {
+                    cacheInfo.Value.Initialize(position, 0, 1, m_currentDamage.ToArray());
+                    using (Cache<AttackInfo> cacheResult = GameplaySystem.combatManager.ResolveConflict(cacheInfo.Value, targetInfo))
+                    {
+                        using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
+                        {
+                            cacheEventArgs.Value.Initialize(cacheInfo, targetInfo, cacheResult);
+                            TargetDamaged?.Invoke(this, cacheEventArgs.Value);
+                            cacheEventArgs.Release();
+                        }
+                        cacheResult.Release();
+                    }
+                    cacheInfo.Release();
+                }
+
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
             }
         }
 
@@ -41,6 +74,12 @@ namespace Refactor.DChild.Gameplay.Combat
         {
             m_info.damage.Clear();
             m_info.damage.AddRange(damage);
+            if (m_isInstantiated == false)
+            {
+                m_damageModifier = 1;
+                m_currentDamage = new List<AttackDamage>();
+                m_isInstantiated = true;
+            }
             ApplyDamageModification();
         }
 
@@ -53,8 +92,17 @@ namespace Refactor.DChild.Gameplay.Combat
         public void SetData(AttackerData data)
         {
             m_data = data;
-            m_info.Copy(m_data.info);
-            ApplyDamageModification();
+            if (m_info != null)
+            {
+                m_info.Copy(m_data.info);
+                if (m_isInstantiated == false)
+                {
+                    m_damageModifier = 1;
+                    m_currentDamage = new List<AttackDamage>();
+                    m_isInstantiated = true;
+                }
+                ApplyDamageModification();
+            }
         }
 
         public void SetDamageModifier(int value)
@@ -85,17 +133,32 @@ namespace Refactor.DChild.Gameplay.Combat
                 m_info.Copy(m_data.info);
             }
 
-            m_currentDamage = new List<AttackDamage>();
-            m_damageModifier = 1;
-            ApplyDamageModification();
+            if (m_isInstantiated == false)
+            {
+                m_damageModifier = 1;
+                m_currentDamage = new List<AttackDamage>();
+                ApplyDamageModification();
+                m_isInstantiated = true;
+            }
         }
 
 
 #if UNITY_EDITOR
+        [Button]
+        private void UseSelfAsCenterMass()
+        {
+            m_centerMass = transform;
+        }
+
         private void ApplyData()
         {
             m_info.Copy(m_data.info);
             ApplyDamageModification();
+        }
+
+        public void InitializeField(Transform centerMass)
+        {
+            m_centerMass = centerMass;
         }
 #endif
     }

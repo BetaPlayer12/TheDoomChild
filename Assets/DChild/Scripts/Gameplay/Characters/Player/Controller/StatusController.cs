@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Status Controller")]
     public class StatusController : MonoBehaviour
     {
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]

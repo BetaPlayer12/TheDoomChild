@@ -1,8 +1,11 @@
 ﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Combat.StatusAilment;
+using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,13 +13,18 @@ namespace DChild.Gameplay.Combat
 {
     public interface ICombatManager
     {
+<<<<<<< HEAD
         AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo);
+=======
+        Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo);
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect);
         void Inflict(StatusEffectReciever reciever, params StatusEffectChance[] statusEffectChance);
         List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes);
         List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer);
         void Damage(IDamageable damageable, AttackDamage damage);
         void Heal(IHealable healable, int health);
+        void MonitorBoss(Boss boss);
     }
 
     public class CombatManager : SerializedMonoBehaviour, ICombatManager, IGameplaySystemModule, IGameplayInitializable
@@ -27,26 +35,33 @@ namespace DChild.Gameplay.Combat
         private CriticalDamageHandle m_criticalDamageHandle;
         [SerializeField, HideLabel, Title("UI")]
         private CombatUIHandler m_uiHandler;
+        [SerializeField]
+        private BossCombatUI m_bossCombat;
         private AOETargetHandler m_aOETargetHandler;
-
         private PlayerCombatHandler m_playerCombatHandler;
         private ResistanceHandler m_resistanceHandler;
 
         private List<AttackType> m_damageList;
         private IDamageable m_cacheTarget;
 
+<<<<<<< HEAD
         public AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo)
+=======
+        public Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo)
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         {
-            AttackInfo result = new AttackInfo(attacker.damage);
-            m_criticalDamageHandle.Execute(ref result, attacker.critChance, attacker.critDamageModifier);
+            //AttackInfo result = new AttackInfo(attacker.damage);
+            Cache<AttackInfo> result = Cache<AttackInfo>.Claim();
+            result.Value.Initialize(attacker.damage);
+            m_criticalDamageHandle.Execute(result, attacker.critChance, attacker.critDamageModifier);
 
             m_cacheTarget = targetInfo.instance;
             if (m_cacheTarget.attackResistance != null)
             {
-                m_resistanceHandler.CalculatateResistanceReduction(m_cacheTarget.attackResistance, ref result);
+                m_resistanceHandler.CalculatateResistanceReduction(m_cacheTarget.attackResistance, result);
             }
 
-            result = ApplyResults(result, targetInfo.isCharacter);
+            ApplyResults(result, targetInfo.isCharacter);
 
             if (m_cacheTarget.isAlive)
             {
@@ -66,7 +81,6 @@ namespace DChild.Gameplay.Combat
             return result;
         }
 
-
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)
         {
             m_statusInflictionHandle.Inflict(reciever, statusEffect);
@@ -79,25 +93,29 @@ namespace DChild.Gameplay.Combat
 
         public void Damage(IDamageable damageable, AttackDamage attackDamage)
         {
-            AttackInfo result = new AttackInfo(attackDamage);
-            if (damageable.attackResistance != null)
+            using (Cache<AttackInfo> cacheResult = Cache<AttackInfo>.Claim())
             {
-                m_resistanceHandler.CalculatateResistanceReduction(damageable.attackResistance, ref result);
-            }
-
-            var damageInfo = result.damageList[0];
-            if (damageInfo.isHeal)
-            {
-
-            }
-            else
-            {
-                var damage = damageInfo.damage;
-                damageable.TakeDamage(damage.value, damage.type);
-                if (GameSystem.settings?.gameplay.showDamageValues ?? true)
+                cacheResult.Value.Initialize(attackDamage);
+                if (damageable.attackResistance != null)
                 {
-                    m_uiHandler.ShowDamageValues(damageable.position, damage, false);
+                    m_resistanceHandler.CalculatateResistanceReduction(damageable.attackResistance, cacheResult);
                 }
+
+                var damageInfo = cacheResult.Value.damageList[0];
+                if (damageInfo.isHeal)
+                {
+
+                }
+                else
+                {
+                    var damage = damageInfo.damage;
+                    damageable.TakeDamage(damage.value, damage.type);
+                    if (GameSystem.settings?.gameplay.showDamageValues ?? true)
+                    {
+                        m_uiHandler.ShowDamageValues(damageable.position, damage, false);
+                    }
+                }
+                cacheResult.Release();
             }
         }
 
@@ -112,6 +130,11 @@ namespace DChild.Gameplay.Combat
 
         public List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes) => m_aOETargetHandler.ValidateTargets(source, hitboxes);
         public List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer) => m_aOETargetHandler.GetValidTargetsOfCircleAOE(source, radius, layer);
+
+        public void MonitorBoss(Boss boss)
+        {
+            m_bossCombat?.SetBoss(boss);
+        }
 
         public void Initialize()
         {
@@ -172,9 +195,7 @@ namespace DChild.Gameplay.Combat
             if (GameSystem.settings?.gameplay.showDamageValues ?? true)
             {
                 m_uiHandler.Update();
-            }
-        }
-
-
+            }    
+        } 
     }
 }

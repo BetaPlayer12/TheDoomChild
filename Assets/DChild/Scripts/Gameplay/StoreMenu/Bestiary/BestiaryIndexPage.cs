@@ -47,7 +47,7 @@ namespace DChild.Menu.Bestiary
                 var data = m_bestiaryList.GetInfo(ID);
                 m_buttons[i].SetData(data);
                 m_buttons[i].Show();
-                m_buttons[i].SetInteractable(m_tracker.HasInfoOf(ID));
+                m_buttons[i].SetInteractable(m_tracker?.HasInfoOf(ID) ?? true);
             }
 
             for (; i < m_buttonCount; i++)

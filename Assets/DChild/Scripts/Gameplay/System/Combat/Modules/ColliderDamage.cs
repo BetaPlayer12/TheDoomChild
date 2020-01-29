@@ -10,18 +10,60 @@ using Refactor.DChild.Gameplay;
 using Refactor.DChild.Gameplay.Combat;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using DChild.Gameplay.Environment;
+using Sirenix.Utilities;
 
 namespace DChild.Gameplay.Combat
 {
+    [AddComponentMenu("DChild/Gameplay/Combat/Collider Damage")]
     public class ColliderDamage : MonoBehaviour
     {
+        [System.Serializable]
+        public class Collider2DInfo
+        {
+            [SerializeField]
+            private Collider2D m_target;
+            [SerializeField]
+            private Collider2D[] m_ignoreList;
+
+            public void IgnoreColliders(bool value)
+            {
+                for (int i = 0; i < m_ignoreList.Length; i++)
+                {
+                    Physics2D.IgnoreCollision(m_target, m_ignoreList[i],value);
+                }
+            }
+        }
+
         [SerializeField]
         private bool m_canDetectInteractables;
+        [SerializeField]
+        private Collider2DInfo[] m_ignoreColliderList;
+
         private IDamageDealer m_damageDealer;
+        public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
+
+        protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
+        {
+            if (hitbox.damageable.CompareTag(Character.objectTag))
+            {
+                var character = hitbox.GetComponentInParent<Character>();
+                cache.Value.Initialize(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
+            }
+            else
+            {
+                cache.Value.Initialize(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
+            }
+        }
 
         private void Awake()
         {
             m_damageDealer = GetComponentInParent<IDamageDealer>();
+            for (int i = 0; i < m_ignoreColliderList.Length; i++)
+            {
+                m_ignoreColliderList[i].IgnoreColliders(true);
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -29,10 +71,15 @@ namespace DChild.Gameplay.Combat
             if (collision.CompareTag("DamageCollider"))
                 return;
 
-            var hitbox = collision.GetComponent<Hitbox>();
-            if (hitbox != null)
+            if (collision.TryGetComponent(out Hitbox hitbox))
             {
-                m_damageDealer?.Damage(CreateInfo(hitbox), hitbox.defense);
+                using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                {
+                    InitializeTargetInfo(cacheTargetInfo, hitbox);
+                    m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                    DamageableDetected?.Invoke(collision);
+                    cacheTargetInfo?.Release();
+                }
             }
 
             if (m_canDetectInteractables)
@@ -46,10 +93,14 @@ namespace DChild.Gameplay.Combat
             if (collision.gameObject.CompareTag("DamageCollider"))
                 return;
 
-            var hitbox = collision.gameObject.GetComponent<Hitbox>();
-            if (hitbox != null && hitbox.isInvulnerable == false)
+            if (collision.gameObject.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)
             {
-                m_damageDealer.Damage(CreateInfo(hitbox), hitbox.defense);
+                using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                {
+                    InitializeTargetInfo(cacheTargetInfo, hitbox);
+                    m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                    cacheTargetInfo?.Release();
+                }
             }
 
             if (m_canDetectInteractables)
@@ -58,17 +109,5 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        protected TargetInfo CreateInfo(Hitbox hitbox)
-        {
-            if (hitbox.damageable.CompareTag(Character.objectTag))
-            {
-                var character = hitbox.GetComponentInParent<Character>();
-                return new TargetInfo(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
-            }
-            else
-            {
-                return new TargetInfo(hitbox.damageable);
-            }
-        }
     }
 }

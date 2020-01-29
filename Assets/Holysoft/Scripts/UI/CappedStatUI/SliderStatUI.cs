@@ -8,7 +8,7 @@ namespace Holysoft.Gameplay.UI
         [SerializeField]
         private Slider m_slider;
 
-        protected override float maxValue { set => m_slider.maxValue = value; }
-        protected override float currentValue { set => m_slider.value = value; }
+        public override float maxValue { set => m_slider.maxValue = value; }
+        public override float currentValue { set => m_slider.value = value; }
     }
 }

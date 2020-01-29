@@ -231,7 +231,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
@@ -243,17 +243,17 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Attack:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack.animation);
+                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                         case Attack.AttackLong:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attackLong.animation);
+                            m_attackHandle.ExecuteAttack(m_info.attackLong.animation, m_info.idleAnimation);
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                         case Attack.AttackTwitch:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attackTwitch.animation);
+                            m_attackHandle.ExecuteAttack(m_info.attackTwitch.animation, m_info.idleAnimation);
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                     }
@@ -302,7 +302,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    Debug.Log("Still wetting");
+                    //Debug.Log("Still wetting");
                     return;
             }
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -23,6 +23,7 @@ namespace Doozy.Editor.Windows
                     Settings.DebugGameEventManager ||
                     Settings.DebugGestureListener ||
                     Settings.DebugGraphController ||
+                    Settings.DebugKeyToAction ||
                     Settings.DebugKeyToGameEvent ||
                     Settings.DebugOrientationDetector ||
                     Settings.DebugProgressor ||
@@ -368,6 +369,20 @@ namespace Doozy.Editor.Windows
                             m_needsSave = true;
                         }
 
+                        GUILayout.Space(m_debugHorizontalButtonSpacing);
+
+                        bool debugKeyToAction = DoozySettings.Instance.DebugKeyToAction;
+                        EditorGUI.BeginChangeCheck();
+                        debugKeyToAction = DrawDebugButton(debugKeyToAction, "Key To Action", Styles.GetStyle(Styles.StyleName.IconKeyToAction), DGUI.Colors.KeyToActionColorName);
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            DoozySettings.Instance.UndoRecord("DDebug");
+                            DoozySettings.Instance.DebugKeyToAction = debugKeyToAction;
+                            DoozySettings.Instance.SetDirty(false);
+                            m_needsSave = true;
+                        }
+
+                        
                         GUILayout.Space(m_debugHorizontalButtonSpacing);
 
                         bool debugKeyToGameEvent = DoozySettings.Instance.DebugKeyToGameEvent;

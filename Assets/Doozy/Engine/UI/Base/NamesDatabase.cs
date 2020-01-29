@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Doozy.Engine.Utils;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 // ReSharper disable UnusedMember.Global
@@ -430,10 +430,8 @@ namespace Doozy.Engine.UI.Base
         /// <param name="saveAssets"> Write all unsaved asset changes to disk? </param>
         public void SearchForUnregisteredDatabases(bool saveAssets)
         {
-            string title = UILabels.Database + ": " + DatabaseType; // ProgressBar Title
-            string info = UILabels.Search;                          // ProgressBar Info
-
-            DoozyUtils.DisplayProgressBar(title, info, 0.1f);
+            DoozyUtils.DisplayProgressBar(UILabels.SearchForDatabases, UILabels.Search, 0.1f);
+            
             bool foundUnregisteredDatabase = false;
             ListOfNames[] array = Resources.LoadAll<ListOfNames>("");
             if (array == null || array.Length == 0)
@@ -445,7 +443,7 @@ namespace Doozy.Engine.UI.Base
             if (Categories == null) Categories = new List<ListOfNames>();
             for (int i = 0; i < array.Length; i++)
             {
-                DoozyUtils.DisplayProgressBar(title, info, 0.1f + 0.8f * (i + 1) / array.Length);
+                DoozyUtils.DisplayProgressBar(UILabels.SearchForDatabases, UILabels.Search, 0.1f + 0.7f * (i + 1) / array.Length);
                 ListOfNames foundList = array[i];
                 if (foundList.DatabaseType != DatabaseType) continue;
                 if (Categories.Contains(foundList)) continue;
@@ -453,13 +451,13 @@ namespace Doozy.Engine.UI.Base
                 foundUnregisteredDatabase = true;
             }
 
-            DoozyUtils.DisplayProgressBar(title, info, 1f);
             if (!foundUnregisteredDatabase)
             {
                 DoozyUtils.ClearProgressBar();
                 return;
             }
 
+            DoozyUtils.DisplayProgressBar(UILabels.SearchForDatabases, UILabels.Search, 0.9f);
             UpdateListOfCategoryNames();
             SetDirty(saveAssets);
             DoozyUtils.ClearProgressBar();
@@ -478,7 +476,6 @@ namespace Doozy.Engine.UI.Base
             Categories = Categories.OrderBy(listOfNames => listOfNames.CategoryName).ToList(); //sort database by category name
             foreach (ListOfNames listOfNames in Categories) listOfNames.Names.Sort();          //sort items in each category
             SetDirty(saveAssets);
-//            DDebug.Log(UILabels.DatabaseSorted);
         }
 
         /// <summary> Records any changes done on the object after this function </summary>

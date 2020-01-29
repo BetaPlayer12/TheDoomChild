@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/AI/Movement/Path Finder Agent")]
     public class PathFinderAgent : MonoBehaviour
     {
         [SerializeField]

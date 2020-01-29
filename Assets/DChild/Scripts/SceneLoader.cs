@@ -1,6 +1,7 @@
 ﻿using DChild.Menu;
 using Holysoft.Collections;
 using Holysoft.Event;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,14 +18,40 @@ namespace DChild
         private SceneInfo m_mainMenu;
 
         private string m_activeZone;
+<<<<<<< HEAD
 
         public string activeZone => m_activeZone;
 
+=======
+#if UNITY_EDITOR
+        [SerializeField]
+#endif
+        private bool m_gameplaySceneActive;
+        private Action CallAfterSceneDone;
+
+        public string activeZone => m_activeZone;
+
+#if UNITY_EDITOR
+        public void SetAsActiveZone(string sceneName) => m_activeZone = sceneName;
+#endif
+
+        public void LoadZone(string sceneName, bool withLoadingScene, Action ToCallAfterSceneDone)
+        {
+            CallAfterSceneDone = ToCallAfterSceneDone;
+            LoadingHandle.SceneDone += AfterSceneDone;
+            LoadZone(sceneName, withLoadingScene);
+        }
+
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         public void LoadZone(string sceneName, bool withLoadingScene)
         {
             if (withLoadingScene)
             {
+<<<<<<< HEAD
                 if (m_activeZone != string.Empty)
+=======
+                if (m_activeZone != null && m_activeZone != string.Empty && m_activeZone != sceneName)
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;
@@ -61,9 +88,17 @@ namespace DChild
                 m_activeZone = string.Empty;
             }
             LoadingHandle.UnloadScenes(m_gameplayScene.sceneName);
+            m_gameplaySceneActive = false;
             LoadingHandle.LoadScenes(m_mainMenu.sceneName);
             Time.timeScale = 1;
             SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
+        }
+
+        private void AfterSceneDone(object sender, EventActionArgs eventArgs)
+        {
+            CallAfterSceneDone();
+            CallAfterSceneDone = null;
+            LoadingHandle.SceneDone -= AfterSceneDone;
         }
     }
 

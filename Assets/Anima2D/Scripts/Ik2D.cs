@@ -42,7 +42,6 @@ namespace Anima2D
 			{
 				m_CachedTarget = value;
 				m_TargetTransform = value.transform;
-				InitializeSolver();
 			}
 		}
 		

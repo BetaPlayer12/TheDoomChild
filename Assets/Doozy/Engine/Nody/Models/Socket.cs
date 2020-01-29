@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -206,13 +206,13 @@ namespace Doozy.Engine.Nody.Models
         public bool CanConnect(Socket other, bool ignoreValueType = false)
         {
             if (other == null) return false;                                                                                                                     //check that the other socket is not null
-            if (IsConnectedToSocket(other.Id)) return false;                                                                                                     // check that this socket is not already connected to the other socket
+            if (IsConnectedToSocket(other.Id)) return false;                                                                                                     //check that this socket is not already connected to the other socket
             if (Id == other.Id) return false;                                                                                                                    //make sure we're not trying to connect the same socket
             if (NodeId == other.NodeId) return false;                                                                                                            //check that we are not connecting sockets on the same baseNode
             if (IsInput && other.IsInput) return false;                                                                                                          //check that the sockets are not both input sockets
             if (IsOutput && other.IsOutput) return false;                                                                                                        //check that the sockets are not both output sockets
             if (ignoreValueType) return true;                                                                                                                    //since we're not comparing valueTypes and we passed all the tests -> we conclude that the two sockets can connect
-            if (ValueType.BaseType == typeof(PassthroughConnection).BaseType || other.ValueType.BaseType == typeof(PassthroughConnection).BaseType) return true; //this is allows any connection to happen without
+            if (ValueType.BaseType == typeof(PassthroughConnection).BaseType || other.ValueType.BaseType == typeof(PassthroughConnection).BaseType) return true; //this is allows any connection to happen without further checks
             if (ValueType.BaseType != other.ValueType.BaseType) return false;                                                                                    //check that the sockets are of the same type (in order to be able to connect)
             return true;                                                                                                                                         //all the 'can connect' conditions have been met -> we conclude that the two sockets can connect
         }

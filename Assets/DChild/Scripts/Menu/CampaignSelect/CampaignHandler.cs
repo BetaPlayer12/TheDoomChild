@@ -24,6 +24,7 @@ namespace DChild.Menu
 
         public void Play()
         {
+            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
             GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad.sceneName, true);
             LoadingHandle.UnloadScenes(gameObject.scene.name);
         }
@@ -32,6 +33,7 @@ namespace DChild.Menu
         {
             m_campaignSelect.selectedSlot.Reset();
             m_campaignSelect.SendCampaignSelectedEvent();
+            SerializationHandle.Delete(m_selectedSlotID);
         }
 
         protected override void Awake()

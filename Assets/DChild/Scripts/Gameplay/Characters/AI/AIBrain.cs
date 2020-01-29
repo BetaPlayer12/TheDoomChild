@@ -19,7 +19,7 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             [System.Serializable]
             public abstract class SkeletonBaseInfo
             {
-//#if UNITY_EDITOR
+                //#if UNITY_EDITOR
                 protected SkeletonDataAsset m_skeletonDataAsset;
 
                 public void SetData(SkeletonDataAsset skeletonData) => m_skeletonDataAsset = skeletonData;
@@ -45,7 +45,18 @@ namespace Refactor.DChild.Gameplay.Characters.AI
                     }
                     return list;
                 }
-//#endif
+
+                protected IEnumerable GetSkins()
+                {
+                    ValueDropdownList<string> list = new ValueDropdownList<string>();
+                    var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Skins.ToArray();
+                    for (int i = 0; i < reference.Length; i++)
+                    {
+                        list.Add(reference[i].Name);
+                    }
+                    return list;
+                }
+                //#endif
             }
 
             [System.Serializable, HideReferenceObjectPicker]
@@ -92,7 +103,7 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             [SerializeField, PreviewField, OnValueChanged("Initialize")]
             protected SkeletonDataAsset m_skeletonDataAsset;
 
-//#if UNITY_EDITOR
+            //#if UNITY_EDITOR
             protected IEnumerable GetEvents()
             {
                 ValueDropdownList<string> list = new ValueDropdownList<string>();
@@ -110,11 +121,12 @@ namespace Refactor.DChild.Gameplay.Characters.AI
                 var reference = m_skeletonDataAsset.GetAnimationStateData().SkeletonData.Animations.ToArray();
                 for (int i = 0; i < reference.Length; i++)
                 {
+
                     list.Add(reference[i].Name);
                 }
                 return list;
             }
-//#endif
+            //#endif
 
             public abstract void Initialize();
         }
@@ -124,18 +136,14 @@ namespace Refactor.DChild.Gameplay.Characters.AI
         [SerializeField, TabGroup("Reference")]
         protected SpineRootAnimation m_animation;
         [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
-        private AIData m_data;
-//#if UNITY_EDITOR
-        [ShowInInspector, InlineEditor, TabGroup("Data")]
-        private AIData m_inlineEditor;
-//#endif
+        protected AIData m_data;
 
         [ShowInInspector, HideInEditorMode, TabGroup("Data")]
         protected T m_info;
 
         public void SetData(AIData data)
         {
-            if (m_data.info.GetType() == m_info.GetType())
+            if (data.info.GetType() == typeof(T))
             {
                 m_data = data;
             }
@@ -145,16 +153,16 @@ namespace Refactor.DChild.Gameplay.Characters.AI
         {
             m_info = (T)m_data.info;
             m_info.Initialize();
+            if (m_data.bestiaryData != null)
+            {
+                m_character.SetID(m_data.bestiaryData.id);
+            }
         }
 
         protected virtual void Awake()
         {
-            Debug.Log("Update ApplyData trigger");
             ApplyData();
         }
-
-        [SerializeField, FolderPath, PropertyOrder(-1), TabGroup("Data")]
-        private string m_referenceFolder;
 
 #if UNITY_EDITOR
         private IEnumerable GetData()
@@ -162,11 +170,12 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             var list = new ValueDropdownList<AIData>();
             list.Add("None", null);
             var infoType = typeof(T);
-            var filePaths = Directory.GetFiles(m_referenceFolder);
+            var filePaths = AssetDatabase.FindAssets("t:AIData");
             for (int i = 0; i < filePaths.Length; i++)
             {
-                var asset = AssetDatabase.LoadAssetAtPath<AIData>(filePaths[i]);
-                if (asset != null && asset.info.GetType() == infoType)
+
+                var asset = AssetDatabase.LoadAssetAtPath<AIData>(AssetDatabase.GUIDToAssetPath(filePaths[i]));
+                if (asset != null && asset.info != null && asset.info.GetType() == infoType)
                 {
                     list.Add(asset);
                 }
@@ -176,7 +185,6 @@ namespace Refactor.DChild.Gameplay.Characters.AI
 
         private void InitializeInfo()
         {
-            m_inlineEditor = m_data;
             m_info = (T)m_data.info;
         }
 #endif

@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.State
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Character State")]
     public class CharacterState : MonoBehaviour, IPlayerState, IMoveState, IGroundednessState,
                                 ICrouchState, IFlinchState, IWallStickState,
                                 IDashState, IDoubleJumpState, IWallJumpState,
                                 IHighJumpState, IBehaviourState, ICombatState, IPlatformDropState,
-                                IWhipGrapple, IProjectileThrowState, ILedgeGrabState
+                                IWhipGrapple, IProjectileThrowState , ILedgeGrabState
     {
         public event EventAction<CombatStateEventArgs> CombatModeChanged;
 

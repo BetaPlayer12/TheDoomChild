@@ -86,7 +86,7 @@ namespace Anima2D
 		[UnityEditor.Callbacks.DidReloadScripts]
 		static void HierarchyChanged()
 		{
-			s_SpriteMeshInstances = EditorExtra.FindComponentsOfType<SpriteMeshInstance>().ToList();
+			s_SpriteMeshInstances = GameObject.FindObjectsOfType<SpriteMeshInstance>().ToList();
 		}
 
 		private static void HierarchyWindowItemCallback(int pID, Rect pRect)

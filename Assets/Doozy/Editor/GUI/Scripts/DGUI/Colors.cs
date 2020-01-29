@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -154,6 +154,7 @@ namespace Doozy.Editor
             public static ColorName GraphControllerColorName { get { return ColorName.Orange; } }
             public static ColorName HelpColorName { get { return Utility.IsProSkin ? ColorName.UnityLight : ColorName.Gray; } }
             public static ColorName KeysColorName { get { return ColorName.DeepOrange; } }
+            public static ColorName KeyToActionColorName { get { return ColorName.Pink; } }
             public static ColorName KeyToGameEventColorName { get { return ColorName.Pink; } }
             public static ColorName MoveColorName { get { return ColorName.Green; } }
             public static ColorName NodyColorName { get { return ColorName.LightBlue; } }
@@ -163,6 +164,7 @@ namespace Doozy.Editor
             public static ColorName PlaymakerEventDispatcherColorName { get { return ColorName.Cyan; } }
             public static ColorName ProgressorColorName { get { return ColorName.Lime; } }
             public static ColorName ProgressorGroupColorName { get { return ColorName.Lime; } }
+            public static ColorName RadialLayoutColorName { get { return ColorName.Teal; } }
             public static ColorName RotateColorName { get { return ColorName.Orange; } }
             public static ColorName ScaleColorName { get { return ColorName.Red; } }
             public static ColorName SceneDirectorColorName { get { return ColorName.Orange; } }
@@ -176,6 +178,7 @@ namespace Doozy.Editor
             public static ColorName StartNodeColorName { get { return ColorName.Lime; } }
             public static ColorName SubGraphNodeColorName { get { return ColorName.Cyan; } }
             public static ColorName TouchDetectorColorName { get { return ColorName.Orange; } }
+            public static ColorName ThemesColorName { get { return ColorName.Teal; } }
             public static ColorName TouchyColorName { get { return ColorName.Green; } }
             public static ColorName UIButtonColorName { get { return ColorName.Blue; } }
             public static ColorName UIButtonListenerColorName { get { return ColorName.Pink; } }
@@ -183,6 +186,7 @@ namespace Doozy.Editor
             public static ColorName UIDrawerColorName { get { return ColorName.Blue; } }
             public static ColorName UIDrawerListenerColorName { get { return ColorName.Pink; } }
             public static ColorName UIGraphColorName { get { return ColorName.Gray; } }
+            public static ColorName UIImageColorName { get { return ColorName.Blue; } }
             public static ColorName UIPopupColorName { get { return ColorName.Blue; } }
             public static ColorName UIPopupManagerColorName { get { return ColorName.Orange; } }
             public static ColorName UISubGraphColorName { get { return ColorName.Cyan; } }

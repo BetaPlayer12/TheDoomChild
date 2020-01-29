@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Characters
 {
     public class SpineEventListener : MonoBehaviour
     {
-        public class EventAction
+        private class EventAction
         {
             public event Action action;
             public void Invoke() => action?.Invoke();
@@ -69,5 +69,12 @@ namespace DChild.Gameplay.Characters
         {
             Activate();
         }
+
+#if UNITY_EDITOR
+        public void InitializeFields(SkeletonAnimation animation)
+        {
+            m_animation = animation;
+        }
+#endif
     }
 }

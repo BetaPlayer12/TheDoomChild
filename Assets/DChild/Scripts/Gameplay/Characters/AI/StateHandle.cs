@@ -4,6 +4,7 @@
 
 namespace Refactor.DChild.Gameplay.Characters.AI
 {
+
     [System.Serializable,HideLabel]
     public struct StateHandle<T> where T : System.Enum
     {

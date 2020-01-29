@@ -115,6 +115,8 @@ MonoBehaviour:
   m_animator: {fileID: 2414135952209286051}
   m_bodyDuration:
     m_startTime: 3
+  m_hitCollider: {fileID: 3494449295435245411}
+  m_hitBox: {fileID: 40166194417672409}
 --- !u!114 &554149111092361285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,6 +132,7 @@ MonoBehaviour:
   m_centerMass: {fileID: 6563985650005983225}
   m_health: {fileID: 6257293362602607283}
   m_resistance: {fileID: 6929119989120819791}
+  m_flinchHandler: {fileID: 2725813542355500407}
 --- !u!114 &2306889073997990204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,9 +199,6 @@ MonoBehaviour:
     m_max: 0
   m_legCollision: {fileID: 8347433816209527385}
   m_legCollider: {fileID: 8347433816209527384}
-  m_legColliderLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &4824844611710533824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +243,11 @@ MonoBehaviour:
   m_info:
     damage:
     - m_type: 0
+<<<<<<< HEAD
       m_value: 0
+=======
+      m_damage: 25
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
@@ -267,8 +271,39 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
+<<<<<<< HEAD
     SerializationNodes: []
   m_data: {fileID: 0}
+=======
+    SerializationNodes:
+    - Name: m_resistance
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.AttackType,
+        Assembly-CSharp],[System.Single, mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Combat.AttackType,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_useType: 0
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 --- !u!1001 &5970916431279462007
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -380,6 +415,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &40166194417672409 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5931880809761486510, guid: 51a377dc739d3bb44a86ea035e5311c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 5970916431279462007}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6563985650005983225 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 705660997346175374, guid: 51a377dc739d3bb44a86ea035e5311c1,
@@ -416,6 +457,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &3494449295435245411 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7107300084386935060, guid: 51a377dc739d3bb44a86ea035e5311c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 5970916431279462007}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &402692263218316713 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6289930681876845534, guid: 51a377dc739d3bb44a86ea035e5311c1,

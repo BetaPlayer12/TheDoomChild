@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Physics;
 
 namespace Refactor.DChild.Gameplay.Characters.Enemies
 {
@@ -44,11 +45,11 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_runAttack = new SimpleAttackInfo();
             public SimpleAttackInfo runAttack => m_runAttack;
+            [SerializeField]
+            private SimpleAttackInfo m_runAttack2 = new SimpleAttackInfo();
+            public SimpleAttackInfo runAttack2 => m_runAttack2;
             //
 
-            [SerializeField, MinValue(0)]
-            private float m_patience;
-            public float patience => m_patience;
             [SerializeField]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
@@ -101,6 +102,15 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             private string m_fallFromAwakenedAnimation;
             public string fallFromAwakenedAnimation => m_fallFromAwakenedAnimation;
 
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_rightFootEvent;
+            public string rightFootEvent => m_rightFootEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_leftFootEvent;
+            public string leftFootEvent => m_leftFootEvent;
+
+
 
             public override void Initialize()
             {
@@ -112,6 +122,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 m_attack2.SetData(m_skeletonDataAsset);
                 m_attack3.SetData(m_skeletonDataAsset);
                 m_runAttack.SetData(m_skeletonDataAsset);
+                m_runAttack2.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -119,7 +130,6 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Idle,
-            Patrol,
             Turning,
             Attacking,
             Chasing,
@@ -137,6 +147,9 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             _COUNT
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -147,10 +160,14 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
-        //Patience Handler
-        private float m_currentPatience;
-        private bool m_enablePatience;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandler;
+
         private bool m_spawnDone;
+<<<<<<< HEAD
+=======
+        //private bool m_isRunAttacking;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -162,12 +179,14 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
 
+        [Title("For Testing Purposes")]
         [SerializeField]
-        private BoxCollider2D m_box2D;
+        private GameObject m_testTarget;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            m_animation.DisableRootMotion();
+            StopAllCoroutines();
+            m_animation.EnableRootMotion(false, false);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -178,47 +197,44 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_currentPatience = 0;
-                m_enablePatience = false;
             }
-            else
-            {
-                if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                {
-                    m_enablePatience = true;
-                }
-            }
+        }
+
+        public void AddTarget(GameObject target)
+        {
+            m_testTarget = target;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            //m_character.SetFacing(m_character.facing == HorizontalDirection.Left  ? HorizontalDirection.Right : HorizontalDirection.Left);
             m_stateHandle.ApplyQueuedState();
         }
 
-        //Patience Handler
-        private void Patience()
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_currentPatience < m_info.patience)
-            {
-                m_currentPatience += m_character.isolatedObject.deltaTime;
-            }
-            else
-            {
-                m_targetInfo.Set(null, null);
-                m_enablePatience = false;
-                m_stateHandle.SetState(State.Patrol);
-            }
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_animation.SetAnimation(0, m_info.idle1Animation, true);
+            m_spawnDone = true;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            StopAllCoroutines();
             m_movement.Stop();
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
         }
 
         public void SetDirection(float direction)
         {
             transform.localScale = new Vector3(direction, transform.localScale.y, transform.localScale.z);
+            GetComponent<Character>().SetFacing(direction > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
         public override void ApplyData()
@@ -226,26 +242,36 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             base.ApplyData();
             if (m_attackDecider != null)
             {
-                Debug.Log("Update attack list trigger function");
                 UpdateAttackDeciderList();
             }
         }
         private void UpdateAttackDeciderList()
         {
-            Debug.Log("Update attack list trigger");
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range),
                                     new AttackInfo<Attack>(Attack.Attack3, m_info.attack3.range),
-                                    new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range));
+                                    new AttackInfo<Attack>(Attack.RunAttack, m_info.runAttack.range)/**/);
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
+<<<<<<< HEAD
         private IEnumerator Wait()
         {
             while (m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete)
             {
                 yield return null;
             }
+=======
+        public IEnumerator Die()
+        {
+            StopAllCoroutines();
+            m_spawnDone = false;
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            Destroy(this.gameObject);
+            yield return null;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         }
 
         private IEnumerator SpawnRoutine()
@@ -260,19 +286,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.fallFromAwakenedAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, SkeletonSpawnAnimation.ANIMATION_FALL_FROM);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
-            m_box2D.offset = new Vector2(0, 10);
-            m_box2D.size = new Vector2(50, 25);
-            Debug.Log("Spawn Done");
             if (m_targetInfo.isValid)
             {
                 m_stateHandle.SetState(State.Chasing);
             }
-            else
-            {
-                m_stateHandle.SetState(State.Patrol);
-            }
-            yield return null;
             m_spawnDone = true;
+<<<<<<< HEAD
         }
 
         private IEnumerator RunAttackRoutine()
@@ -286,6 +305,8 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             Debug.Log("STOP RUN ATTACK SKELETON");
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
+=======
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
             yield return null;
         }
 
@@ -293,6 +314,13 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             //m_enableChase = true;
+            //m_spineEventListener.Subscribe(m_info.leftFootEvent, LeftFootAudio);
+            //m_spineEventListener.Subscribe(m_info.rightFootEvent, RightFootAudio);
+
+            if (m_testTarget != null)
+            {
+                SetTarget(m_testTarget.GetComponent<Damageable>(), m_testTarget.GetComponent<Character>());
+            }
             StartCoroutine(SpawnRoutine());
         }
 
@@ -303,8 +331,10 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
+            m_flinchHandler.FlinchStart += OnFlinchStart;
+            m_flinchHandler.FlinchEnd += OnFlinchEnd;
             UpdateAttackDeciderList();
         }
 
@@ -317,44 +347,34 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     case State.Idle:
                         m_animation.SetAnimation(0, m_info.idle1Animation, true);
                         break;
-
-                    case State.Patrol:
-                        m_animation.EnableRootMotion(false, false);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
-                        break;
-
                     case State.Turning:
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         m_movement.Stop();
-                        m_turnHandle.Execute(m_info.turnAnimation);
+                        m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
+                        m_turnHandle.Execute(m_info.turnAnimation, m_info.idle1Animation);
                         break;
                     case State.Attacking:
                         m_stateHandle.Wait(State.ReevaluateSituation);
-
-                        //StartCoroutine(Wait()); //This is just to fix the transition issue with attacking
+                        
 
                         switch (m_attackDecider.chosenAttack.attack)
                         {
                             case Attack.Attack1:
                                 m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.attack1.animation);
-                                //m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
+                                m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idle1Animation);
                                 break;
                             case Attack.Attack2:
                                 m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.attack2.animation);
-                                //m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
+                                m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idle1Animation);
                                 break;
                             case Attack.Attack3:
                                 m_animation.EnableRootMotion(true, false);
-                                m_attackHandle.ExecuteAttack(m_info.attack3.animation);
-                                //m_animation.AddAnimation(0, m_info.idle1Animation, true, 0);
+                                m_attackHandle.ExecuteAttack(m_info.attack3.animation, m_info.idle1Animation);
                                 break;
                             case Attack.RunAttack:
                                 m_animation.EnableRootMotion(false, false);
-                                StartCoroutine(RunAttackRoutine());
+                                GetComponent<IsolatedPhysics2D>().AddForce((Vector2.right * transform.localScale.x) * 15, ForceMode2D.Impulse);
+                                m_attackHandle.ExecuteAttack(m_info.runAttack.animation, m_info.idle1Animation);
                                 break;
                         }
                         m_attackDecider.hasDecidedOnAttack = false;
@@ -366,28 +386,44 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
                                 {
-
                                     m_attackDecider.DecideOnAttack();
                                     if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                                     {
                                         m_movement.Stop();
+                                        m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
                                         m_stateHandle.SetState(State.Attacking);
                                     }
                                     else
                                     {
                                         m_animation.EnableRootMotion(false, false);
+<<<<<<< HEAD
                                         m_animation.SetAnimation(0, m_info.run.animation, true);
                                         m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+=======
+                                        //m_animation.SetAnimation(0, m_info.run.animation, true);
+                                        //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                        if (!IsTargetInRange(m_info.targetDistanceTolerance))
+                                        {
+                                            m_animation.SetAnimation(0, m_info.run.animation, true).MixDuration = 0.05f;
+                                            m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                        }
+                                        else
+                                        {
+                                            m_animation.SetAnimation(0, m_info.move.animation, true).MixDuration = 0.05f;
+                                            m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                        }
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
                                     }
                                 }
                                 else
                                 {
-                                    m_animation.SetAnimation(0, m_info.idle1Animation, true);
+                                    m_animation.SetAnimation(0, m_info.idle1Animation, true).MixDuration = 0.05f;
                                 }
                             }
                             else
                             {
-                                m_stateHandle.SetState(State.Turning);
+                                if(m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                                    m_stateHandle.SetState(State.Turning);
                             }
                         }
                         break;
@@ -398,19 +434,9 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                         {
                             m_stateHandle.SetState(State.Chasing);
                         }
-                        else
-                        {
-                            m_stateHandle.SetState(State.Patrol);
-                        }
                         break;
                     case State.WaitBehaviourEnd:
-                        Debug.Log("Still wetting");
                         return;
-                }
-
-                if (m_enablePatience)
-                {
-                    Patience();
                 }
 
                 m_wallSensor.transform.localScale = new Vector3(transform.localScale.x, m_wallSensor.transform.localScale.y, m_wallSensor.transform.localScale.z);

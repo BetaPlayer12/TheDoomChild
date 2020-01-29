@@ -55,7 +55,7 @@ namespace DChild.Gameplay.Combat
         public void Initialize(Scene scene)
         {
             m_uiInfoList = new List<UIInfo>();
-            m_pool = GameSystem.poolManager.GetPool<UIObjectPool>();
+            m_pool = GameSystem.poolManager?.GetPool<UIObjectPool>() ?? null;
             m_scene = scene;
         }
 

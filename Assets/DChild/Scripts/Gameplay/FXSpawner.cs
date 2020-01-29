@@ -13,9 +13,12 @@ namespace DChild.Gameplay
         private Transform m_spawnPoint;
         private FXSpawnHandle<FX> m_spawnHandle;
 
+        public Transform spawnPoint { get => m_spawnPoint;}
+        public GameObject fx { get => m_fx; }
+
         public void SetFX(GameObject fx) => m_fx = fx;
-        public void SpawnFX(Scene scene) => m_spawnHandle.InstantiateFX(m_fx, m_spawnPoint.position, scene);
-        public void SpawnFX(HorizontalDirection direction) => m_spawnHandle.InstantiateFX(m_fx, m_spawnPoint.position, direction);
-        public void SpawnFX() => m_spawnHandle.InstantiateFX(m_fx, m_spawnPoint.position);
+        public FX SpawnFX(Scene scene) => m_spawnHandle.InstantiateFX(m_fx, m_spawnPoint.position, scene);
+        public FX SpawnFX(HorizontalDirection direction) => m_spawnHandle.InstantiateFX(m_fx, m_spawnPoint.position, direction);
+        public FX SpawnFX() => m_spawnHandle.InstantiateFX(m_fx, m_spawnPoint.position);
     }
 }

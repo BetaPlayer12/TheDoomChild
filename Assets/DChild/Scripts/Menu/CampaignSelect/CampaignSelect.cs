@@ -1,5 +1,6 @@
 ﻿using DChild;
 using DChild.Menu;
+using DChild.Menu.Campaign;
 using DChild.Serialization;
 using Holysoft.Event;
 using Holysoft.Menu;
@@ -11,7 +12,7 @@ namespace DChild.Menu
     public class CampaignSelect : AdjacentNavigation, ICampaignSelect
     {
         [SerializeField]
-        private NavigationTimelines m_animation;
+        private CampaignVideoHandler m_animation;
 #if UNITY_EDITOR
         [SerializeField]
 #endif
@@ -42,12 +43,11 @@ namespace DChild.Menu
             base.Next();
             if (previousIndex < lastNavigationIndex)
             {
-                m_animation.Play(NavigationTimelines.Type.Next);
+                m_animation.Play(CampaignVideoHandler.Type.Next);
             }
             else
             {
-                m_animation.Play(NavigationTimelines.Type.LastItem);
-
+                m_animation.Play(CampaignVideoHandler.Type.Last);
             }
             m_selectedSlot = m_slotList.GetSlot(m_currentNavigationIndex);
         }
@@ -58,11 +58,11 @@ namespace DChild.Menu
             base.Previous();
             if (previousIndex > 0)
             {
-                m_animation.Play(NavigationTimelines.Type.Previous);
+                m_animation.Play(CampaignVideoHandler.Type.Previous);
             }
             else
             {
-                m_animation.Play(NavigationTimelines.Type.FirstItem);
+                m_animation.Play(CampaignVideoHandler.Type.First);
             }
             m_selectedSlot = m_slotList.GetSlot(m_currentNavigationIndex);
         }

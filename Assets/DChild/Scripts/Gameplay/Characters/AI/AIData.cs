@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Menu.Bestiary;
+using Sirenix.OdinInspector;
 using Spine.Unity;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -11,10 +12,12 @@ namespace Refactor.DChild.Gameplay.Characters.AI
     [CreateAssetMenu(fileName = "AIData", menuName = "DChild/Gameplay/AI Data")]
     public class AIData : SerializedScriptableObject
     {
-
+        [SerializeField]
+        private BestiaryData m_bestiaryData;
         [SerializeField]
         private IAIInfo m_info;
 
+        public BestiaryData bestiaryData => m_bestiaryData;
         public IAIInfo info => m_info;
 
 

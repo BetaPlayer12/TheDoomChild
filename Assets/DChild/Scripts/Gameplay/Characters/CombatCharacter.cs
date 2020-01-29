@@ -75,5 +75,10 @@ namespace DChild.Gameplay.Characters
         {
             throw new System.NotImplementedException();
         }
+
+        public void SetInvulnerability(bool isInvulnerable)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

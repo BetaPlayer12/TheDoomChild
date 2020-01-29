@@ -1,17 +1,9 @@
-﻿using System;
-using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.AI;
 using UnityEngine;
-using Spine;
-using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
-using System.Collections.Generic;
-using DChild;
-using DChild.Gameplay.Characters.Enemies;
 
 namespace Refactor.DChild.Gameplay.Characters.Enemies
 {
@@ -228,7 +220,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
@@ -240,12 +232,12 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Attack1:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack1.animation);
+                            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                         case Attack.Attack2:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack2.animation);
+                            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                     }
@@ -295,7 +287,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    Debug.Log("Still wetting");
+                    //Debug.Log("Still wetting");
                     return;
             }
 

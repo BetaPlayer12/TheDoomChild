@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Combat
         [MinValue(1f)]
         private float m_critModifier;
 
-        public void Execute(ref AttackInfo info, int chance, float modifier)
+        public void Execute(AttackInfo info, int chance, float modifier)
         {
             if (chance > 0 && Random.Range(0, 101) <= chance)
             {

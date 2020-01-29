@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
+    [AddComponentMenu("DChild/Gameplay/AI/Movement/Ground Movement Handler 2D")]
     public class GroundMovementHandler2D : MovementHandle2D
     {
         [SerializeField]
@@ -21,6 +22,13 @@ namespace DChild.Gameplay
         {
             m_source.SetVelocity(0);
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(CharacterPhysics2D physics)
+        {
+            m_source = physics;
+        }
+#endif
     }
 
 }

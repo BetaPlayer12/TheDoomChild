@@ -1,11 +1,11 @@
-﻿using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Characters.AI;
-using DChild.Gameplay.Characters.Enemies;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
+<<<<<<< HEAD
 using Refactor.DChild.Gameplay.Combat;
+=======
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
@@ -40,14 +40,12 @@ namespace Refactor.DChild.Gameplay.Characters.AI
             }
         }
 
-
         protected bool IsTargetInRange(float distance) => Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distance;
         protected Vector2 DirectionToTarget() => (m_targetInfo.position - (Vector2)m_character.transform.position).normalized;
 
-
         protected override void Awake()
         {
-            Debug.Log("Update Awake trigger");
+            m_targetInfo = new AITargetInfo();
             base.Awake();
             m_damageable.Destroyed += OnDestroyed;
         }
@@ -56,7 +54,18 @@ namespace Refactor.DChild.Gameplay.Characters.AI
 
         protected virtual void Start()
         {
-            m_targetInfo = new AITargetInfo();
+
         }
+
+#if UNITY_EDITOR
+        public Type aiDataType => m_data.GetType();
+        public void InitializeField(Character character, SpineRootAnimation spineRoot, Damageable damageable, Transform centerMass)
+        {
+            m_character = character;
+            m_animation = spineRoot;
+            m_damageable = damageable;
+            m_centerMass = centerMass;
+        }
+#endif
     }
 }

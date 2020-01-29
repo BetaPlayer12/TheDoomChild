@@ -1,9 +1,10 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Linq;
 using Doozy.Editor.Utils;
@@ -16,6 +17,12 @@ namespace Doozy.Editor.Internal
     [InitializeOnLoad]
     public static class DefineSymbolsProcessor
     {
+        /// <summary> Define Symbol for Doozy UI Manager </summary>
+        public const string DEFINE_DOOZY_MANAGER = "dUI_MANAGER";
+        
+        /// <summary> Define Symbol for Doozy UI Designer </summary>
+        public const string DEFINE_DOOZY_DESIGNER = "dUI_DESIGNER";            
+
         /// <summary> Define Symbol for Master Audio </summary>
         public const string DEFINE_MASTER_AUDIO = "dUI_MasterAudio";
 
@@ -57,9 +64,9 @@ namespace Doozy.Editor.Internal
 
         private static void ExecuteProcessor()
         {
-            if (EditorApplication.isPlayingOrWillChangePlaymode) 
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
-            
+
             DelayedCall.Run(0.1f, Run);
         }
 
@@ -75,7 +82,35 @@ namespace Doozy.Editor.Internal
 
         private static IEnumerable<Assembly> GetAssemblies() { return AppDomain.CurrentDomain.GetAssemblies(); }
 
-        private static bool NamespaceExists(string targetNamespace) { return s_assemblies.SelectMany(assembly => assembly.GetTypes()).Any(type => type.Namespace == targetNamespace); }
+        //https://haacked.com/archive/2012/07/23/get-all-types-in-an-assembly.aspx/
+        private static bool NamespaceExists(string targetNamespace)
+        {
+            if (s_assemblies == null || s_assemblies.Count == 0)
+            {
+                UpdateAssemblies();
+                if (s_assemblies == null || s_assemblies.Count == 0)
+                    return false;
+            }
+
+            foreach (Assembly assembly in s_assemblies)
+            {
+                if (assembly == null) continue;
+                Type[] typesInAsm;
+                try
+                {
+                    typesInAsm = assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    typesInAsm = ex.Types.Where(t => t != null).ToArray();
+                }
+
+                if (typesInAsm.Any(type => type.Namespace == targetNamespace))
+                    return true;
+            }
+
+            return false;
+        }
 
         private static void UpdateAssemblies()
         {
@@ -172,6 +207,8 @@ namespace Doozy.Editor.Internal
 
         public static void UpdateScriptingDefineSymbols()
         {
+            DefineSymbolsUtils.AddGlobalDefine(DEFINE_DOOZY_MANAGER);
+            
             if (Settings.UsePlaymaker) DefineSymbolsUtils.AddGlobalDefine(DEFINE_PLAYMAKER);
             else DefineSymbolsUtils.RemoveGlobalDefine(DEFINE_PLAYMAKER);
 

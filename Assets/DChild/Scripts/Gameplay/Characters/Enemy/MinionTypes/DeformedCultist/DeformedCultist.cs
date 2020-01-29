@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Projectiles;
-using DChild.Gameplay.Projectiles.Handlers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

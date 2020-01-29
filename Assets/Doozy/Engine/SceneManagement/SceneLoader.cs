@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -295,7 +295,7 @@ namespace Doozy.Engine.SceneManagement
         /// <param name="sceneName"> Name or path of the Scene to load </param>
         public void LoadSceneAsyncSingle(string sceneName) { LoadSceneAsync(sceneName, LoadSceneMode.Single); }
 
-        /// <summary> Set the AllowSceneActivation that that allows for Scenes to be activated as soon as it is ready. </summary>
+        /// <summary> Set the AllowSceneActivation that that allows for a Scene to be activated as soon as it is ready </summary>
         /// <param name="allowSceneActivation"> Allow Scenes to be activated as soon as it is ready </param>
         public SceneLoader SetAllowSceneActivation(bool allowSceneActivation)
         {
@@ -312,7 +312,7 @@ namespace Doozy.Engine.SceneManagement
         }
 
         /// <summary> Set the LoadSceneMode value, that determines how the new scene is loaded by this SceneLoader </summary>
-        /// <param name="loadSceneMode"></param>
+        /// <param name="loadSceneMode"> Load mode used when loading a scene </param>
         public SceneLoader SetLoadSceneMode(LoadSceneMode loadSceneMode)
         {
             LoadSceneMode = loadSceneMode;

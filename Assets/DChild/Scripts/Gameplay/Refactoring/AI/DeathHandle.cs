@@ -1,8 +1,14 @@
 ﻿using System;
 using DChild.Gameplay.Characters;
+<<<<<<< HEAD
 using Holysoft.Collections;
 using Holysoft.Event;
 using Refactor.DChild.Gameplay.Combat;
+=======
+using DChild.Gameplay.Combat;
+using Holysoft.Collections;
+using Holysoft.Event;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using Spine;
 using UnityEngine;
 
@@ -17,6 +23,14 @@ namespace Refactor.DChild.Gameplay.Characters
         [SerializeField]
         private CountdownTimer m_bodyDuration;
 
+<<<<<<< HEAD
+=======
+        [SerializeField]
+        private GameObject m_hitCollider;
+        [SerializeField]
+        private GameObject m_hitBox;
+
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         private string m_animation;
 
         public void SetAnimation(string animation)
@@ -32,13 +46,21 @@ namespace Refactor.DChild.Gameplay.Characters
 
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+<<<<<<< HEAD
             m_source.SetHitboxActive(false);
+=======
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
             m_animator.SetAnimation(0, m_animation, false, 0);
             m_animator.animationState.Complete += OnDeathAnimationComplete;
         }
 
         private void OnDeathAnimationComplete(TrackEntry trackEntry)
         {
+<<<<<<< HEAD
+=======
+            m_hitCollider.SetActive(false);
+            m_hitBox.SetActive(false);
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
             m_bodyDuration.Reset();
             m_animator.animationState.Complete -= OnDeathAnimationComplete;
             enabled = true;

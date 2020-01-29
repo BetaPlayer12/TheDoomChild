@@ -1,21 +1,24 @@
 ﻿using DChild.Configurations;
+<<<<<<< HEAD
 using DChild.Gameplay.Characters.Players;
+=======
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Databases;
-using DChild.Gameplay.Pooling;
-using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems;
 using DChild.Gameplay.VFX;
-using DChild.Inputs;
+using DChild.Menu;
 using DChild.Serialization;
+<<<<<<< HEAD
 using Holysoft.Gameplay.UI;
 using Sirenix.OdinInspector;
+=======
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using UnityEngine;
 
 namespace DChild.Gameplay
 {
-
     public class GameplayModifiers
     {
         public float minionSoulEssenceDrop = 1;
@@ -24,32 +27,41 @@ namespace DChild.Gameplay
     public class GameplaySystem : MonoBehaviour
     {
         private GameplaySettings m_settings;
-        private static DatabaseManager m_databaseManager;
+        private static GameplaySystem m_instance;
+        private static CampaignSlot m_campaignToLoad;
+        private static GameplayModifiers m_modifiers;
+        public static GameplayModifiers modifiers => m_modifiers;
 
-        private static IGameplaySystemModule[] m_modules;
+        #region Modules
         private static IGameplayActivatable[] m_activatableModules;
+        private static IOptionalGameplaySystemModule[] m_optionalGameplaySystemModules;
         private static CombatManager m_combatManager;
-
         private static FXManager m_fxManager;
         private static Cinema m_cinema;
         private static World m_world;
         private static SimulationHandler m_simulation;
         private static PlayerManager m_playerManager;
         private static LootHandler m_lootHandler;
+<<<<<<< HEAD
         private static GameplayModifiers m_modifiers;
+=======
+        private static CampaignSerializer m_campaignSerializer;
+        private static ZoneMoverHandle m_zoneMover;
+        private static HealthTracker m_healthTracker;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
+
 
         public static ICombatManager combatManager => m_combatManager;
-
         public static IFXManager fXManager => m_fxManager;
-        public static IDatabaseManager databaseManager => m_databaseManager;
         public static ICinema cinema => m_cinema;
         public static IWorld world => m_world;
         public static ITime time => m_world;
         public static IPlayerManager playerManager => m_playerManager;
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
-        public static GameplayModifiers modifiers { get => m_modifiers; }
-
+        public static IHealthTracker healthTracker => m_healthTracker;
+        public static CampaignSerializer campaignSerializer => m_campaignSerializer;
+        #endregion
         public static bool isGamePaused { get; private set; }
 
         #region Cinematic
@@ -82,8 +94,9 @@ namespace DChild.Gameplay
             isGamePaused = true;
         }
 
-        public static void LoadGame(CampaignSlot campaignSlot)
+        public static void ClearCaches()
         {
+<<<<<<< HEAD
 
         }
 
@@ -92,27 +105,44 @@ namespace DChild.Gameplay
         private static SliderStatUI bossHealth;
 
         public static void SetBossHealth(Character character)
-        {
-            bossHealth.MonitorInfoOf(character.GetComponentInChildren<Health>());
+=======
+            m_cinema?.ClearLists();
+            m_healthTracker?.RemoveAllTrackers();
         }
-        //Temp End
 
-        public static CampaignSlot SaveGame()
+        public static void LoadGame(CampaignSlot campaignSlot)
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         {
-            return null;
+            m_campaignToLoad = campaignSlot;
+            ClearCaches();
+            m_healthTracker.RemoveAllTrackers();
+            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
+            GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
+            m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+        }
+
+        public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
+        {
+            m_zoneMover.MoveCharacterToLocation(character, location, entranceType);
+            ClearCaches();
         }
 
         private void AssignModules()
         {
             AssignModule(out m_combatManager);
             AssignModule(out m_fxManager);
-            AssignModule(out m_databaseManager);
             AssignModule(out m_lootHandler);
             AssignModule(out m_cinema);
             AssignModule(out m_world);
             AssignModule(out m_simulation);
             AssignModule(out m_playerManager);
+<<<<<<< HEAD
             //Debug.Log("Modules Assigned");
+=======
+            AssignModule(out m_zoneMover);
+            AssignModule(out m_campaignSerializer);
+            AssignModule(out m_healthTracker);
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
@@ -123,18 +153,22 @@ namespace DChild.Gameplay
 
         protected void Awake()
         {
-            AssignModules();
-            m_modules = GetComponentsInChildren<IGameplaySystemModule>();
-            m_activatableModules = GetComponentsInChildren<IGameplayActivatable>();
-
-            var initializables = GetComponentsInChildren<IGameplayInitializable>();
-            for (int i = 0; i < initializables.Length; i++)
+            if (m_instance)
             {
-                initializables[i].Initialize();
+                Destroy(gameObject);
             }
-            bossHealth = m_bossHealth;
-            //m_fxManager.LoadDatabase(m_database);
-            //m_fxManager.Initialize(); //Temporary for grasscutFX
+            else
+            {
+                m_instance = this;
+                AssignModules();
+                m_activatableModules = GetComponentsInChildren<IGameplayActivatable>();
+
+                var initializables = GetComponentsInChildren<IGameplayInitializable>();
+                for (int i = 0; i < initializables.Length; i++)
+                {
+                    initializables[i].Initialize();
+                }
+            }
         }
 
         private void Start()
@@ -143,6 +177,11 @@ namespace DChild.Gameplay
             m_settings = GameSystem.settings?.gameplay ?? null;
             m_modifiers = new GameplayModifiers();
             isGamePaused = true;
+            if (m_campaignToLoad != null)
+            {
+                m_campaignSerializer.SetSlot(m_campaignToLoad);
+                m_campaignToLoad = null;
+            }
         }
 
         private void OnEnable()
@@ -163,8 +202,23 @@ namespace DChild.Gameplay
 
         private void OnApplicationQuit()
         {
-            Debug.Log("Quit");
             Time.timeScale = 1;
+        }
+
+        private void OnDestroy()
+        {
+            if (this == m_instance)
+            {
+                m_combatManager = null;
+                m_fxManager = null;
+                m_lootHandler = null;
+                m_cinema = null;
+                m_world = null;
+                m_simulation = null;
+                m_playerManager = null;
+                m_zoneMover = null;
+                m_activatableModules = null;
+            }
         }
     }
 }

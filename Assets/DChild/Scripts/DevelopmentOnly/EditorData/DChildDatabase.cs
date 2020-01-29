@@ -111,6 +111,21 @@ namespace DChild
                 }
             }
 
+            public int Insert(int ID, string name, string description, SoulSkillType type)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    //ChangeID and try Insert Again
+                    return Insert((int)UnityEngine.Random.Range(0, 999999), name, description, type);
+                }
+                else
+                {
+                    m_connection.ExecuteCommand($"INSERT INTO {table} (ID,Name, Description, Type) VALUES({ID},\"{name}\",\"{description}\",\"{type.ToString()}\");");
+                    return ID;
+                }
+            }
+
             private Element[] CreateListFromReader(IDataReader reader)
             {
                 List<Element> list = new List<Element>();
@@ -244,6 +259,11 @@ namespace DChild
                 m_connection.ExecuteCommand($"UPDATE Bestiary SET ID = {ID} WHERE Name = \"{reference}\"");
             }
 
+            public void UpdateID(int reference, int ID)
+            {
+                m_connection.ExecuteCommand($"UPDATE Bestiary SET ID = {ID} WHERE ID = {reference}");
+            }
+
             public void Insert(int ID, string name, string description)
             {
                 var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
@@ -265,6 +285,21 @@ namespace DChild
                     var ID = IDs[i];
                     m_connection.ExecuteCommand($"DELETE FROM Bestiar WHERE ID = {ID}");
                     m_connection.ExecuteCommand($"DELETE FROM Bestiary_Location WHERE Bestiary_ID = {ID}");
+                }
+            }
+
+            public (int HP,int DMG) GetRatings(int ID)
+            {
+                var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
+                if (bestiaryReader.Read())
+                {
+                    return (bestiaryReader.GetData<int>("HP Rating"), bestiaryReader.GetData<int>("DMG Rating"));
+
+                }
+                else
+                {
+                    return (-1, -1);
+
                 }
             }
         }
@@ -359,6 +394,21 @@ namespace DChild
                 else
                 {
                     throw new System.Exception($"Record with ID:{ID} does not exists, use Insert instead");
+                }
+            }
+
+            public int Insert(int ID, string name, string description, int quantityLimit, int cost)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    //ChangeID and try Insert Again
+                    return Insert((int)UnityEngine.Random.Range(0, 999999), name, description, quantityLimit, cost);
+                }
+                else
+                {
+                    m_connection.ExecuteCommand($"INSERT INTO {table} (ID,Name, Description, MaxStack,Cost) VALUES({ID},\"{name}\",\"{description}\",{quantityLimit},{cost});");
+                    return ID;
                 }
             }
         }

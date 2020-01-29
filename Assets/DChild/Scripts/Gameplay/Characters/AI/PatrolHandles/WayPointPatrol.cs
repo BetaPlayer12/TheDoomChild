@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.AI
 {
+
+    [AddComponentMenu("DChild/Gameplay/AI/Patrol/WayPoint Patrol")]
     public class WayPointPatrol : PatrolHandle
     {
         public struct PatrolInfo
@@ -66,6 +68,7 @@ namespace DChild.Gameplay.Characters.AI
             if (GetProposedFacing(currentPosition, movementInfo.destination) != character.currentFacing)
             {
                 CallTurnRequest();
+
             }
             else
             {
@@ -83,11 +86,9 @@ namespace DChild.Gameplay.Characters.AI
                 if (GetProposedFacing(currentPosition, agent.segmentDestination) != characterInfo.currentFacing)
                 {
                     CallTurnRequest();
-                    Debug.Log("fd");
                 }
                 else
                 {
-                    Debug.Log("move");
                     agent.Move(speed);
                 }
             }
@@ -180,8 +181,6 @@ namespace DChild.Gameplay.Characters.AI
 
             }
         }
-
-
 #endif
     }
 }

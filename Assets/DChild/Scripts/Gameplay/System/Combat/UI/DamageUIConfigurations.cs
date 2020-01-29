@@ -1,11 +1,17 @@
+<<<<<<< HEAD
 ﻿using DChild.Gameplay.Databases;
 using Sirenix.OdinInspector;
 using System;
+=======
+﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using TMPro;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat.UI
 {
+
     [CreateAssetMenu(fileName = "DamageUIConfigurations", menuName = "DChild/Database/Damage UI Configurations")]
     public class DamageUIConfigurations : ScriptableDatabase
     {

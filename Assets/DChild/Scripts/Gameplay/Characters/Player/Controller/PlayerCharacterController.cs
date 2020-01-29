@@ -5,9 +5,11 @@ using Holysoft.Event;
 using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using DChild.Gameplay.Characters.Players.Behaviour;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Player Character Controller")]
     public class PlayerCharacterController : MonoBehaviour, IMainController
     {
         [SerializeField]
@@ -24,6 +26,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private GameObject m_behaviourContainer;
         [SerializeField]
         private CharacterState m_characterState;
+        [SerializeField]
+        private GroundednessHandle m_groundedness;
 
         private ControllerEventArgs m_callArgs;
 
@@ -73,10 +77,28 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 controllableModules[i].ConnectTo(this);
             }
+            m_groundedness.Initialize();
         }
 
         private void FixedUpdate()
         {
+            if (m_characterState.isGrounded)
+            {
+                m_groundedness.HandleGround();
+            }
+            else
+            {
+
+
+                m_groundedness.HandleMidAir();
+                if(m_characterState.isDashing == false)
+                {
+                    m_groundedness.HandleLand();
+                }
+              
+
+            }
+
             if (m_enabled)
             {
                 if (m_characterState.waitForBehaviour)
@@ -84,10 +106,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_characterState.isGrounded)
                 {
+                   
                     m_ground.CallFixedUpdate(m_characterState, m_skills, m_callArgs);
+                   
                 }
                 else
                 {
+                
                     m_air.CallFixedUpdate(m_characterState, m_skills, m_callArgs);
                 }
             }
@@ -121,5 +146,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
             }
         }
+
+#if UNITY_EDITOR
+        public void Initialize(GameObject character, GameObject behaviour)
+        {
+            m_behaviourContainer = behaviour;
+            m_characterState = character.GetComponentInChildren<CharacterState>();
+            m_groundedness = character.GetComponentInChildren<GroundednessHandle>();
+    }
+#endif
     }
 }

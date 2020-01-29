@@ -5,10 +5,14 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Inventories;
 using DChild.Serialization;
-using Doozy.Engine;
+//using Doozy.Engine;
 using Holysoft.Event;
+<<<<<<< HEAD
 using Refactor.DChild.Gameplay.Characters.Players;
 using Refactor.DChild.Gameplay.Combat;
+=======
+using DChild.Gameplay.Characters.Players;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -30,8 +34,14 @@ namespace DChild.Gameplay.Characters.Players
         StatusEffectResistance statusResistance { get; }
         IMainController controller { get; }
         PlayerInventory inventory { get; }
+        LootPicker lootPicker { get; }
+        StatusEffectReciever statusEffectReciever { get; }
+        Character character { get; }
+
+        int GetInstanceID();
     }
 
+    [AddComponentMenu("DChild/Gameplay/Player/Player")]
     public class Player : SerializedMonoBehaviour, IPlayer
     {
         [SerializeField]
@@ -48,6 +58,8 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerCharacterController m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
+        [SerializeField]
+        private SoulCrystalHandle m_soulCrystalHandle;
 
         [Title("Serialzables")]
         [SerializeField]
@@ -64,6 +76,15 @@ namespace DChild.Gameplay.Characters.Players
         private Attacker m_attacker;
         [SerializeField]
         private Magic m_magic;
+<<<<<<< HEAD
+=======
+        [SerializeField]
+        private StatusEffectReciever m_statusEffectReciever;
+        [SerializeField]
+        private LootPicker m_lootPicker;
+        [SerializeField]
+        private GroundednessHandle m_groundednessHandle;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
         public event EventAction<EventActionArgs> OnDeath;
 
@@ -81,7 +102,11 @@ namespace DChild.Gameplay.Characters.Players
         public PlayerInventory inventory => m_inventory;
         public IMainController controller => m_controller;
 
+        public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
+
         public StatusEffectResistance statusResistance => m_statusResistance;
+
+        public Character character => m_controlledCharacter;
 
         public PlayerCharacterData SaveData()
         {
@@ -91,6 +116,12 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PlayerCharacterData data)
         {
             m_serializer.LoadData(data);
+            m_soulCrystalHandle.InitializeHandles();
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            m_controlledCharacter.transform.position = position;
         }
 
         private void Awake()
@@ -103,10 +134,24 @@ namespace DChild.Gameplay.Characters.Players
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             OnDeath?.Invoke(this, eventArgs);
-            GameEventMessage.SendEvent("Game Over");
             m_controlledCharacter.physics.SetVelocity(Vector2.zero);
+            m_groundednessHandle.enabled = false;
+            m_groundednessHandle.ResetAnimationParameters();
             m_controller.Disable();
             m_damageable.SetHitboxActive(false);
         }
+
+#if UNITY_EDITOR
+        public void Initialize(GameObject character)
+        {
+            m_controlledCharacter = character.GetComponentInChildren<Character>();
+            m_state = character.GetComponentInChildren<CharacterState>();
+            m_damageable = character.GetComponentInChildren<Damageable>();
+            m_attacker = character.GetComponentInChildren<Attacker>();
+            m_magic = character.GetComponentInChildren<Magic>();
+            m_lootPicker = character.GetComponentInChildren<LootPicker>();
+            m_groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
+        }
+#endif
     }
 }

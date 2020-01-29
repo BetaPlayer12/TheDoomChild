@@ -19,6 +19,15 @@ namespace DChild.Gameplay.Characters
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
+        [SerializeField]
+        private bool m_autoFlinch;
+
+        public void InitializeField(SpineRootAnimation spineRoot,IsolatedPhysics2D physics, SkeletonAnimation animation)
+        {
+            m_spine = spineRoot;
+            m_physics = physics;
+            m_skeletonAnimation = animation;
+        }
 #endif
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_animation;
@@ -39,6 +48,7 @@ namespace DChild.Gameplay.Characters
         {
             if (m_isFlinching == false)
             {
+                //StopAllCoroutines(); //Gian Editz
                 m_physics?.SetVelocity(Vector2.zero);
                 StartCoroutine(FlinchRoutine());
             }
@@ -46,8 +56,12 @@ namespace DChild.Gameplay.Characters
 
         private IEnumerator FlinchRoutine()
         {
-            m_spine.SetAnimation(0, m_animation, false, 0);
-            m_spine.AddEmptyAnimation(0, 0.2f, 0);
+            FlinchStart?.Invoke(this, new EventActionArgs());
+            if (m_isFlinching)
+            {
+                m_spine.SetAnimation(0, m_animation, false, 0);
+                m_spine.AddEmptyAnimation(0, 0.2f, 0);
+            }
             m_isFlinching = true;
             m_spine.AnimationSet += OnAnimationSet;
             m_spine.animationState.Complete += OnAnimationComplete;
@@ -57,6 +71,7 @@ namespace DChild.Gameplay.Characters
             }
             m_spine.AnimationSet -= OnAnimationSet;
             m_spine.animationState.Complete -= OnAnimationComplete;
+            FlinchEnd?.Invoke(this, new EventActionArgs());
         }
 
         private void OnAnimationComplete(TrackEntry trackEntry)

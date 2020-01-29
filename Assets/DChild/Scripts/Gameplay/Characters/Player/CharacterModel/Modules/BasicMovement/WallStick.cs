@@ -70,11 +70,13 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         {
             if (m_isSliding)
             {
+               
                 m_physics.SetVelocity(Vector2.down * m_slideSpeed);
 
                 m_wallSensor.Cast();
                 if (m_wallSensor.isDetecting == false || m_physics.inContactWithGround)
                 {
+                    
                     CancelWallStick();
                     m_groundednessHandle.CallLand();
                 }
@@ -98,16 +100,19 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
                     {
                         m_wallSensor.Cast();
                         if (m_wallSensor.allRaysDetecting)
-                        {
+                        {                          
                             var hit = m_wallSensor.GetValidHits()[0];
-                            if (hit.collider.CompareTag("Droppable") == false)
+                            if (hit.collider.CompareTag("Droppable") == false && hit.collider.CompareTag("InvisibleWall") == false)
                             {
+                                
                                 m_groundHeightSensor.Cast();
                                 if (m_groundHeightSensor.isDetecting == false)
                                 {
+                                    
                                     m_platformSensor.Cast();
                                     if (m_platformSensor.isDetecting == false)
                                     {
+                                        
                                         AttachToWall(hit);
                                         StartStickToWall();
                                     }
@@ -166,6 +171,7 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         private void OnWallStickEnd(object sender, EventActionArgs eventArgs)
         {
+            
             StartWallSlide();
         }
 

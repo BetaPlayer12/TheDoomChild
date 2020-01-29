@@ -1,11 +1,9 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 #if UNITY_EDITOR
 using Sirenix.Utilities.Editor;
-using UnityEditor;
 #endif
 
 namespace DChild
@@ -18,29 +16,13 @@ namespace DChild
         protected int[] m_IDs;
 
         public int Count => m_IDs.Length;
-        public T GetInfo(int ID) => m_list[ID];
+        public T GetInfo(int ID) => m_list.ContainsKey(ID) ? m_list[ID] : null;
         public int[] GetIDs() => m_IDs;
 
 #if UNITY_EDITOR
-        [SerializeField, FolderPath]
-        private string m_reference;
 
-        [Button]
-        private void UseAllDataFromReference()
-        {
-            var filePaths = Directory.GetFiles(m_reference);
-            for (int i = 0; i < filePaths.Length; i++)
-            {
-                var asset = AssetDatabase.LoadAssetAtPath<T>(filePaths[i]);
-                if (asset != null)
-                {
-                    m_hash.Add(asset);
-                }
-            }
-        }
-
-        [ShowInInspector, ListDrawerSettings(OnTitleBarGUI = "TitleBar")]
-        private HashSet<T> m_hash = new HashSet<T>();
+        [ShowInInspector, ListDrawerSettings(OnTitleBarGUI = "TitleBar", DraggableItems = true),AssetSelector]
+        private List<T> m_hash = new List<T>();
 
         private void TitleBar()
         {
