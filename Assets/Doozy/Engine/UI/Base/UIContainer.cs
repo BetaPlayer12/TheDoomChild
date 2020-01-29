@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -93,7 +93,8 @@ namespace Doozy.Engine.UI.Base
             if (DisableCanvas)
             {
                 Canvas.enabled = false;
-                if (DisableGraphicRaycaster) GraphicRaycaster.enabled = false;
+                if (DisableGraphicRaycaster)
+                    GraphicRaycaster.enabled = false;
             }
         }
 
@@ -119,9 +120,31 @@ namespace Doozy.Engine.UI.Base
         public virtual void Init()
         {
             if (RectTransform == null) return;
-            Canvas = RectTransform.gameObject.GetComponent<Canvas>() ?? RectTransform.gameObject.AddComponent<Canvas>();
-            GraphicRaycaster = RectTransform.gameObject.GetComponent<GraphicRaycaster>() ?? RectTransform.gameObject.AddComponent<GraphicRaycaster>();
-            CanvasGroup = RectTransform.gameObject.GetComponent<CanvasGroup>() ?? RectTransform.gameObject.AddComponent<CanvasGroup>();
+            
+            if (Canvas == null)
+            {
+                Canvas = RectTransform.gameObject.GetComponent<Canvas>();
+                if (Canvas == null)
+                    Canvas = RectTransform.gameObject.AddComponent<Canvas>();
+            }
+
+            if (GraphicRaycaster == null)
+            {
+                GraphicRaycaster = RectTransform.gameObject.GetComponent<GraphicRaycaster>();
+                if (GraphicRaycaster == null)
+                    GraphicRaycaster = RectTransform.gameObject.AddComponent<GraphicRaycaster>();
+            }
+
+            if (CanvasGroup == null)
+            {
+                CanvasGroup = RectTransform.gameObject.GetComponent<CanvasGroup>();
+                if(CanvasGroup == null)
+                    CanvasGroup = RectTransform.gameObject.AddComponent<CanvasGroup>();
+            }
+            
+            if (Canvas.enabled && DisableCanvas) Canvas.enabled = false;
+            if (GraphicRaycaster.enabled & DisableGraphicRaycaster) GraphicRaycaster.enabled = false;
+
             if (!Enabled)
             {
                 Disable();
@@ -129,9 +152,6 @@ namespace Doozy.Engine.UI.Base
             }
 
             UpdateStartValues();
-
-            if (Canvas.enabled) Canvas.enabled = false;
-            if (GraphicRaycaster.enabled) GraphicRaycaster.enabled = false;
         }
 
         /// <summary> Resets this instance to the default values </summary>

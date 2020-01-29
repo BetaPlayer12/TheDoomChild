@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -44,6 +44,7 @@ namespace Doozy.Editor.Settings
         public float WindowViewContentHorizontalPadding = 8f;
         public string EditorPrefsKeyWindowCurrentView = "Doozy.Window.CurrentView";
         public string EditorPrefsKeyWindowToolbarState = "Doozy.Window.ToolbarState";
+        public string EditorPrefsKeyWindowCurrentTheme = "Doozy.Window.CurrentTheme";
         public string WindowTitle = "DoozyUI";
 
         /// <summary> [Editor Only] Marks target object as dirty. (Only suitable for non-scene objects) </summary>

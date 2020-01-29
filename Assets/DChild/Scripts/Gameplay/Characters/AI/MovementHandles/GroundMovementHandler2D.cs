@@ -22,6 +22,13 @@ namespace DChild.Gameplay
         {
             m_source.SetVelocity(0);
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(CharacterPhysics2D physics)
+        {
+            m_source = physics;
+        }
+#endif
     }
 
 }

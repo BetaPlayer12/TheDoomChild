@@ -1,11 +1,14 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using Doozy.Editor.Internal;
 using Doozy.Editor.Nody.Editors;
 using Doozy.Engine.SceneManagement;
+using Doozy.Engine.UI;
+using Doozy.Engine.UI.Base;
 using Doozy.Engine.UI.Nodes;
+using Doozy.Engine.UI.Settings;
 using Doozy.Engine.Utils;
 using UnityEditor;
 using UnityEngine;
@@ -21,6 +24,10 @@ namespace Doozy.Editor.UI.Nodes
         private const string ERROR_NO_SCENE_NAME = "ErrorNoSceneName";
         private const string ERROR_BAD_BUILD_INDEX = "ErrorBadBuildIndex";
 
+        private static NamesDatabase UIViewDatabase { get { return UIViewSettings.Database; } }
+        private static NamesDatabase UIButtonDatabase { get { return UIButtonSettings.Database; } }
+        private static NamesDatabase UIDrawerDatabase { get { return UIDrawerSettings.Database; } }
+        
         private WaitNode TargetNode { get { return (WaitNode) target; } }
 
         private SerializedProperty
@@ -34,7 +41,16 @@ namespace Doozy.Editor.UI.Nodes
             m_durationMin,
             m_sceneBuildIndex,
             m_gameEvent,
-            m_sceneName;
+            m_sceneName,
+            m_uiViewTriggerAction,
+            m_viewCategory,
+            m_viewName,
+            m_uiButtonTriggerAction,
+            m_buttonCategory,
+            m_buttonName,
+            m_uiDrawerTriggerAction,
+            m_drawerName,
+            m_customDrawerName;
 
         protected override void LoadSerializedProperty()
         {
@@ -51,6 +67,15 @@ namespace Doozy.Editor.UI.Nodes
             m_sceneBuildIndex = GetProperty(PropertyName.SceneBuildIndex);
             m_gameEvent = GetProperty(PropertyName.GameEvent);
             m_sceneName = GetProperty(PropertyName.SceneName);
+            m_uiViewTriggerAction = GetProperty(PropertyName.UIViewTriggerAction);
+            m_viewCategory = GetProperty(PropertyName.ViewCategory);
+            m_viewName = GetProperty(PropertyName.ViewName);
+            m_uiButtonTriggerAction = GetProperty(PropertyName.UIButtonTriggerAction);
+            m_buttonCategory = GetProperty(PropertyName.ButtonCategory);
+            m_buttonName = GetProperty(PropertyName.ButtonName);
+            m_uiDrawerTriggerAction = GetProperty(PropertyName.UIDrawerTriggerAction);
+            m_drawerName = GetProperty(PropertyName.DrawerName);
+            m_customDrawerName = GetProperty(PropertyName.CustomDrawerName);
         }
 
         protected override void OnEnable()
@@ -107,7 +132,36 @@ namespace Doozy.Editor.UI.Nodes
                 if (TargetNode.WaitFor != WaitNode.WaitType.Time)
                 {
                     GUILayout.Space(DGUI.Properties.Space());
-                    DGUI.Toggle.Switch.Draw(m_anyValue, TargetNode.WaitFor == WaitNode.WaitType.GameEvent ? UILabels.AnyGameEvent : UILabels.AnyScene, textColorName, true, false);
+                    string anyLabel = string.Empty;
+                    switch (TargetNode.WaitFor)
+                    {
+                        case WaitNode.WaitType.GameEvent:
+                            anyLabel = UILabels.AnyGameEvent;
+                            break;
+                        case WaitNode.WaitType.SceneLoad: 
+                        case WaitNode.WaitType.SceneUnload: 
+                        case WaitNode.WaitType.ActiveSceneChange:
+                            anyLabel = UILabels.AnyScene;
+                            break;
+                        case WaitNode.WaitType.UIView: 
+                            DGUI.Property.Draw(m_uiViewTriggerAction, UILabels.TriggerAction, backgroundColorName, textColorName);
+                            GUILayout.Space(DGUI.Properties.Space());
+                            if ((UIViewBehaviorType) m_uiViewTriggerAction.enumValueIndex == UIViewBehaviorType.Unknown)
+                                m_uiViewTriggerAction.enumValueIndex = (int) UIViewBehaviorType.Show;
+                            anyLabel = UILabels.AnyUIView;
+                            break;
+                        case WaitNode.WaitType.UIButton: 
+                            DGUI.Property.Draw(m_uiButtonTriggerAction, UILabels.TriggerAction, backgroundColorName, textColorName);
+                            GUILayout.Space(DGUI.Properties.Space());
+                            anyLabel = UILabels.AnyUIButton;
+                            break;
+                        case WaitNode.WaitType.UIDrawer: 
+                            DGUI.Property.Draw(m_uiDrawerTriggerAction, UILabels.TriggerAction, backgroundColorName, textColorName);
+                            GUILayout.Space(DGUI.Properties.Space());
+                            anyLabel = UILabels.AnyUIDrawer;
+                            break;
+                    }
+                    DGUI.Toggle.Switch.Draw(m_anyValue, anyLabel, textColorName, true, false);
                     if (m_anyValue.boolValue)
                     {
                         backgroundColorName = DGUI.Colors.DisabledBackgroundColorName;
@@ -159,6 +213,33 @@ namespace Doozy.Editor.UI.Nodes
                                 break;
                         }
 
+                        GUI.enabled = true;
+                        break;
+                    case WaitNode.WaitType.UIView:
+                        GUI.enabled = !TargetNode.AnyValue;
+                        DGUI.Database.DrawItemsDatabaseSelector(serializedObject,
+                                                                m_viewCategory, UILabels.ViewCategory,
+                                                                m_viewName, UILabels.ViewName,
+                                                                UIViewDatabase,
+                                                                backgroundColorName);
+                        GUI.enabled = true;
+                        break;
+                    case WaitNode.WaitType.UIButton:
+                        GUI.enabled = !TargetNode.AnyValue;
+                        DGUI.Database.DrawItemsDatabaseSelector(serializedObject,
+                                                                m_buttonCategory, UILabels.ButtonCategory,
+                                                                m_buttonName, UILabels.ButtonName,
+                                                                UIButtonDatabase,
+                                                                backgroundColorName);
+                        GUI.enabled = true;
+                        break;
+                    case WaitNode.WaitType.UIDrawer:
+                        GUI.enabled = !TargetNode.AnyValue;
+                        DGUI.Database.DrawItemsDatabaseSelectorForGeneralCategoryOnly(UIDrawer.DefaultDrawerCategory,
+                                                                                      m_drawerName, UILabels.DrawerName,
+                                                                                      m_customDrawerName,
+                                                                                      UIDrawerDatabase,
+                                                                                      backgroundColorName);
                         GUI.enabled = true;
                         break;
                 }

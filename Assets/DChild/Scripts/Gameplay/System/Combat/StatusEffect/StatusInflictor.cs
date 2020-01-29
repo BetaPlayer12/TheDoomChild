@@ -6,7 +6,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Combat.StatusAilment
 {
     [AddComponentMenu("DChild/Gameplay/Combat/Status Inflictor")]
-    public class StatusInflictor : SerializedMonoBehaviour
+    public class StatusInflictor : MonoBehaviour
     {
         [SerializeField]
         private StatusEffectChanceData m_data;
@@ -70,11 +70,14 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         private void CopyData()
         {
-            m_statusInflictions.Clear();
-            var chances = m_data.chance;
-            foreach (var key in chances.Keys)
+            if (m_statusInflictions != null)
             {
-                m_statusInflictions.Add(new StatusEffectChance(key, chances[key]));
+                m_statusInflictions.Clear();
+                var chances = m_data.chance;
+                foreach (var key in chances.Keys)
+                {
+                    m_statusInflictions.Add(new StatusEffectChance(key, chances[key]));
+                }
             }
         }
 
@@ -91,7 +94,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         private void Awake()
         {
-            GetComponent<IAttacker>().TargetDamaged += OnTargetDamage; 
+            GetComponent<IAttacker>().TargetDamaged += OnTargetDamage;
             m_statusInflictions = new List<StatusEffectChance>();
             if (m_data != null)
             {

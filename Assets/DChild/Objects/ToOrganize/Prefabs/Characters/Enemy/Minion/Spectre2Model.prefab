@@ -146,6 +146,7 @@ CompositeCollider2D:
       - {x: -0.9048724, y: 3.2415981}
       - {x: -0.2828595, y: 2.266736}
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.000005
 --- !u!114 &2388790097130377395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +165,6 @@ MonoBehaviour:
   - {fileID: 7113182203101746363}
   - {fileID: 4333788170718806364}
   - {fileID: 4990639772047889340}
-  m_compositeColliderID: -72702
   m_isInvulnerable: 0
   m_damageReduction: 0
 --- !u!114 &1820545539615300780
@@ -179,6 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_ignoreColliderList: []
 --- !u!1 &1521194929409582743
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +451,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 23cb91065f2e37442af0f5aa7ad4b184, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -457,6 +459,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -493,10 +496,15 @@ MonoBehaviour:
   clearStateOnDisable: 0
   tintBlack: 0
   singleSubmesh: 0
+  fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
+  maskInteraction: 0
+  maskMaterials:
+    materialsMaskDisabled: []
+    materialsInsideMask: []
+    materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  m_flipX: 0
   _animationName: 
   loop: 0
   timeScale: 1
@@ -513,6 +521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneRoot: {fileID: 3121521506222324613}
+  flipBy180DegreeRotation: 0
   skeletonRenderer: {fileID: 4347796458591663870}
 --- !u!1 &4608116261518781989
 GameObject:

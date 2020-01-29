@@ -15,6 +15,7 @@ using DChild.Gameplay.Characters.Enemies;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Werewolf")]
     public class WerewolfAI : CombatAIBrain<WerewolfAI.Info>
     {
         [System.Serializable]
@@ -254,22 +255,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-
-
+                    
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Bite:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.biteAttack.animation);
+                            m_attackHandle.ExecuteAttack(m_info.biteAttack.animation, m_info.idleAnimation);
                             break;
                         case Attack.Scratch:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation);
+                            m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -285,7 +286,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                                 {
                                     m_movement.Stop();
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0.05f;
                                     m_stateHandle.SetState(State.Attacking);
                                 }
                                 else

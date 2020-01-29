@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters
         private Spine.TrackEntry m_cacheTrack;
         public event EventAction<EventActionArgs> AttackDone;
 
-        public void ExecuteAttack(string attackAnimation)
+        public void ExecuteAttack(string attackAnimation, string idleAnimation)
         {
             if (m_cacheTrack != null)
             {
@@ -23,7 +23,8 @@ namespace DChild.Gameplay.Characters
             m_cacheTrack.MixDuration = 0;
             m_cacheTrack.Complete += OnTrackDone;
             m_cacheTrack.Interrupt += OnTrackDone;
-            m_animation.AddEmptyAnimation(0, 0, 1); //Commented dis to fix the transitional issue of attacks
+            //m_animation.AddEmptyAnimation(0, 0, 0); //Commented dis to fix the transitional issue of attacks
+            m_animation.AddAnimation(0, idleAnimation, true, 0);
         }
 
         private void OnTrackDone(TrackEntry trackEntry)

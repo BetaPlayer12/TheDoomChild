@@ -17,6 +17,9 @@ MonoBehaviour:
   m_physics: {fileID: 7625108144392214621}
   m_colliders: {fileID: 6391463019821572621}
   m_facing: 1
+  m_bodyReference:
+    m_default: {fileID: 0}
+    m_list: []
 --- !u!114 &1374677103294768224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46,7 +49,6 @@ MonoBehaviour:
   m_character: {fileID: 1337807901182476031}
   m_animation: {fileID: 1374677103294768224}
   m_data: {fileID: 11400000, guid: b1268681c362d3644971ec088651d605, type: 2}
-  m_referenceFolder: Assets/DChild/Objects/Characters/Minions/FlyingEyeball
   m_damageable: {fileID: 3829139401251901318}
   m_centerMass: {fileID: 7693561344315404867}
   m_turnHandle: {fileID: 8534032656445465338}
@@ -216,12 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 3580623147257434345}
-  m_eventInfo: []
-  m_animationStartInfo:
-  - m_animationName: Attack2
-    m_soundToPlay: MELEEATTACK
-  - m_animationName: Death
-    m_soundToPlay: DEADBEE
+  m_data: {fileID: 0}
 --- !u!1 &7625108144814748985
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +309,7 @@ MonoBehaviour:
   m_spine: {fileID: 1374677103294768224}
   m_physics: {fileID: 7625108144392214621}
   m_skeletonAnimation: {fileID: 0}
+  m_autoFlinch: 0
   m_animation: Damage
 --- !u!114 &7625108144814748991
 MonoBehaviour:

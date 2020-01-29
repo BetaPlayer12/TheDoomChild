@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -281,14 +281,19 @@ namespace Doozy.Engine.UI
         /// <summary> Internal variable that holds a reference to the coroutine that disables the button after click </summary>
         private Coroutine m_disableButtonCoroutine;
 
+#pragma warning disable 0414
         /// <summary> Internal variable used to detect when a a toggle change has happened </summary>
         private bool m_previousValue;
+#pragma warning restore 0414
 
         /// <summary> Internal variable that holds a reference to the Toggle component </summary>
         private Toggle m_toggle;
 
         /// <summary> Internal variable used to update the start values when the first interaction happens </summary>
         private bool m_updateStartValuesRequired;
+
+        /// <summary> Internal variable used to keep track if this component has been initialized </summary>
+        private bool m_initialized;
 
         #endregion
 
@@ -306,10 +311,31 @@ namespace Doozy.Engine.UI
 
         public override void Awake()
         {
+            m_initialized = false;
             base.Awake();
             LoadPresets();
-
             m_previousValue = !IsOn;
+            Toggle.onValueChanged.AddListener(ToggleOnValueChanged);
+        }
+
+        public override void OnEnable()
+        {
+            base.OnEnable();
+
+            if (m_initialized) return;
+            if (!m_updateStartValuesRequired) //on the first interaction update the start values so that the reset method works as intended 
+            {
+                UpdateStartValues();
+                m_updateStartValuesRequired = true;
+            }
+
+            OnClick.Invoke(this, false, false, false, true, true, true);
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            m_initialized = true;
         }
 
         public override void OnDisable()
@@ -331,16 +357,19 @@ namespace Doozy.Engine.UI
             StopCoroutine(m_disableButtonCoroutine);
             m_disableButtonCoroutine = null;
             EnableToggle();
+
+            m_previousValue = !IsOn;
         }
 
         private void Update()
         {
-            if (m_previousValue != IsOn)
-            {
-                m_previousValue = IsOn;
-                OnValueChanged.Invoke(IsOn);
-                if (ToggleProgressor != null) ToggleProgressor.SetProgress(IsOn ? 1 : 0);
-            }
+//            if (m_initialized && m_previousValue != IsOn)
+//            {
+//                m_previousValue = IsOn;
+//                OnValueChanged.Invoke(IsOn);
+//                Debug.Log("On value changed");
+//                if (ToggleProgressor != null) ToggleProgressor.SetProgress(IsOn ? 1 : 0);
+//            }
 
             if (InputData.InputMode == InputMode.None) return;
 
@@ -504,10 +533,7 @@ namespace Doozy.Engine.UI
         }
 
         /// <summary> Select this toggle in the EventSystem </summary>
-        public void SelectToggle()
-        {
-            UnityEventSystem.SetSelectedGameObject(gameObject);
-        }
+        public void SelectToggle() { UnityEventSystem.SetSelectedGameObject(gameObject); }
 
         /// <summary> If this UIToggle has a label referenced, its text will get updated to the given text value </summary>
         /// <param name="text"> The new text value for the referenced label (if there is one) </param>
@@ -541,6 +567,13 @@ namespace Doozy.Engine.UI
         private void PrintBehaviorDebugMessage(UIToggleBehavior behavior, string action, bool debug = false)
         {
             if (DebugComponent || debug) DDebug.Log("(" + name + ") - [" + (IsOn ? UIToggleState.On : UIToggleState.Off) + "]" + behavior.BehaviorType + " - " + action + ".", this);
+        }
+
+        private void ToggleOnValueChanged(bool value)
+        {
+            m_previousValue = IsOn;
+            OnValueChanged.Invoke(IsOn);
+            if (ToggleProgressor != null) ToggleProgressor.SetProgress(IsOn ? 1 : 0);
         }
 
         private void TriggerToggleBehavior(UIToggleBehavior behavior, bool debug = false)

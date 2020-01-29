@@ -37,6 +37,18 @@ namespace DChild.Gameplay.Environment
 
         private int m_trackedObjectCount;
 
+        public Rigidbody2D[] GetDetachables()
+        {
+            if (m_toDetach.Length > 0)
+            {
+                return m_toDetach;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public void SetInitialForceReference(Vector2 forceDirection, float force)
         {
             m_angle = Vector2.Angle(Vector2.right, forceDirection) * Mathf.Sign(forceDirection.y);
@@ -58,7 +70,6 @@ namespace DChild.Gameplay.Environment
             {
                 var force = m_force + Random.Range(-m_forceOffset, m_forceOffset);
                 var angle = MathfExt.DegreeToVector2(m_angle + Random.Range(-m_angleOffset, m_angleOffset));
-                Debug.Log(angle);
                 m_cacheRigidbody = m_rigidbodies[i];
                 m_cacheRigidbody.AddForce(angle * force, ForceMode2D.Impulse);
                 m_cacheRigidbody.AddTorque(angle.x * force, ForceMode2D.Impulse);

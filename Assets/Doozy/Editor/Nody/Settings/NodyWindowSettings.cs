@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -39,6 +39,7 @@ namespace Doozy.Editor.Nody.Settings
         public const float DOT_ANIMATION_SPEED_MAX = 2f;
         public const float DOT_ANIMATION_SPEED_MIN = 0.2f;
         public const float RECENT_GRAPHS_AREA_WIDTH = 200f;
+        public const bool SHOW_NODE_NOTES_DEFAULT_VALUE = true;
         public const float SNAP_TO_GRID_SIZE = 12f;
         public const float TOOLBAR_OPACITY = 0.95f;
         public const float ZOOM_DEFAULT_VALUE = 1f;
@@ -60,13 +61,13 @@ namespace Doozy.Editor.Nody.Settings
         public NodyWindow.View CurrentView = NodyWindow.View.General;
         public Vector2 CurrentPanOffset = PanOffsetDefaultValue;
         public Vector2 DefaultPanOffset = PanOffsetDefaultValue;
-        public bool CloseNodyWithAltX = true;
         public bool IsDirty;
         public bool SaveCurrentGraphWithControlS = true;
         public float CurrentDotAnimationSpeed = DOT_ANIMATION_SPEED_DEFAULT_VALUE;
         public float CurrentZoom = ZOOM_DEFAULT_VALUE;
         public float DefaultDotAnimationSpeed = DOT_ANIMATION_SPEED_DEFAULT_VALUE;
         public float DefaultZoom = ZOOM_DEFAULT_VALUE;
+        public bool ShowNodeNotes = SHOW_NODE_NOTES_DEFAULT_VALUE;
 
         public bool CanPasteNodes { get { return CopiedNodes.Count > 0; } }
 

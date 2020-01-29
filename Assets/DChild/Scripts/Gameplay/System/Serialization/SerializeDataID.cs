@@ -2,14 +2,12 @@
 using Sirenix.OdinInspector;
 #if UNITY_EDITOR
 using System.IO;
-using UnityEditor;
 #endif
 
 
 namespace DChild.Serialization
 {
-
-    [CreateAssetMenu(fileName = "SerializeDataID", menuName = "DChild/Serialize Data ID")]
+    [CreateAssetMenu(fileName = "SerializeDataID", menuName = "DChild/Serialization/Serialize Data ID")]
     public class SerializeDataID : ScriptableObject
     {
         [SerializeField, ReadOnly]
@@ -64,7 +62,7 @@ namespace DChild.Serialization
             else
             {
                 JsonUtility.FromJsonOverwrite(json, jsonID);
-                m_ID = jsonID.ID + Random.Range(1,10);
+                m_ID = jsonID.ID + Random.Range(1, 10);
                 jsonID.ID = m_ID;
             }
             var newjson = JsonUtility.ToJson(jsonID);

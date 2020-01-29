@@ -2,7 +2,6 @@
 using Sirenix.OdinInspector;
 namespace DChild.Serialization
 {
-
     public class ComponentSerializer : MonoBehaviour
     {
         [InfoBox("This GameObject must be ACTIVE", InfoMessageType = InfoMessageType.Warning)]
@@ -15,7 +14,7 @@ namespace DChild.Serialization
         public ISaveData SaveData() => m_component.Save();
         public void LoadData(ISaveData data) => m_component.Load(data);
 
-        private void Awake()
+        public void Initiatlize()
         {
             m_component = GetComponent<ISerializableComponent>();
         }

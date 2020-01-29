@@ -78,7 +78,7 @@ namespace Pathfinding {
 		[SerializeField]
 		[HideInInspector]
 		[FormerlySerializedAs("centerOffset")]
-		float centerOffsetCompatibility;
+		float centerOffsetCompatibility = float.NaN;
 
 		/// <summary>
 		/// Determines which direction the agent moves in.
@@ -171,6 +171,8 @@ namespace Pathfinding {
 		/// <summary>Cached CharacterController component</summary>
 		protected CharacterController controller;
 
+		/// <summary>Cached RVOController component</summary>
+		protected RVOController rvoController;
 
 		/// <summary>
 		/// Plane which this agent is moving in.
@@ -205,7 +207,7 @@ namespace Pathfinding {
 		public bool updateRotation = true;
 
 		/// <summary>Indicates if gravity is used during this frame</summary>
-		protected bool usingGravity { get; private set; }
+		protected bool usingGravity { get; set; }
 
 		/// <summary>Delta time used for movement during the last frame</summary>
 		protected float lastDeltaTime;
@@ -298,9 +300,16 @@ namespace Pathfinding {
 			destination = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
 		}
 
-		protected virtual void FindComponents () {
+		/// <summary>
+		/// Looks for any attached components like RVOController and CharacterController etc.
+		///
+		/// This is done during <see cref="OnEnable"/>. If you are adding/removing components during runtime you may want to call this function
+		/// to make sure that this script finds them. It is unfortunately prohibitive from a performance standpoint to look for components every frame.
+		/// </summary>
+		public virtual void FindComponents () {
 			tr = transform;
 			seeker = GetComponent<Seeker>();
+			rvoController = GetComponent<RVOController>();
 			// Find attached movement components
 			controller = GetComponent<CharacterController>();
 			rigid = GetComponent<Rigidbody>();
@@ -337,9 +346,10 @@ namespace Pathfinding {
 
 		/// <summary>\copydoc Pathfinding::IAstarAI::Teleport</summary>
 		public virtual void Teleport (Vector3 newPosition, bool clearPath = true) {
-			if (clearPath) CancelCurrentPathRequest();
+			if (clearPath) ClearPath();
 			prevPosition1 = prevPosition2 = simulatedPosition = newPosition;
 			if (updatePosition) tr.position = newPosition;
+			if (rvoController != null) rvoController.Move(Vector3.zero);
 			if (clearPath) SearchPath();
 		}
 
@@ -350,7 +360,7 @@ namespace Pathfinding {
 		}
 
 		protected virtual void OnDisable () {
-			CancelCurrentPathRequest();
+			ClearPath();
 
 			// Make sure we no longer receive callbacks when paths complete
 			seeker.pathCallback -= OnPathComplete;
@@ -450,9 +460,22 @@ namespace Pathfinding {
 		/// <summary>Called when a requested path has been calculated</summary>
 		protected abstract void OnPathComplete (Path newPath);
 
+		/// <summary>
+		/// Clears the current path of the agent.
+		///
+		/// Usually invoked using <see cref="SetPath(null)"/>
+		///
+		/// See: <see cref="SetPath"/>
+		/// See: <see cref="isStopped"/>
+		/// </summary>
+		protected abstract void ClearPath ();
+
 		/// <summary>\copydoc Pathfinding::IAstarAI::SetPath</summary>
 		public void SetPath (Path path) {
-			if (path.PipelineState == PathState.Created) {
+			if (path == null) {
+				CancelCurrentPathRequest();
+				ClearPath();
+			} else if (path.PipelineState == PathState.Created) {
 				// Path has not started calculation yet
 				lastRepath = Time.time;
 				waitingForPathCalculation = true;
@@ -490,6 +513,11 @@ namespace Pathfinding {
 
 		/// <summary>Calculates how far to move during a single frame</summary>
 		protected Vector2 CalculateDeltaToMoveThisFrame (Vector2 position, float distanceToEndOfPath, float deltaTime) {
+			if (rvoController != null && rvoController.enabled) {
+				// Use RVOController to get a processed delta position
+				// such that collisions will be avoided if possible
+				return movementPlane.ToPlane(rvoController.CalculateMovementDelta(movementPlane.ToWorld(position, 0), deltaTime));
+			}
 			// Direction and distance to move during this frame
 			return Vector2.ClampMagnitude(velocity2D * deltaTime, distanceToEndOfPath);
 		}
@@ -672,6 +700,7 @@ namespace Pathfinding {
 			if (!Application.isPlaying || !enabled) FindComponents();
 
 			var color = ShapeGizmoColor;
+			if (rvoController != null && rvoController.locked) color *= 0.5f;
 			if (orientation == OrientationMode.YAxisForward) {
 				Draw.Gizmos.Cylinder(position, Vector3.forward, 0, radius * tr.localScale.x, color);
 			} else {
@@ -699,6 +728,8 @@ namespace Pathfinding {
 			if (unityThread && !float.IsNaN(centerOffsetCompatibility)) {
 				height = centerOffsetCompatibility*2;
 				ResetShape();
+				var rvo = GetComponent<RVOController>();
+				if (rvo != null) radius = rvo.radiusBackingField;
 				centerOffsetCompatibility = float.NaN;
 			}
 			#pragma warning disable 618

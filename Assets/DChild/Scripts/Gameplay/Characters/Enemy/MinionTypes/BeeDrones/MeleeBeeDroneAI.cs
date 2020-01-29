@@ -64,10 +64,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_chargeAnimation;
             public string chargeAnimation => m_chargeAnimation;
 
-            [SerializeField]
-            private GameObject m_burstGO;
-            public GameObject burstGO => m_burstGO;
-
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -103,27 +99,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-        //Patience Handler
-        [SerializeField]
-        private SpineEventListener m_spineListener;
-        [SerializeField]
-        private Transform m_stingerPos;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
-        private ProjectileLauncher m_stingerLauncher;
         private float m_currentPatience;
         private bool m_enablePatience;
         private float timeCounter;
         private bool m_chargeOnce;
         private bool m_chargeFacing;
-
-        //[SerializeField]
-        //private AudioSource m_Audiosource;
-        //[SerializeField]
-        //private AudioClip m_AttackClip;
-        //[SerializeField]
-        //private AudioClip m_DeadClip;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -195,28 +178,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-       
-        void HandleEvent(TrackEntry trackEntry, Spine.Event e)
-        {
-            //if (e.Data.Name == m_eventName[0])
-            //{
-            //    //Debug.Log(m_eventName[0]);
-            //    ////Spawn Projectile
-
-            //    if (IsFacingTarget())
-            //    {
-            //        var target = m_targetInfo.position; //No Parabola
-            //        target = new Vector2(target.x, target.y - 2);
-            //        Vector2 spitPos = m_stingerPos.position;
-            //        Vector3 v_diff = (target - spitPos);
-            //        float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-            //        GameObject burst = Instantiate(m_info.burstGO, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
-            //        GameObject shoot = Instantiate(m_info.stingerProjectile, spitPos, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg)); //No Parabola
-            //        shoot.GetComponent<Rigidbody2D>().AddForce((m_stingerSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * shoot.transform.right, ForceMode2D.Impulse);
-            //    }
-            //}
-        }
-
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             //m_Audiosource.clip = m_DeadClip;
@@ -224,11 +185,6 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
         }
-
-    
-
-
-       
 
         protected override void Awake()
         {
@@ -245,13 +201,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chargeFacing = false;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-            m_animation.animationState.Event += HandleEvent;
-         
         }
 
         private void Update()
@@ -293,21 +242,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 
 
                 case State.Patrol:
-                    
-                    // if (!m_wallSensor.isDetecting && !m_floorSensor.isDetecting && !m_cielingSensor.isDetecting) //This means that as long as your sensors are detecting something it will patrol
-                    // {
                     m_chargeOnce = false;
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     timeCounter = 0;
-                    // break;
-                    // }
-                    // else
-                    // {
-                    //    m_stateHandle.SetState(State.Turning);
-                    //   Debug.Log("sensor test patrol");
-                    //  }
                     break;
 
                 case State.Turning:
@@ -315,17 +254,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.ReevaluateSituation);
                    
                     m_agent.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                 case State.Attacking:
                  
                     m_agent.Stop();
                     m_animation.EnableRootMotion(false, false);
-                    m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation);
-                    m_animation.SetAnimation(0, m_info.meleeAttack.animation, true);
+                    m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation, m_info.idleAnimation);
                     m_stateHandle.Wait(State.WaitBehaviourEnd);
-                    //m_Audiosource.clip = m_AttackClip;
-                    //m_Audiosource.Play();
                     break;
                 case State.Chasing:
                     if (IsFacingTarget())
@@ -335,7 +271,7 @@ namespace DChild.Gameplay.Characters.Enemies
                        
 
                             var target = m_targetInfo.position;
-                            target.y -= 0.5f;
+                            //target.y -= 0.5f;
                             m_animation.DisableRootMotion();
 
                             if (IsTargetInRange(m_info.meleeAttack.range))
@@ -358,16 +294,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 m_agent.SetDestination(target);
                                 
-                                    m_agent.Move(m_info.move.speed);
-                                
+                                m_agent.Move(m_info.move.speed);
                             }
-
-                           
-
-
-                           
-                           
-                      
                     }
                     else
                     {
@@ -397,25 +325,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                   
                      return;
-                    
-                  
-                   
-
-                   
             }
-            
-
-
 
             if (m_enablePatience)
             {
                 Patience();
             }
         }
-
-
     }
 }
 

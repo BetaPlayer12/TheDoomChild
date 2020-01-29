@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+    [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Combat/Attacker")]
     public class Attacker : MonoBehaviour, IAttacker, IDamageDealer
     {
@@ -85,14 +86,17 @@ namespace DChild.Gameplay.Combat
         public void SetData(AttackerData data)
         {
             m_data = data;
-            m_info.Copy(m_data.info);
-            if (m_isInstantiated == false)
+            if (m_info != null)
             {
-                m_damageModifier = 1;
-                m_currentDamage = new List<AttackDamage>();
-                m_isInstantiated = true;
+                m_info.Copy(m_data.info);
+                if (m_isInstantiated == false)
+                {
+                    m_damageModifier = 1;
+                    m_currentDamage = new List<AttackDamage>();
+                    m_isInstantiated = true;
+                }
+                ApplyDamageModification();
             }
-            ApplyDamageModification();
         }
 
         public void SetDamageModifier(int value)
@@ -134,7 +138,6 @@ namespace DChild.Gameplay.Combat
 
 
 #if UNITY_EDITOR
-
         [Button]
         private void UseSelfAsCenterMass()
         {
@@ -145,6 +148,11 @@ namespace DChild.Gameplay.Combat
         {
             m_info.Copy(m_data.info);
             ApplyDamageModification();
+        }
+
+        public void InitializeField(Transform centerMass)
+        {
+            m_centerMass = centerMass;
         }
 #endif
     }

@@ -8,13 +8,13 @@ namespace DChild.Gameplay.Characters.AI
     [AddComponentMenu("DChild/Gameplay/AI/Patrol/Platform Patrol")]
     public class PlatformPatrol : PatrolHandle
     {
-        [SerializeField]
+        [SerializeField, FoldoutGroup("Reference")]
         private CharacterPhysics2D m_characterPhysics2D;
-        [SerializeField]
-        private RaySensor m_groundSensor;
-        [SerializeField]
+        [SerializeField, PropertyTooltip("Needs To sense ground to determine if it will detect wall or not"), FoldoutGroup("Reference")]
+        private RaySensor m_leadGroundSensor;
+        [SerializeField, PropertyTooltip("Senses the edge wall it will snap on to"), FoldoutGroup("Reference")]
         private RaySensor m_edgeWallSensor;
-        [SerializeField]
+        [SerializeField, PropertyTooltip("Senses the wall it will snap on to"), FoldoutGroup("Reference")]
         private RaySensor m_wallSensor;
 
         [SerializeField]
@@ -32,6 +32,8 @@ namespace DChild.Gameplay.Characters.AI
 
         public override void Patrol(MovementHandle2D movement, float speed, CharacterInfo characterInfo)
         {
+            m_characterPhysics2D.simulateGravity = m_characterPhysics2D.GetComponent<Transform>().localRotation.z != 0 ? false : true;
+
             if (m_shouldSnapToLedge || m_shouldSnapToWall)
             {
                 ExecuteAutoRotate();
@@ -44,6 +46,8 @@ namespace DChild.Gameplay.Characters.AI
 
         public override void Patrol(PathFinderAgent agent, float speed, CharacterInfo characterInfo)
         {
+            m_characterPhysics2D.simulateGravity = m_characterPhysics2D.GetComponent<Transform>().localRotation.z != 0 ? false : true;
+
             // I dont really if this works on an Agent
             if (m_shouldSnapToLedge || m_shouldSnapToWall)
             {
@@ -64,6 +68,10 @@ namespace DChild.Gameplay.Characters.AI
                 {
                     CalculateSnapValues(m_wallSensor.GetHits()[0]);
                 }
+                else
+                {
+                    //Event thingy
+                }
             }
             else
             {
@@ -73,7 +81,7 @@ namespace DChild.Gameplay.Characters.AI
 
         private void OnGroundSensorCast(object sender, RaySensorCastEventArgs eventArgs)
         {
-            if (m_groundSensor.isDetecting == false)
+            if (m_leadGroundSensor.isDetecting == false)
             {
                 m_edgeWallSensor.Cast();
                 if (m_edgeWallSensor.isDetecting)
@@ -83,11 +91,15 @@ namespace DChild.Gameplay.Characters.AI
                     {
                         CalculateSnapValues(m_edgeWallSensor.GetHits()[0]);
                     }
+                    else
+                    {
+                        //Event thingy
+                    }
                 }
             }
             else
             {
-                var normal = m_groundSensor.GetHits()[0].normal;
+                var normal = m_leadGroundSensor.GetHits()[0].normal;
                 if (m_groundNormal != normal)
                 {
                     m_characterPhysics2D.SetGroundNormal(normal);
@@ -116,9 +128,9 @@ namespace DChild.Gameplay.Characters.AI
 
         private void Start()
         {
-            if (m_groundSensor)
+            if (m_leadGroundSensor)
             {
-                m_groundSensor.SensorCast += OnGroundSensorCast;
+                m_leadGroundSensor.SensorCast += OnGroundSensorCast;
             }
             if (m_wallSensor)
             {

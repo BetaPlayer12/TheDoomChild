@@ -1,14 +1,15 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Doozy.Engine.Utils;
 using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
-
 #endif
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -341,9 +342,22 @@ namespace Doozy.Engine.Soundy
             if (DatabaseNames == null) DatabaseNames = new List<string>();
             if (SoundDatabases == null) SoundDatabases = new List<SoundDatabase>();
             DatabaseNames.Clear();
+            bool foundNullDatabaseReference = false;
             foreach (SoundDatabase database in SoundDatabases)
+            {
+                if (database == null)
+                {
+                    foundNullDatabaseReference = true;
+                    continue;
+                }
                 DatabaseNames.Add(database.DatabaseName);
+            }
             DatabaseNames.Sort();
+            if (foundNullDatabaseReference)
+            {
+                SoundDatabases = SoundDatabases.Where(soundDatabase => soundDatabase != null).ToList();
+                SetDirty(false);
+            }
             SetDirty(saveAssets);
         }
 
