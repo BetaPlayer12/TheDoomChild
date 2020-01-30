@@ -43,7 +43,21 @@ namespace DChild.Gameplay
         public static IFXManager fXManager => m_fxManager;
         public static ICinema cinema => m_cinema;
         public static IWorld world => m_world;
-        public static ITime time => m_world;
+        public static ITime time
+        {
+            get
+            {
+                if (m_world == null)
+                {
+                    return new TimeInfo(Time.timeScale, Time.deltaTime, Time.fixedDeltaTime);
+                }
+                else
+                {
+                    return m_world;
+                }
+            }
+        }
+
         public static IPlayerManager playerManager => m_playerManager;
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;

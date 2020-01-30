@@ -67,7 +67,6 @@ namespace DChild.Serialization
         private CampaignSlot m_cacheSlot;
         private ComponentSerializer m_cacheComponentSerializer;
 
-
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
             m_cacheSlot = GameplaySystem.campaignSerializer.slot;
