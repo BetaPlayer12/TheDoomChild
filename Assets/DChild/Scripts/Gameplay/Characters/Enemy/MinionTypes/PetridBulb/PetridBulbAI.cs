@@ -80,6 +80,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
 
+        [SerializeField, TabGroup("Offset")]
+        private Vector2 m_targetOffset;
+
         private float m_targetDistance;
 
         [ShowInInspector]
@@ -97,13 +100,16 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private Bone m_bone;
 
-        //protected override void Start()
-        //{
-        //    base.Start();
+        private bool m_canShoot;
 
-        //    m_spineEventListener.Subscribe(m_info.spawnProjectileEvent, LaunchProjectile);
-        //    //GameplaySystem.SetBossHealth(m_character);
-        //}
+        protected override void Start()
+        {
+            base.Start();
+
+            m_spineEventListener.Subscribe(m_info.spawnProjectileEvent, LaunchProjectile);
+            m_canShoot = true;
+            //GameplaySystem.SetBossHealth(m_character);
+        }
 
         private void LaunchProjectile()
         {
@@ -115,6 +121,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
 
                 //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                m_projectileLauncher.AimAt(m_targetInfo.position);
                 m_projectileLauncher.LaunchProjectile();
                 //m_Audiosource.clip = m_RangeAttackClip;
                 //m_Audiosource.Play();
@@ -162,6 +169,18 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private IEnumerator AttackRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_canShoot = false;
+            m_animation.EnableRootMotion(true, false);
+            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+            yield return new WaitForSeconds(1.5f);
+            m_stateHandle.ApplyQueuedState();
+            m_canShoot = true;
+            yield return null;
+        }
+
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             //m_Audiosource.clip = m_DeadClip;
@@ -190,7 +209,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_targetInfo.isValid)
             {
                 var localPositon = transform.InverseTransformPoint(m_targetInfo.position);
-                localPositon = new Vector2(-localPositon.x, localPositon.y);
+                localPositon = new Vector2(localPositon.x + m_targetOffset.x, localPositon.y + m_targetOffset.y);
                 m_bone.SetLocalPosition(localPositon);
             }
         }
@@ -223,16 +242,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Attacking:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    //m_stateHandle.Wait(State.ReevaluateSituation);
 
-
-                    m_animation.EnableRootMotion(true, false);
-                    m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                    StartCoroutine(AttackRoutine());
 
                     break;
                 case State.Chasing:
                     {
-                        if (m_groundSensor.allRaysDetecting)
+                        if (m_groundSensor.allRaysDetecting && m_canShoot)
                         {
                             if (IsTargetInRange(m_info.attack.range))
                             {

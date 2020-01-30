@@ -154,6 +154,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
 
                 //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                m_projectileLauncher.AimAt(m_targetInfo.position);
                 m_projectileLauncher.LaunchProjectile();
                 //m_Audiosource.clip = m_RangeAttackClip;
                 //m_Audiosource.Play();
