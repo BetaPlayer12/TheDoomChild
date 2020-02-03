@@ -4,6 +4,7 @@ using DChild.Gameplay.Environment;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System.Collections;
 using UnityEngine;
 
@@ -53,8 +54,10 @@ namespace DChild.Gameplay.Systems
                 m_handle.DoSceneTransition(character, TransitionType.PostEnter);
 
                 LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
-                LoadZoneFunctionHandle loadZoneFunctionHandle = new LoadZoneFunctionHandle(m_destination, character);
-                GameSystem.LoadZone(m_destination.scene, true, loadZoneFunctionHandle.CallLocationArriveEvent);
+                Cache<LoadZoneFunctionHandle> cacheLoadZoneHandle = Cache<LoadZoneFunctionHandle>.Claim();
+                cacheLoadZoneHandle.Value.Initialize(m_destination, character, cacheLoadZoneHandle);
+                GameSystem.LoadZone(m_destination.scene, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+
             }
             else if (type == TransitionType.Exit)
             {
