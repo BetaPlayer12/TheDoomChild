@@ -26,6 +26,7 @@ namespace PixelCrushers.DialogueSystem
         private LuaScriptWizard luaScriptWizard = null;
         private QuestPicker questPicker = null;
         private Rect sequenceRect;
+        private SequenceSyntaxState sequenceSyntaxState = SequenceSyntaxState.Unchecked;
         private ReorderableList sendMessageList = null;
 
         public void OnEnable()
@@ -102,7 +103,7 @@ namespace PixelCrushers.DialogueSystem
                     var newLuaCode = luaScriptWizard.Draw(new GUIContent("Lua Code", "The Lua code to run when the condition is true"), trigger.luaCode);
 
                     // Sequence:
-                    var newSequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence"), trigger.sequence, ref sequenceRect);
+                    var newSequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence"), trigger.sequence, ref sequenceRect, ref sequenceSyntaxState);
 
                     // Quest:
                     if (EditorTools.selectedDatabase != questPicker.database)
