@@ -23,7 +23,7 @@ namespace DChildDebug
 
         [SerializeField, BoxGroup("Mesh Creation"), MinValue(1), OnValueChanged("OnEditorRecomposition")]
         private int pointPerUnits = 5;
-        [SerializeField, BoxGroup("Mesh Creation"), OnValueChanged("OnEditorRecomposition")]
+        [SerializeField, BoxGroup("Mesh Creation"), OnValueChanged("OnEditorRecomposition", true)]
         private Vector2 size = new Vector2(6f, 2f);
 
         [SerializeField, BoxGroup("Liquid")]
@@ -212,6 +212,16 @@ namespace DChildDebug
             GetReferences();
             RecomputeMesh();
             meshVertices = m_Mesh.vertices;
+            if (TryGetComponent(out BoxCollider2D collider))
+            {
+                var colliderSize = collider.size;
+                colliderSize.Set(size.x, size.y);
+                collider.size = colliderSize;
+            }
+            else
+            {
+                gameObject.AddComponent<BoxCollider2D>();
+            }
         }
 #endif
     }
