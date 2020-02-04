@@ -73,7 +73,6 @@ namespace PixelCrushers.DialogueSystem
         /// <value><c>true</c> if mute exceptions; otherwise, <c>false</c>.</value>
         public static bool muteExceptions { get; set; }
 
-
         /// <summary>
         /// Set true to log warnings if trying to register a function under a name that's already registered.
         /// </summary>
@@ -90,6 +89,14 @@ namespace PixelCrushers.DialogueSystem
         /// The Lua Interpreter environment.
         /// </summary>
         private static Language.Lua.LuaTable m_environment = Language.Lua.LuaInterpreter.CreateGlobalEnviroment();
+
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            m_environment = Language.Lua.LuaInterpreter.CreateGlobalEnviroment();
+        }
+#endif
 
         /// @cond FOR_V1_COMPATIBILITY
         public static bool WasInvoked { get { return wasInvoked; } set { wasInvoked = value; } }
