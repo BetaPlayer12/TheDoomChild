@@ -17,15 +17,14 @@ namespace DChild
 
             public void PlaySound(CallBackSounds callBack)
             {
-                if (callBack.IsTransformPlaying(m_soundToPlay))
+                if (callBack.IsTransformPlaying(m_soundToPlay) == false)
                 {
-                    callBack.StopSound(m_soundToPlay);
+                    callBack.PlaySound(m_soundToPlay);
                 }
-                callBack.PlaySound(m_soundToPlay);
             }
 
 #if UNITY_EDITOR
-            protected SkeletonDataAsset m_skeletonDataAsset;
+            protected SkeletonDataAsset m_skeletonDataAsset; 
 
             public void Initialize(SkeletonDataAsset skeletonData)
             {
@@ -103,7 +102,7 @@ namespace DChild
             {
                 m_animationStartInfo[i].Initialize(m_skeletonDataAsset);
             }
-        }
+        } 
 #endif
 
         private void OnEnable()

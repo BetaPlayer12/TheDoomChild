@@ -102,7 +102,7 @@ namespace Spine {
 		}
 
 		/// <param name="target">After the first and before the last entry.</param>
-		internal static int BinarySearch (float[] values, float target) {
+		public static int BinarySearch (float[] values, float target) {
 			int low = 0;
 			int high = values.Length - 2;
 			if (high == 0) return 1;

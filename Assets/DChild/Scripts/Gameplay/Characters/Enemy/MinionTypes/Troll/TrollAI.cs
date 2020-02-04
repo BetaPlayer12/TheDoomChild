@@ -82,10 +82,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private GameObject m_dirtProjectile;
             public GameObject dirtProjectile => m_dirtProjectile;
 
-            [SerializeField, ValueDropdown("GetEvents")]
-            private string m_groundSmashEvent;
-            public string groundSmashEvent => m_groundSmashEvent;
-
 
             public override void Initialize()
             {
@@ -156,10 +152,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_targetOffset;
 
         private float m_targetDistance;
-        [SerializeField, TabGroup("Effects")]
-        private ParticleSystem m_attack01FX;
-        [SerializeField, TabGroup("Effects")]
-        private ParticleSystem m_attack02FX;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -174,7 +166,6 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
 
             m_spineEventListener.Subscribe(m_info.dirAttackEvent, DirtProjectile);
-            m_spineEventListener.Subscribe(m_info.groundSmashEvent, m_attack01FX.Play);
             //GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -220,7 +211,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     //obj.transform.localPosition = new Vector2(4, -1.5f);
                     //
 
-                    m_attack02FX.Play();
 
                     //Shoot Spit
                     var target = m_targetInfo.position;
@@ -359,7 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Patrol:
                     m_animation.EnableRootMotion(true, false);
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true).MixDuration = 1f;
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
                     break;
@@ -372,7 +362,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
 
-                    m_animation.SetAnimation(0, m_info.idleAnimation, false);
+
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Pound:
@@ -401,12 +391,13 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                                 {
                                     m_movement.Stop();
+                                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                     m_stateHandle.SetState(State.Attacking);
                                 }
                                 else
                                 {
                                     m_animation.EnableRootMotion(false, false);
-                                    m_animation.SetAnimation(0, m_info.run.animation, true).MixDuration = 1f;
+                                    m_animation.SetAnimation(0, m_info.run.animation, true);
                                     m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
                                 }
                             }
