@@ -44,7 +44,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 1907353872235826173}
-  m_data: {fileID: 0}
+  m_eventInfo: []
+  m_animationStartInfo:
+  - m_animationName: Attack2
+    m_soundToPlay: MELEEATTACK
+  - m_animationName: Death
+    m_soundToPlay: DEADBEE
 --- !u!114 &1738104772957480063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,9 +167,6 @@ MonoBehaviour:
   m_physics: {fileID: 3423455632081051346}
   m_colliders: {fileID: 8321434082190145817}
   m_facing: 1
-  m_bodyReference:
-    m_default: {fileID: 0}
-    m_list: []
 --- !u!114 &6143059689997378287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +196,7 @@ MonoBehaviour:
   m_character: {fileID: 6107871229922703472}
   m_animation: {fileID: 6143059689997378287}
   m_data: {fileID: 11400000, guid: b1268681c362d3644971ec088651d605, type: 2}
+  m_referenceFolder: Assets/DChild/Objects/Characters/Minions/FlyingEyeball
   m_damageable: {fileID: 8318298354739939593}
   m_centerMass: {fileID: 0}
   m_turnHandle: {fileID: 3476115680190538869}
@@ -309,7 +312,6 @@ MonoBehaviour:
   m_spine: {fileID: 6143059689997378287}
   m_physics: {fileID: 3423455632081051346}
   m_skeletonAnimation: {fileID: 0}
-  m_autoFlinch: 0
   m_animation: Damage
 --- !u!114 &3423455631425745840
 MonoBehaviour:
@@ -448,21 +450,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8358926406305702483}
     m_Modifications:
-    - target: {fileID: 295532345663329779, guid: 988870237aa2d7241b0610cc1cac0140,
-        type: 3}
-      propertyPath: m_spine
-      value: 
-      objectReference: {fileID: 6143059689997378287}
-    - target: {fileID: 295532345663329779, guid: 988870237aa2d7241b0610cc1cac0140,
-        type: 3}
-      propertyPath: m_physics
-      value: 
-      objectReference: {fileID: 3423455632081051346}
-    - target: {fileID: 3283793563577587910, guid: 988870237aa2d7241b0610cc1cac0140,
-        type: 3}
-      propertyPath: rb
-      value: 
-      objectReference: {fileID: 3241523584280992280}
     - target: {fileID: 3494980375170295962, guid: 988870237aa2d7241b0610cc1cac0140,
         type: 3}
       propertyPath: m_Name
@@ -523,6 +510,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 295532345663329779, guid: 988870237aa2d7241b0610cc1cac0140,
+        type: 3}
+      propertyPath: m_spine
+      value: 
+      objectReference: {fileID: 6143059689997378287}
+    - target: {fileID: 295532345663329779, guid: 988870237aa2d7241b0610cc1cac0140,
+        type: 3}
+      propertyPath: m_physics
+      value: 
+      objectReference: {fileID: 3423455632081051346}
+    - target: {fileID: 3283793563577587910, guid: 988870237aa2d7241b0610cc1cac0140,
+        type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 3241523584280992280}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 988870237aa2d7241b0610cc1cac0140, type: 3}
 --- !u!114 &1907353872235826173 stripped
@@ -562,10 +564,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
-      propertyPath: m_maxHealth
-      value: 10
+      propertyPath: m_Name
+      value: Owl
+      objectReference: {fileID: 0}
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_TagString
+      value: Character
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -622,25 +634,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_Name
-      value: Owl
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_TagString
-      value: Character
-      objectReference: {fileID: 0}
     - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_UseFullKinematicContacts
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
