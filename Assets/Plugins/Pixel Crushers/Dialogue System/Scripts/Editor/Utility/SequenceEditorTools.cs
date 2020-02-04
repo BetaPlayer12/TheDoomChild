@@ -5,9 +5,12 @@ using UnityEditor;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace PixelCrushers.DialogueSystem
 {
+
+    public enum SequenceSyntaxState { Unchecked, Valid, Error }
 
     /// <summary>
     /// This class provides a custom drawer for Sequence fields.
@@ -68,8 +71,23 @@ namespace PixelCrushers.DialogueSystem
 
         public static string DrawLayout(GUIContent guiContent, string sequence, ref Rect rect)
         {
+            var syntaxState = SequenceSyntaxState.Unchecked;
+            return DrawLayout(guiContent, sequence, ref rect, ref syntaxState);
+        }
+
+        public static string DrawLayout(GUIContent guiContent, string sequence, ref Rect rect, ref SequenceSyntaxState syntaxState)
+        {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(guiContent);
+            EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(sequence));
+            if (GUILayout.Button(new GUIContent("Check", "Check sequence for errors."), EditorStyles.miniButton, GUILayout.Width(48)))
+            {
+                syntaxState = CheckSyntax(sequence);
+            }
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.BeginChangeCheck();
+
             if (GUILayout.Button("+", EditorStyles.miniButton, GUILayout.Width(26)))
             {
                 DrawContextMenu(sequence);
@@ -82,7 +100,9 @@ namespace PixelCrushers.DialogueSystem
             }
 
             EditorWindowTools.StartIndentedSection();
+            SetSyntaxStateGUIColor(syntaxState);
             var newSequence = EditorGUILayout.TextArea(sequence);
+            ClearSyntaxStateGUIColor();
             if (!string.Equals(newSequence, sequence))
             {
                 sequence = newSequence;
@@ -159,6 +179,9 @@ namespace PixelCrushers.DialogueSystem
                     }
                     break;
             }
+
+            // If content changed, reset syntax check state:
+            if (EditorGUI.EndChangeCheck()) syntaxState = SequenceSyntaxState.Unchecked;
 
             EditorWindowTools.EndIndentedSection();
 
@@ -409,6 +432,37 @@ namespace PixelCrushers.DialogueSystem
 
             otherCommandName = (string)data + "(";
             SetMenuResult(MenuResult.OtherCommand);
+        }
+
+        public static SequenceSyntaxState CheckSyntax(string sequence)
+        {
+            if (string.IsNullOrEmpty(sequence)) return SequenceSyntaxState.Valid;
+            // Add fake values for special {{...}} keywords:
+            var sequenceToCheck = sequence.
+                Replace("{{default}}", "None()").
+                Replace("{{end}}", "0");
+            sequenceToCheck = Regex.Replace(sequenceToCheck, @"\{\{.+\}\}", string.Empty);
+            var parser = new SequenceParser();
+            var result = parser.Parse(sequenceToCheck);
+            return (result == null || result.Count == 0) ? SequenceSyntaxState.Error : SequenceSyntaxState.Valid; 
+        }
+
+        public static void SetSyntaxStateGUIColor(SequenceSyntaxState syntaxState)
+        {
+            switch (syntaxState)
+            {
+                case SequenceSyntaxState.Valid:
+                    GUI.color = Color.green;
+                    break;
+                case SequenceSyntaxState.Error:
+                    GUI.color = Color.red;
+                    break;
+            }
+        }
+
+        public static void ClearSyntaxStateGUIColor()
+        {
+            GUI.color = Color.white;
         }
 
     }

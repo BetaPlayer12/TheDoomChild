@@ -21,6 +21,7 @@ namespace PixelCrushers.DialogueSystem
         {
             icon = AssetDatabase.LoadAssetAtPath<Texture2D>(IconFilename);
             if (icon == null) return;
+            EditorApplication.hierarchyWindowItemOnGUI -= HierarchyWindowItemOnGUI;
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemOnGUI;
             EditorApplication.RepaintHierarchyWindow();
         }

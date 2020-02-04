@@ -87,6 +87,11 @@ namespace PixelCrushers.DialogueSystem
             protected set { m_currentSubtitle = value; }
         }
 
+        /// <summary>
+        /// The database name of the actor whose display name appears in the Portrait Name field.
+        /// </summary>
+        public string portraitActorName { get; protected set; }
+
         #endregion
 
         #region Internal Properties
@@ -161,6 +166,7 @@ namespace PixelCrushers.DialogueSystem
             if (this.portraitImage != null) this.portraitImage.sprite = portraitSprite;
             if (this.portraitName != null) this.portraitName.text = portraitName;
             if (subtitleText.text != null) subtitleText.text = string.Empty;
+            portraitActorName = (dialogueActor != null) ? dialogueActor.actor : portraitName;
             CheckDialogueActorAnimator(dialogueActor);
         }
 
@@ -394,6 +400,7 @@ namespace PixelCrushers.DialogueSystem
                     portraitImage.sprite = sprite;
                     Tools.SetGameObjectActive(portraitImage, sprite != null);
                 }
+                portraitActorName = subtitle.speakerInfo.nameInDatabase;
                 portraitName.text = subtitle.speakerInfo.Name;
                 UITools.SendTextChangeMessage(portraitName);
             }
