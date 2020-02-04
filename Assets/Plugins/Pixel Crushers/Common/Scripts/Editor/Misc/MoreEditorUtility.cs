@@ -105,7 +105,7 @@ namespace PixelCrushers
         {
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            UnityEditorInternal.InternalEditorUtility.RequestScriptReload();
+            EditorUtility.RequestScriptReload();
         }
 
         /// <summary>
