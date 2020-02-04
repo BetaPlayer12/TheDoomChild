@@ -110,11 +110,17 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 #else
             EditorApplication.playmodeStateChanged -= OnPlaymodeStateChanged;
 #endif
-            TemplateTools.SaveToEditorPrefs(template);
+            SaveTemplate();
             inspectorSelection = null;
             instance = null;
             nodeStyle = null;
             SaveEditorSettings();
+        }
+
+        private void SaveTemplate()
+        {
+            TemplateTools.SaveToEditorPrefs(template);
+            SaveTemplateToDatabase();
         }
 
         private void LoadEditorSettings()
@@ -122,6 +128,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             registerCompleteObjectUndo = EditorPrefs.GetBool(CompleteUndoKey, true);
             showDatabaseName = EditorPrefs.GetBool(ShowDatabaseNameKey, true);
             autoBackupFrequency = EditorPrefs.GetFloat(AutoBackupKey, DefaultAutoBackupFrequency);
+            autoBackupFolder = EditorPrefs.GetString(AutoBackupFolderKey, string.Empty);
             timeForNextAutoBackup = Time.realtimeSinceStartup + autoBackupFrequency;
             addNewNodesToRight = EditorPrefs.GetBool(AddNewNodesToRightKey, false);
             trimWhitespaceAroundPipes = EditorPrefs.GetBool(TrimWhitespaceAroundPipesKey, true);
@@ -139,6 +146,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             EditorPrefs.SetBool(TrimWhitespaceAroundPipesKey, trimWhitespaceAroundPipes);
             EditorPrefs.SetString(LocalizationLanguagesKey, JsonUtility.ToJson(localizationLanguages));
             EditorPrefs.SetString(SequencerDragDropCommandsKey, SequenceEditorTools.SaveDragDropCommands());
+        }
+
+        private void LoadTemplateFromDatabase()
+        {
+            if (database == null || string.IsNullOrEmpty(database.templateJson)) return;
+            var databaseTemplate = JsonUtility.FromJson<Template>(database.templateJson);
+            if (databaseTemplate != null) template = databaseTemplate;
+        }
+
+        private void SaveTemplateToDatabase()
+        {
+            if (database == null) return;
+            database.templateJson = JsonUtility.ToJson(template);
+            SetDatabaseDirty("Save template");
         }
 
 #if UNITY_2017_2_OR_NEWER
@@ -196,6 +217,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 var needToReset = (database != null) && (databaseID != newDatabaseID);
                 if (debug) Debug.Log("<color=yellow>Dialogue Editor: SelectDatabase " + newDatabase + "(ID=" + newDatabaseID + "), old=" + database + "(ID=" + databaseID + "), reset=" + needToReset + "</color>", newDatabase);
                 database = newDatabase;
+                LoadTemplateFromDatabase();
                 serializedObject = new SerializedObject(database);
                 if (needToReset)
                 {
@@ -263,7 +285,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             try
             {
                 RecordUndo();
-                DrawDatabaseName();
+                var isInNodeEditor = (toolbar.Current == Toolbar.Tab.Conversations) && showNodeEditor;
+                if (!isInNodeEditor) DrawDatabaseName(); // Node editor draws name after grid.
                 DrawToolbar();
                 DrawMainBody();
             }
@@ -403,13 +426,18 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void RecordUndo()
         {
             if (database == null) return;
-            if (registerCompleteObjectUndo)
+            var eventType = Event.current.type;
+            if (eventType == EventType.MouseUp || eventType == EventType.MouseDrag ||
+                eventType == EventType.KeyUp || eventType == EventType.ContextClick)
             {
-                Undo.RegisterCompleteObjectUndo(database, "Dialogue Database");
-            }
-            else
-            {
-                Undo.RecordObject(database, "Dialogue Database");
+                if (registerCompleteObjectUndo)
+                {
+                    Undo.RegisterCompleteObjectUndo(database, "Dialogue Database");
+                }
+                else
+                {
+                    Undo.RecordObject(database, "Dialogue Database");
+                }
             }
         }
 
@@ -452,6 +480,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     return;
                 }
                 var backupPath = Path.GetDirectoryName(path) + "/" + Path.GetFileNameWithoutExtension(path) + " (Auto-Backup).asset";
+                if (!string.IsNullOrEmpty(autoBackupFolder))
+                {
+                    backupPath = autoBackupFolder + "/" + Path.GetFileNameWithoutExtension(path) + " (Auto-Backup).asset";
+                }
                 if (debug) Debug.Log("Dialogue Editor: Making auto-backup " + backupPath);
                 EditorUtility.DisplayProgressBar("Dialogue Editor Auto-Backup", "Creating auto-backup " + Path.GetFileNameWithoutExtension(backupPath), 0);
                 AssetDatabase.DeleteAsset(backupPath);

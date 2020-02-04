@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5359531679360644659}
+  - component: {fileID: 1137045532185797309}
   - component: {fileID: 7369769870689975007}
   m_Layer: 13
   m_Name: Sounds
@@ -31,6 +32,19 @@ Transform:
   m_Father: {fileID: 6424695230871814796}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1137045532185797309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6399774371866662214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1330a9f521346bb48be4a7e58a30f65e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnLocationMode: 2
 --- !u!114 &7369769870689975007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44,8 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 2930393021455537622}
-  m_eventInfo: []
-  m_animationStartInfo: []
+  m_data: {fileID: 11400000, guid: 7afae21d5682e4e418c31181fda2b236, type: 2}
 --- !u!1 &6424695230871814787
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,8 +127,8 @@ MonoBehaviour:
   m_startIndex: 0
   m_startIteration: 1
   m_wayPoints:
-  - {x: 80, y: -54.44}
-  - {x: 60, y: -54.44}
+  - {x: 98.55, y: -54.755875}
+  - {x: 86.9, y: -54.755875}
   m_useCurrentPosition: 0
   m_overridePatrolIndex: 0
 --- !u!114 &9006375430222819299
@@ -133,6 +146,7 @@ MonoBehaviour:
   m_spine: {fileID: 8694658257653842231}
   m_physics: {fileID: 7501248501160373272}
   m_skeletonAnimation: {fileID: 2930393021455537622}
+  m_autoFlinch: 1
   m_animation: Flinch
 --- !u!114 &7956035160476990605
 MonoBehaviour:
@@ -150,6 +164,7 @@ MonoBehaviour:
   m_animator: {fileID: 8694658257653842231}
   m_bodyDuration:
     m_startTime: 3
+  m_destroySource: 0
 --- !u!114 &9049938164838481107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,6 +320,7 @@ MonoBehaviour:
     m_maxStepHeight: 0.01
     stepSearchOvershoot: 0.01
     m_detector: {fileID: 0}
+  m_calculateGroundAngle: 1
   m_acceptableWalkableAngle:
     m_min: 0
     m_max: 0
@@ -328,7 +344,6 @@ MonoBehaviour:
   m_character: {fileID: 8730981206529776552}
   m_animation: {fileID: 8694658257653842231}
   m_data: {fileID: 11400000, guid: a0a2d1ddd566ec04fbd5d494761c8f2d, type: 2}
-  m_referenceFolder: Assets/DChild/Objects/Characters/Minions/Mandragora
   m_damageable: {fileID: 6816657545238866641}
   m_centerMass: {fileID: 2658099570208437904}
   m_turnHandle: {fileID: 9049938164838481107}
@@ -373,6 +388,9 @@ MonoBehaviour:
   m_physics: {fileID: 7501248501160373272}
   m_colliders: {fileID: 2084362870781571677}
   m_facing: 1
+  m_bodyReference:
+    m_default: {fileID: 0}
+    m_list: []
 --- !u!114 &4107344084411756763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,20 +420,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
-      propertyPath: m_Name
-      value: Mandragora
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_TagString
-      value: Character
+      propertyPath: m_maxHealth
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.680927
+      value: 38.71
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -467,6 +480,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_Name
+      value: Mandragora
+      objectReference: {fileID: 0}
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_TagString
+      value: Character
+      objectReference: {fileID: 0}
     - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_BodyType
@@ -476,11 +499,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_UseFullKinematicContacts
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_maxHealth
-      value: 75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
@@ -527,11 +545,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3739007760380592176}
     m_Modifications:
-    - target: {fileID: 1191763446433945730, guid: a7599f23db0f7454a80df8444a1b4a11,
+    - target: {fileID: 233090905990557144, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
-      propertyPath: m_Name
-      value: MandragoraModel
-      objectReference: {fileID: 0}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 7719016373444114555}
     - target: {fileID: 1191763446433945729, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -587,25 +605,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 233090905990557144, guid: a7599f23db0f7454a80df8444a1b4a11,
+    - target: {fileID: 1191763446433945730, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
-      propertyPath: rb
-      value: 
-      objectReference: {fileID: 7719016373444114555}
+      propertyPath: m_Name
+      value: MandragoraModel
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7599f23db0f7454a80df8444a1b4a11, type: 3}
---- !u!114 &2930393021455537622 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1191763446433945728, guid: a7599f23db0f7454a80df8444a1b4a11,
-    type: 3}
-  m_PrefabInstance: {fileID: 4045119114280799574}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2202170498647244050 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2786751810171252804, guid: a7599f23db0f7454a80df8444a1b4a11,
@@ -670,6 +676,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2930393021455537622 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1191763446433945728, guid: a7599f23db0f7454a80df8444a1b4a11,
+    type: 3}
+  m_PrefabInstance: {fileID: 4045119114280799574}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6837717968332295932 stripped
