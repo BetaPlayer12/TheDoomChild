@@ -58,7 +58,7 @@ public class DummyController : MonoBehaviour
             }
         }
 
-        if (Input.GetButton("Fire2"))
+        if (Input.GetButton("Fire1"))
         {
             m_attackHitBox.SetActive(true);
         }
