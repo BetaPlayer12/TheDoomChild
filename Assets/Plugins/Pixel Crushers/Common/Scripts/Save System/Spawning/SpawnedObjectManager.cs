@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace PixelCrushers
@@ -43,6 +44,9 @@ namespace PixelCrushers
         [SerializeField]
         private List<SpawnedObject> m_spawnedObjects = new List<SpawnedObject>();
 
+        [Tooltip("When restoring this Spawned Object Manager, tell respawned objects to restore their saved data also.")]
+        private bool m_applySaveDataToSpawnedObjectsOnRestore = false;
+
         private static SpawnedObjectManager m_instance;
 
         public List<SpawnedObject> spawnedObjectPrefabs
@@ -55,6 +59,12 @@ namespace PixelCrushers
         {
             get { return m_spawnedObjects; }
             set { m_spawnedObjects = value; }
+        }
+
+        public bool applySaveDataToSpawnedObjectsOnRestore
+        {
+            get { return m_applySaveDataToSpawnedObjectsOnRestore; }
+            set { m_applySaveDataToSpawnedObjectsOnRestore = value; }
         }
 
         public override string key
@@ -105,6 +115,37 @@ namespace PixelCrushers
                 if (prefab == null) continue;
                 Instantiate(prefab, spawnedObjectData.position, spawnedObjectData.rotation);
             }
+            if (m_applySaveDataToSpawnedObjectsOnRestore)
+            {
+                if (SaveSystem.framesToWaitBeforeApplyData == 0)
+                {
+                    ApplyDataToRespawnedObjects();
+                }
+                else
+                {
+                    StartCoroutine(ApplyDataToRespawnedObjectsAfterFrames(SaveSystem.framesToWaitBeforeApplyData));
+                }
+            }
+        }
+
+        protected void ApplyDataToRespawnedObjects()
+        {
+            for (int i = 0; i < m_spawnedObjects.Count; i++)
+            {
+                foreach (var saver in m_spawnedObjects[i].GetComponentsInChildren<Saver>())
+                {
+                    saver.ApplyData(SaveSystem.currentSavedGameData.GetData(saver.key));
+                }
+            }
+        }
+
+        protected IEnumerator ApplyDataToRespawnedObjectsAfterFrames(int numFrames)
+        {
+            for (int i = 0; i < numFrames; i++)
+            {
+                yield return null;
+            }
+            ApplyDataToRespawnedObjects();
         }
 
         protected SpawnedObject GetSpawnedObjectPrefab(string prefabName)

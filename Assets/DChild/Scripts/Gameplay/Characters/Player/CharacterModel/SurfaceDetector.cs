@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
+
     public class SurfaceDetector : MonoBehaviour
     {
         public class SurfaceDetectedEventArgs : IEventActionArgs

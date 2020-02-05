@@ -160,7 +160,7 @@ namespace PixelCrushers.DialogueSystem
         /// Indicates whether the window is showing active quests or completed quests.
         /// </summary>
         /// <value><c>true</c> if showing active quests; otherwise, <c>false</c>.</value>
-        public bool isShowingActiveQuests { get { return currentQuestStateMask == QuestState.Active; } }
+        public virtual bool isShowingActiveQuests { get { return currentQuestStateMask == QuestState.Active; } }
 
         /// @cond FOR_V1_COMPATIBILITY
         public bool IsOpen { get { return isOpen; } protected set { isOpen = value; } }

@@ -220,6 +220,11 @@ namespace PixelCrushers.DialogueSystem
             conversationUIElements.standardMenuControls.OverrideActorMenuPanel(actorTransform, menuPanelNumber, customPanel ?? conversationUIElements.defaultMenuPanel);
         }
 
+        public virtual void OverrideActorMenuPanel(Actor actor, MenuPanelNumber menuPanelNumber, StandardUIMenuPanel customPanel)
+        {
+            conversationUIElements.standardMenuControls.OverrideActorMenuPanel(actor, menuPanelNumber, customPanel ?? conversationUIElements.defaultMenuPanel);
+        }
+
         #endregion
 
     }

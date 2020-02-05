@@ -23,7 +23,7 @@ namespace Holysoft.Menu
 
             public void Open()
             {
-                m_canvas.Show();
+                //m_canvas.Show();
                 m_button.Highlight();
             }
 

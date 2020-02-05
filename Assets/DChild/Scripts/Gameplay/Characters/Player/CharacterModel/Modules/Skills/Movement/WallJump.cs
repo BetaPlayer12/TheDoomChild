@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
-    public class WallJump : Jump
+    public class WallJump : DChild.Gameplay.Characters.Players.Behaviour.Jump
     {
         [SerializeField]
         private float m_forwardPower;

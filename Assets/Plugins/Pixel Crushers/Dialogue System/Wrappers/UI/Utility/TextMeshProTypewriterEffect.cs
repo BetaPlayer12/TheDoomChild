@@ -19,6 +19,7 @@ namespace PixelCrushers.DialogueSystem.Wrappers
 
 #else
 
+    [HelpURL("https://pixelcrushers.com/dialogue_system/manual2x/html/dialogue_u_is.html#dialogueUITypewriterEffect")]
     [AddComponentMenu("")]
     public class TextMeshProTypewriterEffect : PixelCrushers.DialogueSystem.TextMeshProTypewriterEffect
     {

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Skill
 {
-    public class DoubleJump : Jump, IControllableModule
+    public class DoubleJump : DChild.Gameplay.Characters.Players.Behaviour.Jump, IControllableModule
     {
         [SerializeField]
         private FXSpawner m_fXSpawner;

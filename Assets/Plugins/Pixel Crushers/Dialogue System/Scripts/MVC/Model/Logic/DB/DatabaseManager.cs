@@ -68,8 +68,8 @@ namespace PixelCrushers.DialogueSystem
             if ((database != null) && !m_loadedDatabases.Contains(database))
             {
                 if (m_loadedDatabases.Count == 0) DialogueLua.InitializeChatMapperVariables();
-                DialogueLua.AddChatMapperVariables(database, m_loadedDatabases);
                 m_masterDatabase.Add(database);
+                DialogueLua.AddChatMapperVariables(m_masterDatabase, m_loadedDatabases);
                 m_loadedDatabases.Add(database);
             }
         }

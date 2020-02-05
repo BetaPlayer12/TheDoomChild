@@ -3,63 +3,36 @@ using Spine.Unity;
 using Spine;
 using DarkTonic.MasterAudio;
 using System;
+using Sirenix.OdinInspector;
+using static DChild.SoundData;
 
 namespace DChild
 {
+    [RequireComponent(typeof(CallBackSounds))]
     [AddComponentMenu("DChild/Audio/Spine Sounds")]
-    public class SpineSounds : MonoBehaviour, IHasSkeletonDataAsset
+    public class SpineSounds : MonoBehaviour
     {
-        [System.Serializable]
-        private class EventInfo
-        {
-            [SerializeField, SpineEvent]
-            private string m_eventName;
-
-            [SerializeField,SoundGroup]
-            private string m_soundToPlay;
-
-            public string eventName { get => m_eventName; }
-
-            public void PlaySound(Transform transform) => MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
-        }
-
-        [System.Serializable]
-        private class AnimationInfo
-        {
-            [SerializeField, SpineAnimation]
-            private string m_animationName;
-
-            [SerializeField, SoundGroup]
-            private string m_soundToPlay;
-
-            public string animationName { get => m_animationName; }
-
-            public void PlaySound(Transform transform) => MasterAudio.PlaySound3DAtTransformAndForget(m_soundToPlay, transform);
-        }
-
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
-        [SerializeField]
-        private EventInfo[] m_eventInfo;
-        [SerializeField]
-        private AnimationInfo[] m_animationStartInfo;
+        [SerializeField, InlineEditor]
+        private SoundData m_data;
+        private CallBackSounds m_callback;
 
         private static string m_cacheEvent;
-        private static EventInfo m_cacheEventInfo;
+        private static SoundData.EventInfo m_cacheEventInfo;
         private static string m_cacheAnimation;
-        private static AnimationInfo m_cacheAnimationInfo;
+        private static SoundData.AnimationInfo m_cacheAnimationInfo;
 
-        SkeletonDataAsset IHasSkeletonDataAsset.SkeletonDataAsset => m_skeletonAnimation.SkeletonDataAsset;
 
         private void OnEvents(TrackEntry trackEntry, Spine.Event e)
         {
             m_cacheEvent = e.Data.Name;
-            for (int i = 0; i < m_eventInfo.Length; i++)
+            for (int i = 0; i < m_data.eventCount; i++)
             {
-                m_cacheEventInfo = m_eventInfo[i];
+                m_cacheEventInfo = m_data.GetEventInfo(i);
                 if (m_cacheEvent == m_cacheEventInfo.eventName)
                 {
-                    m_cacheEventInfo.PlaySound(transform);
+                    m_cacheEventInfo.PlaySound(m_callback);
                     break;
                 }
             }
@@ -68,12 +41,12 @@ namespace DChild
         private void OnAnimationStart(TrackEntry trackEntry)
         {
             m_cacheAnimation = trackEntry.Animation.Name;
-            for (int i = 0; i < m_animationStartInfo.Length; i++)
+            for (int i = 0; i < m_data.animationCount; i++)
             {
-                m_cacheAnimationInfo = m_animationStartInfo[i];
-                if(m_cacheAnimation == m_cacheAnimationInfo.animationName)
+                m_cacheAnimationInfo = m_data.GetAnimationInfo(i);
+                if (m_cacheAnimation == m_cacheAnimationInfo.animationName)
                 {
-                    m_cacheAnimationInfo.PlaySound(transform);
+                    m_cacheAnimationInfo.PlaySound(m_callback);
                     break;
                 }
             }
@@ -81,10 +54,9 @@ namespace DChild
 
         private void Start()
         {
+            m_callback = GetComponent<CallBackSounds>();
             m_skeletonAnimation.state.Event += OnEvents;
             m_skeletonAnimation.state.Start += OnAnimationStart;
         }
-
-     
     }
 }

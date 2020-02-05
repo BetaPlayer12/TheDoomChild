@@ -26,7 +26,6 @@ namespace DChild.Gameplay.Combat
 
         public IDamageable damageable => m_damageable;
         public BodyDefense defense => m_isInvulnerable ? new BodyDefense(m_isInvulnerable) : new BodyDefense(m_damageReduction);
-
         public bool isInvulnerable => m_isInvulnerable;
 
         public void Enable()

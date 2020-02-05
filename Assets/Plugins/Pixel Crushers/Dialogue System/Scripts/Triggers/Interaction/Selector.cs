@@ -406,12 +406,16 @@ namespace PixelCrushers.DialogueSystem
             Ray ray = UnityEngine.Camera.main.ScreenPointToRay(GetSelectionPoint());
             lastRay = ray;
 
+            // New Variable rayCastDistance is used below for the raycasts instead of maxSelectionDistance to be able to set it to infinity (if using DistanceFrom.GameObject) instead of maxSelectionDistance:
+            // Credit: Daniel D. (Thank you!)
+            float raycastDistance = (distanceFrom == DistanceFrom.GameObject) ? Mathf.Infinity : maxSelectionDistance; 
+
             if (raycastAll)
             {
 
                 // Run RaycastAll:
                 if (lastHits == null) lastHits = new RaycastHit[MaxHits];
-                numLastHits = Physics.RaycastNonAlloc(ray, lastHits, maxSelectionDistance, layerMask);
+                numLastHits = Physics.RaycastNonAlloc(ray, lastHits, raycastDistance, layerMask);
                 bool foundUsable = false;
                 for (int i = 0; i < numLastHits; i++)
                 {
@@ -426,7 +430,7 @@ namespace PixelCrushers.DialogueSystem
                     else
                     {
                         Usable hitUsable = hit.collider.gameObject.GetComponent<Usable>();
-                        if (hitUsable != null && hitUsable.enabled)
+                        if (hitUsable != null && hitUsable.enabled && hitDistance <= maxSelectionDistance)
                         {
                             foundUsable = true;
                             distance = hitDistance;
@@ -510,12 +514,12 @@ namespace PixelCrushers.DialogueSystem
             }
 
             // Check for use key or button (only if releasing button on same selection):
-            if ((useKey != KeyCode.None) && Input.GetKeyDown(useKey)) return true;
+            if ((useKey != KeyCode.None) && InputDeviceManager.IsKeyDown(useKey)) return true;
             if (!string.IsNullOrEmpty(useButton))
             {
                 if (DialogueManager.instance != null && DialogueManager.getInputButtonDown == DialogueManager.instance.StandardGetInputButtonDown)
                 {
-                    return Input.GetButtonUp(useButton) && (selection == clickedDownOn);
+                    return InputDeviceManager.IsButtonUp(useButton) && (selection == clickedDownOn);
                 }
                 else
                 {

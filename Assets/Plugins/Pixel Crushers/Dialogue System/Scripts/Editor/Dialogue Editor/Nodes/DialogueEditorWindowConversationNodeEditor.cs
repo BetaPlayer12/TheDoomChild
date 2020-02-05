@@ -118,9 +118,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (nodeEditorDeleteCurrentConversation) DeleteCurrentConversationInNodeEditor();
             //--- Unnecessary: if (inspectorSelection == null) inspectorSelection = currentConversation;
 
-            DrawNodeEditorTopControls();
-
-            if (showParticipantNames) DrawParticipantsOnCanvas();
+            DrawNodeEditorTopControls();            
 
             var topOffset = GetTopOffsetHeight();
 
@@ -142,6 +140,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 EditorZoomArea.End();
             }
+
+            DrawDatabaseName();
+            if (showParticipantNames) DrawParticipantsOnCanvas();
+
             Handles.color = MajorGridLineColor;
             Handles.DrawLine(new Vector2(0, topOffset), new Vector2(position.width, topOffset));
 
@@ -501,12 +503,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             if (nodeStyle == null || nodeStyle.normal == null || nodeStyle.normal.background == null)
             {
+#if UNITY_2019_3_OR_NEWER
+                nodeStyle = Styles.GetNodeStyle("node", Styles.Color.Grey, false);
+                nodeStyle.wordWrap = false;
+                nodeStyle.contentOffset = new Vector2(0, -16);
+                nodeStyle.alignment = TextAnchor.MiddleCenter;
+                nodeStyle.normal.textColor = EditorGUIUtility.isProSkin ? new Color(0.9f, 0.9f, 0.9f) : Color.black;
+#else
                 nodeStyle = new GUIStyle(GUI.skin.box);
                 nodeStyle.wordWrap = false;
                 nodeStyle.contentOffset = new Vector2(0, -4);
                 nodeStyle.alignment = TextAnchor.MiddleCenter;
                 nodeStyle.normal.background = (EditorGUIUtility.Load("Dialogue System/EditorNode.png") as Texture2D) ?? Texture2D.whiteTexture;
                 nodeStyle.normal.textColor = EditorGUIUtility.isProSkin ? new Color(0.9f, 0.9f, 0.9f) : Color.black;
+#endif
             }
 
             string nodeLabel = GetDialogueEntryNodeText(entry);
@@ -519,8 +529,13 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             if (isSelected)
             {
+#if UNITY_2019_3_OR_NEWER
+                int bottomXAdd = 10;
+#else
+                int bottomXAdd = 8;
+#endif
                 GUI.backgroundColor = Color.white;
-                var bigRect = new Rect(boxRect.x - 1, boxRect.y - 4, boxRect.width + 6, boxRect.height + 8);
+                var bigRect = new Rect(boxRect.x - 1, boxRect.y - 4, boxRect.width + 6, boxRect.height + bottomXAdd);
                 GUI.Box(bigRect, string.Empty, Styles.GetNodeStyle("node", (nodeColor == EditorTools.NodeColor_Blue) ? Styles.Color.Blue : Styles.Color.Gray, isSelected));
                 GUI.backgroundColor = nodeColor;
             }

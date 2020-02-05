@@ -4,6 +4,7 @@ using DChild.Gameplay.Pooling;
 using DChild.Menu;
 using Holysoft.Event;
 using Sirenix.Utilities;
+using System;
 using UnityEngine;
 
 namespace DChild
@@ -37,6 +38,7 @@ namespace DChild
         [SerializeField]
         private GameIntroHandler m_introHandler;
 
+
         public static void SetCamera(Camera camera)
         {
             mainCamera = camera;
@@ -69,6 +71,12 @@ namespace DChild
         public static void LoadZone(string sceneName, bool withLoadingScene)
         {
             m_zoneLoader.LoadZone(sceneName, withLoadingScene);
+            GameplaySystem.ClearCaches();
+        }
+
+        public static void LoadZone(string sceneName, bool withLoadingScene, Action CallAfterSceneDone)
+        {
+            m_zoneLoader.LoadZone(sceneName, withLoadingScene,CallAfterSceneDone);
             GameplaySystem.ClearCaches();
         }
 

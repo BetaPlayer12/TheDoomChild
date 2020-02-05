@@ -59,6 +59,20 @@ namespace PixelCrushers
 
         private static int s_sendMessageDepth = 0;
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            s_listenerInfo = new List<ListenerInfo>();
+            s_listenerInfoPool = new Pool<ListenerInfo>();
+            s_sendersToLog = new HashSet<GameObject>();
+            s_listenersToLog = new HashSet<GameObject>();
+            s_sendInEditMode = false;
+            s_debug = false;
+            s_sendMessageDepth = 0;
+        }
+#endif
+
         /// <summary>
         /// Send messages even when not playing.
         /// </summary>

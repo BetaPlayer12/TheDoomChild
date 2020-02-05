@@ -76,7 +76,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             DrawTemplate("Dialogue Entries", template.dialogueEntryFields, template.dialogueEntryPrimaryFieldTitles, ref templateFoldouts.dialogueEntries);
             DrawDialogueLineColors();
             EditorWindowTools.EndIndentedSection();
-            if (EditorGUI.EndChangeCheck()) TemplateTools.SaveToEditorPrefs(template);
+            if (EditorGUI.EndChangeCheck()) SaveTemplate();
         }
 
         private void DrawTemplate(string foldoutName, List<Field> fields, List<string> primaryFieldTitles, ref bool foldout)
@@ -126,6 +126,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 if (newTemplate != null)
                 {
                     template = newTemplate;
+                    SaveTemplate();
                 }
                 else {
                     EditorUtility.DisplayDialog("Import Error", "Unable to import template data from the XML file.", "OK");
@@ -138,7 +139,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (EditorUtility.DisplayDialog("Reset template?", "You cannot undo this action.", "Reset", "Cancel"))
             {
                 template = Template.FromDefault();
-                TemplateTools.SaveToEditorPrefs(template);
+                SaveTemplate();
                 Repaint();
             }
         }

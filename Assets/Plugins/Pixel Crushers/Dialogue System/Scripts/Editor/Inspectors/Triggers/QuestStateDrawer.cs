@@ -20,7 +20,8 @@ namespace PixelCrushers.DialogueSystem
             "active",
             "success",
             "failure",
-            "abandoned"
+            "abandoned",
+            "grantable"
         };
 
         public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
@@ -50,6 +51,7 @@ namespace PixelCrushers.DialogueSystem
                 case QuestState.Success: return 2;
                 case QuestState.Failure: return 3;
                 case QuestState.Abandoned: return 4;
+                case QuestState.Grantable: return 5;
             }
         }
 
@@ -63,6 +65,7 @@ namespace PixelCrushers.DialogueSystem
                 case 2: return QuestState.Success;
                 case 3: return QuestState.Failure;
                 case 4: return QuestState.Abandoned;
+                case 5: return QuestState.Grantable;
             }
         }
 

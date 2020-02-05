@@ -176,6 +176,15 @@ namespace PixelCrushers.DialogueSystem
 
         private static Dictionary<string, Stack<string>> m_shortcutStack = new Dictionary<string, Stack<string>>();
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            m_cachedComponentTypes = new Dictionary<string, Type>();
+            m_shortcuts = new Dictionary<string, string>();
+            m_shortcutStack = new Dictionary<string, Stack<string>>();
+        }
+#endif
         private SequenceParser m_parser = new SequenceParser();
 
         private const float InstantThreshold = 0.001f;
@@ -877,11 +886,17 @@ namespace PixelCrushers.DialogueSystem
             {
                 if (command != null)
                 {
-                    if (!string.IsNullOrEmpty(command.endMessage)) Sequencer.Message(command.endMessage);                    
-                    Destroy(command); //---Was: Destroy(command, 0.1f);
+                    if (!string.IsNullOrEmpty(command.endMessage)) Sequencer.Message(command.endMessage);
+                    StartCoroutine(DestroyAfterOneFrame(command)); //---Was: Destroy(command); //---Was: Destroy(command, 0.1f);
                 }
             }
             m_activeCommands.Clear();
+        }
+
+        IEnumerator DestroyAfterOneFrame(SequencerCommand command)
+        {
+            yield return null;
+            Destroy(command);
         }
 
         /// <summary>
@@ -1881,14 +1896,18 @@ namespace PixelCrushers.DialogueSystem
                         {
                             for (int i = 0; i < m_setDialoguePanelPreviouslyOpenSubtitlePanels.Count; i++)
                             {
-                                standardDialogueUI.conversationUIElements.subtitlePanels[i].Open();
+                                var subtitlePanelNumber = m_setDialoguePanelPreviouslyOpenSubtitlePanels[i];
+                                standardDialogueUI.conversationUIElements.subtitlePanels[subtitlePanelNumber].panelState = UIPanel.PanelState.Closed;
+                                standardDialogueUI.conversationUIElements.subtitlePanels[subtitlePanelNumber].Open();
                             }
                         }
                         if (m_setDialoguePanelPreviouslyOpenMenuPanels != null)
                         {
                             for (int i = 0; i < m_setDialoguePanelPreviouslyOpenMenuPanels.Count; i++)
                             {
-                                standardDialogueUI.conversationUIElements.menuPanels[i].Open();
+                                var menuPanelNumber = m_setDialoguePanelPreviouslyOpenMenuPanels[i];
+                                standardDialogueUI.conversationUIElements.menuPanels[menuPanelNumber].panelState = UIPanel.PanelState.Closed;
+                                standardDialogueUI.conversationUIElements.menuPanels[menuPanelNumber].Open();
                             }
                         }
                     }
@@ -1905,12 +1924,22 @@ namespace PixelCrushers.DialogueSystem
                         for (int i = 0; i < standardDialogueUI.conversationUIElements.subtitlePanels.Length; i++)
                         {
                             if (standardDialogueUI.conversationUIElements.subtitlePanels[i] == null) continue;
-                            if (standardDialogueUI.conversationUIElements.subtitlePanels[i].isOpen) m_setDialoguePanelPreviouslyOpenSubtitlePanels.Add(i);
+                            if (standardDialogueUI.conversationUIElements.subtitlePanels[i].isOpen)
+                            {
+                                if (immediate) standardDialogueUI.conversationUIElements.subtitlePanels[i].HideImmediate();
+                                else standardDialogueUI.conversationUIElements.subtitlePanels[i].Close();
+                                m_setDialoguePanelPreviouslyOpenSubtitlePanels.Add(i);
+                            }
                         }
                         for (int i = 0; i < standardDialogueUI.conversationUIElements.menuPanels.Length; i++)
                         {
                             if (standardDialogueUI.conversationUIElements.menuPanels[i] == null) continue;
-                            if (standardDialogueUI.conversationUIElements.menuPanels[i].isOpen) m_setDialoguePanelPreviouslyOpenMenuPanels.Add(i);
+                            if (standardDialogueUI.conversationUIElements.menuPanels[i].isOpen)
+                            {
+                                m_setDialoguePanelPreviouslyOpenMenuPanels.Add(i);
+                                if (immediate) standardDialogueUI.conversationUIElements.menuPanels[i].HideImmediate();
+                                else standardDialogueUI.conversationUIElements.menuPanels[i].Close();
+                            }
                         }
                         if (immediate) standardDialogueUI.conversationUIElements.HideImmediate();
                     }
@@ -2037,6 +2066,22 @@ namespace PixelCrushers.DialogueSystem
             var menuPanelNumber = string.Equals(panelID, "default", StringComparison.OrdinalIgnoreCase) ? MenuPanelNumber.Default
                             : PanelNumberUtility.IntToMenuPanelNumber(Tools.StringToInt(panelID));
             var dialogueActor = (actorTransform != null) ? actorTransform.GetComponent<DialogueActor>() : null;
+            if (actorTransform == null)
+            {
+                if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Sequencer: SetMenuPanel({1}, {2})", new System.Object[] { DialogueDebug.Prefix, actorName, menuPanelNumber }));
+                if (string.Equals(actorName, "speaker", StringComparison.OrdinalIgnoreCase))
+                {
+                    var conversation = DialogueManager.masterDatabase.GetConversation(DialogueManager.lastConversationID);
+                    if (conversation != null) actorName = DialogueManager.masterDatabase.GetActor(conversation.ActorID).Name;
+                }
+                var actor = DialogueManager.masterDatabase.GetActor(actorName);
+                var standardDialogueUI = DialogueManager.dialogueUI as StandardDialogueUI;
+                if (actor != null && standardDialogueUI != null)
+                { 
+                    standardDialogueUI.OverrideActorMenuPanel(actor, menuPanelNumber, null);
+                    return true;
+                }
+            }
             if (dialogueActor != null)
             {
                 if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Sequencer: SetMenuPanel({1}, {2})", new System.Object[] { DialogueDebug.Prefix, actorTransform, menuPanelNumber }), actorTransform);

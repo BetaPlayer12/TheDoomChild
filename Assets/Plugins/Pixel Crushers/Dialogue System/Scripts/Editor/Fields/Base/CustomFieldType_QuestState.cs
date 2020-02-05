@@ -17,6 +17,12 @@ namespace PixelCrushers.DialogueSystem
             return questStateStrings[index];
         }
 
+        public override string Draw(GUIContent label, string currentValue, DialogueDatabase dataBase)
+        {
+            int index = EditorGUILayout.Popup(label.text, GetCurrentIndex(currentValue), questStateStrings);
+            return questStateStrings[index];
+        }
+
         public override string Draw(Rect rect, string currentValue, DialogueDatabase dataBase)
         {
             int index = EditorGUI.Popup(rect, GetCurrentIndex(currentValue), questStateStrings);

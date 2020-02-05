@@ -77,8 +77,7 @@ namespace DChild.Gameplay.Combat
             if (collision.CompareTag("DamageCollider"))
                 return;
 
-            var hitbox = collision.GetComponent<Hitbox>();
-            if (hitbox && hitbox.isInvulnerable == false)
+            if (collision.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)
             {
                 var targetID = hitbox.GetInstanceID();
                 m_processingHitbox.Add(hitbox);

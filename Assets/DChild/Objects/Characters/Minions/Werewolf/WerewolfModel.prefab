@@ -685,7 +685,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1089360297817908516}
   - component: {fileID: 6031322828457148897}
-  - component: {fileID: 7536685193453021364}
+  - component: {fileID: 1987754861534762248}
+  - component: {fileID: 3850222742023119379}
   m_Layer: 13
   m_Name: scratchAttackBB
   m_TagString: Untagged
@@ -700,9 +701,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2731189344812395531}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.99756086, w: 0.06980241}
+  m_LocalPosition: {x: 4.368936, y: 3.4953105, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 4375769121101767469}
   m_RootOrder: 0
@@ -723,7 +724,7 @@ MonoBehaviour:
   slotName: scratch_bounding_box
   isTrigger: 1
   clearStateOnDisable: 1
---- !u!60 &7536685193453021364
+--- !u!60 &1987754861534762248
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -748,14 +749,34 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 1.2720364, y: 1.0662365}
-      - {x: 0.34515926, y: 1.6414729}
-      - {x: -0.12831843, y: 1.2381067}
-      - {x: -0.29394513, y: 0.08650496}
-      - {x: 0.3254, y: -0.55990005}
-      - {x: 0.94349986, y: -0.46099997}
-      - {x: 1.1337554, y: -0.016286403}
-      - {x: 1.2972382, y: 0.59486675}
+    - - {x: 1.2720915, y: 1.0660698}
+      - {x: 0.3455223, y: 1.6414944}
+      - {x: -0.1280243, y: 1.2380364}
+      - {x: -0.29393938, y: 0.08650163}
+      - {x: 0.3254, y: -0.5598999}
+      - {x: 0.9435, y: -0.46099994}
+      - {x: 1.1335964, y: -0.016321566}
+      - {x: 1.2971637, y: 0.5945329}
+--- !u!114 &3850222742023119379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731189344812395531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 6838728216547988282}
+  boneName: finger1R4
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
 --- !u!1 &3081716802298812028
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,7 +855,7 @@ CompositeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1195,7 +1216,8 @@ GameObject:
   m_Component:
   - component: {fileID: 644036284213649632}
   - component: {fileID: 3379587708804358223}
-  - component: {fileID: 6300514059028346828}
+  - component: {fileID: 589444790369343857}
+  - component: {fileID: 3489169922329858602}
   m_Layer: 13
   m_Name: biteAttackBB
   m_TagString: Untagged
@@ -1210,9 +1232,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5043913392797903263}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.36754304, w: 0.93000656}
+  m_LocalPosition: {x: 2.8147225, y: 9.188926, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 4375769121101767469}
   m_RootOrder: 1
@@ -1233,7 +1255,7 @@ MonoBehaviour:
   slotName: bite_attack
   isTrigger: 1
   clearStateOnDisable: 1
---- !u!60 &6300514059028346828
+--- !u!60 &589444790369343857
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1266,6 +1288,26 @@ PolygonCollider2D:
       - {x: 1.9285002, y: -0.29610008}
       - {x: 1.1802998, y: -0.49500012}
       - {x: 0.54280126, y: -0.9880006}
+--- !u!114 &3489169922329858602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043913392797903263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 6838728216547988282}
+  boneName: head
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
 --- !u!1 &5095543409306338606
 GameObject:
   m_ObjectHideFlags: 0
@@ -1758,6 +1800,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

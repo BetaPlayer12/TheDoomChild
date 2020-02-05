@@ -202,7 +202,7 @@ namespace PixelCrushers.DialogueSystem {
 			cmpEntry.ConditionPriority = entry.conditionPriority.ToString();
 			cmpEntry.Fields = FieldsToCmp(entry.fields);
 			AddRequiredDialogEntryFields(cmpEntry.Fields);
-			//--- Dialogue Text type should be Text: cmpEntry.Fields.ForEach(cmpField => { if (cmpField.Title.StartsWith("Dialogue Text")) cmpField.Type = "Localization"; });
+			cmpEntry.Fields.ForEach(cmpField => { if (cmpField.Title.StartsWith("Dialogue Text")) cmpField.Type = "Localization"; });
             if (includeCanvasRect) AddCanvasRectField(entry, cmpEntry);
 			cmpEntry.OutgoingLinks = LinksToCmp(entry.outgoingLinks);
 			foreach (var link in cmpEntry.OutgoingLinks) {
@@ -237,7 +237,7 @@ namespace PixelCrushers.DialogueSystem {
 			RequireField(cmpFields, 3, "Actor", "Actor", "", "The actor who is talking.");
 			RequireField(cmpFields, 4, "Conversant", "Actor", "", "The actor who is listening.");
 			RequireField(cmpFields, 5, "Menu Text", "Text", "", "The text that is displayd to the player in a list as a dialogue option.");
-			RequireField(cmpFields, 6, "Dialogue Text", "Text", "", "The text that is spoken by the actor.");
+			RequireField(cmpFields, 6, "Dialogue Text", "Localization", "", "The text that is spoken by the actor.");
 			RequireField(cmpFields, 7, "Parenthetical", "Text", "", "A description of what is going on during this dialogue.");
 			RequireField(cmpFields, 8, "Audio Files", "Files", "[]", "A collection of audio files that should be played during this dialogue.");
 			RequireField(cmpFields, 9, "Video File", "Text", "", "A WMV video file to be played for this dialogue.");

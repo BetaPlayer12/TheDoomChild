@@ -9,11 +9,6 @@ namespace DChildEditor
     public class AssetToolKitWindow : OdinEditorWindow
     {
 
-        [AssetSelector(Paths = "Assets/Testing|Assets/testing|Assets/DChild/Objects/Location", Filter = "t:Texture2D"), SerializeField]
-        private Texture2D[] m_textures;
-        [SerializeField]
-        private string m_prefix;
-
         private static AssetToolKitWindow m_instance;
 
         [MenuItem("Tools/Kit/Asset ToolKit")]
@@ -22,6 +17,11 @@ namespace DChildEditor
             m_instance = EditorWindow.GetWindow<AssetToolKitWindow>();
             m_instance.Show();
         }
+
+        [AssetSelector(Paths = "Assets/Testing|Assets/testing|Assets/DChild/Objects/Location", Filter = "t:Texture2D"), SerializeField]
+        private Texture2D[] m_textures;
+        [SerializeField]
+        private string m_prefix;
 
 
         [Button]

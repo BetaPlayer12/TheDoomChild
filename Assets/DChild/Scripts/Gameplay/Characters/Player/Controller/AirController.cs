@@ -19,13 +19,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private DoubleJump m_doubleJump;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private WallStick m_wallStick;
+        private DChild.Gameplay.Characters.Players.Behaviour.WallStick m_wallStick;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private WallJump m_wallJump;
+        private DChild.Gameplay.Characters.Players.Skill.WallJump m_wallJump;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private AirDash m_dash;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private LedgeGrab m_ledgeGrab;
+        private DChild.Gameplay.Characters.Players.Behaviour.LedgeGrab m_ledgeGrab;
 
 
         private SkillResetRequester m_skillRequester;
@@ -36,10 +36,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_speedTransistor = behaviours.GetComponentInChildren<MoveSpeedTransistor>();
             m_highJump = behaviours.GetComponentInChildren<HighJump>();
             m_doubleJump = behaviours.GetComponentInChildren<DoubleJump>();
-            m_wallStick = behaviours.GetComponentInChildren<WallStick>();
-            m_wallJump = behaviours.GetComponentInChildren<WallJump>();
+            m_wallStick = behaviours.GetComponentInChildren<DChild.Gameplay.Characters.Players.Behaviour.WallStick>();
+            m_wallJump = behaviours.GetComponentInChildren<DChild.Gameplay.Characters.Players.Skill.WallJump>();
             m_dash = behaviours.GetComponentInChildren<AirDash>();
-            m_ledgeGrab = behaviours.GetComponentInChildren<LedgeGrab>();
+            m_ledgeGrab = behaviours.GetComponentInChildren<DChild.Gameplay.Characters.Players.Behaviour.LedgeGrab>();
 
         }
 

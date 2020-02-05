@@ -1108,17 +1108,17 @@ namespace Spine {
 		/// </summary>
 		public bool HoldPrevious { get { return holdPrevious; } set { holdPrevious = value; } }
 
-		/// <summary>
-		/// <para>
-		/// Resets the rotation directions for mixing this entry's rotate timelines. This can be useful to avoid bones rotating the
-		/// long way around when using <see cref="alpha"/> and starting animations on other tracks.</para>
-		/// <para>
-		/// Mixing with <see cref="MixBlend.Replace"/> involves finding a rotation between two others, which has two possible solutions:
-		/// the short way or the long way around. The two rotations likely change over time, so which direction is the short or long
-		/// way also changes. If the short way was always chosen, bones would flip to the other side when that direction became the
-		/// long way. TrackEntry chooses the short way the first time it is applied and remembers that direction.</para>
-		/// </summary>
-		public void ResetRotationDirections () {
+        /// <summary>
+        /// <para>
+        /// Resets the rotation directions for mixing this entry's rotate timelines. This can be useful to avoid bones rotating the
+        /// long way around when using <see cref="alpha"/> and starting animations on other tracks.</para>
+        /// <para>
+        /// Mixing with <see cref="MixBlend.Replace"/> involves finding a rotation between two others, which has two possible solutions:
+        /// the short way or the long way around. The two rotations likely change over time, so which direction is the short or long
+        /// way also changes. If the short way was always chosen, bones would flip to the other side when that direction became the
+        /// long way. TrackEntry chooses the short way the first time it is applied and remembers that direction.</para>
+        /// </summary>
+        public void ResetRotationDirections () {
 			timelinesRotation.Clear();
 		}
 

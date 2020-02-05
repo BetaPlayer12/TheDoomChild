@@ -19,7 +19,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
     {
 
         private List<string> textAreaFields = new List<string>() { "Description", "Success Description", "Failure Description" };
-        private static readonly string[] questStateStrings = { "(None)", "unassigned", "active", "success", "failure", "done", "abandoned" };
+        private static readonly string[] questStateStrings = { "(None)", "unassigned", "active", "success", "failure", "done", "abandoned", "grantable" };
 
         private bool showStateFieldAsQuest = true;
 
@@ -182,12 +182,27 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void DrawField(Field field, bool isTitleEditable = true, bool showType = true)
         {
-            EditorGUI.BeginDisabledGroup(!isTitleEditable);
-            field.title = EditorGUILayout.TextField(field.title);
-            EditorGUI.EndDisabledGroup();
+            if (isTitleEditable)
+            {
+                //EditorGUI.BeginDisabledGroup(!isTitleEditable);
+                field.title = EditorGUILayout.TextField(field.title);
+                //EditorGUI.EndDisabledGroup();
+            }
+            else
+            {
+                EditorGUILayout.LabelField(field.title);
+            }
 
             // Custom field types:
             field.value = CustomFieldTypeService.DrawField(field, database);
+
+            if (showType) DrawFieldType(field);
+        }
+
+        private void DrawField(GUIContent label, Field field, bool showType = true)
+        {
+            // Custom field types:
+            field.value = CustomFieldTypeService.DrawField(label, field, database);
 
             if (showType) DrawFieldType(field);
         }
@@ -234,6 +249,19 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 if (string.Equals(value, questStateStrings[i])) index = i;
             }
             int newIndex = EditorGUILayout.Popup(index, questStateStrings);
+            return (newIndex == index)
+                ? value
+                : ((newIndex == 0) ? string.Empty : questStateStrings[newIndex]);
+        }
+
+        private string DrawQuestStateField(GUIContent label, string value)
+        {
+            int index = 0;
+            for (int i = 0; i < questStateStrings.Length; i++)
+            {
+                if (string.Equals(value, questStateStrings[i])) index = i;
+            }
+            int newIndex = EditorGUILayout.Popup(label.text, index, questStateStrings);
             return (newIndex == index)
                 ? value
                 : ((newIndex == 0) ? string.Empty : questStateStrings[newIndex]);

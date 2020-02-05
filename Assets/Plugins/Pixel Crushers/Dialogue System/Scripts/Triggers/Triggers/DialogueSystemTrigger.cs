@@ -12,6 +12,11 @@ namespace PixelCrushers.DialogueSystem
     /// Dialogue System functions such as starting conversations, barks, alerts, 
     /// sequences, and Lua code.
     /// </summary>
+    /// <remarks>
+    /// Note: DialogueSystemTrigger has a custom editor (DialogueSystemTriggerEditor).
+    /// If you make a subclass, you can also subclass the editor script and override
+    /// its virtual functions.
+    /// </remarks>
     [AddComponentMenu("")] // Deprecated.
     public class DialogueSystemTrigger : MonoBehaviour
     {
@@ -61,6 +66,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The quest entry number whose state to change.
         /// </summary>
+        [QuestEntryPopup]
         public int questEntryNumber = 1;
 
         /// <summary>

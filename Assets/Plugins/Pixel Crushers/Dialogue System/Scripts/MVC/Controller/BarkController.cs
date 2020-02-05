@@ -98,6 +98,14 @@ namespace PixelCrushers.DialogueSystem
         /// <value>The last sequencer.</value>
         public static Sequencer LastSequencer { get; private set; }
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            currentBarkPriority = new Dictionary<Transform, int>();
+        }
+#endif
+
         static BarkController()
         {
             LastSequencer = null;

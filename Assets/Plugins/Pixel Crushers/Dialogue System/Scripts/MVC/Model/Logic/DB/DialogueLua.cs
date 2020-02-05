@@ -48,6 +48,16 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         private static Dictionary<string, float> relationshipTable = new Dictionary<string, float>();
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            includeSimStatus = true;
+            statusTable = new Dictionary<string, string>();
+            relationshipTable = new Dictionary<string, float>();
+        }
+#endif
+
         /// <summary>
         /// Initializes the DialogueLua class. Registers the Chat Mapper functions (xxxStatus() and 
         /// xxxRelationship()), and initializes the Chat Mapper tables.
