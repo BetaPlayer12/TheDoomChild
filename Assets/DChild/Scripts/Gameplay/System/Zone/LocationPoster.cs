@@ -23,6 +23,7 @@ namespace DChild.Gameplay.Systems
             }
 
             m_data?.Set(gameObject.scene, m_locationPoint.position);
+            gameObject.name = "LP_" + m_data?.name ?? "NONE";
         }
 #endif
     }
