@@ -86,7 +86,19 @@ namespace DChild.Serialization
             m_characterData = new PlayerCharacterData();
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
+        }
 
+        public void Copy(CampaignSlot slot)
+        {
+            m_demoGame = slot.demoGame;
+            m_newGame = slot.newGame;
+            m_location = slot.location;
+            m_spawnPosition = slot.spawnPosition;
+            m_completion = slot.completion;
+            m_duration = slot.duration;
+            m_characterData = new PlayerCharacterData(slot.characterData);
+            m_campaignProgress = new SerializeDataList(slot.campaignProgress);
+            m_zoneDatas = new SerializeDataList(slot.zoneDatas);
         }
 
         public void UpdateLocation(SceneInfo scene, Location location, Vector2 spawnPosition)
@@ -114,14 +126,7 @@ namespace DChild.Serialization
         public CampaignSlot(CampaignSlot slot)
         {
             this.m_id = slot.id;
-            m_newGame = slot.newGame;
-            m_location = slot.location;
-            m_spawnPosition = slot.spawnPosition;
-            m_completion = slot.completion;
-            m_duration = slot.duration;
-            m_characterData = new PlayerCharacterData(slot.characterData);
-            m_campaignProgress = new SerializeDataList(slot.campaignProgress);
-            m_zoneDatas = new SerializeDataList(slot.zoneDatas);
+            Copy(slot);
         }
 
         public SerializeDataList campaignProgress => m_campaignProgress;
