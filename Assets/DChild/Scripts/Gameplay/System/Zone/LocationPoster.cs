@@ -23,10 +23,13 @@ namespace DChild.Gameplay.Systems
             }
 
             m_data?.Set(gameObject.scene, m_locationPoint.position);
-            var newName = "LP_" + m_data?.name ?? "NONE";
-            if (gameObject.name != newName)
+            if (gameObject.scene.name != null)
             {
-                gameObject.name = newName;
+                var newName = "LP_" + m_data?.name ?? "NONE";
+                if (gameObject.name != newName)
+                {
+                    gameObject.name = newName;
+                }
             }
         }
 #endif
