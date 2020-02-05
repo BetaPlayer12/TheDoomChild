@@ -12,18 +12,22 @@ namespace DChild.Gameplay.Systems
         public LocationData data { get => m_data; }
 
 #if UNITY_EDITOR
-        [SerializeField,PropertyOrder(-1)]
+        [SerializeField, PropertyOrder(-1)]
         private Transform m_locationPoint;
 
         private void OnValidate()
         {
-            if(m_locationPoint == null)
+            if (m_locationPoint == null)
             {
                 m_locationPoint = transform;
             }
 
             m_data?.Set(gameObject.scene, m_locationPoint.position);
-            gameObject.name = "LP_" + m_data?.name ?? "NONE";
+            var newName = "LP_" + m_data?.name ?? "NONE";
+            if (gameObject.name != newName)
+            {
+                gameObject.name = newName;
+            }
         }
 #endif
     }
