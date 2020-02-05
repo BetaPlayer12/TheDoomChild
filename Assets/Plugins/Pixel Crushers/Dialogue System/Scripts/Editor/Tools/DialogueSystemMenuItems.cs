@@ -351,11 +351,11 @@ namespace PixelCrushers.DialogueSystem
         [MenuItem("Tools/Pixel Crushers/Dialogue System/Tools/Enable TextMesh Pro Support...", false, 100)]
         static public void AddTMPPRESENT()
         {
-            if (EditorUtility.DisplayDialog("Enable TextMesh Pro Support", "This will enable the Dialogue System's TextMesh Pro support for the current build platform. Your project must already contain the TextMesh Pro package. To continue, press OK. If you need to install TextMesh Pro first, press Cancel.", "OK", "Cancel"))
+            if (EditorUtility.DisplayDialog("Enable TextMesh Pro Support", "This will enable the Dialogue System's TextMesh Pro support. Your project must already contain the TextMesh Pro package. To continue, press OK. If you need to install TextMesh Pro first, press Cancel.", "OK", "Cancel"))
             {
                 MoreEditorUtility.TryAddScriptingDefineSymbols("TMP_PRESENT");
                 EditorTools.ReimportScripts();
-                EditorUtility.DisplayDialog("TextMesh Pro Support Enabled", "TextMesh Pro support has been enabled for the current build platform. You may need to right-click on the two files named TextMeshProTypewriterEffect and select Reimport to be able to add them to your GameObjects. If you change build platforms, you may need to select this menu item again.", "OK");
+                EditorUtility.DisplayDialog("TextMesh Pro Support Enabled", "TextMesh Pro support has been enabled. You may need to right-click on the two files named TextMeshProTypewriterEffect and select Reimport to be able to add them to your GameObjects. If you change build platforms, you may need to select this menu item again.", "OK");
             }
         }
 
@@ -363,6 +363,24 @@ namespace PixelCrushers.DialogueSystem
         static bool ValidateAddTMPPRESENT()
         {
             return !MoreEditorUtility.DoesScriptingDefineSymbolExist("TMP_PRESENT");
+        }
+
+        //=============================================================
+
+        [MenuItem("Tools/Pixel Crushers/Dialogue System/Tools/Enable Super Text Mesh Support...", false, 101)]
+        static public void AddUSESTM()
+        {
+            if (EditorUtility.DisplayDialog("Enable Super Text Mesh Support", "This will enable Super Text Mesh support. Your project must already contain Super Text Mesh.\n\n*IMPORTANT*: Before pressing OK, you MUST move the Clavian folder into the Plugins folder!\n\nTo continue, press OK. If you need to install Super Text Mesh or move the folder first, press Cancel.", "OK", "Cancel"))
+            {
+                MoreEditorUtility.TryAddScriptingDefineSymbols("USE_STM");
+                EditorUtility.DisplayDialog("Super Text Mesh Support Enabled", "Super Text Mesh support has been enabled.", "OK");
+            }
+        }
+
+        [MenuItem("Tools/Pixel Crushers/Dialogue System/Tools/Enable Super Text Mesh Support...", true)]
+        static bool ValidateAddUSESTM()
+        {
+            return !MoreEditorUtility.DoesScriptingDefineSymbolExist("USE_STM");
         }
 
         #endregion

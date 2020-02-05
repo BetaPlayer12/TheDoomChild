@@ -94,6 +94,11 @@ namespace PixelCrushers.DialogueSystem
 
         public SyncInfo syncInfo = new SyncInfo();
 
+        /// <summary>
+        /// Each database now stores a copy of its template.
+        /// </summary>
+        public string templateJson = string.Empty;
+
         // Cache dictionary by asset name to speed up searches:
         private Dictionary<string, Actor> actorNameCache = null;
         private Dictionary<string, Item> itemNameCache = null;
