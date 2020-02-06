@@ -24,6 +24,7 @@ namespace DChild.Gameplay
         private HorizontalDirection m_facing = HorizontalDirection.Right;
         [SerializeField, FoldoutGroup("Body Reference"), HideLabel]
         private BodyReference m_bodyReference;
+
         private int m_ID;
         private bool m_hasID;
 
