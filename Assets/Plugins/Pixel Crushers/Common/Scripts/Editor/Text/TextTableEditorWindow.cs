@@ -536,7 +536,9 @@ namespace PixelCrushers
         {
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1) // Right-click
             {
-                var index = (int)((Event.current.mousePosition.y / (EditorGUIUtility.singleLineHeight + 4)) - 1);
+                var scrolledClickPosition = Event.current.mousePosition.y - 16;
+                var elementHeight = (EditorGUIUtility.singleLineHeight + 5);
+                var index = Mathf.FloorToInt(scrolledClickPosition / elementHeight);
                 if (0 <= index && index < m_fieldList.count)
                 {
                     var menu = new GenericMenu();
@@ -551,7 +553,9 @@ namespace PixelCrushers
         {
             int index = (int)data;
             m_serializedObject.ApplyModifiedProperties();
+            Undo.RecordObject(m_textTable, "Insert Field");
             m_textTable.InsertField(index, "Field " + m_textTable.nextFieldID);
+            EditorUtility.SetDirty(m_textTable);
             m_serializedObject.Update();
             RebuildFieldCache();
             Repaint();
@@ -564,7 +568,9 @@ namespace PixelCrushers
             if (EditorUtility.DisplayDialog("Delete Field", "Delete '" + info.fieldNameProperty.stringValue + "'?", "OK", "Cancel"))
             {
                 m_serializedObject.ApplyModifiedProperties();
+                Undo.RecordObject(m_textTable, "Delete Field");
                 m_textTable.RemoveField(info.fieldNameProperty.stringValue);
+                EditorUtility.SetDirty(m_textTable);
                 m_serializedObject.Update();
                 RebuildFieldCache();
                 Repaint();
@@ -666,6 +672,7 @@ namespace PixelCrushers
                     Debug.Log("Deleted everything in " + m_textTable.name, m_textTable);
                     break;
             }
+            EditorUtility.SetDirty(m_textTable);
             m_serializedObject.Update();
             RebuildFieldCache();
             Repaint();
@@ -709,7 +716,7 @@ namespace PixelCrushers
             var searchRect = new Rect(rect.x, rect.y + rect.height - 4 * EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight);
             var replaceRect = new Rect(rect.x, rect.y + rect.height - 3 * EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight);
             var buttonRect = new Rect(rect.x, rect.y + rect.height - 2 * EditorGUIUtility.singleLineHeight + 4, rect.width, EditorGUIUtility.singleLineHeight);
-            m_searchString = EditorGUI.TextField(searchRect, "Find", m_searchString);
+            m_searchString = EditorGUI.TextField(searchRect, new GUIContent("Find", "Regular expressions allowed."), m_searchString);
             m_replaceString = EditorGUI.TextField(replaceRect, "Replace With", m_replaceString);
             var buttonWidth = 78f;
             var toggleWidth = 90f;

@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters
         private SpineRootAnimation m_animator;
         [SerializeField]
         private CountdownTimer m_bodyDuration;
+        [SerializeField]
+        private bool m_destroySource;
 
         private string m_animation;
 
@@ -26,8 +28,15 @@ namespace DChild.Gameplay.Characters
 
         private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
         {
-            m_source.gameObject.SetActive(false);
-            enabled = false;
+            if (m_destroySource)
+            {
+                Destroy(m_source.gameObject);
+            }
+            else
+            {
+                m_source.gameObject.SetActive(false);
+                enabled = false;
+            }
         }
 
         private void OnDestroyed(object sender, EventActionArgs eventArgs)

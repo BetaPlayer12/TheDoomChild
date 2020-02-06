@@ -105,7 +105,11 @@ namespace PixelCrushers
         {
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+#if UNITY_2019_3_OR_NEWER
             EditorUtility.RequestScriptReload();
+#else
+            UnityEditorInternal.InternalEditorUtility.RequestScriptReload();
+#endif
         }
 
         /// <summary>
@@ -143,6 +147,65 @@ namespace PixelCrushers
             }
             //Debug.Log("Touched: " + found);
         }
+
+        //=============================================================
+
+        [MenuItem("Tools/Pixel Crushers/Common/Misc/Enable TextMesh Pro Support...", false, 101)]
+        static public void AddTMPPRESENT()
+        {
+            if (EditorUtility.DisplayDialog("Enable TextMesh Pro Support", "This will enable TextMesh Pro support. Your project must already contain the TextMesh Pro package. To continue, press OK. If you need to install TextMesh Pro first, press Cancel.", "OK", "Cancel"))
+            {
+                MoreEditorUtility.TryAddScriptingDefineSymbols("TMP_PRESENT");
+                TouchScriptsWithScriptingSymbol("TMP_PRESENT");
+                EditorUtility.DisplayDialog("TextMesh Pro Support Enabled", "TextMesh Pro support has been enabled. You may need to right-click on the two files named TextMeshProTypewriterEffect and select Reimport to be able to add them to your GameObjects. If you change build platforms, you may need to select this menu item again.", "OK");
+            }
+        }
+
+        [MenuItem("Tools/Pixel Crushers/Common/Misc/Enable TextMesh Pro Support...", true)]
+        static bool ValidateAddTMPPRESENT()
+        {
+            return !MoreEditorUtility.DoesScriptingDefineSymbolExist("TMP_PRESENT");
+        }
+
+        //=============================================================
+
+        [MenuItem("Tools/Pixel Crushers/Common/Misc/Enable Super Text Mesh Support...", false, 101)]
+        static public void AddUSESTM()
+        {
+            if (EditorUtility.DisplayDialog("Enable Super Text Mesh Support", "This will enable Super Text Mesh support. Your project must already contain Super Text Mesh.\n\n*IMPORTANT*: Before pressing OK, you MUST move the Clavian folder into the Plugins folder!\n\nTo continue, press OK. If you need to install Super Text Mesh or move the folder first, press Cancel.", "OK", "Cancel"))
+            {
+                MoreEditorUtility.TryAddScriptingDefineSymbols("USE_STM");
+                EditorUtility.DisplayDialog("Super Text Mesh Support Enabled", "Super Text Mesh support has been enabled.", "OK");
+            }
+        }
+
+        [MenuItem("Tools/Pixel Crushers/Common/Misc/Enable Super Text Mesh Support...", true)]
+        static bool ValidateAddUSESTM()
+        {
+            return !MoreEditorUtility.DoesScriptingDefineSymbolExist("USE_STM");
+        }
+
+        //=============================================================
+
+#if UNITY_2019_1_OR_NEWER
+
+        [MenuItem("Tools/Pixel Crushers/Common/Misc/Use New Input System...", false, 102)]
+        static public void AddUSENEWINPUT()
+        {
+            if (EditorUtility.DisplayDialog("Use New Input System", "This will switch the Input Device Manager to read from Unity's new Input System. You must have already added the Input System package.\n\n*IMPORTANT*: Support for the new Input System has not been implemented yet! This option currently only suppresses error messages by preventing the Input Device Manager from accessing Unity's default Input class.", "OK", "Cancel"))
+            {
+                MoreEditorUtility.TryAddScriptingDefineSymbols("USE_NEW_INPUT");
+                EditorUtility.DisplayDialog("Using New Input System", "*IMPORTANT*: Support for the new Input System has not been implemented yet! This option currently only suppresses error messages by preventing the Input Device Manager from accessing Unity's default Input class.", "OK");
+            }
+        }
+
+        [MenuItem("Tools/Pixel Crushers/Common/Misc/Use New Input System...", true)]
+        static bool ValidateAddUSENEWINPUT()
+        {
+            return !MoreEditorUtility.DoesScriptingDefineSymbolExist("USE_NEW_INPUT");
+        }
+
+#endif
 
     }
 }
