@@ -15,6 +15,7 @@ namespace PlayerNew
         private WallJump wallJumpBehavior;
         private Slash slashBehavior;
         private Dash dashBehavior;
+        private GroundShaker groundShakerBehavior;
         private Animator animator;
         private CollisionState collisionState;
 
@@ -34,7 +35,7 @@ namespace PlayerNew
             wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
             dashBehavior = GetComponent<Dash>();
-
+            groundShakerBehavior = GetComponent<GroundShaker>();
         }
         // Start is called before the first frame update
         void Start()
@@ -76,6 +77,7 @@ namespace PlayerNew
                 wallStickBehavior.onWallDetected = false;
             }
 
+            
 
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
@@ -84,14 +86,21 @@ namespace PlayerNew
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing);
-            SlashAnimationState(slashBehavior.attacking);
-
+            SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter);
+            GroundShakerAnimationState(groundShakerBehavior.groundSmash);
 
         }
 
-        void SlashAnimationState(bool value)
+        void GroundShakerAnimationState(bool value)
         {
-            animator.SetBool("Attack", value);
+            animator.SetBool("EarthShake", value);
+        }
+
+        void SlashAnimationState(bool value1, int value2)
+        {
+            animator.SetBool("Attack", value1);
+          
+                animator.SetInteger("AttackState", value2 + 1);
         }
 
         void DashAnimationState(bool value)
