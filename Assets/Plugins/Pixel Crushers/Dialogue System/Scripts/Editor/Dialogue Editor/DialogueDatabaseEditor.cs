@@ -33,7 +33,6 @@ namespace PixelCrushers.DialogueSystem
         void OnEnable()
         {
             instance = this;
-            EditorApplication.projectWindowItemOnGUI -= OnProjectWindowItemOnGUI;
             EditorApplication.projectWindowItemOnGUI += OnProjectWindowItemOnGUI;
         }
 

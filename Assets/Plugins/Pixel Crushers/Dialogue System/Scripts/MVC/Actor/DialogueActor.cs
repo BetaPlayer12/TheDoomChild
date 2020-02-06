@@ -268,8 +268,7 @@ namespace PixelCrushers.DialogueSystem
         {
             if (t == null) return string.Empty;
             var dialogueActor = GetDialogueActorComponent(t);
-            return (dialogueActor != null && dialogueActor.isActiveAndEnabled) ? dialogueActor.GetName()
-                : CharacterInfo.GetLocalizedDisplayNameInDatabase(t.name);
+            return (dialogueActor == null) ? CharacterInfo.GetLocalizedDisplayNameInDatabase(t.name) : dialogueActor.GetName();
         }
 
         /// <summary>

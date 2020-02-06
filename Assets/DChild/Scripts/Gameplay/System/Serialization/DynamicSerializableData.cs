@@ -12,7 +12,7 @@ namespace DChild.Serialization
     public class DynamicSerializableData : ScriptableObject
     {
         [SerializeField]
-        private SerializeID m_ID = new SerializeID(true);
+        private SerializeDataID m_ID;
         [SerializeField, ReadOnly]
         private bool m_isLocked;
         [ShowInInspector,ReadOnly]

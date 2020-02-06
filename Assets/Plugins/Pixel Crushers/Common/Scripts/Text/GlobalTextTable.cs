@@ -18,14 +18,6 @@ namespace PixelCrushers
 
         protected static GlobalTextTable s_instance = null;
 
-#if UNITY_2019_3_OR_NEWER
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void InitStaticVariables()
-        {
-            s_instance = null;
-        }
-#endif
-
         protected virtual void Awake()
         {
             s_instance = this;

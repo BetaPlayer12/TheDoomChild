@@ -145,37 +145,37 @@ namespace Doozy.Editor.Internal
             DoozyUtils.DisplayProgressBar("Hold on...", "Soundy - Search For Unregistered Databases", 0.1f);
             SoundySettings.Database.SearchForUnregisteredDatabases(false);
             DoozyUtils.DisplayProgressBar("Hold on...", "Soundy - Refresh", 0.15f);
-            SoundySettings.Database.RefreshDatabase(false, true);
+            SoundySettings.Database.RefreshDatabase(false, false);
 
             //THEMES
             DoozyUtils.DisplayProgressBar("Hold on...", "Themes - Search For Unregistered Themes", 0.2f);
             ThemesSettings.Database.SearchForUnregisteredThemes(false);
             DoozyUtils.DisplayProgressBar("Hold on...", "Themes - Refresh", 0.25f);
-            ThemesSettings.Database.RefreshDatabase(false, true);
+            ThemesSettings.Database.RefreshDatabase(false, false);
             
             //UIAnimations
             DoozyUtils.DisplayProgressBar("Hold on...", "UIAnimations - Search For Unregistered Databases", 0.3f);
-            UIAnimations.Instance.SearchForUnregisteredDatabases(true);
+            UIAnimations.Instance.SearchForUnregisteredDatabases(false);
 
             //UIButtons
             DoozyUtils.DisplayProgressBar("Hold on...", "Buttons - Search For Unregistered Databases", 0.4f);
-            UIButtonSettings.Database.SearchForUnregisteredDatabases(true);
+            UIButtonSettings.Database.SearchForUnregisteredDatabases(false);
 
             //UICanvases
             DoozyUtils.DisplayProgressBar("Hold on...", "Canvases - Search For Unregistered Databases", 0.6f);
-            UICanvasSettings.Database.SearchForUnregisteredDatabases(true);
+            UICanvasSettings.Database.SearchForUnregisteredDatabases(false);
 
             //UIDrawers
             DoozyUtils.DisplayProgressBar("Hold on...", "Drawers - Search For Unregistered Databases", 0.7f);
-            UIDrawerSettings.Database.SearchForUnregisteredDatabases(true);
+            UIDrawerSettings.Database.SearchForUnregisteredDatabases(false);
 
             //UIViews
             DoozyUtils.DisplayProgressBar("Hold on...", "Views - Search For Unregistered Databases", 0.8f);
-            UIViewSettings.Database.SearchForUnregisteredDatabases(true);
+            UIViewSettings.Database.SearchForUnregisteredDatabases(false);
 
             //UIPopups
             DoozyUtils.DisplayProgressBar("Hold on...", "Popups - Search For Unregistered Databases", 0.9f);
-            UIPopupSettings.Database.SearchForUnregisteredLinks(true);
+            UIPopupSettings.Database.SearchForUnregisteredLinks(false);
 
             if (saveAssets)
             {

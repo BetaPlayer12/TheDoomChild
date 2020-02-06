@@ -9,38 +9,43 @@ namespace DChild.Serialization
     public class SerializeDataList
     {
         [OdinSerialize]
-        private Dictionary<SerializeID, ISaveData> m_saveDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
+        private Dictionary<int, ISaveData> m_saveDatas = new Dictionary<int, ISaveData>();
 
         public SerializeDataList()
         {
-            m_saveDatas = new Dictionary<SerializeID, ISaveData>();
+            m_saveDatas = new Dictionary<int, ISaveData>();
         }
 
-        public void UpdateData(SerializeID ID, ISaveData data)
+        public void UpdateData(SerializeDataID ID, ISaveData data)
         {
-            if (m_saveDatas.ContainsKey(ID))
+            var IDvalue = ID.value;
+            if (m_saveDatas.ContainsKey(ID.value))
             {
-                m_saveDatas[ID] = data;
+                m_saveDatas[IDvalue] = data;
             }
             else
             {
-                m_saveDatas.Add(new SerializeID(ID,false), data);
+                m_saveDatas.Add(IDvalue, data);
             }
         }
 
-        public ISaveData GetData(SerializeID ID)
+        public ISaveData GetData(SerializeDataID ID)
         {
             var IDvalue = ID.value;
+            return m_saveDatas.ContainsKey(IDvalue) ? m_saveDatas[IDvalue] : null;
+        }
+
+        public ISaveData GetData(int ID)
+        {
             return m_saveDatas.ContainsKey(ID) ? m_saveDatas[ID] : null;
         }
 
-
 #if UNITY_EDITOR
-        public Dictionary<SerializeID, ISaveData> saveDatas => m_saveDatas;
+        public Dictionary<int, ISaveData> saveDatas => m_saveDatas;
 
         public SerializeDataList(SerializeDataList data)
         {
-            m_saveDatas = new Dictionary<SerializeID, ISaveData>();
+            m_saveDatas = new Dictionary<int, ISaveData>();
             foreach (var key in data.saveDatas.Keys)
             {
                 m_saveDatas.Add(key, data.saveDatas[key]);

@@ -26,7 +26,7 @@ namespace PixelCrushers.DialogueSystem
         public static WelcomeWindow ShowWindow()
         {
             var window = GetWindow<WelcomeWindow>(false, "Welcome");
-            window.minSize = new Vector2(370, 444);
+            window.minSize = new Vector2(370, 430);
             window.showOnStart = true; // Can't check EditorPrefs when constructing window: showOnStartPrefs;
             return window;
         }
@@ -41,7 +41,6 @@ namespace PixelCrushers.DialogueSystem
         {
             if (!EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                EditorApplication.update -= CheckShowWelcomeWindow;
                 EditorApplication.update += CheckShowWelcomeWindow;
             }
         }
@@ -176,7 +175,6 @@ namespace PixelCrushers.DialogueSystem
             var define_USE_ARTICY = false;
             var define_USE_AURORA = false;
             var define_TMP_PRESENT = false;
-            var define_USE_STM = false;
             var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup).Split(';');
             for (int i = 0; i < defines.Length; i++)
             {
@@ -186,12 +184,10 @@ namespace PixelCrushers.DialogueSystem
                 if (string.Equals(ScriptingSymbolNames.USE_ARTICY, defines[i].Trim())) define_USE_ARTICY = true;
                 if (string.Equals(ScriptingSymbolNames.USE_AURORA, defines[i].Trim())) define_USE_AURORA = true;
                 if (string.Equals(ScriptingSymbolNames.TMP_PRESENT, defines[i].Trim())) define_TMP_PRESENT = true;
-                if (string.Equals(ScriptingSymbolNames.USE_STM, defines[i].Trim())) define_USE_STM = true;
             }
 #if EVALUATION_VERSION || !UNITY_2018_1_OR_NEWER
             define_USE_PHYSICS2D = true;
             define_TMP_PRESENT = false;
-            define_USE_STM = false;
             define_USE_ARTICY = true;
             define_USE_AURORA = true;
 #endif
@@ -225,13 +221,10 @@ namespace PixelCrushers.DialogueSystem
 #if EVALUATION_VERSION
             EditorGUI.BeginDisabledGroup(true);
             EditorGUILayout.ToggleLeft(new GUIContent("TextMesh Pro (TMP_PRESENT)", "TextMesh Pro support not available in evaluation version."), define_TMP_PRESENT);
-            EditorGUILayout.ToggleLeft(new GUIContent("Super Text Mesh (USE_STM)", "Super Text Mesh support not available in evaluation version."), define_USE_STM);
             EditorGUI.EndDisabledGroup();
             var new_TMP_PRESENT = define_TMP_PRESENT;
-            var new_USE_STM = define_USE_STM;
 #else
             var new_TMP_PRESENT = EditorGUILayout.ToggleLeft(new GUIContent("TextMesh Pro (TMP_PRESENT)", "Enable Dialogue System support for TextMesh Pro. You must still enable TextMesh Pro in Package Manager."), define_TMP_PRESENT);
-            var new_USE_STM = EditorGUILayout.ToggleLeft(new GUIContent("Super Text Mesh (USE_STM)", "Enable Dialogue System support for Super Text Mesh. Requires Super Text Mesh in project."), define_USE_STM);
 #endif
             var changed = EditorGUI.EndChangeCheck();
 
@@ -240,25 +233,7 @@ namespace PixelCrushers.DialogueSystem
             if (new_USE_CINEMACHINE != define_USE_CINEMACHINE) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_CINEMACHINE, new_USE_CINEMACHINE);
             if (new_USE_ARTICY != define_USE_ARTICY) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_ARTICY, new_USE_ARTICY);
             if (new_USE_AURORA != define_USE_AURORA) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_AURORA, new_USE_AURORA);
-            if (new_TMP_PRESENT != define_TMP_PRESENT) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.TMP_PRESENT, new_TMP_PRESENT, true);
-            if (new_USE_STM != define_USE_STM)
-            {
-                if (new_USE_STM)
-                {
-                    if (EditorUtility.DisplayDialog("Enable Super Text Mesh Support", "This will enable Super Text Mesh support. Your project must already contain Super Text Mesh.\n\n*IMPORTANT*: Before pressing OK, you MUST move the Clavian folder into the Plugins folder!\n\nTo continue, press OK. If you need to install Super Text Mesh or move the folder first, press Cancel.", "OK", "Cancel"))
-                    {
-                        MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_STM, new_USE_STM);
-                    }
-                    else
-                    {
-                        changed = false;
-                    }
-                }
-                else
-                {
-                    MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_STM, new_USE_STM);
-                }
-            }
+            if (new_TMP_PRESENT != define_TMP_PRESENT) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.TMP_PRESENT, new_TMP_PRESENT);
 
             EditorWindowTools.DrawHorizontalLine();
             GUILayout.EndArea();

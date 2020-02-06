@@ -54,7 +54,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private Field currentEntryConversant = null;
         private bool entryEventFoldout = false;
         private bool entryFieldsFoldout = false;
-        private SequenceSyntaxState sequenceSyntaxState = SequenceSyntaxState.Unchecked;
 
         private DialogueEntry _currentEntry = null;
         [SerializeField]
@@ -68,7 +67,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             set
             {
                 _currentEntry = value;
-                sequenceSyntaxState = SequenceSyntaxState.Unchecked;
                 if (value != null)
                 {
                     currentEntryID = value.id;
@@ -596,7 +594,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 }
 
                 // Sequence (including localized if defined):
-                entry.Sequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence", "Cutscene played when speaking this entry. If set, overrides Dialogue Manager's Default Sequence. Drag audio clips to add AudioWait() commands."), entry.Sequence, ref sequenceRect, ref sequenceSyntaxState);
+                entry.Sequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence", "Cutscene played when speaking this entry. If set, overrides Dialogue Manager's Default Sequence. Drag audio clips to add AudioWait() commands."), entry.Sequence, ref sequenceRect);
                 DrawLocalizedVersions(entry.fields, "Sequence {0}", false, FieldType.Text);
 
                 // Response Menu Sequence:
@@ -722,7 +720,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 // Sequence (including localized if defined):
                 var sequence = GetMultinodeSelectionFieldValue(DialogueSystemFields.Sequence);
                 EditorGUI.BeginChangeCheck();
-                sequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence", "Cutscene played when speaking these entries. If set, overrides Dialogue Manager's Default Sequence. Drag audio clips to add AudioWait() commands."), sequence, ref sequenceRect, ref sequenceSyntaxState);
+                sequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence", "Cutscene played when speaking these entries. If set, overrides Dialogue Manager's Default Sequence. Drag audio clips to add AudioWait() commands."), sequence, ref sequenceRect);
                 if (EditorGUI.EndChangeCheck()) { changed = true; SetMultinodeSelectionFieldValue(DialogueSystemFields.Sequence, sequence); }
 
                 // Response Menu Sequence:

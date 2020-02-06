@@ -50,7 +50,7 @@ namespace PixelCrushers
 
         private void Update()
         {
-            if (InputDeviceManager.IsButtonDown(menuInputButton)) ToggleMenu();
+            if (Input.GetButtonDown(menuInputButton)) ToggleMenu();
         }
 
         public void ToggleMenu()

@@ -4,10 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using System.Collections;
-#if USE_NEW_INPUT
-using UnityEngine.InputSystem;
-#endif
-// NOTE: Support for the new Input System is not implemented yet.
 
 namespace PixelCrushers
 {
@@ -82,7 +78,6 @@ namespace PixelCrushers
         public delegate float GetAxisDelegate(string axisName);
 
         public GetButtonDownDelegate GetButtonDown = null;
-        public GetButtonDownDelegate GetButtonUp = null;
         public GetAxisDelegate GetInputAxis = null;
 
         private Vector3 m_lastMousePosition;
@@ -120,27 +115,13 @@ namespace PixelCrushers
 
         public static bool IsButtonDown(string buttonName)
         {
-            return (m_instance != null && m_instance.GetButtonDown != null) ? m_instance.GetButtonDown(buttonName) : DefaultGetButtonDown(buttonName);
-        }
+            return (m_instance != null && m_instance.GetButtonDown != null) ? m_instance.GetButtonDown(buttonName) : false;
 
-        public static bool IsButtonUp(string buttonName)
-        {
-            return (m_instance != null && m_instance.GetButtonUp != null) ? m_instance.GetButtonUp(buttonName) : DefaultGetButtonUp(buttonName);
-        }
-
-        public static bool IsKeyDown(KeyCode keyCode)
-        {
-            return DefaultGetKeyDown(keyCode);
         }
 
         public static float GetAxis(string axisName)
         {
-            return (m_instance != null && m_instance.GetInputAxis != null) ? m_instance.GetInputAxis(axisName) : DefaultGetAxis(axisName);
-        }
-
-        public static Vector3 GetMousePosition()
-        {
-            return DefaultGetMousePosition();
+            return (m_instance != null && m_instance.GetInputAxis != null) ? m_instance.GetInputAxis(axisName) : 0;
         }
 
         public void Awake()
@@ -150,10 +131,9 @@ namespace PixelCrushers
                 Destroy(gameObject);
             }
             else
-            {
+            { 
                 m_instance = this;
                 GetButtonDown = DefaultGetButtonDown;
-                GetButtonUp = DefaultGetButtonUp;
                 GetInputAxis = DefaultGetAxis;
                 if (singleton)
                 {
@@ -175,12 +155,12 @@ namespace PixelCrushers
 
         public void Start()
         {
-            m_lastMousePosition = GetMousePosition();
+            m_lastMousePosition = Input.mousePosition;
             SetInputDevice(inputDevice);
             BrieflyIgnoreMouseMovement();
         }
 
-        private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             BrieflyIgnoreMouseMovement();
         }
@@ -248,7 +228,7 @@ namespace PixelCrushers
             {
                 for (int i = 0; i < joystickKeyCodesToCheck.Length; i++)
                 {
-                    if (IsKeyDown(joystickKeyCodesToCheck[i]))
+                    if (Input.GetKeyDown(joystickKeyCodesToCheck[i]))
                     {
                         return true;
                     }
@@ -262,7 +242,7 @@ namespace PixelCrushers
                 }
                 for (int i = 0; i < joystickAxesToCheck.Length; i++)
                 {
-                    if (Mathf.Abs(DefaultGetAxis(joystickAxesToCheck[i])) > joystickAxisThreshold)
+                    if (Mathf.Abs(Input.GetAxisRaw(joystickAxesToCheck[i])) > joystickAxisThreshold)
                     {
                         return true;
                     }
@@ -278,10 +258,9 @@ namespace PixelCrushers
         public bool IsUsingMouse()
         {
             if (!detectMouseControl) return false;
-            if (DefaultGetMouseButtonDown(0) || DefaultGetMouseButtonDown(1)) return true;
-            var mousePosition = DefaultGetMousePosition();
-            var didMouseMove = !m_ignoreMouse && (Mathf.Abs(mousePosition.x - m_lastMousePosition.x) > mouseMoveThreshold || Mathf.Abs(mousePosition.y - m_lastMousePosition.y) > mouseMoveThreshold);
-            m_lastMousePosition = mousePosition;
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(1)) return true;
+            var didMouseMove = !m_ignoreMouse && (Mathf.Abs(Input.mousePosition.x - m_lastMousePosition.x) > mouseMoveThreshold || Mathf.Abs(Input.mousePosition.y - m_lastMousePosition.y) > mouseMoveThreshold);
+            m_lastMousePosition = Input.mousePosition;
             return didMouseMove;
         }
 
@@ -295,7 +274,7 @@ namespace PixelCrushers
             m_ignoreMouse = true;
             yield return new WaitForSeconds(0.5f);
             m_ignoreMouse = false;
-            m_lastMousePosition = DefaultGetMousePosition();
+            m_lastMousePosition = Input.mousePosition;
             if (deviceUsesCursor)
             {
                 SetCursor(true);
@@ -308,7 +287,7 @@ namespace PixelCrushers
             {
                 for (int i = 0; i < keyCodesToCheck.Length; i++)
                 {
-                    if (DefaultGetKeyDown(keyCodesToCheck[i]))
+                    if (Input.GetKeyDown(keyCodesToCheck[i]))
                     {
                         return true;
                     }
@@ -334,7 +313,7 @@ namespace PixelCrushers
             {
                 for (int i = 0; i < backKeyCodes.Length; i++)
                 {
-                    if (DefaultGetKeyDown(backKeyCodes[i]))
+                    if (Input.GetKeyDown(backKeyCodes[i]))
                     {
                         return true;
                     }
@@ -352,6 +331,30 @@ namespace PixelCrushers
                 Debug.LogError("Some input settings listed on the Input Device Manager component are missing from Unity's Input Manager. To automatically add them, inspect the Input Device Manager component and click the 'Add Input Definitions' button at the bottom.\n" + e.Message, this);
             }
             return false;
+        }
+
+        public bool DefaultGetButtonDown(string buttonName)
+        {
+            try
+            {
+                return string.IsNullOrEmpty(buttonName) ? false : Input.GetButtonDown(buttonName);
+            }
+            catch (System.ArgumentException) // Input button not in setup.
+            {
+                return false;
+            }
+        }
+
+        public float DefaultGetAxis(string axisName)
+        {
+            try
+            {
+                return string.IsNullOrEmpty(axisName) ? 0 : Input.GetAxis(axisName);
+            }
+            catch (System.ArgumentException) // Input axis not in setup.
+            {
+                return 0;
+            }
         }
 
         public void SetCursor(bool visible)
@@ -372,89 +375,6 @@ namespace PixelCrushers
             yield return new WaitForEndOfFrame();
             Cursor.visible = visible;
             Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
-        }
-
-        public static bool DefaultGetKeyDown(KeyCode keyCode)
-        {
-#if USE_NEW_INPUT
-            return false;
-#else
-            return Input.GetKeyDown(keyCode);
-#endif
-        }
-
-        public static bool DefaultGetButtonDown(string buttonName)
-        {
-            try
-            {
-#if USE_NEW_INPUT
-                return false;
-#else
-                return string.IsNullOrEmpty(buttonName) ? false : Input.GetButtonDown(buttonName);
-#endif
-            }
-            catch (System.ArgumentException) // Input button not in setup.
-            {
-                return false;
-            }
-        }
-
-        public static bool DefaultGetButtonUp(string buttonName)
-        {
-            try
-            {
-#if USE_NEW_INPUT
-                return false;
-#else
-                return string.IsNullOrEmpty(buttonName) ? false : Input.GetButtonUp(buttonName);
-#endif
-            }
-            catch (System.ArgumentException) // Input button not in setup.
-            {
-                return false;
-            }
-        }
-
-        public static float DefaultGetAxis(string axisName)
-        {
-            try
-            {
-#if USE_NEW_INPUT
-
-                return 0;
-#else
-                return string.IsNullOrEmpty(axisName) ? 0 : Input.GetAxis(axisName);
-#endif
-            }
-            catch (System.ArgumentException) // Input axis not in setup.
-            {
-                return 0;
-            }
-        }
-
-        public static Vector3 DefaultGetMousePosition()
-        {
-#if USE_NEW_INPUT
-            var pos = Mouse.current.position.ReadValue();
-            return new Vector3(pos.x, pos.y, 0);
-#else
-            return Input.mousePosition;
-#endif
-        }
-
-        public static bool DefaultGetMouseButtonDown(int buttonNumber)
-        {
-#if USE_NEW_INPUT
-            switch (buttonNumber)
-            {
-                case 0: return Mouse.current.leftButton.isPressed;
-                case 1: return Mouse.current.rightButton.isPressed;
-                case 2: return Mouse.current.middleButton.isPressed;
-                default: return false;
-            }
-#else
-            return Input.GetMouseButtonDown(buttonNumber);
-#endif
         }
 
     }

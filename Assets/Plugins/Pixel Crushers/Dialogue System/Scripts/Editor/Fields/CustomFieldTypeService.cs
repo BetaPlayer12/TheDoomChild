@@ -53,13 +53,6 @@ namespace PixelCrushers.DialogueSystem
             return (fieldCustomType != null) ? fieldCustomType.Draw(field.value, dataBase) : field.value;
         }
 
-        public static string DrawField(GUIContent label, Field field, DialogueDatabase dataBase)
-        {
-            TryConvertType(field);
-            var fieldCustomType = GetFieldCustomType(field.typeString);
-            return (fieldCustomType != null) ? fieldCustomType.Draw(label, field.value, dataBase) : field.value;
-        }
-
         public static string DrawField(Rect rect, Field field, DialogueDatabase dataBase)
         {
             TryConvertType(field);

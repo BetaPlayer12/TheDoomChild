@@ -1,7 +1,6 @@
 ﻿using Sirenix.Serialization;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace DChild.Serialization
@@ -20,12 +19,6 @@ namespace DChild.Serialization
             File.WriteAllBytes(filePath, bytes);
             Debug.Log("Game Save " +
                        $"\n {filePath}");
-        }
-
-        public static async Task<bool> SaveAsync(int slotID, CampaignSlot data)
-        {
-            await Task.Run(() => Save(slotID, data));
-            return true;
         }
 
         public static void Delete(int ID)
@@ -69,11 +62,6 @@ namespace DChild.Serialization
             {
                 Debug.LogError("File Path does not exist");
             }
-        }
-        public static async Task<bool> LoadAsync(int slotID, CampaignSlot data)
-        {
-            await Task.Run(() => Load(slotID, ref data));
-            return true;
         }
     }
 

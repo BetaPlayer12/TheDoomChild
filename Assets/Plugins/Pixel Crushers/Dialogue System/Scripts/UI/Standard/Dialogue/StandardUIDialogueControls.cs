@@ -15,6 +15,8 @@ namespace PixelCrushers.DialogueSystem
 
         #region Serialized Variables
 
+        [SerializeField]
+        private bool m_useDoozy;
         [Tooltip("Main panel for conversation UI (optional).")]
         public UIPanel mainPanel;
 
@@ -33,9 +35,6 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("Default panel for response menus.")]
         public StandardUIMenuPanel defaultMenuPanel;
-
-        [Tooltip("When showing response menu, use portrait info of player actor assigned to first response.")]
-        public bool useFirstResponseForMenuPortrait;
 
         #endregion
 
@@ -58,7 +57,7 @@ namespace PixelCrushers.DialogueSystem
         public void Initialize()
         {
             m_standardSubtitleControls.Initialize(subtitlePanels, defaultNPCSubtitlePanel, defaultPCSubtitlePanel);
-            m_standardMenuControls.Initialize(menuPanels, defaultMenuPanel, useFirstResponseForMenuPortrait);
+            m_standardMenuControls.Initialize(menuPanels, defaultMenuPanel);
         }
 
         #endregion
@@ -96,7 +95,15 @@ namespace PixelCrushers.DialogueSystem
         {
             HideSubtitlePanelsImmediate();
             HideMenuPanelsImmediate();
-            if (mainPanel != null) { mainPanel.gameObject.SetActive(false); mainPanel.panelState = UIPanel.PanelState.Closed; }
+
+            if (mainPanel != null)
+            {
+                if (m_useDoozy == false)
+                {
+                    mainPanel.gameObject.SetActive(false);
+                }
+                mainPanel.panelState = UIPanel.PanelState.Closed;
+            }
         }
 
         private void HideSubtitlePanelsImmediate()

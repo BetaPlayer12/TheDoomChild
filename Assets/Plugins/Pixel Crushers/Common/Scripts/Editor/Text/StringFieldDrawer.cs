@@ -143,24 +143,16 @@ namespace PixelCrushers
         public static string GetStringFieldValue(SerializedProperty stringFieldProperty)
         {
             if (stringFieldProperty == null) return string.Empty;
-            var textProperty = stringFieldProperty.FindPropertyRelative("m_text");
-            if (textProperty != null && !string.IsNullOrEmpty(textProperty.stringValue))
-            {
-                return textProperty.stringValue;
-            }
             var stringAssetProperty = stringFieldProperty.FindPropertyRelative("m_stringAsset");
-            if (stringAssetProperty != null && stringAssetProperty.objectReferenceValue is StringAsset)
+            if (stringAssetProperty != null && stringAssetProperty.objectReferenceValue != null && stringAssetProperty.objectReferenceValue is StringAsset)
             {
                 return (stringAssetProperty.objectReferenceValue as StringAsset).text;
             }
-            var textTableProperty = stringFieldProperty.FindPropertyRelative("m_textTable");
-            if (textTableProperty != null && textTableProperty.objectReferenceValue is TextTable)
+            else
             {
-                var textTable = textTableProperty.objectReferenceValue as TextTable;
-                var textTableFieldIDProperty = stringFieldProperty.FindPropertyRelative("m_textTableFieldID");
-                return textTable.GetFieldTextForLanguage(textTableFieldIDProperty.intValue, UILocalizationManager.instance.currentLanguage);
+                var textProperty = stringFieldProperty.FindPropertyRelative("m_text");
+                return (textProperty != null) ? textProperty.stringValue : string.Empty;
             }
-            return string.Empty;
         }
 
         public static void SetStringFieldValue(SerializedProperty stringFieldProperty, string value)

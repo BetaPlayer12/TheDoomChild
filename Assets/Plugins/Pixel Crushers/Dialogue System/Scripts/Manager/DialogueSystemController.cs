@@ -57,7 +57,7 @@ namespace PixelCrushers.DialogueSystem
         public bool preloadResources = false;
 
         [Tooltip("Use a copy of the dialogue database at runtime instead of the asset file directly. This allows you to change the database without affecting the asset.")]
-        public bool instantiateDatabase = true;
+        public bool instantiateDatabase = false;
 
         /// <summary>
         /// If <c>true</c>, Unity will not destroy the game object when loading a new level.
@@ -140,15 +140,6 @@ namespace PixelCrushers.DialogueSystem
 
         public static bool applicationIsQuitting = false;
         public static string lastInitialDatabaseName = null;
-
-#if UNITY_2019_3_OR_NEWER
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void InitStaticVariables()
-        {
-            applicationIsQuitting = false;
-            lastInitialDatabaseName = null;
-        }
-#endif
 
         /// <summary>
         /// Gets the dialogue database manager.
@@ -365,7 +356,7 @@ namespace PixelCrushers.DialogueSystem
         /// <returns></returns>
         public bool StandardGetInputButtonDown(string buttonName)
         {
-            return InputDeviceManager.IsButtonDown(buttonName);
+            return InputDeviceManager.IsButtonDown(buttonName); // Was: Input.GetButtonDown(buttonName);
         }
 
         private bool DisabledGetInputButtonDown(string buttonName)

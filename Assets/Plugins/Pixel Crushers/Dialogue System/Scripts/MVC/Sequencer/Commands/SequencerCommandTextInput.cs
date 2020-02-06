@@ -40,17 +40,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             int maxLength = GetParameterAsInt(3);
             bool clearField = string.Equals(GetParameter(4), "clear");
             if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Sequencer: TextInput({1}, {2}, {3}, {4})", new System.Object[] { DialogueDebug.Prefix, Tools.GetObjectName(textFieldUIObject), labelText, variableName, maxLength }));
-            if (string.IsNullOrEmpty(variableName))
-            {
-                if (DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Sequencer: TextInput({1}): The third parameter must be the name of a Dialogue System variable.", new System.Object[] { DialogueDebug.Prefix, GetParameters() }));
-                Stop();
-            }
-            else if (textFieldUI == null)
-            {
-                if (DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Sequencer: TextInput(): Text Field UI not found on a GameObject '{1}'. Did you specify the correct GameObject name?", new System.Object[] { DialogueDebug.Prefix, GetParameter(0) }));
-                Stop();
-            }
-            else
+            if (textFieldUI != null)
             {
                 if (labelText.StartsWith("var="))
                 {
@@ -58,6 +48,11 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
                 }
                 string variableValue = clearField ? string.Empty : DialogueLua.GetVariable(variableName).asString;
                 textFieldUI.StartTextInput(labelText, variableValue, maxLength, OnAcceptedText);
+            }
+            else
+            {
+                if (DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Sequencer: TextInput(): Text Field UI not found on a GameObject '{1}'. Did you specify the correct GameObject name?", new System.Object[] { DialogueDebug.Prefix, GetParameter(0) }));
+                Stop();
             }
         }
 

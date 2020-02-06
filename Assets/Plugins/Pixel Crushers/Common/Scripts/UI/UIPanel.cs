@@ -49,13 +49,6 @@ namespace PixelCrushers
         private float m_timeNextCheck = 0;
         private float m_timeNextRefresh = 0;
 
-        protected bool m_deactivateOnHidden = true;
-        public bool deactivateOnHidden
-        {
-            get { return m_deactivateOnHidden; }
-            set { m_deactivateOnHidden = value; }
-        }
-
         /// <summary>
         /// If false, turns off checking of current selection to make sure a valid selectable is selected.
         /// You can temporarily set this false if you open a non-UIPanel window and don't want
@@ -235,7 +228,7 @@ namespace PixelCrushers
         protected virtual void OnHidden()
         {
             panelState = PanelState.Closed;
-            if (deactivateOnHidden) gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
         protected virtual void Update()

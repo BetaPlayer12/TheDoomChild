@@ -13,6 +13,5 @@ namespace PixelCrushers.DialogueSystem
         public const string USE_ARTICY = "USE_ARTICY";
         public const string USE_AURORA = "USE_AURORA";
         public const string TMP_PRESENT = "TMP_PRESENT";
-        public const string USE_STM = "USE_STM";
     }
 }
