@@ -180,9 +180,8 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        public IEnumerator Start()
+        public void Start()
         {
-            yield return null;
             if (addTrigger == DialogueTriggerEvent.OnStart) TryAddDatabases(null, onePerFrame);
             if (removeTrigger == DialogueTriggerEvent.OnStart) TryRemoveDatabases(null, onePerFrame);
         }
