@@ -508,6 +508,11 @@ namespace DChild
             {
                 m_connection.ExecuteCommand($"INSERT INTO {table} VALUES({ID},\"{context}\")");
             }
+
+            public void Modify(int ID, string context)
+            {
+                m_connection.ExecuteCommand($"UPDATE {table} SET Context = \"{context}\" WHERE ID = {ID}");
+            }
         }
 
         private static SerializeIDConnection serializeIDConnection = new SerializeIDConnection();
