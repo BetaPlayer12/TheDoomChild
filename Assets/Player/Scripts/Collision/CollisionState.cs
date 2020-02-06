@@ -56,8 +56,9 @@ namespace PlayerNew
 
             isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
 
-            //RaycastHit2D hit = Physics2D.Raycast(transform.position,  Vector2.left, collisionLayer);
-            //Debug.DrawLine(transform.position)
+            RaycastHit2D slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
+            RaycastHit2D slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
+
         }
 
         private void OnDrawGizmos()
@@ -78,10 +79,8 @@ namespace PlayerNew
                 Gizmos.DrawWireSphere(pos, collisionRadius);
             }
 
-            foreach(var rayPosition in rayPositions)
-            {
-
-            }
+            Debug.DrawRay(transform.position, Vector2.right * lineLength, Color.green);
+            Debug.DrawRay(transform.position, Vector2.left * lineLength, Color.green);
         }
     }
 
