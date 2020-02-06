@@ -54,12 +54,6 @@ namespace Doozy.Engine.UI.Nodes
         public UIDrawerBehaviorType UIDrawerTriggerAction = UIDrawerBehaviorType.Open;
         public string DrawerName = UIDrawer.DefaultDrawerName;
         public bool CustomDrawerName = false;
-        public bool SwitchBackMode = false;
-
-        private Node m_sourceNode;
-        private bool m_activatedByEvent;
-        public bool HasSource { get { return m_sourceNode != null; } }
-        public Node Source { get { return m_sourceNode; } }
 
         public string WaitForInfoTitle
         {
@@ -111,7 +105,6 @@ namespace Doozy.Engine.UI.Nodes
         public override void AddDefaultSockets()
         {
             base.AddDefaultSockets();
-//            AddInputSocket(ConnectionMode.Multiple, typeof(PassthroughConnection), false, false);
             AddOutputSocket(ConnectionMode.Override, typeof(PassthroughConnection), false, false);
         }
 
@@ -168,18 +161,10 @@ namespace Doozy.Engine.UI.Nodes
             RemoveListeners();
         }
 
-        private void UpdateSourceNode(Node node)
-        {
-            if (!SwitchBackMode) return;
-            m_sourceNode = node;
-        }
-
-
         private void OnGameEventMessage(GameEventMessage message)
         {
             if (PortalGraph != null && !PortalGraph.Enabled) return;
             if (message.EventName != GameEventToListenFor) return;
-            m_activatedByEvent = true;
             PortalGraph.SetActiveNodeById(Id);
         }
 
@@ -193,10 +178,7 @@ namespace Doozy.Engine.UI.Nodes
             if (AnyValue ||
                 message.View.ViewCategory.Equals(ViewCategory) &&
                 message.View.ViewName.Equals(ViewName))
-            {
-                m_activatedByEvent = true;
                 PortalGraph.SetActiveNodeById(Id);
-            }
         }
 
         private void OnUIButtonMessage(UIButtonMessage message)
@@ -209,22 +191,17 @@ namespace Doozy.Engine.UI.Nodes
             bool listeningForBackButton = ButtonName.Equals(UIButton.BackButtonName);
             if (listeningForBackButton && (message.ButtonName.Equals(UIButton.BackButtonName) || message.Button != null && message.Button.IsBackButton))
             {
-                m_activatedByEvent = true;
                 PortalGraph.SetActiveNodeById(Id);
                 return;
             }
 
             if (AnyValue)
             {
-                m_activatedByEvent = true;
                 PortalGraph.SetActiveNodeById(Id);
                 return;
             }
 
-            if (message.Button == null ||
-                !message.Button.ButtonCategory.Equals(ButtonCategory) ||
-                !message.Button.ButtonName.Equals(ButtonName)) return;
-            m_activatedByEvent = true;
+            if (message.Button == null || !message.Button.ButtonCategory.Equals(ButtonCategory) || !message.Button.ButtonName.Equals(ButtonName)) return;
             PortalGraph.SetActiveNodeById(Id);
         }
 
@@ -235,10 +212,7 @@ namespace Doozy.Engine.UI.Nodes
             if (DebugMode) DDebug.Log("UIDrawerMessage received: " + message.Type + " " + message.Drawer.DrawerName + " // Listening for: " + DrawerName, this);
             if (message.Type != UIDrawerTriggerAction) return;
             if (AnyValue || message.Drawer.DrawerName.Equals(DrawerName))
-            {
-                m_activatedByEvent = true;
                 PortalGraph.SetActiveNodeById(Id);
-            }
         }
 
         public override void CopyNode(Node original)
@@ -257,7 +231,6 @@ namespace Doozy.Engine.UI.Nodes
             UIDrawerTriggerAction = node.UIDrawerTriggerAction;
             DrawerName = node.DrawerName;
             CustomDrawerName = node.CustomDrawerName;
-            SwitchBackMode = node.SwitchBackMode;
         }
 
         public override void OnEnter(Node previousActiveNode, Connection connection)
@@ -265,28 +238,7 @@ namespace Doozy.Engine.UI.Nodes
             base.OnEnter(previousActiveNode, connection);
             if (ActiveGraph == null) return;
             if (!FirstOutputSocket.IsConnected) return;
-
-            if (!SwitchBackMode) //Switch Back Node disabled -> Activate the first connected node
-            {
-                PortalGraph.SetActiveNodeByConnection(FirstOutputSocket.FirstConnection);
-                return;
-            }
-
-            if (!m_activatedByEvent && HasSource) //node activated by a direct connection and has a source -> go back
-            {
-                PortalGraph.SetActiveNodeById(m_sourceNode.Id);
-                m_sourceNode = null; //reset source after going back
-                return;
-            }
-
-            UpdateSourceNode(m_activatedByEvent ? previousActiveNode : null); //update the source to the previously active node if activated by an event
-            PortalGraph.SetActiveNodeByConnection(FirstOutputSocket.FirstConnection);
-        }
-
-        public override void OnExit(Node nextActiveNode, Connection connection)
-        {
-            base.OnExit(nextActiveNode, connection);
-            m_activatedByEvent = false;
+            ActiveGraph.SetActiveNodeByConnection(FirstOutputSocket.FirstConnection);
         }
 
         public override void CheckForErrors()

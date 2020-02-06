@@ -456,22 +456,18 @@ namespace PixelCrushers.DialogueSystem
             for (int i = 0; i < m_builtinPanels.Count; i++)
             {
                 var panel = m_builtinPanels[i];
-                if (panel != null &&
-                    ((panel.currentSubtitle != null && string.Equals(panel.currentSubtitle.speakerInfo.nameInDatabase, actorName)) ||
-                    (panel.portraitActorName == actorName)))
+                if (panel != null && panel.currentSubtitle != null && string.Equals(panel.currentSubtitle.speakerInfo.nameInDatabase, actorName))
                 {
                     panel.SetActorPortraitSprite(actorName, portraitSprite);
-                    //--- Check other panels in case listener's portrait changed. return;
+                    return;
                 }
             }
             foreach (var panel in m_actorPanelCache.Values)
             {
-                if (panel != null &&
-                    ((panel.currentSubtitle != null && string.Equals(panel.currentSubtitle.speakerInfo.nameInDatabase, actorName)) ||
-                    (panel.portraitActorName == actorName)))
+                if (panel != null && panel.currentSubtitle != null && string.Equals(panel.currentSubtitle.speakerInfo.nameInDatabase, actorName))
                 {
                     panel.SetActorPortraitSprite(actorName, portraitSprite);
-                    //--- Check other panels in case listener's portrait changed. return;
+                    return;
                 }
             }
         }

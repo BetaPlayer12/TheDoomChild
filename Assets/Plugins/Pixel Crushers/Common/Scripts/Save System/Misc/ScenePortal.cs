@@ -24,8 +24,6 @@ namespace PixelCrushers
         [SerializeField]
         private string m_spawnpointNameInDestinationScene;
 
-        private bool m_isLoadingScene = false;
-
         public string requiredTag
         {
             get { return m_requiredTag; }
@@ -44,16 +42,8 @@ namespace PixelCrushers
             set { m_spawnpointNameInDestinationScene = value; }
         }
 
-        public bool isLoadingScene
-        {
-            get { return m_isLoadingScene; }
-            set { m_isLoadingScene = value; }
-        }
-
         public virtual void UsePortal()
         {
-            if (isLoadingScene) return;
-            isLoadingScene = true;
             LoadScene();
         }
 

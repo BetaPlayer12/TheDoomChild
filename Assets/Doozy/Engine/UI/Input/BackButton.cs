@@ -129,15 +129,6 @@ namespace Doozy.Engine.UI.Input
 
         #region Unity Methods
 
-#if UNITY_2019_3_OR_NEWER
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void RunOnStart()
-        {
-            s_applicationIsQuitting = false;
-            s_initialized = false;
-        }
-#endif
-        
         private void Reset() { BackButtonInputData = GetBackButtonInputData(); }
 
         private void Awake()

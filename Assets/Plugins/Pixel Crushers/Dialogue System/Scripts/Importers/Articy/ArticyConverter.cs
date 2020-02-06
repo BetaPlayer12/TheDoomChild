@@ -593,16 +593,6 @@ namespace PixelCrushers.DialogueSystem.Articy
             return conversation;
         }
 
-        private int GetDefaultActorID(Conversation conversation)
-        {
-            return (conversation != null) ? conversation.ActorID : (prefs.UseDefaultActorsIfNoneAssignedToDialogue ? 1 : 0);
-        }
-
-        private int GetDefaultConversantID(Conversation conversation)
-        {
-            return (conversation != null) ? conversation.ConversantID : (prefs.UseDefaultActorsIfNoneAssignedToDialogue ? 2 : 0);
-        }
-
         /// <summary>
         /// Creates a new Dialogue System conversation from an articy flow fragment. This also adds the
         /// conversation's mandatory first dialogue entry, "START".
@@ -620,8 +610,8 @@ namespace PixelCrushers.DialogueSystem.Articy
             Field.SetValue(conversation.fields, "Description", articyFlowFragment.text.DefaultText, FieldType.Text);
             SetFeatureFields(conversation.fields, articyFlowFragment.features);
             var parentConversation = GetConversationStackTop();
-            conversation.ActorID = GetDefaultActorID(parentConversation);
-            conversation.ConversantID = GetDefaultConversantID(parentConversation);
+            conversation.ActorID = (parentConversation != null) ? parentConversation.ActorID : 1;
+            conversation.ConversantID = (parentConversation != null) ? parentConversation.ConversantID : 2;
             database.conversations.Add(conversation);
 
             // Create START entry:
@@ -911,8 +901,8 @@ namespace PixelCrushers.DialogueSystem.Articy
             if (fragment == null || conversation == null) return;
             var entry = CreateNewDialogueEntry(conversation, fragment.displayName.DefaultText, fragment.id);
             entry.canvasRect = new Rect(fragment.position.x, fragment.position.y, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
-            ConvertLocalizableText(entry, "Dialogue Text", fragment.text, true);
-            ConvertLocalizableText(entry, "Menu Text", fragment.menuText, true);
+            ConvertLocalizableText(entry, "Dialogue Text", fragment.text);
+            ConvertLocalizableText(entry, "Menu Text", fragment.menuText);
             ConvertLocalizableText(entry, "Title", fragment.displayName);
             SetFeatureFields(entry.fields, fragment.features);
             if (prefs.StageDirectionsAreSequences)
@@ -930,7 +920,7 @@ namespace PixelCrushers.DialogueSystem.Articy
                 entry.fields.Remove(scriptField);
             }
             Actor actor = FindActorByArticyId(fragment.speakerIdRef);
-            entry.ActorID = (actor != null) ? actor.id : (prefs.UseDefaultActorsIfNoneAssignedToDialogue ? conversation.ActorID : 0);
+            entry.ActorID = (actor != null) ? actor.id : conversation.ActorID;
             var conversantEntity = Field.Lookup(entry.fields, "ConversantEntity");
             var conversantActor = (conversantEntity == null) ? null 
                 : (prefs.ConvertSlotsAs == ConverterPrefs.ConvertSlotsModes.ID) ? FindActorByArticyId(conversantEntity.value)
@@ -942,7 +932,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             }
             else
             {
-                entry.ConversantID = prefs.UseDefaultActorsIfNoneAssignedToDialogue ? ((entry.ActorID == conversation.ActorID) ? conversation.ConversantID : conversation.ActorID) : 0;
+                entry.ConversantID = (entry.ActorID == conversation.ActorID) ? conversation.ConversantID : conversation.ActorID;
             }
             ConvertPinExpressionsToConditionsAndScripts(entry, fragment.pins);
             RecordPins(fragment.pins, entry);
@@ -1338,19 +1328,19 @@ namespace PixelCrushers.DialogueSystem.Articy
             return (s != null) && (s.Contains("+=") || s.Contains("-="));
         }
 
-        private void ConvertLocalizableText(DialogueEntry entry, string baseFieldTitle, ArticyData.LocalizableText localizableText, bool replaceNewlines = false)
+        private void ConvertLocalizableText(DialogueEntry entry, string baseFieldTitle, ArticyData.LocalizableText localizableText)
         {
             if (entry == null) return;
             foreach (KeyValuePair<string, string> kvp in localizableText.localizedString)
             {
                 if (string.IsNullOrEmpty(kvp.Key))
                 {
-                    Field.SetValue(entry.fields, baseFieldTitle, RemoveFormattingTags(kvp.Value, replaceNewlines), FieldType.Text);
+                    Field.SetValue(entry.fields, baseFieldTitle, RemoveFormattingTags(kvp.Value), FieldType.Text);
                 }
                 else
                 {
                     string localizedTitle = string.Equals("Dialogue Text", baseFieldTitle) ? kvp.Key : string.Format("{0} {1}", baseFieldTitle, kvp.Key);
-                    Field.SetValue(entry.fields, localizedTitle, RemoveFormattingTags(kvp.Value, replaceNewlines), FieldType.Localization);
+                    Field.SetValue(entry.fields, localizedTitle, RemoveFormattingTags(kvp.Value), FieldType.Localization);
                 }
             }
         }
@@ -1371,11 +1361,9 @@ namespace PixelCrushers.DialogueSystem.Articy
             }
         }
 
-        private string RemoveFormattingTags(string s, bool replaceNewlines = false)
+        private string RemoveFormattingTags(string s)
         {
-            if (string.IsNullOrEmpty(s)) return s;
-            if (replaceNewlines && s.Contains(@"\n")) s = s.Replace(@"\n", "\n");
-            if (s.Contains("font-size"))
+            if (!string.IsNullOrEmpty(s) && s.Contains("font-size"))
             {
                 Regex regex = new Regex("{font-size:[0-9]+pt;}");
                 return regex.Replace(s, string.Empty);

@@ -14,19 +14,10 @@ namespace PixelCrushers
         {
             var uiTextProperty = property.FindPropertyRelative("m_uiText");
             var textMeshProUGUIProperty = property.FindPropertyRelative("m_textMeshProUGUI");
-            var superTextMeshProperty = property.FindPropertyRelative("m_superTextMesh");
             var isUiTextAssigned = (uiTextProperty != null) && (uiTextProperty.objectReferenceValue != null);
             var isTextMeshProUGUIAssigned = (textMeshProUGUIProperty != null) && (textMeshProUGUIProperty.objectReferenceValue != null);
-            var isSuperTextMeshAssigned = (superTextMeshProperty != null) && (superTextMeshProperty.objectReferenceValue != null);
-            //var isContentAssigned = (isUiTextAssigned && !isTextMeshProUGUIAssigned && !isSuperTextMeshAssigned) || 
-            //    (!isUiTextAssigned && isTextMeshProUGUIAssigned && !isSuperTextMeshAssigned) ||
-            //    (!isUiTextAssigned && !isTextMeshProUGUIAssigned && isSuperTextMeshAssigned) ||
-            //    (textMeshProUGUIProperty == null && superTextMeshProperty == null);
-            var isContentAssigned = isUiTextAssigned || isTextMeshProUGUIAssigned || isSuperTextMeshAssigned;
-            int numUnassignedLines = 1;
-            if (textMeshProUGUIProperty != null) numUnassignedLines++;
-            if (superTextMeshProperty != null) numUnassignedLines++;
-            return (isContentAssigned ? 1 : numUnassignedLines) * EditorGUIUtility.singleLineHeight;
+            var isContentAssigned = (isUiTextAssigned && !isTextMeshProUGUIAssigned) || (!isUiTextAssigned && isTextMeshProUGUIAssigned) || (textMeshProUGUIProperty == null);
+            return (isContentAssigned ? 1 : 2) * EditorGUIUtility.singleLineHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -39,7 +30,6 @@ namespace PixelCrushers
 
                 var uiTextProperty = property.FindPropertyRelative("m_uiText");
                 var textMeshProUGUIProperty = property.FindPropertyRelative("m_textMeshProUGUI");
-                var superTextMeshProperty = property.FindPropertyRelative("m_superTextMesh");
                 if (uiTextProperty == null)
                 {
                     Debug.LogError("Sorry! There was an internal editor error with a UI Text Field. Please contact Pixel Crushers for support.");
@@ -47,16 +37,11 @@ namespace PixelCrushers
                 }
                 var isUiTextAssigned = (uiTextProperty != null) && (uiTextProperty.objectReferenceValue != null);
                 var isTextMeshProUGUIAssigned = (textMeshProUGUIProperty != null) && (textMeshProUGUIProperty.objectReferenceValue != null);
-                var isSuperTextMeshAssigned = (superTextMeshProperty != null) && (superTextMeshProperty.objectReferenceValue != null);
-                //var isContentAssigned = (isUiTextAssigned && !isTextMeshProUGUIAssigned && !isSuperTextMeshAssigned) ||
-                //    (!isUiTextAssigned && isTextMeshProUGUIAssigned && !isSuperTextMeshAssigned) ||
-                //    (!isUiTextAssigned && !isTextMeshProUGUIAssigned && isSuperTextMeshAssigned) ||
-                //    (textMeshProUGUIProperty == null && superTextMeshProperty == null);
-                var isContentAssigned = isUiTextAssigned || isTextMeshProUGUIAssigned || isSuperTextMeshAssigned;
+                var isContentAssigned = (isUiTextAssigned && !isTextMeshProUGUIAssigned) || (!isUiTextAssigned && isTextMeshProUGUIAssigned);
 
                 float yOffset = 0;
 
-                if (isUiTextAssigned || !isContentAssigned)
+                if (isUiTextAssigned|| !isContentAssigned)
                 {
                     EditorGUI.PropertyField(new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight), uiTextProperty, GUIContent.none);
                     yOffset += EditorGUIUtility.singleLineHeight;
@@ -65,11 +50,6 @@ namespace PixelCrushers
                 if (isTextMeshProUGUIAssigned || (textMeshProUGUIProperty != null && !isContentAssigned))
                 {
                     EditorGUI.PropertyField(new Rect(position.x, position.y + yOffset, position.width, EditorGUIUtility.singleLineHeight), textMeshProUGUIProperty, GUIContent.none);
-                }
-
-                if (isSuperTextMeshAssigned || (superTextMeshProperty != null && !isContentAssigned))
-                {
-                    EditorGUI.PropertyField(new Rect(position.x, position.y + yOffset, position.width, EditorGUIUtility.singleLineHeight), superTextMeshProperty, GUIContent.none);
                 }
             }
             finally

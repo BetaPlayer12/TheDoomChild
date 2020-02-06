@@ -34,13 +34,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Quest was abandoned
         /// </summary>
-        Abandoned = 0x10,
-
-        /// <summary>
-        /// Quest is available to be granted to the player. The Dialogue System does
-        /// not use this state, but it's included for those who want to use it on their own
-        /// </summary>
-        Grantable = 0x20
+        Abandoned = 0x10
     }
 
 }

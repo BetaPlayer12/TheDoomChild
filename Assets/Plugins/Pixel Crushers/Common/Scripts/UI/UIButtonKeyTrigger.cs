@@ -30,7 +30,7 @@ namespace PixelCrushers
 
         void Update()
         {
-            if (InputDeviceManager.IsKeyDown(key) || (!string.IsNullOrEmpty(buttonName) && InputDeviceManager.IsButtonDown(buttonName)))
+            if (Input.GetKeyDown(key) || (!string.IsNullOrEmpty(buttonName) && InputDeviceManager.IsButtonDown(buttonName)))
             {
                 ExecuteEvents.Execute(m_selectable.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.submitHandler);
             }

@@ -683,11 +683,8 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public override void Stop()
         {
-            if (isPlaying)
-            {
-                onEnd.Invoke();
-                Sequencer.Message(SequencerMessages.Typed);
-            }
+            if (isPlaying) onEnd.Invoke();
+            Sequencer.Message(SequencerMessages.Typed);
             StopTypewriterCoroutine();
             if (control != null) control.text = UITools.StripRPGMakerCodes(frontSkippedText + original);
             original = null;

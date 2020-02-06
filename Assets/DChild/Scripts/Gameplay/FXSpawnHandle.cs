@@ -11,7 +11,6 @@ namespace DChild.Gameplay
         {
             var instance = InstantiateFX(fx, position);
             instance.SetFacing(direction);
-            instance.Play();
             return instance;
         }
 
@@ -19,7 +18,6 @@ namespace DChild.Gameplay
         {
             var instance = InstantiateFX(fx, position);
             SceneManager.MoveGameObjectToScene(instance.gameObject, scene);
-            instance.Play();
             return instance;
         }
 

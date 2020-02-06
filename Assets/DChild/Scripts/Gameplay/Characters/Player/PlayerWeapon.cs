@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using Holysoft.Event;
@@ -8,7 +7,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
 {
-
     [AddComponentMenu("DChild/Gameplay/Player/Player Weapon")]
     public class PlayerWeapon : MonoBehaviour
     {

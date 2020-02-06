@@ -69,9 +69,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_smokeFXEvent;
             public string smokeFXEvent => m_smokeFXEvent;
-            [SerializeField, ValueDropdown("GetEvents")]
-            private string m_smokeStopFXEvent;
-            public string smokeStopFXEvent => m_smokeStopFXEvent;
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
@@ -121,8 +118,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
-        [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_smokeFX;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -145,8 +140,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
 
             m_spineEventListener.Subscribe(m_info.dartFXEvent, LaunchProjectile);
-            m_spineEventListener.Subscribe(m_info.smokeFXEvent, m_smokeFX.Play);
-            m_spineEventListener.Subscribe(m_info.smokeStopFXEvent, m_smokeFX.Stop);
+            m_spineEventListener.Subscribe(m_info.smokeFXEvent, LaunchProjectile);
             //GameplaySystem.SetBossHealth(m_character);
         }
 

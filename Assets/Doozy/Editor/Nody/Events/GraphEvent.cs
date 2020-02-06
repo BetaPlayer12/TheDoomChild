@@ -40,7 +40,6 @@ namespace Doozy.Editor.Nody
                     Receivers.RemoveAt(i);
                     continue;
                 }
-
                 Receivers[i].Invoke(graphEvent);
             }
         }
@@ -48,7 +47,6 @@ namespace Doozy.Editor.Nody
         public static Action<GraphEvent> OnGraphEvent = delegate { };
 
         public readonly EventType eventType;
-        public readonly CommandType commandType;
         public readonly BaseNodeGUI sourceNodeGUI;
         public readonly Socket sourceSocket;
         public readonly Vector2 eventPosition;
@@ -61,14 +59,12 @@ namespace Doozy.Editor.Nody
         {
             this.eventType = eventType;
             this.message = message;
-            this.commandType = CommandType.NONE;
         }
 
         public GraphEvent(EventType eventType, BaseNodeGUI sourceNodeGUI)
         {
             this.eventType = eventType;
             this.sourceNodeGUI = sourceNodeGUI;
-            this.commandType = CommandType.NONE;
         }
 
         public GraphEvent(EventType eventType, BaseNodeGUI sourceNodeGUI, string message)
@@ -76,14 +72,12 @@ namespace Doozy.Editor.Nody
             this.eventType = eventType;
             this.sourceNodeGUI = sourceNodeGUI;
             this.message = message;
-            this.commandType = CommandType.NONE;
         }
 
         private GraphEvent(EventType eventType, Vector2 mousePosition)
         {
             this.eventType = eventType;
             this.mousePosition = mousePosition;
-            this.commandType = CommandType.NONE;
         }
 
         public GraphEvent(EventType eventType, BaseNodeGUI sourceNodeGUI, Vector2 mousePosition)
@@ -91,7 +85,6 @@ namespace Doozy.Editor.Nody
             this.eventType = eventType;
             this.sourceNodeGUI = sourceNodeGUI;
             this.mousePosition = mousePosition;
-            this.commandType = CommandType.NONE;
         }
 
         public GraphEvent(EventType eventType, BaseNodeGUI sourceNodeGUI, Socket sourceSocket, Vector2 mousePosition)
@@ -100,7 +93,6 @@ namespace Doozy.Editor.Nody
             this.sourceNodeGUI = sourceNodeGUI;
             this.sourceSocket = sourceSocket;
             this.mousePosition = mousePosition;
-            this.commandType = CommandType.NONE;
         }
 
         public GraphEvent(EventType eventType, BaseNodeGUI sourceNodeGUI, Socket sourceSocket, Vector2 eventPosition, Vector2 mousePosition)
@@ -110,7 +102,6 @@ namespace Doozy.Editor.Nody
             this.sourceSocket = sourceSocket;
             this.eventPosition = eventPosition;
             this.mousePosition = mousePosition;
-            this.commandType = CommandType.NONE;
         }
 
         public GraphEvent(EventType eventType, BaseNodeGUI sourceNodeGUI, Socket sourceSocket, Vector2 eventPosition, Vector2 mousePosition, string message)
@@ -121,20 +112,6 @@ namespace Doozy.Editor.Nody
             this.eventPosition = eventPosition;
             this.mousePosition = mousePosition;
             this.message = message;
-            this.commandType = CommandType.NONE;
-        }
-        
-        private GraphEvent(CommandType commandType)
-        {
-            this.eventType = EventType.EVENT_NONE;
-            this.commandType = commandType;
-        }
-
-        private GraphEvent(CommandType commandType, Socket socket)
-        {
-            this.eventType = EventType.EVENT_NONE;
-            this.commandType = commandType;
-            this.sourceSocket = socket;
         }
 
         private static void Send(GraphEvent graphEvent)
@@ -152,10 +129,6 @@ namespace Doozy.Editor.Nody
         public static void Send(EventType eventType, BaseNodeGUI sourceNodeGUI, Socket sourceSocket, Vector2 mousePosition) { Send(new GraphEvent(eventType, sourceNodeGUI, sourceSocket, mousePosition)); }
         public static void Send(EventType eventType, BaseNodeGUI sourceNodeGUI, Socket sourceSocket, Vector2 eventPosition, Vector2 mousePosition) { Send(new GraphEvent(eventType, sourceNodeGUI, sourceSocket, eventPosition, mousePosition)); }
         public static void Send(EventType eventType, BaseNodeGUI sourceNodeGUI, Socket sourceSocket, Vector2 eventPosition, Vector2 mousePosition, string message) { Send(new GraphEvent(eventType, sourceNodeGUI, sourceSocket, eventPosition, mousePosition, message)); }
-
-        public static void ConstructGraph() { Send(new GraphEvent(CommandType.CONSTRUCT_GRAPH)); }
-        public static void RecalculateAllPoints() { Send(new GraphEvent(CommandType.RECALCULATE_ALL_POINTS)); }
-        public static void DisconnectSocket(Socket socket) { Send(new GraphEvent(CommandType.DISCONNECT_SOCKET, socket)); }
 
         public enum EventType
         {
@@ -183,18 +156,8 @@ namespace Doozy.Editor.Nody
             EVENT_RECORD_UNDO,
             EVENT_UNDO_REDO_PERFORMED,
             EVENT_SAVED_ASSETS,
-
-            EVENT_GRAPH_OPENED
-        }
-
-        public enum CommandType
-        {
-            NONE,
             
-            CONSTRUCT_GRAPH,
-            RECALCULATE_ALL_POINTS,
-
-            DISCONNECT_SOCKET
+            EVENT_GRAPH_OPENED
         }
     }
 }

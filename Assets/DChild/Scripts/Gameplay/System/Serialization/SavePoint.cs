@@ -17,11 +17,6 @@ namespace DChild.Gameplay
         [Button]
         public void SaveGame()
         {
-#if UNITY_EDITOR
-            if (m_dontActuallySave)
-                return;
-#endif
-
             GameplaySystem.campaignSerializer.slot.UpdateLocation(m_sceneInfo, m_location, m_spawnPosition);
             GameplaySystem.campaignSerializer.Save();
             GameplaySystem.playerManager.player.health.ResetValueToMax();
@@ -38,10 +33,5 @@ namespace DChild.Gameplay
         {
             m_spawnPosition = transform.position;
         }
-
-#if UNITY_EDITOR
-        [SerializeField]
-        private bool m_dontActuallySave;
-#endif
     }
 }

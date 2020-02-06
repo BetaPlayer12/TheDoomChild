@@ -56,8 +56,6 @@ namespace PixelCrushers.DialogueSystem
         protected bool showAnimatorStatesAction;
         protected bool showUnityEventAction;
 
-        protected SequenceSyntaxState sequenceSyntaxState = SequenceSyntaxState.Unchecked;
-
         public virtual void OnEnable()
         {
             var trigger = target as DialogueSystemTrigger;
@@ -418,7 +416,7 @@ namespace PixelCrushers.DialogueSystem
                     EditorGUILayout.EndHorizontal();
                     serializedObject.ApplyModifiedProperties();
                     EditorGUI.BeginChangeCheck();
-                    var newSequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence"), trigger.sequence, ref sequenceRect, ref sequenceSyntaxState);
+                    var newSequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence"), trigger.sequence, ref sequenceRect);
                     var changed = EditorGUI.EndChangeCheck();
                     serializedObject.Update();
                     if (changed) serializedObject.FindProperty("sequence").stringValue = newSequence;

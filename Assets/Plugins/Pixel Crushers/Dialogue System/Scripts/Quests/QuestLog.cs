@@ -95,12 +95,6 @@ namespace PixelCrushers.DialogueSystem
         public const string AbandonedStateString = "abandoned";
 
         /// <summary>
-        /// Constant state string for quests that are grantable. 
-        /// This state isn't used by the Dialogue System, but it's made available for those who want to use it.
-        /// </summary>
-        public const string GrantableStateString = "grantable";
-
-        /// <summary>
         /// Constant state string for quests that are done, if you want to track done instead of success/failure.
         /// This is essentially the same as success, and corresponds to the same enum value, QuestState.Success
         /// </summary>
@@ -149,7 +143,6 @@ namespace PixelCrushers.DialogueSystem
             Lua.RegisterFunction("CurrentQuestEntryState", null, typeof(QuestLog).GetMethod("CurrentQuestEntryState"));
             Lua.RegisterFunction("SetQuestState", null, typeof(QuestLog).GetMethod("SetQuestState", new[] { typeof(string), typeof(string) }));
             Lua.RegisterFunction("SetQuestEntryState", null, typeof(QuestLog).GetMethod("SetQuestEntryState", new[] { typeof(string), typeof(double), typeof(string) }));
-            Lua.RegisterFunction("UpdateQuestIndicators", null, typeof(QuestLog).GetMethod("UpdateQuestIndicators", new[] { typeof(string) }));
         }
 
         /// <summary>
@@ -522,7 +515,6 @@ namespace PixelCrushers.DialogueSystem
             if (string.Equals(s, SuccessStateString) || string.Equals(s, DoneStateString)) return QuestState.Success;
             if (string.Equals(s, FailureStateString)) return QuestState.Failure;
             if (string.Equals(s, AbandonedStateString)) return QuestState.Abandoned;
-            if (string.Equals(s, GrantableStateString)) return QuestState.Grantable;
             return QuestState.Unassigned;
         }
 
@@ -544,7 +536,6 @@ namespace PixelCrushers.DialogueSystem
                 case QuestState.Success: return SuccessStateString;
                 case QuestState.Failure: return FailureStateString;
                 case QuestState.Abandoned: return AbandonedStateString;
-                case QuestState.Grantable: return GrantableStateString;
                 default: return UnassignedStateString;
             }
         }
@@ -1305,15 +1296,6 @@ namespace PixelCrushers.DialogueSystem
                 questWatchItem.StopObserving();
             }
             questWatchList.Clear();
-        }
-
-        /// <summary>
-        /// Updates all quest state listeners who are listening for questName.
-        /// </summary>
-        public static void UpdateQuestIndicators(string questName)
-        {
-            var dispatcher = GameObject.FindObjectOfType<QuestStateDispatcher>();
-            if (dispatcher != null) dispatcher.OnQuestStateChange(questName);
         }
 
     }
