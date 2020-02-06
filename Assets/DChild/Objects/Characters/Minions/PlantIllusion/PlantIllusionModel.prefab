@@ -330,6 +330,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1294,7 +1295,7 @@ CompositeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1531,16 +1532,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5411490106124327896}
     m_Modifications:
-    - target: {fileID: 1559414381500830716, guid: 7b8cb528ad5bb4840afad02acde081ec,
-        type: 3}
-      propertyPath: m_Name
-      value: Plant_Illusion_Smoke_Poison_attack
-      objectReference: {fileID: 0}
-    - target: {fileID: 1559414381500830716, guid: 7b8cb528ad5bb4840afad02acde081ec,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1559414381500830705, guid: 7b8cb528ad5bb4840afad02acde081ec,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1596,6 +1587,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1559414381500830716, guid: 7b8cb528ad5bb4840afad02acde081ec,
+        type: 3}
+      propertyPath: m_Name
+      value: Plant_Illusion_Smoke_Poison_attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1559414381500830716, guid: 7b8cb528ad5bb4840afad02acde081ec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b8cb528ad5bb4840afad02acde081ec, type: 3}
 --- !u!4 &3331921224800210334 stripped
@@ -1611,10 +1612,90 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5411490106124327896}
     m_Modifications:
-    - target: {fileID: 1324619274276486542, guid: 621266440cb13b148948a001bc64252e,
+    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
         type: 3}
-      propertyPath: m_Name
-      value: Plant_Illusion_Smoke_Poison_attack 1
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: ShapeModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: ShapeModule.m_Rotation.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: scalingMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619273347623785, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: ShapeModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: ShapeModule.m_Rotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: ShapeModule.m_Rotation.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: scalingMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324619274276486529, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1324619274276486531, guid: 621266440cb13b148948a001bc64252e,
         type: 3}
@@ -1676,110 +1757,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3738222732886974492, guid: 621266440cb13b148948a001bc64252e,
+    - target: {fileID: 1324619274276486542, guid: 621266440cb13b148948a001bc64252e,
         type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3738222732886974492, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3738222732886974492, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3738222732886974492, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: stopAction
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: ShapeModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: ShapeModule.radius.value
-      value: 0.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: ShapeModule.m_Rotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: ShapeModule.m_Rotation.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486528, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: scalingMode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619274276486529, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: m_RenderAlignment
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: stopAction
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: ShapeModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: ShapeModule.radius.value
-      value: 0.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: ShapeModule.m_Rotation.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619273347623784, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: scalingMode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1324619273347623785, guid: 621266440cb13b148948a001bc64252e,
-        type: 3}
-      propertyPath: m_RenderAlignment
-      value: 2
+      propertyPath: m_Name
+      value: Plant_Illusion_Smoke_Poison_attack 1
       objectReference: {fileID: 0}
     - target: {fileID: 1709142148354538333, guid: 621266440cb13b148948a001bc64252e,
         type: 3}
@@ -1816,20 +1797,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.9763314
       objectReference: {fileID: 0}
-    - target: {fileID: 3738222734626912023, guid: 621266440cb13b148948a001bc64252e,
+    - target: {fileID: 3738222732886974492, guid: 621266440cb13b148948a001bc64252e,
         type: 3}
-      propertyPath: playOnAwake
+      propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3738222734626912023, guid: 621266440cb13b148948a001bc64252e,
+    - target: {fileID: 3738222732886974492, guid: 621266440cb13b148948a001bc64252e,
         type: 3}
-      propertyPath: stopAction
-      value: 3
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
       objectReference: {fileID: 0}
-    - target: {fileID: 3738222734626912023, guid: 621266440cb13b148948a001bc64252e,
+    - target: {fileID: 3738222732886974492, guid: 621266440cb13b148948a001bc64252e,
         type: 3}
-      propertyPath: moveWithTransform
-      value: 1
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738222732886974492, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 3738222732886974690, guid: 621266440cb13b148948a001bc64252e,
         type: 3}
@@ -1850,6 +1836,21 @@ PrefabInstance:
         type: 3}
       propertyPath: looping
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738222734626912023, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738222734626912023, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738222734626912023, guid: 621266440cb13b148948a001bc64252e,
+        type: 3}
+      propertyPath: moveWithTransform
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1324619274276486541, guid: 621266440cb13b148948a001bc64252e, type: 3}
