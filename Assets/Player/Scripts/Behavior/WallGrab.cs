@@ -9,6 +9,7 @@ namespace PlayerNew
 
         private FaceDirection facing;
 
+
         public bool canLedgeGrab = false;
         public bool ledgeDetected;
 
@@ -29,6 +30,7 @@ namespace PlayerNew
         void Start()
         {
             facing = GetComponent<FaceDirection>();
+            
         }
 
         // Update is called once per frame
@@ -62,17 +64,21 @@ namespace PlayerNew
                 {
                     ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) - ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
                     ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) + ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
+                    Debug.Log("1");
                 }
                 else
                 {
                     ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) + ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
                     ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) - ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
+                    Debug.Log("2");
                 }
-
+                //capsuleCollider.enabled = false;
                 ToggleScripts(false);
                 canLedgeGrab = true;
                 ledgeDetected = true;
-
+                //ledgeBotPos = Vector2.zero;
+                
+                transform.position = ledgePos1;
             }
 
             if (canLedgeGrab)
@@ -87,20 +93,18 @@ namespace PlayerNew
 
         }
 
-        //IEnumerator FinishedLedgeClimbRoutine()
-        //{
-        //    yield return new WaitForSeconds(1.5f);
-        //    transform.position = ledgePos1;
-        //    ledgeDetected = false;
-        //    ledgeBotPos = Vector2.zero;
-        //    canLedgeGrab = false;
-        //    ToggleScripts(true);
-
-        //}
+        IEnumerator FinishedLedgeClimbRoutine()
+        {
+            Debug.Log("yeild");
+            yield return new WaitForSeconds(0.1f);
+            // capsuleCollider.enabled = true;
+            
+        }
         private void FinishedLedgeClimb()
         {
-            transform.position = ledgePos1;
-            ledgeBotPos = Vector2.zero;
+            //StartCoroutine(FinishedLedgeClimbRoutine());
+            
+           
             ledgeDetected = false;
             canLedgeGrab = false;
             ToggleScripts(true);
