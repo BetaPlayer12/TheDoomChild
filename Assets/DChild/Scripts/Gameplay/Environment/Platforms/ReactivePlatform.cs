@@ -31,6 +31,7 @@ namespace DChild.Gameplay.Environment
 
         private void OnCollisionEnter2D(Collision2D collider)
         {
+            Debug.Log("afsfs");
             if (collider.enabled)
             {
                 if (m_particle != null)

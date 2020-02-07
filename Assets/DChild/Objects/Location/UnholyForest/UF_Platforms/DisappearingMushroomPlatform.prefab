@@ -12,6 +12,11 @@ GameObject:
   - component: {fileID: 2977114085929136775}
   - component: {fileID: 7542746823422494501}
   - component: {fileID: 9194401508923874315}
+  - component: {fileID: 3902910985435549892}
+  - component: {fileID: 8986026964573837895}
+  - component: {fileID: 1041124007169870911}
+  - component: {fileID: 156588207}
+  - component: {fileID: 156588213}
   m_Layer: 11
   m_Name: MushroomModel
   m_TagString: Untagged
@@ -27,8 +32,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7107998722240062991}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 6.4, y: 1.1, z: 0}
+  m_LocalScale: {x: 0.36, y: 0.36, z: 0.36}
   m_Children: []
   m_Father: {fileID: 4420651002235578149}
   m_RootOrder: 0
@@ -114,28 +119,103 @@ MonoBehaviour:
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
   _animationName: ShrinkMushroom_LargeForm_Idle
-  loop: 0
+  loop: 1
   timeScale: 1
---- !u!114 &8136754487385382248
+--- !u!114 &3902910985435549892
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8108686939998219127}
+  m_GameObject: {fileID: 7107998722240062991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animationTracks: []
+  m_skeletonAnimation: {fileID: 9194401508923874315}
+--- !u!61 &8986026964573837895
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7107998722240062991}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 1
+  m_UsedByComposite: 0
+  m_Offset: {x: -2.5619142, y: 4.823382}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 11.886808, y: 0.5392008}
+  m_EdgeRadius: 0
+--- !u!251 &1041124007169870911
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7107998722240062991}
+  m_Enabled: 1
+  m_UseColliderMask: 0
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: 0
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 1
+  m_SurfaceArc: 180
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1
+--- !u!114 &156588207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7107998722240062991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 400be5b020b59284e80458af81df5165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_particle: {fileID: 0}
+  m_hasReactionAnimation: 0
+  m_reactionAnimation: 
+  m_idleAnimation: 
+--- !u!114 &156588213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7107998722240062991}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e68980c5b50b58458d97757945ef0ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_disappearDelay: 0
-  m_disappearDuration: 0
-  m_idleAnimation: 
-  m_steppedOnAnimation: 
-  m_aboutToDisappearAnimation: 
-  m_disappearAnimation: 
-  m_hiddenAnimation: 
-  m_reappearAnimation: 
+  m_disappearDelay: 3
+  m_disappearDuration: 3
+  m_idleAnimation: ShrinkMushroom_LargeForm_Idle
+  m_steppedOnAnimation: ShrinkMushroom_LargeForm_JumpedOn2
+  m_aboutToDisappearAnimation: ShrinkMushroom_LargeForm_ShrinkTrigger
+  m_disappearAnimation: ShrinkMushroom_LargeForm_Shrink
+  m_hiddenAnimation: ShrinkMushroom_SmallForm_Idle
+  m_reappearAnimation: ShrinkMushroom_SmallForm_Grow
 --- !u!1001 &2569717579935813264
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -203,14 +283,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: DisappearingMushroomPlatform
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 433116391196279401, guid: 29e185fdb4b9aa24cad8460750289188, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 29e185fdb4b9aa24cad8460750289188, type: 3}
---- !u!1 &8108686939998219127 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5993920883357902311, guid: 29e185fdb4b9aa24cad8460750289188,
-    type: 3}
-  m_PrefabInstance: {fileID: 2569717579935813264}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4420651002235578149 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2229341378643454389, guid: 29e185fdb4b9aa24cad8460750289188,
