@@ -48,7 +48,8 @@ namespace PlayerNew
             //}
             if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall)
             {
-                OnWallGrab();
+                Debug.Log("wall grab");
+               // OnWallGrab();
             }
 
         }
