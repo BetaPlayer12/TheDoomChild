@@ -311,6 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
         
         private int m_currentPhaseIndex;
         float m_currentRecoverTime;
+        bool m_isFinalPhase;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -517,8 +518,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
             m_hitbox.SetInvulnerability(true);
             m_animation.EnableRootMotion(false, false);
-            if (m_currentPhaseIndex >= 3)
+            if (m_currentPhaseIndex >= 3 && !m_isFinalPhase)
             {
+                m_isFinalPhase = true;
                 m_chosenAttack = Attack.GroundStingerAttack;
                 //m_animation.EnableRootMotion(true, true);
                 var spear = Instantiate(m_info.spearDrop, transform.position, Quaternion.identity);
@@ -641,7 +643,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 var mainFX = m_QBStingerChargeFX.main;
                 mainFX.startRotation = transform.localScale.x > 0 ? /*180 * Mathf.Deg2Rad*/ (float)Mathf.PI/*nis*/: 0;
                 //chargeFXScale.localScale = new Vector3(transform.localScale.x > 0 ? -chargeFXScale.localScale.x : chargeFXScale.localScale.x, chargeFXScale.localScale.y, chargeFXScale.localScale.z);
-                GetComponent<IsolatedPhysics2D>().SetVelocity(100 * transform.localScale.x, 0);
+                GetComponent<IsolatedPhysics2D>().SetVelocity(250 * transform.localScale.x, 0);
                 yield return new WaitForSeconds(i == 0 ? 1.25f : 2f);
                 m_animation.SetEmptyAnimation(0, 0);
                 CustomTurn();
@@ -687,7 +689,17 @@ namespace DChild.Gameplay.Characters.Enemies
             var targetPos = new Vector2(transform.position.x, m_spearThrowPoint.position.y);
             while (Vector2.Distance(transform.position, targetPos) > 1.5f)
             {
-                DynamicMovement(targetPos);
+                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
+                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
+                //Debug.Log("Read Dynamic Movements " + velocityX + " " + velocityY);
+                m_agent.SetDestination(targetPos);
+                m_agent.Move(m_info.moveForward.speed);
+
+                if (velocityX != 0 && velocityY > 5f)
+                {
+                    //Debug.Log("Move Upward");
+                    m_animation.SetAnimation(0, m_info.moveAscend.animation, true);
+                }
                 yield return null;
             }
             m_flinchHandle.gameObject.SetActive(true);
