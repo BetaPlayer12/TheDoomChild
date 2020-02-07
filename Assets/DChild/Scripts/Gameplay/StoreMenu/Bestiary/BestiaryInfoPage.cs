@@ -2,6 +2,7 @@
 using Holysoft.UI;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,13 +54,13 @@ namespace DChild.Menu.Bestiary
             }
         }
 
-        private void UpdateLocation(Location[] locations)
+        private void UpdateLocation(IReadOnlyList<Location> locations)
         {
             m_location.text = "";
-            for (int i = 0; i < locations.Length; i++)
+            for (int i = 0; i < locations.Count; i++)
             {
                 m_location.text += locations[i].ToString().Replace('_', ' ');
-                if (i < locations.Length - 1)
+                if (i < locations.Count - 1)
                 {
                     m_location.text += "/";
                 }
