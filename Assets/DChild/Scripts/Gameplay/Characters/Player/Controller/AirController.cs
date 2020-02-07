@@ -7,11 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-<<<<<<< HEAD
-
-=======
     [AddComponentMenu("DChild/Gameplay/Player/Controller/Air Controller")]
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
     public class AirController : MonoBehaviour
     {
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
@@ -23,13 +19,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private DoubleJump m_doubleJump;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private WallStick m_wallStick;
+        private DChild.Gameplay.Characters.Players.Behaviour.WallStick m_wallStick;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private WallJump m_wallJump;
+        private DChild.Gameplay.Characters.Players.Skill.WallJump m_wallJump;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private AirDash m_dash;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private LedgeGrab m_ledgeGrab;
+        private DChild.Gameplay.Characters.Players.Behaviour.LedgeGrab m_ledgeGrab;
 
 
         private SkillResetRequester m_skillRequester;
@@ -40,10 +36,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_speedTransistor = behaviours.GetComponentInChildren<MoveSpeedTransistor>();
             m_highJump = behaviours.GetComponentInChildren<HighJump>();
             m_doubleJump = behaviours.GetComponentInChildren<DoubleJump>();
-            m_wallStick = behaviours.GetComponentInChildren<WallStick>();
-            m_wallJump = behaviours.GetComponentInChildren<WallJump>();
+            m_wallStick = behaviours.GetComponentInChildren<DChild.Gameplay.Characters.Players.Behaviour.WallStick>();
+            m_wallJump = behaviours.GetComponentInChildren<DChild.Gameplay.Characters.Players.Skill.WallJump>();
             m_dash = behaviours.GetComponentInChildren<AirDash>();
-            m_ledgeGrab = behaviours.GetComponentInChildren<LedgeGrab>();
+            m_ledgeGrab = behaviours.GetComponentInChildren<DChild.Gameplay.Characters.Players.Behaviour.LedgeGrab>();
+
         }
 
         public void CallFixedUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
@@ -52,6 +49,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (state.isMoving)
                 {
+
                     if (m_ledgeGrab?.AttemptToLedgeGrab() ?? false)
                     {
                         m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
@@ -76,12 +74,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void CallUpdate(IPlayerState state, IPrimarySkills skills, ControllerEventArgs callArgs)
         {
+
             m_speedTransistor.SwitchToAirMoveSpeed();
             if (state.isStickingToWall)
             {
                 m_wallStick?.HandleWallStick();
                 if (skills.IsEnabled(PrimarySkill.WallJump) && callArgs.input.isJumpPressed)
                 {
+
                     m_wallStick?.CancelWallStick();
                     m_wallJump?.HandleJump();
                 }
@@ -119,15 +119,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                 }
             }
-
             //UpdateCall?.Invoke(this, callArgs);
             if (skills.IsEnabled(PrimarySkill.WallJump) && state.isDroppingFromPlatform == false)
             {
-               
                 m_wallStick?.AttemptToWallStick();
                 if (state.isStickingToWall)
                 {
-
                     m_skillRequester.RequestSkillReset(PrimarySkill.DoubleJump, PrimarySkill.Dash);
                 }
             }

@@ -40,7 +40,7 @@ namespace DChild.Gameplay
         private static Cinema m_cinema;
         private static World m_world;
         private static SimulationHandler m_simulation;
-        private static PlayerManager m_playerManager;
+        private static DChild.Gameplay.Systems.PlayerManager m_playerManager;
         private static LootHandler m_lootHandler;
 <<<<<<< HEAD
         private static GameplayModifiers m_modifiers;
@@ -55,7 +55,21 @@ namespace DChild.Gameplay
         public static IFXManager fXManager => m_fxManager;
         public static ICinema cinema => m_cinema;
         public static IWorld world => m_world;
-        public static ITime time => m_world;
+        public static ITime time
+        {
+            get
+            {
+                if (m_world == null)
+                {
+                    return new TimeInfo(Time.timeScale, Time.deltaTime, Time.fixedDeltaTime);
+                }
+                else
+                {
+                    return m_world;
+                }
+            }
+        }
+
         public static IPlayerManager playerManager => m_playerManager;
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
@@ -119,12 +133,6 @@ namespace DChild.Gameplay
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
             m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
-        }
-
-        public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
-        {
-            m_zoneMover.MoveCharacterToLocation(character, location, entranceType);
-            ClearCaches();
         }
 
         private void AssignModules()

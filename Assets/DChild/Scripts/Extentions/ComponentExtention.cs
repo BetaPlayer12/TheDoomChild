@@ -84,5 +84,17 @@ namespace DChild
             component = mono.GetComponentInChildren<T>();
             return component;
         }
+
+        public static bool TryGetComponentInParent<T>(this GameObject mono, out T component) where T : Component
+        {
+            component = mono.GetComponentInParent<T>();
+            return component;
+        }
+
+        public static bool TryGetComponentInChildren<T>(this GameObject mono, out T component) where T : Component
+        {
+            component = mono.GetComponentInChildren<T>();
+            return component;
+        }
     }
 }
