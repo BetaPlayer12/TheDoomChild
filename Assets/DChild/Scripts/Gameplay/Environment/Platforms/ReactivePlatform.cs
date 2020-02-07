@@ -2,6 +2,7 @@
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,17 +21,18 @@ namespace DChild.Gameplay.Environment
         [SerializeField, Spine.Unity.SpineAnimation, ShowIf("m_hasReactionAnimation")]
         private string m_idleAnimation;
 
-        private SpineRootAnimation m_animation;
+        private SkeletonAnimation m_animation;
 
         public event EventAction<EventActionArgs> OnReaction;
 
         private void Start()
         {
-            m_animation = GetComponent<SpineRootAnimation>();
+            m_animation = GetComponentInChildren<SkeletonAnimation>();
         }
 
         private void OnCollisionEnter2D(Collision2D collider)
         {
+            Debug.Log("afsfs");
             if (collider.enabled)
             {
                 if (m_particle != null)
@@ -39,8 +41,8 @@ namespace DChild.Gameplay.Environment
                 }
                 if (m_hasReactionAnimation == true && m_reactionAnimation != string.Empty)
                 {
-                    m_animation.SetAnimation(0, m_reactionAnimation, false);
-                    m_animation.AddAnimation(0, m_idleAnimation, true, 0.5f);
+                    m_animation.state.SetAnimation(0, m_reactionAnimation, false);
+                    m_animation.state.AddAnimation(0, m_idleAnimation, true, 0.5f);
                 }
                 OnReaction?.Invoke(this, EventActionArgs.Empty);
             }
