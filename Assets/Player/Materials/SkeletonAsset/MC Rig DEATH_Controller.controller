@@ -97,7 +97,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -8181381936513780654}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -353,7 +354,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 4748588823317930955}
+  - {fileID: -894741549561552086}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -383,21 +384,6 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 45fd298e072b5d542996b2474654dcbb, type: 2}
   m_speed: 1
   loop: 1
---- !u!114 &-8783963449837066018
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 0a367454b891e87479433160d679a6b3, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!1101 &-8722744128682125571
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -419,7 +405,7 @@ AnimatorStateTransition:
     m_ConditionEvent: WallGrab
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: Dash
+    m_ConditionEvent: WallStick
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1746624476157034394}
@@ -675,7 +661,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 7773992380284235528}
+  - {fileID: -6379057421007451081}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -949,7 +935,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 2590926706270288425}
+  - {fileID: 5723717186452670237}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1315,15 +1301,15 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.13333334
-    functionName: FootStepR
+  - time: 0.26666668
+    functionName: FootStepL
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
-  - time: 0.53333336
-    functionName: FootStepL
+  - time: 0.6666667
+    functionName: FootStepR
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -2079,6 +2065,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Grounded
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Dash
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8672436176384424847}
   m_Solo: 0
@@ -2385,7 +2374,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 1049321547186216448}
+  - {fileID: 5082297513577817979}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -2867,6 +2856,12 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: WallGrab
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Attack
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Crouch
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7818474725651733495}
   m_Solo: 0
@@ -2881,21 +2876,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
---- !u!114 &-5871754235451804427
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: fe90b962aeacaac438eb3da8d2b34da9, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!74 &-5853694857807628311
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -3270,7 +3250,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 7990160055967082942}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -3475,10 +3456,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 8085360936444676138}
-    m_Position: {x: 850, y: -90, z: 0}
+    m_Position: {x: 1290, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -735328971408105764}
-    m_Position: {x: 760, y: 180, z: 0}
+    m_Position: {x: 750, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -9007819729185463917}
     m_Position: {x: 750, y: 120, z: 0}
@@ -3538,19 +3519,19 @@ AnimatorStateMachine:
     m_Position: {x: -430, y: 530, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3032932411240091757}
-    m_Position: {x: 540, y: -370, z: 0}
+    m_Position: {x: 590, y: -350, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4443430755636319204}
-    m_Position: {x: 770, y: -180, z: 0}
+    m_Position: {x: 770, y: -190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8672436176384424847}
-    m_Position: {x: 530, y: -210, z: 0}
+    m_Position: {x: 480, y: -300, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8796270380636815644}
     m_Position: {x: 380, y: -240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1618872645126521389}
-    m_Position: {x: 270, y: -180, z: 0}
+    m_Position: {x: 870, y: -10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6637323676034325886}
     m_Position: {x: 270, y: -120, z: 0}
@@ -3568,7 +3549,7 @@ AnimatorStateMachine:
     m_Position: {x: 530, y: 240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1746624476157034394}
-    m_Position: {x: 610, y: -150, z: 0}
+    m_Position: {x: 860, y: -90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -670005763327890217}
     m_Position: {x: 310, y: 320, z: 0}
@@ -4412,7 +4393,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -8783963449837066018}
+  - {fileID: -6513754662745615569}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -4554,7 +4535,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -2857645226548283053}
   m_StateMachineBehaviours:
-  - {fileID: 8593399374726224183}
+  - {fileID: -6357917999278510124}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -4625,21 +4606,6 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 796a4c8ee3e6d2c42b628accddf3f3b1, type: 2}
   m_speed: 1
   loop: 1
---- !u!114 &-4002573782029279614
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: cd06bc7c81b6e154fbf5a4da40fe6cc1, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!74 &-3933078286311775598
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -4752,21 +4718,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &-3802572522307988875
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: f58325c22c97a8445b238d8867535ac1, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!74 &-3784973809703820593
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -4939,21 +4890,6 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events: []
---- !u!114 &-3246837543632197459
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 068deea98a5418b459ae7d0cef871fab, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!74 &-3144342723241192406
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -5052,7 +4988,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -1581066088062432666}
+  - {fileID: 1590292110947389258}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -5067,21 +5003,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &-2980106009501366130
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: b1f8f52e2e8344e42850211d1a698a8f, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!1102 &-2956559618615179759
 AnimatorState:
   serializedVersion: 5
@@ -5094,7 +5015,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 2402056461014307315}
+  - {fileID: -8031500960668251318}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -5609,7 +5530,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -2980106009501366130}
+  - {fileID: 1925171887984698288}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -5762,21 +5683,6 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events: []
---- !u!114 &-1581066088062432666
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 0fcf3f59ac89f0c479f98fb70080a47e, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!114 &-1572862281138546589
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5894,6 +5800,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: WallGrab
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Attack
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4443430755636319204}
@@ -6341,7 +6250,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 7405068853400901294}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -6555,7 +6465,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -4002573782029279614}
+  - {fileID: -1572862281138546589}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -6686,7 +6596,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.33333334
+        time: 0.16666667
         value: 0
         inSlope: 0
         outSlope: 0
@@ -6722,7 +6632,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.33333334
+    m_StopTime: 0.16666667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -6741,14 +6651,7 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0
-    functionName: LandingEvt
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 1
+  m_Events: []
 --- !u!74 &-559324624091561306
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -7667,21 +7570,6 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events: []
---- !u!114 &809989855763452467
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 8fccdb66769de31499d099d300ad9541, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!114 &924026147986062889
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7695,21 +7583,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animation: {fileID: 11400000, guid: 2b687eb09c35f984ab4f3b48381a69cd, type: 2}
-  m_speed: 1
-  loop: 0
---- !u!114 &1049321547186216448
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 8130ea45961c57b46ad9a1f204ee365d, type: 2}
   m_speed: 1
   loop: 0
 --- !u!74 &1145668378532806239
@@ -7811,6 +7684,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Attack
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: WallStick
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4679323058050249909}
@@ -8025,7 +7901,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 7073885058429263124}
+  - {fileID: -5549168875597516050}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -8482,21 +8358,6 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events: []
---- !u!114 &2402056461014307315
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 2ab4a7a74ee266d4c863f00e9d610ac5, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!114 &2564074486951159820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8512,21 +8373,6 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: d168ef9934eeab64e8c6ec05675d081b, type: 2}
   m_speed: 1
   loop: 1
---- !u!114 &2590926706270288425
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 6b932067493c8804d92c398951699986, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!114 &2619436193366174567
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8658,6 +8504,92 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 0a3186dead620fa4696ed0282a6ce62c, type: 2}
   m_speed: 1
   loop: 0
+--- !u!74 &3301350602527144542
+AnimationClip:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Idle11
+  serializedVersion: 6
+  m_Legacy: 0
+  m_Compressed: 0
+  m_UseHighQualityCurve: 1
+  m_RotationCurves: []
+  m_CompressedRotationCurves: []
+  m_EulerCurves: []
+  m_PositionCurves: []
+  m_ScaleCurves: []
+  m_FloatCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 10.2
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
+  m_PPtrCurves: []
+  m_SampleRate: 60
+  m_WrapMode: 0
+  m_Bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_ClipBindingConstant:
+    genericBindings:
+    - serializedVersion: 2
+      path: 0
+      attribute: 1341452863
+      script: {fileID: 0}
+      typeID: 1
+      customType: 0
+      isPPtrCurve: 0
+    pptrCurveMapping: []
+  m_AnimationClipSettings:
+    serializedVersion: 2
+    m_AdditiveReferencePoseClip: {fileID: 0}
+    m_AdditiveReferencePoseTime: 0
+    m_StartTime: 0
+    m_StopTime: 10.2
+    m_OrientationOffsetY: 0
+    m_Level: 0
+    m_CycleOffset: 0
+    m_HasAdditiveReferencePose: 0
+    m_LoopTime: 0
+    m_LoopBlend: 0
+    m_LoopBlendOrientation: 0
+    m_LoopBlendPositionY: 0
+    m_LoopBlendPositionXZ: 0
+    m_KeepOriginalOrientation: 0
+    m_KeepOriginalPositionY: 1
+    m_KeepOriginalPositionXZ: 0
+    m_HeightFromFeet: 0
+    m_Mirror: 0
+  m_EditorCurves: []
+  m_EulerEditorCurves: []
+  m_HasGenericRootTransform: 0
+  m_HasMotionFloatCurves: 0
+  m_Events: []
 --- !u!114 &3446400048148466820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9435,21 +9367,6 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 66d2e429e1f4eae479b99e2cae2b017f, type: 2}
   m_speed: 1
   loop: 1
---- !u!114 &4748588823317930955
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 63e2abdc0b41af94aa8fe68eb96520b8, type: 2}
-  m_speed: 1
-  loop: 1
 --- !u!74 &4762995207500815077
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -9833,7 +9750,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -3246837543632197459}
+  - {fileID: -672144520378847498}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -9848,6 +9765,92 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!74 &5269787283379159064
+AnimationClip:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Idle2222
+  serializedVersion: 6
+  m_Legacy: 0
+  m_Compressed: 0
+  m_UseHighQualityCurve: 1
+  m_RotationCurves: []
+  m_CompressedRotationCurves: []
+  m_EulerCurves: []
+  m_PositionCurves: []
+  m_ScaleCurves: []
+  m_FloatCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 2
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
+  m_PPtrCurves: []
+  m_SampleRate: 60
+  m_WrapMode: 0
+  m_Bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_ClipBindingConstant:
+    genericBindings:
+    - serializedVersion: 2
+      path: 0
+      attribute: 1341452863
+      script: {fileID: 0}
+      typeID: 1
+      customType: 0
+      isPPtrCurve: 0
+    pptrCurveMapping: []
+  m_AnimationClipSettings:
+    serializedVersion: 2
+    m_AdditiveReferencePoseClip: {fileID: 0}
+    m_AdditiveReferencePoseTime: 0
+    m_StartTime: 0
+    m_StopTime: 2
+    m_OrientationOffsetY: 0
+    m_Level: 0
+    m_CycleOffset: 0
+    m_HasAdditiveReferencePose: 0
+    m_LoopTime: 0
+    m_LoopBlend: 0
+    m_LoopBlendOrientation: 0
+    m_LoopBlendPositionY: 0
+    m_LoopBlendPositionXZ: 0
+    m_KeepOriginalOrientation: 0
+    m_KeepOriginalPositionY: 1
+    m_KeepOriginalPositionXZ: 0
+    m_HeightFromFeet: 0
+    m_Mirror: 0
+  m_EditorCurves: []
+  m_EulerEditorCurves: []
+  m_HasGenericRootTransform: 0
+  m_HasMotionFloatCurves: 0
+  m_Events: []
 --- !u!74 &5380933081709882617
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -10140,7 +10143,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -5871754235451804427}
+  - {fileID: 7361589969331501241}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -10296,7 +10299,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 3263601748358305861}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -10907,6 +10911,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Crouch
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Grounded
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1618872645126521389}
   m_Solo: 0
@@ -10932,7 +10939,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 2114822724797311429}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -10974,7 +10982,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: -3802572522307988875}
+  - {fileID: 4954749146156767126}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -11000,7 +11008,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 4098906571218453075}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -11015,21 +11024,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &6698050411025336241
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: bdfc73dead5e801489e64a1e7269f0bf, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!1101 &6864447812689368876
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -11154,21 +11148,6 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
---- !u!114 &7073885058429263124
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: eedb389752b04874bbfd7dc93941d17c, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!74 &7182942400597602574
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -11255,6 +11234,106 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events: []
+--- !u!74 &7278382817270519842
+AnimationClip:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Jog6
+  serializedVersion: 6
+  m_Legacy: 0
+  m_Compressed: 0
+  m_UseHighQualityCurve: 1
+  m_RotationCurves: []
+  m_CompressedRotationCurves: []
+  m_EulerCurves: []
+  m_PositionCurves: []
+  m_ScaleCurves: []
+  m_FloatCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.8
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
+  m_PPtrCurves: []
+  m_SampleRate: 60
+  m_WrapMode: 0
+  m_Bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_ClipBindingConstant:
+    genericBindings:
+    - serializedVersion: 2
+      path: 0
+      attribute: 1341452863
+      script: {fileID: 0}
+      typeID: 1
+      customType: 0
+      isPPtrCurve: 0
+    pptrCurveMapping: []
+  m_AnimationClipSettings:
+    serializedVersion: 2
+    m_AdditiveReferencePoseClip: {fileID: 0}
+    m_AdditiveReferencePoseTime: 0
+    m_StartTime: 0
+    m_StopTime: 0.8
+    m_OrientationOffsetY: 0
+    m_Level: 0
+    m_CycleOffset: 0
+    m_HasAdditiveReferencePose: 0
+    m_LoopTime: 0
+    m_LoopBlend: 0
+    m_LoopBlendOrientation: 0
+    m_LoopBlendPositionY: 0
+    m_LoopBlendPositionXZ: 0
+    m_KeepOriginalOrientation: 0
+    m_KeepOriginalPositionY: 1
+    m_KeepOriginalPositionXZ: 0
+    m_HeightFromFeet: 0
+    m_Mirror: 0
+  m_EditorCurves: []
+  m_EulerEditorCurves: []
+  m_HasGenericRootTransform: 0
+  m_HasMotionFloatCurves: 0
+  m_Events:
+  - time: 0.26666668
+    functionName: FootStepL
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 1
+  - time: 0.6666667
+    functionName: FootStepR
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 1
 --- !u!114 &7361589969331501241
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11371,51 +11450,6 @@ MonoBehaviour:
   m_animation: {fileID: 11400000, guid: 34bc88161aa0be445a7f99f9dd9f167f, type: 2}
   m_speed: 1
   loop: 0
---- !u!114 &7541594540652556909
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 07f45dd9769014f4994cc4ca1a215b95, type: 2}
-  m_speed: 1
-  loop: 0
---- !u!114 &7773992380284235528
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 7c19a56dde4b5ea48b1ce12828345fe5, type: 2}
-  m_speed: 1
-  loop: 0
---- !u!114 &7810445211333890896
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: 4d59847a953befa47a2e1683f1e21cbf, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!114 &7990160055967082942
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11443,7 +11477,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 809989855763452467}
+  - {fileID: 5893455728566722351}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -11458,21 +11492,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &8593399374726224183
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 11400000, guid: f5947ee44a6eb3e4e839b1480788cca5, type: 2}
-  m_speed: 1
-  loop: 0
 --- !u!114 &8633914636353860452
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11500,7 +11519,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 6698050411025336241}
+  - {fileID: -4231788688408257992}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -11813,7 +11832,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 7810445211333890896}
+  - {fileID: -6315980542354662708}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -11828,92 +11847,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!74 &8855054719843298155
-AnimationClip:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Idle4
-  serializedVersion: 6
-  m_Legacy: 0
-  m_Compressed: 0
-  m_UseHighQualityCurve: 1
-  m_RotationCurves: []
-  m_CompressedRotationCurves: []
-  m_EulerCurves: []
-  m_PositionCurves: []
-  m_ScaleCurves: []
-  m_FloatCurves:
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 2
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: dummy
-    path: 
-    classID: 1
-    script: {fileID: 0}
-  m_PPtrCurves: []
-  m_SampleRate: 60
-  m_WrapMode: 0
-  m_Bounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_ClipBindingConstant:
-    genericBindings:
-    - serializedVersion: 2
-      path: 0
-      attribute: 1341452863
-      script: {fileID: 0}
-      typeID: 1
-      customType: 0
-      isPPtrCurve: 0
-    pptrCurveMapping: []
-  m_AnimationClipSettings:
-    serializedVersion: 2
-    m_AdditiveReferencePoseClip: {fileID: 0}
-    m_AdditiveReferencePoseTime: 0
-    m_StartTime: 0
-    m_StopTime: 2
-    m_OrientationOffsetY: 0
-    m_Level: 0
-    m_CycleOffset: 0
-    m_HasAdditiveReferencePose: 0
-    m_LoopTime: 0
-    m_LoopBlend: 0
-    m_LoopBlendOrientation: 0
-    m_LoopBlendPositionY: 0
-    m_LoopBlendPositionXZ: 0
-    m_KeepOriginalOrientation: 0
-    m_KeepOriginalPositionY: 1
-    m_KeepOriginalPositionXZ: 0
-    m_HeightFromFeet: 0
-    m_Mirror: 0
-  m_EditorCurves: []
-  m_EulerEditorCurves: []
-  m_HasGenericRootTransform: 0
-  m_HasMotionFloatCurves: 0
-  m_Events: []
 --- !u!1102 &8994457181497758543
 AnimatorState:
   serializedVersion: 5
@@ -11952,7 +11885,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 7541594540652556909}
+  - {fileID: -5535904188370818924}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

@@ -43,7 +43,7 @@ namespace PlayerNew
             Debug.Log("yeild");
             yield return new WaitForSeconds(midAirDelay);
             body2d.gravityScale = defGravity* smashMultiplier;
-            ToggleScripts(true);
+            
 
         }
         
@@ -53,7 +53,7 @@ namespace PlayerNew
             groundSmash = false;
             Debug.Log("finish animation");
             body2d.gravityScale = defGravity;
-           
+            ToggleScripts(true);
         }
 
     }
