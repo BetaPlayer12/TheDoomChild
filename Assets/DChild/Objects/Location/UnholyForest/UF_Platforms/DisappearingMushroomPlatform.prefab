@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1838299824
+--- !u!1 &7107998722240062991
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1838299825}
-  - component: {fileID: 1838299828}
-  - component: {fileID: 1838299827}
-  - component: {fileID: 1838299826}
+  - component: {fileID: 9154007288230105695}
+  - component: {fileID: 2977114085929136775}
+  - component: {fileID: 7542746823422494501}
+  - component: {fileID: 9194401508923874315}
   m_Layer: 11
   m_Name: MushroomModel
   m_TagString: Untagged
@@ -19,35 +19,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1838299825
+--- !u!4 &9154007288230105695
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1838299824}
+  m_GameObject: {fileID: 7107998722240062991}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 868607066970422630}
+  m_Father: {fileID: 4420651002235578149}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1838299828
+--- !u!33 &2977114085929136775
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1838299824}
+  m_GameObject: {fileID: 7107998722240062991}
   m_Mesh: {fileID: 0}
---- !u!23 &1838299827
+--- !u!23 &7542746823422494501
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1838299824}
+  m_GameObject: {fileID: 7107998722240062991}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c7599b3f4b1cf044c94b4add329ce6db, type: 2}
+  - {fileID: 2100000, guid: 66b4155a94a62d24f905ffe2b84d104e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,19 +80,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1838299826
+--- !u!114 &9194401508923874315
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1838299824}
+  m_GameObject: {fileID: 7107998722240062991}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 9d0a044ab7daa524487adafbb4ee1327, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 78ae6e12fe3a62e449b4c5b1b524eb07, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -113,10 +113,30 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: PlatMush_V2_Idle
-  loop: 1
+  _animationName: ShrinkMushroom_LargeForm_Idle
+  loop: 0
   timeScale: 1
---- !u!1001 &1368495784658801875
+--- !u!114 &8136754487385382248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108686939998219127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e68980c5b50b58458d97757945ef0ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_disappearDelay: 0
+  m_disappearDuration: 0
+  m_idleAnimation: 
+  m_steppedOnAnimation: 
+  m_aboutToDisappearAnimation: 
+  m_disappearAnimation: 
+  m_hiddenAnimation: 
+  m_reappearAnimation: 
+--- !u!1001 &2569717579935813264
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -181,13 +201,19 @@ PrefabInstance:
     - target: {fileID: 5993920883357902311, guid: 29e185fdb4b9aa24cad8460750289188,
         type: 3}
       propertyPath: m_Name
-      value: MushroomPlatform(v2)
+      value: DisappearingMushroomPlatform
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29e185fdb4b9aa24cad8460750289188, type: 3}
---- !u!4 &868607066970422630 stripped
+--- !u!1 &8108686939998219127 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5993920883357902311, guid: 29e185fdb4b9aa24cad8460750289188,
+    type: 3}
+  m_PrefabInstance: {fileID: 2569717579935813264}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4420651002235578149 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2229341378643454389, guid: 29e185fdb4b9aa24cad8460750289188,
     type: 3}
-  m_PrefabInstance: {fileID: 1368495784658801875}
+  m_PrefabInstance: {fileID: 2569717579935813264}
   m_PrefabAsset: {fileID: 0}
