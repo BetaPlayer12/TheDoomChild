@@ -165,7 +165,7 @@ namespace DChildDebug
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb = collision.GetComponentInParent<Rigidbody2D>();
             if (rb == null || rb.bodyType == RigidbodyType2D.Static)
                 return; //we don't care about static rigidbody, they can't "fall" in water
 
