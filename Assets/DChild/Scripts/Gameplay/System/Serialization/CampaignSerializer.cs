@@ -5,6 +5,8 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
 using UnityEngine;
+using System.Threading.Tasks;
+using Doozy.Engine;
 #if UNITY_EDITOR
 using DChildDebug;
 #endif
@@ -59,19 +61,46 @@ namespace DChild.Gameplay
         [Button]
         public void Save()
         {
-            using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
-            {
-                cacheEventArgs.Value.Initialize(m_slot);
-                PreSerialization?.Invoke(this, cacheEventArgs.Value);
-                cacheEventArgs.Release();
-            }
+            CallPreSerialization();
             SerializationHandle.Save(m_slot.id, m_slot);
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+            GameEventMessage.SendEvent("Game Save Start");
+            CallPreSerialization();
+            await SerializationHandle.SaveAsync(m_slot.id, m_slot);
+            GameEventMessage.SendEvent("Game Save End");
+            return true;
         }
 
         [Button]
         public void Load()
         {
             SerializationHandle.Load(m_slot.id, ref m_slot);
+            CallPostDeserialization();
+        }
+
+        public async Task<bool> LoadAsync()
+        {
+            GameEventMessage.SendEvent("Game Load Start");
+            await SerializationHandle.LoadAsync(m_slot.id,m_slot);
+            CallPostDeserialization();
+            GameEventMessage.SendEvent("Game Load End");
+            return true;
+        }
+
+        private void CallPreSerialization()
+        {
+            using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
+            {
+                cacheEventArgs.Value.Initialize(m_slot);
+                PreSerialization?.Invoke(this, cacheEventArgs.Value);
+                cacheEventArgs.Release();
+            }
+        }
+        private void CallPostDeserialization()
+        {
             using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
             {
                 cacheEventArgs.Value.Initialize(m_slot);

@@ -296,6 +296,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_spearThrowPoint;
         [SerializeField, TabGroup("Move Points")]
         private Transform m_stingerDivePoint;
+        [SerializeField, TabGroup("Move Points")]
+        private Transform m_GroundPoint;
 
         [SerializeField]
         private List<Transform> m_spawnPoints;
@@ -610,6 +612,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.phase2AtkChargeStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase2AtkChargeStartAnimation);
             m_animation.DisableRootMotion();
+            m_hitbox.SetInvulnerability(true);
             m_QBStingerChargeFX.gameObject.SetActive(true);
             m_QBStingerChargeFX.Play();
             //int i;
@@ -646,6 +649,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(.25f);
                 transform.position = new Vector2(transform.position.x, m_targetInfo.position.y);
             }
+            m_hitbox.SetInvulnerability(false);
 
             transform.position = m_returnPoint.position;
             m_QBStingerChargeFX.gameObject.SetActive(false);
@@ -714,10 +718,10 @@ namespace DChild.Gameplay.Characters.Enemies
             transform.position = m_stingerDivePoint.position;
             m_animation.SetAnimation(0, m_info.phase4AtkStingerLoopAnimation, true);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase4AtkStingerLoopAnimation);
-            var shadow = Instantiate(m_info.shadowTelegraph, new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2), Quaternion.identity);
+            var shadow = Instantiate(m_info.shadowTelegraph, new Vector2(m_targetInfo.position.x, m_GroundPoint.position.y), Quaternion.identity);
             while (shadow.transform.localScale.x > 0.35f)
             {
-                shadow.transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2);
+                shadow.transform.position = new Vector2(m_targetInfo.position.x, shadow.transform.position.y);
                 shadow.transform.localScale = new Vector3(shadow.transform.localScale.x - 0.25f * Time.deltaTime, shadow.transform.localScale.y - 0.25f * Time.deltaTime, shadow.transform.localScale.z - 0.25f * Time.deltaTime);
                 yield return null;
             }
