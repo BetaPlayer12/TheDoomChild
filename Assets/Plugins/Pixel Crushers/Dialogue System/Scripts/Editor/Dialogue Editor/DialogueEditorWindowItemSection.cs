@@ -346,12 +346,19 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             else if (useGroupField)
             {
-                EditTextField(item.fields, "Group", "The group this quest belongs to.", false);
-                DrawLocalizedVersions(item.fields, "Group {0}", false, FieldType.Text);
+                if (groupField.typeString == "CustomFieldType_Text")
+                {
+                    EditTextField(item.fields, "Group", "The group this quest belongs to.", false);
+                    DrawLocalizedVersions(item.fields, "Group {0}", false, FieldType.Text);
+                }
+                else
+                {
+                    DrawField(new GUIContent("Group", "The group this quest belongs to."), groupField, false);
+                }
             }
 
             // State:
-            EditorGUILayout.BeginHorizontal();
+            //EditorGUILayout.BeginHorizontal();
             Field stateField = Field.Lookup(item.fields, "State");
             if (stateField == null)
             {
@@ -359,9 +366,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 item.fields.Add(stateField);
                 SetDatabaseDirty("Create State Field");
             }
-            EditorGUILayout.LabelField(new GUIContent("State", "The starting state of the quest."), GUILayout.Width(140));
-            stateField.value = DrawQuestStateField(stateField.value);
-            EditorGUILayout.EndHorizontal();
+            //EditorGUILayout.LabelField(new GUIContent("State", "The starting state of the quest."), GUILayout.Width(140));
+            stateField.value = DrawQuestStateField(new GUIContent("State", "The starting state of the quest."), stateField.value);
+            //EditorGUILayout.EndHorizontal();
 
             // Trackable:
             bool trackable = item.LookupBool("Trackable");

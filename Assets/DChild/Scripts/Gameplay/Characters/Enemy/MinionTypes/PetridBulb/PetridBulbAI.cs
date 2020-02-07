@@ -30,6 +30,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
+            [SerializeField, MinValue(0)]
+            private float m_respawnTime;
+            public float respawnTime => m_respawnTime;
 
             [SerializeField]
             private float m_targetDistanceTolerance;
@@ -40,7 +43,22 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
-            
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathTopAnimation;
+            public string deathTopAnimation => m_deathTopAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathSideAnimation;
+            public string deathSideAnimation => m_deathSideAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_flinch1Animation;
+            public string flinch1Animation => m_flinch1Animation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_flinch2Animation;
+            public string flinch2Animation => m_flinch2Animation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_respawnAnimation;
+            public string respawnAnimation => m_respawnAnimation;
+
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -63,23 +81,32 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Idle,
+            Dead,
             Attacking,
             Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
 
+        //[SerializeField, TabGroup("Modules")]
+        //private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
 
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_muzzleFX;
         [SerializeField, TabGroup("Offset")]
         private Vector2 m_targetOffset;
 
@@ -119,6 +146,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 Vector2 spitPos = m_projectileStart.position;
                 Vector3 v_diff = (target - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                m_muzzleFX.Play();
 
                 //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
                 m_projectileLauncher.AimAt(m_targetInfo.position);
@@ -154,6 +182,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            //m_animation.SetAnimation(0, m_info.flinch1Animation, false);
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            //StartCoroutine(DeathRoutine());
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dead);
+        }
+
         //Patience Handler
         private void Patience()
         {
@@ -167,6 +208,30 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Idle);
             }
+        }
+
+        private IEnumerator DeathRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            //Debug.Log("Bulb Rotation " + transform.rotation.z);
+            m_hitbox.SetInvulnerability(true);
+            if (transform.rotation.z == -1 || transform.rotation.z == 1)
+            {
+                m_animation.SetAnimation(0, m_info.deathTopAnimation, false);
+            }
+            else
+            {
+                m_animation.SetAnimation(0, m_info.deathSideAnimation, false);
+            }
+            //yield return new WaitForAnimationComplete(m_animation.animationState, deathAnim);
+            yield return new WaitForSeconds(m_info.respawnTime);
+            m_animation.SetAnimation(0, m_info.respawnAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.respawnAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.SetInvulnerability(false);
+            m_stateHandle.ApplyQueuedState();
+            m_canShoot = true;
+            yield return null;
         }
 
         private IEnumerator AttackRoutine()
@@ -206,10 +271,20 @@ namespace DChild.Gameplay.Characters.Enemies
         void SkeletonAnimation_UpdateLocal(ISkeletonAnimation animated)
         {
             //Debug.Log("FKING AIM");
-            if (m_targetInfo.isValid)
+            if (m_targetInfo.isValid && m_animation.GetCurrentAnimation(0).ToString() != m_info.deathTopAnimation 
+                && m_targetInfo.isValid && m_animation.GetCurrentAnimation(0).ToString() != m_info.deathSideAnimation)
             {
                 var localPositon = transform.InverseTransformPoint(m_targetInfo.position);
-                localPositon = new Vector2(localPositon.x + m_targetOffset.x, localPositon.y + m_targetOffset.y);
+                if (transform.rotation.z == 1 || transform.rotation.z == -1)
+                {
+                    Debug.Log("NEGATIVE");
+                    localPositon = new Vector2(localPositon.x + m_targetOffset.x, localPositon.y + -m_targetOffset.y);
+                }
+                else
+                {
+                    Debug.Log("POSITIVE");
+                    localPositon = new Vector2(localPositon.x + m_targetOffset.x, localPositon.y + m_targetOffset.y);
+                }
                 m_bone.SetLocalPosition(localPositon);
             }
         }
@@ -218,9 +293,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_attackHandle.AttackDone += OnAttackDone;
-            //m_deathHandle.SetAnimation(m_info.deathAnimation);
-            //m_flinchHandle.FlinchStart += OnFlinchStart;
-            //m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            //m_deathHandle.SetAnimation(transform.rotation.z == 1 ? m_info.deathTopAnimation : m_info.deathSideAnimation);
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectileStart);
 
@@ -240,6 +315,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
+                case State.Dead:
+                    StartCoroutine(DeathRoutine());
+                    break;
 
                 case State.Attacking:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
@@ -249,7 +327,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
-                        if (m_groundSensor.allRaysDetecting && m_canShoot)
+                        if (/*m_groundSensor.allRaysDetecting &&*/ m_canShoot)
                         {
                             if (IsTargetInRange(m_info.attack.range))
                             {
@@ -286,11 +364,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
-                    //if (m_targetInfo.isValid)
-                    //{
-                    //    m_stateHandle.SetState(State.Chasing);
-                    //}
-                    m_stateHandle.SetState(State.Chasing);
+                    if (m_targetInfo.isValid)
+                    {
+                        m_stateHandle.SetState(State.Chasing);
+                    }
+                    else
+                    {
+                        m_stateHandle.SetState(State.Idle);
+                    }
                     break;
                 case State.WaitBehaviourEnd:
                     return;

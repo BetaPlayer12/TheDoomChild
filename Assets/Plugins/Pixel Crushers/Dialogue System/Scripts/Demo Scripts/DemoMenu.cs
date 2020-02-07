@@ -34,7 +34,7 @@ namespace PixelCrushers.DialogueSystem.Demo
 
         void Update()
         {
-            if (Input.GetKeyDown(menuKey) && !DialogueManager.isConversationActive && !IsQuestLogOpen())
+            if (InputDeviceManager.IsKeyDown(menuKey) && !DialogueManager.isConversationActive && !IsQuestLogOpen())
             {
                 SetMenuStatus(!isMenuOpen);
             }

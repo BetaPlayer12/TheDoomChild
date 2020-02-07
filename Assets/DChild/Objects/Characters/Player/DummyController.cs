@@ -15,6 +15,8 @@ public class DummyController : MonoBehaviour
     [SerializeField, TabGroup("Reference")]
     protected SpineRootAnimation m_animation;
     [SerializeField, TabGroup("Reference")]
+    private Transform m_capeTransformReference;
+    [SerializeField, TabGroup("Reference")]
     private GameObject m_attackHitBox;
     [SerializeField, TabGroup("Reference")]
     private Damageable m_damageable;
@@ -56,7 +58,7 @@ public class DummyController : MonoBehaviour
             }
         }
 
-        if (Input.GetButton("Fire2"))
+        if (Input.GetButton("Fire1"))
         {
             m_attackHitBox.SetActive(true);
         }
@@ -76,5 +78,6 @@ public class DummyController : MonoBehaviour
             //transform.localScale = new Vector3(-1, 1, 1);
         }
         transform.localScale = m_character.facing == HorizontalDirection.Right ? transform.localScale = Vector3.one : new Vector3(-1, 1, 1);
+        m_capeTransformReference.localScale = new Vector3(-transform.localScale.x, 1, 1);
     }
 }
