@@ -36,10 +36,22 @@ namespace PlayerNew
             {
                 if (dash && dashHold < 0.1f && Time.time - lastDashTime > dashDelay)
                 {
+                    if (!collisionState.grounded)
+                    {
+                        body2d.gravityScale = 0;
+                    }
                     OnDash(facingDir);
                 }
                 else
                 {
+                    if(body2d.gravityScale <= 0)
+                    {
+                        if(body2d.drag >= 100f)
+                        {
+                            body2d.drag = 0;
+                        }
+                        body2d.gravityScale = 20f;
+                    }
                     dashing = false;
                 }
             }
