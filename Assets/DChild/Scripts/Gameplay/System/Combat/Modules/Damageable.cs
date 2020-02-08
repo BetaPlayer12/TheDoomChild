@@ -1,9 +1,9 @@
 ﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using DChild.Gameplay.Characters;
+using Refactor.DChild.Gameplay.Characters;
 using UnityEngine;
 
-namespace DChild.Gameplay.Combat
+namespace Refactor.DChild.Gameplay.Combat
 {
     [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Combat/Damageable")]

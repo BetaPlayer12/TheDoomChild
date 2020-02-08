@@ -86,6 +86,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!targetDefense.isInvulnerable)
             {
+<<<<<<< HEAD
+                AttackerInfo info = new AttackerInfo(position, 0, 1, m_currentDamage);
+                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
+=======
                 //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
                 //{
                 //    info.Value.Initialize(position, 0, 1, m_currentDamage);
@@ -93,6 +98,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
                 //    info.Release();
                 //}
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
             }
         }
 

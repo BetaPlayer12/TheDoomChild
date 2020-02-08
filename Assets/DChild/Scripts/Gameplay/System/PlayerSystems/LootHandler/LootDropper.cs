@@ -1,7 +1,6 @@
 ﻿using Holysoft.Event;
-using DChild.Gameplay.Combat;
+using Refactor.DChild.Gameplay.Combat;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Systems
 {
@@ -13,10 +12,9 @@ namespace DChild.Gameplay.Systems
         private bool m_dropWhenDestroyed;
         private Damageable m_damageable;
 
-        [Button]
         public void DropLoot()
         {
-            m_loot.DropLoot(m_damageable.position);
+            m_loot.DropLoot(transform.position);
         }
 
         public void SetLootData(LootData lootData)

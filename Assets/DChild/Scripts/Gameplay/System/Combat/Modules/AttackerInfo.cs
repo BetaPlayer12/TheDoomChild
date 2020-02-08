@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DChild.Gameplay.Combat
+namespace Refactor.DChild.Gameplay.Combat
 {
     [System.Serializable]
     public class AttackerInfo

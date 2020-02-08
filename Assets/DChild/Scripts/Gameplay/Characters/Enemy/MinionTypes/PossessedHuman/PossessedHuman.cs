@@ -64,6 +64,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             List<ITarget> alreadyDamaged = new List<ITarget>();
             var affectedColliders = Physics2D.OverlapCircleAll(position, m_explodeDamageRadius, 1 << LayerMask.NameToLayer("Player"));
+<<<<<<< HEAD
+            AttackerInfo info = new AttackerInfo(position, 0, 1, m_currentDamage);
+=======
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
             for (int i = 0; i < affectedColliders.Length; i++)
             {
                 var damageable = affectedColliders[i].GetComponentInParent<ITarget>();
