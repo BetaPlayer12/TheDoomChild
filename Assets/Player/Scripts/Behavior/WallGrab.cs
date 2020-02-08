@@ -8,7 +8,7 @@ namespace PlayerNew
     {
 
         private FaceDirection facing;
-
+        private Renderer spriteRenderer;
 
         public bool canLedgeGrab = false;
         public bool ledgeDetected;
@@ -30,6 +30,7 @@ namespace PlayerNew
         void Start()
         {
             facing = GetComponent<FaceDirection>();
+            spriteRenderer = GetComponent<Renderer>();
             
         }
 
@@ -46,8 +47,12 @@ namespace PlayerNew
 
             //    //call animation
             //}
-            if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall)
+            if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall && collisionState.onWallLeg)
             {
+               
+                
+                ToggleScripts(false);
+                spriteRenderer.enabled = false;
                 OnWallGrab();
             }
 
@@ -55,39 +60,42 @@ namespace PlayerNew
 
         private void OnWallGrab()
         {
+            
+            //if (!canLedgeGrab)
+            //{
 
-            if (!canLedgeGrab)
-            {
+            ledgeBotPos = trans.position;
 
-                ledgeBotPos = trans.position;
+            Debug.Log(ledgeBotPos);
+                
                 if (facing.isFacingRight)
                 {
                     ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) - ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
                     ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) + ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
-                    Debug.Log("1");
+                   // Debug.Log("1");
                 }
                 else
                 {
                     ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) + ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
                     ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) - ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
-                    Debug.Log("2");
+                  //  Debug.Log("2");
                 }
                 //capsuleCollider.enabled = false;
-                ToggleScripts(false);
+               
                 canLedgeGrab = true;
                 ledgeDetected = true;
-                //ledgeBotPos = Vector2.zero;
-                
+                ledgeBotPos = Vector2.zero;
+               // spriteRenderer.enabled = false;
                 transform.position = ledgePos1;
-            }
+           // }
 
-            if (canLedgeGrab)
-            {
-                body2d.gravityScale = 0;
-                body2d.drag = 100;
-                // StartCoroutine(FinishedLedgeClimbRoutine());
-                //ToggleScripts(false);
-            }
+            //if (canLedgeGrab)
+            //{
+            //    body2d.gravityScale = 0;
+            //    body2d.drag = 100;
+            //    // StartCoroutine(FinishedLedgeClimbRoutine());
+            //    //ToggleScripts(false);
+            //}
 
             //FinishedLedgeClimb();
 
@@ -103,12 +111,15 @@ namespace PlayerNew
         private void FinishedLedgeClimb()
         {
             //StartCoroutine(FinishedLedgeClimbRoutine());
-            
-           
             ledgeDetected = false;
             canLedgeGrab = false;
             ToggleScripts(true);
-            Debug.Log("ledge grab finish");
+        }
+
+        private void StartLedgeClimb()
+        {
+            Debug.Log("On climb");
+            spriteRenderer.enabled = true;
         }
     }
 

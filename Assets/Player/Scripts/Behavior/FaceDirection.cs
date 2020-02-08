@@ -1,11 +1,16 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DChild.Gameplay.Characters;
 
 namespace PlayerNew
 {
     public class FaceDirection : PlayerBehaviour
     {
+        [SerializeField]
+        private Character m_character;
+
         // Start is called before the first frame update
         public bool isFacingRight;
         void Start()
@@ -22,14 +27,21 @@ namespace PlayerNew
             if (right)
             {
                 inputState.direction = Directions.Right;
-                isFacingRight = true;
+                if (isFacingRight == false)
+                {
+                    isFacingRight = true;
+                    m_character.SetFacing(HorizontalDirection.Right);
+                }
             }
             else if (left)
             {
                 inputState.direction = Directions.Left;
-                isFacingRight = false;
+                if (isFacingRight == true)
+                {
+                    isFacingRight = false;
+                    m_character.SetFacing(HorizontalDirection.Left);
+                }
             }
-
             transform.localScale = new Vector3((float)inputState.direction, 1, 1);
         }
     }
