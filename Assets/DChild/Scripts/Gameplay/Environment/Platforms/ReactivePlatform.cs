@@ -41,7 +41,7 @@ namespace DChild.Gameplay.Environment
                 if (m_hasReactionAnimation == true && m_reactionAnimation != string.Empty)
                 {
                     m_animation.state.SetAnimation(0, m_reactionAnimation, false);
-                    m_animation.state.AddAnimation(0, m_idleAnimation, true, 0.5f);
+                    m_animation.state.AddAnimation(0, m_idleAnimation, true, 0);
                 }
                 OnReaction?.Invoke(this, EventActionArgs.Empty);
             }
