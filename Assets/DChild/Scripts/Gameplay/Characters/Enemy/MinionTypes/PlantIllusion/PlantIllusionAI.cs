@@ -154,12 +154,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                var target = m_targetInfo.position; //No Parabola      
+                var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
+                //var target = m_targetInfo.position; //No Parabola      
                 Vector2 spitPos = m_projectileStart.position;
                 Vector3 v_diff = (target - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
 
                 //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                m_projectileLauncher.AimAt(target);
                 m_projectileLauncher.LaunchProjectile();
                 //m_Audiosource.clip = m_RangeAttackClip;
                 //m_Audiosource.Play();
@@ -313,6 +315,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
+                        Debug.Log(IsFacingTarget());
                         if (IsFacingTarget())
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
