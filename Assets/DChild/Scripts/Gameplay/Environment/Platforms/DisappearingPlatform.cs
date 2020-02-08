@@ -93,7 +93,7 @@ namespace DChild.Gameplay.Environment
                 {
                     m_collider.enabled = false;
                     m_animation.state.SetAnimation(0, m_disappearAnimation, false);
-                    m_animation.state.AddAnimation(0, m_hiddenAnimation, true, 0.5f);
+                    m_animation.state.AddAnimation(0, m_hiddenAnimation, true, 0);
 
                     m_willDisappear = false;
                     m_hasDisappeared = true;
@@ -106,7 +106,7 @@ namespace DChild.Gameplay.Environment
                 if (m_disappearDurationTimer <= 0)
                 {
                     m_animation.state.SetAnimation(0, m_reappearAnimation, false);
-                    m_animation.state.AddAnimation(0, m_idleAnimation, true, 0.8f);
+                    m_animation.state.AddAnimation(0, m_idleAnimation, true, 0);
 
                     m_animation.state.Interrupt += EnableCollider;
                     m_hasDisappeared = false;
