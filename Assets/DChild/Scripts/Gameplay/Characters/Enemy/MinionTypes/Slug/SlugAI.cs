@@ -132,6 +132,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
 
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_muzzleFX;
@@ -395,7 +397,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_spikeDamage.SetActive(false);
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                             {
                                 m_attackDecider.DecideOnAttack();
                                 if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
