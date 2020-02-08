@@ -77,6 +77,14 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_dirAttackEvent;
             public string dirAttackEvent => m_dirAttackEvent;
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_oraOraEvent;
+            public string oraOraEvent => m_oraOraEvent;
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_poundEvent;
+            public string poundEvent => m_poundEvent;
 
             [SerializeField]
             private GameObject m_dirtProjectile;
@@ -140,6 +148,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
 
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_poundFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_oraFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_rockThrowFX;
+
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
         [SerializeField, TabGroup("Cannon Values")]
@@ -166,6 +181,8 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
 
             m_spineEventListener.Subscribe(m_info.dirAttackEvent, DirtProjectile);
+            m_spineEventListener.Subscribe(m_info.poundEvent, m_poundFX.Play);
+            m_spineEventListener.Subscribe(m_info.oraOraEvent, m_oraFX.Play);
             //GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -211,7 +228,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //obj.transform.localPosition = new Vector2(4, -1.5f);
                     //
 
-
+                    m_rockThrowFX.Play();
                     //Shoot Spit
                     var target = m_targetInfo.position;
                     target = new Vector2(target.x, target.y - 2);
