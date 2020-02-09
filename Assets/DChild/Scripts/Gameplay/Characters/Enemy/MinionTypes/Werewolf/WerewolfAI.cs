@@ -293,7 +293,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     m_animation.EnableRootMotion(false, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
-                                    m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                    //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
                                 }
                             }
                             else
