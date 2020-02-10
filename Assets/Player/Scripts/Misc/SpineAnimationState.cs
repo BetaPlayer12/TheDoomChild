@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using Spine;
 
-namespace DChild
+namespace DChild.StateMachine
 {
     public class SpineAnimationState : StateMachineBehaviour
     {
@@ -15,7 +15,7 @@ namespace DChild
 
         public sealed override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            ApplyAnimation(animator, stateInfo,layerIndex, animator.GetComponentInChildren<SkeletonAnimation>());
+            ApplyAnimation(animator, stateInfo, layerIndex, animator.GetComponentInChildren<SkeletonAnimation>());
         }
 
         protected virtual void ApplyAnimation(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, SkeletonAnimation skeletonAnimation)
@@ -24,7 +24,7 @@ namespace DChild
             ModifyTrack(track);
         }
 
-        protected virtual void  ModifyTrack(TrackEntry track)
+        protected virtual void ModifyTrack(TrackEntry track)
         {
             track.TimeScale = m_speed;
         }
