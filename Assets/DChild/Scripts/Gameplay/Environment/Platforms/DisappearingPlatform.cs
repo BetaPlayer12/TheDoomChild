@@ -1,6 +1,8 @@
 ﻿using DChild.Gameplay.Characters;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using Spine;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +10,30 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
+    [CreateAssetMenu(fileName = "DisappearingPlatformData", menuName = "DChild/Gameplay/Disappearing Platform Data")]
+    public class DisappearingPlatformData : ScriptableObject
+    {
+        [SerializeField]
+        private float m_disappearDelay;
+        [SerializeField]
+        private float m_disappearDuration;
+
+        [SerializeField]
+        private SkeletonDataAsset m_skeletonDataAsset;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonDataAsset"), ShowIf("@m_skeletonDataAsset != null")]
+        private string m_idleAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonDataAsset"), ShowIf("@m_skeletonDataAsset != null"]
+        private string m_steppedOnAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonDataAsset"), ShowIf("@m_skeletonDataAsset != null"]
+        private string m_aboutToDisappearAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonDataAsset"), ShowIf("@m_skeletonDataAsset != null"]
+        private string m_disappearAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonDataAsset"), ShowIf("@m_skeletonDataAsset != null"]
+        private string m_hiddenAnimation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonDataAsset"), ShowIf("@m_skeletonDataAsset != null"]
+        private string m_reappearAnimation;
+    }
+
     public class DisappearingPlatform : MonoBehaviour
     {
         [SerializeField]
