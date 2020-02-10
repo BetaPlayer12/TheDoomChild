@@ -1,18 +1,19 @@
-﻿using System.Collections;
+﻿using DChild.Menu.Extras;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpriteRandomizer : MonoBehaviour
+namespace DChild
 {
-    // Start is called before the first frame update
-    void Start()
+    public class SpriteRandomizer : MonoBehaviour
     {
-        
-    }
+        [SerializeField]
+        private SpriteList m_list;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void RandomizeSprite(SpriteRenderer renderer)
+        {
+            var index = Random.Range(0, m_list.count);
+            renderer.sprite = m_list.GetSprite(index);
+        }
     }
 }
