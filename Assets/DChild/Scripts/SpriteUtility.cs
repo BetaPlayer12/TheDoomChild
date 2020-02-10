@@ -14,7 +14,10 @@ namespace DChild
 
         public void LoadSavedSprite()
         {
-            m_renderer.sprite = m_savedSprite;
+            if (m_savedSprite != null)
+            {
+                m_renderer.sprite = m_savedSprite;
+            }
         }
 
         private void Awake()
