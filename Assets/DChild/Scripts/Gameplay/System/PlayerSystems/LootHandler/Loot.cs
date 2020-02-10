@@ -1,9 +1,12 @@
 ﻿using System;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Pooling;
+<<<<<<< HEAD
+=======
 using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
@@ -11,6 +14,11 @@ namespace DChild.Gameplay.Systems
     public abstract class Loot : PoolableObject
     {
         [SerializeField]
+<<<<<<< HEAD
+        private Rigidbody2D m_rigidbody;
+
+        public static string objectTag => "Loot";
+=======
         private CountdownTimer m_popTimer;
         [SerializeField, BoxGroup("Basic Loot Info")]
         protected Rigidbody2D m_rigidbody;
@@ -43,12 +51,23 @@ namespace DChild.Gameplay.Systems
             m_pickedBy.lootPicker.Glow();
             m_rigidbody.velocity = Vector2.zero;
         }
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
+        public abstract void PickUp(IPlayer player);
         public void Pop(Vector2 force)
         {
             m_rigidbody.velocity = Vector2.zero;
             m_rigidbody.AddForce(force, ForceMode2D.Impulse);
         }
+<<<<<<< HEAD
+        private void OnValidate()
+        {
+            //if (gameObject.CompareTag(objectTag) == false)
+            //{
+            //    gameObject.tag = objectTag;
+            //    Debug.Log(gameObject.tag);
+            //}
+=======
 
         public override void SpawnAt(Vector2 position, Quaternion rotation)
         {
@@ -102,6 +121,7 @@ namespace DChild.Gameplay.Systems
                     enabled = false;
                 }
             }
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         }
     }
 }

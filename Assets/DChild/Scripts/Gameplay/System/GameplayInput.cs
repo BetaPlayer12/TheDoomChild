@@ -19,7 +19,6 @@ namespace DChild.Gameplay.Systems
         {
             if (Input.GetKeyDown(m_pause))
             {
-                GameplaySystem.PauseGame();
                 GameEventMessage.SendEvent("Pause Game");
             }
             else if (Input.GetKeyDown(m_storeOpen))

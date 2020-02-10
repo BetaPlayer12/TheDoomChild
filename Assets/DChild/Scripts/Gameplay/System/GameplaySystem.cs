@@ -1,12 +1,20 @@
 ﻿using DChild.Configurations;
+<<<<<<< HEAD
+using DChild.Gameplay.Characters.Players;
+=======
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Databases;
 using DChild.Gameplay.Systems;
-using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Menu;
 using DChild.Serialization;
+<<<<<<< HEAD
+using Holysoft.Gameplay.UI;
+using Sirenix.OdinInspector;
+=======
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -34,9 +42,13 @@ namespace DChild.Gameplay
         private static SimulationHandler m_simulation;
         private static DChild.Gameplay.Systems.PlayerManager m_playerManager;
         private static LootHandler m_lootHandler;
+<<<<<<< HEAD
+        private static GameplayModifiers m_modifiers;
+=======
         private static CampaignSerializer m_campaignSerializer;
         private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
 
         public static ICombatManager combatManager => m_combatManager;
@@ -87,7 +99,6 @@ namespace DChild.Gameplay
             Time.timeScale = 1;
             m_playerManager?.EnableInput();
             isGamePaused = false;
-            GameSystem.SetCursorVisibility(false);
         }
 
         public static void PauseGame()
@@ -95,16 +106,26 @@ namespace DChild.Gameplay
             Time.timeScale = 0;
             m_playerManager?.DisableInput();
             isGamePaused = true;
-            GameSystem.SetCursorVisibility(true);
         }
 
         public static void ClearCaches()
         {
+<<<<<<< HEAD
+
+        }
+
+        //Temp
+        public SliderStatUI m_bossHealth;
+        private static SliderStatUI bossHealth;
+
+        public static void SetBossHealth(Character character)
+=======
             m_cinema?.ClearLists();
             m_healthTracker?.RemoveAllTrackers();
         }
 
         public static void LoadGame(CampaignSlot campaignSlot)
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         {
             m_campaignToLoad = campaignSlot;
             ClearCaches();
@@ -123,9 +144,13 @@ namespace DChild.Gameplay
             AssignModule(out m_world);
             AssignModule(out m_simulation);
             AssignModule(out m_playerManager);
+<<<<<<< HEAD
+            //Debug.Log("Modules Assigned");
+=======
             AssignModule(out m_zoneMover);
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_healthTracker);
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();

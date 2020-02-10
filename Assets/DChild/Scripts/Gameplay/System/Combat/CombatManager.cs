@@ -13,7 +13,11 @@ namespace DChild.Gameplay.Combat
 {
     public interface ICombatManager
     {
+<<<<<<< HEAD
+        AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo);
+=======
         Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo);
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect);
         void Inflict(StatusEffectReciever reciever, params StatusEffectChance[] statusEffectChance);
         List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes);
@@ -40,7 +44,11 @@ namespace DChild.Gameplay.Combat
         private List<AttackType> m_damageList;
         private IDamageable m_cacheTarget;
 
+<<<<<<< HEAD
+        public AttackInfo ResolveConflict(AttackerInfo attacker, TargetInfo targetInfo)
+=======
         public Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo)
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         {
             //AttackInfo result = new AttackInfo(attacker.damage);
             Cache<AttackInfo> result = Cache<AttackInfo>.Claim();

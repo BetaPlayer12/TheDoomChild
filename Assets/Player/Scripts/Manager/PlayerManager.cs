@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay.Characters.Players.Modules;
+using Holysoft.Event;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace PlayerNew
 {
-    public class PlayerManager : MonoBehaviour
+    public class PlayerManager : MonoBehaviour , IMainController
     {
         private InputState inputState;
         private Jog jogBehavior;
@@ -15,11 +17,22 @@ namespace PlayerNew
         private WallJump wallJumpBehavior;
         private Slash slashBehavior;
         private Dash dashBehavior;
+        private GroundShaker groundShakerBehavior;
+        private Thrust thrustBehavior;
         private Animator animator;
         private CollisionState collisionState;
 
+        public event EventAction<EventActionArgs> ControllerDisabled;
 
+        public void Enable()
+        {
+            enabled = true;
+        }
 
+        public void Disable()
+        {
+            enabled = false;
+        }
 
         private void Awake()
         {
@@ -34,7 +47,8 @@ namespace PlayerNew
             wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
             dashBehavior = GetComponent<Dash>();
-
+            thrustBehavior = GetComponent<Thrust>();
+            groundShakerBehavior = GetComponent<GroundShaker>();
         }
         // Start is called before the first frame update
         void Start()
@@ -76,6 +90,29 @@ namespace PlayerNew
                 wallStickBehavior.onWallDetected = false;
             }
 
+            if (thrustBehavior.thrustAttack)
+            {
+                animator.SetBool("Thrust", true);
+                if (!thrustBehavior.chargingAttack && !thrustBehavior.thrustHasStarted)
+                {
+                    animator.SetTrigger("ThrustStart");
+                }else if (thrustBehavior.chargingAttack && thrustBehavior.thrustHasStarted)
+                {
+                    animator.ResetTrigger("ThrustStart");
+                    animator.SetBool("ThrustCharge", true);
+                }else if (!thrustBehavior.chargingAttack)
+                {
+                    animator.SetBool("ThrustCharge", false);
+                    animator.SetTrigger("ThrustEnd");
+                   
+                }
+
+            }
+            else
+            {
+                animator.ResetTrigger("ThrustEnd");
+                animator.SetBool("Thrust", false);
+            }
 
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
@@ -84,14 +121,21 @@ namespace PlayerNew
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing);
-            SlashAnimationState(slashBehavior.attacking);
-
+            SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter);
+            GroundShakerAnimationState(groundShakerBehavior.groundSmash);
 
         }
 
-        void SlashAnimationState(bool value)
+        void GroundShakerAnimationState(bool value)
         {
-            animator.SetBool("Attack", value);
+            animator.SetBool("EarthShake", value);
+        }
+
+        void SlashAnimationState(bool value1, int value2)
+        {
+            animator.SetBool("Attack", value1);
+          
+                animator.SetInteger("AttackState", value2 + 1);
         }
 
         void DashAnimationState(bool value)
@@ -129,6 +173,7 @@ namespace PlayerNew
             animator.SetBool("WallStick", value);
         }
 
+        
     }
 }
 

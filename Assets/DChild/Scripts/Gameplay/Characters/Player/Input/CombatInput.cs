@@ -15,6 +15,7 @@ namespace DChild.Inputs
         private bool m_isOffHandPressed;
         private bool m_isThrowProjectilePressed;
         private bool m_isThrowProjectileHeld;
+        private bool m_isGrappling;
         private float m_timer;
         public Transform attackPos;
         public float attackRange;
@@ -23,6 +24,7 @@ namespace DChild.Inputs
         public bool isOffHandPressed => m_isOffHandPressed;
         public bool isThrowProjectilePressed => m_isThrowProjectilePressed;
         public bool isThrowProjectileHeld => m_isThrowProjectileHeld;
+        public bool isGrappling => m_isGrappling;
 
         public void Disable()
         {
@@ -30,6 +32,7 @@ namespace DChild.Inputs
             m_isOffHandPressed = false;
             m_isThrowProjectilePressed = false;
             m_isThrowProjectileHeld = false;
+            m_isGrappling = false;
            
         }
 
@@ -37,7 +40,12 @@ namespace DChild.Inputs
         {
             m_isMainHandPressed = Input.GetButtonDown(INPUT_MAINHAND);
             m_isOffHandPressed = Input.GetButtonDown(INPUT_OFFHAND);
+
+
+           
+
             var throwBombHeld = Input.GetButton(INPUT_THROWPROJECTILE);
+           
             if (throwBombHeld && !m_isThrowProjectileHeld && !m_isThrowProjectilePressed)
             {
                 m_isThrowProjectilePressed = true;
@@ -56,16 +64,21 @@ namespace DChild.Inputs
             {
                 
             }
-           
+
+            if ( Input.GetKey(KeyCode.LeftShift) && m_isOffHandPressed == true)
+            {
+                m_isGrappling = true;
+            }
+
             //if (Input.GetButton(INPUT_OFFHAND))
             //{
             //    m_timer += Time.deltaTime;
-            //    //Debug.Log("Pressed left click. Timer: " + m_timer);
+            //    Debug.Log("Pressed left click. Timer: " + m_timer);
             //}
             //if (Input.GetButtonUp(INPUT_OFFHAND))
             //{
-            //   // Debug.Log("Timer: " + m_timer);
-            //    if(m_timer > 3.0f)
+            //    // Debug.Log("Timer: " + m_timer);
+            //    if (m_timer > 3.0f)
             //    {
             //        Debug.Log("Charge Attack");
             //    }
@@ -76,7 +89,7 @@ namespace DChild.Inputs
             //    m_timer = 0.0f;
             //}
 
-           
+
 
 
         }

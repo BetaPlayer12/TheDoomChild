@@ -3,7 +3,7 @@ using UnityEngine;
 using Spine.Unity;
 using Spine;
 
-namespace DChild
+namespace DChild.StateMachine
 {
     public class SpineAnimationExitState : SpineAnimationState
     {

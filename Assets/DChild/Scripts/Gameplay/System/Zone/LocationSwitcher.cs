@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+﻿using DChild.Gameplay.Systems.Serialization;
+=======
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Environment;
@@ -6,10 +9,17 @@ using DChild.Menu;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System.Collections;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
+<<<<<<< HEAD
+    public class LocationSwitcher : MonoBehaviour
+    {
+        [SerializeField]
+        private LocationData m_destination;
+=======
     [RequireComponent(typeof(LocationPoster))]
     public class LocationSwitcher : SerializedMonoBehaviour
     {
@@ -27,9 +37,17 @@ namespace DChild.Gameplay.Systems
             m_poster = GetComponent<LocationPoster>();
             m_poster.data.OnArrival += OnArrival;
         }
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+<<<<<<< HEAD
+            if (GameSystem.IsCurrentZone(m_destination.scene) == false)
+            {
+                GameSystem.LoadZone(m_destination.scene, true);
+            }
+            agent.transform.position = m_destination.position;
+=======
             var playerControlledObject = collision.GetComponent<Hitbox>();
 
             if (playerControlledObject != null)
@@ -90,6 +108,7 @@ namespace DChild.Gameplay.Systems
         private void OnDestroy()
         {
             m_poster.data.OnArrival -= OnArrival;
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         }
     }
 }
