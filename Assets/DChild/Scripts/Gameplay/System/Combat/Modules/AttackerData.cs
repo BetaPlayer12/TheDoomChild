@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Refactor.DChild.Gameplay.Combat
+namespace DChild.Gameplay.Combat
 {
     [CreateAssetMenu(fileName = "AttackerData", menuName = "DChild/Gameplay/Combat/Attacker Data")]
     public class AttackerData : ScriptableObject

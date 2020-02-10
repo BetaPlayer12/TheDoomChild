@@ -29,14 +29,11 @@ namespace DChild.Gameplay.Characters.Enemies
             AddAnimation(0, ANIMATION_TOMBA_IDLE, true, 0);
         }
 
-<<<<<<< HEAD
-=======
         public void DoTombABurrow()
         {
             SetAnimation(0, ANIMATION_TOMBA_BURROW, false);
         }
 
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         public void DoTombBIdle()
         {
             SetAnimation(0, ANIMATION_TOMBB_IDLE, true);

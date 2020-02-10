@@ -1,7 +1,7 @@
 ﻿using DChild.Menu.Extras;
 using UnityEngine;
 
-namespace Refactor.DChild.Menu.Extras
+namespace DChild.Menu.Extras
 {
     public class ExtrasImageContent : MonoBehaviour
     {

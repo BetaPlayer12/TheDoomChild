@@ -3,7 +3,7 @@ using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Inputs;
 using Holysoft.Collections;
 using Holysoft.Event;
-using Refactor.DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules

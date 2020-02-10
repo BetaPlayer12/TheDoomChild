@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using DChild.Gameplay.Characters.Players.Modules;
-using Holysoft.Event;
 
 namespace PlayerNew
 {
@@ -52,27 +50,11 @@ namespace PlayerNew
         }
     }
 
-    public class InputManager : MonoBehaviour , IMainController
+    public class InputManager : MonoBehaviour
     {
 
         public InputAxisState[] inputs;
         public InputState inputState;
-
-        public event EventAction<EventActionArgs> ControllerDisabled;
-
-        public void Disable()
-        {
-            enabled = false;
-            foreach (var input in inputs)
-            {
-                inputState.SetButtonValue(input.button, false);
-            }
-        }
-
-        public void Enable()
-        {
-            enabled = true;
-        }
 
         // Use this for initialization
         void Start()

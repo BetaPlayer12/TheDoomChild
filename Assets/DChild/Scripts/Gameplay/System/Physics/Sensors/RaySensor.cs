@@ -59,7 +59,7 @@ namespace DChild.Gameplay
 
         public int DetectionCount => m_detectionCount;
 
-        
+        public RaycastHit2D m_castHit;
         public RaycastHit2D[] GetHits() => m_multiRaycast.hits;
 
         public RaycastHit2D[] GetUniqueHits()
