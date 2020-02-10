@@ -1,16 +1,12 @@
 ﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
-<<<<<<< HEAD
-using Refactor.DChild.Gameplay.Combat;
-=======
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Refactor.DChild.Gameplay.Characters.AI
+namespace DChild.Gameplay.Characters.AI
 {
     public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain where T : IAIInfo
     {

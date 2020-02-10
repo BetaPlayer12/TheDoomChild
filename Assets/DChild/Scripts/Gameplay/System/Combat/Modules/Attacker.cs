@@ -6,7 +6,7 @@ using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Refactor.DChild.Gameplay.Combat
+namespace DChild.Gameplay.Combat
 {
     [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Combat/Attacker")]
@@ -45,11 +45,6 @@ namespace Refactor.DChild.Gameplay.Combat
                     }
                 }
                 var position = transform.position;
-<<<<<<< HEAD
-                global::DChild.Gameplay.Combat.AttackerInfo info = new global::DChild.Gameplay.Combat.AttackerInfo(position, 0, 1, m_currentDamage.ToArray());
-                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
-=======
                 using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
                 {
                     cacheInfo.Value.Initialize(position, 0, 1, m_currentDamage.ToArray());
@@ -66,7 +61,6 @@ namespace Refactor.DChild.Gameplay.Combat
                     cacheInfo.Release();
                 }
 
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
             }
         }
 

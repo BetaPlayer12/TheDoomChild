@@ -9,8 +9,6 @@ using UnityEngine;
 
 namespace DChild
 {
-<<<<<<< HEAD
-=======
     public class CameraChangeEventArgs : IEventActionArgs
     {
         public void Initialize(Camera camera) 
@@ -21,27 +19,25 @@ namespace DChild
         public Camera camera { get; private set; }
     }
 
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
     public class GameSystem : MonoBehaviour
     {
         private static PoolManager m_poolManager;
         private static ConfirmationHandler m_confirmationHander;
         private static SceneLoader m_zoneLoader;
+        private static Cursor m_cursor;
         public static GameSettings settings { get; private set; }
         public static GameDataManager dataManager { get; private set; }
-
-<<<<<<< HEAD
         public static IPoolManager poolManager => m_poolManager;
-=======
-        private static GameSystem m_instance;
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
+        public static Camera mainCamera { get; private set; }
+        public static event EventAction<CameraChangeEventArgs> CameraChange;
 
+        private static GameSystem m_instance;
+
+        [SerializeField]
+        private Cursor m_instanceCursor;
         [SerializeField]
         private GameIntroHandler m_introHandler;
 
-<<<<<<< HEAD
-        public static void RequestConfirmation(EventAction<EventActionArgs> listener, string message)
-=======
 
         public static void SetCamera(Camera camera)
         {
@@ -60,7 +56,6 @@ namespace DChild
         }
 
         public static bool RequestConfirmation(EventAction<EventActionArgs> listener, string message)
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         {
             if (m_confirmationHander == null)
             {
@@ -87,17 +82,14 @@ namespace DChild
 
         public static bool IsCurrentZone(string sceneName) => m_zoneLoader.activeZone == sceneName;
 
+#if UNITY_EDITOR
+        public static void ForceCurrentZoneName(string sceneName) => m_zoneLoader.SetAsActiveZone(sceneName);
+#endif
+
         public static void LoadMainMenu() => m_zoneLoader.LoadMainMenu();
 
         private void Awake()
         {
-<<<<<<< HEAD
-            settings = GetComponentInChildren<GameSettings>();
-            m_confirmationHander = GetComponentInChildren<ConfirmationHandler>();
-            m_zoneLoader = GetComponentInChildren<SceneLoader>();
-            dataManager = GetComponentInChildren<GameDataManager>();
-            m_poolManager = GetComponentInChildren<PoolManager>();
-=======
             if (m_instance)
             {
                 Destroy(gameObject);
@@ -112,7 +104,6 @@ namespace DChild
                 m_poolManager = GetComponentInChildren<PoolManager>();
                 m_cursor = m_instanceCursor;
             }
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         }
 
         private void Start()

@@ -1,5 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players;
-using Refactor.DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusAilment

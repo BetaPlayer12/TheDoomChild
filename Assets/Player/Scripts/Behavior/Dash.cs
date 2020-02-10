@@ -36,22 +36,10 @@ namespace PlayerNew
             {
                 if (dash && dashHold < 0.1f && Time.time - lastDashTime > dashDelay)
                 {
-                    if (!collisionState.grounded)
-                    {
-                        body2d.gravityScale = 0;
-                    }
                     OnDash(facingDir);
                 }
                 else
                 {
-                    if(body2d.gravityScale <= 0)
-                    {
-                        if(body2d.drag >= 100f)
-                        {
-                            body2d.drag = 0;
-                        }
-                        body2d.gravityScale = 20f;
-                    }
                     dashing = false;
                 }
             }
@@ -90,7 +78,6 @@ namespace PlayerNew
         {
             var vel = body2d.velocity;
             lastDashTime -= Time.time;
-            body2d.velocity = Vector2.zero;
             body2d.AddForce(new Vector2(facingDir * dashForce, vel.y), ForceMode2D.Force);
             dashing = true;
         }

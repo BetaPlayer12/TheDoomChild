@@ -23,7 +23,7 @@ namespace PlayerNew
         // Update is called once per frame
         protected virtual void Update()
         {
-            if (collisionState.onWall && collisionState.onWallLeg && !wallGrab.canLedgeGrab)
+            if (collisionState.onWall && !wallGrab.canLedgeGrab)
             {
 
                 if (!onWallDetected)
@@ -49,8 +49,7 @@ namespace PlayerNew
         protected virtual void Onstick()
         {
             //if (!collisionState.grounded && body2d.velocity.y > 0)
-          
-            if (!collisionState.grounded && collisionState.onWall && collisionState.onWallLeg)
+            if (!collisionState.grounded)
             {
                 body2d.gravityScale = 0;
                 body2d.drag = 100;

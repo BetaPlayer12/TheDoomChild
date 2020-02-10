@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay;
-<<<<<<< HEAD
-using Refactor.DChild.Gameplay.Characters.AI;
-=======
 using DChild.Gameplay.Characters.AI;
 using DChild;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Projectiles;
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
 public class TombSoul : AttackProjectile
 {
