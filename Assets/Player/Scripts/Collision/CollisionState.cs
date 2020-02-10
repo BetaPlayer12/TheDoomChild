@@ -7,6 +7,8 @@ namespace PlayerNew
     public class CollisionState : MonoBehaviour
     {
         public LayerMask collisionLayer;
+        public bool disableGround;
+        public bool forceGrounded;
         public bool grounded;
         public bool onWall;
         public bool onWallLeg;
@@ -45,7 +47,18 @@ namespace PlayerNew
             pos.x += transform.position.x;
             pos.y += transform.position.y;
 
-            grounded = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+            if (disableGround)
+            {
+                grounded = false;
+            }else if (forceGrounded)
+            {
+                grounded = true;
+            }else
+            {
+                grounded = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+            }
+
+           
 
             pos = inputState.direction == Directions.Right ? rightPosition : leftPosition;
             pos.x += transform.position.x;
