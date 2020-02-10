@@ -395,7 +395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: 0a367454b891e87479433160d679a6b3, type: 2}
   m_speed: 1
   loop: 0
 --- !u!1101 &-8722744128682125571
@@ -1768,7 +1768,35 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.53333336
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -1780,6 +1808,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
+  - time: 0.53333336
+    functionName: FinishAttackAnim
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
 --- !u!74 &-6960036867070418236
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -3366,7 +3401,35 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.3
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -3378,6 +3441,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
+  - time: 0.3
+    functionName: FinishAttackAnim
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
 --- !u!74 &-5280693825107108711
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -3475,22 +3545,22 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 8085360936444676138}
-    m_Position: {x: 850, y: -90, z: 0}
+    m_Position: {x: 970, y: -20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -735328971408105764}
-    m_Position: {x: 760, y: 180, z: 0}
+    m_Position: {x: 980, y: 150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -9007819729185463917}
-    m_Position: {x: 750, y: 120, z: 0}
+    m_Position: {x: 970, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8521296003170400917}
     m_Position: {x: -430, y: 440, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2956559618615179759}
-    m_Position: {x: 760, y: 50, z: 0}
+    m_Position: {x: 970, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4679323058050249909}
-    m_Position: {x: 270, y: -340, z: 0}
+    m_Position: {x: 240, y: -180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 488321512755653463}
     m_Position: {x: -460, y: 160, z: 0}
@@ -3505,7 +3575,7 @@ AnimatorStateMachine:
     m_Position: {x: 10, y: -290, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6580572215167488027}
-    m_Position: {x: 660, y: 480, z: 0}
+    m_Position: {x: 970, y: 260, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7996239108139715257}
     m_Position: {x: -10, y: -220, z: 0}
@@ -3529,49 +3599,49 @@ AnimatorStateMachine:
     m_Position: {x: -480, y: -30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8096358897602530481}
-    m_Position: {x: 730, y: -300, z: 0}
+    m_Position: {x: 950, y: -170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7818474725651733495}
-    m_Position: {x: 830, y: 340, z: 0}
+    m_Position: {x: 990, y: 210, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5173831371111783339}
     m_Position: {x: -430, y: 530, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3032932411240091757}
-    m_Position: {x: 540, y: -370, z: 0}
+    m_Position: {x: 260, y: -250, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4443430755636319204}
-    m_Position: {x: 770, y: -180, z: 0}
+    m_Position: {x: 970, y: -100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8672436176384424847}
-    m_Position: {x: 530, y: -210, z: 0}
+    m_Position: {x: 230, y: -130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8796270380636815644}
-    m_Position: {x: 380, y: -240, z: 0}
+    m_Position: {x: 240, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1618872645126521389}
-    m_Position: {x: 270, y: -180, z: 0}
+    m_Position: {x: 240, y: 70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6637323676034325886}
-    m_Position: {x: 270, y: -120, z: 0}
+    m_Position: {x: 250, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5873986794384359357}
-    m_Position: {x: 240, y: 20, z: 0}
+    m_Position: {x: 250, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5329516918499902562}
-    m_Position: {x: 240, y: 80, z: 0}
+    m_Position: {x: -230, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 9119504448923162249}
-    m_Position: {x: 240, y: 160, z: 0}
+    m_Position: {x: 250, y: 270, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5236824977060988996}
-    m_Position: {x: 530, y: 240, z: 0}
+    m_Position: {x: 970, y: 340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1746624476157034394}
-    m_Position: {x: 610, y: -150, z: 0}
+    m_Position: {x: 250, y: -70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -670005763327890217}
-    m_Position: {x: 310, y: 320, z: 0}
+    m_Position: {x: 240, y: 330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6068228411112336821}
     m_Position: {x: 0, y: 310, z: 0}
@@ -4159,7 +4229,35 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.6
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -4171,6 +4269,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
+  - time: 0.6
+    functionName: GroundSmashFinishAnimation
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
 --- !u!74 &-4912216979721405921
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -4252,7 +4357,35 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.5
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -4264,6 +4397,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
+  - time: 0.5
+    functionName: FinishAttackAnim
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
 --- !u!1101 &-4888030953588074637
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -4764,7 +4904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: f58325c22c97a8445b238d8867535ac1, type: 2}
   m_speed: 1
   loop: 0
 --- !u!74 &-3784973809703820593
@@ -5774,7 +5914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: 0fcf3f59ac89f0c479f98fb70080a47e, type: 2}
   m_speed: 1
   loop: 0
 --- !u!114 &-1572862281138546589
@@ -6035,6 +6175,21 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0
+--- !u!114 &-1083059524814856737
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 11400000, guid: 34bc88161aa0be445a7f99f9dd9f167f, type: 2}
+  m_speed: 1
+  loop: 0
 --- !u!74 &-1060318008082633472
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -6325,11 +6480,46 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1.1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 1.1
+    functionName: FinishedLedgeClimb
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
 --- !u!1102 &-735328971408105764
 AnimatorState:
   serializedVersion: 5
@@ -6341,7 +6531,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -1083059524814856737}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -7206,11 +7397,46 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.46666667
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.46666667
+    functionName: FinishAttackAnim
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
 --- !u!74 &452924740253280399
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -7679,7 +7905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: 8fccdb66769de31499d099d300ad9541, type: 2}
   m_speed: 1
   loop: 0
 --- !u!114 &924026147986062889
@@ -7907,7 +8133,35 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 2
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -8494,7 +8748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: 2ab4a7a74ee266d4c863f00e9d610ac5, type: 2}
   m_speed: 1
   loop: 0
 --- !u!114 &2564074486951159820
@@ -8524,7 +8778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: 6b932067493c8804d92c398951699986, type: 2}
   m_speed: 1
   loop: 0
 --- !u!114 &2619436193366174567
@@ -9447,7 +9701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: 63e2abdc0b41af94aa8fe68eb96520b8, type: 2}
   m_speed: 1
   loop: 1
 --- !u!74 &4762995207500815077
@@ -9531,7 +9785,35 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.33333334
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -9543,6 +9825,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
+  - time: 0.33333334
+    functionName: FinishAttackAnim
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
 --- !u!74 &4939553218257137854
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -10251,7 +10540,35 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.5
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -10878,7 +11195,35 @@ AnimationClip:
     m_KeepOriginalPositionXZ: 0
     m_HeightFromFeet: 0
     m_Mirror: 0
-  m_EditorCurves: []
+  m_EditorCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.33333334
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: dummy
+    path: 
+    classID: 1
+    script: {fileID: 0}
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
@@ -10890,6 +11235,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 1
+  - time: 0.33333334
+    functionName: FinishAttackAnim
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
 --- !u!1101 &6526148573517102382
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -11398,7 +11750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: 7c19a56dde4b5ea48b1ce12828345fe5, type: 2}
   m_speed: 1
   loop: 0
 --- !u!114 &7810445211333890896
@@ -11470,7 +11822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523b95024e9e7a947a63897010ccc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animation: {fileID: 0}
+  m_animation: {fileID: 11400000, guid: f5947ee44a6eb3e4e839b1480788cca5, type: 2}
   m_speed: 1
   loop: 0
 --- !u!114 &8633914636353860452
