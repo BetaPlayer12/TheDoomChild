@@ -199,6 +199,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.rangeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rangeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(2f);
 
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -350,30 +351,31 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
 
                             if (IsTargetInRange(m_info.stingerProjectile.range))
-                            {
-                                m_stateHandle.SetState(State.Attacking);
-                            }
-                            else
-                            {
-
-                                var target = m_targetInfo.position;
-                                //target.y -= 0.5f;
-                                m_animation.DisableRootMotion();
-                                if (m_character.physics.velocity != Vector2.zero)
-                                {
-                                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                                }
-                                else
-                                {
-                                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                                }
-                                m_agent.SetDestination(target);
-                              
-                                    m_agent.Move(m_info.move.speed);
-                              
-                            }
-
+                        {
+                            m_agent.Stop();
+                            m_stateHandle.SetState(State.Attacking);
                         }
+                        //else
+                        //{
+
+                        //    var target = m_targetInfo.position;
+                        //    //target.y -= 0.5f;
+                        //    m_animation.DisableRootMotion();
+                        //    if (m_character.physics.velocity != Vector2.zero)
+                        //    {
+                        //        m_animation.SetAnimation(0, m_info.move.animation, true);
+                        //    }
+                        //    else
+                        //    {
+                        //        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        //    }
+                        //    m_agent.SetDestination(target);
+
+                        //        m_agent.Move(m_info.move.speed);
+
+                        //}
+
+                    }
                         else
                         {
                             m_stateHandle.SetState(State.Turning);
