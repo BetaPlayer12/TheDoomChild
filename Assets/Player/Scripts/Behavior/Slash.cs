@@ -139,7 +139,7 @@ namespace PlayerNew
             attackCounter++;
             attacking = false;
             ToggleScripts(true);
-            Debug.Log("attack end: " + attackCounter);
+            
         }
     }
 }
