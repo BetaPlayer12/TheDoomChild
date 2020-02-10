@@ -10,22 +10,10 @@ namespace PlayerNew
         public float slideMultiplier = 5f;
         override protected void Update()
         {
-           
             base.Update();
-            //if (!collisionState.grounded && !collisionState.onWall)
-            //{
-            //    body2d.sharedMaterial.friction = 0.0f;
-                
-            //}
-            //else
-            //{
-            //    body2d.sharedMaterial.friction = 0.4f;
-                
-            //}
-            //Debug.Log(body2d.sharedMaterial.friction);
+
             if (onWallDetected)
             {
-               
                 var velY = slideVelocity;
                 if (inputState.GetButtonValue(inputButtons[0]))
                 {
@@ -37,7 +25,6 @@ namespace PlayerNew
 
         override protected void Onstick()
         {
-           
             base.Onstick();
             body2d.velocity = Vector2.zero;
         }

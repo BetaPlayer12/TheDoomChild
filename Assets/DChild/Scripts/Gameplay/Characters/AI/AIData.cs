@@ -5,7 +5,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace Refactor.DChild.Gameplay.Characters.AI
+namespace DChild.Gameplay.Characters.AI
 {
     public interface IAIInfo { void Initialize(); }
 
@@ -25,11 +25,11 @@ namespace Refactor.DChild.Gameplay.Characters.AI
         [Button, PropertyOrder(-1)]
         private void Referesh()
         {
-            m_info.Initialize();
+            m_info?.Initialize();
         }
         private void OnEnable()
         {
-            m_info.Initialize();
+            m_info?.Initialize();
         }
 #endif
     }

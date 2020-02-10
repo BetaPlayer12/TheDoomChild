@@ -7,7 +7,6 @@ using Doozy.Engine;
 using Holysoft;
 using Holysoft.Collections;
 using Holysoft.Event;
-using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -26,7 +25,7 @@ namespace DChild.Gameplay.Systems
         [SerializeField, BoxGroup("Player Data")]
         private Player m_player;
         [SerializeField]
-        private InputManager m_input;
+        private PlayerInput m_input;
         [SerializeField]
         private PlayerCharacterOverride m_overrideController;
         [SerializeField]
@@ -49,15 +48,6 @@ namespace DChild.Gameplay.Systems
             return m_overrideController;
         }
 
-#if UNITY_EDITOR
-        [Button("OverrideCharacterControls")]
-        private void OverrideCharacterControlDebug()
-        {
-            OverrideCharacterControls();
-        }
-#endif
-
-        [Button]
         public void StopCharacterControlOverride()
         {
             m_overrideController.enabled = false;
@@ -105,7 +95,7 @@ namespace DChild.Gameplay.Systems
             if (m_player)
             {
                 m_player = player;
-                m_input = m_player.GetComponentInChildren<InputManager>();
+                m_input = m_player.GetComponent<PlayerInput>();
                 m_player.OnDeath += OnPlayerDeath;
             }
             //m_autoReflex.Initialize();
