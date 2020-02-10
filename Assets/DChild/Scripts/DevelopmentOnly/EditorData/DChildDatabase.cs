@@ -147,14 +147,17 @@ namespace DChild
         {
             public struct CoreInfo
             {
-                public CoreInfo(int iD, string name) : this()
+                public CoreInfo(int iD, string name, string title) : this()
                 {
-                    ID = iD;
+                    this.ID = iD;
                     this.name = name;
+                    this.title = title;
                 }
 
                 public int ID { get; }
                 public string name { get; }
+
+                public string title { get; }
             }
 
             private SQLConnection.DatabaseConnection m_connection;
@@ -187,7 +190,7 @@ namespace DChild
                 var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary");
                 while (bestiaryReader.Read())
                 {
-                    list.Add(new CoreInfo(bestiaryReader.GetData<int>("ID"), bestiaryReader.GetData<string>("Name")));
+                    list.Add(new CoreInfo(bestiaryReader.GetData<int>("ID"), bestiaryReader.GetData<string>("Name"), bestiaryReader.GetData<string>("Title")));
                 }
                 return list.ToArray();
             }
@@ -241,12 +244,12 @@ namespace DChild
                 }
             }
 
-            public void Update(int ID, string name, string description)
+            public void Update(int ID, string name, string title, string description)
             {
                 var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
                 if (bestiaryReader.Read())
                 {
-                    m_connection.ExecuteCommand($"UPDATE Bestiary SET Name = \"{name}\",  Description = \"{description}\"  WHERE ID = {ID}");
+                    m_connection.ExecuteCommand($"UPDATE Bestiary SET Name = \"{name}\", Title = \"{(title == string.Empty? "": title)}\",  Description = \"{(description == string.Empty? "" : description)}\"  WHERE ID = {ID}");
                 }
                 else
                 {
@@ -264,7 +267,7 @@ namespace DChild
                 m_connection.ExecuteCommand($"UPDATE Bestiary SET ID = {ID} WHERE ID = {reference}");
             }
 
-            public void Insert(int ID, string name, string description)
+            public void Insert(int ID, string name, string title, string description)
             {
                 var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
                 if (bestiaryReader.Read())
@@ -273,7 +276,7 @@ namespace DChild
                 }
                 else
                 {
-                    m_connection.ExecuteCommand($"INSERT INTO Bestiary VALUES({ID},\"{name}\",\"{description}\")");
+                    m_connection.ExecuteCommand($"INSERT INTO Bestiary VALUES({ID},\"{name}\",\"{title}\",\"{description}\",1,1)");
 
                 }
             }

@@ -90,6 +90,7 @@ namespace PlayerNew
         {
             var vel = body2d.velocity;
             lastDashTime -= Time.time;
+            body2d.velocity = Vector2.zero;
             body2d.AddForce(new Vector2(facingDir * dashForce, vel.y), ForceMode2D.Force);
             dashing = true;
         }

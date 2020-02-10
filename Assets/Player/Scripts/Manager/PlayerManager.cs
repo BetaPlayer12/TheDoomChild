@@ -16,6 +16,7 @@ namespace PlayerNew
         private Slash slashBehavior;
         private Dash dashBehavior;
         private GroundShaker groundShakerBehavior;
+        private Thrust thrustBehavior;
         private Animator animator;
         private CollisionState collisionState;
 
@@ -35,6 +36,7 @@ namespace PlayerNew
             wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
             dashBehavior = GetComponent<Dash>();
+            thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
         }
         // Start is called before the first frame update
@@ -77,7 +79,29 @@ namespace PlayerNew
                 wallStickBehavior.onWallDetected = false;
             }
 
-            
+            if (thrustBehavior.thrustAttack)
+            {
+                animator.SetBool("Thrust", true);
+                if (!thrustBehavior.chargingAttack && !thrustBehavior.thrustHasStarted)
+                {
+                    animator.SetTrigger("ThrustStart");
+                }else if (thrustBehavior.chargingAttack && thrustBehavior.thrustHasStarted)
+                {
+                    animator.ResetTrigger("ThrustStart");
+                    animator.SetBool("ThrustCharge", true);
+                }else if (!thrustBehavior.chargingAttack)
+                {
+                    animator.SetBool("ThrustCharge", false);
+                    animator.SetTrigger("ThrustEnd");
+                   
+                }
+
+            }
+            else
+            {
+                animator.ResetTrigger("ThrustEnd");
+                animator.SetBool("Thrust", false);
+            }
 
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);

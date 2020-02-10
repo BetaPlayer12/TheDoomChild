@@ -49,6 +49,7 @@ namespace PlayerNew
         protected virtual void Onstick()
         {
             //if (!collisionState.grounded && body2d.velocity.y > 0)
+          
             if (!collisionState.grounded && collisionState.onWall && collisionState.onWallLeg)
             {
                 body2d.gravityScale = 0;
