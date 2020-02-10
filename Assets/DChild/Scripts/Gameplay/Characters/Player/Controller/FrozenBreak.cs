@@ -1,7 +1,7 @@
 ﻿using System;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Inputs;
-using DChild.Gameplay.Characters.Players;
+using Refactor.DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

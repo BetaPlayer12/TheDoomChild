@@ -12,15 +12,15 @@ namespace PlayerNew
         protected Rigidbody2D body2d;
         protected Transform trans;
         protected CollisionState collisionState;
+        [SerializeField]
         protected CapsuleCollider2D capsuleCollider;
 
         protected virtual void Awake()
         {
             inputState = GetComponent<InputState>();
-            body2d = GetComponent<Rigidbody2D>();
+            body2d = GetComponentInParent<Rigidbody2D>();
             trans = GetComponent<Transform>();
             collisionState = GetComponent<CollisionState>();
-            capsuleCollider = GetComponent<CapsuleCollider2D>();
         }
 
         protected virtual void ToggleScripts(bool value)

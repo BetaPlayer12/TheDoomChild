@@ -1,6 +1,6 @@
 ﻿using Holysoft.Event;
 using UnityEngine;
-using static DChild.Gameplay.Combat.Damageable;
+using static Refactor.DChild.Gameplay.Combat.Damageable;
 
 namespace DChild.Gameplay.Combat
 {

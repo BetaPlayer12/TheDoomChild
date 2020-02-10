@@ -3,7 +3,7 @@ using Holysoft.Menu;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DChild.Menu.Extras
+namespace Refactor.DChild.Menu.Extras
 {
     public class ExtrasImageShowcase : AdjacentNavigation
     {

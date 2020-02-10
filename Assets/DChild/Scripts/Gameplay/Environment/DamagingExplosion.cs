@@ -40,6 +40,10 @@ namespace DChild.Gameplay.Environment
                 {
                     using (Cache<TargetInfo> targetInfo = Cache<TargetInfo>.Claim())
                     {
+<<<<<<< HEAD
+                        AttackerInfo info = new AttackerInfo(transform.position, 0, 1, m_damage);
+                        GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(hitbox.damageable, bodyDefense.damageReduction));
+=======
                         for (int i = 0; i < affectedColliders.Length; i++)
                         {
                             if (affectedColliders[i].CompareTag("DamageCollider") == false)
@@ -59,6 +63,7 @@ namespace DChild.Gameplay.Environment
                             targetInfo.Release();
                         }
                         info.Release();
+>>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
                     }
                 }
             }
