@@ -1,5 +1,4 @@
 ﻿using DChild.Gameplay.Pooling;
-using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.Players;
