@@ -1,17 +1,17 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Combat;
 using UnityEngine;
 
 namespace DChild.Gameplay.Essence
 {
-
-    public class SoulEssenceLoot : EssenceLoot
+    public class HealthEssenceLoot : EssenceLoot
     {
         [SerializeField, Min(1)]
-        private int m_value;
+        private int m_healValue;
 
         protected override void OnApplyPickup(IPlayer player)
         {
-            player.inventory.AddSoulEssence(m_value);
+            GameplaySystem.combatManager.Heal((IHealable)player.damageableModule, m_healValue);
         }
     }
 }

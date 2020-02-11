@@ -1,4 +1,4 @@
-﻿using DChild.Gameplay.SoulEssence;
+﻿using DChild.Gameplay.Essence;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour

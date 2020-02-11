@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.SoulEssence;
 using Spine;
 using UnityEngine;
 
