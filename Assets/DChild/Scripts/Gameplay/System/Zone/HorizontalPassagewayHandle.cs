@@ -49,20 +49,13 @@ namespace DChild.Gameplay.Environment
 
         private void OnPassageWayPostEnter(Character character)
         {
-            Debug.Log("Post");
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
             controller.moveDirectionInput = 0;
 
-            //TODO Update code
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
-            rigidBody.gravityScale = 0;
-            CollisionState test = character.GetComponentInChildren<CollisionState>();
-            test.forceGrounded = true;
-
-            //character.physics.SetVelocity(Vector2.zero);
-            //character.physics.simulateGravity = false;
-            //var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-            //groundednessHandle.enabled = false;
+            rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            collisionState.forceGrounded = true;
         }
 
         private void OnPassagewayExit(Character character, TravelDirection exitDirection)
@@ -70,15 +63,10 @@ namespace DChild.Gameplay.Environment
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
             controller.moveDirectionInput = (int)exitDirection;
 
-            //TODO Update code
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
-            rigidBody.gravityScale = 20;
-            CollisionState test = character.GetComponentInChildren<CollisionState>();
-            test.forceGrounded = false;
-
-            //character.physics.simulateGravity = true;
-            //var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-            //groundednessHandle.enabled = true;
+            rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            collisionState.forceGrounded = false;
         }
 
 #if UNITY_EDITOR
