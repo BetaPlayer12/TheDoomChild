@@ -47,7 +47,7 @@ namespace PlayerNew
 
             //    //call animation
             //}
-            if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall && collisionState.onWallLeg)
+            if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall /*&& collisionState.onWallLeg*/)
             {
                
                 
