@@ -397,25 +397,26 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_spikeDamage.SetActive(false);
-                            if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                            m_attackDecider.DecideOnAttack();
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                             {
-                                m_attackDecider.DecideOnAttack();
-                                if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
-                                {
-                                    m_movement.Stop();
-                                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    m_stateHandle.SetState(State.Attacking);
-                                }
-                                else
+                                m_movement.Stop();
+                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.SetState(State.Attacking);
+                            }
+                            else
+                            {
+                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting /*&& m_edgeSensor.isDetecting*/)
                                 {
                                     m_animation.EnableRootMotion(true, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2f;
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
                                 }
-                            }
-                            else
-                            {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                else
+                                {
+                                    m_movement.Stop();
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
                             }
                         }
                         else
