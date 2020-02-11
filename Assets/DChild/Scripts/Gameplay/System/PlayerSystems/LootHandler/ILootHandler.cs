@@ -1,6 +1,4 @@
-﻿using DChild.Gameplay.SoulEssence;
-
-namespace DChild.Gameplay.Systems
+﻿namespace DChild.Gameplay.Systems
 {
     public interface ILootHandler
     {
