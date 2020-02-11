@@ -27,7 +27,7 @@ namespace PlayerNew
 
         private void Awake()
         {
-            body2D = GetComponent<Rigidbody2D>();
+            body2D = GetComponentInParent<Rigidbody2D>();
         }
 
         private void FixedUpdate()

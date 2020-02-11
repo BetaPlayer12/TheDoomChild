@@ -41,12 +41,6 @@ namespace DChild.Gameplay.Projectiles
                     var damage = m_data.damage;
                     using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
                     {
-<<<<<<< HEAD
-                        AttackerInfo info = new AttackerInfo(transform.position, 0, 1, damage[i]);
-                        var targetInfo = new TargetInfo(m_cacheToDamage.damageable, m_cacheToDamage.defense.damageReduction);
-                        var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                        CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
-=======
                         using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                         {
                             using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
@@ -67,7 +61,6 @@ namespace DChild.Gameplay.Projectiles
                             cacheTargetInfo?.Release();
                         }
                         cacheInfo.Release();
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
                     }
                 }
                 if (m_data.isPiercing == false)

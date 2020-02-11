@@ -8,7 +8,6 @@ using DChild.Gameplay.Characters.Players;
 
 namespace DChild.Gameplay.Characters.Players.Behaviour
 {
-    //something is here
     public class GroundJumpHandler : Jump, IControllableModule
     {
         [SerializeField]

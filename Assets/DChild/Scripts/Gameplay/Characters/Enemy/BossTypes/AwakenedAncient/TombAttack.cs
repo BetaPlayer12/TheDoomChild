@@ -1,10 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-<<<<<<< HEAD
-using DChild.Gameplay.Characters.Enemies;
-using DChild;
-using Refactor.DChild.Gameplay.Characters.AI;
-=======
 using DChild.Gameplay.Characters.AI;
 using DGameplay = DChild.Gameplay;
 using Holysoft.Event;
@@ -14,7 +9,6 @@ using Spine;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Projectiles;
 //using System;
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
 public class TombAttack : MonoBehaviour
 {
@@ -51,52 +45,6 @@ public class TombAttack : MonoBehaviour
     [SerializeField]
     private DGameplay.ParticleFX m_tombFX;
 
-<<<<<<< HEAD
-    private void Awake()
-    {
-        m_animation = GetComponent<TombAttackAnimation>();
-    }
-
-    private void Start()
-    {
-        //m_animation.SetEmptyAnimation(0, 0);
-        int num = Random.Range(0, 2);
-        m_animation.DoTombRise(num);
-        StartCoroutine(SummonSoul(num));
-        StartCoroutine(TombLife());
-    }
-
-    public void GetTarget(AITargetInfo target)
-    {
-        m_target = target;
-    }
-
-    private IEnumerator SummonSoul(int num)
-    {
-        if(num == 0)
-        {
-            yield return new WaitForAnimationComplete(m_animation.animationState, TombAttackAnimation.ANIMATION_TOMBA_RISE);
-        }
-        else if (num == 1)
-        {
-            yield return new WaitForAnimationComplete(m_animation.animationState, TombAttackAnimation.ANIMATION_TOMBB_RISE);
-        }
-        else if (num == 2)
-        {
-            yield return new WaitForAnimationComplete(m_animation.animationState, TombAttackAnimation.ANIMATION_TOMBC_RISE);
-        }
-        
-        GameObject soul = Instantiate(m_soul, new Vector2(transform.position.x, transform.position.y+2), Quaternion.identity);
-        soul.GetComponent<TombSoul>().GetTarget(m_target);
-        yield return null;
-    }
-
-    private IEnumerator TombLife()
-    {
-        yield return new WaitForSeconds(m_lifeTime);
-        yield return null;
-        Destroy(this.gameObject);
-=======
     private float m_volleys;
     private float m_delay;
 
@@ -154,6 +102,5 @@ public class TombAttack : MonoBehaviour
         soul.GetComponent<TombSoul>().SetAttackInfo(m_target,m_delay);
         soul.GetComponent<Projectile>().Impacted += Impacted;
         yield return null;
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
     }
 }

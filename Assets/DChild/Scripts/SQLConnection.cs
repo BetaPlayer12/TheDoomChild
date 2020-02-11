@@ -81,7 +81,15 @@ public static class SQLConnection
         }
     }
 
-    public static T GetData<T>(this IDataReader reader, string column) => (T)reader[column];
+    public static T GetData<T>(this IDataReader reader, string column)
+    {
+        var value = (T)reader[column];
+        if (value == null)
+        {
+            value = default;
+        }
+        return value;
+    }
 
     private static IDataReader ExecuteQuery(this IDbConnection dBconnection, string query)
     {

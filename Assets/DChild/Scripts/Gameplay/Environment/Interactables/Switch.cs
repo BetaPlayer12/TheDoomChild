@@ -7,6 +7,7 @@
  **************************************/
 
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Serialization;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,13 +16,23 @@ using UnityEngine.Events;
 namespace DChild.Gameplay.Environment
 {
     [AddComponentMenu("DChild/Gameplay/Environment/Interactable/Switch")]
-    public class Switch : MonoBehaviour, IHitToInteract
+    public class Switch : MonoBehaviour, IHitToInteract, ISerializableComponent
     {
         public enum Type
         {
             Toggle,
             OneTime,
             Trigger
+        }
+
+        public struct SaveData : ISaveData
+        {
+            public SaveData(bool isOpen)
+            {
+                this.isOpen = isOpen;
+            }
+
+            public bool isOpen { get; }
         }
 
         [SerializeField, OnValueChanged("OnTypeChanged")]
@@ -42,6 +53,28 @@ namespace DChild.Gameplay.Environment
         [SerializeField, HideIf("m_hideOffState")]
         private UnityEvent m_offState;
 
+        public ISaveData Save()
+        {
+            return new SaveData(m_isOn);
+        }
+
+        public void Load(ISaveData data)
+        {
+            m_isOn = ((SaveData)data).isOpen;
+            if (m_isOn)
+            {
+                m_startAsOnState?.Invoke();
+                if (m_type == Type.OneTime)
+                {
+                    m_collider.enabled = false;
+                }
+            }
+            else
+            {
+                m_startAsOffState?.Invoke();
+                m_collider.enabled = true;
+            }
+        }
 
         public void SetAs(bool value)
         {
@@ -219,6 +252,7 @@ namespace DChild.Gameplay.Environment
                 return ((Component)instance).transform.position;
             }
         }
+
 #endif
     }
 }

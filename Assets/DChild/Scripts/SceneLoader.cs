@@ -18,11 +18,6 @@ namespace DChild
         private SceneInfo m_mainMenu;
 
         private string m_activeZone;
-<<<<<<< HEAD
-
-        public string activeZone => m_activeZone;
-
-=======
 #if UNITY_EDITOR
         [SerializeField]
 #endif
@@ -42,31 +37,30 @@ namespace DChild
             LoadZone(sceneName, withLoadingScene);
         }
 
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
         public void LoadZone(string sceneName, bool withLoadingScene)
         {
             if (withLoadingScene)
             {
-<<<<<<< HEAD
-                if (m_activeZone != string.Empty)
-=======
                 if (m_activeZone != null && m_activeZone != string.Empty && m_activeZone != sceneName)
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;
                 }
 
-                if (SceneManager.GetSceneByName(m_gameplayScene.sceneName).isLoaded == false)
+                if (m_gameplaySceneActive == false)
                 {
                     LoadingHandle.LoadScenes(m_gameplayScene.sceneName);
+                    m_gameplaySceneActive = true;
                 }
-                LoadingHandle.LoadScenes(sceneName);
+                if (m_activeZone != sceneName)
+                {
+                    LoadingHandle.LoadScenes(sceneName);
+                }
                 SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
             }
             else
             {
-                if (m_activeZone != string.Empty)
+                if (m_activeZone != string.Empty && m_activeZone != sceneName)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;

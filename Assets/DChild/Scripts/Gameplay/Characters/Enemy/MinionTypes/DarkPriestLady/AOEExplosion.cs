@@ -52,11 +52,6 @@ namespace DChild.Gameplay
             {
                 using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
                 {
-<<<<<<< HEAD
-                    AttackerInfo info = new AttackerInfo(transform.position, 0, 1, damage[j]);
-                    var result = GameplaySystem.combatManager.ResolveConflict(info, new TargetInfo(m_cacheHitbox.damageable, m_cacheHitbox.defense.damageReduction));
-                    //CallAttackerAttacked(new CombatConclusionEventArgs(info, m_toDamage[j], result));
-=======
                     using (Cache<TargetInfo> targetInfo = Cache<TargetInfo>.Claim())
                     {
                         for (int i = 0; i < m_cacheHitboxList.Count; i++)
@@ -76,7 +71,6 @@ namespace DChild.Gameplay
                         targetInfo.Release();
                     }
                     info.Release();
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
                 }
             }
         }

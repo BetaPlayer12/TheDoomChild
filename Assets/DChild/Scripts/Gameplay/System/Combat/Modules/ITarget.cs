@@ -1,6 +1,6 @@
-﻿using Refactor.DChild.Gameplay;
-using Refactor.DChild.Gameplay.Characters;
-using Refactor.DChild.Gameplay.Combat;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat

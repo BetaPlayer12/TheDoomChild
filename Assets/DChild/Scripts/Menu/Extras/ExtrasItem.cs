@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Refactor.DChild.Menu.Extras
+namespace DChild.Menu.Extras
 {
     public struct ItemSelectedEventArgs : IEventActionArgs
     {

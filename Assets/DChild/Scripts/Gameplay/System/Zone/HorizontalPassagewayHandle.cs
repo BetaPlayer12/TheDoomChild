@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Systems;
+using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -44,27 +45,40 @@ namespace DChild.Gameplay.Environment
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
             controller.moveDirectionInput = (int)travelDirection;
-
         }
 
         private void OnPassageWayPostEnter(Character character)
         {
+            Debug.Log("Post");
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-
             controller.moveDirectionInput = 0;
-            character.physics.SetVelocity(Vector2.zero);
-            character.physics.simulateGravity = false;
-            var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-            groundednessHandle.enabled = false;
+
+            //TODO Update code
+            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
+            rigidBody.gravityScale = 0;
+            CollisionState test = character.GetComponentInChildren<CollisionState>();
+            test.forceGrounded = true;
+
+            //character.physics.SetVelocity(Vector2.zero);
+            //character.physics.simulateGravity = false;
+            //var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
+            //groundednessHandle.enabled = false;
         }
 
         private void OnPassagewayExit(Character character, TravelDirection exitDirection)
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
             controller.moveDirectionInput = (int)exitDirection;
-            character.physics.simulateGravity = true;
-            var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-            groundednessHandle.enabled = true;
+
+            //TODO Update code
+            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
+            rigidBody.gravityScale = 20;
+            CollisionState test = character.GetComponentInChildren<CollisionState>();
+            test.forceGrounded = false;
+
+            //character.physics.simulateGravity = true;
+            //var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
+            //groundednessHandle.enabled = true;
         }
 
 #if UNITY_EDITOR

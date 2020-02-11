@@ -7,14 +7,11 @@ using DChild.Gameplay.Inventories;
 using DChild.Serialization;
 //using Doozy.Engine;
 using Holysoft.Event;
-<<<<<<< HEAD
-using Refactor.DChild.Gameplay.Characters.Players;
-using Refactor.DChild.Gameplay.Combat;
-=======
 using DChild.Gameplay.Characters.Players;
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 using Sirenix.OdinInspector;
 using UnityEngine;
+using DChild.Gameplay.Characters.Players.Behaviour;
+using PlayerNew;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -55,7 +52,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
         [SerializeField]
-        private PlayerCharacterController m_controller;
+        private InputManager m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
         [SerializeField]
@@ -76,15 +73,12 @@ namespace DChild.Gameplay.Characters.Players
         private Attacker m_attacker;
         [SerializeField]
         private Magic m_magic;
-<<<<<<< HEAD
-=======
         [SerializeField]
         private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private LootPicker m_lootPicker;
         [SerializeField]
         private GroundednessHandle m_groundednessHandle;
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
         public event EventAction<EventActionArgs> OnDeath;
 
@@ -101,6 +95,7 @@ namespace DChild.Gameplay.Characters.Players
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
         public IMainController controller => m_controller;
+        public LootPicker lootPicker => m_lootPicker;
 
         public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
 

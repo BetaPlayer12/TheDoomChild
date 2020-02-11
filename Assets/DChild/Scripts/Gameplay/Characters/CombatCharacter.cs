@@ -4,8 +4,8 @@ using DChild.Gameplay.Systems.WorldComponents;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Holysoft.Event;
-using Refactor.DChild.Gameplay.Characters;
-using Refactor.DChild.Gameplay.Combat;
+using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
 
 namespace DChild.Gameplay.Characters
 {

@@ -22,33 +22,16 @@ namespace DChild.Gameplay.Systems.Serialization
     [CreateAssetMenu(fileName = "LocationData", menuName = "DChild/Gameplay/Location Data")]
     public class LocationData : ScriptableObject
     {
-        public enum ExitDirection
-        {
-            Top,
-            Bottom,
-            Left,
-            Right,
-        }
-
         [SerializeField]
         private Location m_location;
         [SerializeField]
         private SceneInfo m_scene;
         [SerializeField]
         private Vector2 m_position;
-<<<<<<< HEAD
-        [SerializeField]
-        private ExitDirection m_exitDirection;
-=======
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
         public Location location => m_location;
         public string scene => m_scene.sceneName;
         public Vector2 position => m_position;
-<<<<<<< HEAD
-        public ExitDirection exitDirection => m_exitDirection;
-=======
->>>>>>> 1da651e7110817459d92af99c3db2a4e35b13b23
 
 
 #if UNITY_EDITOR

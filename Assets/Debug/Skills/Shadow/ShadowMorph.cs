@@ -7,7 +7,7 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Collections;
 using Holysoft.Event;
-using Refactor.DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
