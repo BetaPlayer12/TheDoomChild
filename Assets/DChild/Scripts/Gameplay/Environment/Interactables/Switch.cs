@@ -196,8 +196,9 @@ namespace DChild.Gameplay.Environment
 
             Dictionary<GameObject, GizmoInfo> m_gizmosToDraw = new Dictionary<GameObject, GizmoInfo>();
 
-            HandleGizmoValidation(m_gizmosToDraw, m_onState, Color.green);
-            HandleGizmoValidation(m_gizmosToDraw, m_offState, Color.red);
+
+            HandleGizmoValidation(m_gizmosToDraw, m_onState, new Color(0, 0.5595117f,1f));
+            HandleGizmoValidation(m_gizmosToDraw, m_offState, new Color(1, 0.7397324f,0));
 
             foreach (var key in m_gizmosToDraw.Keys)
             {
