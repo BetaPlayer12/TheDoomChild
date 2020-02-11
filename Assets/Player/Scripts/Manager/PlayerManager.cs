@@ -110,7 +110,7 @@ namespace PlayerNew
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing);
-            SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter);
+            SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter, slashBehavior.upHold);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
 
         }
@@ -120,11 +120,12 @@ namespace PlayerNew
             animator.SetBool("EarthShake", value);
         }
 
-        void SlashAnimationState(bool value1, int value2)
+        void SlashAnimationState(bool value1, int value2, bool value3)
         {
             animator.SetBool("Attack", value1);
           
                 animator.SetInteger("AttackState", value2 + 1);
+            animator.SetBool("UpHold", value3);
         }
 
         void DashAnimationState(bool value)

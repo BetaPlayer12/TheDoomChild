@@ -115,6 +115,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -280,7 +282,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting && m_edgeSensor.isDetecting)
                             {
                                 m_attackDecider.DecideOnAttack();
                                 if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))

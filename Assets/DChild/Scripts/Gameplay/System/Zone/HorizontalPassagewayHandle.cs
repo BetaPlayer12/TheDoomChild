@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Systems;
+using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -44,27 +45,28 @@ namespace DChild.Gameplay.Environment
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
             controller.moveDirectionInput = (int)travelDirection;
-
         }
 
         private void OnPassageWayPostEnter(Character character)
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-
             controller.moveDirectionInput = 0;
-            character.physics.SetVelocity(Vector2.zero);
-            character.physics.simulateGravity = false;
-            var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-            groundednessHandle.enabled = false;
+
+            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
+            rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            collisionState.forceGrounded = true;
         }
 
         private void OnPassagewayExit(Character character, TravelDirection exitDirection)
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
             controller.moveDirectionInput = (int)exitDirection;
-            character.physics.simulateGravity = true;
-            var groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
-            groundednessHandle.enabled = true;
+
+            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
+            rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            collisionState.forceGrounded = false;
         }
 
 #if UNITY_EDITOR

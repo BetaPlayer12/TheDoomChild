@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3333005058661361440}
   - component: {fileID: 4729801794122870979}
   - component: {fileID: 3704138789701857777}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Slug_2_Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 0.5
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -222,7 +222,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 0.09018554, g: 0.5566038, b: 0.007876454, a: 1}
-      maxColor: {r: 1, g: 0, b: 0.27793503, a: 1}
+      maxColor: {r: 0.1981132, g: 0, b: 0.05516094, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -284,7 +284,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
+      scalar: 5
       minScalar: 2
       maxCurve:
         serializedVersion: 2
@@ -4763,6 +4763,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4822,7 +4823,8 @@ GameObject:
   - component: {fileID: 4692011570255613549}
   - component: {fileID: 4692011570255613538}
   - component: {fileID: 4692011570255613539}
-  m_Layer: 0
+  - component: {fileID: 457552031508149412}
+  m_Layer: 13
   m_Name: Slug_2_Projetile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4838,13 +4840,13 @@ Transform:
   m_GameObject: {fileID: 4692011570255613536}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.88, y: -1.896, z: 1.71}
-  m_LocalScale: {x: 0.75706655, y: 0.75706655, z: 0.75706655}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3333005058661361440}
   - {fileID: 7901362396123372306}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &4692011570255613538
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4855,7 +4857,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 5
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -5035,7 +5037,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0, b: 0.44654083, a: 1}
+      maxColor: {r: 1, g: 0.1273585, b: 0.76729584, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5097,7 +5099,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.7
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9585,6 +9587,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9633,6 +9636,24 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &457552031508149412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4692011570255613536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: 5cfdb69a50062964cb74b24fdece0b34, type: 2}
+  m_particleSystems:
+  - {fileID: 4692011570255613538}
+  - {fileID: 4729801794122870979}
+  m_playOnAwake: 1
+  m_poolOnStop: 1
 --- !u!1 &8938646102301083389
 GameObject:
   m_ObjectHideFlags: 0
@@ -9643,7 +9664,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7901362396123372306}
   - component: {fileID: 8149786750008204014}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Slug_2_Projectile_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9679,6 +9700,7 @@ TrailRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9706,7 +9728,7 @@ TrailRenderer:
   m_Time: 0.3
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.5
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
