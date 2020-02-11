@@ -7,11 +7,10 @@ namespace PlayerNew
     public class CollisionState : MonoBehaviour
     {
         public LayerMask collisionLayer;
-        public bool disableGround;
         public bool forceGrounded;
+        public bool forceFloating;
         public bool grounded;
         public bool onWall;
-        public bool onWallLeg;
         public bool isTouchingLedge;
         public float slopeAngle;
         public Vector2 bottomPosition = Vector2.zero;
@@ -19,8 +18,6 @@ namespace PlayerNew
         public Vector2 leftPosition = Vector2.zero;
         public Vector2 ledgeRightPosition = Vector2.zero;
         public Vector2 ledgeLeftPosition = Vector2.zero;
-        public Vector2 leftLegPosition = Vector2.zero;
-        public Vector2 rightLegPosition = Vector2.zero;
         public Vector2 slopeLeft = Vector2.zero;
         public Vector2 slopeRight = Vector2.zero;
 
@@ -47,18 +44,19 @@ namespace PlayerNew
             pos.x += transform.position.x;
             pos.y += transform.position.y;
 
-            if (disableGround)
-            {
-                grounded = false;
-            }else if (forceGrounded)
+            if (forceGrounded)
             {
                 grounded = true;
-            }else
+                forceFloating = false;
+            }else if (forceFloating)
+            {
+                forceGrounded = false;
+                grounded = false;
+            }
+            else
             {
                 grounded = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             }
-
-           
 
             pos = inputState.direction == Directions.Right ? rightPosition : leftPosition;
             pos.x += transform.position.x;
@@ -69,24 +67,18 @@ namespace PlayerNew
             pos = inputState.direction == Directions.Right ? ledgeRightPosition : ledgeLeftPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
+
             isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
 
-            pos = inputState.direction == Directions.Left ? rightLegPosition : leftLegPosition;
-            pos.x += transform.position.x;
-            pos.y += transform.position.y;
-            onWallLeg = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-
-
-            RaycastHit2D slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
-            RaycastHit2D slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
-
+            //RaycastHit2D hit = Physics2D.Raycast(transform.position,  Vector2.left, collisionLayer);
+            //Debug.DrawLine(transform.position)
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.color = collisionColor;
 
-            var positions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition, bottomPosition, leftLegPosition, rightLegPosition };
+            var positions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition, bottomPosition };
             var rayPositions = new Vector2[] { slopeLeft, slopeRight };
 
 
@@ -100,8 +92,10 @@ namespace PlayerNew
                 Gizmos.DrawWireSphere(pos, collisionRadius);
             }
 
-            Debug.DrawRay(transform.position, Vector2.right * lineLength, Color.green);
-            Debug.DrawRay(transform.position, Vector2.left * lineLength, Color.green);
+            foreach(var rayPosition in rayPositions)
+            {
+
+            }
         }
     }
 
