@@ -14,7 +14,7 @@ namespace PlayerNew
         
 
         private Vector2 dirFacing;
-        private float lastDashTime = 0;
+        private float lastDashTime;
 
         private void Start()
         {
@@ -28,21 +28,61 @@ namespace PlayerNew
             var dash = inputState.GetButtonValue(inputButtons[0]);
             var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);
 
+
+            //Debug.Log(Time.deltaTime + " - " + lastDashTime);    
+
+            //    if (dash && dashHold < 0.1f && Time.deltaTime - lastDashTime > dashDelay)
+            //    {
+            //        if (!collisionState.grounded)
+            //        {
+            //            body2d.gravityScale = 0;
+            //        }
+
+            //        OnDash(facingDir);
+            //    }
+            //    else
+            //    {
+            //        if (body2d.gravityScale <= 0)
+            //        {
+            //            if (body2d.drag >= 100f)
+            //            {
+            //                body2d.drag = 0;
+            //            }
+            //            body2d.gravityScale = 20f;
+            //        }
+            //        dashing = false;
+            //    }
+
             if (dash && dashHold < 0.1f)
             {
+                Debug.Log("dashing here");
                 OnDash(facingDir);
             }
             else
             {
-                if (dash && dashHold < 0.1f && Time.time - lastDashTime > dashDelay)
+                if (dash && dashHold < 0.1f && Time.deltaTime - lastDashTime > dashDelay)
                 {
+                    if (!collisionState.grounded)
+                    {
+                        body2d.gravityScale = 0;
+                    }
+
                     OnDash(facingDir);
                 }
                 else
                 {
+                    if (body2d.gravityScale <= 0)
+                    {
+                        if (body2d.drag >= 100f)
+                        {
+                            body2d.drag = 0;
+                        }
+                        body2d.gravityScale = 20f;
+                    }
                     dashing = false;
                 }
             }
+
 
             //if (dashing)
             //{
@@ -78,6 +118,7 @@ namespace PlayerNew
         {
             var vel = body2d.velocity;
             lastDashTime -= Time.time;
+            body2d.velocity = Vector2.zero;
             body2d.AddForce(new Vector2(facingDir * dashForce, vel.y), ForceMode2D.Force);
             dashing = true;
         }
