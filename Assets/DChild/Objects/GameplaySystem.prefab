@@ -43,7 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8122af7a27b38f4892887b92de143dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_parentUI: {fileID: 0}
   m_healthUI: {fileID: 0}
+  m_offset: {x: 0, y: 0, z: 0}
 --- !u!1 &1799503189760083926
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,49 +312,22 @@ MonoBehaviour:
       Entry: 7
       Data: 13|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
-      Entry: 7
-      Data: 14|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[DChild.Serialization.ISaveData,
-        Assembly-CSharp]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 15|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
+      Entry: 6
       Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: m_zoneDatas
       Entry: 7
-      Data: 16|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 14|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
-      Entry: 7
-      Data: 17|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[DChild.Serialization.ISaveData,
-        Assembly-CSharp]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 15
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
+      Entry: 6
       Data: 
     - Name: 
       Entry: 8
       Data: 
-    - Name: 
-      Entry: 8
+    - Name: m_miscDatas
+      Entry: 6
       Data: 
     - Name: 
       Entry: 8
@@ -374,7 +349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2624314046681382207
 Transform:
   m_ObjectHideFlags: 0
@@ -668,6 +643,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -965,6 +941,8 @@ MonoBehaviour:
   m_player: {fileID: 0}
   m_input: {fileID: 0}
   m_overrideController: {fileID: 0}
+  m_respawnDelay:
+    m_startTime: 0
   m_autoReflex:
     m_slowValue: 0
     m_duration: 0.1

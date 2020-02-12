@@ -33,8 +33,16 @@ namespace PlayerNew
         private void FixedUpdate()
         {
             absValX = Mathf.Abs(body2D.velocity.x);
+            if (absValX > 0 && absValX < 1)
+            {
+                absValX = 0;
+            }
 
             absValY = Mathf.Abs(body2D.velocity.y);
+            if (absValY > 0 && absValY < 1)
+            {
+                absValY = 0;
+            }
         }
 
         public void SetButtonValue(Buttons key, bool value)
