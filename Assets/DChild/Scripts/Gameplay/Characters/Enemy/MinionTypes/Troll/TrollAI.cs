@@ -147,6 +147,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
 
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_poundFX;
@@ -384,7 +386,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Pound:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation);
+                            if (m_edgeSensor.isDetecting)
+                                m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation);
+                            else
+                                m_stateHandle.ApplyQueuedState();
                             break;
                         case Attack.Punch:
                             m_animation.EnableRootMotion(true, false);
@@ -392,7 +397,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.OraOra:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation);
+                            if (m_edgeSensor.isDetecting)
+                                m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation);
+                            else
+                                m_stateHandle.ApplyQueuedState();
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -402,26 +410,27 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            m_attackDecider.DecideOnAttack();
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                             {
-                                m_attackDecider.DecideOnAttack();
-                                if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
-                                {
-                                    m_movement.Stop();
-                                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    m_stateHandle.SetState(State.Attacking);
-                                }
-                                else
+                                m_movement.Stop();
+                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.SetState(State.Attacking);
+                            }
+                            else
+                            {
+                                if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_animation.EnableRootMotion(false, false);
                                     m_animation.SetAnimation(0, m_info.run.animation, true);
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed);
                                 }
-                            }
-                            else
-                            {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                else
+                                {
+                                    m_movement.Stop();
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
                             }
                         }
                         else
