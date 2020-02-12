@@ -13,26 +13,46 @@ namespace DChild.Gameplay.Environment
         private IdlingCreatureData m_idlingCreatureData;
 
         private SkeletonAnimation m_animation;
+        private bool m_isAnimationStateReady;
+
+        private int m_currentIndex;
+        private int m_numberOfRepeatsOnSameIndex;
+        private const int MAXANIMATIONREPEATS = 3;
 
         private void Awake()
         {
             m_animation = GetComponentInChildren<SkeletonAnimation>();
         }
 
-        void Start()
+        private void Start()
         {
-            SelectRandomAnimationFromList();
+            SelectRandomAnimationFromList(UnityEngine.Random.Range(0f, 2f));
+            m_isAnimationStateReady = true;
         }
 
-        private void SelectRandomAnimationFromList()
+        private void SelectRandomAnimationFromList(float delay = 0)
         {
             if (m_animation != null)
             {
                 if (m_idlingCreatureData.animationList.Length > 0)
                 {
-                    int randomIndex = UnityEngine.Random.Range(0, m_idlingCreatureData.animationList.Length);
+                    int randomIndex = 0;
+                    do
+                    {
+                        randomIndex = UnityEngine.Random.Range(0, m_idlingCreatureData.animationList.Length);
+                        if (m_currentIndex == randomIndex)
+                        {
+                            m_numberOfRepeatsOnSameIndex++;
+                        }
+                        else
+                        {
+                            m_currentIndex = randomIndex;
+                            m_numberOfRepeatsOnSameIndex = 0;
+                        }
+                    } while (m_numberOfRepeatsOnSameIndex == MAXANIMATIONREPEATS && m_currentIndex == randomIndex);
 
-                    m_animation.state.SetAnimation(0, m_idlingCreatureData.animationList[randomIndex], true);
+
+                    m_animation.state.SetAnimation(0, m_idlingCreatureData.animationList[m_currentIndex], true).Delay = delay;
                     m_animation.state.Complete += CallSelectRandomAnimationFromList;
                 }
             }
@@ -40,7 +60,10 @@ namespace DChild.Gameplay.Environment
 
         private void OnEnable()
         {
-            SelectRandomAnimationFromList();
+            if (m_isAnimationStateReady)
+            {
+                SelectRandomAnimationFromList(UnityEngine.Random.Range(0f, 1f));
+            }
         }
 
         private void OnDisable()
