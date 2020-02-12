@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4509155403230898480}
   - component: {fileID: 2987794272306646820}
   - component: {fileID: 4606725880621409787}
-  - component: {fileID: 1272582555543513046}
-  - component: {fileID: 6052339010765640836}
+  - component: {fileID: 828514915736899130}
+  - component: {fileID: 2072853853457658919}
   m_Layer: 13
   m_Name: ATKbb
   m_TagString: Untagged
@@ -70,7 +70,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
---- !u!60 &1272582555543513046
+--- !u!60 &828514915736899130
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,7 +101,7 @@ PolygonCollider2D:
       - {x: -4.52063, y: 6.137011}
       - {x: -8.653106, y: 8.53326}
       - {x: -11.540382, y: 8.385717}
---- !u!60 &6052339010765640836
+--- !u!60 &2072853853457658919
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -337,6 +337,7 @@ Transform:
   m_Children:
   - {fileID: 4022847749309350462}
   - {fileID: 5734500856480116638}
+  - {fileID: 854796975581076211}
   - {fileID: 6408385714467916379}
   m_Father: {fileID: 2898836489464412509}
   m_RootOrder: 1
@@ -368,6 +369,7 @@ MonoBehaviour:
   m_sensors:
   - {fileID: 6806083368054415990}
   - {fileID: 2170676635863732632}
+  - {fileID: 7937777945834943856}
   m_useDistance: 1
   m_castPerDistance: 0.5
   m_useTime: 1
@@ -418,7 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_config: {fileID: 0}
+    m_config: {fileID: 11400000, guid: 85eb7210a2ae6a647a4e69bb9af636ca, type: 2}
     m_rayColor: {r: 1, g: 0.08614111, b: 0, a: 1}
   m_enable: 1
 --- !u!114 &3757267939591972217
@@ -1522,7 +1524,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3603153313760383971}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &4514024502030697455
 BoxCollider2D:
@@ -1914,6 +1916,68 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+--- !u!1 &8382255492344677605
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 854796975581076211}
+  - component: {fileID: 7937777945834943856}
+  - component: {fileID: 2454641595302143029}
+  m_Layer: 13
+  m_Name: EdgeSensor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &854796975581076211
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8382255492344677605}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3603153313760383971}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7937777945834943856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8382255492344677605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_multiRaycast:
+    m_config: {fileID: 11400000, guid: d3cfdefe08bf29f4f8c99a371c4f472b, type: 2}
+    m_rayColor: {r: 1, g: 0, b: 0.7532368, a: 1}
+  m_enable: 1
+--- !u!114 &2454641595302143029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8382255492344677605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_leftRotation: 270
+  m_rightRotation: 90
 --- !u!1 &8630284703602539719
 GameObject:
   m_ObjectHideFlags: 0
@@ -2121,7 +2185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_multiRaycast:
-    m_config: {fileID: 0}
+    m_config: {fileID: 11400000, guid: 8e6853c49221bde43a887b83550eb6d4, type: 2}
     m_rayColor: {r: 0, g: 1, b: 0, a: 1}
   m_enable: 1
 --- !u!114 &6199204817379021527

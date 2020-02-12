@@ -1,12 +1,10 @@
 ﻿using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft;
 using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies

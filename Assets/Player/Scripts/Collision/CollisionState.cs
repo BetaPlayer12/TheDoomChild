@@ -44,8 +44,10 @@ namespace PlayerNew
         private void FixedUpdate()
         {
             var pos = bottomPosition;
+            Vector2 lineDir;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
+
 
             if (disableGround)
             {
@@ -64,12 +66,18 @@ namespace PlayerNew
             pos.x += transform.position.x;
             pos.y += transform.position.y;
 
-            onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+            lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
+            //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+            onWall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
 
             pos = inputState.direction == Directions.Right ? ledgeRightPosition : ledgeLeftPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
-            isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+
+            lineDir = inputState.direction == Directions.Right  ? Vector2.right : Vector2.left;
+            //isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+            isTouchingLedge = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
+
 
             pos = inputState.direction == Directions.Left ? rightLegPosition : leftLegPosition;
             pos.x += transform.position.x;
@@ -82,27 +90,38 @@ namespace PlayerNew
 
         }
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = collisionColor;
+        //private void OnDrawGizmos()
+        //{
+        //    Gizmos.color = collisionColor;
 
-            var positions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition, bottomPosition, leftLegPosition, rightLegPosition };
-            var rayPositions = new Vector2[] { slopeLeft, slopeRight };
+        //    var positions = new Vector2[] {bottomPosition, leftLegPosition, rightLegPosition };
+        //    var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
 
 
 
-            foreach (var position in positions)
-            {
-                var pos = position;
-                pos.x += transform.position.x;
-                pos.y += transform.position.y;
 
-                Gizmos.DrawWireSphere(pos, collisionRadius);
-            }
+        //    foreach (var position in positions)
+        //    {
+        //        var pos = position;
+        //        pos.x += transform.position.x;
+        //        pos.y += transform.position.y;
 
-            Debug.DrawRay(transform.position, Vector2.right * lineLength, Color.green);
-            Debug.DrawRay(transform.position, Vector2.left * lineLength, Color.green);
-        }
+        //        Gizmos.DrawWireSphere(pos, collisionRadius);
+        //    }
+
+        //    foreach (var rayPosition in rayPositions)
+        //    {
+        //        var pos = rayPosition;
+
+        //        var lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
+        //        pos.x += transform.position.x;
+        //        pos.y += transform.position.y;
+        //        Gizmos.DrawRay(pos, lineDir * lineLength);
+        //    }
+
+        //    Debug.DrawRay(transform.position, Vector2.right * lineLength, Color.green);
+        //    Debug.DrawRay(transform.position, Vector2.left * lineLength, Color.green);
+        //}
     }
 
 }
