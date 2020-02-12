@@ -80,6 +80,14 @@ namespace DChild.Gameplay.Cinematics.Cameras
             m_noiseModule = GetComponent<CinemachineNoise>();
             m_vCam.enabled = false;
         }
+
+#if UNITY_EDITOR
+        [Button, HideInEditorMode]
+        private void UseThis()
+        {
+            GameplaySystem.cinema.TransistionTo(this);
+        }
+#endif
     }
 
 }

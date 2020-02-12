@@ -385,22 +385,19 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Pound:
+                            Debug.Log("Pound Attack");
                             m_animation.EnableRootMotion(true, false);
-                            if (m_edgeSensor.isDetecting)
-                                m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation);
-                            else
-                                m_stateHandle.ApplyQueuedState();
+                            m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation);
                             break;
                         case Attack.Punch:
+                            Debug.Log("Punch Attack");
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
                             break;
                         case Attack.OraOra:
+                            Debug.Log("Oraora Attack");
                             m_animation.EnableRootMotion(true, false);
-                            if (m_edgeSensor.isDetecting)
-                                m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation);
-                            else
-                                m_stateHandle.ApplyQueuedState();
+                            m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -408,8 +405,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
+                        Debug.Log("Is Facing Target: " + IsFacingTarget());
                         if (IsFacingTarget())
                         {
+                            Debug.Log("ATTACKING PLAYER");
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                             {
@@ -428,6 +427,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    m_attackDecider.hasDecidedOnAttack = false;
                                     m_movement.Stop();
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }

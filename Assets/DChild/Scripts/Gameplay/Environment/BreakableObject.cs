@@ -156,11 +156,11 @@ namespace DChild.Gameplay.Environment
         [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
         private void FixObject()
         {
-            m_isDestroyed = true;
-            m_onDestroy?.Invoke();
+            m_isDestroyed = false;
+            m_onFix?.Invoke();
             if (m_createDebris)
             {
-                InstantiateDebris(m_debris);
+                DestroyInstantiatedDebris();
             }
         }
 
