@@ -30,6 +30,7 @@ namespace DChild.StateMachine
 
             }
         }
+
         private void ToggleColliderStates(Animator animator)
         {
             var colliders = animator.GetComponentsInChildren<Collider2D>();
