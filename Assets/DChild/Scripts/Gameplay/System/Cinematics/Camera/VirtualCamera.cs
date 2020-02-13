@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField]
         private bool m_isAlreadyTracking;
         [SerializeField]
-        [HideInInspector]
+        [ReadOnly]
         private CinemachineVirtualCamera m_vCam;
         private CinemachineNoise m_noiseModule;
 
