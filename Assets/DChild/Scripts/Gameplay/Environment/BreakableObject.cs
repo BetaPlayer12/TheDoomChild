@@ -96,6 +96,7 @@ namespace DChild.Gameplay.Environment
         {
             var instance = Instantiate(debris, m_object.position, Quaternion.identity);
             m_instantiatedDebris = instance.GetComponent<Debris>();
+            m_instantiatedDebris.transform.localScale = transform.localScale;
             m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
             m_leftOverDebris = m_instantiatedDebris.GetDetachables();
         }
@@ -155,11 +156,11 @@ namespace DChild.Gameplay.Environment
         [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
         private void FixObject()
         {
-            m_isDestroyed = true;
-            m_onDestroy?.Invoke();
+            m_isDestroyed = false;
+            m_onFix?.Invoke();
             if (m_createDebris)
             {
-                InstantiateDebris(m_debris);
+                DestroyInstantiatedDebris();
             }
         }
 

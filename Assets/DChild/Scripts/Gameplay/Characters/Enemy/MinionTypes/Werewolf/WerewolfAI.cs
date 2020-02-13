@@ -110,11 +110,14 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
+        private bool m_isDetecting;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -142,8 +145,9 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                if(m_stateHandle.currentState != State.Chasing)
+                if(m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
+                    m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
                 m_currentPatience = 0;
@@ -170,6 +174,7 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_targetInfo.Set(null, null);
+                m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
             }
@@ -280,26 +285,27 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            m_attackDecider.DecideOnAttack();
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                             {
-                                m_attackDecider.DecideOnAttack();
-                                if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
-                                {
-                                    m_movement.Stop();
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    m_stateHandle.SetState(State.Attacking);
-                                }
-                                else
+                                m_movement.Stop();
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.SetState(State.Attacking);
+                            }
+                            else
+                            {
+                                if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_animation.EnableRootMotion(false, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
                                 }
-                            }
-                            else
-                            {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                else
+                                {
+                                    m_movement.Stop();
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
                             }
                         }
                         else

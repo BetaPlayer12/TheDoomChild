@@ -6,8 +6,10 @@
  * 
  **************************************/
 
+using DChild.Gameplay.Characters;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -53,6 +55,8 @@ namespace DChild.Gameplay.Environment
         [SerializeField, HideIf("m_hideOffState")]
         private UnityEvent m_offState;
 
+        public Vector2 position => transform.position;
+
         public ISaveData Save()
         {
             return new SaveData(m_isOn);
@@ -74,6 +78,12 @@ namespace DChild.Gameplay.Environment
                 m_startAsOffState?.Invoke();
                 m_collider.enabled = true;
             }
+        }
+
+        public void Interact(HorizontalDirection direction)
+        {
+            OnHit?.Invoke(this, new HitDirectionEventArgs(direction));
+            Interact();
         }
 
         public void SetAs(bool value)
@@ -157,6 +167,10 @@ namespace DChild.Gameplay.Environment
         [SerializeField, HideInInspector]
         private bool m_hideOffState;
 
+
+
+        public event EventAction<HitDirectionEventArgs> OnHit;
+
         private struct GizmoInfo
         {
             public Vector3 position { get; }
@@ -196,8 +210,9 @@ namespace DChild.Gameplay.Environment
 
             Dictionary<GameObject, GizmoInfo> m_gizmosToDraw = new Dictionary<GameObject, GizmoInfo>();
 
-            HandleGizmoValidation(m_gizmosToDraw, m_onState, Color.green);
-            HandleGizmoValidation(m_gizmosToDraw, m_offState, Color.red);
+
+            HandleGizmoValidation(m_gizmosToDraw, m_onState, new Color(0, 0.5595117f, 1f));
+            HandleGizmoValidation(m_gizmosToDraw, m_offState, new Color(1, 0.7397324f, 0));
 
             foreach (var key in m_gizmosToDraw.Keys)
             {
@@ -252,7 +267,6 @@ namespace DChild.Gameplay.Environment
                 return ((Component)instance).transform.position;
             }
         }
-
 #endif
     }
 }

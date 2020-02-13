@@ -118,6 +118,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
 
         [SerializeField]
         private GameObject m_screamHitbox;
@@ -264,26 +266,27 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            m_screamHitbox.SetActive(false);
+                            if (IsTargetInRange(m_info.attack.range))
                             {
-                                m_screamHitbox.SetActive(false);
-                                if (IsTargetInRange(m_info.attack.range))
+                                m_movement.Stop();
+                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.SetState(State.Attacking);
+                            }
+                            else
+                            {
+                                m_animation.EnableRootMotion(false, false);
+                                if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting && m_edgeSensor.isDetecting)
                                 {
-                                    m_movement.Stop();
-                                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    m_stateHandle.SetState(State.Attacking);
-                                }
-                                else
-                                {
-                                    m_animation.EnableRootMotion(false, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
                                 }
-                            }
-                            else
-                            {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                else
+                                {
+                                    m_movement.Stop();
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
                             }
                         }
                         else

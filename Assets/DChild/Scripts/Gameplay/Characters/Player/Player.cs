@@ -11,6 +11,7 @@ using DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using DChild.Gameplay.Characters.Players.Behaviour;
+using PlayerNew;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -51,7 +52,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
         [SerializeField]
-        private PlayerCharacterController m_controller;
+        private InputManager m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
         [SerializeField]
@@ -129,8 +130,11 @@ namespace DChild.Gameplay.Characters.Players
         {
             OnDeath?.Invoke(this, eventArgs);
             m_controlledCharacter.physics.SetVelocity(Vector2.zero);
-            m_groundednessHandle.enabled = false;
-            m_groundednessHandle.ResetAnimationParameters();
+            if (m_groundednessHandle != null)
+            {
+                m_groundednessHandle.enabled = false;
+                m_groundednessHandle.ResetAnimationParameters();
+            }
             m_controller.Disable();
             m_damageable.SetHitboxActive(false);
         }
