@@ -14,6 +14,7 @@ namespace DChild.Gameplay.Environment
 
         private SkeletonAnimation m_animation;
         private bool m_isAnimationStateReady;
+        private bool m_isListening;
 
         private int m_currentIndex;
         private int m_numberOfRepeatsOnSameIndex;
@@ -26,6 +27,8 @@ namespace DChild.Gameplay.Environment
 
         private void Start()
         {
+            m_animation.state.Complete += CallSelectRandomAnimationFromList;
+            m_isListening = true;
             SelectRandomAnimationFromList(UnityEngine.Random.Range(0f, 2f));
             m_isAnimationStateReady = true;
         }
@@ -53,7 +56,7 @@ namespace DChild.Gameplay.Environment
 
 
                     m_animation.state.SetAnimation(0, m_idlingCreatureData.animationList[m_currentIndex], true).Delay = delay;
-                    m_animation.state.Complete += CallSelectRandomAnimationFromList;
+
                 }
             }
         }
@@ -63,24 +66,28 @@ namespace DChild.Gameplay.Environment
             if (m_isAnimationStateReady)
             {
                 SelectRandomAnimationFromList(UnityEngine.Random.Range(0f, 1f));
+                if (m_isListening == false)
+                {
+                    m_animation.state.Complete += CallSelectRandomAnimationFromList;
+                }
             }
         }
 
         private void OnDisable()
         {
-            m_animation.state.Complete += FinishAnimation;
+            m_animation.state.Complete -= CallSelectRandomAnimationFromList;
+            m_isListening = false;
         }
 
         private void CallSelectRandomAnimationFromList(TrackEntry trackEntry)
         {
-            m_animation.state.Complete -= CallSelectRandomAnimationFromList;
             SelectRandomAnimationFromList();
         }
 
-        private void FinishAnimation(TrackEntry trackEntry)
-        {
-            m_animation.state.ClearTracks();
-            m_animation.state.Complete -= FinishAnimation;
-        }
+        //private void FinishAnimation(TrackEntry trackEntry)
+        //{
+        //    m_animation.state.ClearTracks();
+        //    m_animation.state.Complete -= FinishAnimation;
+        //}
     }
 }
