@@ -4,10 +4,13 @@
  * 
  ***************************************************/
 
+using UnityEngine;
+
 namespace DChild.Gameplay.Combat
 {
     public interface IDamageDealer
     {
+        Vector2 position { get; }
         void Damage(TargetInfo target, BodyDefense targetDefense);
     }
 }
