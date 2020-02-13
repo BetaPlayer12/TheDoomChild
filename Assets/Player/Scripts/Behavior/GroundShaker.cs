@@ -6,6 +6,14 @@ namespace PlayerNew
 {
     public class GroundShaker : PlayerBehaviour
     {
+        [SerializeField]
+        private ParticleSystem deathEarthShakerHelicopter;
+        [SerializeField]
+        private ParticleSystem deathEarthShakerPreloop;
+        [SerializeField]
+        private ParticleSystem deathEarthShakerLoop;
+        [SerializeField]
+        private ParticleSystem deathEarthShakerImpact;
 
         public float midAirDelay;
         public bool groundSmash;
@@ -38,7 +46,29 @@ namespace PlayerNew
             }
         }
 
-        IEnumerator GroundSmashDelayRoutine()
+        private void StartEarthShakerFX()
+        {
+            deathEarthShakerHelicopter.Play();
+        }
+
+        private void DeathEarthShakerPreLoop()
+        {
+            deathEarthShakerHelicopter.Stop();
+            deathEarthShakerPreloop.Play();
+        }
+        private void DeathEarthShakerLoop()
+        {
+            deathEarthShakerPreloop.Stop();
+            deathEarthShakerLoop.Play();
+        }
+
+        private void DeathEarthShakerImpact()
+        {
+            deathEarthShakerLoop.Stop();
+            deathEarthShakerImpact.Play();
+        }
+
+            IEnumerator GroundSmashDelayRoutine()
         {
             Debug.Log("yeild");
             yield return new WaitForSeconds(midAirDelay);
@@ -50,6 +80,7 @@ namespace PlayerNew
 
         public void GroundSmashFinishAnimation()
         {
+           
             groundSmash = false;
             Debug.Log("finish animation");
             body2d.gravityScale = defGravity;

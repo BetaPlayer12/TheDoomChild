@@ -25,6 +25,7 @@ namespace PlayerNew
         public float resetTime;
 
         public Transform attackPos;
+        public Collider2D attackCollider;
         public LayerMask whatIsEnemies;
         public float attackRange;
 
@@ -35,10 +36,17 @@ namespace PlayerNew
         private ParticleSystem m_swordCombo1FX;
         [SerializeField]
         private ParticleSystem m_swordCombo2FX;
+        [SerializeField]
+        private ParticleSystem m_VFX_CrouchSlashX;
+        [SerializeField]
+        private ParticleSystem m_VFX_JumpUpSlashFX;
+        [SerializeField]
+        private ParticleSystem m_VFX_SwordUpSlashFX;
 
 
         private void Start()
         {
+            attackCollider.enabled = false;
             crouchState = GetComponent<Crouch>();
         }
 
@@ -47,6 +55,7 @@ namespace PlayerNew
         {
             var canSlash = inputState.GetButtonValue(inputButtons[0]);
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
+            var downButton = inputState.GetButtonValue(inputButtons[1]);
             var upButton = inputState.GetButtonValue(inputButtons[2]);
 
 
@@ -110,20 +119,20 @@ namespace PlayerNew
                         }
                         ToggleScripts(false);
                         Collider2D[] objToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
-                        if (attackCounter == 0)
+                        if (attackCounter == 0 && !upButton && !downButton)
                         {
                             m_forwardSlash1FX.Play();
                         }
-                        else if (attackCounter == 1)
+                        else if (attackCounter == 1 && !upButton && !downButton)
                         {
                             m_swordCombo1FX.Play();
                         }
-                        else if (attackCounter == 2)
+                        else if (attackCounter == 2 && !upButton && !downButton)
                         {
                             m_swordCombo2FX.Play();
                         }
                     attacking = true;
-
+                    attackCollider.enabled = true;
                     }
 
                     
@@ -159,8 +168,23 @@ namespace PlayerNew
             Gizmos.DrawWireSphere(attackPos.position, attackRange);
         }
 
+        private void CrouchSlashFX()
+        {
+            m_VFX_CrouchSlashX.Play();
+        }
+
+        private void JumpUpSlashFX()
+        {
+            m_VFX_JumpUpSlashFX.Play();
+        }
+
+        private void SwordUpSlashFX()
+        {
+            m_VFX_SwordUpSlashFX.Play();
+        }
         private void FinishAttackAnim()
         {
+            attackCollider.enabled = false;
             attackCounter++;
             attacking = false;
             ToggleScripts(true);

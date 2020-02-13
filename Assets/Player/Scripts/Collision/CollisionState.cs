@@ -24,6 +24,10 @@ namespace PlayerNew
         public Vector2 slopeLeft = Vector2.zero;
         public Vector2 slopeRight = Vector2.zero;
 
+        public RaycastHit2D slopeLeftHit;
+        public RaycastHit2D slopeRightHit;
+        public RaycastHit2D slopeBotHit;
+
         public float collisionRadius = 10.0f;
         public Color collisionColor = Color.red;
         public float lineLength; 
@@ -58,6 +62,7 @@ namespace PlayerNew
             }else
             {
                 grounded = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+               
             }
 
            
@@ -84,44 +89,45 @@ namespace PlayerNew
             pos.y += transform.position.y;
             onWallLeg = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
 
+            slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
+            slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
+            slopeBotHit = Physics2D.Raycast(transform.position, Vector2.down, lineLength, collisionLayer);
 
-            RaycastHit2D slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
-            RaycastHit2D slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
 
         }
 
-        //private void OnDrawGizmos()
-        //{
-        //    Gizmos.color = collisionColor;
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = collisionColor;
 
-        //    var positions = new Vector2[] {bottomPosition, leftLegPosition, rightLegPosition };
-        //    var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
-
-
+            var positions = new Vector2[] {bottomPosition, leftLegPosition, rightLegPosition };
+            var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
 
 
-        //    foreach (var position in positions)
-        //    {
-        //        var pos = position;
-        //        pos.x += transform.position.x;
-        //        pos.y += transform.position.y;
 
-        //        Gizmos.DrawWireSphere(pos, collisionRadius);
-        //    }
 
-        //    foreach (var rayPosition in rayPositions)
-        //    {
-        //        var pos = rayPosition;
+            foreach (var position in positions)
+            {
+                var pos = position;
+                pos.x += transform.position.x;
+                pos.y += transform.position.y;
 
-        //        var lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
-        //        pos.x += transform.position.x;
-        //        pos.y += transform.position.y;
-        //        Gizmos.DrawRay(pos, lineDir * lineLength);
-        //    }
+                Gizmos.DrawWireSphere(pos, collisionRadius);
+            }
 
-        //    Debug.DrawRay(transform.position, Vector2.right * lineLength, Color.green);
-        //    Debug.DrawRay(transform.position, Vector2.left * lineLength, Color.green);
-        //}
+            //foreach (var rayPosition in rayPositions)
+            //{
+            //    var pos = rayPosition;
+
+            //    var lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
+            //    pos.x += transform.position.x;
+            //    pos.y += transform.position.y;
+            //    Gizmos.DrawRay(pos, lineDir * lineLength);
+            //}
+
+            Debug.DrawRay(transform.position, Vector2.right * lineLength, Color.green);
+            Debug.DrawRay(transform.position, Vector2.left * lineLength, Color.green);
+        }
     }
 
 }

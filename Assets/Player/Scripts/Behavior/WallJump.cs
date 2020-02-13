@@ -12,7 +12,7 @@ namespace PlayerNew
 
         private float timeElapsed = 0;
 
-        private void Update()
+        private void FixedUpdate()
         {
             var canJump = inputState.GetButtonValue(inputButtons[0]);
             var holdJump = inputState.GetButtonHoldTime(inputButtons[0]);

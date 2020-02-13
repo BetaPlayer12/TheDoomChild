@@ -10,6 +10,12 @@ namespace PlayerNew
         public bool thrustAttack;
         public bool thrustHasStarted;
         public float timeToCharge;
+        [SerializeField]
+        private ParticleSystem swordThrustBuildUp;
+        [SerializeField]
+        private ParticleSystem swordThrustBody;
+        [SerializeField]
+        private ParticleSystem slashSwordThrustImpacts;
         // Start is called before the first frame update
         void Start()
         {
@@ -24,12 +30,15 @@ namespace PlayerNew
             if (holdTime > timeToCharge && !chargingAttack)
             {
                 Debug.Log("Charging");
+                swordThrustBuildUp.Play();
                 thrustAttack = true;
                 ToggleScripts(false);
 
             }
             else if (chargingAttack && holdTime == 0)
             {
+                swordThrustBuildUp.Stop();
+                swordThrustBody.Play();
                 Debug.Log("Attack");
                 chargingAttack = false;
             }
@@ -37,12 +46,21 @@ namespace PlayerNew
 
         private void StartChargeLoop()
         {
+            
+            Debug.Log("charge start ");
             chargingAttack = true;
             thrustHasStarted = true;
+           
+        }
+
+        private void ThrustImpact()
+        {
+            slashSwordThrustImpacts.Play();
         }
 
         private void FinishThrustAttackAnime()
         {
+            
             thrustAttack = false;
             thrustHasStarted = false;
             ToggleScripts(true);
