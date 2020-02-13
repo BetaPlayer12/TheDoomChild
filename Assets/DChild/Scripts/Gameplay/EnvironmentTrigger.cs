@@ -41,6 +41,18 @@ namespace DChild.Gameplay
                 m_exitEvents.RemoveAllListeners();
             }
         }
+
+        [Button,HideInEditorMode]
+        private void OnEnter()
+        {
+            m_enterEvents?.Invoke();
+        }
+
+        [Button,HideIf("m_oneTimeOnly"), HideInEditorMode]
+        private void OnExit()
+        {
+            m_exitEvents?.Invoke();
+        }
 #endif
     }
 }
