@@ -37,8 +37,12 @@ namespace DChild.Gameplay.Systems.Serialization
 #if UNITY_EDITOR
         public void Set(Scene scene, Vector2 position)
         {
-            m_scene.Set(scene);
+            Debug.Log(scene);
+            //Keeps resetting to random value.... Why???
+            //m_scene.Set(scene);
             m_position = position;
+            Debug.LogError("Is Being Set", this);
+            throw new System.Exception("Test Message");
         }
 #endif
 

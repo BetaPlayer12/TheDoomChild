@@ -57,11 +57,12 @@ namespace DChild.Gameplay.Systems
                 Cache<LoadZoneFunctionHandle> cacheLoadZoneHandle = Cache<LoadZoneFunctionHandle>.Claim();
                 cacheLoadZoneHandle.Value.Initialize(m_destination, character, cacheLoadZoneHandle);
                 GameSystem.LoadZone(m_destination.scene, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                GameplaySystem.ClearCaches();
 
             }
             else if (type == TransitionType.Exit)
             {
-                character.transform.position = m_poster.data.position;
+                //character.transform.position = m_poster.data.position;
 
                 yield return new WaitForSeconds(m_transitionDelay);
 

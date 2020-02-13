@@ -23,6 +23,7 @@ namespace DChild.Menu
 
         private static List<string> scenesToLoad;
         private static List<string> scenesToUnload;
+        public static event EventAction<EventActionArgs> LoadingDone;
         public static event EventAction<EventActionArgs> SceneDone;
         public static LoadType loadType { get; private set; }
 
@@ -141,6 +142,8 @@ namespace DChild.Menu
             {
                 m_loadOperations[i].allowSceneActivation = true;
             }
+            yield return endOfFrame;
+            SceneDone?.Invoke(this, EventActionArgs.Empty);
             if (loadType == LoadType.Smart)
             {
                 GameEventMessage.SendEvent("Load Done");
@@ -178,7 +181,7 @@ namespace DChild.Menu
         private void OnDestroy()
         {
             m_animation.AnimationEnd -= OnAnimationEnd;
-            SceneDone?.Invoke(this, EventActionArgs.Empty);
+            LoadingDone?.Invoke(this, EventActionArgs.Empty);
         }
     }
 }
