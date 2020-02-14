@@ -11,10 +11,9 @@ namespace DChild
 {
     public class GameDataManager : MonoBehaviour
     {
-#if UNITY_EDITOR
         [SerializeField]
         private bool m_doNotUseExistingFiles; 
-#endif
+
         [SerializeField, Title("Save File"), HideLabel]
         private CampaignSlotList m_campaignSlotList;
 
@@ -41,14 +40,10 @@ namespace DChild
 
         private void Awake()
         {
-#if UNITY_EDITOR
             if(m_doNotUseExistingFiles == false)
             {
                 InitializeCampaginSlotList();
             }
-#else
-            InitializeCampaginSlotList();
-#endif
         }
     }
 }
