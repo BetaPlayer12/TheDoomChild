@@ -128,7 +128,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private Bone m_bone;
 
         private bool m_canShoot;
+<<<<<<< HEAD
         private Vector2 m_boneDefaultPos;
+=======
+        //private bool m_isDed;
+        private Vector2 m_boneDefaultPos;
+        [SerializeField]
+        private Transform m_modelTF;
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
 
         protected override void Start()
         {
@@ -183,14 +190,27 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.flinch1Animation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             //StartCoroutine(DeathRoutine());
+<<<<<<< HEAD
             StopAllCoroutines();
             m_stateHandle.OverrideState(State.Dead);
+=======
+            //StopAllCoroutines();
+            //m_stateHandle.OverrideState(State.Dead);
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+<<<<<<< HEAD
             //StopAllCoroutines();
             //m_stateHandle.OverrideState(State.Dead);
+=======
+            //m_isDed = true;
+            m_hitbox.SetInvulnerability(true);
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dead);
+            StartCoroutine(DeathRoutine());
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
         }
 
         //Patience Handler
@@ -215,21 +235,36 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.idleAnimation, false).TimeScale = 3f;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
             m_bone.SetLocalPosition(m_boneDefaultPos);
+<<<<<<< HEAD
             m_hitbox.SetInvulnerability(true);
+=======
+            string deathAnim;
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
             if (transform.rotation.z == -1 || transform.rotation.z == 1)
             {
-                m_animation.SetAnimation(0, m_info.deathTopAnimation, false);
+                deathAnim = m_info.deathTopAnimation;
+                //m_animation.SetAnimation(0, m_info.deathTopAnimation, false);
             }
             else
             {
-                m_animation.SetAnimation(0, m_info.deathSideAnimation, false);
+                Debug.Log("Bulb Rotation " + transform.rotation.z);
+                deathAnim = m_info.deathSideAnimation;
+                //if()
+                m_modelTF.localScale = new Vector3(transform.rotation.z >= 0.5f ? -m_modelTF.localScale.x : m_modelTF.localScale.x, m_modelTF.localScale.y, m_modelTF.localScale.z);
+                //m_animation.SetAnimation(0, m_info.deathSideAnimation, false);
             }
-            //yield return new WaitForAnimationComplete(m_animation.animationState, deathAnim);
+            m_animation.SetAnimation(0, deathAnim, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, deathAnim);
             yield return new WaitForSeconds(m_info.respawnTime);
+            m_modelTF.localScale = new Vector3(m_modelTF.localScale.x > 0 ? -m_modelTF.localScale.x : m_modelTF.localScale.x, m_modelTF.localScale.y, m_modelTF.localScale.z);
             m_animation.SetAnimation(0, m_info.respawnAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.respawnAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(false);
+<<<<<<< HEAD
+=======
+            //m_isDed = false;
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
             m_canShoot = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -319,7 +354,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Dead:
                     //StopAllCoroutines();
+<<<<<<< HEAD
                     StartCoroutine(DeathRoutine());
+=======
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
                     break;
 
                 case State.Attacking:
@@ -368,6 +406,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
                     //m_canShoot = true;
+<<<<<<< HEAD
+=======
+                    //if (!m_isDed)
+                    //{
+                    //}
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
                     m_stateHandle.SetState(State.Chasing);
                     //if (m_targetInfo.isValid)
                     //{
