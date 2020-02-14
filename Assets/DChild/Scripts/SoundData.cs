@@ -41,6 +41,7 @@ namespace DChild
 
             public string eventName { get => m_eventName; }
 
+#if  UNITY_EDITOR
             protected IEnumerable GetEvents()
             {
                 ValueDropdownList<string> list = new ValueDropdownList<string>();
@@ -50,7 +51,8 @@ namespace DChild
                     list.Add(reference[i].Name);
                 }
                 return list;
-            }
+            } 
+#endif
         }
 
         [System.Serializable]
@@ -61,6 +63,7 @@ namespace DChild
 
             public string animationName { get => m_animationName; }
 
+#if UNITY_EDITOR
             protected IEnumerable GetAnimations()
             {
                 ValueDropdownList<string> list = new ValueDropdownList<string>();
@@ -70,7 +73,8 @@ namespace DChild
                     list.Add(reference[i].Name);
                 }
                 return list;
-            }
+            } 
+#endif
         }
 
         [SerializeField]
@@ -103,13 +107,13 @@ namespace DChild
                 m_animationStartInfo[i].Initialize(m_skeletonDataAsset);
             }
         } 
-#endif
 
         private void OnEnable()
         {
             InitializeEventInfo();
             InitializeAnimationInfo();
         }
+#endif
     }
 
 }
