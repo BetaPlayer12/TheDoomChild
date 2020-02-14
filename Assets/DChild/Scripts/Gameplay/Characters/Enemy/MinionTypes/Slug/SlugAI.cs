@@ -406,7 +406,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting /*&& m_edgeSensor.isDetecting*/)
+                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_animation.EnableRootMotion(true, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2f;
