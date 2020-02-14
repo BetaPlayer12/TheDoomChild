@@ -76,6 +76,8 @@ namespace DChild.Serialization
                 m_isOnAppend = true;
             }
 
+            list.Sort((x, y) => x.Text.CompareTo(y.Text));
+
             return list;
         }
 
