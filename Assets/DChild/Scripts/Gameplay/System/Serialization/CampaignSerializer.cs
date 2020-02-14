@@ -75,9 +75,12 @@ namespace DChild.Gameplay
         }
 
         [Button]
-        public void Load()
+        public void Load(bool byPassLoadingFromFile = false)
         {
-            SerializationHandle.Load(m_slot.id, ref m_slot);
+            if (byPassLoadingFromFile == false)
+            {
+                SerializationHandle.Load(m_slot.id, ref m_slot);
+            }
             CallPostDeserialization();
         }
 
