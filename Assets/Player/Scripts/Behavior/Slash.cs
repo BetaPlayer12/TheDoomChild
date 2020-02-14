@@ -52,11 +52,15 @@ namespace PlayerNew
         [SerializeField]
         private Collider2D m_swordCombo2AttackCollider;
         [SerializeField]
+<<<<<<< HEAD
+        private Collider2D m_swordThrustImpactAttackCollider;
+=======
         private Collider2D m_crouchSlashAttackCollider;
         [SerializeField]
         private Collider2D m_jumpSlashAttackCollider;
         [SerializeField]
         private Collider2D m_swordUpSlashAttackCollider;
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
 
         private void Start()
         {
@@ -226,6 +230,10 @@ namespace PlayerNew
                 case 2:
                     m_swordCombo2AttackCollider.enabled = false;
                     break;
+<<<<<<< HEAD
+            }
+
+=======
                 default:
                     break;
             }
@@ -234,6 +242,7 @@ namespace PlayerNew
             m_jumpSlashAttackCollider.enabled = false;
             m_swordUpSlashAttackCollider.enabled = false;
 
+>>>>>>> 5c5651ba52e7fff5ec3e3e41f3c713eb8ffb277f
             attackCounter++;
             attacking = false;
            
