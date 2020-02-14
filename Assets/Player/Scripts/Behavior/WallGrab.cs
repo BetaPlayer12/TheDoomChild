@@ -88,7 +88,7 @@ namespace PlayerNew
 
                 canLedgeGrab = true;
                // spriteRenderer.enabled = false;
-                transform.position = ledgePos1;
+               
 
 
 
@@ -126,7 +126,8 @@ namespace PlayerNew
         private void StartLedgeClimb()
         {
             //Debug.Log("On climb");
-            spriteRenderer.enabled = true;
+            //  spriteRenderer.enabled = true;
+            transform.position = ledgePos1;
         }
     }
 

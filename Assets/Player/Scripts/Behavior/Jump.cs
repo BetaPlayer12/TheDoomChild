@@ -41,10 +41,11 @@ namespace PlayerNew
             }
             else
             {
+                
 
                 if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay)
                 {
-
+                    
                     if (jumpsRemaining > 0)
                     {
                         OnJump();

@@ -27,10 +27,12 @@ namespace PlayerNew
         public RaycastHit2D slopeLeftHit;
         public RaycastHit2D slopeRightHit;
         public RaycastHit2D slopeBotHit;
+        public RaycastHit2D ledgeBotHit;
 
         public float collisionRadius = 10.0f;
         public Color collisionColor = Color.red;
-        public float lineLength; 
+        public float lineLength;
+        private float posDir;
 
         private InputState inputState;
         // Start is called before the first frame update
@@ -93,6 +95,10 @@ namespace PlayerNew
             slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
             slopeBotHit = Physics2D.Raycast(transform.position, Vector2.down, lineLength, collisionLayer);
 
+            posDir = inputState.direction == Directions.Left ? 1 : -1;
+            ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
+
+
 
         }
 
@@ -101,7 +107,7 @@ namespace PlayerNew
             Gizmos.color = collisionColor;
 
             var positions = new Vector2[] {bottomPosition, leftLegPosition, rightLegPosition };
-            var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
+            //var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
 
 
 
@@ -124,9 +130,9 @@ namespace PlayerNew
             //    pos.y += transform.position.y;
             //    Gizmos.DrawRay(pos, lineDir * lineLength);
             //}
-
-            Debug.DrawRay(transform.position, Vector2.right * lineLength, Color.green);
-            Debug.DrawRay(transform.position, Vector2.left * lineLength, Color.green);
+           
+            Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
+            
         }
     }
 

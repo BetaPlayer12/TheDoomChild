@@ -28,6 +28,7 @@ namespace PlayerNew
         public Collider2D attackCollider;
         public LayerMask whatIsEnemies;
         public float attackRange;
+        public bool holdingAttack;
 
         private Crouch crouchState;
         [SerializeField]
@@ -42,6 +43,8 @@ namespace PlayerNew
         private ParticleSystem m_VFX_JumpUpSlashFX;
         [SerializeField]
         private ParticleSystem m_VFX_SwordUpSlashFX;
+        [SerializeField]
+        private ParticleSystem m_VFX_JumpSwordDownSlashFX;
 
 
         private void Start()
@@ -101,7 +104,7 @@ namespace PlayerNew
 
                 if (timeBtwnAtck < 0)
                 {
-                    if (canSlash && holdTime < 0.1f && attacking == false)
+                    if (canSlash && holdTime < 0.1f && attacking == false && collisionState.grounded)
                     {
 
                         if (attackCounter == 0)
@@ -135,30 +138,29 @@ namespace PlayerNew
                     attackCollider.enabled = true;
                     }
 
-                    
-
-                    if (holdTime > attackHold)
-                    {
-                        //Debug.Log("holding attack");
-                    }
-
-                    
-
                     timeBtwnAtck = startTimeBtwAttck;
                 }
                 else
                 {
                     timeBtwnAtck -= Time.deltaTime;
                 }
-            if (comboTimer > 0.1f && attackCounter >= 1) {
-                comboTimer -= Time.deltaTime;
-            } else
-            {
-                comboTimer = attackingTime;
-                attackCounter = 0;
-            }
+                if (comboTimer > 0.1f && attackCounter >= 1) {
+                    comboTimer -= Time.deltaTime;
+                } else
+                {
+                    comboTimer = attackingTime;
+                    attackCounter = 0;
+                }
+
+                if(!collisionState.grounded && holdTime < 0.3f)
+                {
+               
+                    holdingAttack = false;
+                }
 
             //Debug.Log("Combo timer:" + attackCounter);
+
+           
         }
 
 
@@ -171,6 +173,16 @@ namespace PlayerNew
         private void CrouchSlashFX()
         {
             m_VFX_CrouchSlashX.Play();
+        }
+
+        private void SwordAttackForward_MainAction()
+        {
+            m_forwardSlash1FX.Play();
+        }
+
+        private void JumpDownSlashFX()
+        {
+            m_VFX_JumpSwordDownSlashFX.Play();
         }
 
         private void JumpUpSlashFX()

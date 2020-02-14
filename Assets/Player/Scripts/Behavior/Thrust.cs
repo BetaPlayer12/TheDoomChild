@@ -26,13 +26,17 @@ namespace PlayerNew
         void Update()
         {
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
+            var down = inputState.GetButtonValue(inputButtons[1]);
+            var dash = inputState.GetButtonValue(inputButtons[2]);
+
             // Debug.Log(holdTime + " holding");
-            if (holdTime > timeToCharge && !chargingAttack)
+            if (holdTime > timeToCharge && !chargingAttack && collisionState.grounded && !down && !dash)
             {
+                ToggleScripts(false);
                 Debug.Log("Charging");
                 swordThrustBuildUp.Play();
                 thrustAttack = true;
-                ToggleScripts(false);
+               
 
             }
             else if (chargingAttack && holdTime == 0)

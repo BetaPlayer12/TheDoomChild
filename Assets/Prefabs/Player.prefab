@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &146637940
 Transform:
   m_ObjectHideFlags: 0
@@ -481,7 +481,7 @@ MonoBehaviour:
   - {fileID: 7567338640060585551}
   - {fileID: 922925365}
   - {fileID: 1086033433}
-  jumpVelocity: {x: 100, y: 70}
+  jumpVelocity: {x: 700, y: 400}
   jumpingOffWall: 0
   resetDelay: 0.2
 --- !u!114 &1086033433
@@ -500,6 +500,7 @@ MonoBehaviour:
   dissableScripts: []
   onWallDetected: 0
   wallSticking: 0
+  groundWallStick: 0
   slideVelocity: -10
   slideMultiplier: 5
   velocityX: 0
@@ -526,9 +527,9 @@ MonoBehaviour:
   canLedgeGrab: 0
   ledgeDetected: 0
   ledgeBotPos: {x: 0, y: 0}
-  ledgeClimbXOffset1: -1
+  ledgeClimbXOffset1: -3
   ledgeClimbYOffset1: 9
-  ledgeClimbXOffset2: 4
+  ledgeClimbXOffset2: 3
   ledgeClimbYOffset2: 9
 --- !u!114 &6127085214049875194
 MonoBehaviour:
@@ -587,12 +588,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   attackRange: 1.04
+  holdingAttack: 0
   m_forwardSlash1FX: {fileID: 9208892215321486123}
   m_swordCombo1FX: {fileID: 2847626079987262445}
   m_swordCombo2FX: {fileID: 5013531694104655790}
   m_VFX_CrouchSlashX: {fileID: 4042968203043053328}
   m_VFX_JumpUpSlashFX: {fileID: 1646533492410343127}
   m_VFX_SwordUpSlashFX: {fileID: 5767329656797613987}
+  m_VFX_JumpSwordDownSlashFX: {fileID: 0}
 --- !u!114 &965161050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,7 +633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c42f20c231a167d41a6f1089dbe07ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputButtons: 05000000
+  inputButtons: 050000000300000006000000
   dissableScripts:
   - {fileID: 7567338640060585551}
   - {fileID: 922925365}
