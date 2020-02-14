@@ -22,7 +22,10 @@ namespace DChild.Gameplay.Systems
                 m_locationPoint = transform;
             }
 
-            m_data?.Set(gameObject.scene, m_locationPoint.position);
+            if (Application.isPlaying == false)
+            {
+                m_data?.Set(gameObject.scene, m_locationPoint.position);
+            }
             if (gameObject.scene.name != null)
             {
                 var newName = "LP_" + m_data?.name ?? "NONE";

@@ -19,6 +19,8 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
 
     private SkeletonAnimation m_animation;
 
+    public Vector2 position => transform.position;
+
     public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
     public void SpawnAt(Vector2 position, HorizontalDirection facing)

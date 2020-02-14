@@ -75,8 +75,11 @@ namespace DChild.Gameplay.Environment
 
         private void OnDisable()
         {
-            m_animation.state.Complete -= CallSelectRandomAnimationFromList;
-            m_isListening = false;
+            if (m_animation.state != null)
+            {
+                m_animation.state.Complete -= CallSelectRandomAnimationFromList;
+                m_isListening = false;
+            }
         }
 
         private void CallSelectRandomAnimationFromList(TrackEntry trackEntry)
