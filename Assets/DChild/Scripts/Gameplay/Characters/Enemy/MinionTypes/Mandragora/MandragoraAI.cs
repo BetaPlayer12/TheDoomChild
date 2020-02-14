@@ -114,6 +114,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_spriteMask;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -213,6 +215,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_spriteMask.SetActive(false);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -246,6 +249,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Burrowed:
                     m_animation.EnableRootMotion(false, false);
+                    m_spriteMask.SetActive(true);
                     m_animation.SetAnimation(0, m_info.burrowedAnimation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
