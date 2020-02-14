@@ -45,7 +45,14 @@ namespace PlayerNew
         private ParticleSystem m_VFX_SwordUpSlashFX;
         [SerializeField]
         private ParticleSystem m_VFX_JumpSwordDownSlashFX;
-
+        [SerializeField]
+        private Collider2D m_forwardSlashAttackCollider;
+        [SerializeField]
+        private Collider2D m_swordCombo1AttackCollider;
+        [SerializeField]
+        private Collider2D m_swordCombo2AttackCollider;
+        [SerializeField]
+        private Collider2D m_swordThrustImpactAttackCollider;
 
         private void Start()
         {
@@ -106,7 +113,6 @@ namespace PlayerNew
                 {
                     if (canSlash && holdTime < 0.1f && attacking == false && collisionState.grounded)
                     {
-
                         if (attackCounter == 0)
                         {
                             comboTimer = attackingTime;
@@ -120,22 +126,28 @@ namespace PlayerNew
                         {
                            //nothing yet
                         }
+
                         ToggleScripts(false);
                         Collider2D[] objToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
+
                         if (attackCounter == 0 && !upButton && !downButton)
                         {
                             m_forwardSlash1FX.Play();
+                            m_forwardSlashAttackCollider.enabled = true;
                         }
                         else if (attackCounter == 1 && !upButton && !downButton)
                         {
                             m_swordCombo1FX.Play();
+                            m_swordCombo1AttackCollider.enabled = true;
                         }
                         else if (attackCounter == 2 && !upButton && !downButton)
                         {
                             m_swordCombo2FX.Play();
+                            m_swordCombo2AttackCollider.enabled = true;
                         }
-                    attacking = true;
-                    attackCollider.enabled = true;
+
+                        attacking = true;
+                        attackCollider.enabled = true;
                     }
 
                     timeBtwnAtck = startTimeBtwAttck;
@@ -146,7 +158,8 @@ namespace PlayerNew
                 }
                 if (comboTimer > 0.1f && attackCounter >= 1) {
                     comboTimer -= Time.deltaTime;
-                } else
+                } 
+                else
                 {
                     comboTimer = attackingTime;
                     attackCounter = 0;
@@ -159,10 +172,7 @@ namespace PlayerNew
                 }
 
             //Debug.Log("Combo timer:" + attackCounter);
-
-           
         }
-
 
         private void OnDrawGizmosSelected()
         {
@@ -197,8 +207,23 @@ namespace PlayerNew
         private void FinishAttackAnim()
         {
             attackCollider.enabled = false;
+
+            switch (attackCounter)
+            {
+                case 0:
+                    m_forwardSlashAttackCollider.enabled = false;
+                    break;
+                case 1:
+                    m_swordCombo1AttackCollider.enabled = false;
+                    break;
+                case 2:
+                    m_swordCombo2AttackCollider.enabled = false;
+                    break;
+            }
+
             attackCounter++;
             attacking = false;
+           
             ToggleScripts(true);
             
         }

@@ -128,6 +128,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Bone m_bone;
 
         private bool m_canShoot;
+        private Vector2 m_boneDefaultPos;
 
         protected override void Start()
         {
@@ -177,22 +178,19 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
-        {
-            m_stateHandle.ApplyQueuedState();
-        }
-
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             //m_animation.SetAnimation(0, m_info.flinch1Animation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             //StartCoroutine(DeathRoutine());
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dead);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            m_stateHandle.OverrideState(State.Dead);
+            //StopAllCoroutines();
+            //m_stateHandle.OverrideState(State.Dead);
         }
 
         //Patience Handler
@@ -214,6 +212,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             //Debug.Log("Bulb Rotation " + transform.rotation.z);
+            //m_animation.SetAnimation(0, m_info.idleAnimation, false).TimeScale = 3f;
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
+            m_bone.SetLocalPosition(m_boneDefaultPos);
             m_hitbox.SetInvulnerability(true);
             if (transform.rotation.z == -1 || transform.rotation.z == 1)
             {
@@ -229,8 +230,8 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.respawnAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.SetInvulnerability(false);
-            m_stateHandle.ApplyQueuedState();
             m_canShoot = true;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -240,9 +241,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_canShoot = false;
             m_animation.EnableRootMotion(true, false);
             m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
-            yield return new WaitForSeconds(1.5f);
-            m_stateHandle.ApplyQueuedState();
+            yield return new WaitForSeconds(2f);
             m_canShoot = true;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -300,6 +301,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectileStart);
 
             m_bone = m_animation.skeletonAnimation.Skeleton.FindBone(m_boneName);
+            m_boneDefaultPos = m_bone.GetLocalPosition();
             m_animation.skeletonAnimation.UpdateLocal += SkeletonAnimation_UpdateLocal;
         }
 
@@ -316,6 +318,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
                 case State.Dead:
+                    //StopAllCoroutines();
                     StartCoroutine(DeathRoutine());
                     break;
 
@@ -364,14 +367,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
-                    if (m_targetInfo.isValid)
-                    {
-                        m_stateHandle.SetState(State.Chasing);
-                    }
-                    else
-                    {
-                        m_stateHandle.SetState(State.Idle);
-                    }
+                    //m_canShoot = true;
+                    m_stateHandle.SetState(State.Chasing);
+                    //if (m_targetInfo.isValid)
+                    //{
+                    //    m_stateHandle.SetState(State.Chasing);
+                    //}
+                    //else
+                    //{
+                    //    m_stateHandle.SetState(State.Idle);
+                    //}
                     break;
                 case State.WaitBehaviourEnd:
                     return;
