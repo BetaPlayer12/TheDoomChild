@@ -52,7 +52,11 @@ namespace PlayerNew
         [SerializeField]
         private Collider2D m_swordCombo2AttackCollider;
         [SerializeField]
-        private Collider2D m_swordThrustImpactAttackCollider;
+        private Collider2D m_crouchSlashAttackCollider;
+        [SerializeField]
+        private Collider2D m_jumpSlashAttackCollider;
+        [SerializeField]
+        private Collider2D m_swordUpSlashAttackCollider;
 
         private void Start()
         {
@@ -183,6 +187,7 @@ namespace PlayerNew
         private void CrouchSlashFX()
         {
             m_VFX_CrouchSlashX.Play();
+            m_crouchSlashAttackCollider.enabled = true;
         }
 
         private void SwordAttackForward_MainAction()
@@ -198,11 +203,13 @@ namespace PlayerNew
         private void JumpUpSlashFX()
         {
             m_VFX_JumpUpSlashFX.Play();
+            m_jumpSlashAttackCollider.enabled = true;
         }
 
         private void SwordUpSlashFX()
         {
             m_VFX_SwordUpSlashFX.Play();
+            m_swordUpSlashAttackCollider.enabled = true;
         }
         private void FinishAttackAnim()
         {
@@ -219,7 +226,13 @@ namespace PlayerNew
                 case 2:
                     m_swordCombo2AttackCollider.enabled = false;
                     break;
+                default:
+                    break;
             }
+
+            m_crouchSlashAttackCollider.enabled = false;
+            m_jumpSlashAttackCollider.enabled = false;
+            m_swordUpSlashAttackCollider.enabled = false;
 
             attackCounter++;
             attacking = false;
