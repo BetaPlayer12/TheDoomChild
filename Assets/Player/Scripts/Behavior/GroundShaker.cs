@@ -6,6 +6,16 @@ namespace PlayerNew
 {
     public class GroundShaker : PlayerBehaviour
     {
+        [SerializeField]
+        private ParticleSystem deathEarthShakerHelicopter;
+        [SerializeField]
+        private ParticleSystem deathEarthShakerPreloop;
+        [SerializeField]
+        private ParticleSystem deathEarthShakerLoop;
+        [SerializeField]
+        private ParticleSystem deathEarthShakerImpact;
+        [SerializeField]
+        private Collider2D m_groundShakerAttackCollider;
 
         public float midAirDelay;
         public bool groundSmash;
@@ -22,6 +32,9 @@ namespace PlayerNew
         {
             var down = inputState.GetButtonValue(inputButtons[0]);
             var attack = inputState.GetButtonValue(inputButtons[1]);
+            var attackHold = inputState.GetButtonHoldTime(inputButtons[1]);
+
+          
 
             if (!collisionState.grounded && down && attack)
             {
@@ -38,9 +51,32 @@ namespace PlayerNew
             }
         }
 
-        IEnumerator GroundSmashDelayRoutine()
+        private void StartEarthShakerFX()
         {
-            Debug.Log("yeild");
+            deathEarthShakerHelicopter.Play();
+        }
+
+        private void DeathEarthShakerPreLoop()
+        {
+            deathEarthShakerHelicopter.Stop();
+            deathEarthShakerPreloop.Play();
+        }
+        private void DeathEarthShakerLoop()
+        {
+            deathEarthShakerPreloop.Stop();
+            deathEarthShakerLoop.Play();
+        }
+
+        private void DeathEarthShakerImpact()
+        {
+            deathEarthShakerLoop.Stop();
+            deathEarthShakerImpact.Play();
+            m_groundShakerAttackCollider.enabled = true;
+        }
+
+            IEnumerator GroundSmashDelayRoutine()
+        {
+            
             yield return new WaitForSeconds(midAirDelay);
             body2d.gravityScale = defGravity* smashMultiplier;
             
@@ -50,10 +86,12 @@ namespace PlayerNew
 
         public void GroundSmashFinishAnimation()
         {
+           
             groundSmash = false;
             Debug.Log("finish animation");
             body2d.gravityScale = defGravity;
             ToggleScripts(true);
+            m_groundShakerAttackCollider.enabled = false;
         }
 
     }
