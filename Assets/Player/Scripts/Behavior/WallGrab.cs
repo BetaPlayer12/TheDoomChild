@@ -48,16 +48,12 @@ namespace PlayerNew
 
             //    //call animation
             //}
+
             if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall && collisionState.onWallLeg && !ledgeDetected)
             {
-               
-                
                 ToggleScripts(false);
-                //spriteRenderer.enabled = false;
-               
                 ledgeDetected = true;
                 ledgeBotPos = transform.position;
-                
                 OnWallGrab();
             }
 
@@ -91,10 +87,12 @@ namespace PlayerNew
                 //capsuleCollider.enabled = false;
 
                 canLedgeGrab = true;
+               // spriteRenderer.enabled = false;
+               
 
 
-                // spriteRenderer.enabled = false;
-                transform.position = ledgePos1;
+
+
                 // }
 
                 //if (canLedgeGrab)
@@ -127,8 +125,9 @@ namespace PlayerNew
 
         private void StartLedgeClimb()
         {
-            Debug.Log("On climb");
-            //spriteRenderer.enabled = true;
+            //Debug.Log("On climb");
+            //  spriteRenderer.enabled = true;
+            transform.position = ledgePos1;
         }
     }
 

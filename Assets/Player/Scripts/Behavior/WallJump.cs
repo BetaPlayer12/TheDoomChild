@@ -12,12 +12,13 @@ namespace PlayerNew
 
         private float timeElapsed = 0;
 
-        private void Update()
+        private void FixedUpdate()
         {
             var canJump = inputState.GetButtonValue(inputButtons[0]);
             var holdJump = inputState.GetButtonHoldTime(inputButtons[0]);
-            if (collisionState.onWall && !collisionState.grounded) {
 
+            if (collisionState.onWall && !collisionState.grounded) {
+                Debug.Log(collisionState.grounded);
                 if (canJump && holdJump < 0.1f)
                 {
                     inputState.direction = inputState.direction == Directions.Right ? Directions.Left : Directions.Right;

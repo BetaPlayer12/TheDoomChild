@@ -12,6 +12,7 @@ namespace PlayerNew
 
         public bool canLongJump;
         public bool isLongJumping;
+        private bool groundJumpExtra = true;
 
         protected override void Update()
         {
@@ -19,7 +20,6 @@ namespace PlayerNew
             var canJump = inputState.GetButtonValue(inputButtons[0]);
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
             velocityY = body2d.velocity.y;
-
 
             if (!canJump)
             {
@@ -29,6 +29,16 @@ namespace PlayerNew
             {
                 isLongJumping = false;
             }
+
+            if(!collisionState.grounded && groundJumpExtra)
+            {
+                jumpsRemaining = 1;
+                groundJumpExtra = false;
+            }else if (collisionState.grounded)
+            {
+                groundJumpExtra = true;
+            }
+
             base.Update();
             if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay)
             {
