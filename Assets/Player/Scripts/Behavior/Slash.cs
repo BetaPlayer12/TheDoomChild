@@ -13,6 +13,7 @@ namespace PlayerNew
         public int attackCounter;
         private float attackHold;
         private float comboTimer;
+        private Dash dashState;
 
         public float startTimeBtwAttck;
 
@@ -46,6 +47,8 @@ namespace PlayerNew
         [SerializeField]
         private ParticleSystem m_VFX_JumpSwordDownSlashFX;
         [SerializeField]
+        private ParticleSystem m_VFX_SwordJumpSlashForward;
+        [SerializeField]
         private Collider2D m_forwardSlashAttackCollider;
         [SerializeField]
         private Collider2D m_swordCombo1AttackCollider;
@@ -62,6 +65,8 @@ namespace PlayerNew
         {
             attackCollider.enabled = false;
             crouchState = GetComponent<Crouch>();
+            dashState = GetComponent<Dash>();
+
         }
 
         // Update is called once per frame
@@ -113,9 +118,12 @@ namespace PlayerNew
                 upHold = upButton ? true : false;
             
 
-                if (timeBtwnAtck < 0)
+                if (timeBtwnAtck < 0 && !dashState.dashing)
                 {
-                    if (canSlash && holdTime < 0.1f && attacking == false && collisionState.grounded)
+                    if (canSlash && holdTime < 0.1f && attacking == false)
+                    {
+                    ToggleScripts(false);
+                    if (collisionState.grounded)
                     {
                         if (attackCounter == 0)
                         {
@@ -128,12 +136,10 @@ namespace PlayerNew
                         }
                         else
                         {
-                           //nothing yet
+                            //nothing yet
                         }
 
-                        ToggleScripts(false);
-                        Collider2D[] objToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
-
+                        //Collider2D[] objToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
                         if (attackCounter == 0 && !upButton && !downButton)
                         {
                             m_forwardSlash1FX.Play();
@@ -149,10 +155,13 @@ namespace PlayerNew
                             m_swordCombo2FX.Play();
                             m_swordCombo2AttackCollider.enabled = true;
                         }
-
-                        attacking = true;
-                        attackCollider.enabled = true;
                     }
+                    
+                    
+
+                    attacking = true;
+                }
+              
 
                     timeBtwnAtck = startTimeBtwAttck;
                 }
@@ -162,8 +171,7 @@ namespace PlayerNew
                 }
                 if (comboTimer > 0.1f && attackCounter >= 1) {
                     comboTimer -= Time.deltaTime;
-                } 
-                else
+                } else
                 {
                     comboTimer = attackingTime;
                     attackCounter = 0;
@@ -176,7 +184,10 @@ namespace PlayerNew
                 }
 
             //Debug.Log("Combo timer:" + attackCounter);
+
+           
         }
+
 
         private void OnDrawGizmosSelected()
         {
@@ -198,6 +209,11 @@ namespace PlayerNew
         private void JumpDownSlashFX()
         {
             m_VFX_JumpSwordDownSlashFX.Play();
+        }
+
+        private void SwordJumpSlashForwardFX()
+        {
+            m_VFX_SwordJumpSlashForward.Play();
         }
 
         private void JumpUpSlashFX()
@@ -236,7 +252,6 @@ namespace PlayerNew
 
             attackCounter++;
             attacking = false;
-           
             ToggleScripts(true);
             
         }

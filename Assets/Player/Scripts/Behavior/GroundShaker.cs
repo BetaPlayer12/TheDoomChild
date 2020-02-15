@@ -14,8 +14,6 @@ namespace PlayerNew
         private ParticleSystem deathEarthShakerLoop;
         [SerializeField]
         private ParticleSystem deathEarthShakerImpact;
-        [SerializeField]
-        private Collider2D m_groundShakerAttackCollider;
 
         public float midAirDelay;
         public bool groundSmash;
@@ -71,7 +69,6 @@ namespace PlayerNew
         {
             deathEarthShakerLoop.Stop();
             deathEarthShakerImpact.Play();
-            m_groundShakerAttackCollider.enabled = true;
         }
 
             IEnumerator GroundSmashDelayRoutine()
@@ -91,7 +88,6 @@ namespace PlayerNew
             Debug.Log("finish animation");
             body2d.gravityScale = defGravity;
             ToggleScripts(true);
-            m_groundShakerAttackCollider.enabled = false;
         }
 
     }
