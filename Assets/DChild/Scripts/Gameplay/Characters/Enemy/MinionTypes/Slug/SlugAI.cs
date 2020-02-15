@@ -414,6 +414,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    m_attackDecider.hasDecidedOnAttack = false;
                                     m_movement.Stop();
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }

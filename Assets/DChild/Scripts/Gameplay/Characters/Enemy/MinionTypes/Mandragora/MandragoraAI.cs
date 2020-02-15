@@ -129,6 +129,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleSystem m_screamFX;
 
         private float m_targetDistance;
+        private bool m_hasDetected;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -161,8 +162,9 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                if (m_stateHandle.currentState != State.Chasing)
+                if (m_stateHandle.currentState != State.Chasing && !m_hasDetected)
                 {
+                    m_hasDetected = true;
                     m_stateHandle.SetState(State.Detect);
                 }
                 m_currentPatience = 0;
@@ -190,6 +192,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
+                m_hasDetected = false;
                 m_stateHandle.SetState(State.Burrowed);
             }
         }
