@@ -29,8 +29,8 @@ namespace DChild.Menu
         {
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
             GameplaySystem.SetCurrentCampaign(m_campaignSelect.selectedSlot);
-            GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad.sceneName, true);
             LoadingHandle.UnloadScenes(gameObject.scene.name);
+            GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad.sceneName, true);
         }
 
         private void OnDeleteAffirmed(object sender, EventActionArgs eventArgs)

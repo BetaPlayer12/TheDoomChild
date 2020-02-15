@@ -84,6 +84,11 @@ namespace DChild.Gameplay
             CallPostDeserialization();
         }
 
+        public void UpdateData()
+        {
+            CallPreSerialization(); ;
+        }
+
         public async Task<bool> LoadAsync()
         {
             GameEventMessage.SendEvent("Game Load Start");
