@@ -16,9 +16,6 @@ namespace PlayerNew
         private ParticleSystem swordThrustBody;
         [SerializeField]
         private ParticleSystem slashSwordThrustImpacts;
-        [SerializeField]
-        private Collider2D m_thrustImpactAttackCollider;
-
         // Start is called before the first frame update
         void Start()
         {
@@ -63,7 +60,6 @@ namespace PlayerNew
         private void ThrustImpact()
         {
             slashSwordThrustImpacts.Play();
-            m_thrustImpactAttackCollider.enabled = true;
         }
 
         private void FinishThrustAttackAnime()
@@ -71,7 +67,6 @@ namespace PlayerNew
             
             thrustAttack = false;
             thrustHasStarted = false;
-            m_thrustImpactAttackCollider.enabled = false;
             ToggleScripts(true);
         }
     }
