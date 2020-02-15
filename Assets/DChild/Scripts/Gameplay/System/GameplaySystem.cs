@@ -22,6 +22,8 @@ namespace DChild.Gameplay
     {
 #if UNITY_EDITOR
         [SerializeField]
+        private bool m_dontDestroyOnLoad;
+        [SerializeField]
         private bool m_doNotDeserializeOnAwake;
         [SerializeField]
         private bool m_doNotTeleportPlayerOnAwake;
@@ -171,6 +173,13 @@ namespace DChild.Gameplay
             }
             else
             {
+#if UNITY_EDITOR
+                if (m_dontDestroyOnLoad)
+                {
+                    DontDestroyOnLoad(this.gameObject);
+                }
+#endif
+
                 m_instance = this;
                 AssignModules();
                 m_activatableModules = GetComponentsInChildren<IGameplayActivatable>();
