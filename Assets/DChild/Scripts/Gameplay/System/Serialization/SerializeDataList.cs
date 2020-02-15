@@ -34,8 +34,6 @@ namespace DChild.Serialization
             return m_saveDatas.ContainsKey(ID) ? m_saveDatas[ID] : null;
         }
 
-
-#if UNITY_EDITOR
         public Dictionary<SerializeID, ISaveData> saveDatas => m_saveDatas;
 
         public SerializeDataList(SerializeDataList data)
@@ -46,6 +44,5 @@ namespace DChild.Serialization
                 m_saveDatas.Add(key, data.saveDatas[key]);
             }
         }
-#endif
     }
 }

@@ -7,6 +7,8 @@ using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Menu;
 using DChild.Serialization;
+using Holysoft.Event;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -18,6 +20,13 @@ namespace DChild.Gameplay
 
     public class GameplaySystem : MonoBehaviour
     {
+#if UNITY_EDITOR
+        [SerializeField]
+        private bool m_doNotDeserializeOnAwake;
+        [SerializeField]
+        private bool m_doNotTeleportPlayerOnAwake;
+#endif
+
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;
@@ -104,14 +113,34 @@ namespace DChild.Gameplay
             m_healthTracker?.RemoveAllTrackers();
         }
 
-        public static void LoadGame(CampaignSlot campaignSlot)
+        public static void LoadGame(CampaignSlot campaignSlot, LoadingHandle.LoadType loadType)
         {
             m_campaignToLoad = campaignSlot;
             ClearCaches();
-            m_healthTracker.RemoveAllTrackers();
-            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
+            m_healthTracker?.RemoveAllTrackers();
+            LoadingHandle.SetLoadType(loadType);
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
             m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+            LoadingHandle.SceneDone += LoadGameDone;
+        }
+
+        public static void SetCurrentCampaign(CampaignSlot campaignSlot)
+        {
+            if (m_instance)
+            {
+                LoadGame(campaignSlot, LoadingHandle.LoadType.Force);
+            }
+            else
+            {
+                m_campaignToLoad = campaignSlot;
+            }
+        }
+
+        private static void LoadGameDone(object sender, EventActionArgs eventArgs)
+        {
+            m_campaignSerializer.SetSlot(m_campaignToLoad);
+            m_campaignSerializer.Load();
+            LoadingHandle.SceneDone -= LoadGameDone;
         }
 
         private void AssignModules()
@@ -151,6 +180,24 @@ namespace DChild.Gameplay
                 {
                     initializables[i].Initialize();
                 }
+                m_campaignSerializer.SetSlot(m_campaignToLoad);
+#if UNITY_EDITOR
+                if (m_doNotDeserializeOnAwake == false)
+                {
+                    m_campaignSerializer.Load(true);
+                }
+#else
+                m_campaignSerializer.Load(true);
+#endif
+
+#if UNITY_EDITOR
+                if (m_doNotTeleportPlayerOnAwake == false)
+                {
+                    m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+                }
+#else
+                m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+#endif     
             }
         }
 
