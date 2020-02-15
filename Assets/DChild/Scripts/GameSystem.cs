@@ -104,6 +104,7 @@ namespace DChild
 #if UNITY_EDITOR
                 if (m_dontDestroyOnLoad)
                 {
+                    transform.parent = null;
                     DontDestroyOnLoad(this.gameObject);
                 }
 #endif

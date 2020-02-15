@@ -62,12 +62,16 @@ namespace PlayerNew
 
         public void Disable()
         {
-            throw new System.NotImplementedException();
+            enabled = false;
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                inputState.SetButtonValue(inputs[i].button, false);
+            }
         }
 
         public void Enable()
         {
-            throw new System.NotImplementedException();
+            enabled = true;
         }
 
         // Use this for initialization

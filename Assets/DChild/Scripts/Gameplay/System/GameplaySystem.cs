@@ -176,6 +176,7 @@ namespace DChild.Gameplay
 #if UNITY_EDITOR
                 if (m_dontDestroyOnLoad)
                 {
+                    transform.parent = null;
                     DontDestroyOnLoad(this.gameObject);
                 }
 #endif
@@ -189,7 +190,10 @@ namespace DChild.Gameplay
                 {
                     initializables[i].Initialize();
                 }
-                m_campaignSerializer.SetSlot(m_campaignToLoad);
+                if (m_campaignToLoad != null)
+                {
+                    m_campaignSerializer.SetSlot(m_campaignToLoad);
+                }
 #if UNITY_EDITOR
                 if (m_doNotDeserializeOnAwake == false)
                 {
