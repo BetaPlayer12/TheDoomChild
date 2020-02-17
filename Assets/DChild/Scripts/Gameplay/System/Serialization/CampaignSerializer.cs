@@ -86,7 +86,7 @@ namespace DChild.Gameplay
 
         public void UpdateData()
         {
-            CallPreSerialization(); ;
+            CallPreSerialization();
         }
 
         public async Task<bool> LoadAsync()
