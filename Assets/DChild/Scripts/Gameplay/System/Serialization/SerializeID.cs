@@ -16,7 +16,7 @@ namespace DChild.Serialization
 
             public int GetHashCode(SerializeID obj)
             {
-                return obj.value.GetHashCode();
+                return obj.value;
             }
         }
 

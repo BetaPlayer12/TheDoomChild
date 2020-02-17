@@ -30,9 +30,7 @@ namespace DChild.Gameplay.Systems
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            var playerControlledObject = collision.GetComponent<Hitbox>();
-
-            if (playerControlledObject != null)
+            if (collision.TryGetComponent(out Hitbox hitbox))
             {
                 Character character = collision.GetComponentInParent<Character>();
 
