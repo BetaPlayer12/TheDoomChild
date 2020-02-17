@@ -13,7 +13,7 @@ namespace DChild.Serialization
 
         public SerializeDataList()
         {
-            m_saveDatas = new Dictionary<SerializeID, ISaveData>();
+            m_saveDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
         }
 
         public void UpdateData(SerializeID ID, ISaveData data)
@@ -38,7 +38,7 @@ namespace DChild.Serialization
 
         public SerializeDataList(SerializeDataList data)
         {
-            m_saveDatas = new Dictionary<SerializeID, ISaveData>();
+            m_saveDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
             foreach (var key in data.saveDatas.Keys)
             {
                 m_saveDatas.Add(key, data.saveDatas[key]);

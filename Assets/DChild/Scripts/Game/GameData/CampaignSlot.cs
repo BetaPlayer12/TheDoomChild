@@ -79,6 +79,7 @@ namespace DChild.Serialization
         public SerializeDataList campaignProgress => m_campaignProgress;
         public SerializeDataList zoneDatas => m_zoneDatas;
 
+        [Button]
         public void Reset()
         {
             m_newGame = true;
