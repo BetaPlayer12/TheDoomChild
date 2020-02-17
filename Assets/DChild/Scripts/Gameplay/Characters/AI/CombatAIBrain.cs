@@ -53,6 +53,17 @@ namespace DChild.Gameplay.Characters.AI
 
         }
 
+        protected virtual void LateUpdate()
+        {
+            if(m_targetInfo.isValid && m_targetInfo.doesTargetExist == false)
+            {
+                OnTargetDisappeared();
+                m_targetInfo.Set(null);
+            }
+        }
+
+        protected abstract void OnTargetDisappeared();
+
 #if UNITY_EDITOR
         public Type aiDataType => m_data.GetType();
         public void InitializeField(Character character, SpineRootAnimation spineRoot, Damageable damageable, Transform centerMass)

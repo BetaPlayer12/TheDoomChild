@@ -145,7 +145,8 @@ namespace DChild.Serialization
 
         private void OnDestroy()
         {
-            UpdateSaveData();
+            GameplaySystem.campaignSerializer.PreSerialization -= OnPreSerialization;
+            GameplaySystem.campaignSerializer.PostDeserialization -= OnPostDeserialization;
         }
 
         #region Editor
