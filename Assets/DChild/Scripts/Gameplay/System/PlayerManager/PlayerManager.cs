@@ -86,9 +86,9 @@ namespace DChild.Gameplay.Systems
         }
         private void OnRespawnPlayer(object sender, EventActionArgs eventArgs)
         {
-            GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, Menu.LoadingHandle.LoadType.Smart);
-            GameplaySystem.campaignSerializer.Load();
-            m_playerIsDead = false;
+            //GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, Menu.LoadingHandle.LoadType.Smart);
+            //GameplaySystem.campaignSerializer.Load();
+            //m_playerIsDead = false;
         }
 
         private void Start()
