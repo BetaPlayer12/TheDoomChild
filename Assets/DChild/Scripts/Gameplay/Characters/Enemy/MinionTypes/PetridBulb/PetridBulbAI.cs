@@ -403,5 +403,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 Patience();
             }
         }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Idle);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+            m_canShoot = false;
+        }
     }
 }

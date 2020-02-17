@@ -55,6 +55,8 @@ namespace DChild.Gameplay.Environment
         [SerializeField, HideIf("m_hideOffState")]
         private UnityEvent m_offState;
 
+        public event EventAction<HitDirectionEventArgs> OnHit;
+
         public Vector2 position => transform.position;
 
         public ISaveData Save()
@@ -166,10 +168,6 @@ namespace DChild.Gameplay.Environment
         private bool m_hideStartAsOffState;
         [SerializeField, HideInInspector]
         private bool m_hideOffState;
-
-
-
-        public event EventAction<HitDirectionEventArgs> OnHit;
 
         private struct GizmoInfo
         {

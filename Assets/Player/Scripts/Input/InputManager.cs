@@ -52,7 +52,7 @@ namespace PlayerNew
         }
     }
 
-    public class InputManager : MonoBehaviour, IMainController
+    public class InputManager : MonoBehaviour,  IMainController
     {
 
         public InputAxisState[] inputs;
