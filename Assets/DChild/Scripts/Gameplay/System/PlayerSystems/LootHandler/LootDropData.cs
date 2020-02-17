@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Systems
             {
                 var score = UnityEngine.Random.Range(0f, 100f);
                 int index = 0;
-                while (index < m_drops.Count && m_drops[index].percentScore > score)
+                while (index < m_drops.Count && index != m_drops.Count - 1 && m_drops[index].percentScore > score)
                 {
                     index++;
                 }

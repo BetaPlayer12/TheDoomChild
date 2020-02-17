@@ -15,6 +15,7 @@ namespace DChild.Gameplay
                 this.wasTriggered = wasTriggered;
             }
 
+            [ShowInInspector]
             public bool wasTriggered { get; }
         }
 
