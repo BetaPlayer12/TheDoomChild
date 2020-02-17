@@ -751,5 +751,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
         }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Idle);
+        }
     }
 }
