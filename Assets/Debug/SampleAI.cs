@@ -147,5 +147,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
         }
+
+        protected override void OnTargetDisappeared()
+        {
+
+        }
     }
 }
