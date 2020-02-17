@@ -21,17 +21,29 @@ namespace DChild.Gameplay.Environment.Interractables
 
         [ShowInInspector, OnValueChanged("OnStateChange")]
         private bool m_isOpen;
+        [SerializeField]
+        private string m_multiDirectionParameter;
+        [SerializeField]
+        private bool m_multiDirectionParameterValue;
         private Animator m_animator;
 
         public void Open()
         {
             m_isOpen = true;
+            if(m_multiDirectionParameter != string.Empty)
+            {
+                m_animator.SetBool(m_multiDirectionParameter, m_multiDirectionParameterValue);
+            }
             m_animator.SetTrigger("Open");
         }
 
         public void Close()
         {
             m_isOpen = false;
+            if (m_multiDirectionParameter != string.Empty)
+            {
+                m_animator.SetBool(m_multiDirectionParameter, m_multiDirectionParameterValue);
+            }
             m_animator.SetTrigger("Close");
         }
 

@@ -34,11 +34,11 @@ namespace PlayerNew
             var attack = inputState.GetButtonValue(inputButtons[1]);
             var attackHold = inputState.GetButtonHoldTime(inputButtons[1]);
 
-          
+
 
             if (!collisionState.grounded && down && attack)
             {
-               
+
                 body2d.velocity = Vector2.zero;
                 groundSmash = true;
                 body2d.gravityScale = 0f;
@@ -47,7 +47,7 @@ namespace PlayerNew
             }
             else
             {
-               // Debug.Log("grounded");
+                // Debug.Log("grounded");
             }
         }
 
@@ -74,24 +74,21 @@ namespace PlayerNew
             m_groundShakerAttackCollider.enabled = true;
         }
 
-            IEnumerator GroundSmashDelayRoutine()
+        IEnumerator GroundSmashDelayRoutine()
         {
-            
             yield return new WaitForSeconds(midAirDelay);
-            body2d.gravityScale = defGravity* smashMultiplier;
-            
-
+            body2d.gravityScale = defGravity * smashMultiplier;
         }
-        
+
 
         public void GroundSmashFinishAnimation()
         {
-           
+
             groundSmash = false;
             Debug.Log("finish animation");
             body2d.gravityScale = defGravity;
-            ToggleScripts(true);
             m_groundShakerAttackCollider.enabled = false;
+            ToggleScripts(true);
         }
 
     }

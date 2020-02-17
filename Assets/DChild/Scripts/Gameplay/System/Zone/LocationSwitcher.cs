@@ -49,6 +49,8 @@ namespace DChild.Gameplay.Systems
 
             if (type == TransitionType.Enter)
             {
+                GameplaySystem.campaignSerializer.UpdateData();
+
                 yield return new WaitForSeconds(m_transitionDelay);
 
                 m_handle.DoSceneTransition(character, TransitionType.PostEnter);

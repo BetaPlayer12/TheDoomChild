@@ -39,7 +39,7 @@ namespace PlayerNew
                 Debug.Log("Charging");
                 swordThrustBuildUp.Play();
                 thrustAttack = true;
-               
+
 
             }
             else if (chargingAttack && holdTime == 0)
@@ -53,11 +53,11 @@ namespace PlayerNew
 
         private void StartChargeLoop()
         {
-            
+
             Debug.Log("charge start ");
             chargingAttack = true;
             thrustHasStarted = true;
-           
+
         }
 
         private void ThrustImpact()
@@ -68,7 +68,6 @@ namespace PlayerNew
 
         private void FinishThrustAttackAnime()
         {
-            
             thrustAttack = false;
             thrustHasStarted = false;
             m_thrustImpactAttackCollider.enabled = false;

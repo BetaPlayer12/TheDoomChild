@@ -33,9 +33,9 @@ namespace PlayerNew
         {
             if (collisionState.onWall && !collisionState.grounded && !ledgeDetected)
             {
+                ToggleScripts(false);
                 ledgeDetected = true;
                 ledgeBotPos = trans.position;
-                ToggleScripts(false);
                 CheckLedgeClimb();
 
                 //call animation
