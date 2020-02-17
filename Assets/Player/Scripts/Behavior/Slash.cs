@@ -214,6 +214,7 @@ namespace PlayerNew
         private void SwordJumpSlashForwardFX()
         {
             m_VFX_SwordJumpSlashForward.Play();
+            m_jumpSlashAttackCollider.enabled = true;
         }
 
         private void JumpUpSlashFX()
