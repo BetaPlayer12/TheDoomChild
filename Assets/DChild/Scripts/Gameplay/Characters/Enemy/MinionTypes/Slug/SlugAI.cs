@@ -414,6 +414,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    m_attackDecider.hasDecidedOnAttack = false;
                                     m_movement.Stop();
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
@@ -446,6 +447,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Patrol);
+            m_currentPatience = 0;
+            m_enablePatience = false;
         }
     }
 }
