@@ -16,6 +16,9 @@ namespace PlayerNew
         private ParticleSystem swordThrustBody;
         [SerializeField]
         private ParticleSystem slashSwordThrustImpacts;
+        [SerializeField]
+        private Collider2D m_thrustImpactAttackCollider;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -36,7 +39,7 @@ namespace PlayerNew
                 Debug.Log("Charging");
                 swordThrustBuildUp.Play();
                 thrustAttack = true;
-               
+
 
             }
             else if (chargingAttack && holdTime == 0)
@@ -50,23 +53,24 @@ namespace PlayerNew
 
         private void StartChargeLoop()
         {
-            
+
             Debug.Log("charge start ");
             chargingAttack = true;
             thrustHasStarted = true;
-           
+
         }
 
         private void ThrustImpact()
         {
             slashSwordThrustImpacts.Play();
+            m_thrustImpactAttackCollider.enabled = true;
         }
 
         private void FinishThrustAttackAnime()
         {
-            
             thrustAttack = false;
             thrustHasStarted = false;
+            m_thrustImpactAttackCollider.enabled = false;
             ToggleScripts(true);
         }
     }
