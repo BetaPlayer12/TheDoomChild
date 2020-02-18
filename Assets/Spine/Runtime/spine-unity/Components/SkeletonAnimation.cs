@@ -136,6 +136,10 @@ namespace Spine.Unity {
 		}
 		#endregion
 
+        [SerializeField]
+        private bool m_alwaysUpdateMesh;
+
+
 		private bool m_isVisible;
 
 		/// <summary>
@@ -210,7 +214,7 @@ namespace Spine.Unity {
 
 		public override void LateUpdate()
 		{
-			if (m_isVisible)
+			if (m_alwaysUpdateMesh || m_isVisible)
 			{
 				base.LateUpdate();
 			}

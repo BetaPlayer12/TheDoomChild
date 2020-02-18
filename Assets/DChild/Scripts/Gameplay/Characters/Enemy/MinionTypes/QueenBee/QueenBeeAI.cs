@@ -48,6 +48,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_horizontalDroneAttack = new SimpleAttackInfo();
             public SimpleAttackInfo horizontalDroneAttack => m_horizontalDroneAttack;
             [SerializeField]
+            private float m_drone3rdPhaseYAim;
+            public float drone3rdPhaseYAim => m_drone3rdPhaseYAim;
+            [SerializeField]
             private SimpleAttackInfo m_spearChargeAttack = new SimpleAttackInfo();
             public SimpleAttackInfo spearChargeAttack => m_spearChargeAttack;
             [SerializeField]
@@ -177,17 +180,17 @@ namespace DChild.Gameplay.Characters.Enemies
         public class PhaseInfo : IPhaseInfo
         {
             [SerializeField]
-            private int m_tombVolley;
-            public int tombVolley => m_tombVolley;
-            [SerializeField]
-            private int m_tombSize;
-            public int tombSize => m_tombSize;
-            [SerializeField]
-            private int m_skeletonNum;
-            public int skeletonNum => m_skeletonNum;
-            [SerializeField, ValueDropdown("GetSkins")]
-            private string m_skin;
-            public string skin => m_skin;
+            private int m_droneStrikeBatches;
+            public int droneStrikeBatches => m_droneStrikeBatches;
+            //[SerializeField]
+            //private int m_tombSize;
+            //public int tombSize => m_tombSize;
+            //[SerializeField]
+            //private int m_skeletonNum;
+            //public int skeletonNum => m_skeletonNum;
+            //[SerializeField, ValueDropdown("GetSkins")]
+            //private string m_skin;
+            //public string skin => m_skin;
             [SerializeField]
             private int m_phaseIndex;
             public int phaseIndex => m_phaseIndex;
@@ -291,6 +294,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Move Points")]
         private Transform m_tripleDronePoint;
         [SerializeField, TabGroup("Move Points")]
+        private Transform m_tripleDronePhase3Point;
+        [SerializeField, TabGroup("Move Points")]
         private Transform m_returnPoint;
         [SerializeField, TabGroup("Move Points")]
         private Transform m_spearThrowPoint;
@@ -310,6 +315,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Bone m_bone;
         
         private int m_currentPhaseIndex;
+        private int m_currentDroneBatches;
+        //private float m_currentDroneSummonSpeed;
         float m_currentRecoverTime;
         bool m_isFinalPhase;
 
@@ -321,6 +328,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_currentSkeletonSize = obj.skeletonNum;
             //m_currentSkin = obj.skin;
             m_currentPhaseIndex = obj.phaseIndex;
+            m_currentDroneBatches = obj.droneStrikeBatches;
         }
 
         private void ChangeState()
@@ -576,19 +584,24 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             //CustomTurn();
-            while (Vector2.Distance(transform.position, m_tripleDronePoint.position) > 1.5)
+            var attackPos = m_currentPhaseIndex != 2 ? m_tripleDronePoint.position : m_tripleDronePhase3Point.position;
+            while (Vector2.Distance(transform.position, attackPos) > 1.5)
             {
-                DynamicMovement(m_tripleDronePoint.position);
+                DynamicMovement(attackPos);
                 yield return null;
             }
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_animation.SetAnimation(0, m_info.summonDroneAnimation, false).TimeScale = 2f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDroneAnimation);
-            m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
-            m_animation.SetAnimation(0, m_info.orderDroneAttackLoopAnimation, true);
-            yield return new WaitForSeconds(1f);
+            for (int i = 0; i < m_currentDroneBatches; i++)
+            {
+                //LaunchBeeProjectile();
+                m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
+                m_animation.SetAnimation(0, m_info.orderDroneAttackLoopAnimation, true);
+                yield return new WaitForSeconds(1);
+            }
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
             //for (int i = 0; i < /*m_spawnPoints.Count*/4; i++)
             //{
@@ -598,6 +611,33 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.SetState(State.ReevaluateSituation);
             yield return null;
         }
+
+        //private IEnumerator HorizontalDronesPhase3Routine()
+        //{
+        //    m_agent.Stop();
+        //    //CustomTurn();
+        //    while (Vector2.Distance(transform.position, m_tripleDronePoint.position) > 1.5)
+        //    {
+        //        DynamicMovement(m_tripleDronePoint.position);
+        //        yield return null;
+        //    }
+        //    m_stateHandle.Wait(State.ReevaluateSituation);
+        //    m_agent.Stop();
+        //    m_animation.SetAnimation(0, m_info.summonDroneAnimation, false).TimeScale = 2f;
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDroneAnimation);
+        //    m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false);
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
+        //    m_animation.SetAnimation(0, m_info.orderDroneAttackLoopAnimation, true);
+        //    yield return new WaitForSeconds(1f);
+        //    m_animation.SetAnimation(0, m_info.idleAnimation, false);
+        //    //for (int i = 0; i < /*m_spawnPoints.Count*/4; i++)
+        //    //{
+        //    //}
+        //    m_attackDecider.hasDecidedOnAttack = false;
+        //    m_stateHandle.ApplyQueuedState();
+        //    //m_stateHandle.SetState(State.ReevaluateSituation);
+        //    yield return null;
+        //}
 
         private IEnumerator SpearChargeRoutine()
         {
@@ -674,6 +714,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_animation.SetAnimation(0, m_info.phase1AtkMeleeAnimation, false);
+            if(m_currentPhaseIndex != 0)
+            {
+                yield return new WaitForSeconds(2.25f);
+                GetComponent<IsolatedPhysics2D>().AddForce(new Vector2(2.5f * transform.localScale.x, 0), ForceMode2D.Impulse);
+                yield return new WaitForSeconds(0.25f);
+                m_agent.Stop();
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase1AtkMeleeAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -781,7 +828,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchSpearProjectile()
         {
-            m_launcher = new ProjectileLauncher(m_info.spearProjectile.projectileInfo, m_spawnPoints[0]);
+            m_launcher = new ProjectileLauncher(m_info.spearProjectile.projectileInfo, m_spearSpawnPoint);
             if (!IsFacingTarget())
             {
                 transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
