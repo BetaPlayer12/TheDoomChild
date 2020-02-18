@@ -41,7 +41,6 @@ namespace DChild
             {
                 MasterAudio.StopBusOfTransform(transform, buses[i]);
             }
-
         }
 
         public void StopSounds(params string[] soundGroups)
