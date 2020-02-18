@@ -182,6 +182,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private int m_droneStrikeBatches;
             public int droneStrikeBatches => m_droneStrikeBatches;
+            [SerializeField]
+            private float m_droneStrikeSummonSpeed;
+            public float droneStrikeSummonSpeed => m_droneStrikeSummonSpeed;
+            [SerializeField]
+            private int m_droneSummonAmmount;
+            public int droneSummonAmmount => m_droneSummonAmmount;
             //[SerializeField]
             //private int m_tombSize;
             //public int tombSize => m_tombSize;
@@ -290,6 +296,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Attack m_chosenAttack;
 
         private ProjectileLauncher m_launcher;
+        private ProjectileLauncher m_spearLauncher;
 
         [SerializeField, TabGroup("Move Points")]
         private Transform m_tripleDronePoint;
@@ -316,6 +323,8 @@ namespace DChild.Gameplay.Characters.Enemies
         
         private int m_currentPhaseIndex;
         private int m_currentDroneBatches;
+        private float m_currentSummonSpeed;
+        private int m_currentSummonAmmount;
         //private float m_currentDroneSummonSpeed;
         float m_currentRecoverTime;
         bool m_isFinalPhase;
@@ -329,6 +338,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_currentSkin = obj.skin;
             m_currentPhaseIndex = obj.phaseIndex;
             m_currentDroneBatches = obj.droneStrikeBatches;
+            m_currentSummonSpeed = obj.droneStrikeSummonSpeed;
+            m_currentSummonAmmount = obj.droneSummonAmmount;
         }
 
         private void ChangeState()
@@ -597,7 +608,7 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int i = 0; i < m_currentDroneBatches; i++)
             {
                 //LaunchBeeProjectile();
-                m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false);
+                m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false).TimeScale = m_currentSummonSpeed;
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
                 m_animation.SetAnimation(0, m_info.orderDroneAttackLoopAnimation, true);
                 yield return new WaitForSeconds(1);
@@ -611,33 +622,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.SetState(State.ReevaluateSituation);
             yield return null;
         }
-
-        //private IEnumerator HorizontalDronesPhase3Routine()
-        //{
-        //    m_agent.Stop();
-        //    //CustomTurn();
-        //    while (Vector2.Distance(transform.position, m_tripleDronePoint.position) > 1.5)
-        //    {
-        //        DynamicMovement(m_tripleDronePoint.position);
-        //        yield return null;
-        //    }
-        //    m_stateHandle.Wait(State.ReevaluateSituation);
-        //    m_agent.Stop();
-        //    m_animation.SetAnimation(0, m_info.summonDroneAnimation, false).TimeScale = 2f;
-        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDroneAnimation);
-        //    m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false);
-        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
-        //    m_animation.SetAnimation(0, m_info.orderDroneAttackLoopAnimation, true);
-        //    yield return new WaitForSeconds(1f);
-        //    m_animation.SetAnimation(0, m_info.idleAnimation, false);
-        //    //for (int i = 0; i < /*m_spawnPoints.Count*/4; i++)
-        //    //{
-        //    //}
-        //    m_attackDecider.hasDecidedOnAttack = false;
-        //    m_stateHandle.ApplyQueuedState();
-        //    //m_stateHandle.SetState(State.ReevaluateSituation);
-        //    yield return null;
-        //}
 
         private IEnumerator SpearChargeRoutine()
         {
@@ -824,31 +808,42 @@ namespace DChild.Gameplay.Characters.Enemies
         private void LaunchBeeProjectile()
         {
             StartCoroutine(LaunchBeeProjectileRoutine());
+            //for (int i = 0; i < m_currentSummonAmmount; i++)
+            //{
+            //    float rotation = transform.localScale.x < 1 ? 180 : 0;
+            //    int rng = UnityEngine.Random.Range(0, m_spawnPoints.Count);
+            //    m_spawnPoints[rng].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+            //    //GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
+            //    m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[rng]);
+            //    m_launcher.LaunchProjectile();
+            //    //yield return new WaitForSeconds(.25f);
+
+            //}
         }
 
         private void LaunchSpearProjectile()
         {
-            m_launcher = new ProjectileLauncher(m_info.spearProjectile.projectileInfo, m_spearSpawnPoint);
             if (!IsFacingTarget())
             {
                 transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
                 m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
-            m_launcher.AimAt(m_targetInfo.position);
-            m_launcher.LaunchProjectile();
+            m_spearLauncher = new ProjectileLauncher(m_info.spearProjectile.projectileInfo, m_spearSpawnPoint);
+            m_spearLauncher.AimAt(m_targetInfo.position);
+            m_spearLauncher.LaunchProjectile();
         }
 
         private IEnumerator LaunchBeeProjectileRoutine()
         {
-            for (int i = 0; i < m_spawnPoints.Count; i++)
+            for (int i = 0; i < m_currentSummonAmmount; i++)
             {
                 float rotation = transform.localScale.x < 1 ? 180 : 0;
-                m_spawnPoints[i].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
-                GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[i].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
-                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[i]);
+                int rng = UnityEngine.Random.Range(0, m_spawnPoints.Count);
+                m_spawnPoints[rng].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+                //GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
+                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[rng]);
                 m_launcher.LaunchProjectile();
                 yield return new WaitForSeconds(.25f);
-
             }
         }
 
