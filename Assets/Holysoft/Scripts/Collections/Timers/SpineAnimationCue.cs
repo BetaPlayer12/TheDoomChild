@@ -1,20 +1,15 @@
-﻿using Holysoft.Event;
-using Holysoft.UI;
-using Sirenix.OdinInspector;
-using Spine;
+﻿using Holysoft.UI;
 using Spine.Unity;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Holysoft.Collections
 {
     public class SpineAnimationCue : UIBehaviour
     {
         [SerializeField]
-        private SkeletonGraphic m_skeletonData;
+        private SkeletonAnimation m_skeletonData;
 
         [SpineAnimation(dataField: "m_skeletonData")]
         public List<string> animations;
