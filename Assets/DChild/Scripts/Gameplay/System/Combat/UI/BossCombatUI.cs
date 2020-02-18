@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Combat.UI
         public void SetBoss(Boss boss)
         {
             m_bossHealth.MonitorInfoOf(boss.health);
+            m_bossName.text = boss.creatureName;
         }
     }
 }
