@@ -116,11 +116,7 @@ namespace DChild.Gameplay.Environment
 
         private void OnDestroyObject(object sender, EventActionArgs eventArgs)
         {
-            m_onDestroy?.Invoke();
-            if (m_createDebris)
-            {
-                InstantiateDebris(m_debris);
-            }
+            SetObjectState(true);
         }
 
         // Start is called before the first frame update

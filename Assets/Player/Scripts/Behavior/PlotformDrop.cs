@@ -21,9 +21,10 @@ namespace PlayerNew
         private void OnCollisionEnter2D(Collision2D collision)
         {
             var down = inputState.GetButtonValue(inputButtons[0]);
+            var downHold = inputState.GetButtonHoldTime(inputButtons[0]);
             var jump = inputState.GetButtonValue(inputButtons[1]);
 
-            if (collision.gameObject.tag == "Droppable" && down && jump)
+            if (collision.gameObject.tag == "Droppable" && down && jump && downHold < 0.1f)
             {
                 Debug.Log("Dropping");
                 body2d.velocity = Vector2.zero;
