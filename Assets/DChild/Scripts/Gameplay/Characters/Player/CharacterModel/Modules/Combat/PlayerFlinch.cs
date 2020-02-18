@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField, MinValue(0)]
         private float m_knockBackPower;
-
+        [SerializeField]
         private CollisionState m_collionState;
         private Rigidbody2D m_physics;
         private Animator m_animator;

@@ -644,6 +644,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_knockBackPower: 10
+  m_collionState: {fileID: 4084513133358244984}
 --- !u!1001 &3000564938841532954
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1110,7 +1111,7 @@ PrefabInstance:
     - target: {fileID: 4030078961449566229, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4042968203043053328, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
@@ -1537,6 +1538,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Model
       objectReference: {fileID: 0}
+    - target: {fileID: 7567338640060585545, guid: f12efcbc77240e7449cca360a383e925,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 301ceb1237eb05842b215571d8cbfba4, type: 2}
     - target: {fileID: 7567338640060585547, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
       propertyPath: collisionLayer.m_Bits
@@ -1685,7 +1691,7 @@ PrefabInstance:
     - target: {fileID: 8416278654859809743, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8512243716019145142, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
@@ -2370,6 +2376,12 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7567338640060585549, guid: f12efcbc77240e7449cca360a383e925, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f12efcbc77240e7449cca360a383e925, type: 3}
+--- !u!60 &761861199 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 5884952831889467004, guid: f12efcbc77240e7449cca360a383e925,
+    type: 3}
+  m_PrefabInstance: {fileID: 5884952831304823347}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &1456960559162279325 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 5013531694104655790, guid: f12efcbc77240e7449cca360a383e925,
@@ -2730,6 +2742,18 @@ CapsuleCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4084513133358244984 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7567338640060585547, guid: f12efcbc77240e7449cca360a383e925,
+    type: 3}
+  m_PrefabInstance: {fileID: 5884952831304823347}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558870011c0032a4481f99829923af91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2409406276008226169 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8125728846634508106, guid: f12efcbc77240e7449cca360a383e925,
@@ -2748,21 +2772,15 @@ PolygonCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &8516097706880209374 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2847626079987262445, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5884952830939474640 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 365549795, guid: f12efcbc77240e7449cca360a383e925,
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &761861199 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 5884952831889467004, guid: f12efcbc77240e7449cca360a383e925,
+--- !u!198 &8516097706880209374 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2847626079987262445, guid: f12efcbc77240e7449cca360a383e925,
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
