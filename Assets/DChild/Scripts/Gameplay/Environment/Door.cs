@@ -57,6 +57,10 @@ namespace DChild.Gameplay.Environment.Interractables
             m_isOpen = ((SaveData)data).isOpen;
             if (m_isOpen)
             {
+                if (m_multiDirectionParameter != string.Empty)
+                {
+                    m_animator.SetBool(m_multiDirectionParameter, m_multiDirectionParameterValue);
+                }
                 m_animator.SetTrigger("Open");
             }
         }
