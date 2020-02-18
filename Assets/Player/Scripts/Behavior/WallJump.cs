@@ -23,7 +23,7 @@ namespace PlayerNew
                 {
                     Debug.Log("wall jump");
                     inputState.direction = inputState.direction == Directions.Right ? Directions.Left : Directions.Right;
-                    body2d.velocity = new Vector2(jumpVelocity.x * (float)inputState.direction, jumpVelocity.y);
+                    //body2d.velocity = new Vector2(jumpVelocity.x * (float)inputState.direction, jumpVelocity.y);
                 }
             }
         }
