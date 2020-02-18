@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace PlayerNew
     public class LedgeGrab : PlayerBehaviour
 
     {
+        [SerializeField]
+        private Character m_character;
         private FaceDirection facing;
 
         public bool canLedgeGrab = false;
@@ -62,7 +65,7 @@ namespace PlayerNew
 
         private void FinishedLedgeClimb()
         {
-            transform.position = ledgePos2;
+            m_character.transform.position = ledgePos2;
             ledgeDetected = false;
             ToggleScripts(false);
         }
