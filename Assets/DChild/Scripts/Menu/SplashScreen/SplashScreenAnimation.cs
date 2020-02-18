@@ -9,7 +9,7 @@ namespace DChild.Menu.MainMenu
     public class SplashScreenAnimation : MonoBehaviour
     {
         [SerializeField]
-        private SkeletonGraphic m_zSkeleton;
+        private SkeletonAnimation m_zSkeleton;
         [SerializeField]
         [SpineAnimation]
         private string m_idleLoop;
