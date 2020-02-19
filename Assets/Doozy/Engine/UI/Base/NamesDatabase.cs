@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Doozy.Engine.Utils;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 // ReSharper disable UnusedMember.Global
@@ -138,17 +138,10 @@ namespace Doozy.Engine.UI.Base
         {
             categoryName = categoryName.Trim();
             if (categoryName.Equals(CUSTOM)) return true;
-            if (Categories == null)
-            {
-                Categories = new List<ListOfNames>();
-                return false;
-            }
-
-            foreach (ListOfNames listOfNames in Categories)
-                if (listOfNames.CategoryName.Equals(categoryName))
-                    return true;
-
+            if (Categories != null) return Categories.Where(listOfNames => listOfNames != null).Any(listOfNames => listOfNames.CategoryName.Equals(categoryName));
+            Categories = new List<ListOfNames>();
             return false;
+
         }
 
         /// <summary> Creates a new ListOfNames asset with the given category name and adds a reference to it to the database. Returns TRUE if the operation was successful </summary>
@@ -156,7 +149,15 @@ namespace Doozy.Engine.UI.Base
         /// <param name="names"> Names to be added to the list </param>
         /// <param name="showDialog"> Should a display dialog be shown before executing the action </param>
         /// <param name="saveAssets"> Write all unsaved asset changes to disk? </param>
-        public bool CreateCategory(string categoryName, List<string> names, bool showDialog = false, bool saveAssets = false)
+        public bool CreateCategory(string categoryName, List<string> names, bool showDialog = false, bool saveAssets = false) { return CreateCategory(GetPath(DatabaseType), categoryName, names, showDialog, saveAssets); }
+
+        /// <summary> Creates a new ListOfNames asset, at the given relative path, with the given category name and adds a reference to it to the database. Returns TRUE if the operation was successful </summary>
+        /// <param name="relativePath"> Path where to create the theme asset </param>
+        /// <param name="categoryName"> The category name of the new ListOfNames </param>
+        /// <param name="names"> Names to be added to the list </param>
+        /// <param name="showDialog"> Should a display dialog be shown before executing the action </param>
+        /// <param name="saveAssets"> Write all unsaved asset changes to disk? </param>
+        public bool CreateCategory(string relativePath, string categoryName, List<string> names, bool showDialog = false, bool saveAssets = false)
         {
             categoryName = categoryName.Trim();
             if (string.IsNullOrEmpty(categoryName))
@@ -176,12 +177,13 @@ namespace Doozy.Engine.UI.Base
             }
 
 #if UNITY_EDITOR
-            var listOfNames = AssetUtils.CreateAsset<ListOfNames>(GetPath(DatabaseType), GetDatabaseFileName(DatabaseType, categoryName));
+            var listOfNames = AssetUtils.CreateAsset<ListOfNames>(relativePath, GetDatabaseFileName(DatabaseType, categoryName));
 #else
             ListOfNames listOfNames = ScriptableObject.CreateInstance<ListOfNames>();
 #endif
 
             listOfNames.CategoryName = categoryName;
+            if (names == null) names = new List<string>();
             listOfNames.AddNames(names, true, false);
             listOfNames.DatabaseType = DatabaseType;
             listOfNames.SetDirty(false);
@@ -430,10 +432,8 @@ namespace Doozy.Engine.UI.Base
         /// <param name="saveAssets"> Write all unsaved asset changes to disk? </param>
         public void SearchForUnregisteredDatabases(bool saveAssets)
         {
-            string title = UILabels.Database + ": " + DatabaseType; // ProgressBar Title
-            string info = UILabels.Search;                          // ProgressBar Info
+            DoozyUtils.DisplayProgressBar(UILabels.SearchForDatabases, UILabels.Search, 0.1f);
 
-            DoozyUtils.DisplayProgressBar(title, info, 0.1f);
             bool foundUnregisteredDatabase = false;
             ListOfNames[] array = Resources.LoadAll<ListOfNames>("");
             if (array == null || array.Length == 0)
@@ -445,7 +445,7 @@ namespace Doozy.Engine.UI.Base
             if (Categories == null) Categories = new List<ListOfNames>();
             for (int i = 0; i < array.Length; i++)
             {
-                DoozyUtils.DisplayProgressBar(title, info, 0.1f + 0.8f * (i + 1) / array.Length);
+                DoozyUtils.DisplayProgressBar(UILabels.SearchForDatabases, UILabels.Search, 0.1f + 0.7f * (i + 1) / array.Length);
                 ListOfNames foundList = array[i];
                 if (foundList.DatabaseType != DatabaseType) continue;
                 if (Categories.Contains(foundList)) continue;
@@ -453,13 +453,13 @@ namespace Doozy.Engine.UI.Base
                 foundUnregisteredDatabase = true;
             }
 
-            DoozyUtils.DisplayProgressBar(title, info, 1f);
             if (!foundUnregisteredDatabase)
             {
                 DoozyUtils.ClearProgressBar();
                 return;
             }
 
+            DoozyUtils.DisplayProgressBar(UILabels.SearchForDatabases, UILabels.Search, 0.9f);
             UpdateListOfCategoryNames();
             SetDirty(saveAssets);
             DoozyUtils.ClearProgressBar();
@@ -478,7 +478,6 @@ namespace Doozy.Engine.UI.Base
             Categories = Categories.OrderBy(listOfNames => listOfNames.CategoryName).ToList(); //sort database by category name
             foreach (ListOfNames listOfNames in Categories) listOfNames.Names.Sort();          //sort items in each category
             SetDirty(saveAssets);
-//            DDebug.Log(UILabels.DatabaseSorted);
         }
 
         /// <summary> Records any changes done on the object after this function </summary>
@@ -489,9 +488,10 @@ namespace Doozy.Engine.UI.Base
         public void UpdateListOfCategoryNames()
         {
             CategoryNames.Clear();
-            foreach (ListOfNames listOfNames in Categories)
-                if (!CategoryNames.Contains(listOfNames.CategoryName))
-                    CategoryNames.Add(listOfNames.CategoryName);
+            foreach (ListOfNames listOfNames in Categories.Where(listOfNames => listOfNames != null).Where(listOfNames => !CategoryNames.Contains(listOfNames.CategoryName)))
+            {
+                CategoryNames.Add(listOfNames.CategoryName);
+            }
 
             CategoryNames.Insert(0, CUSTOM);
         }

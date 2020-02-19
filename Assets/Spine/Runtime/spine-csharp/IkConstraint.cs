@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated May 1, 2019. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2019, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -15,16 +15,16 @@
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
- * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
- * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 using System;
@@ -37,19 +37,22 @@ namespace Spine {
 	/// <para>
 	/// See <a href="http://esotericsoftware.com/spine-ik-constraints">IK constraints</a> in the Spine User Guide.</para>
 	/// </summary>
-	public class IkConstraint : IConstraint {
+	public class IkConstraint : IUpdatable {
 		internal IkConstraintData data;
 		internal ExposedList<Bone> bones = new ExposedList<Bone>();
 		internal Bone target;
 		internal int bendDirection;
 		internal bool compress, stretch;
-		internal float mix = 1;
+		internal float mix = 1, softness;
+
+		internal bool active;
 
 		public IkConstraint (IkConstraintData data, Skeleton skeleton) {
 			if (data == null) throw new ArgumentNullException("data", "data cannot be null.");
 			if (skeleton == null) throw new ArgumentNullException("skeleton", "skeleton cannot be null.");
 			this.data = data;
 			mix = data.mix;
+			softness = data.softness;
 			bendDirection = data.bendDirection;
 			compress = data.compress;
 			stretch = data.stretch;
@@ -70,6 +73,7 @@ namespace Spine {
 				bones.Add(skeleton.Bones.Items[bone.data.index]);
 			target = skeleton.Bones.Items[constraint.target.data.index];
 			mix = constraint.mix;
+			softness = constraint.softness;
 			bendDirection = constraint.bendDirection;
 			compress = constraint.compress;
 			stretch = constraint.stretch;
@@ -88,14 +92,9 @@ namespace Spine {
 				Apply(bones.Items[0], target.worldX, target.worldY, compress, stretch, data.uniform, mix);
 				break;
 			case 2:
-				Apply(bones.Items[0], bones.Items[1], target.worldX, target.worldY, bendDirection, stretch, mix);
+				Apply(bones.Items[0], bones.Items[1], target.worldX, target.worldY, bendDirection, stretch, softness, mix);
 				break;
 			}
-		}
-
-
-		public int Order {
-			get { return data.order; }
 		}
 
 		/// <summary>The bones that will be modified by this IK constraint.</summary>
@@ -113,6 +112,12 @@ namespace Spine {
 		public float Mix {
 			get { return mix; }
 			set { mix = value; }
+		}
+
+		///<summary>For two bone IK, the distance from the maximum reach of the bones that rotation will slow.</summary>
+		public float Softness {
+			get { return softness; }
+			set { softness = value; }
 		}
 
 		/// <summary>Controls the bend direction of the IK bones, either 1 or -1.</summary>
@@ -136,6 +141,10 @@ namespace Spine {
 			set { stretch = value; }
 		}
 
+		public bool Active {
+			get { return active; }
+		}
+
 		/// <summary>The IK constraint's setup pose data.</summary>
 		public IkConstraintData Data {
 			get { return data; }
@@ -150,17 +159,55 @@ namespace Spine {
 								float alpha) {
 			if (!bone.appliedValid) bone.UpdateAppliedTransform();
 			Bone p = bone.parent;
-			float id = 1 / (p.a * p.d - p.b * p.c);
-			float x = targetX - p.worldX, y = targetY - p.worldY;
-			float tx = (x * p.d - y * p.b) * id - bone.ax, ty = (y * p.a - x * p.c) * id - bone.ay;
-			float rotationIK = (float)Math.Atan2(ty, tx) * MathUtils.RadDeg - bone.ashearX - bone.arotation;
+
+			float pa = p.a, pb = p.b, pc = p.c, pd = p.d;
+			float rotationIK = -bone.ashearX - bone.arotation;
+			float tx = 0, ty = 0;
+
+			switch(bone.data.transformMode) {
+				case TransformMode.OnlyTranslation:
+					tx = targetX - bone.worldX;
+					ty = targetY - bone.worldY;
+					break;
+				case TransformMode.NoRotationOrReflection: {
+                        rotationIK += (float)Math.Atan2(pc, pa) * MathUtils.RadDeg;
+                        float ps = Math.Abs(pa * pd - pb * pc) / (pa * pa + pc * pc);
+                        pb = -pc * ps;
+                        pd = pa * ps;
+                        float x = targetX - p.worldX, y = targetY - p.worldY;
+                        float d = pa * pd - pb * pc;
+                        tx = (x * pd - y * pb) / d - bone.ax;
+                        ty = (y * pa - x * pc) / d - bone.ay;
+                        break;
+                }                    
+                default: {
+                    float x = targetX - p.worldX, y = targetY - p.worldY;
+                    float d = pa * pd - pb * pc;
+                    tx = (x * pd - y * pb) / d - bone.ax;
+                    ty = (y * pa - x * pc) / d - bone.ay;
+                    break;
+                }
+			}
+
+			rotationIK += (float)Math.Atan2(ty, tx) * MathUtils.RadDeg;
 			if (bone.ascaleX < 0) rotationIK += 180;
 			if (rotationIK > 180)
 				rotationIK -= 360;
 			else if (rotationIK < -180) //
 				rotationIK += 360;
+
 			float sx = bone.ascaleX, sy = bone.ascaleY;
 			if (compress || stretch) {
+				switch (bone.data.transformMode) {
+					case TransformMode.NoScale:
+                        tx = targetX - bone.worldX;
+                        ty = targetY - bone.worldY;
+                        break;
+                    case TransformMode.NoScaleOrReflection:
+						tx = targetX - bone.worldX;
+						ty = targetY - bone.worldY;
+                        break;
+				}
 				float b = bone.data.length * sx, dd = (float)Math.Sqrt(tx * tx + ty * ty);
 				if ((compress && dd < b) || (stretch && dd > b) && b > 0.0001f) {
 					float s = (dd / b - 1) * alpha + 1;
@@ -173,7 +220,8 @@ namespace Spine {
 
 		/// <summary>Applies 2 bone IK. The target is specified in the world coordinate system.</summary>
 		/// <param name="child">A direct descendant of the parent bone.</param>
-		static public void Apply (Bone parent, Bone child, float targetX, float targetY, int bendDir, bool stretch, float alpha) {
+		static public void Apply (Bone parent, Bone child, float targetX, float targetY, int bendDir, bool stretch, float softness,
+			float alpha) {
 			if (alpha == 0) {
 				child.UpdateWorldTransform();
 				return;
@@ -215,12 +263,29 @@ namespace Spine {
 			b = pp.b;
 			c = pp.c;
 			d = pp.d;
-			float id = 1 / (a * d - b * c), x = targetX - pp.worldX, y = targetY - pp.worldY;
-			float tx = (x * d - y * b) * id - px, ty = (y * a - x * c) * id - py, dd = tx * tx + ty * ty;
-			x = cwx - pp.worldX;
-			y = cwy - pp.worldY;
+			float id = 1 / (a * d - b * c), x = cwx - pp.worldX, y = cwy - pp.worldY;
 			float dx = (x * d - y * b) * id - px, dy = (y * a - x * c) * id - py;
 			float l1 = (float)Math.Sqrt(dx * dx + dy * dy), l2 = child.data.length * csx, a1, a2;
+			if (l1 < 0.0001f) {
+				Apply(parent, targetX, targetY, false, stretch, false, alpha);
+				child.UpdateWorldTransform(cx, cy, 0, child.ascaleX, child.ascaleY, child.ashearX, child.ashearY);
+				return;
+			}
+			x = targetX - pp.worldX;
+			y = targetY - pp.worldY;
+			float tx = (x * d - y * b) * id - px, ty = (y * a - x * c) * id - py;
+			float dd = tx * tx + ty * ty;
+			if (softness != 0) {
+				softness *= psx * (csx + 1) / 2;
+				float td = (float)Math.Sqrt(dd), sd = td - l1 - l2 * psx + softness;
+				if (sd > 0) {
+					float p = Math.Min(1, sd / (softness * 2)) - 1;
+					p = (sd - softness * (1 - p * p)) / td;
+					tx -= p * tx;
+					ty -= p * ty;
+					dd = tx * tx + ty * ty;
+				}
+			}
 			if (u) {
 				l2 *= psx;
 				float cos = (dd - l1 * l1 - l2 * l2) / (2 * l1 * l2);
@@ -228,7 +293,7 @@ namespace Spine {
 					cos = -1;
 				else if (cos > 1) {
 					cos = 1;
-					if (stretch && l1 + l2 > 0.0001f) sx *= ((float)Math.Sqrt(dd) / (l1 + l2) - 1) * alpha + 1;
+					if (stretch) sx *= ((float)Math.Sqrt(dd) / (l1 + l2) - 1) * alpha + 1;
 				}
 				a2 = (float)Math.Acos(cos) * bendDir;
 				a = l1 + l2 * cos;

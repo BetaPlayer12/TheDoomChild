@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace DChild.Gameplay
 {
-
     public abstract class CharacterPhysics2D : IsolatedPhysics2D
     {
         [TabGroup("TabGroup", "Configuration")]
@@ -20,28 +19,36 @@ namespace DChild.Gameplay
         private bool m_useStepClimb = true;
         [SerializeField, ToggleGroup("m_useStepClimb", GroupID = "TabGroup/Configuration/StepClimb"), HideLabel]
         private StepClimber m_stepClimber;
-        
-        [SerializeField, TabGroup("TabGroup","Restriction")]
+        [SerializeField, TabGroup("TabGroup", "Configuration")]
+        private bool m_calculateGroundAngle = true;
+
+        [SerializeField, TabGroup("TabGroup", "Restriction")]
         private RangeFloat m_acceptableWalkableAngle;
-        [SerializeField, TabGroup("TabGroup","References"), ValueDropdown("LegCollisionDropdown")]
+        [SerializeField, TabGroup("TabGroup", "References"), ValueDropdown("LegCollisionDropdown")]
         private CollisionDetector m_legCollision;
-        [SerializeField, TabGroup("TabGroup","References"), ValueDropdown("LegColliderDropdown")]
+        [SerializeField, TabGroup("TabGroup", "References"), ValueDropdown("LegColliderDropdown")]
         private Collider2D m_legCollider;
 
         private ColliderIntersectDetector m_legColliderDetector;
         private float m_groundAngle;
 
-        [ShowInInspector, ReadOnly, TabGroup("TabGroup","Data")]
+        [ShowInInspector, ReadOnly, TabGroup("TabGroup", "Data")]
         private bool m_onWalkableGround;
+        [ShowInInspector, ReadOnly, TabGroup("TabGroup", "Data")]
         private bool m_inContactWithGround;
+        [ShowInInspector, ReadOnly, TabGroup("TabGroup", "Data")]
         private Vector2 m_moveAlongGround;
+        [SerializeField, TabGroup("TabGroup", "References")]
+        private LayerMask m_legColliderLayerMask;
+        private RaySensor m_slopeSensor;
 
         public Vector2 moveAlongGround => m_moveAlongGround;
         public bool onWalkableGround => m_onWalkableGround;
         public bool inContactWithGround => m_inContactWithGround;
-        public bool isFalling => m_onWalkableGround == false && velocity.y < -15f; //-0.1f;
+        public bool isFalling => m_onWalkableGround == false && velocity.y < -0.1f; //-0.1f;
         public float groundAngle => m_groundAngle;
         public RangeFloat acceptableAngle => m_acceptableWalkableAngle;
+        public bool calculateGroundAngle { set => m_calculateGroundAngle = value; }
 
         public void StopCoyoteTime()
         {
@@ -50,8 +57,29 @@ namespace DChild.Gameplay
             m_onWalkableGround = false;
         }
 
+        public void SetGroundNormal(Vector2 groundNormal)
+        {
+            m_groundAngle = Vector2.Angle(up, groundNormal);
+            m_moveAlongGround = new Vector2(groundNormal.y, -groundNormal.x);
+        }
+
+        public override void UpdatePhysics()
+        {
+            if (m_calculateGroundAngle)
+            {
+                CalculateGroundAngle();
+            }
+            EvaluateGroundedness();
+            base.UpdatePhysics();
+            if (m_useStepClimb)
+            {
+                m_stepClimber.Execute(m_rigidbody2D);
+            }
+        }
+
         private void UseCoyoteTime()
         {
+
             if (m_coyoteTime.isAvailable)
             {
                 m_onWalkableGround = true;
@@ -70,14 +98,17 @@ namespace DChild.Gameplay
             m_moveAlongGround = new Vector2(groundNormal.y, -groundNormal.x);
         }
 
+
         private void EvaluateGroundedness()
         {
+            //This is where all started 
             if (m_legColliderDetector != null && m_legColliderDetector.IsIntersecting(m_legCollider))
             {
                 m_onWalkableGround = false;
                 m_inContactWithGround = false;
             }
-            if (m_legCollision.collisionCount > 0)
+
+            if (m_legCollider.IsTouchingLayers(m_legColliderLayerMask) && velocity.y <= 0.1f)
             {
                 m_inContactWithGround = true;
                 if (m_acceptableWalkableAngle.InRange(m_groundAngle))
@@ -117,17 +148,8 @@ namespace DChild.Gameplay
             m_onWalkableGround = true;
             m_legColliderDetector = GetComponentInChildren<CapsuleColliderDetector>();
             m_stepClimber.Initialize();
+            m_legColliderLayerMask = Physics2D.GetLayerCollisionMask(m_legCollider.gameObject.layer);
             base.Awake();
-        }
-        public override void UpdatePhysics()
-        {
-            CalculateGroundAngle();
-            EvaluateGroundedness();
-            base.UpdatePhysics();
-            if (m_useStepClimb)
-            {
-                m_stepClimber.Execute(m_rigidbody2D);
-            }
         }
 
         protected void Update()
@@ -143,11 +165,6 @@ namespace DChild.Gameplay
         private void OnDrawGizmosSelected()
         {
             m_stepClimber.DrawGizmos(transform);
-        }
-
-        private void OnValidate()
-        {
-            m_stepClimber.m_detectorCandidates = new List<CollisionDetector>(GetComponentsInChildren<CollisionDetector>()).Where(x => x.recordContactPoints);
         }
 
         public void Initialize(CollisionDetector legCollision)

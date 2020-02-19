@@ -3,10 +3,9 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Anima2D
+namespace Anima2D 
 {
-#if UNITY_EDITOR
-    [InitializeOnLoad]
+	[InitializeOnLoad]
 	public class ColorRing
 	{
 		static List<Color> mColors = new List<Color>();
@@ -43,5 +42,4 @@ namespace Anima2D
 			}
 		}
 	}
-#endif
 }

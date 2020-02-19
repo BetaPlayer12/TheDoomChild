@@ -50,6 +50,48 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             }
             AssetDatabase.SaveAssets();
         }
+
+
+        [Button, ToggleGroup("m_enableEdit"), ShowIf("m_connectToDatabase")]
+        private void SaveToDatabase()
+        {
+            var connection = DChildDatabase.GetSoulSkillConnection();
+            connection.Initialize();
+            connection.Update(m_ID, m_type, m_description);
+            connection.Close();
+        }
+
+        [Button, ToggleGroup("m_enableEdit"), ShowIf("m_connectToDatabase")]
+        private void LoadFromDatabase()
+        {
+            var connection = DChildDatabase.GetSoulSkillConnection();
+            connection.Initialize();
+            var info = connection.GetInfoOf(m_ID);
+            m_type = info.type;
+            m_description = info.description;
+            connection.Close();
+        }
+
+        [Button, ToggleGroup("m_enableEdit"), HideIf("m_connectToDatabase")]
+        private void InsertToDatabase()
+        {
+            var connection = DChildDatabase.GetSoulSkillConnection();
+            connection.Initialize();
+            m_ID = connection.Insert(Mathf.Abs(m_ID), m_name, m_description, m_type);
+            m_databaseID = m_ID;
+            m_customName = m_name;
+            m_connectToDatabase = true;
+            connection.Close();
+
+            string assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
+            if (m_ID != -1)
+            {
+                var fileName = m_name.Replace(" ", string.Empty);
+                fileName += "Data";
+                FileUtility.RenameAsset(this, assetPath, fileName);
+                AssetDatabase.SaveAssets();
+            }
+        }
 #endif
         #endregion
         [SerializeField, ToggleGroup("m_enableEdit")]
@@ -69,7 +111,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             for (int i = 0; i < m_modules.Length; i++)
             {
-                m_modules[i].AttachTo(player);
+                m_modules[i].AttachTo(GetInstanceID(),player);
             }
         }
 
@@ -77,7 +119,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             for (int i = 0; i < m_modules.Length; i++)
             {
-                m_modules[i].DetachFrom(player);
+                m_modules[i].DetachFrom(GetInstanceID(),player);
             }
         }
 

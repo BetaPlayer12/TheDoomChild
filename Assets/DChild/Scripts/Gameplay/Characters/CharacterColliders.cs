@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters
 {
+    [AddComponentMenu("DChild/Gameplay/Object/Character Colliders")]
     public class CharacterColliders : MonoBehaviour
     {
         private Collider2D[] m_colliders;
@@ -41,6 +42,21 @@ namespace DChild.Gameplay.Characters
                 for (int j = 0; j < m_detectors[i].intersectingColliderCount; j++)
                 {
                     if (m_detectors[i].IsIntersecting(m_colliders[j]))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool AreCollidersIntersecting(Collider2D otherCollider)
+        {
+            for (int i = 0; i < m_detectors.Length; i++)
+            {
+                for (int j = 0; j < m_detectors[i].intersectingColliderCount; j++)
+                {
+                    if (m_detectors[i].IsIntersecting(otherCollider))
                     {
                         return true;
                     }

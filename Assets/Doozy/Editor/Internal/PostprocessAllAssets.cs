@@ -1,4 +1,3 @@
-using Doozy.Engine;
 using UnityEditor;
 
 namespace Doozy.Editor.Internal
@@ -7,8 +6,7 @@ namespace Doozy.Editor.Internal
     {
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
-//            DDebug.Log("Hello OnPostBuildEvent");
+//            DDebug.Log("OnPostprocessAllAssets: Running Doozy Assets Processor...");
         }
     }
-
 }

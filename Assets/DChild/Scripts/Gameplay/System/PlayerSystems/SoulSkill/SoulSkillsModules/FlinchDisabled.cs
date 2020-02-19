@@ -5,14 +5,14 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 {
     public struct FlinchDisabled : ISoulSkillModule
     {
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
-            player.characterState.canFlinch = false;
+            player.state.canFlinch = false;
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
-            player.characterState.canFlinch = true;
+            player.state.canFlinch = true;
         }
     }
 }

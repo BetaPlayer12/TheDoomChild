@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DChild.Gameplay;
+using DChild.Gameplay.Characters;
 using DChild.Gameplay.Systems;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -45,7 +46,7 @@ namespace DChild.Gameplay
         }
 
         [Button("Stop")]
-        public void Stop()
+        public override void Stop()
         {
             if (m_state != State.Stop)
             {
@@ -58,7 +59,7 @@ namespace DChild.Gameplay
         }
 
         [Button("Pauses")]
-        public void Pause()
+        public override void Pause()
         {
             if (m_state != State.Pause)
             {
@@ -98,15 +99,21 @@ namespace DChild.Gameplay
             for (int i = 0; i < m_particleSystems.Length; i++)
             {
                 var main = m_particleSystems[i].main;
-                main.playOnAwake = m_playOnAwake;
+                if (main.playOnAwake != m_playOnAwake)
+                {
+                    main.playOnAwake = m_playOnAwake;
+                }
 #if UNITY_EDITOR
-                if (m_poolOnStop)
+                if (m_poolOnStop && main.stopAction != ParticleSystemStopAction.Callback)
                 {
                     main.stopAction = ParticleSystemStopAction.Callback;
                 }
 #endif
             }
         }
-    }
 
+        public override void SetFacing(HorizontalDirection horizontalDirection)
+        {
+        }
+    }
 }

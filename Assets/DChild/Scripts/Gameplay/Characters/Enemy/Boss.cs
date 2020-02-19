@@ -1,74 +1,53 @@
-﻿using DChild.Gameplay.Combat;
-using Spine;
+﻿using DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Combat;
+using DChild.Menu.Bestiary;
+using Holysoft.Event;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public abstract class Boss : Enemy
+    public class Boss : MonoBehaviour
     {
-        private Vector2 m_initialPosition;
-        protected AttackDamage[] m_currentDamage;
-
-        public override EnemyType enemyType => EnemyType.Boss;
-        public override IAttackResistance attackResistance => null;
-        public override IStatusResistance statusResistance => null;
-        protected abstract AttackDamage startDamage { get; }
-
-        public override void InitializeAs(bool isAlive)
+        public struct PhaseEventArgs : IEventActionArgs
         {
-            if (isAlive)
+            public PhaseEventArgs(int index) : this()
             {
-                m_health.ResetValueToMax();
-                EnableHitboxes();
-                m_colliders.Enable();
-                transform.position = m_initialPosition;
-                m_brain.ResetBrain();
-                m_behaviour.SetActiveBehaviour(null);
-                gameObject.SetActive(true);
-                animation?.DoIdle();
-                ResetValues();
+                this.index = index;
             }
-            else
-            {
-                m_health.Empty();
-                DisableHitboxes();
-                m_colliders.Disable();
-                gameObject.SetActive(false);
-            }
+
+            public int index { get; }
         }
 
-        protected virtual void OnAnimationComplete(TrackEntry trackEntry)
+        [SerializeField]
+        private BestiaryData m_data;
+        [SerializeField]
+        private Health m_health;
+        private ICombatAIBrain m_brain;
+
+        public Health health => m_health;
+        public string creatureName => m_data.name;
+        public string creatureTitle => m_data.title;
+
+        public event EventAction<PhaseEventArgs> PhaseChange;
+
+        public void SetTarget(IDamageable damageable, Character m_target)
         {
-            if (trackEntry.Animation.Name == CombatCharacterAnimation.ANIMATION_DEATH)
-            {
-                m_colliders.Disable();
-            }
+            m_brain.SetTarget(damageable, m_target);
         }
 
-        protected override void OnDeath()
+        public void SendPhaseTriggered(int index) => PhaseChange?.Invoke(this, new PhaseEventArgs(index));
+
+        private void Awake()
         {
-            animation?.DoDeath();
+            m_brain = GetComponent<ICombatAIBrain>();
         }
-
-        protected virtual void ResetValues()
-        {
-
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            m_initialPosition = transform.position;
-            m_currentDamage = new AttackDamage[1];
-        }
-
-        protected virtual void Start()
-        {
-            m_currentDamage[0] = startDamage;
-            if (animation)
-            {
-                animation.animationState.Complete += OnAnimationComplete;
-            }
-        }
+#if UNITY_EDITOR
+    public void InitializeFields(BestiaryData data, Health health)
+    {
+            m_data = data;
+            m_health = health;
     }
+#endif
+    }
+
 }

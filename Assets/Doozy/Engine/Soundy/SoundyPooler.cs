@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -81,7 +81,7 @@ namespace Doozy.Engine.Soundy
 
         #region Static Methods
 
-        /// <summary> Stops all SoundyControllers from playing, destroys the GameObjects they are attached to and clears the Pool </summary>
+        /// <summary> Stop all SoundyControllers from playing, destroy the GameObjects they are attached to and clear the Pool </summary>
         /// <param name="keepMinimumNumberOfControllers"> Should there be a minimum set number of controllers in the pool left after clearing? </param>
         public static void ClearPool(bool keepMinimumNumberOfControllers = false)
         {
@@ -113,18 +113,18 @@ namespace Doozy.Engine.Soundy
             if (Instance.DebugComponent) DDebug.Log("Clear Pool - Killed All Controllers - " + Pool.Count + " Controllers Available", Instance);
         }
 
-        /// <summary> Gets a SoundyController from the Pool, or creates a new one if all the available controllers are in use </summary>
+        /// <summary> Get a SoundyController from the Pool, or create a new one if all the available controllers are in use </summary>
         public static SoundyController GetControllerFromPool()
         {
             RemoveNullControllersFromThePool();
-            if (Pool.Count <= 0) return SoundyController.GetController(); //the pool does not have any controllers in it -> create and return a new controller
+            if (Pool.Count <= 0) PutControllerInPool(SoundyController.GetController()); //the pool does not have any controllers in it -> create and return a new controller
             SoundyController controller = Pool[0];                        //assign the first found controller
             Pool.Remove(controller);                                      //remove the assigned controller from the pool
             controller.gameObject.SetActive(true);
             return controller; //return a reference to the controller
         }
 
-        /// <summary> Creates a set number of SoundyController and adds them to the Pool </summary>
+        /// <summary> Create a set number of SoundyControllers and add them to the Pool </summary>
         /// <param name="numberOfControllers"> How many controllers should be created </param>
         public static void PopulatePool(int numberOfControllers)
         {
@@ -135,17 +135,15 @@ namespace Doozy.Engine.Soundy
             if (Instance.DebugComponent) DDebug.Log("Populate Pool - Added " + numberOfControllers + " Controllers to the Pool - " + Pool.Count + " Controllers Available", Instance);
         }
 
-        /// <summary> Puts the SoundyController back in the Pool </summary>
+        /// <summary> Put a SoundyController back in the Pool </summary>
         /// <param name="controller"> The controller </param>
         public static void PutControllerInPool(SoundyController controller)
         {
+            if (controller == null) return;
             if (!Pool.Contains(controller)) Pool.Add(controller);
             controller.gameObject.SetActive(false);
-#if UNITY_EDITOR
-            controller.transform.parent = Instance.transform;
-#endif
-
-            if (Instance.DebugComponent) DDebug.Log("Put '" + controller.name + "' Controller back in the Pool - " + Pool.Count + " Controllers Available", Instance);
+            controller.transform.SetParent(Instance.transform);
+            if (Instance.DebugComponent) DDebug.Log("Put '" + controller.name + "' Controller in the Pool - " + Pool.Count + " Controllers Available", Instance);
         }
 
         #endregion

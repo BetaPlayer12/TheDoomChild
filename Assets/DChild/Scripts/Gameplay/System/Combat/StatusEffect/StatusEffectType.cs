@@ -1,21 +1,20 @@
 ﻿using UnityEngine;
 
-namespace DChild.Gameplay.Combat.StatusInfliction
+namespace DChild.Gameplay.Combat.StatusAilment
 {
     public enum StatusEffectType
     {
-        Poison,
-        Curse,
-        Stun,
-        Shock,
-        Petrify,
-        Silence,
-        Bleed,
-        Confuse,
+        Burning,
+        Electrecuted,
+        Stunned,
+        Bleeding,
         Frozen,
-        Burn,
-        Blind,
+        Poisoned,
+        Cursed,
+        Corrosion,
+        Snared,
+        Oiled,
         [HideInInspector]
-        _Count
+        _COUNT
     }
 }

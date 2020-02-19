@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -26,14 +26,14 @@ namespace Doozy.Editor.Windows
 
         private static bool s_needsToUpdateScriptingDefineSymbols;
 
-        private float GeneralColumnWidth { get { return (ViewWidth - ViewContentLeftHorizontalPadding * 2 - ViewContentRightHorizontalPadding * 2 - DynamicViewVerticalSpace(2)) / 2; } }
+        private float GeneralColumnWidth { get { return (FullViewWidth - ViewContentLeftHorizontalPadding * 2 - ViewContentRightHorizontalPadding * 2 - DynamicViewVerticalSpace(2)) / 2; } }
 
         private void DrawViewGeneral()
         {
             if (CurrentView != View.General) return;
 
-            //Language
-            DrawGeneralLanguageOption();
+            //Refresh & Language
+            DrawGeneralRefreshAndLanguageOptions();
 
             DrawDynamicViewVerticalSpace();
 
@@ -65,27 +65,34 @@ namespace Doozy.Editor.Windows
             DrawDynamicViewVerticalSpace(2);
         }
 
-        #region Language
+        #region Refresh and Language
 
-        private void DrawGeneralLanguageOption()
+        private void DrawGeneralRefreshAndLanguageOptions()
         {
-            GUI.enabled = false;
             GUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
             {
+                if (DGUI.Button.Dynamic.DrawIconButton(Styles.GetStyle(Styles.StyleName.IconFaMagic), UILabels.Refresh, Size.S, TextAlign.Left, DGUI.Colors.DarkOrLightColorName, DGUI.Colors.LightOrDarkColorName, DGUI.Properties.SingleLineHeight + DGUI.Properties.Space(2), false))
+                {
+                    DoozyAssetsProcessor.Run();
+                    DGUI.Properties.ExitGUI();
+                }
                 GUILayout.FlexibleSpace();
-                DGUI.Icon.Draw(Styles.GetStyle(Styles.StyleName.IconFaLanguage), 28, DGUI.Properties.SingleLineHeight, DGUI.Colors.LightOrDarkColorName);
-                Engine.Language currentLanguage = LanguagePack.CurrentLanguage;
-                EditorGUI.BeginChangeCheck();
-                GUILayout.BeginVertical();
-                GUILayout.Space(0);
-                currentLanguage = (Engine.Language) EditorGUILayout.EnumPopup(currentLanguage, GUILayout.Width(DGUI.Properties.DefaultFieldWidth * 3));
-                GUILayout.EndVertical();
-                if (EditorGUI.EndChangeCheck())
-                    if (currentLanguage != Engine.Language.Unknown)
-                        LanguagePack.CurrentLanguage = currentLanguage;
+                GUI.enabled = false;
+                {
+                    DGUI.Icon.Draw(Styles.GetStyle(Styles.StyleName.IconFaLanguage), 28, DGUI.Properties.SingleLineHeight, DGUI.Colors.LightOrDarkColorName);
+                    Engine.Language currentLanguage = LanguagePack.CurrentLanguage;
+                    EditorGUI.BeginChangeCheck();
+                    GUILayout.BeginVertical();
+                    GUILayout.Space(0);
+                    currentLanguage = (Engine.Language) EditorGUILayout.EnumPopup(currentLanguage, GUILayout.Width(DGUI.Properties.DefaultFieldWidth * 3));
+                    GUILayout.EndVertical();
+                    if (EditorGUI.EndChangeCheck())
+                        if (currentLanguage != Engine.Language.Unknown)
+                            LanguagePack.CurrentLanguage = currentLanguage;
+                }
+                GUI.enabled = true;
             }
             GUILayout.EndHorizontal();
-            GUI.enabled = true;
         }
 
         #endregion
@@ -118,13 +125,13 @@ namespace Doozy.Editor.Windows
             enabled = DrawGeneralOptionBox("'Back' Button", UILabels.UseBackButtonDescription, enabled, Styles.GetStyle(Styles.StyleName.IconBackButton), DGUI.Colors.BackButtonColorName);
             if (EditorGUI.EndChangeCheck()) Settings.UseBackButton = enabled;
         }
-        
+
         private void DrawAutoDisableUIInteractionsButton()
         {
             bool enabled = Settings.AutoDisableUIInteractions;
             EditorGUI.BeginChangeCheck();
             enabled = DrawGeneralOptionBox("Auto Disable UI Interactions", UILabels.AutoDisableUIInteractionsDescription, enabled, Styles.GetStyle(Styles.StyleName.IconDisableButton), ColorName.Orange);
-            
+
             if (EditorGUI.EndChangeCheck()) Settings.AutoDisableUIInteractions = enabled;
         }
 
@@ -301,7 +308,7 @@ namespace Doozy.Editor.Windows
             DGUI.WindowUtils.DrawIconTitle(Styles.StyleName.IconFaNewspaper, UILabels.News, UILabels.NoteworthyInformation, DGUI.Colors.LightOrDarkColorName);
             DrawDynamicViewVerticalSpace(0.5f);
 
-            GUILayout.BeginHorizontal(GUILayout.Width(ViewWidth - ViewContentLeftHorizontalPadding * 2 - ViewContentRightHorizontalPadding * 2));
+            GUILayout.BeginHorizontal(GUILayout.Width(FullViewWidth - ViewContentLeftHorizontalPadding * 2 - ViewContentRightHorizontalPadding * 2));
             {
                 GUILayout.Space(40 * CurrentViewExpanded.faded);
                 GUILayout.BeginVertical();

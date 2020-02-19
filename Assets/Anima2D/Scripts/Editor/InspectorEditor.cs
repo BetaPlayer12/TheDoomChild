@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -320,4 +319,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

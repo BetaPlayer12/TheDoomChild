@@ -68,6 +68,10 @@ namespace Doozy.Examples
                         targetObject.PresetCategory.text = button.OnLongClick.PresetCategory.ToUpper();
                         targetObject.PresetName.text = button.OnLongClick.PresetName;
                         break;
+                    case UIButtonBehaviorType.OnRightClick:
+                        targetObject.PresetCategory.text = button.OnRightClick.PresetCategory.ToUpper();
+                        targetObject.PresetName.text = button.OnRightClick.PresetName;
+                        break;
                     case UIButtonBehaviorType.OnPointerEnter:
                         targetObject.PresetCategory.text = button.OnPointerEnter.PresetCategory.ToUpper();
                         targetObject.PresetName.text = button.OnPointerEnter.PresetName;

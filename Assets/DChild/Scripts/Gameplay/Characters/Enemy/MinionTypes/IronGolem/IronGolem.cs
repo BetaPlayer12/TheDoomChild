@@ -357,5 +357,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             throw new System.NotImplementedException();
         }
+
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

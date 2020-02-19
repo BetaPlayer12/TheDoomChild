@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -58,6 +58,8 @@ namespace Doozy.Editor.UI
             m_autoHideAfterShow,
             m_autoHideAfterShowDelay,
             m_autoSelectButtonAfterShow,
+            m_autoSelectPreviouslySelectedButtonAfterHide,
+            m_blockBackButton,
             m_buttons,
             m_canvasName,
             m_container,
@@ -67,6 +69,7 @@ namespace Doozy.Editor.UI
             m_displayTarget,
             m_hideBehavior,
             m_hideInstantAnimation,
+            m_hideOnAnyButton,
             m_hideOnBackButton,
             m_hideOnClickAnywhere,
             m_hideOnClickContainer,
@@ -127,6 +130,8 @@ namespace Doozy.Editor.UI
             m_autoHideAfterShow = GetProperty(PropertyName.AutoHideAfterShow);
             m_autoHideAfterShowDelay = GetProperty(PropertyName.AutoHideAfterShowDelay);
             m_autoSelectButtonAfterShow = GetProperty(PropertyName.AutoSelectButtonAfterShow);
+            m_autoSelectPreviouslySelectedButtonAfterHide = GetProperty(PropertyName.AutoSelectPreviouslySelectedButtonAfterHide);
+            m_blockBackButton = GetProperty(PropertyName.BlockBackButton);
             m_canvasName = GetProperty(PropertyName.CanvasName);
             m_container = GetProperty(PropertyName.Container);
             m_customCanvasName = GetProperty(PropertyName.CustomCanvasName);
@@ -134,6 +139,7 @@ namespace Doozy.Editor.UI
             m_displayTarget = GetProperty(PropertyName.DisplayTarget);
             m_hideBehavior = GetProperty(PropertyName.HideBehavior);
             m_hideInstantAnimation = GetProperty(PropertyName.InstantAnimation, m_hideBehavior);
+            m_hideOnAnyButton = GetProperty(PropertyName.HideOnAnyButton);
             m_hideOnBackButton = GetProperty(PropertyName.HideOnBackButton);
             m_hideOnClickAnywhere = GetProperty(PropertyName.HideOnClickAnywhere);
             m_hideOnClickContainer = GetProperty(PropertyName.HideOnClickContainer);
@@ -213,11 +219,15 @@ namespace Doozy.Editor.UI
             GUILayout.Space(DGUI.Properties.Space(4));
             DrawAutoHide();
             GUILayout.Space(DGUI.Properties.Space(4));
+            DrawDisableBackButton();
+            GUILayout.Space(DGUI.Properties.Space(4));
             DrawHideOptions();
             GUILayout.Space(DGUI.Properties.Space());
             DrawDestroyAfterHide();
             GUILayout.Space(DGUI.Properties.Space(4));
             DrawAutoSelectButton();
+            GUILayout.Space(DGUI.Properties.Space(4));
+            DrawAutoSelectPreviouslySelectedButtonAfterHide();
             GUILayout.Space(DGUI.Properties.Space(4));
             DrawOverlay();
             GUILayout.Space(DGUI.Properties.Space());
@@ -885,7 +895,7 @@ namespace Doozy.Editor.UI
         private void UpdateOverlayEnabledState()
         {
             if (!Target.HasOverlay) return;
-
+            Target.Overlay.Init();
             bool enabled = GetProperty(PropertyName.Enabled, m_overlay).boolValue;
             Target.Overlay.RectTransform.gameObject.SetActive(enabled);
             Target.Overlay.Canvas.enabled = enabled;
@@ -960,6 +970,9 @@ namespace Doozy.Editor.UI
             GUILayout.Space(DGUI.Properties.Space());
             GUILayout.BeginHorizontal();
             {
+                GUILayout.Space(DGUI.Properties.Space());
+                DGUI.Toggle.Switch.Draw(m_hideOnAnyButton, UILabels.AnyButton, m_hideOnAnyButton.boolValue ? ComponentColorName : DGUI.Colors.DisabledBackgroundColorName, false, true);
+                GUILayout.Space(DGUI.Properties.Space());
                 DGUI.Toggle.Switch.Draw(m_hideOnBackButton, UILabels.BackButton, m_hideOnBackButton.boolValue ? ComponentColorName : DGUI.Colors.DisabledBackgroundColorName, false, true);
                 GUILayout.Space(DGUI.Properties.Space());
                 DGUI.Toggle.Switch.Draw(m_hideOnClickAnywhere, UILabels.ClickAnywhere, m_hideOnClickAnywhere.boolValue ? ComponentColorName : DGUI.Colors.DisabledBackgroundColorName, false, true);
@@ -1002,6 +1015,8 @@ namespace Doozy.Editor.UI
                            GUILayout.FlexibleSpace);
         }
 
+        private void DrawDisableBackButton() { DGUI.Toggle.Switch.Draw(m_blockBackButton, UILabels.BlockBackButton, ComponentColorName, true, true); }
+
         private void DrawDestroyAfterHide() { DGUI.Toggle.Switch.Draw(m_destroyAfterHide, UILabels.DestroyAfterHide, ComponentColorName, true, true); }
 
         private void DrawAutoSelectButton()
@@ -1020,6 +1035,11 @@ namespace Doozy.Editor.UI
                            });
         }
 
+        private void DrawAutoSelectPreviouslySelectedButtonAfterHide()
+        {
+            DGUI.Toggle.Switch.Draw(m_autoSelectPreviouslySelectedButtonAfterHide, UILabels.AutoSelectPreviouslySelectedButtonAfterHide, ComponentColorName, true, true);
+        }
+        
         private void DrawWhenHidden()
         {
             SerializedProperty disableGameObject = GetProperty(PropertyName.DisableGameObject, m_container);

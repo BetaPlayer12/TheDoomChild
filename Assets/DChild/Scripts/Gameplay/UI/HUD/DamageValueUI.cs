@@ -14,10 +14,10 @@ namespace DChild.Gameplay.Combat.UI
         [SerializeField]
         private GameObject m_critText;
 
-        public void Load(int value, IDamageUIConfig damageUI, bool isCrit)
+        public void Load(int value, TMP_ColorGradient configuration, bool isCrit)
         {
             m_damageText.text = value.ToString();
-            m_damageText.colorGradient = damageUI.vertexGradient;
+            m_damageText.colorGradientPreset = configuration;
             m_critText.SetActive(isCrit);
         }
 

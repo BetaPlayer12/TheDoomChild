@@ -3,11 +3,11 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using Refactor.DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Characters.AI;
 using Spine.Unity;
 using UnityEngine;
 
-namespace Refactor.DChild.Gameplay.Characters.Enemies
+namespace DChild.Gameplay.Characters.Enemies
 {
     public class SampleAI : CombatAIBrain<SampleAI.Info>
     {
@@ -111,7 +111,7 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     WaitForBehaviour(State.ReevaluateSituation);
-                    m_attackHandle.ExecuteAttack(m_info.attack.animation);
+                    m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.move.animation);
                     break;
                 case State.Chasing:
                     //Put Target Destination
@@ -146,6 +146,11 @@ namespace Refactor.DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     return;
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+
         }
     }
 }

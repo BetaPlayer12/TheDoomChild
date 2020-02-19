@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay.Inventories;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace DChild.Menu.Item
@@ -8,6 +10,8 @@ namespace DChild.Menu.Item
     {
         [SerializeField]
         private Image m_icon;
+        [SerializeField]
+        private TextMeshProUGUI m_countText;
 
         private Canvas m_canvas;
 
@@ -33,10 +37,13 @@ namespace DChild.Menu.Item
             m_canvas.enabled = false;
         }
 
-        public void SetInfo(ItemData data)
+        public void SetInfo(ItemSlot slot)
         {
-            m_icon.sprite = data.icon;
+            m_icon.sprite = slot.item.icon;
+            m_countText.text = slot.count.ToString();
         }
+
+        public void SetCount(int count) => m_countText.text = count.ToString();
 
         private void Awake()
         {

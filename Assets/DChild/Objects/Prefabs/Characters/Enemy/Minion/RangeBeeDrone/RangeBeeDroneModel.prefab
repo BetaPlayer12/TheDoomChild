@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 5637387481399289546}
   boneName: sting 2
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -204,6 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 5637387481399289546}
   boneName: root
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -286,6 +288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 5637387481399289546}
   boneName: bosy main bone
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -418,6 +421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 5637387481399289546}
   boneName: lower body bone
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -470,7 +474,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 5.13}
   serializedVersion: 2
-  m_Radius: 24.31707
+  m_Radius: 35
 --- !u!114 &1221463063079220037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,6 +579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 5637387481399289546}
   boneName: sting 1
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -713,6 +718,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_ignoreColliderList: []
 --- !u!50 &4055349373691877905
 Rigidbody2D:
   serializedVersion: 4
@@ -800,6 +807,7 @@ CompositeCollider2D:
       - {x: 0.1228158, y: 1.6174601}
       - {x: -0.0014593, y: 1.4718177}
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.00005
 --- !u!1 &7189003159738749311
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,10 +870,11 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c3001ec0c0ebe6742b4c78984ffba963, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -873,6 +882,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -897,7 +907,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 2a1eac79912ee5e4b8158441ddc6464f, type: 2}
+  skeletonDataAsset: {fileID: 0}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
@@ -909,6 +919,7 @@ MonoBehaviour:
   clearStateOnDisable: 0
   tintBlack: 0
   singleSubmesh: 0
+  fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
   maskInteraction: 0
@@ -933,6 +944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneRoot: {fileID: 0}
+  flipBy180DegreeRotation: 0
   skeletonRenderer: {fileID: 5637387481399289546}
 --- !u!114 &9139688978606104867
 MonoBehaviour:
@@ -966,6 +978,7 @@ MonoBehaviour:
   m_spine: {fileID: 0}
   m_physics: {fileID: 0}
   m_skeletonAnimation: {fileID: 0}
+  m_autoFlinch: 0
   m_animation: 
 --- !u!1 &7299100510775145456
 GameObject:
@@ -1014,6 +1027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 5637387481399289546}
   boneName: upper body bone
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1

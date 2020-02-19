@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
@@ -21,4 +20,3 @@ public interface IAnimationWindowImpl
 	void CreateDefaultCurve(EditorCurveBinding binding);
 	void AddKey(EditorCurveBinding binding, float time);
 }
-#endif

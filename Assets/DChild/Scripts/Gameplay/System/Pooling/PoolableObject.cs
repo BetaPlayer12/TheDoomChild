@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Pooling
         public void DestroyInstance()
         {
             InstanceDestroyed?.Invoke(this, new PoolItemEventArgs(this, transform));
+            //gameObject.SetActive(false);
             Destroy(gameObject);
         }
 
@@ -27,6 +28,9 @@ namespace DChild.Gameplay.Pooling
             transform.rotation = rotation;
         }
 
-        protected void CallPoolRequest() => PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
+        public void CallPoolRequest()
+        {
+            PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
+        }
     }
 }

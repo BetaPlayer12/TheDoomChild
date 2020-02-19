@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using UnityEditor.Sprites;
 using System.IO;
@@ -10,7 +9,7 @@ using System.Reflection;
 
 namespace Anima2D
 {
-    [InitializeOnLoad]
+	[InitializeOnLoad]
 	public class SpriteMeshPostprocessor : AssetPostprocessor
 	{
 		static Dictionary<string,string> s_SpriteMeshToTextureCache = new Dictionary<string, string>();
@@ -369,4 +368,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Doozy.Engine.Extensions;
+using Doozy.Engine.Layouts;
 using Doozy.Engine.Orientation;
 using Doozy.Engine.Progress;
 using Doozy.Engine.Settings;
@@ -319,6 +320,15 @@ namespace Doozy.Engine.UI
         /// <summary> Internal variable used to suppress invoking events when the first Hide is executed </summary>
         private bool m_initialized;
 
+        /// <summary> Internal variable used to keep a reference to the LayoutController that controls the RectTransform of this view (only if a LayoutGroup is used) </summary>
+        private LayoutController m_layoutController;
+
+        /// <summary> Internal variable used to keep track if this view has a LayoutController referenced (optimization needed to reduce the number of null checks) </summary>
+        private bool m_hasLayoutController;
+
+        /// <summary> Internal variable used to keep track if this view is directly under a LayoutGroup </summary>
+        private bool m_controlledByLayoutGroup;
+
         #endregion
 
         #region Unity Methods
@@ -338,9 +348,11 @@ namespace Doozy.Engine.UI
 
         public override void Awake()
         {
+            if(UseCustomStartAnchoredPosition)
+                MoveToCustomStartPosition();
+            
             base.Awake();
-            StartPosition = UseCustomStartAnchoredPosition ? CustomStartAnchoredPosition : RectTransform.anchoredPosition3D;
-            MoveToCustomStartPosition();
+
             LoadPresets();
             m_initialized = false;
 
@@ -351,7 +363,38 @@ namespace Doozy.Engine.UI
         public override void Start()
         {
             base.Start();
+            CheckForLayoutController();
             Initialize();
+        }
+
+        private void CheckForLayoutController()
+        {
+//            Debug.Log("CheckForLayoutController");
+            if (!m_controlledByLayoutGroup)
+            {
+                m_controlledByLayoutGroup = GetComponentInParent<LayoutGroup>() != null;
+                if (!m_controlledByLayoutGroup)
+                {
+                    m_hasLayoutController = false;
+                    m_layoutController = null;
+                }
+                else
+                {
+                    m_layoutController = GetComponentInParent<LayoutController>();
+                    m_hasLayoutController = m_layoutController != null;
+                    if (!m_hasLayoutController) m_layoutController = transform.parent.gameObject.AddComponent<LayoutController>();
+                }
+            }
+            else
+            {
+                m_hasLayoutController = m_layoutController != null;
+                if (m_hasLayoutController) m_layoutController.Rebuild(true);
+            }
+
+            if (UseCustomStartAnchoredPosition && m_controlledByLayoutGroup)
+                UseCustomStartAnchoredPosition = false;
+
+            StartPosition = UseCustomStartAnchoredPosition ? CustomStartAnchoredPosition : RectTransform.anchoredPosition3D;
         }
 
         public override void OnEnable()
@@ -359,9 +402,11 @@ namespace Doozy.Engine.UI
             base.OnEnable();
             m_childUIButtons = GetComponentsInChildren<UIButton>();
             m_childUIViews = GetComponentsInChildren<UIView>();
+//            if (HasChildUIViews && DisableGameObjectWhenHidden) DisableGameObjectWhenHidden = false;
             if (Settings.UseOrientationDetector && OrientationDetector != null)
                 OrientationDetector.OnOrientationEvent.AddListener(OnOrientationChange); //if using OrientationDetector subscribe to the onOrientationChange UnityEvent every time this UIView is enabled
         }
+
 
         public override void OnDisable()
         {
@@ -397,7 +442,7 @@ namespace Doozy.Engine.UI
         public void Hide(bool instantAction = false)
         {
             if (HideBehavior.InstantAnimation) instantAction = true;
-            
+
             StopShow();
 
             if (!HideBehavior.Animation.Enabled && !instantAction)
@@ -416,9 +461,65 @@ namespace Doozy.Engine.UI
             m_hideCoroutine = StartCoroutine(HideEnumerator(instantAction));
         }
 
-        /// <summary> Hides this UIView after the set delay </summary>
+        /// <summary> Hide this UIView after the set delay </summary>
         /// <param name="delay"> Time delay before this UIView is automatically hidden </param>
         public void Hide(float delay) { m_autoHideCoroutine = StartCoroutine(HideWithDelayEnumerator(delay)); }
+
+        /// <summary> Hide this UIView instantly without triggering any of its actions </summary>
+        public void InstantHide()
+        {
+            CheckForLayoutController();
+
+            StopLoopAnimation();
+
+            StopShow();
+            StopHide();
+
+            ResetToStartValues();
+
+            Canvas.enabled = !DisableCanvasWhenHidden;                     //disable the canvas, if the option is enabled
+            GraphicRaycaster.enabled = !DisableGraphicRaycasterWhenHidden; //disable the graphic raycaster, if the option is enabled
+            gameObject.SetActive(!DisableGameObjectWhenHidden);            //disable the Source the UIView is attached to, if the option is enabled
+
+            HideDeselectButton();
+
+            Visibility = VisibilityState.NotVisible;
+            if (VisibleViews.Contains(this)) VisibleViews.Remove(this);
+
+            if (m_initialized) NotifySystemOfTriggeredBehavior(UIViewBehaviorType.Hide); //send the global events
+
+            RemoveHiddenFromVisibleViews();
+
+            if (!m_initialized) m_initialized = true;
+        }
+
+        /// <summary> Show this UIView instantly without triggering any of its actions </summary>
+        public void InstantShow()
+        {
+            CheckForLayoutController();
+
+            StopLoopAnimation();
+            StopHide();
+            StopShow();
+
+            ResetToStartValues();
+
+            Canvas.enabled = true;           //enable the canvas
+            GraphicRaycaster.enabled = true; //enable the graphic raycaster
+            gameObject.SetActive(true);      //set the active state to true (in case it has been disabled when hidden)
+
+            Visibility = VisibilityState.Visible;
+            if (!VisibleViews.Contains(this)) VisibleViews.Add(this);
+
+            NotifySystemOfTriggeredBehavior(UIViewBehaviorType.Show); //send the global events
+
+            if (AutoHideAfterShow) Hide(AutoHideAfterShowDelay);
+            ShowSelectDeselectButton(); //select the selectedButton
+
+            RemoveHiddenFromVisibleViews();
+
+            if (HasChildUIViews) StartCoroutine(ShowViewNextFrame(ViewCategory, ViewName, true));
+        }
 
         /// <summary> Sends an UIViewMessage notifying the system that an UIViewBehavior has been triggered </summary>
         /// <param name="behaviorType"> The UIViewBehaviorType of the UIViewBehavior that has been triggered </param>
@@ -436,12 +537,29 @@ namespace Doozy.Engine.UI
         /// <summary> Resets this UIView's RectTransform.anchoredPosition3D to the CurrentStartPosition value </summary>
         public override void ResetPosition() { RectTransform.anchoredPosition3D = CurrentStartPosition; }
 
+        /// <summary> Sets the 'visibility' of this UIView by showing or hiding it </summary>
+        /// <param name="visible"> If TRUE it will show the UIView (if hidden). If FALSE it will hide the UIView (if visible) </param>
+        public void SetVisibility(bool visible)
+        {
+            if (visible) Show();
+            else Hide();
+        }
+
+        /// <summary> Sets the 'visibility' of this UIView by showing or hiding it </summary>
+        /// <param name="visible"> If TRUE it will show the UIView (if hidden). If FALSE it will hide the UIView (if visible) </param>
+        /// <param name="instantAction"> Should the animation happen instantly? (zero seconds) </param>
+        public void SetVisibility(bool visible, bool instantAction)
+        {
+            if (visible) Show(instantAction);
+            else Hide(instantAction);
+        }
+
         /// <summary> Shows this UIView </summary>
         /// <param name="instantAction"> Should the animation happen instantly? (zero seconds) </param>
         public void Show(bool instantAction = false)
         {
             if (ShowBehavior.InstantAnimation) instantAction = true;
-            
+
             gameObject.SetActive(true); //set the active state to true (in case it has been disabled when hidden)
 
             StopHide();
@@ -461,7 +579,7 @@ namespace Doozy.Engine.UI
             }
 
             m_showCoroutine = StartCoroutine(ShowEnumerator(instantAction));
-            if (HasChildUIViews) StartCoroutine(TriggerShowInNextFrame(instantAction));
+            if (HasChildUIViews) StartCoroutine(ShowViewNextFrame(ViewCategory, ViewName, instantAction));
         }
 
         /// <summary> Start the loop animations set up on this UIView </summary>
@@ -493,6 +611,12 @@ namespace Doozy.Engine.UI
 
         #region Private Methods
 
+        private void HideDeselectButton()
+        {
+            if (DeselectAnyButtonSelectedOnHide)              //check that the deselect any button on HIDE option is enabled
+                UnityEventSystem.SetSelectedGameObject(null); //clear any selection
+        }
+
         private void Initialize()
         {
             m_childUIButtons = GetComponentsInChildren<UIButton>();
@@ -505,17 +629,17 @@ namespace Doozy.Engine.UI
             switch (BehaviorAtStart)
             {
                 case UIViewStartBehavior.DoNothing:
-                    StartCoroutine(ExecuteShowSelectDeselectButtonEnumerator()); //select the auto-selected button
+                    ShowSelectDeselectButton(); //select the auto-selected button
                     if (LoopBehavior.AutoStartLoopAnimation) StartLoopAnimation();
                     Canvas.enabled = true;           //enable the canvas
                     GraphicRaycaster.enabled = true; //enable the graphic raycaster
                     m_initialized = true;
                     break;
                 case UIViewStartBehavior.Hide:
-//                    HideView(ViewCategory, ViewName, true);
-                    Hide(true);
+                    InstantHide();
                     break;
                 case UIViewStartBehavior.PlayShowAnimation:
+                    InstantHide();
                     if (Settings.UseOrientationDetector)
                     {
                         if (OrientationDetector.CurrentOrientation == DetectedOrientation.Unknown)
@@ -525,11 +649,8 @@ namespace Doozy.Engine.UI
                     }
                     else
                     {
-//                        HideView(ViewCategory, ViewName, true);
-//                        ShowView(ViewCategory, ViewName);
-                        Hide(true);
                         Show();
-                        if (HasChildUIViews) StartCoroutine(TriggerShowInNextFrame(false));
+                        if (HasChildUIViews) StartCoroutine(ShowViewNextFrame(ViewCategory, ViewName, false));
                     }
 
                     break;
@@ -563,6 +684,14 @@ namespace Doozy.Engine.UI
             }
         }
 
+        private void ShowSelectDeselectButton()
+        {
+            if (AutoSelectButtonAfterShow && SelectedButton != null)    //check that the auto select option is enabled and that a selectedButton has been referenced
+                UnityEventSystem.SetSelectedGameObject(SelectedButton); //select the referenced selectedButton
+            else if (DeselectAnyButtonSelectedOnShow)                   //check that the deselect any button on SHOW option is enabled
+                UnityEventSystem.SetSelectedGameObject(null);           //clear any selection
+        }
+
         private void StopHide()
         {
             if (m_hideCoroutine == null) return;
@@ -570,7 +699,7 @@ namespace Doozy.Engine.UI
             m_hideCoroutine = null;
             Visibility = VisibilityState.NotVisible;
             UIAnimator.StopAnimations(RectTransform, AnimationType.Hide);
-            if(Settings.AutoDisableUIInteractions) EnableUIInteractions();
+            if (Settings.AutoDisableUIInteractions) EnableUIInteractions();
         }
 
         private void StopShow()
@@ -580,7 +709,7 @@ namespace Doozy.Engine.UI
             m_showCoroutine = null;
             Visibility = VisibilityState.Visible;
             UIAnimator.StopAnimations(RectTransform, AnimationType.Show);
-            if(Settings.AutoDisableUIInteractions) EnableUIInteractions();
+            if (Settings.AutoDisableUIInteractions) EnableUIInteractions();
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -603,18 +732,32 @@ namespace Doozy.Engine.UI
 
         #region IEnumerators
 
-        private IEnumerator TriggerShowInNextFrame(bool instantAction)
+        /// <summary> Show all the UIViews with the passed view category and view name in the NEXT FRAME </summary>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="viewName"> UIView name (found in the view category) </param>
+        /// <param name="instantAction"> Determines if the SHOW animation should happen instantly (in zero seconds) </param>
+        public static IEnumerator ShowViewNextFrame(string viewCategory, string viewName, bool instantAction = false)
         {
             yield return null; //skip a frame
+
+            ShowView(viewCategory, viewName, instantAction);
+        }
+
+        /// <summary> Hide all the UIViews with the passed view category and view name int the NEXT FRAME</summary>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="viewName"> UIView name (found in the view category) </param>
+        /// <param name="instantAction"> Determines if the HIDE animation should happen instantly (in zero seconds) </param>
+        public static IEnumerator HideViewNextFrame(string viewCategory, string viewName, bool instantAction = false)
+        {
             yield return null; //skip a frame
 
-            ShowView(ViewCategory, ViewName, instantAction);
+            HideView(viewCategory, viewName, instantAction);
         }
 
         private IEnumerator ShowEnumerator(bool instantAction)
         {
 //            yield return null; //skip a frame
-            if(Settings.AutoDisableUIInteractions) DisableUIInteractions();
+            if (Settings.AutoDisableUIInteractions) DisableUIInteractions();
 
             UIAnimator.StopAnimations(RectTransform, ShowBehavior.Animation.AnimationType); //stop any SHOW animations
 
@@ -622,6 +765,8 @@ namespace Doozy.Engine.UI
 
             Canvas.enabled = true;           //enable the canvas
             GraphicRaycaster.enabled = true; //enable the graphic raycaster
+
+            CheckForLayoutController();
 
             //MOVE
             Vector3 moveFrom = UIAnimator.GetAnimationMoveFrom(RectTransform, ShowBehavior.Animation, CurrentStartPosition);
@@ -650,8 +795,7 @@ namespace Doozy.Engine.UI
             Visibility = VisibilityState.Showing; //update the visibility state
             if (!VisibleViews.Contains(this)) VisibleViews.Add(this);
 
-            ShowBehavior.OnStart.Invoke(gameObject, !instantAction, !instantAction);
-
+            if (instantAction) ShowBehavior.OnStart.Invoke(gameObject, false, false);
             NotifySystemOfTriggeredBehavior(UIViewBehaviorType.Show); //send the global events
 
             if (HideProgressor != null) HideProgressor.SetValue(0f);
@@ -663,13 +807,26 @@ namespace Doozy.Engine.UI
 
                 float totalDuration = ShowBehavior.Animation.TotalDuration;
                 float elapsedTime = startTime - Time.realtimeSinceStartup;
+                float startDelay = ShowBehavior.Animation.StartDelay;
+                bool invokedOnStart = false;
                 while (elapsedTime <= totalDuration) //wait for seconds realtime (ignore Unity's Time.Timescale)
                 {
                     elapsedTime = Time.realtimeSinceStartup - startTime;
+
+                    if (!invokedOnStart && elapsedTime > startDelay)
+                    {
+                        ShowBehavior.OnStart.Invoke(gameObject);
+                        invokedOnStart = true;
+                    }
+
+                    if (m_hasLayoutController) m_layoutController.Rebuild(true);
+
                     VisibilityProgress = elapsedTime / totalDuration;
                     yield return null;
                 }
             }
+
+            if (m_hasLayoutController) m_layoutController.Rebuild(true);
 
             ShowBehavior.OnFinished.Invoke(gameObject, !instantAction, !instantAction);
 
@@ -680,9 +837,9 @@ namespace Doozy.Engine.UI
 
             StartLoopAnimation(); //start playing the loop animation
             if (AutoHideAfterShow) Hide(AutoHideAfterShowDelay);
-            StartCoroutine(ExecuteShowSelectDeselectButtonEnumerator()); //select the selectedButton
-            m_showCoroutine = null;                                      //clear the coroutine reference
-            if(Settings.AutoDisableUIInteractions) EnableUIInteractions();
+            ShowSelectDeselectButton(); //select the selectedButton
+            m_showCoroutine = null;     //clear the coroutine reference
+            if (Settings.AutoDisableUIInteractions) EnableUIInteractions();
 
             RemoveHiddenFromVisibleViews();
         }
@@ -690,15 +847,16 @@ namespace Doozy.Engine.UI
         private IEnumerator HideEnumerator(bool instantAction)
         {
 //            yield return null; //skip a frame
-            if(Settings.AutoDisableUIInteractions) DisableUIInteractions();
+            if (Settings.AutoDisableUIInteractions) DisableUIInteractions();
 
             UIAnimator.StopAnimations(RectTransform, HideBehavior.Animation.AnimationType); //stop any HIDE animations
 
             if (LoopBehavior.Animation.Enabled) UIAnimator.StopAnimations(RectTransform, LoopBehavior.Animation.AnimationType);
 
-//            RemoveNullChildUIButtons();
+            CheckForLayoutController();
 
             //MOVE
+            if (m_controlledByLayoutGroup) UpdateStartPosition();
             Vector3 moveFrom = UIAnimator.GetAnimationMoveFrom(RectTransform, HideBehavior.Animation, CurrentStartPosition);
             Vector3 moveTo = UIAnimator.GetAnimationMoveTo(RectTransform, HideBehavior.Animation, CurrentStartPosition);
             if (!HideBehavior.Animation.Move.Enabled || instantAction) ResetPosition();
@@ -722,12 +880,12 @@ namespace Doozy.Engine.UI
             if (!HideBehavior.Animation.Fade.Enabled || instantAction) ResetAlpha();
             UIAnimator.Fade(RectTransform, HideBehavior.Animation, fadeFrom, fadeTo, instantAction); //initialize and play the HIDE Fade tween
 
-            StartCoroutine(ExecuteHideDeselectButtonEnumerator());
+            HideDeselectButton();
             Visibility = VisibilityState.Hiding; //update the visibility state
             if (VisibleViews.Contains(this)) VisibleViews.Remove(this);
             if (m_initialized)
             {
-                HideBehavior.OnStart.Invoke(gameObject, !instantAction, !instantAction);
+                if (instantAction) HideBehavior.OnStart.Invoke(gameObject, false, false);
                 NotifySystemOfTriggeredBehavior(UIViewBehaviorType.Hide); //send the global events
             }
 
@@ -738,15 +896,28 @@ namespace Doozy.Engine.UI
 
                 float totalDuration = HideBehavior.Animation.TotalDuration;
                 float elapsedTime = startTime - Time.realtimeSinceStartup;
+                float startDelay = HideBehavior.Animation.StartDelay;
+                bool invokedOnStart = false;
                 while (elapsedTime <= totalDuration) //wait for seconds realtime (ignore Unity's Time.Timescale)
                 {
                     elapsedTime = Time.realtimeSinceStartup - startTime;
+
+                    if (!invokedOnStart && elapsedTime > startDelay)
+                    {
+                        HideBehavior.OnStart.Invoke(gameObject);
+                        invokedOnStart = true;
+                    }
+
+                    if (m_hasLayoutController) m_layoutController.Rebuild(true);
+
                     VisibilityProgress = 1 - elapsedTime / totalDuration; //operation is reversed in hide than in show
                     yield return null;
                 }
 
                 yield return new WaitForSecondsRealtime(UIViewSettings.DISABLE_WHEN_HIDDEN_TIME_BUFFER); //wait for seconds realtime (ignore Unity's Time.Timescale)
             }
+
+            if (m_hasLayoutController) m_layoutController.Rebuild(true);
 
             if (m_initialized)
             {
@@ -760,7 +931,7 @@ namespace Doozy.Engine.UI
             GraphicRaycaster.enabled = !DisableGraphicRaycasterWhenHidden; //disable the graphic raycaster, if the option is enabled
             gameObject.SetActive(!DisableGameObjectWhenHidden);            //disable the Source the UIView is attached to, if the option is enabled
             m_hideCoroutine = null;                                        //clear the coroutine reference
-            if(Settings.AutoDisableUIInteractions) EnableUIInteractions();
+            if (Settings.AutoDisableUIInteractions) EnableUIInteractions();
 
             RemoveHiddenFromVisibleViews();
 
@@ -772,23 +943,6 @@ namespace Doozy.Engine.UI
             if (delay > 0) yield return new WaitForSecondsRealtime(delay);
             Hide();
             m_autoHideCoroutine = null;
-        }
-
-        private IEnumerator ExecuteShowSelectDeselectButtonEnumerator()
-        {
-            yield return null; //skip a frame
-
-            if (AutoSelectButtonAfterShow && SelectedButton != null)    //check that the auto select option is enabled and that a selectedButton has been referenced
-                UnityEventSystem.SetSelectedGameObject(SelectedButton); //select the referenced selectedButton
-            else if (DeselectAnyButtonSelectedOnShow)                   //check that the deselect any button on SHOW option is enabled
-                UnityEventSystem.SetSelectedGameObject(null);           //clear any selection
-        }
-
-        private IEnumerator ExecuteHideDeselectButtonEnumerator()
-        {
-            yield return null;                                //skip a frame
-            if (DeselectAnyButtonSelectedOnHide)              //check that the deselect any button on HIDE option is enabled
-                UnityEventSystem.SetSelectedGameObject(null); //clear any selection
         }
 
         private IEnumerator ExecuteGetOrientationEnumerator()
@@ -806,12 +960,9 @@ namespace Doozy.Engine.UI
 
         #region Static Methods
 
-        /// <summary>
-        /// Returns a list of all the UIViews, registered in the UIView.Database, with the given view category and view name.
-        /// <para/> If no UIView is found, it will return an empty list.
-        /// </summary>
-        /// <param name="viewCategory"> View category to search for</param>
-        /// <param name="viewName"> View name to search for (found in the view category) </param>
+        /// <summary> Returns a list of all the UIViews, registered in the UIView.Database, with the given view category and view name. If no UIView is found, it will return an empty list </summary>
+        /// <param name="viewCategory"> UIView category to search for</param>
+        /// <param name="viewName"> UIView name to search for (found in the view category) </param>
         /// <returns></returns>
         public static List<UIView> GetViews(string viewCategory, string viewName)
         {
@@ -826,33 +977,32 @@ namespace Doozy.Engine.UI
             return views; //return list
         }
 
-        /// <summary>
-        /// Hide all the UIViews with the passed view name and the default view category name 'General'.
-        /// <para/> Note that if an UIView view category and view name are set to the default values, the HIDE animation will NOT play.
-        /// </summary>
-        /// <param name="viewName"> View name </param>
+        /// <summary> Hide all the UIViews with the passed view name and the default view category name 'General' </summary>
+        /// <param name="viewName"> UIView name </param>
         /// <param name="instantAction"> Determines if the HIDE animation should happen instantly (in zero seconds) </param>
         public static void HideView(string viewName, bool instantAction = false) { HideView(DefaultViewCategory, viewName, instantAction); }
 
-        /// <summary>
-        /// Hide all the UIViews with the passed view category and view name.
-        /// <para/> Note that if an UIView view category and view name are set to the default values, the HIDE animation will NOT play.
-        /// </summary>
-        /// <param name="viewCategory"> View category </param>
-        /// <param name="viewName"> View name (found in the view category) </param>
+        /// <summary> Hide all the UIViews with the passed view category and view name </summary>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="viewName"> UIView name (found in the view category) </param>
         /// <param name="instantAction"> Determines if the HIDE animation should happen instantly (in zero seconds) </param>
         public static void HideView(string viewCategory, string viewName, bool instantAction = false)
         {
-            if (viewCategory.Equals(DefaultViewCategory) && viewName.Equals(DefaultViewName)) return;
+            //if (viewCategory.Equals(DefaultViewCategory) && viewName.Equals(DefaultViewName)) return;
             ExecuteHide(viewCategory, viewName, instantAction);
         }
+
+        /// <summary> Hide all the UIViews with the passed view category </summary>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="instantAction"> Determines if the HIDE animation should happen instantly (in zero seconds) </param>
+        public static void HideViewCategory(string viewCategory, bool instantAction = false) { ExecuteHideCategory(viewCategory, instantAction); }
 
         /// <summary>
         /// Returns TRUE if at least one UIView, with the passed view category and view name, is visible.
         /// <para/> An UIView is considered visible if its IsVisible value is true and if it has been added to the VisibleViews list.
         /// </summary>
-        /// <param name="viewCategory"> View category </param>
-        /// <param name="viewName"> View name (found in the view category) </param>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="viewName"> UIView name (found in the view category) </param>
         public static bool IsViewVisible(string viewCategory, string viewName)
         {
             foreach (UIView view in VisibleViews)
@@ -866,30 +1016,29 @@ namespace Doozy.Engine.UI
             return false; //no UIView, with the passed category and name, is visible -> return FALSE
         }
 
-        /// <summary>
-        /// Show all the UIViews with the passed view name and the default view category name 'General'.
-        /// <para/> Note that if an UIView view category and view name are set to the default values, the SHOW animation will NOT play.
-        /// </summary>
-        /// <param name="viewName"> View name </param>
+        /// <summary> Show all the UIViews with the passed view name and the default view category name 'General' </summary>
+        /// <param name="viewName"> UIView name </param>
         /// <param name="instantAction"> Determines if the SHOW animation should happen instantly (in zero seconds) </param>
         public static void ShowView(string viewName, bool instantAction = false) { ShowView(DefaultViewCategory, viewName, instantAction); }
 
-        /// <summary>
-        /// Show all the UIViews with the passed view category and view name.
-        /// <para/> Note that if an UIView view category and view name are set to the default values, the SHOW animation will NOT play.
-        /// </summary>
-        /// <param name="viewCategory"> View category </param>
-        /// <param name="viewName"> View name (found in the view category) </param>
+        /// <summary> Show all the UIViews with the passed view category and view name </summary>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="viewName"> UIView name (found in the view category) </param>
         /// <param name="instantAction"> Determines if the SHOW animation should happen instantly (in zero seconds) </param>
         public static void ShowView(string viewCategory, string viewName, bool instantAction = false)
         {
-            if (viewCategory.Equals(DefaultViewCategory) && viewName.Equals(DefaultViewName)) return;
+            //if (viewCategory.Equals(DefaultViewCategory) && viewName.Equals(DefaultViewName)) return;
             ExecuteShow(viewCategory, viewName, instantAction);
         }
 
+        /// <summary> Show all the UIViews with the passed view category </summary>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="instantAction"> Determines if the SHOW animation should happen instantly (in zero seconds) </param>
+        public static void ShowViewCategory(string viewCategory, bool instantAction = false) { ExecuteShowCategory(viewCategory, instantAction); }
+
         /// <summary> Execute the HIDE animation according to each UIView's specific settings </summary>
-        /// <param name="viewCategory"> The UIView category </param>
-        /// <param name="viewName"> The UIView name </param>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="viewName"> UIView name </param>
         /// <param name="instantAction"> Determines if the HIDE animation should happen instantly (in zero seconds) </param>
         private static void ExecuteHide(string viewCategory, string viewName, bool instantAction = false)
         {
@@ -914,9 +1063,34 @@ namespace Doozy.Engine.UI
                 RemoveAnyNullReferencesFromTheDatabase(); //remove any null references from the Database
         }
 
-        /// <summary> Executes the SHOW animation according to each UIView's specific settings </summary>
+        /// <summary> Execute the HIDE animation for all the UIView's that belong to a given view category </summary>
         /// <param name="viewCategory"> The UIView category </param>
-        /// <param name="viewName"> The UIView name </param>
+        /// <param name="instantAction"> Determines if the HIDE animation should happen instantly (in zero seconds) </param>
+        private static void ExecuteHideCategory(string viewCategory, bool instantAction = false)
+        {
+            bool foundNullEntry = false; //null check flag
+            foreach (UIView view in Database)
+            {
+                if (view == null)
+                {
+                    foundNullEntry = true;
+                    continue;
+                } //this null check flag has been added to fix the slim (impossible) chance that a null UIView reference exists in the registry;
+                //this can happen if it has been destroyed/deleted (thus now it's null) and has not been unregistered (sanity check)
+
+                if (!view.ViewCategory.Equals(viewCategory)) continue;
+                if (!view.gameObject.activeInHierarchy) continue;
+                if (DoozySettings.Instance.DebugUIView) DDebug.Log("Hiding the (" + viewCategory + ")(" + view.ViewName + ") UIView. This is " + (instantAction ? "" : "NOT ") + "an instant action.");
+                view.Hide(instantAction); //hide the UIView
+            }
+
+            if (foundNullEntry)                           //well... it happened... at least one null UIView reference was found in the UIView.Database
+                RemoveAnyNullReferencesFromTheDatabase(); //remove any null references from the Database
+        }
+
+        /// <summary> Execute the SHOW animation according to each UIView's specific settings </summary>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="viewName"> UIView name </param>
         /// <param name="instantAction"> Determines if the SHOW animation should happen instantly (in zero seconds) </param>
         private static void ExecuteShow(string viewCategory, string viewName, bool instantAction)
         {
@@ -1000,7 +1174,91 @@ namespace Doozy.Engine.UI
                 RemoveAnyNullReferencesFromTheDatabase(); //remove any null references from the Database
         }
 
-        /// <summary> Checks the VisibleViews list and removes any null entries and any UIViews that are marked as being hidden </summary>
+        /// <summary> Execute the SHOW animation for all the UIView's that belong to a given view category </summary>
+        /// <param name="viewCategory"> UIView category </param>
+        /// <param name="instantAction"> Determines if the SHOW animation should happen instantly (in zero seconds) </param>
+        private static void ExecuteShowCategory(string viewCategory, bool instantAction = false)
+        {
+            bool foundNullEntry = false; //null check flag
+            foreach (UIView view in Database)
+            {
+                if (view == null)
+                {
+                    foundNullEntry = true;
+                    continue;
+                } //this null check flag has been added to fix the slim (impossible) chance that a null UIView reference exists in the registry;
+                //this can happen if it has been destroyed/deleted (thus now it's null) and has not been unregistered (sanity check)
+
+
+                if (!view.ViewCategory.Equals(viewCategory)) continue;
+                view.gameObject.SetActive(true); //set the Source active state to true (in case it has been disabled when hidden)
+                if (!view.gameObject.activeInHierarchy) continue;
+                if (!Settings.UseOrientationDetector) //check if the system is using the OrientationDetector
+                {
+                    if (DoozySettings.Instance.DebugUIView) DDebug.Log("Showing the (" + viewCategory + ")(" + view.ViewName + ") UIView. This is " + (instantAction ? "" : "NOT ") + "an instant action.");
+                    view.Show(instantAction); //show the UIView
+                    continue;                 //continue to the next Database entry
+                }
+
+                if (OrientationDetector.CurrentOrientation == DetectedOrientation.Unknown) //check that we do not have an Unknown orientation
+                    OrientationDetector.CheckDeviceOrientation();                          //do an orientation check to update the current orientation
+
+                switch (OrientationDetector.CurrentOrientation)
+                {
+                    case DetectedOrientation.Portrait:
+                        switch (view.TargetOrientation)
+                        {
+                            case TargetOrientation.Portrait:
+                                if (DoozySettings.Instance.DebugUIView) DDebug.Log("Showing the (" + viewCategory + ")(" + view.ViewName + ") UIView. This is " + (instantAction ? "" : "not ") + "an instant action." + (DoozySettings.Instance.UseOrientationDetector ? " TargetOrientation: " + TargetOrientation.Portrait : ""));
+                                view.Show(instantAction);
+                                break;
+                            case TargetOrientation.Landscape:
+                                view.Visibility = VisibilityState.Visible;
+                                view.Hide(true);
+                                break;
+                            case TargetOrientation.Any:
+                                if (DoozySettings.Instance.DebugUIView) DDebug.Log("Showing the (" + viewCategory + ")(" + view.ViewName + ") UIView. This is " + (instantAction ? "" : "not ") + "an instant action." + (DoozySettings.Instance.UseOrientationDetector ? " TargetOrientation: " + TargetOrientation.Any : ""));
+                                view.Show(instantAction);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                        break;
+                    case DetectedOrientation.Landscape:
+                        switch (view.TargetOrientation)
+                        {
+                            case TargetOrientation.Portrait:
+                                view.Visibility = VisibilityState.Visible;
+                                view.Hide(true);
+                                break;
+                            case TargetOrientation.Landscape:
+                                if (DoozySettings.Instance.DebugUIView) DDebug.Log("Showing the (" + viewCategory + ")(" + view.ViewName + ") UIView. This is " + (instantAction ? "" : "not ") + "an instant action." + (DoozySettings.Instance.UseOrientationDetector ? " TargetOrientation: " + TargetOrientation.Landscape : ""));
+                                view.Show(instantAction);
+                                break;
+                            case TargetOrientation.Any:
+                                if (DoozySettings.Instance.DebugUIView) DDebug.Log("Showing the (" + viewCategory + ")(" + view.ViewName + ") UIView. This is " + (instantAction ? "" : "not ") + "an instant action." + (DoozySettings.Instance.UseOrientationDetector ? " TargetOrientation: " + TargetOrientation.Any : ""));
+                                view.Show(instantAction);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                        break;
+                    case DetectedOrientation.Unknown:
+                        if (DoozySettings.Instance.DebugUIView) DDebug.Log("Unknown Orientation");
+                        //do nothing
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            if (foundNullEntry)                           //well... it happened... at least one null UIView reference was found in the UIView.Database
+                RemoveAnyNullReferencesFromTheDatabase(); //remove any null references from the Database
+        }
+
+        /// <summary> Check the VisibleViews list and remove any null entries and any UIViews that are marked as being hidden </summary>
         private static void RemoveHiddenFromVisibleViews()
         {
             RemoveNullsFromVisibleViews();
@@ -1009,7 +1267,7 @@ namespace Doozy.Engine.UI
                     VisibleViews.RemoveAt(i);
         }
 
-        /// <summary> Checks the VisibleViews list and removes any null entries </summary>
+        /// <summary> Check the VisibleViews list and removes any null entries </summary>
         private static void RemoveNullsFromVisibleViews()
         {
             for (int i = VisibleViews.Count - 1; i >= 0; i--)

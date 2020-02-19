@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -55,17 +55,21 @@ namespace Doozy.Engine.UI.Settings
 #endif
         }
         
-        public const SimpleSwipe CLOSE_DIRECTION_DEFAULT_VALUE = SimpleSwipe.Left;
+        public const bool BLOCK_BACK_BUTTON_DEFAULT_VALUE = true;
         public const bool DETECT_GESTURES_DEFAULT_VALUE = true;
+        public const bool HIDE_ON_BACK_BUTTON_DEFAULT_VALUE = true;
         public const bool USE_CUSTOM_START_ANCHORED_POSITION_DEFAULT_VALUE = true;
         public const float CLOSE_SPEED_DEFAULT_VALUE = 10f;
         public const float OPEN_SPEED_DEFAULT_VALUE = 10f;
+        public const SimpleSwipe CLOSE_DIRECTION_DEFAULT_VALUE = SimpleSwipe.Left;
         public const string RENAME_PREFIX_DEFAULT_VALUE = "Drawer - ";
         public const string RENAME_SUFFIX_DEFAULT_VALUE = "";
         public static Vector3 CUSTOM_START_ANCHORED_POSITION_DEFAULT_VALUE = Vector3.zero;
         
         public SimpleSwipe CloseDirection = CLOSE_DIRECTION_DEFAULT_VALUE;
         public Vector3 CustomStartAnchoredPosition = CUSTOM_START_ANCHORED_POSITION_DEFAULT_VALUE;
+        public bool BlockBackButton = BLOCK_BACK_BUTTON_DEFAULT_VALUE;
+        public bool HideOnBackButton = HIDE_ON_BACK_BUTTON_DEFAULT_VALUE;
         public bool DetectGestures = DETECT_GESTURES_DEFAULT_VALUE;
         public bool UseCustomStartAnchoredPosition = USE_CUSTOM_START_ANCHORED_POSITION_DEFAULT_VALUE;
         public float CloseSpeed = CLOSE_SPEED_DEFAULT_VALUE;
@@ -78,6 +82,8 @@ namespace Doozy.Engine.UI.Settings
             CloseDirection = CLOSE_DIRECTION_DEFAULT_VALUE;
             CloseSpeed = CLOSE_SPEED_DEFAULT_VALUE;
             CustomStartAnchoredPosition = CUSTOM_START_ANCHORED_POSITION_DEFAULT_VALUE;
+            BlockBackButton = BLOCK_BACK_BUTTON_DEFAULT_VALUE;
+            HideOnBackButton = HIDE_ON_BACK_BUTTON_DEFAULT_VALUE;
             DetectGestures = DETECT_GESTURES_DEFAULT_VALUE;
             OpenSpeed = OPEN_SPEED_DEFAULT_VALUE;
             RenamePrefix = RENAME_PREFIX_DEFAULT_VALUE;
@@ -96,6 +102,8 @@ namespace Doozy.Engine.UI.Settings
             drawer.CloseDirection = CloseDirection;
             drawer.CloseSpeed = CloseSpeed;
             drawer.CustomStartAnchoredPosition = CustomStartAnchoredPosition;
+            drawer.BlockBackButton = BlockBackButton;
+            drawer.HideOnBackButton = HideOnBackButton;
             drawer.DetectGestures = DetectGestures;
             drawer.OpenSpeed = OpenSpeed;
             drawer.UseCustomStartAnchoredPosition = UseCustomStartAnchoredPosition;

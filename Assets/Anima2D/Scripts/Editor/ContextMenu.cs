@@ -8,8 +8,7 @@ using System.Linq;
 
 namespace Anima2D
 {
-#if UNITY_EDITOR
-    public class ContextMenu
+	public class ContextMenu
 	{
 		[MenuItem("Assets/Create/Anima2D/SpriteMesh", true)]
 		static bool ValidateCreateSpriteMesh(MenuCommand menuCommand)
@@ -278,5 +277,4 @@ namespace Anima2D
 			return result;
 		}
 	}
-#endif
 }

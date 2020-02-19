@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.SoulEssence;
 using Spine;
 using UnityEngine;
 
@@ -12,7 +11,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override EnemyType enemyType => EnemyType.Minion;
         public override IAttackResistance attackResistance => null;
-        public override IStatusResistance statusResistance => null;
         protected abstract AttackDamage startDamage { get; }
 
         public override void InitializeAs(bool isAlive)
@@ -69,6 +67,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 animation.animationState.Complete += OnAnimationComplete;
             }
+        }
+
+        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

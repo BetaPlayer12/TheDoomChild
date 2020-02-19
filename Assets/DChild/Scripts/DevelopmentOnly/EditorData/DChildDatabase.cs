@@ -36,6 +36,7 @@ namespace DChild
             private SQLConnection.DatabaseConnection m_connection;
             private bool m_connectionOpened;
             private static string database => "DChildSetup";
+            private static string table => "SoulSkills";
 
             public void Initialize()
             {
@@ -59,7 +60,7 @@ namespace DChild
 
             public string GetNameOf(int ID)
             {
-                var bestiaryReader = m_connection.ExecuteQuery($"SELECT Name FROM SoulSkills WHERE ID = {ID}");
+                var bestiaryReader = m_connection.ExecuteQuery($"SELECT Name FROM {table} WHERE ID = {ID}");
                 if (bestiaryReader.Read())
                 {
                     return bestiaryReader.GetData<string>("Name");
@@ -72,14 +73,57 @@ namespace DChild
 
             public Element[] GetAllSkills()
             {
-                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM SoulSkills Where Blocked = false");
+                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM {table} Where Blocked = false");
                 return CreateListFromReader(reader);
             }
 
             public Element[] GetSkillsOfType(SoulSkillType type)
             {
-                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM SoulSkills Where Type = \"{type.ToString()}\" AND Blocked = false");
+                var reader = m_connection.ExecuteQuery($"SELECT ID,Name FROM {table} Where Type = \"{type.ToString()}\" AND Blocked = false");
                 return CreateListFromReader(reader);
+            }
+
+            public void Update(int ID, SoulSkillType type, string description)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    m_connection.ExecuteCommand($"UPDATE {table} SET Description = \"{description}\", Type = \"{type.ToString()}\" WHERE ID = {ID}");
+                }
+                else
+                {
+                    throw new System.Exception($"Record with ID:{ID} does not exists, use Insert instead");
+                }
+            }
+
+            public (SoulSkillType type, string description) GetInfoOf(int ID)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID = {ID}");
+                if (reader.Read())
+                {
+                    SoulSkillType result;
+                    Enum.TryParse(reader.GetData<string>("Type"), true, out result);
+                    return (result, reader.GetData<string>("Description"));
+                }
+                else
+                {
+                    throw new System.Exception($"Record with ID:{ID} does not exists");
+                }
+            }
+
+            public int Insert(int ID, string name, string description, SoulSkillType type)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    //ChangeID and try Insert Again
+                    return Insert((int)UnityEngine.Random.Range(0, 999999), name, description, type);
+                }
+                else
+                {
+                    m_connection.ExecuteCommand($"INSERT INTO {table} (ID,Name, Description, Type) VALUES({ID},\"{name}\",\"{description}\",\"{type.ToString()}\");");
+                    return ID;
+                }
             }
 
             private Element[] CreateListFromReader(IDataReader reader)
@@ -92,23 +136,28 @@ namespace DChild
                 }
                 return list.ToArray();
             }
+
         }
         private static SoulSkillConnection soulSkillConnection = new SoulSkillConnection();
         public static SoulSkillConnection GetSoulSkillConnection() => soulSkillConnection;
         #endregion
 
+        #region Bestiary
         public struct BestiaryConnection
         {
             public struct CoreInfo
             {
-                public CoreInfo(int iD, string name) : this()
+                public CoreInfo(int iD, string name, string title) : this()
                 {
-                    ID = iD;
+                    this.ID = iD;
                     this.name = name;
+                    this.title = title;
                 }
 
                 public int ID { get; }
                 public string name { get; }
+
+                public string title { get; }
             }
 
             private SQLConnection.DatabaseConnection m_connection;
@@ -141,7 +190,7 @@ namespace DChild
                 var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary");
                 while (bestiaryReader.Read())
                 {
-                    list.Add(new CoreInfo(bestiaryReader.GetData<int>("ID"), bestiaryReader.GetData<string>("Name")));
+                    list.Add(new CoreInfo(bestiaryReader.GetData<int>("ID"), bestiaryReader.GetData<string>("Name"), bestiaryReader.GetData<string>("Title")));
                 }
                 return list.ToArray();
             }
@@ -195,12 +244,12 @@ namespace DChild
                 }
             }
 
-            public void Update(int ID, string name, string description)
+            public void Update(int ID, string name, string title, string description)
             {
                 var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
                 if (bestiaryReader.Read())
                 {
-                    m_connection.ExecuteCommand($"UPDATE Bestiary SET Name = \"{name}\",  Description = \"{description}\"  WHERE ID = {ID}");
+                    m_connection.ExecuteCommand($"UPDATE Bestiary SET Name = \"{name}\", Title = \"{(title == string.Empty? "": title)}\",  Description = \"{(description == string.Empty? "" : description)}\"  WHERE ID = {ID}");
                 }
                 else
                 {
@@ -213,7 +262,12 @@ namespace DChild
                 m_connection.ExecuteCommand($"UPDATE Bestiary SET ID = {ID} WHERE Name = \"{reference}\"");
             }
 
-            public void Insert(int ID, string name, string description)
+            public void UpdateID(int reference, int ID)
+            {
+                m_connection.ExecuteCommand($"UPDATE Bestiary SET ID = {ID} WHERE ID = {reference}");
+            }
+
+            public void Insert(int ID, string name, string title, string description)
             {
                 var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
                 if (bestiaryReader.Read())
@@ -222,7 +276,7 @@ namespace DChild
                 }
                 else
                 {
-                    m_connection.ExecuteCommand($"INSERT INTO Bestiary VALUES({ID},\"{name}\",\"{description}\")");
+                    m_connection.ExecuteCommand($"INSERT INTO Bestiary VALUES({ID},\"{name}\",\"{title}\",\"{description}\",1,1)");
 
                 }
             }
@@ -236,8 +290,236 @@ namespace DChild
                     m_connection.ExecuteCommand($"DELETE FROM Bestiary_Location WHERE Bestiary_ID = {ID}");
                 }
             }
+
+            public (int HP, int DMG) GetRatings(int ID)
+            {
+                var bestiaryReader = m_connection.ExecuteQuery($"SELECT * FROM Bestiary Where ID = {ID}");
+                if (bestiaryReader.Read())
+                {
+                    return (bestiaryReader.GetData<int>("HP Rating"), bestiaryReader.GetData<int>("DMG Rating"));
+
+                }
+                else
+                {
+                    return (-1, -1);
+
+                }
+            }
         }
         private static BestiaryConnection bestiaryConnection = new BestiaryConnection();
         public static BestiaryConnection GetBestiaryConnection() => bestiaryConnection;
+        #endregion
+
+        #region Item
+        public struct ItemConnection
+        {
+            public struct CoreInfo
+            {
+                public CoreInfo(int iD, string name) : this()
+                {
+                    ID = iD;
+                    this.name = name;
+                }
+
+                public int ID { get; }
+                public string name { get; }
+            }
+
+            private SQLConnection.DatabaseConnection m_connection;
+            private bool m_connectionOpened;
+            private static string database => "DChildSetup";
+            private static string table => "Items";
+
+            public void Initialize()
+            {
+                if (m_connectionOpened == false)
+                {
+                    SQLConnection.Open(database);
+                    m_connection = SQLConnection.GetConnection(database);
+                    m_connectionOpened = true;
+                }
+            }
+
+            public void Close()
+            {
+                if (m_connectionOpened)
+                {
+                    SQLConnection.Close(database);
+                    m_connection.Dispose();
+                    m_connectionOpened = false;
+                }
+            }
+
+            public CoreInfo[] GetAllInfo()
+            {
+                List<CoreInfo> list = new List<CoreInfo>();
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table}");
+                while (reader.Read())
+                {
+                    list.Add(new CoreInfo(reader.GetData<int>("ID"), reader.GetData<string>("Name")));
+                }
+                return list.ToArray();
+            }
+
+            public string GetNameOf(int ID)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT Name FROM {table} WHERE ID = {ID}");
+                if (reader.Read())
+                {
+                    return reader.GetData<string>("Name");
+                }
+                else
+                {
+                    return "Not Found";
+                }
+            }
+
+            public (string description, int quantityLimit, int cost) GetInfoOf(int ID)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID = {ID}");
+                if (reader.Read())
+                {
+                    return (reader.GetData<string>("Description"), reader.GetData<int>("MaxStack"), reader.GetData<int>("Cost"));
+                }
+                else
+                {
+                    throw new System.Exception($"Record with ID:{ID} does not exists");
+                }
+            }
+
+            public void Update(int ID, string description, int quantityLimit, int cost)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    m_connection.ExecuteCommand($"UPDATE {table} SET Description = \"{description}\", MaxStack = {quantityLimit}, Cost = {cost} WHERE ID ={ID}");
+                }
+                else
+                {
+                    throw new System.Exception($"Record with ID:{ID} does not exists, use Insert instead");
+                }
+            }
+
+            public int Insert(int ID, string name, string description, int quantityLimit, int cost)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID ={ID}");
+                if (reader.Read())
+                {
+                    //ChangeID and try Insert Again
+                    return Insert((int)UnityEngine.Random.Range(0, 999999), name, description, quantityLimit, cost);
+                }
+                else
+                {
+                    m_connection.ExecuteCommand($"INSERT INTO {table} (ID,Name, Description, MaxStack,Cost) VALUES({ID},\"{name}\",\"{description}\",{quantityLimit},{cost});");
+                    return ID;
+                }
+            }
+        }
+        private static ItemConnection itemConnection = new ItemConnection();
+        public static ItemConnection GetItemConnection() => itemConnection;
+        #endregion
+
+        #region SerializeIDs
+        public struct SerializeIDConnection
+        {
+            public struct Element
+            {
+                public Element(int id, string name) : this()
+                {
+                    this.id = id;
+                    this.name = name;
+                }
+
+                public int id { get; }
+                public string name { get; }
+            }
+
+            private SQLConnection.DatabaseConnection m_connection;
+            private bool m_connectionOpened;
+            private static string database => "DChildSetup";
+            private static string table => "SerializeIDs";
+
+            public void Initialize()
+            {
+                if (m_connectionOpened == false)
+                {
+                    SQLConnection.Open(database);
+                    m_connection = SQLConnection.GetConnection(database);
+                    m_connectionOpened = true;
+                }
+            }
+
+            public void Close()
+            {
+                if (m_connectionOpened)
+                {
+                    SQLConnection.Close(database);
+                    m_connection.Dispose();
+                    m_connectionOpened = false;
+                }
+            }
+
+            public IReadOnlyList<Element> GetAll()
+            {
+                List<Element> list = new List<Element>();
+
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table}");
+
+                while (reader.Read())
+                {
+                    list.Add(new Element(reader.GetData<int>("ID"), reader.GetData<string>("Context")));
+                }
+
+                return list;
+            }
+
+            public bool DoesContextExist(string context)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE Context = \"{context}\"");
+                return reader.Read();
+            }
+
+            public string GetContext(int ID)
+            {
+                var reader = m_connection.ExecuteQuery($"SELECT * FROM {table} WHERE ID = {ID}");
+                if (reader.Read())
+                {
+                    return reader.GetData<string>("Context");
+
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+
+            public int GetNextID()
+            {
+                List<int> list = new List<int>();
+
+                var reader = m_connection.ExecuteQuery($"SELECT ID FROM {table}");
+
+                while (reader.Read())
+                {
+                    list.Add(reader.GetData<int>("ID"));
+                }
+
+                return list.Count > 0 ? (list.Max() + 1) : 1;
+            }
+
+            public void Append(int ID, string context)
+            {
+                m_connection.ExecuteCommand($"INSERT INTO {table} VALUES({ID},\"{context}\")");
+            }
+
+            public void Modify(int ID, string context)
+            {
+                m_connection.ExecuteCommand($"UPDATE {table} SET Context = \"{context}\" WHERE ID = {ID}");
+            }
+        }
+
+        private static SerializeIDConnection serializeIDConnection = new SerializeIDConnection();
+        public static SerializeIDConnection GetSerializeIDConnection() => serializeIDConnection;
+        #endregion
     }
 }

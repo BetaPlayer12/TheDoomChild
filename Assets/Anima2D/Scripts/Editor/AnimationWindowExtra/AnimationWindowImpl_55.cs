@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections;
@@ -81,4 +80,3 @@ namespace Anima2D
 		}
 	}
 }
-#endif

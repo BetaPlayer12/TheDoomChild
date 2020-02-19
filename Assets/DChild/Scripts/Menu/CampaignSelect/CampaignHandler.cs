@@ -1,4 +1,5 @@
 ﻿using System;
+using DChild.Gameplay;
 using DChild.Menu.Campaign;
 using DChild.Serialization;
 using Holysoft.Event;
@@ -9,6 +10,8 @@ namespace DChild.Menu
 {
     public class CampaignHandler : CampaignSelectSubElement
     {
+        [SerializeField]
+        private CampaignSlotFile m_defaultSave;
         private ICampaignSelect m_campaignSelect;
         private int m_selectedSlotID;
 
@@ -24,14 +27,18 @@ namespace DChild.Menu
 
         public void Play()
         {
+            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
+            GameplaySystem.SetCurrentCampaign(m_campaignSelect.selectedSlot);
+            LoadingHandle.UnloadScenes(gameObject.scene.name);
             GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad.sceneName, true);
-            LoadingHandle.UnLoadScenes(gameObject.scene.name);
         }
 
         private void OnDeleteAffirmed(object sender, EventActionArgs eventArgs)
         {
-            m_campaignSelect.selectedSlot.Reset();
+            m_defaultSave.LoadFileTo(m_campaignSelect.selectedSlot);
+            //m_campaignSelect.selectedSlot.Reset();
             m_campaignSelect.SendCampaignSelectedEvent();
+            SerializationHandle.Delete(m_selectedSlotID);
         }
 
         protected override void Awake()

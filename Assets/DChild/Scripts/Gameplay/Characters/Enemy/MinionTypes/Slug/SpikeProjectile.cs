@@ -3,12 +3,11 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
-using DChild.Gameplay.Projectiles;
 using Holysoft.Event;
+using Sirenix.Utilities;
 using Spine;
 using Spine.Unity;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
@@ -19,6 +18,8 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
     private const string ANIMATION_PROJECTILE = "Spike_Projectiles";
 
     private SkeletonAnimation m_animation;
+
+    public Vector2 position => transform.position;
 
     public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
@@ -61,9 +62,13 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
     {
         if (!targetDefense.isInvulnerable)
         {
-            AttackInfo info = new AttackInfo(transform.position, 0, 1, m_damage);
-            var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-            TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo.target, result));
+            //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
+            //{
+            //    info.Value.Initialize(transform.position, 0, 1, m_damage);
+            //    var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+            //    TargetDamaged?.Invoke(this, new CombatConclusionEventArgs(info, targetInfo, result));
+            //    info.Release();
+            //}
         }
     }
 }

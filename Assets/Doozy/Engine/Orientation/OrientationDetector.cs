@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -114,6 +114,14 @@ namespace Doozy.Engine.Orientation
 
         #region Unity Methods
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void RunOnStart()
+        {
+            ApplicationIsQuitting = false;
+        }
+#endif
+        
         private void Reset() { Canvas.renderMode = RenderMode.ScreenSpaceOverlay; }
 
         private void OnValidate() { Canvas.renderMode = RenderMode.ScreenSpaceOverlay; }
@@ -137,12 +145,15 @@ namespace Doozy.Engine.Orientation
             RectTransform.anchorMax = Vector2.one;
         }
 
-        private void OnEnable() { CheckDeviceOrientation(); }
+        private void OnEnable()
+        {
+            CheckDeviceOrientation();
+            
+        }
 
         private void Update()
         {
             if (m_currentOrientation == DetectedOrientation.Unknown) CheckDeviceOrientation();
-
 //#if UNITY_2018_1_OR_NEWER
 //CheckDeviceOrientation();
 //#endif
@@ -205,7 +216,7 @@ namespace Doozy.Engine.Orientation
 #endif
         }
 
-        /// <summary> Updates the current orientation to the given newOrientation and invoke OnOrientationEvent </summary>
+        /// <summary> Update the current orientation to the given newOrientation and invoke OnOrientationEvent </summary>
         public void ChangeOrientation(DetectedOrientation newOrientation, bool forceUpdate = false)
         {
             m_currentOrientation = newOrientation;

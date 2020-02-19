@@ -25,7 +25,5 @@ namespace DChild.Gameplay.Systems
         void Unregister(IInteractiveEnvironment isolatedObject);
         void Register(IIsolatedPhysics isolatedPhysics);
         void Unregister(IIsolatedPhysics isolatedPhysics);
-        void Register(Enemy enemy);
-        void Unregister(Enemy enemy);
     }
 }

@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField]
         private float m_value;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             switch (m_systemField)
             {
@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             }
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             switch (m_systemField)
             {

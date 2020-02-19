@@ -12,9 +12,10 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     {
         private enum Stats
         {
+            Health,
+            Magic,
             Attack,
             MagicAttack,
-            Defense,
             Crit_Damage,
             Crit_Chance,
         }
@@ -24,7 +25,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         [SerializeField, HideInInspector]
         private int m_value;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             switch (m_toChange)
             {
@@ -34,19 +35,22 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 case Stats.MagicAttack:
                     AddStat(player.stats, PlayerStat.MagicAttack, m_value);
                     break;
-                case Stats.Defense:
-                    AddStat(player.stats, PlayerStat.Defense, m_value);
-                    break;
                 case Stats.Crit_Chance:
                     AddStat(player.stats, PlayerStat.CritChance, m_value);
                     break;
                 case Stats.Crit_Damage:
-                    player.modifiers.critDamageModifier += ToFloat(m_value);
+                    //player.modifiers.critDamageModifier += ToFloat(m_value);
+                    break;
+                case Stats.Health:
+                    AddStat(player.stats, PlayerStat.Health, m_value);
+                    break;
+                case Stats.Magic:
+                    AddStat(player.stats, PlayerStat.Magic, m_value);
                     break;
             }
         }
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             switch (m_toChange)
             {
@@ -56,14 +60,18 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
                 case Stats.MagicAttack:
                     AddStat(player.stats, PlayerStat.MagicAttack, -m_value);
                     break;
-                case Stats.Defense:
-                    AddStat(player.stats, PlayerStat.Defense, -m_value);
-                    break;
+               
                 case Stats.Crit_Chance:
                     AddStat(player.stats, PlayerStat.CritChance, -m_value);
                     break;
                 case Stats.Crit_Damage:
-                    player.modifiers.critDamageModifier -= ToFloat(m_value);
+                    //player.modifiers.critDamageModifier -= ToFloat(m_value);
+                    break;
+                case Stats.Health:
+                    AddStat(player.stats, PlayerStat.Health, -m_value);
+                    break;
+                case Stats.Magic:
+                    AddStat(player.stats, PlayerStat.Magic, -m_value);
                     break;
             }
         }
@@ -72,7 +80,6 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         private void AddStat(IPlayerStats reference, PlayerStat stat, int value)
         {
             reference.AddStat(stat, value);
-            reference.ApplyChanges();
         }
 #if UNITY_EDITOR
         [SerializeField, HideInInspector]

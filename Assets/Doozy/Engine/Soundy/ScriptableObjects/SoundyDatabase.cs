@@ -1,9 +1,10 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Doozy.Engine.Utils;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -97,7 +98,14 @@ namespace Doozy.Engine.Soundy
         /// <param name="databaseName"> The name of the new SoundDatabase </param>
         /// <param name="showDialog"> Should a display dialog be shown before executing the action </param>
         /// <param name="saveAssets"> Write all unsaved asset changes to disk? </param>
-        public bool CreateSoundDatabase(string databaseName, bool showDialog = false, bool saveAssets = false)
+        public bool CreateSoundDatabase(string databaseName, bool showDialog = false, bool saveAssets = false) { return CreateSoundDatabase(DoozyPath.GetDataPath(DoozyPath.ComponentName.Soundy), databaseName, showDialog, saveAssets); }
+
+        /// <summary> Creates a new SoundDatabase asset, at the given relative path, with the given database name and adds a reference to it to the database </summary>
+        /// <param name="relativePath"> Path where to create the theme asset </param>
+        /// <param name="databaseName"> The name of the new SoundDatabase </param>
+        /// <param name="showDialog"> Should a display dialog be shown before executing the action </param>
+        /// <param name="saveAssets"> Write all unsaved asset changes to disk? </param>
+        public bool CreateSoundDatabase(string relativePath, string databaseName, bool showDialog = false, bool saveAssets = false)
         {
             databaseName = databaseName.Trim();
 
@@ -116,10 +124,10 @@ namespace Doozy.Engine.Soundy
 #endif
                 return false;
             }
-            
+
 #if UNITY_EDITOR
-            SoundDatabase soundDatabase = AssetUtils.CreateAsset<SoundDatabase>(DoozyPath.GetDataPath(DoozyPath.ComponentName.Soundy), SoundyManager.GetSoundDatabaseFilename(databaseName.Replace(" ", string.Empty)));
-           
+            SoundDatabase soundDatabase = AssetUtils.CreateAsset<SoundDatabase>(relativePath, SoundyManager.GetSoundDatabaseFilename(databaseName.Replace(" ", string.Empty)));
+
 #else
             SoundDatabase soundDatabase = ScriptableObject.CreateInstance<SoundDatabase>();
 #endif
@@ -187,7 +195,7 @@ namespace Doozy.Engine.Soundy
 #if UNITY_EDITOR
             SearchForUnregisteredDatabases(false);
             if (Contains(SoundyManager.GENERAL)) return;
-            
+
             SoundDatabase soundDatabase = AssetUtils.CreateAsset<SoundDatabase>(DoozyPath.GetDataPath(DoozyPath.ComponentName.Soundy), SoundyManager.GetSoundDatabaseFilename(SoundyManager.GENERAL));
 #else
             SoundDatabase soundDatabase = ScriptableObject.CreateInstance<SoundDatabase>();
@@ -287,7 +295,7 @@ namespace Doozy.Engine.Soundy
 
                 return false;
             }
-            
+
             if (Contains(newDatabaseName))
             {
                 EditorUtility.DisplayDialog(UILabels.RenameSoundDatabase + " '" + soundDatabase.DatabaseName + "'",
@@ -341,9 +349,25 @@ namespace Doozy.Engine.Soundy
             if (DatabaseNames == null) DatabaseNames = new List<string>();
             if (SoundDatabases == null) SoundDatabases = new List<SoundDatabase>();
             DatabaseNames.Clear();
+            bool foundNullDatabaseReference = false;
             foreach (SoundDatabase database in SoundDatabases)
+            {
+                if (database == null)
+                {
+                    foundNullDatabaseReference = true;
+                    continue;
+                }
+
                 DatabaseNames.Add(database.DatabaseName);
+            }
+
             DatabaseNames.Sort();
+            if (foundNullDatabaseReference)
+            {
+                SoundDatabases = SoundDatabases.Where(soundDatabase => soundDatabase != null).ToList();
+                SetDirty(false);
+            }
+
             SetDirty(saveAssets);
         }
 

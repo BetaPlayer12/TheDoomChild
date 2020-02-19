@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -82,7 +82,7 @@ namespace Doozy.Editor.Nody.Windows
             //we do this here because in normal operation we want to update only the connections that are referencing nodes that are being dragged
             CalculateAllConnectionCurves();
 
-            //update the visual sate of all the connection points
+            //update the visual state of all the connection points
             UpdateVirtualPointsIsOccupiedStates();
 
             //check for errors

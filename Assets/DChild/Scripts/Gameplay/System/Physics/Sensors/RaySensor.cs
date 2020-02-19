@@ -1,5 +1,6 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,14 +16,14 @@ namespace DChild.Gameplay
         Collider2D GetProminentHitCollider();
     }
 
-    public struct RaySensorCastEventArgs : IEventActionArgs
+    public class RaySensorCastEventArgs : IEventActionArgs
     {
-        public RaySensorCastEventArgs(IRaySensorCastInfo castInfo) : this()
+        public IRaySensorCastInfo castInfo { get; private set; }
+
+        public void Initialize(IRaySensorCastInfo castInfo)
         {
             this.castInfo = castInfo;
         }
-
-        public IRaySensorCastInfo castInfo { get; }
     }
 
     public class RaySensor : MonoBehaviour, IRaySensorCastInfo
@@ -44,17 +45,21 @@ namespace DChild.Gameplay
         private Collider2D m_prominentHitCollider;
         private bool m_updatedProminentHitCollider;
 
+
         private static List<Collider2D> m_colliderList;
         private static List<int> m_colliderCountList;
         private static List<RaycastHit2D> m_hitBufferList;
         private static bool m_isInitialized;
         private int m_detectionCount;
 
+        [ShowInInspector, ReadOnly]
         public bool isDetecting => m_multiRaycast.isDetecting;
+        [ShowInInspector, ReadOnly]
         public bool allRaysDetecting => m_multiRaycast.areAllRaysDetecting;
 
         public int DetectionCount => m_detectionCount;
 
+        public RaycastHit2D m_castHit;
         public RaycastHit2D[] GetHits() => m_multiRaycast.hits;
 
         public RaycastHit2D[] GetUniqueHits()
@@ -170,7 +175,12 @@ namespace DChild.Gameplay
                 m_updatedValidHits = false;
                 m_prominentHitCollider = null;
                 m_updatedProminentHitCollider = false;
-                SensorCast?.Invoke(this, new RaySensorCastEventArgs(this));
+                using (Cache<RaySensorCastEventArgs> cacheEventArgs = Cache<RaySensorCastEventArgs>.Claim())
+                {
+                    cacheEventArgs.Value.Initialize(this);
+                    SensorCast?.Invoke(this, cacheEventArgs.Value);
+                    cacheEventArgs.Release();
+                }
             }
         }
 
@@ -192,8 +202,6 @@ namespace DChild.Gameplay
 #if UNITY_EDITOR
         public void Initialize(int count, LayerMask mask, bool ignoreTrigger, float castWidth, float castDistance)
         {
-
-
         }
 
         public void Initialize(float rotation)

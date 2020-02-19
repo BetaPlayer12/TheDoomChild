@@ -4,10 +4,11 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using Spine.Unity.Modules;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public class Tukko : Boss, IFlinch
+    public class Tukko : BossTemplate, IFlinch
     {
         [SerializeField]
         private AttackDamage m_damage;
@@ -312,6 +313,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         }
 
-      
+        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

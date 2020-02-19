@@ -3,56 +3,97 @@ using System.Collections.Generic;
 using UnityEngine;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay;
-using Refactor.DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Characters.AI;
+using DChild;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Projectiles;
 
-public class TombSoul : MonoBehaviour
+public class TombSoul : AttackProjectile
 {
+    private static FXSpawnHandle<FX> m_spawnHandle;
+    private static bool m_fxHandleInstantiated;
+
+    protected override void Collide()
+    {
+        var explosion = m_spawnHandle.InstantiateFX(projectileData.impactFX, transform.position);
+        explosion.transform.parent = null;
+        UnloadProjectile();
+        CallImpactedEvent();
+        Destroy(this.gameObject); //Quick Fix cuz not pooling atm
+    }
+
     [SerializeField]
     private float m_soulSpeed;
     [SerializeField]
-    private float m_riseSpeed;
+    private Vector2 m_riseSpeed;
+    [SerializeField]
+    private float m_riseDuration;
 
-    private IsolatedObjectPhysics2D m_physics;
+    private float m_delay;
+
+
+    //private IsolatedObjectPhysics2D m_physics;
+    private Collider2D m_collider;
     private AITargetInfo m_target;
-    private TombSoulAnimation m_animation;
+    private PhysicsMovementHandler2D m_movement;
+    private Damageable m_damageable;
 
-    private void Awake()
-    {
-        m_physics = GetComponent<IsolatedObjectPhysics2D>();
-        m_animation = GetComponent<TombSoulAnimation>();
-    }
+    private bool m_willChase;
 
     private void Start()
     {
+        m_damageable.Destroyed += Destroyed;
         StartCoroutine(SoulRoutine());
     }
 
-    public void GetTarget(AITargetInfo target)
+    protected override void Awake()
     {
-        m_target = target;
+        base.Awake();
+        if (m_fxHandleInstantiated == false)
+        {
+            m_spawnHandle = new FXSpawnHandle<FX>();
+            m_fxHandleInstantiated = true;
+        }
+
+        m_damageable = GetComponent<Damageable>();
+        //m_physics = GetComponent<IsolatedObjectPhysics2D>();
+        m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedObjectPhysics2D>(), transform);
+        m_collider = GetComponentInChildren<Collider2D>();
     }
 
-    private void ThrowSoul()
+    private void Destroyed(object sender, Holysoft.Event.EventActionArgs eventArgs)
     {
-        //Shoot Spit
-        m_animation.DoCharge();
-        var target = m_target.position ; //No Parabola
-        target = new Vector2(target.x, target.y - 2);
-        Vector2 soulPos = transform.position;
-        Vector3 v_diff = (target - soulPos);
-        float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-        //transform.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
-        //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.localRotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+        Collide();
+    }
 
-        GetComponent<Rigidbody2D>().AddForce((m_soulSpeed + (Vector2.Distance(target, transform.position) * 0.35f)) * transform.right, ForceMode2D.Impulse);
+    public void SetAttackInfo(AITargetInfo target, float delay)
+    {
+        m_target = target;
+        m_delay = delay;
     }
 
     private IEnumerator SoulRoutine()
     {
-        GetComponent<Rigidbody2D>().AddForce((m_riseSpeed + (Vector2.Distance(m_target.position, transform.position) * 0.35f)) * Vector2.up, ForceMode2D.Impulse);
+        GetComponent<Rigidbody2D>().AddForce(Random.Range(m_riseSpeed.x, m_riseSpeed.y) * Vector2.up, ForceMode2D.Impulse);
+        m_collider.enabled = false;
         yield return new WaitForSeconds(3);
-        ThrowSoul();
+        m_collider.enabled = true;
+        GetComponent<Rigidbody2D>().velocity =Vector2.zero;
+        //m_animation.SetAnimation(0, "Charge", false).TimeScale = 2;
+        //yield return new WaitForAnimationComplete(m_animation.animationState, TombSoulAnimation.ANIMATION_CHARGE);
+        //m_animation.DoChargeRed();
+        //yield return new WaitUntil(() => m_hasLaunched);
+        yield return new WaitForSeconds(m_delay);
+        m_willChase = true;
+        //m_movement.MoveTo(m_target.position, m_soulSpeed);
         yield return null;
+    }
+
+    private void Update()
+    {
+        if (m_willChase)
+        {
+            m_movement.MoveTo(m_target.position, m_soulSpeed);
+        }
     }
 }

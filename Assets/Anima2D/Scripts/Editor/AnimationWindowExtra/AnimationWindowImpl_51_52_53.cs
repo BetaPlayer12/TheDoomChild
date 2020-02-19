@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections;
@@ -58,9 +57,18 @@ namespace Anima2D
 			m_FrameToTimeMethod = m_AnimationWindowStateType.GetMethod("FrameToTime",BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 			m_TimeToFrameMethod = m_AnimationWindowStateType.GetMethod("TimeToFrame",BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 			m_TimeMethod = m_AnimationKeyTimeType.GetMethod("Time",BindingFlags.Public | BindingFlags.Static);
-			m_CreateDefaultCurvesMethod = m_AnimationWindowUtilityType.GetMethod("CreateDefaultCurves",BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            try
+            {
+                m_CreateDefaultCurvesMethod = m_AnimationWindowUtilityType.GetMethod("CreateDefaultCurves", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 
-			Type[] l_AddKeyframeToCurveTypes = { m_AnimationWindowStateType, m_AnimationWindowCurveType, m_AnimationKeyTimeType };
+            }
+            catch
+            {
+                Debug.Log("Something is wrong here");
+            }
+
+
+            Type[] l_AddKeyframeToCurveTypes = { m_AnimationWindowStateType, m_AnimationWindowCurveType, m_AnimationKeyTimeType };
 			m_AddKeyframeToCurveMethod = m_AnimationWindowUtilityType.GetMethod("AddKeyframeToCurve",BindingFlags.Public | BindingFlags.Static, null, l_AddKeyframeToCurveTypes, null);
 
 			Type[] l_SaveCurveTypes = { m_AnimationWindowCurveType };
@@ -309,4 +317,4 @@ namespace Anima2D
 		}
 	}
 }
-#endif
+

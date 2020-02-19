@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -129,6 +129,15 @@ namespace Doozy.Engine.UI.Input
 
         #region Unity Methods
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void RunOnStart()
+        {
+            s_applicationIsQuitting = false;
+            s_initialized = false;
+        }
+#endif
+        
         private void Reset() { BackButtonInputData = GetBackButtonInputData(); }
 
         private void Awake()
@@ -187,7 +196,7 @@ namespace Doozy.Engine.UI.Input
 
         #region Public Methods
 
-        /// <summary> Fires the 'Back' button event (if it can be executed and is enabled) </summary>
+        /// <summary> Fire the 'Back' button event (if it can be executed and is enabled) </summary>
         public void Execute()
         {
             if (!DoozySettings.Instance.UseBackButton) return;
@@ -196,15 +205,22 @@ namespace Doozy.Engine.UI.Input
 
             if (UIPopup.AnyPopupVisible)
             {
-                UIPopup popup = UIPopup.LastShownPopup;
-                if (popup.HideOnBackButton) popup.Hide();
-                return;
+                UIPopup lastShownPopup = UIPopup.LastShownPopup;
+                if (lastShownPopup.HideOnBackButton)
+                    lastShownPopup.Hide();
+
+                if (lastShownPopup.BlockBackButton)
+                    return;
             }
 
             if (UIDrawer.AnyDrawerOpened)
             {
-                UIDrawer.OpenedDrawer.Close();
-                return;
+                UIDrawer openedDrawer = UIDrawer.OpenedDrawer;
+                if (openedDrawer.HideOnBackButton)
+                    openedDrawer.Close();
+
+                if (openedDrawer.BlockBackButton)
+                    return;
             }
 
             Message.Send(new UIButtonMessage(NAME, UIButtonBehaviorType.OnClick));
@@ -218,23 +234,23 @@ namespace Doozy.Engine.UI.Input
         /// <summary> Adds BackButton to scene and returns a reference to it </summary>
         public static BackButton AddToScene(bool selectGameObjectAfterCreation = false) { return DoozyUtils.AddToScene<BackButton>(MenuUtils.BackButton_GameObject_Name, true, selectGameObjectAfterCreation); }
 
-        /// <summary> Disables the 'Back' button functionality </summary>
+        /// <summary> Disable the 'Back' button functionality </summary>
         public static void Disable()
         {
             Instance.m_backButtonDisableLevel++; //if == 0 --> false (back button is not disabled) if > 0 --> true (back button is disabled)
         }
 
-        /// <summary> Enables the 'Back' button functionality </summary>
+        /// <summary> Enable the 'Back' button functionality </summary>
         public static void Enable()
         {
             Instance.m_backButtonDisableLevel--; //if == 0 --> false (back button is not disabled) if > 0 --> true (back button is disabled)
             if (Instance.m_backButtonDisableLevel < 0) Instance.m_backButtonDisableLevel = 0;
         }
 
-        /// <summary> Enables the 'Back' button functionality by resetting the additive bool to zero. backButtonDisableLevel = 0. Use this ONLY for special cases when something wrong happens and the back button is stuck in disabled mode </summary>
+        /// <summary> Enable the 'Back' button functionality by resetting the additive bool to zero. backButtonDisableLevel = 0. Use this ONLY for special cases when something wrong happens and the back button is stuck in disabled mode </summary>
         public static void EnableByForce() { Instance.m_backButtonDisableLevel = 0; }
 
-        /// <summary> Initializes the BackButton Instance </summary>
+        /// <summary> Initialize the BackButton Instance </summary>
         public static void Init()
         {
             if (s_initialized || s_instance != null) return;

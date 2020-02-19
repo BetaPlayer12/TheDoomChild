@@ -120,6 +120,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -131,6 +132,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -167,6 +169,7 @@ MonoBehaviour:
   clearStateOnDisable: 0
   tintBlack: 0
   singleSubmesh: 0
+  fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
   maskInteraction: 0
@@ -191,6 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneRoot: {fileID: 0}
+  flipBy180DegreeRotation: 0
   skeletonRenderer: {fileID: 3394700099283359459}
 --- !u!114 &2303258578637803786
 MonoBehaviour:
@@ -224,6 +228,7 @@ MonoBehaviour:
   m_spine: {fileID: 0}
   m_physics: {fileID: 0}
   m_skeletonAnimation: {fileID: 0}
+  m_autoFlinch: 0
   m_animation: 
 --- !u!1 &1320882685526682748
 GameObject:
@@ -271,6 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: abdomen_Bug_Giant2
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -351,6 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: dust3
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -403,6 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: head_Bug_Giant02
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -501,6 +509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 3394700099283359459}
   boneName: sting 2
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -643,6 +652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: abdomen_Bug_Giant02
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -862,6 +872,7 @@ CompositeCollider2D:
       - {x: 0.5115414, y: 0.1403466}
       - {x: 1.1642054, y: 0.12553}
   m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.00005
 --- !u!114 &7106460866367168288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -878,7 +889,6 @@ MonoBehaviour:
   - {fileID: 2183691986725825444}
   - {fileID: 8199709118724235044}
   - {fileID: 4584254079264509899}
-  m_compositeColliderID: -33050
   m_isInvulnerable: 0
   m_damageReduction: 0
 --- !u!114 &2223875786060822814
@@ -893,6 +903,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_ignoreColliderList: []
 --- !u!1 &4666997468959791844
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,6 +981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: root
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -1101,6 +1114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: jumpfx
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -1151,6 +1165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: acid_spit1
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -1201,6 +1216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: Core_bone_bug_Giant02
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1
@@ -1283,6 +1299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: dust1
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1

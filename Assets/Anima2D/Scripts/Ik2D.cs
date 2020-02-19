@@ -79,13 +79,13 @@ namespace Anima2D
 
 		void OnDrawGizmos()
 		{
-			UnityEngine.Gizmos.matrix = transform.localToWorldMatrix;
+			Gizmos.matrix = transform.localToWorldMatrix;
 
 			if(enabled && target && numBones > 0)
 			{
-                UnityEngine.Gizmos.DrawIcon(transform.position,"ikGoal");
+				Gizmos.DrawIcon(transform.position,"ikGoal");
 			}else{
-                UnityEngine.Gizmos.DrawIcon(transform.position,"ikGoalDisabled");
+				Gizmos.DrawIcon(transform.position,"ikGoalDisabled");
 			}
 		}
 

@@ -6,6 +6,7 @@ using UnityEngine;
 using DChild.Gameplay.Physics;
 using DChild.Gameplay.Systems.WorldComponents;
 using DChild.Gameplay.Systems;
+using Sirenix.Serialization;
 
 namespace DChild.Gameplay
 {
@@ -96,7 +97,10 @@ namespace DChild.Gameplay
             }
         }
 
-        public void SetVelocity(Vector2 velocity) => this.velocity = m_physicsTime.GetRelativeForce(velocity);
+        public void SetVelocity(Vector2 velocity)
+        {
+            this.velocity = m_physicsTime.GetRelativeForce(velocity);
+        }
 
         public void SetVelocity(float x = float.NaN, float y = float.NaN)
         {

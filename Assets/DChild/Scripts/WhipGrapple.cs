@@ -4,7 +4,7 @@ using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Behaviour;
 using System.Collections.Generic;
 
-public class WhipGrapple : MonoBehaviour, IPlayerExternalModule
+public class WhipGrapple : MonoBehaviour
 {
     private enum SelectionType
     {
@@ -30,11 +30,11 @@ public class WhipGrapple : MonoBehaviour, IPlayerExternalModule
 
     private SelectionType m_detectionType;
 
-    public void Initialize(IPlayerModules player)
-    {
-        m_physics = player.physics;
-        m_transform = player.physics.transform;
-    }
+    //public void Initialize(IPlayerModules player)
+    //{
+    //    m_physics = player.physics;
+    //    m_transform = player.physics.transform;
+    //}
 
     public void Grapple(bool isActivated)
     {
@@ -115,5 +115,4 @@ public class WhipGrapple : MonoBehaviour, IPlayerExternalModule
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(m_sensorPosition, m_overlapSize);
     }
-
 }
