@@ -19,6 +19,7 @@ namespace PlayerNew
 
         public bool attackHolding;
         public bool attacking;
+        public bool upHold;
        // public float attackHold = 0.5f;
         public int comboCount;
         public float resetTime;
@@ -28,6 +29,13 @@ namespace PlayerNew
         public float attackRange;
 
         private Crouch crouchState;
+        [SerializeField]
+        private ParticleSystem m_forwardSlash1FX;
+        [SerializeField]
+        private ParticleSystem m_swordCombo1FX;
+        [SerializeField]
+        private ParticleSystem m_swordCombo2FX;
+
 
         private void Start()
         {
@@ -39,7 +47,7 @@ namespace PlayerNew
         {
             var canSlash = inputState.GetButtonValue(inputButtons[0]);
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
-           
+            var upButton = inputState.GetButtonValue(inputButtons[2]);
 
 
             //if(canSlash && attackCounter <= comboCount)
@@ -76,7 +84,11 @@ namespace PlayerNew
             //    attackTimeCounter = resetTime;
             //    attackCounter = 0;
             //}
-           
+
+          
+
+                upHold = upButton ? true : false;
+            
 
                 if (timeBtwnAtck < 0)
                 {
@@ -98,7 +110,20 @@ namespace PlayerNew
                         }
                         ToggleScripts(false);
                         Collider2D[] objToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
-                        attacking = true;
+                        if (attackCounter == 0)
+                        {
+                            m_forwardSlash1FX.Play();
+                        }
+                        else if (attackCounter == 1)
+                        {
+                            m_swordCombo1FX.Play();
+                        }
+                        else if (attackCounter == 2)
+                        {
+                            m_swordCombo2FX.Play();
+                        }
+                    attacking = true;
+
                     }
 
                     
@@ -139,7 +164,7 @@ namespace PlayerNew
             attackCounter++;
             attacking = false;
             ToggleScripts(true);
-            Debug.Log("attack end: " + attackCounter);
+            
         }
     }
 }
