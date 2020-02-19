@@ -123,11 +123,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField]
-        private GameObject m_screamHitbox;
-        [SerializeField]
-        private ParticleSystem m_screamFX;
-
         private float m_targetDistance;
         private bool m_hasDetected;
 
@@ -145,8 +140,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void SpawnProjectile()
         {
             Debug.Log("Scream Attack");
-            m_screamHitbox.SetActive(true);
-            m_screamFX.Play();
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -274,7 +267,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
-                            m_screamHitbox.SetActive(false);
                             if (IsTargetInRange(m_info.attack.range))
                             {
                                 m_movement.Stop();

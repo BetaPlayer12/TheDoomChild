@@ -98,6 +98,12 @@ namespace DChild.Gameplay
             return true;
         }
 
+        public void DetachSerializers()
+        {
+            PreSerialization = delegate { };
+            PostDeserialization = delegate { };
+        }
+
         private void CallPreSerialization()
         {
             using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
