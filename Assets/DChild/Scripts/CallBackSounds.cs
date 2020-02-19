@@ -27,7 +27,7 @@ namespace DChild
             for (int i = 0; i < data.playCount; i++)
             {
                 currentSoudGroup = data.GetPlaySoundGroup(i);
-                if (IsTransformPlaying(currentSoudGroup))
+                if (IsTransformPlaying(currentSoudGroup) == false)
                 {
                     PlaySound(currentSoudGroup);
                 }
