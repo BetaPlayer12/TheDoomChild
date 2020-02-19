@@ -48,7 +48,7 @@ namespace PlayerNew
             {
                 swordThrustBuildUp.Stop();
                 swordThrustBody.Play();
-                Debug.Log("Attack");
+                //Debug.Log("Attack");
                 chargingAttack = false;
             }
         }
@@ -56,7 +56,7 @@ namespace PlayerNew
         private void StartChargeLoop()
         {
             
-            Debug.Log("charge start ");
+            //Debug.Log("charge start ");
             chargingAttack = true;
             thrustHasStarted = true;
            
@@ -64,8 +64,8 @@ namespace PlayerNew
 
         private void ThrustImpact()
         {
-            Debug.Log("fasfafasf");
-            swordThrustArrow.Stop();
+            //Debug.Log("fasfafasf");
+            //swordThrustArrow.Stop();
             slashSwordThrustImpacts.Play();
             m_thrustImpactAttackCollider.enabled = true;
         }
