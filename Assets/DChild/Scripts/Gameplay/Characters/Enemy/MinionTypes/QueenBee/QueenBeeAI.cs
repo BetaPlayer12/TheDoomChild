@@ -258,6 +258,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_droneSpointsGO;
+        [SerializeField, TabGroup("Reference")]
         private Transform m_modelTransform;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -609,6 +611,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_flinchHandle.gameObject.SetActive(m_currentPhaseIndex == 2 ? true : false);
             m_agent.Stop();
+            m_droneSpointsGO.transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
             m_animation.SetAnimation(0, m_info.summonDroneAnimation, false).TimeScale = 2f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDroneAnimation);
             for (int i = 0; i < m_currentDroneBatches; i++)
