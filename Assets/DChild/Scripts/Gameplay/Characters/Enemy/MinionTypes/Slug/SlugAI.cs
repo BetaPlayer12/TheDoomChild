@@ -365,7 +365,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Patrol:
-                    if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_animation.EnableRootMotion(true, transform.localRotation.z != 0 ? true : false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = 1f;
