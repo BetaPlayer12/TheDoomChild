@@ -54,8 +54,6 @@ namespace PlayerNew
         protected override void OnJump()
         {
             base.OnJump();
-
-            Debug.Log("jumping");
             canLongJump = true;
         }
     }
