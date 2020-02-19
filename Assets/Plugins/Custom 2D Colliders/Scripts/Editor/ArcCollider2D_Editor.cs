@@ -53,7 +53,7 @@ public class ArcCollider_Editor : Editor {
         GUI.changed = false;
         DrawDefaultInspector();
         var col = collider.offset;
-        col.y = -4.7f;
+       // col.y = -4.7f;
         collider.offset = col;
 
         if (GUI.changed || !off.Equals(collider.offset))
