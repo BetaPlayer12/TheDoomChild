@@ -9,6 +9,7 @@ namespace PlayerNew
         private WallGrab wallGrab;
         public bool onWallDetected;
         public bool wallSticking;
+        public bool groundWallStick;
 
         protected float defaultGravityScale;
         protected float defaultDrag;
@@ -23,6 +24,17 @@ namespace PlayerNew
         // Update is called once per frame
         protected virtual void Update()
         {
+            if (collisionState.onWall || collisionState.onWallLeg)
+            {
+                groundWallStick = true;
+            }
+            else
+            {
+                groundWallStick = false;
+            }
+
+           
+
             if (collisionState.onWall && collisionState.onWallLeg && !wallGrab.canLedgeGrab)
             {
 

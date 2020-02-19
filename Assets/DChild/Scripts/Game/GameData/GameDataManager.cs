@@ -11,6 +11,9 @@ namespace DChild
 {
     public class GameDataManager : MonoBehaviour
     {
+        [SerializeField]
+        private bool m_doNotUseExistingFiles; 
+
         [SerializeField, Title("Save File"), HideLabel]
         private CampaignSlotList m_campaignSlotList;
 
@@ -37,7 +40,10 @@ namespace DChild
 
         private void Awake()
         {
-            InitializeCampaginSlotList();
+            if(m_doNotUseExistingFiles == false)
+            {
+                InitializeCampaginSlotList();
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField]
         private bool m_isAlreadyTracking;
         [SerializeField]
-        [HideInInspector]
+        [ReadOnly]
         private CinemachineVirtualCamera m_vCam;
         private CinemachineNoise m_noiseModule;
 
@@ -80,6 +80,14 @@ namespace DChild.Gameplay.Cinematics.Cameras
             m_noiseModule = GetComponent<CinemachineNoise>();
             m_vCam.enabled = false;
         }
+
+#if UNITY_EDITOR
+        [Button, HideInEditorMode]
+        private void UseThis()
+        {
+            GameplaySystem.cinema.TransistionTo(this);
+        }
+#endif
     }
 
 }

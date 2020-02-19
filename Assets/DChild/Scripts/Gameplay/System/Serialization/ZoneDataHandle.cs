@@ -15,11 +15,11 @@ namespace DChild.Serialization
         public class ZoneData : ISaveData
         {
             [SerializeField]
-            private Dictionary<SerializeID, ISaveData> m_savedDatas;
+            private Dictionary<SerializeID, ISaveData> m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
 
             public ZoneData()
             {
-                m_savedDatas = new Dictionary<SerializeID, ISaveData>();
+                m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
             }
 
             public ZoneData(ComponentSerializer[] serializers)
@@ -33,7 +33,7 @@ namespace DChild.Serialization
 
             public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas)
             {
-                m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas);
+                m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas, new SerializeID.EqualityComparer());
             }
 
             public void SetData(SerializeID ID, ISaveData data)
@@ -145,7 +145,8 @@ namespace DChild.Serialization
 
         private void OnDestroy()
         {
-            UpdateSaveData();
+            GameplaySystem.campaignSerializer.PreSerialization -= OnPreSerialization;
+            GameplaySystem.campaignSerializer.PostDeserialization -= OnPostDeserialization;
         }
 
         #region Editor

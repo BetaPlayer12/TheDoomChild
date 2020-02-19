@@ -81,14 +81,16 @@ namespace DChild.Gameplay.Systems
         private void OnPlayerDeath(object sender, EventActionArgs eventArgs)
         {
             GameEventMessage.SendEvent("Game Over");
+            m_input.Disable();
+            m_player.controller.Disable();
             m_playerIsDead = true;
             m_respawnDelay.Reset();
         }
         private void OnRespawnPlayer(object sender, EventActionArgs eventArgs)
         {
-            GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot);
-            GameplaySystem.campaignSerializer.Load();
-            m_playerIsDead = false;
+            //GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, Menu.LoadingHandle.LoadType.Smart);
+            //GameplaySystem.campaignSerializer.Load();
+            //m_playerIsDead = false;
         }
 
         private void Start()

@@ -30,9 +30,7 @@ namespace DChild.Gameplay.Systems
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            var playerControlledObject = collision.GetComponent<Hitbox>();
-
-            if (playerControlledObject != null)
+            if (collision.TryGetComponent(out Hitbox hitbox))
             {
                 Character character = collision.GetComponentInParent<Character>();
 
@@ -49,6 +47,8 @@ namespace DChild.Gameplay.Systems
 
             if (type == TransitionType.Enter)
             {
+                GameplaySystem.campaignSerializer.UpdateData();
+
                 yield return new WaitForSeconds(m_transitionDelay);
 
                 m_handle.DoSceneTransition(character, TransitionType.PostEnter);
@@ -57,11 +57,12 @@ namespace DChild.Gameplay.Systems
                 Cache<LoadZoneFunctionHandle> cacheLoadZoneHandle = Cache<LoadZoneFunctionHandle>.Claim();
                 cacheLoadZoneHandle.Value.Initialize(m_destination, character, cacheLoadZoneHandle);
                 GameSystem.LoadZone(m_destination.scene, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                GameplaySystem.ClearCaches();
 
             }
             else if (type == TransitionType.Exit)
             {
-                character.transform.position = m_poster.data.position;
+                //character.transform.position = m_poster.data.position;
 
                 yield return new WaitForSeconds(m_transitionDelay);
 
