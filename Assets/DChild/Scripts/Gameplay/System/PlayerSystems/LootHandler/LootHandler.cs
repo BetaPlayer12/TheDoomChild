@@ -61,7 +61,7 @@ namespace DChild.Gameplay.Systems
             for (int i = 0; i < instanceToCreate; i++)
             {
                 m_cachedLoot = pool.GetOrCreateItem(request.loot).GetComponent<Loot>();
-                SceneManager.MoveGameObjectToScene(m_cachedLoot,)
+                SceneManager.MoveGameObjectToScene(m_cachedLoot.gameObject, request.sceneToDropLoot);
                 m_cachedLoot.SpawnAt(request.location, Quaternion.identity);
                 m_cachedLoot.Pop(GetRandomPopVelocity());
             }
