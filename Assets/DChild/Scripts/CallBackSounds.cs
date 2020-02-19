@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild
 {
+
     [AddComponentMenu("DChild/Audio/CallBack Sounds")]
     public class CallBackSounds : MonoBehaviour
     {
@@ -41,7 +42,6 @@ namespace DChild
             {
                 MasterAudio.StopBusOfTransform(transform, buses[i]);
             }
-
         }
 
         public void StopSounds(params string[] soundGroups)
