@@ -535,6 +535,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_phaseHandle.ApplyChange();
+            m_bodyCollider.SetActive(false);
             m_stateHandle.Wait(State.Phasing);
             m_animation.animationState.TimeScale = 1f;
             //m_turnState = State.Phasing;
