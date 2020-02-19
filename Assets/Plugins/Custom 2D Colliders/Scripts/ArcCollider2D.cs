@@ -64,7 +64,7 @@ public class ArcCollider2D : MonoBehaviour {
 
         if (pizzaSlice && totalAngle % 360 != 0)
         {
-            center.y -= 9.38f;
+            //center.y -= 9.38f;
             points.Add(center);
         }
 
