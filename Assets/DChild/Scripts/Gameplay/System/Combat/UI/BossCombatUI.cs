@@ -9,7 +9,9 @@ namespace DChild.Gameplay.Combat.UI
     public class BossCombatUI : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshProUGUI m_bossName;
+        private TextMeshProUGUI m_bossName;        
+        [SerializeField]
+        private TextMeshProUGUI m_bossTitle;
         [SerializeField]
         private SliderStatUI m_bossHealth;
 
@@ -17,6 +19,7 @@ namespace DChild.Gameplay.Combat.UI
         {
             m_bossHealth.MonitorInfoOf(boss.health);
             m_bossName.text = boss.creatureName;
+            m_bossTitle.text = boss.creatureTitle;
         }
     }
 }
