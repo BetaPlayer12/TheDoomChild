@@ -258,6 +258,10 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_droneSpointsGO;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_movePointsGO;
+        [SerializeField, TabGroup("Reference")]
         private Transform m_modelTransform;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -535,6 +539,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_phaseHandle.ApplyChange();
+            m_bodyCollider.SetActive(false);
             m_stateHandle.Wait(State.Phasing);
             m_animation.animationState.TimeScale = 1f;
             //m_turnState = State.Phasing;
@@ -608,6 +613,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_flinchHandle.gameObject.SetActive(m_currentPhaseIndex == 2 ? true : false);
             m_agent.Stop();
+            m_droneSpointsGO.transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
             m_animation.SetAnimation(0, m_info.summonDroneAnimation, false).TimeScale = 2f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDroneAnimation);
             for (int i = 0; i < m_currentDroneBatches; i++)
@@ -989,6 +995,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_attackDecider.chosenAttack.range)*/ && m_chosenAttack != m_previousAttack)
                     {
                         //m_agent.Stop();
+                        m_movePointsGO.transform.localScale = new Vector3(UnityEngine.Random.Range(-1, 1), 1, 1);
+                        if (m_movePointsGO.transform.localScale.x == 0)
+                        {
+                            m_movePointsGO.transform.localScale = Vector3.one;
+                        }
                         m_previousAttack = m_chosenAttack;
                         m_stateHandle.SetState(State.Attacking);
                     }

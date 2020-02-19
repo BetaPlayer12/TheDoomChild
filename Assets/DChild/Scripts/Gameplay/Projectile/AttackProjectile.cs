@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Projectiles
 
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            if (LayerMask.LayerToName(collision.gameObject.layer) == "Environment")
+            if (LayerMask.LayerToName(collision.gameObject.layer) == "Environment" || LayerMask.LayerToName(collision.gameObject.layer) == "Default") //Default is for QueenBee Quickfix
             {
                 if (m_data.canPassThroughEnvironment == false)
                 {

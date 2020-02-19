@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Systems
         [Button]
         public void DropLoot()
         {
-            m_loot.DropLoot(m_damageable.position, gameObject.scene);
+            m_loot.DropLoot(m_damageable.position);
         }
 
         public void SetLootData(LootData lootData)
