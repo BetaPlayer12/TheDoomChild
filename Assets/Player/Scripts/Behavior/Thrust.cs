@@ -38,7 +38,7 @@ namespace PlayerNew
             if (holdTime > timeToCharge && !chargingAttack && collisionState.grounded && !down && !dash)
             {
                 ToggleScripts(false);
-                Debug.Log("Charging");
+                //Debug.Log("Charging");
                 swordThrustBuildUp.Play();
                 thrustAttack = true;
                
