@@ -3,6 +3,7 @@ using Holysoft;
 using Holysoft.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Systems
 {
@@ -60,7 +61,7 @@ namespace DChild.Gameplay.Systems
             for (int i = 0; i < instanceToCreate; i++)
             {
                 m_cachedLoot = pool.GetOrCreateItem(request.loot).GetComponent<Loot>();
-                //SceneManager.
+                SceneManager.MoveGameObjectToScene(m_cachedLoot,)
                 m_cachedLoot.SpawnAt(request.location, Quaternion.identity);
                 m_cachedLoot.Pop(GetRandomPopVelocity());
             }
