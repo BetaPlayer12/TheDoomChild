@@ -256,6 +256,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
         private Transform m_modelTransform;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -703,7 +705,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_animation.SetAnimation(0, m_info.phase1AtkMeleeAnimation, false);
-            if(m_currentPhaseIndex != 0)
+            m_bodyCollider.SetActive(true);
+            if (m_currentPhaseIndex != 0)
             {
                 yield return new WaitForSeconds(2.25f);
                 GetComponent<IsolatedPhysics2D>().AddForce(new Vector2(2.5f * transform.localScale.x, 0), ForceMode2D.Impulse);
@@ -711,6 +714,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.Stop();
             }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase1AtkMeleeAnimation);
+            m_bodyCollider.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
