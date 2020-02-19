@@ -9,7 +9,7 @@ namespace DChild
     {
         [SerializeField, MinValue(1), OnValueChanged("ValidateSlots")]
         private int m_slotCount;
-        [SerializeField, ListDrawerSettings(HideRemoveButton = true, HideAddButton = true, DraggableItems = false, NumberOfItemsPerPage = 1),HideReferenceObjectPicker]
+        [SerializeField, ListDrawerSettings(HideRemoveButton = true, HideAddButton = true, DraggableItems = false, NumberOfItemsPerPage = 1)]
         private CampaignSlot[] m_slots = new CampaignSlot[1];
 
         public int slotCount => m_slotCount;

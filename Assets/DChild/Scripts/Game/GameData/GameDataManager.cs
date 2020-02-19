@@ -6,21 +6,20 @@ using System;
 using UnityEngine;
 using System.IO;
 using DChild.Serialization;
-using Sirenix.Serialization;
 
 namespace DChild
 {
-    public class GameDataManager : SerializedMonoBehaviour
+    public class GameDataManager : MonoBehaviour
     {
         [SerializeField]
         private bool m_doNotUseExistingFiles; 
 
-        [OdinSerialize, HideReferenceObjectPicker,Title("Save File"), HideLabel]
-        private CampaignSlotList m_campaignSlotList = new CampaignSlotList();
+        [SerializeField, Title("Save File"), HideLabel]
+        private CampaignSlotList m_campaignSlotList;
 
-        public CampaignSlotList campaignSlotList => m_campaignSlotList;
+        public CampaignSlotList campaignSlotList { get => m_campaignSlotList; }
 
-        public void InitializeCampaignSlotList()
+        private void InitializeCampaginSlotList()
         {
             CampaignSlot[] slots = new CampaignSlot[m_campaignSlotList.slotCount];
             for (int i = 0; i < slots.Length; i++)
@@ -43,7 +42,7 @@ namespace DChild
         {
             if(m_doNotUseExistingFiles == false)
             {
-                InitializeCampaignSlotList();
+                InitializeCampaginSlotList();
             }
         }
     }

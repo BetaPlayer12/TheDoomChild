@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Systems
 {
@@ -9,11 +8,11 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private LootData[] m_loots;
 
-        public override void DropLoot(Vector2 position, Scene scene)
+        public override void DropLoot(Vector2 position)
         {
             for (int i = 0; i < m_loots.Length; i++)
             {
-                m_loots[i].DropLoot(position,scene);
+                m_loots[i].DropLoot(position);
             }
         }
     }

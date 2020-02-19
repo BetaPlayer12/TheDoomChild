@@ -1,6 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Systems
 {
@@ -12,9 +11,9 @@ namespace DChild.Gameplay.Systems
         [SerializeField, MinValue(1)]
         private int m_count;
 
-        public override void DropLoot(Vector2 position,Scene scene)
+        public override void DropLoot(Vector2 position)
         {
-            GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_loot, m_count, position, scene));
+            GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_loot, m_count, position));
         }
 #if UNITY_EDITOR
         private bool ValidateLoot(GameObject loot)

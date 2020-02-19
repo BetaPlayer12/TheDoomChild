@@ -40,8 +40,10 @@ namespace PlayerNew
             }
 
             base.Update();
-            if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay)
+
+            if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay && !collisionState.onWall && !collisionState.onWallLeg)
             {
+                Debug.Log("long jumping");
                 var vel = body2d.velocity;
                 body2d.velocity = new Vector2(vel.x, jumpSpeed * longJumpMultiplier);
                 canLongJump = false;
@@ -53,6 +55,7 @@ namespace PlayerNew
 
         protected override void OnJump()
         {
+            Debug.Log("calling jump");
             base.OnJump();
             canLongJump = true;
         }
