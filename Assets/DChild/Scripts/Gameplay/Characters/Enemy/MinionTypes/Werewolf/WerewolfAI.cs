@@ -253,7 +253,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if(!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                    if(!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true);

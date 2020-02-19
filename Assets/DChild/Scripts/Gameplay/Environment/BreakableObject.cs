@@ -17,11 +17,13 @@ namespace DChild.Gameplay.Environment
         {
             public SaveData(bool isDestroyed) : this()
             {
-                this.isDestroyed = isDestroyed;
+                this.m_isDestroyed = isDestroyed;
             }
 
-            [ShowInInspector,]
-            public bool isDestroyed { get; private set; }
+            [SerializeField]
+            private bool m_isDestroyed;
+
+            public bool isDestroyed => m_isDestroyed;
         }
 
         [SerializeField]

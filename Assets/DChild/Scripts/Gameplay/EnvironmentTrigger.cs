@@ -12,11 +12,12 @@ namespace DChild.Gameplay
         {
             public SaveData(bool wasTriggered)
             {
-                this.wasTriggered = wasTriggered;
+                this.m_isTriggered = wasTriggered;
             }
 
             [ShowInInspector]
-            public bool wasTriggered { get; }
+            public bool m_isTriggered;
+            public bool isTriggered => m_isTriggered;
         }
 
         [SerializeField, OnValueChanged("OnValueChange")]
@@ -35,7 +36,7 @@ namespace DChild.Gameplay
 
         public void Load(ISaveData data)
         {
-            m_wasTriggered = ((SaveData)data).wasTriggered;
+            m_wasTriggered = ((SaveData)data).isTriggered;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
