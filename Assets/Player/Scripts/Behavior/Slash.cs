@@ -17,11 +17,10 @@ namespace PlayerNew
 
         public float startTimeBtwAttck;
 
-
         public bool attackHolding;
         public bool attacking;
         public bool upHold;
-       // public float attackHold = 0.5f;
+        // public float attackHold = 0.5f;
         public int comboCount;
         public float resetTime;
 
@@ -95,8 +94,6 @@ namespace PlayerNew
 
             //}
 
-
-
             //if (attackTimeCounter > 0.1f)
             //{
             //    attackTimeCounter -= Time.deltaTime;
@@ -113,15 +110,12 @@ namespace PlayerNew
             //    attackCounter = 0;
             //}
 
-          
+            upHold = upButton ? true : false;
 
-                upHold = upButton ? true : false;
-            
-
-                if (timeBtwnAtck < 0 && !dashState.dashing)
+            if (timeBtwnAtck < 0 && !dashState.dashing)
+            {
+                if (canSlash && holdTime < 0.1f && attacking == false)
                 {
-                    if (canSlash && holdTime < 0.1f && attacking == false)
-                    {
                     ToggleScripts(false);
                     if (collisionState.grounded)
                     {
@@ -156,38 +150,32 @@ namespace PlayerNew
                             m_swordCombo2AttackCollider.enabled = true;
                         }
                     }
-                    
-                    
 
                     attacking = true;
                 }
-              
 
-                    timeBtwnAtck = startTimeBtwAttck;
-                }
-                else
-                {
-                    timeBtwnAtck -= Time.deltaTime;
-                }
-                if (comboTimer > 0.1f && attackCounter >= 1) {
-                    comboTimer -= Time.deltaTime;
-                } else
-                {
-                    comboTimer = attackingTime;
-                    attackCounter = 0;
-                }
+                timeBtwnAtck = startTimeBtwAttck;
+            }
+            else
+            {
+                timeBtwnAtck -= Time.deltaTime;
+            }
+            if (comboTimer > 0.1f && attackCounter >= 1)
+            {
+                comboTimer -= Time.deltaTime;
+            }
+            else
+            {
+                comboTimer = attackingTime;
+                attackCounter = 0;
+            }
 
-                if(!collisionState.grounded && holdTime < 0.3f)
-                {
-               
-                    holdingAttack = false;
-                }
+            if (!collisionState.grounded && holdTime < 0.3f)
+            {
 
-            //Debug.Log("Combo timer:" + attackCounter);
-
-           
+                holdingAttack = false;
+            }
         }
-
 
         private void OnDrawGizmosSelected()
         {
@@ -214,7 +202,6 @@ namespace PlayerNew
         private void SwordJumpSlashForwardFX()
         {
             m_VFX_SwordJumpSlashForward.Play();
-            m_jumpSlashAttackCollider.enabled = true;
         }
 
         private void JumpUpSlashFX()
@@ -228,6 +215,7 @@ namespace PlayerNew
             m_VFX_SwordUpSlashFX.Play();
             m_swordUpSlashAttackCollider.enabled = true;
         }
+
         private void FinishAttackAnim()
         {
             attackCollider.enabled = false;
@@ -254,7 +242,7 @@ namespace PlayerNew
             attackCounter++;
             attacking = false;
             ToggleScripts(true);
-            
+
         }
     }
 }

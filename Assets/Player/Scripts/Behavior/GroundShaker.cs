@@ -87,10 +87,8 @@ namespace PlayerNew
             groundSmash = false;
             Debug.Log("finish animation");
             body2d.gravityScale = defGravity;
-            m_groundShakerAttackCollider.enabled = false;
             ToggleScripts(true);
+            m_groundShakerAttackCollider.enabled = false;
         }
-
     }
-
 }

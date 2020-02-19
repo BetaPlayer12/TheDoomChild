@@ -15,6 +15,8 @@ namespace PlayerNew
         [SerializeField]
         private ParticleSystem swordThrustBody;
         [SerializeField]
+        private ParticleSystem swordThrustArrow;
+        [SerializeField]
         private ParticleSystem slashSwordThrustImpacts;
         [SerializeField]
         private Collider2D m_thrustImpactAttackCollider;
@@ -39,7 +41,7 @@ namespace PlayerNew
                 Debug.Log("Charging");
                 swordThrustBuildUp.Play();
                 thrustAttack = true;
-
+               
 
             }
             else if (chargingAttack && holdTime == 0)
@@ -53,25 +55,32 @@ namespace PlayerNew
 
         private void StartChargeLoop()
         {
-
+            
             Debug.Log("charge start ");
             chargingAttack = true;
             thrustHasStarted = true;
-
+           
         }
 
         private void ThrustImpact()
         {
+            swordThrustArrow.Stop();
             slashSwordThrustImpacts.Play();
             m_thrustImpactAttackCollider.enabled = true;
         }
 
+        private void SwordThrustArrow()
+        {
+            swordThrustArrow.Play();
+        }
+
         private void FinishThrustAttackAnime()
         {
+            
             thrustAttack = false;
             thrustHasStarted = false;
-            m_thrustImpactAttackCollider.enabled = false;
             ToggleScripts(true);
+            m_thrustImpactAttackCollider.enabled = false;
         }
     }
 
