@@ -48,18 +48,7 @@ namespace PlayerNew
         private ParticleSystem m_VFX_JumpSwordDownSlashFX;
         [SerializeField]
         private ParticleSystem m_VFX_SwordJumpSlashForward;
-        [SerializeField]
-        private Collider2D m_forwardSlashAttackCollider;
-        [SerializeField]
-        private Collider2D m_swordCombo1AttackCollider;
-        [SerializeField]
-        private Collider2D m_swordCombo2AttackCollider;
-        [SerializeField]
-        private Collider2D m_crouchSlashAttackCollider;
-        [SerializeField]
-        private Collider2D m_jumpSlashAttackCollider;
-        [SerializeField]
-        private Collider2D m_swordUpSlashAttackCollider;
+
 
         private void Start()
         {
@@ -143,17 +132,14 @@ namespace PlayerNew
                         if (attackCounter == 0 && !upButton && !downButton)
                         {
                             m_forwardSlash1FX.Play();
-                            m_forwardSlashAttackCollider.enabled = true;
                         }
                         else if (attackCounter == 1 && !upButton && !downButton)
                         {
                             m_swordCombo1FX.Play();
-                            m_swordCombo1AttackCollider.enabled = true;
                         }
                         else if (attackCounter == 2 && !upButton && !downButton)
                         {
                             m_swordCombo2FX.Play();
-                            m_swordCombo2AttackCollider.enabled = true;
                         }
                     }
                     
@@ -198,7 +184,6 @@ namespace PlayerNew
         private void CrouchSlashFX()
         {
             m_VFX_CrouchSlashX.Play();
-            m_crouchSlashAttackCollider.enabled = true;
         }
 
         private void SwordAttackForward_MainAction()
@@ -214,43 +199,20 @@ namespace PlayerNew
         private void SwordJumpSlashForwardFX()
         {
             m_VFX_SwordJumpSlashForward.Play();
-            m_jumpSlashAttackCollider.enabled = true;
         }
 
         private void JumpUpSlashFX()
         {
             m_VFX_JumpUpSlashFX.Play();
-            m_jumpSlashAttackCollider.enabled = true;
         }
 
         private void SwordUpSlashFX()
         {
             m_VFX_SwordUpSlashFX.Play();
-            m_swordUpSlashAttackCollider.enabled = true;
         }
         private void FinishAttackAnim()
         {
             attackCollider.enabled = false;
-
-            switch (attackCounter)
-            {
-                case 0:
-                    m_forwardSlashAttackCollider.enabled = false;
-                    break;
-                case 1:
-                    m_swordCombo1AttackCollider.enabled = false;
-                    break;
-                case 2:
-                    m_swordCombo2AttackCollider.enabled = false;
-                    break;
-                default:
-                    break;
-            }
-
-            m_crouchSlashAttackCollider.enabled = false;
-            m_jumpSlashAttackCollider.enabled = false;
-            m_swordUpSlashAttackCollider.enabled = false;
-
             attackCounter++;
             attacking = false;
             ToggleScripts(true);
