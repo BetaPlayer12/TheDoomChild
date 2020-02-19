@@ -1925,12 +1925,12 @@ GameObject:
   - component: {fileID: 8213962263143193958}
   - component: {fileID: 465880572060009902}
   - component: {fileID: 6361443382781322649}
-  - component: {fileID: 375472821685411586}
-  - component: {fileID: 472999773842753660}
-  - component: {fileID: 6933241064469112392}
-  - component: {fileID: 2321308866687873359}
-  - component: {fileID: 5916688788263261815}
   - component: {fileID: 5280032607097867904}
+  - component: {fileID: 1314964471353244765}
+  - component: {fileID: 1611095089510621143}
+  - component: {fileID: 4823862261972956988}
+  - component: {fileID: 1319385735395317100}
+  - component: {fileID: 3720121915566186739}
   m_Layer: 13
   m_Name: Attackbb
   m_TagString: Untagged
@@ -1988,7 +1988,21 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
---- !u!60 &375472821685411586
+--- !u!114 &5280032607097867904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3572298187313426143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_ignoreColliderList: []
+--- !u!60 &1314964471353244765
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2021,7 +2035,7 @@ PolygonCollider2D:
       - {x: 1.2729, y: -0.039}
       - {x: 5.7027, y: 4.3545}
       - {x: 6.3011, y: 4.8198}
---- !u!60 &472999773842753660
+--- !u!60 &1611095089510621143
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2054,7 +2068,7 @@ PolygonCollider2D:
       - {x: -10.9139, y: -5.0515}
       - {x: 0.086799994, y: -7.2715}
       - {x: -0.036199994, y: 5.8905997}
---- !u!60 &6933241064469112392
+--- !u!60 &4823862261972956988
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2087,7 +2101,7 @@ PolygonCollider2D:
       - {x: -5.2205997, y: 2.238}
       - {x: -1.9489, y: 5.5568}
       - {x: -5.2205997, y: 8.8691}
---- !u!60 &2321308866687873359
+--- !u!60 &1319385735395317100
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2120,7 +2134,7 @@ PolygonCollider2D:
       - {x: 0.92199993, y: 0.40060002}
       - {x: 2.7660997, y: 3.8917}
       - {x: 2.8079, y: 12.7417}
---- !u!60 &5916688788263261815
+--- !u!60 &3720121915566186739
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2149,20 +2163,6 @@ PolygonCollider2D:
       - {x: -8.6689, y: -0.4597}
       - {x: 8.876699, y: -0.517}
       - {x: 8.8971, y: 2.8013}
---- !u!114 &5280032607097867904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3572298187313426143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_ignoreColliderList: []
 --- !u!1 &3685458530969503804
 GameObject:
   m_ObjectHideFlags: 0
@@ -2204,10 +2204,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.024086595, y: 0.3225857}
+  m_Offset: {x: 0, y: 1.0553064}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2218,7 +2218,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.3975699, y: 2.6823962}
+  m_Size: {x: 5, y: 7.110613}
   m_EdgeRadius: 0
 --- !u!1 &3697076383863085536
 GameObject:
