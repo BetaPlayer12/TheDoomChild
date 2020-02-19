@@ -10,6 +10,17 @@ namespace PlayerNew
         public bool thrustAttack;
         public bool thrustHasStarted;
         public float timeToCharge;
+        [SerializeField]
+        private ParticleSystem swordThrustBuildUp;
+        [SerializeField]
+        private ParticleSystem swordThrustBody;
+        [SerializeField]
+        private ParticleSystem swordThrustArrow;
+        [SerializeField]
+        private ParticleSystem slashSwordThrustImpacts;
+        [SerializeField]
+        private Collider2D m_thrustImpactAttackCollider;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -20,16 +31,23 @@ namespace PlayerNew
         void Update()
         {
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
+            var down = inputState.GetButtonValue(inputButtons[1]);
+            var dash = inputState.GetButtonValue(inputButtons[2]);
+
             // Debug.Log(holdTime + " holding");
-            if (holdTime > timeToCharge && !chargingAttack)
+            if (holdTime > timeToCharge && !chargingAttack && collisionState.grounded && !down && !dash)
             {
-                Debug.Log("Charging");
-                thrustAttack = true;
                 ToggleScripts(false);
+                Debug.Log("Charging");
+                swordThrustBuildUp.Play();
+                thrustAttack = true;
+               
 
             }
             else if (chargingAttack && holdTime == 0)
             {
+                swordThrustBuildUp.Stop();
+                swordThrustBody.Play();
                 Debug.Log("Attack");
                 chargingAttack = false;
             }
@@ -37,15 +55,32 @@ namespace PlayerNew
 
         private void StartChargeLoop()
         {
+            
+            Debug.Log("charge start ");
             chargingAttack = true;
             thrustHasStarted = true;
+           
+        }
+
+        private void ThrustImpact()
+        {
+            swordThrustArrow.Stop();
+            slashSwordThrustImpacts.Play();
+            m_thrustImpactAttackCollider.enabled = true;
+        }
+
+        private void SwordThrustArrow()
+        {
+            swordThrustArrow.Play();
         }
 
         private void FinishThrustAttackAnime()
         {
+            
             thrustAttack = false;
             thrustHasStarted = false;
             ToggleScripts(true);
+            m_thrustImpactAttackCollider.enabled = false;
         }
     }
 

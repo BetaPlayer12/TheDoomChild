@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,8 @@ namespace PlayerNew
 {
     public class WallGrab : PlayerBehaviour
     {
-
+        [SerializeField]
+        private Character m_character;
         private FaceDirection facing;
         private Renderer spriteRenderer;
         
@@ -48,16 +50,12 @@ namespace PlayerNew
 
             //    //call animation
             //}
+
             if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall && collisionState.onWallLeg && !ledgeDetected)
             {
-               
-                
                 ToggleScripts(false);
-                //spriteRenderer.enabled = false;
-               
                 ledgeDetected = true;
                 ledgeBotPos = transform.position;
-                
                 OnWallGrab();
             }
 
@@ -91,10 +89,12 @@ namespace PlayerNew
                 //capsuleCollider.enabled = false;
 
                 canLedgeGrab = true;
+               // spriteRenderer.enabled = false;
+               
 
 
-                // spriteRenderer.enabled = false;
-                transform.position = ledgePos1;
+
+
                 // }
 
                 //if (canLedgeGrab)
@@ -127,8 +127,9 @@ namespace PlayerNew
 
         private void StartLedgeClimb()
         {
-            Debug.Log("On climb");
-            //spriteRenderer.enabled = true;
+            //Debug.Log("On climb");
+            //  spriteRenderer.enabled = true;
+            m_character.transform.position = ledgePos1;
         }
     }
 

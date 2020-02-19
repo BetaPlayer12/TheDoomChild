@@ -11,7 +11,7 @@ namespace DChild
 {
     public class CameraChangeEventArgs : IEventActionArgs
     {
-        public void Initialize(Camera camera) 
+        public void Initialize(Camera camera)
         {
             this.camera = camera;
         }
@@ -21,6 +21,11 @@ namespace DChild
 
     public class GameSystem : MonoBehaviour
     {
+#if UNITY_EDITOR
+        [SerializeField]
+        private bool m_dontDestroyOnLoad;
+#endif
+
         private static PoolManager m_poolManager;
         private static ConfirmationHandler m_confirmationHander;
         private static SceneLoader m_zoneLoader;
@@ -76,7 +81,7 @@ namespace DChild
 
         public static void LoadZone(string sceneName, bool withLoadingScene, Action CallAfterSceneDone)
         {
-            m_zoneLoader.LoadZone(sceneName, withLoadingScene,CallAfterSceneDone);
+            m_zoneLoader.LoadZone(sceneName, withLoadingScene, CallAfterSceneDone);
             GameplaySystem.ClearCaches();
         }
 
@@ -96,6 +101,14 @@ namespace DChild
             }
             else
             {
+#if UNITY_EDITOR
+                if (m_dontDestroyOnLoad)
+                {
+                    transform.parent = null;
+                    DontDestroyOnLoad(this.gameObject);
+                }
+#endif
+
                 m_instance = this;
                 settings = GetComponentInChildren<GameSettings>();
                 m_confirmationHander = GetComponentInChildren<ConfirmationHandler>();

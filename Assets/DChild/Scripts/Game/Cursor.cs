@@ -48,7 +48,11 @@ namespace DChild
         {
             m_cacheCamera = camera;
             m_cacheTransform = m_cacheCamera?.transform ?? null;
-            enabled = m_cacheCamera;
+
+            if(m_cacheCamera != null)
+            {
+                enabled = m_cacheCamera;
+            }
             if (enabled)
             {
                 FollowCursor(Input.mousePosition, m_cacheTransform.rotation, m_cacheTransform.position, m_cacheCamera.fieldOfView);

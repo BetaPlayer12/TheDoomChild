@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace PlayerNew
 {
     public abstract class PlayerBehaviour : MonoBehaviour
     {
+        [DrawWithUnity]
         public Buttons[] inputButtons;
         public MonoBehaviour[] dissableScripts;
         protected InputState inputState;

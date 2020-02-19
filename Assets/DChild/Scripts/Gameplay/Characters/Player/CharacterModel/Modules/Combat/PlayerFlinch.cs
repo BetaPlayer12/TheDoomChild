@@ -4,6 +4,7 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using PlayerNew;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -11,18 +12,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField, MinValue(0)]
         private float m_knockBackPower;
-
-        private CharacterPhysics2D m_physics;
+        [SerializeField]
+        private CollisionState m_collionState;
+        private Rigidbody2D m_physics;
         private Animator m_animator;
         private string m_flinch;
 
         public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
-            m_physics.SetVelocity(0);
+            m_physics.velocity = Vector2.zero;
             Vector2 knockBackDirection = Vector2.zero;
             knockBackDirection.x = directionToSource.x > 0 ? -1 : 1;
 
-            if (m_physics.onWalkableGround)
+            if (m_collionState.grounded)
             {
                 knockBackDirection.y = 1;
             }
@@ -38,8 +40,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_animator = info.animator;
             m_flinch = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Flinch);
-            m_physics = info.physics;
-            info.state.canFlinch = true;
+            m_physics = info.character.GetComponent<Rigidbody2D>();
+            //m_collionState = m_animator.GetComponent<CollisionState>();
+           // info.state.canFlinch = true;
         }
     }
 }
