@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using Sirenix.Utilities.Editor;
@@ -70,9 +71,9 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        public override void DropLoot(Vector2 position)
+        public override void DropLoot(Vector2 position, Scene scene)
         {
-            GetRandomLoot()?.DropLoot(position);
+            GetRandomLoot()?.DropLoot(position,scene);
         }
 
 #if UNITY_EDITOR
