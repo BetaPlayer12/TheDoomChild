@@ -64,6 +64,7 @@ namespace PlayerNew
 
         private void ThrustImpact()
         {
+            Debug.Log("fasfafasf");
             swordThrustArrow.Stop();
             slashSwordThrustImpacts.Play();
             m_thrustImpactAttackCollider.enabled = true;
