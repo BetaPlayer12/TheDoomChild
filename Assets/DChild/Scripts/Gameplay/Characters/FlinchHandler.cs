@@ -16,11 +16,11 @@ namespace DChild.Gameplay.Characters
         private SpineRootAnimation m_spine;
         [SerializeField]
         private IsolatedPhysics2D m_physics;
+        [SerializeField]
+        private bool m_autoFlinch;
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
-        [SerializeField]
-        private bool m_autoFlinch;
 
         public void InitializeField(SpineRootAnimation spineRoot,IsolatedPhysics2D physics, SkeletonAnimation animation)
         {
@@ -31,6 +31,8 @@ namespace DChild.Gameplay.Characters
 #endif
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_animation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_idleAnimation;
 
         private bool m_isFlinching;
 
@@ -41,6 +43,8 @@ namespace DChild.Gameplay.Characters
 
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
+            Debug.Log("Flinch");
+            m_spine.SetAnimation(0, m_idleAnimation, true);
             Flinch();
         }
 
@@ -57,10 +61,12 @@ namespace DChild.Gameplay.Characters
         private IEnumerator FlinchRoutine()
         {
             FlinchStart?.Invoke(this, new EventActionArgs());
-            if (m_isFlinching)
+            if (m_autoFlinch)
             {
                 m_spine.SetAnimation(0, m_animation, false, 0);
-                m_spine.AddEmptyAnimation(0, 0.2f, 0);
+                m_spine.AddAnimation(0, m_idleAnimation, false, 0.2f).TimeScale = 20;
+
+                //m_spine.AddEmptyAnimation(0, 0.2f, 0);
             }
             m_isFlinching = true;
             m_spine.AnimationSet += OnAnimationSet;

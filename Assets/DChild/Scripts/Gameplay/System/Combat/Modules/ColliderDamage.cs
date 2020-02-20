@@ -71,18 +71,21 @@ namespace DChild.Gameplay.Combat
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-		//Debug.Log("DAMAGED");
+            //Debug.Log("DAMAGED");
             if (collision.CompareTag("DamageCollider"))
                 return;
 
             if (collision.TryGetComponent(out Hitbox hitbox))
             {
-                using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                if (hitbox.CanBeDamageBy(m_collider))
                 {
-                    InitializeTargetInfo(cacheTargetInfo, hitbox);
-                    m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
-                    DamageableDetected?.Invoke(collision);
-                    cacheTargetInfo?.Release();
+                    using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                    {
+                        InitializeTargetInfo(cacheTargetInfo, hitbox);
+                        m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                        DamageableDetected?.Invoke(collision);
+                        cacheTargetInfo?.Release();
+                    }
                 }
                 if (collision.TryGetComponentInParent(out HitFXHandle onHitFX))
                 {
@@ -113,9 +116,9 @@ namespace DChild.Gameplay.Combat
 
             if (m_canDetectInteractables)
             {
-                if(collision.TryGetComponentInParent(out IHitToInteract interactable))
+                if (collision.TryGetComponentInParent(out IHitToInteract interactable))
                 {
-                    interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position,m_damageDealer.position));
+                    interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
 
                 }
             }

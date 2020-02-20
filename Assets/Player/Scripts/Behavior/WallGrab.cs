@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,8 @@ namespace PlayerNew
 {
     public class WallGrab : PlayerBehaviour
     {
-
+        [SerializeField]
+        private Character m_character;
         private FaceDirection facing;
         private Renderer spriteRenderer;
         
@@ -127,7 +129,7 @@ namespace PlayerNew
         {
             //Debug.Log("On climb");
             //  spriteRenderer.enabled = true;
-            transform.position = ledgePos1;
+            m_character.transform.position = ledgePos1;
         }
     }
 

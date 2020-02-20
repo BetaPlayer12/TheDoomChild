@@ -12,10 +12,12 @@ namespace DChild.Gameplay
         {
             public SaveData(bool wasTriggered)
             {
-                this.wasTriggered = wasTriggered;
+                this.m_isTriggered = wasTriggered;
             }
 
-            public bool wasTriggered { get; }
+            [ShowInInspector]
+            public bool m_isTriggered;
+            public bool isTriggered => m_isTriggered;
         }
 
         [SerializeField, OnValueChanged("OnValueChange")]
@@ -34,7 +36,7 @@ namespace DChild.Gameplay
 
         public void Load(ISaveData data)
         {
-            m_wasTriggered = ((SaveData)data).wasTriggered;
+            m_wasTriggered = ((SaveData)data).isTriggered;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -60,6 +62,14 @@ namespace DChild.Gameplay
                 {
                     m_exitEvents?.Invoke();
                 }
+            }
+        }
+
+        private void OnValidate()
+        {
+            if(this.TryGetComponentInChildren<Collider2D>(out Collider2D collider))
+            {
+                collider.isTrigger = true;
             }
         }
 
