@@ -91,11 +91,7 @@ namespace DChild
         public static void ForceCurrentZoneName(string sceneName) => m_zoneLoader.SetAsActiveZone(sceneName);
 #endif
 
-        public static void LoadMainMenu()
-        {
-            dataManager.InitializeCampaignSlotList();
-            m_zoneLoader.LoadMainMenu();
-        }
+        public static void LoadMainMenu() => m_zoneLoader.LoadMainMenu();
 
         private void Awake()
         {
