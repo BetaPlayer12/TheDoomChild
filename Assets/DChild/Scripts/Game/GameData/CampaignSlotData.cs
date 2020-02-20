@@ -20,5 +20,11 @@ namespace DChildDebug
             m_slot.SetID(m_ID);
         }
 #endif
+
+        [Button]
+        public void SaveToFile()
+        {
+            SerializationHandle.Save(m_slot.id, m_slot);
+        }
     }
 }

@@ -58,6 +58,8 @@ namespace PlayerNew
         [SerializeField]
         private Collider2D m_jumpSlashAttackCollider;
         [SerializeField]
+        private Collider2D m_swordJumpSlashForwardAttackCollider;
+        [SerializeField]
         private Collider2D m_swordUpSlashAttackCollider;
 
         private void Start()
@@ -202,6 +204,7 @@ namespace PlayerNew
         private void SwordJumpSlashForwardFX()
         {
             m_VFX_SwordJumpSlashForward.Play();
+            m_swordJumpSlashForwardAttackCollider.enabled = true;
         }
 
         private void JumpUpSlashFX()
@@ -220,29 +223,18 @@ namespace PlayerNew
         {
             attackCollider.enabled = false;
 
-            switch (attackCounter)
-            {
-                case 0:
-                    m_forwardSlashAttackCollider.enabled = false;
-                    break;
-                case 1:
-                    m_swordCombo1AttackCollider.enabled = false;
-                    break;
-                case 2:
-                    m_swordCombo2AttackCollider.enabled = false;
-                    break;
-                default:
-                    break;
-            }
+            m_forwardSlashAttackCollider.enabled = false;
+            m_swordCombo1AttackCollider.enabled = false;
+            m_swordCombo2AttackCollider.enabled = false;
 
             m_crouchSlashAttackCollider.enabled = false;
             m_jumpSlashAttackCollider.enabled = false;
             m_swordUpSlashAttackCollider.enabled = false;
+            m_swordJumpSlashForwardAttackCollider.enabled = false;
 
             attackCounter++;
             attacking = false;
             ToggleScripts(true);
-
         }
     }
 }

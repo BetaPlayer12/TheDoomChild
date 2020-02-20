@@ -22,12 +22,12 @@ namespace DChild.Serialization
         {
             m_slot.SetID(m_ID);
         }
+#endif
 
         [Button]
-        private void SaveToFile()
+        public void SaveToFile()
         {
             SerializationHandle.Save(m_slot.id, m_slot);
         }
-#endif
     }
 }

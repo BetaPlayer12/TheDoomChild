@@ -10,9 +10,9 @@ namespace PlayerNew
         private Jog jogBehavior;
         private Crouch crouchBehavior;
         private WallStick wallStickBehavior;
-        private WallGrab wallGrabBehavior;
+        //private WallGrab wallGrabBehavior;
         private LongJump longJumpBehavior;
-        private WallJump wallJumpBehavior;
+        //private WallJump wallJumpBehavior;
         private Slash slashBehavior;
         private Dash dashBehavior;
         private GroundShaker groundShakerBehavior;
@@ -31,9 +31,9 @@ namespace PlayerNew
             jogBehavior = GetComponent<Jog>();
             crouchBehavior = GetComponent<Crouch>();
             wallStickBehavior = GetComponent<WallStick>();
-            wallGrabBehavior = GetComponent<WallGrab>();
+            //wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
-            wallJumpBehavior = GetComponent<WallJump>();
+            //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
             dashBehavior = GetComponent<Dash>();
             thrustBehavior = GetComponent<Thrust>();
@@ -80,11 +80,11 @@ namespace PlayerNew
                 JogAnimationState(0);
             }
 
-            if (wallJumpBehavior.jumpingOffWall)
-            {
-                animator.SetTrigger("WallJump");
-                wallStickBehavior.onWallDetected = false;
-            }
+            //if (wallJumpBehavior.jumpingOffWall)
+            //{
+            //    animator.SetTrigger("WallJump");
+            //    wallStickBehavior.onWallDetected = false;
+            //}
 
             if (thrustBehavior.thrustAttack)
             {
@@ -111,7 +111,7 @@ namespace PlayerNew
 
 
 
-            WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
+            //WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
