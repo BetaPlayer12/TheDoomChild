@@ -260,6 +260,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_droneSpointsGO;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_movePointsGO;
+        [SerializeField, TabGroup("Reference")]
         private Transform m_modelTransform;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -548,7 +550,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_isFinalPhase = true;
                 m_chosenAttack = Attack.GroundStingerAttack;
-                //m_animation.EnableRootMotion(true, true);
                 var spear = Instantiate(m_info.spearDrop, transform.position, Quaternion.identity);
                 m_RightArmFX.Play();
                 m_LeftArmFX.Play();
@@ -699,8 +700,21 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             //CustomTurn();
-            while (Vector2.Distance(transform.position, m_targetInfo.position) > m_info.spearMeleeAttack.range)
+            //var target = new Vector2(m_targetInfo.position.x - 5, m_targetInfo.position.y);
+            //bool isInRange = Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range;
+            //Debug.Log("X Distance In Range " + xTargetInRange);
+            //Debug.Log("Y Distance In Range " + yTargetInRange);
+            bool testing = false;
+            /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
+            while (!testing)
             {
+
+                bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < m_info.spearMeleeAttack.range ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 3 ? true : false;
+                if (xTargetInRange && yTargetInRange)
+                {
+                    testing = true;
+                }
                 //Debug.Log("Facing Target " + IsFacingTarget());
                 DynamicMovement(m_targetInfo.position);
                 yield return null;
@@ -712,10 +726,12 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_currentPhaseIndex != 0)
             {
                 yield return new WaitForSeconds(2.25f);
-                GetComponent<IsolatedPhysics2D>().AddForce(new Vector2(2.5f * transform.localScale.x, 0), ForceMode2D.Impulse);
+                m_animation.DisableRootMotion();
+                //m_character.physics.SetVelocity(Vector2.zero);
+                m_character.physics.AddForce(new Vector2(5f * transform.localScale.x, 0), ForceMode2D.Impulse);
                 yield return new WaitForSeconds(0.25f);
-                m_agent.Stop();
             }
+            m_agent.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase1AtkMeleeAnimation);
             m_bodyCollider.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
@@ -988,11 +1004,27 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
 
                     //Debug.Log("Commence Attacking Deciding Phase");
-                    m_attackDecider.DecideOnAttack();
-                    m_chosenAttack = m_attackDecider.chosenAttack.attack;
+                    if (m_previousAttack == Attack.SpearMelee)
+                    {
+                        //Debug.Log("Decide ANothat BEE ATACK");
+                        m_attackDecider.DecideOnAttack();
+                        m_chosenAttack = m_attackDecider.chosenAttack.attack;
+
+                    }
+                    else
+                    {
+                        //Debug.Log("Spear Spear");
+                        m_chosenAttack = Attack.SpearMelee;
+                        m_attackDecider.hasDecidedOnAttack = true;
+
+                    }
+                    //m_chosenAttack = m_previousAttack == Attack.SpearMelee ? m_attackDecider.chosenAttack.attack : Attack.SpearMelee;
+
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_attackDecider.chosenAttack.range)*/ && m_chosenAttack != m_previousAttack)
                     {
                         //m_agent.Stop();
+                        m_movePointsGO.transform.localScale = new Vector3(UnityEngine.Random.Range(-1, 1), 1, 1);
+                        m_movePointsGO.transform.localScale = new Vector3(m_movePointsGO.transform.localScale.x == 0 ? 1 : m_movePointsGO.transform.localScale.x, 1, 1);
                         m_previousAttack = m_chosenAttack;
                         m_stateHandle.SetState(State.Attacking);
                     }
