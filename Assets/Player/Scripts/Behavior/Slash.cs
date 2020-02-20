@@ -111,7 +111,7 @@ namespace PlayerNew
             //}
 
             upHold = upButton ? true : false;
-
+            Debug.Log(upButton);
             if (timeBtwnAtck < 0 && !dashState.dashing)
             {
                 if (canSlash && holdTime < 0.1f && attacking == false)

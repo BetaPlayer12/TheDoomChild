@@ -118,6 +118,7 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+        [Button]
         public void Interact()
         {
             switch (m_type)
