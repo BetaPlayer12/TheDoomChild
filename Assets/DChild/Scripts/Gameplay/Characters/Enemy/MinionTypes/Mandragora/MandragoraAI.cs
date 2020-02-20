@@ -123,11 +123,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField]
-        private GameObject m_screamHitbox;
-        [SerializeField]
-        private ParticleSystem m_screamFX;
-
         private float m_targetDistance;
         private bool m_hasDetected;
 
@@ -145,8 +140,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void SpawnProjectile()
         {
             Debug.Log("Scream Attack");
-            m_screamHitbox.SetActive(true);
-            m_screamFX.Play();
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -207,7 +200,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            StopAllCoroutines();
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
@@ -218,9 +212,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_spriteMask.SetActive(false);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_spriteMask.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -273,7 +267,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
-                            m_screamHitbox.SetActive(false);
                             if (IsTargetInRange(m_info.attack.range))
                             {
                                 m_movement.Stop();

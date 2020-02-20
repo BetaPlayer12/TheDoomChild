@@ -12,6 +12,7 @@ namespace PlayerNew
         [SerializeField]
         private Transform m_capeTFReference;
 
+
         private void Update()
         {
             if (m_playerTF.localScale.x < 0)
@@ -24,5 +25,6 @@ namespace PlayerNew
             }
         }
     }
+
 }
 

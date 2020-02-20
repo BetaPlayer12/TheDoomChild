@@ -9,14 +9,19 @@ namespace DChild.Gameplay.Environment.Interractables
 
     public class Door : MonoBehaviour, ISerializableComponent
     {
+
+        [System.Serializable]
         public struct SaveData : ISaveData
         {
             public SaveData(bool isOpen)
             {
-                this.isOpen = isOpen;
+                this.m_isOpen = isOpen;
             }
 
-            public bool isOpen { get; }
+            [SerializeField]
+            private bool m_isOpen;
+
+            public bool isOpen => m_isOpen;
         }
 
         [ShowInInspector, OnValueChanged("OnStateChange")]
@@ -57,6 +62,10 @@ namespace DChild.Gameplay.Environment.Interractables
             m_isOpen = ((SaveData)data).isOpen;
             if (m_isOpen)
             {
+                if (m_multiDirectionParameter != string.Empty)
+                {
+                    m_animator.SetBool(m_multiDirectionParameter, m_multiDirectionParameterValue);
+                }
                 m_animator.SetTrigger("Open");
             }
         }

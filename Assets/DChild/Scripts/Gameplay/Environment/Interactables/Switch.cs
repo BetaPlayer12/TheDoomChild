@@ -27,14 +27,18 @@ namespace DChild.Gameplay.Environment
             Trigger
         }
 
+        [System.Serializable]
         public struct SaveData : ISaveData
         {
             public SaveData(bool isOpen)
             {
-                this.isOpen = isOpen;
+                this.m_isTriggered = isOpen;
             }
 
-            public bool isOpen { get; }
+            [SerializeField]
+            private bool m_isTriggered;
+
+            public bool isTriggered => m_isTriggered;
         }
 
         [SerializeField, OnValueChanged("OnTypeChanged")]
@@ -66,7 +70,7 @@ namespace DChild.Gameplay.Environment
 
         public void Load(ISaveData data)
         {
-            m_isOn = ((SaveData)data).isOpen;
+            m_isOn = ((SaveData)data).isTriggered;
             if (m_isOn)
             {
                 m_startAsOnState?.Invoke();
@@ -114,6 +118,7 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+        [Button]
         public void Interact()
         {
             switch (m_type)
