@@ -314,6 +314,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
         }
 
+        private IEnumerator SlugProjectileRoutine()
+        {
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.spitAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(2f);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             StopAllCoroutines();
@@ -395,7 +406,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Spit:
                             m_animation.EnableRootMotion(false, false);
-                            m_attackHandle.ExecuteAttack(m_info.spitAttack.animation, m_info.idleAnimation);
+                            //m_attackHandle.ExecuteAttack(m_info.spitAttack.animation, m_info.idleAnimation);
+                            StartCoroutine(SlugProjectileRoutine());
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
