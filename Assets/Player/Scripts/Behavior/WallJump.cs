@@ -17,13 +17,15 @@ namespace PlayerNew
             var canJump = inputState.GetButtonValue(inputButtons[0]);
             var holdJump = inputState.GetButtonHoldTime(inputButtons[0]);
 
-            if (collisionState.onWall && !collisionState.grounded) {
+            if (collisionState.onWall && !collisionState.grounded && collisionState.onWallLeg && collisionState.isTouchingLedge) {
                 
                 if (canJump && holdJump < 0.1f)
                 {
-                    Debug.Log("wall jump");
+                    
                     inputState.direction = inputState.direction == Directions.Right ? Directions.Left : Directions.Right;
-                    //body2d.velocity = new Vector2(jumpVelocity.x * (float)inputState.direction, jumpVelocity.y);
+                    body2d.velocity = new Vector2(jumpVelocity.x * (float)inputState.direction, jumpVelocity.y);
+                    Debug.Log("wall jump:" + body2d.velocity);
+                    //body2d.AddForce(new Vector2(jumpVelocity.x , jumpVelocity.y), ForceMode2D.Force);
                 }
             }
         }

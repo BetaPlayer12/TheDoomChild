@@ -260,8 +260,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_droneSpointsGO;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_movePointsGO;
-        [SerializeField, TabGroup("Reference")]
         private Transform m_modelTransform;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -995,11 +993,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_attackDecider.chosenAttack.range)*/ && m_chosenAttack != m_previousAttack)
                     {
                         //m_agent.Stop();
-                        m_movePointsGO.transform.localScale = new Vector3(UnityEngine.Random.Range(-1, 1), 1, 1);
-                        if (m_movePointsGO.transform.localScale.x == 0)
-                        {
-                            m_movePointsGO.transform.localScale = Vector3.one;
-                        }
                         m_previousAttack = m_chosenAttack;
                         m_stateHandle.SetState(State.Attacking);
                     }
