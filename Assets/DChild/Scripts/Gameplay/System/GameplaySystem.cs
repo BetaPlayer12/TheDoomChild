@@ -10,6 +10,7 @@ using DChild.Serialization;
 using Holysoft.Event;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay
 {
@@ -28,7 +29,6 @@ namespace DChild.Gameplay
         [SerializeField]
         private bool m_doNotTeleportPlayerOnAwake;
 #endif
-
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;

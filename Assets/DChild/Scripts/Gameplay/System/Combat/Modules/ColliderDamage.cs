@@ -40,7 +40,7 @@ namespace DChild.Gameplay.Combat
         private IDamageDealer m_damageDealer;
         public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
-        protected abstract bool IsValidToDamage(Collider2D collision);
+        protected abstract bool IsValidToHit(Collider2D collision);
 
         protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
@@ -120,12 +120,13 @@ namespace DChild.Gameplay.Combat
             //Debug.Log("DAMAGED");
             if (collision.CompareTag("DamageCollider"))
                 return;
+            var validToHit = IsValidToHit(collision);
 
             if (collision.TryGetComponent(out Hitbox hitbox))
             {
                 if (hitbox.CanBeDamageBy(m_collider))
                 {
-                    if (IsValidToDamage(collision))
+                    if (validToHit)
                     {
                         DealDamage(collision, hitbox);
                         SpawnHitFX(collision);
@@ -133,7 +134,7 @@ namespace DChild.Gameplay.Combat
                 }
             }
 
-            if (m_canDetectInteractables)
+            if (m_canDetectInteractables && validToHit)
             {
                 InterractWith(collision);
             }
