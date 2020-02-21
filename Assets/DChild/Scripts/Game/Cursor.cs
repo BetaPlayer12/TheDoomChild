@@ -35,19 +35,16 @@ namespace DChild
 
         public void SetVisibility(bool isVisible)
         {
-            if (UnityEngine.Cursor.visible != isVisible)
-            {
-                UnityEngine.Cursor.visible = isVisible;
-                gameObject?.SetActive(isVisible);
-                if (isVisible)
-                {
-                    UnityEngine.Cursor.lockState = CursorLockMode.None;
-                }
-                else
-                {
-                    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                }
-            }
+            UnityEngine.Cursor.visible = isVisible;
+            gameObject.SetActive(isVisible);
+            //if (isVisible)
+            //{
+            //    UnityEngine.Cursor.lockState = CursorLockMode.None;
+            //}
+            //else
+            //{
+            //    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            //}
         }
 
         private void OnOffsetChange()

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Sirenix.Serialization;
 using System.Collections;
 using DChildDebug.Serialization;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Serialization
 {
@@ -141,6 +142,11 @@ namespace DChild.Serialization
             }
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
+        }
+
+        private void Start()
+        {
+            SceneManager.SetActiveScene(gameObject.scene);
         }
 
         private void OnDestroy()
