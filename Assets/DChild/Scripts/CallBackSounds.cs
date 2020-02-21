@@ -10,6 +10,31 @@ namespace DChild
         [SerializeField]
         private MasterAudio.SoundSpawnLocationMode m_spawnLocationMode;
 
+        public void Execute(CallBackSoundsData data)
+        {
+            string currentSoundGroup = null;
+            if(data.stopCount > 0)
+            {
+                for (int i = 0; i < data.stopCount; i++)
+                {
+                    currentSoundGroup = data.GetStopSoundGroup(i);
+                    if (IsTransformPlaying(currentSoundGroup))
+                    {
+                        StopSound(currentSoundGroup);
+                    }
+                }
+            }
+
+            for (int i = 0; i < data.stopCount; i++)
+            {
+                currentSoundGroup = data.GetPlaySoundGroup(i);
+                if (!IsTransformPlaying(currentSoundGroup))
+                {
+                    PlaySound(currentSoundGroup);
+                }
+            }
+        }
+
         public void PlaySound(string soundGroup)
         {
             switch (m_spawnLocationMode)
