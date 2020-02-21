@@ -162,10 +162,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 m_currentPatience = 0;
                 m_enablePatience = false;
+                //StopCoroutine(PatienceRoutine());
             }
             else
             {
                 m_enablePatience = true;
+                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -189,6 +191,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.SetState(State.Burrowed);
             }
         }
+        //private IEnumerator PatienceRoutine()
+        //{
+        //    yield return new WaitForSeconds(m_info.patience);
+        //    m_targetInfo.Set(null, null);
+        //    m_hasDetected = false;
+        //    m_stateHandle.SetState(State.Burrowed);
+        //}
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {

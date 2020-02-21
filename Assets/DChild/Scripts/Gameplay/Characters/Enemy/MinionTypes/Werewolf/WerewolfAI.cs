@@ -124,6 +124,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
 
+        private State m_turnState;
+
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -144,18 +146,27 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (damageable != null)
             {
-                base.SetTarget(damageable, m_target);
+                base.SetTarget(damageable);
                 if(m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
                 m_currentPatience = 0;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
                 m_enablePatience = false;
             }
             else
             {
+                //if (!m_enablePatience)
+                //{
+                //    m_enablePatience = true;
+                //    //Patience();
+                //    StartCoroutine(PatienceRoutine());
+                //}
                 m_enablePatience = true;
+                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -179,6 +190,22 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.SetState(State.Patrol);
             }
         }
+        //private IEnumerator PatienceRoutine()
+        //{
+        //    //if (m_enablePatience)
+        //    //{
+        //    //    while (m_currentPatience < m_info.patience)
+        //    //    {
+        //    //        m_currentPatience += m_character.isolatedObject.deltaTime;
+        //    //        yield return null;
+        //    //    }
+        //    //}
+        //    yield return new WaitForSeconds(m_info.patience);
+        //    m_targetInfo.Set(null, null);
+        //    m_isDetecting = false;
+        //    m_enablePatience = false;
+        //    m_stateHandle.SetState(State.Patrol);
+        //}
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
@@ -247,14 +274,24 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    StartCoroutine(DetectRoutine());
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
                     break;
 
                 case State.Patrol:
                     if(!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
+                        m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
@@ -263,12 +300,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_movement.Stop();
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        m_turnState = State.ReevaluateSituation;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
                     }
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
@@ -319,6 +358,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
+                            m_turnState = State.ReevaluateSituation;
                             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                                 m_stateHandle.SetState(State.Turning);
                         }
@@ -343,6 +383,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_enablePatience)
             {
                 Patience();
+                //StartCoroutine(PatienceRoutine());
             }
         }
 
