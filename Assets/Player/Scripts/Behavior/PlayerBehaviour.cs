@@ -9,6 +9,7 @@ namespace PlayerNew
     {
         [DrawWithUnity]
         public Buttons[] inputButtons;
+        [DrawWithUnity]
         public MonoBehaviour[] dissableScripts;
         protected InputState inputState;
         protected Rigidbody2D body2d;

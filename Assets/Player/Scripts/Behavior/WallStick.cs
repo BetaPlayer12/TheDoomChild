@@ -6,17 +6,20 @@ namespace PlayerNew
 {
     public class WallStick : PlayerBehaviour
     {
-        private WallGrab wallGrab;
+        //private WallGrab wallGrab;
         public bool onWallDetected;
         public bool wallSticking;
         public bool groundWallStick;
 
         protected float defaultGravityScale;
         protected float defaultDrag;
+
+
         // Start is called before the first frame update
-        void Start()
+        protected override void Awake()
         {
-            wallGrab = GetComponent<WallGrab>();
+            base.Awake();
+            //wallGrab = GetComponent<WallGrab>();
             defaultGravityScale = body2d.gravityScale;
             defaultDrag = body2d.drag;
         }
@@ -35,7 +38,7 @@ namespace PlayerNew
 
            
 
-            if (collisionState.onWall && collisionState.onWallLeg && !wallGrab.canLedgeGrab)
+            if (collisionState.onWall && collisionState.onWallLeg)
             {
 
                 if (!onWallDetected)
@@ -74,9 +77,12 @@ namespace PlayerNew
         {
             if (body2d.gravityScale != defaultGravityScale)
             {
+                
                 body2d.gravityScale = defaultGravityScale;
                 body2d.drag = defaultDrag;
                 wallSticking = false;
+
+                Debug.Log("Defaul gravity Scale: " + defaultGravityScale);
             }
         }
     }
