@@ -16,12 +16,6 @@ namespace DChildDebug
 
         public CampaignSlot slot { get => m_slot; }
 
-
-        [Button]
-        public void SaveToFile()
-        {
-            SerializationHandle.Save(m_ID, m_slot);
-        }
 #if UNITY_EDITOR
         private void ChangeCampaignSlotID()
         {
