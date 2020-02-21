@@ -259,8 +259,7 @@ MonoBehaviour:
   m_slowFactor: 0
   m_fastFactor: 0
   m_fXObjects:
-    m_particleSystems:
-    - {fileID: 8960813765681191653}
+    m_particleSystems: []
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 2930393021455537622}
@@ -371,8 +370,6 @@ MonoBehaviour:
   m_wallSensor: {fileID: 2202170498647244050}
   m_groundSensor: {fileID: 6837717968332295932}
   m_edgeSensor: {fileID: 1245148638648549156}
-  m_screamHitbox: {fileID: 8888313052268733875}
-  m_screamFX: {fileID: 8960813765681191653}
 --- !u!114 &8694658257653842231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,6 +404,45 @@ MonoBehaviour:
   m_bodyReference:
     m_default: {fileID: 0}
     m_list: []
+--- !u!60 &6644994243972629179
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8238302845349518308}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.8453999, y: 5.8055997}
+      - {x: 0.8237, y: 6.2707}
+      - {x: -0.040799998, y: 6.4462}
+      - {x: -1.0411, y: 6.0951}
+      - {x: -1.8844, y: 5.3889}
+      - {x: -2.5261, y: 4.2282}
+      - {x: -2.8954, y: 2.9768}
+      - {x: -3.0630999, y: 1.6439999}
+      - {x: -2.9747, y: -0.3369999}
+      - {x: -0.1653, y: -0.32800007}
+      - {x: 3.4536998, y: -0.3183}
+      - {x: 3.5291, y: 1.4735}
+      - {x: 3.2770998, y: 3.2148001}
+      - {x: 2.6819, y: 4.7205997}
 --- !u!114 &4107344084411756763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,7 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -566,6 +602,16 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 7719016373444114555}
+    - target: {fileID: 1191763446433945728, guid: a7599f23db0f7454a80df8444a1b4a11,
+        type: 3}
+      propertyPath: maskMaterials.materialsMaskDisabled.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1191763446433945728, guid: a7599f23db0f7454a80df8444a1b4a11,
+        type: 3}
+      propertyPath: maskMaterials.materialsOutsideMask.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1191763446433945729, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -626,7 +672,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: MandragoraModel
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 1191763446433945743, guid: a7599f23db0f7454a80df8444a1b4a11,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1700283649020493685, guid: a7599f23db0f7454a80df8444a1b4a11,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.02699416
+      objectReference: {fileID: 0}
+    - target: {fileID: 1700283649020493685, guid: a7599f23db0f7454a80df8444a1b4a11,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.4156637
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7211641146460114925, guid: a7599f23db0f7454a80df8444a1b4a11, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a7599f23db0f7454a80df8444a1b4a11, type: 3}
 --- !u!114 &1245148638648549156 stripped
 MonoBehaviour:
@@ -640,15 +702,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8888313052268733875 stripped
+--- !u!1 &8238302845349518308 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4862348040698833125, guid: a7599f23db0f7454a80df8444a1b4a11,
-    type: 3}
-  m_PrefabInstance: {fileID: 4045119114280799574}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &8960813765681191653 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4933714023482005427, guid: a7599f23db0f7454a80df8444a1b4a11,
+  m_CorrespondingSourceObject: {fileID: 5365883568691893938, guid: a7599f23db0f7454a80df8444a1b4a11,
     type: 3}
   m_PrefabInstance: {fileID: 4045119114280799574}
   m_PrefabAsset: {fileID: 0}

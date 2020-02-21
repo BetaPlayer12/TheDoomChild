@@ -38,7 +38,7 @@ namespace PlayerNew
             if (holdTime > timeToCharge && !chargingAttack && collisionState.grounded && !down && !dash)
             {
                 ToggleScripts(false);
-                Debug.Log("Charging");
+                //Debug.Log("Charging");
                 swordThrustBuildUp.Play();
                 thrustAttack = true;
                
@@ -48,7 +48,7 @@ namespace PlayerNew
             {
                 swordThrustBuildUp.Stop();
                 swordThrustBody.Play();
-                Debug.Log("Attack");
+                //Debug.Log("Attack");
                 chargingAttack = false;
             }
         }
@@ -56,7 +56,7 @@ namespace PlayerNew
         private void StartChargeLoop()
         {
             
-            Debug.Log("charge start ");
+            //Debug.Log("charge start ");
             chargingAttack = true;
             thrustHasStarted = true;
            
@@ -64,7 +64,8 @@ namespace PlayerNew
 
         private void ThrustImpact()
         {
-            swordThrustArrow.Stop();
+            //Debug.Log("fasfafasf");
+            //swordThrustArrow.Stop();
             slashSwordThrustImpacts.Play();
             m_thrustImpactAttackCollider.enabled = true;
         }

@@ -6,20 +6,20 @@ using UnityEngine;
 namespace PlayerNew
 {
     
-    public class Death : MonoBehaviour
+    public class Death : PlayerBehaviour
     {
-       
-        private BasicHealth playerStatus;
+        
+      
         // Start is called before the first frame update
         void Start()
         {
-            playerStatus = GetComponent<BasicHealth>();
+            
         }
 
         // Update is called once per frame
         void Update()
         {
-            Debug.Log(playerStatus.currentValue);
+            
         }
     }
 

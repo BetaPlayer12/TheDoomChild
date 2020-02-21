@@ -6,10 +6,18 @@ namespace PlayerNew
 {
     public class WallSlide : WallStick
     {
+        private FaceDirection facing;
         public float slideVelocity = -5f;
         public float slideMultiplier = 5f;
         public float velocityX;
-        
+        public float forceX;
+        public float forceY;
+
+        private void Start()
+        {
+            facing = GetComponent<FaceDirection>();
+        }
+
         override protected void Update()
         {
            
@@ -33,6 +41,7 @@ namespace PlayerNew
                 capsuleCollider.enabled = false;
                 capsuleCollider.enabled = true;
                 //body2d.gravityScale = 20f;
+                //body2d.drag = 0f; 
             }
             
             //if (!collisionState.grounded && !collisionState.onWall)
@@ -52,9 +61,20 @@ namespace PlayerNew
                 if (inputState.GetButtonValue(inputButtons[0]))
                 {
                     velY *= slideMultiplier;
+                    //ToggleScripts(false);
                 }
                 body2d.velocity = new Vector2(body2d.velocity.x, velY);
+
+                if(inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
+                {
+
+                    body2d.velocity = new Vector2(forceX, forceY);
+                    //Offwall();
+
+                }
             }
+
+
         }
 
         override protected void Onstick()
