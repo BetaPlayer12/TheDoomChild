@@ -364,9 +364,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            StopAllCoroutines();
             if (/*m_animation.GetCurrentAnimation(0).ToString() == m_info.spearThrowAttack.animation*/ m_currentPhaseIndex != 3)
             {
-                StopAllCoroutines();
                 m_stateHandle.OverrideState(State.Fall);
             }
             else /*if (m_stateHandle.currentState != State.Fall)*/
