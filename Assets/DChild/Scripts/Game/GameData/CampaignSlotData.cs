@@ -1,6 +1,7 @@
 ﻿using DChild.Serialization;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using System;
 using UnityEngine;
 
 namespace DChildDebug
@@ -14,7 +15,8 @@ namespace DChildDebug
         private CampaignSlot m_slot = new CampaignSlot(1);
 
         public CampaignSlot slot { get => m_slot; }
-# if UNITY_EDITOR
+
+#if UNITY_EDITOR
         private void ChangeCampaignSlotID()
         {
             m_slot.SetID(m_ID);
