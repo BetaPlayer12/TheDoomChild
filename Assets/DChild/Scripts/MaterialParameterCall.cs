@@ -19,7 +19,7 @@ namespace DChild
             m_shaderID = Shader.PropertyToID(m_parameter);
         }
 
-        public void SetValue(bool value) => SetPropertyBlock((MaterialPropertyBlock materialPropertyBlock) => { materialPropertyBlock.SetFloat(m_shaderID, value ? 1 : 0); });
+        public void SetValue(bool value) => SetPropertyBlock((MaterialPropertyBlock materialPropertyBlock) => { materialPropertyBlock.SetInt(m_shaderID, value ? 1 : 0); });
         public void SetValue(float value) => SetPropertyBlock((MaterialPropertyBlock materialPropertyBlock) => { materialPropertyBlock.SetFloat(m_shaderID, value); });
 
         private void SetPropertyBlock(Action<MaterialPropertyBlock> action)
@@ -38,6 +38,7 @@ namespace DChild
             {
                 m_shaderID = Shader.PropertyToID(m_parameter);
             }
+            m_propertyBlock = new MaterialPropertyBlock();
         }
     }
 }
