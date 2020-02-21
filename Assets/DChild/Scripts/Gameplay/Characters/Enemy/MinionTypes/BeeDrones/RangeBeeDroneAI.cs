@@ -173,10 +173,15 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                {
-                    m_enablePatience = true;
-                }
+                //if (!IsTargetInRange(m_info.targetDistanceTolerance))
+                //{
+                //}
+                //m_enablePatience = true;
+                StopAllCoroutines();
+                m_targetInfo.Set(null, null);
+                m_enablePatience = false;
+                m_isDetecting = false;
+                m_stateHandle.OverrideState(State.Patrol);
             }
         }
 
@@ -194,6 +199,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                StopAllCoroutines();
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
@@ -202,6 +208,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
@@ -359,9 +366,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Patrol:
                     m_turnState = State.ReevaluateSituation;
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    if (m_agent.hasPath)
+                    {
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idle2Animation, true);
+                    }
                    
                     break;
 
@@ -432,10 +446,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             
 
-            if (m_enablePatience)
-            {
-                Patience();
-            }
+            //if (m_enablePatience)
+            //{
+            //    Patience();
+            //}
 
 
 
