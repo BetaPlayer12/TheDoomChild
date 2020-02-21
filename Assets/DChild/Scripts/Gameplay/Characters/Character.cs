@@ -2,10 +2,12 @@
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay
 {
+
     [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Objects/Character")]
     public class Character : MonoBehaviour, ICharacter, ITurningCharacter

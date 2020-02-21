@@ -26,6 +26,13 @@ namespace DChild.Gameplay.Combat
             CallResistanceChange(new ResistanceEventArgs(type, GetResistance(type)));
         }
 
+        public override void ClearResistance()
+        {
+            m_baseResistance.Clear();
+            m_additionalResistance.Clear();
+            m_combinedResistance.Clear();
+        }
+
         public void AddResistance(AttackType type, float resistance)
         {
             if (m_additionalResistance.ContainsKey(type))
@@ -99,6 +106,8 @@ namespace DChild.Gameplay.Combat
             CalculateResistance();
             CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
         }
+
+
 #endif
     }
 }
