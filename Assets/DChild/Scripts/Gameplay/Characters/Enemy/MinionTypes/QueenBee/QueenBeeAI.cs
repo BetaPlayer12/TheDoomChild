@@ -18,7 +18,7 @@ using Spine.Unity.Modules;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Boss/QueenBee")]
-    public class QueenBeeAI : CombatAIBrain<QueenBeeAI.Info>
+    public class QueenBeeAI : CombatAIBrain<QueenBeeAI.Info>, IBossPhaseInfo
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -334,6 +334,8 @@ namespace DChild.Gameplay.Characters.Enemies
         //private float m_currentDroneSummonSpeed;
         float m_currentRecoverTime;
         bool m_isFinalPhase;
+
+        public int[] GetHealthPrecentagePhaseInfo() => m_info.phaseInfo.GetHealthPrecentageConditionInfo();
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -1058,5 +1060,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
 
         }
+
+
     }
 }
