@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         public void SetResistanceList(Dictionary<StatusEffectType, int> list)
         {
             Copy(list, m_resistances);
-            ResistanceChange?.Invoke(this, new ResistanceEventArgs(StatusEffectType._COUNT,0));
+            ResistanceChange?.Invoke(this, new ResistanceEventArgs(StatusEffectType._COUNT, 0));
         }
 
         public void SetResistance(StatusEffectType type, int resistanceValue)
@@ -61,9 +61,10 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public void SetData(StatusEffectChanceData data)
         {
+            m_data = data;
+            m_resistances?.Clear();
             if (m_data != data)
             {
-                m_data = data;
                 if (m_resistances != null)
                 {
                     Copy(m_data.chance, m_resistances);
