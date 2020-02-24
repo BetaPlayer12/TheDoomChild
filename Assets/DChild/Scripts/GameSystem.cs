@@ -93,6 +93,7 @@ namespace DChild
 
         public static void LoadMainMenu()
         {
+            dataManager.InitializeCampaginSlotList();
             m_zoneLoader.LoadMainMenu();
         }
 
