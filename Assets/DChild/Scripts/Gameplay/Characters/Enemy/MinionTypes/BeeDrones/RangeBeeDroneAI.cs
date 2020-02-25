@@ -88,6 +88,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Idle,
             Patrol,
+            Detect,
             Turning,
             Attacking,
             Chasing,
@@ -115,9 +116,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
+        private State m_turnState;
         private ProjectileLauncher m_stingerLauncher;
         private float m_currentPatience;
         private bool m_enablePatience;
+        private bool m_isDetecting;
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -160,16 +163,25 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.SetState(State.Chasing);
+                if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
+                }
                 m_currentPatience = 0;
                 m_enablePatience = false;
             }
             else
             {
-                if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                {
-                    m_enablePatience = true;
-                }
+                //if (!IsTargetInRange(m_info.targetDistanceTolerance))
+                //{
+                //}
+                //m_enablePatience = true;
+                StopAllCoroutines();
+                m_targetInfo.Set(null, null);
+                m_enablePatience = false;
+                m_isDetecting = false;
+                m_stateHandle.OverrideState(State.Patrol);
             }
         }
 
@@ -187,10 +199,20 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                StopAllCoroutines();
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
             }
+        }
+
+        private IEnumerator DetectRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(2f);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private IEnumerator RangeAttackRoutine()
@@ -199,6 +221,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.rangeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rangeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(2f);
 
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -317,6 +340,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
             switch (m_stateHandle.currentState)
             {
+                case State.Detect:
+                    m_agent.Stop();
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
+                        //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                    break;
+
                 case State.Idle:
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     if (m_targetInfo.isValid == false)
@@ -326,15 +365,22 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    m_turnState = State.ReevaluateSituation;
+                    if (m_agent.hasPath)
+                    {
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idle2Animation, true);
+                    }
                    
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_agent.Stop();
                    
@@ -351,31 +397,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             if (IsTargetInRange(m_info.stingerProjectile.range))
                             {
+                                m_agent.Stop();
                                 m_stateHandle.SetState(State.Attacking);
                             }
-                            else
-                            {
+                        //else
+                        //{
 
-                                var target = m_targetInfo.position;
-                                //target.y -= 0.5f;
-                                m_animation.DisableRootMotion();
-                                if (m_character.physics.velocity != Vector2.zero)
-                                {
-                                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                                }
-                                else
-                                {
-                                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                                }
-                                m_agent.SetDestination(target);
-                              
-                                    m_agent.Move(m_info.move.speed);
-                              
-                            }
+                        //    var target = m_targetInfo.position;
+                        //    //target.y -= 0.5f;
+                        //    m_animation.DisableRootMotion();
+                        //    if (m_character.physics.velocity != Vector2.zero)
+                        //    {
+                        //        m_animation.SetAnimation(0, m_info.move.animation, true);
+                        //    }
+                        //    else
+                        //    {
+                        //        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        //    }
+                        //    m_agent.SetDestination(target);
+
+                        //        m_agent.Move(m_info.move.speed);
+
+                        //}
 
                         }
                         else
                         {
+                            m_turnState = State.ReevaluateSituation;
                             m_stateHandle.SetState(State.Turning);
                         }
                     
@@ -398,16 +446,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
             
 
-            if (m_enablePatience)
-            {
-                Patience();
-            }
+            //if (m_enablePatience)
+            //{
+            //    Patience();
+            //}
 
-            
 
-           
+
+
         }
-       
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Patrol);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+            m_isDetecting = false;
+        }
+
 
     }
 }

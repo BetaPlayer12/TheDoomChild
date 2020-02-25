@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
-    [CreateAssetMenu(fileName = "IdlingCreatureData", menuName = "DChild/Gameplay/Idling Creature Data")]
+    [CreateAssetMenu(fileName = "IdlingCreatureData", menuName = "DChild/Gameplay/Environment/Idling Creature Data")]
     public class IdlingCreatureData : ScriptableObject
     {
         [SerializeField]

@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Characters.AI
         [SerializeField]
         private IPhaseConditionTemplate<T> m_conditionTemplate;
 
+        public int[] GetHealthPrecentageConditionInfo() => m_conditionTemplate.GetHealthPrecentageConditionInfo();
+
         public IPhaseInfo GetDataOfPhase(T phase) => m_phaseDataList.ContainsKey(phase) ? m_phaseDataList[phase].info : null;
 
         public IPhaseConditionHandle<T> CreateConditionHandle(Character character) => m_conditionTemplate.CreateHandle(character);

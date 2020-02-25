@@ -33,7 +33,7 @@ namespace DChildEditor.Gameplay.Systems
             }
         }
 
-        private Info m_previousInfo;
+        private Info m_previousInfo = new Info();
 
         public override void OnInspectorGUI()
         {

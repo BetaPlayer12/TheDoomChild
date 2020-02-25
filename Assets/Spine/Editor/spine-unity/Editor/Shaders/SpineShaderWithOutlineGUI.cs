@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated May 1, 2019. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2019, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -15,16 +15,16 @@
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
- * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
- * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 using UnityEngine;
@@ -37,6 +37,7 @@ public class SpineShaderWithOutlineGUI : ShaderGUI {
 
 	protected MaterialEditor _materialEditor;
 	bool _showAdvancedOutlineSettings = false;
+	bool _showStencilSettings = false;
 
 	MaterialProperty _OutlineWidth = null;
 	MaterialProperty _OutlineColor = null;
@@ -45,6 +46,8 @@ public class SpineShaderWithOutlineGUI : ShaderGUI {
 	MaterialProperty _OutlineSmoothness = null;
 	MaterialProperty _Use8Neighbourhood = null;
 	MaterialProperty _OutlineMipLevel = null;
+	MaterialProperty _StencilComp = null;
+	MaterialProperty _StencilRef = null;
 
 	static GUIContent _EnableOutlineText = new GUIContent("Outline", "Enable outline rendering. Draws an outline by sampling 4 or 8 neighbourhood pixels at a given distance specified via 'Outline Width'.");
 	static GUIContent _OutlineWidthText = new GUIContent("Outline Width", "");
@@ -54,8 +57,11 @@ public class SpineShaderWithOutlineGUI : ShaderGUI {
 	static GUIContent _OutlineSmoothnessText = new GUIContent("Outline Smoothness", "");
 	static GUIContent _Use8NeighbourhoodText = new GUIContent("Sample 8 Neighbours", "");
 	static GUIContent _OutlineMipLevelText = new GUIContent("Outline Mip Level", "");
+	static GUIContent _StencilCompText = new GUIContent("Stencil Comparison", "");
+	static GUIContent _StencilRefText = new GUIContent("Stencil Reference", "");
 
 	static GUIContent _OutlineAdvancedText = new GUIContent("Advanced", "");
+	static GUIContent _ShowStencilText = new GUIContent("Stencil", "Stencil parameters for mask interaction.");
 
 	protected const string ShaderOutlineNamePrefix = "Spine/Outline/";
 	protected const string ShaderNormalNamePrefix = "Spine/";
@@ -68,6 +74,8 @@ public class SpineShaderWithOutlineGUI : ShaderGUI {
 
 		base.OnGUI(materialEditor, properties);
 		EditorGUILayout.Space();
+		RenderStencilProperties();
+		EditorGUILayout.Space();
 		RenderOutlineProperties();
 	}
 
@@ -76,16 +84,40 @@ public class SpineShaderWithOutlineGUI : ShaderGUI {
 	#region Virtual Interface
 
 	protected virtual void FindProperties (MaterialProperty[] props) {
-		_OutlineWidth = FindProperty("_OutlineWidth", props);
-		_OutlineReferenceTexWidth = FindProperty("_OutlineReferenceTexWidth", props);
-		_OutlineColor = FindProperty("_OutlineColor", props);
-		_ThresholdEnd = FindProperty("_ThresholdEnd", props);
-		_OutlineSmoothness = FindProperty("_OutlineSmoothness", props);
-		_Use8Neighbourhood = FindProperty("_Use8Neighbourhood", props);
-		_OutlineMipLevel = FindProperty("_OutlineMipLevel", props);
+
+		_OutlineWidth = FindProperty("_OutlineWidth", props, false);
+		_OutlineReferenceTexWidth = FindProperty("_OutlineReferenceTexWidth", props, false);
+		_OutlineColor = FindProperty("_OutlineColor", props, false);
+		_ThresholdEnd = FindProperty("_ThresholdEnd", props, false);
+		_OutlineSmoothness = FindProperty("_OutlineSmoothness", props, false);
+		_Use8Neighbourhood = FindProperty("_Use8Neighbourhood", props, false);
+		_OutlineMipLevel = FindProperty("_OutlineMipLevel", props, false);
+
+		_StencilComp = FindProperty("_StencilComp", props, false);
+		_StencilRef = FindProperty("_StencilRef", props, false);
+		if (_StencilRef == null)
+			 _StencilRef = FindProperty("_Stencil", props, false);
+	}
+
+	protected virtual void RenderStencilProperties () {
+		if (_StencilComp == null)
+			return; // not a shader supporting custom stencil operations
+
+		// Use default labelWidth
+		EditorGUIUtility.labelWidth = 0f;
+		_showStencilSettings = EditorGUILayout.Foldout(_showStencilSettings, _ShowStencilText);
+		if (_showStencilSettings) {
+			using (new SpineInspectorUtility.IndentScope()) {
+				_materialEditor.ShaderProperty(_StencilComp, _StencilCompText);
+				_materialEditor.ShaderProperty(_StencilRef, _StencilRefText);
+			}
+		}
 	}
 
 	protected virtual void RenderOutlineProperties () {
+
+		if (_OutlineWidth == null)
+			return; // not an outline shader
 
 		// Use default labelWidth
 		EditorGUIUtility.labelWidth = 0f;
