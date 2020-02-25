@@ -17,9 +17,10 @@ namespace DChild.Gameplay.Combat
 
         protected override Dictionary<AttackType, float> resistance => m_resistance;
 
-        public void SetData(AttackResistanceData data)
+        public override void SetData(AttackResistanceData data)
         {
             m_data = data;
+            m_resistance.Clear();
             if (m_resistance != null)
             {
                 m_resistance.Clear();
