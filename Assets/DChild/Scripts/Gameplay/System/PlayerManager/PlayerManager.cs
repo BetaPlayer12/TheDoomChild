@@ -7,6 +7,7 @@ using Doozy.Engine;
 using Holysoft;
 using Holysoft.Collections;
 using Holysoft.Event;
+using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace DChild.Gameplay.Systems
         [SerializeField, BoxGroup("Player Data")]
         private Player m_player;
         [SerializeField]
-        private PlayerInput m_input;
+        private InputManager m_input;
         [SerializeField]
         private PlayerCharacterOverride m_overrideController;
         [SerializeField]
@@ -80,14 +81,16 @@ namespace DChild.Gameplay.Systems
         private void OnPlayerDeath(object sender, EventActionArgs eventArgs)
         {
             GameEventMessage.SendEvent("Game Over");
+            m_input.Disable();
+            m_player.controller.Disable();
             m_playerIsDead = true;
             m_respawnDelay.Reset();
         }
         private void OnRespawnPlayer(object sender, EventActionArgs eventArgs)
         {
-            GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot);
-            GameplaySystem.campaignSerializer.Load();
-            m_playerIsDead = false;
+            //GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, Menu.LoadingHandle.LoadType.Smart);
+            //GameplaySystem.campaignSerializer.Load();
+            //m_playerIsDead = false;
         }
 
         private void Start()
@@ -95,7 +98,7 @@ namespace DChild.Gameplay.Systems
             if (m_player)
             {
                 m_player = player;
-                m_input = m_player.GetComponent<PlayerInput>();
+                m_input = m_player.GetComponent<InputManager>();
                 m_player.OnDeath += OnPlayerDeath;
             }
             //m_autoReflex.Initialize();

@@ -7,7 +7,10 @@ using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Menu;
 using DChild.Serialization;
+using Holysoft.Event;
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay
 {
@@ -18,6 +21,14 @@ namespace DChild.Gameplay
 
     public class GameplaySystem : MonoBehaviour
     {
+#if UNITY_EDITOR
+        [SerializeField]
+        private bool m_dontDestroyOnLoad;
+        [SerializeField]
+        private bool m_doNotDeserializeOnAwake;
+        [SerializeField]
+        private bool m_doNotTeleportPlayerOnAwake;
+#endif
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;
@@ -43,7 +54,21 @@ namespace DChild.Gameplay
         public static IFXManager fXManager => m_fxManager;
         public static ICinema cinema => m_cinema;
         public static IWorld world => m_world;
-        public static ITime time => m_world;
+        public static ITime time
+        {
+            get
+            {
+                if (m_world == null)
+                {
+                    return new TimeInfo(Time.timeScale, Time.deltaTime, Time.fixedDeltaTime);
+                }
+                else
+                {
+                    return m_world;
+                }
+            }
+        }
+
         public static IPlayerManager playerManager => m_playerManager;
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
@@ -90,20 +115,34 @@ namespace DChild.Gameplay
             m_healthTracker?.RemoveAllTrackers();
         }
 
-        public static void LoadGame(CampaignSlot campaignSlot)
+        public static void LoadGame(CampaignSlot campaignSlot, LoadingHandle.LoadType loadType)
         {
             m_campaignToLoad = campaignSlot;
             ClearCaches();
-            m_healthTracker.RemoveAllTrackers();
-            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
+            m_healthTracker?.RemoveAllTrackers();
+            LoadingHandle.SetLoadType(loadType);
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
             m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+            LoadingHandle.SceneDone += LoadGameDone;
         }
 
-        public static void MovePlayerToLocation(Character character, LocationData location, TravelDirection entranceType)
+        public static void SetCurrentCampaign(CampaignSlot campaignSlot)
         {
-            m_zoneMover.MoveCharacterToLocation(character, location, entranceType);
-            ClearCaches();
+            if (m_instance)
+            {
+                LoadGame(campaignSlot, LoadingHandle.LoadType.Force);
+            }
+            else
+            {
+                m_campaignToLoad = campaignSlot;
+            }
+        }
+
+        private static void LoadGameDone(object sender, EventActionArgs eventArgs)
+        {
+            m_campaignSerializer.SetSlot(m_campaignToLoad);
+            m_campaignSerializer.Load();
+            LoadingHandle.SceneDone -= LoadGameDone;
         }
 
         private void AssignModules()
@@ -134,6 +173,14 @@ namespace DChild.Gameplay
             }
             else
             {
+#if UNITY_EDITOR
+                if (m_dontDestroyOnLoad)
+                {
+                    transform.parent = null;
+                    DontDestroyOnLoad(this.gameObject);
+                }
+#endif
+
                 m_instance = this;
                 AssignModules();
                 m_activatableModules = GetComponentsInChildren<IGameplayActivatable>();
@@ -143,6 +190,27 @@ namespace DChild.Gameplay
                 {
                     initializables[i].Initialize();
                 }
+                if (m_campaignToLoad != null)
+                {
+                    m_campaignSerializer.SetSlot(m_campaignToLoad);
+                }
+#if UNITY_EDITOR
+                if (m_doNotDeserializeOnAwake == false)
+                {
+                    m_campaignSerializer.Load(true);
+                }
+#else
+                m_campaignSerializer.Load(true);
+#endif
+
+#if UNITY_EDITOR
+                if (m_doNotTeleportPlayerOnAwake == false)
+                {
+                    m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+                }
+#else
+                m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+#endif     
             }
         }
 

@@ -2,10 +2,12 @@
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay
 {
+
     [SelectionBase]
     [AddComponentMenu("DChild/Gameplay/Objects/Character")]
     public class Character : MonoBehaviour, ICharacter, ITurningCharacter
@@ -24,6 +26,7 @@ namespace DChild.Gameplay
         private HorizontalDirection m_facing = HorizontalDirection.Right;
         [SerializeField, FoldoutGroup("Body Reference"), HideLabel]
         private BodyReference m_bodyReference;
+
         private int m_ID;
         private bool m_hasID;
 

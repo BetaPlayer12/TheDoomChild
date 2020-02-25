@@ -81,6 +81,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             DrawOtherScriptsField();
             DrawUseTechnicalNamesToggle();
             DrawDirectConversationLinksToEntry1Toggle();
+            DrawDefaultActorsToggle();
             DrawConvertMarkupToggle();
             DrawSplitPipesToggle();
             DrawDocumentsSubmenu();
@@ -208,7 +209,7 @@ namespace PixelCrushers.DialogueSystem.Articy
                     EditorGUILayout.HelpBox("Note: Because FlowFragment Script is specified, you must register a custom Lua function named '" + prefs.FlowFragmentScript + "' or the Dialogue System will report errors. If you don't want to do this, clear FlowFragment Script.", MessageType.Info);
                     if (GUILayout.Button("Info", GUILayout.Width(40)))
                     {
-                        Application.OpenURL("http://pixelcrushers.com/dialogue_system/manual/html/lua_in_scripts.html#luaClassRegisterFunction");
+                        Application.OpenURL("https://pixelcrushers.com/dialogue_system/manual2x/html/logic_and_lua.html#luaClassRegisterFunction");
                     }
                     EditorGUILayout.EndHorizontal();
                 }
@@ -243,6 +244,13 @@ namespace PixelCrushers.DialogueSystem.Articy
             prefs.DirectConversationLinksToEntry1 = EditorGUILayout.Toggle(new GUIContent("Conv. Links to Entry 1",
                 "When a link points to a conversation's START node, redirect it to entry 1 instead."),
                 prefs.DirectConversationLinksToEntry1);
+        }
+
+        private void DrawDefaultActorsToggle()
+        {
+            prefs.UseDefaultActorsIfNoneAssignedToDialogue = EditorGUILayout.Toggle(new GUIContent("Use Default Actors If None",
+                "If no actors are assigned to a dialogue, assign default 'Player' and 'NPC' actors. If unticked, leave conversation unassigned."),
+                prefs.UseDefaultActorsIfNoneAssignedToDialogue);
         }
 
         private void DrawConvertMarkupToggle()

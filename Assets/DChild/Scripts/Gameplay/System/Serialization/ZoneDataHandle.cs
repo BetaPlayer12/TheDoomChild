@@ -5,6 +5,8 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using Sirenix.Serialization;
 using System.Collections;
+using DChildDebug.Serialization;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Serialization
 {
@@ -14,28 +16,28 @@ namespace DChild.Serialization
         public class ZoneData : ISaveData
         {
             [SerializeField]
-            private Dictionary<int, ISaveData> m_savedDatas;
+            private Dictionary<SerializeID, ISaveData> m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
 
             public ZoneData()
             {
-                m_savedDatas = new Dictionary<int, ISaveData>();
+                m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
             }
 
             public ZoneData(ComponentSerializer[] serializers)
             {
-                m_savedDatas = new Dictionary<int, ISaveData>();
+                m_savedDatas = new Dictionary<SerializeID, ISaveData>();
                 for (int i = 0; i < serializers.Length; i++)
                 {
                     m_savedDatas.Add(serializers[i].ID, null);
                 }
             }
 
-            public ZoneData(Dictionary<int, ISaveData> savedDatas)
+            public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas)
             {
-                m_savedDatas = savedDatas;
+                m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas, new SerializeID.EqualityComparer());
             }
 
-            public void SetData(int ID, ISaveData data)
+            public void SetData(SerializeID ID, ISaveData data)
             {
                 if (m_savedDatas.ContainsKey(ID))
                 {
@@ -43,15 +45,19 @@ namespace DChild.Serialization
                 }
                 else
                 {
-                    m_savedDatas.Add(ID, data);
+                    m_savedDatas.Add(new SerializeID(ID,false), data);
                 }
             }
 
-            public ISaveData GetData(int ID) => m_savedDatas.ContainsKey(ID) ? m_savedDatas[ID] : null;
+            public ISaveData GetData(SerializeID ID) => m_savedDatas.ContainsKey(ID) ? m_savedDatas[ID] : null;
+
+#if UNITY_EDITOR
+            public Dictionary<SerializeID, ISaveData> savedDatas => m_savedDatas;
+#endif
         }
 
         [SerializeField]
-        private SerializeDataID m_ID;
+        private SerializeID m_ID = new SerializeID(true);
         [SerializeField, ValueDropdown("GetComponents", IsUniqueList = true), TabGroup("Serializer", "Component"), OnValueChanged("UpdateEditorData", true)]
         private ComponentSerializer[] m_componentSerializers;
         [SerializeField, ValueDropdown("GetDynamicSerializers", IsUniqueList = true), TabGroup("Serializer", "Dynamic")]
@@ -61,7 +67,6 @@ namespace DChild.Serialization
 
         private CampaignSlot m_cacheSlot;
         private ComponentSerializer m_cacheComponentSerializer;
-
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
@@ -139,9 +144,15 @@ namespace DChild.Serialization
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
         }
 
+        private void Start()
+        {
+            SceneManager.SetActiveScene(gameObject.scene);
+        }
+
         private void OnDestroy()
         {
-            UpdateSaveData();
+            GameplaySystem.campaignSerializer.PreSerialization -= OnPreSerialization;
+            GameplaySystem.campaignSerializer.PostDeserialization -= OnPostDeserialization;
         }
 
         #region Editor
@@ -209,7 +220,7 @@ namespace DChild.Serialization
                 }
                 else
                 {
-                    var dictionary = new Dictionary<int, ISaveData>();
+                    var dictionary = new Dictionary<SerializeID, ISaveData>();
                     for (int i = 0; i < editorData.m_datas.Count; i++)
                     {
                         var save = editorData.m_datas[i];
@@ -219,14 +230,14 @@ namespace DChild.Serialization
                 }
             }
         }
-
-        [SerializeField, HideInPlayMode]
+        [SerializeField, HideInPlayMode, ToggleGroup("m_useEditorData")]
         private bool m_useEditorData;
-        [OdinSerialize, HideInPlayMode, HideReferenceObjectPicker, ShowIf("m_useEditorData")]
+        [OdinSerialize, HideInPlayMode, HideReferenceObjectPicker, ShowIf("m_useEditorData"), ToggleGroup("m_useEditorData"), HideLabel]
         private EditorData m_editorData;
 
         private void UpdateEditorData()
         {
+
             if (m_editorData == null)
             {
                 m_editorData = new EditorData(m_componentSerializers);
@@ -237,6 +248,18 @@ namespace DChild.Serialization
                 newData.CopyPastSavedData(m_editorData);
                 m_editorData = newData;
             }
+        }
+
+        public (SerializeID ID, ZoneData data) GetDefaultData()
+        {
+            var zoneData = new ZoneData();
+            for (int i = 0; i < m_componentSerializers.Length; i++)
+            {
+                m_cacheComponentSerializer = m_componentSerializers[i];
+                m_cacheComponentSerializer.Initiatlize();
+                zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
+            }
+            return (m_ID, zoneData);
         }
 
         private IEnumerable GetComponents() => FindObjectsOfType<ComponentSerializer>();

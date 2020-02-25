@@ -4,6 +4,7 @@ using Holysoft.Event;
 using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Systems.Serialization
 {
@@ -22,7 +23,7 @@ namespace DChild.Gameplay.Systems.Serialization
     [CreateAssetMenu(fileName = "LocationData", menuName = "DChild/Gameplay/Location Data")]
     public class LocationData : ScriptableObject
     {
-        [SerializeField]
+        [SerializeField, InfoBox("NEVER DUPLICATE THIS!!! THIS WILL CAUSE A CRACK IN SPACE TIME", InfoMessageType.Warning)]
         private Location m_location;
         [SerializeField]
         private SceneInfo m_scene;
