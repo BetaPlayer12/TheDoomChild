@@ -1,7 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ namespace DChild.Gameplay.Environment
 {
     public class WindHandle : MonoBehaviour
     {
-        [SerializeField,OnValueChanged("UpdateRenderers")]
+        [SerializeField, OnValueChanged("UpdateRenderers")]
         private float m_strength;
         [SerializeField, ValueDropdown("GetRenderers", IsUniqueList = true)]
         private Renderer[] m_affectedRenderers;
