@@ -10,9 +10,9 @@ namespace PlayerNew
         private Jog jogBehavior;
         private Crouch crouchBehavior;
         private WallStick wallStickBehavior;
-        //private WallGrab wallGrabBehavior;
+        private WallGrab wallGrabBehavior;
         private LongJump longJumpBehavior;
-        //private WallJump wallJumpBehavior;
+        private WallJump wallJumpBehavior;
         private Slash slashBehavior;
         private Dash dashBehavior;
         private GroundShaker groundShakerBehavior;
@@ -31,9 +31,9 @@ namespace PlayerNew
             jogBehavior = GetComponent<Jog>();
             crouchBehavior = GetComponent<Crouch>();
             wallStickBehavior = GetComponent<WallStick>();
-            //wallGrabBehavior = GetComponent<WallGrab>();
+            wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
-            //wallJumpBehavior = GetComponent<WallJump>();
+            wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
             dashBehavior = GetComponent<Dash>();
             thrustBehavior = GetComponent<Thrust>();
@@ -57,12 +57,10 @@ namespace PlayerNew
                 JogAnimationState(0);
             }
 
-            if (inputState.absValX > 0 && !wallStickBehavior.groundWallStick)
+            if (inputState.absValX > 0)
             {
                 JogAnimationState(1);
             }
-
-           
 
             if (inputState.absValY > 0)
             {
@@ -75,16 +73,11 @@ namespace PlayerNew
 
             }
 
-            if (wallStickBehavior.groundWallStick)
+            if (wallJumpBehavior.jumpingOffWall)
             {
-                JogAnimationState(0);
+                animator.SetTrigger("WallJump");
+                wallStickBehavior.onWallDetected = false;
             }
-
-            //if (wallJumpBehavior.jumpingOffWall)
-            //{
-            //    animator.SetTrigger("WallJump");
-            //    wallStickBehavior.onWallDetected = false;
-            //}
 
             if (thrustBehavior.thrustAttack)
             {
@@ -100,6 +93,7 @@ namespace PlayerNew
                 {
                     animator.SetBool("ThrustCharge", false);
                     animator.SetTrigger("ThrustEnd");
+                   
                 }
 
             }
@@ -110,15 +104,15 @@ namespace PlayerNew
             }
 
 
-
-            //WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
+            WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing);
-            SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter, slashBehavior.upHold, slashBehavior.holdingAttack);
+            SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter, slashBehavior.upHold);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
+
         }
 
         void GroundShakerAnimationState(bool value)
@@ -126,12 +120,12 @@ namespace PlayerNew
             animator.SetBool("EarthShake", value);
         }
 
-        void SlashAnimationState(bool value1, int value2, bool value3, bool value4 )
+        void SlashAnimationState(bool value1, int value2, bool value3)
         {
             animator.SetBool("Attack", value1);
-            animator.SetInteger("AttackState", value2 + 1);
+          
+                animator.SetInteger("AttackState", value2 + 1);
             animator.SetBool("UpHold", value3);
-           
         }
 
         void DashAnimationState(bool value)
