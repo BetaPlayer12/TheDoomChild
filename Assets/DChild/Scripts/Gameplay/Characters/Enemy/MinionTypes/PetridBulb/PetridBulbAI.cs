@@ -102,6 +102,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_aggroSensorGO;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
 
@@ -128,6 +130,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Bone m_bone;
 
         private bool m_canShoot;
+        //private bool m_isDed;
+        private Vector2 m_boneDefaultPos;
+        [SerializeField]
+        private Transform m_modelTF;
 
         protected override void Start()
         {
@@ -177,22 +183,21 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
-        {
-            m_stateHandle.ApplyQueuedState();
-        }
-
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             //m_animation.SetAnimation(0, m_info.flinch1Animation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             //StartCoroutine(DeathRoutine());
+            //StopAllCoroutines();
+            //m_stateHandle.OverrideState(State.Dead);
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dead);
+            StartCoroutine(DeathRoutine());
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            m_stateHandle.OverrideState(State.Dead);
+            //m_isDed = true;
         }
 
         //Patience Handler
@@ -213,24 +218,39 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+            m_targetInfo.Set(null);
+            m_hitbox.Disable();
+            m_aggroSensorGO.SetActive(false);
             //Debug.Log("Bulb Rotation " + transform.rotation.z);
-            m_hitbox.SetInvulnerability(true);
+            //m_animation.SetAnimation(0, m_info.idleAnimation, false).TimeScale = 3f;
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
+            m_bone.SetLocalPosition(m_boneDefaultPos);
+            string deathAnim;
             if (transform.rotation.z == -1 || transform.rotation.z == 1)
             {
-                m_animation.SetAnimation(0, m_info.deathTopAnimation, false);
+                deathAnim = m_info.deathTopAnimation;
+                //m_animation.SetAnimation(0, m_info.deathTopAnimation, false);
             }
             else
             {
-                m_animation.SetAnimation(0, m_info.deathSideAnimation, false);
+                Debug.Log("Bulb Rotation " + transform.rotation.z);
+                deathAnim = m_info.deathSideAnimation;
+                //if()
+                m_modelTF.localScale = new Vector3(transform.rotation.z >= 0.5f ? -m_modelTF.localScale.x : m_modelTF.localScale.x, m_modelTF.localScale.y, m_modelTF.localScale.z);
+                //m_animation.SetAnimation(0, m_info.deathSideAnimation, false);
             }
-            //yield return new WaitForAnimationComplete(m_animation.animationState, deathAnim);
+            m_animation.SetAnimation(0, deathAnim, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, deathAnim);
             yield return new WaitForSeconds(m_info.respawnTime);
+            m_modelTF.localScale = new Vector3(m_modelTF.localScale.x > 0 ? -m_modelTF.localScale.x : m_modelTF.localScale.x, m_modelTF.localScale.y, m_modelTF.localScale.z);
             m_animation.SetAnimation(0, m_info.respawnAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.respawnAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
-            m_stateHandle.ApplyQueuedState();
+            m_hitbox.Enable();
+            m_aggroSensorGO.SetActive(true);
+            //m_isDed = false;
             m_canShoot = true;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -238,11 +258,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_canShoot = false;
+            m_aggroSensorGO.SetActive(false);
             m_animation.EnableRootMotion(true, false);
             m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
-            yield return new WaitForSeconds(1.5f);
-            m_stateHandle.ApplyQueuedState();
+            yield return new WaitForSeconds(5f);
             m_canShoot = true;
+            m_aggroSensorGO.SetActive(true);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -300,6 +322,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectileStart);
 
             m_bone = m_animation.skeletonAnimation.Skeleton.FindBone(m_boneName);
+            m_boneDefaultPos = m_bone.GetLocalPosition();
             m_animation.skeletonAnimation.UpdateLocal += SkeletonAnimation_UpdateLocal;
         }
 
@@ -311,12 +334,13 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
+                    m_targetInfo.Set(null);
                     m_animation.EnableRootMotion(false, false);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
                 case State.Dead:
-                    StartCoroutine(DeathRoutine());
+                    //StopAllCoroutines();
                     break;
 
                 case State.Attacking:
@@ -364,6 +388,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
+                    //m_canShoot = true;
+                    //if (!m_isDed)
+                    //{
+                    //}
+                    //m_stateHandle.SetState(State.Chasing);
                     if (m_targetInfo.isValid)
                     {
                         m_stateHandle.SetState(State.Chasing);
@@ -381,6 +410,14 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Idle);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+            m_canShoot = false;
         }
     }
 }

@@ -28,6 +28,9 @@ namespace DChild.Gameplay.Combat
         private bool m_isInstantiated;
 
         private List<AttackDamage> m_currentDamage;
+
+        public Vector2 position => m_centerMass.position;
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 

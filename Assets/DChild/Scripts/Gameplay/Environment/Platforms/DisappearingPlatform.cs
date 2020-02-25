@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters;
 using Holysoft.Event;
 using Spine;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,27 +9,13 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
+
     public class DisappearingPlatform : MonoBehaviour
     {
         [SerializeField]
-        private float m_disappearDelay;
-        [SerializeField]
-        private float m_disappearDuration;
+        private DisappearingPlatformData m_disappearingPlatformData;
 
-        [SerializeField, Spine.Unity.SpineAnimation]
-        private string m_idleAnimation;
-        [SerializeField, Spine.Unity.SpineAnimation]
-        private string m_steppedOnAnimation;
-        [SerializeField, Spine.Unity.SpineAnimation]
-        private string m_aboutToDisappearAnimation;
-        [SerializeField, Spine.Unity.SpineAnimation]
-        private string m_disappearAnimation;
-        [SerializeField, Spine.Unity.SpineAnimation]
-        private string m_hiddenAnimation;
-        [SerializeField, Spine.Unity.SpineAnimation]
-        private string m_reappearAnimation;
-
-        private SpineRootAnimation m_animation;
+        private SkeletonAnimation m_animation;
         private Collider2D m_collider;
         private bool m_willDisappear = false;
         private bool m_hasDisappeared = false;
@@ -38,20 +25,20 @@ namespace DChild.Gameplay.Environment
 
         private void EnableCollider(TrackEntry trackEntry)
         {
-            if (trackEntry.Animation.Name == m_reappearAnimation)
+            if (trackEntry.Animation.Name == m_disappearingPlatformData.reappearAnimation)
             {
                 m_collider.enabled = true;
-                m_disappearDurationTimer = m_disappearDuration;
-                m_disappearDelayTimer = m_disappearDelay;
-                m_animation.animationState.Interrupt -= EnableCollider;
+                m_disappearDurationTimer = m_disappearingPlatformData.disappearDuration;
+                m_disappearDelayTimer = m_disappearingPlatformData.disappearDelay;
+                m_animation.state.Interrupt -= EnableCollider;
             }
         }
 
         private void DisappearPlatform()
         {
             m_willDisappear = true;
-            m_animation.SetAnimation(0, m_steppedOnAnimation, false);
-            m_animation.AddAnimation(0, m_aboutToDisappearAnimation, true, 0);
+            m_animation.state.SetAnimation(0, m_disappearingPlatformData.steppedOnAnimation, false);
+            m_animation.state.AddAnimation(0, m_disappearingPlatformData.aboutToDisappearAnimation, true, 0);
         }
         private void OnPlatformReaction(object sender, EventActionArgs eventArgs)
         {
@@ -64,7 +51,7 @@ namespace DChild.Gameplay.Environment
 
         private void Awake()
         {
-            m_animation = GetComponentInChildren<SpineRootAnimation>();
+            m_animation = GetComponentInChildren<SkeletonAnimation>();
             m_collider = GetComponentInChildren<Collider2D>();
             m_hasReactivePlatform = TryGetComponent(out ReactivePlatform platform);
             if (m_hasReactivePlatform)
@@ -75,8 +62,8 @@ namespace DChild.Gameplay.Environment
 
         void Start()
         {
-            m_disappearDelayTimer = m_disappearDelay;
-            m_disappearDurationTimer = m_disappearDuration;
+            m_disappearDelayTimer = m_disappearingPlatformData.disappearDelay;
+            m_disappearDurationTimer = m_disappearingPlatformData.disappearDuration;
             if (m_hasReactivePlatform)
             {
                 enabled = false;
@@ -91,12 +78,12 @@ namespace DChild.Gameplay.Environment
                 if (m_disappearDelayTimer <= 0)
                 {
                     m_collider.enabled = false;
-                    m_animation.SetAnimation(0, m_disappearAnimation, false);
-                    m_animation.AddAnimation(0, m_hiddenAnimation, true, 0.5f);
+                    m_animation.state.SetAnimation(0, m_disappearingPlatformData.disappearAnimation, false);
+                    m_animation.state.AddAnimation(0, m_disappearingPlatformData.hiddenAnimation, true, 0.5f);
 
                     m_willDisappear = false;
                     m_hasDisappeared = true;
-                    m_disappearDurationTimer = m_disappearDuration;
+                    m_disappearDurationTimer = m_disappearingPlatformData.disappearDuration;
                 }
             }
             else if (m_hasDisappeared == true)
@@ -104,10 +91,10 @@ namespace DChild.Gameplay.Environment
                 m_disappearDurationTimer -= Time.deltaTime;
                 if (m_disappearDurationTimer <= 0)
                 {
-                    m_animation.SetAnimation(0, m_reappearAnimation, false);
-                    m_animation.AddAnimation(0, m_idleAnimation, true, 0.8f);
+                    m_animation.state.SetAnimation(0, m_disappearingPlatformData.reappearAnimation, false);
+                    m_animation.state.AddAnimation(0, m_disappearingPlatformData.idleAnimation, true, 0.8f);
 
-                    m_animation.animationState.Interrupt += EnableCollider;
+                    m_animation.state.Interrupt += EnableCollider;
                     m_hasDisappeared = false;
                 }
             }

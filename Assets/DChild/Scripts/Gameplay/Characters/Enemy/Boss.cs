@@ -25,6 +25,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ICombatAIBrain m_brain;
 
         public Health health => m_health;
+        public string creatureName => m_data.name;
+        public string creatureTitle => m_data.title;
 
         public event EventAction<PhaseEventArgs> PhaseChange;
 

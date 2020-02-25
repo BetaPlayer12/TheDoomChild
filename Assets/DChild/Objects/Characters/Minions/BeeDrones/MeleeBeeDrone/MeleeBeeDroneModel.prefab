@@ -108,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 1626929057599596827}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.325, y: 0.325, z: 0.325}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 913728636318796389}
   - {fileID: 4809150871044810960}
@@ -200,6 +200,7 @@ MonoBehaviour:
   _animationName: Idle
   loop: 1
   timeScale: 1
+  m_alwaysUpdateMesh: 0
 --- !u!114 &7890800615663750060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,8 +287,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8243615689079779488}
   - component: {fileID: 9196341391285414727}
-  - component: {fileID: 7323971456948718369}
-  m_Layer: 13
+  - component: {fileID: 6294258831894680731}
+  m_Layer: 9
   m_Name: AggroSensor
   m_TagString: Sensor
   m_Icon: {fileID: 0}
@@ -323,8 +324,8 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 5.13}
   serializedVersion: 2
-  m_Radius: 25
---- !u!114 &7323971456948718369
+  m_Radius: 15
+--- !u!114 &6294258831894680731
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -487,7 +488,7 @@ GameObject:
   - component: {fileID: 2271356089846404865}
   - component: {fileID: 7084402005336145028}
   - component: {fileID: 8846099698472826760}
-  - component: {fileID: 6109295093888544323}
+  - component: {fileID: 2261686713379415001}
   m_Layer: 13
   m_Name: Stinger
   m_TagString: Untagged
@@ -545,7 +546,7 @@ MonoBehaviour:
   slotName: sting_bouning_box
   isTrigger: 0
   clearStateOnDisable: 1
---- !u!60 &6109295093888544323
+--- !u!60 &2261686713379415001
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -651,20 +652,20 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 3187949402011352469}
     m_ColliderPaths:
-    - - X: 8239184
-        Y: 3637530
-      - X: 8285920
-        Y: 19887462
-      - X: -7963983
-        Y: 19934169
-      - X: -8010690
-        Y: 3684266
+    - - X: 25351399
+        Y: 11192403
+      - X: 25495199
+        Y: 61192196
+      - X: -24504566
+        Y: 61335967
+      - X: -24648337
+        Y: 11336203
   m_CompositePaths:
     m_Paths:
-    - - {x: 0.8239155, y: 0.363753}
-      - {x: 0.8285891, y: 1.9887462}
-      - {x: -0.7963983, y: 1.993414}
-      - {x: -0.8010661, y: 0.3684266}
+    - - {x: 2.535137, y: 1.1192403}
+      - {x: 2.549517, y: 6.11922}
+      - {x: -2.4504566, y: 6.1335936}
+      - {x: -2.4648309, y: 1.1336203}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.000005
 --- !u!114 &1525629426744955353

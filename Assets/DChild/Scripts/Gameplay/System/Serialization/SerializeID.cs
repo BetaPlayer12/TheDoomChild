@@ -16,11 +16,11 @@ namespace DChild.Serialization
 
             public int GetHashCode(SerializeID obj)
             {
-                return obj.value.GetHashCode();
+                return obj.value;
             }
         }
 
-        [SerializeField, HideIf("m_isOnAppend"), ValueDropdown("GetIDs"), HorizontalGroup("ID")]
+        [SerializeField, HideIf("@m_isOnAppend || m_isOnModify"), ValueDropdown("GetIDs"), HorizontalGroup("ID")]
         private int m_ID;
         [SerializeField, HideInInspector]
         private bool m_showHandle;
@@ -52,9 +52,10 @@ namespace DChild.Serialization
 #if UNITY_EDITOR
 
         private bool m_isOnAppend;
+        private bool m_isOnModify;
         private int m_createdID;
         private bool m_canCreateID;
-        [ShowInInspector, ValidateInput("ValidateContext"), ShowIf("m_isOnAppend"), OnValueChanged("ConfirmChange")]
+        [ShowInInspector, ValidateInput("ValidateContext"), ShowIf("@m_isOnAppend || m_isOnModify"), OnValueChanged("ConfirmChange")]
         private string m_context;
 
 
@@ -75,6 +76,8 @@ namespace DChild.Serialization
                 m_isOnAppend = true;
             }
 
+            list.Sort((x, y) => x.Text.CompareTo(y.Text));
+
             return list;
         }
 
@@ -86,6 +89,18 @@ namespace DChild.Serialization
             connection.Initialize();
             m_createdID = connection.GetNextID();
             connection.Close();
+            m_showHandle = false;
+        }
+
+        [Button, HorizontalGroup("ID"), ShowIf("@m_showHandle && !m_isOnModify"), HideInPlayMode]
+        private void ModifyID()
+        {
+            m_isOnModify = true;
+            var connection = DChildDatabase.GetSerializeIDConnection();
+            connection.Initialize();
+            m_context = connection.GetContext(m_ID);
+            connection.Close();
+            m_showHandle = false;
         }
 
 
@@ -119,10 +134,12 @@ namespace DChild.Serialization
         }
 
 
-        [Button("Cancel"), HorizontalGroup("Buttons"), ShowIf("m_isOnAppend")]
-        private void CancelCreateID()
+        [Button("Cancel"), HorizontalGroup("Buttons"), ShowIf("@m_isOnAppend || m_isOnModify")]
+        private void Cancel()
         {
+            m_showHandle = true;
             m_isOnAppend = false;
+            m_isOnModify = false;
             m_context = string.Empty;
             m_canCreateID = false;
         }
@@ -136,7 +153,17 @@ namespace DChild.Serialization
             connection.Initialize();
             connection.Append(m_ID, m_context);
             connection.Close();
-            CancelCreateID();
+            Cancel();
+        }
+
+        [Button("Modify"), HorizontalGroup("Buttons"), ShowIf("@m_canCreateID && m_isOnModify")]
+        private void ModifyContext()
+        {
+            var connection = DChildDatabase.GetSerializeIDConnection();
+            connection.Initialize();
+            connection.Modify(m_ID, m_context);
+            connection.Close();
+            Cancel();
         }
 #endif
     }

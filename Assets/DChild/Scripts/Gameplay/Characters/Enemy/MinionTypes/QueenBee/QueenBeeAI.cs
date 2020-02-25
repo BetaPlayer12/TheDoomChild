@@ -48,6 +48,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_horizontalDroneAttack = new SimpleAttackInfo();
             public SimpleAttackInfo horizontalDroneAttack => m_horizontalDroneAttack;
             [SerializeField]
+            private float m_drone3rdPhaseYAim;
+            public float drone3rdPhaseYAim => m_drone3rdPhaseYAim;
+            [SerializeField]
             private SimpleAttackInfo m_spearChargeAttack = new SimpleAttackInfo();
             public SimpleAttackInfo spearChargeAttack => m_spearChargeAttack;
             [SerializeField]
@@ -177,17 +180,23 @@ namespace DChild.Gameplay.Characters.Enemies
         public class PhaseInfo : IPhaseInfo
         {
             [SerializeField]
-            private int m_tombVolley;
-            public int tombVolley => m_tombVolley;
+            private int m_droneStrikeBatches;
+            public int droneStrikeBatches => m_droneStrikeBatches;
             [SerializeField]
-            private int m_tombSize;
-            public int tombSize => m_tombSize;
+            private float m_droneStrikeSummonSpeed;
+            public float droneStrikeSummonSpeed => m_droneStrikeSummonSpeed;
             [SerializeField]
-            private int m_skeletonNum;
-            public int skeletonNum => m_skeletonNum;
-            [SerializeField, ValueDropdown("GetSkins")]
-            private string m_skin;
-            public string skin => m_skin;
+            private int m_droneSummonAmmount;
+            public int droneSummonAmmount => m_droneSummonAmmount;
+            //[SerializeField]
+            //private int m_tombSize;
+            //public int tombSize => m_tombSize;
+            //[SerializeField]
+            //private int m_skeletonNum;
+            //public int skeletonNum => m_skeletonNum;
+            //[SerializeField, ValueDropdown("GetSkins")]
+            //private string m_skin;
+            //public string skin => m_skin;
             [SerializeField]
             private int m_phaseIndex;
             public int phaseIndex => m_phaseIndex;
@@ -247,6 +256,12 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_droneSpointsGO;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_movePointsGO;
+        [SerializeField, TabGroup("Reference")]
         private Transform m_modelTransform;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -287,15 +302,20 @@ namespace DChild.Gameplay.Characters.Enemies
         private Attack m_chosenAttack;
 
         private ProjectileLauncher m_launcher;
+        private ProjectileLauncher m_spearLauncher;
 
         [SerializeField, TabGroup("Move Points")]
         private Transform m_tripleDronePoint;
+        [SerializeField, TabGroup("Move Points")]
+        private Transform m_tripleDronePhase3Point;
         [SerializeField, TabGroup("Move Points")]
         private Transform m_returnPoint;
         [SerializeField, TabGroup("Move Points")]
         private Transform m_spearThrowPoint;
         [SerializeField, TabGroup("Move Points")]
         private Transform m_stingerDivePoint;
+        [SerializeField, TabGroup("Move Points")]
+        private Transform m_GroundPoint;
 
         [SerializeField]
         private List<Transform> m_spawnPoints;
@@ -308,7 +328,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private Bone m_bone;
         
         private int m_currentPhaseIndex;
+        private int m_currentDroneBatches;
+        private float m_currentSummonSpeed;
+        private int m_currentSummonAmmount;
+        //private float m_currentDroneSummonSpeed;
         float m_currentRecoverTime;
+        bool m_isFinalPhase;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -318,6 +343,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_currentSkeletonSize = obj.skeletonNum;
             //m_currentSkin = obj.skin;
             m_currentPhaseIndex = obj.phaseIndex;
+            m_currentDroneBatches = obj.droneStrikeBatches;
+            m_currentSummonSpeed = obj.droneStrikeSummonSpeed;
+            m_currentSummonAmmount = obj.droneSummonAmmount;
         }
 
         private void ChangeState()
@@ -336,9 +364,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.spearThrowAttack.animation)
+            StopAllCoroutines();
+            if (/*m_animation.GetCurrentAnimation(0).ToString() == m_info.spearThrowAttack.animation*/ m_currentPhaseIndex != 3)
             {
-                StopAllCoroutines();
                 m_stateHandle.OverrideState(State.Fall);
             }
             else /*if (m_stateHandle.currentState != State.Fall)*/
@@ -366,7 +394,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            if(m_stateHandle.currentState != State.Phasing)
+            m_animation.animationState.TimeScale = 1f;
+            if (m_stateHandle.currentState != State.Phasing)
                 m_stateHandle.ApplyQueuedState();
         }
 
@@ -434,7 +463,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.SetDestination(target);
                 m_agent.Move(m_info.moveForward.speed);
 
-                if (velocityX != 0 && velocityY > 5f)
+                if (velocityX == 0 && velocityY > 5f)
                 {
                     //Debug.Log("Move Upward");
                     m_animation.SetAnimation(0, m_info.moveAscend.animation, true);
@@ -510,15 +539,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_phaseHandle.ApplyChange();
+            m_bodyCollider.SetActive(false);
             m_stateHandle.Wait(State.Phasing);
+            m_animation.animationState.TimeScale = 1f;
             //m_turnState = State.Phasing;
             m_agent.Stop();
             m_hitbox.SetInvulnerability(true);
             m_animation.EnableRootMotion(false, false);
-            if (m_currentPhaseIndex >= 3)
+            if (m_currentPhaseIndex >= 3 && !m_isFinalPhase)
             {
+                m_isFinalPhase = true;
                 m_chosenAttack = Attack.GroundStingerAttack;
-                //m_animation.EnableRootMotion(true, true);
                 var spear = Instantiate(m_info.spearDrop, transform.position, Quaternion.identity);
                 m_RightArmFX.Play();
                 m_LeftArmFX.Play();
@@ -555,7 +586,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 //transform.position = Vector3.MoveTowards(transform.position, target, .025f);
                 m_agent.SetDestination(target);
-                m_agent.Move(m_info.moveForward.speed * 1.5f);
+                m_agent.Move(m_info.moveForward.speed * 3f);
                 yield return null;
             }
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -572,19 +603,27 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             //CustomTurn();
-            while (Vector2.Distance(transform.position, m_tripleDronePoint.position) > 1.5)
+            var attackPos = m_currentPhaseIndex != 2 ? m_tripleDronePoint.position : m_tripleDronePhase3Point.position;
+            while (Vector2.Distance(transform.position, attackPos) > 1.5)
             {
-                DynamicMovement(m_tripleDronePoint.position);
+                DynamicMovement(attackPos);
                 yield return null;
             }
             m_stateHandle.Wait(State.ReevaluateSituation);
+            m_flinchHandle.gameObject.SetActive(m_currentPhaseIndex == 2 ? true : false);
             m_agent.Stop();
+            m_droneSpointsGO.transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
             m_animation.SetAnimation(0, m_info.summonDroneAnimation, false).TimeScale = 2f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonDroneAnimation);
-            m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
-            m_animation.SetAnimation(0, m_info.orderDroneAttackLoopAnimation, true);
-            yield return new WaitForSeconds(1f);
+            for (int i = 0; i < m_currentDroneBatches; i++)
+            {
+                //LaunchBeeProjectile();
+                m_animation.SetAnimation(0, m_info.orderDroneAttackAnimation, false).TimeScale = m_currentSummonSpeed;
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.orderDroneAttackAnimation);
+                m_animation.SetAnimation(0, m_info.orderDroneAttackLoopAnimation, true);
+                yield return new WaitForSeconds(1);
+            }
+            m_flinchHandle.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
             //for (int i = 0; i < /*m_spawnPoints.Count*/4; i++)
             //{
@@ -610,6 +649,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.phase2AtkChargeStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase2AtkChargeStartAnimation);
             m_animation.DisableRootMotion();
+            m_hitbox.SetInvulnerability(true);
+            m_bodyCollider.SetActive(false);
             m_QBStingerChargeFX.gameObject.SetActive(true);
             m_QBStingerChargeFX.Play();
             //int i;
@@ -638,7 +679,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 var mainFX = m_QBStingerChargeFX.main;
                 mainFX.startRotation = transform.localScale.x > 0 ? /*180 * Mathf.Deg2Rad*/ (float)Mathf.PI/*nis*/: 0;
                 //chargeFXScale.localScale = new Vector3(transform.localScale.x > 0 ? -chargeFXScale.localScale.x : chargeFXScale.localScale.x, chargeFXScale.localScale.y, chargeFXScale.localScale.z);
-                GetComponent<IsolatedPhysics2D>().SetVelocity(100 * transform.localScale.x, 0);
+                GetComponent<IsolatedPhysics2D>().SetVelocity(250 * transform.localScale.x, 0);
                 yield return new WaitForSeconds(i == 0 ? 1.25f : 2f);
                 m_animation.SetEmptyAnimation(0, 0);
                 CustomTurn();
@@ -646,6 +687,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(.25f);
                 transform.position = new Vector2(transform.position.x, m_targetInfo.position.y);
             }
+            m_hitbox.SetInvulnerability(false);
 
             transform.position = m_returnPoint.position;
             m_QBStingerChargeFX.gameObject.SetActive(false);
@@ -659,8 +701,21 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_agent.Stop();
             //CustomTurn();
-            while (Vector2.Distance(transform.position, m_targetInfo.position) > m_info.spearMeleeAttack.range)
+            //var target = new Vector2(m_targetInfo.position.x - 5, m_targetInfo.position.y);
+            //bool isInRange = Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range;
+            //Debug.Log("X Distance In Range " + xTargetInRange);
+            //Debug.Log("Y Distance In Range " + yTargetInRange);
+            bool testing = false;
+            /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
+            while (!testing)
             {
+
+                bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < m_info.spearMeleeAttack.range ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 3 ? true : false;
+                if (xTargetInRange && yTargetInRange)
+                {
+                    testing = true;
+                }
                 //Debug.Log("Facing Target " + IsFacingTarget());
                 DynamicMovement(m_targetInfo.position);
                 yield return null;
@@ -668,7 +723,18 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_animation.SetAnimation(0, m_info.phase1AtkMeleeAnimation, false);
+            m_bodyCollider.SetActive(true);
+            if (m_currentPhaseIndex != 0)
+            {
+                yield return new WaitForSeconds(2.25f);
+                m_animation.DisableRootMotion();
+                //m_character.physics.SetVelocity(Vector2.zero);
+                m_character.physics.AddForce(new Vector2(5f * transform.localScale.x, 0), ForceMode2D.Impulse);
+                yield return new WaitForSeconds(0.25f);
+            }
+            m_agent.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase1AtkMeleeAnimation);
+            m_bodyCollider.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
@@ -683,7 +749,17 @@ namespace DChild.Gameplay.Characters.Enemies
             var targetPos = new Vector2(transform.position.x, m_spearThrowPoint.position.y);
             while (Vector2.Distance(transform.position, targetPos) > 1.5f)
             {
-                DynamicMovement(targetPos);
+                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
+                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
+                //Debug.Log("Read Dynamic Movements " + velocityX + " " + velocityY);
+                m_agent.SetDestination(targetPos);
+                m_agent.Move(m_info.moveForward.speed);
+
+                if (velocityX != 0 && velocityY > 5f)
+                {
+                    //Debug.Log("Move Upward");
+                    m_animation.SetAnimation(0, m_info.moveAscend.animation, true);
+                }
                 yield return null;
             }
             m_flinchHandle.gameObject.SetActive(true);
@@ -714,10 +790,10 @@ namespace DChild.Gameplay.Characters.Enemies
             transform.position = m_stingerDivePoint.position;
             m_animation.SetAnimation(0, m_info.phase4AtkStingerLoopAnimation, true);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase4AtkStingerLoopAnimation);
-            var shadow = Instantiate(m_info.shadowTelegraph, new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2), Quaternion.identity);
+            var shadow = Instantiate(m_info.shadowTelegraph, new Vector2(m_targetInfo.position.x, m_GroundPoint.position.y), Quaternion.identity);
             while (shadow.transform.localScale.x > 0.35f)
             {
-                shadow.transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y - 2);
+                shadow.transform.position = new Vector2(m_targetInfo.position.x, shadow.transform.position.y);
                 shadow.transform.localScale = new Vector3(shadow.transform.localScale.x - 0.25f * Time.deltaTime, shadow.transform.localScale.y - 0.25f * Time.deltaTime, shadow.transform.localScale.z - 0.25f * Time.deltaTime);
                 yield return null;
             }
@@ -761,31 +837,42 @@ namespace DChild.Gameplay.Characters.Enemies
         private void LaunchBeeProjectile()
         {
             StartCoroutine(LaunchBeeProjectileRoutine());
+            //for (int i = 0; i < m_currentSummonAmmount; i++)
+            //{
+            //    float rotation = transform.localScale.x < 1 ? 180 : 0;
+            //    int rng = UnityEngine.Random.Range(0, m_spawnPoints.Count);
+            //    m_spawnPoints[rng].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+            //    //GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
+            //    m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[rng]);
+            //    m_launcher.LaunchProjectile();
+            //    //yield return new WaitForSeconds(.25f);
+
+            //}
         }
 
         private void LaunchSpearProjectile()
         {
-            m_launcher = new ProjectileLauncher(m_info.spearProjectile.projectileInfo, m_spawnPoints[0]);
             if (!IsFacingTarget())
             {
                 transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
                 m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
-            m_launcher.AimAt(m_targetInfo.position);
-            m_launcher.LaunchProjectile();
+            m_spearLauncher = new ProjectileLauncher(m_info.spearProjectile.projectileInfo, m_spearSpawnPoint);
+            m_spearLauncher.AimAt(m_targetInfo.position);
+            m_spearLauncher.LaunchProjectile();
         }
 
         private IEnumerator LaunchBeeProjectileRoutine()
         {
-            for (int i = 0; i < m_spawnPoints.Count; i++)
+            for (int i = 0; i < m_currentSummonAmmount; i++)
             {
                 float rotation = transform.localScale.x < 1 ? 180 : 0;
-                m_spawnPoints[i].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
-                GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[i].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
-                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[i]);
+                int rng = UnityEngine.Random.Range(0, m_spawnPoints.Count);
+                m_spawnPoints[rng].localRotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+                //GameObject burst = Instantiate(m_info.burstGO, m_spawnPoints[rng].position, Quaternion.Euler(new Vector3(0, 0, rotation)));
+                m_launcher = new ProjectileLauncher(m_info.beeProjectile.projectileInfo, m_spawnPoints[rng]);
                 m_launcher.LaunchProjectile();
                 yield return new WaitForSeconds(.25f);
-
             }
         }
 
@@ -905,6 +992,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
+                    m_animation.animationState.TimeScale = 2f;
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_agent.Stop();
                     break;
@@ -917,11 +1005,27 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
 
                     //Debug.Log("Commence Attacking Deciding Phase");
-                    m_attackDecider.DecideOnAttack();
-                    m_chosenAttack = m_attackDecider.chosenAttack.attack;
+                    if (m_previousAttack == Attack.SpearMelee)
+                    {
+                        //Debug.Log("Decide ANothat BEE ATACK");
+                        m_attackDecider.DecideOnAttack();
+                        m_chosenAttack = m_attackDecider.chosenAttack.attack;
+
+                    }
+                    else
+                    {
+                        //Debug.Log("Spear Spear");
+                        m_chosenAttack = Attack.SpearMelee;
+                        m_attackDecider.hasDecidedOnAttack = true;
+
+                    }
+                    //m_chosenAttack = m_previousAttack == Attack.SpearMelee ? m_attackDecider.chosenAttack.attack : Attack.SpearMelee;
+
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_attackDecider.chosenAttack.range)*/ && m_chosenAttack != m_previousAttack)
                     {
                         //m_agent.Stop();
+                        m_movePointsGO.transform.localScale = new Vector3(UnityEngine.Random.Range(-1, 1), 1, 1);
+                        m_movePointsGO.transform.localScale = new Vector3(m_movePointsGO.transform.localScale.x == 0 ? 1 : m_movePointsGO.transform.localScale.x, 1, 1);
                         m_previousAttack = m_chosenAttack;
                         m_stateHandle.SetState(State.Attacking);
                     }
@@ -950,6 +1054,9 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        protected override void OnTargetDisappeared()
+        {
 
+        }
     }
 }

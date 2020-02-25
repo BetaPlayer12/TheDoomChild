@@ -154,12 +154,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                var target = m_targetInfo.position; //No Parabola      
+                var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
+                //var target = m_targetInfo.position; //No Parabola      
                 Vector2 spitPos = m_projectileStart.position;
                 Vector3 v_diff = (target - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
 
                 //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                m_projectileLauncher.AimAt(target);
                 m_projectileLauncher.LaunchProjectile();
                 //m_Audiosource.clip = m_RangeAttackClip;
                 //m_Audiosource.Play();
@@ -218,7 +220,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            StopAllCoroutines();
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
@@ -313,6 +316,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
+                        Debug.Log(IsFacingTarget());
                         if (IsFacingTarget())
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
@@ -364,6 +368,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Burrowed);
+            m_currentPatience = 0;
+            m_enablePatience = false;
         }
     }
 }
