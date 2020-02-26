@@ -31,6 +31,7 @@
 #define NEW_PREFAB_SYSTEM
 #endif
 
+using DChild;
 using UnityEngine;
 
 namespace Spine.Unity {
@@ -173,6 +174,41 @@ namespace Spine.Unity {
 					#endif
 				}
 			}
+		}
+
+		public bool CallUpdateLocal()
+		{
+			var canCall = _UpdateLocal != null;
+			if (canCall)
+			{
+				_UpdateLocal(this);
+			}
+			return canCall;
+		}
+
+		public bool CallUpdateWorld()
+		{
+			var canCall = _UpdateWorld != null;
+			if (canCall)
+			{
+				_UpdateWorld(this);
+			}
+			return canCall;
+		}
+
+		public bool CallUpdateComplete()
+		{
+			var canCall = _UpdateComplete != null;
+			if (canCall)
+			{
+				_UpdateComplete(this);
+			}
+			return canCall;
+		}
+
+		void Start()
+		{
+			SpineAnimationManager.Register(this);
 		}
 
 		void Update () {
