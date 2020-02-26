@@ -1,19 +1,17 @@
 ﻿using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Systems;
 using UnityEngine;
 
-namespace DChild.Gameplay.SoulEssence
+namespace DChild.Gameplay.Essence
 {
-    public class SoulEssenceLoot : Loot
+
+    public class SoulEssenceLoot : EssenceLoot
     {
         [SerializeField, Min(1)]
         private int m_value;
 
-        protected override void ApplyPickUp()
+        protected override void OnApplyPickup(IPlayer player)
         {
-            base.ApplyPickUp();
-            m_pickedBy.inventory.AddSoulEssence(m_value);
-            //CallPoolRequest();
+            player.inventory.AddSoulEssence(m_value);
         }
     }
 }

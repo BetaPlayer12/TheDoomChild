@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         private int m_currentIncreasedValue;
         private float value => m_value / 100f;
 
-        public void AttachTo(IPlayer player)
+        public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
             m_reference = player.stats;
             switch (m_toChange)
@@ -45,7 +45,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         }
 
 
-        public void DetachFrom(IPlayer player)
+        public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
             m_reference.StatsChanged -= OnStatsChange;
             switch (m_toChange)

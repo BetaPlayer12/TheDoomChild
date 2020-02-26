@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -80,7 +80,9 @@ namespace Doozy.Editor.Nody.NodeGUI
         {
             var types = new List<Type>();
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly assembly in assemblies) types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
+            foreach (Assembly assembly in assemblies)
+                if (assembly != null)
+                    types.AddRange(assembly.GetTypes().Where(t => baseType != null && (!t.IsAbstract && baseType.IsAssignableFrom(t))).ToArray());
             return types.ToArray();
         }
 

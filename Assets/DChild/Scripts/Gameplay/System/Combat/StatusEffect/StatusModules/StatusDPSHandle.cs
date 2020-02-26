@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusAilment
 {
-
     [System.Serializable]
     public class StatusDPSHandle : IStatusEffectUpdatableModule
     {

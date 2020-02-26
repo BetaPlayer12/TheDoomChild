@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -105,6 +105,19 @@ namespace Doozy.Editor.Nody.Windows
                 default: throw new ArgumentOutOfRangeException();
             }
 
+            switch (graphEvent.commandType)
+            {
+                case GraphEvent.CommandType.NONE: break;
+                case GraphEvent.CommandType.CONSTRUCT_GRAPH:
+                    ConstructGraphGUI();
+                    break;
+                case GraphEvent.CommandType.RECALCULATE_ALL_POINTS:
+                    RecalculateAllPointRects();
+                    break;
+                case GraphEvent.CommandType.DISCONNECT_SOCKET:
+                    DisconnectSocket(graphEvent.sourceSocket, true);
+                    break;
+            }
 
             Repaint();
         }
@@ -387,12 +400,14 @@ namespace Doozy.Editor.Nody.Windows
                 if (m_currentHoveredVirtualPoint != null)
                 {
                     //lifted left mouse button over a socket connection point
-                    if (m_activeSocket != null &&                                            //if there is an active socket
-                        m_activeSocket != m_currentHoveredVirtualPoint.Socket &&             //and it's not this one
-                        m_activeSocket.CanConnect(m_currentHoveredVirtualPoint.Socket))      //and the two sockets can get connected
+                    if (m_activeSocket != null &&                                       //if there is an active socket
+                        m_activeSocket != m_currentHoveredVirtualPoint.Socket &&        //and it's not this one
+                        m_activeSocket.CanConnect(m_currentHoveredVirtualPoint.Socket)) //and the two sockets can get connected
+                    {
                         ConnectSockets(m_activeSocket, m_currentHoveredVirtualPoint.Socket); //connect the two sockets
-                    else                                                                     //this was a failed connection attempt
-                        GraphEvent.Send(GraphEvent.EventType.EVENT_CONNECTING_END);          //send a graph event
+                    }
+                    else                                                            //this was a failed connection attempt
+                        GraphEvent.Send(GraphEvent.EventType.EVENT_CONNECTING_END); //send a graph event
 
                     m_activeSocket = null;   //clear the active socket
                     m_mode = GraphMode.None; //set the graph in idle mode
@@ -597,7 +612,7 @@ namespace Doozy.Editor.Nody.Windows
                     break;
 
                 case KeyCode.S: //Select start node
-                    if (e.modifiers ==  EventModifiers.None)
+                    if (e.modifiers == EventModifiers.None)
                         GoToStartOrEnterNode();
                     break;
             }
@@ -619,7 +634,7 @@ namespace Doozy.Editor.Nody.Windows
 
                 //perform pan to zoom out from mouse position
                 CurrentPanOffset = new Vector2(CurrentPanOffset.x + (mousePosition.x - position.width / 2 + WorldToGridPosition(mousePosition).x) * NodyWindowSettings.ZOOM_STEP,
-                                        CurrentPanOffset.y + (mousePosition.y - position.height / 2 + WorldToGridPosition(mousePosition).y) * NodyWindowSettings.ZOOM_STEP);
+                                               CurrentPanOffset.y + (mousePosition.y - position.height / 2 + WorldToGridPosition(mousePosition).y) * NodyWindowSettings.ZOOM_STEP);
 //                m_panOffsetX += (mousePosition.x - position.width / 2 + WorldToGridPosition(mousePosition).x) * NodySettings.Instance.CurrentZoomStep;
 //                m_panOffsetY += (mousePosition.y - position.height / 2 + WorldToGridPosition(mousePosition).y) * NodySettings.Instance.CurrentZoomStep;
             }
@@ -631,7 +646,7 @@ namespace Doozy.Editor.Nody.Windows
 
                 //perform pan to zoom in to mouse position
                 CurrentPanOffset = new Vector2(CurrentPanOffset.x - (mousePosition.x - position.width / 2 + WorldToGridPosition(mousePosition).x) * NodyWindowSettings.ZOOM_STEP,
-                                        CurrentPanOffset.y - (mousePosition.y - position.height / 2 + WorldToGridPosition(mousePosition).y) * NodyWindowSettings.ZOOM_STEP);
+                                               CurrentPanOffset.y - (mousePosition.y - position.height / 2 + WorldToGridPosition(mousePosition).y) * NodyWindowSettings.ZOOM_STEP);
 //                m_panOffsetX -= (mousePosition.x - position.width / 2 + WorldToGridPosition(mousePosition).x) * NodySettings.Instance.CurrentZoomStep;
 //                m_panOffsetY -= (mousePosition.y - position.height / 2 + WorldToGridPosition(mousePosition).y) * NodySettings.Instance.CurrentZoomStep;
             }

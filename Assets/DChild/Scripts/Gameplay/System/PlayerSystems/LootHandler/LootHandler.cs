@@ -1,10 +1,9 @@
 ﻿using DChild.Gameplay.Pooling;
-using DChild.Gameplay.SoulEssence;
 using Holysoft;
 using Holysoft.Collections;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Systems
 {
@@ -42,6 +41,10 @@ namespace DChild.Gameplay.Systems
                 if (request.count == 0)
                 {
                     m_requests.RemoveAt(0);
+                    if (m_requests.Count == 0)
+                    {
+                        break;
+                    }
                 }
                 else
                 {
@@ -52,31 +55,18 @@ namespace DChild.Gameplay.Systems
 
         private int HandleRequest(ref LootDropRequest request, int maxInstance)
         {
-            if (request.count >= m_maxLootSpawnPerFrame)
+            var requestCount = request.count;
+            int instanceToCreate = requestCount >= maxInstance ? maxInstance : requestCount;
+            var pool = GameSystem.poolManager.GetPool<PoolableObjectPool>();
+            for (int i = 0; i < instanceToCreate; i++)
             {
-                var pool = GameSystem.poolManager.GetPool<PoolableObjectPool>();
-                for (int i = 0; i < maxInstance; i++)
-                {
-                    m_cachedLoot = pool.GetOrCreateItem(request.loot).GetComponent<Loot>();
-                    m_cachedLoot.SpawnAt(request.location, Quaternion.identity);
-                    m_cachedLoot.Pop(GetRandomPopVelocity());
-                }
-                request.count -= maxInstance;
-                m_cachedLoot = null;
-                return maxInstance;
+                m_cachedLoot = pool.GetOrCreateItem(request.loot).GetComponent<Loot>();
+                m_cachedLoot.SpawnAt(request.location, Quaternion.identity);
+                m_cachedLoot.Pop(GetRandomPopVelocity());
             }
-            else
-            {
-
-                var instanceCount = request.count;
-                for (int i = 0; i < instanceCount; i++)
-                {
-                    Instantiate(request.loot).GetComponent<Loot>().SpawnAt(request.location, Quaternion.identity);
-                }
-                request.count = 0;
-                m_cachedLoot = null;
-                return instanceCount;
-            }
+            request.count -= instanceToCreate;
+            m_cachedLoot = null;
+            return instanceToCreate;
         }
 
         private Vector2 GetRandomPopVelocity()

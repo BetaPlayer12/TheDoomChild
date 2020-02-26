@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated May 1, 2019. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2019, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -15,16 +15,16 @@
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
- * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
- * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 using System;
@@ -32,7 +32,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-using Spine;
+using CompatibilityProblemInfo = Spine.Unity.SkeletonDataCompatibility.CompatibilityProblemInfo;
 
 namespace Spine.Unity {
 
@@ -116,24 +116,24 @@ namespace Spine.Unity {
 			}
 
 			// Disabled to support attachmentless/skinless SkeletonData.
-//			if (atlasAssets == null) {
-//				atlasAssets = new AtlasAsset[0];
-//				if (!quiet)
-//					Debug.LogError("Atlas not set for SkeletonData asset: " + name, this);
-//				Clear();
-//				return null;
-//			}
-//			#if !SPINE_TK2D
-//			if (atlasAssets.Length == 0) {
-//				Clear();
-//				return null;
-//			}
-//			#else
-//			if (atlasAssets.Length == 0 && spriteCollection == null) {
-//				Clear();
-//				return null;
-//			}
-//			#endif
+			//			if (atlasAssets == null) {
+			//				atlasAssets = new AtlasAsset[0];
+			//				if (!quiet)
+			//					Debug.LogError("Atlas not set for SkeletonData asset: " + name, this);
+			//				Clear();
+			//				return null;
+			//			}
+			//			#if !SPINE_TK2D
+			//			if (atlasAssets.Length == 0) {
+			//				Clear();
+			//				return null;
+			//			}
+			//			#else
+			//			if (atlasAssets.Length == 0 && spriteCollection == null) {
+			//				Clear();
+			//				return null;
+			//			}
+			//			#endif
 
 			if (skeletonData != null)
 				return skeletonData;
@@ -161,20 +161,30 @@ namespace Spine.Unity {
 			#endif
 
 			bool isBinary = skeletonJSON.name.ToLower().Contains(".skel");
-			SkeletonData loadedSkeletonData;
+			SkeletonData loadedSkeletonData = null;
 
 			try {
 				if (isBinary)
 					loadedSkeletonData = SkeletonDataAsset.ReadSkeletonData(skeletonJSON.bytes, attachmentLoader, skeletonDataScale);
 				else
 					loadedSkeletonData = SkeletonDataAsset.ReadSkeletonData(skeletonJSON.text, attachmentLoader, skeletonDataScale);
-
 			} catch (Exception ex) {
 				if (!quiet)
 					Debug.LogError("Error reading skeleton JSON file for SkeletonData asset: " + name + "\n" + ex.Message + "\n" + ex.StackTrace, this);
-				return null;
-
 			}
+
+			#if UNITY_EDITOR
+			if (loadedSkeletonData == null && !quiet && skeletonJSON != null) {
+				SkeletonDataCompatibility.VersionInfo fileVersion = SkeletonDataCompatibility.GetVersionInfo(skeletonJSON);
+				CompatibilityProblemInfo compatibilityProblemInfo = SkeletonDataCompatibility.GetCompatibilityProblemInfo(fileVersion);
+				if (compatibilityProblemInfo != null) {
+					SkeletonDataCompatibility.DisplayCompatibilityProblem(compatibilityProblemInfo.DescriptionString(), skeletonJSON);
+					return null;
+				}
+			}
+			#endif
+			if (loadedSkeletonData == null)
+				return null;
 
 			if (skeletonDataModifiers != null) {
 				foreach (var m in skeletonDataModifiers) {

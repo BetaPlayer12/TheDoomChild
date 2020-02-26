@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -10,8 +11,10 @@ namespace DChild.Gameplay.Characters.AI
     public class PhaseHandle<T, U> where T : System.Enum
                                   where U : IPhaseInfo
     {
-        [SerializeField]
+        [SerializeField, OnValueChanged("PhaseChanged"),EnableIf("m_overidePhase")]
         private T m_currentPhase;
+        [ShowInInspector]
+        private bool m_overidePhase;
         private PhaseInfo<T> m_phaseInfo;
         private IPhaseConditionHandle<T> m_conditionHandle;
         private bool willTransistion;
@@ -27,18 +30,22 @@ namespace DChild.Gameplay.Characters.AI
             ChangeState = ChangeStateFunction;
             ApplyPhaseData = ApplyPhaseDataFunction;
             willTransistion = false;
+            m_overidePhase = false;
         }
 
         public void MonitorPhase()
         {
-            if (willTransistion == false)
+            if (m_overidePhase == false)
             {
-                var phase = m_conditionHandle.GetProposedPhase();
-                if (m_currentPhase.Equals(phase) == false)
+                if (willTransistion == false)
                 {
-                    m_currentPhase = phase;
-                    willTransistion = true;
-                    ChangeState();
+                    var phase = m_conditionHandle.GetProposedPhase();
+                    if (m_currentPhase.Equals(phase) == false)
+                    {
+                        m_currentPhase = phase;
+                        willTransistion = true;
+                        ChangeState();
+                    }
                 }
             }
         }
@@ -47,6 +54,12 @@ namespace DChild.Gameplay.Characters.AI
         {
             ApplyPhaseData((U)m_phaseInfo.GetDataOfPhase(m_currentPhase));
             willTransistion = false;
+        }
+
+        private void PhaseChanged()
+        {
+            willTransistion = true;
+            ChangeState();
         }
     }
 }

@@ -232,7 +232,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
-                    m_turnHandle.Execute(m_info.turnAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
@@ -244,7 +244,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Scratch:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation);
+                            m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation);
                             m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
                         //case Attack.ScratchDeflect: TO BE IMPLEMENTED
@@ -310,6 +310,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_wallSensor.transform.localScale = new Vector3(transform.localScale.x, m_wallSensor.transform.localScale.y, m_wallSensor.transform.localScale.z);
             m_groundSensor.transform.localScale = new Vector3(transform.localScale.x, m_groundSensor.transform.localScale.y, m_groundSensor.transform.localScale.z);
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Patrol);
+            m_currentPatience = 0;
+            m_enablePatience = false;
         }
     }
 }

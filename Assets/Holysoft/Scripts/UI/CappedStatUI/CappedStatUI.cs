@@ -6,13 +6,13 @@ namespace Holysoft.Gameplay.UI
 {
     public abstract class CappedStatUI : SerializedMonoBehaviour
     {
-//#if UNITY_EDITOR
+        //#if UNITY_EDITOR
         [OdinSerialize, OnValueChanged("UpdateUI")]
-//#endif
+        //#endif
         private ICappedStat m_stat;
 
-        protected abstract float maxValue { set; }
-        protected abstract float currentValue { set; }
+        public abstract float maxValue { set; }
+        public abstract float currentValue { set; }
 
         public virtual void MonitorInfoOf(ICappedStat stat)
         {
@@ -26,8 +26,7 @@ namespace Holysoft.Gameplay.UI
             {
                 m_stat.ValueChanged += OnValueChange;
                 m_stat.MaxValueChanged += OnMaxValueChange;
-                maxValue = m_stat.maxValue;
-                currentValue = m_stat.currentValue;
+                Initialize(m_stat.maxValue, m_stat.currentValue);
             }
             else
             {
@@ -36,11 +35,17 @@ namespace Holysoft.Gameplay.UI
             }
         }
 
+        protected virtual void Initialize(float maxValue, float currentValue)
+        {
+            this.maxValue = maxValue;
+            this.currentValue = currentValue;
+        }
+
         private void OnMaxValueChange(object sender, StatInfoEventArgs eventArgs) => maxValue = eventArgs.maxValue;
 
         private void OnValueChange(object sender, StatInfoEventArgs eventArgs) => currentValue = eventArgs.currentValue;
 
-//#if UNITY_EDITOR
+        //#if UNITY_EDITOR
         private ICappedStat m_previous;
 
         protected virtual void Awake()
@@ -66,7 +71,7 @@ namespace Holysoft.Gameplay.UI
 
             m_previous = m_stat;
         }
-//#endif
+        //#endif
     }
 
 }

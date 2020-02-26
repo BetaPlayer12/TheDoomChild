@@ -18,11 +18,14 @@ namespace DChild.Gameplay.Characters
         private bool m_useRootMotionY;
 
         private bool m_isTurning;
+        private string m_turnAnimation;
 
-        public void Execute(string animation)
+        public void Execute(string turn, string idle)
         {
-            m_animation.SetAnimation(0, animation, false);
-            m_animation.AddEmptyAnimation(0, 0, 0);
+            m_turnAnimation = turn;
+            m_animation.SetAnimation(0, turn, false);
+            m_animation.AddAnimation(0, idle, true, 0); //with idle
+            //m_animation.AddEmptyAnimation(0, 0, 0);
             StartCoroutine(TurnRoutine());
         }
 
@@ -32,6 +35,7 @@ namespace DChild.Gameplay.Characters
             m_animation.EnableRootMotion(m_useRootMotionX, m_useRootMotionY);
             m_animation.AnimationSet += OnAnimationSet;
             m_animation.animationState.Complete += OnComplete;
+            m_animation.animationState.Interrupt += OnComplete;
             while (m_isTurning)
             {
                 yield return null;
@@ -39,6 +43,7 @@ namespace DChild.Gameplay.Characters
             m_animation.DisableRootMotion();
             m_animation.AnimationSet -= OnAnimationSet;
             m_animation.animationState.Complete -= OnComplete;
+            m_animation.animationState.Interrupt -= OnComplete;
             var currentScale = m_character.facing == HorizontalDirection.Left ? Vector3.one : new Vector3(-1, 1, 1);
             m_character.transform.localScale = currentScale;
             TurnCharacter();
@@ -47,12 +52,18 @@ namespace DChild.Gameplay.Characters
 
         private void OnComplete(TrackEntry trackEntry)
         {
-            m_isTurning = false;
+            if (trackEntry.Animation.Name == m_turnAnimation)
+            {
+                m_isTurning = false;
+            }
         }
 
         private void OnAnimationSet(object sender, AnimationEventArgs eventArgs)
         {
-            m_isTurning = false;
+            if (eventArgs.animationData.name != m_turnAnimation)
+            {
+                m_isTurning = false;
+            }
         }
     }
 }

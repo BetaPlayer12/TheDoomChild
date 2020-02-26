@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.AI
 {
+
+    [AddComponentMenu("DChild/Gameplay/AI/Patrol/WayPoint Patrol")]
     public class WayPointPatrol : PatrolHandle
     {
         public struct PatrolInfo
@@ -39,14 +41,14 @@ namespace DChild.Gameplay.Characters.AI
 
         [SerializeField]
         [OnValueChanged("UpdateStartIndex")]
-        [BoxGroup("Configuration")]
+        [BoxGroup("Configuration"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private int m_startIndex;
         [SerializeField]
-        [BoxGroup("Configuration")]
+        [BoxGroup("Configuration"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private Iteration m_startIteration = Iteration.Forward;
         [SerializeField]
         [BoxGroup("Configuration")]
-        [ListDrawerSettings(CustomAddFunction = "AddToWaypoint")]
+        [ListDrawerSettings(CustomAddFunction = "AddToWaypoint"),HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private Vector2[] m_wayPoints;
 
         private int m_currentIndex;
@@ -66,7 +68,7 @@ namespace DChild.Gameplay.Characters.AI
             if (GetProposedFacing(currentPosition, movementInfo.destination) != character.currentFacing)
             {
                 CallTurnRequest();
-               
+
             }
             else
             {
@@ -138,11 +140,11 @@ namespace DChild.Gameplay.Characters.AI
         [Space]
 
         [FoldoutGroup("ToolKit")]
-        [SerializeField]
+        [SerializeField, HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private bool m_useCurrentPosition;
         [FoldoutGroup("ToolKit")]
         [SerializeField]
-        [MinValue(0), OnValueChanged("UpdateStartIndex")]
+        [MinValue(0), OnValueChanged("UpdateStartIndex"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private int m_overridePatrolIndex;
 
         public bool useCurrentPosition => m_useCurrentPosition;
@@ -152,7 +154,7 @@ namespace DChild.Gameplay.Characters.AI
         public Vector2[] wayPoints => m_wayPoints;
 
         [FoldoutGroup("ToolKit")]
-        [HideIf("m_useCurrentPosition")]
+        [HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null || m_useCurrentPosition")]
         [Button("Save To Current Index")]
         private void SaveToCurrentIndex()
         {
@@ -160,7 +162,7 @@ namespace DChild.Gameplay.Characters.AI
         }
 
         [FoldoutGroup("ToolKit")]
-        [Button("Go To Starting Position")]
+        [Button("Go To Starting Position"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private void GoToStartingPosition()
         {
             m_useCurrentPosition = false;

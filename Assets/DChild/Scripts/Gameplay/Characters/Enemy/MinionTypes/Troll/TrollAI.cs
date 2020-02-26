@@ -1,0 +1,512 @@
+﻿using System;
+using DChild.Gameplay;
+using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
+using Holysoft.Event;
+using DChild.Gameplay.Characters.AI;
+using UnityEngine;
+using Spine;
+using Spine.Unity;
+using Sirenix.OdinInspector;
+using System.Collections;
+using System.Collections.Generic;
+using DChild;
+using DChild.Gameplay.Characters.Enemies;
+
+namespace DChild.Gameplay.Characters.Enemies
+{
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Troll")]
+    public class TrollAI : CombatAIBrain<TrollAI.Info>
+    {
+        [System.Serializable]
+        public class Info : BaseInfo
+        {
+            //Basic Behaviours
+            [SerializeField]
+            private MovementInfo m_patrol = new MovementInfo();
+            public MovementInfo patrol => m_patrol;
+            [SerializeField]
+            private MovementInfo m_move = new MovementInfo();
+            public MovementInfo move => m_move;
+            [SerializeField]
+            private MovementInfo m_run = new MovementInfo();
+            public MovementInfo run => m_run;
+
+            //Attack Behaviours
+            [SerializeField]
+            private SimpleAttackInfo m_poundAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo poundAttack => m_poundAttack;
+            [SerializeField]
+            private SimpleAttackInfo m_punchAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo punchAttack => m_punchAttack;
+            [SerializeField]
+            private SimpleAttackInfo m_oraOraAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo oraOraAttack => m_oraOraAttack;
+            //
+
+            [SerializeField, MinValue(0)]
+            private float m_patience;
+            public float patience => m_patience;
+
+            [SerializeField]
+            private float m_targetDistanceTolerance;
+            public float targetDistanceTolerance => m_targetDistanceTolerance;
+
+
+            //Animations
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_idleAnimation;
+            public string idleAnimation => m_idleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_detectAnimation;
+            public string detectAnimation => m_detectAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_flinchAnimation;
+            public string flinchAnimation => m_flinchAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_flinchBackwardsAnimation;
+            public string flinchBackwardsAnimation => m_flinchBackwardsAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_turnAnimation;
+            public string turnAnimation => m_turnAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathAnimation;
+            public string deathAnimation => m_deathAnimation;
+
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_dirAttackEvent;
+            public string dirAttackEvent => m_dirAttackEvent;
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_oraOraEvent;
+            public string oraOraEvent => m_oraOraEvent;
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_poundEvent;
+            public string poundEvent => m_poundEvent;
+
+            [SerializeField]
+            private GameObject m_dirtProjectile;
+            public GameObject dirtProjectile => m_dirtProjectile;
+
+
+            public override void Initialize()
+            {
+#if UNITY_EDITOR
+                m_patrol.SetData(m_skeletonDataAsset);
+                m_move.SetData(m_skeletonDataAsset);
+                m_run.SetData(m_skeletonDataAsset);
+                m_poundAttack.SetData(m_skeletonDataAsset);
+                m_punchAttack.SetData(m_skeletonDataAsset);
+                m_oraOraAttack.SetData(m_skeletonDataAsset);
+#endif
+            }
+        }
+
+        private enum State
+        {
+            Detect,
+            Patrol,
+            Turning,
+            Attacking,
+            Chasing,
+            Flinch,
+            ReevaluateSituation,
+            WaitBehaviourEnd,
+        }
+
+        private enum Attack
+        {
+            Pound,
+            Punch,
+            OraOra,
+            [HideInInspector]
+            _COUNT
+        }
+
+        [SerializeField, TabGroup("Modules")]
+        private AnimatedTurnHandle m_turnHandle;
+        [SerializeField, TabGroup("Modules")]
+        private MovementHandle2D m_movement;
+        [SerializeField, TabGroup("Modules")]
+        private PatrolHandle m_patrolHandle;
+        [SerializeField, TabGroup("Modules")]
+        private AttackHandle m_attackHandle;
+        [SerializeField, TabGroup("Modules")]
+        private DeathHandle m_deathHandle;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
+        //Patience Handler
+        private float m_currentPatience;
+        private bool m_enablePatience;
+
+        [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_wallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
+
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_poundFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_oraFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_rockThrowFX;
+
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_speed;
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_gravityScale;
+        [SerializeField, TabGroup("Cannon Values")]
+        private Vector2 m_posOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_velOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private Vector2 m_targetOffset;
+
+        private float m_targetDistance;
+
+        [ShowInInspector]
+        private StateHandle<State> m_stateHandle;
+        [ShowInInspector]
+        private RandomAttackDecider<Attack> m_attackDecider;
+
+        private State m_turnState;
+        private bool m_isDetecting;
+
+        [SerializeField]
+        private Transform m_throwPoint;
+
+        protected override void Start()
+        {
+            base.Start();
+
+            m_spineEventListener.Subscribe(m_info.dirAttackEvent, DirtProjectile);
+            m_spineEventListener.Subscribe(m_info.poundEvent, m_poundFX.Play);
+            m_spineEventListener.Subscribe(m_info.oraOraEvent, m_oraFX.Play);
+            //GameplaySystem.SetBossHealth(m_character);
+        }
+
+        private Vector2 BallisticVel()
+        {
+            m_info.dirtProjectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
+
+            m_targetDistance = Vector2.Distance(m_targetInfo.position, m_throwPoint.position);
+            var dir = (m_targetInfo.position - new Vector2(m_throwPoint.position.x, m_throwPoint.position.y));
+            var h = dir.y;
+            dir.y = 0;
+            var dist = dir.magnitude;
+            dir.y = dist;
+            dist += h;
+
+            var currentSpeed = m_speed;
+
+            var vel = Mathf.Sqrt(dist * m_info.dirtProjectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale);
+            return (vel * new Vector3(dir.x * m_posOffset.x, dir.y * m_posOffset.y).normalized) * m_targetOffset.sqrMagnitude; //closest to accurate
+        }
+
+        private float GroundDistance()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_throwPoint.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            if (hit.collider != null)
+            {
+                return hit.distance;
+            }
+
+            return 0;
+        }
+
+        private void DirtProjectile()
+        {
+            if (m_targetInfo.isValid)
+            {
+                if (IsFacingTarget())
+                {
+                    //Dirt FX
+                    //GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
+                    //obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
+                    //obj.transform.parent = m_seedSpitTF;
+                    //obj.transform.localPosition = new Vector2(4, -1.5f);
+                    //
+
+                    m_rockThrowFX.Play();
+                    //Shoot Spit
+                    var target = m_targetInfo.position;
+                    target = new Vector2(target.x, target.y - 2);
+                    Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
+                    Vector3 v_diff = (target - spitPos);
+                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+
+                    GameObject projectile = Instantiate(m_info.dirtProjectile, spitPos, Quaternion.identity);
+                    projectile.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                }
+                else
+                {
+                    m_turnState = State.ReevaluateSituation;
+                    m_stateHandle.OverrideState(State.Turning);
+                }
+            }
+        }
+
+        private void OnAttackDone(object sender, EventActionArgs eventArgs)
+        {
+            m_animation.DisableRootMotion();
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+
+        public override void SetTarget(IDamageable damageable, Character m_target = null)
+        {
+            if (damageable != null)
+            {
+                base.SetTarget(damageable, m_target);
+                if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
+                }
+                m_currentPatience = 0;
+                //StopCoroutine(PatienceRoutine());
+                m_enablePatience = false;
+            }
+            else
+            {
+                m_enablePatience = true;
+                //StartCoroutine(PatienceRoutine());
+            }
+        }
+
+        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
+        {
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        //Patience Handler
+        private void Patience()
+        {
+            if (m_currentPatience < m_info.patience)
+            {
+                m_currentPatience += m_character.isolatedObject.deltaTime;
+            }
+            else
+            {
+                m_targetInfo.Set(null, null);
+                m_enablePatience = false;
+                m_isDetecting = false;
+                m_stateHandle.SetState(State.Patrol);
+            }
+        }
+        //private IEnumerator PatienceRoutine()
+        //{
+        //    yield return new WaitForSeconds(m_info.patience);
+        //    m_targetInfo.Set(null, null);
+        //    m_isDetecting = false;
+        //    m_stateHandle.SetState(State.Patrol);
+        //}
+
+        protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            //m_Audiosource.clip = m_DeadClip;
+            //m_Audiosource.Play();
+            base.OnDestroyed(sender, eventArgs);
+            m_movement.Stop();
+        }
+
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            StopAllCoroutines();
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
+        public override void ApplyData()
+        {
+            base.ApplyData();
+            if (m_attackDecider != null)
+            {
+                UpdateAttackDeciderList();
+            }
+        }
+
+        private void UpdateAttackDeciderList()
+        {
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Pound, m_info.poundAttack.range),
+                                    new AttackInfo<Attack>(Attack.Punch, m_info.punchAttack.range),
+                                    new AttackInfo<Attack>(Attack.OraOra, m_info.oraOraAttack.range)/**/);
+            m_attackDecider.hasDecidedOnAttack = false;
+        }
+
+        private IEnumerator DetectRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_patrolHandle.TurnRequest += OnTurnRequest;
+            m_attackHandle.AttackDone += OnAttackDone;
+            m_turnHandle.TurnDone += OnTurnDone;
+            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_attackDecider = new RandomAttackDecider<Attack>();
+            UpdateAttackDeciderList();
+        }
+
+
+        private void Update()
+        {
+            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
+            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
+            switch (m_stateHandle.currentState)
+            {
+                case State.Detect:
+                    m_movement.Stop();
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                    break;
+
+                case State.Patrol:
+
+                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
+                    {
+                        m_turnState = State.ReevaluateSituation;
+                        m_animation.EnableRootMotion(true, false);
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
+                    }
+                    else
+                    {
+                        m_movement.Stop();
+                        m_turnState = State.ReevaluateSituation;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                        //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+                    break;
+
+                case State.Turning:
+                    m_stateHandle.Wait(m_turnState);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    break;
+
+                case State.Attacking:
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+
+
+                    switch (m_attackDecider.chosenAttack.attack)
+                    {
+                        case Attack.Pound:
+                            Debug.Log("Pound Attack");
+                            m_animation.EnableRootMotion(true, false);
+                            m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation);
+                            break;
+                        case Attack.Punch:
+                            Debug.Log("Punch Attack");
+                            m_animation.EnableRootMotion(true, false);
+                            m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
+                            break;
+                        case Attack.OraOra:
+                            Debug.Log("Oraora Attack");
+                            m_animation.EnableRootMotion(true, false);
+                            m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation);
+                            break;
+                    }
+                    m_attackDecider.hasDecidedOnAttack = false;
+
+                    break;
+                case State.Chasing:
+                    {
+                        Debug.Log("Is Facing Target: " + IsFacingTarget());
+                        if (IsFacingTarget())
+                        {
+                            Debug.Log("ATTACKING PLAYER");
+                            m_attackDecider.DecideOnAttack();
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            {
+                                m_movement.Stop();
+                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.SetState(State.Attacking);
+                            }
+                            else
+                            {
+                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                                {
+                                    m_animation.EnableRootMotion(false, false);
+                                    m_animation.SetAnimation(0, m_info.run.animation, true);
+                                    //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed);
+                                }
+                                else
+                                {
+                                    m_attackDecider.hasDecidedOnAttack = false;
+                                    m_movement.Stop();
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            m_turnState = State.ReevaluateSituation;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
+                    }
+                    break;
+
+                case State.ReevaluateSituation:
+                    //How far is target, is it worth it to chase or go back to patrol
+                    if (m_targetInfo.isValid)
+                    {
+                        m_stateHandle.SetState(State.Chasing);
+                    }
+                    else
+                    {
+                        m_stateHandle.SetState(State.Patrol);
+                    }
+                    break;
+                case State.WaitBehaviourEnd:
+                    return;
+            }
+
+            if (m_enablePatience)
+            {
+                Patience();
+            }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Patrol);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+            m_isDetecting = false;
+        }
+    }
+}

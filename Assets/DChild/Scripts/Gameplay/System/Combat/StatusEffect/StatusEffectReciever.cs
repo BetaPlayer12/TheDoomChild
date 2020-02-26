@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         public StatusEffectType type { get; }
     }
 
+    [AddComponentMenu("DChild/Gameplay/Combat/Status Effect Reciever")]
     public class StatusEffectReciever : MonoBehaviour
     {
         [SerializeField]
@@ -45,6 +46,26 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public bool IsInflictedWith(StatusEffectType type) => Contains(type, out int index);
 
+        public float GetCurrentDurationOf(StatusEffectType type)
+        {
+            if (Contains(type, out int index))
+            {
+                return m_inflictedStatusEffects[index].duration;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public void SetCurrentDurationOf(StatusEffectType type, float duration)
+        {
+            if (Contains(type, out int index))
+            {
+                m_inflictedStatusEffects[index].duration = duration;
+            }
+        }
+
         public void StopStatusEffect(StatusEffectType type)
         {
             if (Contains(type, out int index))
@@ -57,7 +78,6 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public void SetActive(StatusEffectType type, bool active)
         {
-
             if (Contains(type, out int index))
             {
                 m_inflictedStatusEffects[index].isActive = active;
@@ -95,12 +115,24 @@ namespace DChild.Gameplay.Combat.StatusAilment
         {
             if (m_inflictedStatusEffects.Count > 0)
             {
-                var deltaTime = m_isolatedObject.deltaTime;
+                var deltaTime = m_isolatedObject?.deltaTime ?? Time.deltaTime;
                 for (int i = 0; i < m_inflictedStatusEffects.Count; i++)
                 {
                     m_inflictedStatusEffects[i].Update(deltaTime);
                 }
             }
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(Character character)
+        {
+            m_character = character;
+        }
+
+        public void InitializeField(StatusEffectResistance resistance)
+        {
+            m_resistance = resistance;
+        }
+#endif
     }
 }

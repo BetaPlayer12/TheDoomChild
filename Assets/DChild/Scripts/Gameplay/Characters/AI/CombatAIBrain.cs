@@ -1,13 +1,8 @@
-﻿using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Characters.AI;
-using DChild.Gameplay.Characters.Enemies;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
-using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
-using DChild.Menu.Bestiary;
 #if UNITY_EDITOR
 #endif
 
@@ -41,10 +36,8 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-
         protected bool IsTargetInRange(float distance) => Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distance;
         protected Vector2 DirectionToTarget() => (m_targetInfo.position - (Vector2)m_character.transform.position).normalized;
-
 
         protected override void Awake()
         {
@@ -59,5 +52,27 @@ namespace DChild.Gameplay.Characters.AI
         {
 
         }
+
+        protected virtual void LateUpdate()
+        {
+            if(m_targetInfo.isValid && m_targetInfo.doesTargetExist == false)
+            {
+                OnTargetDisappeared();
+                m_targetInfo.Set(null);
+            }
+        }
+
+        protected abstract void OnTargetDisappeared();
+
+#if UNITY_EDITOR
+        public Type aiDataType => m_data.GetType();
+        public void InitializeField(Character character, SpineRootAnimation spineRoot, Damageable damageable, Transform centerMass)
+        {
+            m_character = character;
+            m_animation = spineRoot;
+            m_damageable = damageable;
+            m_centerMass = centerMass;
+        }
+#endif
     }
 }

@@ -25,6 +25,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ICombatAIBrain m_brain;
 
         public Health health => m_health;
+        public string creatureName => m_data.name;
+        public string creatureTitle => m_data.title;
 
         public event EventAction<PhaseEventArgs> PhaseChange;
 
@@ -39,5 +41,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_brain = GetComponent<ICombatAIBrain>();
         }
+#if UNITY_EDITOR
+    public void InitializeFields(BestiaryData data, Health health)
+    {
+            m_data = data;
+            m_health = health;
     }
+#endif
+    }
+
 }

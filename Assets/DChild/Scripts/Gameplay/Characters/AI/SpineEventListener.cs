@@ -69,5 +69,12 @@ namespace DChild.Gameplay.Characters
         {
             Activate();
         }
+
+#if UNITY_EDITOR
+        public void InitializeFields(SkeletonAnimation animation)
+        {
+            m_animation = animation;
+        }
+#endif
     }
 }

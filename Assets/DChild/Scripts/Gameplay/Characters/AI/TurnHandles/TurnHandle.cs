@@ -18,7 +18,14 @@ namespace DChild.Gameplay.Characters
 
         private void OnValidate()
         {
-            ComponentUtility.AssignNullComponent(this,ref m_character, ComponentUtility.ComponentSearchMethod.Parent);
+            ComponentUtility.AssignNullComponent(this, ref m_character, ComponentUtility.ComponentSearchMethod.Parent);
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(Character character)
+        {
+            m_character = character;
+        }
+#endif
     }
 }

@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated May 1, 2019. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2019, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -15,16 +15,16 @@
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
- * NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS
- * INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 using UnityEngine;
@@ -116,7 +116,7 @@ namespace Spine.Unity {
 			public MixBlend[] layerBlendModes = new MixBlend[0];
 			#endregion
 
-			public enum MixMode { AlwaysMix, MixNext, SpineStyle }
+			public enum MixMode { AlwaysMix, MixNext, Hard }
 
 			readonly Dictionary<int, Spine.Animation> animationTable = new Dictionary<int, Spine.Animation>(IntEqualityComparer.Instance);
 			readonly Dictionary<AnimationClip, int> clipNameHashCodeTable = new Dictionary<AnimationClip, int>(AnimationClipEqualityComparer.Instance);
@@ -159,8 +159,10 @@ namespace Spine.Unity {
 			}
 
 			public void Apply (Skeleton skeleton) {
-				if (layerMixModes.Length < animator.layerCount)
+				if (layerMixModes.Length < animator.layerCount) {
 					System.Array.Resize<MixMode>(ref layerMixModes, animator.layerCount);
+					layerMixModes[animator.layerCount-1] = MixMode.MixNext;
+				}
 
 			#if UNITY_EDITOR
 				if (!Application.isPlaying) {
@@ -194,7 +196,7 @@ namespace Spine.Unity {
 						bool isInterruptionActive, shallInterpolateWeightTo1;
 						GetAnimatorClipInfos(layer, out isInterruptionActive, out clipInfoCount, out nextClipInfoCount, out interruptingClipInfoCount,
 											out clipInfo, out nextClipInfo, out interruptingClipInfo, out shallInterpolateWeightTo1);
-						
+
 						for (int c = 0; c < clipInfoCount; c++) {
 							var info = clipInfo[c];
 							float weight = info.weight * layerWeight; if (weight == 0) continue;
@@ -231,9 +233,9 @@ namespace Spine.Unity {
 					AnimatorStateInfo interruptingStateInfo;
 					float interruptingClipTimeAddition;
 					GetAnimatorStateInfos(layer, out isInterruptionActive, out stateInfo, out nextStateInfo, out interruptingStateInfo, out interruptingClipTimeAddition);
-					
+
 					bool hasNext = nextStateInfo.fullPathHash != 0;
-					
+
 					int clipInfoCount, nextClipInfoCount, interruptingClipInfoCount;
 					IList<AnimatorClipInfo> clipInfo, nextClipInfo, interruptingClipInfo;
 					bool shallInterpolateWeightTo1;
@@ -264,8 +266,8 @@ namespace Spine.Unity {
 																interruptingStateInfo.loop, null, weight, layerBlendMode, MixDirection.In);
 							}
 						}
-					} else { // case MixNext || SpineStyle
-							 // Apply first non-zero weighted clip
+					} else { // case MixNext || Hard
+						// Apply first non-zero weighted clip
 						int c = 0;
 						for (; c < clipInfoCount; c++) {
 							var info = clipInfo[c]; float weight = info.weight * layerWeight; if (weight == 0) continue;
@@ -281,7 +283,7 @@ namespace Spine.Unity {
 						c = 0;
 						if (hasNext) {
 							// Apply next clip directly instead of mixing (ie: no crossfade, ignores mecanim transition weights)
-							if (mode == MixMode.SpineStyle) {
+							if (mode == MixMode.Hard) {
 								for (; c < nextClipInfoCount; c++) {
 									var info = nextClipInfo[c]; float weight = info.weight * layerWeight; if (weight == 0) continue;
 									GetAnimation(info.clip).Apply(skeleton, 0, AnimationTime(nextStateInfo.normalizedTime, info.clip.length, nextStateInfo.speed < 0), nextStateInfo.loop, null, 1f, layerBlendMode, MixDirection.In);
@@ -298,7 +300,7 @@ namespace Spine.Unity {
 						c = 0;
 						if (isInterruptionActive) {
 							// Apply next clip directly instead of mixing (ie: no crossfade, ignores mecanim transition weights)
-							if (mode == MixMode.SpineStyle) {
+							if (mode == MixMode.Hard) {
 								for (; c < interruptingClipInfoCount; c++) {
 									var info = interruptingClipInfo[c];
 									float clipWeight = shallInterpolateWeightTo1 ? (info.weight + 1.0f) * 0.5f : info.weight;
@@ -367,7 +369,7 @@ namespace Spine.Unity {
 				for (int layer = 0, n = animator.layerCount; layer < n; ++layer) {
 					var controller = animator.runtimeAnimatorController as UnityEditor.Animations.AnimatorController;
 					if (controller != null) {
-						layerBlendModes[layer] = MixBlend.Replace;
+						layerBlendModes[layer] = MixBlend.First;
 						if (layer > 0) {
 							layerBlendModes[layer] = controller.layers[layer].blendingMode == UnityEditor.Animations.AnimatorLayerBlendingMode.Additive ?
 								MixBlend.Add : MixBlend.Replace;
@@ -378,7 +380,7 @@ namespace Spine.Unity {
 		#endif
 
 			void GetStateUpdatesFromAnimator (int layer) {
-				
+
 				var layerInfos = layerClipInfos[layer];
 				int clipInfoCount = animator.GetCurrentAnimatorClipInfoCount(layer);
 				int nextClipInfoCount = animator.GetNextAnimatorClipInfoCount(layer);

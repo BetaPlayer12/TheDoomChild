@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -21,7 +21,7 @@ namespace Doozy.Editor.Windows
         {
             GUILayout.BeginVertical(GUILayout.Height(position.height));
             {
-                DGUI.AnimatedTexture.Draw(ToolbarAnimBool, DoozyToolbarHeader, DoozyWindowSettings.Instance.ToolbarExpandedWidth, DoozyWindowSettings.Instance.ToolbarHeaderHeight); //Doozy Toolbar Header
+                DGUI.AnimatedTexture.Draw(MainToolbarAnimBool, DoozyToolbarHeader, DoozyWindowSettings.Instance.ToolbarExpandedWidth, DoozyWindowSettings.Instance.ToolbarHeaderHeight); //Doozy Toolbar Header
 
                 DrawToolbarExpandCollapseButton();
                 GUILayout.Space(LeftToolbarVerticalSectionSpacing / 2);
@@ -36,9 +36,10 @@ namespace Doozy.Editor.Windows
                 DrawToolbarButton(View.Soundy, Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonSoundy), Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonSoundySelected));
                 DrawToolbarButton(View.Touchy, Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonTouchy), Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonTouchySelected));
                 DrawToolbarButton(View.Nody, Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonNody), Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonNodySelected));
-//                GUILayout.Space(DGUI.Properties.Space(8));
+                GUILayout.Space(DGUI.Properties.Space(8));
 //                DrawToolbarButton(View.Animations, Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonAnimations), Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonAnimationsSelected));
 //                DrawToolbarButton(View.Templates, Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonTemplates), Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonTemplatesSelected));
+                DrawToolbarButton(View.Themes, Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonThemes), Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonThemesSelected));
                 GUILayout.Space(LeftToolbarVerticalSectionSpacing);
                 DrawToolbarButton(View.Settings, Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonSettings), Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonSettingsSelected));
                 DrawToolbarButton(View.Debug, Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonDebug), Styles.GetStyle(Styles.StyleName.DoozyWindowToolbarButtonDebugSelected));
@@ -88,25 +89,25 @@ namespace Doozy.Editor.Windows
         {
             Color initialColor = GUI.color;
             GUI.color = DGUI.Colors.GetDColor(colorName).Normal.WithAlpha(GUI.color.a);
-            GUILayout.BeginHorizontal(GUILayout.Width(ToolbarWidth));
-            GUILayout.Space(6 * (1 - ToolbarAnimBool.faded));
+            GUILayout.BeginHorizontal(GUILayout.Width(MainToolbarWidth));
+            GUILayout.Space(6 * (1 - MainToolbarAnimBool.faded));
             bool result = GUILayout.Button(GUIContent.none,
-                                           Styles.GetStyle(ToolbarAnimBool.target
+                                           Styles.GetStyle(MainToolbarAnimBool.target
                                                                ? Styles.StyleName.ArrowButtonToLeft
                                                                : Styles.StyleName.ArrowButtonToRight),
                                            GUILayout.Height(DoozyWindowSettings.Instance.ToolbarExpandCollapseButtonHeight));
-            GUILayout.Space(2 * ToolbarAnimBool.faded);
+            GUILayout.Space(2 * MainToolbarAnimBool.faded);
             GUILayout.EndHorizontal();
             GUI.color = initialColor;
 
-            ToolbarAnimBool.target = DoozyWindowSettings.Instance.DynamicToolbarExpanded;
+            MainToolbarAnimBool.target = DoozyWindowSettings.Instance.DynamicToolbarExpanded;
             if (!result) return;
             ToggleToolbarMenuExpandOrCollapse();
         }
 
         private void ToggleToolbarMenuExpandOrCollapse()
         {
-            DoozyWindowSettings.Instance.DynamicToolbarExpanded = !ToolbarAnimBool.target;
+            DoozyWindowSettings.Instance.DynamicToolbarExpanded = !MainToolbarAnimBool.target;
             DoozyWindowSettings.Instance.SetDirty(false);
         }
     }

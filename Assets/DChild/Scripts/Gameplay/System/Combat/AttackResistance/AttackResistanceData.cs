@@ -46,40 +46,11 @@ namespace DChild.Gameplay.Combat
                 get => m_value; set
                 {
                     m_value = value;
-                    UpdateData();
+                    m_type = GetClosestType(m_value);
                 }
             }
 
             public AttackResistanceType type => m_type;
-
-            private void UpdateData()
-            {
-                m_type = GetClosestType(m_value);
-            }
-
-            private AttackResistanceType GetClosestType(float value)
-            {
-                if (value > 1)
-                {
-                    return AttackResistanceType.Absorb;
-                }
-                else if (value == 0f)
-                {
-                    return AttackResistanceType.None;
-                }
-                else if (value == 1f)
-                {
-                    return AttackResistanceType.Immune;
-                }
-                else if (value < 0)
-                {
-                    return AttackResistanceType.Weak;
-                }
-                else
-                {
-                    return AttackResistanceType.Strong;
-                }
-            }
         }
 
         [SerializeField, OnValueChanged("UpdateResistanceLists"), FoldoutGroup("Edit Section")]
@@ -89,7 +60,6 @@ namespace DChild.Gameplay.Combat
         protected Dictionary<AttackType, AttackResistanceType> m_resistantType = new Dictionary<AttackType, AttackResistanceType>();
         [ShowInInspector, HideReferenceObjectPicker, PropertyOrder(1), HideIf("m_useType"), OnValueChanged("Validate", true)]
         protected Dictionary<AttackType, Info> m_resistantInfo = new Dictionary<AttackType, Info>();
-
 
         private void Validate()
         {
@@ -159,7 +129,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private AttackResistanceType GetClosestType(float value)
+        protected static AttackResistanceType GetClosestType(float value)
         {
             if (value > 1)
             {

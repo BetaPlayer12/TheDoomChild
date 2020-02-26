@@ -4,6 +4,11 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
+    public interface IOptionalGameplaySystemModule
+    {
+
+    }
+
     public interface IGameplaySystemModule
     {
     }

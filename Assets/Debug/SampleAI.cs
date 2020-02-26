@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     WaitForBehaviour(State.ReevaluateSituation);
-                    m_attackHandle.ExecuteAttack(m_info.attack.animation);
+                    m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.move.animation);
                     break;
                 case State.Chasing:
                     //Put Target Destination
@@ -146,6 +146,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     return;
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+
         }
     }
 }

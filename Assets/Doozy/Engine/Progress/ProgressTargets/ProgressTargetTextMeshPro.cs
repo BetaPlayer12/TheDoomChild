@@ -1,7 +1,8 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
+using System.Text;
 using Doozy.Engine.Utils;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ namespace Doozy.Engine.Progress
 
         /// <summary> The variable that will get converted to string and set as the text value of the TextMeshPro target </summary>
         public TargetVariable TargetVariable = TargetVariable.Progress;
-        
+
         /// <summary> Should the target variable value get rounded to the nearest integer? </summary>
         public bool WholeNumbers = true;
 
@@ -64,8 +65,14 @@ namespace Doozy.Engine.Progress
 
         #region Private Variables
 
+        /// <summary> Internal variable used to keep track if this progress target's variables have been initialized </summary>
+        private bool m_initialized;
+
         /// <summary> Internal variable used to get the updated target value </summary>
         private float m_targetValue;
+
+        /// <summary> Internal variable used to lower the string operations memory allocations </summary>
+        private StringBuilder m_stringBuilder = new StringBuilder();
 
         #endregion
 
@@ -77,7 +84,9 @@ namespace Doozy.Engine.Progress
         public override void UpdateTarget(Progressor progressor)
         {
             base.UpdateTarget(progressor);
-            
+
+            if (!m_initialized) Init();
+
 #if dUI_TextMeshPro
             if (TextMeshPro == null) return;
 
@@ -109,7 +118,10 @@ namespace Doozy.Engine.Progress
                     break;
             }
 
-            TextMeshPro.text = Prefix + m_targetValue + Suffix;
+            TextMeshPro.SetText(m_stringBuilder.Remove(0, m_stringBuilder.Length)
+                                               .Append(Prefix)
+                                               .Append(m_targetValue)
+                                               .Append(Suffix));
 #endif
         }
 
@@ -117,13 +129,23 @@ namespace Doozy.Engine.Progress
 
         #region Private Methods
 
-        private void Reset()
+        private void Reset() { UpdateReference(); }
+
+        private void Init()
         {
-#if dUI_TextMeshPro
-            TextMeshPro = GetComponent<TMP_Text>();
-#endif
+            UpdateReference();
+            if (m_stringBuilder == null) m_stringBuilder = new StringBuilder();
+            m_initialized = true;
         }
 
+        private void UpdateReference()
+        {
+#if dUI_TextMeshPro
+            if (TextMeshPro == null)
+                TextMeshPro = GetComponent<TMP_Text>();
+#endif
+        }
+        
         #endregion
     }
 }

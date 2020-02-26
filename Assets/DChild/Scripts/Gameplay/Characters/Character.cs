@@ -1,10 +1,15 @@
 ﻿using DChild.Gameplay.Characters;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay
 {
+
+    [SelectionBase]
+    [AddComponentMenu("DChild/Gameplay/Objects/Character")]
     public class Character : MonoBehaviour, ICharacter, ITurningCharacter
     {
         public static string objectTag => "Character";
@@ -19,6 +24,9 @@ namespace DChild.Gameplay
         private CharacterColliders m_colliders;
         [SerializeField]
         private HorizontalDirection m_facing = HorizontalDirection.Right;
+        [SerializeField, FoldoutGroup("Body Reference"), HideLabel]
+        private BodyReference m_bodyReference;
+
         private int m_ID;
         private bool m_hasID;
 
@@ -34,6 +42,8 @@ namespace DChild.Gameplay
 
         public int ID => m_ID;
         public bool hasID => m_hasID;
+
+        public Transform GetBodyPart(BodyReference.BodyPart bodyPart) => m_bodyReference.GetBodyPart(bodyPart);
 
         public void SetID(int ID)
         {
@@ -60,5 +70,15 @@ namespace DChild.Gameplay
                 Debug.Log(gameObject.tag);
             }
         }
+
+#if UNITY_EDITOR
+        public void InitializeField(Transform centermass, IsolatedObject isolatedObject, IsolatedPhysics2D physics, CharacterColliders colliders)
+        {
+            m_centerMass = centermass;
+            m_isolatedObject = isolatedObject;
+            m_physics = physics;
+            m_colliders = colliders;
+        }
+#endif
     }
 }

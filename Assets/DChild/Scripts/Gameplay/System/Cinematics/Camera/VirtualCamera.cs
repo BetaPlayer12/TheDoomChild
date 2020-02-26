@@ -32,8 +32,11 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField]
         private bool m_isAlreadyTracking;
         [SerializeField]
-        [HideInInspector]
+        [ReadOnly]
         private CinemachineVirtualCamera m_vCam;
+        private CinemachineNoise m_noiseModule;
+
+        public CinemachineNoise noiseModule => m_noiseModule;
 
         public void Track(Transform target) => m_vCam.m_Follow = target;
 
@@ -49,13 +52,21 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         private void OnEnable()
         {
+            GameplaySystem.cinema.Register(this);
             if (m_isAlreadyTracking == false && m_trackPlayer)
             {
-               
-                    GameplaySystem.cinema.Register(this);
-                    m_isAlreadyTracking = true;
-               
-                
+                GameplaySystem.cinema.AllowTracking(this);
+                m_isAlreadyTracking = true;
+            }
+        }
+
+        private void OnDisable()
+        {
+            GameplaySystem.cinema.Unregister(this);
+            if (m_isAlreadyTracking)
+            {
+                GameplaySystem.cinema.RemoveTracking(this);
+                m_isAlreadyTracking = false;
             }
         }
 
@@ -66,8 +77,17 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         private void Awake()
         {
+            m_noiseModule = GetComponent<CinemachineNoise>();
             m_vCam.enabled = false;
         }
+
+#if UNITY_EDITOR
+        [Button, HideInEditorMode]
+        private void UseThis()
+        {
+            GameplaySystem.cinema.TransistionTo(this);
+        }
+#endif
     }
 
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+    [AddComponentMenu("DChild/Gameplay/Player/Controller/Ground Controller")]
     public class GroundController : MonoBehaviour
     {
 
@@ -14,7 +15,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private MoveSpeedTransistor m_speedTransistor;
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
-        private Crouch m_crouch;
+        private DChild.Gameplay.Characters.Players.Behaviour.Crouch m_crouch;
 
         [ShowInInspector, ReadOnly, BoxGroup("Modules")]
         private GroundJumpHandler m_groundJump;
@@ -28,7 +29,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_skillRequester = skillRequester;
 
-            m_crouch = behaviours.GetComponentInChildren<Crouch>();
+            m_crouch = behaviours.GetComponentInChildren<DChild.Gameplay.Characters.Players.Behaviour.Crouch>();
             m_groundJump = behaviours.GetComponentInChildren<GroundJumpHandler>();
             m_groundDash = behaviours.GetComponentInChildren<GroundDash>();
             m_platformDrop = behaviours.GetComponentInChildren<PlatformDrop>();

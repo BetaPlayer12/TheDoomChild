@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -32,9 +32,9 @@ namespace Doozy.Editor.Internal
 
 
         public int VersionMajor = 3;
-        public int VersionMinor;
+        public int VersionMinor = 1;
         public int VersionStatus = 2;
-        public int VersionRevision;
+        public int VersionRevision = 1;
 
         public string VersionReleaseStatus
         {
@@ -57,7 +57,7 @@ namespace Doozy.Editor.Internal
             {
                 return VersionMajor + "." +
                        VersionMinor + "." +
-                       VersionReleaseStatus + VersionRevision;
+                       VersionRevision;
             }
         }
 

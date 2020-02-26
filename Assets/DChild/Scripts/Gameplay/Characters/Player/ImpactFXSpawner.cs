@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.Players
     public class ImpactFXSpawner : MonoBehaviour, IComplexCharacterModule
     {
         [SerializeField]
-        private ColliderDamage m_colliderDamage;
+        private BaseColliderDamage m_colliderDamage;
         [SerializeField]
         private FXSpawner m_fx;
         [SerializeField]

@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Combat
 
         public void ResolveDamageRecieved(IPlayer player)
         {
-            if (player.state.canFlinch)
+            if (player.state?.canFlinch ?? true)
             {
                 StartCoroutine(DisableInputTemporarily(player));
             }
@@ -35,9 +35,9 @@ namespace DChild.Gameplay.Combat
 
         private IEnumerator TemporaryInvulnerability(IPlayer player)
         {
-            player.damageableModule.SetHitboxActive(false);
+            player.damageableModule.SetInvulnerability(true);
             yield return new WaitForWorldSeconds(m_invulnerabilityDuration);
-            player.damageableModule.SetHitboxActive(true);
+            player.damageableModule.SetInvulnerability(false);
         }
 
         private IEnumerator DisableInputTemporarily(IPlayer player)

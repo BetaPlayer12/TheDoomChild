@@ -28,6 +28,9 @@ namespace DChild.Gameplay.Pooling
             transform.rotation = rotation;
         }
 
-        public void CallPoolRequest() => PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
+        public void CallPoolRequest()
+        {
+            PoolRequest?.Invoke(this, new PoolItemEventArgs(this, transform));
+        }
     }
 }

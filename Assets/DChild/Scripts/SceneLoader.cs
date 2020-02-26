@@ -1,6 +1,7 @@
 ﻿using DChild.Menu;
 using Holysoft.Collections;
 using Holysoft.Event;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,12 +22,20 @@ namespace DChild
         [SerializeField]
 #endif
         private bool m_gameplaySceneActive;
+        private Action CallAfterSceneDone;
 
         public string activeZone => m_activeZone;
 
 #if UNITY_EDITOR
         public void SetAsActiveZone(string sceneName) => m_activeZone = sceneName;
 #endif
+
+        public void LoadZone(string sceneName, bool withLoadingScene, Action ToCallAfterSceneDone)
+        {
+            CallAfterSceneDone = ToCallAfterSceneDone;
+            LoadingHandle.LoadingDone += AfterSceneDone;
+            LoadZone(sceneName, withLoadingScene);
+        }
 
         public void LoadZone(string sceneName, bool withLoadingScene)
         {
@@ -77,6 +86,13 @@ namespace DChild
             LoadingHandle.LoadScenes(m_mainMenu.sceneName);
             Time.timeScale = 1;
             SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
+        }
+
+        private void AfterSceneDone(object sender, EventActionArgs eventArgs)
+        {
+            CallAfterSceneDone();
+            CallAfterSceneDone = null;
+            LoadingHandle.LoadingDone -= AfterSceneDone;
         }
     }
 

@@ -1,13 +1,13 @@
-﻿// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+﻿// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
 using System;
 using System.IO;
-using Doozy.Engine.Settings;
 using UnityEngine;
 
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
 #endif
 
@@ -25,16 +25,18 @@ namespace Doozy.Engine.Utils
         /// <param name="refreshAssetDatabase"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T GetScriptableObject<T>(string fileName, 
-                                               string resourcesPath, 
-                                               bool saveAssetDatabase, 
-                                               bool refreshAssetDatabase) 
+        public static T GetScriptableObject<T>(string fileName,
+                                               string resourcesPath,
+                                               bool saveAssetDatabase,
+                                               bool refreshAssetDatabase)
             where T : ScriptableObject
         {
             if (string.IsNullOrEmpty(resourcesPath)) return null;
             if (string.IsNullOrEmpty(fileName)) return null;
             // ReSharper disable once SuspiciousTypeConversion.Global
-            if (!resourcesPath[resourcesPath.Length - 1].Equals(@"\")) resourcesPath += @"\";
+//            if (!resourcesPath[resourcesPath.Length - 1].Equals(@"\")) resourcesPath += @"\";
+//            resourcesPath = resourcesPath.Replace(@"\", "/");
+            resourcesPath = CleanPath(resourcesPath);
 
             var obj = (T) Resources.Load(fileName, typeof(T));
 
@@ -44,7 +46,7 @@ namespace Doozy.Engine.Utils
                 simpleResourcesPath = simpleResourcesPath.Replace("Resources", "").Remove(0, 1);
                 obj = (T) Resources.Load(Path.Combine(simpleResourcesPath, fileName), typeof(T));
             }
-            
+
 #if UNITY_EDITOR
             if (obj != null) return obj;
             obj = CreateAsset<T>(resourcesPath, fileName, ".asset", saveAssetDatabase, refreshAssetDatabase);
@@ -56,25 +58,37 @@ namespace Doozy.Engine.Utils
         {
             if (string.IsNullOrEmpty(resourcesPath)) return null;
             if (string.IsNullOrEmpty(fileName)) return null;
+            resourcesPath = CleanPath(resourcesPath);
             // ReSharper disable once SuspiciousTypeConversion.Global
-            if (!resourcesPath[resourcesPath.Length - 1].Equals(@"\")) resourcesPath += @"\";
+//            if (!resourcesPath[resourcesPath.Length - 1].Equals(@"\")) resourcesPath += @"\";
+//            resourcesPath = resourcesPath.Replace(@"\", "/");
 
             return (T) Resources.Load(resourcesPath + fileName, typeof(T));
         }
 
+        public static string CleanPath(string path)
+        {
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            if (!path[path.Length - 1].Equals(@"\")) path += @"\";
+            path = path.Replace(@"\\", @"\");
+            path = path.Replace(@"\", "/");
+            return path;
+        }
+
 #if UNITY_EDITOR
-        public static T CreateAsset<T>(string relativePath, 
-                                       string fileName, 
+        public static T CreateAsset<T>(string relativePath,
+                                       string fileName,
                                        string extension = ".asset",
-                                       bool saveAssetDatabase = true, 
-                                       bool refreshAssetDatabase = true) 
+                                       bool saveAssetDatabase = true,
+                                       bool refreshAssetDatabase = true)
             where T : ScriptableObject
         {
             if (string.IsNullOrEmpty(relativePath)) return null;
             if (string.IsNullOrEmpty(fileName)) return null;
+            relativePath = CleanPath(relativePath);
             // ReSharper disable once SuspiciousTypeConversion.Global
-            if (!relativePath[relativePath.Length - 1].Equals(@"\")) relativePath += @"\";
-            relativePath = relativePath.Replace(@"\\", @"\");
+//            if (!relativePath[relativePath.Length - 1].Equals(@"\")) relativePath += @"\";
+//            relativePath = relativePath.Replace(@"\\", @"\");
             var asset = ScriptableObject.CreateInstance<T>();
             AssetDatabase.CreateAsset(asset, relativePath + fileName + extension);
             EditorUtility.SetDirty(asset);
@@ -83,13 +97,28 @@ namespace Doozy.Engine.Utils
             return asset;
         }
 
+        public static List<T> GetAssets<T>() where T : ScriptableObject
+        {
+            var list = new List<T>();
+            string[] guids = AssetDatabase.FindAssets("t:" + typeof(T).Name);
+            foreach (string guid in guids)
+            {
+                var asset = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid));
+                if (asset == null) continue;
+                list.Add(asset);
+            }
+
+            return list;
+        }
+        
         public static void MoveAssetToTrash(string relativePath, string fileName, bool saveAssetDatabase = true,
                                             bool refreshAssetDatabase = true, bool printDebugMessage = true)
         {
             if (string.IsNullOrEmpty(relativePath)) return;
             if (string.IsNullOrEmpty(fileName)) return;
             // ReSharper disable once SuspiciousTypeConversion.Global
-            if (!relativePath[relativePath.Length - 1].Equals(@"\")) relativePath += @"\";
+//            if (!relativePath[relativePath.Length - 1].Equals(@"\")) relativePath += @"\";
+            relativePath = CleanPath(relativePath);
             if (!AssetDatabase.MoveAssetToTrash(relativePath + fileName + ".asset")) return;
             if (printDebugMessage) DDebug.Log("The " + fileName + ".asset file has been moved to trash.");
             if (saveAssetDatabase) AssetDatabase.SaveAssets();
@@ -101,7 +130,8 @@ namespace Doozy.Engine.Utils
             if (string.IsNullOrEmpty(filePath)) return null;
             if (string.IsNullOrEmpty(fileName)) return null;
             // ReSharper disable once SuspiciousTypeConversion.Global
-            if (!filePath[filePath.Length - 1].Equals(@"\")) filePath += @"\";
+//            if (!filePath[filePath.Length - 1].Equals(@"\")) filePath += @"\";
+            filePath = CleanPath(filePath);
             return AssetDatabase.LoadAssetAtPath<Texture>(filePath + fileName + fileExtension);
         }
 
@@ -110,7 +140,8 @@ namespace Doozy.Engine.Utils
             if (string.IsNullOrEmpty(filePath)) return null;
             if (string.IsNullOrEmpty(fileName)) return null;
             // ReSharper disable once SuspiciousTypeConversion.Global
-            if (!filePath[filePath.Length - 1].Equals(@"\")) filePath += @"\";
+//            if (!filePath[filePath.Length - 1].Equals(@"\")) filePath += @"\";
+            filePath = CleanPath(filePath);
             return AssetDatabase.LoadAssetAtPath<Texture2D>(filePath + fileName + fileExtension);
         }
 #endif

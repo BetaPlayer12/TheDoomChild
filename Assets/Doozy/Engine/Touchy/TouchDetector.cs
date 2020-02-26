@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -8,9 +8,9 @@ using Doozy.Engine.Settings;
 using Doozy.Engine.Utils;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -108,20 +108,28 @@ namespace Doozy.Engine.Touchy
         private Vector2 m_currentSwipe;
         private bool m_swipeEnded;
         private TouchInfo m_currentTouchInfo;
-        private List<Touch> m_touches;
+        private List<Touch> m_touches = new List<Touch>();
         private Touch m_touch;
         private PointerEventData m_pointerEventData;
-        private List<RaycastResult> m_raycastResults;
+        private List<RaycastResult> m_raycastResults = new List<RaycastResult>();
 
         #endregion
 
         #region Unity Methods
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void RunOnStart()
+        {
+            ApplicationIsQuitting = false;
+        }
+#endif
+        
         private void Awake()
         {
             if (s_instance != null && s_instance != this)
             {
-                DDebug.Log( "There cannot be two '" + GetType().Name + "' active at the same time. Destroying this one!");
+                DDebug.Log("There cannot be two '" + GetType().Name + "' active at the same time. Destroying this one!");
                 Destroy(gameObject);
                 return;
             }
@@ -142,17 +150,17 @@ namespace Doozy.Engine.Touchy
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (DebugComponent) DDebug.Log( gameObject.name + ": " + "OnBeginDrag", this);
+            if (DebugComponent) DDebug.Log(gameObject.name + ": " + "OnBeginDrag", this);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (DebugComponent) DDebug.Log( gameObject.name + ": " + "OnDrag", this);
+            if (DebugComponent) DDebug.Log(gameObject.name + ": " + "OnDrag", this);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (DebugComponent) DDebug.Log( gameObject.name + ": " + "OnEndDrag", this);
+            if (DebugComponent) DDebug.Log(gameObject.name + ": " + "OnEndDrag", this);
         }
 
         #endregion
@@ -169,8 +177,8 @@ namespace Doozy.Engine.Touchy
 
         private void Initialize()
         {
-            m_touches = new List<Touch>();
-            m_raycastResults = new List<RaycastResult>();
+            if (m_touches == null) m_touches = new List<Touch>();
+            if (m_raycastResults == null) m_raycastResults = new List<RaycastResult>();
 
             OnSwipeAction += HandleSwipe;
             OnLongTapAction += HandleLongTap;
@@ -263,35 +271,35 @@ namespace Doozy.Engine.Touchy
 
         private void HandleSwipe(TouchInfo touchInfo)
         {
-            if (DebugComponent) DDebug.Log( string.Format("HandleSwipe: {0}", touchInfo), this);
+            if (DebugComponent) DDebug.Log(string.Format("HandleSwipe: {0}", touchInfo), this);
         }
 
         private void HandleTap(TouchInfo touchInfo)
         {
-            if (DebugComponent) DDebug.Log( string.Format("HandleTap: {0}", touchInfo), this);
+            if (DebugComponent) DDebug.Log(string.Format("HandleTap: {0}", touchInfo), this);
         }
 
         private void HandleLongTap(TouchInfo touchInfo)
         {
-            if (DebugComponent) DDebug.Log( string.Format("HandleLongPress: {0}", touchInfo), this);
+            if (DebugComponent) DDebug.Log(string.Format("HandleLongPress: {0}", touchInfo), this);
         }
 
         #endregion
 
         #region Static Methods
 
-        /// <summary> Initializes the TouchDetector </summary>
+        /// <summary> Initialize the TouchDetector </summary>
         public static void Init()
         {
             if (s_instance != null) return;
             s_instance = Instance;
         }
 
-        /// <summary> Returns the Vector2 representation of the given swipe direction </summary>
+        /// <summary> Get the Vector2 representation of the given swipe direction </summary>
         /// <param name="swipe"> Target swipe direction </param>
         public static Vector2 GetCardinalDirection(Swipe swipe) { return CardinalDirection.Get(swipe); }
 
-        /// <summary> Converts a SimpleSwipe into a Swipe </summary>
+        /// <summary> Convert a SimpleSwipe into a Swipe </summary>
         /// <param name="simpleSwipe"> Target simple swipe </param>
         /// <param name="reverse"> Should the reversed value be returned? (eg. if SimpleSwipe.Left and reverse is true, it will return Swipe.Right) </param>
         public static Swipe GetSwipe(SimpleSwipe simpleSwipe, bool reverse = false)
@@ -307,7 +315,7 @@ namespace Doozy.Engine.Touchy
             }
         }
 
-        /// <summary> Converts a Swipe into a SimpleSwipe </summary>
+        /// <summary> Convert a Swipe into a SimpleSwipe </summary>
         /// <param name="swipe"> Target swipe </param>
         /// <param name="reverse"> Should the reversed value be returned? (eg. if Swipe.Left and reverse is true, it will return SimpleSwipe.Right) </param>
         public static SimpleSwipe GetSimpleSwipe(Swipe swipe, bool reverse = false)
@@ -327,7 +335,7 @@ namespace Doozy.Engine.Touchy
             }
         }
 
-        /// <summary> Returns a Swipe direction by analyzing the given direction </summary>
+        /// <summary> Get a Swipe direction by analyzing a given direction </summary>
         /// <param name="direction"> Swipe direction </param>
         public static Swipe GetSwipeDirection(Vector2 direction)
         {
@@ -364,7 +372,7 @@ namespace Doozy.Engine.Touchy
             return swipeDirection;
         }
 
-        /// <summary> Returns a SimpleSwipe direction by analyzing the given direction </summary>
+        /// <summary> Get a SimpleSwipe direction by analyzing a given direction </summary>
         /// <param name="direction"> Swipe direction </param>
         public static SimpleSwipe GetSimpleSwipeDirection(Vector2 direction)
         {

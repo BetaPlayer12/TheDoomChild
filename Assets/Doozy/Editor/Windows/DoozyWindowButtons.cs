@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -30,13 +30,19 @@ namespace Doozy.Editor.Windows
 
         private static bool TopButton(GUIStyle icon, string label, ColorName colorName, bool active) { return TopButton(icon, label, colorName, active, TopButtonHeight); }
 
-        private static bool ButtonNew(bool active, string label) { return TopButton(DGUI.Icon.New, label, ColorName.Green, active) || !active && Event.current.keyCode == KeyCode.N && Event.current.type == EventType.KeyUp && !EditorGUIUtility.editingTextField; }
+        private static bool ButtonNew(bool active, string label)
+        {
+            return TopButton(DGUI.Icon.New, label, ColorName.Green, active); // || !active && DGUI.KeyMapper.DetectKeyUp(Event.current, KeyCode.N) && !EditorGUIUtility.editingTextField;
+        }
+
+        private static bool ButtonEditMode(bool active) { return TopButton(DGUI.Icon.Edit, UILabels.EditMode, ColorName.Green, active); }
         private static bool ButtonRefreshDatabase() { return TopButton(DGUI.Icon.Refresh, UILabels.Refresh, ColorName.Green, false); }
         private static bool ButtonRemoveDuplicates() { return TopButton(DGUI.Icon.Duplicate, UILabels.RemoveDuplicates, ColorName.Green, false); }
-        private static bool ButtonResetDatabase() { return TopButton(DGUI.Icon.Reset, UILabels.Reset, ColorName.Red, false); }
+        private static bool ButtonResetDatabase() { return TopButton(DGUI.Icon.Reset, UILabels.Reset, ColorName.Red, true); }
         private static bool ButtonSaveDatabase() { return TopButton(DGUI.Icon.Save, UILabels.Save, ColorName.Green, false); }
         private static bool ButtonSearchFor(string label) { return TopButton(DGUI.Icon.Search, label, ColorName.Green, false); }
         private static bool ButtonSortDatabase() { return TopButton(DGUI.Icon.SortAlphaDown, UILabels.Sort, ColorName.Green, false); }
+        private static bool ButtonAutoSave(bool active) { return TopButton(DGUI.Icon.Save, active ? UILabels.AutoSaveEnabled : UILabels.AutoSaveDisabled, ColorName.Green, active); }
 
         private static bool ButtonClearSearch(AnimBool searchEnabled)
         {

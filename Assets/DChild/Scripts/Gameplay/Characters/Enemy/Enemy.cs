@@ -1,6 +1,5 @@
 ﻿using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.SoulEssence;
 using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft;
 using Holysoft.Event;
@@ -85,9 +84,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!targetDefense.isInvulnerable)
             {
-                AttackerCombatInfo info = new AttackerCombatInfo(position, 0, 1, m_currentDamage);
-                var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
-                CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
+                //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
+                //{
+                //    info.Value.Initialize(position, 0, 1, m_currentDamage);
+                //    var result = GameplaySystem.combatManager.ResolveConflict(info, targetInfo);
+                //    CallAttackerAttacked(new CombatConclusionEventArgs(info, targetInfo, result));
+                //    info.Release();
+                //}
             }
         }
 

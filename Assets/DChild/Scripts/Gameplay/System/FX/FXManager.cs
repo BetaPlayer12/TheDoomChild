@@ -22,7 +22,7 @@ namespace DChild.Gameplay.VFX
 
         public void Initialize()
         {
-            m_pool = GameSystem.poolManager.GetPool<FXPool>();
+            m_pool = GameSystem.poolManager?.GetPool<FXPool>() ?? null;
         }
 
         public T InstantiateFX<T>(GameObject fx, Vector3 position) where T : FX => (T)SmartInstantiateFX(position, fx);

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+    [AddComponentMenu("DChild/Gameplay/Combat/Extended Attack Resistance")]
     public class ExtendedAttackResistance : AttackResistance
     {
         [HorizontalGroup("Split")]
@@ -23,6 +24,13 @@ namespace DChild.Gameplay.Combat
             SetResistance(m_baseResistance, type, resistanceValue);
             CalculateResistance();
             CallResistanceChange(new ResistanceEventArgs(type, GetResistance(type)));
+        }
+
+        public override void ClearResistance()
+        {
+            m_baseResistance.Clear();
+            m_additionalResistance.Clear();
+            m_combinedResistance.Clear();
         }
 
         public void AddResistance(AttackType type, float resistance)
@@ -98,6 +106,8 @@ namespace DChild.Gameplay.Combat
             CalculateResistance();
             CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
         }
+
+
 #endif
     }
 }

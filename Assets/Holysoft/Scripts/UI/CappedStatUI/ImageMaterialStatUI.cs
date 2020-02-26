@@ -15,8 +15,8 @@ namespace Holysoft.Gameplay.UI
         private Material m_material;
         private float m_maxValue;
 
-        protected override float maxValue { set => m_maxValue = value; }
-        protected override float currentValue
+        public override float maxValue { set => m_maxValue = value; }
+        public override float currentValue
         {
             set
             {

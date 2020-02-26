@@ -42,7 +42,7 @@ namespace DChild.Gameplay
             throw new NotImplementedException();
         }
 
-        public override void SetFacing(HorizontalDirection direction) => m_spine.skeleton.FlipX = direction == HorizontalDirection.Left;
+        public override void SetFacing(HorizontalDirection direction) => m_spine.skeleton.ScaleX = direction == HorizontalDirection.Left ? -1 : 1;
 
         private void OnComplete(TrackEntry trackEntry)
         {

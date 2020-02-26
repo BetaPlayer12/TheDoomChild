@@ -23,8 +23,6 @@ namespace DChild.Gameplay.Systems
 
         private float m_prevTimeScale;
         private TimeIsolationHandler m_timeIsolationHandler;
-        [SerializeField]
-        private EnemyManager m_enemyManager;
         private IsolatedPhysicsHandler m_isolatedPhysicsHandler;
         private InteractiveEnvironmentHandler m_interactiveEnvironmentHandler;
 
@@ -57,8 +55,6 @@ namespace DChild.Gameplay.Systems
         public void Unregister(IInteractiveEnvironment isolatedObject) => m_interactiveEnvironmentHandler.Unregister(isolatedObject);
         public void Register(IIsolatedPhysics isolatedPhysics) => m_isolatedPhysicsHandler.Register(isolatedPhysics);
         public void Unregister(IIsolatedPhysics isolatedPhysics) => m_isolatedPhysicsHandler.Unregister(isolatedPhysics);
-        public void Register(Enemy enemy) => m_enemyManager.Register(enemy);
-        public void Unregister(Enemy enemy) => m_enemyManager.Unregister(enemy);
 
         public void CleanUp()
         {
@@ -81,7 +77,6 @@ namespace DChild.Gameplay.Systems
             m_timeIsolationHandler = new TimeIsolationHandler(timeScale);
             m_interactiveEnvironmentHandler = new InteractiveEnvironmentHandler();
             m_isolatedPhysicsHandler = new IsolatedPhysicsHandler();
-            m_enemyManager.Initialize();
         }
 
         private void FixedUpdate()

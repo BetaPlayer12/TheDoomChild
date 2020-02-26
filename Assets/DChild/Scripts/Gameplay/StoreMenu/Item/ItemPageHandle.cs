@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DChild.Gameplay.Items;
+using System;
 using UnityEngine;
 
 namespace DChild.Menu.Item
@@ -9,10 +10,16 @@ namespace DChild.Menu.Item
         private ItemInfoPage m_info;
         [SerializeField]
         private ItemContainerUI m_containerUI;
+        [SerializeField]
+        private UsableItemMenuHandle m_usableItemMenuHandle;
+
+        private static ItemData m_cacheItemData;
 
         public void Select(ItemSlotUI slot)
         {
-            m_info.SetInfo(slot.item);
+            m_cacheItemData = slot.item;
+            m_info.SetInfo(m_cacheItemData);
+            m_usableItemMenuHandle.SetItem((UsableItemData)m_cacheItemData);
         }
 
         private void OnNewPage(object sender, ItemContainerUI.SlotEventActionArgs eventArgs)
@@ -22,8 +29,8 @@ namespace DChild.Menu.Item
 
         private void Awake()
         {
-           m_containerUI.NewPage += OnNewPage;
+            m_containerUI.NewPage += OnNewPage;
         }
-        
+
     }
 }

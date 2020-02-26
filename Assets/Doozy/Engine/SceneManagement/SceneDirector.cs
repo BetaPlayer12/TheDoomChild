@@ -1,4 +1,4 @@
-// Copyright (c) 2015 - 2019 Doozy Entertainment / Marlink Trading SRL. All Rights Reserved.
+// Copyright (c) 2015 - 2019 Doozy Entertainment. All Rights Reserved.
 // This code can only be used under the standard Unity Asset Store End User License Agreement
 // A Copy of the EULA APPENDIX 1 is available at http://unity3d.com/company/legal/as_terms
 
@@ -99,6 +99,14 @@ namespace Doozy.Engine.SceneManagement
 
         #region Unity Methods
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void RunOnStart()
+        {
+            ApplicationIsQuitting = false;
+        }
+#endif
+        
         private void Awake()
         {
             if (s_instance != null && s_instance != this)
@@ -165,7 +173,7 @@ namespace Doozy.Engine.SceneManagement
 
         #region Static Methods
 
-        /// <summary> Creates a SceneLoader that loads the Scene asynchronously in the background by its index in Build Settings, then returns a reference to the newly created SceneLoader </summary>
+        /// <summary> Create a SceneLoader that loads the Scene asynchronously in the background by its index in Build Settings, then returns a reference to the newly created SceneLoader </summary>
         /// <param name="sceneBuildIndex"> Index of the Scene in the Build Settings to load </param>
         /// <param name="loadSceneMode"> If LoadSceneMode.Single then all current Scenes will be unloaded before loading </param>
         /// <param name="progressor"> Progressor that will get referenced to the SceneLoader, to get updated while the scene loads </param>
@@ -181,7 +189,7 @@ namespace Doozy.Engine.SceneManagement
             return loader;
         }
 
-        /// <summary> Creates a SceneLoader that loads the Scene asynchronously in the background by its name in Build Settings, then returns a reference to the newly created SceneLoader </summary>
+        /// <summary> Create a SceneLoader that loads the Scene asynchronously in the background by its name in Build Settings, then returns a reference to the newly created SceneLoader </summary>
         /// <param name="sceneName"> Name or path of the Scene to load </param>
         /// <param name="loadSceneMode"> If LoadSceneMode.Single then all current Scenes will be unloaded before loading </param>
         /// <param name="progressor"> Progressor that will get referenced to the SceneLoader, to get updated while the scene loads </param>
