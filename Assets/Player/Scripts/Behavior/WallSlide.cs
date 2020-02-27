@@ -65,7 +65,7 @@ namespace PlayerNew
                 }
                 body2d.velocity = new Vector2(body2d.velocity.x, velY);
 
-                if(inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
+                if(inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f && !collisionState.grounded)
                 {
 
                     body2d.velocity = new Vector2(forceX, forceY);
