@@ -143,6 +143,8 @@ namespace Spine.Unity {
 
 		private bool m_isVisible;
 
+		public bool isVisible { get; }
+
 		/// <summary>
 		/// Clears the previously generated mesh, resets the skeleton's pose, and clears all previously active animations.</summary>
 		public override void ClearState () {
@@ -250,10 +252,10 @@ namespace Spine.Unity {
 
 		public override void LateUpdate()
 		{
-			if (m_alwaysUpdateMesh || m_isVisible)
-			{
+			//if (m_alwaysUpdateMesh || m_isVisible)
+			//{
 				base.LateUpdate();
-			}
+			//}
 		}
 
 		private void OnBecameInvisible()
