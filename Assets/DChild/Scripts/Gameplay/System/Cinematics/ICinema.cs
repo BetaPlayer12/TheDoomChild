@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Cinematics
         void RemoveTracking(ITrackingCamera trackingCamera);
         void Register(ITrackingCamera trackingCamera);
         void Unregister(ITrackingCamera trackingCamera);
+
+        void ApplyLookAhead(Cinema.LookAhead look);
     }
 
 }
