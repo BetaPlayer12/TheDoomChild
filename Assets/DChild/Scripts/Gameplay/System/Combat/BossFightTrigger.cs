@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -8,8 +9,22 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Combat
 {
-    public class BossFightTrigger : MonoBehaviour
+    public class BossFightTrigger : MonoBehaviour, ISerializableComponent
     {
+        [System.Serializable]
+        public struct SaveData : ISaveData
+        {
+            [SerializeField]
+            private bool m_isTriggered;
+
+            public SaveData(bool isTriggered)
+            {
+                m_isTriggered = isTriggered;
+            }
+
+            public bool isTriggered => m_isTriggered;
+        }
+
         [SerializeField]
         private Boss m_boss;
         [SerializeField, MinValue(0)]
@@ -59,6 +74,13 @@ namespace DChild.Gameplay.Combat
                     }
                 }
             }
+        }
+
+        public ISaveData Save() => new SaveData(m_isTriggered);
+
+        public void Load(ISaveData data)
+        {
+            m_isTriggered = ((SaveData)data).isTriggered;
         }
     }
 }

@@ -117,13 +117,15 @@ namespace PlayerNew
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing);
-            SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter, slashBehavior.upHold, slashBehavior.holdingAttack);
+           // SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter, slashBehavior.upHold, slashBehavior.holdingAttack);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
         }
 
         void GroundShakerAnimationState(bool value)
         {
             animator.SetBool("EarthShake", value);
+          
+           
         }
 
         void SlashAnimationState(bool value1, int value2, bool value3, bool value4 )
