@@ -57,6 +57,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private Vector2 m_attack2Bounce2Velocity;
             public Vector2 attack2Bounce2Velocity => m_attack2Bounce2Velocity;
+            [SerializeField]
+            private float m_attackCD;
+            public float attackCD => m_attackCD;
             //[SerializeField]
             //private float m_attack2ThonkTime;
             //public float attack2ThonkTime => m_attack2ThonkTime;
@@ -100,6 +103,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
 
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_breathEvent;
+            public string breathEvent => m_breathEvent;
+
 
             public override void Initialize()
             {
@@ -120,6 +128,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Patrol,
             Turning,
             Attacking,
+            Cooldown,
             Chasing,
             Flinch,
             ReevaluateSituation,
@@ -137,7 +146,11 @@ namespace DChild.Gameplay.Characters.Enemies
             _COUNT
         }
         [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_attackBB;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -152,7 +165,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         //Patience Handler
         private float m_currentPatience;
-        private float m_currentThonkTime;
+        private float m_currentCD;
         private bool m_enablePatience;
         private bool m_isDetecting;
 
@@ -162,6 +175,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_breathFX;
         //[SerializeField, TabGroup("Territory")]
         //private Collider2D m_territoryCollider;
 
@@ -183,7 +198,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.Cooldown);
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
@@ -232,6 +247,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
+                m_currentCD = 0;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
             }
@@ -257,6 +273,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -287,7 +304,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack3, m_info.attack1.range),*/
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack3, m_info.attack1.range),/**/
                                     new AttackInfo<Attack>(Attack.Attack1, m_info.attack3.range),
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
@@ -332,12 +349,22 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
 
-        //protected override void Start()
-        //{
-        //    base.Start();
-        //    m_startPosition = new Vector2(transform.position.x, transform.position.y + m_info.attack2OverheadOffset);
-        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-        //}
+        protected override void Start()
+        {
+            base.Start();
+
+            m_spineEventListener.Subscribe(m_info.breathEvent, PoisonBreath);
+            //GameplaySystem.SetBossHealth(m_character);
+        }
+
+        private void PoisonBreath()
+        {
+            if (m_stateHandle.currentState != State.Detect)
+            {
+                m_attackBB.SetActive(true);
+                m_breathFX.Play();
+            }
+        }
 
         protected override void Awake()
         {
@@ -364,7 +391,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        //m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
                     }
                     else
@@ -419,6 +446,28 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
+
+                    break;
+
+                case State.Cooldown:
+                    //m_stateHandle.Wait(State.ReevaluateSituation);
+                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    m_attackBB.SetActive(false);
+                    if (!IsFacingTarget())
+                    {
+                        m_turnState = State.Cooldown;
+                        m_stateHandle.SetState(State.Turning);
+                    }
+
+                    if (m_currentCD <= m_info.attackCD)
+                    {
+                        m_currentCD += Time.deltaTime;
+                    }
+                    else
+                    {
+                        m_currentCD = 0;
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    }
 
                     break;
                 case State.Chasing:
@@ -483,6 +532,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.OverrideState(State.Patrol);
             m_currentPatience = 0;
+            m_currentCD = 0;
             m_enablePatience = false;
             m_isDetecting = false;
         }
