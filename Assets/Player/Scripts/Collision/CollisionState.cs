@@ -74,7 +74,7 @@ namespace PlayerNew
             pos.y += transform.position.y;
 
             lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
-            //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+            onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             onWall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
 
             pos = inputState.direction == Directions.Right ? ledgeRightPosition : ledgeLeftPosition;
@@ -82,7 +82,7 @@ namespace PlayerNew
             pos.y += transform.position.y;
 
             lineDir = inputState.direction == Directions.Right  ? Vector2.right : Vector2.left;
-            //isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+            isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             isTouchingLedge = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
 
 
@@ -107,7 +107,7 @@ namespace PlayerNew
             Gizmos.color = collisionColor;
 
             var positions = new Vector2[] {bottomPosition, leftLegPosition, rightLegPosition };
-            //var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
+            var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
 
 
 
@@ -121,15 +121,15 @@ namespace PlayerNew
                 Gizmos.DrawWireSphere(pos, collisionRadius);
             }
 
-            //foreach (var rayPosition in rayPositions)
-            //{
-            //    var pos = rayPosition;
+            foreach (var rayPosition in rayPositions)
+            {
+                var pos = rayPosition;
 
-            //    var lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
-            //    pos.x += transform.position.x;
-            //    pos.y += transform.position.y;
-            //    Gizmos.DrawRay(pos, lineDir * lineLength);
-            //}
+                var lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
+                pos.x += transform.position.x;
+                pos.y += transform.position.y;
+                Gizmos.DrawRay(pos, lineDir * lineLength);
+            }
            
             Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
             

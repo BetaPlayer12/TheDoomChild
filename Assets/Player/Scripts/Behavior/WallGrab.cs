@@ -33,7 +33,7 @@ namespace PlayerNew
         void Start()
         {
             facing = GetComponent<FaceDirection>();
-            spriteRenderer = GetComponent<Renderer>();
+            //spriteRenderer = GetComponent<Renderer>();
             
         }
 
@@ -41,23 +41,40 @@ namespace PlayerNew
         void Update()
         {
 
-            //if (collisionState.onWall && !collisionState.grounded && !ledgeDetected)
-            //{
-            //    ledgeDetected = true;
-            //    ledgeBotPos = trans.position;
-            //    ToggleScripts(false);
-            //    CheckLedgeClimb();
-
-            //    //call animation
-            //}
-
+/*
             if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall && collisionState.onWallLeg && !ledgeDetected)
             {
                 ToggleScripts(false);
                 ledgeDetected = true;
                 ledgeBotPos = transform.position;
-                OnWallGrab();
+               
             }
+
+            //wallGrab facing right
+            if(collisionState.onWall && facing.isFacingRight)
+            {
+                if(inputState.GetButtonValue[0] || inputState.GetButtonValue(inputButtons[1]))
+                {
+                    OnWallGrab();
+                }
+                else if(collisionState.onWall && (inputState.GetButtonValue[2] || inputState.GetButtonValue[3] || inputState.GetButtonValue[4]))
+                {
+                    ToggleScripts(true);
+                }
+            }
+            //wallGrab facing left
+            else if(collisionState.onWall && !facing.isFacingRight)
+            {
+                if (inputState.GetButtonValue[0] || inputState.GetButtonValue(inputButtons[3]))
+                {
+                    OnWallGrab();
+                }
+                else if (collisionState.onWall && (inputState.GetButtonValue[1] || inputState.GetButtonValue[2] || inputState.GetButtonValue[4]))
+                {
+                    ToggleScripts(true);
+                }       
+            }*/
+
 
         }
 
@@ -67,12 +84,6 @@ namespace PlayerNew
            if(ledgeDetected && !canLedgeGrab)
             {
                  canLedgeGrab = true;
-                //if (!canLedgeGrab)
-                //{
-
-               // ledgeBotPos = trans.position;
-
-
 
                 if (facing.isFacingRight)
                 {
@@ -86,26 +97,10 @@ namespace PlayerNew
                     ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) - ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
                     //  Debug.Log("2");
                 }
-                //capsuleCollider.enabled = false;
+
 
                 canLedgeGrab = true;
-               // spriteRenderer.enabled = false;
-               
 
-
-
-
-                // }
-
-                //if (canLedgeGrab)
-                //{
-                //    body2d.gravityScale = 0;
-                //    body2d.drag = 100;
-                //    // StartCoroutine(FinishedLedgeClimbRoutine());
-                //    //ToggleScripts(false);
-                //}
-
-                //FinishedLedgeClimb();
             }
 
         }
@@ -114,12 +109,12 @@ namespace PlayerNew
         {
             Debug.Log("yeild");
             yield return new WaitForSeconds(0.1f);
-            // capsuleCollider.enabled = true;
+
             
         }
         private void FinishedLedgeClimb()
         {
-            //StartCoroutine(FinishedLedgeClimbRoutine());
+
             ledgeDetected = false;
             canLedgeGrab = false;
             ToggleScripts(true);
@@ -127,9 +122,8 @@ namespace PlayerNew
 
         private void StartLedgeClimb()
         {
-            //Debug.Log("On climb");
-            //  spriteRenderer.enabled = true;
-            m_character.transform.position = ledgePos1;
+
+            transform.position = ledgePos1;
         }
     }
 

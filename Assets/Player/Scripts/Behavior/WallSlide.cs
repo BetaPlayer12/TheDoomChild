@@ -65,10 +65,17 @@ namespace PlayerNew
                 }
                 body2d.velocity = new Vector2(body2d.velocity.x, velY);
 
-                if(inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
+                if(inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f && !collisionState.grounded)
                 {
+                    //facing left
+                    if (!facing.isFacingRight)
+                        body2d.velocity = new Vector2(forceX, forceY);
 
-                    body2d.velocity = new Vector2(forceX, forceY);
+                    //facing right
+                    else
+                        body2d.velocity = new Vector2(forceX * -1f, forceY);
+
+
                     //Offwall();
 
                 }

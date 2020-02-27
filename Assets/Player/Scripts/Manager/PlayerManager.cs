@@ -10,7 +10,7 @@ namespace PlayerNew
         private Jog jogBehavior;
         private Crouch crouchBehavior;
         private WallStick wallStickBehavior;
-        //private WallGrab wallGrabBehavior;
+        private WallGrab wallGrabBehavior;
         private LongJump longJumpBehavior;
         //private WallJump wallJumpBehavior;
         private Slash slashBehavior;
@@ -31,7 +31,7 @@ namespace PlayerNew
             jogBehavior = GetComponent<Jog>();
             crouchBehavior = GetComponent<Crouch>();
             wallStickBehavior = GetComponent<WallStick>();
-            //wallGrabBehavior = GetComponent<WallGrab>();
+            wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
@@ -111,7 +111,7 @@ namespace PlayerNew
 
 
 
-            //WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
+            WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
