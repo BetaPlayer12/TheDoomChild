@@ -1,5 +1,6 @@
 ﻿using Spine;
 using System;
+using UnityEngine;
 
 namespace DChild
 {
@@ -31,7 +32,7 @@ namespace DChild
                 skeletonY = bone.skeleton.y;
 
                 hasParent = bone.parent != null;
-                parentHashCode = hasParent ? bone.parent.GetHashCode() : 0;
+                parent = new SkeletonBoneIndex(bone.parent);
                 dataLength = bone.data.length;
 
                 x = bone.x;
@@ -42,12 +43,12 @@ namespace DChild
                 shearX = bone.shearX;
                 shearY = bone.shearY;
 
-                a = 0;
-                b = 0;
-                c = 0;
-                d = 0;
-                worldX = 0;
-                worldY = 0;
+                a = bone.a;
+                b = bone.b;
+                c = bone.c;
+                d = bone.d;
+                worldX = bone.worldX;
+                worldY = bone.worldY;
             }
             else
             {
@@ -69,7 +70,7 @@ namespace DChild
                 skeletonY = 0;
 
                 hasParent = false;
-                parentHashCode = 0;
+                parent = new SkeletonBoneIndex(null);
                 dataLength = 0f;
 
                 x = 0;
@@ -87,14 +88,11 @@ namespace DChild
                 worldX = 0;
                 worldY = 0;
             }
-            parentIndex = 0;
         }
 
         public int hashCode { get; }
         public bool hasParent { get; }
-        public int parentHashCode { get; }
-
-        public int parentIndex;
+        public SkeletonBoneIndex parent;
 
         public float dataLength { get; }
 
@@ -127,7 +125,6 @@ namespace DChild
             worldY = localX * c + localY * d + this.worldY;
         }
 
-
         public void UpdateWorldTransform(SkeletonBone parent)
         {
             UpdateWorldTransform(x, y, rotation, scaleX, scaleY, shearX, shearY, parent);
@@ -145,7 +142,7 @@ namespace DChild
             appliedValid = true;
 
             if (hasParent)
-            { // Root bone.
+            { // Not Root bone.
 
                 float pa = parent.a, pb = parent.b, pc = parent.c, pd = parent.d;
                 worldX = pa * x + pb * y + parent.worldX;
@@ -164,6 +161,7 @@ namespace DChild
                             b = pa * lb + pb * ld;
                             c = pc * la + pd * lc;
                             d = pc * lb + pd * ld;
+                            //Debug.Log($"{GetHashCode()} =X= {pa}-{pb}-{pc}-{pd}");
                             return;
                         }
                     case TransformMode.OnlyTranslation:

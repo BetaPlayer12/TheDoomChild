@@ -15,10 +15,12 @@ namespace DChild
         public class BoneTracker
         {
             private Dictionary<SkeletonAnimation, Cache<List<Bone>>> m_pair;
+            private List<Cache<List<Bone>>> m_cacheList;
 
             public BoneTracker()
             {
                 m_pair = new Dictionary<SkeletonAnimation, Cache<List<Bone>>>();
+                m_cacheList = new List<Cache<List<Bone>>>();
             }
 
             public void AddToTracker(SkeletonAnimation animation)
@@ -28,6 +30,7 @@ namespace DChild
                     var list = Cache<List<Bone>>.Claim();
                     list.Value.Clear();
                     m_pair.Add(animation, list);
+                    m_cacheList.Add(list);
                 }
             }
 
@@ -44,34 +47,39 @@ namespace DChild
             {
                 if (m_pair.ContainsKey(animation))
                 {
-                    m_pair[animation].Release();
+                    var list = m_pair[animation];
+                    list.Release();
                     m_pair.Remove(animation);
+                    m_cacheList.Remove(list);
                 }
             }
 
             public void Clear()
             {
-                foreach (var item in m_pair.Keys)
-                {
-                    m_pair[item].Release();
-                }
                 m_pair.Clear();
+                for (int i = 0; i < m_cacheList.Count; i++)
+                {
+                    m_cacheList[i].Release();
+                }
+                m_cacheList.Clear();
             }
         }
 
         public class UpdateTracker
         {
-            private struct Info
+            private class Info
             {
+                public SkeletonAnimation m_source { get; private set; }
                 public float targetDeltaTime { get; private set; }
                 public float deltaTime;
                 public bool canBeUpdated;
 
                 private int currentFPS;
 
-                public Info(bool canBeUpdated) : this()
+                public void Initialize(SkeletonAnimation animation, bool canBeUpdated)
                 {
-                    targetDeltaTime = (1f/60);
+                    m_source = animation;
+                    targetDeltaTime = (1f / 60);
                     deltaTime = 0;
                     this.canBeUpdated = canBeUpdated;
                     currentFPS = 60;
@@ -93,8 +101,6 @@ namespace DChild
                     EvaluateUpdateStatus();
                 }
 
-                public void ClearFlag() => canBeUpdated = false;
-
                 private void EvaluateUpdateStatus()
                 {
                     if (canBeUpdated == false)
@@ -108,18 +114,23 @@ namespace DChild
                 }
             }
 
-            private Dictionary<SkeletonAnimation, Info> m_pair;
+            private Dictionary<SkeletonAnimation, Cache<Info>> m_pair;
+            private List<Cache<Info>> m_infoList;
 
             public UpdateTracker()
             {
-                m_pair = new Dictionary<SkeletonAnimation, Info>();
+                m_pair = new Dictionary<SkeletonAnimation, Cache<Info>>();
+                m_infoList = new List<Cache<Info>>();
             }
 
             public void AddToTracker(SkeletonAnimation animation)
             {
                 if (m_pair.ContainsKey(animation) == false)
                 {
-                    m_pair.Add(animation, new Info(true));
+                    var cache = Cache<Info>.Claim();
+                    cache.Value.Initialize(animation, true);
+                    m_pair.Add(animation, cache);
+                    m_infoList.Add(cache);
                 }
             }
 
@@ -127,31 +138,26 @@ namespace DChild
             {
                 if (m_pair.ContainsKey(animation))
                 {
+                    var cache = m_pair[animation];
+                    cache.Release();
                     m_pair.Remove(animation);
+                    m_infoList.Remove(cache);
                 }
             }
 
-            public void Update(float deltaTime)
+            public void Update(int index, float deltaTime)
             {
-                foreach (var key in m_pair.Keys)
-                {
-                    if (key.isVisible)
-                    {
-                        m_pair[key].SetFPS(60);
-                    }
-                    else
-                    {
-                        m_pair[key].SetFPS(30);
-                    }
-                    m_pair[key].Update(deltaTime);
-                }
+                var info = m_infoList[index];
+                var fps = info.Value.m_source.isVisible ? 60 : 30;
+                info.Value.SetFPS(fps);
+                info.Value.Update(deltaTime);
             }
 
             public bool CanBeUpdated(SkeletonAnimation animation)
             {
                 if (m_pair.ContainsKey(animation))
                 {
-                    return m_pair[animation].canBeUpdated;
+                    return m_pair[animation].Value.canBeUpdated;
                 }
                 else
                 {
@@ -162,7 +168,7 @@ namespace DChild
             {
                 if (m_pair.ContainsKey(animation))
                 {
-                    return m_pair[animation].targetDeltaTime;
+                    return m_pair[animation].Value.targetDeltaTime;
                 }
                 else
                 {
@@ -172,9 +178,9 @@ namespace DChild
 
             public void ClearFlags()
             {
-                foreach (var key in m_pair.Keys)
+                for (int i = 0; i < m_infoList.Count; i++)
                 {
-                    m_pair[key].ClearFlag();
+                    m_infoList[i].Value.canBeUpdated = false;
                 }
             }
         }
@@ -193,6 +199,8 @@ namespace DChild
         private List<NativeArray<SkeletonUpdateInstruction>> m_skelInstructionList;
         private List<NativeArray<SkeletonBone>> m_skelBoneList;
         private List<NativeArray<SkeletonIKConstraint>> m_skelIkList;
+        private List<NativeArray<SkeletonTransformConstraint>> m_skelTransformList;
+        private List<NativeArray<SkeletonBoneIndex>> m_skelTransformBonesList;
         private NativeArray<JobHandle> m_updateInfoHandleArray;
         public static void Register(SkeletonAnimation animation)
         {
@@ -233,7 +241,6 @@ namespace DChild
             {
                 var bone = cacheBone[j];
                 var skelBone = skelBones[j];
-
                 bone.ax = skelBone.ax;
                 bone.ay = skelBone.ay;
                 bone.arotation = skelBone.arotation;
@@ -264,14 +271,18 @@ namespace DChild
             m_cacheAnimation = m_animations[animationIndex];
             m_boneTracker.AddToTracker(m_cacheAnimation);
             Profiler.BeginSample("Create Native Arrays");
-            UpdateWorldTransformJob.CreateNativeArrays(m_cacheAnimation, m_boneTracker.GetBones(m_cacheAnimation), out NativeArray<SkeletonUpdateInstruction> instruction, out NativeArray<SkeletonBone> skelBone, out NativeArray<SkeletonIKConstraint> ik);
+
+            UpdateWorldTransformJob.CreateNativeArrays(m_cacheAnimation, m_boneTracker.GetBones(m_cacheAnimation), out NativeArray<SkeletonUpdateInstruction> instruction,
+                                                        out NativeArray<SkeletonBone> skelBone, out NativeArray<SkeletonIKConstraint> ik, out NativeArray<SkeletonTransformConstraint> nTransform, out NativeArray<SkeletonBoneIndex> transformBone);
             Profiler.EndSample();
             m_skelInstructionList.Add(instruction);
             m_skelBoneList.Add(skelBone);
             m_skelIkList.Add(ik);
-            var job = new UpdateWorldTransformJob(instruction, skelBone, ik);
-            job.Initialize();
+            m_skelTransformList.Add(nTransform);
+            m_skelTransformBonesList.Add(transformBone);
+            var job = new UpdateWorldTransformJob(instruction, skelBone, ik, nTransform, transformBone);
             m_updateInfoHandleArray[jobindex] = job.Schedule();
+
         }
 
         private void ScheduleDeltaUpdateHandle()
@@ -329,10 +340,14 @@ namespace DChild
                 m_skelInstructionList[i].Dispose();
                 m_skelBoneList[i].Dispose();
                 m_skelIkList[i].Dispose();
+                m_skelTransformList[i].Dispose();
+                m_skelTransformBonesList[i].Dispose();
             }
             m_skelInstructionList.Clear();
             m_skelBoneList.Clear();
             m_skelIkList.Clear();
+            m_skelTransformList.Clear();
+            m_skelTransformBonesList.Clear();
             m_boneTracker.Clear();
         }
 
@@ -392,18 +407,21 @@ namespace DChild
                 m_skelInstructionList = new List<NativeArray<SkeletonUpdateInstruction>>();
                 m_skelBoneList = new List<NativeArray<SkeletonBone>>();
                 m_skelIkList = new List<NativeArray<SkeletonIKConstraint>>();
+                m_skelTransformList = new List<NativeArray<SkeletonTransformConstraint>>();
+                m_skelTransformBonesList = new List<NativeArray<SkeletonBoneIndex>>();
                 m_boneTracker = new BoneTracker();
                 m_updateTracker = new UpdateTracker();
                 m_updateAfterWorldUpdateIndexList = new List<int>();
             }
         }
 
+
         private void Update()
         {
-            //m_updateTracker.Update(Time.deltaTime);
             //SkeletonAnimation cacheAnimation;
             //for (int i = 0; i < m_animationCount; i++)
             //{
+            //    m_updateTracker.Update(i,Time.deltaTime);
             //    cacheAnimation = m_animations[i];
             //    if (m_updateTracker.CanBeUpdated(cacheAnimation))
             //    {
