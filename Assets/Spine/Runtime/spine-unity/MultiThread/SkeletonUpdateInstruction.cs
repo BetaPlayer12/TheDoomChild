@@ -9,6 +9,7 @@
             {
                 Bone,
                 IKConstraint,
+                TransformConstraint
             }
             public SkeletonUpdateInstruction(Type type, int index) : this()
             {

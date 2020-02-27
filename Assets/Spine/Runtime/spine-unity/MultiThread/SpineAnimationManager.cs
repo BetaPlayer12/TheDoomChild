@@ -400,55 +400,53 @@ namespace DChild
 
         private void Update()
         {
-            m_updateTracker.Update(Time.deltaTime);
-            SkeletonAnimation cacheAnimation;
-            for (int i = 0; i < m_animationCount; i++)
-            {
-                cacheAnimation = m_animations[i];
-                if (m_updateTracker.CanBeUpdated(cacheAnimation))
-                {
-                    Debug.Log(m_updateTracker.GetTargetDeltaTime(cacheAnimation));
-                    cacheAnimation.Update(m_updateTracker.GetTargetDeltaTime(cacheAnimation));
-                    Debug.Log("Called");
-                }
-            }
+            //m_updateTracker.Update(Time.deltaTime);
+            //SkeletonAnimation cacheAnimation;
+            //for (int i = 0; i < m_animationCount; i++)
+            //{
+            //    cacheAnimation = m_animations[i];
+            //    if (m_updateTracker.CanBeUpdated(cacheAnimation))
+            //    {
+            //        cacheAnimation.Update(m_updateTracker.GetTargetDeltaTime(cacheAnimation));
+            //    }
+            //}
 
-            ////MultiThread;
-            //ScheduleDeltaUpdateHandle();
+            //MultiThread;
+            ScheduleDeltaUpdateHandle();
 
-            ////CallSomewhere Else
-            //ApplyDeltaUpdate();
+            //CallSomewhere Else
+            ApplyDeltaUpdate();
 
-            ////Schedule World Transform Job
-            //ScheduleAllSkeletonUpdateHandle();
-            ////Call AI Manager To Update
-            //ApplyAllSkeletonUpdate();
-            ////Call Update World
-            //CallUpdateWorld();
+            //Schedule World Transform Job
+            ScheduleAllSkeletonUpdateHandle();
+            //Call AI Manager To Update
+            ApplyAllSkeletonUpdate();
+            //Call Update World
+            CallUpdateWorld();
 
-            //ScheduleSKeletonUpdateAfterWorld();
+            ScheduleSKeletonUpdateAfterWorld();
 
-            //ApplySkeletonUpdateAfterWorld();
-            //CallUpdateComplete();
+            ApplySkeletonUpdateAfterWorld();
+            CallUpdateComplete();
         }
 
         private void LateUpdate()
         {
-            //for (int i = 0; i < m_animations.Count; i++)
-            //{
-            //    m_animations[i].LateUpdate();
-            //}
-
-            SkeletonAnimation cacheAnimation;
-            for (int i = 0; i < m_animationCount; i++)
+            for (int i = 0; i < m_animations.Count; i++)
             {
-                cacheAnimation = m_animations[i];
-                if (m_updateTracker.CanBeUpdated(cacheAnimation))
-                {
-                    cacheAnimation.LateUpdate();
-                }
+                m_animations[i].LateUpdate();
             }
-            m_updateTracker.ClearFlags();
+
+            //SkeletonAnimation cacheAnimation;
+            //for (int i = 0; i < m_animationCount; i++)
+            //{
+            //    cacheAnimation = m_animations[i];
+            //    if (m_updateTracker.CanBeUpdated(cacheAnimation))
+            //    {
+            //        cacheAnimation.LateUpdate();
+            //    }
+            //}
+            //m_updateTracker.ClearFlags();
         }
     }
 }
