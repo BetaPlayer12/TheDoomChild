@@ -34,23 +34,35 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attack1 = new SimpleAttackInfo();
             public SimpleAttackInfo attack1 => m_attack1;
             [SerializeField]
-            private SimpleAttackInfo m_attack2_upward = new SimpleAttackInfo();
-            public SimpleAttackInfo attack2_upward => m_attack2_upward;
+            private SimpleAttackInfo m_attack2 = new SimpleAttackInfo();
+            public SimpleAttackInfo attack2 => m_attack2;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_attack2_downwardAnimation;
-            public string attack2_downwardAnimation => m_attack2_downwardAnimation;
+            private string m_attack2_loop;
+            public string attack2_loop => m_attack2_loop;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_attack2_loop2;
+            public string attack2_loop2 => m_attack2_loop2;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_attack2_bounce;
+            public string attack2_bounce => m_attack2_bounce;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_attack2_end;
+            public string attack2_end => m_attack2_end;
             [SerializeField]
             private float m_attack2AirTime;
             public float attack2AirTime => m_attack2AirTime;
             [SerializeField]
-            private float m_attack2ThonkTime;
-            public float attack2ThonkTime => m_attack2ThonkTime;
-            [SerializeField]
-            private float m_attack2DropSpeed;
-            public float attack2DropSpeed => m_attack2DropSpeed;
-            [SerializeField]
-            private float m_attack2OverheadOffset;
-            public float attack2OverheadOffset => m_attack2OverheadOffset;
+            private Vector2 m_attack2Velocity;
+            public Vector2 attack2Velocity => m_attack2Velocity;
+            //[SerializeField]
+            //private float m_attack2ThonkTime;
+            //public float attack2ThonkTime => m_attack2ThonkTime;
+            //[SerializeField]
+            //private float m_attack2DropSpeed;
+            //public float attack2DropSpeed => m_attack2DropSpeed;
+            //[SerializeField]
+            //private float m_attack2OverheadOffset;
+            //public float attack2OverheadOffset => m_attack2OverheadOffset;
             [SerializeField]
             private SimpleAttackInfo m_attack3 = new SimpleAttackInfo();
             public SimpleAttackInfo attack3 => m_attack3;
@@ -92,7 +104,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
-                m_attack2_upward.SetData(m_skeletonDataAsset);
+                m_attack2.SetData(m_skeletonDataAsset);
                 //m_attack2_upward.SetData(m_skeletonDataAsset);
                 m_attack3.SetData(m_skeletonDataAsset);
 #endif
@@ -141,16 +153,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_isDetecting;
 
-        private Vector2 m_startPosition;
-
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
-        [SerializeField, TabGroup("Territory")]
-        private Collider2D m_territoryCollider;
+        //[SerializeField, TabGroup("Territory")]
+        //private Collider2D m_territoryCollider;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -251,12 +261,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             StopAllCoroutines();
+            m_hitbox.SetInvulnerability(false);
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -273,7 +285,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),
                                     new AttackInfo<Attack>(Attack.Attack3, m_info.attack3.range),*/
-                                    new AttackInfo<Attack>(Attack.Attack2, m_info.attack2_upward.range));
+                                    new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -291,48 +303,37 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator Attack2Routine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            m_animation.SetAnimation(0, m_info.attack2_upward.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2_upward.animation);
-            //m_hitbox.SetInvulnerability(true);
-            m_hitbox.gameObject.SetActive(false);
-            yield return new WaitForSeconds(m_info.attack2AirTime);
             m_movement.Stop();
-            //m_hitbox.SetInvulnerability(false);
-            m_hitbox.gameObject.SetActive(true);
-            var target = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + m_info.attack2OverheadOffset);
-            transform.position = target;
-            while (m_currentThonkTime < m_info.attack2ThonkTime)
-            {
-                m_currentThonkTime += Time.deltaTime;
-                if (m_territoryCollider.bounds.Contains(m_targetInfo.position))
-                {
-                    Debug.Log("BabyePlayer");
-                    transform.position = m_startPosition;
-                }
-                yield return null;
-            }
-            while (!m_groundSensor.isDetecting)
-            {
-                //transform.position = Vector3.MoveTowards(transform.position, target, .025f);
-                //m_agent.SetDestination(target);
-                //m_agent.Move(m_info.moveForward.speed * 3f);
-                m_character.physics.SetVelocity(0, m_info.attack2DropSpeed);
-                yield return null;
-            }
-            m_animation.SetAnimation(0, m_info.attack2_downwardAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2_downwardAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            m_animation.SetAnimation(0, m_info.attack2.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+            m_animation.SetAnimation(0, m_info.attack2_loop, true);
+            var bounceDir = new Vector2(m_info.attack2Velocity.x * transform.localScale.x, m_info.attack2Velocity.y);
+            m_character.physics.SetVelocity(bounceDir);
+            m_hitbox.SetInvulnerability(true);
+            //m_hitbox.gameObject.SetActive(false);
+            yield return new WaitForSeconds(m_info.attack2AirTime);
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            m_animation.SetAnimation(0, m_info.attack2_bounce, false);
+            yield return new WaitForSeconds(.75f);
+            m_character.physics.AddVelocity(new Vector2(20f * transform.localScale.x, 0));
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2_bounce);
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.attack2_end, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2_end);
+            m_hitbox.SetInvulnerability(false);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
 
-        protected override void Start()
-        {
-            base.Start();
-            m_startPosition = new Vector2(transform.position.x, transform.position.y + m_info.attack2OverheadOffset);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-        }
+        //protected override void Start()
+        //{
+        //    base.Start();
+        //    m_startPosition = new Vector2(transform.position.x, transform.position.y + m_info.attack2OverheadOffset);
+        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //}
 
         protected override void Awake()
         {
@@ -404,7 +405,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
                             break;
                         case Attack.Attack2:
-                            m_animation.EnableRootMotion(true, false);
+                            m_animation.EnableRootMotion(false, false);
                             //m_attackHandle.ExecuteAttack(m_info.attack2_downward.animation, m_info.idleAnimation);
                             StartCoroutine(Attack2Routine());
                             break;
