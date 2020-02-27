@@ -729,7 +729,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(2.25f);
                 m_animation.DisableRootMotion();
                 //m_character.physics.SetVelocity(Vector2.zero);
-                m_character.physics.AddForce(new Vector2(5f * transform.localScale.x, 0), ForceMode2D.Impulse);
+                m_character.physics.SetVelocity(new Vector2(150f * transform.localScale.x, 0));
                 yield return new WaitForSeconds(0.25f);
             }
             m_agent.Stop();
