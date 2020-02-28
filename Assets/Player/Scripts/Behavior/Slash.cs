@@ -179,8 +179,6 @@ namespace PlayerNew
             }else if (Input.GetButtonUp("Fire1"))
             {
                 Debug.Log("end here");
-                animator.SetBool("Attack", false);
-                animator.SetBool("Slash1", false);
                 m_forwardSlashAttackCollider.enabled = false;
                 m_swordCombo1AttackCollider.enabled = false;
                 m_swordCombo2AttackCollider.enabled = false;
@@ -189,6 +187,8 @@ namespace PlayerNew
                 m_jumpSlashAttackCollider.enabled = false;
                 m_swordUpSlashAttackCollider.enabled = false;
                 m_swordJumpSlashForwardAttackCollider.enabled = false;
+                animator.SetBool("Attack", false);
+                animator.SetBool("Slash1", false);
                 ToggleScripts(true);
             }
         }

@@ -82,11 +82,13 @@ namespace PlayerNew
            
             base.Onstick();
             body2d.velocity = Vector2.zero;
+            ToggleScripts(false);
         }
 
         protected override void Offwall()
         {
             base.Offwall();
+            ToggleScripts(true);
         }
     }
 

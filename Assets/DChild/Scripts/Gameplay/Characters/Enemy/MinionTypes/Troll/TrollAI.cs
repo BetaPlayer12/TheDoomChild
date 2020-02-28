@@ -313,6 +313,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -326,6 +327,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
