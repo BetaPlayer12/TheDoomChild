@@ -120,6 +120,7 @@ namespace PlayerNew
                     {
                         animator.SetBool("Slash1", true);
                         m_forwardSlash1FX.Play();
+                        m_forwardSlashAttackCollider.enabled = true;
                     }
                     numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
                    
@@ -135,12 +136,14 @@ namespace PlayerNew
                             animator.SetBool("Slash2", true);
                             animator.SetBool("Slash3", false);
                             m_swordCombo1FX.Play();
+                            m_swordCombo1AttackCollider.enabled = true;
                             break;
                         case 3:
                             animator.SetBool("Slash1", false);
                             animator.SetBool("Slash2", false);
                             animator.SetBool("Slash3", true);
                             m_swordCombo2FX.Play();
+                            m_swordCombo2AttackCollider.enabled = true;
                             break;
                     }
                     animator.SetBool("Attack", true);
@@ -161,11 +164,13 @@ namespace PlayerNew
                     {
                        
                         SwordJumpSlashForwardFX();
+                        m_swordJumpSlashForwardAttackCollider.enabled = true;
 
                     }
                     else
                     {
                         JumpUpSlashFX();
+                        m_swordUpSlashAttackCollider.enabled = true;
                     }
                     animator.SetBool("Attack", true);
                 }
@@ -206,6 +211,14 @@ namespace PlayerNew
             Debug.Log("attack 1 only " + numOfClicks);
             animator.SetBool("Slash1", false);
             animator.SetBool("Attack", false);
+            m_forwardSlashAttackCollider.enabled = false;
+            m_swordCombo1AttackCollider.enabled = false;
+            m_swordCombo2AttackCollider.enabled = false;
+
+            m_crouchSlashAttackCollider.enabled = false;
+            m_jumpSlashAttackCollider.enabled = false;
+            m_swordUpSlashAttackCollider.enabled = false;
+            m_swordJumpSlashForwardAttackCollider.enabled = false;
             ToggleScripts(true);
         }
 
@@ -216,7 +229,15 @@ namespace PlayerNew
                 animator.SetBool("Slash1", false);
                 animator.SetBool("Slash2", false);
                 animator.SetBool("Attack", false);
-                ToggleScripts(true);
+            m_forwardSlashAttackCollider.enabled = false;
+            m_swordCombo1AttackCollider.enabled = false;
+            m_swordCombo2AttackCollider.enabled = false;
+
+            m_crouchSlashAttackCollider.enabled = false;
+            m_jumpSlashAttackCollider.enabled = false;
+            m_swordUpSlashAttackCollider.enabled = false;
+            m_swordJumpSlashForwardAttackCollider.enabled = false;
+            ToggleScripts(true);
            
         }
 
@@ -227,6 +248,14 @@ namespace PlayerNew
             animator.SetBool("Slash2", false);
             animator.SetBool("Slash3", false);
             animator.SetBool("Attack", false);
+            m_forwardSlashAttackCollider.enabled = false;
+            m_swordCombo1AttackCollider.enabled = false;
+            m_swordCombo2AttackCollider.enabled = false;
+
+            m_crouchSlashAttackCollider.enabled = false;
+            m_jumpSlashAttackCollider.enabled = false;
+            m_swordUpSlashAttackCollider.enabled = false;
+            m_swordJumpSlashForwardAttackCollider.enabled = false;
             numOfClicks = 0;
             ToggleScripts(true);
         }
