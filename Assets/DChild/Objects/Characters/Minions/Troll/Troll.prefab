@@ -195,7 +195,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 1035759663297430862}
   m_data: {fileID: 11400000, guid: 1a7b41d49812b0b47bb16ca86e2e48de, type: 2}
---- !u!60 &1109729564277685215
+--- !u!60 &2173712116454491866
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3259187504703809547}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.98669994, y: 2.4467998}
+      - {x: -1.0152999, y: 0.0444}
+      - {x: 4.7047, y: -0.041399997}
+      - {x: 4.5045, y: 2.3896}
+--- !u!60 &7444733839637708798
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226,35 +255,6 @@ PolygonCollider2D:
       - {x: -4.5211587, y: 6.1377163}
       - {x: -8.6535, y: 8.534033}
       - {x: -11.541296, y: 8.386606}
---- !u!60 &4783965834442541933
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3259187504703809547}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.98669994, y: 2.4467998}
-      - {x: -1.0152999, y: 0.0444}
-      - {x: 4.7047, y: -0.041399997}
-      - {x: 4.5045, y: 2.3896}
 --- !u!114 &4677905126922753816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,6 +491,7 @@ MonoBehaviour:
   m_poundFX: {fileID: 6242382938274109540}
   m_oraFX: {fileID: 6242382938274109540}
   m_rockThrowFX: {fileID: 8957763487938450878}
+  m_attackHitbox: {fileID: 498585083328969392}
   m_speed: 3
   m_gravityScale: 3
   m_posOffset: {x: 1, y: 0.4}
@@ -1439,8 +1440,8 @@ PrefabInstance:
       value: -0.31009573
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 2955470385240852429, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
-    - {fileID: 7206166312492431231, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
+    - {fileID: 4698517179331347436, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
+    - {fileID: 4057723643017919176, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
 --- !u!114 &1035759663297430862 stripped
 MonoBehaviour:
@@ -1454,12 +1455,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!198 &4294420001323458795 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2161065630139505913, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
+--- !u!114 &4186164008401986245 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2052867907135839959, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &2546843927511148493 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 377537719806155743, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
@@ -1481,6 +1488,12 @@ ParticleSystem:
 --- !u!198 &4162948443692628634 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 2279030374617220744, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 2766755537548934162}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &498585083328969392 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2345858624621069986, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
@@ -1544,9 +1557,9 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &8164621888649737272 stripped
+--- !u!198 &1087968770947659336 stripped
 ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6281375622193891370, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
+  m_CorrespondingSourceObject: {fileID: 2989334988983323226, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
@@ -1559,6 +1572,12 @@ ParticleSystem:
 --- !u!4 &2555776147453922188 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 365509953858484126, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 2766755537548934162}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8164621888649737272 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6281375622193891370, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
@@ -1586,15 +1605,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
---- !u!50 &7960393507589439206 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 5196452725302444788, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
+--- !u!198 &4294420001323458795 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2161065630139505913, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &1087968770947659336 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2989334988983323226, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
+--- !u!50 &7960393507589439206 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 5196452725302444788, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
@@ -1658,18 +1677,6 @@ CapsuleCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4186164008401986245 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2052867907135839959, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
-    type: 3}
-  m_PrefabInstance: {fileID: 2766755537548934162}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!198 &8957763488430777194 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 6500141142658752376, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
