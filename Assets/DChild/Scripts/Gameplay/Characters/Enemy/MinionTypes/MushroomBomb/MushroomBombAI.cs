@@ -57,8 +57,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
-            private string m_attackEvent;
-            public string attackEvent => m_attackEvent;
+            private string m_smokeCharging;
+            public string smokeCharging => m_smokeCharging;
 
             public override void Initialize()
             {
@@ -93,6 +93,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_aggroSensor;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_explosionRadius;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
@@ -117,6 +119,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_smokeChargeFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_poisonExplodeFX;
 
         private float m_targetDistance;
 
@@ -128,14 +134,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
 
-            m_spineEventListener.Subscribe(m_info.attackEvent, SpawnProjectile);
+            //m_spineEventListener.Subscribe(m_info.smokeCharging, m_smokeChargeFX.Play);
             //GameplaySystem.SetBossHealth(m_character);
         }
 
-        private void SpawnProjectile()
-        {
-            Debug.Log("Scream Attack");
-        }
+        //private void SmokeCharging()
+        //{
+        //    Debug.Log("Scream Attack");
+        //}
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -188,11 +194,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChargeRoutine()
         {
             m_stateHandle.Wait(State.Dead);
+            m_aggroSensor.SetActive(false);
+            m_smokeChargeFX.Play();
             m_animation.SetAnimation(0, m_info.attack.animation, true);
             yield return new WaitForSeconds(m_info.chargeTime);
             m_hitbox.gameObject.SetActive(false);
             m_explosionRadius.SetActive(true);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            m_smokeChargeFX.Stop();
+            m_poisonExplodeFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
             m_stateHandle.ApplyQueuedState();
         }
