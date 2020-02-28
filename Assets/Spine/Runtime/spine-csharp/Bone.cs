@@ -155,8 +155,6 @@ namespace Spine
             appliedValid = true;
             Skeleton skeleton = this.skeleton;
 
-            Debug.Log($"{data.name} == {GetHashCode()} == {this.parent}");
-
             Bone parent = this.parent;
             if (parent == null)
             { // Root bone. yay

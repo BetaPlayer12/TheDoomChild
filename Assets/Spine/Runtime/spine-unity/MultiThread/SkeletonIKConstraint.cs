@@ -101,7 +101,7 @@ namespace DChild
                     }
             }
 
-            
+
             rotationIK += (float)Math.Atan2(ty, tx) * MathUtils.RadDeg;
             Debug.Log($"Post Atan2 {bone.hashCode} == {rotationIK}");
             if (bone.ascaleX < 0) rotationIK += 180;
@@ -148,10 +148,15 @@ namespace DChild
                 childBone.UpdateWorldTransform(childBoneParent);
                 return;
             }
-            Debug.Log($"{parentBone.hashCode} \n {childBone.hashCode}");
 
-            if (!parentBone.appliedValid) parentBone.UpdateAppliedTransform(parentBoneParent);
-            if (!childBone.appliedValid) childBone.UpdateAppliedTransform(childBoneParent);
+            if (!parentBone.appliedValid)
+            {
+                parentBone.UpdateAppliedTransform(parentBoneParent);
+            }
+            if (!childBone.appliedValid)
+            {
+                childBone.UpdateAppliedTransform(childBoneParent);
+            }
             float px = parentBone.ax, py = parentBone.ay, psx = parentBone.ascaleX, sx = psx, psy = parentBone.ascaleY, csx = childBone.ascaleX;
             int os1, os2, s2;
             if (psx < 0)

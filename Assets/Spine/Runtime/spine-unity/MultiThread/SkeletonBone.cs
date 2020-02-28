@@ -24,7 +24,7 @@ namespace DChild
                 ascaleY = bone.scaleY;
                 ashearX = bone.shearX;
                 ashearY = bone.shearY;
-                appliedValid = false;
+                appliedValid = bone.appliedValid;
 
                 skeletonScaleX = bone.skeleton.ScaleX;
                 skeletonScaleY = bone.skeleton.ScaleY;
@@ -161,7 +161,6 @@ namespace DChild
                             b = pa * lb + pb * ld;
                             c = pc * la + pd * lc;
                             d = pc * lb + pd * ld;
-                            //Debug.Log($"{GetHashCode()} =X= {pa}-{pb}-{pc}-{pd}");
                             return;
                         }
                     case TransformMode.OnlyTranslation:
