@@ -13,7 +13,7 @@ namespace DChild.Serialization
 
         public SerializeDataList()
         {
-            m_saveDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
+            m_saveDatas = new Dictionary<SerializeID, ISaveData>();
         }
 
         public void UpdateData(SerializeID ID, ISaveData data)
@@ -34,15 +34,18 @@ namespace DChild.Serialization
             return m_saveDatas.ContainsKey(ID) ? m_saveDatas[ID] : null;
         }
 
+
+#if UNITY_EDITOR
         public Dictionary<SerializeID, ISaveData> saveDatas => m_saveDatas;
 
         public SerializeDataList(SerializeDataList data)
         {
-            m_saveDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
+            m_saveDatas = new Dictionary<SerializeID, ISaveData>();
             foreach (var key in data.saveDatas.Keys)
             {
                 m_saveDatas.Add(key, data.saveDatas[key]);
             }
         }
+#endif
     }
 }

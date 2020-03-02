@@ -82,8 +82,7 @@ namespace DChild.Menu.Bestiary
         private string m_idleAnimation;
         [SerializeField, TextArea, ToggleGroup("m_enableEdit")]
         private string m_description;
-        //[SerializeField, ValueDropdown("GetLocations", IsUniqueList = true), ToggleGroup("m_enableEdit")]
-        [SerializeField,DrawWithUnity]
+        [SerializeField, ValueDropdown("GetLocations", IsUniqueList = true), ToggleGroup("m_enableEdit")]
         private Location[] m_locatedIn;
 
         public int id { get => m_ID; }

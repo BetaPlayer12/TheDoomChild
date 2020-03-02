@@ -40,16 +40,13 @@ namespace DChild.Gameplay
 
         private void LateUpdate()
         {
-            if (m_camera == null)
+            if(m_camera == null)
             {
                 m_camera = GameSystem.mainCamera?.transform ?? null;
             }
-            else
-            {
-                var position = m_camera.position;
-                position.z = 0;
-                transform.position = position;
-            }
+            var position = m_camera.position;
+            position.z = 0;
+            transform.position = position;
         }
 
         private void OnDestroy()

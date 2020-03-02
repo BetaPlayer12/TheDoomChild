@@ -17,7 +17,6 @@ namespace DChild.Gameplay.Environment.Interractables
 
         private void Awake()
         {
-            m_interractable = GetComponent<IHitToInteract>();
             m_interractable.OnHit += OnHit;
         }
 

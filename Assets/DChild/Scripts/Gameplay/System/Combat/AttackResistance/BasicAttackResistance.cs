@@ -31,11 +31,6 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public override void ClearResistance()
-        {
-            m_resistance.Clear();
-        }
-
         public void SetResistance(AttackType type, AttackResistanceType resistanceType) => SetResistance(type, ConvertToFloat(resistanceType));
 
         public override void SetResistance(AttackType type, float resistanceValue)
@@ -67,8 +62,6 @@ namespace DChild.Gameplay.Combat
         {
             CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
         }
-
-      
 #endif
     }
 }

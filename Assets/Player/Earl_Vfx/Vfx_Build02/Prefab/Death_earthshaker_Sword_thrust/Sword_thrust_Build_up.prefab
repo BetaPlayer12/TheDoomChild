@@ -4763,7 +4763,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4839,7 +4838,7 @@ Transform:
   m_GameObject: {fileID: 5871400970477273066}
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.2143948, y: 2.2134163, z: 2.228822}
+  m_LocalScale: {x: 3.243929, y: 3.2424955, z: 3.2650635}
   m_Children: []
   m_Father: {fileID: 8391039724030596395}
   m_RootOrder: 3
@@ -9575,7 +9574,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -14387,7 +14385,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -19199,7 +19196,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -19259,6 +19255,7 @@ GameObject:
   - component: {fileID: 5871400971127609505}
   - component: {fileID: 5871400971127609504}
   - component: {fileID: 5871400971127609519}
+  - component: {fileID: 5871400971127609518}
   m_Layer: 0
   m_Name: Sword_thrust_Build_up
   m_TagString: Untagged
@@ -19298,7 +19295,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -24022,7 +24019,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -24071,6 +24067,25 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!95 &5871400971127609518
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5871400971127609517}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 939dbfae38898bd41baaf671b083ddb1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5871400971840387673
 GameObject:
   m_ObjectHideFlags: 0
@@ -24096,15 +24111,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5871400971840387673}
-  m_LocalRotation: {x: 0.6898085, y: -0.006187421, z: 0.0064935395, w: 0.72393626}
-  m_LocalPosition: {x: -0.040305212, y: -0.028607812, z: -3.1512253}
-  m_LocalScale: {x: 1.492529, y: 1.481521, z: 1.4815216}
+  m_LocalRotation: {x: 0.6898363, y: -0, z: -0, w: 0.7239654}
+  m_LocalPosition: {x: -0.04, y: -0.03, z: -3.18}
+  m_LocalScale: {x: 1.4925286, y: 1.4815211, z: 1.4815216}
   m_Children:
   - {fileID: 6270690517643822770}
   - {fileID: 5803342970121236170}
   m_Father: {fileID: 5871400971127609505}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 87.234, y: 0, z: 1.028}
+  m_LocalEulerAnglesHint: {x: -2.262, y: 0, z: 0}
 --- !u!198 &5871400971840387675
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -24180,7 +24195,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 0
+  scalingMode: 1
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -24673,7 +24688,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 1
+    maxNumParticles: 1000
     size3D: 1
     rotation3D: 0
     gravityModifier:
@@ -28863,7 +28878,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -28923,6 +28937,7 @@ GameObject:
   - component: {fileID: 5871400971963475360}
   - component: {fileID: 5871400971963475363}
   - component: {fileID: 5871400971963475362}
+  - component: {fileID: 5871400971963475361}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -33675,7 +33690,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -33724,6 +33738,25 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!95 &5871400971963475361
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5871400971963475375}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 939dbfae38898bd41baaf671b083ddb1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6270690517643822769
 GameObject:
   m_ObjectHideFlags: 0
@@ -38487,7 +38520,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -38547,6 +38579,7 @@ GameObject:
   - component: {fileID: 8391039724030596395}
   - component: {fileID: 8391039724030596394}
   - component: {fileID: 8391039724030596389}
+  - component: {fileID: 8391039724030596388}
   m_Layer: 0
   m_Name: Sword_thrust_Build_up (1)
   m_TagString: Untagged
@@ -43312,7 +43345,6 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -43361,3 +43393,22 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!95 &8391039724030596388
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8391039724030596391}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 939dbfae38898bd41baaf671b083ddb1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -73,7 +73,8 @@ namespace DChild.Gameplay.Environment
             Func<Transform, string> getPath = null;
             getPath = x => (x ? getPath(x.parent) + "/" + x.gameObject.name : "");
             return FindObjectsOfType<Renderer>().Select(x => new ValueDropdownItem(getPath(x.transform), x));
-        }
 #endif
+        }
     }
+
 }

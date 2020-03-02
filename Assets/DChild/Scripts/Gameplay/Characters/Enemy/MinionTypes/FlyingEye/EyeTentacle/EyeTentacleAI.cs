@@ -100,11 +100,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 Debug.Log("GROUNDED DEDDED");
             }
         }
-
-        protected override void OnTargetDisappeared()
-        {
-            m_stateHandle.OverrideState(State.Idle);
-        }
     }
 }
 

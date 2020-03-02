@@ -37,7 +37,7 @@ namespace UnityChan
         }
 
 #if UNITY_EDITOR
-        void FixedUpdate()
+        void Update()
         {
             if (m_followThisTransformScaleX != null)
             {

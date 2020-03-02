@@ -410,10 +410,5 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_groundSensor.transform.localScale = new Vector3(transform.localScale.x, m_groundSensor.transform.localScale.y, m_groundSensor.transform.localScale.z);
             }
         }
-
-        protected override void OnTargetDisappeared()
-        {
-
-        }
     }
 }

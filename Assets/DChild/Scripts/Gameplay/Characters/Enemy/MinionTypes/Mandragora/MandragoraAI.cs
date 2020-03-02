@@ -114,8 +114,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
-        [SerializeField, TabGroup("Reference")]
-        private GameObject m_spriteMask;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -123,8 +121,12 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField]
+        private GameObject m_screamHitbox;
+        [SerializeField]
+        private ParticleSystem m_screamFX;
+
         private float m_targetDistance;
-        private bool m_hasDetected;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -140,6 +142,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void SpawnProjectile()
         {
             Debug.Log("Scream Attack");
+            m_screamHitbox.SetActive(true);
+            m_screamFX.Play();
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -155,19 +159,16 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                if (m_stateHandle.currentState != State.Chasing && !m_hasDetected)
+                if (m_stateHandle.currentState != State.Chasing)
                 {
-                    m_hasDetected = true;
                     m_stateHandle.SetState(State.Detect);
                 }
                 m_currentPatience = 0;
                 m_enablePatience = false;
-                //StopCoroutine(PatienceRoutine());
             }
             else
             {
                 m_enablePatience = true;
-                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -187,17 +188,9 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
-                m_hasDetected = false;
                 m_stateHandle.SetState(State.Burrowed);
             }
         }
-        //private IEnumerator PatienceRoutine()
-        //{
-        //    yield return new WaitForSeconds(m_info.patience);
-        //    m_targetInfo.Set(null, null);
-        //    m_hasDetected = false;
-        //    m_stateHandle.SetState(State.Burrowed);
-        //}
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
@@ -209,8 +202,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
@@ -225,7 +217,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_spriteMask.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -257,7 +248,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Burrowed:
                     m_animation.EnableRootMotion(false, false);
-                    m_spriteMask.SetActive(true);
                     m_animation.SetAnimation(0, m_info.burrowedAnimation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
@@ -278,6 +268,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
+                            m_screamHitbox.SetActive(false);
                             if (IsTargetInRange(m_info.attack.range))
                             {
                                 m_movement.Stop();
@@ -327,14 +318,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
-        }
-
-        protected override void OnTargetDisappeared()
-        {
-            m_stateHandle.OverrideState(State.Burrowed);
-            m_currentPatience = 0;
-            m_enablePatience = false;
-            m_hasDetected = false;
         }
     }
 }
