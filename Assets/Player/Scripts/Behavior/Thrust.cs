@@ -19,6 +19,8 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
+            // add horizontal movement
+
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
             // Debug.Log(holdTime + " holding");
             if (holdTime > timeToCharge && !chargingAttack)

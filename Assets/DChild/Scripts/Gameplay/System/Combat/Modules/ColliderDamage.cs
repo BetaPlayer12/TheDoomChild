@@ -3,12 +3,7 @@
  * Attackers should look for this in order to damage an Object
  * 
  ***************************************************/
-using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
-using Holysoft;
-using DChild.Gameplay;
-using DChild.Gameplay.Combat;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using DChild.Gameplay.Environment;
@@ -17,8 +12,8 @@ using DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay.Combat
 {
-    [AddComponentMenu("DChild/Gameplay/Combat/Collider Damage")]
-    public class ColliderDamage : MonoBehaviour
+
+    public abstract class ColliderDamage : MonoBehaviour
     {
         [System.Serializable]
         public class Collider2DInfo
@@ -46,6 +41,8 @@ namespace DChild.Gameplay.Combat
         private IDamageDealer m_damageDealer;
         public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
+        protected abstract bool IsValidToHit(Collider2D collision);
+
         protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
             if (hitbox.damageable.CompareTag(Character.objectTag))
@@ -56,6 +53,56 @@ namespace DChild.Gameplay.Combat
             else
             {
                 cache.Value.Initialize(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
+            }
+        }
+
+
+        private void SpawnHitFX(Collider2D collision)
+        {
+            if (collision.TryGetComponentInParent(out HitFXHandle onHitFX))
+            {
+                ColliderDistance2D colliderDistance = m_collider.Distance(collision);
+                if (!colliderDistance.isValid)
+                {
+                    return;
+                }
+
+                Vector2 hitPoint;
+
+                // if its overlapped then this collider's nearest vertex is inside the other collider
+                // so the position adjustment shouldn't be necessary
+                if (colliderDistance.isOverlapped)
+                {
+                    hitPoint = colliderDistance.pointA; // point on the surface of this collider
+                }
+                else
+                {
+                    // move the hit location inside the collider a bit
+                    // this assumes the colliders are basically touching
+                    hitPoint = colliderDistance.pointB - (0.01f * colliderDistance.normal);
+                }
+
+                onHitFX.SpawnFX(hitPoint, GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint));
+            }
+        }
+
+        private void InterractWith(Collider2D collision)
+        {
+            if (collision.TryGetComponentInParent(out IHitToInteract interactable))
+            {
+                interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
+
+            }
+        }
+
+        private void DealDamage(Collider2D collision, Hitbox hitbox)
+        {
+            using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+            {
+                InitializeTargetInfo(cacheTargetInfo, hitbox);
+                m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                DamageableDetected?.Invoke(collision);
+                cacheTargetInfo?.Release();
             }
         }
 
@@ -71,53 +118,26 @@ namespace DChild.Gameplay.Combat
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-		//Debug.Log("DAMAGED");
+            //Debug.Log("DAMAGED");
             if (collision.CompareTag("DamageCollider"))
                 return;
+            var validToHit = IsValidToHit(collision);
 
             if (collision.TryGetComponent(out Hitbox hitbox))
             {
-                using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                if (hitbox.CanBeDamageBy(m_collider))
                 {
-                    InitializeTargetInfo(cacheTargetInfo, hitbox);
-                    m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
-                    DamageableDetected?.Invoke(collision);
-                    cacheTargetInfo?.Release();
-                }
-                if (collision.TryGetComponentInParent(out HitFXHandle onHitFX))
-                {
-                    ColliderDistance2D colliderDistance = m_collider.Distance(collision);
-                    if (!colliderDistance.isValid)
+                    if (validToHit)
                     {
-                        return;
+                        DealDamage(collision, hitbox);
+                        SpawnHitFX(collision);
                     }
-
-                    Vector2 hitPoint;
-
-                    // if its overlapped then this collider's nearest vertex is inside the other collider
-                    // so the position adjustment shouldn't be necessary
-                    if (colliderDistance.isOverlapped)
-                    {
-                        hitPoint = colliderDistance.pointA; // point on the surface of this collider
-                    }
-                    else
-                    {
-                        // move the hit location inside the collider a bit
-                        // this assumes the colliders are basically touching
-                        hitPoint = colliderDistance.pointB - (0.01f * colliderDistance.normal);
-                    }
-
-                    onHitFX.SpawnFX(hitPoint, GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint));
                 }
             }
 
-            if (m_canDetectInteractables)
+            if (m_canDetectInteractables && validToHit)
             {
-                if(collision.TryGetComponentInParent(out IHitToInteract interactable))
-                {
-                    interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position,m_damageDealer.position));
-
-                }
+                InterractWith(collision);
             }
         }
 

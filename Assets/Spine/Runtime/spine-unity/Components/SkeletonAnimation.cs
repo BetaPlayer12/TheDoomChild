@@ -31,6 +31,7 @@
 #define NEW_PREFAB_SYSTEM
 #endif
 
+using DChild;
 using UnityEngine;
 
 namespace Spine.Unity {
@@ -136,7 +137,13 @@ namespace Spine.Unity {
 		}
 		#endregion
 
+        [SerializeField]
+        private bool m_alwaysUpdateMesh;
+
+
 		private bool m_isVisible;
+
+		public bool isVisible { get; }
 
 		/// <summary>
 		/// Clears the previously generated mesh, resets the skeleton's pose, and clears all previously active animations.</summary>
@@ -169,6 +176,41 @@ namespace Spine.Unity {
 					#endif
 				}
 			}
+		}
+
+		public bool CallUpdateLocal()
+		{
+			var canCall = _UpdateLocal != null;
+			if (canCall)
+			{
+				_UpdateLocal(this);
+			}
+			return canCall;
+		}
+
+		public bool CallUpdateWorld()
+		{
+			var canCall = _UpdateWorld != null;
+			if (canCall)
+			{
+				_UpdateWorld(this);
+			}
+			return canCall;
+		}
+
+		public bool CallUpdateComplete()
+		{
+			var canCall = _UpdateComplete != null;
+			if (canCall)
+			{
+				_UpdateComplete(this);
+			}
+			return canCall;
+		}
+
+		void Start()
+		{
+			SpineAnimationManager.Register(this);
 		}
 
 		void Update () {
@@ -210,10 +252,10 @@ namespace Spine.Unity {
 
 		public override void LateUpdate()
 		{
-			if (m_isVisible)
-			{
+			//if (m_alwaysUpdateMesh || m_isVisible)
+			//{
 				base.LateUpdate();
-			}
+			//}
 		}
 
 		private void OnBecameInvisible()
