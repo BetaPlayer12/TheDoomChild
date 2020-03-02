@@ -36,7 +36,7 @@ namespace PlayerNew
                
                 if (canJump && holdTime < 0.1f && !collisionState.onWall && !collisionState.onWallLeg)
                 {
-                    Debug.Log("from ground");
+                   
                     jumpsRemaining = jumpCount - 1;
                     OnJump();
                 }
@@ -47,7 +47,7 @@ namespace PlayerNew
 
                 if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay && !collisionState.onWall && !collisionState.onWallLeg)
                 {
-                    Debug.Log("double jumping");
+                   
                     if (jumpsRemaining > 0)
                     {
                         OnJump();

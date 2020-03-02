@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Spine {
 	public class Skeleton {
@@ -133,7 +134,7 @@ namespace Spine {
 				bone.active = !bone.sorted;
 			}
 			if (skin != null) {
-				Object[] skinBones = skin.bones.Items;
+				object[] skinBones = skin.bones.Items;
 				for (int i = 0, n = skin.bones.Count; i < n; i++) {
 					Bone bone = (Bone)bones.Items[((BoneData)skinBones[i]).index];
 					do {

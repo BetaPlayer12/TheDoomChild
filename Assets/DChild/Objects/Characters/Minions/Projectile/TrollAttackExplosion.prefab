@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 3062135797176933408}
   - component: {fileID: 3062135797176933409}
   - component: {fileID: 9017899828483743941}
-  - component: {fileID: 5263734011912803545}
   - component: {fileID: 2238376540794582377}
   - component: {fileID: 8337205586383589602}
-  m_Layer: 16
+  - component: {fileID: 8600205111452200405}
+  m_Layer: 14
   m_Name: TrollAttackExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,17 +73,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!210 &5263734011912803545
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3062135797176933411}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 2
 --- !u!114 &2238376540794582377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,6 +106,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_ignoreColliderList: []
+--- !u!61 &8600205111452200405
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3062135797176933411}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0000021457672, y: 1.9064331}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 13.54755, y: 9.625732}
+  m_EdgeRadius: 0
 --- !u!1 &4791974033412078927
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,13 +144,13 @@ GameObject:
   - component: {fileID: 8642593278586668916}
   - component: {fileID: 6082271270675606377}
   - component: {fileID: 6270903388612198979}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6465903679836333181
 Transform:
   m_ObjectHideFlags: 0
@@ -174,7 +189,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6.7737746, y: 4.812866}
+  m_Size: {x: 13.54755, y: 9.625732}
   m_EdgeRadius: 0
 --- !u!199 &6082271270675606377
 ParticleSystemRenderer:
@@ -191,6 +206,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4922,10 +4938,35 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3062135797176933408}
     m_Modifications:
-    - target: {fileID: 8117275475192658165, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+    - target: {fileID: 6479098106532325603, guid: 83c706ca0fc17b34e8470f476a01fa6f,
         type: 3}
-      propertyPath: m_Name
-      value: Troll_Rock_Impact
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479098106532325603, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479098106532325604, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1150295711
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479098106532325604, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479098106532325604, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 102
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479098106532325606, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8117275475192658160, guid: 83c706ca0fc17b34e8470f476a01fa6f,
         type: 3}
@@ -4982,6 +5023,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -174.113
       objectReference: {fileID: 0}
+    - target: {fileID: 8117275475192658162, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1150295711
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117275475192658162, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117275475192658162, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 101
+      objectReference: {fileID: 0}
     - target: {fileID: 8117275475192658163, guid: 83c706ca0fc17b34e8470f476a01fa6f,
         type: 3}
       propertyPath: playOnAwake
@@ -4992,15 +5048,20 @@ PrefabInstance:
       propertyPath: stopAction
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 6479098106532325603, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+    - target: {fileID: 8117275475192658163, guid: 83c706ca0fc17b34e8470f476a01fa6f,
         type: 3}
-      propertyPath: playOnAwake
-      value: 1
+      propertyPath: lengthInSec
+      value: 0.25
       objectReference: {fileID: 0}
-    - target: {fileID: 6479098106532325603, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+    - target: {fileID: 8117275475192658165, guid: 83c706ca0fc17b34e8470f476a01fa6f,
         type: 3}
-      propertyPath: stopAction
-      value: 3
+      propertyPath: m_Name
+      value: Troll_Rock_Impact
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117275475192658165, guid: 83c706ca0fc17b34e8470f476a01fa6f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 83c706ca0fc17b34e8470f476a01fa6f, type: 3}

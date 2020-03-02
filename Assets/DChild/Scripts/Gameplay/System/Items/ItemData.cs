@@ -12,6 +12,8 @@ namespace DChild.Gameplay.Items
     [CreateAssetMenu(fileName = "ItemData", menuName = "DChild/Database/Item Data")]
     public class ItemData : DatabaseAsset
     {
+        #region EDITOR
+
 #if UNITY_EDITOR
         [ShowInInspector, ToggleGroup("m_enableEdit")]
         private bool m_enableEdit;
@@ -102,8 +104,11 @@ namespace DChild.Gameplay.Items
             m_cost = info.cost;
             connection.Close();
         }
-#endif
+#endif 
+        #endregion
 
+        [SerializeField, ToggleGroup("m_enableEdit")]
+        private ItemCategory m_category;
         [SerializeField, PreviewField(100, ObjectFieldAlignment.Center), ToggleGroup("m_enableEdit")]
         private Sprite m_icon;
         [SerializeField, MinValue(1), ToggleGroup("m_enableEdit")]
@@ -115,6 +120,8 @@ namespace DChild.Gameplay.Items
 
         public int id { get => m_ID; }
         public string itemName { get => m_name; }
+        public ItemCategory category => m_category;
+
         public Sprite icon { get => m_icon; }
         public int quantityLimit { get => m_quantityLimit; }
         public int cost { get => m_cost; }
