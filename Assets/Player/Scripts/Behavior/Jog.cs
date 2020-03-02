@@ -12,12 +12,10 @@ namespace PlayerNew
         public float jogTimer = 3.5f;
         public bool jogging = false;
 
-        private CapsuleCollider2D collider2D;
-
         // Start is called before the first frame update
         void Start()
         {
-            collider2D = GetComponent<CapsuleCollider2D>();
+
         }
 
         // Update is called once per frame
@@ -54,6 +52,8 @@ namespace PlayerNew
             body2d.velocity = new Vector2(velX, body2d.velocity.y);
 
 
+
+
             //if(right || left)
             //{
             //    var tmpSpeed = speed;
@@ -62,7 +62,6 @@ namespace PlayerNew
             //}
 
         }
-
     }
 }
 

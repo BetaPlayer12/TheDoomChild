@@ -4,7 +4,7 @@ using Spine;
 using DarkTonic.MasterAudio;
 using System;
 using Sirenix.OdinInspector;
-using static DChild.SpineSoundData;
+using static DChild.SoundData;
 
 namespace DChild
 {
@@ -15,13 +15,13 @@ namespace DChild
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
         [SerializeField, InlineEditor]
-        private SpineSoundData m_data;
+        private SoundData m_data;
         private CallBackSounds m_callback;
 
         private static string m_cacheEvent;
-        private static SpineSoundData.EventInfo m_cacheEventInfo;
+        private static SoundData.EventInfo m_cacheEventInfo;
         private static string m_cacheAnimation;
-        private static SpineSoundData.AnimationInfo m_cacheAnimationInfo;
+        private static SoundData.AnimationInfo m_cacheAnimationInfo;
 
 
         private void OnEvents(TrackEntry trackEntry, Spine.Event e)

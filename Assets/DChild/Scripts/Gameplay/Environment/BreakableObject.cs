@@ -17,13 +17,11 @@ namespace DChild.Gameplay.Environment
         {
             public SaveData(bool isDestroyed) : this()
             {
-                this.m_isDestroyed = isDestroyed;
+                this.isDestroyed = isDestroyed;
             }
 
-            [SerializeField]
-            private bool m_isDestroyed;
-
-            public bool isDestroyed => m_isDestroyed;
+            [ShowInInspector,]
+            public bool isDestroyed { get; private set; }
         }
 
         [SerializeField]
@@ -118,7 +116,11 @@ namespace DChild.Gameplay.Environment
 
         private void OnDestroyObject(object sender, EventActionArgs eventArgs)
         {
-            SetObjectState(true);
+            m_onDestroy?.Invoke();
+            if (m_createDebris)
+            {
+                InstantiateDebris(m_debris);
+            }
         }
 
         // Start is called before the first frame update

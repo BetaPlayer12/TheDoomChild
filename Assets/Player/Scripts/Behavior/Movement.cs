@@ -16,7 +16,7 @@ namespace PlayerNew
         // Use this for initialization
         void Start()
         {
-            body2d = GetComponentInParent<Rigidbody2D>();
+            body2d = GetComponent<Rigidbody2D>();
             inputState = GetComponent<InputState>();
         }
 

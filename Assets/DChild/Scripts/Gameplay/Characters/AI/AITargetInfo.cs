@@ -10,7 +10,6 @@ namespace DChild.Gameplay.Characters.AI
     {
         public bool isCharacter { get; private set; }
         public bool isValid { get; private set; }
-        public bool doesTargetExist => m_damageable != null;
         private IDamageable m_damageable;
         private Character m_target;
 

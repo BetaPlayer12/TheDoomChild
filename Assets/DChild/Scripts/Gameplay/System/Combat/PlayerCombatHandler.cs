@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Combat
 
         public void ResolveDamageRecieved(IPlayer player)
         {
-            if (player.state?.canFlinch ?? true)
+            if (player.state.canFlinch)
             {
                 StartCoroutine(DisableInputTemporarily(player));
             }

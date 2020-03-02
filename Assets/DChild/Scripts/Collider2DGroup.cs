@@ -25,7 +25,7 @@ namespace DChild
         {
             for (int i = 0; i < m_colliders.Length; i++)
             {
-                m_colliders[i].enabled = value;
+                m_colliders[i].enabled = true;
             }
         }
 

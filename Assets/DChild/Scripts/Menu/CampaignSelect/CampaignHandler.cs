@@ -1,5 +1,4 @@
 ﻿using System;
-using DChild.Gameplay;
 using DChild.Menu.Campaign;
 using DChild.Serialization;
 using Holysoft.Event;
@@ -28,9 +27,8 @@ namespace DChild.Menu
         public void Play()
         {
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
-            GameplaySystem.SetCurrentCampaign(m_campaignSelect.selectedSlot);
-            LoadingHandle.UnloadScenes(gameObject.scene.name);
             GameSystem.LoadZone(m_campaignSelect.selectedSlot.sceneToLoad.sceneName, true);
+            LoadingHandle.UnloadScenes(gameObject.scene.name);
         }
 
         private void OnDeleteAffirmed(object sender, EventActionArgs eventArgs)

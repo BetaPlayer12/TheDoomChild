@@ -26,9 +26,9 @@ namespace DChild.Gameplay.Systems
 
         private void Awake()
         {
-            m_damageable = GetComponentInParent<Damageable>();
             if (m_dropWhenDestroyed)
             {
+                m_damageable = GetComponentInParent<Damageable>();
                 m_damageable.Destroyed += OnDestroyed;
             }
         }

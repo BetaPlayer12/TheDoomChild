@@ -17,21 +17,23 @@ namespace DChild.Menu.MainMenu
         [SpineAnimation]
         private string m_startAnimation;
 
+
+        public SkeletonAnimation zSkeleton => m_zSkeleton;
         public string startAnimation => m_startAnimation;
 
         public void Initialize()
         {
             gameObject.SetActive(true);
-            if (m_zSkeleton.AnimationState != null)
+            if (m_zSkeleton.state != null)
             {
-                var track = m_zSkeleton.AnimationState.SetAnimation(0, m_idleLoop, true);
+                var track = m_zSkeleton.state.SetAnimation(0, m_idleLoop, true);
                 track.MixDuration = 0;
             }
         }
 
         public void TransistionAnimation()
         {
-            m_zSkeleton.AnimationState.SetAnimation(0, m_startAnimation, false);
+            m_zSkeleton.state.SetAnimation(0, m_startAnimation, false);
         }
 
         public void Hide()

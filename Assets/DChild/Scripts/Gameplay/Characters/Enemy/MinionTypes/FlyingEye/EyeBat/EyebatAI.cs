@@ -339,12 +339,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        protected override void OnTargetDisappeared()
-        {
-            m_stateHandle.OverrideState(State.Patrol);
-            m_currentPatience = 0;
-            m_enablePatience = false;
-        }
 
     }
 }

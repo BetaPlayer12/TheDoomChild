@@ -11,7 +11,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-
     [RequireComponent(typeof(Collider2D))]
     [AddComponentMenu("DChild/Gameplay/Combat/Hitbox")]
     public class Hitbox : MonoBehaviour
@@ -49,8 +48,6 @@ namespace DChild.Gameplay.Combat
         {
             m_isInvulnerable = value;
         }
-
-        public virtual bool CanBeDamageBy(params Collider2D[] colliders) => true;
 
         private void Awake()
         {

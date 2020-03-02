@@ -33,18 +33,14 @@ namespace DChild.Gameplay.Environment
         private bool m_isInitialized;
         private Coroutine m_currentRoutine;
 
-        [System.Serializable]
         public struct SaveData : ISaveData
         {
             public SaveData(bool isInvisible) : this()
             {
-                this.m_isInvisible = isInvisible;
+                this.isInvisible = isInvisible;
             }
 
-            [SerializeField]
-            private bool m_isInvisible;
-
-            public bool isInvisible => m_isInvisible;
+            public bool isInvisible { get; }
         }
 
         private struct ColorInfo

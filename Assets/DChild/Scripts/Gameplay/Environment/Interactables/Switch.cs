@@ -27,18 +27,14 @@ namespace DChild.Gameplay.Environment
             Trigger
         }
 
-        [System.Serializable]
         public struct SaveData : ISaveData
         {
             public SaveData(bool isOpen)
             {
-                this.m_isTriggered = isOpen;
+                this.isOpen = isOpen;
             }
 
-            [SerializeField]
-            private bool m_isTriggered;
-
-            public bool isTriggered => m_isTriggered;
+            public bool isOpen { get; }
         }
 
         [SerializeField, OnValueChanged("OnTypeChanged")]
@@ -59,8 +55,6 @@ namespace DChild.Gameplay.Environment
         [SerializeField, HideIf("m_hideOffState")]
         private UnityEvent m_offState;
 
-        public event EventAction<HitDirectionEventArgs> OnHit;
-
         public Vector2 position => transform.position;
 
         public ISaveData Save()
@@ -70,7 +64,7 @@ namespace DChild.Gameplay.Environment
 
         public void Load(ISaveData data)
         {
-            m_isOn = ((SaveData)data).isTriggered;
+            m_isOn = ((SaveData)data).isOpen;
             if (m_isOn)
             {
                 m_startAsOnState?.Invoke();
@@ -118,7 +112,6 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-        [Button]
         public void Interact()
         {
             switch (m_type)
@@ -173,6 +166,10 @@ namespace DChild.Gameplay.Environment
         private bool m_hideStartAsOffState;
         [SerializeField, HideInInspector]
         private bool m_hideOffState;
+
+
+
+        public event EventAction<HitDirectionEventArgs> OnHit;
 
         private struct GizmoInfo
         {
