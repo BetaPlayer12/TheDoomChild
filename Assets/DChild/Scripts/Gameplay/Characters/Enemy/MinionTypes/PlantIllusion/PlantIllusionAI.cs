@@ -127,6 +127,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("AttackHitBoxes")]
+        private GameObject m_smokeHitbox;
 
         private float m_targetDistance;
 
@@ -145,8 +147,8 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
 
             m_spineEventListener.Subscribe(m_info.dartFXEvent, LaunchProjectile);
-            m_spineEventListener.Subscribe(m_info.smokeFXEvent, m_smokeFX.Play);
-            m_spineEventListener.Subscribe(m_info.smokeStopFXEvent, m_smokeFX.Stop);
+            m_spineEventListener.Subscribe(m_info.smokeFXEvent, SmokeStart);
+            m_spineEventListener.Subscribe(m_info.smokeStopFXEvent, SmokeEnd);
             //GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -166,6 +168,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_Audiosource.clip = m_RangeAttackClip;
                 //m_Audiosource.Play();
             }
+        }
+
+        private void SmokeStart()
+        {
+            m_smokeHitbox.SetActive(true);
+            m_smokeFX.Play();
+        }
+
+        private void SmokeEnd()
+        {
+            m_smokeHitbox.SetActive(false);
+            m_smokeFX.Stop();
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -220,13 +234,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -368,13 +383,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
-        }
-
-        protected override void OnTargetDisappeared()
-        {
-            m_stateHandle.OverrideState(State.Burrowed);
-            m_currentPatience = 0;
-            m_enablePatience = false;
         }
     }
 }

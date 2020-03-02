@@ -1,8 +1,13 @@
-﻿using Holysoft.UI;
+﻿using Holysoft.Event;
+using Holysoft.UI;
+using Sirenix.OdinInspector;
+using Spine;
 using Spine.Unity;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Holysoft.Collections
 {
@@ -39,9 +44,9 @@ namespace Holysoft.Collections
 
         private void LateUpdate()
         {
-            if (m_skeletonData?.AnimationState.GetCurrent(0).ToString() == animations[0])
+            if (m_skeletonData?.state.GetCurrent(0).ToString() == animations[0])
             {
-                var spineLength = m_skeletonData.AnimationState.GetCurrent(0).TrackTime;
+                var spineLength = m_skeletonData.state.GetCurrent(0).TrackTime;
                 if (Mathf.Abs(spineLength) >= cue)
                 {
                     m_text.alpha = Mathf.Lerp(m_text.color.a, 0f, speed * Time.deltaTime);

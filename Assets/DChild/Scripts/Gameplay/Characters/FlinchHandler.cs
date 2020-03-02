@@ -64,9 +64,10 @@ namespace DChild.Gameplay.Characters
             if (m_autoFlinch)
             {
                 m_spine.SetAnimation(0, m_animation, false, 0);
-                m_spine.AddAnimation(0, m_idleAnimation, true, 0.2f);
+                m_spine.AddEmptyAnimation(0, 0.2f, 0);
 
-                //m_spine.AddEmptyAnimation(0, 0.2f, 0);
+                //m_spine.AddAnimation(0, m_idleAnimation, true, 0.2f);
+
             }
             m_isFlinching = true;
             m_spine.AnimationSet += OnAnimationSet;

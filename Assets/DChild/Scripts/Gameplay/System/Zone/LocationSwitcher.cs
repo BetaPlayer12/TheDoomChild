@@ -30,7 +30,9 @@ namespace DChild.Gameplay.Systems
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.TryGetComponent(out Hitbox hitbox))
+            var playerControlledObject = collision.GetComponent<Hitbox>();
+
+            if (playerControlledObject != null)
             {
                 Character character = collision.GetComponentInParent<Character>();
 
@@ -47,8 +49,6 @@ namespace DChild.Gameplay.Systems
 
             if (type == TransitionType.Enter)
             {
-                GameplaySystem.campaignSerializer.UpdateData();
-
                 yield return new WaitForSeconds(m_transitionDelay);
 
                 m_handle.DoSceneTransition(character, TransitionType.PostEnter);

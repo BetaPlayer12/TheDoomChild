@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Sirenix.Serialization;
 using System.Collections;
 using DChildDebug.Serialization;
-using UnityEngine.SceneManagement;
 
 namespace DChild.Serialization
 {
@@ -16,11 +15,11 @@ namespace DChild.Serialization
         public class ZoneData : ISaveData
         {
             [SerializeField]
-            private Dictionary<SerializeID, ISaveData> m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
+            private Dictionary<SerializeID, ISaveData> m_savedDatas;
 
             public ZoneData()
             {
-                m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
+                m_savedDatas = new Dictionary<SerializeID, ISaveData>();
             }
 
             public ZoneData(ComponentSerializer[] serializers)
@@ -34,7 +33,7 @@ namespace DChild.Serialization
 
             public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas)
             {
-                m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas, new SerializeID.EqualityComparer());
+                m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas);
             }
 
             public void SetData(SerializeID ID, ISaveData data)
@@ -144,15 +143,9 @@ namespace DChild.Serialization
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
         }
 
-        private void Start()
-        {
-            SceneManager.SetActiveScene(gameObject.scene);
-        }
-
         private void OnDestroy()
         {
-            GameplaySystem.campaignSerializer.PreSerialization -= OnPreSerialization;
-            GameplaySystem.campaignSerializer.PostDeserialization -= OnPostDeserialization;
+            UpdateSaveData();
         }
 
         #region Editor

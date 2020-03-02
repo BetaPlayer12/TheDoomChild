@@ -75,18 +75,10 @@ namespace DChild.Gameplay
         }
 
         [Button]
-        public void Load(bool byPassLoadingFromFile = false)
+        public void Load()
         {
-            if (byPassLoadingFromFile == false)
-            {
-                SerializationHandle.Load(m_slot.id, ref m_slot);
-            }
+            SerializationHandle.Load(m_slot.id, ref m_slot);
             CallPostDeserialization();
-        }
-
-        public void UpdateData()
-        {
-            CallPreSerialization();
         }
 
         public async Task<bool> LoadAsync()

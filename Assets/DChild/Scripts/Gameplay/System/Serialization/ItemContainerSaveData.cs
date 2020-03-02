@@ -42,10 +42,12 @@ namespace DChild.Serialization
 
         public Item[] datas { get => m_datas;  }
 
+#if UNITY_EDITOR
         public ItemContainerSaveData(ItemContainerSaveData m_datas)
         {
             List<Item> itemList = new List<Item>(m_datas.datas);
             this.m_datas = itemList.ToArray();
         }
+#endif
     }
 }

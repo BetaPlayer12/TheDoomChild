@@ -46,6 +46,7 @@ namespace DChild.Serialization
             this.m_equippedSoulSkillData = m_equippedSoulSkillData;
         }
 
+#if UNITY_EDITOR
         public PlayerCharacterData(PlayerCharacterData data)
         {
             this.m_inventoryData = new PlayerInventoryData(data.inventoryData);
@@ -55,7 +56,6 @@ namespace DChild.Serialization
             this.m_equippedSoulSkillData = data.equippedSoulSkillData;
         }
 
-#if UNITY_EDITOR
         [NonSerialized, ShowInInspector, BoxGroup("Debug")]
         private BestiaryList m_bestiaryList;
         [NonSerialized, ShowInInspector, BoxGroup("Debug")]

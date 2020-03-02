@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Characters.AI
 {
     public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain where T : IAIInfo
     {
+        [SerializeField]
+        private CharacterStatsData m_characterStatsData;
         [SerializeField, TabGroup("Reference")]
         private Damageable m_damageable;
         [SerializeField, TabGroup("Reference")]
@@ -43,6 +45,7 @@ namespace DChild.Gameplay.Characters.AI
         {
             m_targetInfo = new AITargetInfo();
             base.Awake();
+            m_characterStatsData?.Apply(m_character);
             m_damageable.Destroyed += OnDestroyed;
         }
 
@@ -55,7 +58,7 @@ namespace DChild.Gameplay.Characters.AI
 
         protected virtual void LateUpdate()
         {
-            if(m_targetInfo.isValid && m_targetInfo.doesTargetExist == false)
+            if (m_targetInfo.isValid && m_targetInfo.doesTargetExist == false)
             {
                 OnTargetDisappeared();
                 m_targetInfo.Set(null);
