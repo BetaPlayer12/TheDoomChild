@@ -28,6 +28,5 @@ namespace DChild.Gameplay.UI
                 m_detector.InteractableDetected += OnInteractableDetected;
             }
         }
-
     }
 }

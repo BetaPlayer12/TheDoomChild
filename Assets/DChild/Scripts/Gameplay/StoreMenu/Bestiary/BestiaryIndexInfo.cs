@@ -6,7 +6,6 @@ using TMPro;
 
 namespace DChild.Menu.Bestiary
 {
-    [RequireComponent(typeof(Canvas))]
     public class BestiaryIndexInfo : MonoBehaviour
     {
         [SerializeField]
@@ -14,28 +13,16 @@ namespace DChild.Menu.Bestiary
         [SerializeField]
         private Image m_creatureImage;
 
-        private Canvas m_canvas;
-
         public void Show()
         {
-#if UNITY_EDITOR
-            if (m_canvas == null)
-            {
-                m_canvas = GetComponent<Canvas>();
-            }
-#endif
-            m_canvas.enabled = true;
+            m_creatureLabel.enabled = true;
+            m_creatureImage.enabled = true;
         }
 
         public void Hide()
         {
-#if UNITY_EDITOR
-            if (m_canvas == null)
-            {
-                m_canvas = GetComponent<Canvas>();
-            }
-#endif
-            m_canvas.enabled = false;
+            m_creatureLabel.enabled = false;
+            m_creatureImage.enabled = false;
         }
 
         public void SetInfo(BestiaryData data)
@@ -50,11 +37,6 @@ namespace DChild.Menu.Bestiary
                 m_creatureLabel.text = data.creatureName;
                 m_creatureImage.sprite = data.indexImage;
             }
-        }
-
-        private void Awake()
-        {
-            m_canvas = GetComponent<Canvas>();
         }
     }
 }
