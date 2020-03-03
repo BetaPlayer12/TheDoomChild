@@ -165,44 +165,47 @@ namespace DChildDebug
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            Rigidbody2D rb = collision.GetComponentInParent<Rigidbody2D>();
-            if (rb == null || rb.bodyType == RigidbodyType2D.Static)
-                return; //we don't care about static rigidbody, they can't "fall" in water
-
-            Bounds bounds = collision.bounds;
-
-            List<int> touchedColumnIndices = new List<int>();
-            float divisionWith = m_Width / m_Columns.Length;
-
-            Vector3 localMin = transform.InverseTransformPoint(bounds.min);
-            Vector3 localMax = transform.InverseTransformPoint(bounds.max);
-
-            // find all our springs within the bounds
-            var xMin = localMin.x;
-            var xMax = localMax.x;
-
-            for (var i = 0; i < m_Columns.Length; i++)
+            if (collision.isTrigger == false)
             {
-                if (m_Columns[i].xPosition > xMin && m_Columns[i].xPosition < xMax)
-                    touchedColumnIndices.Add(i);
-            }
+                Rigidbody2D rb = collision.GetComponentInParent<Rigidbody2D>();
+                if (rb == null || rb.bodyType == RigidbodyType2D.Static)
+                    return; //we don't care about static rigidbody, they can't "fall" in water
 
-            // if we have no hits we should loop back through and find the 2 closest verts and use them
-            if (touchedColumnIndices.Count == 0)
-            {
+                Bounds bounds = collision.bounds;
+
+                List<int> touchedColumnIndices = new List<int>();
+                float divisionWith = m_Width / m_Columns.Length;
+
+                Vector3 localMin = transform.InverseTransformPoint(bounds.min);
+                Vector3 localMax = transform.InverseTransformPoint(bounds.max);
+
+                // find all our springs within the bounds
+                var xMin = localMin.x;
+                var xMax = localMax.x;
+
                 for (var i = 0; i < m_Columns.Length; i++)
                 {
-                    // widen our search to included divisitionWidth padding on each side so we definitely get a couple hits
-                    if (m_Columns[i].xPosition + divisionWith > xMin && m_Columns[i].xPosition - divisionWith < xMax)
+                    if (m_Columns[i].xPosition > xMin && m_Columns[i].xPosition < xMax)
                         touchedColumnIndices.Add(i);
                 }
-            }
 
-            float testForce = 0.2f;
-            for (int i = 0; i < touchedColumnIndices.Count; ++i)
-            {
-                int idx = touchedColumnIndices[i];
-                m_Columns[idx].velocity -= testForce;
+                // if we have no hits we should loop back through and find the 2 closest verts and use them
+                if (touchedColumnIndices.Count == 0)
+                {
+                    for (var i = 0; i < m_Columns.Length; i++)
+                    {
+                        // widen our search to included divisitionWidth padding on each side so we definitely get a couple hits
+                        if (m_Columns[i].xPosition + divisionWith > xMin && m_Columns[i].xPosition - divisionWith < xMax)
+                            touchedColumnIndices.Add(i);
+                    }
+                }
+
+                float testForce = 0.2f;
+                for (int i = 0; i < touchedColumnIndices.Count; ++i)
+                {
+                    int idx = touchedColumnIndices[i];
+                    m_Columns[idx].velocity -= testForce;
+                }
             }
         }
 

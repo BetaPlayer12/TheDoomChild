@@ -8,14 +8,16 @@ namespace DChild.Gameplay
     public class EnvironmentTrigger : MonoBehaviour, ISerializableComponent
     {
         [System.Serializable]
-        public struct SaveData: ISaveData
+        public struct SaveData : ISaveData
         {
             public SaveData(bool wasTriggered)
             {
-                this.wasTriggered = wasTriggered;
+                this.m_isTriggered = wasTriggered;
             }
 
-            public bool wasTriggered { get; }
+            [ShowInInspector]
+            public bool m_isTriggered;
+            public bool isTriggered => m_isTriggered;
         }
 
         [SerializeField, OnValueChanged("OnValueChange")]
@@ -25,33 +27,49 @@ namespace DChild.Gameplay
         [SerializeField, HideIf("m_oneTimeOnly")]
         private UnityEvent m_exitEvents;
 
+        private bool m_wasTriggered;
+
         public ISaveData Save()
         {
-            return new SaveData(enabled == false);
+            return new SaveData(m_wasTriggered);
         }
 
         public void Load(ISaveData data)
         {
-            enabled = ((SaveData)data).wasTriggered == false;
+            m_wasTriggered = ((SaveData)data).isTriggered;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Hitbox"))
             {
-                m_enterEvents?.Invoke();
+                if ((m_oneTimeOnly && !m_wasTriggered) || !m_oneTimeOnly)
+                {
+                    m_enterEvents?.Invoke();
+                }
                 if (m_oneTimeOnly)
                 {
-                    enabled = false;
+                    m_wasTriggered = true;
                 }
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.CompareTag("Hitbox"))
+            if (m_oneTimeOnly == false)
             {
-                m_exitEvents?.Invoke();
+                if (collision.CompareTag("Hitbox"))
+                {
+                    m_exitEvents?.Invoke();
+                }
+            }
+        }
+
+        private void OnValidate()
+        {
+            if(this.TryGetComponentInChildren<Collider2D>(out Collider2D collider))
+            {
+                collider.isTrigger = true;
             }
         }
 
@@ -64,13 +82,13 @@ namespace DChild.Gameplay
             }
         }
 
-        [Button,HideInEditorMode]
+        [Button, HideInEditorMode]
         private void OnEnter()
         {
             m_enterEvents?.Invoke();
         }
 
-        [Button,HideIf("m_oneTimeOnly"), HideInEditorMode]
+        [Button, HideIf("m_oneTimeOnly"), HideInEditorMode]
         private void OnExit()
         {
             m_exitEvents?.Invoke();

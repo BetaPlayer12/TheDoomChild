@@ -11,9 +11,10 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+
     [RequireComponent(typeof(Collider2D))]
     [AddComponentMenu("DChild/Gameplay/Combat/Hitbox")]
-    public abstract class Hitbox : MonoBehaviour
+    public class Hitbox : MonoBehaviour
     {
         private IDamageable m_damageable;
         [SerializeField, HideInInspector]
@@ -27,8 +28,6 @@ namespace DChild.Gameplay.Combat
         public IDamageable damageable => m_damageable;
         public BodyDefense defense => m_isInvulnerable ? new BodyDefense(m_isInvulnerable) : new BodyDefense(m_damageReduction);
         public bool isInvulnerable => m_isInvulnerable;
-
-        public abstract bool CanBeDamageBy(params Collider2D[] colliders);
 
         public void Enable()
         {
@@ -50,6 +49,8 @@ namespace DChild.Gameplay.Combat
         {
             m_isInvulnerable = value;
         }
+
+        public virtual bool CanBeDamageBy(params Collider2D[] colliders) => true;
 
         private void Awake()
         {

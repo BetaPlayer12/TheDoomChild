@@ -86,9 +86,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5787646661913183393}
   - component: {fileID: 625512094644400911}
-  - component: {fileID: 4989407399134859538}
+  - component: {fileID: 5204849338305375451}
   m_Layer: 9
-  m_Name: GameObject
+  m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +134,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.6914728, y: 9.733213}
   m_EdgeRadius: 0
---- !u!114 &4989407399134859538
+--- !u!114 &5204849338305375451
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,13 +143,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8493428121935856020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
+  m_Script: {fileID: 11500000, guid: 34b489c0ee0d08c42a6db5b55d62de1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 625512094644400911}
   m_isInvulnerable: 0
   m_damageReduction: 0
+  m_viableTags:
+  - WallBreaker
 --- !u!1001 &5262197208521533391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -245,7 +247,7 @@ PrefabInstance:
     - target: {fileID: 4577591927111601765, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
       propertyPath: m_maxHealth
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7003674765399219517, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
@@ -267,6 +269,316 @@ PrefabInstance:
         type: 3}
       propertyPath: m_id.m_ID
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].snapshotsToBlend.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: useDisableSound
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].actionName
+      value: Your action name
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].isExpanded
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].soundType
+      value: BreakableBlockadeSmash
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].targetGlidePitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].pitchGlideTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].snapshotTransitionTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].snapshotsToBlend.Array.data[0].weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].startPlaylist
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].fadeTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].minAge
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].clipName
+      value: '[None]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.SoundEvents.Array.data[0].variationType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: startSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: visibleSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: invisibleSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: collisionSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: collisionExitSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: triggerSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: triggerExitSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: mouseEnterSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: mouseExitSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: mouseClickSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: mouseUpSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: mouseDragSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: spawnedSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: despawnedSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: enableSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: disableSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: collision2dSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: collisionExit2dSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: triggerEnter2dSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: triggerExit2dSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: particleCollisionSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: nguiOnClickSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: nguiMouseDownSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: nguiMouseUpSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: nguiMouseEnterSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: nguiMouseExitSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unitySliderChangedSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityButtonClickedSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityPointerDownSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityDragSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityPointerUpSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityPointerEnterSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityPointerExitSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityDropSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityScrollSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityUpdateSelectedSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unitySelectSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityDeselectSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityMoveSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityInitializePotentialDragSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityBeginDragSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityEndDragSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unitySubmitSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityCancelSound.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880526986204328962, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: unityToggleSound.isExpanded
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8302337d0dac39146b4f6aaaf90bbe60, type: 3}

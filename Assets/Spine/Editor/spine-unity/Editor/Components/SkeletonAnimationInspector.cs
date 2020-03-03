@@ -36,6 +36,7 @@ namespace Spine.Unity.Editor {
 	[CustomEditor(typeof(SkeletonAnimation))]
 	[CanEditMultipleObjects]
 	public class SkeletonAnimationInspector : SkeletonRendererInspector {
+        protected SerializedProperty alwaysUpdateMesh;
 		protected SerializedProperty animationName, loop, timeScale, autoReset;
 		protected bool wasAnimationNameChanged;
 		protected bool requireRepaint;
@@ -44,7 +45,8 @@ namespace Spine.Unity.Editor {
 
 		protected override void OnEnable () {
 			base.OnEnable();
-			animationName = serializedObject.FindProperty("_animationName");
+            alwaysUpdateMesh = serializedObject.FindProperty("m_alwaysUpdateMesh");
+            animationName = serializedObject.FindProperty("_animationName");
 			loop = serializedObject.FindProperty("loop");
 			timeScale = serializedObject.FindProperty("timeScale");
 		}
@@ -73,6 +75,7 @@ namespace Spine.Unity.Editor {
 				component.timeScale = Mathf.Max(component.timeScale, 0);
 			}
 			EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(alwaysUpdateMesh);
 
 			if (!isInspectingPrefab) {
 				if (requireRepaint) {

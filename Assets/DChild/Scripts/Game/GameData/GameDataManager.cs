@@ -1,26 +1,22 @@
-﻿using DChild.Gameplay.Environment;
-using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using System.IO;
 using DChild.Serialization;
+using Sirenix.Serialization;
 
 namespace DChild
 {
-    public class GameDataManager : MonoBehaviour
+    public class GameDataManager : SerializedMonoBehaviour
     {
-#if UNITY_EDITOR
         [SerializeField]
         private bool m_doNotUseExistingFiles; 
-#endif
-        [SerializeField, Title("Save File"), HideLabel]
-        private CampaignSlotList m_campaignSlotList;
 
-        public CampaignSlotList campaignSlotList { get => m_campaignSlotList; }
+        [OdinSerialize,HideReferenceObjectPicker, Title("Save File"), HideLabel]
+        private CampaignSlotList m_campaignSlotList = new CampaignSlotList();
 
-        private void InitializeCampaginSlotList()
+        public CampaignSlotList campaignSlotList => m_campaignSlotList;
+
+        public void InitializeCampaginSlotList()
         {
             CampaignSlot[] slots = new CampaignSlot[m_campaignSlotList.slotCount];
             for (int i = 0; i < slots.Length; i++)
@@ -41,14 +37,10 @@ namespace DChild
 
         private void Awake()
         {
-#if UNITY_EDITOR
             if(m_doNotUseExistingFiles == false)
             {
                 InitializeCampaginSlotList();
             }
-#else
-            InitializeCampaginSlotList();
-#endif
         }
     }
 }

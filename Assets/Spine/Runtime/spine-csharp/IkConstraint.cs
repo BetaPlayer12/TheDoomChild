@@ -28,7 +28,6 @@
  *****************************************************************************/
 
 using System;
-using UnityEngine;
 
 namespace Spine {
 	/// <summary>
@@ -227,10 +226,7 @@ namespace Spine {
 				child.UpdateWorldTransform();
 				return;
 			}
-			if (!parent.appliedValid)
-			{
-				parent.UpdateAppliedTransform();
-			}
+			if (!parent.appliedValid) parent.UpdateAppliedTransform();
 			if (!child.appliedValid) child.UpdateAppliedTransform();
 			float px = parent.ax, py = parent.ay, psx = parent.ascaleX, sx = psx, psy = parent.ascaleY, csx = child.ascaleX;
 			int os1, os2, s2;

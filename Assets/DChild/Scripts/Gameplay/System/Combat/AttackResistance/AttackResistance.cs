@@ -25,9 +25,9 @@ namespace DChild.Gameplay.Combat
 
         public abstract void SetData(AttackResistanceData data);
 
-        public abstract void ClearResistance();
-
         public abstract void SetResistance(AttackType type, float resistanceValue);
+
+        public abstract void ClearResistance();
 
         public float GetResistance(AttackType type) => resistance.ContainsKey(type) ? resistance[type] : 0;
 
