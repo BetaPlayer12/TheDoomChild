@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
-    public class Foilage : MonoBehaviour
+    public class FoilageOld : MonoBehaviour
     {
         private Renderer[] m_renderers;
 
