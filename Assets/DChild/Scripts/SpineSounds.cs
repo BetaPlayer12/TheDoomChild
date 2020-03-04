@@ -14,7 +14,7 @@ namespace DChild
     {
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
-        [SerializeField, InlineEditor]
+        [SerializeField]
         private SpineSoundData m_data;
         private CallBackSounds m_callback;
 
