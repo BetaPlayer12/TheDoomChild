@@ -134,9 +134,9 @@ namespace DChild
             asset.InstantiateAsync(request.position, Quaternion.identity).Completed += (operation) =>
             {
                 m_spawnedInstances[asset].Value.Add(operation.Result);
-                var instance = operation.Result.AddComponent<AddressableInstance>();
-                instance.reference = asset;
-                instance.OnDestroyInstance = OnInstanceDestroyed;
+                //var instance = operation.Result.AddComponent<AddressableInstance>();
+                //instance.reference = asset;
+                //instance.OnDestroyInstance = OnInstanceDestroyed;
                 m_toBeInstantiatedCount[asset]--;
 
                 if (request.hasCallback)
