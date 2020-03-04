@@ -1,27 +1,13 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Pooling;
+using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Holysoft.Pooling
+namespace DChild.Gameplay.Pooling
 {
-    public interface IPool
-    {
-        void Initialize();
-        void Update(float deltaTime);
-        void Clear();
-    }
-
-    public abstract class ObjectPool : IPool
-    {
-        public static Transform poolItemStorage;
-
-        public abstract void Clear();
-        public abstract void Initialize();
-        public abstract void Update(float deltaTime);
-    }
-
-    public abstract class ObjectPool<T> : ObjectPool where T : class, IPoolableItem
+    public abstract class ObjectPool<T> : ObjectPool where T : MonoBehaviour, IPoolableItem
     {
         [SerializeField, MinValue(1)]
         private float m_poolDuration;
@@ -35,6 +21,7 @@ namespace Holysoft.Pooling
         {
             m_items = new List<T>();
             m_timers = new List<float>();
+            AddressableSpawner.OnSpawn += OnInstanceCreated;
         }
 
         public T GetOrCreateItem(GameObject gameObject)
@@ -55,6 +42,37 @@ namespace Holysoft.Pooling
             }
         }
 
+        public void GetOrCreateItem(AssetReferenceGameObject gameObject, int index = 0, Action<GameObject, int> CallBack = null)
+        {
+
+            var component = ((GameObject)gameObject.Asset).GetComponent<T>();
+            if (component == null)
+            {
+                throw new System.Exception($"{gameObject} does not have component {typeof(T).Name} for Pool Manager {GetType().Name}");
+            }
+            else if (m_items.Count > 0)
+            {
+                var retrievedInstance = RetrieveFromPool(component);
+                if (retrievedInstance == null)
+                {
+                    CreateInstance(gameObject, index, CallBack);
+                }
+                else
+                {
+                    CallBack(retrievedInstance.gameObject, index);
+                }
+            }
+            else
+            {
+                CreateInstance(gameObject, index, CallBack);
+            }
+        }
+
+        private void CreateInstance(AssetReferenceGameObject gameObject, int index = 0, Action<GameObject, int> CallBack = null)
+        {
+            AddressableSpawner.Spawn(gameObject, Vector3.zero, index, CallBack);
+        }
+
         private T CreateInstance(GameObject gameObject)
         {
             var instance = UnityEngine.Object.Instantiate(gameObject);
@@ -62,6 +80,15 @@ namespace Holysoft.Pooling
             newComponent.PoolRequest += OnPoolRequest;
             newComponent.InstanceDestroyed += OnInstanceDestroyed;
             return newComponent;
+        }
+
+        private void OnInstanceCreated(GameObject obj)
+        {
+            if (obj.TryGetComponent(out T newComponent))
+            {
+                newComponent.PoolRequest += OnPoolRequest;
+                newComponent.InstanceDestroyed += OnInstanceDestroyed;
+            }
         }
 
         private void OnInstanceDestroyed(object sender, PoolItemEventArgs eventArgs)
