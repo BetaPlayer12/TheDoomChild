@@ -173,14 +173,22 @@ namespace PlayerNew
                         m_swordUpSlashAttackCollider.enabled = true;
                     }
                     animator.SetBool("Attack", true);
-                }
-                else
-                {
-                   
-                }
+                } 
+               
                 
             }else if (Input.GetButtonUp("Fire1"))
             {
+                Debug.Log("end here");
+                m_forwardSlashAttackCollider.enabled = false;
+                m_swordCombo1AttackCollider.enabled = false;
+                m_swordCombo2AttackCollider.enabled = false;
+
+                m_crouchSlashAttackCollider.enabled = false;
+                m_jumpSlashAttackCollider.enabled = false;
+                m_swordUpSlashAttackCollider.enabled = false;
+                m_swordJumpSlashForwardAttackCollider.enabled = false;
+                animator.SetBool("Attack", false);
+                animator.SetBool("Slash1", false);
                 ToggleScripts(true);
             }
         }
