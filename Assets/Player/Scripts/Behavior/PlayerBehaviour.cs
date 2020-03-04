@@ -11,8 +11,6 @@ namespace PlayerNew
         public Buttons[] inputButtons;
         [DrawWithUnity]
         public MonoBehaviour[] dissableScripts;
-        [DrawWithUnity]
-        public MonoBehaviour[] enableOnlyScript;
         protected InputState inputState;
         protected Rigidbody2D body2d;
         protected Transform trans;
@@ -30,32 +28,11 @@ namespace PlayerNew
 
         protected virtual void ToggleScripts(bool value)
         {
-           
-           
-            if(enableOnlyScript.Length > 0 && value == true)
+            foreach (var script in dissableScripts)
             {
-               
-                foreach (var enbleScript in enableOnlyScript)
-                {
-                    Debug.Log("enable only:" + enbleScript);
-                    if (!enbleScript)
-                    {
-                        foreach (var script in dissableScripts)
-                        {
-                            script.enabled = value;
-                        }
-                    }
-                }
+                script.enabled = value;
             }
-            else
-            {
-                foreach (var script in dissableScripts)
-                {
-                    script.enabled = value;
-                }
-            }
-           
-        }       
+        }
     }
 
 }

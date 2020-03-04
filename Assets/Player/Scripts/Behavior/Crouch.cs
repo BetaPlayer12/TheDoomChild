@@ -31,7 +31,7 @@ namespace PlayerNew
             else if (crouching && !canCrouch)
             {
                 OnCrouch(false);
-            }            
+            }
         }
     }
 

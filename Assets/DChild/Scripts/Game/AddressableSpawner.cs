@@ -130,20 +130,20 @@ namespace DChild
 
         private void SpawnInstance(AssetReferenceGameObject asset, Request request, Action<GameObject, int> CallBack)
         {
-            m_toBeInstantiatedCount[asset]++;
-            asset.InstantiateAsync(request.position, Quaternion.identity).Completed += (operation) =>
-            {
-                m_spawnedInstances[asset].Value.Add(operation.Result);
-                var instance = operation.Result.AddComponent<AddressableInstance>();
-                instance.reference = asset;
-                instance.OnDestroyInstance = OnInstanceDestroyed;
-                m_toBeInstantiatedCount[asset]--;
+            //m_toBeInstantiatedCount[asset]++;
+            //asset.InstantiateAsync(request.position, Quaternion.identity).Completed += (operation) =>
+            //{
+            //    m_spawnedInstances[asset].Value.Add(operation.Result);
+            //    var instance = operation.Result.AddComponent<AddressableInstance>();
+            //    instance.reference = asset;
+            //    instance.OnDestroyInstance = OnInstanceDestroyed;
+            //    m_toBeInstantiatedCount[asset]--;
 
-                if (request.hasCallback)
-                {
-                    CallBack?.Invoke(operation.Result, request.index);
-                }
-            };
+            //    if (request.hasCallback)
+            //    {
+            //        CallBack?.Invoke(operation.Result, request.index);
+            //    }
+            //};
         }
 
         private void OnInstanceDestroyed(AssetReferenceGameObject asset, GameObject instance)
