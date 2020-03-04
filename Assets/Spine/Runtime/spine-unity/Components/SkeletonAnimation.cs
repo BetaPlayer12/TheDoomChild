@@ -31,7 +31,6 @@
 #define NEW_PREFAB_SYSTEM
 #endif
 
-using DChild;
 using UnityEngine;
 
 namespace Spine.Unity {
@@ -206,11 +205,6 @@ namespace Spine.Unity {
 				_UpdateComplete(this);
 			}
 			return canCall;
-		}
-
-		void Start()
-		{
-			SpineAnimationManager.Register(this);
 		}
 
 		void Update () {
