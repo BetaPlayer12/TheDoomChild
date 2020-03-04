@@ -175,6 +175,39 @@ namespace Spine.Unity {
 			}
 		}
 
+<<<<<<< HEAD
+=======
+		public bool CallUpdateLocal()
+		{
+			var canCall = _UpdateLocal != null;
+			if (canCall)
+			{
+				_UpdateLocal(this);
+			}
+			return canCall;
+		}
+
+		public bool CallUpdateWorld()
+		{
+			var canCall = _UpdateWorld != null;
+			if (canCall)
+			{
+				_UpdateWorld(this);
+			}
+			return canCall;
+		}
+
+		public bool CallUpdateComplete()
+		{
+			var canCall = _UpdateComplete != null;
+			if (canCall)
+			{
+				_UpdateComplete(this);
+			}
+			return canCall;
+		}
+
+>>>>>>> c8c223d328b12ecf2bb5849041e05b31713e1fa7
 		void Update () {
 			#if UNITY_EDITOR
 			if (!Application.isPlaying) {
