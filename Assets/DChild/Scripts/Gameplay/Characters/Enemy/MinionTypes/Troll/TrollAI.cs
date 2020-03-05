@@ -156,6 +156,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleSystem m_oraFX;
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_rockThrowFX;
+        [SerializeField, TabGroup("AttackHitbox")]
+        private GameObject m_attackHitbox;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -186,9 +188,23 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
 
             m_spineEventListener.Subscribe(m_info.dirAttackEvent, DirtProjectile);
-            m_spineEventListener.Subscribe(m_info.poundEvent, m_poundFX.Play);
-            m_spineEventListener.Subscribe(m_info.oraOraEvent, m_oraFX.Play);
+            m_spineEventListener.Subscribe(m_info.poundEvent, MeleeAttack/*m_poundFX.Play*/);
+            m_spineEventListener.Subscribe(m_info.oraOraEvent, MeleeAttack/*m_oraFX.Play*/);
             //GameplaySystem.SetBossHealth(m_character);
+        }
+
+        private void MeleeAttack()
+        {
+            StartCoroutine(MeleeAttackRoutine());
+        }
+
+        private IEnumerator MeleeAttackRoutine()
+        {
+            m_attackHitbox.SetActive(true);
+            m_poundFX.Play();
+            yield return new WaitForSeconds(.25f);
+            m_attackHitbox.SetActive(false);
+            yield return null;
         }
 
         private Vector2 BallisticVel()
@@ -313,6 +329,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -326,7 +343,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 

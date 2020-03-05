@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
         private CinemachineVirtualCamera m_vCam;
         private CinemachineNoise m_noiseModule;
         private CinemachineCameraOffset m_offsetHandle;
+        private Vector2 m_cameraPosition;
 
         public Vector3 currentOffset => m_offsetHandle?.m_Offset ?? Vector3.zero;
         public CinemachineNoise noiseModule => m_noiseModule;
@@ -58,6 +59,12 @@ namespace DChild.Gameplay.Cinematics.Cameras
             {
                 m_offsetHandle.m_Offset = offset;
             }
+        }
+
+        private void GetCameraStartingPosition()
+        {
+            m_cameraPosition = transform.position;
+            Debug.Log(m_cameraPosition);
         }
 
         private void OnEnable()
@@ -97,6 +104,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
         private void UseThis()
         {
             GameplaySystem.cinema.TransistionTo(this);
+            GetCameraStartingPosition();
         }
 
 

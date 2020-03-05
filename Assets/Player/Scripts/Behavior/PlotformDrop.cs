@@ -28,6 +28,7 @@ namespace PlayerNew
           
             if (collision.gameObject.tag == "Droppable" && down && jump && downhHold < 0.5)
             {
+                Debug.Log("test");
                 body2d.velocity = Vector2.zero;
                 collider2D.isTrigger = true;
                 StartCoroutine(EnableColliderRoutine());
