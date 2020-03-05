@@ -79,7 +79,6 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
-            //var canSlash = inputState.GetButtonValue(inputButtons[0]);
             var canSlash = Input.GetButtonDown("Fire1");
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
             var downButton = inputState.GetButtonValue(inputButtons[1]);
@@ -115,7 +114,6 @@ namespace PlayerNew
                         numOfClicks = 1;
                        
                     }
-
                     if (numOfClicks == 1)
                     {
                         animator.SetBool("Slash1", true);
@@ -153,8 +151,6 @@ namespace PlayerNew
                     SwordUpSlashFX();
                 }else if(downButton && collisionState.grounded)
                 {
-
-                    Debug.Log("Crouch attack");
                     animator.SetBool("Attack", true);
                     animator.SetBool("Crouch", true);
                     CrouchSlashFX();
@@ -162,10 +158,8 @@ namespace PlayerNew
                 {
                     if (!upButton)
                     {
-                       
                         SwordJumpSlashForwardFX();
                         m_swordJumpSlashForwardAttackCollider.enabled = true;
-
                     }
                     else
                     {
@@ -173,14 +167,20 @@ namespace PlayerNew
                         m_swordUpSlashAttackCollider.enabled = true;
                     }
                     animator.SetBool("Attack", true);
-                }
-                else
-                {
-                   
-                }
+                } 
+               
                 
             }else if (Input.GetButtonUp("Fire1"))
             {
+                m_forwardSlashAttackCollider.enabled = false;
+                m_swordCombo1AttackCollider.enabled = false;
+                m_swordCombo2AttackCollider.enabled = false;
+                m_crouchSlashAttackCollider.enabled = false;
+                m_jumpSlashAttackCollider.enabled = false;
+                m_swordUpSlashAttackCollider.enabled = false;
+                m_swordJumpSlashForwardAttackCollider.enabled = false;
+                animator.SetBool("Attack", false);
+                animator.SetBool("Slash1", false);
                 ToggleScripts(true);
             }
         }
@@ -188,7 +188,7 @@ namespace PlayerNew
         public void ReturnToIdle()
         {
             //force set to Idle
-            Debug.Log("hahahahahahah");
+           
             animator.SetInteger("Jog", 0);
             animator.SetBool("Grounded", true);
             animator.SetBool("Crouch", false);
@@ -205,10 +205,15 @@ namespace PlayerNew
             //animator.SetBool()
 
         }
+        
+        public void FinishCrouchAttack()
+        {
+            Debug.Log("Finish crouch attack");
+        }
+
 
         public void FinishAttack1()
         {
-            Debug.Log("attack 1 only " + numOfClicks);
             animator.SetBool("Slash1", false);
             animator.SetBool("Attack", false);
             m_forwardSlashAttackCollider.enabled = false;
@@ -225,10 +230,9 @@ namespace PlayerNew
         public void FinishAttack2()
         {
            
-                Debug.Log("attack 2 only " + numOfClicks);
-                animator.SetBool("Slash1", false);
-                animator.SetBool("Slash2", false);
-                animator.SetBool("Attack", false);
+            animator.SetBool("Slash1", false);
+            animator.SetBool("Slash2", false);
+            animator.SetBool("Attack", false);
             m_forwardSlashAttackCollider.enabled = false;
             m_swordCombo1AttackCollider.enabled = false;
             m_swordCombo2AttackCollider.enabled = false;
@@ -243,7 +247,6 @@ namespace PlayerNew
 
         public void FinishAttack3()
         {
-            Debug.Log("attack 3 only " + numOfClicks);
             animator.SetBool("Slash1", false);
             animator.SetBool("Slash2", false);
             animator.SetBool("Slash3", false);
@@ -325,6 +328,7 @@ namespace PlayerNew
 
             attacking = false;
             slashing = false;
+            
             ToggleScripts(true);
         }
     }
