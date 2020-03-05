@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
 using Spine.Unity;
 using Spine;
-using DarkTonic.MasterAudio;
-using System;
 using Sirenix.OdinInspector;
-using static DChild.SpineSoundData;
 
 namespace DChild
 {
@@ -22,7 +19,6 @@ namespace DChild
         private static SpineSoundData.EventInfo m_cacheEventInfo;
         private static string m_cacheAnimation;
         private static SpineSoundData.AnimationInfo m_cacheAnimationInfo;
-
 
         private void OnEvents(TrackEntry trackEntry, Spine.Event e)
         {
