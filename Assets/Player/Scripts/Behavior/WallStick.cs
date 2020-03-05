@@ -10,6 +10,7 @@ namespace PlayerNew
         public bool onWallDetected;
         public bool wallSticking;
         public bool groundWallStick;
+        public bool wallGrounded;
 
         protected float defaultGravityScale;
         protected float defaultDrag;
@@ -64,13 +65,17 @@ namespace PlayerNew
         protected virtual void Onstick()
         {
             //if (!collisionState.grounded && body2d.velocity.y > 0)
-          
+
             if (!collisionState.grounded && collisionState.onWall && collisionState.onWallLeg)
             {
                 body2d.gravityScale = 0;
                 body2d.drag = 100;
                 wallSticking = true;
+                wallGrounded = false;
             }
+            if (collisionState.grounded && collisionState.onWall && collisionState.onWallLeg)
+                wallGrounded = true;
+
         }
 
         protected virtual void Offwall()

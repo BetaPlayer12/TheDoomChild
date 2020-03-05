@@ -13,6 +13,7 @@ namespace PlayerNew
         public float velocityX;
         public float forceX;
         public float forceY;
+                
 
         private void Start()
         {
@@ -44,43 +45,45 @@ namespace PlayerNew
                 capsuleCollider.enabled = true;
 
             }
-            
 
+            //set jumpForce if onWall and isGrounded
+            if (onWallDetected && wallGrounded)
+            {
+                forceX = 10;
+                forceY = 50;
+            }
+            if(onWallDetected && !wallGrounded)
+            {
+                forceX = 250;
+                forceY = 250;
+            }
+
+
+            //wall slide
             if (onWallDetected && !collisionState.grounded)
             {
+
                 var velY = slideVelocity;
+
+
                 if (inputState.GetButtonValue(inputButtons[0]))
                 {
                     velY *= slideMultiplier;
-                   
+
                 }
-                body2d.velocity = new Vector2(body2d.velocity.x, velY);
-
-                if(inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
-                {
-                    //facing left
-                    if (!facing.isFacingRight)
-                        body2d.velocity = new Vector2(forceX, forceY);
-
-                    //facing right
-                    else
-                        body2d.velocity = new Vector2(forceX * -1f, forceY);
-                  
-                }
-            } else if(onWallDetected && collisionState.grounded)
-            {
-                Debug.Log("jump here up");
-                if (inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
-                {
-                                                           
-                    Debug.Log("jump here");
-                    body2d.velocity = new Vector2(body2d.velocity.x * forceX, forceY);
-
-
-                }                
-
+                body2d.velocity = new Vector2(body2d.velocity.x, velY);                               
             }
 
+            //jumping beside wall 
+            if (onWallDetected && inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
+            {
+                //facing left
+                if (!facing.isFacingRight)
+                    body2d.velocity = new Vector2(forceX, forceY);
+                //facing right
+                else
+                    body2d.velocity = new Vector2(forceX * -1f, forceY);
+            }
 
         }
 
@@ -88,7 +91,8 @@ namespace PlayerNew
         {
            
             base.Onstick();
-           // body2d.velocity = Vector2.zero;
+            // body2d.velocity = Vector2.zero;
+            Debug.Log(wallGrounded);
         }
 
         protected override void Offwall()
