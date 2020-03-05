@@ -130,8 +130,11 @@ namespace DChild.Gameplay.Characters.Players
         {
             OnDeath?.Invoke(this, eventArgs);
             m_controlledCharacter.physics.SetVelocity(Vector2.zero);
-            m_groundednessHandle.enabled = false;
-            m_groundednessHandle.ResetAnimationParameters();
+            if (m_groundednessHandle != null)
+            {
+                m_groundednessHandle.enabled = false;
+                m_groundednessHandle.ResetAnimationParameters();
+            }
             m_controller.Disable();
             m_damageable.SetHitboxActive(false);
         }

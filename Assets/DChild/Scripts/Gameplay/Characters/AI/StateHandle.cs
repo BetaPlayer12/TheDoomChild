@@ -1,11 +1,8 @@
 ﻿using Sirenix.OdinInspector;
-#if UNITY_EDITOR
-#endif
 
 namespace DChild.Gameplay.Characters.AI
 {
-
-    [System.Serializable,HideLabel]
+    [System.Serializable, HideLabel]
     public struct StateHandle<T> where T : System.Enum
     {
         [ShowInInspector]

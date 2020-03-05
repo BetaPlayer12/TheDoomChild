@@ -88,6 +88,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Idle,
             Patrol,
+            Detect,
             Turning,
             Attacking,
             Chasing,
@@ -95,6 +96,8 @@ namespace DChild.Gameplay.Characters.Enemies
             WaitBehaviourEnd,
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_aggroSensor;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -115,9 +118,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
+        private State m_turnState;
         private ProjectileLauncher m_stingerLauncher;
         private float m_currentPatience;
         private bool m_enablePatience;
+        private bool m_isDetecting;
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -132,7 +137,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         //
         private float timeCounter;
-
         // player position
         private Vector2 playerPosition;
 
@@ -160,17 +164,18 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.SetState(State.Chasing);
+                if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
+                }
                 m_currentPatience = 0;
                 m_enablePatience = false;
             }
-            else
-            {
-                if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                {
-                    m_enablePatience = true;
-                }
-            }
+            //else
+            //{
+            //    //m_enablePatience = true;
+            //}
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -187,19 +192,50 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_targetInfo.Set(null, null);
-                m_enablePatience = false;
-                m_stateHandle.SetState(State.Patrol);
+                //StopAllCoroutines();
+                //m_targetInfo.Set(null, null);
+                //m_enablePatience = false;
+                //m_stateHandle.SetState(State.Patrol);
+                ResetBrain();
             }
+        }
+
+        private void ResetBrain()
+        {
+            //if (m_aggroSensorGO.activeSelf)
+            //{
+            //}
+            StopAllCoroutines();
+            m_targetInfo.Set(null, null);
+            m_enablePatience = false;
+            m_isDetecting = false;
+            m_stateHandle.OverrideState(State.Patrol);
+        }
+
+        private IEnumerator DetectRoutine()
+        {
+            m_stateHandle.Wait(State.Chasing);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(2f);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private IEnumerator RangeAttackRoutine()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
+            //m_aggroSensorGO.SetActive(false);
             m_animation.SetAnimation(0, m_info.rangeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rangeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-
+            yield return new WaitForSeconds(2f);
+            if (!m_aggroSensor.IsTouchingLayers(LayerMask.NameToLayer("Player")) /*&& m_stateHandle.currentState == State.ReevaluateSituation*/)
+            {
+                ResetBrain();
+                Debug.Log("Contain'ts Player");
+            }
+            //m_aggroSensorGO.SetActive(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -317,6 +353,21 @@ namespace DChild.Gameplay.Characters.Enemies
 
             switch (m_stateHandle.currentState)
             {
+                case State.Detect:
+                    m_agent.Stop();
+                    if (IsFacingTarget())
+                    {
+                        StartCoroutine(DetectRoutine());
+                        //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                    break;
+
                 case State.Idle:
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     if (m_targetInfo.isValid == false)
@@ -326,22 +377,28 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    m_turnState = State.ReevaluateSituation;
+                    if (m_agent.hasPath)
+                    {
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idle2Animation, true);
+                    }
                    
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_agent.Stop();
                    
                     break;
                 case State.Attacking:
                     playerPosition = m_targetInfo.position;
-                    m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(RangeAttackRoutine());
                     break;
                 case State.Chasing:
@@ -351,31 +408,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
                             if (IsTargetInRange(m_info.stingerProjectile.range))
                             {
+                                m_agent.Stop();
                                 m_stateHandle.SetState(State.Attacking);
                             }
-                            else
-                            {
+                        //else
+                        //{
 
-                                var target = m_targetInfo.position;
-                                //target.y -= 0.5f;
-                                m_animation.DisableRootMotion();
-                                if (m_character.physics.velocity != Vector2.zero)
-                                {
-                                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                                }
-                                else
-                                {
-                                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                                }
-                                m_agent.SetDestination(target);
-                              
-                                    m_agent.Move(m_info.move.speed);
-                              
-                            }
+                        //    var target = m_targetInfo.position;
+                        //    //target.y -= 0.5f;
+                        //    m_animation.DisableRootMotion();
+                        //    if (m_character.physics.velocity != Vector2.zero)
+                        //    {
+                        //        m_animation.SetAnimation(0, m_info.move.animation, true);
+                        //    }
+                        //    else
+                        //    {
+                        //        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        //    }
+                        //    m_agent.SetDestination(target);
+
+                        //        m_agent.Move(m_info.move.speed);
+
+                        //}
 
                         }
                         else
                         {
+                            m_turnState = State.ReevaluateSituation;
                             m_stateHandle.SetState(State.Turning);
                         }
                     
@@ -383,6 +442,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
+
                     if (m_targetInfo.isValid)
                     {
                         m_stateHandle.SetState(State.Chasing);
@@ -396,18 +456,23 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            
 
-            if (m_enablePatience)
-            {
-                Patience();
-            }
 
-            
+            //if (m_enablePatience)
+            //{
+            //    Patience();
+            //}
 
-           
         }
-       
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Patrol);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+            m_isDetecting = false;
+        }
+
 
     }
 }

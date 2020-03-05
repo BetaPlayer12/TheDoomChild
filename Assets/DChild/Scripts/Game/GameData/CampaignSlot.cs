@@ -76,6 +76,10 @@ namespace DChild.Serialization
         public Vector2 spawnPosition { get => m_spawnPosition; }
         public PlayerCharacterData characterData => m_characterData;
 
+        public SerializeDataList campaignProgress => m_campaignProgress;
+        public SerializeDataList zoneDatas => m_zoneDatas;
+
+        [Button]
         public void Reset()
         {
             m_newGame = true;
@@ -128,9 +132,6 @@ namespace DChild.Serialization
             this.m_id = slot.id;
             Copy(slot);
         }
-
-        public SerializeDataList campaignProgress => m_campaignProgress;
-        public SerializeDataList zoneDatas => m_zoneDatas;
 
         public void SetID(int ID)
         {

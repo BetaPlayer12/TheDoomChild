@@ -12,6 +12,7 @@ namespace PlayerNew
 
         public bool canLongJump;
         public bool isLongJumping;
+        private bool groundJumpExtra = true;
 
         protected override void Update()
         {
@@ -19,7 +20,6 @@ namespace PlayerNew
             var canJump = inputState.GetButtonValue(inputButtons[0]);
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
             velocityY = body2d.velocity.y;
-
 
             if (!canJump)
             {
@@ -29,8 +29,19 @@ namespace PlayerNew
             {
                 isLongJumping = false;
             }
+
+            if(!collisionState.grounded && groundJumpExtra)
+            {
+                jumpsRemaining = 1;
+                groundJumpExtra = false;
+            }else if (collisionState.grounded)
+            {
+                groundJumpExtra = true;
+            }
+
             base.Update();
-            if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay)
+
+            if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay && !collisionState.onWall && !collisionState.onWallLeg)
             {
                 var vel = body2d.velocity;
                 body2d.velocity = new Vector2(vel.x, jumpSpeed * longJumpMultiplier);
@@ -43,6 +54,7 @@ namespace PlayerNew
 
         protected override void OnJump()
         {
+           
             base.OnJump();
             canLongJump = true;
         }
