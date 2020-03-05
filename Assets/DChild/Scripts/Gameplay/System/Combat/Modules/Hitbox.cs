@@ -44,6 +44,8 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public virtual bool CanBeDamageBy(params Collider2D[] colliders) => true;
+
         public void SetInvulnerability(bool value)
         {
             m_isInvulnerable = value;
