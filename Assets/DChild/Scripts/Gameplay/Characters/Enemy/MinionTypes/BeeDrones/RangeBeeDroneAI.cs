@@ -96,6 +96,8 @@ namespace DChild.Gameplay.Characters.Enemies
             WaitBehaviourEnd,
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_aggroSensor;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -135,7 +137,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         //
         private float timeCounter;
-
         // player position
         private Vector2 playerPosition;
 
@@ -171,18 +172,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_currentPatience = 0;
                 m_enablePatience = false;
             }
-            else
-            {
-                //if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                //{
-                //}
-                //m_enablePatience = true;
-                StopAllCoroutines();
-                m_targetInfo.Set(null, null);
-                m_enablePatience = false;
-                m_isDetecting = false;
-                m_stateHandle.OverrideState(State.Patrol);
-            }
+            //else
+            //{
+            //    //m_enablePatience = true;
+            //}
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -199,16 +192,29 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                StopAllCoroutines();
-                m_targetInfo.Set(null, null);
-                m_enablePatience = false;
-                m_stateHandle.SetState(State.Patrol);
+                //StopAllCoroutines();
+                //m_targetInfo.Set(null, null);
+                //m_enablePatience = false;
+                //m_stateHandle.SetState(State.Patrol);
+                ResetBrain();
             }
+        }
+
+        private void ResetBrain()
+        {
+            //if (m_aggroSensorGO.activeSelf)
+            //{
+            //}
+            StopAllCoroutines();
+            m_targetInfo.Set(null, null);
+            m_enablePatience = false;
+            m_isDetecting = false;
+            m_stateHandle.OverrideState(State.Patrol);
         }
 
         private IEnumerator DetectRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.Chasing);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
@@ -217,12 +223,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RangeAttackRoutine()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
+            //m_aggroSensorGO.SetActive(false);
             m_animation.SetAnimation(0, m_info.rangeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rangeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(2f);
-
+            if (!m_aggroSensor.IsTouchingLayers(LayerMask.NameToLayer("Player")) /*&& m_stateHandle.currentState == State.ReevaluateSituation*/)
+            {
+                ResetBrain();
+                Debug.Log("Contain'ts Player");
+            }
+            //m_aggroSensorGO.SetActive(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -344,7 +357,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
                         //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
@@ -387,7 +399,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     playerPosition = m_targetInfo.position;
-                    m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(RangeAttackRoutine());
                     break;
                 case State.Chasing:
@@ -431,6 +442,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
+
                     if (m_targetInfo.isValid)
                     {
                         m_stateHandle.SetState(State.Chasing);
@@ -444,15 +456,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            
+
 
             //if (m_enablePatience)
             //{
             //    Patience();
             //}
-
-
-
 
         }
 
