@@ -43,7 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8122af7a27b38f4892887b92de143dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_parentUI: {fileID: 0}
   m_healthUI: {fileID: 0}
+  m_offset: {x: 0, y: 0, z: 0}
 --- !u!1 &1799503189760083926
 GameObject:
   m_ObjectHideFlags: 0
@@ -53,7 +55,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 33779680844366987}
-  - component: {fileID: 362299302311717258}
+  - component: {fileID: 8899000321254783730}
   m_Layer: 0
   m_Name: Serializer
   m_TagString: Untagged
@@ -75,7 +77,7 @@ Transform:
   m_Father: {fileID: 1656687072529629155}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &362299302311717258
+--- !u!114 &8899000321254783730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -311,12 +313,11 @@ MonoBehaviour:
       Data: 13|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 14|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[DChild.Serialization.ISaveData,
-        Assembly-CSharp]], mscorlib
+      Data: 14|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 15|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
-        mscorlib]], mscorlib
+      Data: 15|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -337,11 +338,39 @@ MonoBehaviour:
       Data: 16|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 17|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[DChild.Serialization.ISaveData,
-        Assembly-CSharp]], mscorlib
+      Data: 17|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
-      Entry: 9
-      Data: 15
+      Entry: 7
+      Data: 18|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_miscDatas
+      Entry: 7
+      Data: 19|DChild.Serialization.SerializeDataList, Assembly-CSharp
+    - Name: m_saveDatas
+      Entry: 7
+      Data: 20|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 21|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 12
       Data: 0
@@ -374,7 +403,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2624314046681382207
 Transform:
   m_ObjectHideFlags: 0
@@ -668,6 +697,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -825,6 +855,104 @@ MonoBehaviour:
   m_withGravity: 0
   m_gravityScale: 0
   m_velocity: {x: 0, y: 0}
+--- !u!1 &8201099975804057246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8536943695377355588}
+  - component: {fileID: 2169945062240998354}
+  - component: {fileID: 3760816760592113498}
+  - component: {fileID: 9190569924505327815}
+  m_Layer: 0
+  m_Name: Cinema
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8536943695377355588
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201099975804057246}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1656687072529629155}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2169945062240998354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201099975804057246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3fa4cd5cca8fac4e869028abc7d43b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_mainCamera: {fileID: 0}
+  m_trackingTarget: {fileID: 0}
+--- !u!114 &3760816760592113498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201099975804057246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b22269412dc42024699a0e6fdce34c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_yOffset: 5
+  m_duration: 0.5
+  m_interpolation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &9190569924505327815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8201099975804057246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d0236126e39dd847b3b3f2ba6d7eac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_holdForPeek: 0.5
 --- !u!1 &9027099112888996189
 GameObject:
   m_ObjectHideFlags: 0
@@ -837,7 +965,6 @@ GameObject:
   - component: {fileID: 2775572802307578294}
   - component: {fileID: 7300060033477175834}
   - component: {fileID: 3187279951672348425}
-  - component: {fileID: 8422006114234957730}
   - component: {fileID: 736789538}
   - component: {fileID: 329289794}
   - component: {fileID: 1344667973}
@@ -863,6 +990,7 @@ Transform:
   - {fileID: 5947637787709336866}
   - {fileID: 2624314046681382207}
   - {fileID: 33779680844366987}
+  - {fileID: 8536943695377355588}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -878,6 +1006,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3607c5780ee2f143a5dd129b329bfe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_dontDestroyOnLoad: 0
+  m_doNotDeserializeOnAwake: 0
+  m_doNotTeleportPlayerOnAwake: 0
 --- !u!114 &7300060033477175834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -902,20 +1033,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33963cdaa3a24504696531bff85673f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8422006114234957730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9027099112888996189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3fa4cd5cca8fac4e869028abc7d43b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_mainCamera: {fileID: 0}
-  m_trackingTarget: {fileID: 0}
 --- !u!114 &736789538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,10 +1063,10 @@ MonoBehaviour:
   m_maxLootSpawnPerFrame: 5
   m_popVelocityX:
     m_min: 2
-    m_max: 5
+    m_max: 25
   m_popVelocityY:
-    m_min: 5
-    m_max: 10
+    m_min: 30
+    m_max: 50
 --- !u!114 &1344667973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -965,6 +1082,8 @@ MonoBehaviour:
   m_player: {fileID: 0}
   m_input: {fileID: 0}
   m_overrideController: {fileID: 0}
+  m_respawnDelay:
+    m_startTime: 0
   m_autoReflex:
     m_slowValue: 0
     m_duration: 0.1

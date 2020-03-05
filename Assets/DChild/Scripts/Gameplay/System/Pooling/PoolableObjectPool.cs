@@ -1,5 +1,4 @@
-﻿using Holysoft.Pooling;
-using System;
+﻿using System;
 
 namespace DChild.Gameplay.Pooling
 {

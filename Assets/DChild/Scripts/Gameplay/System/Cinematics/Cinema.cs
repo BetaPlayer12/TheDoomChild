@@ -8,8 +8,16 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
+
     public class Cinema : MonoBehaviour, ICinema, IGameplaySystemModule, IGameplayInitializable
     {
+        public enum LookAhead
+        {
+            None,
+            Up,
+            Down,
+        }
+
         [SerializeField]
         private Camera m_mainCamera;
         private IVirtualCamera m_currentVCam;
@@ -18,6 +26,8 @@ namespace DChild.Gameplay.Cinematics
         private List<CinemachineNoise> m_noiseList;
         [SerializeField]
         private Transform m_trackingTarget;
+        private CameraOffsetHandle m_offsetHandle;
+        private LookAhead m_currentLookAhead;
 #if UNITY_EDITOR
         [ShowInInspector, OnValueChanged("EnableCameraShake")]
         private bool m_cameraShake;
@@ -30,9 +40,20 @@ namespace DChild.Gameplay.Cinematics
 
         public void TransistionTo(IVirtualCamera vCam)
         {
-            m_currentVCam?.Deactivate();
+            if (m_currentVCam != null)
+            {
+                m_currentVCam.Deactivate();
+                m_offsetHandle.CopyOffset(m_currentVCam, vCam);
+            }
             vCam.Activate();
+            m_offsetHandle.ApplyOffset(vCam, m_currentLookAhead);
             m_currentVCam = vCam;
+        }
+
+        public void ApplyLookAhead(LookAhead look)
+        {
+            m_currentLookAhead = look;
+            m_offsetHandle.ApplyOffset(m_currentVCam, m_currentLookAhead);
         }
 
         public void TransistionToDefaultCamera()
@@ -52,6 +73,7 @@ namespace DChild.Gameplay.Cinematics
 
         public void ClearLists()
         {
+            m_currentVCam = null;
             m_trackingCameras?.Clear();
             m_noiseList?.Clear();
         }
@@ -104,6 +126,7 @@ namespace DChild.Gameplay.Cinematics
         {
             m_trackingCameras = new List<ITrackingCamera>();
             m_noiseList = new List<CinemachineNoise>();
+            m_offsetHandle = GetComponent<CameraOffsetHandle>();
         }
 
 

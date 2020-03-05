@@ -54,18 +54,25 @@ namespace DChild.Gameplay.Systems
 
         private LootData GetRandomLoot()
         {
-            var score = UnityEngine.Random.Range(0f, 100f);
-            int index = 0;
-            while (index < m_drops.Count && m_drops[index].percentScore > score)
+            if (m_drops.Count > 0)
             {
-                index++;
+                var score = UnityEngine.Random.Range(0f, 100f);
+                int index = 0;
+                while (index < m_drops.Count && index != m_drops.Count - 1 && m_drops[index].percentScore > score)
+                {
+                    index++;
+                }
+                return m_drops[index].loot;
             }
-            return m_drops[index].loot;
+            else
+            {
+                return null;
+            }
         }
 
         public override void DropLoot(Vector2 position)
         {
-            GetRandomLoot().DropLoot(position);
+            GetRandomLoot()?.DropLoot(position);
         }
 
 #if UNITY_EDITOR

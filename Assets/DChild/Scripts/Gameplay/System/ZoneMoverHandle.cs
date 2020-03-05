@@ -130,7 +130,7 @@ namespace DChild.Gameplay
 
         private void Awake()
         {
-            LoadingHandle.SceneDone += OnSceneDone;
+            LoadingHandle.LoadingDone += OnSceneDone;
         }
     }
 }
