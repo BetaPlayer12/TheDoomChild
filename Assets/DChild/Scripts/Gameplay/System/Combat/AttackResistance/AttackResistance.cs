@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Combat
         public event EventAction<ResistanceEventArgs> ResistanceChange;
 
         public abstract void SetData(AttackResistanceData data);
-
+        public abstract void ClearResistance();
         public abstract void SetResistance(AttackType type, float resistanceValue);
 
         public abstract void ClearResistance();
