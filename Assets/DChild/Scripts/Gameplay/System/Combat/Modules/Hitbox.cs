@@ -52,8 +52,6 @@ namespace DChild.Gameplay.Combat
             m_isInvulnerable = value;
         }
 
-        public virtual bool CanBeDamageBy(params Collider2D[] colliders) => true;
-
         private void Awake()
         {
             m_damageable = GetComponentInParent<IDamageable>();
