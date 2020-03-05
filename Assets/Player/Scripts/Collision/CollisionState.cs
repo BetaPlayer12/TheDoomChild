@@ -13,6 +13,7 @@ namespace PlayerNew
         public bool onWall;
         public bool onWallLeg;
         public bool isTouchingLedge;
+        public bool isTouchingInteractable;
         public float slopeAngle;
         public Vector2 bottomPosition = Vector2.zero;
         public Vector2 rightPosition = Vector2.zero;
@@ -134,6 +135,34 @@ namespace PlayerNew
             Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
             
         }
+
+      
+
+        //private void OnTriggerStay2D(Collider2D collision)
+        //{
+        //    if (collision.gameObject.tag == "Interactable")
+        //    {
+        //        isTouchingInteractable = true;
+        //    }
+        //}
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.tag == "Interactable")
+            {
+                isTouchingInteractable = true;
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (collision.gameObject.tag == "Interactable")
+            {
+                isTouchingInteractable = false;
+            }
+        }
+
+
     }
 
 }

@@ -181,10 +181,7 @@ namespace PlayerNew
                 m_swordJumpSlashForwardAttackCollider.enabled = false;
                 animator.SetBool("Attack", false);
                 animator.SetBool("Slash1", false);
-                if (!downButton)
-                {
-                    ToggleScripts(true);
-                }
+                ToggleScripts(true);
             }
         }
 
