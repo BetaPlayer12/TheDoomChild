@@ -108,6 +108,11 @@ namespace DChild
             }
         }
 
+        internal static object Spawn(AssetReferenceGameObject debris, Vector2 position, object onSpawn)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void SpawnFromRequests(AssetReferenceGameObject asset)
         {
             var cacheRequest = m_spawnRequests[asset];
