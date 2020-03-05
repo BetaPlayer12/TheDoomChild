@@ -3,7 +3,9 @@ using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
@@ -31,7 +33,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private bool m_createDebris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
-        private GameObject m_debris;
+        private AssetReferenceGameObject m_debris;
 
         [SerializeField, TabGroup("On Destroy")]
         private UnityEvent m_onDestroy;
@@ -101,17 +103,27 @@ namespace DChild.Gameplay.Environment
             m_leftOverDebris = m_instantiatedDebris.GetDetachables();
         }
 
+        private void InstantiateDebris(AssetReferenceGameObject debris) => AddressableSpawner.Spawn(debris, m_object.position, 0, OnSpawn);
+
+        private void OnSpawn(GameObject instance, int arg2)
+        {
+            m_instantiatedDebris = instance.GetComponent<Debris>();
+            m_instantiatedDebris.transform.localScale = transform.localScale;
+            m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
+            m_leftOverDebris = m_instantiatedDebris.GetDetachables();
+        }
+
         private void DestroyInstantiatedDebris()
         {
             if (m_leftOverDebris != null)
             {
                 for (int i = m_leftOverDebris.Length - 1; i >= 0; i--)
                 {
-                    Destroy(m_leftOverDebris[i].gameObject);
+                    Addressables.ReleaseInstance(m_leftOverDebris[i].gameObject);
                 }
                 m_leftOverDebris = null;
-                Destroy(m_instantiatedDebris.gameObject);
             }
+            Addressables.ReleaseInstance(m_instantiatedDebris.gameObject);
         }
 
         private void OnDestroyObject(object sender, EventActionArgs eventArgs)

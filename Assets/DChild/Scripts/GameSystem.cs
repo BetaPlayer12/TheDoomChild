@@ -24,6 +24,7 @@ namespace DChild
         private static PoolManager m_poolManager;
         private static ConfirmationHandler m_confirmationHander;
         private static SceneLoader m_zoneLoader;
+        private static AddressableSceneManager m_sceneManager;
         private static Cursor m_cursor;
         public static GameSettings settings { get; private set; }
         public static GameDataManager dataManager { get; private set; }
