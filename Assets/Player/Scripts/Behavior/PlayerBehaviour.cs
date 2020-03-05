@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,8 +7,12 @@ namespace PlayerNew
 {
     public abstract class PlayerBehaviour : MonoBehaviour
     {
+        [DrawWithUnity]
         public Buttons[] inputButtons;
+        [DrawWithUnity]
         public MonoBehaviour[] dissableScripts;
+        [DrawWithUnity]
+        public MonoBehaviour[] enableOnlyScript;
         protected InputState inputState;
         protected Rigidbody2D body2d;
         protected Transform trans;
@@ -25,11 +30,32 @@ namespace PlayerNew
 
         protected virtual void ToggleScripts(bool value)
         {
-            foreach (var script in dissableScripts)
+           
+           
+            if(enableOnlyScript.Length > 0 && value == true)
             {
-                script.enabled = value;
+               
+                foreach (var enbleScript in enableOnlyScript)
+                {
+                    Debug.Log("enable only:" + enbleScript);
+                    if (!enbleScript)
+                    {
+                        foreach (var script in dissableScripts)
+                        {
+                            script.enabled = value;
+                        }
+                    }
+                }
             }
-        }
+            else
+            {
+                foreach (var script in dissableScripts)
+                {
+                    script.enabled = value;
+                }
+            }
+           
+        }       
     }
 
 }

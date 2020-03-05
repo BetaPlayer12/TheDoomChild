@@ -234,7 +234,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            StopAllCoroutines();
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
@@ -348,6 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //    m_animation.SetAnimation(0, m_info.surpriseAnimation, false);
                                     //    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                                     //}
+                                    m_attackDecider.hasDecidedOnAttack = false;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
@@ -383,6 +385,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Burrowed);
+            m_currentPatience = 0;
+            m_enablePatience = false;
         }
     }
 }

@@ -76,7 +76,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Idle,
-            Patrol,
             Turning,
             Attacking,
             Chasing,
@@ -202,10 +201,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_smokeChargeFX.Play();
             m_animation.SetAnimation(0, m_info.attack.animation, true);
             yield return new WaitForSeconds(m_info.chargeTime);
-            //m_hitbox.gameObject.SetActive(false);
-            m_explosionRadius.SetActive(true);
-            m_animation.SetAnimation(0, m_info.explodeAnimation, false);
             m_hitbox.SetInvulnerability(true);
+            m_animation.SetAnimation(0, m_info.explodeAnimation, false);
+            m_explosionRadius.GetComponent<Collider2D>().enabled = true;
             m_smokeChargeFX.Stop();
             m_poisonExplodeFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.explodeAnimation);
@@ -218,7 +216,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
-            m_movement.Stop();
+            //m_movement.Stop();
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -253,28 +251,8 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    break;
-                case State.Patrol:
                     //Debug.Log("Patrolling");
-                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
-                    {
-                        //Debug.Log("Going to Patrol Pos");
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
-                    }
-                    else
-                    {
-                        //Debug.Log("Patrol Turn");
-                        m_movement.Stop();
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        m_stateHandle.SetState(State.Turning);
-                    }
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
 
                 case State.Turning:
@@ -290,7 +268,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Dead:
                     gameObject.SetActive(false);
-                    m_explosionRadius.SetActive(false);
+                    //m_explosionRadius.SetActive(false);
+                    m_explosionRadius.GetComponent<Collider2D>().enabled = true;
                     m_targetInfo.Set(null, null);
                     m_enablePatience = false;
                     break;
@@ -310,7 +289,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
-                                    //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
                                     //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
                                 }
                                 else

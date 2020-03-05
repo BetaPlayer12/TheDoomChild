@@ -10,12 +10,16 @@ namespace PlayerNew
         public float speed = 10f;
         public float speedMultiplier = 1.5f;
         public float jogTimer = 3.5f;
+        public float crouchSpeedMultiplier = 0.5f;
         public bool jogging = false;
+        
+
+        private CapsuleCollider2D collider2D;
 
         // Start is called before the first frame update
         void Start()
         {
-
+            collider2D = GetComponent<CapsuleCollider2D>();
         }
 
         // Update is called once per frame
@@ -23,6 +27,7 @@ namespace PlayerNew
         {
             var right = inputState.GetButtonValue(inputButtons[0]);
             var left = inputState.GetButtonValue(inputButtons[1]);
+            var down = inputState.GetButtonValue(inputButtons[2]);
 
             var velX = speed;
 
@@ -49,9 +54,14 @@ namespace PlayerNew
                 jogTimer = 3.5f;
             }
 
-            body2d.velocity = new Vector2(velX, body2d.velocity.y);
 
-
+            if (down) {
+                body2d.velocity = new Vector2(velX * crouchSpeedMultiplier, body2d.velocity.y);
+            } else
+            {
+                body2d.velocity = new Vector2(velX, body2d.velocity.y);
+            }
+            
 
 
             //if(right || left)
@@ -62,6 +72,7 @@ namespace PlayerNew
             //}
 
         }
+
     }
 }
 
