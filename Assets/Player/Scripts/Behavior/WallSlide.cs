@@ -47,7 +47,7 @@ namespace PlayerNew
             }
 
             //set jumpForce if onWall and isGrounded
-            if (onWallDetected && wallGrounded)
+            if (onWallDetected && wallGrounded || groundWallStick && collisionState.onWallLeg && collisionState.grounded)
             {
                 forceX = 10;
                 forceY = 50;
@@ -75,7 +75,7 @@ namespace PlayerNew
             }
 
             //jumping beside wall 
-            if (onWallDetected && inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
+            if ((onWallDetected || groundWallStick) && inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
             {
                 //facing left
                 if (!facing.isFacingRight)

@@ -76,6 +76,7 @@ namespace PlayerNew
             if (collisionState.grounded && collisionState.onWall && collisionState.onWallLeg)
                 wallGrounded = true;
 
+
         }
 
         protected virtual void Offwall()
