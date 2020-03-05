@@ -349,6 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //    m_animation.SetAnimation(0, m_info.surpriseAnimation, false);
                                     //    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                                     //}
+                                    m_attackDecider.hasDecidedOnAttack = false;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
