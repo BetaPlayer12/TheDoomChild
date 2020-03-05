@@ -1,4 +1,5 @@
-﻿using Sirenix.Utilities;
+﻿using DChild.Gameplay;
+using Sirenix.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,14 +25,14 @@ namespace DChild
             public bool hasCallback { get; }
         }
 
-        private static Dictionary<AssetReferenceGameObject, AsyncOperationHandle<GameObject>> m_loadedAssets = new Dictionary<AssetReferenceGameObject, AsyncOperationHandle<GameObject>>();
-        private static Dictionary<AssetReferenceGameObject, Cache<List<GameObject>>> m_spawnedInstances = new Dictionary<AssetReferenceGameObject, Cache<List<GameObject>>>();
-        private static Dictionary<AssetReferenceGameObject, Cache<Queue<Request>>> m_spawnRequests = new Dictionary<AssetReferenceGameObject, Cache<Queue<Request>>>();
-        private static Dictionary<AssetReferenceGameObject, Cache<Queue<Action<GameObject, int>>>> m_spawnRequestsCallback = new Dictionary<AssetReferenceGameObject, Cache<Queue<Action<GameObject, int>>>>();
-        private static Dictionary<AssetReferenceGameObject, int> m_toBeInstantiatedCount = new Dictionary<AssetReferenceGameObject, int>();
+        private static Dictionary<AssetReferenceT<GameObject>, AsyncOperationHandle<GameObject>> m_loadedAssets = new Dictionary<AssetReferenceT<GameObject>, AsyncOperationHandle<GameObject>>();
+        private static Dictionary<AssetReferenceT<GameObject>, Cache<List<GameObject>>> m_spawnedInstances = new Dictionary<AssetReferenceT<GameObject>, Cache<List<GameObject>>>();
+        private static Dictionary<AssetReferenceT<GameObject>, Cache<Queue<Request>>> m_spawnRequests = new Dictionary<AssetReferenceT<GameObject>, Cache<Queue<Request>>>();
+        private static Dictionary<AssetReferenceT<GameObject>, Cache<Queue<Action<GameObject, int>>>> m_spawnRequestsCallback = new Dictionary<AssetReferenceT<GameObject>, Cache<Queue<Action<GameObject, int>>>>();
+        private static Dictionary<AssetReferenceT<GameObject>, int> m_toBeInstantiatedCount = new Dictionary<AssetReferenceT<GameObject>, int>();
         public static event Action<GameObject> OnSpawn;
 
-        public static void Spawn(AssetReferenceGameObject asset, Vector3 position, int index, Action<GameObject, int> CallBack = null)
+        public static void Spawn(AssetReferenceT<GameObject> asset, Vector3 position, int index, Action<GameObject, int> CallBack = null)
         {
 
             var request = new Request(position, index, CallBack != null);
@@ -64,7 +65,7 @@ namespace DChild
             }
         }
 
-        private static void LoadAndSpawn(AssetReferenceGameObject asset, Request request, Action<GameObject, int> CallBack)
+        private static void LoadAndSpawn(AssetReferenceT<GameObject> asset, Request request, Action<GameObject, int> CallBack)
         {
             var handle = asset.LoadAssetAsync<GameObject>();
             m_loadedAssets.Add(asset, handle);
@@ -81,7 +82,7 @@ namespace DChild
             };
         }
 
-        private static void CreateRequestFor(AssetReferenceGameObject asset, Request request, Action<GameObject, int> CallBack)
+        private static void CreateRequestFor(AssetReferenceT<GameObject> asset, Request request, Action<GameObject, int> CallBack)
         {
             if (m_toBeInstantiatedCount.ContainsKey(asset) == false)
             {
@@ -108,12 +109,7 @@ namespace DChild
             }
         }
 
-        internal static object Spawn(AssetReferenceGameObject debris, Vector2 position, object onSpawn)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void SpawnFromRequests(AssetReferenceGameObject asset)
+        private static void SpawnFromRequests(AssetReferenceT<GameObject> asset)
         {
             var cacheRequest = m_spawnRequests[asset];
             do
@@ -132,7 +128,7 @@ namespace DChild
             }
         }
 
-        private static void SpawnInstance(AssetReferenceGameObject asset, Request request, Action<GameObject, int> CallBack)
+        private static void SpawnInstance(AssetReferenceT<GameObject> asset, Request request, Action<GameObject, int> CallBack)
         {
             m_toBeInstantiatedCount[asset]++;
             asset.InstantiateAsync(request.position, Quaternion.identity).Completed += (operation) =>
@@ -151,7 +147,7 @@ namespace DChild
             };
         }
 
-        private static void OnInstanceDestroyed(AssetReferenceGameObject asset, GameObject instance)
+        private static void OnInstanceDestroyed(AssetReferenceT<GameObject> asset, GameObject instance)
         {
             m_spawnedInstances[asset].Value.Remove(instance);
             if (m_spawnedInstances[asset].Value.Count > 0 && m_toBeInstantiatedCount[asset] == 0)
@@ -161,6 +157,7 @@ namespace DChild
                 m_toBeInstantiatedCount.Remove(asset);
 
                 Addressables.Release(m_loadedAssets[asset]);
+                asset.ReleaseAsset();
                 m_loadedAssets.Remove(asset);
             }
         }
