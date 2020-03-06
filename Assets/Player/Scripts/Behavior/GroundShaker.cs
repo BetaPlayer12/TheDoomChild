@@ -17,6 +17,8 @@ namespace PlayerNew
         [SerializeField]
         private Collider2D m_groundShakerAttackCollider;
 
+        private Crouch crouchMovement;
+
         public float midAirDelay;
         public bool groundSmash;
         public float smashMultiplier;
@@ -27,6 +29,7 @@ namespace PlayerNew
         {
             defGravity = body2d.gravityScale;
             animator = GetComponent<Animator>();
+            crouchMovement = GetComponent<Crouch>();
         }
 
         // Update is called once per frame
@@ -38,7 +41,7 @@ namespace PlayerNew
 
 
 
-            if (!collisionState.grounded && down && attack && !groundSmash)
+            if (!collisionState.grounded && down && attack && !groundSmash && !crouchMovement.crouching)
             {
                 Debug.Log("Shakering");
 
