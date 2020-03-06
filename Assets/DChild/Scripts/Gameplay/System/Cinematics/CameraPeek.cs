@@ -11,7 +11,6 @@ namespace DChild.Gameplay.Cinematics
         private float m_holdTime;
 
         private bool m_isPeeking;
-        private LookAhead m_peekDirection;
 
         private void LateUpdate()
         {
@@ -22,23 +21,20 @@ namespace DChild.Gameplay.Cinematics
                     m_holdTime = 0;
                     if (m_isPeeking)
                     {
-                        m_peekDirection = LookAhead.None;
-                        GameplaySystem.cinema.ApplyLookAhead(m_peekDirection);
+                        GameplaySystem.cinema.ApplyLookAhead(LookAhead.None);
                         m_isPeeking = false;
                     }
                     break;
                 case 1:
-                    if (m_isPeeking == false || m_peekDirection != LookAhead.Up)
+                    if (m_isPeeking == false)
                     {
-                        m_peekDirection = LookAhead.Up;
-                        EvaluatePeek(m_peekDirection);
+                        EvaluatePeek(LookAhead.Up);
                     }
                     break;
                 case -1:
-                    if (m_isPeeking == false || m_peekDirection != LookAhead.Down)
+                    if (m_isPeeking == false)
                     {
-                        m_peekDirection = LookAhead.Down;
-                        EvaluatePeek(m_peekDirection);
+                        EvaluatePeek(LookAhead.Down);
                     }
                     break;
             }

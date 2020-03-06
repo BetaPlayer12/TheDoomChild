@@ -14,7 +14,6 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private string[] m_viableTags;
 
-
         public override bool CanBeDamageBy(params Collider2D[] colliders)
         {
             for (int i = 0; i < colliders.Length; i++)

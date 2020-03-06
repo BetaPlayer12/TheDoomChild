@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -161,7 +161,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8150526989712420483
 Transform:
   m_ObjectHideFlags: 0
@@ -327,6 +327,7 @@ MonoBehaviour:
   m_character: {fileID: 4780062556551447320}
   m_animation: {fileID: 4887880220346636679}
   m_data: {fileID: 11400000, guid: abd067a5546e5894988b0ba8c782cda7, type: 2}
+  m_characterStatsData: {fileID: 0}
   m_damageable: {fileID: 7342342234584805985}
   m_centerMass: {fileID: 7416519721040084012}
   m_turnHandle: {fileID: 5110260082625881187}
@@ -339,7 +340,7 @@ MonoBehaviour:
   m_spineEventListener: {fileID: 7085717963124468946}
   m_wallSensor: {fileID: 4130708735038742495}
   m_groundSensor: {fileID: 8734981687397608497}
-  m_edgeSensor: {fileID: 8742670282587311484}
+  m_edgeSensor: {fileID: 0}
   m_muzzleFX: {fileID: 5307708860418944895}
   m_spikeFX: {fileID: 5561244384673550487}
   m_speed: 3
@@ -607,6 +608,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2636814090782271733, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2636814090782271737, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
         type: 3}
@@ -1110,18 +1116,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f959a9b0ff33f645b018e04b10d4ccb, type: 3}
---- !u!114 &4130708735038742495 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1347331627457495103, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
-    type: 3}
-  m_PrefabInstance: {fileID: 3161974781362216928}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &8021317117639969971 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 4949709037007950675, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
@@ -1230,9 +1224,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3161974781362216928}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8742670282587311484 stripped
+--- !u!114 &4130708735038742495 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5959848913735094940, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
+  m_CorrespondingSourceObject: {fileID: 1347331627457495103, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
     type: 3}
   m_PrefabInstance: {fileID: 3161974781362216928}
   m_PrefabAsset: {fileID: 0}

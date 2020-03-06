@@ -5,6 +5,9 @@ using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChild.Gameplay.Systems.Serialization
 {
@@ -40,6 +43,7 @@ namespace DChild.Gameplay.Systems.Serialization
         {
             m_scene.Set(scene);
             m_position = position;
+            //AssetDatabase.SaveAssets();
         }
 #endif
 
