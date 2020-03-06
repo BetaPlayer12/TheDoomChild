@@ -11,6 +11,7 @@ namespace PlayerNew
         public int jumpCount = 2;
 
         private Jog jogging;
+        private Crouch crouchMovement;
 
         protected float lastJumpTime = 0;
         protected int jumpsRemaining = 0;
@@ -19,6 +20,7 @@ namespace PlayerNew
         void Start()
         {
             jogging = GetComponent<Jog>();
+            crouchMovement = GetComponent<Crouch>();
         }
 
         // Update is called once per frame
@@ -34,7 +36,7 @@ namespace PlayerNew
             {
                
                
-                if (canJump && holdTime < 0.1f && !collisionState.onWall && !collisionState.onWallLeg)
+                if (canJump && holdTime < 0.1f && !collisionState.onWall && !collisionState.onWallLeg && !crouchMovement.crouching)
                 {
                    
                     jumpsRemaining = jumpCount - 1;
@@ -45,7 +47,7 @@ namespace PlayerNew
             {
                 
 
-                if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay && !collisionState.onWall && !collisionState.onWallLeg)
+                if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay && !collisionState.onWall && !collisionState.onWallLeg && !crouchMovement.crouching)
                 {
                    
                     if (jumpsRemaining > 0)

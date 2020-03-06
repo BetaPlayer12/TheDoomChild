@@ -7,15 +7,18 @@ namespace PlayerNew
     public class WallSlide : WallStick
     {
         private FaceDirection facing;
+        private LongJump jumping;
         public float slideVelocity = -5f;
         public float slideMultiplier = 5f;
         public float velocityX;
         public float forceX;
         public float forceY;
+                
 
         private void Start()
         {
             facing = GetComponent<FaceDirection>();
+            jumping = GetComponent<LongJump>();
         }
 
         override protected void Update()
@@ -32,7 +35,7 @@ namespace PlayerNew
                 body2d.sharedMaterial.friction = 0;
                 capsuleCollider.enabled = false;
                 capsuleCollider.enabled = true;
-                //body2d.gravityScale = 100f;
+
             }
             else
             {
@@ -40,40 +43,47 @@ namespace PlayerNew
                 body2d.sharedMaterial.friction = 0.4f;
                 capsuleCollider.enabled = false;
                 capsuleCollider.enabled = true;
-                //body2d.gravityScale = 20f;
-                //body2d.drag = 0f; 
+
             }
-            
-            //if (!collisionState.grounded && !collisionState.onWall)
-            //{
-            //    body2d.sharedMaterial.friction = 0.0f;
 
-            //}
-            //else
-            //{
-            //    body2d.sharedMaterial.friction = 0.4f;
-
-            //}
-            //Debug.Log(body2d.sharedMaterial.friction);
-            if (onWallDetected)
+            //set jumpForce if onWall and isGrounded
+            if (onWallDetected && wallGrounded || groundWallStick && collisionState.onWallLeg && collisionState.grounded)
             {
+                forceX = 10;
+                forceY = 50;
+            }
+            if(onWallDetected && !wallGrounded)
+            {
+                forceX = 250;
+                forceY = 250;
+            }
+
+
+            //wall slide
+            if (onWallDetected && !collisionState.grounded)
+            {
+
                 var velY = slideVelocity;
+
+
                 if (inputState.GetButtonValue(inputButtons[0]))
                 {
                     velY *= slideMultiplier;
-                    //ToggleScripts(false);
-                }
-                body2d.velocity = new Vector2(body2d.velocity.x, velY);
-
-                if(inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f && !collisionState.grounded)
-                {
-
-                    body2d.velocity = new Vector2(forceX, forceY);
-                    //Offwall();
 
                 }
+                body2d.velocity = new Vector2(body2d.velocity.x, velY);                               
             }
 
+            //jumping beside wall 
+            if ((onWallDetected || groundWallStick) && inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
+            {
+                //facing left
+                if (!facing.isFacingRight)
+                    body2d.velocity = new Vector2(forceX, forceY);
+                //facing right
+                else
+                    body2d.velocity = new Vector2(forceX * -1f, forceY);
+            }
 
         }
 
@@ -81,14 +91,13 @@ namespace PlayerNew
         {
            
             base.Onstick();
-            body2d.velocity = Vector2.zero;
-            ToggleScripts(false);
+            // body2d.velocity = Vector2.zero;
+            Debug.Log(wallGrounded);
         }
 
         protected override void Offwall()
         {
             base.Offwall();
-            ToggleScripts(true);
         }
     }
 
