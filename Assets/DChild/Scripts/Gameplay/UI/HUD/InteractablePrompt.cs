@@ -16,7 +16,7 @@ namespace DChild.Gameplay.UI
             GameEventMessage.SendEvent("Interaction Prompt Hide");
             if (eventArgs.interactable)
             {
-                m_prompt.transform.position = eventArgs.interactable.transform.position;
+                m_prompt.transform.position = eventArgs.interactable.promptPosition;
                 GameEventMessage.SendEvent("Interaction Prompt Show");
             }
         }
