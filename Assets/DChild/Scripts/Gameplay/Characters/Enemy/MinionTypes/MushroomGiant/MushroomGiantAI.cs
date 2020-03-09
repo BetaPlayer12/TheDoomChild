@@ -179,8 +179,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_breathFX;
         //[SerializeField, TabGroup("Territory")]
         //private Collider2D m_territoryCollider;
-        [SerializeField, TabGroup("Renderer")]
-        private MeshRenderer m_mRendererer;
+        //[SerializeField, TabGroup("Renderer")]
+        //private MeshRenderer m_mRendererer;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -199,6 +199,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_breathFX.gameObject.GetComponent<ParticleSystem>().Stop();
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.Cooldown);
         }
@@ -282,7 +283,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            m_mRendererer.material.SetFloat("Highlight", 1);
+            //m_mRendererer.material.SetFloat("Highlight", 1);
             StopAllCoroutines();
             m_hitbox.SetInvulnerability(false);
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
@@ -387,7 +388,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
             //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
-            Debug.Log("Highlight is: " + m_mRendererer.material.GetFloat("Highlight"));
+            //Debug.Log("Highlight is: " + m_mRendererer.material.GetFloat("Highlight"));
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
