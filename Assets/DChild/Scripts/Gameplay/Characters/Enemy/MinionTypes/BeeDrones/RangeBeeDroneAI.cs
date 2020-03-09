@@ -202,9 +202,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ResetBrain()
         {
-            //if (m_aggroSensorGO.activeSelf)
-            //{
-            //}
             StopAllCoroutines();
             m_targetInfo.Set(null, null);
             m_enablePatience = false;
@@ -225,17 +222,17 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
-            //m_aggroSensorGO.SetActive(false);
+            m_aggroSensor.enabled = false;
             m_animation.SetAnimation(0, m_info.rangeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rangeAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(2f);
+            m_aggroSensor.enabled = true;
             if (!m_aggroSensor.IsTouchingLayers(LayerMask.NameToLayer("Player")) /*&& m_stateHandle.currentState == State.ReevaluateSituation*/)
             {
                 ResetBrain();
-                Debug.Log("Contain'ts Player");
+                //Debug.Log("Contain'ts Player");
             }
-            //m_aggroSensorGO.SetActive(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
