@@ -175,8 +175,7 @@ namespace Spine.Unity {
 			}
 		}
 
-<<<<<<< HEAD
-=======
+
 		public bool CallUpdateLocal()
 		{
 			var canCall = _UpdateLocal != null;
@@ -207,7 +206,7 @@ namespace Spine.Unity {
 			return canCall;
 		}
 
->>>>>>> c8c223d328b12ecf2bb5849041e05b31713e1fa7
+
 		void Update () {
 			#if UNITY_EDITOR
 			if (!Application.isPlaying) {

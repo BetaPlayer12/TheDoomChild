@@ -10,7 +10,7 @@ namespace PlayerNew
         [SerializeField]
         private FaceDirection facing;
         private Renderer spriteRenderer;
-        private Character character;
+        
 
         public bool canLedgeGrab = false;
         public bool ledgeDetected;
@@ -34,9 +34,8 @@ namespace PlayerNew
         void Start()
         {
             facing = GetComponent<FaceDirection>();
-            character = GetComponentInParent<Character>();
             //spriteRenderer = GetComponent<Renderer>();
-
+            
         }
 
         // Update is called once per frame
@@ -134,7 +133,7 @@ namespace PlayerNew
 
         private void StartLedgeClimb()
         {
-            character.transform.position = ledgePos2;
+            transform.position = ledgePos2;
             climb = true;
         }
     }

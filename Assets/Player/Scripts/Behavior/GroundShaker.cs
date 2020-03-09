@@ -21,8 +21,6 @@ namespace PlayerNew
 
         private Crouch crouchMovement;
 
-        private Crouch crouchMovement;
-
         public float midAirDelay;
         public bool groundSmash;
         public float smashMultiplier;
