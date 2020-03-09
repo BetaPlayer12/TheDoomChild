@@ -16,6 +16,10 @@ namespace PlayerNew
         private ParticleSystem deathEarthShakerImpact;
         [SerializeField]
         private Collider2D m_groundShakerAttackCollider;
+        [SerializeField]
+        private Collider2D m_swordJumpAttackCollider;
+
+        private Crouch crouchMovement;
 
         private Crouch crouchMovement;
 
@@ -59,6 +63,7 @@ namespace PlayerNew
 
         private void StartEarthShakerFX()
         {
+            m_swordJumpAttackCollider.enabled = false;
             deathEarthShakerHelicopter.Play();
         }
 
