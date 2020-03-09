@@ -16,15 +16,22 @@ namespace PlayerNew
         private ParticleSystem deathEarthShakerImpact;
         [SerializeField]
         private Collider2D m_groundShakerAttackCollider;
+        [SerializeField]
+        private Collider2D m_swordJumpAttackCollider;
+
+        private Crouch crouchMovement;
 
         public float midAirDelay;
         public bool groundSmash;
         public float smashMultiplier;
         private float defGravity;
+        private Animator animator;
         // Start is called before the first frame update
         void Start()
         {
             defGravity = body2d.gravityScale;
+            animator = GetComponent<Animator>();
+            crouchMovement = GetComponent<Crouch>();
         }
 
         // Update is called once per frame
@@ -36,8 +43,9 @@ namespace PlayerNew
 
 
 
-            if (!collisionState.grounded && down && attack)
+            if (!collisionState.grounded && down && attack && !groundSmash && !crouchMovement.crouching)
             {
+                Debug.Log("Shakering");
 
                 body2d.velocity = Vector2.zero;
                 groundSmash = true;
@@ -53,6 +61,7 @@ namespace PlayerNew
 
         private void StartEarthShakerFX()
         {
+            m_swordJumpAttackCollider.enabled = false;
             deathEarthShakerHelicopter.Play();
         }
 
@@ -72,6 +81,7 @@ namespace PlayerNew
             deathEarthShakerLoop.Stop();
             deathEarthShakerImpact.Play();
             m_groundShakerAttackCollider.enabled = true;
+            
         }
 
         IEnumerator GroundSmashDelayRoutine()
@@ -85,10 +95,11 @@ namespace PlayerNew
         {
 
             groundSmash = false;
-            Debug.Log("finish animation");
+           
             body2d.gravityScale = defGravity;
             ToggleScripts(true);
             m_groundShakerAttackCollider.enabled = false;
+            animator.SetBool("Attack", false);
         }
     }
 }

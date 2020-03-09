@@ -30,6 +30,8 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
+            // add horizontal movement
+
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
             var down = inputState.GetButtonValue(inputButtons[1]);
             var dash = inputState.GetButtonValue(inputButtons[2]);

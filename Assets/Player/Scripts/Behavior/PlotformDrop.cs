@@ -25,19 +25,22 @@ namespace PlayerNew
             var down = inputState.GetButtonValue(inputButtons[0]);
             var downhHold = inputState.GetButtonHoldTime(inputButtons[0]);
             var jump = inputState.GetButtonValue(inputButtons[1]);
-
-            if (collision.gameObject.tag == "Droppable" && down && jump && downhHold < 0.1f)
+          
+            if (collision.gameObject.tag == "Droppable" && down && jump && downhHold < 0.5)
             {
                 body2d.velocity = Vector2.zero;
                 collider2D.isTrigger = true;
                 StartCoroutine(EnableColliderRoutine());
             }
         }
+
     
-    
+
+
         IEnumerator EnableColliderRoutine()
         {
             yield return new WaitForSeconds(enableCollider);
+            
             collider2D.isTrigger = false;
         }
     }

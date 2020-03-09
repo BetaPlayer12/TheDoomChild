@@ -361,6 +361,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 

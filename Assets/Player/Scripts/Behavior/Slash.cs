@@ -7,26 +7,28 @@ namespace PlayerNew
     public class Slash : PlayerBehaviour
     {
 
-        private float timeBtwnAtck;
+        private Animator animator;
+        public float timeBtwnAtck = 0.2f;
         private float attackTimeCounter;
         public float attackingTime;
-        public int attackCounter;
+        //public int attackCounter;
         private float attackHold;
         private float comboTimer;
+        private float slashTimer;
         private Dash dashState;
-
-        public float startTimeBtwAttck;
-
+        public int comboCount = 0;
+        //public float startTimeBtwAttck;
         public bool attackHolding;
         public bool attacking;
+        public bool slashing;
         public bool upHold;
         // public float attackHold = 0.5f;
-        public int comboCount;
         public float resetTime;
 
         public Transform attackPos;
         public Collider2D attackCollider;
         public LayerMask whatIsEnemies;
+
         public float attackRange;
         public bool holdingAttack;
 
@@ -62,121 +64,203 @@ namespace PlayerNew
         [SerializeField]
         private Collider2D m_swordUpSlashAttackCollider;
 
+        public int numOfClicks = 0;
+        float lastClickedTime = 0;
+        public float maxComboDelay = 1.2f;
+
         private void Start()
         {
             attackCollider.enabled = false;
             crouchState = GetComponent<Crouch>();
             dashState = GetComponent<Dash>();
-
+            animator = GetComponent<Animator>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            var canSlash = inputState.GetButtonValue(inputButtons[0]);
+            var canSlash = Input.GetButtonDown("Fire1");
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
             var downButton = inputState.GetButtonValue(inputButtons[1]);
             var upButton = inputState.GetButtonValue(inputButtons[2]);
+            var leftButton = inputState.GetButtonValue(inputButtons[3]);
+            var rightButton = inputState.GetButtonValue(inputButtons[4]);
+            
 
 
-            //if(canSlash && attackCounter <= comboCount)
-            //{
-            //    Debug.Log(startTimeBtwAttck);
-            //    if(startTimeBtwAttck > 0.1f)
-            //    {
-            //        Debug.Log("attacking:" + attackCounter);
-            //        attackCounter++;
-            //        timeBtwnAtck -= Time.deltaTime;
-            //    }
-            //    else
-            //    {
-            //        attackCounter = 0;
-            //        timeBtwnAtck = resetTime;
-            //    }
-
-            //}
-
-            //if (attackTimeCounter > 0.1f)
-            //{
-            //    attackTimeCounter -= Time.deltaTime;
-            //    //attacking = true;
-            //    if (canSlash && holdTime < 0.1f)
-            //    {
-            //        attackCounter++;
-            //    }
-            //    Debug.Log("attack:" + attackCounter);
-            //}
-            //else
-            //{
-            //    attackTimeCounter = resetTime;
-            //    attackCounter = 0;
-            //}
+            if (Time.time - lastClickedTime > maxComboDelay)
+            {
+                numOfClicks = 0;
+            }
 
             upHold = upButton ? true : false;
-            Debug.Log(upButton);
-            if (timeBtwnAtck < 0 && !dashState.dashing)
-            {
-                if (canSlash && holdTime < 0.1f && attacking == false)
-                {
-                    ToggleScripts(false);
-                    if (collisionState.grounded)
-                    {
-                        if (attackCounter == 0)
-                        {
-                            comboTimer = attackingTime;
-                        }
-                        else if (attackCounter == 3)
-                        {
-                            attackCounter = 0;
-                            comboTimer = 1.0f;
-                        }
-                        else
-                        {
-                            //nothing yet
-                        }
+            animator.SetBool("UpHold", upHold);
 
-                        //Collider2D[] objToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
-                        if (attackCounter == 0 && !upButton && !downButton)
-                        {
-                            m_forwardSlash1FX.Play();
-                            m_forwardSlashAttackCollider.enabled = true;
-                        }
-                        else if (attackCounter == 1 && !upButton && !downButton)
-                        {
+            if (Input.GetButtonDown("Fire1") && !dashState.dashing)
+            {
+                ToggleScripts(false);
+               
+                if (!upHold && collisionState.grounded && !downButton)
+                {
+                    
+                    lastClickedTime = Time.time;
+                    numOfClicks++;
+
+                    if (leftButton || rightButton && collisionState.grounded)
+                    {
+                       
+                        body2d.velocity = Vector2.zero;
+                        animator.SetBool("Attack", false);
+                        numOfClicks = 1;
+                       
+                    }
+                    if (numOfClicks == 1)
+                    {
+                        animator.SetBool("Slash1", true);
+                        m_forwardSlash1FX.Play();
+                        m_forwardSlashAttackCollider.enabled = true;
+                    }
+                    numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
+                   
+                    switch (numOfClicks)
+                    {
+                        case 1:
+                            animator.SetBool("Slash1", true);
+                            animator.SetBool("Slash2", false);
+                            animator.SetBool("Slash3", false);
+                            break;
+                        case 2:
+                            animator.SetBool("Slash1", false);
+                            animator.SetBool("Slash2", true);
+                            animator.SetBool("Slash3", false);
                             m_swordCombo1FX.Play();
                             m_swordCombo1AttackCollider.enabled = true;
-                        }
-                        else if (attackCounter == 2 && !upButton && !downButton)
-                        {
+                            break;
+                        case 3:
+                            animator.SetBool("Slash1", false);
+                            animator.SetBool("Slash2", false);
+                            animator.SetBool("Slash3", true);
                             m_swordCombo2FX.Play();
                             m_swordCombo2AttackCollider.enabled = true;
-                        }
+                            break;
                     }
-
-                    attacking = true;
-                }
-
-                timeBtwnAtck = startTimeBtwAttck;
-            }
-            else
+                    animator.SetBool("Attack", true);
+                }else if(upHold && collisionState.grounded)
+                {
+                    animator.SetBool("Attack", true);
+                    SwordUpSlashFX();
+                }else if(downButton && collisionState.grounded)
+                {
+                    animator.SetBool("Attack", true);
+                    animator.SetBool("Crouch", true);
+                    CrouchSlashFX();
+                }else if (!collisionState.grounded)
+                {
+                    if (!upButton)
+                    {
+                        SwordJumpSlashForwardFX();
+                        m_swordJumpSlashForwardAttackCollider.enabled = true;
+                    }
+                    else
+                    {
+                        JumpUpSlashFX();
+                        m_swordUpSlashAttackCollider.enabled = true;
+                    }
+                    animator.SetBool("Attack", true);
+                } 
+               
+                
+            }else if (Input.GetButtonUp("Fire1"))
             {
-                timeBtwnAtck -= Time.deltaTime;
+                m_forwardSlashAttackCollider.enabled = false;
+                m_swordCombo1AttackCollider.enabled = false;
+                m_swordCombo2AttackCollider.enabled = false;
+                m_crouchSlashAttackCollider.enabled = false;
+                m_jumpSlashAttackCollider.enabled = false;
+                m_swordUpSlashAttackCollider.enabled = false;
+                m_swordJumpSlashForwardAttackCollider.enabled = false;
+                animator.SetBool("Attack", false);
+                animator.SetBool("Slash1", false);
+                ToggleScripts(true);
             }
-            if (comboTimer > 0.1f && attackCounter >= 1)
-            {
-                comboTimer -= Time.deltaTime;
-            }
-            else
-            {
-                comboTimer = attackingTime;
-                attackCounter = 0;
-            }
+        }
 
-            if (!collisionState.grounded && holdTime < 0.3f)
-            {
+        public void ReturnToIdle()
+        {
+            //force set to Idle
+           
+            animator.SetInteger("Jog", 0);
+            animator.SetBool("Grounded", true);
+            animator.SetBool("Crouch", false);
+            animator.SetBool("Attack", false);
+            animator.SetBool("Dash", false);
+            animator.SetBool("EarthShake", false);
+            animator.SetBool("ThrustCharge", false);
+            animator.SetBool("Thrust", false);
+            animator.SetBool("JumpDownAttack", false);
+            animator.SetBool("WallGrab", false);
+            animator.SetBool("Slash1", false);
+            animator.SetBool("Slash2", false);
+            animator.SetBool("Slash3", false);
+            //animator.SetBool()
 
-                holdingAttack = false;
-            }
+        }
+        
+        public void FinishCrouchAttack()
+        {
+            Debug.Log("Finish crouch attack");
+        }
+
+
+        public void FinishAttack1()
+        {
+            animator.SetBool("Slash1", false);
+            animator.SetBool("Attack", false);
+            m_forwardSlashAttackCollider.enabled = false;
+            m_swordCombo1AttackCollider.enabled = false;
+            m_swordCombo2AttackCollider.enabled = false;
+
+            m_crouchSlashAttackCollider.enabled = false;
+            m_jumpSlashAttackCollider.enabled = false;
+            m_swordUpSlashAttackCollider.enabled = false;
+            m_swordJumpSlashForwardAttackCollider.enabled = false;
+            ToggleScripts(true);
+        }
+
+        public void FinishAttack2()
+        {
+           
+            animator.SetBool("Slash1", false);
+            animator.SetBool("Slash2", false);
+            animator.SetBool("Attack", false);
+            m_forwardSlashAttackCollider.enabled = false;
+            m_swordCombo1AttackCollider.enabled = false;
+            m_swordCombo2AttackCollider.enabled = false;
+
+            m_crouchSlashAttackCollider.enabled = false;
+            m_jumpSlashAttackCollider.enabled = false;
+            m_swordUpSlashAttackCollider.enabled = false;
+            m_swordJumpSlashForwardAttackCollider.enabled = false;
+            ToggleScripts(true);
+           
+        }
+
+        public void FinishAttack3()
+        {
+            animator.SetBool("Slash1", false);
+            animator.SetBool("Slash2", false);
+            animator.SetBool("Slash3", false);
+            animator.SetBool("Attack", false);
+            m_forwardSlashAttackCollider.enabled = false;
+            m_swordCombo1AttackCollider.enabled = false;
+            m_swordCombo2AttackCollider.enabled = false;
+
+            m_crouchSlashAttackCollider.enabled = false;
+            m_jumpSlashAttackCollider.enabled = false;
+            m_swordUpSlashAttackCollider.enabled = false;
+            m_swordJumpSlashForwardAttackCollider.enabled = false;
+            numOfClicks = 0;
+            ToggleScripts(true);
         }
 
         private void OnDrawGizmosSelected()
@@ -187,12 +271,14 @@ namespace PlayerNew
 
         private void CrouchSlashFX()
         {
+            
             m_VFX_CrouchSlashX.Play();
             m_crouchSlashAttackCollider.enabled = true;
         }
 
         private void SwordAttackForward_MainAction()
         {
+           
             m_forwardSlash1FX.Play();
         }
 
@@ -221,6 +307,8 @@ namespace PlayerNew
 
         private void FinishAttackAnim()
         {
+
+            Debug.Log("finish attack");
             attackCollider.enabled = false;
 
             m_forwardSlashAttackCollider.enabled = false;
@@ -232,8 +320,15 @@ namespace PlayerNew
             m_swordUpSlashAttackCollider.enabled = false;
             m_swordJumpSlashForwardAttackCollider.enabled = false;
 
-            attackCounter++;
+            animator.SetBool("Slash1", false);
+            animator.SetBool("Slash2", false);
+            animator.SetBool("Slash3", false);
+            animator.SetBool("Attack", false);
+            animator.SetBool("Crouch", false);
+
             attacking = false;
+            slashing = false;
+            
             ToggleScripts(true);
         }
     }
