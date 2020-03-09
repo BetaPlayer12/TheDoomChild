@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 65779931634921660}
   - component: {fileID: 5013531693398153085}
   - component: {fileID: 7647081025267108162}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: VFX_SwordCombo2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -105,7 +105,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 1
+  moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
   randomSeed: 0
@@ -4812,105 +4812,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!1 &2613120407109353351
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2613120407109353348}
-  - component: {fileID: 2613120407109353346}
-  - component: {fileID: 2613120407109353349}
-  m_Layer: 8
-  m_Name: AttackCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2613120407109353348
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2613120407109353351}
-  m_LocalRotation: {x: -0, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8203511202221368277}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2613120407109353346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2613120407109353351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 1
-  m_ignoreColliderList:
-  - m_target: {fileID: 0}
-    m_ignoreList:
-    - {fileID: 0}
---- !u!60 &2613120407109353349
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2613120407109353351}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 2.6789246, y: 1.6017976}
-      - {x: 2.7306519, y: 7.763373}
-      - {x: 1.3853912, y: 7.9034505}
-      - {x: -0.13284302, y: 8.033535}
-      - {x: -1.4031982, y: 8.085138}
-      - {x: -2.651291, y: 8.060812}
-      - {x: -3.821762, y: 7.8878236}
-      - {x: -4.7882996, y: 7.524449}
-      - {x: -5.919159, y: 6.8896947}
-      - {x: -6.8156586, y: 6.328259}
-      - {x: -8.169357, y: 5.313128}
-      - {x: -8.9110565, y: 4.495316}
-      - {x: -9.911377, y: 3.2138677}
-      - {x: -10.493988, y: 1.8372083}
-      - {x: -10.635468, y: 0.6401925}
-      - {x: -10.656265, y: -0.6913657}
-      - {x: -9.840393, y: -2.579248}
-      - {x: -8.585602, y: -3.5849032}
-      - {x: -7.393814, y: -4.3851933}
-      - {x: -4.120514, y: -5.4001546}
-      - {x: -2.083191, y: -5.7512174}
-      - {x: -0.87257385, y: -5.849171}
-      - {x: 0.31089783, y: -5.8870044}
-      - {x: 2.5420837, y: -5.9065957}
-      - {x: 2.6349335, y: 0.2602105}
 --- !u!1 &2876399867061208711
 GameObject:
   m_ObjectHideFlags: 0
@@ -4920,7 +4821,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8203511202221368277}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: VFX_SwordCombo2_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4939,7 +4840,6 @@ Transform:
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children:
   - {fileID: 65779931634921660}
-  - {fileID: 2613120407109353348}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

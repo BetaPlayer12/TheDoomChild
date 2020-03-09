@@ -18,7 +18,6 @@ namespace PlayerNew
         private GroundShaker groundShakerBehavior;
         private Thrust thrustBehavior;
         private Animator animator;
-        private WallSlide wallSlideBehavior;
 
 
 
@@ -44,7 +43,6 @@ namespace PlayerNew
             dashBehavior = GetComponent<Dash>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
-            wallSlideBehavior = GetComponent<WallSlide>();
           
         }
         // Start is called before the first frame update
@@ -101,11 +99,6 @@ namespace PlayerNew
                 JogAnimationState(0);
             }
 
-
-
-           
-           
-
 /*            if (wallJumpBehavior.jumpingOffWall)
             {
                 animator.SetTrigger("WallJump");
@@ -145,11 +138,11 @@ namespace PlayerNew
             }
 
 
-            CapeWallStickingState(wallSlideBehavior.wallSticking);
+
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
-            VelocityYAnimationState(longJumpBehavior.velocityY, wallSlideBehavior.wallSticking);
+            VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
@@ -170,24 +163,16 @@ namespace PlayerNew
            
         }
 
-        void CapeWallStickingState(bool value)
-        {
-                capeAnimation.SetBool("Jumping", !value);
-                capeAnimation.SetBool("WallStick", value);
-        }
-
-
         void DashAnimationState(bool value)
         {
             animator.SetBool("Dash", value);
         }
 
-        void VelocityYAnimationState(float value, bool value1)
+        void VelocityYAnimationState(float value)
         {
-          
 
             animator.SetFloat("Yvelocity", value);
-            if(value > 0.5f || value < -0.5f && !value1)
+            if(value > 0.5f || value < -0.5f)
             {
                 capeAnimation.SetBool("Jumping", true);
             }
@@ -215,12 +200,10 @@ namespace PlayerNew
             if (value != 0)
             {
                 capeAnimation.SetBool("Jog", true);
-                capeAnimation.SetBool("Jumping", false);
             }
             else
             {
                 capeAnimation.SetBool("Jog", false);
-                capeAnimation.SetBool("Jumping", true);
             }
         }
 
