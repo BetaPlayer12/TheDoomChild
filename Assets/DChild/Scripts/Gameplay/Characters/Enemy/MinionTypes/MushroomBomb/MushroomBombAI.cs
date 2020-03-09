@@ -57,6 +57,18 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathStartAnimation;
+            public string deathStartAnimation => m_deathStartAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathFallLoopAnimation;
+            public string deathFallLoopAnimation => m_deathFallLoopAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathBounceAnimation;
+            public string deathBounceAnimation => m_deathBounceAnimation;
+            [SerializeField]
+            private Vector2 m_deathKnockbackForce;
+            public Vector2 deathKnockbackForce => m_deathKnockbackForce;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -194,6 +206,29 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private IEnumerator DeathRoutine(object sender, EventActionArgs eventArgs)
+        {
+            m_animation.DisableRootMotion();
+            var knockbackDir = -transform.localScale.x * m_info.deathKnockbackForce.x;
+            m_character.physics.SetVelocity(knockbackDir, m_info.deathKnockbackForce.y);
+            m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
+            m_animation.SetAnimation(0, m_info.deathBounceAnimation, false);
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            Debug.Log("Ground Detected Bounce1");
+            m_animation.SetAnimation(0, m_info.deathBounceAnimation, false);
+            m_character.physics.SetVelocity(knockbackDir * .5f, m_info.deathKnockbackForce.y *.5f);
+            yield return new WaitForSeconds(.25f);
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            Debug.Log("Ground Detected Bounce2");
+            m_animation.SetAnimation(0, m_info.deathBounceAnimation, false);
+            m_character.physics.SetVelocity(knockbackDir * .4f, m_info.deathKnockbackForce.y * .4f);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathBounceAnimation);
+            m_movement.Stop();
+            //base.OnDestroyed(sender, eventArgs);
+            yield return null;
+        }
+
         private IEnumerator ChargeRoutine()
         {
             m_stateHandle.Wait(State.Dead);
@@ -214,7 +249,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            Debug.Log("Die");
             StopAllCoroutines();
+            StartCoroutine(DeathRoutine(sender, eventArgs));
             base.OnDestroyed(sender, eventArgs);
             //m_movement.Stop();
         }

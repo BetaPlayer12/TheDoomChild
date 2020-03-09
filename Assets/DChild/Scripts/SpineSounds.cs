@@ -42,6 +42,7 @@ namespace DChild
                 m_cacheAnimationInfo = m_data.GetAnimationInfo(i);
                 if (m_cacheAnimation == m_cacheAnimationInfo.animationName)
                 {
+                    m_cacheAnimationInfo.StopSound(m_callback); //Gian Edit to fix the sounds that mutes when played again more than once
                     m_cacheAnimationInfo.PlaySound(m_callback);
                     break;
                 }
