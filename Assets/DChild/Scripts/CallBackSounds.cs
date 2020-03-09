@@ -25,7 +25,7 @@ namespace DChild
                 }
             }
 
-            for (int i = 0; i < data.playCount; i++)
+            for (int i = 0; i < data.stopCount; i++)
             {
                 currentSoundGroup = data.GetPlaySoundGroup(i);
                 if (!IsTransformPlaying(currentSoundGroup))

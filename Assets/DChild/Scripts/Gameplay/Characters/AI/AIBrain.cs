@@ -138,7 +138,7 @@ namespace DChild.Gameplay.Characters.AI
         [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
         protected AIData m_data;
 
-        //[ShowInInspector, HideInEditorMode, TabGroup("Data")]
+        [ShowInInspector, HideInEditorMode, TabGroup("Data")]
         protected T m_info;
 
         public void SetData(AIData data)

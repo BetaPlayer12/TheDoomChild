@@ -42,6 +42,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_turnAnimation;
             public string turnAnimation => m_turnAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_turnDodgeAnimation;
+            public string turnDodgeAnimation => m_turnDodgeAnimation;
 
 
             public override void Initialize()
@@ -56,8 +59,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Idle,
             Patrol,
             Turning,
+            Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -86,7 +91,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
-        private State m_turnState;
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -113,8 +117,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (damageable != null)
             {
-                //base.SetTarget(damageable, m_target);
-                //m_stateHandle.SetState(State.Chasing);
+                base.SetTarget(damageable, m_target);
+                m_stateHandle.SetState(State.Chasing);
                 m_currentPatience = 0;
                 m_enablePatience = false;
             }
@@ -135,8 +139,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -201,26 +203,31 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             switch (m_stateHandle.currentState)
             {
+                case State.Idle:
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    break;
+
                 case State.Patrol:
-                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
-                    {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
-                    }
-                    else
-                    {
-                        m_movement.Stop();
-                        m_turnState = State.ReevaluateSituation;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
-                    }
+                    m_animation.EnableRootMotion(true, false);
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+
+                    //if (m_sound_Q_trigerCollider.isTrigger)
+                    //{
+                    //    Debug.Log("nice2x");
+                    //    if (!m_Audiosource.isPlaying)
+                    //    {
+                    //        m_Audiosource.clip = m_Minion_Sound_Q_Clip;
+                    //        m_Audiosource.Play();
+
+                    //    }
+                    //}
+                   
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(m_turnState);
+                    m_stateHandle.Wait(State.ReevaluateSituation);
                     m_movement.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
@@ -229,15 +236,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.ReevaluateSituation:
                     //How far is target, is it worth it to chase or go back to patrol
-                    m_stateHandle.SetState(State.Patrol);
-                    //if (m_targetInfo.isValid)
-                    //{
-                    //    m_stateHandle.SetState(State.Chasing);
-                    //}
-                    //else
-                    //{
-                    //    m_stateHandle.SetState(State.Patrol);
-                    //}
+                    if (m_targetInfo.isValid)
+                    {
+                        m_stateHandle.SetState(State.Chasing);
+                    }
+                    else
+                    {
+                        m_stateHandle.SetState(State.Patrol);
+                    }
                     break;
                 case State.WaitBehaviourEnd:
                    
@@ -249,8 +255,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 Patience();
             }
 
-            //m_wallSensor.transform.localScale = new Vector3(transform.localScale.x, m_wallSensor.transform.localScale.y, m_wallSensor.transform.localScale.z);
-            //m_groundSensor.transform.localScale = new Vector3(transform.localScale.x, m_groundSensor.transform.localScale.y, m_groundSensor.transform.localScale.z);
+            m_wallSensor.transform.localScale = new Vector3(transform.localScale.x, m_wallSensor.transform.localScale.y, m_wallSensor.transform.localScale.z);
+            m_groundSensor.transform.localScale = new Vector3(transform.localScale.x, m_groundSensor.transform.localScale.y, m_groundSensor.transform.localScale.z);
         }
 
         protected override void OnTargetDisappeared()

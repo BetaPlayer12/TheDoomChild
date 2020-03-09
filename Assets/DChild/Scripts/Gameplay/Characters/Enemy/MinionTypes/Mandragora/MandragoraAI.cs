@@ -185,7 +185,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
                 m_hasDetected = false;
@@ -217,8 +216,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -226,7 +223,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.None;
             m_spriteMask.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
@@ -333,7 +329,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
-            GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             m_stateHandle.OverrideState(State.Burrowed);
             m_currentPatience = 0;
             m_enablePatience = false;
