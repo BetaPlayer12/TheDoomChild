@@ -181,10 +181,7 @@ namespace PlayerNew
                 m_swordJumpSlashForwardAttackCollider.enabled = false;
                 animator.SetBool("Attack", false);
                 animator.SetBool("Slash1", false);
-                if (!downButton)
-                {
-                    ToggleScripts(true);
-                }
+                ToggleScripts(true);
             }
         }
 
@@ -274,14 +271,14 @@ namespace PlayerNew
 
         private void CrouchSlashFX()
         {
-            Debug.Log("Crounch attack");
+            
             m_VFX_CrouchSlashX.Play();
             m_crouchSlashAttackCollider.enabled = true;
         }
 
         private void SwordAttackForward_MainAction()
         {
-            Debug.Log("forward slash");
+           
             m_forwardSlash1FX.Play();
         }
 

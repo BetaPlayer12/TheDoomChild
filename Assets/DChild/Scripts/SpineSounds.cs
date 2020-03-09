@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
 using Spine.Unity;
 using Spine;
-using DarkTonic.MasterAudio;
-using System;
 using Sirenix.OdinInspector;
-using static DChild.SpineSoundData;
 
 namespace DChild
 {
@@ -14,7 +11,7 @@ namespace DChild
     {
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
-        [SerializeField]
+        [SerializeField, InlineEditor]
         private SpineSoundData m_data;
         private CallBackSounds m_callback;
 
@@ -22,7 +19,6 @@ namespace DChild
         private static SpineSoundData.EventInfo m_cacheEventInfo;
         private static string m_cacheAnimation;
         private static SpineSoundData.AnimationInfo m_cacheAnimationInfo;
-
 
         private void OnEvents(TrackEntry trackEntry, Spine.Event e)
         {
@@ -46,6 +42,7 @@ namespace DChild
                 m_cacheAnimationInfo = m_data.GetAnimationInfo(i);
                 if (m_cacheAnimation == m_cacheAnimationInfo.animationName)
                 {
+                    m_cacheAnimationInfo.StopSound(m_callback); //Gian Edit to fix the sounds that mutes when played again more than once
                     m_cacheAnimationInfo.PlaySound(m_callback);
                     break;
                 }

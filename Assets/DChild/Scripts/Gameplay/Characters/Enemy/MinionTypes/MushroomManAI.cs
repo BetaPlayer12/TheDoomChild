@@ -327,7 +327,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Attack:
                             m_attackBB.SetActive(true);
-                            m_animation.EnableRootMotion(false, false);
+                            m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                             break;
                     }
