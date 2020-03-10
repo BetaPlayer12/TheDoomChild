@@ -48,7 +48,6 @@ namespace DChild.Gameplay.Characters.AI
             this.m_target = target;
             isCharacter = target;
             isValid = damageable != null;
-            Debug.Log("valid varable check " + isValid);
         }
 
         public void Set(IDamageable damageable)
@@ -56,7 +55,6 @@ namespace DChild.Gameplay.Characters.AI
             m_damageable = damageable;
             isCharacter = false;
             isValid = damageable != null;
-            Debug.Log("valid varable check2 " + isValid);
         }
     }
 }
