@@ -76,10 +76,8 @@ namespace DChild
 
         private void ActivateScene(SceneInstance instance)
         {
-            instance.ActivateAsync().completed += (operation) =>
-            {
-                m_unactivatedScenes.Remove(instance);
-            };
+            instance.Activate();
+            m_unactivatedScenes.Remove(instance);
         }
 
         private void Awake()

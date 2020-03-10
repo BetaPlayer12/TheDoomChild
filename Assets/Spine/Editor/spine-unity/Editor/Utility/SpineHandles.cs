@@ -214,7 +214,6 @@ namespace Spine.Unity.Editor {
 			var pos = new Vector3(b.WorldX * skeletonRenderScale, b.WorldY * skeletonRenderScale, 0);
 			float length = b.Data.Length;
 			if (length > 0) {
-				Debug.Log($" {b.Data.Name}=={b.WorldRotationX}");
 				Quaternion rot = Quaternion.Euler(0, 0, b.WorldRotationX);
 				Vector3 scale = Vector3.one * length * b.WorldScaleX * skeletonRenderScale;
 				const float my = 1.5f;
