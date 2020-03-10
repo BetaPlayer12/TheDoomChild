@@ -660,6 +660,104 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+--- !u!1 &4914704124739206884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595390651572007820}
+  - component: {fileID: 2914864306993785680}
+  - component: {fileID: 5459732075996280386}
+  - component: {fileID: 6610132760341546613}
+  m_Layer: 0
+  m_Name: Cinema
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1595390651572007820
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1656687072529629155}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2914864306993785680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3fa4cd5cca8fac4e869028abc7d43b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_mainCamera: {fileID: 0}
+  m_trackingTarget: {fileID: 0}
+--- !u!114 &5459732075996280386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b22269412dc42024699a0e6fdce34c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_yOffset: 5
+  m_duration: 0.5
+  m_interpolation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &6610132760341546613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d0236126e39dd847b3b3f2ba6d7eac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_holdForPeek: 0.5
 --- !u!1 &6243475520926959959
 GameObject:
   m_ObjectHideFlags: 0
@@ -876,7 +974,6 @@ GameObject:
   - component: {fileID: 2775572802307578294}
   - component: {fileID: 7300060033477175834}
   - component: {fileID: 3187279951672348425}
-  - component: {fileID: 8422006114234957730}
   - component: {fileID: 736789538}
   - component: {fileID: 329289794}
   - component: {fileID: 1344667973}
@@ -902,6 +999,7 @@ Transform:
   - {fileID: 5947637787709336866}
   - {fileID: 2624314046681382207}
   - {fileID: 33779680844366987}
+  - {fileID: 1595390651572007820}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -944,20 +1042,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33963cdaa3a24504696531bff85673f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8422006114234957730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9027099112888996189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3fa4cd5cca8fac4e869028abc7d43b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_mainCamera: {fileID: 0}
-  m_trackingTarget: {fileID: 0}
 --- !u!114 &736789538
 MonoBehaviour:
   m_ObjectHideFlags: 0

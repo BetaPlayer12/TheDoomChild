@@ -43,8 +43,7 @@ namespace DChild.Gameplay.Characters
 
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
-            Debug.Log("Flinch");
-            m_spine.SetAnimation(0, m_idleAnimation, true);
+            //Debug.Log("Flinch");
             Flinch();
         }
 
@@ -63,6 +62,7 @@ namespace DChild.Gameplay.Characters
             FlinchStart?.Invoke(this, new EventActionArgs());
             if (m_autoFlinch)
             {
+                m_spine.SetAnimation(0, m_idleAnimation, true);
                 m_spine.SetAnimation(0, m_animation, false, 0);
                 m_spine.AddAnimation(0, m_idleAnimation, false, 0.2f).TimeScale = 20;
 
