@@ -107,6 +107,11 @@ namespace DChild.Gameplay.Combat
             CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
         }
 
+        public override void SetData(AttackResistanceData data)
+        {
+            throw new System.NotImplementedException();
+        }
+
 
 #endif
     }
