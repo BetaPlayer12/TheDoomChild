@@ -40,7 +40,7 @@ namespace PlayerNew
 
             if (!collisionState.grounded && down && attack && !groundSmash)
             {
-                Debug.Log("Shakering");
+              
 
                 body2d.velocity = Vector2.zero;
                 groundSmash = true;
@@ -82,6 +82,7 @@ namespace PlayerNew
         {
             yield return new WaitForSeconds(midAirDelay);
             body2d.gravityScale = defGravity * smashMultiplier;
+
         }
 
 

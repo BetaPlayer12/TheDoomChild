@@ -96,7 +96,7 @@ namespace PlayerNew
            
             base.Onstick();
             // body2d.velocity = Vector2.zero;
-            Debug.Log(wallGrounded);
+           
         }
 
         protected override void Offwall()

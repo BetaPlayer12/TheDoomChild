@@ -45,7 +45,6 @@ namespace PlayerNew
 
             if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay && !collisionState.onWall && !collisionState.onWallLeg && !crouch.crouching)
             {
-                Debug.Log("Crouch jump");
                 var vel = body2d.velocity;
                 body2d.velocity = new Vector2(vel.x, jumpSpeed * longJumpMultiplier);
                 canLongJump = false;
