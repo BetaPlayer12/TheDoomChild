@@ -27,6 +27,7 @@ namespace PlayerNew
             base.Update();
             var wallStickLeft = inputState.GetButtonValue(inputButtons[1]);
             var wallStickRight = inputState.GetButtonValue(inputButtons[2]);
+
             velocityX = body2d.velocity.x;
 
             if (!collisionState.grounded && !onWallDetected && !wallSticking)
@@ -70,6 +71,9 @@ namespace PlayerNew
                 {
                     velY *= slideMultiplier;
 
+                }else if (inputState.GetButtonValue(inputButtons[4]))
+                {
+                    velY *= -slideMultiplier;
                 }
                 body2d.velocity = new Vector2(body2d.velocity.x, velY);                               
             }

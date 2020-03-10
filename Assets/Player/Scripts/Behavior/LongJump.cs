@@ -6,6 +6,8 @@ namespace PlayerNew
 {
     public class LongJump : Jump
     {
+        [SerializeField]
+        private Crouch crouch;
         public float longJumpDelay = 0.15f;
         public float longJumpMultiplier = 1.5f;
         public float velocityY;
@@ -41,8 +43,9 @@ namespace PlayerNew
 
             base.Update();
 
-            if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay && !collisionState.onWall && !collisionState.onWallLeg)
+            if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay && !collisionState.onWall && !collisionState.onWallLeg && !crouch.crouching)
             {
+                Debug.Log("Crouch jump");
                 var vel = body2d.velocity;
                 body2d.velocity = new Vector2(vel.x, jumpSpeed * longJumpMultiplier);
                 canLongJump = false;
