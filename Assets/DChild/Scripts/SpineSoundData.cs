@@ -23,6 +23,11 @@ namespace DChild
                 }
             }
 
+            public void StopSound(CallBackSounds callBack)
+            {
+                callBack.StopSound(m_soundToPlay);
+            }
+
 #if UNITY_EDITOR
             protected SkeletonDataAsset m_skeletonDataAsset; 
 
