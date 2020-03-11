@@ -96,7 +96,7 @@ namespace PlayerNew
             upHold = upButton ? true : false;
             animator.SetBool("UpHold", upHold);
 
-            if (Input.GetButtonDown("Fire1") && !dashState.dashing)
+            if (Input.GetButtonDown("Fire1") && !dashState.dashing && !downButton)
             {
                 ToggleScripts(false);
                
