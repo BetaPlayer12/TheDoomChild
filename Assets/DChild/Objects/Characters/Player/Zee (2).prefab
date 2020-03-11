@@ -47,6 +47,7 @@ MonoBehaviour:
   m_pointOfReference: {fileID: 4294471023827248790}
   m_instance: {fileID: 8599680194379353108}
   m_maxDistance: 15
+  m_calculateAlways: 0
 --- !u!1 &4294471023827248798
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7245713391412971792}
+  m_centerMass: {fileID: 0}
   m_isolatedObject: {fileID: 4294471023827248796}
   m_physics: {fileID: 0}
   m_colliders: {fileID: 0}
@@ -122,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7245713391412971792}
+  m_centerMass: {fileID: 0}
   m_data: {fileID: 0}
   m_info:
     damage:
@@ -143,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7245713391412971792}
+  m_centerMass: {fileID: 0}
   m_health: {fileID: 4294471024675222952}
   m_resistance: {fileID: 4294471024675222953}
 --- !u!50 &4294471023827248786
@@ -678,48 +679,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4294471023827248790}
     m_Modifications:
-    - target: {fileID: 251286694, guid: f12efcbc77240e7449cca360a383e925, type: 3}
-      propertyPath: m_swordCombo1AttackCollider
-      value: 
-      objectReference: {fileID: 8496082761401061241}
-    - target: {fileID: 251286694, guid: f12efcbc77240e7449cca360a383e925, type: 3}
-      propertyPath: m_swordCombo2AttackCollider
-      value: 
-      objectReference: {fileID: 8496082760713383269}
-    - target: {fileID: 251286694, guid: f12efcbc77240e7449cca360a383e925, type: 3}
-      propertyPath: m_crouchSlashAttackCollider
-      value: 
-      objectReference: {fileID: 4061170891763100891}
-    - target: {fileID: 251286694, guid: f12efcbc77240e7449cca360a383e925, type: 3}
-      propertyPath: m_jumpSlashAttackCollider
-      value: 
-      objectReference: {fileID: 136933773172094259}
-    - target: {fileID: 251286694, guid: f12efcbc77240e7449cca360a383e925, type: 3}
-      propertyPath: m_swordUpSlashAttackCollider
-      value: 
-      objectReference: {fileID: 4766772837497955243}
-    - target: {fileID: 919870464, guid: f12efcbc77240e7449cca360a383e925, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 965161050, guid: f12efcbc77240e7449cca360a383e925, type: 3}
-      propertyPath: m_groundShakerAttackCollider
-      value: 
-      objectReference: {fileID: 7358237651109466307}
-    - target: {fileID: 1405919478, guid: f12efcbc77240e7449cca360a383e925, type: 3}
-      propertyPath: m_thrustImpactAttackCollider
-      value: 
-      objectReference: {fileID: 1900053199378706060}
-    - target: {fileID: 5088562139932810120, guid: f12efcbc77240e7449cca360a383e925,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5088562139932810120, guid: f12efcbc77240e7449cca360a383e925,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7567338640060585520, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
       propertyPath: m_Mesh
@@ -785,21 +744,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Model
       objectReference: {fileID: 0}
-    - target: {fileID: 8416278654859809743, guid: f12efcbc77240e7449cca360a383e925,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.28
-      objectReference: {fileID: 0}
-    - target: {fileID: 8416278654859809743, guid: f12efcbc77240e7449cca360a383e925,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 8416278654859809743, guid: f12efcbc77240e7449cca360a383e925,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 9075859532353287501, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
       propertyPath: m_Mesh
@@ -853,21 +797,9 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &8496082761401061241 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 2613120406931586378, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &1456960559162279325 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 5013531694104655790, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
---- !u!60 &8496082760713383269 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 2613120406277480278, guid: f12efcbc77240e7449cca360a383e925,
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
@@ -1015,21 +947,9 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
---- !u!61 &1900053199378706060 stripped
-BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 5473515371360525503, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &7615603752087514403 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4042968203043053328, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
---- !u!60 &4061170891763100891 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 7635747628552576744, guid: f12efcbc77240e7449cca360a383e925,
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
@@ -1039,21 +959,9 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &136933773172094259 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 5786547045422024448, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &117699076314971536 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 5767329656797613987, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
---- !u!60 &4766772837497955243 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 1408913961424884120, guid: f12efcbc77240e7449cca360a383e925,
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
@@ -1123,12 +1031,6 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &7358237651109466307 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4014461280597484272, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &4493369812150836547 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 8065988035934465904, guid: f12efcbc77240e7449cca360a383e925,
@@ -1192,12 +1094,6 @@ ParticleSystem:
 --- !u!198 &8466835984685175348 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 2606373706024214535, guid: f12efcbc77240e7449cca360a383e925,
-    type: 3}
-  m_PrefabInstance: {fileID: 5884952831304823347}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7245713391412971792 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3829885539137125155, guid: f12efcbc77240e7449cca360a383e925,
     type: 3}
   m_PrefabInstance: {fileID: 5884952831304823347}
   m_PrefabAsset: {fileID: 0}

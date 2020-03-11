@@ -16,10 +16,6 @@ namespace PlayerNew
         private ParticleSystem deathEarthShakerImpact;
         [SerializeField]
         private Collider2D m_groundShakerAttackCollider;
-        [SerializeField]
-        private Collider2D m_swordJumpAttackCollider;
-
-        private Crouch crouchMovement;
 
         public float midAirDelay;
         public bool groundSmash;
@@ -31,7 +27,6 @@ namespace PlayerNew
         {
             defGravity = body2d.gravityScale;
             animator = GetComponent<Animator>();
-            crouchMovement = GetComponent<Crouch>();
         }
 
         // Update is called once per frame
@@ -43,9 +38,9 @@ namespace PlayerNew
 
 
 
-            if (!collisionState.grounded && down && attack && !groundSmash && !crouchMovement.crouching)
+            if (!collisionState.grounded && down && attack && !groundSmash)
             {
-                Debug.Log("Shakering");
+              
 
                 body2d.velocity = Vector2.zero;
                 groundSmash = true;
@@ -61,7 +56,6 @@ namespace PlayerNew
 
         private void StartEarthShakerFX()
         {
-            m_swordJumpAttackCollider.enabled = false;
             deathEarthShakerHelicopter.Play();
         }
 
@@ -87,7 +81,9 @@ namespace PlayerNew
         IEnumerator GroundSmashDelayRoutine()
         {
             yield return new WaitForSeconds(midAirDelay);
-            body2d.gravityScale = defGravity * smashMultiplier;
+            // body2d.gravityScale = defGravity * smashMultiplier;
+            body2d.velocity = Vector2.zero;
+            body2d.AddForce(new Vector2(body2d.velocity.x, -smashMultiplier), ForceMode2D.Force);
         }
 
 
@@ -95,7 +91,7 @@ namespace PlayerNew
         {
 
             groundSmash = false;
-           
+            body2d.velocity = Vector2.zero;
             body2d.gravityScale = defGravity;
             ToggleScripts(true);
             m_groundShakerAttackCollider.enabled = false;

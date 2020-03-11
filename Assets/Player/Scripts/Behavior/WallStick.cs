@@ -87,8 +87,6 @@ namespace PlayerNew
                 body2d.gravityScale = defaultGravityScale;
                 body2d.drag = defaultDrag;
                 wallSticking = false;
-
-                Debug.Log("Defaul gravity Scale: " + defaultGravityScale);
             }
         }
     }
