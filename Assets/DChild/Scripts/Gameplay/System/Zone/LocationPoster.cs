@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Systems
 #if UNITY_EDITOR
         [SerializeField, PropertyOrder(-1)]
         private Transform m_locationPoint;
+        [SerializeField, HideInInspector]
+        private Vector3 m_prevPosition;
 
         private void OnValidate()
         {
@@ -24,7 +26,12 @@ namespace DChild.Gameplay.Systems
 
             if (Application.isPlaying == false)
             {
-                m_data?.Set(gameObject.scene, m_locationPoint.position);
+                var currentPosition = m_locationPoint.position;
+                if (m_prevPosition != currentPosition)
+                {
+                    m_data?.Set(gameObject.scene, currentPosition);
+                    m_prevPosition = currentPosition;
+                }
             }
             if (gameObject.scene.name != null)
             {
