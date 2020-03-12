@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-    public class ZoneSettings : MonoBehaviour, ISerializableComponent
+    public class EnvironmentChanger : MonoBehaviour, ISerializableComponent
     {
         [System.Serializable]
         private struct SaveData : ISaveData
@@ -25,9 +25,9 @@ namespace DChild.Gameplay.Environment
         private bool m_hasChanged;
         [SerializeField, TabGroup("Default")]
         private UnityEvent m_default;
-        [SerializeField, TabGroup("Default")]
+        [SerializeField, TabGroup("Changed")]
         private UnityEvent m_changed;
-        [SerializeField, TabGroup("Default")]
+        [SerializeField, TabGroup("Transistion")]
         private UnityEvent m_transistionToChanged;
 
         public void Load(ISaveData data)

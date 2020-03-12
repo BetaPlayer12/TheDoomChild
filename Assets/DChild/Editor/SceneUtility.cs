@@ -1,26 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 public static class SceneUtility
 {
-    private static List<Transform> m_spriteChildren = new List<Transform>();
-    private static List<SpriteRenderer> m_toRecheck = new List<SpriteRenderer>();
+    private static List<Transform> m_transformList = new List<Transform>();
+    private static List<SpriteRenderer> m_spriteRendererList = new List<SpriteRenderer>();
 
     [MenuItem("Tools/DChild Utility/Optimize Sprite Renderers In Scene")]
     private static void OptimizeSpriteRenderersInScene()
     {
         var sprites = Object.FindObjectsOfType<SpriteRenderer>();
-        m_toRecheck.Clear();
+        m_spriteRendererList.Clear();
         for (int i = 0; i < sprites.Length; i++)
         {
             ReorientSpriteRenderer(sprites[i]);
         }
-        for (int i = 0; i < m_toRecheck.Count; i++)
+        for (int i = 0; i < m_spriteRendererList.Count; i++)
         {
-            ReorientSpriteRenderer(m_toRecheck[i]);
+            ReorientSpriteRenderer(m_spriteRendererList[i]);
         }
-        m_toRecheck.Clear();
+        m_spriteRendererList.Clear();
     }
 
     private static void ReorientSpriteRenderer(SpriteRenderer renderer)
@@ -44,27 +45,27 @@ public static class SceneUtility
         {
             if (transform.childCount > 0)
             {
-                m_toRecheck.AddRange(transform.GetComponentsInChildren<SpriteRenderer>(true));
-                m_spriteChildren.Clear();
+                m_spriteRendererList.AddRange(transform.GetComponentsInChildren<SpriteRenderer>(true));
+                m_transformList.Clear();
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     var child = transform.GetChild(i);
-                    m_spriteChildren.Add(child);
+                    m_transformList.Add(child);
                 }
-                for (int i = 0; i < m_spriteChildren.Count; i++)
+                for (int i = 0; i < m_transformList.Count; i++)
                 {
-                    m_spriteChildren[i].parent = null;
+                    m_transformList[i].parent = null;
                 }
             }
         }
         transform.localScale = scale;
         if (hasChanges)
         {
-            for (int i = 0; i < m_spriteChildren.Count; i++)
+            for (int i = 0; i < m_transformList.Count; i++)
             {
-                m_spriteChildren[i].parent = transform;
+                m_transformList[i].parent = transform;
             }
-            m_spriteChildren.Clear();
+            m_transformList.Clear();
         }
     }
 }
