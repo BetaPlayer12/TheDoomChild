@@ -89,7 +89,6 @@ namespace PlayerNew
 
         public void GroundSmashFinishAnimation()
         {
-
             groundSmash = false;
             body2d.velocity = Vector2.zero;
             body2d.gravityScale = defGravity;
