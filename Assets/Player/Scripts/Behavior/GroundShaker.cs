@@ -16,6 +16,8 @@ namespace PlayerNew
         private ParticleSystem deathEarthShakerImpact;
         [SerializeField]
         private Collider2D m_groundShakerAttackCollider;
+        [SerializeField]
+        private WallSlide wallSlide;
 
         public float midAirDelay;
         public bool groundSmash;
