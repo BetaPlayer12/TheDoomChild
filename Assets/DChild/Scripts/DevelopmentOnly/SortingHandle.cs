@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Spine.Unity;
+using System.Linq;
 #if UNITY_EDITOR
 using Sirenix.Utilities.Editor;
 #endif
@@ -11,12 +13,31 @@ namespace DChild
     [DisallowMultipleComponent]
     public class SortingHandle : MonoBehaviour
     {
-        [SerializeField, SortingLayer, OnValueChanged("UpdateSorting")]
+        [SerializeField]
+        private bool m_includeInBuild;
+        [SerializeField, SortingLayer, OnValueChanged("UpdateSorting"), LabelText("Reference Layer")]
         private int m_referenceLayer;
         [SerializeField, OnValueChanged("UpdateSorting")]
         private int m_referenceOrder;
+
+        [SerializeField, HideInInspector]
+        private Renderer[] m_renderers;
+        [SerializeField, HideInInspector]
+        private int[] m_baseOrders;
+
         public int sortingLayerID => m_referenceLayer;
         public int sortingOrder => m_referenceOrder;
+
+        public void SetOrder(int layerID, int sortingOrder)
+        {
+            m_referenceLayer = layerID;
+            m_referenceOrder = sortingOrder;
+            for (int i = 0; i < m_renderers.Length; i++)
+            {
+                m_renderers[i].sortingLayerID = layerID;
+                m_renderers[i].sortingOrder = m_baseOrders[i] + sortingOrder;
+            }
+        }
 
 #if UNITY_EDITOR
         [System.Serializable]
@@ -26,6 +47,9 @@ namespace DChild
             private Renderer m_renderer;
             [SerializeField, HorizontalGroup("Group"), ReadOnly]
             private int m_baseOrder;
+
+            public Renderer renderer => m_renderer;
+            public int baseOrder => m_baseOrder;
 
             public Info(Renderer renderer, int referenceOrder)
             {
@@ -48,13 +72,13 @@ namespace DChild
         [SerializeField, HideInInspector]
         private int m_previousReferenceOrder;
         [SerializeField, ListDrawerSettings(DraggableItems = false, HideAddButton = true, OnTitleBarGUI = "OnListGUI", HideRemoveButton = true)]
-        private List<Info> m_renderers;
+        private List<Info> m_rendererList;
 
         private void OnListGUI()
         {
             if (SirenixEditorGUI.IconButton(EditorIcons.Download))
             {
-                m_renderers.Clear();
+                m_rendererList.Clear();
                 PopulateList();
             }
         }
@@ -64,27 +88,37 @@ namespace DChild
             var renderers = GetComponentsInChildren<Renderer>();
             for (int i = 0; i < renderers.Length; i++)
             {
-                m_renderers.Add(new Info(renderers[i], m_referenceOrder));
-                m_renderers[i].UpdateSorting(m_referenceLayer, m_referenceOrder);
+                m_rendererList.Add(new Info(renderers[i], m_referenceOrder));
+                m_rendererList[i].UpdateSorting(m_referenceLayer, m_referenceOrder);
             }
         }
 
         private void UpdateSorting()
         {
-            for (int i = 0; i < m_renderers.Count; i++)
+            for (int i = 0; i < m_rendererList.Count; i++)
             {
-                m_renderers[i].UseCurrentAsBaseOrder(m_previousReferenceOrder);
-                m_renderers[i].UpdateSorting(m_referenceLayer, m_referenceOrder);
+                m_rendererList[i].UseCurrentAsBaseOrder(m_previousReferenceOrder);
+                m_rendererList[i].UpdateSorting(m_referenceLayer, m_referenceOrder);
             }
             m_previousReferenceOrder = m_referenceOrder;
         }
 
         private void OnValidate()
         {
-            if (m_renderers.Count == 0)
+            if (m_rendererList.Count == 0)
             {
                 m_previousReferenceOrder = 0;
                 PopulateList();
+            }
+            if (m_includeInBuild)
+            {
+                m_renderers = m_rendererList.Select(x => x.renderer).ToArray();
+                m_baseOrders = m_rendererList.Select(x => x.baseOrder).ToArray();
+            }
+            else
+            {
+                m_renderers = null;
+                m_baseOrders = null;
             }
         }
 #endif
