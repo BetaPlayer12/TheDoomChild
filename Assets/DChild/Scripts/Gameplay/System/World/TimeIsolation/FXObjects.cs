@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Systems.WorldComponents
                 if (m_particleSystems[i] != null)
                 {
                     var main = m_particleSystems[i].main;
-                    main.simulationSpeed = timeScale;
+                    //main.simulationSpeed = timeScale;
                 }
             }
         }
