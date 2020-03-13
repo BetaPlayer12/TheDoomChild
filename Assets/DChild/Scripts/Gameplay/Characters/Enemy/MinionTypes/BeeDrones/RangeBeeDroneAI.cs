@@ -149,6 +149,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             //m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //m_aggroSensor.enabled = true;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -209,6 +210,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ResetBrain()
         {
             StopAllCoroutines();
+            m_currentCD = 0;
+            m_aggroSensor.enabled = true;
             m_targetInfo.Set(null, null);
             m_enablePatience = false;
             m_isDetecting = false;
@@ -408,19 +411,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     //StartCoroutine(RangeAttackRoutine());
                     break;
                 case State.Cooldown:
-                    if (m_currentCD < m_info.attackCD)
+                    if (m_currentCD <= m_info.attackCD)
                     {
                         m_currentCD += Time.deltaTime;
                     }
                     else
                     {
+                        if (!m_aggroSensor.IsTouchingLayers(LayerMask.NameToLayer("Player")) /*&& m_stateHandle.currentState == State.ReevaluateSituation*/)
+                        {
+                            ResetBrain();
+                            //Debug.Log("Contain'ts Player");
+                        }
+                        m_currentCD = 0;
                         m_aggroSensor.enabled = true;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
-                    }
-                    if (!m_aggroSensor.IsTouchingLayers(LayerMask.NameToLayer("Player")) /*&& m_stateHandle.currentState == State.ReevaluateSituation*/)
-                    {
-                        ResetBrain();
-                        //Debug.Log("Contain'ts Player");
                     }
                     break;
                 case State.Chasing:
