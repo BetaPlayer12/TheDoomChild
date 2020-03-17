@@ -235,7 +235,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     instance.transform.position = m_throwPoint.position;
                     var component = instance.GetComponent<Projectile>();
                     component.ResetState();
-                    component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                    //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                    component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
                     //return instance.gameObject;
                 }
                 else
