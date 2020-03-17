@@ -20,7 +20,7 @@ namespace DChild
         [SerializeField, OnValueChanged("UpdateSorting")]
         private int m_referenceOrder;
 
-        [SerializeField, HideInInspector]
+        [SerializeField, DisableInEditorMode]
         private Renderer[] m_renderers;
         [SerializeField, HideInInspector]
         private int[] m_baseOrders;
@@ -72,7 +72,7 @@ namespace DChild
         [SerializeField, HideInInspector]
         private int m_previousReferenceOrder;
         [SerializeField, ListDrawerSettings(DraggableItems = false, HideAddButton = true, OnTitleBarGUI = "OnListGUI", HideRemoveButton = true)]
-        private List<Info> m_rendererList;
+        private List<Info> m_rendererList = new List<Info>();
 
         private void OnListGUI()
         {
