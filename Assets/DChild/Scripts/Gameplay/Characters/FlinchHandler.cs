@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Characters
 
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
-            //Debug.Log("Flinch");
+         
             Flinch();
         }
 
