@@ -81,8 +81,9 @@ namespace PlayerNew
         IEnumerator GroundSmashDelayRoutine()
         {
             yield return new WaitForSeconds(midAirDelay);
-            body2d.gravityScale = defGravity * smashMultiplier;
-
+            // body2d.gravityScale = defGravity * smashMultiplier;
+            body2d.velocity = Vector2.zero;
+            body2d.AddForce(new Vector2(body2d.velocity.x, -smashMultiplier), ForceMode2D.Force);
         }
 
 
@@ -90,7 +91,7 @@ namespace PlayerNew
         {
 
             groundSmash = false;
-           
+            body2d.velocity = Vector2.zero;
             body2d.gravityScale = defGravity;
             ToggleScripts(true);
             m_groundShakerAttackCollider.enabled = false;

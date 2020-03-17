@@ -18,6 +18,7 @@ namespace PlayerNew
         private GroundShaker groundShakerBehavior;
         private Thrust thrustBehavior;
         private Animator animator;
+        private WallSlide wallSlideBehavior;
 
 
 
@@ -43,6 +44,7 @@ namespace PlayerNew
             dashBehavior = GetComponent<Dash>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
+            wallSlideBehavior = GetComponent<WallSlide>();
           
         }
         // Start is called before the first frame update
@@ -137,7 +139,11 @@ namespace PlayerNew
                 animator.SetBool("Thrust", false);
             }
 
-
+            if(wallSlideBehavior.onWallDetected && !collisionState.grounded)
+            {
+                animator.SetBool("UpHold",wallSlideBehavior.upHold);
+                animator.SetBool("DownHold",wallSlideBehavior.downHold);
+            }
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);

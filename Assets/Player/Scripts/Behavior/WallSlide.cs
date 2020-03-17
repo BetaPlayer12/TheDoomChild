@@ -13,6 +13,9 @@ namespace PlayerNew
         public float velocityX;
         public float forceX;
         public float forceY;
+
+        public bool upHold;
+        public bool downHold;
                 
 
         private void Start()
@@ -25,8 +28,20 @@ namespace PlayerNew
         {
            
             base.Update();
+            var wallStickDown = inputState.GetButtonValue(inputButtons[0]);
             var wallStickLeft = inputState.GetButtonValue(inputButtons[1]);
             var wallStickRight = inputState.GetButtonValue(inputButtons[2]);
+            var wallStickJump = inputState.GetButtonValue(inputButtons[3]);
+            var wallStickJumpHold = inputState.GetButtonHoldTime(inputButtons[3]);
+            var wallStickUp = inputState.GetButtonValue(inputButtons[4]);
+
+            if (wallSticking)
+            {
+                upHold = wallStickUp;
+                downHold = wallStickDown;
+            }
+
+            
 
             velocityX = body2d.velocity.x;
 
@@ -67,11 +82,11 @@ namespace PlayerNew
                 var velY = slideVelocity;
 
 
-                if (inputState.GetButtonValue(inputButtons[0]))
+                if (wallStickDown)
                 {
                     velY *= slideMultiplier;
 
-                }else if (inputState.GetButtonValue(inputButtons[4]))
+                }else if (wallStickUp)
                 {
                     velY *= -slideMultiplier;
                 }
@@ -79,8 +94,10 @@ namespace PlayerNew
             }
 
             //jumping beside wall 
-            if ((onWallDetected || groundWallStick) && inputState.GetButtonValue(inputButtons[3]) && inputState.GetButtonHoldTime(inputButtons[3]) < 0.1f)
+            if ((onWallDetected || groundWallStick) && wallStickJump && wallStickJumpHold < 0.1f)
             {
+                Debug.Log("Big jump");
+
                 //facing left
                 if (!facing.isFacingRight)
                     body2d.velocity = new Vector2(forceX, forceY);
