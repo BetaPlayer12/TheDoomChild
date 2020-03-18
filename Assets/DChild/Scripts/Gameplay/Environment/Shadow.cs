@@ -30,6 +30,7 @@ namespace DChild.Gameplay.Environment
 
                 m_instance.position = m_hitBuffer[0].point;
                 m_instance.localScale = Vector3.Lerp(Vector3.zero, m_originalScale, 1 - (m_hitBuffer[0].distance / m_maxDistance));
+                m_instance.rotation = Quaternion.identity;
             }
             else
             {
@@ -56,6 +57,6 @@ namespace DChild.Gameplay.Environment
                 RenderShadow();
                 m_prevPosition = m_pointOfReference.position;
             }
-        }  
+        }
     }
 }
