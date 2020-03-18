@@ -17,9 +17,7 @@ namespace PlayerNew
         [SerializeField]
         private Collider2D m_groundShakerAttackCollider;
         [SerializeField]
-        private Collider2D m_swordJumpAttackCollider;
-
-        private Crouch crouchMovement;
+        private WallSlide wallSlide;
 
         public float midAirDelay;
         public bool groundSmash;
@@ -31,7 +29,6 @@ namespace PlayerNew
         {
             defGravity = body2d.gravityScale;
             animator = GetComponent<Animator>();
-            crouchMovement = GetComponent<Crouch>();
         }
 
         // Update is called once per frame
@@ -43,14 +40,15 @@ namespace PlayerNew
 
 
 
-            if (!collisionState.grounded && down && attack && !groundSmash && !crouchMovement.crouching)
+            if (!collisionState.grounded && down && attack && !groundSmash)
             {
-                Debug.Log("Shakering");
+              
 
                 body2d.velocity = Vector2.zero;
                 groundSmash = true;
                 body2d.gravityScale = 0f;
                 ToggleScripts(false);
+                Debug.Log("ground shake");
                 StartCoroutine(GroundSmashDelayRoutine());
             }
             else
@@ -61,7 +59,6 @@ namespace PlayerNew
 
         private void StartEarthShakerFX()
         {
-            m_swordJumpAttackCollider.enabled = false;
             deathEarthShakerHelicopter.Play();
         }
 
@@ -87,16 +84,19 @@ namespace PlayerNew
         IEnumerator GroundSmashDelayRoutine()
         {
             yield return new WaitForSeconds(midAirDelay);
-            body2d.gravityScale = defGravity * smashMultiplier;
+            body2d.gravityScale = defGravity;
+            // body2d.gravityScale = defGravity * smashMultiplier;
+            Debug.Log(smashMultiplier);
+            body2d.velocity = Vector2.zero;
+            body2d.AddForce(new Vector2(body2d.velocity.x, -smashMultiplier), ForceMode2D.Force);
         }
 
 
         public void GroundSmashFinishAnimation()
         {
-
             groundSmash = false;
-           
-            body2d.gravityScale = defGravity;
+            body2d.velocity = Vector2.zero;
+            
             ToggleScripts(true);
             m_groundShakerAttackCollider.enabled = false;
             animator.SetBool("Attack", false);

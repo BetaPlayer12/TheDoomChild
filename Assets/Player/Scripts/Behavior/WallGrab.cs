@@ -10,7 +10,7 @@ namespace PlayerNew
         [SerializeField]
         private FaceDirection facing;
         private Renderer spriteRenderer;
-        private Character character;
+        
 
         public bool canLedgeGrab = false;
         public bool ledgeDetected;
@@ -34,9 +34,8 @@ namespace PlayerNew
         void Start()
         {
             facing = GetComponent<FaceDirection>();
-            character = GetComponentInParent<Character>();
             //spriteRenderer = GetComponent<Renderer>();
-
+            
         }
 
         // Update is called once per frame
@@ -56,13 +55,11 @@ namespace PlayerNew
                 if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[1])))
                 {
                     OnWallGrab();
-                    Debug.Log("wall grab facing right");
                 }
                 else if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[3]) || inputState.GetButtonValue(inputButtons[4])))
                 {
                     ToggleScripts(true);
                     ledgeDetected = false;
-                    Debug.Log("toggle facing right");
                 }
             }
             //wallGrab facing left
@@ -71,13 +68,11 @@ namespace PlayerNew
                 if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[3])))
                 {
                     OnWallGrab();
-                    Debug.Log("wall grab facing left");
                 }
                 else if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[1]) || inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[4])))
                 {
                     ToggleScripts(true);
                     ledgeDetected = false;
-                    Debug.Log("toggle facing left");
                 }
             }
 
@@ -118,14 +113,12 @@ namespace PlayerNew
 
         IEnumerator FinishedLedgeClimbRoutine()
         {
-            Debug.Log("yeild");
             yield return new WaitForSeconds(0.1f);
             FinishedLedgeClimb();
 
         }
         private void FinishedLedgeClimb()
         {
-            Debug.Log("done");
             ledgeDetected = false;
             canLedgeGrab = false;
             ToggleScripts(true);
@@ -134,7 +127,7 @@ namespace PlayerNew
 
         private void StartLedgeClimb()
         {
-            character.transform.position = ledgePos2;
+            transform.position = ledgePos2;
             climb = true;
         }
     }

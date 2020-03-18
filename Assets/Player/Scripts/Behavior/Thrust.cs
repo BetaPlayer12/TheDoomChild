@@ -10,6 +10,7 @@ namespace PlayerNew
         public bool thrustAttack;
         public bool thrustHasStarted;
         public float timeToCharge;
+        public float thrustDash;
         [SerializeField]
         private ParticleSystem swordThrustBuildUp;
         [SerializeField]
@@ -20,6 +21,8 @@ namespace PlayerNew
         private ParticleSystem slashSwordThrustImpacts;
         [SerializeField]
         private Collider2D m_thrustImpactAttackCollider;
+        [SerializeField]
+        private FaceDirection facing;
 
         // Start is called before the first frame update
         void Start()
@@ -50,6 +53,8 @@ namespace PlayerNew
             {
                 swordThrustBuildUp.Stop();
                 swordThrustBody.Play();
+                var faceDir = facing.isFacingRight ? 1 : -1;
+                body2d.velocity = transform.right * thrustDash * faceDir;
                 //Debug.Log("Attack");
                 chargingAttack = false;
             }
@@ -79,6 +84,7 @@ namespace PlayerNew
 
         private void FinishThrustAttackAnime()
         {
+            Debug.Log("finishing");
             
             thrustAttack = false;
             thrustHasStarted = false;
