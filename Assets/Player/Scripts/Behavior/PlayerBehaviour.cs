@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using DChild.Gameplay.Combat;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,10 @@ namespace PlayerNew
         protected Transform trans;
         protected CollisionState collisionState;
         protected CapsuleCollider2D capsuleCollider;
+        protected Damageable damagable;
+        protected BasicHealth basicHealth;
+        
+        
 
         protected virtual void Awake()
         {
@@ -26,6 +31,8 @@ namespace PlayerNew
             trans = GetComponent<Transform>();
             collisionState = GetComponent<CollisionState>();
             capsuleCollider = GetComponent<CapsuleCollider2D>();
+            damagable = GetComponentInParent<Damageable>();
+            basicHealth = GetComponentInChildren<BasicHealth>();
         }
 
         protected virtual void ToggleScripts(bool value)

@@ -137,7 +137,10 @@ namespace DChild.Gameplay.Environment
                 }
                 m_leftOverDebris = null;
             }
-            Addressables.ReleaseInstance(m_instantiatedDebris.gameObject);
+            if(m_instantiatedDebris != null)
+            {
+                Addressables.ReleaseInstance(m_instantiatedDebris.gameObject);
+            }
         }
 
         private void OnDestroyObject(object sender, EventActionArgs eventArgs)

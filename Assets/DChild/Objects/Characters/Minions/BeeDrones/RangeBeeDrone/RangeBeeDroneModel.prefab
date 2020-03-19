@@ -40,8 +40,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 519972078329284804}
-  - component: {fileID: 1221463063079220037}
   - component: {fileID: 4458685950179620036}
+  - component: {fileID: 1274228352505154913}
   m_Layer: 9
   m_Name: AggroSensor
   m_TagString: Sensor
@@ -63,18 +63,6 @@ Transform:
   m_Father: {fileID: 8790547402403475969}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1221463063079220037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4830789473834944000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bd17172878d8ff4cbc0d13f04dfc1a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &4458685950179620036
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -101,6 +89,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 55, y: 19.68835}
   m_EdgeRadius: 0
+--- !u!114 &1274228352505154913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4830789473834944000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eec63e2d8574ba947936161e71632309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_model: {fileID: 6502704721882598875}
 --- !u!1 &6384419587086336513
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,6 +318,7 @@ GameObject:
   - component: {fileID: 4055349373691877905}
   - component: {fileID: 8280393302103068993}
   - component: {fileID: 4994041687153368315}
+  - component: {fileID: 8763051376727069156}
   m_Layer: 13
   m_Name: SkeletonUtility-SkeletonRoot
   m_TagString: Untagged
@@ -427,6 +429,19 @@ MonoBehaviour:
   - {fileID: 7713662696251085282}
   m_isInvulnerable: 0
   m_damageReduction: 0
+--- !u!114 &8763051376727069156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7109939905502988458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0864555905362647844ef2ee6556571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_compositeCollider2D: {fileID: 8280393302103068993}
 --- !u!1 &7189003159738749311
 GameObject:
   m_ObjectHideFlags: 0

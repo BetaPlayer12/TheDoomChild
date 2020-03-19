@@ -6,7 +6,8 @@ namespace PlayerNew
 {
     public class Crouch : PlayerBehaviour
     {
-
+        [SerializeField]
+        private GroundShaker groundsmash;
         public bool crouching;
 
 

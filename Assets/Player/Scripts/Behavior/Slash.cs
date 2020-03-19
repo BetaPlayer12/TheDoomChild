@@ -271,14 +271,12 @@ namespace PlayerNew
 
         private void CrouchSlashFX()
         {
-            
             m_VFX_CrouchSlashX.Play();
             m_crouchSlashAttackCollider.enabled = true;
         }
 
         private void SwordAttackForward_MainAction()
         {
-           
             m_forwardSlash1FX.Play();
         }
 
@@ -308,7 +306,6 @@ namespace PlayerNew
         private void FinishAttackAnim()
         {
 
-            Debug.Log("finish attack");
             attackCollider.enabled = false;
 
             m_forwardSlashAttackCollider.enabled = false;

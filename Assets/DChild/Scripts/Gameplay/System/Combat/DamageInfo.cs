@@ -11,6 +11,7 @@
             damage = attackDamage;
             isMagicalDamage = AttackDamage.IsMagicAttack(damage.type);
             isHeal = false;
+            //Content
         }
     }
 }
