@@ -32,6 +32,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_rangeAttack = new SimpleAttackInfo();
             public SimpleAttackInfo rangeAttack => m_rangeAttack;
+            [SerializeField, MinValue(0)]
+            private float m_attackCD;
+            public float attackCD => m_attackCD;
             //
             [SerializeField, MinValue(0)]
             private float m_patience;
@@ -91,6 +94,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Detect,
             Turning,
             Attacking,
+            Cooldown,
             Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
@@ -134,16 +138,19 @@ namespace DChild.Gameplay.Characters.Enemies
 
         //stored timer
         private float postAtan2;
-
-        //
+        
         private float timeCounter;
         // player position
         private Vector2 playerPosition;
 
+        private float m_currentCD;
+
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //m_aggroSensor.enabled = true;
+            m_stateHandle.ApplyQueuedState();
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
@@ -203,6 +210,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ResetBrain()
         {
             StopAllCoroutines();
+            m_currentCD = 0;
+            m_aggroSensor.enabled = true;
             m_targetInfo.Set(null, null);
             m_enablePatience = false;
             m_isDetecting = false;
@@ -396,7 +405,27 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     playerPosition = m_targetInfo.position;
-                    StartCoroutine(RangeAttackRoutine());
+                    m_stateHandle.Wait(State.Cooldown);
+                    m_aggroSensor.enabled = false;
+                    m_attackHandle.ExecuteAttack(m_info.rangeAttack.animation, m_info.idleAnimation);
+                    //StartCoroutine(RangeAttackRoutine());
+                    break;
+                case State.Cooldown:
+                    if (m_currentCD <= m_info.attackCD)
+                    {
+                        m_currentCD += Time.deltaTime;
+                    }
+                    else
+                    {
+                        if (!m_aggroSensor.IsTouchingLayers(LayerMask.NameToLayer("Player")) /*&& m_stateHandle.currentState == State.ReevaluateSituation*/)
+                        {
+                            ResetBrain();
+                            //Debug.Log("Contain'ts Player");
+                        }
+                        m_currentCD = 0;
+                        m_aggroSensor.enabled = true;
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    }
                     break;
                 case State.Chasing:
                    

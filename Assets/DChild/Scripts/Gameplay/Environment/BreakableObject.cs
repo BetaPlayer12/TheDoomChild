@@ -11,6 +11,7 @@ using UnityEngine.Events;
 namespace DChild.Gameplay.Environment
 {
 
+    [RequireComponent(typeof(SortingHandle))]
     [AddComponentMenu("DChild/Gameplay/Environment/Breakable Object")]
     public class BreakableObject : MonoBehaviour, ISerializableComponent
     {
@@ -30,8 +31,6 @@ namespace DChild.Gameplay.Environment
 
         [SerializeField]
         private Damageable m_object;
-        [SerializeField, SortingLayer]
-        private int m_sortingLayer;
         [ShowInInspector, OnValueChanged("SetObjectStateDebug")]
         private bool m_isDestroyed;
         [SerializeField]
@@ -52,6 +51,7 @@ namespace DChild.Gameplay.Environment
         private float m_force;
         private Debris m_instantiatedDebris;
         private Rigidbody2D[] m_leftOverDebris;
+        private SortingHandle m_sortingHandle;
 
         public void SetObjectState(bool isDestroyed)
         {
@@ -112,7 +112,7 @@ namespace DChild.Gameplay.Environment
                 var renderers = instance.GetComponentsInChildren<SpriteRenderer>();
                 for (int i = 0; i < renderers.Length; i++)
                 {
-                    renderers[i].sortingLayerID = m_sortingLayer;
+                    renderers[i].sortingLayerID = m_sortingHandle.sortingLayerID;
                 }
             }
         }
@@ -137,7 +137,10 @@ namespace DChild.Gameplay.Environment
                 }
                 m_leftOverDebris = null;
             }
-            Addressables.ReleaseInstance(m_instantiatedDebris.gameObject);
+            if(m_instantiatedDebris != null)
+            {
+                Addressables.ReleaseInstance(m_instantiatedDebris.gameObject);
+            }
         }
 
         private void OnDestroyObject(object sender, EventActionArgs eventArgs)
@@ -149,6 +152,7 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_object.Destroyed += OnDestroyObject;
+            m_sortingHandle = GetComponent<SortingHandle>();
             //if (m_isDestroyed == true)
             //{
             //    m_onDestroy?.Invoke();
@@ -199,18 +203,6 @@ namespace DChild.Gameplay.Environment
                 if (m_createDebris)
                 {
                     DestroyInstantiatedDebris();
-                }
-            }
-        }
-
-        private void OnValidate()
-        {
-            var renderers = GetComponentsInChildren<Renderer>();
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                if (renderers[i].sortingLayerID != m_sortingLayer)
-                {
-                    renderers[i].sortingLayerID = m_sortingLayer;
                 }
             }
         }
