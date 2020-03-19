@@ -68,7 +68,7 @@ namespace PlayerNew
                 forceX = 10;
                 forceY = 50;
             }
-            if(onWallDetected && !wallGrounded)
+            if(onWallDetected && !wallGrounded && !collisionState.grounded)
             {
                 forceX = 250;
                 forceY = 250;

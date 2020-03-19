@@ -8,6 +8,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
     public class PlayerDeath : MonoBehaviour, IComplexCharacterModule
     {
         private Damageable m_source;
+        [SerializeField]
         private Animator m_animator;
         private string m_deathParameter;
 
@@ -21,8 +22,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnDeath(object sender, EventActionArgs eventArgs)
         {
+            Debug.Log("Dead");
             m_source.SetHitboxActive(false);
-            m_animator.SetTrigger(m_deathParameter);
+            m_animator.SetBool("Death", true);
         }
     }
 }

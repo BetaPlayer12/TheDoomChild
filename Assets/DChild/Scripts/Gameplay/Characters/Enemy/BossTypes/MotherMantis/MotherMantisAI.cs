@@ -40,10 +40,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_universalAttackCD;
             public float universalAttackCD => m_universalAttackCD;
             [Title("Attack Chances")]
-            [SerializeField]
+            [SerializeField, Range(0,100)]
             private float m_universalAttackChance;
             public float universalAttackChance => m_universalAttackChance;
-            [SerializeField]
+            [SerializeField, Range(0, 100)]
             private float m_meleeAttackChance;
             public float meleeAttackChance => m_meleeAttackChance;
             
@@ -54,6 +54,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_attack2 = new SimpleAttackInfo();
             public SimpleAttackInfo attack2 => m_attack2;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_stuckAnimation;
+            public string stuckAnimation => m_stuckAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_unstuckAnimation;
+            public string unstuckAnimation => m_unstuckAnimation;
+            [SerializeField, Range(0, 100)]
+            private float m_stuckDuration;
+            public float stuckDuration => m_stuckDuration;
             [SerializeField]
             private SimpleAttackInfo m_attack2StepBack = new SimpleAttackInfo();
             public SimpleAttackInfo attack2StepBack => m_attack2StepBack;
@@ -69,12 +78,18 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_attack5 = new SimpleAttackInfo();
             public SimpleAttackInfo attack5 => m_attack5;
+            [SerializeField]
+            private float m_seedAmmount;
+            public float seedAmmount => m_seedAmmount;
 
             [Title("Spawned Objects")]
             [SerializeField]
             private GameObject m_larvaBulb;
             public GameObject larvaBulb => m_larvaBulb;
-            
+            [SerializeField]
+            private GameObject m_seedProjectile;
+            public GameObject seedProjectile => m_seedProjectile;
+
             [Title("Misc")]
             [SerializeField]
             private float m_targetDistanceTolerance;
@@ -140,20 +155,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_petalAmount;
             public float petalAmount => m_petalAmount;
             [SerializeField]
-            private float m_droneStrikeSummonSpeed;
-            public float droneStrikeSummonSpeed => m_droneStrikeSummonSpeed;
-            [SerializeField]
-            private int m_droneSummonAmmount;
-            public int droneSummonAmmount => m_droneSummonAmmount;
-            //[SerializeField]
-            //private int m_tombSize;
-            //public int tombSize => m_tombSize;
-            //[SerializeField]
-            //private int m_skeletonNum;
-            //public int skeletonNum => m_skeletonNum;
-            //[SerializeField, ValueDropdown("GetSkins")]
-            //private string m_skin;
-            //public string skin => m_skin;
+            private float m_cooldownSpeed;
+            public float cooldownSpeed => m_cooldownSpeed;
             [SerializeField]
             private int m_phaseIndex;
             public int phaseIndex => m_phaseIndex;
@@ -192,10 +195,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Attack1,
             Attack2,
-            Attack2StepBack,
             Attack3,
             Attack4,
-            Attack4b,
             Attack5,
             WaitAttackEnd,
         }
@@ -229,14 +230,22 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
-        [SerializeField, TabGroup("Modules")]
-        private FlinchHandler m_flinchHandle;
+        //[SerializeField, TabGroup("Modules")]
+        //private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("Effects")]
+        private ParticleFX m_deathFX;
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_petalStartFX;
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_petalLoopFX;
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_petalEndFX;
+        [SerializeField, TabGroup("Effects")]
+        private ParticleFX m_seedLaunchFX;
+        [SerializeField, TabGroup("Effects")]
+        private ParticleFX m_landFX;
+        [SerializeField, TabGroup("Effects")]
+        private ParticleFX m_flinchFX;
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -262,23 +271,36 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_petalProjectileSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_larvaSpawnPoint;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_seedSpawnPoint;
 
         private float m_groundPosition;
         private List<Vector2> m_targetPositions;
 
         private bool m_stickToGround;
+        private bool m_seedSpawning;
         private float m_currentCD;
 
-        //private Vector2 m_testTarget;
+        [ReadOnly, TabGroup("PatternTracker")]
+        public int m_attack1Use;
+        [ReadOnly, TabGroup("PatternTracker")]
+        public int m_attack2Use;
+        [ReadOnly, TabGroup("PatternTracker")]
+        public int m_attack3Use;
+        [ReadOnly, TabGroup("PatternTracker")]
+        public int m_attack4Use;
+        [ReadOnly, TabGroup("PatternTracker")]
+        public int m_attack5Use;
+
 
 
         private int m_currentPhaseIndex;
         private float m_currentPetalAmount;
-        private float m_currentSummonSpeed;
+        private float m_currentCooldownSpeed;
         private int m_currentSummonAmmount;
         //private float m_currentDroneSummonSpeed;
         float m_currentRecoverTime;
-        bool m_isPhasing;
+        //bool m_isPhasing;
 
         private string m_moveAnim;
         private float m_moveSpeed;
@@ -292,13 +314,18 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_currentSkin = obj.skin;
             m_currentPhaseIndex = obj.phaseIndex;
             m_currentPetalAmount = obj.petalAmount;
-            m_currentSummonSpeed = obj.droneStrikeSummonSpeed;
-            m_currentSummonAmmount = obj.droneSummonAmmount;
+            m_currentCooldownSpeed = obj.cooldownSpeed;
         }
 
         private void ChangeState()
         {
+            m_phaseHandle.ApplyChange();
+            //if (!m_isPhasing)
+            //{
+            //    m_isPhasing = true;
+            //}
             StopAllCoroutines();
+            m_animation.SetEmptyAnimation(0, 0);
             m_stateHandle.OverrideState(State.Phasing);
         }
 
@@ -311,27 +338,6 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
-
-        //private void OnFlinchStart(object sender, EventActionArgs eventArgs)
-        //{
-        //    StopAllCoroutines();
-        //    m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-        //    //if (/*m_animation.GetCurrentAnimation(0).ToString() == m_info.spearThrowAttack.animation*/ m_currentPhaseIndex != 3)
-        //    //{
-        //    //    m_stateHandle.OverrideState(State.Fall);
-        //    //}
-        //    //else /*if (m_stateHandle.currentState != State.Fall)*/
-        //    //{
-        //    //    m_animation.SetAnimation(0, IsFacingTarget() ? m_info.stuckStateFlinchForwardAnimaation : m_info.stuckStateFlinchBackwardAnimation, false);
-        //    //    m_stateHandle.OverrideState(State.Stucc);
-        //    //}
-        //}
-
-        //private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
-        //{
-        //    //m_stateHandle.OverrideState(State.Stucc);
-        //    m_stateHandle.OverrideState(State.ReevaluateSituation);
-        //}
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -348,7 +354,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_animation.animationState.TimeScale = 1f;
-            if (!m_isPhasing)
+            //if (!m_isPhasing)
                 m_stateHandle.ApplyQueuedState();
         }
 
@@ -377,36 +383,48 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_phaseHandle.ApplyChange();
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            m_currentCD = 0;
-            m_isPhasing = true;
-            //m_stateHandle.Wait(State.ReevaluateSituation);
-            m_animation.animationState.TimeScale = 1f;
-            m_movement.Stop();
-            m_bodyCollider.SetActive(false);
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_hitbox.SetInvulnerability(true);
+            m_currentCD = 0;
+            //m_isPhasing = true;
+            //m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_animation.animationState.TimeScale = 1f;
+            //m_movement.Stop();
+            m_bodyCollider.SetActive(false);
+            //m_hitbox.SetInvulnerability(true);
             m_animation.EnableRootMotion(true, false);
             //m_turnState = State.Phasing;
             var flinchAnim = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBackAnimation;
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_animation.SetAnimation(0, m_info.attack1.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
-            m_isPhasing = false;
-            m_bodyCollider.SetActive(true);
+            m_animation.SetAnimation(0, flinchAnim, false);
+            m_flinchFX.Play();
+            yield return new WaitForAnimationComplete(m_animation.animationState, flinchAnim);
             m_hitbox.SetInvulnerability(false);
-            m_animation.DisableRootMotion();
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //m_isPhasing = false;
+            if (m_currentPhaseIndex == 4)
+            {
+                StartCoroutine(SeedLaunchRoutine());
+                StartCoroutine(SeedFXRoutine());
+            }
+            else
+            {
+                m_animation.SetAnimation(0, m_info.attack1.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+                m_bodyCollider.SetActive(true);
+                m_animation.DisableRootMotion();
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                m_stateHandle.ApplyQueuedState();
+            }
             yield return null;
         }
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            StopAllCoroutines();
             //transform.position = new Vector2(transform.position.x, m_groundPosition);
             m_stickToGround = true;
+            m_deathFX.Play();
             StartCoroutine(LeapStickToGroundRoutine(m_groundPosition));
             m_movement.Stop();
         }
@@ -462,8 +480,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Cooldown);
             //StartCoroutine(PetalFXRoutine());
-            m_animation.SetAnimation(0, m_info.attack4.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack4.animation);
+            var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.attack4.animation : m_info.attack4b.animation;
+            m_animation.SetAnimation(0, animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, animation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -485,10 +504,18 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.Cooldown);
             m_hitbox.SetInvulnerability(true);
             m_stickToGround = true;
+            //var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.attack2.animation : m_info.attack2StepBack.animation;
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
             yield return new WaitForSeconds(1.5f);
             transform.position = new Vector2(m_targetInfo.position.x, transform.position.y - 5);
+            //yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            yield return new WaitForSeconds(.825f);
+            m_landFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+            m_animation.SetAnimation(0, m_info.stuckAnimation, true);
+            yield return new WaitForSeconds(m_info.stuckDuration);
+            m_animation.SetAnimation(0, m_info.unstuckAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unstuckAnimation);
             m_hitbox.SetInvulnerability(false);
             m_stickToGround = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -500,8 +527,14 @@ namespace DChild.Gameplay.Characters.Enemies
         #region LarvaBulbAttack
         private IEnumerator SpawnLarvaRoutine()
         {
-            yield return new WaitForSeconds(1f);
-            var bulb = Instantiate(m_info.larvaBulb, m_larvaSpawnPoint.position, Quaternion.identity);
+            yield return new WaitForSeconds(1f); //m_larvaSpawnPoint.position
+            for (int i = 0; i < 5; i++)
+            {
+                var position = new Vector2(UnityEngine.Random.Range(-50, 50) + m_larvaSpawnPoint.position.x, m_larvaSpawnPoint.position.y);
+                var bulb = Instantiate(m_info.larvaBulb, position, Quaternion.identity);
+                bulb.GetComponent<MotherMantisBulb>().GetTarget(m_targetInfo);
+                yield return new WaitForSeconds(.5f);
+            }
             yield return null;
         }
 
@@ -516,13 +549,48 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         #endregion
 
+        #region SeedLaunch
+        private IEnumerator SeedFXRoutine()
+        {
+            yield return new WaitForSeconds(.6f);
+            m_seedLaunchFX.Play();
+            yield return new WaitForSeconds(1.4f);
+            m_seedLaunchFX.Stop();
+            StartCoroutine(SeedSpawnRoutine());
+            yield return null;
+        }
+
+        private IEnumerator SeedSpawnRoutine()
+        {
+            m_seedSpawning = true;
+            for (int i = 0; i < m_info.seedAmmount; i++)
+            {
+                var spawnPoint = new Vector2(m_seedSpawnPoint.position.x + (UnityEngine.Random.Range(-100, 100)), m_seedSpawnPoint.position.y);
+                var projectile = Instantiate(m_info.seedProjectile, spawnPoint, Quaternion.identity);
+                yield return new WaitForSeconds(.5f);
+            }
+            m_seedSpawning = false;
+            yield return null;
+        }
+
+        private IEnumerator SeedLaunchRoutine()
+        {
+            m_stateHandle.Wait(State.Cooldown);
+            m_animation.SetAnimation(0, m_info.attack5.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack5.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        } 
+        #endregion
+
         #endregion
         #region Movement
         private void MoveToTarget()
         {
             if (!IsTargetInRange(m_info.attack1.range) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
             {
-                m_animation.EnableRootMotion(false, false);
+                m_animation.EnableRootMotion(true, false);
                 m_animation.SetAnimation(0, m_moveAnim, true);
                 //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_moveSpeed);
@@ -549,16 +617,29 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void AttackPattern()
+        {
+            m_attackDecider.hasDecidedOnAttack = true;
+            if (m_attackDecider.chosenAttack.attack == Attack.Attack1 && m_attack1Use <= 2 && m_currentPhaseIndex == 1)
+            {
+                m_attack1Use++;
+                m_chosenAttack = Attack.Attack1;
+            }
+            else if (m_attackDecider.chosenAttack.attack == Attack.Attack2 && m_attack2Use <= 2 && m_currentPhaseIndex == 2)
+            {
+                m_attack2Use++;
+                m_chosenAttack = Attack.Attack2;
+            }
+        }
+
 
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range),
-                                    //new AttackInfo<Attack>(Attack.Attack2StepBack, m_info.attack2StepBack.range),
                                     new AttackInfo<Attack>(Attack.Attack3, m_info.attack3.range),
-                                    new AttackInfo<Attack>(Attack.Attack4, m_info.attack4.range)/*,*/
-                                    /*new AttackInfo<Attack>(Attack.Attack4b, m_info.attack4b.range),
-                                    new AttackInfo<Attack>(Attack.Attack5, m_info.attack5.range)*/);
+                                    new AttackInfo<Attack>(Attack.Attack4, m_info.attack4.range),
+                                    new AttackInfo<Attack>(Attack.Attack5, m_info.attack5.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -612,6 +693,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            //if (!m_isPhasing)
+            //{
+            //}
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
             {
@@ -632,6 +716,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Phasing:
                     //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                    m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
@@ -641,22 +726,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     break;
                 case State.Attacking:
-                    //StartCoroutine(TripleBeeDroneRoutine());
-                    //MoveToAttackPosition(m_chosenAttack);
                     //m_stateHandle.Wait(State.ReevaluateSituation);
-
-                    float chance = UnityEngine.Random.Range(0, 100);
-                    if (chance < m_info.meleeAttackChance && IsTargetInRange(m_info.attack1.range))
+                    if (IsFacingTarget())
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
-                    }
-                    else
-                    {
-                        //Debug.Log("Current Chance to Use Skill: " + chance);
-                        //Debug.Log("Chance needed to Use Skill: " + m_info.universalAttackChance);
-                        if (chance < m_info.universalAttackChance)
+                        float chance = UnityEngine.Random.Range(0, 100);
+                        float meleeChance = UnityEngine.Random.Range(0, 100);
+                        if (chance > m_info.universalAttackChance && meleeChance < m_info.meleeAttackChance && IsTargetInRange(m_info.attack1.range))
                         {
+                            m_stateHandle.Wait(State.ReevaluateSituation);
+                            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
+                        }
+                        else if (chance < m_info.universalAttackChance)
+                        {
+                            //Debug.Log("Current Chance to Use Skill: " + chance);
+                            //Debug.Log("Chance needed to Use Skill: " + m_info.universalAttackChance);
                             switch (m_attackDecider.chosenAttack.attack)
                             {
                                 case Attack.Attack1:
@@ -668,10 +751,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
                                     StartCoroutine(LeapAttackRoutine());
                                     StartCoroutine(LeapStickToGroundRoutine(m_groundPosition));
-                                    break;
-                                case Attack.Attack2StepBack:
-                                    //m_animation.EnableRootMotion(true, false);
-                                    m_attackHandle.ExecuteAttack(m_info.attack2StepBack.animation, m_info.idleAnimation);
                                     break;
                                 case Attack.Attack3:
                                     //m_animation.EnableRootMotion(true, false);
@@ -693,29 +772,32 @@ namespace DChild.Gameplay.Characters.Enemies
                                         StartCoroutine(PetalLaunchRoutine());
                                     }
                                     break;
-                                case Attack.Attack4b:
-                                    //m_animation.EnableRootMotion(true, false);
-                                    m_attackHandle.ExecuteAttack(m_info.attack4b.animation, m_info.idleAnimation);
-                                    break;
                                 case Attack.Attack5:
                                     //m_animation.EnableRootMotion(true, false);
-                                    m_attackHandle.ExecuteAttack(m_info.attack5.animation, m_info.idleAnimation);
+                                    if (AllowAttack(4) && !m_seedSpawning)
+                                    {
+                                        //m_attackHandle.ExecuteAttack(m_info.attack5.animation, m_info.idleAnimation);
+                                        StartCoroutine(SeedLaunchRoutine());
+                                        StartCoroutine(SeedFXRoutine());
+                                    }
+                                    else
+                                    {
+                                        m_attackDecider.hasDecidedOnAttack = false;
+                                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                                    }
                                     break;
                             }
                         }
                         else
                         {
-                            if (IsFacingTarget())
-                            {
-                                MoveToTarget();
-                            }
-                            else
-                            {
-                                m_turnState = State.Attacking;
-                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                                    m_stateHandle.SetState(State.Turning);
-                            }
+                            MoveToTarget();
                         }
+                    }
+                    else
+                    {
+                        m_turnState = State.Attacking;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
                     }
 
                     break;
@@ -740,7 +822,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                     }
 
-                    if (m_currentCD <= m_info.universalAttackCD)
+                    if (m_currentCD <= m_currentCooldownSpeed)
                     {
                         m_currentCD += Time.deltaTime;
                     }
@@ -764,7 +846,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) /*&& !m_wallSensor.allRaysDetecting*/)
                         {
-                            StopAllCoroutines();
+                            //StopAllCoroutines();
                             m_previousAttack = m_attackDecider.chosenAttack.attack;
                             //m_movement.Stop();
                             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
