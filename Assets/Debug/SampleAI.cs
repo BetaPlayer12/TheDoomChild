@@ -150,7 +150,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
-
+            throw new NotImplementedException();
         }
     }
 }

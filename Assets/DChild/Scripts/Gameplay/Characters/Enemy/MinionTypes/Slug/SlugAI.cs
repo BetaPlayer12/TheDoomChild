@@ -235,7 +235,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     instance.transform.position = m_throwPoint.position;
                     var component = instance.GetComponent<Projectile>();
                     component.ResetState();
-                    component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                    //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                    component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
                     //return instance.gameObject;
                 }
                 else
@@ -361,7 +362,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 

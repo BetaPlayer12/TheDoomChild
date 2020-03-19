@@ -6,7 +6,8 @@ namespace PlayerNew
 {
     public class Crouch : PlayerBehaviour
     {
-
+        [SerializeField]
+        private GroundShaker groundsmash;
         public bool crouching;
 
 
@@ -31,7 +32,7 @@ namespace PlayerNew
             else if (crouching && !canCrouch)
             {
                 OnCrouch(false);
-            }
+            }            
         }
     }
 

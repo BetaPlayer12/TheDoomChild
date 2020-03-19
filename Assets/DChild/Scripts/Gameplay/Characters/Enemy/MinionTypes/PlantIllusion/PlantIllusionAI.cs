@@ -241,7 +241,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -348,6 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //    m_animation.SetAnimation(0, m_info.surpriseAnimation, false);
                                     //    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                                     //}
+                                    m_attackDecider.hasDecidedOnAttack = false;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }

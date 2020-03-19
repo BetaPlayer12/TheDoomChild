@@ -129,7 +129,7 @@ namespace DChild.Gameplay.Characters.Players
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             OnDeath?.Invoke(this, eventArgs);
-            m_controlledCharacter.physics.SetVelocity(Vector2.zero);
+          //  m_controlledCharacter.physics.SetVelocity(Vector2.zero);
             if (m_groundednessHandle != null)
             {
                 m_groundednessHandle.enabled = false;

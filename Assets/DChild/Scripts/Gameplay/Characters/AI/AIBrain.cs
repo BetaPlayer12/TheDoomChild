@@ -5,6 +5,7 @@ using UnityEngine;
 using Spine.Unity;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -83,6 +84,7 @@ namespace DChild.Gameplay.Characters.AI
                 public float speed => m_speed;
             }
 
+            [System.Serializable, HideReferenceObjectPicker]
             public class SimpleProjectileAttackInfo : SkeletonBaseInfo
             {
                 [SerializeField, ValueDropdown("GetAnimations")]
@@ -138,7 +140,7 @@ namespace DChild.Gameplay.Characters.AI
         [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
         protected AIData m_data;
 
-        [ShowInInspector, HideInEditorMode, TabGroup("Data")]
+        //[ShowInInspector, HideInEditorMode, TabGroup("Data")]
         protected T m_info;
 
         public void SetData(AIData data)

@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using DChild.Gameplay.Combat;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,11 +12,17 @@ namespace PlayerNew
         public Buttons[] inputButtons;
         [DrawWithUnity]
         public MonoBehaviour[] dissableScripts;
+        [DrawWithUnity]
+        public MonoBehaviour[] enableOnlyScript;
         protected InputState inputState;
         protected Rigidbody2D body2d;
         protected Transform trans;
         protected CollisionState collisionState;
         protected CapsuleCollider2D capsuleCollider;
+        protected Damageable damagable;
+        protected BasicHealth basicHealth;
+        
+        
 
         protected virtual void Awake()
         {
@@ -24,15 +31,38 @@ namespace PlayerNew
             trans = GetComponent<Transform>();
             collisionState = GetComponent<CollisionState>();
             capsuleCollider = GetComponent<CapsuleCollider2D>();
+            damagable = GetComponentInParent<Damageable>();
+            basicHealth = GetComponentInChildren<BasicHealth>();
         }
 
         protected virtual void ToggleScripts(bool value)
         {
-            foreach (var script in dissableScripts)
+           
+           
+            if(enableOnlyScript.Length > 0 && value == true)
             {
-                script.enabled = value;
+               
+                foreach (var enbleScript in enableOnlyScript)
+                {
+                    Debug.Log("enable only:" + enbleScript);
+                    if (!enbleScript)
+                    {
+                        foreach (var script in dissableScripts)
+                        {
+                            script.enabled = value;
+                        }
+                    }
+                }
             }
-        }
+            else
+            {
+                foreach (var script in dissableScripts)
+                {
+                    script.enabled = value;
+                }
+            }
+           
+        }       
     }
 
 }

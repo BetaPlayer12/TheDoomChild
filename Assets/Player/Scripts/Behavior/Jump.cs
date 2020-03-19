@@ -10,6 +10,7 @@ namespace PlayerNew
         public float jumpDelay = .1f;
         public int jumpCount = 2;
 
+        private Crouch crouching;
         private Jog jogging;
 
         protected float lastJumpTime = 0;
@@ -19,6 +20,7 @@ namespace PlayerNew
         void Start()
         {
             jogging = GetComponent<Jog>();
+            crouching = GetComponent<Crouch>();
         }
 
         // Update is called once per frame
@@ -34,9 +36,9 @@ namespace PlayerNew
             {
                
                
-                if (canJump && holdTime < 0.1f && !collisionState.onWall && !collisionState.onWallLeg)
+                if (canJump && holdTime < 0.1f && !collisionState.onWall && !collisionState.onWallLeg && !crouching.crouching)
                 {
-                    Debug.Log("from ground");
+                   
                     jumpsRemaining = jumpCount - 1;
                     OnJump();
                 }
@@ -45,9 +47,9 @@ namespace PlayerNew
             {
                 
 
-                if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay && !collisionState.onWall && !collisionState.onWallLeg)
+                if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay && !collisionState.onWall && !collisionState.onWallLeg && !crouching.crouching)
                 {
-                    Debug.Log("double jumping");
+                   
                     if (jumpsRemaining > 0)
                     {
                         OnJump();
@@ -65,6 +67,7 @@ namespace PlayerNew
             var vel = body2d.velocity;
             lastJumpTime = Time.time;
             body2d.velocity = new Vector2(vel.x, jumpSpeed);
+            Debug.Log("Second jump:" + body2d.velocity);
             body2d.sharedMaterial.friction = 0f;
 
 

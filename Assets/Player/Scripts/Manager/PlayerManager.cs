@@ -10,7 +10,7 @@ namespace PlayerNew
         private Jog jogBehavior;
         private Crouch crouchBehavior;
         private WallStick wallStickBehavior;
-        //private WallGrab wallGrabBehavior;
+        private WallGrab wallGrabBehavior;
         private LongJump longJumpBehavior;
         //private WallJump wallJumpBehavior;
         private Slash slashBehavior;
@@ -18,8 +18,14 @@ namespace PlayerNew
         private GroundShaker groundShakerBehavior;
         private Thrust thrustBehavior;
         private Animator animator;
+        private WallSlide wallSlideBehavior;
+
+
+
         private CollisionState collisionState;
 
+       
+        public Animator capeAnimation;
 
 
 
@@ -31,13 +37,15 @@ namespace PlayerNew
             jogBehavior = GetComponent<Jog>();
             crouchBehavior = GetComponent<Crouch>();
             wallStickBehavior = GetComponent<WallStick>();
-            //wallGrabBehavior = GetComponent<WallGrab>();
+            wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
             dashBehavior = GetComponent<Dash>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
+            wallSlideBehavior = GetComponent<WallSlide>();
+          
         }
         // Start is called before the first frame update
         void Start()
@@ -72,7 +80,20 @@ namespace PlayerNew
 
             if (crouchBehavior.crouching)
             {
-
+                if(inputState.absValX > 0)
+                {
+                    capeAnimation.SetBool("CrouchMoving", true);
+                }
+                else
+                {
+                    capeAnimation.SetBool("CrouchMoving", false);
+                    capeAnimation.SetBool("CrouchIdle", true);
+                }
+                
+            }
+            else
+            {
+                capeAnimation.SetBool("CrouchIdle", false);
             }
 
             if (wallStickBehavior.groundWallStick)
@@ -80,11 +101,11 @@ namespace PlayerNew
                 JogAnimationState(0);
             }
 
-            //if (wallJumpBehavior.jumpingOffWall)
-            //{
-            //    animator.SetTrigger("WallJump");
-            //    wallStickBehavior.onWallDetected = false;
-            //}
+/*            if (wallJumpBehavior.jumpingOffWall)
+            {
+                animator.SetTrigger("WallJump");
+                wallStickBehavior.onWallDetected = false;
+            }*/
 
             if (thrustBehavior.thrustAttack)
             {
@@ -92,38 +113,52 @@ namespace PlayerNew
                 if (!thrustBehavior.chargingAttack && !thrustBehavior.thrustHasStarted)
                 {
                     animator.SetTrigger("ThrustStart");
-                }else if (thrustBehavior.chargingAttack && thrustBehavior.thrustHasStarted)
+                   
+                }
+                else if (thrustBehavior.chargingAttack && thrustBehavior.thrustHasStarted)
                 {
                     animator.ResetTrigger("ThrustStart");
+                    capeAnimation.SetBool("ThrustCharging", true);
                     animator.SetBool("ThrustCharge", true);
-                }else if (!thrustBehavior.chargingAttack)
+                    
+
+                }
+                else if (!thrustBehavior.chargingAttack)
                 {
+                    capeAnimation.SetBool("ThrustCharging", false);
                     animator.SetBool("ThrustCharge", false);
+                    capeAnimation.SetBool("ThrustImpact", true);
                     animator.SetTrigger("ThrustEnd");
                 }
 
             }
             else
             {
+                capeAnimation.SetBool("ThrustImpact", false);
                 animator.ResetTrigger("ThrustEnd");
                 animator.SetBool("Thrust", false);
             }
 
+            if(wallSlideBehavior.onWallDetected && !collisionState.grounded)
+            {
+                animator.SetBool("UpHold",wallSlideBehavior.upHold);
+                animator.SetBool("DownHold",wallSlideBehavior.downHold);
+            }
 
-
-            //WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
+            WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing);
-            SlashAnimationState(slashBehavior.attacking, slashBehavior.attackCounter, slashBehavior.upHold, slashBehavior.holdingAttack);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
         }
 
         void GroundShakerAnimationState(bool value)
         {
             animator.SetBool("EarthShake", value);
+          
+           
         }
 
         void SlashAnimationState(bool value1, int value2, bool value3, bool value4 )
@@ -143,20 +178,39 @@ namespace PlayerNew
         {
 
             animator.SetFloat("Yvelocity", value);
+            if(value > 0.5f || value < -0.5f)
+            {
+                capeAnimation.SetBool("Jumping", true);
+            }
+            else
+            {
+                capeAnimation.SetBool("Jumping", false);
+            }
         }
 
         void GroundednessAnimationState(bool value)
         {
             animator.SetBool("Grounded", value);
+           
         }
 
         void CrouchAnimationState(bool value)
         {
             animator.SetBool("Crouch", value);
+
+          
         }
         void JogAnimationState(int value)
         {
             animator.SetInteger("Jog", value);
+            if (value != 0)
+            {
+                capeAnimation.SetBool("Jog", true);
+            }
+            else
+            {
+                capeAnimation.SetBool("Jog", false);
+            }
         }
 
         void WallGrabAnimationState(bool value)
