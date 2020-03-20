@@ -49,6 +49,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //private string m_flinchAnimation;
             //public string flinchAnimation => m_flinchAnimation;
 
+            [Title("Larva")]
+            [SerializeField]
+            private GameObject m_larva;
+            public GameObject larva => m_larva;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -80,6 +85,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_spawnFX;
         //Patience Handler
 
 
@@ -90,9 +97,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         //private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
-        public override void SetTarget(IDamageable damageable, Character m_target = null)
+        public void GetTarget(AITargetInfo target)
         {
-
+            m_targetInfo = target;
         }
 
         //Patience Handler
@@ -130,6 +137,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+
         private IEnumerator DeathRoutine()
         {
             m_hitbox.SetInvulnerability(true);
@@ -138,6 +146,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.AddAnimation(0, m_info.idleOpenAnimation, false, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleOpenAnimation);
             gameObject.SetActive(false);
+            yield return null;
+        }
+
+        private IEnumerator SpawnLarvaRoutine()
+        {
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.openAnimation);
+            m_spawnFX.Play();
+            var larva = Instantiate(m_info.larva, transform.position, Quaternion.identity);
+            larva.GetComponent<BulbLarvaAI>().GetTarget(m_targetInfo);
             yield return null;
         }
 
@@ -175,6 +192,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_currentSpawnTime = 0;
                         m_stateHandle.OverrideState(State.WaitBehaviourEnd);
                         StartCoroutine(DeathRoutine());
+                        StartCoroutine(SpawnLarvaRoutine());
                     }
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
