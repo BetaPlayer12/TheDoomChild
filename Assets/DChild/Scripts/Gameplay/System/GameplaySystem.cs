@@ -27,9 +27,9 @@ namespace DChild.Gameplay
 #endif
         [SerializeField]
         private bool m_doNotDeserializeOnAwake;
-
         [SerializeField]
         private bool m_doNotTeleportPlayerOnAwake;
+
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;

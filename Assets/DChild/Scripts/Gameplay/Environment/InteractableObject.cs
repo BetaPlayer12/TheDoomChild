@@ -19,6 +19,8 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => m_promptPosition;
 
+        public bool showPrompt => true;
+
 #if UNITY_EDITOR
         [SerializeField,PropertyOrder(-1)]
         private Transform m_promptLocation;
@@ -45,6 +47,18 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_canInteract = true;
+        }
+
+        public void Interact(Character character)
+        {
+            if (m_canInteract)
+            {
+                m_onInteraction?.Invoke();
+                if (m_oneTimeInteraction)
+                {
+                    m_canInteract = false;
+                }
+            }
         }
     }
 }
