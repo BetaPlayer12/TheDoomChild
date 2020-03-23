@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Essence
 {
+
     public class SoulEssenceLoot : EssenceLoot
     {
         [SerializeField, Min(1)]
