@@ -4,74 +4,175 @@ using Spine.Unity;
 using Holysoft.Event;
 using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
+using Spine;
+using System;
 
 namespace DChild.Gameplay.Environment
 {
     public class PoisonMushroom : MonoBehaviour
     {
-        [SerializeField]
-        private CountdownTimer m_poisonEmissionTime;
-        [SerializeField]
-        private CountdownTimer m_uninteractableTime;
-        [SerializeField, Spine.Unity.SpineAnimation]
-        private string m_emmisionAnimation;
-        [SerializeField, Spine.Unity.SpineAnimation]
-        private string m_uninteractableAnimation;
+        [CreateAssetMenu(fileName ="PoisonMushroomData", menuName = "DChild/Gameplay/Environment/Poison Mushroom Data")]
+        public class Data : ScriptableObject
+        {
+            [SerializeField]
+            private float m_emmisionDelayTime;
+            [SerializeField]
+            private float m_resetDelayTime;
+
+            [SerializeField,BoxGroup("Animation")]
+            private SkeletonDataAsset m_skeletonData;
+            [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonData"), BoxGroup("Animation")]
+            private string m_anticipationAnimation;
+            [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonData"), BoxGroup("Animation")]
+            private string m_emissionAnimation;
+
+            [SerializeField]
+            private AssetReferenceFX m_anticipationFXReference;
+            [SerializeField, SpineEvent(dataField = "m_skeletonData")]
+            private string m_emissionFXEvent;
+            [SerializeField]
+            private AssetReferenceFX m_emissionFXReference;
+
+            public float emmisionDelayTime => m_emmisionDelayTime;
+            public float resetDelayTime => m_resetDelayTime;
+
+            public string anticipationAnimation => m_anticipationAnimation;
+            public string emissionAnimation => m_emissionAnimation;
+
+            public AssetReferenceFX anticipationFXReference => m_anticipationFXReference;
+            public string emissionFXEvent => m_emissionFXEvent;
+            public AssetReferenceFX emissionFXReference => m_emissionFXReference;
+        }
+
+        [SerializeField,OnValueChanged("OnDataChanged",includeChildren: true)]
+        private Data m_data;
+
+        private CountdownTimer m_emmisionDelayTime;
+        private CountdownTimer m_resetDelayTime;
+
+
         [SerializeField]
         private Collider2D m_trigger;
         [SerializeField]
         private Collider2D m_damageCollider;
 
+        [SerializeField]
+        private Transform m_anticipationTransformReference;
+        private FX m_anticipationFX;
+
+        private FX m_emissionFX;
+
         private string m_idleAnimation;
         private SpineAnimation m_animation;
+        private SortingHandle m_sortingHandle;
 
-        private void OnUninteractionEnd(object sender, EventActionArgs eventArgs)
+        private FXSpawnHandle<FX> m_fxSpawner;
+
+        private void OnResetDelayEnd(object sender, EventActionArgs eventArgs)
         {
             enabled = false;
             m_trigger.enabled = true;
             m_animation.SetAnimation(0, m_idleAnimation, true);
-
         }
-        private void OnPoisonEmissionEnd(object sender, EventActionArgs eventArgs)
+
+        private void OnDelayEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_uninteractableAnimation, false);
-            m_uninteractableTime.Reset();
+            m_animation.SetAnimation(0, m_data.emissionAnimation, false);
+            m_animation.animationState.Complete += OnEmisionComplete;
+
+            m_anticipationFX.Stop();
+            m_anticipationFX = null;
+            enabled = false;
+        }
+
+        private void OnEmisionComplete(TrackEntry trackEntry)
+        {
+            if (trackEntry.Animation.Name == m_data.emissionAnimation)
+            {
+                m_resetDelayTime.Reset();
+                enabled = true;
+            }
+        }
+
+        private void OnEvent(TrackEntry trackEntry, Spine.Event e)
+        {
+            if (e.Data.Name == m_data.emissionFXEvent)
+            {
+                m_fxSpawner.InstantiateFX(m_data.emissionFXReference, OnEmissionFXSpawn);
+            }
+        }
+
+        private void OnEmissionFXSpawn(GameObject instance, int index)
+        {
+            var instanceTransform = instance.transform;
+            instanceTransform.parent = transform;
+            instanceTransform.localPosition = Vector3.zero;
+            instanceTransform.localRotation = Quaternion.identity;
+            instanceTransform.localScale = Vector3.one;
+            instanceTransform.parent = null;
+            m_emissionFX = instance.GetComponent<FX>();
+            m_emissionFX.Play();
+            m_emissionFX.Done += OnEmissionFXDone;
+            instance.GetComponent<SortingHandle>().SetOrder(m_sortingHandle.sortingLayerID, m_sortingHandle.sortingOrder);
+            m_damageCollider.enabled = true;
+        }
+
+        private void OnEmissionFXDone(object sender, EventActionArgs eventArgs)
+        {
             m_damageCollider.enabled = false;
+            m_emissionFX.Done -= OnEmissionFXDone;
+            m_emissionFX = null;
         }
 
         [Button]
         private void EmitPoison()
         {
-            m_animation.SetAnimation(0, m_emmisionAnimation, true);
-            m_poisonEmissionTime.Reset();
+            m_animation.SetAnimation(0, m_data.anticipationAnimation, true);
+            m_emmisionDelayTime.Reset();
+            m_fxSpawner.InstantiateFX(m_data.anticipationFXReference, OnAnticipationFXSpawn);
+
             enabled = true;
-            m_damageCollider.enabled = true;
             m_trigger.enabled = false;
+        }
+
+        private void OnAnticipationFXSpawn(GameObject instance, int index)
+        {
+            var instanceTransform = instance.transform;
+            instanceTransform.parent = m_anticipationTransformReference;
+            instanceTransform.localPosition = Vector3.zero;
+            instanceTransform.localRotation = Quaternion.identity;
+            instanceTransform.localScale = Vector3.one;
+            instanceTransform.parent = null;
+            m_anticipationFX = instance.GetComponent<FX>();
+            m_anticipationFX.Play();
+            instance.GetComponent<SortingHandle>().SetOrder(m_sortingHandle.sortingLayerID, m_sortingHandle.sortingOrder);
         }
 
         private void Awake()
         {
             m_animation = GetComponentInChildren<SpineAnimation>();
-            m_trigger = GetComponentInChildren<Collider2D>();
-            m_poisonEmissionTime.CountdownEnd += OnPoisonEmissionEnd;
-            m_poisonEmissionTime.EndTime(false);
-            m_uninteractableTime.CountdownEnd += OnUninteractionEnd;
-            m_uninteractableTime.EndTime(false);
+            m_sortingHandle = GetComponent<SortingHandle>();
+            m_emmisionDelayTime = new CountdownTimer(m_data.emmisionDelayTime);
+            m_emmisionDelayTime.CountdownEnd += OnDelayEnd;
+            m_emmisionDelayTime.EndTime(false);
+            m_resetDelayTime = new CountdownTimer(m_data.resetDelayTime);
+            m_resetDelayTime.CountdownEnd += OnResetDelayEnd;
+            m_resetDelayTime.EndTime(false);
             m_damageCollider.enabled = false;
         }
-
 
         private void Start()
         {
             m_idleAnimation = m_animation.animationState.GetCurrent(0).Animation.Name;
+            m_animation.animationState.Event += OnEvent;
             enabled = false;
         }
 
         private void Update()
         {
             var deltaTime = GameplaySystem.time.deltaTime;
-            m_poisonEmissionTime.Tick(deltaTime);
-            m_uninteractableTime.Tick(deltaTime);
+            m_emmisionDelayTime.Tick(deltaTime);
+            m_resetDelayTime.Tick(deltaTime);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -85,7 +186,13 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-
+#if UNITY_EDITOR
+        private void OnDataChanged()
+        {
+            m_emmisionDelayTime.SetStartTime(m_data.emmisionDelayTime);
+            m_resetDelayTime.SetStartTime(m_data.resetDelayTime);
+        }
+#endif
     }
 
 }
