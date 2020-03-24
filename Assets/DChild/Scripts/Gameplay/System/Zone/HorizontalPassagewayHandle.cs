@@ -1,9 +1,14 @@
-﻿using PlayerNew;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters.Players.Behaviour;
+using DChild.Gameplay.Environment;
+using DChild.Gameplay.Systems;
+using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
+
     [System.Serializable]
     public struct HorizontalPassagewayHandle : ISwitchHandle
     {
@@ -13,16 +18,12 @@ namespace DChild.Gameplay.Environment
             Right = 1,
         }
 
-        [SerializeField, OnValueChanged("OnDirectionChange")]
+        [SerializeField,OnValueChanged("OnDirectionChange")]
         private TravelDirection m_entranceDirection;
-        [SerializeField, ShowIf("m_customTravelDirections")]
+        [SerializeField,ShowIf("m_customTravelDirections")]
         private TravelDirection m_exitDirection;
 
-        public float transitionDelay => 0.2f;
-
-        public bool needsButtonInteraction => false;
-
-        public Vector3 promptPosition => Vector3.zero;
+        public float transitionDelay => 1;
 
         public void DoSceneTransition(Character character, TransitionType type)
         {
@@ -74,9 +75,9 @@ namespace DChild.Gameplay.Environment
 
         private void OnDirectionChange()
         {
-            if (m_customTravelDirections == false)
+            if(m_customTravelDirections == false)
             {
-                if (m_entranceDirection == TravelDirection.Left)
+                if(m_entranceDirection == TravelDirection.Left)
                 {
                     m_exitDirection = TravelDirection.Right;
                 }

@@ -51,10 +51,8 @@ namespace DChild.Gameplay.Combat
         }
 
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             m_affectedColliders = new List<Collider2D>();
             m_toDamage = new List<Hitbox>();
             m_infos = new List<Info>();
@@ -81,10 +79,6 @@ namespace DChild.Gameplay.Combat
                         DealDamage(collision, m_toDamage[i]);
                         SpawnHitFX(collision);
                     }
-                }
-                else
-                {
-                    m_infos[i] = info;
                 }
             }
         }
