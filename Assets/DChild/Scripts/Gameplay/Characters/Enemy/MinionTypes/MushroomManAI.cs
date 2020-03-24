@@ -114,8 +114,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_playerSensor;
         //[SerializeField, TabGroup("Territory")]
         //private Collider2D m_territoryCollider;
 
@@ -361,7 +359,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting && m_playerSensor.isDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);

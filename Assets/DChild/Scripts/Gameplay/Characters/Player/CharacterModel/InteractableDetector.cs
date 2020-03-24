@@ -1,5 +1,4 @@
 ﻿using DChild.Gameplay.Environment;
-using DChild.Gameplay.Environment.Interractables;
 using Holysoft.Event;
 using Sirenix.Utilities;
 using System.Collections.Generic;
@@ -9,11 +8,11 @@ namespace DChild.Gameplay.Characters.Players
 {
     public class DetectedInteractableEventArgs : IEventActionArgs
     {
-        private IButtonToInteract m_interactable;
+        private InteractableObject m_interactable;
 
-        public IButtonToInteract interactable => m_interactable;
+        public InteractableObject interactable => m_interactable;
 
-        public void Initialize(IButtonToInteract interactable) => m_interactable = interactable;
+        public void Initialize(InteractableObject interactable) => m_interactable = interactable;
     }
 
     public class InteractableDetector : MonoBehaviour, IComplexCharacterModule
@@ -21,11 +20,11 @@ namespace DChild.Gameplay.Characters.Players
         private Character m_character;
         private Vector2 m_prevCharacterPosition;
 
-        private List<IButtonToInteract> m_objectsInRange;
-        private IButtonToInteract m_closestObject;
+        private List<InteractableObject> m_objectsInRange;
+        private InteractableObject m_closestObject;
         public event EventAction<DetectedInteractableEventArgs> InteractableDetected;
 
-        public IButtonToInteract closestObject => m_closestObject;
+        public InteractableObject closestObject => m_closestObject;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -33,22 +32,19 @@ namespace DChild.Gameplay.Characters.Players
             m_prevCharacterPosition = m_character.centerMass.transform.position;
         }
 
-        private void CallInteractableDetectedEvent(IButtonToInteract interactable)
+        private void CallInteractableDetectedEvent(InteractableObject interactable)
         {
-            if (interactable.showPrompt)
+            using (Cache<DetectedInteractableEventArgs> cacheEvent = Cache<DetectedInteractableEventArgs>.Claim())
             {
-                using (Cache<DetectedInteractableEventArgs> cacheEvent = Cache<DetectedInteractableEventArgs>.Claim())
-                {
-                    cacheEvent.Value.Initialize(interactable);
-                    InteractableDetected?.Invoke(this, cacheEvent.Value);
-                    cacheEvent.Release();
-                } 
+                cacheEvent.Value.Initialize(interactable);
+                InteractableDetected?.Invoke(this, cacheEvent.Value);
+                cacheEvent.Release();
             }
         }
 
         private void Awake()
         {
-            m_objectsInRange = new List<IButtonToInteract>();
+            m_objectsInRange = new List<InteractableObject>();
         }
 
         public void Update()
@@ -82,7 +78,7 @@ namespace DChild.Gameplay.Characters.Players
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.TryGetComponentInParent(out IButtonToInteract interactableObject))
+            if (collision.TryGetComponentInParent(out InteractableObject interactableObject))
             {
                 m_objectsInRange.Add(interactableObject);
                 if (m_objectsInRange.Count == 1)
@@ -95,7 +91,7 @@ namespace DChild.Gameplay.Characters.Players
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.TryGetComponentInParent(out IButtonToInteract interactableObject))
+            if (collision.TryGetComponentInParent(out InteractableObject interactableObject))
             {
                 m_objectsInRange.Remove(interactableObject);
                 if (m_objectsInRange.Count == 0)
