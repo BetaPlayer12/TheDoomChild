@@ -24,12 +24,11 @@ namespace DChild.Gameplay
 #if UNITY_EDITOR
         [SerializeField]
         private bool m_dontDestroyOnLoad;
-#endif
         [SerializeField]
         private bool m_doNotDeserializeOnAwake;
+#endif
         [SerializeField]
         private bool m_doNotTeleportPlayerOnAwake;
-
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;
@@ -195,11 +194,14 @@ namespace DChild.Gameplay
                 {
                     m_campaignSerializer.SetSlot(m_campaignToLoad);
                 }
-
+#if UNITY_EDITOR
                 if (m_doNotDeserializeOnAwake == false)
                 {
                     m_campaignSerializer.Load(true);
                 }
+#else
+                m_campaignSerializer.Load(true);
+#endif
 
                 if (m_doNotTeleportPlayerOnAwake == false)
                 {

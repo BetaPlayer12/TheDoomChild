@@ -22,9 +22,9 @@ namespace DChild.Gameplay
 
         [SerializeField, OnValueChanged("OnValueChange")]
         private bool m_oneTimeOnly;
-        [SerializeField, TabGroup("Enter")]
+        [SerializeField]
         private UnityEvent m_enterEvents;
-        [SerializeField, HideIf("m_oneTimeOnly"), TabGroup("Exit")]
+        [SerializeField, HideIf("m_oneTimeOnly")]
         private UnityEvent m_exitEvents;
 
         private bool m_wasTriggered;
@@ -67,7 +67,7 @@ namespace DChild.Gameplay
 
         private void OnValidate()
         {
-            if (this.TryGetComponentInChildren<Collider2D>(out Collider2D collider))
+            if(this.TryGetComponentInChildren<Collider2D>(out Collider2D collider))
             {
                 collider.isTrigger = true;
             }

@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        protected virtual void Awake()
+        private void Awake()
         {
             m_collider = GetComponent<Collider2D>();
             m_damageDealer = GetComponentInParent<IDamageDealer>();

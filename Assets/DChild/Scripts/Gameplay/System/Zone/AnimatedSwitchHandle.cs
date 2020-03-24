@@ -18,10 +18,6 @@ namespace DChild.Gameplay.Environment
 
         public float transitionDelay => m_transitionDelay;
 
-        public bool needsButtonInteraction => true;
-
-        public Vector3 promptPosition => Vector3.zero;
-
         public void DoSceneTransition(Character character, TransitionType type)
         {
             if (type == TransitionType.Enter)

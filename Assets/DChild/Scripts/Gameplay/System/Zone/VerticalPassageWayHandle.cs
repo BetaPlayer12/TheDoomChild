@@ -24,10 +24,6 @@ namespace DChild.Gameplay.Environment
 
         public float transitionDelay => 1;
 
-        public bool needsButtonInteraction => false;
-
-        public Vector3 promptPosition => Vector3.zero;
-
         public void DoSceneTransition(Character character, TransitionType type)
         {
             var characterPhysics = character.GetComponent<CharacterPhysics2D>();
