@@ -142,6 +142,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField]
+        private bool m_willPatrol;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -337,7 +340,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
+                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_willPatrol)
                     {
                         m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(true, false);
@@ -348,9 +351,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_movement.Stop();
-                        m_turnState = State.ReevaluateSituation;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        //m_turnState = State.ReevaluateSituation;
+                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        //    m_stateHandle.SetState(State.Turning);
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
 
