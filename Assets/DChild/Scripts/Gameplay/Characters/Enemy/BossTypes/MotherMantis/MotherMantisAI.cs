@@ -70,6 +70,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attack3 = new SimpleAttackInfo();
             public SimpleAttackInfo attack3 => m_attack3;
             [SerializeField]
+            private float m_bulbAmount;
+            public float bulbAmount => m_bulbAmount;
+            [SerializeField]
             private SimpleAttackInfo m_attack4 = new SimpleAttackInfo();
             public SimpleAttackInfo attack4 => m_attack4;
             [SerializeField]
@@ -270,7 +273,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_petalProjectileSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
-        private Transform m_larvaSpawnPoint;
+        private Transform m_bulbSpawnPoint;
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_seedSpawnPoint;
 
@@ -528,12 +531,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SpawnLarvaRoutine()
         {
             yield return new WaitForSeconds(1f); //m_larvaSpawnPoint.position
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < m_info.bulbAmount; i++)
             {
-                var position = new Vector2(UnityEngine.Random.Range(-50, 50) + m_larvaSpawnPoint.position.x, m_larvaSpawnPoint.position.y);
+                var position = new Vector2(UnityEngine.Random.Range(-70, 70) + m_bulbSpawnPoint.position.x, m_bulbSpawnPoint.position.y);
                 var bulb = Instantiate(m_info.larvaBulb, position, Quaternion.identity);
                 bulb.GetComponent<MotherMantisBulb>().GetTarget(m_targetInfo);
-                yield return new WaitForSeconds(.5f);
+                yield return new WaitForSeconds(3f);
             }
             yield return null;
         }
