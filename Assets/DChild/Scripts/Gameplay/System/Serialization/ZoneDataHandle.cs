@@ -45,7 +45,7 @@ namespace DChild.Serialization
                 }
                 else
                 {
-                    m_savedDatas.Add(new SerializeID(ID,false), data);
+                    m_savedDatas.Add(new SerializeID(ID, false), data);
                 }
             }
 
@@ -60,7 +60,7 @@ namespace DChild.Serialization
         private SerializeID m_ID = new SerializeID(true);
         [SerializeField, ValueDropdown("GetComponents", IsUniqueList = true), TabGroup("Serializer", "Component"), OnValueChanged("UpdateEditorData", true)]
         private ComponentSerializer[] m_componentSerializers;
-        [SerializeField, ValueDropdown("GetDynamicSerializers", IsUniqueList = true), TabGroup("Serializer", "Dynamic")]
+        [SerializeField, ValueDropdown("GetDynamicSerializers", IsUniqueList = true), TabGroup("Serializer", "Dynamic"), OnValueChanged("UpdateEditorData", true)]
         private DynamicSerializableComponent[] m_dynamicSerializers;
         [OdinSerialize, HideInEditorMode]
         private ZoneData m_zoneData = new ZoneData();
@@ -116,6 +116,7 @@ namespace DChild.Serialization
             if (m_useEditorData)
             {
                 proposedData = m_editorData;
+
             }
 #endif
             bool hasData = false;
@@ -135,11 +136,36 @@ namespace DChild.Serialization
                     m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
                 }
             }
+
+#if UNITY_EDITOR
+            if (m_useEditorData)
+            {
+                m_editorData.InitializeDynamicDatas();
+                for (int i = 0; i < m_dynamicSerializers.Length; i++)
+                {
+                    m_dynamicSerializers[i].Initialize();
+                    m_dynamicSerializers[i].LoadUsingCurrent();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < m_dynamicSerializers.Length; i++)
+                {
+                    m_dynamicSerializers[i].Initialize();
+                    m_dynamicSerializers[i].Load();
+                }
+            }
+#else
+
             for (int i = 0; i < m_dynamicSerializers.Length; i++)
             {
                 m_dynamicSerializers[i].Initialize();
                 m_dynamicSerializers[i].Load();
             }
+#endif
+
+
+
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
         }
@@ -161,14 +187,14 @@ namespace DChild.Serialization
         private class EditorData
         {
             [System.Serializable, HideReferenceObjectPicker]
-            public class Data
+            public class ComponentData
             {
-                [SerializeField, ReadOnly]
+                [SerializeField, ReadOnly, DrawWithUnity]
                 public ComponentSerializer m_serializer;
                 [SerializeField, HideReferenceObjectPicker]
                 public ISaveData m_saveData;
 
-                public Data(ComponentSerializer serializer)
+                public ComponentData(ComponentSerializer serializer)
                 {
                     m_serializer = serializer;
                     m_serializer.Initiatlize();
@@ -176,38 +202,84 @@ namespace DChild.Serialization
                 }
             }
 
-            [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true)]
-            private List<Data> m_datas;
-
-            public Data GetData(ComponentSerializer serializer)
+            [System.Serializable]
+            public class DynamicData
             {
-                for (int i = 0; i < m_datas.Count; i++)
+                [SerializeField, ReadOnly, DrawWithUnity]
+                public DynamicSerializableData m_data;
+                [SerializeField, HideReferenceObjectPicker]
+                public ISaveData m_saveData;
+
+                public DynamicData(DynamicSerializableComponent serializer)
                 {
-                    if (serializer == m_datas[i].m_serializer)
+                    m_data = serializer.data;
+                    m_saveData = m_data.GetData<ISaveData>();
+                }
+            }
+
+            [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true), TabGroup("Component")]
+            private List<ComponentData> m_componenetDatas;
+            [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true), TabGroup("Dy")]
+            private List<DynamicData> m_dynamicDatas;
+
+            public void InitializeDynamicDatas()
+            {
+                for (int i = 0; i < m_dynamicDatas.Count; i++)
+                {
+                    m_dynamicDatas[i].m_data.SetData(m_dynamicDatas[i].m_saveData);
+                }
+            }
+
+            public ComponentData GetData(ComponentSerializer serializer)
+            {
+                for (int i = 0; i < m_componenetDatas.Count; i++)
+                {
+                    if (serializer == m_componenetDatas[i].m_serializer)
                     {
-                        return m_datas[i];
+                        return m_componenetDatas[i];
                     }
                 }
                 return null;
             }
 
-            public EditorData(IReadOnlyList<ComponentSerializer> list)
+            public EditorData(IReadOnlyList<ComponentSerializer> componentList, IReadOnlyList<DynamicSerializableComponent> dynamicList)
             {
-                m_datas = new List<Data>();
-                for (int i = 0; i < list.Count; i++)
+                m_componenetDatas = new List<ComponentData>();
+                var componentSize = componentList?.Count ?? 0;
+                for (int i = 0; i < componentSize; i++)
                 {
-                    m_datas.Add(new Data(list[i]));
+                    m_componenetDatas.Add(new ComponentData(componentList[i]));
+                }
+
+                m_dynamicDatas = new List<DynamicData>();
+                var dynamicSize = dynamicList?.Count ?? 0;
+                for (int i = 0; i < dynamicSize; i++)
+                {
+                    bool isNew = true;
+                    var data = dynamicList[i].data;
+                    for (int j = 0; j < m_dynamicDatas.Count; j++)
+                    {
+                        if (m_dynamicDatas[j].m_data == data)
+                        {
+                            isNew = false;
+                            break;
+                        }
+                    }
+                    if (isNew)
+                    {
+                        m_dynamicDatas.Add(new DynamicData(dynamicList[i]));
+                    }
                 }
             }
 
             public void CopyPastSavedData(EditorData source)
             {
-                for (int i = 0; i < m_datas.Count; i++)
+                for (int i = 0; i < m_componenetDatas.Count; i++)
                 {
-                    var data = source.GetData(m_datas[i].m_serializer);
+                    var data = source.GetData(m_componenetDatas[i].m_serializer);
                     if (data != null)
                     {
-                        m_datas[i] = data;
+                        m_componenetDatas[i] = data;
                     }
                 }
             }
@@ -221,15 +293,16 @@ namespace DChild.Serialization
                 else
                 {
                     var dictionary = new Dictionary<SerializeID, ISaveData>();
-                    for (int i = 0; i < editorData.m_datas.Count; i++)
+                    for (int i = 0; i < editorData.m_componenetDatas.Count; i++)
                     {
-                        var save = editorData.m_datas[i];
+                        var save = editorData.m_componenetDatas[i];
                         dictionary.Add(save.m_serializer.ID, save.m_saveData);
                     }
                     return new ZoneData(dictionary);
                 }
             }
         }
+
         [SerializeField, HideInPlayMode, ToggleGroup("m_useEditorData")]
         private bool m_useEditorData;
         [OdinSerialize, HideInPlayMode, HideReferenceObjectPicker, ShowIf("m_useEditorData"), ToggleGroup("m_useEditorData"), HideLabel]
@@ -240,11 +313,11 @@ namespace DChild.Serialization
 
             if (m_editorData == null)
             {
-                m_editorData = new EditorData(m_componentSerializers);
+                m_editorData = new EditorData(m_componentSerializers, m_dynamicSerializers);
             }
             else
             {
-                var newData = new EditorData(m_componentSerializers);
+                var newData = new EditorData(m_componentSerializers, m_dynamicSerializers);
                 newData.CopyPastSavedData(m_editorData);
                 m_editorData = newData;
             }
