@@ -63,7 +63,6 @@ namespace DChild.Gameplay.Combat
                     }
                     cacheInfo.Release();
                 }
-
             }
         }
 
@@ -139,7 +138,6 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-
 #if UNITY_EDITOR
         [Button]
         private void UseSelfAsCenterMass()
@@ -150,7 +148,10 @@ namespace DChild.Gameplay.Combat
         private void ApplyData()
         {
             m_info.Copy(m_data.info);
-            ApplyDamageModification();
+            if (m_currentDamage != null)
+            {
+                ApplyDamageModification();
+            }
         }
 
         public void InitializeField(Transform centerMass)
