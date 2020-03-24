@@ -45,7 +45,7 @@ namespace DChild.Serialization
                 }
                 else
                 {
-                    m_savedDatas.Add(new SerializeID(ID,false), data);
+                    m_savedDatas.Add(new SerializeID(ID, false), data);
                 }
             }
 
@@ -161,14 +161,14 @@ namespace DChild.Serialization
         private class EditorData
         {
             [System.Serializable, HideReferenceObjectPicker]
-            public class Data
+            public class ComponentData
             {
-                [SerializeField, ReadOnly]
+                [SerializeField, ReadOnly, DrawWithUnity]
                 public ComponentSerializer m_serializer;
                 [SerializeField, HideReferenceObjectPicker]
                 public ISaveData m_saveData;
 
-                public Data(ComponentSerializer serializer)
+                public ComponentData(ComponentSerializer serializer)
                 {
                     m_serializer = serializer;
                     m_serializer.Initiatlize();
@@ -176,10 +176,10 @@ namespace DChild.Serialization
                 }
             }
 
-            [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true)]
-            private List<Data> m_datas;
+            [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true),TabGroup("Component")]
+            private List<ComponentData> m_datas;
 
-            public Data GetData(ComponentSerializer serializer)
+            public ComponentData GetData(ComponentSerializer serializer)
             {
                 for (int i = 0; i < m_datas.Count; i++)
                 {
@@ -193,10 +193,10 @@ namespace DChild.Serialization
 
             public EditorData(IReadOnlyList<ComponentSerializer> list)
             {
-                m_datas = new List<Data>();
+                m_datas = new List<ComponentData>();
                 for (int i = 0; i < list.Count; i++)
                 {
-                    m_datas.Add(new Data(list[i]));
+                    m_datas.Add(new ComponentData(list[i]));
                 }
             }
 
@@ -230,6 +230,7 @@ namespace DChild.Serialization
                 }
             }
         }
+
         [SerializeField, HideInPlayMode, ToggleGroup("m_useEditorData")]
         private bool m_useEditorData;
         [OdinSerialize, HideInPlayMode, HideReferenceObjectPicker, ShowIf("m_useEditorData"), ToggleGroup("m_useEditorData"), HideLabel]

@@ -54,7 +54,6 @@ namespace DChild.Gameplay.Combat
         protected override void Awake()
         {
             base.Awake();
-
             m_affectedColliders = new List<Collider2D>();
             m_toDamage = new List<Hitbox>();
             m_infos = new List<Info>();
@@ -86,6 +85,18 @@ namespace DChild.Gameplay.Combat
                 {
                     m_infos[i] = info;
                 }
+            }
+        }
+
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (m_affectedColliders.Contains(collision))
+            {
+                var index = m_affectedColliders.FindIndex(x => x == collision);
+                var info = m_infos[index];
+                info.isOutOfCollider = true;
+                m_infos[index] = info;
             }
         }
     }

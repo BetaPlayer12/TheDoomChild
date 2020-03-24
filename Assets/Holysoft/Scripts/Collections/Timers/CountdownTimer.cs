@@ -7,8 +7,7 @@ namespace Holysoft.Collections
     [System.Serializable]
     public class CountdownTimer : ITimer
     {
-        [SerializeField]
-        [MinValue(0f)]
+        [SerializeField, MinValue(0f)]
         private float m_startTime = 0.1f;
         protected float m_currentTime = -1f;
 

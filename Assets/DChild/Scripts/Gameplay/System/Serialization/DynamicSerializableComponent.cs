@@ -17,7 +17,6 @@ namespace DChild.Serialization
             Both
         }
 
-
         [SerializeField, DisableIf("@m_multiSceneData != null"), ValueDropdown("GetValues"), OnValueChanged("OnValueChanged")]
         private DynamicSerializableData m_multiSceneData;
         [SerializeField]
