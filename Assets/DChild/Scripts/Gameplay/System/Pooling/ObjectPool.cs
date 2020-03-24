@@ -42,15 +42,11 @@ namespace DChild.Gameplay.Pooling
             }
         }
 
-        public void GetOrCreateItem(AssetReferenceGameObject gameObject, int index = 0, Action<GameObject, int> CallBack = null)
+        public void GetOrCreateItem(AssetReferenceT<GameObject> gameObject, int index = 0, Action<GameObject, int> CallBack = null)
         {
 
-            var component = ((GameObject)gameObject.Asset).GetComponent<T>();
-            if (component == null)
-            {
-                throw new System.Exception($"{gameObject} does not have component {typeof(T).Name} for Pool Manager {GetType().Name}");
-            }
-            else if (m_items.Count > 0)
+            var component = gameObject.Asset ? ((GameObject)gameObject.Asset).GetComponent<T>() : null;
+            if (component != null && m_items.Count > 0)
             {
                 var retrievedInstance = RetrieveFromPool(component);
                 if (retrievedInstance == null)
@@ -68,7 +64,7 @@ namespace DChild.Gameplay.Pooling
             }
         }
 
-        private void CreateInstance(AssetReferenceGameObject gameObject, int index = 0, Action<GameObject, int> CallBack = null)
+        private void CreateInstance(AssetReferenceT<GameObject> gameObject, int index = 0, Action<GameObject, int> CallBack = null)
         {
             AddressableSpawner.Spawn(gameObject, Vector3.zero, index, CallBack);
         }

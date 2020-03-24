@@ -17,12 +17,13 @@ namespace DChild.Serialization
             Both
         }
 
-
         [SerializeField, DisableIf("@m_multiSceneData != null"), ValueDropdown("GetValues"), OnValueChanged("OnValueChanged")]
         private DynamicSerializableData m_multiSceneData;
         [SerializeField]
         private SerializationType m_serializationType;
         private ISerializableComponent m_component;
+
+        public DynamicSerializableData data => m_multiSceneData;
 
         public void Load()
         {
@@ -39,6 +40,15 @@ namespace DChild.Serialization
                 m_component.Load(m_multiSceneData.GetData<ISaveData>());
             }
         }
+
+        public void LoadUsingCurrent()
+        {
+            if (m_serializationType == SerializationType.LoadOnly || m_serializationType == SerializationType.Both)
+            {
+                m_component.Load(m_multiSceneData.GetData<ISaveData>());
+            }
+        }
+
 
         public void Save()
         {
@@ -62,7 +72,7 @@ namespace DChild.Serialization
             for (int i = 0; i < filePaths.Length; i++)
             {
                 var asset = AssetDatabase.LoadAssetAtPath<DynamicSerializableData>(AssetDatabase.GUIDToAssetPath(filePaths[i]));
-                if (asset != null && asset.isLocked == false)
+                if (asset != null)
                 {
                     list.Add(asset);
                 }
