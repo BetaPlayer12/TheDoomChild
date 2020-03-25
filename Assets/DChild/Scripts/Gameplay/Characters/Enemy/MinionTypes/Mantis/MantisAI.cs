@@ -118,6 +118,8 @@ namespace DChild.Gameplay.Characters.Enemies
             _COUNT
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -174,6 +176,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
+                m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -211,6 +214,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
@@ -308,6 +312,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        protected override void Start()
+        {
+            base.Start();
+            m_selfCollider.SetActive(false);
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -356,10 +366,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_movement.Stop();
-                        //m_turnState = State.ReevaluateSituation;
-                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                        //    m_stateHandle.SetState(State.Turning);
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        if (m_groundSensor.isDetecting && m_willPatrol)
+                        {
+                            m_turnState = State.ReevaluateSituation;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
+                        else
+                        {
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        }
                     }
                     break;
 
@@ -457,6 +473,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
+            m_selfCollider.SetActive(false);
         }
     }
 }
