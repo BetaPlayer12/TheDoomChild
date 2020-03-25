@@ -46,8 +46,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.5}
-  m_Size: {x: 5, y: 0.5}
+  m_Offset: {x: 0.75, y: 0.5}
+  m_Size: {x: 3.75, y: 0.5}
   m_Direction: 1
 --- !u!114 &8353629854163935
 MonoBehaviour:
@@ -65,7 +65,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   m_collider: {fileID: 8353629854163934}
-  m_recordsContactPoints: 0
+  m_recordsContactPoints: 1
 --- !u!114 &2580647182655516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,7 +315,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724482331193292131}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.26, y: 7.5, z: 0}
+  m_LocalPosition: {x: 2.26, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1884731301227988410}
@@ -381,6 +381,7 @@ Transform:
   m_Children:
   - {fileID: 8353629854163929}
   - {fileID: 3433070080447266064}
+  - {fileID: 2749459741519616701}
   m_Father: {fileID: 8353631720173316}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -704,6 +705,53 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+--- !u!1 &1684401343576399300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2749459741519616701}
+  - component: {fileID: 5144679123742197426}
+  m_Layer: 1
+  m_Name: SelfCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2749459741519616701
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684401343576399300}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2493287739303157824}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &5144679123742197426
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684401343576399300}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.5
 --- !u!1 &2112793857206206481
 GameObject:
   m_ObjectHideFlags: 0
@@ -3203,12 +3251,6 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 6296132945195806421}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &4972437674016294333 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 1324619273347623784, guid: 4ac1c82e08c2bb24bad89c188476a855,
-    type: 3}
-  m_PrefabInstance: {fileID: 6296132945195806421}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &7241944654323846711 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 3738222732886974690, guid: 4ac1c82e08c2bb24bad89c188476a855,
@@ -3218,6 +3260,12 @@ ParticleSystem:
 --- !u!198 &4672568401067398536 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1709142148354538333, guid: 4ac1c82e08c2bb24bad89c188476a855,
+    type: 3}
+  m_PrefabInstance: {fileID: 6296132945195806421}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4972437674016294333 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1324619273347623784, guid: 4ac1c82e08c2bb24bad89c188476a855,
     type: 3}
   m_PrefabInstance: {fileID: 6296132945195806421}
   m_PrefabAsset: {fileID: 0}
