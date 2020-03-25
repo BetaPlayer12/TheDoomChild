@@ -429,16 +429,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_movement.Stop();
-                        if (m_groundSensor.isDetecting)
-                        {
-                            m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                                m_stateHandle.SetState(State.Turning);
-                        }
-                        else
-                        {
-                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        }
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
 
