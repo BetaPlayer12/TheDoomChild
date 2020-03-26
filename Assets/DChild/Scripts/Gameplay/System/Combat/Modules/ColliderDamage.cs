@@ -172,7 +172,7 @@ namespace DChild.Gameplay.Combat
 
                 if (m_canDetectInteractables)
                 {
-                    collision.gameObject.GetComponentInParent<IInteractable>()?.Interact();
+                    InterractWith(collision.collider);
                 }
             }
         }
