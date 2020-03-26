@@ -101,6 +101,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [Title("Animations")]
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_introAnimation;
+            public string introAnimation => m_introAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_intro2Animation;
+            public string intro2Animation => m_intro2Animation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -221,6 +227,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private Transform m_modelTransform;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject Attackbb;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -376,9 +384,17 @@ namespace DChild.Gameplay.Characters.Enemies
             //CustomTurn();
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.attack1.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+            m_hitbox.SetInvulnerability(true);
+            m_animation.EnableRootMotion(true, false);
+            yield return new WaitForSeconds(2);
+            m_animation.SetAnimation(0, m_info.move.animation, true);
+            yield return new WaitForSeconds(5);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
+            m_animation.SetAnimation(0, m_info.intro2Animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.intro2Animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.SetInvulnerability(false);
+            m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
             //m_stateHandle.SetState(State.ReevaluateSituation);
             yield return null;
@@ -505,11 +521,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator LeapAttackRoutine()
         {
             m_stateHandle.Wait(State.Cooldown);
+            Attackbb.SetActive(false);
             m_hitbox.SetInvulnerability(true);
             m_stickToGround = true;
             //var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.attack2.animation : m_info.attack2StepBack.animation;
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
             yield return new WaitForSeconds(1.5f);
+            Attackbb.SetActive(true);
             transform.position = new Vector2(m_targetInfo.position.x, transform.position.y - 5);
             //yield return new WaitUntil(() => m_groundSensor.isDetecting);
             yield return new WaitForSeconds(.825f);
@@ -533,7 +551,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1f); //m_larvaSpawnPoint.position
             for (int i = 0; i < m_info.bulbAmount; i++)
             {
-                var position = new Vector2(UnityEngine.Random.Range(-70, 70) + m_bulbSpawnPoint.position.x, m_bulbSpawnPoint.position.y);
+                var position = new Vector2(UnityEngine.Random.Range(-50, 50) + m_bulbSpawnPoint.position.x, m_bulbSpawnPoint.position.y);
                 var bulb = Instantiate(m_info.larvaBulb, position, Quaternion.identity);
                 bulb.GetComponent<MotherMantisBulb>().GetTarget(m_targetInfo);
                 yield return new WaitForSeconds(3f);
@@ -568,7 +586,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_seedSpawning = true;
             for (int i = 0; i < m_info.seedAmmount; i++)
             {
-                var spawnPoint = new Vector2(m_seedSpawnPoint.position.x + (UnityEngine.Random.Range(-100, 100)), m_seedSpawnPoint.position.y);
+                var spawnPoint = new Vector2(m_seedSpawnPoint.position.x + (UnityEngine.Random.Range(-50, 50)), m_seedSpawnPoint.position.y);
                 var projectile = Instantiate(m_info.seedProjectile, spawnPoint, Quaternion.identity);
                 yield return new WaitForSeconds(.5f);
             }
