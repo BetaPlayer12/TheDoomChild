@@ -111,6 +111,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_aggroSensor;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_explosionRadius;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -151,6 +153,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_deathRoutine = DeathRoutine();
+            m_selfCollider.SetActive(false);
             //m_spineEventListener.Subscribe(m_info.smokeCharging, m_smokeChargeFX.Play);
             //GameplaySystem.SetBossHealth(m_character);
         }
@@ -175,6 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (damageable != null)
                 {
                     base.SetTarget(damageable, m_target);
+                    m_selfCollider.SetActive(true);
                     m_stateHandle.SetState(State.Chasing);
                     m_currentPatience = 0;
                     m_enablePatience = false;
@@ -202,6 +206,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Idle);
@@ -380,6 +385,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.Idle);
             m_currentPatience = 0;
             m_enablePatience = false;
+            m_selfCollider.SetActive(false);
         }
     }
 }

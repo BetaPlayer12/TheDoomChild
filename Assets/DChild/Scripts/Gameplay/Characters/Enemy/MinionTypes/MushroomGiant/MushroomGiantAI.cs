@@ -151,6 +151,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_attackBB;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -199,6 +201,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_breathFX.gameObject.GetComponent<ParticleSystem>().Stop();
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.Cooldown);
@@ -211,6 +214,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
+                m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -248,10 +252,12 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_currentCD = 0;
                 m_enablePatience = false;
+                m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.SetState(State.Patrol);
             }
         }
@@ -345,6 +351,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attack2_end, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2_end);
+            if (!m_wallSensor.isDetecting)
+            {
+                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            }
             m_hitbox.SetInvulnerability(false);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -357,6 +367,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_spineEventListener.Subscribe(m_info.breathEvent, PoisonBreath);
+            m_selfCollider.SetActive(false);
             //GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -419,9 +430,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_movement.Stop();
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        //m_turnState = State.ReevaluateSituation;
-                        ////if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                        //    m_stateHandle.SetState(State.Turning);
                     }
                     break;
 
@@ -482,6 +490,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
+                                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -490,6 +499,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
+                                    GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
                                     m_animation.EnableRootMotion(true, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2f;
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
@@ -497,6 +507,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                     m_movement.Stop();
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
@@ -540,6 +551,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentCD = 0;
             m_enablePatience = false;
             m_isDetecting = false;
+            m_selfCollider.SetActive(false);
         }
     }
 }

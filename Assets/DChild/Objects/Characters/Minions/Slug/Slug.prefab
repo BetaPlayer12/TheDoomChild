@@ -300,9 +300,9 @@ MonoBehaviour:
     m_duration: 0
   m_useStepClimb: 1
   m_stepClimber:
-    m_maxStepHeight: 0.01
-    stepSearchOvershoot: 0.01
-    m_detector: {fileID: 0}
+    m_maxStepHeight: 1
+    stepSearchOvershoot: 2
+    m_detector: {fileID: 1114165085717003201}
   m_calculateGroundAngle: 1
   m_acceptableWalkableAngle:
     m_min: 0
@@ -338,6 +338,7 @@ MonoBehaviour:
   m_deathHandle: {fileID: 6130840986052142141}
   m_flinchHandle: {fileID: 5152555630284257107}
   m_spineEventListener: {fileID: 7085717963124468946}
+  m_selfCollider: {fileID: 5525148098431502467}
   m_wallSensor: {fileID: 4130708735038742495}
   m_groundSensor: {fileID: 8734981687397608497}
   m_edgeSensor: {fileID: 0}
@@ -527,6 +528,12 @@ Rigidbody2D:
     type: 3}
   m_PrefabInstance: {fileID: 2313759440660322495}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8844560421730969359 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 2313759440660322495}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3060225373353274155 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
@@ -542,12 +549,6 @@ MonoBehaviour:
 --- !u!1 &5788904635751393845 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8091365355203670666, guid: 581273cea94d1294a9c56f1ba54042dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 2313759440660322495}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8844560421730969359 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
     type: 3}
   m_PrefabInstance: {fileID: 2313759440660322495}
   m_PrefabAsset: {fileID: 0}
@@ -655,13 +656,13 @@ PrefabInstance:
       objectReference: {fileID: 5531515102709127862}
     - target: {fileID: 4285565004997284761, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
         type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.25
+      propertyPath: m_LocalPosition.x
+      value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4843742591152209465, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
+    - target: {fileID: 4285565004997284761, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4
+      value: -0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5084622510065926699, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
         type: 3}
@@ -871,6 +872,12 @@ ParticleSystem:
 --- !u!1 &5566518479337554046 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7395377193310134174, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
+    type: 3}
+  m_PrefabInstance: {fileID: 3161974781362216928}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5525148098431502467 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7443556983413266275, guid: 0f959a9b0ff33f645b018e04b10d4ccb,
     type: 3}
   m_PrefabInstance: {fileID: 3161974781362216928}
   m_PrefabAsset: {fileID: 0}

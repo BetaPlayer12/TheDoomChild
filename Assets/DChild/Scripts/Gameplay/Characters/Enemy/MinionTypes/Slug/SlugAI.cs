@@ -129,6 +129,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -173,6 +175,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            m_selfCollider.SetActive(false);
 
             //m_spineEventListener.Subscribe(m_info.spitAttackEvent, SpitProjectile);
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
@@ -276,6 +279,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
+                m_selfCollider.SetActive(true);
                 m_currentPatience = 0;
                 m_enablePatience = false;
                 //StopCoroutine(PatienceRoutine()); //for latur
@@ -312,6 +316,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
@@ -432,9 +437,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_movement.Stop();
-                        m_turnState = State.ReevaluateSituation;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
 
@@ -525,6 +528,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
+            m_selfCollider.SetActive(false);
         }
     }
 }
