@@ -30,6 +30,17 @@ namespace DChild.Gameplay.Environment
             m_promptPosition = m_promptLocation.position;
         }
 #endif
+        public void Interact(Character character)
+        {
+            if (m_canInteract)
+            {
+                m_onInteraction?.Invoke();
+                if (m_oneTimeInteraction)
+                {
+                    m_canInteract = false;
+                }
+            }
+        }
 
         [Button]
         public void Interact()
@@ -47,18 +58,6 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_canInteract = true;
-        }
-
-        public void Interact(Character character)
-        {
-            if (m_canInteract)
-            {
-                m_onInteraction?.Invoke();
-                if (m_oneTimeInteraction)
-                {
-                    m_canInteract = false;
-                }
-            }
         }
     }
 }

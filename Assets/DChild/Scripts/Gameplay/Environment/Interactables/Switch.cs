@@ -7,7 +7,9 @@
  **************************************/
 
 using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Gameplay.Inventories;
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;

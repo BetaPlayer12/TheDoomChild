@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Environment.Interractables
         public HorizontalDirection direction { get; }
     }
 
-    public interface IHitToInteract : IInteractable
+    public interface IHitToInteract
     {
         event EventAction<HitDirectionEventArgs> OnHit;
         void Interact(HorizontalDirection direction);
