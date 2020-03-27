@@ -291,7 +291,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_mRendererer.material.SetFloat("Highlight", 1);
             StopAllCoroutines();
-            m_hitbox.SetInvulnerability(false);
+            //m_hitbox.SetInvulnerability(false);
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
@@ -340,7 +340,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.attack2_loop, true);
             var bounceDir = new Vector2(m_info.attack2Velocity.x * transform.localScale.x, m_info.attack2Velocity.y);
             m_character.physics.SetVelocity(bounceDir);
-            m_hitbox.SetInvulnerability(true);
+            m_flinchHandle.gameObject.SetActive(false);
+            //m_hitbox.SetInvulnerability(true);
             //m_hitbox.gameObject.SetActive(false);
             yield return new WaitForSeconds(m_info.attack2AirTime);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -355,7 +356,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             }
-            m_hitbox.SetInvulnerability(false);
+            m_flinchHandle.gameObject.SetActive(true);
+            //m_hitbox.SetInvulnerability(false);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
