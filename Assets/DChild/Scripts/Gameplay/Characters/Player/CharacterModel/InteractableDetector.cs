@@ -1,5 +1,4 @@
-﻿using DChild.Gameplay.Environment;
-using DChild.Gameplay.Environment.Interractables;
+﻿using DChild.Gameplay.Environment.Interractables;
 using Holysoft.Event;
 using Sirenix.Utilities;
 using System.Collections.Generic;
@@ -35,14 +34,17 @@ namespace DChild.Gameplay.Characters.Players
 
         private void CallInteractableDetectedEvent(IButtonToInteract interactable)
         {
-            if (interactable.showPrompt)
+            if(interactable != null)
             {
-                using (Cache<DetectedInteractableEventArgs> cacheEvent = Cache<DetectedInteractableEventArgs>.Claim())
+                if (interactable.showPrompt)
                 {
-                    cacheEvent.Value.Initialize(interactable);
-                    InteractableDetected?.Invoke(this, cacheEvent.Value);
-                    cacheEvent.Release();
-                } 
+                    using (Cache<DetectedInteractableEventArgs> cacheEvent = Cache<DetectedInteractableEventArgs>.Claim())
+                    {
+                        cacheEvent.Value.Initialize(interactable);
+                        InteractableDetected?.Invoke(this, cacheEvent.Value);
+                        cacheEvent.Release();
+                    }
+                }
             }
         }
 
