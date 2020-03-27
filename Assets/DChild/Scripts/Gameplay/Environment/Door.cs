@@ -54,6 +54,11 @@ namespace DChild.Gameplay.Environment.Interractables
 
         public void SetAsOpen(bool open)
         {
+            if (m_animator == null)
+            {
+                m_animator = GetComponentInChildren<Animator>();
+            }
+
             m_isOpen = open;
             if (m_multiDirectionParameter != string.Empty)
             {
