@@ -443,6 +443,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             //transform.position = new Vector2(transform.position.x, m_groundPosition);
             m_stickToGround = true;
+            m_seedLaunchFX.Stop();
             m_deathFX.Play();
             StartCoroutine(LeapStickToGroundRoutine(m_groundPosition));
             m_movement.Stop();
@@ -705,7 +706,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_moveAnim = m_info.move.animation;
             m_moveSpeed = m_info.move.speed;
             m_targetPositions = new List<Vector2>();
-            m_groundPosition = transform.position.y;
 
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
@@ -770,6 +770,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 case Attack.Attack2:
                                     //m_animation.EnableRootMotion(true, false);
                                     //m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                                    m_groundPosition = transform.position.y;
                                     StartCoroutine(LeapAttackRoutine());
                                     StartCoroutine(LeapStickToGroundRoutine(m_groundPosition));
                                     break;
