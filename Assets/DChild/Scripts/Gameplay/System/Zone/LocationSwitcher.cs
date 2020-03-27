@@ -26,11 +26,6 @@ namespace DChild.Gameplay.Systems
 
         public Vector3 promptPosition => m_handle.promptPosition;
 
-        public void Interact()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void Interact(Character character)
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
