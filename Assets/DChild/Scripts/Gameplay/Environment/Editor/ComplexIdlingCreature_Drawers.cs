@@ -26,9 +26,8 @@ namespace DChildEditor.Gameplay.Environment
 
             var gameObject = (target as ComplexIdlingCreature).gameObject;
             var currentPosition = gameObject.transform.position;
-            var idlingProp = Tree.GetPropertyAtPath("m_idlingBehaviour");
+            var idlingProp = Tree.GetPropertyAtUnityPath("m_idlingBehaviour");
             var behaviours = (ComplexIdlingCreature.IBehaviour[])idlingProp.ValueEntry.WeakSmartValue;
-
             for (int i = 0; i < behaviours.Length; i++)
             {
                 if (behaviours[i] is ComplexIdlingCreature.MovingBehaviour)
@@ -54,7 +53,7 @@ namespace DChildEditor.Gameplay.Environment
             var objectName = gameObject.name;
             var currentPosition = gameObject.transform.position;
             movementList.Add(new Info() { destination = currentPosition });
-            var idlingProp = Tree.GetPropertyAtPath("m_idlingBehaviour");
+            var idlingProp = Tree.GetPropertyAtUnityPath("m_idlingBehaviour");
             var behaviours = (ComplexIdlingCreature.IBehaviour[])idlingProp.ValueEntry.WeakSmartValue;
 
             for (int i = 0; i < behaviours.Length; i++)

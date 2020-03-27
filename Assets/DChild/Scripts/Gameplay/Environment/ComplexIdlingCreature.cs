@@ -9,11 +9,11 @@ namespace DChild.Gameplay.Environment
 {
     public class ComplexIdlingCreature : SerializedMonoBehaviour
     {
+        #region Behaviours
         public interface IBehaviour
         {
-
             bool isDone { get; }
-            void Initialize(GameObject rootObject, SpineAnimation animation, ref float timer, ref Instruction instruction, bool snap = false);
+            void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false);
             void Update(GameObject rootObject, ref float timer);
 
 #if UNITY_EDITOR
@@ -62,17 +62,16 @@ namespace DChild.Gameplay.Environment
             protected bool m_isDone;
             [ShowInInspector, ReadOnly, PropertyOrder(100)]
             protected bool m_isActive;
-            private Instruction m_instruction;
 
             public bool isDone => m_isDone;
 
-            public virtual void Initialize(GameObject rootObject, SpineAnimation animation, ref float timer, ref Instruction instruction, bool snap = false)
+            public virtual void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
             {
                 animation.SetAnimation(0, m_animation, m_loop, snap ? 0 : m_mixDuration);
                 timer = 0;
                 m_isActive = true;
                 m_isDone = false;
-                instruction = m_instruction;
+                instruction.isValid = false;
             }
 
             public abstract void Update(GameObject rootObject, ref float timer);
@@ -114,10 +113,10 @@ namespace DChild.Gameplay.Environment
             public string animation { get => m_animation; }
 #endif
 
-            public override void Initialize(GameObject rootObject, SpineAnimation animation, ref float timer, ref Instruction instruction, bool snap = false)
+            public override void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
             {
                 m_origin = rootObject.transform.position;
-                base.Initialize(rootObject, animation, ref timer, ref instruction, snap);
+                base.Initialize(rootObject, animation, instruction, ref timer, snap);
             }
 
             public override void Update(GameObject rootObject, ref float timer)
@@ -145,9 +144,9 @@ namespace DChild.Gameplay.Environment
             private SpineAnimation m_animationReference;
             private Transform m_transform;
 
-            public override void Initialize(GameObject rootObject, SpineAnimation animation, ref float timer, ref Instruction instruction, bool snap = false)
+            public override void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
             {
-                base.Initialize(rootObject, animation, ref timer, ref instruction, snap);
+                base.Initialize(rootObject, animation, instruction, ref timer, snap);
                 m_animationReference = animation;
                 m_animationReference.animationState.Complete += OnComplete;
                 m_transform = rootObject.transform;
@@ -174,18 +173,21 @@ namespace DChild.Gameplay.Environment
         [System.Serializable]
         public class RedirectionBehaviour : IBehaviour
         {
-            [SerializeField, MinValue(0)]
+            [SerializeField]
+            private bool m_overrideBehaviourIndex;
+            [SerializeField, MinValue(0), ShowIf("m_overrideBehaviourIndex")]
             private int m_goToBehaviourIndex;
+            [SerializeField]
+            private bool m_isReacting;
 
             public bool isDone => true;
 
-            public void Initialize(GameObject rootObject, SpineAnimation animation, ref float timer, ref Instruction instruction, bool snap = false)
+            public void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
             {
-                instruction = new Instruction
-                {
-                    behaviourIndex = m_goToBehaviourIndex,
-                    isValid = true
-                };
+                instruction.useCurrentIndex = !m_overrideBehaviourIndex;
+                instruction.behaviourIndex = m_goToBehaviourIndex;
+                instruction.isReacting = m_isReacting;
+                instruction.isValid = true;
             }
 
 #if UNITY_EDITOR
@@ -202,32 +204,164 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-        public struct Instruction
+        public class TeleportBehaviour : IBehaviour
+        {
+            [SerializeField]
+            private Vector3 m_destination;
+            [SerializeField]
+            private Vector3 m_scale = Vector3.one;
+
+            public bool isDone => true;
+
+            public void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
+            {
+                var transform = rootObject.transform;
+                transform.position = m_destination;
+                transform.localScale = m_scale;
+            }
+
+#if UNITY_EDITOR
+            [SerializeField, HideInInspector]
+            private int m_index;
+
+            public void Set(SkeletonDataAsset skeletonComponent, int index)
+            {
+                m_index = index;
+            }
+#endif
+            public void Update(GameObject rootObject, ref float timer)
+            {
+            }
+        }
+
+        [TypeInfoBox("Behaviour Should End here")]
+        public class DisappearBehaviour : IBehaviour
+        {
+            public bool isDone => true;
+
+            public void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
+            {
+                rootObject.SetActive(false);
+            }
+
+#if UNITY_EDITOR
+            [SerializeField, HideInInspector]
+            private int m_index;
+
+            public void Set(SkeletonDataAsset skeletonComponent, int index)
+            {
+                m_index = index;
+            }
+#endif
+            public void Update(GameObject rootObject, ref float timer)
+            {
+            }
+        }
+
+        #endregion
+
+        [System.Serializable]
+        public class BehaviourList : IBehaviour
+        {
+            [SerializeField, OnValueChanged("UpdateReference"), ListDrawerSettings(ShowIndexLabels = true)]
+            private IBehaviour[] m_behaviours;
+
+            private int m_currentIndex;
+            private IBehaviour m_currentBehaviour;
+            private GameObject m_rootObject;
+            private SpineAnimation m_animation;
+            private Instruction m_instruction;
+            private SkeletonDataAsset m_skeletonComponent;
+
+            public bool isDone => m_currentIndex == m_behaviours.Length - 1 && m_behaviours[m_currentIndex].isDone;
+
+            public void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
+            {
+                m_rootObject = rootObject;
+                m_animation = animation;
+                timer = 0;
+                m_instruction = instruction;
+                m_currentIndex = 0;
+                m_currentBehaviour = m_behaviours[m_currentIndex];
+                m_currentBehaviour.Initialize(rootObject, m_animation, m_instruction, ref timer);
+            }
+
+#if UNITY_EDITOR
+            public void Set(SkeletonDataAsset skeletonComponent, int index)
+            {
+                m_skeletonComponent = skeletonComponent;
+                for (int i = 0; i < m_behaviours.Length; i++)
+                {
+                    m_behaviours[i].Set(skeletonComponent, i);
+                }
+            }
+
+            private void UpdateReference()
+            {
+
+                for (int i = 0; i < m_behaviours.Length; i++)
+                {
+                    m_behaviours[i].Set(m_skeletonComponent, i);
+                }
+            }
+
+#endif
+
+            public void Update(GameObject rootObject, ref float timer)
+            {
+                if (m_currentBehaviour.isDone)
+                {
+                    if (m_currentIndex < m_behaviours.Length)
+                    {
+                        m_currentIndex++;
+                        m_currentBehaviour = m_behaviours[m_currentIndex];
+                        m_currentBehaviour.Initialize(rootObject, m_animation, m_instruction, ref timer);
+                    }
+                }
+                else
+                {
+                    m_currentBehaviour.Update(rootObject, ref timer);
+                }
+            }
+        }
+
+        public class Instruction
         {
             public int behaviourIndex;
+            public bool useCurrentIndex;
+            public bool isReacting;
             public bool isValid;
         }
 
         [SerializeField, OnValueChanged("UpdateReference")]
         private SpineAnimation m_spineAnimation;
-        [SerializeField, OnValueChanged("UpdateReference"), ListDrawerSettings(ShowIndexLabels = true)]
+        [SerializeField, OnValueChanged("UpdateReference"), ListDrawerSettings(ShowIndexLabels = true), TabGroup("Idling")]
         private IBehaviour[] m_idlingBehaviour;
+        [SerializeField, OnValueChanged("UpdateReference"), ListDrawerSettings(ShowIndexLabels = true, NumberOfItemsPerPage = 1), TabGroup("Reacting")]
+        private IBehaviour[] m_reactBehaviour;
         private bool m_isReacting;
         private float m_timer;
         private IBehaviour m_currentBehaviour;
 
         private int m_idlingBehaviourIndex;
+        private int m_reactingBehaviourIndex;
         private Instruction m_instruction;
 
+
+        [Button, HideInEditorMode]
         public void React()
         {
-
+            m_isReacting = true;
+            m_reactingBehaviourIndex = UnityEngine.Random.Range(0, m_reactBehaviour.Length);
+            m_currentBehaviour = m_reactBehaviour[m_reactingBehaviourIndex];
+            m_currentBehaviour?.Initialize(gameObject, m_spineAnimation, m_instruction, ref m_timer);
         }
 
         private void Awake()
         {
             m_timer = 0f;
             m_idlingBehaviourIndex = 0;
+            m_instruction = new Instruction();
             if (m_idlingBehaviour.Length > 0)
             {
                 m_currentBehaviour = m_idlingBehaviour[m_idlingBehaviourIndex];
@@ -236,7 +370,7 @@ namespace DChild.Gameplay.Environment
 
         private void Start()
         {
-            m_currentBehaviour?.Initialize(gameObject, m_spineAnimation, ref m_timer, ref m_instruction, true);
+            m_currentBehaviour?.Initialize(gameObject, m_spineAnimation, m_instruction, ref m_timer, true);
         }
 
         private void LateUpdate()
@@ -245,22 +379,47 @@ namespace DChild.Gameplay.Environment
             {
                 if (m_isReacting)
                 {
-                    //Do Something;
+                    if (m_instruction.isValid && m_instruction.isReacting == false)
+                    {
+                        m_isReacting = false;
+                        if (m_instruction.useCurrentIndex == false)
+                        {
+                            m_idlingBehaviourIndex = m_instruction.behaviourIndex;
+                        }
+                        m_currentBehaviour = m_idlingBehaviour[m_idlingBehaviourIndex];
+                    }
                 }
                 else
                 {
                     if (m_instruction.isValid)
                     {
-                        m_idlingBehaviourIndex = m_instruction.behaviourIndex;
-                        m_currentBehaviour = m_idlingBehaviour[m_idlingBehaviourIndex];
+                        m_isReacting = m_instruction.isReacting;
+
+                        if (m_isReacting)
+                        {
+                            if (m_instruction.useCurrentIndex == false)
+                            {
+                                m_reactingBehaviourIndex = m_instruction.behaviourIndex;
+                            }
+                            m_currentBehaviour = m_reactBehaviour[m_reactingBehaviourIndex];
+                        }
+                        else
+                        {
+                            if (m_instruction.useCurrentIndex == false)
+                            {
+                                m_idlingBehaviourIndex = m_instruction.behaviourIndex;
+                            }
+                            m_currentBehaviour = m_idlingBehaviour[m_idlingBehaviourIndex];
+                        }
                     }
                     else
                     {
                         m_idlingBehaviourIndex = (int)Mathf.Repeat(m_idlingBehaviourIndex + 1, m_idlingBehaviour.Length);
                         m_currentBehaviour = m_idlingBehaviour[m_idlingBehaviourIndex];
                     }
-                    m_currentBehaviour.Initialize(gameObject, m_spineAnimation, ref m_timer, ref m_instruction);
                 }
+                m_currentBehaviour.Initialize(gameObject, m_spineAnimation, m_instruction, ref m_timer);
+                Debug.Log("Done");
             }
             else
             {
@@ -268,12 +427,18 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+#if UNITY_EDITOR
         private void UpdateReference()
         {
             for (int i = 0; i < m_idlingBehaviour.Length; i++)
             {
                 m_idlingBehaviour[i].Set(m_spineAnimation.skeletonAnimation.SkeletonDataAsset, i);
             }
+            for (int i = 0; i < m_reactBehaviour.Length; i++)
+            {
+                m_reactBehaviour[i].Set(m_spineAnimation.skeletonAnimation.SkeletonDataAsset, i);
+            }
         }
+#endif
     }
 }
