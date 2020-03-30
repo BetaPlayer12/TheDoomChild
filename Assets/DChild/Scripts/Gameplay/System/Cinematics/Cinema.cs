@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using CinemachineRuleOfThirds;
+﻿using System.Collections.Generic;
 using DChild.Gameplay.Cinematics.Cameras;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;

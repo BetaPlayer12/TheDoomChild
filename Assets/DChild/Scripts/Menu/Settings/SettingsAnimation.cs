@@ -1,4 +1,4 @@
-﻿using CinemachineRuleOfThirds;
+﻿using Cinemachine;
 using Holysoft.UI;
 using UnityEngine;
 using UnityEngine.Playables;

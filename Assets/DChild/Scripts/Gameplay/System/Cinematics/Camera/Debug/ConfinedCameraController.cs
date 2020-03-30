@@ -1,7 +1,7 @@
 ﻿using Holysoft;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using CinemachineRuleOfThirds;
+using Cinemachine;
 
 
 namespace DChildDebug.Gameplay.Camera
