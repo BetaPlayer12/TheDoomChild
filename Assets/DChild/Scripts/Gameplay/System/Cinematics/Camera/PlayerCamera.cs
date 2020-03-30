@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Holysoft;
-using Cinemachine;
+using CinemachineRuleOfThirds;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

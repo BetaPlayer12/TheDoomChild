@@ -1,4 +1,4 @@
-﻿using Cinemachine;
+﻿using CinemachineRuleOfThirds;
 using DChild.Gameplay.Cinematics.Cameras;
 using UnityEngine;
 

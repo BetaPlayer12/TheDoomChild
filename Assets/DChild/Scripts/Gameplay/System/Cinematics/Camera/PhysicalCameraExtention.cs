@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Cinemachine;
+using CinemachineRuleOfThirds;
 using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Cinematics.Cameras

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Cinemachine;
+using CinemachineRuleOfThirds;
 
 namespace DChild.Gameplay.Cinematics.Cameras
 {

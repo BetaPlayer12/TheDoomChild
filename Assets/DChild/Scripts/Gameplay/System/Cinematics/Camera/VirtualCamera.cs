@@ -1,4 +1,4 @@
-﻿using Cinemachine;
+﻿using CinemachineRuleOfThirds;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

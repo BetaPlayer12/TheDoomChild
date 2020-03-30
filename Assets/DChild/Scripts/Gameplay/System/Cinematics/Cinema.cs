@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
+using CinemachineRuleOfThirds;
 using DChild.Gameplay.Cinematics.Cameras;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
@@ -36,7 +36,6 @@ namespace DChild.Gameplay.Cinematics
         public Camera mainCamera => m_mainCamera;
 
         public void SetDefaultCam(IVirtualCamera vCam) => m_defaultCam = vCam;
-
 
         public void TransistionTo(IVirtualCamera vCam)
         {
@@ -84,12 +83,10 @@ namespace DChild.Gameplay.Cinematics
             m_trackingCameras.Add(trackingCamera);
         }
 
-
         public void RemoveTracking(ITrackingCamera trackingCamera)
         {
             m_trackingCameras.Remove(trackingCamera);
         }
-
 
         public void Register(ITrackingCamera trackingCamera)
         {
