@@ -70,8 +70,11 @@ namespace PlayerNew
             }
             if(onWallDetected && !wallGrounded && !collisionState.grounded)
             {
-                forceX = 250;
-                forceY = 250;
+                //forceX = 250;
+                //forceY = 250;
+                //forceX = 10;
+                //forceY = 50;
+                Debug.Log("wall jump");
             }
 
 
@@ -105,7 +108,7 @@ namespace PlayerNew
                 else
                     body2d.velocity = new Vector2(forceX * -1f, forceY);
 
-                Debug.Log(body2d.velocity);
+               
             }
 
         }
