@@ -56,41 +56,88 @@ namespace DChild.Gameplay.Inventories
             OnAmountSet?.Invoke(this, new CurrencyUpdateEventArgs(value));
         }
 
-        public void AddItem(ItemData item)
+        public void AddItem(ItemData item, uint count = 1)
         {
+            var intCount = (int)count;
             //TODO: Items are not yet categorized
             if (item is SoulCrystal)
             {
-                m_soulCrystals.AddItem(item, 1);
+                m_soulCrystals.AddItem(item, intCount);
             }
             else
             {
-                m_items.AddItem(item, 1);
+                switch (item.category)
+                {
+                    case ItemCategory.Consumable:
+                        m_items.AddItem(item, intCount);
+                        break;
+                    case ItemCategory.Quest:
+                    case ItemCategory.Key:
+                        m_questItems.AddItem(item, intCount);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
-        public void RemoveItem(ItemData item)
+        public void RemoveItem(ItemData item, uint count = 1)
         {
+            var intCount = (int)count * -1;
             //TODO: Items are not yet categorized
             if (item is SoulCrystal)
             {
-                m_soulCrystals.AddItem(item, -1);
+                m_soulCrystals.AddItem(item, intCount);
             }
             else
             {
-                m_items.AddItem(item, -1);
+                switch (item.category)
+                {
+                    case ItemCategory.Consumable:
+                        m_items.AddItem(item, intCount);
+                        break;
+                    case ItemCategory.Quest:
+                    case ItemCategory.Key:
+                        m_questItems.AddItem(item, intCount);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
-        public int GetCurrentAmount(ItemData item) => m_items.GetCurrentAmount(item);
+        public int GetCurrentAmount(ItemData item)
+        {
+            switch (item.category)
+            {
+                case ItemCategory.Consumable:
+                    return m_items.GetCurrentAmount(item);
+                case ItemCategory.Quest:
+                case ItemCategory.Key:
+                    return m_questItems.GetCurrentAmount(item);
+                default:
+                    return 0;
+            }
+        }
 
         public bool HasSpaceFor(ItemData item) => m_items.HasSpaceFor(item);
 
         public void AddItem(ItemData item, int count)
         {
-           if(count != 0)
+            if (count != 0)
             {
-                m_items.AddItem(item, count);
+                switch (item.category)
+                {
+                    case ItemCategory.Consumable:
+                        m_items.AddItem(item, count);
+                        break;
+                    case ItemCategory.Quest:
+                    case ItemCategory.Key:
+                        m_questItems.AddItem(item, count);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

@@ -164,8 +164,6 @@ namespace DChild.Serialization
             }
 #endif
 
-
-
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
         }
