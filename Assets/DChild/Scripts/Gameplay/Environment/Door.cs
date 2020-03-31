@@ -27,9 +27,9 @@ namespace DChild.Gameplay.Environment.Interractables
         [ShowInInspector, OnValueChanged("OnStateChange")]
         private bool m_isOpen;
         [SerializeField]
-        private string m_multiDirectionParameter;
-        [SerializeField]
         private bool m_multiDirectionParameterValue;
+        [SerializeField,ShowIf("m_multiDirectionParameterValue")]
+        private string m_multiDirectionParameter;
         private Animator m_animator;
 
         public void Open()

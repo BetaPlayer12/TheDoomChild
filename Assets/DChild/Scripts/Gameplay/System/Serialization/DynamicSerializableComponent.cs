@@ -37,7 +37,11 @@ namespace DChild.Serialization
                 {
                     return;
                 }
-                m_component.Load(m_multiSceneData.GetData<ISaveData>());
+                var data = m_multiSceneData.GetData<ISaveData>();
+                if (data != null)
+                {
+                    m_component.Load(data);
+                }
             }
         }
 
