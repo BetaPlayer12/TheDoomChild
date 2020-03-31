@@ -481,7 +481,8 @@ GameObject:
   - component: {fileID: 2108520188}
   - component: {fileID: 9157246598156621875}
   - component: {fileID: 6510747629855287798}
-  - component: {fileID: 8916035966717308169}
+  - component: {fileID: 4044830908896424797}
+  - component: {fileID: 7444785728418272536}
   m_Layer: 16
   m_Name: Player
   m_TagString: Untagged
@@ -748,7 +749,7 @@ MonoBehaviour:
   jumpSpeed: 49
   jumpDelay: 0.2
   jumpCount: 2
-  crouch: {fileID: 8916035966717308169}
+  crouch: {fileID: 0}
   longJumpDelay: 0.07
   longJumpMultiplier: 1.45
   velocityY: 0
@@ -770,6 +771,8 @@ MonoBehaviour:
   dissableScripts:
   - {fileID: 6127085214049875194}
   - {fileID: 251286694}
+  - {fileID: 965161050}
+  - {fileID: 1405919478}
   enableOnlyScript: []
   onWallDetected: 0
   wallSticking: 0
@@ -796,7 +799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputButtons: 06000000
   dissableScripts:
-  - {fileID: 8916035966717308169}
+  - {fileID: 4044830908896424797}
   - {fileID: 922925365}
   - {fileID: 251286694}
   enableOnlyScript: []
@@ -823,7 +826,7 @@ MonoBehaviour:
   - {fileID: 6127085214049875194}
   - {fileID: 7567338640060585551}
   - {fileID: 922925365}
-  - {fileID: 8916035966717308169}
+  - {fileID: 4044830908896424797}
   enableOnlyScript: []
   timeBtwnAtck: 0.2
   attackingTime: 2
@@ -875,7 +878,7 @@ MonoBehaviour:
   - {fileID: 6127085214049875194}
   - {fileID: 922925365}
   - {fileID: 7567338640060585551}
-  - {fileID: 8916035966717308169}
+  - {fileID: 6510747629855287798}
   enableOnlyScript: []
   deathEarthShakerHelicopter: {fileID: 1542229904964130573}
   deathEarthShakerPreloop: {fileID: 6183892220795103268}
@@ -904,7 +907,7 @@ MonoBehaviour:
   - {fileID: 922925365}
   - {fileID: 6127085214049875194}
   - {fileID: 7567338640060585550}
-  - {fileID: 8916035966717308169}
+  - {fileID: 4044830908896424797}
   - {fileID: 251286694}
   enableOnlyScript: []
   chargingAttack: 0
@@ -970,7 +973,7 @@ MonoBehaviour:
   dissableScripts:
   - {fileID: 7567338640060585551}
   - {fileID: 922925365}
-  - {fileID: 8916035966717308169}
+  - {fileID: 0}
   - {fileID: 1086033433}
   - {fileID: 7567338640060585550}
   - {fileID: 251286694}
@@ -984,7 +987,7 @@ MonoBehaviour:
   ledgeClimbYOffset1: 9
   ledgeClimbXOffset2: 3
   ledgeClimbYOffset2: 9
---- !u!114 &8916035966717308169
+--- !u!114 &4044830908896424797
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -993,7 +996,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7567338640060585527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca91cc39d98d02438ed3bcaa0e4cad3, type: 3}
+  m_Script: {fileID: 11500000, guid: 0100000000000000a0b1daed00000000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputButtons: 03000000
@@ -1001,8 +1004,24 @@ MonoBehaviour:
   - {fileID: 6127085214049875194}
   - {fileID: 922925365}
   enableOnlyScript: []
-  groundsmash: {fileID: 965161050}
+  groundsmash: {fileID: 0}
   crouching: 0
+--- !u!114 &7444785728418272536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7567338640060585527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ed3b2f83d6fb2a408260ca2289246ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputButtons: 02000000
+  dissableScripts: []
+  enableOnlyScript: []
+  m_interactableDetector: {fileID: 0}
 --- !u!1 &8518109723057449616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,11 +1132,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9075859532339196397, guid: 5cba835612e90014b96bed1aff089d23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 9075859532757680359, guid: 5cba835612e90014b96bed1aff089d23,
         type: 3}
       propertyPath: m_followThisTransformScaleX
       value: 
       objectReference: {fileID: 1443909737}
+    - target: {fileID: 9075859532861275805, guid: 5cba835612e90014b96bed1aff089d23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9075859533792336882, guid: 5cba835612e90014b96bed1aff089d23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cba835612e90014b96bed1aff089d23, type: 3}
 --- !u!95 &9075859533659057754 stripped
