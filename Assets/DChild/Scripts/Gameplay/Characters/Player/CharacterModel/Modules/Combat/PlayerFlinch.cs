@@ -15,8 +15,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private CollisionState m_collionState;
         private Rigidbody2D m_physics;
+        [SerializeField]
         private Animator m_animator;
+
         private string m_flinch;
+
+        private void Start()
+        {
+            m_physics = GetComponentInParent<Rigidbody2D>();
+        }
 
         public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
@@ -32,8 +39,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 knockBackDirection.y = -directionToSource.y;
             }
-            m_physics.AddForce(knockBackDirection * m_knockBackPower, ForceMode2D.Impulse);
-            m_animator.SetTrigger(m_flinch);
+
+            //m_physics.AddForce(knockBackDirection * m_knockBackPower, ForceMode2D.Impulse);
+            m_physics.velocity = Vector2.zero;
+            m_physics.AddForce(new Vector2(-7000.0f, 2000.0f), ForceMode2D.Force);
+            m_animator.SetTrigger("Flinch");
+           
         }
 
         public void Initialize(ComplexCharacterInfo info)

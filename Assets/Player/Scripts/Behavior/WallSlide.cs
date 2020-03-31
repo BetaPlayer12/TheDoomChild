@@ -68,7 +68,7 @@ namespace PlayerNew
                 forceX = 10;
                 forceY = 50;
             }
-            if(onWallDetected && !wallGrounded)
+            if(onWallDetected && !wallGrounded && !collisionState.grounded)
             {
                 forceX = 250;
                 forceY = 250;
@@ -94,9 +94,9 @@ namespace PlayerNew
             }
 
             //jumping beside wall 
-            if ((onWallDetected || groundWallStick) && wallStickJump && wallStickJumpHold < 0.1f)
+            if ((onWallDetected || groundWallStick) && wallStickJump && wallStickJumpHold < 0.1f && !upHold)
             {
-                Debug.Log("Big jump");
+               
 
                 //facing left
                 if (!facing.isFacingRight)
@@ -104,6 +104,8 @@ namespace PlayerNew
                 //facing right
                 else
                     body2d.velocity = new Vector2(forceX * -1f, forceY);
+
+                Debug.Log(body2d.velocity);
             }
 
         }

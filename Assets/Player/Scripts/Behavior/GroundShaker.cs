@@ -16,6 +16,8 @@ namespace PlayerNew
         private ParticleSystem deathEarthShakerImpact;
         [SerializeField]
         private Collider2D m_groundShakerAttackCollider;
+        [SerializeField]
+        private WallSlide wallSlide;
 
         public float midAirDelay;
         public bool groundSmash;
@@ -46,6 +48,7 @@ namespace PlayerNew
                 groundSmash = true;
                 body2d.gravityScale = 0f;
                 ToggleScripts(false);
+                Debug.Log("ground shake");
                 StartCoroutine(GroundSmashDelayRoutine());
             }
             else
@@ -81,7 +84,9 @@ namespace PlayerNew
         IEnumerator GroundSmashDelayRoutine()
         {
             yield return new WaitForSeconds(midAirDelay);
+            body2d.gravityScale = defGravity;
             // body2d.gravityScale = defGravity * smashMultiplier;
+            Debug.Log(smashMultiplier);
             body2d.velocity = Vector2.zero;
             body2d.AddForce(new Vector2(body2d.velocity.x, -smashMultiplier), ForceMode2D.Force);
         }
@@ -89,10 +94,9 @@ namespace PlayerNew
 
         public void GroundSmashFinishAnimation()
         {
-
             groundSmash = false;
             body2d.velocity = Vector2.zero;
-            body2d.gravityScale = defGravity;
+            
             ToggleScripts(true);
             m_groundShakerAttackCollider.enabled = false;
             animator.SetBool("Attack", false);

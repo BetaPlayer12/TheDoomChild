@@ -22,7 +22,7 @@ namespace PlayerNew
         {
             facing = GetComponent<FaceDirection>();
         }
-        private void Update() {
+        private void FixedUpdate() {
             float facingDir = facing.isFacingRight ? 1f : -1f;
             var dash = inputState.GetButtonValue(inputButtons[0]);
             var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);
@@ -81,6 +81,7 @@ namespace PlayerNew
             body2d.velocity = Vector2.zero;
             body2d.AddForce(new Vector2(facingDir * dashForce, vel.y), ForceMode2D.Force);
             dashing = true;
+            //Debug.LogError("DashForce: " + dashForce);
         }
 
         IEnumerator FinishedDashRoutine()

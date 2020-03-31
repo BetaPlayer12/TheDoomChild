@@ -263,6 +263,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_movePointsGO;
         [SerializeField, TabGroup("Reference")]
         private Transform m_modelTransform;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_colliderDamageGO;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -350,7 +352,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            StopAllCoroutines();
+            m_animation.SetEmptyAnimation(0, 0);
             m_stateHandle.OverrideState(State.Phasing);
         }
 
@@ -576,6 +578,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FallingRoutine()
         {
+            m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_flinchHandle.gameObject.SetActive(false);
             m_hitbox.SetInvulnerability(true);
@@ -589,7 +592,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.Move(m_info.moveForward.speed * 3f);
                 yield return null;
             }
-            m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_hitbox.SetInvulnerability(false);
             m_animation.SetAnimation(0, m_info.fallRecoverAnimation, false);
@@ -831,6 +833,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            m_colliderDamageGO.SetActive(false);
             m_agent.Stop();
         }
 
@@ -950,7 +953,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            m_phaseHandle.MonitorPhase();
+            if (m_stateHandle.currentState != State.Phasing)
+            {
+                m_phaseHandle.MonitorPhase();
+            }
             switch (m_stateHandle.currentState)
             {
                 case State.Intro:
@@ -958,6 +964,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Phasing:
                     m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                    StopAllCoroutines();
                     //StartCoroutine(ChangePhaseRoutine());
                     StartCoroutine(ChangePhaseRoutine());
                     break;
@@ -1056,7 +1063,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
-
+            m_colliderDamageGO.SetActive(true);
         }
     }
 }

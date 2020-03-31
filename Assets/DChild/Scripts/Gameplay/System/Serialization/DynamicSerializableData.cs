@@ -15,7 +15,7 @@ namespace DChild.Serialization
         private SerializeID m_ID = new SerializeID(true);
         [SerializeField, ReadOnly]
         private bool m_isLocked;
-        [ShowInInspector,ReadOnly]
+        [ShowInInspector]
         private ISaveData m_data;
 
         public int ID => m_ID.value;

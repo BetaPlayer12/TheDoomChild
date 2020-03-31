@@ -6,6 +6,7 @@ namespace DChild
 {
     public class SpriteCycle : MonoBehaviour
     {
+#if UNITY_EDITOR
         [SerializeField, OnValueChanged("OnListChange")]
         private SpriteList m_list;
         [SerializeField]
@@ -13,7 +14,6 @@ namespace DChild
         [SerializeField, HideInInspector]
         private int m_currentIndex;
 
-#if UNITY_EDITOR
         private void OnListChange()
         {
             if (m_list != null && m_renderer != null)
@@ -27,7 +27,7 @@ namespace DChild
             }
         }
 
-        [Button,ShowIf("@m_list != null && m_renderer != null"),HorizontalGroup("Button")]
+        [Button, ShowIf("@m_list != null && m_renderer != null"), HorizontalGroup("Button")]
         private void Previous()
         {
             m_currentIndex = (int)Mathf.Repeat(m_currentIndex - 1, m_list.count);

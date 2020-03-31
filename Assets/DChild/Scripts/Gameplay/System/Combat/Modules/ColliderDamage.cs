@@ -110,7 +110,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             m_collider = GetComponent<Collider2D>();
             m_damageDealer = GetComponentInParent<IDamageDealer>();
@@ -171,7 +171,7 @@ namespace DChild.Gameplay.Combat
 
                 if (m_canDetectInteractables)
                 {
-                    collision.gameObject.GetComponentInParent<IInteractable>()?.Interact();
+                    InterractWith(collision.collider);
                 }
             }
         }
