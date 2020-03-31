@@ -6,6 +6,7 @@ using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Playables;
 
 namespace DChild.Gameplay.Combat
 {
@@ -25,19 +26,32 @@ namespace DChild.Gameplay.Combat
             public bool isTriggered => m_isTriggered;
         }
 
+        private enum PreFight
+        {
+            None,
+            Delay,
+            Cinematic
+        }
+
         [SerializeField]
         private Boss m_boss;
-        [SerializeField, MinValue(0)]
+        [SerializeField]
+        private PreFight m_prefight;
+        [SerializeField, MinValue(0.1f), ShowIf("@m_prefight == PreFight.Delay")]
         private float m_startDelay;
-        [SerializeField]
+        [SerializeField, ShowIf("@m_prefight == PreFight.Cinematic")]
+        private PlayableDirector m_cinematic;
+        [SerializeField, TabGroup("Upon Trigger")]
         private UnityEvent m_uponTrigger;
-        [SerializeField]
+        [SerializeField, TabGroup("On Defeat")]
         private UnityEvent m_onDefeat;
         private bool m_isTriggered;
 
-        private void Awake()
+        private (Damageable damageable, Character character) m_targetTuple;
+
+        private void OnCinematicStop(PlayableDirector obj)
         {
-            m_boss.GetComponent<Damageable>().Destroyed += OnBossKilled;
+            m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
         }
 
         private void OnBossKilled(object sender, EventActionArgs eventArgs)
@@ -51,6 +65,11 @@ namespace DChild.Gameplay.Combat
             m_boss.SetTarget(damageable, character);
         }
 
+        private void Awake()
+        {
+            m_boss.GetComponent<Damageable>().Destroyed += OnBossKilled;
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (m_isTriggered == false)
@@ -61,13 +80,19 @@ namespace DChild.Gameplay.Combat
                     if (target.CompareTag(Character.objectTag))
                     {
                         GameplaySystem.combatManager.MonitorBoss(m_boss);
-                        if (m_startDelay == 0)
+                        switch (m_prefight)
                         {
-                            m_boss.SetTarget(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
-                        }
-                        else
-                        {
-                            StartCoroutine(DelayedAwakeRoutine(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>()));
+                            case PreFight.None:
+                                m_boss.SetTarget(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
+                                break;
+                            case PreFight.Delay:
+                                StartCoroutine(DelayedAwakeRoutine(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>()));
+                                break;
+                            case PreFight.Cinematic:
+                                m_targetTuple = (collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
+                                m_cinematic.stopped += OnCinematicStop;
+                                m_cinematic.Play();
+                                break;
                         }
                         m_uponTrigger?.Invoke();
                         m_isTriggered = true;
@@ -75,6 +100,8 @@ namespace DChild.Gameplay.Combat
                 }
             }
         }
+
+
 
         public ISaveData Save() => new SaveData(m_isTriggered);
 
