@@ -247,6 +247,7 @@ namespace PlayerNew
 
         public void FinishAttack3()
         {
+            
             animator.SetBool("Slash1", false);
             animator.SetBool("Slash2", false);
             animator.SetBool("Slash3", false);
@@ -306,6 +307,7 @@ namespace PlayerNew
         private void FinishAttackAnim()
         {
 
+            Debug.Log("finish attack anim");
             attackCollider.enabled = false;
 
             m_forwardSlashAttackCollider.enabled = false;

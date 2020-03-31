@@ -13,7 +13,8 @@ namespace PlayerNew
         Down,
         Jump,
         Attack,
-        Dash
+        Dash,
+        Interact
     }
 
     public enum Condition

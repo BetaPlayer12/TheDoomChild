@@ -46,10 +46,9 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public void SetData(StatusEffectChanceData data)
         {
-            m_data = data;
-            m_statusInflictions.Clear();
             if (m_data != data)
             {
+                m_data = data;
                 CopyData();
             }
         }
