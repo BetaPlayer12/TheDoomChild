@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c39b4c90d0216f049a8fd894a5f04af3, type: 3}
-  m_Name: AlchemistBotAIData
+  m_Name: SkeletonWarriorAIData
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 103d1abd39fa27f43aa9eeb7a3a3489f, type: 2}
+    - {fileID: 11400000, guid: f45d94139c500354aabf294727556fcc, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -24,17 +24,17 @@ MonoBehaviour:
     SerializationNodes:
     - Name: m_info
       Entry: 7
-      Data: 0|DChild.Gameplay.Characters.Enemies.AlchemistBotAI+Info, Assembly-CSharp
+      Data: 0|DChild.Gameplay.Characters.Enemies.SkeletonWarriorAI+Info, Assembly-CSharp
     - Name: m_skeletonDataAsset
       Entry: 10
       Data: 0
     - Name: m_patrol
       Entry: 7
-      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.AlchemistBotAI+Info,
+      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.SkeletonWarriorAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: ALCHEMIST_BOT_Fly
+      Data: Move
     - Name: m_speed
       Entry: 4
       Data: 5
@@ -43,11 +43,11 @@ MonoBehaviour:
       Data: 
     - Name: m_move
       Entry: 7
-      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.AlchemistBotAI+Info,
+      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.SkeletonWarriorAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: ALCHEMIST_BOT_Fly
+      Data: Run
     - Name: m_speed
       Entry: 4
       Data: 20
@@ -56,54 +56,83 @@ MonoBehaviour:
       Data: 
     - Name: m_attack1
       Entry: 7
-      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.AlchemistBotAI+Info,
+      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.SkeletonWarriorAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: ALCHEMIST_BOT_Attack1
+      Data: Attack1
     - Name: m_range
       Entry: 4
-      Data: 1
+      Data: 7
     - Name: 
       Entry: 8
       Data: 
     - Name: m_attack2
       Entry: 7
-      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.AlchemistBotAI+Info,
+      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.SkeletonWarriorAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: ALCHEMIST_BOT_Attack2
+      Data: Attack2
     - Name: m_range
       Entry: 4
-      Data: 2
+      Data: 7
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_attack3
+      Entry: 7
+      Data: 5|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.SkeletonWarriorAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Attack3
+    - Name: m_range
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_runAttack
+      Entry: 7
+      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.SkeletonWarriorAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Run2
+    - Name: m_range
+      Entry: 4
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_runAttackDuration
+      Entry: 4
+      Data: 0.867
     - Name: m_attackCD
       Entry: 4
-      Data: 2.5
+      Data: 1
     - Name: m_patience
       Entry: 4
       Data: 10
     - Name: m_targetDistanceTolerance
       Entry: 4
-      Data: 15
-    - Name: m_detectionTime
-      Entry: 4
-      Data: 2
+      Data: 10
     - Name: m_idleAnimation
       Entry: 1
-      Data: ALCHEMIST_BOT_Idle
-    - Name: m_turnAnimation
+      Data: Idle
+    - Name: m_detectAnimation
       Entry: 1
-      Data: ALCHEMIST_BOT_Turn
-    - Name: m_deathAnimation
-      Entry: 1
-      Data: ALCHEMIST_BOT_Death
+      Data: Detects_Enemy
     - Name: m_flinchAnimation
       Entry: 1
-      Data: ALCHEMIST_BOT_Flinch
+      Data: Flinch
+    - Name: m_turnAnimation
+      Entry: 1
+      Data: Turn
+    - Name: m_deathAnimation
+      Entry: 1
+      Data: Death
     - Name: 
       Entry: 8
       Data: 
