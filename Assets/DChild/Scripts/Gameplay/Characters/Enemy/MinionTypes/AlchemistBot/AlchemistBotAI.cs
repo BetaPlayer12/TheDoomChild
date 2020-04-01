@@ -145,7 +145,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             //transform.localScale = new Vector3(m_chosenAttack == Attack.Attack2 ? -transform.localScale.x : transform.localScale.x, 1, 1);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.ApplyQueuedState();
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
@@ -188,7 +188,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.Cooldown);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -199,6 +199,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 GroundPosition()
         {
             RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            //if (hit.collider != null)
+            //{
+            //    return hit.point;
+            //}
+            return hit.point;
+        }
+
+        private Vector2 WallPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
             //if (hit.collider != null)
             //{
             //    return hit.point;
@@ -272,6 +282,18 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(3);
             m_canAttack2 = true;
             yield return null;
+        }
+
+        private void CalculateRunPath()
+        {
+            bool isRight = m_targetInfo.position.x >= transform.position.x;
+            var movePos = new Vector2(transform.position.x + (isRight ? -3 : 3), m_targetInfo.position.y + 10);
+            while (Vector2.Distance(transform.position, WallPosition()) <= 5)
+            {
+                movePos = new Vector2(movePos.x + 0.1f, movePos.y);
+                break;
+            }
+            m_agent.SetDestination(movePos);
         }
 
         private bool IsInRange(Vector2 position, float distance) => Vector2.Distance(position, m_character.centerMass.position) <= distance;
@@ -373,6 +395,21 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_turnState = State.Cooldown;
                         m_stateHandle.SetState(State.Turning);
+                    }
+                    else
+                    {
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
+                        {
+                            m_animation.EnableRootMotion(false, false);
+                            m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
+                            CalculateRunPath();
+                            m_agent.Move(m_info.move.speed);
+                        }
+                        else
+                        {
+                            m_agent.Stop();
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
+                        }
                     }
 
                     if (m_currentCD <= m_info.attackCD)
