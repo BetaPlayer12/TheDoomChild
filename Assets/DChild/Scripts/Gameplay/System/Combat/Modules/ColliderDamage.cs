@@ -12,7 +12,6 @@ using DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay.Combat
 {
-
     public abstract class ColliderDamage : MonoBehaviour
     {
         [System.Serializable]
@@ -172,7 +171,7 @@ namespace DChild.Gameplay.Combat
 
                 if (m_canDetectInteractables)
                 {
-                    collision.gameObject.GetComponentInParent<IInteractable>()?.Interact();
+                    InterractWith(collision.collider);
                 }
             }
         }

@@ -68,8 +68,8 @@ namespace PlayerNew
 
             if (!collisionState.grounded && collisionState.onWall && collisionState.onWallLeg)
             {
-                body2d.gravityScale = 0;
-                body2d.drag = 100;
+                //body2d.gravityScale = 0;
+                //body2d.drag = 100;
                 wallSticking = true;
                 wallGrounded = false;
             }

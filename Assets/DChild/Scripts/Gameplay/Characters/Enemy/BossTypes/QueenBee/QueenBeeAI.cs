@@ -18,7 +18,7 @@ using Spine.Unity.Modules;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Boss/QueenBee")]
-    public class QueenBeeAI : CombatAIBrain<QueenBeeAI.Info>, IBossPhaseInfo
+    public class QueenBeeAI : CombatAIBrain<QueenBeeAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -336,8 +336,6 @@ namespace DChild.Gameplay.Characters.Enemies
         //private float m_currentDroneSummonSpeed;
         float m_currentRecoverTime;
         bool m_isFinalPhase;
-
-        public int[] GetHealthPrecentagePhaseInfo() => m_info.phaseInfo.GetHealthPrecentageConditionInfo();
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -733,7 +731,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(2.25f);
                 m_animation.DisableRootMotion();
                 //m_character.physics.SetVelocity(Vector2.zero);
-                m_character.physics.SetVelocity(new Vector2(150f * transform.localScale.x, 0));
+                m_character.physics.AddForce(new Vector2(5f * transform.localScale.x, 0), ForceMode2D.Impulse);
                 yield return new WaitForSeconds(0.25f);
             }
             m_agent.Stop();
@@ -1067,7 +1065,5 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_colliderDamageGO.SetActive(true);
         }
-
-
     }
 }

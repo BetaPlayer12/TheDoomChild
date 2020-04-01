@@ -47,7 +47,7 @@ namespace DChild.Gameplay.Environment
 
         public void SetChange(bool value)
         {
-            if(m_hasChanged != value)
+            if (m_hasChanged != value)
             {
                 m_hasChanged = value;
                 if (m_hasChanged)
@@ -58,6 +58,18 @@ namespace DChild.Gameplay.Environment
                 {
                     m_default?.Invoke();
                 }
+            }
+        }
+
+        private void Awake()
+        {
+            if (m_hasChanged)
+            {
+                m_changed?.Invoke();
+            }
+            else
+            {
+                m_default?.Invoke();
             }
         }
 
