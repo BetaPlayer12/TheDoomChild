@@ -149,6 +149,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.PlayOneShot(m_Minion_Death_Sound_Clip);
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
+            StopAllCoroutines();
+            StartCoroutine(DetonateRoutine());
         }
 
         public void SetDirection(float direction)

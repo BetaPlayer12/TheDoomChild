@@ -213,7 +213,7 @@ namespace DChild.Gameplay
             //m_cinema.SetTrackingTarget(m_player.model);
             m_settings = GameSystem.settings?.gameplay ?? null;
             m_modifiers = new GameplayModifiers();
-            isGamePaused = false;
+            isGamePaused = true;
             if (m_campaignToLoad != null)
             {
                 m_campaignSerializer.SetSlot(m_campaignToLoad);

@@ -20,7 +20,6 @@ namespace DChild.Gameplay.Combat
         public override void SetData(AttackResistanceData data)
         {
             m_data = data;
-            m_resistance.Clear();
             if (m_resistance != null)
             {
                 m_resistance.Clear();

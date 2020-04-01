@@ -139,7 +139,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
-            var sizeMult = UnityEngine.Random.Range(25, 100) * .01f;
+            var sizeMult = UnityEngine.Random.Range(60, 120) * .01f;
             transform.localScale = new Vector2(transform.localScale.x * sizeMult, transform.localScale.y * sizeMult);
             //m_turnHandle.TurnDone += OnTurnDone;
             var deathAnim = UnityEngine.Random.Range(0, 2) == 1 ? m_info.deathAnimation : m_info.death2Animation;
