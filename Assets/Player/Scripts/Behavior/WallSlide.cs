@@ -65,13 +65,15 @@ namespace PlayerNew
             //set jumpForce if onWall and isGrounded
             if (onWallDetected && wallGrounded || groundWallStick && collisionState.onWallLeg && collisionState.grounded)
             {
-                forceX = 10;
-                forceY = 50;
+                //forceX = 10;
+                //forceY = 50;
             }
             if(onWallDetected && !wallGrounded && !collisionState.grounded)
             {
-                forceX = 250;
-                forceY = 250;
+                //forceX = 250;
+                //forceY = 250;
+              
+                Debug.Log("wall jump");
             }
 
 
@@ -85,10 +87,15 @@ namespace PlayerNew
                 if (wallStickDown)
                 {
                     velY *= slideMultiplier;
+                    body2d.gravityScale = 0;
+                    body2d.drag = 100;
 
-                }else if (wallStickUp)
+                }
+                else if (wallStickUp)
                 {
                     velY *= -slideMultiplier;
+                    body2d.gravityScale = 0;
+                    body2d.drag = 100;
                 }
                 body2d.velocity = new Vector2(body2d.velocity.x, velY);                               
             }
@@ -96,16 +103,12 @@ namespace PlayerNew
             //jumping beside wall 
             if ((onWallDetected || groundWallStick) && wallStickJump && wallStickJumpHold < 0.1f && !upHold)
             {
-               
-
                 //facing left
                 if (!facing.isFacingRight)
                     body2d.velocity = new Vector2(forceX, forceY);
                 //facing right
                 else
                     body2d.velocity = new Vector2(forceX * -1f, forceY);
-
-                Debug.Log(body2d.velocity);
             }
 
         }

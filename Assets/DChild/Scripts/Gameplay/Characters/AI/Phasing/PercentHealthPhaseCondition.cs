@@ -3,7 +3,6 @@ using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
@@ -19,13 +18,6 @@ namespace DChild.Gameplay.Characters.AI
         public IPhaseConditionHandle<T> CreateHandle(Character character)
         {
             return new PercentHealthPhaseConditionHandle<T>(character.GetComponentInChildren<Health>(), m_info);
-        }
-
-        public int[] GetHealthPrecentageConditionInfo()
-        {
-            var list = m_info.Values.ToList();
-            list.Sort((x, y) => x.CompareTo(y));
-            return list.ToArray();
         }
     }
 

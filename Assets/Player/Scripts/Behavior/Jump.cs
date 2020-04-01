@@ -67,7 +67,6 @@ namespace PlayerNew
             var vel = body2d.velocity;
             lastJumpTime = Time.time;
             body2d.velocity = new Vector2(vel.x, jumpSpeed);
-            Debug.Log("Second jump:" + body2d.velocity);
             body2d.sharedMaterial.friction = 0f;
 
 

@@ -56,10 +56,10 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
-            if (crouchBehavior.crouching && !jogBehavior.jogging)
-            {
-                inputState.absValX = 0;
-            }
+            //if (crouchBehavior.crouching && !jogBehavior.jogging)
+            //{
+            //    inputState.absValX = 0;
+            //}
             if (collisionState.grounded)
             {
                 JogAnimationState(0);
@@ -78,23 +78,23 @@ namespace PlayerNew
 
             }
 
-            if (crouchBehavior.crouching)
-            {
-                if(inputState.absValX > 0)
-                {
-                    capeAnimation.SetBool("CrouchMoving", true);
-                }
-                else
-                {
-                    capeAnimation.SetBool("CrouchMoving", false);
-                    capeAnimation.SetBool("CrouchIdle", true);
-                }
+            //if (crouchBehavior.crouching)
+            //{
+            //    if(inputState.absValX > 0)
+            //    {
+            //        capeAnimation.SetBool("CrouchMoving", true);
+            //    }
+            //    else
+            //    {
+            //        capeAnimation.SetBool("CrouchMoving", false);
+            //        capeAnimation.SetBool("CrouchIdle", true);
+            //    }
                 
-            }
-            else
-            {
-                capeAnimation.SetBool("CrouchIdle", false);
-            }
+            //}
+            //else
+            //{
+            //    capeAnimation.SetBool("CrouchIdle", false);
+            //}
 
             if (wallStickBehavior.groundWallStick)
             {
@@ -146,7 +146,7 @@ namespace PlayerNew
             }
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
-            CrouchAnimationState(crouchBehavior.crouching);
+           // CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);

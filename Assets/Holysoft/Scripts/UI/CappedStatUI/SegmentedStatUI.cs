@@ -24,12 +24,6 @@ namespace Holysoft.Gameplay.UI
 
             public void SetActive(bool isActive) => m_canvas.enabled = isActive;
 
-            public void SetMaxValue(int value)
-            {
-                m_maxValue = value;
-                m_ui.maxValue = m_maxValue;
-            }
-
             public void SetCurrentValue(float value)
             {
                 m_ui.currentValue = value;
@@ -38,10 +32,6 @@ namespace Holysoft.Gameplay.UI
 
         [SerializeField]
         private Segment[] m_segements;
-
-        public int segementCount => m_segements.Length;
-
-        public void SetMaxValueOfSegment(int index, int maxValue) => m_segements[index].SetMaxValue(maxValue);
 
         public override float maxValue
         {
