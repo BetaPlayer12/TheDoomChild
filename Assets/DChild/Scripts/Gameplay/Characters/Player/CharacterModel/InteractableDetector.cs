@@ -34,7 +34,7 @@ namespace DChild.Gameplay.Characters.Players
 
         private void CallInteractableDetectedEvent(IButtonToInteract interactable)
         {
-            if(interactable != null)
+            if (interactable != null)
             {
                 if (interactable.showPrompt)
                 {
@@ -60,15 +60,10 @@ namespace DChild.Gameplay.Characters.Players
                 var currentPosition = (Vector2)m_character.centerMass.position;
                 if (m_prevCharacterPosition != currentPosition)
                 {
-                    for (int i = m_objectsInRange.Count - 1; i >= 0; i--)
+                    if (m_objectsInRange.Contains(null))
                     {
-                        //Temporary. Will fix later
-                        if(m_objectsInRange[i].ToString() == "null")
-                        {
-                            m_objectsInRange.RemoveAt(i);
-                        }
+                        m_objectsInRange.RemoveAll(x => x == null);
                     }
-
                     float closestDistance = Vector2.Distance(currentPosition, m_objectsInRange[0].transform.position);
                     var closestObject = m_objectsInRange[0];
                     for (int i = 1; i < m_objectsInRange.Count; i++)
