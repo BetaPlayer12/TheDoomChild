@@ -90,11 +90,14 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (collision.TryGetComponentInParent(out IButtonToInteract interactableObject))
             {
-                m_objectsInRange.Add(interactableObject);
-                if (m_objectsInRange.Count == 1)
+                if (interactableObject.showPrompt)
                 {
-                    m_closestObject = interactableObject;
-                    CallInteractableDetectedEvent(interactableObject);
+                    m_objectsInRange.Add(interactableObject);
+                    if (m_objectsInRange.Count == 1)
+                    {
+                        m_closestObject = interactableObject;
+                        CallInteractableDetectedEvent(interactableObject);
+                    } 
                 }
             }
         }
@@ -103,11 +106,14 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (collision.TryGetComponentInParent(out IButtonToInteract interactableObject))
             {
-                m_objectsInRange.Remove(interactableObject);
-                if (m_objectsInRange.Count == 0)
+                if (interactableObject.showPrompt)
                 {
-                    m_closestObject = null;
-                    CallInteractableDetectedEvent(null);
+                    m_objectsInRange.Remove(interactableObject);
+                    if (m_objectsInRange.Count == 0)
+                    {
+                        m_closestObject = null;
+                        CallInteractableDetectedEvent(null);
+                    }
                 }
             }
         }

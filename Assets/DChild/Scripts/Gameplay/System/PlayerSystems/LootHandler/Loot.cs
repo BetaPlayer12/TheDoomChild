@@ -89,7 +89,7 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        private void OnTriggerStay2D(Collider2D collision)
+        protected virtual void OnTriggerStay2D(Collider2D collision)
         {
             if (m_hasBeenApplied == false && m_isPopping == false)
             {
