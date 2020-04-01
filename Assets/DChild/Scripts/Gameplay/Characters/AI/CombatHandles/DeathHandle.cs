@@ -14,12 +14,12 @@ namespace DChild.Gameplay.Characters
         private Damageable m_source;
         [SerializeField]
         private SpineRootAnimation m_animator;
+        [SerializeField, Spine.Unity.SpineAnimation]
+        private string m_animation;
         [SerializeField]
         private CountdownTimer m_bodyDuration;
         [SerializeField]
         private bool m_destroySource;
-
-        private string m_animation;
 
         public void SetAnimation(string animation)
         {

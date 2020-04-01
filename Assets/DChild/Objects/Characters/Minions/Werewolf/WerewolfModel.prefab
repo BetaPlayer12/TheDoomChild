@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818696280001029940}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.5, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0.2, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4959113692182116741}
@@ -833,7 +833,7 @@ GameObject:
   - component: {fileID: 6031322828457148897}
   - component: {fileID: 3850222742023119379}
   - component: {fileID: 2394974105964072425}
-  - component: {fileID: 2039384589991574104}
+  - component: {fileID: 8186763680047331835}
   m_Layer: 13
   m_Name: scratchAttackBB
   m_TagString: Untagged
@@ -905,7 +905,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_ignoreColliderList: []
---- !u!60 &2039384589991574104
+--- !u!60 &8186763680047331835
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1135,7 +1135,7 @@ CompositeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1318,6 +1318,53 @@ Transform:
   m_Father: {fileID: 6838728216547988283}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3585042207249355419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8408733039858407719}
+  - component: {fileID: 5740542756421793756}
+  m_Layer: 1
+  m_Name: SelfCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8408733039858407719
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3585042207249355419}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 6.65, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8965621756010896511}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &5740542756421793756
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3585042207249355419}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.5
 --- !u!1 &4811025356257950162
 GameObject:
   m_ObjectHideFlags: 0
@@ -1468,7 +1515,7 @@ GameObject:
   - component: {fileID: 3379587708804358223}
   - component: {fileID: 3489169922329858602}
   - component: {fileID: 4939020206157636040}
-  - component: {fileID: 4866739481062119419}
+  - component: {fileID: 3467288634091151422}
   m_Layer: 13
   m_Name: biteAttackBB
   m_TagString: Untagged
@@ -1540,7 +1587,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_ignoreColliderList: []
---- !u!60 &4866739481062119419
+--- !u!60 &3467288634091151422
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1683,6 +1730,7 @@ Transform:
   m_Children:
   - {fileID: 6838728215117275110}
   - {fileID: 8165326899231310127}
+  - {fileID: 8408733039858407719}
   m_Father: {fileID: 6838728216547988283}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1724,7 +1772,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6122721030224595292}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.26, y: 7.5, z: 0}
+  m_LocalPosition: {x: 2.26, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4959113692182116741}
@@ -2028,7 +2076,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6838728215117275111}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 0}
+  m_LocalPosition: {x: 0.2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8965621756010896511}
@@ -2048,7 +2096,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.5}
-  m_Size: {x: 5, y: 0.5}
+  m_Size: {x: 3.5, y: 0.5}
   m_Direction: 1
 --- !u!114 &6838728215117275104
 MonoBehaviour:
@@ -2066,7 +2114,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   m_collider: {fileID: 6838728215117275105}
-  m_recordsContactPoints: 0
+  m_recordsContactPoints: 1
 --- !u!114 &6844501203227221027
 MonoBehaviour:
   m_ObjectHideFlags: 0

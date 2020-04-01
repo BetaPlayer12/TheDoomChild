@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Characters;
+using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
 using System.Collections;
@@ -21,6 +22,10 @@ namespace DChild.Gameplay.Environment
         private TravelDirection m_exitDirection;
         [SerializeField]
         private Vector2 m_upVelocity;
+        [SerializeField]
+        private bool m_forceExitFacing;
+        [SerializeField, ShowIf("m_forceExitFacing")]
+        private HorizontalDirection m_exitFacing;
 
         public float transitionDelay => 1;
 
@@ -45,7 +50,7 @@ namespace DChild.Gameplay.Environment
                 {
                     characterPhysics.SetVelocity(Vector2.zero);
                     var exitVelocity = m_upVelocity;
-                    exitVelocity.x *= (int)character.facing;
+                    exitVelocity.x *= m_forceExitFacing ? (int)m_exitFacing : (int)character.facing;
                     characterPhysics.AddForce(exitVelocity, ForceMode2D.Impulse);
                 }
                 else

@@ -27,9 +27,9 @@ namespace DChild.Gameplay.Environment.Interractables
         [ShowInInspector, OnValueChanged("OnStateChange")]
         private bool m_isOpen;
         [SerializeField]
-        private string m_multiDirectionParameter;
-        [SerializeField]
         private bool m_multiDirectionParameterValue;
+        [SerializeField,ShowIf("m_multiDirectionParameterValue")]
+        private string m_multiDirectionParameter;
         private Animator m_animator;
 
         public void Open()
@@ -52,6 +52,30 @@ namespace DChild.Gameplay.Environment.Interractables
             m_animator.SetTrigger("Close");
         }
 
+        public void SetAsOpen(bool open)
+        {
+            if (m_animator == null)
+            {
+                m_animator = GetComponentInChildren<Animator>();
+            }
+
+            m_isOpen = open;
+            if (m_multiDirectionParameter != string.Empty)
+            {
+                m_animator.SetBool(m_multiDirectionParameter, m_multiDirectionParameterValue);
+            }
+            m_animator.SetTrigger("Force");
+            if (m_isOpen)
+            {
+               
+                m_animator.SetTrigger("Open");
+            }
+            else
+            {
+                m_animator.SetTrigger("Close");
+            }
+        }
+
         public virtual void Load(ISaveData data)
         {
             if(m_animator == null)
@@ -66,6 +90,7 @@ namespace DChild.Gameplay.Environment.Interractables
                 {
                     m_animator.SetBool(m_multiDirectionParameter, m_multiDirectionParameterValue);
                 }
+                m_animator.SetTrigger("Force");
                 m_animator.SetTrigger("Open");
             }
         }

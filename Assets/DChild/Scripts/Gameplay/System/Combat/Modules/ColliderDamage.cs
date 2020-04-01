@@ -12,7 +12,6 @@ using DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay.Combat
 {
-
     public abstract class ColliderDamage : MonoBehaviour
     {
         [System.Serializable]
