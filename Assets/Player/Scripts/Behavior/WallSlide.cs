@@ -16,6 +16,8 @@ namespace PlayerNew
 
         public bool upHold;
         public bool downHold;
+
+        public bool extraJump = false;
                 
 
         private void Start()
@@ -41,7 +43,7 @@ namespace PlayerNew
                 downHold = wallStickDown;
             }
 
-            
+           
 
             velocityX = body2d.velocity.x;
 
@@ -73,7 +75,7 @@ namespace PlayerNew
                 //forceX = 250;
                 //forceY = 250;
               
-                Debug.Log("wall jump");
+               
             }
 
 
@@ -97,6 +99,12 @@ namespace PlayerNew
                     body2d.gravityScale = 0;
                     body2d.drag = 100;
                 }
+
+                if (wallStickLeft || wallStickRight)
+                {
+                    extraJump = true;
+                }
+
                 body2d.velocity = new Vector2(body2d.velocity.x, velY);                               
             }
 
