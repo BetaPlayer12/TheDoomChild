@@ -20,6 +20,7 @@ namespace PlayerNew
         private WallSlide wallSlide;
 
         public float midAirDelay;
+        public float midAirAttackHold;
         public bool groundSmash;
         public float smashMultiplier;
         private float defGravity;
@@ -38,23 +39,17 @@ namespace PlayerNew
             var attack = inputState.GetButtonValue(inputButtons[1]);
             var attackHold = inputState.GetButtonHoldTime(inputButtons[1]);
 
+           
 
-
-            if (!collisionState.grounded && down && attack && !groundSmash)
+            if (!collisionState.grounded && down && attack && !groundSmash && attackHold > midAirAttackHold)
             {
-              
-
                 body2d.velocity = Vector2.zero;
                 groundSmash = true;
                 body2d.gravityScale = 0f;
                 ToggleScripts(false);
-                Debug.Log("ground shake");
                 StartCoroutine(GroundSmashDelayRoutine());
             }
-            else
-            {
-                // Debug.Log("grounded");
-            }
+            
         }
 
         private void StartEarthShakerFX()
