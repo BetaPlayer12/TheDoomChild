@@ -8,7 +8,7 @@ namespace PlayerNew
     {
         private InputState inputState;
         private Jog jogBehavior;
-        private Crouch crouchBehavior;
+        private Dock crouchBehavior;
         private WallStick wallStickBehavior;
         private WallGrab wallGrabBehavior;
         private LongJump longJumpBehavior;
@@ -35,7 +35,7 @@ namespace PlayerNew
             collisionState = GetComponent<CollisionState>();
             inputState = GetComponent<InputState>();
             jogBehavior = GetComponent<Jog>();
-            crouchBehavior = GetComponent<Crouch>();
+            crouchBehavior = GetComponent<Dock>();
             wallStickBehavior = GetComponent<WallStick>();
             wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();

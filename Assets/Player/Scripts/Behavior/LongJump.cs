@@ -7,7 +7,7 @@ namespace PlayerNew
     public class LongJump : Jump
     {
         [SerializeField]
-        private Crouch crouch;
+        private Dock crouch;
         [SerializeField]
         private WallSlide wallSlide;
 
