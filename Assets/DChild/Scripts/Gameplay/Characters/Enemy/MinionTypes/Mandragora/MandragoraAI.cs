@@ -99,6 +99,8 @@ namespace DChild.Gameplay.Characters.Enemies
             _COUNT
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -132,6 +134,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            m_selfCollider.SetActive(false);
 
             m_spineEventListener.Subscribe(m_info.attackEvent, SpawnProjectile);
             //GameplaySystem.SetBossHealth(m_character);
@@ -155,6 +158,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
+                m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_hasDetected)
                 {
                     m_hasDetected = true;
@@ -185,9 +189,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
                 m_hasDetected = false;
+                m_selfCollider.SetActive(false);
                 m_stateHandle.SetState(State.Burrowed);
             }
         }
@@ -225,6 +231,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.None;
             m_spriteMask.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
@@ -331,10 +338,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
+            GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             m_stateHandle.OverrideState(State.Burrowed);
             m_currentPatience = 0;
             m_enablePatience = false;
             m_hasDetected = false;
+            m_selfCollider.SetActive(false);
         }
     }
 }

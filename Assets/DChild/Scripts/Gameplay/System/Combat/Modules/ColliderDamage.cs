@@ -12,7 +12,6 @@ using DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay.Combat
 {
-
     public abstract class ColliderDamage : MonoBehaviour
     {
         [System.Serializable]
@@ -56,8 +55,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-
-        private void SpawnHitFX(Collider2D collision)
+        protected void SpawnHitFX(Collider2D collision)
         {
             if (collision.TryGetComponentInParent(out HitFXHandle onHitFX))
             {
@@ -86,16 +84,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private void InterractWith(Collider2D collision)
-        {
-            if (collision.TryGetComponentInParent(out IHitToInteract interactable))
-            {
-                interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
-
-            }
-        }
-
-        private void DealDamage(Collider2D collision, Hitbox hitbox)
+        protected void DealDamage(Collider2D collision, Hitbox hitbox)
         {
             using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
             {
@@ -106,7 +95,22 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private void Awake()
+        protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
+        {
+            DealDamage(collision, hitbox);
+            SpawnHitFX(collision);
+        }
+
+        private void InterractWith(Collider2D collision)
+        {
+            if (collision.TryGetComponentInParent(out IHitToInteract interactable))
+            {
+                interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
+
+            }
+        }
+
+        protected virtual void Awake()
         {
             m_collider = GetComponent<Collider2D>();
             m_damageDealer = GetComponentInParent<IDamageDealer>();
@@ -118,7 +122,6 @@ namespace DChild.Gameplay.Combat
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            //Debug.Log("DAMAGED");
             if (collision.CompareTag("DamageCollider"))
                 return;
             var validToHit = IsValidToHit(collision);
@@ -129,8 +132,7 @@ namespace DChild.Gameplay.Combat
                 {
                     if (validToHit)
                     {
-                        DealDamage(collision, hitbox);
-                        SpawnHitFX(collision);
+                        OnValidCollider(collision, hitbox);
                     }
                 }
             }
@@ -140,6 +142,8 @@ namespace DChild.Gameplay.Combat
                 InterractWith(collision);
             }
         }
+
+        
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
@@ -167,7 +171,7 @@ namespace DChild.Gameplay.Combat
 
                 if (m_canDetectInteractables)
                 {
-                    collision.gameObject.GetComponentInParent<IInteractable>()?.Interact();
+                    InterractWith(collision.collider);
                 }
             }
         }

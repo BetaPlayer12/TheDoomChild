@@ -24,11 +24,12 @@ namespace DChild.Gameplay
 #if UNITY_EDITOR
         [SerializeField]
         private bool m_dontDestroyOnLoad;
+#endif
         [SerializeField]
         private bool m_doNotDeserializeOnAwake;
         [SerializeField]
         private bool m_doNotTeleportPlayerOnAwake;
-#endif
+
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;
@@ -194,23 +195,16 @@ namespace DChild.Gameplay
                 {
                     m_campaignSerializer.SetSlot(m_campaignToLoad);
                 }
-#if UNITY_EDITOR
+
                 if (m_doNotDeserializeOnAwake == false)
                 {
                     m_campaignSerializer.Load(true);
                 }
-#else
-                m_campaignSerializer.Load(true);
-#endif
 
-#if UNITY_EDITOR
                 if (m_doNotTeleportPlayerOnAwake == false)
                 {
                     m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
-                }
-#else
-                m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
-#endif     
+                }  
             }
         }
 
@@ -219,7 +213,7 @@ namespace DChild.Gameplay
             //m_cinema.SetTrackingTarget(m_player.model);
             m_settings = GameSystem.settings?.gameplay ?? null;
             m_modifiers = new GameplayModifiers();
-            isGamePaused = false;
+            isGamePaused = true;
             if (m_campaignToLoad != null)
             {
                 m_campaignSerializer.SetSlot(m_campaignToLoad);

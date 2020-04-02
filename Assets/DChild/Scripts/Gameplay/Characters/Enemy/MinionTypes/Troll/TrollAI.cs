@@ -143,6 +143,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -186,6 +188,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            m_selfCollider.SetActive(false);
 
             m_spineEventListener.Subscribe(m_info.dirAttackEvent, DirtProjectile);
             m_spineEventListener.Subscribe(m_info.poundEvent, MeleeAttack/*m_poundFX.Play*/);
@@ -270,6 +273,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
@@ -281,6 +285,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
+                m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -311,6 +316,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
                 m_isDetecting = false;
@@ -343,8 +349,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -423,10 +429,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_movement.Stop();
-                        m_turnState = State.ReevaluateSituation;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
-                        //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
 
@@ -448,8 +451,15 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Punch:
                             Debug.Log("Punch Attack");
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
+                            if (!m_wallSensor.isDetecting)
+                            {
+                                m_animation.EnableRootMotion(true, false);
+                                m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
+                            }
+                            else
+                            {
+                                m_stateHandle.ApplyQueuedState();
+                            }
                             break;
                         case Attack.OraOra:
                             Debug.Log("Oraora Attack");
@@ -469,14 +479,16 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
+                                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_movement.Stop();
-                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
                             else
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
+                                    GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
                                     m_animation.EnableRootMotion(false, false);
                                     m_animation.SetAnimation(0, m_info.run.animation, true);
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
@@ -484,6 +496,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                     m_attackDecider.hasDecidedOnAttack = false;
                                     m_movement.Stop();
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -526,6 +539,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
+            m_selfCollider.SetActive(false);
         }
     }
 }

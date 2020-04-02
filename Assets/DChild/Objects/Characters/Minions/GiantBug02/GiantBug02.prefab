@@ -17,6 +17,7 @@ MonoBehaviour:
   m_fastFactor: 0
   m_fXObjects:
     m_particleSystems: []
+    m_originalSimulationSpeed: []
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 6782737134571879927}
@@ -49,7 +50,7 @@ MonoBehaviour:
   m_info:
     damage:
     - m_type: 0
-      m_value: 25
+      m_value: 10
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
@@ -82,6 +83,7 @@ MonoBehaviour:
   m_character: {fileID: 8539509539944535660}
   m_animation: {fileID: 8575243015834717427}
   m_data: {fileID: 11400000, guid: 7f03dff460abe7b43a72bf0c32e98306, type: 2}
+  m_characterStatsData: {fileID: 0}
   m_damageable: {fileID: 5850565570232542997}
   m_centerMass: {fileID: 1475145614214482116}
   m_turnHandle: {fileID: 6374910000931387448}
@@ -189,6 +191,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1114942943772844742}
   - component: {fileID: 6565074608206168739}
+  - component: {fileID: 5571044528696701549}
   m_Layer: 13
   m_Name: Sounds
   m_TagString: Untagged
@@ -224,6 +227,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 6782737134571879927}
   m_data: {fileID: 11400000, guid: 2e139339c61f7b641a7af6ba09e16afb, type: 2}
+--- !u!114 &5571044528696701549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1199861620508990491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1330a9f521346bb48be4a7e58a30f65e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnLocationMode: 2
 --- !u!114 &3938666319356869919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,7 +364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 8575243015834717427}
   m_physics: {fileID: 7471764578791973340}
-  m_autoFlinch: 0
+  m_autoFlinch: 1
   m_skeletonAnimation: {fileID: 6782737134571879927}
   m_animation: Flinch
   m_idleAnimation: Idle
@@ -793,6 +809,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6812354333315301909, guid: 8f0218a0102bb1f48907ef3ded375e5a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7297449478846391248, guid: 8f0218a0102bb1f48907ef3ded375e5a,
         type: 3}

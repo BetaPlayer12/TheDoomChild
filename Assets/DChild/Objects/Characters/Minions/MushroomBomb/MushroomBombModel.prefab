@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0e23450807ff25e4183beb20a5f3a2d5, type: 2}
+  - {fileID: 2100000, guid: 51887e24fe7e8e141ae3af34677fea68, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 5fb74534ce029484bbe659d1a80cb60b, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 3c8e5dc8012d8634ebe404972c270aaa, type: 2}
   initialSkinName: default
   initialFlipX: 1
   initialFlipY: 0
@@ -114,13 +114,11 @@ MonoBehaviour:
   fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
-  maskInteraction: 2
+  maskInteraction: 0
   maskMaterials:
-    materialsMaskDisabled:
-    - {fileID: 2100000, guid: 5eeedde7677c0bd478f971af5e877673, type: 2}
+    materialsMaskDisabled: []
     materialsInsideMask: []
-    materialsOutsideMask:
-    - {fileID: 2100000, guid: 0e23450807ff25e4183beb20a5f3a2d5, type: 2}
+    materialsOutsideMask: []
   disableRenderingOnOverride: 1
   _animationName: Idle2
   loop: 1
@@ -204,8 +202,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.25}
-  m_Size: {x: 1.5, y: 0.5}
+  m_Offset: {x: 0.4, y: 0.25}
+  m_Size: {x: 2.5, y: 0.5}
   m_Direction: 1
 --- !u!114 &207434296979794109
 MonoBehaviour:
@@ -256,7 +254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4239717555470677813
 Transform:
   m_ObjectHideFlags: 0
@@ -278,7 +276,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 361463431746870429}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -454,6 +452,7 @@ Transform:
   m_Children:
   - {fileID: 207434296979794107}
   - {fileID: 3267905776901486194}
+  - {fileID: 5549005241133492136}
   m_Father: {fileID: 207434295726285926}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -786,7 +785,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6292769603606155369}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0.4, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1790938209761185496}
@@ -865,7 +864,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_UsedByComposite: 1
   m_Offset: {x: 0, y: 3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -889,13 +888,13 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 5
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -5674,7 +5673,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0
@@ -10323,6 +10322,53 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!1 &7709223320776136843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5549005241133492136}
+  - component: {fileID: 7041370370716775734}
+  m_Layer: 1
+  m_Name: SelfCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5549005241133492136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7709223320776136843}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2334190672992283426}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &7041370370716775734
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7709223320776136843}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0
 --- !u!1 &8129508888248764718
 GameObject:
   m_ObjectHideFlags: 0
@@ -10427,9 +10473,23 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 5681764728613809012}
+    m_ColliderPaths:
+    - - X: 12899971
+        Y: 10319999
+      - X: 12899971
+        Y: 51600000
+      - X: -12900000
+        Y: 51599971
+      - X: -12899971
+        Y: 10319999
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 1.2899942, y: 1.032}
+      - {x: 1.2899942, y: 5.16}
+      - {x: -1.29, y: 5.1599946}
+      - {x: -1.2899942, y: 1.032}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.000005
 --- !u!114 &5142852837643705989
@@ -10489,7 +10549,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 381303348, guid: 3b2a9847c62bd5348a7f13b3150f0093, type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 412852659897468447, guid: 3b2a9847c62bd5348a7f13b3150f0093,
         type: 3}
@@ -10519,7 +10579,7 @@ PrefabInstance:
     - target: {fileID: 560796599749897085, guid: 3b2a9847c62bd5348a7f13b3150f0093,
         type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1677146755170362271, guid: 3b2a9847c62bd5348a7f13b3150f0093,
         type: 3}
@@ -10606,6 +10666,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2500322158616846733, guid: 3b2a9847c62bd5348a7f13b3150f0093,
+        type: 3}
+      propertyPath: m_particleSystems.Array.data[0]
+      value: 
+      objectReference: {fileID: 7684964349620607319}
     - target: {fileID: 6291601230309150122, guid: 3b2a9847c62bd5348a7f13b3150f0093,
         type: 3}
       propertyPath: m_Name
@@ -10692,6 +10757,11 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4148515674502030469, guid: e8a3c108e9ee8904c93dd2ba80ac206b,
+        type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5104300640109072291, guid: e8a3c108e9ee8904c93dd2ba80ac206b,
         type: 3}
       propertyPath: m_SortingLayerID
@@ -10716,6 +10786,11 @@ PrefabInstance:
         type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896400072710168978, guid: e8a3c108e9ee8904c93dd2ba80ac206b,
+        type: 3}
+      propertyPath: moveWithTransform
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7578218840525781679, guid: e8a3c108e9ee8904c93dd2ba80ac206b,
         type: 3}

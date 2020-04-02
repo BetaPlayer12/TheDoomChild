@@ -10,18 +10,21 @@ namespace PlayerNew
         private Animator animator;
         public float timeBtwnAtck = 0.2f;
         private float attackTimeCounter;
+        private float releaseTime = 0.0f;
         public float attackingTime;
         //public int attackCounter;
         private float attackHold;
         private float comboTimer;
         private float slashTimer;
         private Dash dashState;
+        private GroundShaker groundShaker;
         public int comboCount = 0;
         //public float startTimeBtwAttck;
-        public bool attackHolding;
+        public bool attackHolding = false;
         public bool attacking;
         public bool slashing;
         public bool upHold;
+        public bool downHold;
         // public float attackHold = 0.5f;
         public float resetTime;
 
@@ -32,7 +35,7 @@ namespace PlayerNew
         public float attackRange;
         public bool holdingAttack;
 
-        private Crouch crouchState;
+        private Dock crouchState;
         [SerializeField]
         private ParticleSystem m_forwardSlash1FX;
         [SerializeField]
@@ -63,31 +66,74 @@ namespace PlayerNew
         private Collider2D m_swordJumpSlashForwardAttackCollider;
         [SerializeField]
         private Collider2D m_swordUpSlashAttackCollider;
+        [SerializeField]
+        private Collider2D m_swordDownSlashAttackCollider;
 
         public int numOfClicks = 0;
         float lastClickedTime = 0;
         public float maxComboDelay = 1.2f;
 
+        
+
         private void Start()
         {
             attackCollider.enabled = false;
-            crouchState = GetComponent<Crouch>();
+            crouchState = GetComponent<Dock>();
             dashState = GetComponent<Dash>();
+            groundShaker = GetComponent<GroundShaker>();
             animator = GetComponent<Animator>();
         }
 
         // Update is called once per frame
         void Update()
         {
-            //var canSlash = inputState.GetButtonValue(inputButtons[0]);
             var canSlash = Input.GetButtonDown("Fire1");
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
             var downButton = inputState.GetButtonValue(inputButtons[1]);
             var upButton = inputState.GetButtonValue(inputButtons[2]);
             var leftButton = inputState.GetButtonValue(inputButtons[3]);
             var rightButton = inputState.GetButtonValue(inputButtons[4]);
-            
 
+
+            
+           
+
+            //if (holdTime > 0.0f && !collisionState.grounded)
+            //{
+            //    attackHolding = true;
+            //    releaseTime = holdTime;
+
+            //}
+            //else if (holdTime == 0.0f && !collisionState.grounded)
+            //{
+                
+            //        Debug.Log("release time:" + releaseTime);
+            //        releaseTime = 0.0f;
+            //        attackHolding = false;
+
+            //    //if (!collisionState.grounded  && canSlash)
+            //    //{
+
+            //    //    if (upButton)
+            //    //    {
+            //    //        JumpUpSlashFX();
+            //    //        m_swordUpSlashAttackCollider.enabled = true;
+            //    //    }
+            //    //    if (downButton)
+            //    //    {
+            //    //        Debug.Log("down attack");
+            //    //        attackHolding = false;
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        SwordJumpSlashForwardFX();
+            //    //        m_swordJumpSlashForwardAttackCollider.enabled = true;
+            //    //    }
+            //    //    animator.SetBool("Attack", true);
+            //    //    releaseTime = 0.0f;
+            //    //}
+
+            //}
 
             if (Time.time - lastClickedTime > maxComboDelay)
             {
@@ -97,7 +143,57 @@ namespace PlayerNew
             upHold = upButton ? true : false;
             animator.SetBool("UpHold", upHold);
 
-            if (Input.GetButtonDown("Fire1") && !dashState.dashing)
+            downHold = downButton ? true : false;
+            animator.SetBool("DownHold", downHold);
+
+            if (!collisionState.grounded)
+            {
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    
+                    
+                    releaseTime += Time.deltaTime;
+                }
+                if (Input.GetButtonUp("Fire1"))
+                {
+                  
+                        
+                   
+                    Debug.Log("Release time:" + releaseTime);
+
+                    
+                       
+                        if (upButton)
+                        {
+                            animator.SetBool("Attack", true);
+                            JumpUpSlashFX();
+                            m_swordUpSlashAttackCollider.enabled = true;
+                           
+                        }
+                        if (downButton)
+                        {
+                            if (releaseTime < 0.15f)
+                            {
+                            animator.SetBool("Attack", true);
+                            JumpDownSlashFX();
+                            Debug.Log("down attack");
+                            }
+
+                        }
+                        else
+                        {
+                            animator.SetBool("Attack", true);
+                            SwordJumpSlashForwardFX();
+                            m_swordJumpSlashForwardAttackCollider.enabled = true;
+                        }
+                       
+                    
+                    //animator.SetBool("Attack", false);
+                    releaseTime = 0.0f;
+                }
+            }
+
+            if (canSlash && !dashState.dashing)
             {
                 ToggleScripts(false);
                
@@ -113,9 +209,7 @@ namespace PlayerNew
                         body2d.velocity = Vector2.zero;
                         animator.SetBool("Attack", false);
                         numOfClicks = 1;
-                       
                     }
-
                     if (numOfClicks == 1)
                     {
                         animator.SetBool("Slash1", true);
@@ -123,7 +217,7 @@ namespace PlayerNew
                         m_forwardSlashAttackCollider.enabled = true;
                     }
                     numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
-                   
+                    animator.SetBool("Attack", true);
                     switch (numOfClicks)
                     {
                         case 1:
@@ -146,43 +240,24 @@ namespace PlayerNew
                             m_swordCombo2AttackCollider.enabled = true;
                             break;
                     }
-                    animator.SetBool("Attack", true);
+                    
                 }else if(upHold && collisionState.grounded)
                 {
                     animator.SetBool("Attack", true);
                     SwordUpSlashFX();
                 }else if(downButton && collisionState.grounded)
                 {
-
-                    Debug.Log("Crouch attack");
                     animator.SetBool("Attack", true);
                     animator.SetBool("Crouch", true);
                     CrouchSlashFX();
-                }else if (!collisionState.grounded)
-                {
-                    if (!upButton)
-                    {
-                       
-                        SwordJumpSlashForwardFX();
-                        m_swordJumpSlashForwardAttackCollider.enabled = true;
-
-                    }
-                    else
-                    {
-                        JumpUpSlashFX();
-                        m_swordUpSlashAttackCollider.enabled = true;
-                    }
-                    animator.SetBool("Attack", true);
-                } 
+                }
                
                 
-            }else if (Input.GetButtonUp("Fire1"))
+            }else if (Input.GetButtonUp("Fire1") && collisionState.grounded)
             {
-                Debug.Log("end here");
                 m_forwardSlashAttackCollider.enabled = false;
                 m_swordCombo1AttackCollider.enabled = false;
                 m_swordCombo2AttackCollider.enabled = false;
-
                 m_crouchSlashAttackCollider.enabled = false;
                 m_jumpSlashAttackCollider.enabled = false;
                 m_swordUpSlashAttackCollider.enabled = false;
@@ -196,7 +271,7 @@ namespace PlayerNew
         public void ReturnToIdle()
         {
             //force set to Idle
-            Debug.Log("hahahahahahah");
+           
             animator.SetInteger("Jog", 0);
             animator.SetBool("Grounded", true);
             animator.SetBool("Crouch", false);
@@ -213,10 +288,15 @@ namespace PlayerNew
             //animator.SetBool()
 
         }
+        
+        public void FinishCrouchAttack()
+        {
+            Debug.Log("Finish crouch attack");
+        }
+
 
         public void FinishAttack1()
         {
-            Debug.Log("attack 1 only " + numOfClicks);
             animator.SetBool("Slash1", false);
             animator.SetBool("Attack", false);
             m_forwardSlashAttackCollider.enabled = false;
@@ -233,10 +313,9 @@ namespace PlayerNew
         public void FinishAttack2()
         {
            
-                Debug.Log("attack 2 only " + numOfClicks);
-                animator.SetBool("Slash1", false);
-                animator.SetBool("Slash2", false);
-                animator.SetBool("Attack", false);
+            animator.SetBool("Slash1", false);
+            animator.SetBool("Slash2", false);
+            animator.SetBool("Attack", false);
             m_forwardSlashAttackCollider.enabled = false;
             m_swordCombo1AttackCollider.enabled = false;
             m_swordCombo2AttackCollider.enabled = false;
@@ -251,7 +330,7 @@ namespace PlayerNew
 
         public void FinishAttack3()
         {
-            Debug.Log("attack 3 only " + numOfClicks);
+            
             animator.SetBool("Slash1", false);
             animator.SetBool("Slash2", false);
             animator.SetBool("Slash3", false);
@@ -276,14 +355,12 @@ namespace PlayerNew
 
         private void CrouchSlashFX()
         {
-            Debug.Log("Crounch attack");
             m_VFX_CrouchSlashX.Play();
             m_crouchSlashAttackCollider.enabled = true;
         }
 
         private void SwordAttackForward_MainAction()
         {
-            Debug.Log("forward slash");
             m_forwardSlash1FX.Play();
         }
 
@@ -313,7 +390,7 @@ namespace PlayerNew
         private void FinishAttackAnim()
         {
 
-            Debug.Log("finish attack");
+            Debug.Log("finish attack anim");
             attackCollider.enabled = false;
 
             m_forwardSlashAttackCollider.enabled = false;
@@ -333,6 +410,7 @@ namespace PlayerNew
 
             attacking = false;
             slashing = false;
+            
             ToggleScripts(true);
         }
     }

@@ -151,6 +151,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_attackBB;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -179,6 +181,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_breathFX;
         //[SerializeField, TabGroup("Territory")]
         //private Collider2D m_territoryCollider;
+        //[SerializeField, TabGroup("Renderer")]
+        //private MeshRenderer m_mRendererer;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -197,6 +201,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            m_breathFX.gameObject.GetComponent<ParticleSystem>().Stop();
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.Cooldown);
         }
@@ -208,6 +214,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
+                m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -245,10 +252,12 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_currentCD = 0;
                 m_enablePatience = false;
+                m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.SetState(State.Patrol);
             }
         }
@@ -280,8 +289,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            //m_mRendererer.material.SetFloat("Highlight", 1);
             StopAllCoroutines();
-            m_hitbox.SetInvulnerability(false);
+            //m_hitbox.SetInvulnerability(false);
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
@@ -330,7 +340,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.attack2_loop, true);
             var bounceDir = new Vector2(m_info.attack2Velocity.x * transform.localScale.x, m_info.attack2Velocity.y);
             m_character.physics.SetVelocity(bounceDir);
-            m_hitbox.SetInvulnerability(true);
+            m_flinchHandle.gameObject.SetActive(false);
+            //m_hitbox.SetInvulnerability(true);
             //m_hitbox.gameObject.SetActive(false);
             yield return new WaitForSeconds(m_info.attack2AirTime);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -341,7 +352,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attack2_end, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2_end);
-            m_hitbox.SetInvulnerability(false);
+            if (!m_wallSensor.isDetecting)
+            {
+                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            }
+            m_flinchHandle.gameObject.SetActive(true);
+            //m_hitbox.SetInvulnerability(false);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -352,8 +368,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-
             m_spineEventListener.Subscribe(m_info.breathEvent, PoisonBreath);
+            m_selfCollider.SetActive(false);
             //GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -385,6 +401,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
             //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
+            //Debug.Log("Highlight is: " + m_mRendererer.material.GetFloat("Highlight"));
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -414,9 +431,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_movement.Stop();
-                        m_turnState = State.ReevaluateSituation;
-                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
 
@@ -477,6 +492,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
+                                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -485,6 +501,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
+                                    GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
                                     m_animation.EnableRootMotion(true, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2f;
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
@@ -492,6 +509,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                     m_movement.Stop();
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
@@ -535,6 +553,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentCD = 0;
             m_enablePatience = false;
             m_isDetecting = false;
+            m_selfCollider.SetActive(false);
         }
     }
 }

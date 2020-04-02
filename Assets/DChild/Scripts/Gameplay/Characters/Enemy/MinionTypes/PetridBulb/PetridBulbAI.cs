@@ -26,10 +26,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
             //
-            [SerializeField, MinValue(0)]
-            private float m_detectionTime;
-            public float detectionTime => m_detectionTime;
 
+            [SerializeField, MinValue(0)]
+            private float m_detectTime;
+            public float detectTime => m_detectTime;
             [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
@@ -83,8 +83,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
-            Idle,
             Detect,
+            Idle,
             Dead,
             Attacking,
             Chasing,
@@ -108,8 +108,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_aggroSensorGO;
-        [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_groundSensor;
+        //[SerializeField, TabGroup("Sensors")]
+        //private RaySensor m_groundSensor;
 
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_muzzleFX;
@@ -178,12 +178,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (damageable != null)
             {
+                base.SetTarget(damageable, m_target);
+                m_currentPatience = 0;
+                m_enablePatience = false;
+                //StopCoroutine(PatienceRoutine()); //for latur
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
-                    base.SetTarget(damageable, m_target);
-                    //m_stateHandle.SetState(State.Chasing);
-                    m_currentPatience = 0;
-                    m_enablePatience = false;
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
@@ -221,8 +221,8 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_targetInfo.Set(null, null);
-                m_enablePatience = false;
                 m_isDetecting = false;
+                m_enablePatience = false;
                 m_stateHandle.SetState(State.Idle);
             }
         }
@@ -230,7 +230,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return new WaitForSeconds(m_info.detectionTime);
+            yield return new WaitForSeconds(m_info.detectTime);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -238,8 +238,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            m_targetInfo.Set(null);
+            m_targetInfo.Set(null, null);
             m_hitbox.Disable();
+            m_isDetecting = false;
             m_aggroSensorGO.SetActive(false);
             //Debug.Log("Bulb Rotation " + transform.rotation.z);
             //m_animation.SetAnimation(0, m_info.idleAnimation, false).TimeScale = 3f;
@@ -442,8 +443,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.Idle);
             m_currentPatience = 0;
             m_enablePatience = false;
-            m_isDetecting = false;
             m_canShoot = false;
+            m_isDetecting = false;
         }
     }
 }

@@ -32,6 +32,7 @@ public class LoadZoneFunctionHandle
 
     private void TeleportCharacter(object sender, EventActionArgs eventArgs)
     {
+        Debug.Log(m_locationData.position);
         m_character.transform.position = m_locationData.position;
         LoadingHandle.SceneDone -= TeleportCharacter;
     }

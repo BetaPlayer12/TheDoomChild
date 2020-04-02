@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Characters
 
         private bool m_isFlinching;
 
+        public event EventAction<EventActionArgs> HitStopStart;
         public event EventAction<EventActionArgs> FlinchStart;
         public event EventAction<EventActionArgs> FlinchEnd;
 
@@ -43,19 +44,34 @@ namespace DChild.Gameplay.Characters
 
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
-            Debug.Log("Flinch");
-            m_spine.SetAnimation(0, m_idleAnimation, true);
+         
             Flinch();
         }
 
         public void Flinch()
         {
-            if (m_isFlinching == false)
+            HitStopStart?.Invoke(this, new EventActionArgs());
+            if (m_autoFlinch)
             {
-                //StopAllCoroutines(); //Gian Editz
-                m_physics?.SetVelocity(Vector2.zero);
-                StartCoroutine(FlinchRoutine());
+                if (m_isFlinching == false)
+                {
+                    //StopAllCoroutines(); //Gian Editz
+                    StartFlinch();
+                }
             }
+            else
+            {
+                StartFlinch();
+            }
+        }
+
+        public bool autoFlinching => m_autoFlinch;
+        public bool isFlinching => m_isFlinching;
+
+        private void StartFlinch()
+        {
+            m_physics?.SetVelocity(Vector2.zero);
+            StartCoroutine(FlinchRoutine());
         }
 
         private IEnumerator FlinchRoutine()
@@ -63,11 +79,11 @@ namespace DChild.Gameplay.Characters
             FlinchStart?.Invoke(this, new EventActionArgs());
             if (m_autoFlinch)
             {
+                m_spine.SetAnimation(0, m_idleAnimation, true);
                 m_spine.SetAnimation(0, m_animation, false, 0);
-                m_spine.AddEmptyAnimation(0, 0.2f, 0);
+                m_spine.AddAnimation(0, m_idleAnimation, false, 0.2f).TimeScale = 20;
 
-                //m_spine.AddAnimation(0, m_idleAnimation, true, 0.2f);
-
+                //m_spine.AddEmptyAnimation(0, 0.2f, 0);
             }
             m_isFlinching = true;
             m_spine.AnimationSet += OnAnimationSet;

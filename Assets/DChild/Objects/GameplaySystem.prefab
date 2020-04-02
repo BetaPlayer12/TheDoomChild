@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1410112640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1410112641}
+  - component: {fileID: 1410112642}
+  m_Layer: 0
+  m_Name: PlayerOverride
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1410112641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410112640}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1656687072529629155}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1410112642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410112640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e11af26c4ac68c24ca99bbc75502c204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_moveDirectionInput: 0
+  m_input: {fileID: 0}
 --- !u!1 &638597965148341211
 GameObject:
   m_ObjectHideFlags: 0
@@ -29,7 +74,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1656687072529629155}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4261330552481197995
 MonoBehaviour:
@@ -111,7 +156,16 @@ MonoBehaviour:
       Entry: 5
       Data: true
     - Name: m_sceneToLoad
+      Entry: 7
+      Data: 1|Holysoft.Collections.SceneInfo, HolysoftEditor
+    - Name: m_sceneName
       Entry: 6
+      Data: 
+    - Name: m_scenePath
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
     - Name: m_location
       Entry: 3
@@ -151,19 +205,19 @@ MonoBehaviour:
       Data: 
     - Name: m_characterData
       Entry: 7
-      Data: 1|DChild.Serialization.PlayerCharacterData, Assembly-CSharp
+      Data: 2|DChild.Serialization.PlayerCharacterData, Assembly-CSharp
     - Name: m_inventoryData
       Entry: 7
-      Data: 2|DChild.Serialization.PlayerInventoryData, Assembly-CSharp
+      Data: 3|DChild.Serialization.PlayerInventoryData, Assembly-CSharp
     - Name: m_soulEssence
       Entry: 3
       Data: 0
     - Name: m_items
       Entry: 7
-      Data: 3|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+      Data: 4|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
     - Name: m_datas
       Entry: 7
-      Data: 4|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+      Data: 5|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
     - Name: 
       Entry: 12
       Data: 0
@@ -178,10 +232,10 @@ MonoBehaviour:
       Data: 
     - Name: m_soulCrystals
       Entry: 7
-      Data: 5|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+      Data: 6|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
     - Name: m_datas
       Entry: 7
-      Data: 6|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+      Data: 7|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
     - Name: 
       Entry: 12
       Data: 0
@@ -196,10 +250,10 @@ MonoBehaviour:
       Data: 
     - Name: m_questItems
       Entry: 7
-      Data: 7|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+      Data: 8|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
     - Name: m_datas
       Entry: 7
-      Data: 8|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+      Data: 9|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
     - Name: 
       Entry: 12
       Data: 0
@@ -217,10 +271,10 @@ MonoBehaviour:
       Data: 
     - Name: m_bestiaryProgressData
       Entry: 7
-      Data: 9|DChild.Serialization.AcquisitionData, Assembly-CSharp
+      Data: 10|DChild.Serialization.AcquisitionData, Assembly-CSharp
     - Name: m_serializeDatas
       Entry: 7
-      Data: 10|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
+      Data: 11|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
     - Name: 
       Entry: 12
       Data: 1
@@ -259,10 +313,10 @@ MonoBehaviour:
       Data: 
     - Name: m_soulSkillAcquisitionData
       Entry: 7
-      Data: 11|DChild.Serialization.AcquisitionData, Assembly-CSharp
+      Data: 12|DChild.Serialization.AcquisitionData, Assembly-CSharp
     - Name: m_serializeDatas
       Entry: 7
-      Data: 12|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
+      Data: 13|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
     - Name: 
       Entry: 12
       Data: 1
@@ -310,14 +364,14 @@ MonoBehaviour:
       Data: 
     - Name: m_campaignProgress
       Entry: 7
-      Data: 13|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 14|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 14|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 15|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 15|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 16|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -335,14 +389,14 @@ MonoBehaviour:
       Data: 
     - Name: m_zoneDatas
       Entry: 7
-      Data: 16|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 17|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 17|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 18|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 18|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 19|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -360,14 +414,14 @@ MonoBehaviour:
       Data: 
     - Name: m_miscDatas
       Entry: 7
-      Data: 19|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 20|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 20|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 21|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 21|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 22|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -417,7 +471,7 @@ Transform:
   m_Children:
   - {fileID: 200921021822658834}
   m_Father: {fileID: 1656687072529629155}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7351573108079794771
 MonoBehaviour:
@@ -464,7 +518,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1656687072529629155}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1079731738031751150
 MonoBehaviour:
@@ -651,6 +705,104 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+--- !u!1 &4914704124739206884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595390651572007820}
+  - component: {fileID: 2914864306993785680}
+  - component: {fileID: 5459732075996280386}
+  - component: {fileID: 6610132760341546613}
+  m_Layer: 0
+  m_Name: Cinema
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1595390651572007820
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1656687072529629155}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2914864306993785680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3fa4cd5cca8fac4e869028abc7d43b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_mainCamera: {fileID: 0}
+  m_trackingTarget: {fileID: 0}
+--- !u!114 &5459732075996280386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b22269412dc42024699a0e6fdce34c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_yOffset: 5
+  m_duration: 0.5
+  m_interpolation:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &6610132760341546613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d0236126e39dd847b3b3f2ba6d7eac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_holdForPeek: 0.5
 --- !u!1 &6243475520926959959
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,104 +1007,6 @@ MonoBehaviour:
   m_withGravity: 0
   m_gravityScale: 0
   m_velocity: {x: 0, y: 0}
---- !u!1 &8201099975804057246
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8536943695377355588}
-  - component: {fileID: 2169945062240998354}
-  - component: {fileID: 3760816760592113498}
-  - component: {fileID: 9190569924505327815}
-  m_Layer: 0
-  m_Name: Cinema
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8536943695377355588
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8201099975804057246}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1656687072529629155}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2169945062240998354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8201099975804057246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3fa4cd5cca8fac4e869028abc7d43b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_mainCamera: {fileID: 0}
-  m_trackingTarget: {fileID: 0}
---- !u!114 &3760816760592113498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8201099975804057246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b22269412dc42024699a0e6fdce34c75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_yOffset: 5
-  m_duration: 0.5
-  m_interpolation:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &9190569924505327815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8201099975804057246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d0236126e39dd847b3b3f2ba6d7eac9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_holdForPeek: 0.5
 --- !u!1 &9027099112888996189
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,11 +1040,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 2624314046681382207}
   - {fileID: 8573084233319282764}
   - {fileID: 5947637787709336866}
-  - {fileID: 2624314046681382207}
   - {fileID: 33779680844366987}
-  - {fileID: 8536943695377355588}
+  - {fileID: 1410112641}
+  - {fileID: 1595390651572007820}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1006,9 +1061,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3607c5780ee2f143a5dd129b329bfe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_dontDestroyOnLoad: 0
-  m_doNotDeserializeOnAwake: 0
-  m_doNotTeleportPlayerOnAwake: 0
+  m_dontDestroyOnLoad: 1
+  m_doNotDeserializeOnAwake: 1
+  m_doNotTeleportPlayerOnAwake: 1
 --- !u!114 &7300060033477175834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1081,7 +1136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_player: {fileID: 0}
   m_input: {fileID: 0}
-  m_overrideController: {fileID: 0}
+  m_overrideController: {fileID: 1410112642}
   m_respawnDelay:
     m_startTime: 0
   m_autoReflex:
