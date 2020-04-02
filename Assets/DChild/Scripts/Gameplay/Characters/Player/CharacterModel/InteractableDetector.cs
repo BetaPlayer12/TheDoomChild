@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Environment.Interractables;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace DChild.Gameplay.Characters.Players
         private Vector2 m_prevCharacterPosition;
 
         private List<IButtonToInteract> m_objectsInRange;
+        [ShowInInspector]
         private IButtonToInteract m_closestObject;
         public event EventAction<DetectedInteractableEventArgs> InteractableDetected;
 
@@ -51,19 +53,29 @@ namespace DChild.Gameplay.Characters.Players
         private void Awake()
         {
             m_objectsInRange = new List<IButtonToInteract>();
+            m_character = GetComponent<Character>();
+            m_prevCharacterPosition = m_character.centerMass.transform.position;
         }
 
         public void Update()
         {
+            for (int i = m_objectsInRange.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    var forMissingReference = m_objectsInRange[i].transform.position;
+                }
+                catch (MissingReferenceException)
+                {
+                    m_objectsInRange.RemoveAt(i);
+                }
+            }
+
             if (m_objectsInRange.Count > 1)
             {
                 var currentPosition = (Vector2)m_character.centerMass.position;
                 if (m_prevCharacterPosition != currentPosition)
                 {
-                    if (m_objectsInRange.Contains(null))
-                    {
-                        m_objectsInRange.RemoveAll(x => x == null);
-                    }
                     float closestDistance = Vector2.Distance(currentPosition, m_objectsInRange[0].transform.position);
                     var closestObject = m_objectsInRange[0];
                     for (int i = 1; i < m_objectsInRange.Count; i++)
@@ -84,17 +96,27 @@ namespace DChild.Gameplay.Characters.Players
                     m_prevCharacterPosition = currentPosition;
                 }
             }
+            else if (m_objectsInRange.Count == 1)
+            {
+                if (m_closestObject != m_objectsInRange[0])
+                {
+                    m_closestObject = m_objectsInRange[0];
+                }
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.TryGetComponentInParent(out IButtonToInteract interactableObject))
             {
-                m_objectsInRange.Add(interactableObject);
-                if (m_objectsInRange.Count == 1)
+                if (interactableObject.showPrompt)
                 {
-                    m_closestObject = interactableObject;
-                    CallInteractableDetectedEvent(interactableObject);
+                    m_objectsInRange.Add(interactableObject);
+                    if (m_objectsInRange.Count == 1)
+                    {
+                        m_closestObject = interactableObject;
+                        CallInteractableDetectedEvent(interactableObject);
+                    }
                 }
             }
         }
@@ -103,11 +125,14 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (collision.TryGetComponentInParent(out IButtonToInteract interactableObject))
             {
-                m_objectsInRange.Remove(interactableObject);
-                if (m_objectsInRange.Count == 0)
+                if (interactableObject.showPrompt)
                 {
-                    m_closestObject = null;
-                    CallInteractableDetectedEvent(null);
+                    m_objectsInRange.Remove(interactableObject);
+                    if (m_objectsInRange.Count == 0)
+                    {
+                        m_closestObject = null;
+                        CallInteractableDetectedEvent(null);
+                    }
                 }
             }
         }
