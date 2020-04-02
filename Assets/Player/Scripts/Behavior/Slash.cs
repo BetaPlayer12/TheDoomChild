@@ -35,7 +35,7 @@ namespace PlayerNew
         public float attackRange;
         public bool holdingAttack;
 
-        private Crouch crouchState;
+        private Dock crouchState;
         [SerializeField]
         private ParticleSystem m_forwardSlash1FX;
         [SerializeField]
@@ -78,7 +78,7 @@ namespace PlayerNew
         private void Start()
         {
             attackCollider.enabled = false;
-            crouchState = GetComponent<Crouch>();
+            crouchState = GetComponent<Dock>();
             dashState = GetComponent<Dash>();
             groundShaker = GetComponent<GroundShaker>();
             animator = GetComponent<Animator>();
