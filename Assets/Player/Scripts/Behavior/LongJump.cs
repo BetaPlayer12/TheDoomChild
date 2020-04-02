@@ -8,6 +8,9 @@ namespace PlayerNew
     {
         [SerializeField]
         private Crouch crouch;
+        [SerializeField]
+        private WallSlide wallSlide;
+
         public float longJumpDelay = 0.15f;
         public float longJumpMultiplier = 1.5f;
         public float velocityY;
@@ -23,6 +26,8 @@ namespace PlayerNew
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
             velocityY = body2d.velocity.y;
 
+
+
             if (!canJump)
             {
                 canLongJump = false;
@@ -32,7 +37,14 @@ namespace PlayerNew
                 isLongJumping = false;
             }
 
-            if(!collisionState.grounded && groundJumpExtra)
+            if (wallSlide.extraJump && canJump)
+            {
+                jumpsRemaining = 1;
+                groundJumpExtra = false;
+                wallSlide.extraJump = false;
+            }
+
+            if (!collisionState.grounded && groundJumpExtra)
             {
                 jumpsRemaining = 1;
                 groundJumpExtra = false;
@@ -52,7 +64,7 @@ namespace PlayerNew
                 isLongJumping = true;
             }
 
-
+           
         }
 
         protected override void OnJump()

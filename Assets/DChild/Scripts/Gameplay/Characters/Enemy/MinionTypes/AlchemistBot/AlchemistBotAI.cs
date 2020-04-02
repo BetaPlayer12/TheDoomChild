@@ -28,9 +28,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
-            [SerializeField]
-            private float m_runAwaySpeed;
-            public float runAwaySpeed => m_runAwaySpeed;
 
             //Attack Behaviours
             [SerializeField]
@@ -290,7 +287,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void CalculateRunPath()
         {
             bool isRight = m_targetInfo.position.x >= transform.position.x;
-            var movePos = new Vector2(transform.position.x + (isRight ? -10 : 10), m_targetInfo.position.y + 10);
+            var movePos = new Vector2(transform.position.x + (isRight ? -3 : 3), m_targetInfo.position.y + 10);
             while (Vector2.Distance(transform.position, WallPosition()) <= 5)
             {
                 movePos = new Vector2(movePos.x + 0.1f, movePos.y);
@@ -397,8 +394,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_stateHandle.SetState(State.Turning);
                     }
                     else
                     {
@@ -407,7 +403,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_animation.EnableRootMotion(false, false);
                             m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
                             CalculateRunPath();
-                            m_agent.Move(m_info.runAwaySpeed);
+                            m_agent.Move(m_info.move.speed);
                         }
                         else
                         {
