@@ -5,7 +5,7 @@ using UnityEngine;
 public class OnewayPlatform : MonoBehaviour
 {
     private PlatformEffector2D platformEffector;
-    public float waitTime;
+    public float waitTime = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
