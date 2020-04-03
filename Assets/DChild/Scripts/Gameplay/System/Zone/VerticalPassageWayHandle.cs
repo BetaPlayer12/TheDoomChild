@@ -73,7 +73,6 @@ namespace DChild.Gameplay.Environment
                     break;
 
             }
-
         }
 
         private IEnumerator UpEntranceRoutine(Rigidbody2D physics)
