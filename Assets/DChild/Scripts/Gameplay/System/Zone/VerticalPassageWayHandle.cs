@@ -27,8 +27,12 @@ namespace DChild.Gameplay.Environment
         private bool m_forceExitFacing;
         [SerializeField, ShowIf("m_forceExitFacing")]
         private HorizontalDirection m_exitFacing;
+        [SerializeField, MinValue(0)]
+        private float m_transitionDelay;
 
-        public float transitionDelay => 0.2f;
+        private static Coroutine forceFloatCoroutine;
+
+        public float transitionDelay => m_transitionDelay;
 
         public bool needsButtonInteraction => false;
 
@@ -36,9 +40,11 @@ namespace DChild.Gameplay.Environment
 
         public void DoSceneTransition(Character character, TransitionType type)
         {
+            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
+            controller.moveDirectionInput = 0;
             var characterPhysics = character.GetComponent<Rigidbody2D>();
-            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
             CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+
             switch (type)
             {
                 case TransitionType.Enter:
@@ -48,11 +54,18 @@ namespace DChild.Gameplay.Environment
                     }
                     else
                     {
-                        rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                        characterPhysics.constraints = RigidbodyConstraints2D.FreezeRotation;
                     }
                     break;
                 case TransitionType.Exit:
                     character.StopCoroutine("UpEntranceRoutine");
+
+                    if(forceFloatCoroutine != null)
+                    {
+                        character.StopCoroutine(forceFloatCoroutine);
+                        forceFloatCoroutine = null;
+                    }
+
                     if (m_exitDirection == TravelDirection.Up)
                     {
                         characterPhysics.velocity = Vector2.zero;
@@ -64,16 +77,27 @@ namespace DChild.Gameplay.Environment
                     {
                         characterPhysics.velocity = (Vector2.zero);
                     }
-                    rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-                    collisionState.forceGrounded = false;
+                    characterPhysics.constraints = RigidbodyConstraints2D.FreezeRotation;
                     break;
                 case TransitionType.PostEnter:
-                    rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-                    collisionState.forceGrounded = false;
+                    characterPhysics.velocity = Vector2.zero;
+                    characterPhysics.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+                    forceFloatCoroutine = character.StartCoroutine(ForceMidAirFloatRoutine(characterPhysics));
                     break;
 
             }
 
+        }
+
+        private IEnumerator ForceMidAirFloatRoutine(Rigidbody2D physics)
+        {
+            while(true)
+            {
+                Debug.Log("test");
+                physics.velocity = Vector2.zero;
+                yield return null;
+            }
         }
 
         private IEnumerator UpEntranceRoutine(Rigidbody2D physics)
