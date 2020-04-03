@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters;
+using PlayerNew;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
@@ -27,7 +28,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField, ShowIf("m_forceExitFacing")]
         private HorizontalDirection m_exitFacing;
 
-        public float transitionDelay => 1;
+        public float transitionDelay => 0.2f;
 
         public bool needsButtonInteraction => false;
 
@@ -35,38 +36,53 @@ namespace DChild.Gameplay.Environment
 
         public void DoSceneTransition(Character character, TransitionType type)
         {
-            var characterPhysics = character.GetComponent<CharacterPhysics2D>();
-            if (type == TransitionType.Enter)
+            var characterPhysics = character.GetComponent<Rigidbody2D>();
+            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
+            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            switch (type)
             {
-                if (m_entranceDirection == TravelDirection.Up)
-                {
-                    character.StartCoroutine(UpEntranceRoutine(characterPhysics));
-                }
+                case TransitionType.Enter:
+                    if (m_entranceDirection == TravelDirection.Up)
+                    {
+                        character.StartCoroutine(UpEntranceRoutine(characterPhysics));
+                    }
+                    else
+                    {
+                        rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                    }
+                    break;
+                case TransitionType.Exit:
+                    character.StopCoroutine("UpEntranceRoutine");
+                    if (m_exitDirection == TravelDirection.Up)
+                    {
+                        characterPhysics.velocity = Vector2.zero;
+                        var exitVelocity = m_upVelocity;
+                        exitVelocity.x *= m_forceExitFacing ? (int)m_exitFacing : (int)character.facing;
+                        characterPhysics.AddForce(exitVelocity, ForceMode2D.Impulse);
+                    }
+                    else
+                    {
+                        characterPhysics.velocity = (Vector2.zero);
+                    }
+                    rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+                    collisionState.forceGrounded = false;
+                    break;
+                case TransitionType.PostEnter:
+                    rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                    collisionState.forceGrounded = false;
+                    break;
+
             }
-            else
-            {
-                character.StopCoroutine("UpEntranceRoutine");
-                if (m_exitDirection == TravelDirection.Up)
-                {
-                    characterPhysics.SetVelocity(Vector2.zero);
-                    var exitVelocity = m_upVelocity;
-                    exitVelocity.x *= m_forceExitFacing ? (int)m_exitFacing : (int)character.facing;
-                    characterPhysics.AddForce(exitVelocity, ForceMode2D.Impulse);
-                }
-                else
-                {
-                    characterPhysics.SetVelocity(Vector2.zero);
-                }
-            }
+
         }
 
-        private IEnumerator UpEntranceRoutine(CharacterPhysics2D physics)
+        private IEnumerator UpEntranceRoutine(Rigidbody2D physics)
         {
             var waitFor = new WaitForFixedUpdate();
             var time = transitionDelay;
             while (time > 0)
             {
-                physics.SetVelocity(Vector2.up * m_upVelocity);
+                physics.velocity = Vector2.up * m_upVelocity;
                 yield return waitFor;
                 time -= Time.deltaTime;
             }
