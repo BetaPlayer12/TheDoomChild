@@ -53,8 +53,6 @@ namespace DChild.Gameplay.Characters.Players
         private void Awake()
         {
             m_objectsInRange = new List<IButtonToInteract>();
-            m_character = GetComponent<Character>();
-            m_prevCharacterPosition = m_character.centerMass.transform.position;
         }
 
         public void Update()
