@@ -87,7 +87,6 @@ namespace DChild.Gameplay.Environment
                     break;
 
             }
-
         }
 
         private IEnumerator ForceMidAirFloatRoutine(Rigidbody2D physics)
