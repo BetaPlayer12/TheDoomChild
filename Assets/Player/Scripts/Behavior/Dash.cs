@@ -22,7 +22,7 @@ namespace PlayerNew
         {
             facing = GetComponent<FaceDirection>();
         }
-        private void Update() {
+        private void FixedUpdate() {
             float facingDir = facing.isFacingRight ? 1f : -1f;
             var dash = inputState.GetButtonValue(inputButtons[0]);
             var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);

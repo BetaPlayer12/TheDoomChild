@@ -91,6 +91,11 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public override void SetData(AttackResistanceData data)
+        {
+
+        }
+
         private void Awake()
         {
             m_additionalResistance = new Dictionary<AttackType, float>();
@@ -106,13 +111,6 @@ namespace DChild.Gameplay.Combat
             CalculateResistance();
             CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
         }
-
-        public override void SetData(AttackResistanceData data)
-        {
-            throw new System.NotImplementedException();
-        }
-
-
 #endif
     }
 }

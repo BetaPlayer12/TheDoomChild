@@ -17,23 +17,19 @@ namespace DChild.Menu.Item
 
         public void Show()
         {
-#if UNITY_EDITOR
             if (m_canvas == null)
             {
                 m_canvas = GetComponent<Canvas>();
             }
-#endif
             m_canvas.enabled = true;
         }
 
         public void Hide()
         {
-#if UNITY_EDITOR
             if (m_canvas == null)
             {
                 m_canvas = GetComponent<Canvas>();
             }
-#endif
             m_canvas.enabled = false;
         }
 
