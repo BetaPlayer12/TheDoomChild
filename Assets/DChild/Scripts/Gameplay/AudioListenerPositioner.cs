@@ -42,7 +42,10 @@ namespace DChild.Gameplay
         {
             if (m_camera == null)
             {
-                m_camera = GameSystem.mainCamera?.transform ?? null;
+                if(GameSystem.mainCamera != null)
+                {
+                    m_camera = GameSystem.mainCamera?.transform;
+                }
             }
             else
             {

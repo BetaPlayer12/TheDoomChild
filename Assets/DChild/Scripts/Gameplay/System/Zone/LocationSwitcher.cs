@@ -58,6 +58,8 @@ namespace DChild.Gameplay.Systems
 
                 yield return new WaitForSeconds(m_handle.transitionDelay);
 
+                m_handle.DoSceneTransition(character, TransitionType.PostExit);
+
                 var damageable = character.GetComponent<IDamageable>();
                 damageable.SetHitboxActive(true);
 
@@ -98,7 +100,7 @@ namespace DChild.Gameplay.Systems
                     {
                         GoToDestination(character);
                     }
-                } 
+                }
             }
         }
 
