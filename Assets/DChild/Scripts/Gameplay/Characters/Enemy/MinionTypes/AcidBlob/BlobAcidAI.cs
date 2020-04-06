@@ -41,6 +41,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //
 
             [SerializeField, MinValue(0)]
+            private Vector2 m_spawnVelocity;
+            public Vector2 spawnVelocity => m_spawnVelocity;
+            [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
 
@@ -50,6 +53,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             //Animations
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_spawnAnimation;
+            public string spawnAnimation => m_spawnAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_sleepAnimation;
             public string sleepAnimation => m_sleepAnimation;
@@ -89,6 +95,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Spawn,
             Sleep,
             Detect,
             Turning,
@@ -233,6 +240,30 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
         }
 
+        private void CustomTurn()
+        {
+            if (IsFacingTarget())
+            {
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+                m_character.SetFacing(transform.localScale.x > 0 ? HorizontalDirection.Right : HorizontalDirection.Left);
+            }
+        }
+
+        private IEnumerator SpawnRoutine()
+        {
+            m_stateHandle.Wait(State.Cooldown);
+            m_animation.DisableRootMotion();
+            m_animation.SetAnimation(0, m_info.spawnAnimation, false);
+            yield return new WaitForSeconds(0.1f);
+            m_character.physics.SetVelocity(new Vector2(m_info.spawnVelocity.x * -transform.localScale.x, m_info.spawnVelocity.y));
+            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spawnAnimation);
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         private IEnumerator DetectRoutine()
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
@@ -295,8 +326,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                    StartCoroutine(DetectRoutine());
+                    //m_stateHandle.Wait(State.ReevaluateSituation);
+                    //StartCoroutine(DetectRoutine());
+                    CustomTurn();
+                    StartCoroutine(SpawnRoutine());
                     break;
                 case State.Sleep:
                     m_animation.SetAnimation(0, m_info.sleepAnimation, true);
