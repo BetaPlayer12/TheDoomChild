@@ -336,9 +336,9 @@ namespace DChild.Gameplay.Environment
         [SerializeField, OnValueChanged("UpdateReference")]
         private SpineAnimation m_spineAnimation;
         [SerializeField, OnValueChanged("UpdateReference"), ListDrawerSettings(ShowIndexLabels = true), TabGroup("Idling")]
-        private IBehaviour[] m_idlingBehaviour;
+        private IBehaviour[] m_idlingBehaviour = new IBehaviour[0];
         [SerializeField, OnValueChanged("UpdateReference"), ListDrawerSettings(ShowIndexLabels = true, NumberOfItemsPerPage = 1), TabGroup("Reacting")]
-        private IBehaviour[] m_reactBehaviour;
+        private IBehaviour[] m_reactBehaviour = new IBehaviour[0];
         private bool m_isReacting;
         private float m_timer;
         private IBehaviour m_currentBehaviour;

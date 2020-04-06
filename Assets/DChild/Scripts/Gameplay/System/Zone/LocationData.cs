@@ -46,6 +46,12 @@ namespace DChild.Gameplay.Systems.Serialization
             //EditorUtility.SetDirty(this);
             //AssetDatabase.SaveAssets();
         }
+
+        public void SaveAsset()
+        {
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+        }
 #endif
 
         public event EventAction<CharacterEventArgs> OnArrival;

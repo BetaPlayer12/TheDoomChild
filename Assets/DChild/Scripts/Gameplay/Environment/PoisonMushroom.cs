@@ -64,7 +64,7 @@ namespace DChild.Gameplay.Environment
         {
             if (e.Data.Name == m_data.emissionFXEvent)
             {
-                m_fxSpawner.InstantiateFX(m_data.emissionFXReference, OnEmissionFXSpawn);
+                OnEmissionFXSpawn(m_fxSpawner.InstantiateFX(m_data.emissionFXReference, Vector2.zero).gameObject, 0);
             }
         }
 
@@ -79,7 +79,7 @@ namespace DChild.Gameplay.Environment
             m_emissionFX = instance.GetComponent<FX>();
             m_emissionFX.Play();
             m_emissionFX.Done += OnEmissionFXDone;
-            instance.GetComponent<SortingHandle>().SetOrder(m_sortingHandle.sortingLayerID, m_sortingHandle.sortingOrder);
+            instance.GetComponent<SortingHandle>().SetOrder(m_sortingHandle.sortingLayerID, m_sortingHandle.sortingOrder+1);
             m_damageCollider.enabled = true;
         }
 
@@ -95,7 +95,7 @@ namespace DChild.Gameplay.Environment
         {
             m_animation.SetAnimation(0, m_data.anticipationAnimation, true);
             m_emmisionDelayTime.Reset();
-            m_fxSpawner.InstantiateFX(m_data.anticipationFXReference, OnAnticipationFXSpawn);
+            OnAnticipationFXSpawn(m_fxSpawner.InstantiateFX(m_data.anticipationFXReference, Vector2.zero).gameObject,0);
 
             enabled = true;
             m_trigger.enabled = false;
@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Environment
             instanceTransform.parent = null;
             m_anticipationFX = instance.GetComponent<FX>();
             m_anticipationFX.Play();
-            instance.GetComponent<SortingHandle>().SetOrder(m_sortingHandle.sortingLayerID, m_sortingHandle.sortingOrder);
+            instance.GetComponent<SortingHandle>().SetOrder(m_sortingHandle.sortingLayerID, m_sortingHandle.sortingOrder+1);
         }
 
         private void Awake()
