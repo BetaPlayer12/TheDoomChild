@@ -50,6 +50,12 @@ namespace DChild.Gameplay.Combat
             base.OnValidCollider(collision, hitbox);
         }
 
+        private void RemoveAffectedIndex(int i)
+        {
+            m_toDamage.RemoveAt(i);
+            m_affectedColliders.RemoveAt(i);
+            m_infos.RemoveAt(i);
+        }
 
         protected override void Awake()
         {
@@ -69,9 +75,7 @@ namespace DChild.Gameplay.Combat
                 {
                     if (info.isOutOfCollider)
                     {
-                        m_toDamage.RemoveAt(i);
-                        m_affectedColliders.RemoveAt(i);
-                        m_infos.RemoveAt(i);
+                        RemoveAffectedIndex(i);
                     }
                     else
                     {
@@ -79,6 +83,10 @@ namespace DChild.Gameplay.Combat
                         var collision = m_affectedColliders[i];
                         DealDamage(collision, m_toDamage[i]);
                         SpawnHitFX(collision);
+                        if(m_toDamage[i].damageable.isAlive == false)
+                        {
+                            RemoveAffectedIndex(i);
+                        }
                     }
                 }
                 else
@@ -88,6 +96,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+      
 
         private void OnTriggerExit2D(Collider2D collision)
         {

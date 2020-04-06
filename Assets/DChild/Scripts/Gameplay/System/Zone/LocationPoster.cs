@@ -24,23 +24,32 @@ namespace DChild.Gameplay.Systems
                 m_locationPoint = transform;
             }
 
-            if (Application.isPlaying == false)
+            if (UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() == null)
             {
-                var currentPosition = m_locationPoint.position;
-                if (m_prevPosition != currentPosition)
+                if (Application.isPlaying == false)
                 {
-                    m_data?.Set(gameObject.scene, currentPosition);
-                    m_prevPosition = currentPosition;
+                    var currentPosition = m_locationPoint.position;
+                    if (m_prevPosition != currentPosition)
+                    {
+                        m_data?.Set(gameObject.scene, currentPosition);
+                        m_prevPosition = currentPosition;
+                    }
                 }
-            }
-            if (gameObject.scene.name != null)
-            {
-                var newName = "LP_" + m_data?.name ?? "NONE";
-                if (gameObject.name != newName)
+                if (gameObject.scene.name != null)
                 {
-                    gameObject.name = newName;
-                }
+                    var newName = "LP_" + m_data?.name ?? "NONE";
+                    if (gameObject.name != newName)
+                    {
+                        gameObject.name = newName;
+                    }
+                } 
             }
+        }
+
+        [Button,ShowIf("@m_data != null")]
+        private void SaveData()
+        {
+            m_data?.SaveAsset();
         }
 #endif
     }

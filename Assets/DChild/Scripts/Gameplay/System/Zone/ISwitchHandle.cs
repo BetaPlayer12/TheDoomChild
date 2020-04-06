@@ -7,7 +7,8 @@ namespace DChild.Gameplay.Environment
     {
         Enter,
         PostEnter,
-        Exit
+        Exit,
+        PostExit
     }
 
     public interface ISwitchHandle

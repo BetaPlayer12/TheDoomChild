@@ -20,11 +20,11 @@ namespace DChild.Gameplay.Environment
         private string m_emissionAnimation;
 
         [SerializeField]
-        private AssetReferenceFX m_anticipationFXReference;
+        private GameObject m_anticipationFXReference;
         [SerializeField, SpineEvent(dataField = "m_skeletonData")]
         private string m_emissionFXEvent;
         [SerializeField]
-        private AssetReferenceFX m_emissionFXReference;
+        private GameObject m_emissionFXReference;
 
         public float emmisionDelayTime => m_emmisionDelayTime;
         public float resetDelayTime => m_resetDelayTime;
@@ -32,9 +32,9 @@ namespace DChild.Gameplay.Environment
         public string anticipationAnimation => m_anticipationAnimation;
         public string emissionAnimation => m_emissionAnimation;
 
-        public AssetReferenceFX anticipationFXReference => m_anticipationFXReference;
+        public GameObject anticipationFXReference => m_anticipationFXReference;
         public string emissionFXEvent => m_emissionFXEvent;
-        public AssetReferenceFX emissionFXReference => m_emissionFXReference;
+        public GameObject emissionFXReference => m_emissionFXReference;
     }
 
 }

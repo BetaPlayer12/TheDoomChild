@@ -1,41 +1,76 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay.Characters.Players;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class OnewayPlatform : MonoBehaviour
 {
-    private PlatformEffector2D platformEffector;
-    public float waitTime;
+    private Collider2D m_collider;
+    public float waitTime = 0.5f;
+
+    private Collider2D m_playerCollider;
+    private bool m_inContact;
+    private float m_timer;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        platformEffector = GetComponent<PlatformEffector2D>();
+        m_collider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float verticalInput = Input.GetAxis("Vertical");
-
-        if (verticalInput == 0)
+        if (m_inContact)
         {
-            platformEffector.rotationalOffset = 0.0f;
-            waitTime = 0.5f;
-        }
+            float verticalInput = Input.GetAxis("Vertical");
 
-        if (verticalInput < 0)
-        {
-            if(waitTime <= 0)
+            if (verticalInput < 0)
             {
-                platformEffector.rotationalOffset = 180.0f;
-                waitTime = 0.5f;
+                if (Input.GetButtonDown("Jump"))
+                {
+                    Physics2D.IgnoreCollision(m_playerCollider, m_collider, true);
+                    m_inContact = false;
+                    m_timer = waitTime;
+                }
+
             }
-            else
-            {
-                waitTime -= Time.deltaTime;
-            }    
-
         }
-        
+
+        if (m_timer > 0)
+        {
+            m_timer -= Time.deltaTime;
+            if (m_timer <= 0)
+            {
+                Physics2D.IgnoreCollision(m_playerCollider, m_collider, false);
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (m_inContact == false)
+        {
+            if (collision.enabled)
+            {
+                if (collision.collider.GetComponentInParent<PlayerControlledObject>())
+                {
+                    m_playerCollider = collision.collider;
+                    m_inContact = true;
+                }
+            }
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (m_inContact)
+        {
+            if (m_playerCollider == collision.collider)
+            {
+                m_inContact = false;
+                Physics2D.IgnoreCollision(m_playerCollider, m_collider, false);
+            }
+        }
     }
 }
