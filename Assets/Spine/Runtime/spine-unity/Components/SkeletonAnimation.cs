@@ -246,10 +246,10 @@ namespace Spine.Unity {
 
 		public override void LateUpdate()
 		{
-			if (m_alwaysUpdateMesh || m_isVisible)
-			{
+			//if (m_alwaysUpdateMesh || m_isVisible)
+			//{
 				base.LateUpdate();
-			}
+			//}
 		}
 
 		private void OnBecameInvisible()

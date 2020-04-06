@@ -1,5 +1,7 @@
-﻿using DChild.Gameplay;
+﻿
+using DChild.Gameplay;
 using DChild.Gameplay.Characters.Players;
+using Doozy.Engine;
 using PlayerNew;
 using System;
 using System.Collections;
@@ -35,6 +37,7 @@ public class InteractableController : PlayerBehaviour
             if (m_interactableDetector.closestObject != null)
             {
                 m_interactableDetector.closestObject.Interact(m_character);
+                GameEventMessage.SendEvent("Object Interacted");
             }
         }
     }

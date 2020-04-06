@@ -14,7 +14,7 @@ namespace DChild
             GameSystem.CameraChange += OnCameraChange;
         }
 
-        private void nDestroy()
+        private void OnDestroy()
         {
             GameSystem.CameraChange -= OnCameraChange;
         }
