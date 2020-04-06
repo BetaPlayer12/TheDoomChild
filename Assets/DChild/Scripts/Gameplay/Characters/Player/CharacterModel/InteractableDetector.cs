@@ -2,6 +2,7 @@
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,16 +37,14 @@ namespace DChild.Gameplay.Characters.Players
 
         private void CallInteractableDetectedEvent(IButtonToInteract interactable)
         {
-            if (interactable != null)
+
+            if (interactable == null || interactable.showPrompt)
             {
-                if (interactable.showPrompt)
+                using (Cache<DetectedInteractableEventArgs> cacheEvent = Cache<DetectedInteractableEventArgs>.Claim())
                 {
-                    using (Cache<DetectedInteractableEventArgs> cacheEvent = Cache<DetectedInteractableEventArgs>.Claim())
-                    {
-                        cacheEvent.Value.Initialize(interactable);
-                        InteractableDetected?.Invoke(this, cacheEvent.Value);
-                        cacheEvent.Release();
-                    }
+                    cacheEvent.Value.Initialize(interactable);
+                    InteractableDetected?.Invoke(this, cacheEvent.Value);
+                    cacheEvent.Release();
                 }
             }
         }
@@ -61,11 +60,37 @@ namespace DChild.Gameplay.Characters.Players
             {
                 try
                 {
-                    var forMissingReference = m_objectsInRange[i].transform.position;
+                    if (m_objectsInRange[i].transform != null)
+                    {
+                        var forMissingReference = m_objectsInRange[i].transform.position;
+                    }
+                    else
+                    {
+                        m_objectsInRange.RemoveAt(i);
+
+                        if (m_objectsInRange.Count == 0)
+                        {
+                            CallInteractableDetectedEvent(null);
+                        }
+                    }
                 }
                 catch (MissingReferenceException)
                 {
                     m_objectsInRange.RemoveAt(i);
+
+                    if (m_objectsInRange.Count == 0)
+                    {
+                        CallInteractableDetectedEvent(null);
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    m_objectsInRange.RemoveAt(i);
+
+                    if (m_objectsInRange.Count == 0)
+                    {
+                        CallInteractableDetectedEvent(null);
+                    }
                 }
             }
 

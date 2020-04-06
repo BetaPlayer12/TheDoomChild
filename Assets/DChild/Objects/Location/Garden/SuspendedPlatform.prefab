@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2229493058982179556}
   - component: {fileID: 5704808960471639988}
   - component: {fileID: 2920700492094766520}
+  - component: {fileID: 2513891879015290279}
+  - component: {fileID: 7172220167868848175}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -60,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4d839c94dea7eeb449b8bb69b42ef825, type: 2}
+  - {fileID: 2100000, guid: 92e520591f0968946b6bcfa9d5310378, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 4009d08b13a537a42947d846095ddf79, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 6ae9c2a7c178b7e40b72e396222f0b3a, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -114,10 +116,42 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: 
-  loop: 0
+  _animationName: Boulder_idle
+  loop: 1
   timeScale: 1
   m_alwaysUpdateMesh: 0
+--- !u!114 &2513891879015290279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3271725524188729935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5830f2bbb3b8ac149905b0850dbf3c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_source: {fileID: 1172312483073662056}
+  m_animator: {fileID: 7172220167868848175}
+  m_animation: Boulder_death
+  m_bodyDuration:
+    m_startTime: 0
+  m_destroySource: 0
+--- !u!114 &7172220167868848175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3271725524188729935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animationTracks: []
+  m_skeletonAnimation: {fileID: 2920700492094766520}
 --- !u!1 &3672985234317574577
 GameObject:
   m_ObjectHideFlags: 0
