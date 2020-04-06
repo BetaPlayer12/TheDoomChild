@@ -111,7 +111,7 @@ namespace PlayerNew
             //jumping beside wall 
             if ((onWallDetected || groundWallStick) && wallStickJump && wallStickJumpHold < 0.1f && !upHold)
             {
-                Debug.Log("wall jump");
+                
                 //facing left
                 if (!facing.isFacingRight)
                     body2d.velocity = new Vector2(forceX, forceY);
