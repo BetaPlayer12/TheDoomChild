@@ -114,7 +114,7 @@ namespace DChild.Gameplay
                 if (IsInterrupted())
                 {
                     offsetTarget = searchTarget;
-                    offsetTarget.y -= yOffset ;
+                    offsetTarget.y -= yOffset;
                     Raycaster.Cast(origin, offsetTarget.normalized, offsetTarget.magnitude, true, out hitCount);
                     return !IsInterrupted();
                 }
