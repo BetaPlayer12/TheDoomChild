@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DChild.Gameplay;
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild
@@ -13,6 +15,7 @@ namespace DChild
         private MaterialPropertyBlock m_propertyBlock;
         private int m_shaderID;
         private bool m_isInitialized;
+        private float m_lerpSpeed;
 
         public void SetTargetParameter(string parameter)
         {
@@ -33,6 +36,14 @@ namespace DChild
             Initialize();
             SetPropertyBlock((MaterialPropertyBlock materialPropertyBlock) => { materialPropertyBlock.SetFloat(m_shaderID, value); });
         }
+
+        public void LerpValue(float toValue)
+        {
+            Initialize();
+            StartCoroutine(LerpRoutine(m_shaderID, toValue, m_lerpSpeed));
+        }
+
+        public void StopAllRoutines() => StopAllCoroutines();
 
         private void SetPropertyBlock(Action<MaterialPropertyBlock> action)
         {
@@ -55,6 +66,33 @@ namespace DChild
                 m_propertyBlock = new MaterialPropertyBlock();
                 m_isInitialized = true;
             }
+        }
+
+        private IEnumerator LerpRoutine(int shaderID, float destinationValue, float speed)
+        {
+            var lerpValue = 0f;
+            var originValue = new float[m_renderers.Length];
+            for (int i = 0; i < m_renderers.Length; i++)
+            {
+                m_renderers[i].GetPropertyBlock(m_propertyBlock);
+                originValue[i] = m_propertyBlock.GetFloat(shaderID);
+            }
+
+
+            var value = 0f;
+            Action<MaterialPropertyBlock> action = (MaterialPropertyBlock materialPropertyBlock) => { materialPropertyBlock.SetFloat(shaderID, value); };
+            do
+            {
+                lerpValue += speed * GameplaySystem.time.deltaTime;
+                for (int i = 0; i < m_renderers.Length; i++)
+                {
+                    m_renderers[i].GetPropertyBlock(m_propertyBlock);
+                    value = Mathf.Lerp(originValue[i], destinationValue, lerpValue);
+                    action?.Invoke(m_propertyBlock);
+                    m_renderers[i].SetPropertyBlock(m_propertyBlock);
+                }
+                yield return null;
+            } while (lerpValue < 1);
         }
 
         private void Awake()
