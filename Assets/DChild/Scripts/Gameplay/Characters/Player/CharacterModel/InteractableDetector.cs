@@ -60,36 +60,16 @@ namespace DChild.Gameplay.Characters.Players
             {
                 try
                 {
-                    if (m_objectsInRange[i].transform != null)
+                    if (m_objectsInRange[i].transform.gameObject.activeInHierarchy == false)
                     {
-                        var forMissingReference = m_objectsInRange[i].transform.position;
-                    }
-                    else
-                    {
-                        m_objectsInRange.RemoveAt(i);
-
-                        if (m_objectsInRange.Count == 0)
-                        {
-                            CallInteractableDetectedEvent(null);
-                        }
+                        RemoveIndexSafely(i);
                     }
                 }
-                catch (MissingReferenceException)
+                catch (Exception ex)
                 {
-                    m_objectsInRange.RemoveAt(i);
-
-                    if (m_objectsInRange.Count == 0)
+                    if (ex is MissingReferenceException || ex is NullReferenceException)
                     {
-                        CallInteractableDetectedEvent(null);
-                    }
-                }
-                catch (NullReferenceException)
-                {
-                    m_objectsInRange.RemoveAt(i);
-
-                    if (m_objectsInRange.Count == 0)
-                    {
-                        CallInteractableDetectedEvent(null);
+                        RemoveIndexSafely(i);
                     }
                 }
             }
@@ -125,6 +105,16 @@ namespace DChild.Gameplay.Characters.Players
                 {
                     m_closestObject = m_objectsInRange[0];
                 }
+            }
+        }
+
+        private void RemoveIndexSafely(int i)
+        {
+            m_objectsInRange.RemoveAt(i);
+
+            if (m_objectsInRange.Count == 0)
+            {
+                CallInteractableDetectedEvent(null);
             }
         }
 
