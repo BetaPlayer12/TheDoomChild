@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1391,6 +1391,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 154.1
       objectReference: {fileID: 0}
+    - target: {fileID: 6867461928545417999, guid: 7e9ace828767c6d4ab3ab03c8862f417,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6867461929860917304, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -2561,6 +2566,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 270962403}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -2569,7 +2580,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -2661,7 +2672,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &52175372 stripped
 Transform:
@@ -2669,6 +2681,121 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 52175371}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &52175373 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 52175371}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &52175374 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 52175371}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52175373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &52175375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52175373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing_To_Idle2
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 1
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 3|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 52175374}
 --- !u!1 &52648976
 GameObject:
   m_ObjectHideFlags: 0
@@ -4902,7 +5029,7 @@ PrefabInstance:
     - target: {fileID: 5345128152189918591, guid: f59b58d72a783c64786af52ca5d0b94c,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5811582792500166892, guid: f59b58d72a783c64786af52ca5d0b94c,
         type: 3}
@@ -21022,7 +21149,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: fd52859a2dd38594a917b7ecd125feb2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21580,6 +21707,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 270962403}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -21588,7 +21721,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -21680,7 +21813,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &526309981 stripped
 Transform:
@@ -21688,6 +21822,96 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 526309980}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &526309982 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 526309980}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &526309983 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 526309980}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526309982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &526309984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526309982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 526309983}
 --- !u!1 &526997620
 GameObject:
   m_ObjectHideFlags: 0
@@ -23927,6 +24151,26 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2.128845
       objectReference: {fileID: 0}
+    - target: {fileID: 1141223436298971618, guid: 04f073db56954644c8f9fc7fab4ce78c,
+        type: 3}
+      propertyPath: m_referenceOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1141223436298971618, guid: 04f073db56954644c8f9fc7fab4ce78c,
+        type: 3}
+      propertyPath: m_rendererList.Array.data[0].m_baseOrder
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1141223436298971618, guid: 04f073db56954644c8f9fc7fab4ce78c,
+        type: 3}
+      propertyPath: m_previousReferenceOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1331907489161108438, guid: 04f073db56954644c8f9fc7fab4ce78c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1829670820652990522, guid: 04f073db56954644c8f9fc7fab4ce78c,
         type: 3}
       propertyPath: m_Offset.x
@@ -23947,10 +24191,30 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 2.2028658
       objectReference: {fileID: 0}
+    - target: {fileID: 3138615428064601375, guid: 04f073db56954644c8f9fc7fab4ce78c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949606857829856086, guid: 04f073db56954644c8f9fc7fab4ce78c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6000110409676686627, guid: 04f073db56954644c8f9fc7fab4ce78c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986664600869199485, guid: 04f073db56954644c8f9fc7fab4ce78c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7354814089345851502, guid: 04f073db56954644c8f9fc7fab4ce78c,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 30
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 7354814089345851503, guid: 04f073db56954644c8f9fc7fab4ce78c,
         type: 3}
@@ -25690,7 +25954,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 46ea870efddca14409cb768fd35a6703, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -37119,6 +37383,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 270962403}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -37127,7 +37397,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -37229,7 +37499,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &881629132 stripped
 Transform:
@@ -37237,6 +37508,121 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 881629131}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &881629133 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 881629131}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &881629134 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 881629131}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881629133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &881629135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881629133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing_To_Idle1
+    - Name: m_loop
+      Entry: 5
+      Data: false
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 1
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing_To_Idle2
+    - Name: m_loop
+      Entry: 5
+      Data: false
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 3|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 881629134}
 --- !u!1 &882268706
 GameObject:
   m_ObjectHideFlags: 0
@@ -42231,6 +42617,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 904174545}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -42239,7 +42631,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -42331,7 +42723,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &1059342126 stripped
 Transform:
@@ -42582,6 +42975,96 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1068130947 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1059342125}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1068130948 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1059342125}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068130947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1068130949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068130947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 1068130948}
 --- !u!1 &1068535367
 GameObject:
   m_ObjectHideFlags: 0
@@ -46157,6 +46640,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 904174545}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -46165,7 +46654,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -46262,7 +46751,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &1165953964 stripped
 Transform:
@@ -46270,6 +46760,96 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1165953963}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1165953965 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1165953963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1165953966 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1165953963}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165953965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1165953967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165953965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 1165953966}
 --- !u!1 &1167942571
 GameObject:
   m_ObjectHideFlags: 0
@@ -51132,6 +51712,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 303604302132238753, guid: f59b58d72a783c64786af52ca5d0b94c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2005469862315027976, guid: f59b58d72a783c64786af52ca5d0b94c,
         type: 3}
       propertyPath: m_IsActive
@@ -51150,7 +51735,7 @@ PrefabInstance:
     - target: {fileID: 2412037597549242920, guid: f59b58d72a783c64786af52ca5d0b94c,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2412037597549242920, guid: f59b58d72a783c64786af52ca5d0b94c,
         type: 3}
@@ -56291,6 +56876,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 270962403}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -56299,7 +56890,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -56391,7 +56982,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &1402230834 stripped
 Transform:
@@ -56399,6 +56991,96 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1402230833}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1402230835 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1402230833}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1402230836 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1402230833}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402230835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1402230837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402230835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 1402230836}
 --- !u!1 &1402470745
 GameObject:
   m_ObjectHideFlags: 0
@@ -58146,6 +58828,121 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1472751177 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2033912165}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1472751178 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2033912165}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472751177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1472751182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472751177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing_To_Idle1
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 1
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Idle1
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 3|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 1472751178}
 --- !u!1 &1476697629
 GameObject:
   m_ObjectHideFlags: 0
@@ -63129,6 +63926,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 270962403}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -63137,7 +63940,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -63239,7 +64042,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &1639718168 stripped
 Transform:
@@ -63247,6 +64051,96 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1639718167}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1639718169 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1639718167}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1639718170 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1639718167}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639718169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1639718171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639718169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 1639718170}
 --- !u!1 &1641433562
 GameObject:
   m_ObjectHideFlags: 0
@@ -68321,15 +69215,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7418061770032427, guid: 46772ff4c7b016d4dae0eaded85ccf3a, type: 3}
       propertyPath: m_referenceOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7418061770032427, guid: 46772ff4c7b016d4dae0eaded85ccf3a, type: 3}
       propertyPath: m_previousReferenceOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7418061770032427, guid: 46772ff4c7b016d4dae0eaded85ccf3a, type: 3}
       propertyPath: m_rendererList.Array.data[1].m_baseOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 104246708321344866, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
@@ -68409,22 +69303,22 @@ PrefabInstance:
     - target: {fileID: 2141400972984563487, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2612844253999729110, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6667727388399233514, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6727557543518265247, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7628436314831293606, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
@@ -68439,12 +69333,12 @@ PrefabInstance:
     - target: {fileID: 7628436314831293607, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8014635384121078452, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9142945198501749803, guid: 46772ff4c7b016d4dae0eaded85ccf3a,
         type: 3}
@@ -70008,7 +70902,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: ba9080025aa741f45892ca8e3f65227c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -72711,6 +73605,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 904174545}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -72719,7 +73619,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -72816,7 +73716,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &1863251982 stripped
 Transform:
@@ -72824,6 +73725,121 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1863251981}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1863251983 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1863251981}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1863251984 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1863251981}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863251983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1863251985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863251983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing_To_Idle2
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 1
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 30
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 3|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 1863251984}
 --- !u!1 &1863760142
 GameObject:
   m_ObjectHideFlags: 0
@@ -73393,6 +74409,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 270962403}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -73401,7 +74423,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -73493,7 +74515,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &1881573906 stripped
 Transform:
@@ -73501,6 +74524,146 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1881573905}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1881573907 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1881573905}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1881573908 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1881573905}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881573907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1881573909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881573907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Idle2
+    - Name: m_loop
+      Entry: 5
+      Data: false
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 1
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Idle1
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 2
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 12
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 4|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 1881573908}
 --- !u!1 &1892222833
 GameObject:
   m_ObjectHideFlags: 0
@@ -75877,6 +77040,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 904174545}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -75885,7 +77054,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
@@ -75977,7 +77146,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3, type: 3}
 --- !u!4 &1949917003 stripped
 Transform:
@@ -75985,6 +77155,121 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1949917002}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1949917004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1949917002}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1949917005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2166531237401079641, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1949917002}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949917004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1949917006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949917004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd311bbad29f3f45a017b264129ca0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 52801de605c1f0b44bee10109a5623c2, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_idlingBehaviour
+      Entry: 7
+      Data: 0|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 0
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Grazing_To_Idle1
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Environment.ComplexIdlingCreature+InPlaceBehaviour,
+        Assembly-CSharp
+    - Name: m_skeletonDataAsset
+      Entry: 10
+      Data: 0
+    - Name: m_index
+      Entry: 3
+      Data: 1
+    - Name: m_animation
+      Entry: 1
+      Data: Deer_Idle1
+    - Name: m_loop
+      Entry: 5
+      Data: true
+    - Name: m_mixDuration
+      Entry: 4
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_reactBehaviour
+      Entry: 7
+      Data: 3|DChild.Gameplay.Environment.ComplexIdlingCreature+IBehaviour[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_spineAnimation: {fileID: 1949917005}
 --- !u!1 &1952098203
 GameObject:
   m_ObjectHideFlags: 0
@@ -78832,6 +80117,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 904174545}
     m_Modifications:
+    - target: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 857824123832104958, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
+        type: 3}
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_Name
@@ -78840,7 +80131,7 @@ PrefabInstance:
     - target: {fileID: 2411426875490679063, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4660449165546683429, guid: 3a8f0fddc77a4144292f53d6e4dcdeb3,
         type: 3}
