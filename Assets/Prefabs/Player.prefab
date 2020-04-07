@@ -426,7 +426,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -789688561
-  m_SortingLayer: 6
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0b95a1777deeeff46a10421a11773eb2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
@@ -532,6 +532,7 @@ GameObject:
   - component: {fileID: 6510747629855287798}
   - component: {fileID: 7444785728418272536}
   - component: {fileID: 7985633607094572607}
+  - component: {fileID: 8449102287724545631}
   m_Layer: 16
   m_Name: Player
   m_TagString: Untagged
@@ -855,7 +856,7 @@ MonoBehaviour:
   - {fileID: 922925365}
   - {fileID: 251286694}
   enableOnlyScript: []
-  dashForce: 5500
+  dashForce: 3000
   dashDelay: 5
   dashTime: 0.3
   dashing: 0
@@ -1058,9 +1059,27 @@ MonoBehaviour:
   dissableScripts:
   - {fileID: 6127085214049875194}
   - {fileID: 922925365}
+  - {fileID: 1405919478}
   enableOnlyScript: []
   groundsmash: {fileID: 965161050}
   crouching: 0
+--- !u!114 &8449102287724545631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7567338640060585527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2186dce91479584e850fd0d0335905e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputButtons: 
+  dissableScripts: []
+  enableOnlyScript: []
+  attack: {fileID: 251286694}
+  attackMode: 0
 --- !u!1 &8518109723057449616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1857,6 +1876,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX
       objectReference: {fileID: 0}
+    - target: {fileID: 7846448399743153481, guid: c412e995e971b284bb8b1fb1fa00028a,
+        type: 3}
+      propertyPath: m_ignoreColliderList.Array.data[0].m_target
+      value: 
+      objectReference: {fileID: 7567338640060585522}
     - target: {fileID: 8496082760883083275, guid: c412e995e971b284bb8b1fb1fa00028a,
         type: 3}
       propertyPath: m_ignoreColliderList.Array.data[0].m_target

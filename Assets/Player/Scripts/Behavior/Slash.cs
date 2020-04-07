@@ -150,7 +150,7 @@ namespace PlayerNew
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    
+                    attacking = true;
                     
                     releaseTime += Time.deltaTime;
                 }
@@ -186,8 +186,8 @@ namespace PlayerNew
                             SwordJumpSlashForwardFX();
                             m_swordJumpSlashForwardAttackCollider.enabled = true;
                         }
-                       
-                    
+
+                    attacking = true;
                     //animator.SetBool("Attack", false);
                     releaseTime = 0.0f;
                 }
@@ -196,7 +196,7 @@ namespace PlayerNew
             if (canSlash && !dashState.dashing)
             {
                 ToggleScripts(false);
-               
+                attacking = true;
                 if (!upHold && collisionState.grounded && !downButton)
                 {
                     
@@ -262,6 +262,7 @@ namespace PlayerNew
                 m_jumpSlashAttackCollider.enabled = false;
                 m_swordUpSlashAttackCollider.enabled = false;
                 m_swordJumpSlashForwardAttackCollider.enabled = false;
+                attacking = false;
                 animator.SetBool("Attack", false);
                 animator.SetBool("Slash1", false);
                 ToggleScripts(true);
@@ -308,6 +309,7 @@ namespace PlayerNew
             m_swordUpSlashAttackCollider.enabled = false;
             m_swordJumpSlashForwardAttackCollider.enabled = false;
             ToggleScripts(true);
+            attacking = false;
         }
 
         public void FinishAttack2()
@@ -325,7 +327,8 @@ namespace PlayerNew
             m_swordUpSlashAttackCollider.enabled = false;
             m_swordJumpSlashForwardAttackCollider.enabled = false;
             ToggleScripts(true);
-           
+            attacking = false;
+
         }
 
         public void FinishAttack3()
@@ -345,6 +348,7 @@ namespace PlayerNew
             m_swordJumpSlashForwardAttackCollider.enabled = false;
             numOfClicks = 0;
             ToggleScripts(true);
+            attacking = false;
         }
 
         private void OnDrawGizmosSelected()

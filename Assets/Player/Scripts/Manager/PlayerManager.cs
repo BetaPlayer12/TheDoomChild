@@ -19,6 +19,7 @@ namespace PlayerNew
         private Thrust thrustBehavior;
         private Animator animator;
         private WallSlide wallSlideBehavior;
+        private Idle idleBehavior;
 
 
 
@@ -45,6 +46,7 @@ namespace PlayerNew
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
             wallSlideBehavior = GetComponent<WallSlide>();
+            idleBehavior = GetComponent<Idle>();
 
         }
         // Start is called before the first frame update
@@ -152,6 +154,13 @@ namespace PlayerNew
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
+            IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
+        }
+
+        void IdleAnimationModeState(bool value, int value1)
+        {
+            animator.SetBool("AttackMode", value);
+            animator.SetInteger("IdleState", value1);
         }
 
         void GroundShakerAnimationState(bool value)
