@@ -102,6 +102,68 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &517650212723364342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6263352622085019804}
+  - component: {fileID: 1239100542664466193}
+  - component: {fileID: 8057025568774134799}
+  m_Layer: 13
+  m_Name: GroundSensor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6263352622085019804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517650212723364342}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: -0.7071068}
+  m_LocalPosition: {x: 0, y: -5.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7533814355759997730}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1239100542664466193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517650212723364342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_multiRaycast:
+    m_config: {fileID: 11400000, guid: 9e2b296bfad902b48afb907bba031541, type: 2}
+    m_rayColor: {r: 0, g: 1, b: 0.10866976, a: 1}
+  m_enable: 1
+--- !u!114 &8057025568774134799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517650212723364342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_leftRotation: 90
+  m_rightRotation: 270
 --- !u!1 &635085178875493854
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,8 +189,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 635085178875493854}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.021182286, y: 1.4062754, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.030074552, y: 1.2662439, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1939093143405179665}
@@ -147,7 +209,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 1
-  m_Offset: {x: 0, y: 0.4}
+  m_Offset: {x: 0.08, y: 0.47}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -173,10 +235,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 6867767878161283049}
-  boneName: bone19
+  boneName: bone18
   followXYPosition: 1
   followZPosition: 1
-  followBoneRotation: 1
+  followBoneRotation: 0
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
@@ -257,20 +319,20 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 5196754229577667794}
     m_ColliderPaths:
-    - - X: 8335722
-        Y: 10400953
-      - X: 8335722
-        Y: 36200952
-      - X: -7789248
-        Y: 36200923
-      - X: -7789219
-        Y: 10400953
+    - - X: 8706508
+        Y: 9497547
+      - X: 8706508
+        Y: 35297548
+      - X: -7418462
+        Y: 35297519
+      - X: -7418433
+        Y: 9497547
   m_CompositePaths:
     m_Paths:
-    - - {x: 0.8335693, y: 1.0400953}
-      - {x: 0.8335693, y: 3.6200953}
-      - {x: -0.7789248, y: 3.6200895}
-      - {x: -0.778919, y: 1.0400953}
+    - - {x: 0.8706479, y: 0.9497547}
+      - {x: 0.8706479, y: 3.5297549}
+      - {x: -0.7418462, y: 3.529749}
+      - {x: -0.7418404, y: 0.9497547}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.000005
 --- !u!114 &8146823187355039902
@@ -419,7 +481,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7533814355759997730}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3024228674284243688
 MonoBehaviour:
@@ -480,6 +542,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 6.28, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 6263352622085019804}
   - {fileID: 1167703120645761365}
   - {fileID: 8195878140894500937}
   - {fileID: 1604547752390138343}
@@ -501,6 +564,7 @@ MonoBehaviour:
   m_sensors:
   - {fileID: 6719546649849471268}
   - {fileID: 3024228674284243688}
+  - {fileID: 1239100542664466193}
   m_useDistance: 1
   m_castPerDistance: 0.5
   m_useTime: 1
@@ -603,7 +667,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5642621696987522129}
-  - component: {fileID: 6580552803803502620}
   m_Layer: 13
   m_Name: ProjectilePoint
   m_TagString: Untagged
@@ -627,26 +690,6 @@ Transform:
   m_Father: {fileID: 3842954542087072852}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6580552803803502620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5580389903873827669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 6867767878161283049}
-  boneName: bone21
-  followXYPosition: 1
-  followZPosition: 1
-  followBoneRotation: 1
-  followSkeletonFlip: 1
-  followLocalScale: 0
-  initializeOnAwake: 1
 --- !u!1 &5942879155104061219
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,11 +717,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5942879155104061219}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.021182286, y: -4.873725, z: 0}
+  m_LocalPosition: {x: -0.0042792447, y: -4.1575103, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7533814355759997730}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1998679740746793472
 CircleCollider2D:
@@ -722,7 +765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 6867767878161283049}
-  boneName: bone19
+  boneName: Orb
   followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
@@ -759,7 +802,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7533814355759997730}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6719546649849471268
 MonoBehaviour:
@@ -801,7 +844,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5426009660479806712}
   - component: {fileID: 2018627936388261443}
-  - component: {fileID: 791024439399650821}
   m_Layer: 16
   m_Name: BodyCollider
   m_TagString: Untagged
@@ -833,10 +875,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 1
-  m_Offset: {x: 0, y: 0.4}
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.85}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -847,28 +889,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.95, y: 1.8}
+  m_Size: {x: 0.95, y: 0.1}
   m_EdgeRadius: 0
---- !u!114 &791024439399650821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8075743191547219846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 6867767878161283049}
-  boneName: bone19
-  followXYPosition: 1
-  followZPosition: 1
-  followBoneRotation: 1
-  followSkeletonFlip: 1
-  followLocalScale: 0
-  initializeOnAwake: 1
 --- !u!1 &8266155066596933724
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,7 +956,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: f1728a40df3fc4d4984c22f8f20bb47f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -967,7 +989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 8ea6f2738e258784f8d4380e14732fb2, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 681615418c2449440849996238b222df, type: 2}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0

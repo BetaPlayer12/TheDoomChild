@@ -59,11 +59,29 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_turnAnimation;
             public string turnAnimation => m_turnAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathAnimation;
-            public string deathAnimation => m_deathAnimation;
+            private string m_deathStartAnimation;
+            public string deathStartAnimation => m_deathStartAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathFallLoopAnimation;
+            public string deathFallLoopAnimation => m_deathFallLoopAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathFallImpact1Animation;
+            public string deathFallImpact1Animation => m_deathFallImpact1Animation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathFallImpact2Animation;
+            public string deathFallImpact2Animation => m_deathFallImpact2Animation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
+
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_spawnBlobEvent;
+            public string spawnBlobEvent => m_spawnBlobEvent;
+
+            [SerializeField]
+            private GameObject m_blobAcid;
+            public GameObject blobAcid => m_blobAcid;
 
             public override void Initialize()
             {
@@ -98,9 +116,13 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private BoxCollider2D m_attackBB;
         [SerializeField, TabGroup("Reference")]
@@ -117,6 +139,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -188,12 +212,19 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            StopAllCoroutines();
             m_stateHandle.Wait(State.Cooldown);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
+        }
+
+        private void SpawnBlob()
+        {
+            var blob = Instantiate(m_info.blobAcid, transform.position, Quaternion.identity);
+            blob.GetComponent<BlobAcidAI>().SetTargetInfo(m_targetInfo);
         }
 
         private Vector2 GroundPosition()
@@ -256,6 +287,22 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator DeathRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
+            m_animation.EnableRootMotion(true, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
+            yield return new WaitForSeconds(1.6f);
+            //m_animation.DisableRootMotion();
+            m_character.physics.simulateGravity = true;
+            m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.deathFallImpact1Animation : m_info.deathFallImpact2Animation;
+            m_bodyCollider.SetActive(true);
+            m_animation.SetAnimation(0, animation, false);
+            yield return null;
+        }
+
         private IEnumerator AttackBBSize()
         {
             yield return new WaitForSeconds(.35f);
@@ -304,6 +351,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
+            StopAllCoroutines();
+            StartCoroutine(DeathRoutine());
         }
 
         private void SkeletonAnimation_UpdateLocal(ISkeletonAnimation animated)
@@ -318,6 +367,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        protected override void Start()
+        {
+            base.Start();
+            //m_selfCollider.SetActive(false);
+            m_spineEventListener.Subscribe(m_info.spawnBlobEvent, SpawnBlob);
+        }
+
         protected override void Awake()
         {
             Debug.Log(m_info);
@@ -327,7 +383,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
@@ -394,7 +450,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        m_stateHandle.SetState(State.Turning);
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
                     }
                     else
                     {
