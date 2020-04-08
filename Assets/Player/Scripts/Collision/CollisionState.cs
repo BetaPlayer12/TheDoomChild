@@ -75,15 +75,7 @@ namespace PlayerNew
 
             lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
             //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-            var wallHit = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
-            if(wallHit.collider != null)
-            {
-                onWall = wallHit.collider?.CompareTag("InvisibleWall") == false;
-            }
-            else
-            {
-                onWall = false;
-            }
+            onWall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
             //Debug.DrawRay(pos, lineDir);
 
 
@@ -100,15 +92,7 @@ namespace PlayerNew
             pos = inputState.direction == Directions.Left ? rightLegPosition : leftLegPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
-            var wallLegHit = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-            if (wallLegHit != null)
-            {
-                onWallLeg = wallLegHit.CompareTag("InvisibleWall") == false;
-            }
-            else
-            {
-                onWallLeg = false;
-            }
+            onWallLeg = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
 
             slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
             slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);

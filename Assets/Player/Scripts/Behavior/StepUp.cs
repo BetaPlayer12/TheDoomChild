@@ -29,6 +29,7 @@ namespace PlayerNew
             var left = inputState.GetButtonValue(inputButtons[0]);
             var right = inputState.GetButtonValue(inputButtons[1]);
 
+
             if(collisionState.onWallLeg && collisionState.grounded && !collisionState.onWall && !collisionState.isTouchingLedge )
             {
                 ledgeBotPos = transform.position;
