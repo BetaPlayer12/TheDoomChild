@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Environment
             m_originalParentPair = new Dictionary<Collider2D, Transform>();
         }
 
-        private void OnCollisionStay2D(Collision2D collision)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.enabled)
             {

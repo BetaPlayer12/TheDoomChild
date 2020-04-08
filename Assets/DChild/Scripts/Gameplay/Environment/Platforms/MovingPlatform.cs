@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Systems.WorldComponents;
+using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -7,7 +8,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Environment
 {
     [AddComponentMenu("DChild/Gameplay/Environment/Moving Platform")]
-    public class MovingPlatform : MonoBehaviour
+    public class MovingPlatform : MonoBehaviour, ISerializableComponent
     {
         public struct UpdateEventArgs : IEventActionArgs
         {
@@ -23,6 +24,28 @@ namespace DChild.Gameplay.Environment
             public int currentWaypointIndex { get; }
             public int waypointCount { get; }
             public bool isGoingForward { get; }
+        }
+
+        [System.Serializable]
+        public struct SaveData : ISaveData
+        {
+            [SerializeField]
+            private Vector2 m_position;
+            [SerializeField]
+            private int m_wayPoint;
+            [SerializeField]
+            private int m_incrementerValue;
+
+            public SaveData(Vector2 position, int wayPoint, int incrementerValue)
+            {
+                m_position = position;
+                m_wayPoint = wayPoint;
+                m_incrementerValue = incrementerValue;
+            }
+
+            public Vector2 position => m_position;
+            public int wayPoint => m_wayPoint;
+            public int incrementerValue => m_incrementerValue;
         }
 
         [SerializeField, MinValue(0.1f), TabGroup("Setting")]
@@ -58,6 +81,19 @@ namespace DChild.Gameplay.Environment
             transform.position = m_waypoints[m_startWaypoint];
         }
 #endif
+
+        public ISaveData Save() => new SaveData(m_cacheDestination, m_wayPointDestination, m_incrementerValue);
+
+        public void Load(ISaveData data)
+        {
+            var saveData = (SaveData)data;
+            transform.position = saveData.position;
+            m_cacheDestination = saveData.position;
+            m_cacheCurrentWaypoint = m_cacheDestination;
+            m_wayPointDestination = saveData.wayPoint;
+            m_currentWayPoint = m_wayPointDestination;
+            m_incrementerValue = saveData.incrementerValue;
+        }
 
         public void PingPongNextWaypoint(bool next)
         {
