@@ -20,7 +20,8 @@ namespace PlayerNew
 
             if (Input.anyKeyDown)
             {
-                idleTimer = 0.0f;         
+                idleTimer = 0.0f;
+                idleState = 0;
             }
             else
             {
@@ -52,7 +53,7 @@ namespace PlayerNew
                 attackMode = false;
                 idleState = 3;
             }
-            Debug.Log("idle timer: " + idleTimer);
+            //Debug.Log("idle timer: " + idleTimer);
 
         }
     }
