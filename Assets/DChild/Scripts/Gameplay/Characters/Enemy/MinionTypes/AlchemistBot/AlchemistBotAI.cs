@@ -445,14 +445,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_agent.SetDestination(targetPos);
                                 m_agent.Move(m_info.move.speed);
 
-                                if (m_canAttack2 && m_playerSensor.isDetecting)
-                                {
-                                    m_chosenAttack = Attack.Attack2;
-                                    m_animation.EnableRootMotion(true, true);
-                                    m_agent.Stop();
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    m_stateHandle.SetState(State.Attacking);
-                                }
+                                //if (m_canAttack2 && m_playerSensor.isDetecting)
+                                //{
+                                //    m_chosenAttack = Attack.Attack2;
+                                //    m_animation.EnableRootMotion(true, true);
+                                //    m_agent.Stop();
+                                //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                //    m_stateHandle.SetState(State.Attacking);
+                                //}
                             }
                             else
                             {

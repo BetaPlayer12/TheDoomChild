@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private bool m_createDebris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
-        private AssetReferenceGameObject m_debris;
+        private GameObject m_debris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
         private bool m_copySorting;
 
