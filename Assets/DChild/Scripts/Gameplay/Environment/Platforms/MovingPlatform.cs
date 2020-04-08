@@ -62,7 +62,7 @@ namespace DChild.Gameplay.Environment
         public void PingPongNextWaypoint(bool next)
         {
             m_pingPongWaypoint += next ? 1 : -1;
-            m_wayPointDestination = (int)Mathf.PingPong(m_pingPongWaypoint, m_listSize-1);
+            m_wayPointDestination = (int)Mathf.PingPong(m_pingPongWaypoint, m_listSize - 1);
             ChangeDestination();
         }
 
@@ -111,8 +111,8 @@ namespace DChild.Gameplay.Environment
                     m_currentWayPoint += m_incrementerValue;
                     m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
                 }
-
-                if (enabled == false)
+                // Maintain Pathway to Destination
+                else if (enabled == false)
                 {
                     m_currentWayPoint += m_incrementerValue;
                     m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
@@ -135,12 +135,12 @@ namespace DChild.Gameplay.Environment
             ChangeDestination();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
-            var currentPosition = m_rigidbody.position;
+            var currentPosition = (Vector2)transform.position;
             if (currentPosition != m_cacheDestination)
             {
-                m_rigidbody.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
+                transform.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
                 if (currentPosition == m_cacheCurrentWaypoint)
                 {
                     m_currentWayPoint += m_incrementerValue;
