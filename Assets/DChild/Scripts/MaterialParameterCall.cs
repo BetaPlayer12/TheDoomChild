@@ -23,6 +23,8 @@ namespace DChild
             m_shaderID = Shader.PropertyToID(m_parameter);
         }
 
+        public void SetLerpSpeed(float speed) => m_lerpSpeed = speed;
+
         public void SetRenderers(params Renderer[] renderers) => m_renderers = renderers;
 
         public void SetValue(bool value)
@@ -42,8 +44,6 @@ namespace DChild
             Initialize();
             StartCoroutine(LerpRoutine(m_shaderID, toValue, m_lerpSpeed));
         }
-
-        public void StopAllRoutines() => StopAllCoroutines();
 
         private void SetPropertyBlock(Action<MaterialPropertyBlock> action)
         {
