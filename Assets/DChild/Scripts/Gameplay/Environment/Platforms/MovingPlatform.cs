@@ -43,6 +43,8 @@ namespace DChild.Gameplay.Environment
         private Vector2 m_cacheCurrentWaypoint;
         private int m_listSize;
 
+        private int m_pingPongWaypoint;
+
         public event EventAction<UpdateEventArgs> DestinationReached;
 
 #if UNITY_EDITOR
@@ -56,6 +58,13 @@ namespace DChild.Gameplay.Environment
             transform.position = m_waypoints[m_startWaypoint];
         }
 #endif
+
+        public void PingPongNextWaypoint(bool next)
+        {
+            m_pingPongWaypoint += next ? 1 : -1;
+            m_wayPointDestination = (int)Mathf.PingPong(m_pingPongWaypoint, m_listSize-1);
+            ChangeDestination();
+        }
 
         public void GoToNextWayPoint()
         {
@@ -77,6 +86,7 @@ namespace DChild.Gameplay.Environment
 
         public void GoDestination(int destination)
         {
+            m_pingPongWaypoint = destination;
             m_wayPointDestination = destination;
             ChangeDestination();
         }
@@ -98,6 +108,8 @@ namespace DChild.Gameplay.Environment
                 if (proposedIncrementerValue != m_incrementerValue)
                 {
                     m_incrementerValue = proposedIncrementerValue;
+                    m_currentWayPoint += m_incrementerValue;
+                    m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
                 }
 
                 if (enabled == false)

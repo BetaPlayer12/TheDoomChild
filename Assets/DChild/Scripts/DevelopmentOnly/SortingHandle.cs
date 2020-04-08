@@ -5,6 +5,7 @@ using UnityEngine;
 using Spine.Unity;
 using System.Linq;
 #if UNITY_EDITOR
+using UnityEditor;
 using Sirenix.Utilities.Editor;
 #endif
 
@@ -101,6 +102,7 @@ namespace DChild
                 m_rendererList[i].UpdateSorting(m_referenceLayer, m_referenceOrder);
             }
             m_previousReferenceOrder = m_referenceOrder;
+            EditorUtility.SetDirty(gameObject);
         }
 
         private void OnValidate()
