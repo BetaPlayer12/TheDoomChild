@@ -11,7 +11,7 @@ namespace PlayerNew
         public float timeBtwnAtck = 0.2f;
         private float attackTimeCounter;
         private float releaseTime = 0.0f;
-        
+        public float attackingTime;
         //public int attackCounter;
         private float attackHold;
         private float comboTimer;
@@ -21,7 +21,7 @@ namespace PlayerNew
         public int comboCount = 0;
         //public float startTimeBtwAttck;
         public bool attackHolding = false;
-       
+        public bool attacking;
         public bool slashing;
         public bool upHold;
         public bool downHold;
@@ -69,14 +69,9 @@ namespace PlayerNew
         [SerializeField]
         private Collider2D m_swordDownSlashAttackCollider;
 
+        public int numOfClicks = 0;
+        float lastClickedTime = 0;
         public float maxComboDelay = 1.2f;
-        private float lastClickedTime;
-
-        public bool attacking = false;
-        public float attackingTime;
-        private int numOfClicks = 0;
-        
-        
 
         
 
@@ -98,47 +93,135 @@ namespace PlayerNew
             var upButton = inputState.GetButtonValue(inputButtons[2]);
             var leftButton = inputState.GetButtonValue(inputButtons[3]);
             var rightButton = inputState.GetButtonValue(inputButtons[4]);
+      
 
-
-            if (canSlash && !attacking)
+            if (Time.time - lastClickedTime > maxComboDelay)
             {
-                attacking = true;
-                numOfClicks++;
+                numOfClicks = 0;
             }
 
-            if (attacking)
+            upHold = upButton ? true : false;
+            animator.SetBool("UpHold", upHold);
+
+            downHold = downButton ? true : false;
+            animator.SetBool("DownHold", downHold);
+
+            if (!collisionState.grounded)
             {
-                attackingTime += Time.deltaTime;
-                if (canSlash)
+                if (Input.GetButtonDown("Fire1"))
                 {
-                    //max time between attack
-                    if (collisionState.grounded)
-                    {
-                        numOfClicks++;
-                    }
-                    else
-                    {
-                        ResetAttacking();
-                    }
+                    attacking = true;
+                    
+                    releaseTime += Time.deltaTime;
                 }
-
-                if(attackingTime > 0.6f)
+                if (Input.GetButtonUp("Fire1"))
                 {
+                  
+                       
+                        if (upButton)
+                        {
+                            animator.SetBool("Attack", true);
+                            JumpUpSlashFX();
+                            m_swordUpSlashAttackCollider.enabled = true;
+                           
+                        }
+                        if (downButton)
+                        {
+                            if (releaseTime < 0.15f)
+                            {
+                            animator.SetBool("Attack", true);
+                            JumpDownSlashFX();
+                            Debug.Log("down attack");
+                            }
 
-                    ResetAttacking();
+                        }
+                        else
+                        {
+                            animator.SetBool("Attack", true);
+                            SwordJumpSlashForwardFX();
+                            m_swordJumpSlashForwardAttackCollider.enabled = true;
+                        }
+
+                    attacking = true;
+                    //animator.SetBool("Attack", false);
+                    releaseTime = 0.0f;
+                }
+            }
+
+            if (canSlash && !dashState.dashing)
+            {
+                ToggleScripts(false);
+                attacking = true;
+                if (!upHold && collisionState.grounded && !downButton)
+                {
+                    
+                    lastClickedTime = Time.time;
+                    numOfClicks++;
+
+                    if (leftButton || rightButton && collisionState.grounded)
+                    {
+                       
+                        body2d.velocity = Vector2.zero;
+                        animator.SetBool("Attack", false);
+                        numOfClicks = 1;
+                    }
+                    if (numOfClicks == 1)
+                    {
+                        animator.SetBool("Slash1", true);
+                        
+                        m_forwardSlashAttackCollider.enabled = true;
+                    }
+                    numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
+                    animator.SetBool("Attack", true);
+                    switch (numOfClicks)
+                    {
+                        case 1:
+                            animator.SetBool("Slash1", true);
+                            animator.SetBool("Slash2", false);
+                            animator.SetBool("Slash3", false);
+                            break;
+                        case 2:
+                            animator.SetBool("Slash1", false);
+                            animator.SetBool("Slash2", true);
+                            animator.SetBool("Slash3", false);
+                           
+                            m_swordCombo1AttackCollider.enabled = true;
+                            break;
+                        case 3:
+                            animator.SetBool("Slash1", false);
+                            animator.SetBool("Slash2", false);
+                            animator.SetBool("Slash3", true);
+                            
+                            m_swordCombo2AttackCollider.enabled = true;
+                            break;
+                    }
+                    
+                }else if(upHold && collisionState.grounded)
+                {
+                    animator.SetBool("Attack", true);
+                    SwordUpSlashFX();
+                }else if(downButton && collisionState.grounded)
+                {
+                    animator.SetBool("Attack", true);
+                    animator.SetBool("Crouch", true);
+                    CrouchSlashFX();
                 }
                
+                
+            }else if (Input.GetButtonUp("Fire1") && collisionState.grounded)
+            {
+                m_forwardSlashAttackCollider.enabled = false;
+                m_swordCombo1AttackCollider.enabled = false;
+                m_swordCombo2AttackCollider.enabled = false;
+                m_crouchSlashAttackCollider.enabled = false;
+                m_jumpSlashAttackCollider.enabled = false;
+                m_swordUpSlashAttackCollider.enabled = false;
+                m_swordJumpSlashForwardAttackCollider.enabled = false;
+                attacking = false;
+                animator.SetBool("Attack", false);
+                animator.SetBool("Slash1", false);
+                ToggleScripts(true);
             }
-
-
-            Debug.Log("attacking time: " + attackingTime + " numclicks: " + numOfClicks);
-        }
-
-        private void ResetAttacking()
-        {
-            numOfClicks = 0;
-            attackingTime = 0.0f;
-            attacking = false;
         }
 
         public void ReturnToIdle()
@@ -250,6 +333,10 @@ namespace PlayerNew
             m_crouchSlashAttackCollider.enabled = true;
         }
 
+        private void SwordAttackForward_MainAction()
+        {
+            m_forwardSlash1FX.Play();
+        }
 
         private void JumpDownSlashFX()
         {
@@ -313,134 +400,36 @@ namespace PlayerNew
 //    var rightButton = inputState.GetButtonValue(inputButtons[4]);
 
 
-//    if (Time.time - lastClickedTime > maxComboDelay)
+//    if (canSlash && !attacking)
 //    {
-//        numOfClicks = 0;
+//        attacking = true;
+//        numOfClicks++;
 //    }
 
-//    upHold = upButton ? true : false;
-//    animator.SetBool("UpHold", upHold);
-
-//    downHold = downButton ? true : false;
-//    animator.SetBool("DownHold", downHold);
-
-//    if (!collisionState.grounded)
+//    if (attacking)
 //    {
-//        if (Input.GetButtonDown("Fire1"))
+//        attackingTime += Time.deltaTime;
+//        if (canSlash)
 //        {
-//            attacking = true;
-
-//            releaseTime += Time.deltaTime;
-//        }
-//        if (Input.GetButtonUp("Fire1"))
-//        {
-
-
-//            if (upButton)
+//            //max time between attack
+//            if (collisionState.grounded)
 //            {
-//                animator.SetBool("Attack", true);
-//                JumpUpSlashFX();
-//                m_swordUpSlashAttackCollider.enabled = true;
-
-//            }
-//            if (downButton)
-//            {
-//                if (releaseTime < 0.15f)
-//                {
-//                    animator.SetBool("Attack", true);
-//                    JumpDownSlashFX();
-//                    Debug.Log("down attack");
-//                }
-
+//                numOfClicks++;
 //            }
 //            else
 //            {
-//                animator.SetBool("Attack", true);
-//                SwordJumpSlashForwardFX();
-//                m_swordJumpSlashForwardAttackCollider.enabled = true;
+//                ResetAttacking();
 //            }
-
-//            attacking = true;
-//            //animator.SetBool("Attack", false);
-//            releaseTime = 0.0f;
 //        }
-//    }
 
-//    if (canSlash && !dashState.dashing)
-//    {
-//        ToggleScripts(false);
-//        attacking = true;
-//        if (!upHold && collisionState.grounded && !downButton)
+//        if (attackingTime > 0.6f)
 //        {
 
-//            lastClickedTime = Time.time;
-//            numOfClicks++;
-
-//            if (leftButton || rightButton && collisionState.grounded)
-//            {
-
-//                body2d.velocity = Vector2.zero;
-//                animator.SetBool("Attack", false);
-//                numOfClicks = 1;
-//            }
-//            if (numOfClicks == 1)
-//            {
-//                animator.SetBool("Slash1", true);
-
-//                m_forwardSlashAttackCollider.enabled = true;
-//            }
-//            numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
-//            animator.SetBool("Attack", true);
-//            switch (numOfClicks)
-//            {
-//                case 1:
-//                    animator.SetBool("Slash1", true);
-//                    animator.SetBool("Slash2", false);
-//                    animator.SetBool("Slash3", false);
-//                    break;
-//                case 2:
-//                    animator.SetBool("Slash1", false);
-//                    animator.SetBool("Slash2", true);
-//                    animator.SetBool("Slash3", false);
-
-//                    m_swordCombo1AttackCollider.enabled = true;
-//                    break;
-//                case 3:
-//                    animator.SetBool("Slash1", false);
-//                    animator.SetBool("Slash2", false);
-//                    animator.SetBool("Slash3", true);
-
-//                    m_swordCombo2AttackCollider.enabled = true;
-//                    break;
-//            }
-
+//            ResetAttacking();
 //        }
-//        else if (upHold && collisionState.grounded)
-//        {
-//            animator.SetBool("Attack", true);
-//            SwordUpSlashFX();
-//        }
-//        else if (downButton && collisionState.grounded)
-//        {
-//            animator.SetBool("Attack", true);
-//            animator.SetBool("Crouch", true);
-//            CrouchSlashFX();
-//        }
-
 
 //    }
-//    else if (Input.GetButtonUp("Fire1") && collisionState.grounded)
-//    {
-//        m_forwardSlashAttackCollider.enabled = false;
-//        m_swordCombo1AttackCollider.enabled = false;
-//        m_swordCombo2AttackCollider.enabled = false;
-//        m_crouchSlashAttackCollider.enabled = false;
-//        m_jumpSlashAttackCollider.enabled = false;
-//        m_swordUpSlashAttackCollider.enabled = false;
-//        m_swordJumpSlashForwardAttackCollider.enabled = false;
-//        attacking = false;
-//        animator.SetBool("Attack", false);
-//        animator.SetBool("Slash1", false);
-//        ToggleScripts(true);
-//    }
+
+
+//    Debug.Log("attacking time: " + attackingTime + " numclicks: " + numOfClicks);
 //}
