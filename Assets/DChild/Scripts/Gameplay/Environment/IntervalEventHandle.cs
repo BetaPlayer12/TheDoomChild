@@ -11,8 +11,10 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private float m_startDelay;
         [SerializeField]
+        private bool m_startAsActive;
+        [SerializeField, TabGroup("Activate")]
         private float m_activateDelay;
-        [SerializeField]
+        [SerializeField, TabGroup("Deactivate")]
         private float m_deactivateDelay;
         [SerializeField, TabGroup("Activate")]
         private UnityEvent m_activateEvent;
@@ -40,6 +42,17 @@ namespace DChild.Gameplay.Environment
             m_startDelayTimer = m_startDelay;
             m_activateTimer = m_activateDelay;
             m_deactivateTimer = m_deactivateDelay;
+
+            if(m_startAsActive == true)
+            {
+                m_isActivated = true;
+                m_activateEvent?.Invoke();
+            }
+            else
+            {
+                m_isActivated = false;
+                m_deactivateEvent?.Invoke();
+            }
         }
 
         void Update()
