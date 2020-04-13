@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c39b4c90d0216f049a8fd894a5f04af3, type: 3}
-  m_Name: RatBombAIData
+  m_Name: ZombieRedAIData
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: a4d1991f70adfd84a923e13e5140551d, type: 2}
+    - {fileID: 11400000, guid: 8ebecd55d2e4530409af06a9563deb67, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -24,65 +24,52 @@ MonoBehaviour:
     SerializationNodes:
     - Name: m_info
       Entry: 7
-      Data: 0|DChild.Gameplay.Characters.Enemies.RatBombAI+Info, Assembly-CSharp
+      Data: 0|DChild.Gameplay.Characters.Enemies.ZombieRedAI+Info, Assembly-CSharp
     - Name: m_skeletonDataAsset
       Entry: 10
       Data: 0
-    - Name: m_patrol
+    - Name: m_walk
       Entry: 7
-      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.RatBombAI+Info,
+      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.ZombieRedAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Move_Stationary
+      Data: Zombiefemale1_Move _n_place
     - Name: m_speed
-      Entry: 4
-      Data: 15
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_move
-      Entry: 7
-      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.RatBombAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Move_Stationary
-    - Name: m_speed
-      Entry: 4
-      Data: 15
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_attackMelee
-      Entry: 7
-      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RatBombAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack
-    - Name: m_range
-      Entry: 4
-      Data: 6
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_attackExplode
-      Entry: 7
-      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RatBombAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack_SuicideExplosion
-    - Name: m_range
       Entry: 4
       Data: 7
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_run
+      Entry: 7
+      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.ZombieRedAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Zombiefemale1_Move _n_place
+    - Name: m_speed
+      Entry: 4
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_attack
+      Entry: 7
+      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.ZombieRedAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Zombiefemale1_Idle_Scratching_Face
+    - Name: m_range
+      Entry: 4
+      Data: 10
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: m_attackCD
       Entry: 4
-      Data: 2
+      Data: 1
     - Name: m_patience
       Entry: 4
       Data: 10
@@ -91,28 +78,22 @@ MonoBehaviour:
       Data: 7
     - Name: m_idleAnimation
       Entry: 1
-      Data: Idle1
+      Data: Zombiefemale1_Idle
     - Name: m_idle2Animation
       Entry: 1
-      Data: Idle2
+      Data: Zombiefemale1_Idle_Scratching_Face
     - Name: m_detectAnimation
       Entry: 1
-      Data: Idle2
+      Data: Zombiefemale1_Detect
     - Name: m_flinchAnimation
       Entry: 1
-      Data: Damage_No_Red
+      Data: Zombiefemale1_Flinch
     - Name: m_turnAnimation
       Entry: 1
-      Data: Turn
+      Data: Zombiefemale1_Turn
     - Name: m_deathAnimation
       Entry: 1
-      Data: Death_No_Red
-    - Name: m_explodeEvent
-      Entry: 6
-      Data: 
-    - Name: m_explodeDelay
-      Entry: 4
-      Data: 0
+      Data: Zombiefemale1_Detect
     - Name: 
       Entry: 8
       Data: 

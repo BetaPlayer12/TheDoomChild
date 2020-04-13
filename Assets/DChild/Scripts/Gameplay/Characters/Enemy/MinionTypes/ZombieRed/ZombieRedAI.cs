@@ -15,27 +15,25 @@ using DChild.Gameplay.Characters.Enemies;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/RatBomb")]
-    public class RatBombAI : CombatAIBrain<RatBombAI.Info>
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/ZombieRed")]
+    public class ZombieRedAI : CombatAIBrain<ZombieRedAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
         {
             //Basic Behaviours
             [SerializeField]
-            private MovementInfo m_patrol = new MovementInfo();
-            public MovementInfo patrol => m_patrol;
+            private MovementInfo m_walk = new MovementInfo();
+            public MovementInfo walk => m_walk;
             [SerializeField]
-            private MovementInfo m_move = new MovementInfo();
-            public MovementInfo move => m_move;
+            private MovementInfo m_run = new MovementInfo();
+            public MovementInfo run => m_run;
 
             //Attack Behaviours
             [SerializeField]
-            private SimpleAttackInfo m_attackMelee = new SimpleAttackInfo();
-            public SimpleAttackInfo attackMelee => m_attackMelee;
-            [SerializeField]
-            private SimpleAttackInfo m_attackExplode = new SimpleAttackInfo();
-            public SimpleAttackInfo attackExplode => m_attackExplode;
+            private SimpleAttackInfo m_attack = new SimpleAttackInfo();
+            public SimpleAttackInfo attack => m_attack;
+
             [SerializeField, MinValue(0)]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -69,23 +67,13 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
 
-            [Title("Events")]
-            [SerializeField, ValueDropdown("GetEvents")]
-            private string m_explodeEvent;
-            public string explodeEvent => m_explodeEvent;
-
-            [SerializeField]
-            private float m_explodeDelay;
-            public float explodeDelay => m_explodeDelay;
-
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
-                m_patrol.SetData(m_skeletonDataAsset);
-                m_move.SetData(m_skeletonDataAsset);
-                m_attackMelee.SetData(m_skeletonDataAsset);
-                m_attackExplode.SetData(m_skeletonDataAsset);
+                m_walk.SetData(m_skeletonDataAsset);
+                m_run.SetData(m_skeletonDataAsset);
+                m_attack.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -105,20 +93,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum Attack
         {
-            AttackMelee,
-            AttackRange,
+            Attack1,
+            Attack2,
             [HideInInspector]
             _COUNT
         }
 
         [SerializeField, TabGroup("Reference")]
-        private SpineEventListener m_spineEventListener;
-        [SerializeField, TabGroup("Reference")]
-        private Hitbox m_hitbox;
-        [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
-        [SerializeField, TabGroup("Reference")]
-        private Collider2D m_explodeBB;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -134,7 +116,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float m_currentPatience;
         private float m_currentCD;
-        private float m_currentRunAttackDuration;
+        private float m_currentRunAnticDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
 
@@ -144,8 +126,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
-        [SerializeField, TabGroup("FX")]
-        private ParticleFX m_explodeFX;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -164,7 +144,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            //m_animation.DisableRootMotion();
+            m_animation.DisableRootMotion();
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -271,8 +252,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AttackMelee, m_info.attackMelee.range),
-                                    new AttackInfo<Attack>(Attack.AttackRange, m_info.attackExplode.range)/**/);
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -285,31 +265,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator AttackExplodeRoutine()
-        {
-            //m_animation.SetAnimation(0, m_info.idle2Animation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idle2Animation);
-            m_animation.SetAnimation(0, m_info.attackExplode.animation, false);
-            yield return new WaitForSeconds(.45f);
-            m_hitbox.gameObject.SetActive(false);
-            m_explodeFX.Play();
-            m_explodeBB.enabled = true;
-            yield return new WaitForSeconds(.25f);
-            m_explodeBB.enabled = false;
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackExplode.animation);
-            yield return new WaitForSeconds(5);
-            m_hitbox.gameObject.SetActive(true);
-            transform.gameObject.SetActive(false);
-            //m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
         protected override void Start()
         {
             base.Start();
             m_selfCollider.SetActive(false);
-
-            //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 
         protected override void Awake()
@@ -353,9 +312,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(false, false);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        m_animation.SetAnimation(0, m_info.walk.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
+                        m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
                     }
                     else
                     {
@@ -373,15 +332,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
 
 
-                    m_animation.EnableRootMotion(true, false);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
-                        case Attack.AttackMelee:
-                            m_attackHandle.ExecuteAttack(m_info.attackMelee.animation, m_info.idleAnimation);
-                            break;
-                        case Attack.AttackRange:
-                            //m_attackHandle.ExecuteAttack(m_info.attackRange.animation, m_info.idleAnimation);
-                            StartCoroutine(AttackExplodeRoutine());
+                        case Attack.Attack1:
+                            m_animation.EnableRootMotion(true, false);
+                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -397,14 +352,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
-                    else
-                    {
-                        var animation = UnityEngine.Random.Range(0, 100) > 2 ? m_info.idleAnimation : m_info.idle2Animation;
-                        if (m_animation.animationState.GetCurrent(0).IsComplete)
-                        {
-                            m_animation.SetAnimation(0, animation, true);
-                        }
-                    }
 
                     if (m_currentCD <= m_info.attackCD)
                     {
@@ -412,8 +359,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_currentCD = 0;
-                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        if (IsFacingTarget())
+                        {
+                            m_currentCD = 0;
+                            m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        }
                     }
 
                     break;
@@ -425,26 +375,23 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
                                 m_movement.Stop();
+                                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
                             else
                             {
-                                m_animation.EnableRootMotion(false, false);
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
-                                    m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
-                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
+                                    m_animation.EnableRootMotion(false, false);
+                                    m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.run.speed : m_info.walk.speed);
                                 }
                                 else
                                 {
                                     m_movement.Stop();
-                                    var animation = UnityEngine.Random.Range(0, 100) > 2 ? m_info.idleAnimation : m_info.idle2Animation;
-                                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                                    {
-                                        m_animation.SetAnimation(0, animation, true);
-                                    }
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
                         }

@@ -100,6 +100,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Spawn,
             Sleep,
+            Patrol,
             Detect,
             Turning,
             Attacking,
@@ -124,6 +125,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
+        private PlatformPatrol m_platformPatrol;
+        [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
@@ -147,6 +150,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_smokeFX;
+        [SerializeField]
+        private bool m_willPatrol;
 
         private float m_targetDistance;
 
@@ -164,8 +169,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            transform.localScale = m_willPatrol ? Vector3.one : Vector3.zero;
             m_selfCollider.SetActive(false);
-            transform.localScale = Vector2.zero;
             m_spineEventListener.Subscribe(m_info.smokeEvent, SmokeFX);
         }
 
@@ -347,7 +352,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(State.Spawn, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Spawn, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_throwPoint);
             UpdateAttackDeciderList();
@@ -362,14 +367,29 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Spawn:
                     m_movement.Stop();
+                    //m_character.physics.simulateGravity = true;
                     //m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(SpawnRoutine());
                     break;
+
                 case State.Detect:
+                    //m_character.physics.simulateGravity = true;
                     m_movement.Stop();
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(DetectRoutine());
                     break;
+
+                case State.Patrol:
+                    //m_animation.SetAnimation(0, m_info.sleepAnimation, true);
+                    //m_animation.EnableRootMotion(true, transform.localRotation.z != 0 ? true : false);
+                    //m_character.physics.simulateGravity = false;
+                    GetComponent<IsolatedCharacterPhysics2D>().simulateGravity = false;
+                    m_animation.DisableRootMotion();
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = 1f;
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_platformPatrol.Patrol(m_movement, m_info.move.speed, characterInfo);
+                    break;
+
                 case State.Sleep:
                     m_animation.SetAnimation(0, m_info.sleepAnimation, true);
                     break;
@@ -412,6 +432,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
 
                     break;
+
                 case State.Chasing:
                     {
                         if (IsFacingTarget())
