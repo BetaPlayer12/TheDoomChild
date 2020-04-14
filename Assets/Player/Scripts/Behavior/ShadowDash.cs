@@ -28,7 +28,7 @@ namespace PlayerNew
 
             if (dash)
             {
-                if (down)
+                if (down && collisionState.grounded)
                 {
                     shadowDashing = true;
                 }
