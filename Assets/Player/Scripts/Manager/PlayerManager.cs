@@ -6,6 +6,7 @@ namespace PlayerNew
 {
     public class PlayerManager : MonoBehaviour
     {
+        private Rigidbody2D body2d;
         private InputState inputState;
         private Jog jogBehavior;
         private Dock crouchBehavior;
@@ -32,6 +33,7 @@ namespace PlayerNew
 
         private void Awake()
         {
+            body2d = GetComponentInParent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             collisionState = GetComponent<CollisionState>();
             inputState = GetComponent<InputState>();
@@ -157,10 +159,12 @@ namespace PlayerNew
                 crouchBehavior.crouching = false;
             }
 
+            
+
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
-            VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
+            VelocityYAnimationState(body2d.velocity.y);
             WallStickAnimationState(wallStickBehavior.onWallDetected);
             DashAnimationState(dashBehavior.dashing, dashBehavior.shadowDashing);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
