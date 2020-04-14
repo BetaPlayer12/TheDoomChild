@@ -430,12 +430,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_animation.EnableRootMotion(true, false);
+                                m_animation.EnableRootMotion(false, false);
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                     m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
-                                    //m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
                                 }
                                 else
                                 {
