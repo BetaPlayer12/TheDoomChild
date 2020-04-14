@@ -117,11 +117,6 @@ namespace PlayerNew
                 if (Input.GetButtonUp("Fire1"))
                 {
                   
-                        
-                   
-                    Debug.Log("Release time:" + releaseTime);
-
-                    
                        
                         if (upButton)
                         {
@@ -395,3 +390,46 @@ namespace PlayerNew
     }
 }
 
+//void Update()
+//{
+//    var canSlash = Input.GetButtonDown("Fire1");
+//    var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
+//    var downButton = inputState.GetButtonValue(inputButtons[1]);
+//    var upButton = inputState.GetButtonValue(inputButtons[2]);
+//    var leftButton = inputState.GetButtonValue(inputButtons[3]);
+//    var rightButton = inputState.GetButtonValue(inputButtons[4]);
+
+
+//    if (canSlash && !attacking)
+//    {
+//        attacking = true;
+//        numOfClicks++;
+//    }
+
+//    if (attacking)
+//    {
+//        attackingTime += Time.deltaTime;
+//        if (canSlash)
+//        {
+//            //max time between attack
+//            if (collisionState.grounded)
+//            {
+//                numOfClicks++;
+//            }
+//            else
+//            {
+//                ResetAttacking();
+//            }
+//        }
+
+//        if (attackingTime > 0.6f)
+//        {
+
+//            ResetAttacking();
+//        }
+
+//    }
+
+
+//    Debug.Log("attacking time: " + attackingTime + " numclicks: " + numOfClicks);
+//}
