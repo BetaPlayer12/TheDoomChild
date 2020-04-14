@@ -14,7 +14,7 @@ namespace PlayerNew
         private LongJump longJumpBehavior;
         //private WallJump wallJumpBehavior;
         private Slash slashBehavior;
-        private Dash dashBehavior;
+        private ShadowDash dashBehavior;
         private GroundShaker groundShakerBehavior;
         private Thrust thrustBehavior;
         private Animator animator;
@@ -42,7 +42,7 @@ namespace PlayerNew
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
-            dashBehavior = GetComponent<Dash>();
+            dashBehavior = GetComponent<ShadowDash>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
             wallSlideBehavior = GetComponent<WallSlide>();
@@ -103,6 +103,11 @@ namespace PlayerNew
                 JogAnimationState(0);
             }
 
+            if (dashBehavior.dashing)
+            {
+                crouchBehavior.crouching = false;
+            }
+
             /*            if (wallJumpBehavior.jumpingOffWall)
                         {
                             animator.SetTrigger("WallJump");
@@ -147,12 +152,17 @@ namespace PlayerNew
                 animator.SetBool("DownHold", wallSlideBehavior.downHold);
             }
 
+            if (!collisionState.grounded)
+            {
+                crouchBehavior.crouching = false;
+            }
+
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
             WallStickAnimationState(wallStickBehavior.onWallDetected);
-            DashAnimationState(dashBehavior.dashing);
+            DashAnimationState(dashBehavior.dashing, dashBehavior.shadowDashing);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
             IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
         }
@@ -178,9 +188,10 @@ namespace PlayerNew
 
         }
 
-        void DashAnimationState(bool value)
+        void DashAnimationState(bool value1, bool value2 )
         {
-            animator.SetBool("Dash", value);
+            animator.SetBool("Dash", value1);
+            animator.SetBool("ShadowDash", value2);
         }
 
         void VelocityYAnimationState(float value)
