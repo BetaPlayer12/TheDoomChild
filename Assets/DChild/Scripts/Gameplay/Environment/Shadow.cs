@@ -1,6 +1,4 @@
 ﻿using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Environment
@@ -13,20 +11,13 @@ namespace DChild.Gameplay.Environment
         private Transform m_instance;
         [SerializeField, MinValue(0.1f)]
         private float m_maxDistance;
+        [SerializeField, PropertyTooltip("When this is false it will only calculate when position Changes")]
+        private bool m_calculateAlways;
         private Vector3 m_originalScale;
         private RaycastHit2D[] m_hitBuffer;
+        private Vector3 m_prevPosition;
 
-        private void Awake()
-        {
-            m_originalScale = m_instance.localScale;
-        }
-
-        private void OnDisable()
-        {
-            m_instance.gameObject.SetActive(false);
-        }
-
-        private void LateUpdate()
+        private void RenderShadow()
         {
             Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
             m_hitBuffer = Raycaster.Cast(m_pointOfReference.position, Vector2.down, m_maxDistance, true, out int hitcount);
@@ -39,12 +30,33 @@ namespace DChild.Gameplay.Environment
 
                 m_instance.position = m_hitBuffer[0].point;
                 m_instance.localScale = Vector3.Lerp(Vector3.zero, m_originalScale, 1 - (m_hitBuffer[0].distance / m_maxDistance));
+                m_instance.rotation = Quaternion.identity;
             }
             else
             {
                 m_instance.gameObject.SetActive(false);
             }
         }
-    }
 
+        private void Awake()
+        {
+            m_originalScale = m_instance.localScale;
+            m_prevPosition = m_pointOfReference.position;
+            RenderShadow();
+        }
+
+        private void OnDisable()
+        {
+            m_instance.gameObject.SetActive(false);
+        }
+
+        private void LateUpdate()
+        {
+            if (m_prevPosition != m_pointOfReference.position)
+            {
+                RenderShadow();
+                m_prevPosition = m_pointOfReference.position;
+            }
+        }
+    }
 }

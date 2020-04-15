@@ -3,12 +3,15 @@ using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
 
+    [RequireComponent(typeof(SortingHandle))]
     [AddComponentMenu("DChild/Gameplay/Environment/Breakable Object")]
     public class BreakableObject : MonoBehaviour, ISerializableComponent
     {
@@ -34,6 +37,8 @@ namespace DChild.Gameplay.Environment
         private bool m_createDebris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
         private GameObject m_debris;
+        [SerializeField, ShowIf("m_createDebris"), Indent]
+        private bool m_copySorting;
 
         [SerializeField, TabGroup("On Destroy")]
         private UnityEvent m_onDestroy;
@@ -46,6 +51,7 @@ namespace DChild.Gameplay.Environment
         private float m_force;
         private Debris m_instantiatedDebris;
         private Rigidbody2D[] m_leftOverDebris;
+        private SortingHandle m_sortingHandle;
 
         public void SetObjectState(bool isDestroyed)
         {
@@ -101,6 +107,24 @@ namespace DChild.Gameplay.Environment
             m_instantiatedDebris.transform.localScale = transform.localScale;
             m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
             m_leftOverDebris = m_instantiatedDebris.GetDetachables();
+            if (m_copySorting)
+            {
+                var renderers = instance.GetComponentsInChildren<SpriteRenderer>();
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    renderers[i].sortingLayerID = m_sortingHandle.sortingLayerID;
+                }
+            }
+        }
+
+        private void InstantiateDebris(AssetReferenceGameObject debris) => AddressableSpawner.Spawn(debris, m_object.position, 0, OnSpawn);
+
+        private void OnSpawn(GameObject instance, int arg2)
+        {
+            m_instantiatedDebris = instance.GetComponent<Debris>();
+            m_instantiatedDebris.transform.localScale = transform.localScale;
+            m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
+            m_leftOverDebris = m_instantiatedDebris.GetDetachables();
         }
 
         private void DestroyInstantiatedDebris()
@@ -109,10 +133,13 @@ namespace DChild.Gameplay.Environment
             {
                 for (int i = m_leftOverDebris.Length - 1; i >= 0; i--)
                 {
-                    Destroy(m_leftOverDebris[i].gameObject);
+                    Addressables.ReleaseInstance(m_leftOverDebris[i].gameObject);
                 }
                 m_leftOverDebris = null;
-                Destroy(m_instantiatedDebris.gameObject);
+            }
+            if(m_instantiatedDebris != null)
+            {
+                Addressables.ReleaseInstance(m_instantiatedDebris.gameObject);
             }
         }
 
@@ -125,6 +152,7 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_object.Destroyed += OnDestroyObject;
+            m_sortingHandle = GetComponent<SortingHandle>();
             //if (m_isDestroyed == true)
             //{
             //    m_onDestroy?.Invoke();

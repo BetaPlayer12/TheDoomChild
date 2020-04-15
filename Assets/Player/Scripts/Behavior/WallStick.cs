@@ -68,8 +68,8 @@ namespace PlayerNew
 
             if (!collisionState.grounded && collisionState.onWall && collisionState.onWallLeg)
             {
-                body2d.gravityScale = 0;
-                body2d.drag = 100;
+                //body2d.gravityScale = 0;
+                //body2d.drag = 100;
                 wallSticking = true;
                 wallGrounded = false;
             }
@@ -87,8 +87,6 @@ namespace PlayerNew
                 body2d.gravityScale = defaultGravityScale;
                 body2d.drag = defaultDrag;
                 wallSticking = false;
-
-                Debug.Log("Defaul gravity Scale: " + defaultGravityScale);
             }
         }
     }

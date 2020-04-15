@@ -6,44 +6,50 @@ namespace PlayerNew
 {
     public class PlayerManager : MonoBehaviour
     {
+        private Rigidbody2D body2d;
         private InputState inputState;
         private Jog jogBehavior;
-        private Crouch crouchBehavior;
+        private Dock crouchBehavior;
         private WallStick wallStickBehavior;
         private WallGrab wallGrabBehavior;
         private LongJump longJumpBehavior;
         //private WallJump wallJumpBehavior;
         private Slash slashBehavior;
-        private Dash dashBehavior;
+        private ShadowDash dashBehavior;
         private GroundShaker groundShakerBehavior;
         private Thrust thrustBehavior;
         private Animator animator;
+        private WallSlide wallSlideBehavior;
+        private Idle idleBehavior;
 
 
 
         private CollisionState collisionState;
 
-       
+
         public Animator capeAnimation;
 
 
 
         private void Awake()
         {
+            body2d = GetComponentInParent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             collisionState = GetComponent<CollisionState>();
             inputState = GetComponent<InputState>();
             jogBehavior = GetComponent<Jog>();
-            crouchBehavior = GetComponent<Crouch>();
+            crouchBehavior = GetComponent<Dock>();
             wallStickBehavior = GetComponent<WallStick>();
             wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
-            dashBehavior = GetComponent<Dash>();
+            dashBehavior = GetComponent<ShadowDash>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
-          
+            wallSlideBehavior = GetComponent<WallSlide>();
+            idleBehavior = GetComponent<Idle>();
+
         }
         // Start is called before the first frame update
         void Start()
@@ -68,7 +74,7 @@ namespace PlayerNew
                 JogAnimationState(1);
             }
 
-           
+
 
             if (inputState.absValY > 0)
             {
@@ -78,7 +84,7 @@ namespace PlayerNew
 
             if (crouchBehavior.crouching)
             {
-                if(inputState.absValX > 0)
+                if (inputState.absValX > 0)
                 {
                     capeAnimation.SetBool("CrouchMoving", true);
                 }
@@ -87,7 +93,7 @@ namespace PlayerNew
                     capeAnimation.SetBool("CrouchMoving", false);
                     capeAnimation.SetBool("CrouchIdle", true);
                 }
-                
+
             }
             else
             {
@@ -99,11 +105,16 @@ namespace PlayerNew
                 JogAnimationState(0);
             }
 
-/*            if (wallJumpBehavior.jumpingOffWall)
+            if (dashBehavior.dashing)
             {
-                animator.SetTrigger("WallJump");
-                wallStickBehavior.onWallDetected = false;
-            }*/
+                crouchBehavior.crouching = false;
+            }
+
+            /*            if (wallJumpBehavior.jumpingOffWall)
+                        {
+                            animator.SetTrigger("WallJump");
+                            wallStickBehavior.onWallDetected = false;
+                        }*/
 
             if (thrustBehavior.thrustAttack)
             {
@@ -111,14 +122,14 @@ namespace PlayerNew
                 if (!thrustBehavior.chargingAttack && !thrustBehavior.thrustHasStarted)
                 {
                     animator.SetTrigger("ThrustStart");
-                   
+
                 }
                 else if (thrustBehavior.chargingAttack && thrustBehavior.thrustHasStarted)
                 {
                     animator.ResetTrigger("ThrustStart");
                     capeAnimation.SetBool("ThrustCharging", true);
                     animator.SetBool("ThrustCharge", true);
-                    
+
 
                 }
                 else if (!thrustBehavior.chargingAttack)
@@ -137,42 +148,61 @@ namespace PlayerNew
                 animator.SetBool("Thrust", false);
             }
 
+            if (wallSlideBehavior.onWallDetected && !collisionState.grounded)
+            {
+                animator.SetBool("UpHold", wallSlideBehavior.upHold);
+                animator.SetBool("DownHold", wallSlideBehavior.downHold);
+            }
 
+            if (!collisionState.grounded)
+            {
+                crouchBehavior.crouching = false;
+            }
+
+            
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
-            VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
+            VelocityYAnimationState(body2d.velocity.y);
             WallStickAnimationState(wallStickBehavior.onWallDetected);
-            DashAnimationState(dashBehavior.dashing);
+            DashAnimationState(dashBehavior.dashing, dashBehavior.shadowDashing);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
+            IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
+        }
+
+        void IdleAnimationModeState(bool value, int value1)
+        {
+            animator.SetBool("AttackMode", value);
+            animator.SetInteger("IdleState", value1);
         }
 
         void GroundShakerAnimationState(bool value)
         {
             animator.SetBool("EarthShake", value);
-          
-           
+
+
         }
 
-        void SlashAnimationState(bool value1, int value2, bool value3, bool value4 )
+        void SlashAnimationState(bool value1, int value2, bool value3, bool value4)
         {
             animator.SetBool("Attack", value1);
             animator.SetInteger("AttackState", value2 + 1);
             animator.SetBool("UpHold", value3);
-           
+
         }
 
-        void DashAnimationState(bool value)
+        void DashAnimationState(bool value1, bool value2 )
         {
-            animator.SetBool("Dash", value);
+            animator.SetBool("Dash", value1);
+            animator.SetBool("ShadowDash", value2);
         }
 
         void VelocityYAnimationState(float value)
         {
 
             animator.SetFloat("Yvelocity", value);
-            if(value > 0.5f || value < -0.5f)
+            if (value > 0.5f || value < -0.5f)
             {
                 capeAnimation.SetBool("Jumping", true);
             }
@@ -185,14 +215,14 @@ namespace PlayerNew
         void GroundednessAnimationState(bool value)
         {
             animator.SetBool("Grounded", value);
-           
+
         }
 
         void CrouchAnimationState(bool value)
         {
             animator.SetBool("Crouch", value);
 
-          
+
         }
         void JogAnimationState(int value)
         {

@@ -43,7 +43,14 @@ namespace DChild.Gameplay.Systems.Serialization
         {
             m_scene.Set(scene);
             m_position = position;
+            //EditorUtility.SetDirty(this);
             //AssetDatabase.SaveAssets();
+        }
+
+        public void SaveAsset()
+        {
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 #endif
 

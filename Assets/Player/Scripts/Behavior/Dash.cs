@@ -13,16 +13,16 @@ namespace PlayerNew
         public bool dashing = false;
         public bool canDash;
         public float dashCoolDown;
-        
 
-        private Vector2 dirFacing;
-        private float lastDashTime;
 
-        private void Start()
+        protected  Vector2 dirFacing;
+        protected  float lastDashTime;
+
+        protected virtual void Start()
         {
             facing = GetComponent<FaceDirection>();
         }
-        private void Update() {
+        protected virtual void FixedUpdate() {
             float facingDir = facing.isFacingRight ? 1f : -1f;
             var dash = inputState.GetButtonValue(inputButtons[0]);
             var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);
@@ -48,36 +48,37 @@ namespace PlayerNew
                     lastDashTime = dashTime;
                 }
         }
-    //{
-    //    float facingDir = facing.isFacingRight ? 1f : -1f;
-    //    var dash = inputState.GetButtonValue(inputButtons[0]);
-    //    var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);
+        //{
+        //    float facingDir = facing.isFacingRight ? 1f : -1f;
+        //    var dash = inputState.GetButtonValue(inputButtons[0]);
+        //    var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);
 
-    //    if (!canDash && lastDashTime > 0.1)
-    //    {
-    //        ToggleScripts(true);
-    //        lastDashTime -= Time.deltaTime;
-    //        OnDash(facingDir);
-    //    }
-    //    else
-    //    {
-    //        if (!dashing)
-    //        {
-    //            StartCoroutine(FinishedDashRoutine());
-    //        }
+        //    if (!canDash && lastDashTime > 0.1)
+        //    {
+        //        ToggleScripts(true);
+        //        lastDashTime -= Time.deltaTime;
+        //        OnDash(facingDir);
+        //    }
+        //    else
+        //    {
+        //        if (!dashing)
+        //        {
+        //            StartCoroutine(FinishedDashRoutine());
+        //        }
 
-    //    }
+        //    }
 
-    //    if (dash && dashHold < 0.1f && canDash)
-    //    {
-    //        canDash = false;
-    //        dashing = false;
-    //        lastDashTime = dashTime;
-    //    }
+        //    if (dash && dashHold < 0.1f && canDash)
+        //    {
+        //        canDash = false;
+        //        dashing = false;
+        //        lastDashTime = dashTime;
+        //    }
 
-    private void OnDash(float facingDir)
+        protected virtual void OnDash(float facingDir)
         {
             var vel = body2d.velocity;
+            
             body2d.velocity = Vector2.zero;
             body2d.AddForce(new Vector2(facingDir * dashForce, vel.y), ForceMode2D.Force);
             dashing = true;

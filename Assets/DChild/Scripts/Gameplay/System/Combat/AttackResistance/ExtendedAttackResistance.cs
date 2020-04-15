@@ -33,11 +33,6 @@ namespace DChild.Gameplay.Combat
             m_combinedResistance.Clear();
         }
 
-        public override void SetData(AttackResistanceData data)
-        {
-           // No Data For now
-        }
-
         public void AddResistance(AttackType type, float resistance)
         {
             if (m_additionalResistance.ContainsKey(type))
@@ -96,6 +91,11 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public override void SetData(AttackResistanceData data)
+        {
+
+        }
+
         private void Awake()
         {
             m_additionalResistance = new Dictionary<AttackType, float>();
@@ -111,10 +111,6 @@ namespace DChild.Gameplay.Combat
             CalculateResistance();
             CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
         }
-
-
-
-
 #endif
     }
 }

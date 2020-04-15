@@ -55,13 +55,11 @@ namespace PlayerNew
                 if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[1])))
                 {
                     OnWallGrab();
-                    Debug.Log("wall grab facing right");
                 }
                 else if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[3]) || inputState.GetButtonValue(inputButtons[4])))
                 {
                     ToggleScripts(true);
                     ledgeDetected = false;
-                    Debug.Log("toggle facing right");
                 }
             }
             //wallGrab facing left
@@ -70,13 +68,11 @@ namespace PlayerNew
                 if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[3])))
                 {
                     OnWallGrab();
-                    Debug.Log("wall grab facing left");
                 }
                 else if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[1]) || inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[4])))
                 {
                     ToggleScripts(true);
                     ledgeDetected = false;
-                    Debug.Log("toggle facing left");
                 }
             }
 
@@ -117,14 +113,12 @@ namespace PlayerNew
 
         IEnumerator FinishedLedgeClimbRoutine()
         {
-            Debug.Log("yeild");
             yield return new WaitForSeconds(0.1f);
             FinishedLedgeClimb();
 
         }
         private void FinishedLedgeClimb()
         {
-            Debug.Log("done");
             ledgeDetected = false;
             canLedgeGrab = false;
             ToggleScripts(true);

@@ -1,18 +1,31 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &5860607953811042267
-MonoBehaviour:
+--- !u!61 &1271021180185261400
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8214882475894332031}
+  m_GameObject: {fileID: 3122847500707412193}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_maxHealth: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.10326052, y: 8.164788}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 6.68, y: 17.28}
+    newSize: {x: 6.68, y: 17.28}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 4.6147614, y: 15.958663}
+  m_EdgeRadius: 0
 --- !u!212 &6316653579028513632
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -63,32 +76,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &1271021180185261400
-BoxCollider2D:
+--- !u!114 &1150700717037328919
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3122847500707412193}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.10326052, y: 8.164788}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 6.68, y: 17.28}
-    newSize: {x: 6.68, y: 17.28}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 4.6147614, y: 15.958663}
-  m_EdgeRadius: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_collider2Ds:
+  - {fileID: 1271021180185261400}
+  m_isInvulnerable: 0
+  m_damageReduction: 0
 --- !u!212 &4119409511528652691
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -139,6 +142,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5860607953811042267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8214882475894332031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 1
 --- !u!1001 &2563154332778560325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,6 +238,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7948635139481586301, guid: 6c54878149479914087013b1030f56dd,
         type: 3}
+    - target: {fileID: 7713767410971931232, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_debris.m_AssetGUID
+      value: 6c54878149479914087013b1030f56dd
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0d6278d2f66d5344b76dacbcf596621, type: 3}
 --- !u!1 &8214882475894332031 stripped

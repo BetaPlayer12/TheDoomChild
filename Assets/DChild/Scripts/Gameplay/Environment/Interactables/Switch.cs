@@ -7,7 +7,9 @@
  **************************************/
 
 using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Gameplay.Inventories;
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -50,13 +52,16 @@ namespace DChild.Gameplay.Environment
 #endif
         private bool m_isOn;
 
-        [SerializeField]
+        [TabGroup("Main", "StartAs")]
+
+        [SerializeField, TabGroup("Main/StartAs", "On")]
         private UnityEvent m_startAsOnState;
-        [SerializeField, HideIf("m_hideStartAsOffState")]
+        [SerializeField, HideIf("m_hideStartAsOffState"), TabGroup("Main/StartAs", "Off")]
         private UnityEvent m_startAsOffState;
-        [SerializeField]
+        [TabGroup("Main", "Transistion")]
+        [SerializeField, TabGroup("Main/Transistion", "On")]
         private UnityEvent m_onState;
-        [SerializeField, HideIf("m_hideOffState")]
+        [SerializeField, HideIf("m_hideOffState"), TabGroup("Main/Transistion", "Off")]
         private UnityEvent m_offState;
 
         public event EventAction<HitDirectionEventArgs> OnHit;
