@@ -6,7 +6,7 @@ namespace PlayerNew
 {
     public class Dash : PlayerBehaviour
     {
-        private FaceDirection facing;
+        public FaceDirection facing;
         public float dashForce = 200f;
         public float dashDelay = 0.1f;
         public float dashTime;
