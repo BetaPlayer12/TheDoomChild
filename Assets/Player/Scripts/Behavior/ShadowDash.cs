@@ -10,8 +10,11 @@ namespace PlayerNew
         
         public bool shadowDashing = false;
         public bool shadowMode = false;
-    
-       
+
+        private bool isCeilingTouch;
+
+
+
 
         override protected void FixedUpdate()
         {
@@ -20,10 +23,13 @@ namespace PlayerNew
 
             var dash = inputState.GetButtonValue(inputButtons[0]);
             var down = inputState.GetButtonValue(inputButtons[1]);
+
             float faceDir = facing.isFacingRight ? 1 : -1;
            
             if (shadowMode)
             {
+                Debug.Log("Ceiling:" + collisionState.isCeilingTouch);
+                Debug.DrawRay(transform.position, Vector2.up * 1.5f,  Color.green);
                 if (collisionState.isCeilingTouch)
                 {
                     shadowDashing = true;
@@ -31,7 +37,7 @@ namespace PlayerNew
                 }
                 else
                 {
-                    //shadowMode = false;
+                   // shadowMode = false;
                     //shadowDashing = false;
                 }
             }
