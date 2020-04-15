@@ -13,7 +13,10 @@ namespace PlayerNew
         public bool onWall;
         public bool onWallLeg;
         public bool isTouchingLedge;
+        public bool isCeilingTouch;
         public float slopeAngle;
+        
+
         public Vector2 bottomPosition = Vector2.zero;
         public Vector2 rightPosition = Vector2.zero;
         public Vector2 leftPosition = Vector2.zero;
@@ -34,6 +37,7 @@ namespace PlayerNew
         public float lineLength;
         private float posDir;
 
+
         private InputState inputState;
         // Start is called before the first frame update
         void Awake()
@@ -41,11 +45,6 @@ namespace PlayerNew
             inputState = GetComponent<InputState>();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
         private void FixedUpdate()
         {
@@ -67,8 +66,6 @@ namespace PlayerNew
                
             }
 
-           
-
             pos = inputState.direction == Directions.Right ? rightPosition : leftPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
@@ -78,8 +75,6 @@ namespace PlayerNew
             onWall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
             //Debug.DrawRay(pos, lineDir);
 
-
-
             pos = inputState.direction == Directions.Right ? ledgeRightPosition : ledgeLeftPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
@@ -87,7 +82,6 @@ namespace PlayerNew
             lineDir = inputState.direction == Directions.Right  ? Vector2.right : Vector2.left;
             //isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             isTouchingLedge = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
-
 
             pos = inputState.direction == Directions.Left ? rightLegPosition : leftLegPosition;
             pos.x += transform.position.x;
@@ -97,6 +91,8 @@ namespace PlayerNew
             slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
             slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
             slopeBotHit = Physics2D.Raycast(transform.position, Vector2.down, lineLength, collisionLayer);
+            isCeilingTouch = Physics2D.Raycast(transform.position, Vector2.up, lineLength, collisionLayer);
+
 
             posDir = inputState.direction == Directions.Left ? 1 : -1;
             ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
