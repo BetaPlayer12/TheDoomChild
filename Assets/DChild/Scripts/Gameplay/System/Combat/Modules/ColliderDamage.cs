@@ -12,6 +12,7 @@ using DChild.Gameplay.Characters;
 
 namespace DChild.Gameplay.Combat
 {
+
     public abstract class ColliderDamage : MonoBehaviour
     {
         [System.Serializable]
@@ -34,13 +35,20 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private bool m_canDetectInteractables;
         [SerializeField]
+        private bool m_damageUniqueHitboxesOnly;
+        [SerializeField]
         private Collider2DInfo[] m_ignoreColliderList;
 
+        private CollisionRegistrator m_collisionRegistrator;
         private Collider2D m_collider;
         private IDamageDealer m_damageDealer;
         public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
         protected abstract bool IsValidToHit(Collider2D collision);
+
+        public void ResetHitCache() => m_collisionRegistrator?.ResetHitCache();
+
+        public void ClearCache() => m_collisionRegistrator?.ClearCache();
 
         protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
@@ -118,21 +126,44 @@ namespace DChild.Gameplay.Combat
             {
                 m_ignoreColliderList[i].IgnoreColliders(true);
             }
+
+            if (m_damageUniqueHitboxesOnly)
+            {
+                m_collisionRegistrator = new CollisionRegistrator();
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("DamageCollider"))
                 return;
-            var validToHit = IsValidToHit(collision);
 
-            if (collision.TryGetComponent(out Hitbox hitbox))
+            var validToHit = IsValidToHit(collision);
+            if (m_damageUniqueHitboxesOnly)
             {
-                if (hitbox.CanBeDamageBy(m_collider))
+                var hitbox = m_collisionRegistrator.GetHitbox(collision);
+                if (hitbox != null && m_collisionRegistrator.HasDamagedHitbox(hitbox) == false)
                 {
-                    if (validToHit)
+                    if (hitbox.CanBeDamageBy(m_collider))
                     {
-                        OnValidCollider(collision, hitbox);
+                        if (validToHit)
+                        {
+                            OnValidCollider(collision, hitbox);
+                        }
+                    }
+                    m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
+                }
+            }
+            else
+            {
+                if (collision.TryGetComponent(out Hitbox hitbox))
+                {
+                    if (hitbox.CanBeDamageBy(m_collider))
+                    {
+                        if (validToHit)
+                        {
+                            OnValidCollider(collision, hitbox);
+                        }
                     }
                 }
             }
