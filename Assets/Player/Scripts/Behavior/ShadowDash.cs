@@ -27,11 +27,12 @@ namespace PlayerNew
                 if (collisionState.isCeilingTouch)
                 {
                     shadowDashing = true;
+                    shadowMode = true;
                 }
                 else
                 {
-                    shadowMode = false;
-                    shadowDashing = false;
+                    //shadowMode = false;
+                    //shadowDashing = false;
                 }
             }
 
