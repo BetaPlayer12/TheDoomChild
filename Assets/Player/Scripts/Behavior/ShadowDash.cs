@@ -9,7 +9,7 @@ namespace PlayerNew
     {
         
         public bool shadowDashing = false;
-
+        public bool shadowMode = false;
     
        
 
@@ -21,30 +21,27 @@ namespace PlayerNew
             var dash = inputState.GetButtonValue(inputButtons[0]);
             var down = inputState.GetButtonValue(inputButtons[1]);
             float faceDir = facing.isFacingRight ? 1 : -1;
-            if (!dashing)
-            {
-                shadowDashing = false;
-                
-            }
-            if (shadowDashing)
+           
+            if (shadowMode)
             {
                 if (collisionState.isCeilingTouch)
-                {
-                    Debug.Log(faceDir + " " + collisionState.isCeilingTouch);
-                }
-                
-            }
-
-
-            if (dash)
-            {
-                if (down && collisionState.grounded)
                 {
                     shadowDashing = true;
                 }
                 else
                 {
+                    shadowMode = false;
                     shadowDashing = false;
+                }
+            }
+
+
+            if (dash && !shadowMode)
+            {
+                if (down && collisionState.grounded)
+                {
+                    shadowDashing = true;
+                    shadowMode = true;
                 }
             }
         }
