@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,9 @@ namespace PlayerNew
 {
     public class FaceDirection : PlayerBehaviour
     {
+        [SerializeField]
+        private Character m_character;
+
         // Start is called before the first frame update
         public bool isFacingRight;
         void Start()
@@ -23,11 +27,19 @@ namespace PlayerNew
             {
                 inputState.direction = Directions.Right;
                 isFacingRight = true;
+                if(m_character.facing != DChild.Gameplay.Characters.HorizontalDirection.Right)
+                {
+                    m_character.SetFacing(DChild.Gameplay.Characters.HorizontalDirection.Right);
+                }
             }
             else if (left)
             {
                 inputState.direction = Directions.Left;
                 isFacingRight = false;
+                if (m_character.facing != DChild.Gameplay.Characters.HorizontalDirection.Left)
+                {
+                    m_character.SetFacing(DChild.Gameplay.Characters.HorizontalDirection.Left);
+                }
             }
 
             transform.localScale = new Vector3((float)inputState.direction, 1, 1);
