@@ -24,6 +24,11 @@ namespace PlayerNew
             if (!dashing)
             {
                 shadowDashing = false;
+                Debug.Log("Not Dashing");
+            }
+            else
+            {
+                Debug.Log("Dashing");
             }
 
             if (dash)
