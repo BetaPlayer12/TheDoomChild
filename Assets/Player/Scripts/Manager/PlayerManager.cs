@@ -158,7 +158,10 @@ namespace PlayerNew
             {
                 crouchBehavior.crouching = false;
             }
-
+            if (dashBehavior.shadowMode)
+            {
+                crouchBehavior.crouching = false;
+            }
             
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);

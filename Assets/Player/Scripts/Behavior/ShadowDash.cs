@@ -25,20 +25,22 @@ namespace PlayerNew
             var down = inputState.GetButtonValue(inputButtons[1]);
 
             float faceDir = facing.isFacingRight ? 1 : -1;
-           
+
+
+            
             if (shadowMode)
             {
-                Debug.Log("Ceiling:" + collisionState.isCeilingTouch);
-                Debug.DrawRay(transform.position, Vector2.up * 1.5f,  Color.green);
+               
+
                 if (collisionState.isCeilingTouch)
                 {
-                    shadowDashing = true;
                     shadowMode = true;
+                    shadowDashing = true;
                 }
                 else
                 {
-                   // shadowMode = false;
-                    //shadowDashing = false;
+                    shadowMode = false;
+                    shadowDashing = false;
                 }
             }
 
