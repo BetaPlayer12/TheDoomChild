@@ -66,7 +66,7 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                m_collider2Ds = new Collider2D[] { GetComponent<Collider2D>() };
+                m_collider2Ds = new Collider2D[] { GetComponentInChildren<Collider2D>() };
             }
         }
     }

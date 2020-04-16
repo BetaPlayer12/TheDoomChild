@@ -9,20 +9,12 @@ using Holysoft.Event;
 
 namespace DChild.Gameplay.Combat
 {
-    public class CollisionRegistrator
+    public class CollisionRegistrator : MonoBehaviour
     {
         private Dictionary<Hitbox, bool> m_hasHitPair;
         private Dictionary<Collider2D, Hitbox> m_colliderPair;
         private Dictionary<IDamageable, Hitbox> m_damageablePair;
         private Dictionary<Hitbox, List<Collider2D>> m_hitboxToColliderPair;
-
-        public CollisionRegistrator()
-        {
-            m_hasHitPair = new Dictionary<Hitbox, bool>();
-            m_colliderPair = new Dictionary<Collider2D, Hitbox>();
-            m_damageablePair = new Dictionary<IDamageable, Hitbox>();
-            m_hitboxToColliderPair = new Dictionary<Hitbox, List<Collider2D>>();
-        }
 
         public bool HasDamagedHitbox(Hitbox hitbox) => m_hasHitPair.ContainsKey(hitbox) ? m_hasHitPair[hitbox] : false;
         public void RegisterHitboxAs(Hitbox hitbox, bool hasHit)
@@ -84,6 +76,14 @@ namespace DChild.Gameplay.Combat
             m_colliderPair.Clear();
             m_damageablePair.Clear();
             m_hitboxToColliderPair.Clear();
+        }
+
+        private void Awake()
+        {
+            m_hasHitPair = new Dictionary<Hitbox, bool>();
+            m_colliderPair = new Dictionary<Collider2D, Hitbox>();
+            m_damageablePair = new Dictionary<IDamageable, Hitbox>();
+            m_hitboxToColliderPair = new Dictionary<Hitbox, List<Collider2D>>();
         }
     }
 }

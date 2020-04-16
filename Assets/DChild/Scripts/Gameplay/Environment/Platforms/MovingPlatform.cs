@@ -171,7 +171,7 @@ namespace DChild.Gameplay.Environment
             ChangeDestination();
         }
 
-        private void LateUpdate()
+        private void Update()
         {
             var currentPosition = (Vector2)transform.position;
             if (currentPosition != m_cacheDestination)
