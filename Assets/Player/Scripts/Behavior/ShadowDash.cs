@@ -25,9 +25,9 @@ namespace PlayerNew
             var down = inputState.GetButtonValue(inputButtons[1]);
 
             float faceDir = facing.isFacingRight ? 1 : -1;
+            var vel = body2d.velocity;
 
 
-            
             if (shadowMode)
             {
                
@@ -36,12 +36,15 @@ namespace PlayerNew
                 {
                     shadowMode = true;
                     shadowDashing = true;
+                    body2d.AddForce(new Vector2(faceDir * dashForce, vel.y), ForceMode2D.Force);
                 }
                 else
                 {
                     shadowMode = false;
                     shadowDashing = false;
                 }
+
+                Debug.Log(collisionState.isCeilingTouch);
             }
 
 
