@@ -403,13 +403,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            m_hitbox.SetInvulnerability(false); //wasTrue
+            m_hitbox.SetInvulnerability(true);
             m_currentCD = 0;
             //m_isPhasing = true;
             //m_stateHandle.Wait(State.ReevaluateSituation);
             //m_animation.animationState.TimeScale = 1f;
             //m_movement.Stop();
             m_bodyCollider.SetActive(false);
+            //m_hitbox.SetInvulnerability(true);
             m_animation.EnableRootMotion(true, false);
             //m_turnState = State.Phasing;
             var flinchAnim = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBackAnimation;
@@ -522,7 +523,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Cooldown);
             Attackbb.SetActive(false);
-            m_hitbox.SetInvulnerability(false); //wasTrue
+            m_hitbox.SetInvulnerability(true);
             m_stickToGround = true;
             //var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.attack2.animation : m_info.attack2StepBack.animation;
             m_animation.SetAnimation(0, m_info.attack2.animation, false);

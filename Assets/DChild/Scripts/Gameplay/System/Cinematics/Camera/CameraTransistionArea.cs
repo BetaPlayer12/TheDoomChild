@@ -9,8 +9,6 @@ namespace DChild.Gameplay.Cinematics
         [SerializeField]
         private VirtualCamera m_vCam;
 
-        private Collider2D m_collider;
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Hitbox"))
@@ -19,18 +17,21 @@ namespace DChild.Gameplay.Cinematics
                 if (player != null && player.tag == Character.objectTag)
                 {
                     GameplaySystem.cinema.TransistionTo(m_vCam);
-                    m_collider = collision;
                 }
             }
         }
 
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (m_collider == collision)
-            {
-               GameplaySystem.cinema.ResolveCamTransistion(m_vCam);
-            }
-        }
+        //private void OnTriggerExit2D(Collider2D collision)
+        //{
+        //    if (collision.CompareTag("Hitbox"))
+        //    {
+        //        var player = collision.GetComponentInParent<Player>();
+        //        if (player != null)
+        //        {
+        //            GameplaySystem.cinema.TransistionToDefaultCamera();
+        //        }
+        //    }
+        //}
     }
 
 

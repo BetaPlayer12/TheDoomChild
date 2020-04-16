@@ -47,7 +47,7 @@ namespace DChild.Gameplay
         private static DChild.Gameplay.Systems.PlayerManager m_playerManager;
         private static LootHandler m_lootHandler;
         private static CampaignSerializer m_campaignSerializer;
-        private static ZoneLoader m_zoneLoader;
+        private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
 
 
@@ -117,11 +117,6 @@ namespace DChild.Gameplay
             m_playerManager.ClearCache();
         }
 
-        public static void LoadZone(string zone, float delay = 0, Action CallbackAfterZoneLoad = null)
-        {
-            m_zoneLoader.LoadZoneAsync(zone, delay, CallbackAfterZoneLoad);
-        }
-
         public static void LoadGame(CampaignSlot campaignSlot, LoadingHandle.LoadType loadType)
         {
             m_campaignToLoad = campaignSlot;
@@ -135,7 +130,6 @@ namespace DChild.Gameplay
 
         public static void SetCurrentCampaign(CampaignSlot campaignSlot)
         {
-
             if (m_instance)
             {
                 LoadGame(campaignSlot, LoadingHandle.LoadType.Force);
@@ -162,7 +156,7 @@ namespace DChild.Gameplay
             AssignModule(out m_world);
             AssignModule(out m_simulation);
             AssignModule(out m_playerManager);
-            AssignModule(out m_zoneLoader);
+            AssignModule(out m_zoneMover);
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_healthTracker);
         }
@@ -200,7 +194,6 @@ namespace DChild.Gameplay
                 }
                 if (m_campaignToLoad != null)
                 {
-                    m_zoneLoader.SetAsActiveZone(m_campaignToLoad.sceneToLoad.sceneName);
                     m_campaignSerializer.SetSlot(m_campaignToLoad);
                 }
 
@@ -212,7 +205,7 @@ namespace DChild.Gameplay
                 if (m_doNotTeleportPlayerOnAwake == false)
                 {
                     m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
-                }
+                }  
             }
         }
 
@@ -261,7 +254,7 @@ namespace DChild.Gameplay
                 m_world = null;
                 m_simulation = null;
                 m_playerManager = null;
-                m_zoneLoader = null;
+                m_zoneMover = null;
                 m_activatableModules = null;
             }
         }

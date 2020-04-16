@@ -67,15 +67,15 @@ namespace PlayerNew
             //set jumpForce if onWall and isGrounded
             if (onWallDetected && wallGrounded || groundWallStick && collisionState.onWallLeg && collisionState.grounded)
             {
-                //forceX = 10;
-                //forceY = 50;
+                forceX = 10;
+                forceY = 50;
             }
             if(onWallDetected && !wallGrounded && !collisionState.grounded)
             {
                 //forceX = 250;
                 //forceY = 250;
-              
-               
+
+
             }
 
 
@@ -111,7 +111,7 @@ namespace PlayerNew
             //jumping beside wall 
             if ((onWallDetected || groundWallStick) && wallStickJump && wallStickJumpHold < 0.1f && !upHold)
             {
-                Debug.Log("wall jump");
+               
                 //facing left
                 if (!facing.isFacingRight)
                     body2d.velocity = new Vector2(forceX, forceY);
