@@ -6,6 +6,7 @@ namespace PlayerNew
 {
     public class PlayerManager : MonoBehaviour
     {
+        private Rigidbody2D body2d;
         private InputState inputState;
         private Jog jogBehavior;
         private Dock crouchBehavior;
@@ -14,11 +15,12 @@ namespace PlayerNew
         private LongJump longJumpBehavior;
         //private WallJump wallJumpBehavior;
         private Slash slashBehavior;
-        private Dash dashBehavior;
+        private ShadowDash dashBehavior;
         private GroundShaker groundShakerBehavior;
         private Thrust thrustBehavior;
         private Animator animator;
         private WallSlide wallSlideBehavior;
+        private Idle idleBehavior;
 
 
 
@@ -31,6 +33,7 @@ namespace PlayerNew
 
         private void Awake()
         {
+            body2d = GetComponentInParent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             collisionState = GetComponent<CollisionState>();
             inputState = GetComponent<InputState>();
@@ -41,10 +44,11 @@ namespace PlayerNew
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
-            dashBehavior = GetComponent<Dash>();
+            dashBehavior = GetComponent<ShadowDash>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
             wallSlideBehavior = GetComponent<WallSlide>();
+            idleBehavior = GetComponent<Idle>();
 
         }
         // Start is called before the first frame update
@@ -101,6 +105,11 @@ namespace PlayerNew
                 JogAnimationState(0);
             }
 
+            if (dashBehavior.dashing)
+            {
+                crouchBehavior.crouching = false;
+            }
+
             /*            if (wallJumpBehavior.jumpingOffWall)
                         {
                             animator.SetTrigger("WallJump");
@@ -145,13 +154,27 @@ namespace PlayerNew
                 animator.SetBool("DownHold", wallSlideBehavior.downHold);
             }
 
+            if (!collisionState.grounded)
+            {
+                crouchBehavior.crouching = false;
+            }
+
+            
+
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
-            VelocityYAnimationState(Mathf.Floor(longJumpBehavior.velocityY));
+            VelocityYAnimationState(body2d.velocity.y);
             WallStickAnimationState(wallStickBehavior.onWallDetected);
-            DashAnimationState(dashBehavior.dashing);
+            DashAnimationState(dashBehavior.dashing, dashBehavior.shadowDashing);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
+            IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
+        }
+
+        void IdleAnimationModeState(bool value, int value1)
+        {
+            animator.SetBool("AttackMode", value);
+            animator.SetInteger("IdleState", value1);
         }
 
         void GroundShakerAnimationState(bool value)
@@ -169,9 +192,10 @@ namespace PlayerNew
 
         }
 
-        void DashAnimationState(bool value)
+        void DashAnimationState(bool value1, bool value2 )
         {
-            animator.SetBool("Dash", value);
+            animator.SetBool("Dash", value1);
+            animator.SetBool("ShadowDash", value2);
         }
 
         void VelocityYAnimationState(float value)

@@ -1,5 +1,4 @@
 ﻿using DChild.Gameplay.Systems.WorldComponents;
-using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -8,7 +7,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Environment
 {
     [AddComponentMenu("DChild/Gameplay/Environment/Moving Platform")]
-    public class MovingPlatform : MonoBehaviour, ISerializableComponent
+    public class MovingPlatform : MonoBehaviour
     {
         public struct UpdateEventArgs : IEventActionArgs
         {
@@ -24,28 +23,6 @@ namespace DChild.Gameplay.Environment
             public int currentWaypointIndex { get; }
             public int waypointCount { get; }
             public bool isGoingForward { get; }
-        }
-
-        [System.Serializable]
-        public struct SaveData : ISaveData
-        {
-            [SerializeField]
-            private Vector2 m_position;
-            [SerializeField]
-            private int m_wayPoint;
-            [SerializeField]
-            private int m_incrementerValue;
-
-            public SaveData(Vector2 position, int wayPoint, int incrementerValue)
-            {
-                m_position = position;
-                m_wayPoint = wayPoint;
-                m_incrementerValue = incrementerValue;
-            }
-
-            public Vector2 position => m_position;
-            public int wayPoint => m_wayPoint;
-            public int incrementerValue => m_incrementerValue;
         }
 
         [SerializeField, MinValue(0.1f), TabGroup("Setting")]
@@ -66,8 +43,6 @@ namespace DChild.Gameplay.Environment
         private Vector2 m_cacheCurrentWaypoint;
         private int m_listSize;
 
-        private int m_pingPongWaypoint;
-
         public event EventAction<UpdateEventArgs> DestinationReached;
 
 #if UNITY_EDITOR
@@ -81,26 +56,6 @@ namespace DChild.Gameplay.Environment
             transform.position = m_waypoints[m_startWaypoint];
         }
 #endif
-
-        public ISaveData Save() => new SaveData(m_cacheDestination, m_wayPointDestination, m_incrementerValue);
-
-        public void Load(ISaveData data)
-        {
-            var saveData = (SaveData)data;
-            transform.position = saveData.position;
-            m_cacheDestination = saveData.position;
-            m_cacheCurrentWaypoint = m_cacheDestination;
-            m_wayPointDestination = saveData.wayPoint;
-            m_currentWayPoint = m_wayPointDestination;
-            m_incrementerValue = saveData.incrementerValue;
-        }
-
-        public void PingPongNextWaypoint(bool next)
-        {
-            m_pingPongWaypoint += next ? 1 : -1;
-            m_wayPointDestination = (int)Mathf.PingPong(m_pingPongWaypoint, m_listSize - 1);
-            ChangeDestination();
-        }
 
         public void GoToNextWayPoint()
         {
@@ -122,7 +77,6 @@ namespace DChild.Gameplay.Environment
 
         public void GoDestination(int destination)
         {
-            m_pingPongWaypoint = destination;
             m_wayPointDestination = destination;
             ChangeDestination();
         }
@@ -144,11 +98,9 @@ namespace DChild.Gameplay.Environment
                 if (proposedIncrementerValue != m_incrementerValue)
                 {
                     m_incrementerValue = proposedIncrementerValue;
-                    m_currentWayPoint += m_incrementerValue;
-                    m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
                 }
-                // Maintain Pathway to Destination
-                else if (enabled == false)
+
+                if (enabled == false)
                 {
                     m_currentWayPoint += m_incrementerValue;
                     m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
@@ -171,12 +123,12 @@ namespace DChild.Gameplay.Environment
             ChangeDestination();
         }
 
-        private void LateUpdate()
+        private void Update()
         {
-            var currentPosition = (Vector2)transform.position;
+            var currentPosition = m_rigidbody.position;
             if (currentPosition != m_cacheDestination)
             {
-                transform.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
+                m_rigidbody.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
                 if (currentPosition == m_cacheCurrentWaypoint)
                 {
                     m_currentWayPoint += m_incrementerValue;

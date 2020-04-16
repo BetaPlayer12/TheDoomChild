@@ -29,6 +29,7 @@ public class OnewayPlatform : MonoBehaviour
             {
                 if (Input.GetButtonDown("Jump"))
                 {
+                    
                     Physics2D.IgnoreCollision(m_playerCollider, m_collider, true);
                     m_inContact = false;
                     m_timer = waitTime;

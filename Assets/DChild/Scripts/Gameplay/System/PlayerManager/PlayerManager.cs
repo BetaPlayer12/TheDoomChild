@@ -2,6 +2,7 @@
 using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Combat;
 using DChild.Inputs;
 using Doozy.Engine;
 using Holysoft;
@@ -36,6 +37,8 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private AutoReflexHandler m_autoReflex;
 
+        private CollisionRegistrator m_collisionRegistrator;
+
         public Player player => m_player;
         public IAutoReflexHandler autoReflex => m_autoReflex;
 
@@ -49,6 +52,8 @@ namespace DChild.Gameplay.Systems
             return m_overrideController;
         }
 
+        public void ClearCache() => m_collisionRegistrator.ClearCache();
+
         public void StopCharacterControlOverride()
         {
             m_overrideController.enabled = false;
@@ -57,6 +62,7 @@ namespace DChild.Gameplay.Systems
 
         public void Initialize()
         {
+            m_collisionRegistrator = m_player.character.GetComponentInChildren<CollisionRegistrator>();
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             m_respawnDelay.CountdownEnd += OnRespawnPlayer;

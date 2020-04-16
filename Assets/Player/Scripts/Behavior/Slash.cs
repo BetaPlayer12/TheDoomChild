@@ -93,47 +93,7 @@ namespace PlayerNew
             var upButton = inputState.GetButtonValue(inputButtons[2]);
             var leftButton = inputState.GetButtonValue(inputButtons[3]);
             var rightButton = inputState.GetButtonValue(inputButtons[4]);
-
-
-            
-           
-
-            //if (holdTime > 0.0f && !collisionState.grounded)
-            //{
-            //    attackHolding = true;
-            //    releaseTime = holdTime;
-
-            //}
-            //else if (holdTime == 0.0f && !collisionState.grounded)
-            //{
-                
-            //        Debug.Log("release time:" + releaseTime);
-            //        releaseTime = 0.0f;
-            //        attackHolding = false;
-
-            //    //if (!collisionState.grounded  && canSlash)
-            //    //{
-
-            //    //    if (upButton)
-            //    //    {
-            //    //        JumpUpSlashFX();
-            //    //        m_swordUpSlashAttackCollider.enabled = true;
-            //    //    }
-            //    //    if (downButton)
-            //    //    {
-            //    //        Debug.Log("down attack");
-            //    //        attackHolding = false;
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //        SwordJumpSlashForwardFX();
-            //    //        m_swordJumpSlashForwardAttackCollider.enabled = true;
-            //    //    }
-            //    //    animator.SetBool("Attack", true);
-            //    //    releaseTime = 0.0f;
-            //    //}
-
-            //}
+      
 
             if (Time.time - lastClickedTime > maxComboDelay)
             {
@@ -150,18 +110,13 @@ namespace PlayerNew
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    
+                    attacking = true;
                     
                     releaseTime += Time.deltaTime;
                 }
                 if (Input.GetButtonUp("Fire1"))
                 {
                   
-                        
-                   
-                    Debug.Log("Release time:" + releaseTime);
-
-                    
                        
                         if (upButton)
                         {
@@ -186,8 +141,8 @@ namespace PlayerNew
                             SwordJumpSlashForwardFX();
                             m_swordJumpSlashForwardAttackCollider.enabled = true;
                         }
-                       
-                    
+
+                    attacking = true;
                     //animator.SetBool("Attack", false);
                     releaseTime = 0.0f;
                 }
@@ -196,7 +151,7 @@ namespace PlayerNew
             if (canSlash && !dashState.dashing)
             {
                 ToggleScripts(false);
-               
+                attacking = true;
                 if (!upHold && collisionState.grounded && !downButton)
                 {
                     
@@ -213,7 +168,7 @@ namespace PlayerNew
                     if (numOfClicks == 1)
                     {
                         animator.SetBool("Slash1", true);
-                        m_forwardSlash1FX.Play();
+                        
                         m_forwardSlashAttackCollider.enabled = true;
                     }
                     numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
@@ -229,14 +184,14 @@ namespace PlayerNew
                             animator.SetBool("Slash1", false);
                             animator.SetBool("Slash2", true);
                             animator.SetBool("Slash3", false);
-                            m_swordCombo1FX.Play();
+                           
                             m_swordCombo1AttackCollider.enabled = true;
                             break;
                         case 3:
                             animator.SetBool("Slash1", false);
                             animator.SetBool("Slash2", false);
                             animator.SetBool("Slash3", true);
-                            m_swordCombo2FX.Play();
+                            
                             m_swordCombo2AttackCollider.enabled = true;
                             break;
                     }
@@ -262,6 +217,7 @@ namespace PlayerNew
                 m_jumpSlashAttackCollider.enabled = false;
                 m_swordUpSlashAttackCollider.enabled = false;
                 m_swordJumpSlashForwardAttackCollider.enabled = false;
+                attacking = false;
                 animator.SetBool("Attack", false);
                 animator.SetBool("Slash1", false);
                 ToggleScripts(true);
@@ -308,6 +264,7 @@ namespace PlayerNew
             m_swordUpSlashAttackCollider.enabled = false;
             m_swordJumpSlashForwardAttackCollider.enabled = false;
             ToggleScripts(true);
+            attacking = false;
         }
 
         public void FinishAttack2()
@@ -325,7 +282,8 @@ namespace PlayerNew
             m_swordUpSlashAttackCollider.enabled = false;
             m_swordJumpSlashForwardAttackCollider.enabled = false;
             ToggleScripts(true);
-           
+            attacking = false;
+
         }
 
         public void FinishAttack3()
@@ -345,12 +303,28 @@ namespace PlayerNew
             m_swordJumpSlashForwardAttackCollider.enabled = false;
             numOfClicks = 0;
             ToggleScripts(true);
+            attacking = false;
         }
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(attackPos.position, attackRange);
+        }
+
+        private void VFX_Attack1()
+        {
+            m_forwardSlash1FX.Play();
+        }
+
+        private void VFX_Attack2()
+        {
+            m_swordCombo1FX.Play();
+        }
+
+        private void VFX_Attack3()
+        {
+            m_swordCombo2FX.Play();
         }
 
         private void CrouchSlashFX()
@@ -416,3 +390,46 @@ namespace PlayerNew
     }
 }
 
+//void Update()
+//{
+//    var canSlash = Input.GetButtonDown("Fire1");
+//    var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
+//    var downButton = inputState.GetButtonValue(inputButtons[1]);
+//    var upButton = inputState.GetButtonValue(inputButtons[2]);
+//    var leftButton = inputState.GetButtonValue(inputButtons[3]);
+//    var rightButton = inputState.GetButtonValue(inputButtons[4]);
+
+
+//    if (canSlash && !attacking)
+//    {
+//        attacking = true;
+//        numOfClicks++;
+//    }
+
+//    if (attacking)
+//    {
+//        attackingTime += Time.deltaTime;
+//        if (canSlash)
+//        {
+//            //max time between attack
+//            if (collisionState.grounded)
+//            {
+//                numOfClicks++;
+//            }
+//            else
+//            {
+//                ResetAttacking();
+//            }
+//        }
+
+//        if (attackingTime > 0.6f)
+//        {
+
+//            ResetAttacking();
+//        }
+
+//    }
+
+
+//    Debug.Log("attacking time: " + attackingTime + " numclicks: " + numOfClicks);
+//}

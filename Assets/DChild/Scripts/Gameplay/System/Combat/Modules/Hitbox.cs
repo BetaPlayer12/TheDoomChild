@@ -11,8 +11,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-
-    [RequireComponent(typeof(Collider2D))]
     [AddComponentMenu("DChild/Gameplay/Combat/Hitbox")]
     public class Hitbox : MonoBehaviour
     {
@@ -68,7 +66,7 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                m_collider2Ds = new Collider2D[] { GetComponent<Collider2D>() };
+                m_collider2Ds = new Collider2D[] { GetComponentInChildren<Collider2D>() };
             }
         }
     }
