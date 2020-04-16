@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
-
     public class Cinema : MonoBehaviour, ICinema, IGameplaySystemModule, IGameplayInitializable
     {
         public enum LookAhead
@@ -19,7 +18,7 @@ namespace DChild.Gameplay.Cinematics
         [SerializeField]
         private Camera m_mainCamera;
         private IVirtualCamera m_currentVCam;
-        private IVirtualCamera m_defaultCam;
+        private IVirtualCamera m_previousCam;
         private List<ITrackingCamera> m_trackingCameras;
         private List<CinemachineNoise> m_noiseList;
         [SerializeField]
@@ -33,8 +32,6 @@ namespace DChild.Gameplay.Cinematics
 
         public Camera mainCamera => m_mainCamera;
 
-        public void SetDefaultCam(IVirtualCamera vCam) => m_defaultCam = vCam;
-
         public void TransistionTo(IVirtualCamera vCam)
         {
             if (m_currentVCam != null)
@@ -44,20 +41,27 @@ namespace DChild.Gameplay.Cinematics
             }
             vCam.Activate();
             m_offsetHandle.ApplyOffset(vCam, m_currentLookAhead);
+            m_previousCam = m_currentVCam;
             m_currentVCam = vCam;
+        }
+
+        public void ResolveCamTransistion(IVirtualCamera vCam)
+        {
+            if (vCam == m_previousCam)
+            {
+                m_previousCam = null;
+            }
+            else if (vCam == m_currentVCam && m_previousCam != null)
+            {
+                TransistionTo(m_previousCam);
+                m_previousCam = null;
+            }
         }
 
         public void ApplyLookAhead(LookAhead look)
         {
             m_currentLookAhead = look;
             m_offsetHandle.ApplyOffset(m_currentVCam, m_currentLookAhead);
-        }
-
-        public void TransistionToDefaultCamera()
-        {
-            m_currentVCam?.Deactivate();
-            m_defaultCam?.Activate();
-            m_currentVCam = m_defaultCam;
         }
 
         public void EnableCameraShake(bool enable)
@@ -135,6 +139,8 @@ namespace DChild.Gameplay.Cinematics
         {
             m_trackingTarget = centerOfMass;
         }
+
+
 #endif
     }
 }

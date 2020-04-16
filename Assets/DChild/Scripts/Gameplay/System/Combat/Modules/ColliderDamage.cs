@@ -132,7 +132,7 @@ namespace DChild.Gameplay.Combat
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("DamageCollider"))
+            if (collision.CompareTag("DamageCollider") || collision.CompareTag("Sensor"))
                 return;
 
             var validToHit = IsValidToHit(collision);
@@ -171,12 +171,12 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        
+
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             var colliderGameObject = collision.gameObject;
-            if (colliderGameObject.CompareTag("DamageCollider"))
+            if (colliderGameObject.CompareTag("DamageCollider") || colliderGameObject.CompareTag("Sensor"))
                 return;
 
             if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)

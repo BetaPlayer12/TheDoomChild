@@ -14,6 +14,8 @@ namespace DChild.Gameplay
     {
         public static string objectTag => "Character";
 
+        [SerializeField, MinValue(0.5f)]
+        private float m_height;
         [SerializeField]
         private Transform m_centerMass;
         [SerializeField]
@@ -32,6 +34,8 @@ namespace DChild.Gameplay
 
         public event EventAction<FacingEventArgs> CharacterTurn;
         public event EventAction<ObjectIDEventArgs> InstanceDestroyed;
+
+        public float height => m_height;
 
         public IsolatedObject isolatedObject => m_isolatedObject;
         public IsolatedPhysics2D physics => m_physics;
@@ -55,6 +59,11 @@ namespace DChild.Gameplay
         {
             m_facing = facing;
             CharacterTurn?.Invoke(this, new FacingEventArgs(m_facing));
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawLine(transform.position, transform.position + (Vector3.up * m_height));
         }
 
         private void OnDestroy()

@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Combat.BattleZoneComponents;
+﻿using DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Combat.BattleZoneComponents;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -24,6 +25,11 @@ namespace DChild.Gameplay.Combat
         {
             m_entityCount++;
             eventArgs.info.GetComponent<Damageable>().Destroyed += OnEntityDestroyed;
+            if (eventArgs.info.TryGetComponent(out ICombatAIBrain brain))
+            {
+                var player = GameplaySystem.playerManager.player;
+                brain.SetTarget(player.damageableModule, player.character);
+            }
         }
 
         private void OnEntityDestroyed(object sender, EventActionArgs eventArgs)
