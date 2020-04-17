@@ -25,8 +25,8 @@ namespace DChild.Serialization
         private SerializedVector2 m_spawnPosition;
         [SerializeField, HideIf("m_newGame"), MinValue(0), BoxGroup("Slot Info")]
         private int m_completion;
-        [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info")]
-        private TimeKeeper m_duration;
+        [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info"),ClockTime]
+        private float m_duration;
 
         [SerializeField, HideIf("m_newGame")]
         private PlayerCharacterData m_characterData;
@@ -44,7 +44,7 @@ namespace DChild.Serialization
             m_location = Location.None;
             m_spawnPosition = new SerializedVector2();
             m_completion = 0;
-            m_duration = new TimeKeeper();
+            m_duration = 0;
             m_characterData = new PlayerCharacterData();
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
@@ -58,7 +58,7 @@ namespace DChild.Serialization
             m_location = Location.None;
             m_spawnPosition = new SerializedVector2();
             m_completion = 0;
-            m_duration = new TimeKeeper();
+            m_duration = 0;
             m_characterData = new PlayerCharacterData();
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
@@ -71,7 +71,7 @@ namespace DChild.Serialization
         public SceneInfo sceneToLoad => m_sceneToLoad;
         public Location location => m_location;
         public int completion => m_completion;
-        public TimeKeeper duration => m_duration;
+        public float duration => m_duration;
 
         public Vector2 spawnPosition { get => m_spawnPosition; }
         public PlayerCharacterData characterData => m_characterData;
@@ -86,7 +86,7 @@ namespace DChild.Serialization
             m_location = m_demoGame ? Location.Garden : Location.None;
             m_spawnPosition = new SerializedVector2();
             m_completion = 0;
-            m_duration = new TimeKeeper();
+            m_duration = 0;
             m_characterData = new PlayerCharacterData();
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
@@ -111,6 +111,8 @@ namespace DChild.Serialization
             m_location = location;
             m_spawnPosition = spawnPosition;
         }
+
+        public void UpdateDuration(float value) => m_duration = Mathf.Max(0, value);
 
         public void UpdateCharacterData(PlayerCharacterData data) => m_characterData = data;
 

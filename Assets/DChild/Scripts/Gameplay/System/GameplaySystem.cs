@@ -238,6 +238,11 @@ namespace DChild.Gameplay
             }
         }
 
+        private void LateUpdate()
+        {
+            
+        }
+
         private void OnApplicationQuit()
         {
             Time.timeScale = 1;
