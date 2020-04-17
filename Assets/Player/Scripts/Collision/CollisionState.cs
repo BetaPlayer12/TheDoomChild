@@ -91,15 +91,14 @@ namespace PlayerNew
             slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
             slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
             slopeBotHit = Physics2D.Raycast(transform.position, Vector2.down, lineLength, collisionLayer);
-            isCeilingTouch = Physics2D.Raycast(transform.position, Vector2.up, lineLength, collisionLayer);
+            isCeilingTouch = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 3), Vector2.up, 3, collisionLayer);
 
 
             posDir = inputState.direction == Directions.Left ? 1 : -1;
             ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
 
 
-            
-        }
+            Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 3), Vector2.up * 3, Color.cyan);        }
 
         private void OnDrawGizmos()
         {
@@ -129,8 +128,8 @@ namespace PlayerNew
             //    pos.y += transform.position.y;
             //    Gizmos.DrawRay(pos, lineDir * lineLength);
             //}
-           
-            Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
+            
+            //Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
             
         }
     }
