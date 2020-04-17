@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class PlayerDeath : MonoBehaviour, IComplexCharacterModule
     {
-        private Damageable m_source;
+        public Damageable m_source;
         [SerializeField]
         private Animator m_animator;
         private string m_deathParameter;
