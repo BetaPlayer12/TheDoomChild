@@ -14,6 +14,9 @@ namespace DChild.Gameplay.Characters.AI
         private Damageable m_damageable;
         [SerializeField, TabGroup("Reference")]
         protected Transform m_centerMass;
+        [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
+        protected CharacterStatsData m_statsData;
+
 
         protected AITargetInfo m_targetInfo;
 
