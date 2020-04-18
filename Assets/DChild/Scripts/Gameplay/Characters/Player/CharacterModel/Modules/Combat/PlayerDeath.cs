@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Debug.Log("Dead");
             m_source.SetHitboxActive(false);
             m_animator.SetBool("Death", true);
+
         }
     }
 }
