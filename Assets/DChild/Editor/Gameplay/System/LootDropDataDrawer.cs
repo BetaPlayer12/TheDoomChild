@@ -7,8 +7,7 @@ using UnityEngine;
 
 namespace DChildEditor.Gameplay.Systems
 {
-    [CustomEditor(typeof(LootDropData))]
-    public class LootDropData_Inspector : OdinEditor
+    public class LootDropDataDrawer : OdinValueDrawer<LootDropData>
     {
         public class Info
         {
@@ -35,11 +34,15 @@ namespace DChildEditor.Gameplay.Systems
 
         private Info m_previousInfo = new Info();
 
-        public override void OnInspectorGUI()
+        protected override void DrawPropertyLayout(GUIContent label)
         {
-            var lootDropData = target as LootDropData;
+            if (m_previousInfo == null)
+            {
+                m_previousInfo = new Info();
+            }
+            var lootDropData = ValueEntry.SmartValue;
             m_previousInfo.Set(lootDropData);
-            base.OnInspectorGUI();
+            CallNextDrawer(label);
             if (lootDropData.m_autoCalculate)
             {
                 if (lootDropData.m_forcedEdit == true)
@@ -69,14 +72,10 @@ namespace DChildEditor.Gameplay.Systems
                             break;
                         }
                     }
-                } 
+                    ValueEntry.Property.Tree.ApplyChanges();
+                }
             }
         }
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            m_previousInfo = new Info();
-        }
     }
 }

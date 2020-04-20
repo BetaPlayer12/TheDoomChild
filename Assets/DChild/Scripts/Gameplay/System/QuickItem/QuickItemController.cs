@@ -1,4 +1,4 @@
-﻿                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  using UnityEngine;
+﻿using UnityEngine;
 
 namespace DChild.Gameplay.Inventories
 {
@@ -6,22 +6,41 @@ namespace DChild.Gameplay.Inventories
     {
         [SerializeField]
         private QuickItemHandle m_handle;
+        private string m_useButton = "QuickItemUse";
+        private string m_prevButton = "QuickItemPrev";
+        private string m_nextButton = "QuickItemNext";
+
+        private bool m_hasPressed;
+        private string m_pressedButton;
 
         private void Update()
         {
-            if (GameplaySystem.isGamePaused == false)
+            if (m_hasPressed)
             {
-                if (Input.GetButtonDown("QuickItemUse"))
+                if (Input.GetButtonUp(m_pressedButton))
                 {
-                    m_handle.UseCurrentItem();
+                    m_hasPressed = false;
                 }
-                if (Input.GetButtonDown("QuickItemPrev"))
+            }
+            else
+            {
+                if (GameplaySystem.isGamePaused == false && m_handle.hideUI == false)
                 {
-                    m_handle.Previous();
-                }
-                else if (Input.GetButtonDown("QuickItemNext"))
-                {
-                    m_handle.Next();
+                    if (Input.GetButtonDown(m_useButton))
+                    {
+                        m_handle.UseCurrentItem();
+                        m_pressedButton = m_useButton;
+                    }
+                    if (Input.GetButtonDown(m_prevButton))
+                    {
+                        m_handle.Previous();
+                        m_pressedButton = m_prevButton;
+                    }
+                    else if (Input.GetButtonDown(m_nextButton))
+                    {
+                        m_handle.Next();
+                        m_pressedButton = m_prevButton;
+                    }
                 }
             }
         }
