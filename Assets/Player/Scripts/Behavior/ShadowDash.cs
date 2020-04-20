@@ -9,9 +9,12 @@ namespace PlayerNew
     {
         
         public bool shadowDashing = false;
+        public bool shadowMode = false;
+
+        private bool isCeilingTouch;
 
 
-       
+
 
         override protected void FixedUpdate()
         {
@@ -21,27 +24,42 @@ namespace PlayerNew
             var dash = inputState.GetButtonValue(inputButtons[0]);
             var down = inputState.GetButtonValue(inputButtons[1]);
 
-            if (!dashing)
+            float faceDir = facing.isFacingRight ? 1 : -1;
+            var vel = body2d.velocity;
+
+
+            if (shadowMode)
             {
-                shadowDashing = false;
-                Debug.Log("Not Dashing");
-            }
-            else
-            {
-                Debug.Log("Dashing");
+               
+
+                if (collisionState.isCeilingTouch)
+                {
+                    shadowMode = true;
+                    shadowDashing = true;
+                    body2d.AddForce(new Vector2(faceDir * dashForce, vel.y), ForceMode2D.Force);
+                }
+                else
+                {
+                    shadowMode = false;
+                    shadowDashing = false;
+                }
+
+                Debug.Log(collisionState.isCeilingTouch);
             }
 
-            if (dash)
+
+            if (dash && !shadowMode)
             {
                 if (down && collisionState.grounded)
                 {
                     shadowDashing = true;
-                }
-                else
-                {
-                    shadowDashing = false;
+                    shadowMode = true;
                 }
             }
+        }
+        protected override void OnDash(float faceDir)
+        {
+            base.OnDash(faceDir);
         }
     }
 }

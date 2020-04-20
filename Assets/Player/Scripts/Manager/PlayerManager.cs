@@ -158,7 +158,10 @@ namespace PlayerNew
             {
                 crouchBehavior.crouching = false;
             }
-
+            if (dashBehavior.shadowMode)
+            {
+                crouchBehavior.crouching = false;
+            }
             
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
@@ -166,7 +169,7 @@ namespace PlayerNew
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(body2d.velocity.y);
             WallStickAnimationState(wallStickBehavior.onWallDetected);
-            DashAnimationState(dashBehavior.dashing, dashBehavior.shadowDashing);
+            DashAnimationState(dashBehavior.dashing, dashBehavior.shadowMode);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
             IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
         }

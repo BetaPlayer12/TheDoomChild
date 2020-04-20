@@ -7,10 +7,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class PlayerDeath : MonoBehaviour, IComplexCharacterModule
     {
-        private Damageable m_source;
+        public Damageable m_source;
         [SerializeField]
         private Animator m_animator;
         private string m_deathParameter;
+
+        public int hp;
+
+
+        void Update()
+        {
+            hp = m_source.health.currentValue;
+
+            if(hp <= 0f)
+            {
+                OnDeath(this, EventActionArgs.Empty);
+            }
+
+        }
 
         public void Initialize(ComplexCharacterInfo info)
         {
