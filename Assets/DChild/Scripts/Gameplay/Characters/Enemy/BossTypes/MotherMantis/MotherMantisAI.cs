@@ -389,6 +389,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(2);
             m_animation.SetAnimation(0, m_info.move.animation, true);
             yield return new WaitForSeconds(5);
+            GetComponentInChildren<MeshRenderer>().sortingOrder = 99;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
             m_animation.SetAnimation(0, m_info.intro2Animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.intro2Animation);
