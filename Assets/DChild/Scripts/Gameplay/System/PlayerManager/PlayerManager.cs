@@ -52,7 +52,7 @@ namespace DChild.Gameplay.Systems
             return m_overrideController;
         }
 
-        public void ClearCache() => m_collisionRegistrator.ClearCache();
+        public void ClearCache() => m_collisionRegistrator?.ClearCache();
 
         public void StopCharacterControlOverride()
         {
