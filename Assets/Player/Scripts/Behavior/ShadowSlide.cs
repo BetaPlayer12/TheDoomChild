@@ -5,13 +5,16 @@ using UnityEngine;
 
 namespace PlayerNew
 {
-    public class ShadowDash : Dash
+    public class ShadowSlide : Dash
     {
         
         public bool shadowDashing = false;
         public bool shadowMode = false;
+        public float shadowlimeter = 0.3f; // sweetspot is 0.3f
 
+        private float shadowSlideTimer;
         private bool isCeilingTouch;
+        
 
 
 
@@ -31,20 +34,28 @@ namespace PlayerNew
             if (shadowMode)
             {
                
+                shadowSlideTimer += Time.deltaTime;
+
 
                 if (collisionState.isCeilingTouch)
                 {
+                    Debug.Log("dashforce: " + dashForce);
                     shadowMode = true;
                     shadowDashing = true;
                     body2d.AddForce(new Vector2(faceDir * dashForce, vel.y), ForceMode2D.Force);
                 }
                 else
                 {
-                    shadowMode = false;
-                    shadowDashing = false;
+                    if(shadowSlideTimer > shadowlimeter)
+                    {
+                        Debug.Log("Not touching ceiling");
+                        shadowMode = false;
+                        shadowDashing = false;
+                        shadowSlideTimer = 0f;
+                    }
                 }
 
-                Debug.Log(collisionState.isCeilingTouch);
+                
             }
 
 

@@ -15,7 +15,7 @@ namespace PlayerNew
         private LongJump longJumpBehavior;
         //private WallJump wallJumpBehavior;
         private Slash slashBehavior;
-        private ShadowDash dashBehavior;
+        private ShadowSlide dashBehavior;
         private GroundShaker groundShakerBehavior;
         private Thrust thrustBehavior;
         private Animator animator;
@@ -44,7 +44,7 @@ namespace PlayerNew
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
-            dashBehavior = GetComponent<ShadowDash>();
+            dashBehavior = GetComponent<ShadowSlide>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
             wallSlideBehavior = GetComponent<WallSlide>();
