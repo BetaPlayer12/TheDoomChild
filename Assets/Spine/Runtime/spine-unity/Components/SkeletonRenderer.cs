@@ -257,9 +257,13 @@ namespace Spine.Unity {
 		}
 		#endregion
 
+		protected bool m_isVisible;
+
+		public bool isVisible => m_isVisible;
 
 		public virtual void Awake () {
 			Initialize(false);
+			m_isVisible = true;
 		}
 
 		void OnDisable () {

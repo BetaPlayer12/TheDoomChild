@@ -114,6 +114,7 @@ namespace DChild.Gameplay
         {
             m_cinema?.ClearLists();
             m_healthTracker?.RemoveAllTrackers();
+            m_playerManager?.ClearCache();
         }
 
         public static void LoadGame(CampaignSlot campaignSlot, LoadingHandle.LoadType loadType)
@@ -235,6 +236,11 @@ namespace DChild.Gameplay
             {
                 m_activatableModules[i].Disable();
             }
+        }
+
+        private void LateUpdate()
+        {
+            
         }
 
         private void OnApplicationQuit()

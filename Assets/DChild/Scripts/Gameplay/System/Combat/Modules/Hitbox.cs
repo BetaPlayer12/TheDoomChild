@@ -11,13 +11,11 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-
-    [RequireComponent(typeof(Collider2D))]
     [AddComponentMenu("DChild/Gameplay/Combat/Hitbox")]
     public class Hitbox : MonoBehaviour
     {
         private IDamageable m_damageable;
-        [SerializeField, HideInInspector]
+        [SerializeField, DisableInPlayMode, HideInEditorMode]
         private Collider2D[] m_collider2Ds;
 
         [SerializeField]
@@ -37,6 +35,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        [Button]
         public void Disable()
         {
             for (int i = 0; i < m_collider2Ds.Length; i++)
@@ -68,7 +67,7 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                m_collider2Ds = new Collider2D[] { GetComponent<Collider2D>() };
+                m_collider2Ds = GetComponentsInChildren<Collider2D>();
             }
         }
     }

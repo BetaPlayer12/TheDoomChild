@@ -12,9 +12,12 @@ namespace DChild.Gameplay.Environment
         private Collider2D m_collider;
         private IDamageDealer m_damageDealer;
 
+        private List<Damageable> m_damageable;
+
         protected virtual void Awake()
         {
             m_collider = GetComponent<Collider2D>();
+            m_damageable = new List<Damageable>();
             m_damageDealer = GetComponentInParent<IDamageDealer>();
         }
 
@@ -41,28 +44,38 @@ namespace DChild.Gameplay.Environment
 
                 if (colliderGameObject.TryGetComponentInParent(out Damageable damageable) && colliderGameObject.TryGetComponentInParent(out Character character))
                 {
-                    Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
-                    var hits = Raycaster.Cast(collision.GetContact(0).point, -transform.up, character.height, true, out int hitCount);
-                    if (hitCount > 0)
+                    if (m_damageable.Contains(damageable) == false)
                     {
-                        using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                        Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
+                        var hits = Raycaster.Cast(collision.GetContact(0).point, -transform.up, character.height, true, out int hitCount);
+                        if (hitCount > 0)
                         {
-                            InitializeTargetInfo(cacheTargetInfo, damageable);
-                            m_damageDealer?.Damage(cacheTargetInfo.Value, new BodyDefense());
-                            cacheTargetInfo?.Release();
-                        }
-
-                        if (colliderGameObject.TryGetComponentInParent(out HitFXHandle onHitFX))
-                        {
-                            if (collision.contactCount > 0)
+                            m_damageable.Add(damageable);
+                            using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                             {
-                                var hitPoint = collision.GetContact(0).point;
-                                onHitFX.SpawnFX(hitPoint, GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint));
+                                InitializeTargetInfo(cacheTargetInfo, damageable);
+                                m_damageDealer?.Damage(cacheTargetInfo.Value, new BodyDefense());
+                                cacheTargetInfo?.Release();
+                            }
+
+                            if (colliderGameObject.TryGetComponentInParent(out HitFXHandle onHitFX))
+                            {
+                                if (collision.contactCount > 0)
+                                {
+                                    var hitPoint = collision.GetContact(0).point;
+                                    onHitFX.SpawnFX(hitPoint, GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint));
+                                }
                             }
                         }
                     }
                 }
             }
+        }
+
+
+        private void Reset()
+        {
+            m_damageable.Clear();
         }
     }
 

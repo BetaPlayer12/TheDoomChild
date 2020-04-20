@@ -41,12 +41,6 @@ namespace PlayerNew
             inputState = GetComponent<InputState>();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         private void FixedUpdate()
         {
             var pos = bottomPosition;
@@ -58,16 +52,16 @@ namespace PlayerNew
             if (disableGround)
             {
                 grounded = false;
-            }else if (forceGrounded)
+            }
+            else if (forceGrounded)
             {
                 grounded = true;
-            }else
+            }
+            else
             {
                 grounded = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-               
-            }
 
-           
+            }
 
             pos = inputState.direction == Directions.Right ? rightPosition : leftPosition;
             pos.x += transform.position.x;
@@ -76,7 +70,7 @@ namespace PlayerNew
             lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
             //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             var wallHit = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
-            if(wallHit.collider != null)
+            if (wallHit.collider != null)
             {
                 onWall = wallHit.collider?.CompareTag("InvisibleWall") == false;
             }
@@ -86,13 +80,11 @@ namespace PlayerNew
             }
             //Debug.DrawRay(pos, lineDir);
 
-
-
             pos = inputState.direction == Directions.Right ? ledgeRightPosition : ledgeLeftPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
 
-            lineDir = inputState.direction == Directions.Right  ? Vector2.right : Vector2.left;
+            lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
             //isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             isTouchingLedge = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
 
@@ -110,26 +102,21 @@ namespace PlayerNew
                 onWallLeg = false;
             }
 
-            slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
+            slopeLeftHit = Physics2D.Raycast(transform.position, Vector2.left, lineLength, collisionLayer);
             slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
             slopeBotHit = Physics2D.Raycast(transform.position, Vector2.down, lineLength, collisionLayer);
 
             posDir = inputState.direction == Directions.Left ? 1 : -1;
             ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
 
-
-            
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.color = collisionColor;
 
-            var positions = new Vector2[] {bottomPosition, leftLegPosition, rightLegPosition };
+            var positions = new Vector2[] { bottomPosition, leftLegPosition, rightLegPosition };
             //var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
-
-
-
 
             foreach (var position in positions)
             {
@@ -149,9 +136,9 @@ namespace PlayerNew
             //    pos.y += transform.position.y;
             //    Gizmos.DrawRay(pos, lineDir * lineLength);
             //}
-           
+
             Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
-            
+
         }
     }
 

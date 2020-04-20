@@ -5,10 +5,11 @@ using Holysoft.Event;
 using DChild.Gameplay.Combat;
 using Spine;
 using UnityEngine;
+using Spine.Unity;
 
 namespace DChild.Gameplay.Characters
 {
-    public class DeathHandle : MonoBehaviour
+    public class DeathHandle : MonoBehaviour, IHasSkeletonDataAsset
     {
         [SerializeField]
         private Damageable m_source;
@@ -20,6 +21,8 @@ namespace DChild.Gameplay.Characters
         private CountdownTimer m_bodyDuration;
         [SerializeField]
         private bool m_destroySource;
+
+        SkeletonDataAsset IHasSkeletonDataAsset.SkeletonDataAsset => m_animator.GetComponentInChildren<SkeletonAnimation>().skeletonDataAsset;
 
         public void SetAnimation(string animation)
         {
@@ -41,9 +44,17 @@ namespace DChild.Gameplay.Characters
 
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            m_source.SetHitboxActive(false);
-            m_animator.SetAnimation(0, m_animation, false, 0);
-            m_animator.animationState.Complete += OnDeathAnimationComplete;
+            if (m_animator == null)
+            {
+                m_bodyDuration.Reset();
+                enabled = true;
+            }
+            else
+            {
+                m_source.SetHitboxActive(false);
+                m_animator.SetAnimation(0, m_animation, false, 0);
+                m_animator.animationState.Complete += OnDeathAnimationComplete;
+            }
         }
 
         private void OnDeathAnimationComplete(TrackEntry trackEntry)

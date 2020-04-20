@@ -97,8 +97,10 @@ namespace DChild.Menu
 
         private IEnumerator MonitorProgess()
         {
+            var time = 0f;
             m_animation.PlayStart();
             var endOfFrame = new WaitForEndOfFrame();
+
             yield return endOfFrame;
             if (m_unloadOperations.Count > 0)
             {
@@ -112,8 +114,10 @@ namespace DChild.Menu
                         }
                     }
                     yield return endOfFrame;
+                    time += Time.unscaledDeltaTime;
                 } while (m_unloadOperations.Count > 0);
                 yield return endOfFrame;
+                time += Time.unscaledDeltaTime;
             }
 
             if (m_loadOperations.Count > 0)
@@ -131,27 +135,33 @@ namespace DChild.Menu
                         }
                     }
                     yield return endOfFrame;
+                    time += Time.unscaledDeltaTime;
                 } while (isLoading);
             }
             m_animation.PlayEnd();
             if (loadType == LoadType.Force)
             {
                 yield return new WaitForSeconds(2.25f);
+                time += 2.25f;
             }
             for (int i = 0; i < m_loadOperations.Count; i++)
             {
                 m_loadOperations[i].allowSceneActivation = true;
             }
             yield return endOfFrame;
+            time += Time.unscaledDeltaTime;
             SceneDone?.Invoke(this, EventActionArgs.Empty);
             if (loadType == LoadType.Smart)
             {
                 GameEventMessage.SendEvent("Load Done");
                 yield return new WaitForSeconds(1f);
+                time += 1f;
             }
             yield return endOfFrame;
+            time += Time.unscaledDeltaTime;
             //Cant Call Unload Here for some reason, so i have to resort to using a flag to trigger the unloading
             m_unloadThis = true;
+            Debug.Log($"Loading Time: {time}");
         }
 
         private void Awake()

@@ -242,7 +242,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -289,7 +288,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator LeapAttackRoutine()
         {
             m_movement.Stop();
-            m_flinchHandle.gameObject.SetActive(false);
             var leapDir = new Vector2(m_info.leapDistance.x * transform.localScale.x, m_info.leapDistance.y);
             m_character.physics.SetVelocity(leapDir);
             //m_character.physics.AddForce(leapDir, ForceMode2D.Impulse);
@@ -298,7 +296,6 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAnimation);
             m_movement.Stop();
-            m_flinchHandle.gameObject.SetActive(true);
             m_attackDecider.hasDecidedOnAttack = false;
             if (!m_wallSensor.isDetecting)
             {

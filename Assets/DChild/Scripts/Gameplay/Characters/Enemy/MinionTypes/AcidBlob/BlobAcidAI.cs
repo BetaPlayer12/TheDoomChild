@@ -46,9 +46,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
-            [SerializeField, MinValue(0)]
-            private float m_expandSpeed;
-            public float expandSpeed => m_expandSpeed;
 
             [SerializeField]
             private float m_targetDistanceTolerance;
@@ -100,7 +97,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Spawn,
             Sleep,
-            Patrol,
             Detect,
             Turning,
             Attacking,
@@ -125,8 +121,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
-        private PlatformPatrol m_platformPatrol;
-        [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
@@ -139,8 +133,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_attackbb;
-        [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -150,8 +142,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_smokeFX;
-        [SerializeField]
-        private bool m_willPatrol;
 
         private float m_targetDistance;
 
@@ -164,51 +154,26 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool m_isDetecting;
         private float m_currentCD;
-        private float m_currentScale;
 
         protected override void Start()
         {
             base.Start();
-            transform.localScale = m_willPatrol ? Vector3.one : Vector3.zero;
             m_selfCollider.SetActive(false);
             m_spineEventListener.Subscribe(m_info.smokeEvent, SmokeFX);
         }
 
         private void SmokeFX()
         {
-            m_smokeFX.Play();
-            StartCoroutine(AttackbbRoutine());
-
-        }
-
-        private IEnumerator AttackbbRoutine()
-        {
-            m_attackbb.enabled = true;
-            while (m_attackbb.transform.localScale.x <= 1.5f)
-            {
-                var offset = Time.deltaTime * .5f;
-                m_attackbb.transform.localScale += new Vector3(m_attackbb.transform.localScale.x * offset, m_attackbb.transform.localScale.y * offset);
-                yield return null;
-            }
-            //yield return new WaitForSeconds(1f);
-            m_attackbb.transform.localScale = Vector3.one;
-            m_attackbb.enabled = false;
-            yield return null;
+            //m_smokeFX.Play();
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_animation.animationState.TimeScale = 1;
             m_stateHandle.ApplyQueuedState();
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
-
-        public void SetTargetInfo(AITargetInfo targetInfo)
-        {
-            m_targetInfo = targetInfo;
-        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -259,6 +224,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.SetState(State.Sleep);
             }
         }
+        //private IEnumerator PatienceRoutine()
+        //{
+        //    yield return new WaitForSeconds(m_info.patience);
+        //    m_targetInfo.Set(null, null);
+        //    m_isDetecting = false;
+        //    m_stateHandle.SetState(State.Patrol);
+        //}
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
@@ -279,21 +251,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SpawnRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_stateHandle.Wait(State.Cooldown);
             m_animation.DisableRootMotion();
-            m_isDetecting = true;
-            m_animation.SetAnimation(0, m_info.sleepAnimation, true);
-            while (m_currentScale <= 1)
-            {
-                m_currentScale += Time.deltaTime * m_info.expandSpeed;
-                transform.localScale = new Vector3(m_currentScale, m_currentScale, 1);
-                yield return null;
-            }
-            CustomTurn();
-            m_currentScale = 0;
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sleepAnimation);
-            m_animation.SetAnimation(0, m_info.detectAnimation, false).TimeScale = 3f;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.SetAnimation(0, m_info.spawnAnimation, false);
             yield return new WaitForSeconds(0.1f);
             m_character.physics.SetVelocity(new Vector2(m_info.spawnVelocity.x * -transform.localScale.x, m_info.spawnVelocity.y));
@@ -352,7 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Spawn, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Sleep, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_throwPoint);
             UpdateAttackDeciderList();
@@ -365,31 +324,13 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("Ground Sensor is " + m_groundSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
-                case State.Spawn:
+                case State.Detect:
                     m_movement.Stop();
-                    //m_character.physics.simulateGravity = true;
                     //m_stateHandle.Wait(State.ReevaluateSituation);
+                    //StartCoroutine(DetectRoutine());
+                    CustomTurn();
                     StartCoroutine(SpawnRoutine());
                     break;
-
-                case State.Detect:
-                    //m_character.physics.simulateGravity = true;
-                    m_movement.Stop();
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                    StartCoroutine(DetectRoutine());
-                    break;
-
-                case State.Patrol:
-                    //m_animation.SetAnimation(0, m_info.sleepAnimation, true);
-                    //m_animation.EnableRootMotion(true, transform.localRotation.z != 0 ? true : false);
-                    //m_character.physics.simulateGravity = false;
-                    GetComponent<IsolatedCharacterPhysics2D>().simulateGravity = false;
-                    m_animation.DisableRootMotion();
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = 1f;
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_platformPatrol.Patrol(m_movement, m_info.move.speed, characterInfo);
-                    break;
-
                 case State.Sleep:
                     m_animation.SetAnimation(0, m_info.sleepAnimation, true);
                     break;
@@ -406,7 +347,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Attack:
                             m_animation.EnableRootMotion(false, false);
-                            m_animation.animationState.TimeScale = .5f;
                             m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                             break;
                     }
@@ -432,7 +372,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
 
                     break;
-
                 case State.Chasing:
                     {
                         if (IsFacingTarget())
