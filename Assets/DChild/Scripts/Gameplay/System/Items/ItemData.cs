@@ -59,6 +59,7 @@ namespace DChild.Gameplay.Items
                 m_name = "Not Assigned";
                 FileUtility.RenameAsset(this, assetPath, "UnassignedData");
             }
+            EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
 
@@ -79,6 +80,7 @@ namespace DChild.Gameplay.Items
                 var fileName = m_name.Replace(" ", string.Empty);
                 fileName += "Data";
                 FileUtility.RenameAsset(this, assetPath, fileName);
+                EditorUtility.SetDirty(this);
                 AssetDatabase.SaveAssets();
             }
         }
@@ -103,6 +105,9 @@ namespace DChild.Gameplay.Items
             m_quantityLimit = info.quantityLimit;
             m_cost = info.cost;
             connection.Close();
+
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 #endif 
         #endregion

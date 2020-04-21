@@ -21,7 +21,7 @@ namespace DChild.Gameplay
 
         public void Apply(Character character)
         {
-
+            //TODO: ApplyStats
         }
     }
 }
