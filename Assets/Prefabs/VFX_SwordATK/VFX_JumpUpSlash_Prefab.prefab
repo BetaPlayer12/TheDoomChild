@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5974659449776949742}
   - component: {fileID: 4260989303840752496}
   - component: {fileID: 5786547046574030218}
+  - component: {fileID: 7620533101539384251}
   m_Layer: 8
   m_Name: JumpUpSlashCollider
   m_TagString: Untagged
@@ -45,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 1
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList:
   - m_target: {fileID: 0}
     m_ignoreList:
@@ -100,6 +103,24 @@ PolygonCollider2D:
       - {x: 3.1144867, y: 7.241791}
       - {x: 5.245041, y: 6.6779785}
       - {x: 8.852997, y: 5.6598816}
+--- !u!114 &7620533101539384251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293500166159180592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59adafb57d3f471409348179f9e0c77f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 1
+  m_damageUniqueHitboxesOnly: 1
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList:
+  - m_target: {fileID: 0}
+    m_ignoreList: []
 --- !u!1 &2638596245208085992
 GameObject:
   m_ObjectHideFlags: 0
