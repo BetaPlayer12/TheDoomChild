@@ -50,6 +50,8 @@ namespace DChild.Gameplay.Combat
             {
                 Debug.Log("dead");
                 Destroyed?.Invoke(this, EventActionArgs.Empty);
+
+                
             }
         }
 
