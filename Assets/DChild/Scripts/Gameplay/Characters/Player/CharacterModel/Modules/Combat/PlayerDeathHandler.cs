@@ -8,7 +8,7 @@ using Holysoft.Event;
 
 namespace PlayerNew
 {
-    public class Death : PlayerBehaviour, IComplexCharacterModule
+    public class PlayerDeathHandler : PlayerBehaviour, IComplexCharacterModule
     {
         public InputState testState;
         public Damageable m_source;
