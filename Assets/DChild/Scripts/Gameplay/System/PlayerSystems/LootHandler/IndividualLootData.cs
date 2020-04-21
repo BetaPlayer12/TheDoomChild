@@ -1,4 +1,11 @@
 ﻿using UnityEngine;
+using Sirenix.OdinInspector;
+using DChild.Gameplay.Essence;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using Sirenix.Utilities.Editor;
+#endif
 
 namespace DChild.Gameplay.Systems
 {
@@ -7,12 +14,44 @@ namespace DChild.Gameplay.Systems
     {
         [SerializeField]
         private LootReference m_reference;
-        [SerializeField, Min(1)]
+        [SerializeField, Min(1), OnInspectorGUI("OnLootReferenceGUI")]
         private int m_count = 1;
 
         public void DropLoot(Vector2 position)
         {
             GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_reference.loot, m_count, position));
         }
+
+#if UNITY_EDITOR
+        public LootReference reference => m_reference;
+        public int count => m_count;
+
+        private void OnLootReferenceGUI()
+        {
+            var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
+            if (soulEssence)
+            {
+                SirenixEditorGUI.InfoMessageBox($"Soul Essence: {soulEssence.value * m_count}");
+            }
+        }
+
+        void ILootDataContainer.DrawDetails(bool drawContainer, string label = null)
+        {
+            if (m_reference != null)
+            {
+                var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
+                var suffix = label;
+                label = m_reference.name.Replace("LootReference", string.Empty);
+                if (soulEssence)
+                {
+                    EditorGUILayout.LabelField($"{label} ({soulEssence.value * m_count}){suffix}");
+                }
+                else
+                {
+                    EditorGUILayout.LabelField($"{label} ({m_count}){suffix}");
+                } 
+            }
+        }
+#endif
     }
 }

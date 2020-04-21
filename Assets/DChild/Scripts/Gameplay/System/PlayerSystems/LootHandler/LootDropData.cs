@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 
 #if UNITY_EDITOR
+using UnityEditor;
 using Sirenix.Utilities.Editor;
 #endif
 
@@ -80,6 +81,25 @@ namespace DChild.Gameplay.Systems
         public bool m_forcedEdit;
         [NonSerialized, ShowInInspector, PropertyOrder(-1)]
         public bool m_autoCalculate;
+
+        void ILootDataContainer.DrawDetails(bool drawContainer, string label = null)
+        {
+            SirenixEditorGUI.BeginBox(label);
+            EditorGUI.indentLevel++;
+            for (int i = 0; i < m_drops.Count; i++)
+            {
+                if (m_drops[i].loot == null)
+                {
+                    EditorGUILayout.LabelField($"None - {m_drops[i].chance}%");
+                }
+                else
+                {
+                    m_drops[i].loot.DrawDetails(true, $" - {m_drops[i].chance}%");
+                }
+            }
+            EditorGUI.indentLevel--;
+            SirenixEditorGUI.EndBox();
+        }
 
         private void CreateToolbar()
         {

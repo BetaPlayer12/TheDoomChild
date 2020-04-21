@@ -22,5 +22,7 @@ namespace DChild.Gameplay.Environment.Interractables
         void Interact(HorizontalDirection direction);
 
         Vector2 position { get; }
+
+        bool canBeInteractedWith { get; }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
+using Sirenix.Utilities.Editor;
+#endif
 
 namespace DChild.Gameplay.Systems
 {
@@ -15,5 +18,25 @@ namespace DChild.Gameplay.Systems
                 m_loots[i].DropLoot(position);
             }
         }
+
+#if UNITY_EDITOR
+        void ILootDataContainer.DrawDetails(bool drawContainer, string label = null)
+        {
+            if (drawContainer)
+            {
+                SirenixEditorGUI.BeginBox(label);
+            }
+
+            for (int i = 0; i < m_loots.Length; i++)
+            {
+                m_loots[i].DrawDetails(false);
+            }
+
+            if (drawContainer)
+            {
+                SirenixEditorGUI.EndBox();
+            }
+        } 
+#endif
     }
 }
