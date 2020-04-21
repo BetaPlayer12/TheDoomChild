@@ -109,7 +109,7 @@ namespace DChild.Serialization
                 m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
             }
         }
-        private void Awake()
+        private void Start()
         {
             var proposedData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
 #if UNITY_EDITOR
@@ -166,10 +166,6 @@ namespace DChild.Serialization
 
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
-        }
-
-        private void Start()
-        {
             SceneManager.SetActiveScene(gameObject.scene);
         }
 

@@ -48,9 +48,12 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PrimarySkillsData savedData)
         {
             var data = savedData.movementSkills;
-            for (int i = 0; i < data.Length; i++)
+            if (data != null)
             {
-                m_skills[(PrimarySkill)i] = data[i];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    m_skills[(PrimarySkill)i] = data[i];
+                } 
             }
         }
     }

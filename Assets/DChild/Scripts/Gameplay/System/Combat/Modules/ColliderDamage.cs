@@ -9,10 +9,10 @@ using System;
 using DChild.Gameplay.Environment;
 using Sirenix.Utilities;
 using DChild.Gameplay.Characters;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Combat
 {
-
     public abstract class ColliderDamage : MonoBehaviour
     {
         [System.Serializable]
@@ -36,19 +36,16 @@ namespace DChild.Gameplay.Combat
         private bool m_canDetectInteractables;
         [SerializeField]
         private bool m_damageUniqueHitboxesOnly;
+        [SerializeField, ShowIf("m_damageUniqueHitboxesOnly")]
+        private CollisionRegistrator m_collisionRegistrator;
         [SerializeField]
         private Collider2DInfo[] m_ignoreColliderList;
 
-        private CollisionRegistrator m_collisionRegistrator;
         private Collider2D m_collider;
         private IDamageDealer m_damageDealer;
         public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
         protected abstract bool IsValidToHit(Collider2D collision);
-
-        public void ResetHitCache() => m_collisionRegistrator?.ResetHitCache();
-
-        public void ClearCache() => m_collisionRegistrator?.ClearCache();
 
         protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
@@ -135,7 +132,7 @@ namespace DChild.Gameplay.Combat
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("DamageCollider"))
+            if (collision.CompareTag("DamageCollider") || collision.CompareTag("Sensor"))
                 return;
 
             var validToHit = IsValidToHit(collision);
@@ -174,12 +171,12 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        
+
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             var colliderGameObject = collision.gameObject;
-            if (colliderGameObject.CompareTag("DamageCollider"))
+            if (colliderGameObject.CompareTag("DamageCollider") || colliderGameObject.CompareTag("Sensor"))
                 return;
 
             if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)
