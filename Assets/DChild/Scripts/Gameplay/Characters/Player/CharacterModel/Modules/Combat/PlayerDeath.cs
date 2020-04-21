@@ -1,12 +1,19 @@
 ﻿using Holysoft.Event;
 using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay;
 using DChild.Gameplay.Combat;
 using UnityEngine;
 
+
+
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+  
     public class PlayerDeath : MonoBehaviour, IComplexCharacterModule
     {
+     
+        
+
         public Damageable m_source;
         [SerializeField]
         private Animator m_animator;
@@ -22,6 +29,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if(hp <= 0f)
             {
                 OnDeath(this, EventActionArgs.Empty);
+                
             }
 
         }
@@ -39,7 +47,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Debug.Log("Dead");
             m_source.SetHitboxActive(false);
             m_animator.SetBool("Death", true);
-
+            
         }
     }
 }
