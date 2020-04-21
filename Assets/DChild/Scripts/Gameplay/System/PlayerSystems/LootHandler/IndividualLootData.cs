@@ -1,25 +1,18 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
-    [CreateAssetMenu(fileName = "IndividualLootData", menuName = "DChild/Gameplay/Loot/Individual Loot Data")]
-    public class IndividualLootData : LootData
+    [System.Serializable]
+    public class IndividualLootData : ILootDataContainer
     {
-        [SerializeField,ValidateInput("ValidateLoot","GameObject must have Loot component")]
-        private GameObject m_loot;
-        [SerializeField, MinValue(1)]
-        private int m_count;
+        [SerializeField]
+        private LootReference m_reference;
+        [SerializeField, Min(1)]
+        private int m_count = 1;
 
-        public override void DropLoot(Vector2 position)
+        public void DropLoot(Vector2 position)
         {
-            GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_loot, m_count, position));
+            GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_reference.loot, m_count, position));
         }
-#if UNITY_EDITOR
-        private bool ValidateLoot(GameObject loot)
-        {
-            return loot?.GetComponent<Loot>() ?? false;
-        }
-#endif
     }
 }

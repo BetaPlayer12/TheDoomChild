@@ -123,11 +123,6 @@ namespace DChild.Gameplay.Combat
             {
                 m_ignoreColliderList[i].IgnoreColliders(true);
             }
-
-            if (m_damageUniqueHitboxesOnly)
-            {
-                m_collisionRegistrator = new CollisionRegistrator();
-            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -153,7 +148,7 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                if (collision.TryGetComponent(out Hitbox hitbox))
+                if (collision.TryGetComponentInParent(out Hitbox hitbox))
                 {
                     if (hitbox.CanBeDamageBy(m_collider))
                     {
