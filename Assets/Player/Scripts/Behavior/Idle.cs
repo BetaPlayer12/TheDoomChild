@@ -9,6 +9,7 @@ namespace PlayerNew
     {
         [SerializeField]
         private Slash attack;
+        [SerializeField]
         private float idleTimer = 0.0f;
         private float idleTImerReset = 0.0f;
         public int idleState = 0;
@@ -33,6 +34,11 @@ namespace PlayerNew
             else
             {
                 idleTimer += Time.deltaTime;
+            }
+
+            if(idleState == 0 && idleTimer > timeToIdle && !idleStateDone)
+            {
+                idleStateDone = true;
             }
 
             if(idleTimer >= timeToIdle && !idling && idleStateDone)
