@@ -6,6 +6,7 @@ namespace PlayerNew
 {
     public class Whip : PlayerBehaviour
     {
+        public bool whipAtk = false;
         // Start is called before the first frame update
         void Start()
         {
@@ -17,10 +18,17 @@ namespace PlayerNew
         {
             var canWhip = inputState.GetButtonValue(inputButtons[0]);
 
-            if (canWhip)
+            if (canWhip && !whipAtk)
             {
-                Debug.Log("whip attack");
+                whipAtk = true;
+                ToggleScripts(false);
             }
+        }
+
+        private void WhipFinishAttack()
+        {
+            whipAtk = false;
+            ToggleScripts(true);
         }
     }
 
