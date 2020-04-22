@@ -20,7 +20,7 @@ using UnityEngine.Events;
 namespace DChild.Gameplay.Environment
 {
     [AddComponentMenu("DChild/Gameplay/Environment/Interactable/Switch")]
-    public class Switch : MonoBehaviour, IHitToInteract, ISerializableComponent
+    public class Switch : MonoBehaviour, IHitToInteract, IButtonToInteract, ISerializableComponent
     {
         public enum Type
         {
@@ -46,6 +46,10 @@ namespace DChild.Gameplay.Environment
         [SerializeField, OnValueChanged("OnTypeChanged")]
         private Type m_type;
         [SerializeField]
+        private bool m_needsButtonToInteract;
+        [SerializeField, ShowIf("m_needsButtonToInteract")]
+        private Transform m_prompt;
+        [SerializeField]
         private Collider2D m_collider;
 #if UNITY_EDITOR
         [SerializeField, ReadOnly]
@@ -53,11 +57,11 @@ namespace DChild.Gameplay.Environment
         private bool m_isOn;
 
         [TabGroup("Main", "StartAs")]
-
         [SerializeField, TabGroup("Main/StartAs", "On")]
         private UnityEvent m_startAsOnState;
         [SerializeField, HideIf("m_hideStartAsOffState"), TabGroup("Main/StartAs", "Off")]
         private UnityEvent m_startAsOffState;
+
         [TabGroup("Main", "Transistion")]
         [SerializeField, TabGroup("Main/Transistion", "On")]
         private UnityEvent m_onState;
@@ -68,9 +72,31 @@ namespace DChild.Gameplay.Environment
 
         public Vector2 position => transform.position;
 
+        public bool canBeInteractedWith => !m_needsButtonToInteract;
+
+        public bool showPrompt => m_needsButtonToInteract;
+
+        public Vector3 promptPosition => m_prompt.position;
+
         public ISaveData Save()
         {
             return new SaveData(m_isOn);
+        }
+
+        public void EnableCollision()
+        {
+            if (m_collider != null)
+            {
+                m_collider.enabled = true;
+            }
+        }
+
+        public void DisableCollision()
+        {
+            if (m_collider != null)
+            {
+                m_collider.enabled = false;
+            }
         }
 
         public void Load(ISaveData data)
@@ -90,13 +116,6 @@ namespace DChild.Gameplay.Environment
                 m_collider.enabled = true;
             }
         }
-
-        public void Interact(HorizontalDirection direction)
-        {
-            OnHit?.Invoke(this, new HitDirectionEventArgs(direction));
-            Interact();
-        }
-
         public void SetAs(bool value)
         {
             m_isOn = value;
@@ -121,6 +140,17 @@ namespace DChild.Gameplay.Environment
                     m_collider.enabled = true;
                 }
             }
+        }
+
+        public void Interact(HorizontalDirection direction)
+        {
+            OnHit?.Invoke(this, new HitDirectionEventArgs(direction));
+            Interact();
+        }
+
+        public void Interact(Character character)
+        {
+            Interact();
         }
 
         [Button]
@@ -275,6 +305,8 @@ namespace DChild.Gameplay.Environment
                 return ((Component)instance).transform.position;
             }
         }
+
+
 #endif
     }
 }
