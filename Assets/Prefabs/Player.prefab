@@ -532,6 +532,7 @@ GameObject:
   - component: {fileID: 7985633607094572607}
   - component: {fileID: 8449102287724545631}
   - component: {fileID: 5296830413061449066}
+  - component: {fileID: 3215975776911647000}
   m_Layer: 16
   m_Name: Player
   m_TagString: Untagged
@@ -1037,6 +1038,9 @@ MonoBehaviour:
   attack: {fileID: 251286694}
   idleState: 0
   attackMode: 0
+  timeToIdle: 0
+  idling: 0
+  idleStateDone: 1
 --- !u!114 &5296830413061449066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1063,6 +1067,33 @@ MonoBehaviour:
   dashCoolDown: 0.4
   shadowDashing: 0
   shadowMode: 0
+  shadowlimeter: 0.3
+--- !u!114 &3215975776911647000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7567338640060585527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752eb7762239b4544ada33c30171a194, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputButtons: 
+  dissableScripts:
+  - {fileID: 7567338640060585548}
+  - {fileID: 7567338640060585550}
+  - {fileID: 7567338640060585551}
+  - {fileID: 922925365}
+  - {fileID: 251286694}
+  - {fileID: 8449102287724545631}
+  - {fileID: 5296830413061449066}
+  enableOnlyScript: []
+  testState: {fileID: 7567338640060585548}
+  m_source: {fileID: 0}
+  currentHP: 0
+  m_animator: {fileID: 0}
 --- !u!1 &8518109723057449616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1759,17 +1790,7 @@ PrefabInstance:
       propertyPath: m_ignoreColliderList.Array.data[0].m_target
       value: 
       objectReference: {fileID: 7567338640060585522}
-    - target: {fileID: 3936327057006455585, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_ignoreColliderList.Array.data[0].m_target
-      value: 
-      objectReference: {fileID: 7567338640060585522}
     - target: {fileID: 4951036089505271081, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_ignoreColliderList.Array.data[0].m_target
-      value: 
-      objectReference: {fileID: 7567338640060585522}
-    - target: {fileID: 5677409052259205332, guid: c412e995e971b284bb8b1fb1fa00028a,
         type: 3}
       propertyPath: m_ignoreColliderList.Array.data[0].m_target
       value: 
@@ -1829,41 +1850,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5884952831030322815, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_ignoreColliderList.Array.data[0].m_target
-      value: 
-      objectReference: {fileID: 7567338640060585522}
-    - target: {fileID: 5884952832758023269, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_ignoreColliderList.Array.data[0].m_target
-      value: 
-      objectReference: {fileID: 7567338640060585522}
     - target: {fileID: 6550852036853352069, guid: c412e995e971b284bb8b1fb1fa00028a,
         type: 3}
       propertyPath: m_Name
       value: FX
       objectReference: {fileID: 0}
-    - target: {fileID: 7846448399743153481, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_ignoreColliderList.Array.data[0].m_target
-      value: 
-      objectReference: {fileID: 7567338640060585522}
-    - target: {fileID: 8496082760883083275, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_ignoreColliderList.Array.data[0].m_target
-      value: 
-      objectReference: {fileID: 7567338640060585522}
-    - target: {fileID: 8512243715577207153, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_ignoreColliderList.Array.data[0].m_target
-      value: 
-      objectReference: {fileID: 7567338640060585522}
-    - target: {fileID: 8596580128763248101, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_ignoreColliderList.Array.data[0].m_target
-      value: 
-      objectReference: {fileID: 7567338640060585522}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c412e995e971b284bb8b1fb1fa00028a, type: 3}
 --- !u!198 &4042968203043053328 stripped
