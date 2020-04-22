@@ -9,7 +9,7 @@ using UnityEngine;
 namespace DChildEditor.Gameplay.Environment
 {
     [CustomEditor(typeof(ComplexIdlingCreature))]
-    public class ComplexIdlingCreature_Drawers : OdinEditor
+    public class ComplexIdlingCreature_Inspector : OdinEditor
     {
         private struct Info
         {
@@ -36,6 +36,8 @@ namespace DChildEditor.Gameplay.Environment
                     behaviour.m_relativeDestination = behaviour.destination - currentPosition;
                 }
             }
+
+            Tree.ApplyChanges();
         }
 
         private void OnSceneGUI()
@@ -60,7 +62,7 @@ namespace DChildEditor.Gameplay.Environment
             {
                 if (behaviours[i] is ComplexIdlingCreature.MovingBehaviour)
                 {
-                    var behaviour = (ComplexIdlingCreature.MovingBehaviour)behaviours[i];       
+                    var behaviour = (ComplexIdlingCreature.MovingBehaviour)behaviours[i];
                     if (Event.current.shift == false)
                     {
                         behaviour.destination = behaviour.m_relativeDestination + currentPosition;

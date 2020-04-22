@@ -110,8 +110,10 @@ namespace DChild.Gameplay.Combat
         {
             if (collision.TryGetComponentInParent(out IHitToInteract interactable))
             {
-                interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
-
+                if (interactable.canBeInteractedWith)
+                {
+                    interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
+                }
             }
         }
 
