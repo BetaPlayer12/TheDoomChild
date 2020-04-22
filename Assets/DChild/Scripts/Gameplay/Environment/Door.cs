@@ -35,6 +35,7 @@ namespace DChild.Gameplay.Environment.Interractables
         public void Open()
         {
             m_isOpen = true;
+            m_animator.SetBool("Force", false);
             ApplyMultiParameter();
             m_animator.SetTrigger("Open");
         }
@@ -43,6 +44,7 @@ namespace DChild.Gameplay.Environment.Interractables
         {
             m_isOpen = false;
             ApplyMultiParameter();
+            m_animator.SetBool("Force", false);
             m_animator.SetTrigger("Close");
         }
 
@@ -53,18 +55,21 @@ namespace DChild.Gameplay.Environment.Interractables
                 m_animator = GetComponentInChildren<Animator>();
             }
 
-            m_isOpen = open;
             ApplyMultiParameter();
-            m_animator.SetTrigger("Force");
-            if (m_isOpen)
+            if (m_isOpen != open)
             {
+                m_animator.SetBool("Force", true);
+                if (open)
+                {
 
-                m_animator.SetTrigger("Open");
+                    m_animator.SetTrigger("Open");
+                }
+                else
+                {
+                    m_animator.SetTrigger("Close");
+                }
             }
-            else
-            {
-                m_animator.SetTrigger("Close");
-            }
+            m_isOpen = open;
         }
 
         private void ApplyMultiParameter()

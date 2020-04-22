@@ -10,20 +10,20 @@ using Sirenix.Utilities.Editor;
 
 namespace DChild.Gameplay.Systems
 {
-    [CreateAssetMenu(fileName = "LootDropData", menuName = "DChild/Gameplay/Loot/Loot Drop Data")]
-    public class LootDropData : LootData
+    [System.Serializable]
+    public class LootDropData : ILootDataContainer
     {
         [System.Serializable]
         public class DropInfo
         {
             [SerializeField]
-            private LootData m_loot;
+            private ILootDataContainer m_loot;
             [SerializeField, Range(0, 100)]
             private float m_chance;
             [SerializeField, ReadOnly]
             private float m_percentScore;
 
-            public LootData loot { get => m_loot; }
+            public ILootDataContainer loot { get => m_loot; }
             public float chance
             {
                 get => m_chance;
@@ -48,11 +48,11 @@ namespace DChild.Gameplay.Systems
         }
 
         [SerializeField, ListDrawerSettings(CustomAddFunction = "AddElement", CustomRemoveElementFunction = "RemoveElement", DraggableItems = false, OnTitleBarGUI = "CreateToolbar")]
-        private List<DropInfo> m_drops;
+        private List<DropInfo> m_drops = new List<DropInfo>();
 
         public List<DropInfo> drops { get => m_drops; set => m_drops = value; }
 
-        private LootData GetRandomLoot()
+        private ILootDataContainer GetRandomLoot()
         {
             if (m_drops.Count > 0)
             {
@@ -70,7 +70,7 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        public override void DropLoot(Vector2 position)
+        public void DropLoot(Vector2 position)
         {
             GetRandomLoot()?.DropLoot(position);
         }
@@ -78,7 +78,7 @@ namespace DChild.Gameplay.Systems
 #if UNITY_EDITOR
         [NonSerialized]
         public bool m_forcedEdit;
-        [NonSerialized,ShowInInspector,PropertyOrder(-1)]
+        [NonSerialized, ShowInInspector, PropertyOrder(-1)]
         public bool m_autoCalculate;
 
         private void CreateToolbar()
@@ -180,7 +180,7 @@ namespace DChild.Gameplay.Systems
                         }
                     }
                 } while (deduction > 0);
-               
+
             }
         }
 

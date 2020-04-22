@@ -16,6 +16,11 @@ namespace DChildDebug
 
         public CampaignSlot slot { get => m_slot; }
 
+        public void LoadFileTo(CampaignSlot slot)
+        {
+            slot.Copy(m_slot);
+        }
+
 #if UNITY_EDITOR
         private void ChangeCampaignSlotID()
         {

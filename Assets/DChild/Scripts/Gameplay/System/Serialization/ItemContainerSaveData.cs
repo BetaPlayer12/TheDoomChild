@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
-
 
 namespace DChild.Serialization
 {
@@ -12,7 +9,7 @@ namespace DChild.Serialization
         [System.Serializable]
         public struct Item
         {
-            [SerializeField]
+            [SerializeField,ItemDataID]
             private int m_ID;
             [SerializeField]
             private int m_count;

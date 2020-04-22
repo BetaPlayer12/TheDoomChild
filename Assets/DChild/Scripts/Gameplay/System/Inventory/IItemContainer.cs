@@ -23,5 +23,7 @@ namespace DChild.Gameplay.Inventories
 
         ItemContainerSaveData Save();
         void ClearList();
+
+        bool HasItemCategory(ItemCategory category);
     }
 }

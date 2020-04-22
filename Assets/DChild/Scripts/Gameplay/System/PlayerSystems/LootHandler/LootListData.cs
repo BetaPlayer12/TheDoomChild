@@ -2,13 +2,13 @@
 
 namespace DChild.Gameplay.Systems
 {
-    [CreateAssetMenu(fileName = "LootListData", menuName = "DChild/Gameplay/Loot/Loot List Data")]
-    public class LootListData : LootData
+    [System.Serializable]
+    public class LootListData : ILootDataContainer
     {
         [SerializeField]
-        private LootData[] m_loots;
+        private ILootDataContainer[] m_loots = new ILootDataContainer[1];
 
-        public override void DropLoot(Vector2 position)
+        public void DropLoot(Vector2 position)
         {
             for (int i = 0; i < m_loots.Length; i++)
             {

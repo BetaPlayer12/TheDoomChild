@@ -205,7 +205,7 @@ namespace DChild.Gameplay
                 if (m_doNotTeleportPlayerOnAwake == false)
                 {
                     m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
-                }  
+                }
             }
         }
 
@@ -214,7 +214,7 @@ namespace DChild.Gameplay
             //m_cinema.SetTrackingTarget(m_player.model);
             m_settings = GameSystem.settings?.gameplay ?? null;
             m_modifiers = new GameplayModifiers();
-            isGamePaused = true;
+            isGamePaused = false;
             if (m_campaignToLoad != null)
             {
                 m_campaignSerializer.SetSlot(m_campaignToLoad);
@@ -240,7 +240,7 @@ namespace DChild.Gameplay
 
         private void LateUpdate()
         {
-            
+
         }
 
         private void OnApplicationQuit()

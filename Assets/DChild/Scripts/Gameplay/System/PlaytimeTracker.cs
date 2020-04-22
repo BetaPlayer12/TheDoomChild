@@ -18,8 +18,9 @@ namespace DChild.Gameplay.Systems
 
         private void OnLoad(object sender, CampaignSlotUpdateEventArgs eventArgs) => m_currentTime = eventArgs.slot.duration;
 
-        private void Start()
+        private void Awake()
         {
+            m_currentTime = GameplaySystem.campaignSerializer.slot.duration;
             GameplaySystem.campaignSerializer.PostDeserialization += OnLoad;
             GameplaySystem.campaignSerializer.PreSerialization += OnSave;
         }
