@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
+using PlayerNew;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
@@ -36,6 +37,8 @@ namespace DChild.Gameplay.Characters.Players
         private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private SurfaceDetector m_surfaceDector;
+        [SerializeField]
+        private PlayerBehaviour m_playerBehaviour;
 
         public ComplexCharacterInfo(GameObject character, AnimationParametersData animationParametersData)
         {

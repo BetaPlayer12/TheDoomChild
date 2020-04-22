@@ -14,6 +14,7 @@ namespace PlayerNew
         Jump,
         Attack,
         Dash,
+        Attack2,
         Interact
     }
 

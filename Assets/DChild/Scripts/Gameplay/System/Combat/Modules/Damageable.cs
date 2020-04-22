@@ -48,7 +48,10 @@ namespace DChild.Gameplay.Combat
             DamageTaken?.Invoke(this, eventArgs);
             if (m_health?.isEmpty ?? false)
             {
+                Debug.Log("dead");
                 Destroyed?.Invoke(this, EventActionArgs.Empty);
+
+                
             }
         }
 
