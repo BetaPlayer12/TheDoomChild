@@ -125,9 +125,9 @@ namespace PlayerNew
         override protected void Onstick()
         {
            
-            base.Onstick();
-            // body2d.velocity = Vector2.zero;
-           
+    /*      base.Onstick();
+            body2d.velocity = Vector2.zero;*/
+
         }
 
         protected override void Offwall()
