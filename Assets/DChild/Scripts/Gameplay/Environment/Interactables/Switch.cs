@@ -83,6 +83,22 @@ namespace DChild.Gameplay.Environment
             return new SaveData(m_isOn);
         }
 
+        public void EnableCollision()
+        {
+            if (m_collider != null)
+            {
+                m_collider.enabled = true;
+            }
+        }
+
+        public void DisableCollision()
+        {
+            if (m_collider != null)
+            {
+                m_collider.enabled = false;
+            }
+        }
+
         public void Load(ISaveData data)
         {
             m_isOn = ((SaveData)data).isTriggered;
