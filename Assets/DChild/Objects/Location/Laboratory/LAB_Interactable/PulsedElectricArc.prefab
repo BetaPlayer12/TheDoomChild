@@ -1,26 +1,12 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &801772607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7161193652705089294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_ignoreColliderList: []
---- !u!61 &8269836819216696211
+--- !u!61 &7206077651691732669
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7161193652705089294}
+  m_GameObject: {fileID: 9188857856577582215}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -40,6 +26,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &392403084893497144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9188857856577582215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1001 &1956322645434401208
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50,7 +52,7 @@ PrefabInstance:
     - target: {fileID: 2924257673064130387, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2924257673064130387, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
@@ -105,12 +107,12 @@ PrefabInstance:
     - target: {fileID: 2924257673064130387, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.525
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2924257673064130387, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 26.678627
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4165982620508916501, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
@@ -126,12 +128,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_data
       value: 
-      objectReference: {fileID: 11400000, guid: 06fa4083c80568c4eb34b39fca450917,
+      objectReference: {fileID: 11400000, guid: 32266be2182a96b418491a396ca2b044,
         type: 2}
     - target: {fileID: 4165982620508916501, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
       propertyPath: m_info.damage.Array.data[0].m_value
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165982620508916501, guid: 9882f4d0beb57a44abafcc8c589913eb,
+        type: 3}
+      propertyPath: m_info.damage.Array.data[0].m_type
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4321829849071828052, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
@@ -217,7 +224,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_activateEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 8269836819216696211}
+      objectReference: {fileID: 7206077651691732669}
     - target: {fileID: 8695144679313168602, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
       propertyPath: m_activateEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -272,7 +279,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_deactivateEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 8269836819216696211}
+      objectReference: {fileID: 7206077651691732669}
     - target: {fileID: 8695144679313168602, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
       propertyPath: m_deactivateEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -316,12 +323,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9882f4d0beb57a44abafcc8c589913eb, type: 3}
---- !u!1 &7161193652705089294 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8667154100106778294, guid: 9882f4d0beb57a44abafcc8c589913eb,
-    type: 3}
-  m_PrefabInstance: {fileID: 1956322645434401208}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9188857856577582215 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7251675686026786111, guid: 9882f4d0beb57a44abafcc8c589913eb,
