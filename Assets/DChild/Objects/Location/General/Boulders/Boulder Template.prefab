@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2608884043662507843}
   - component: {fileID: 3197031408025080804}
   - component: {fileID: 279188637173587337}
+  - component: {fileID: 1624479648939771608}
   m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
@@ -98,6 +99,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 2.21
+--- !u!114 &1624479648939771608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 893779749382346385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1 &1509428961188855639
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,6 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 262251328581483837}
+  - component: {fileID: 5566944626179155021}
   - component: {fileID: -1568448617462581501}
   - component: {fileID: 8171156582493647959}
   - component: {fileID: 2821997735236375640}
@@ -115,7 +133,7 @@ GameObject:
   - component: {fileID: 4774497640513967546}
   m_Layer: 11
   m_Name: Boulder Template
-  m_TagString: Untagged
+  m_TagString: GroundBreaker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,6 +153,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5566944626179155021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509428961188855639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 2608884043662507843}
+  m_data: {fileID: 11400000, guid: cfd0435323263454c877774f93d24a96, type: 2}
+  m_info:
+    damage:
+    - m_type: 0
+      m_value: 50
+    critChance: 0
+    critDamageModifier: 1
+    ignoreInvulnerability: 0
 --- !u!114 &-1568448617462581501
 MonoBehaviour:
   m_ObjectHideFlags: 0
