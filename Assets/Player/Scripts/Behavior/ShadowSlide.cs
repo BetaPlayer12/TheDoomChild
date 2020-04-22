@@ -39,7 +39,7 @@ namespace PlayerNew
 
                 if (collisionState.isCeilingTouch)
                 {
-                    Debug.Log("dashforce: " + dashForce);
+                   
                     shadowMode = true;
                     shadowDashing = true;
                     body2d.AddForce(new Vector2(faceDir * dashForce, vel.y), ForceMode2D.Force);
@@ -48,7 +48,7 @@ namespace PlayerNew
                 {
                     if(shadowSlideTimer > shadowlimeter)
                     {
-                        Debug.Log("Not touching ceiling");
+                       
                         shadowMode = false;
                         shadowDashing = false;
                         shadowSlideTimer = 0f;

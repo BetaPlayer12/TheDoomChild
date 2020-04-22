@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PlayerCharacterData data)
         {
             m_serializer.LoadData(data);
-            m_soulCrystalHandle.InitializeHandles();
+            m_soulCrystalHandle?.InitializeHandles();
         }
 
         public void SetPosition(Vector2 position)

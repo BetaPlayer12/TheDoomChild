@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
-    public abstract class LootData : ScriptableObject
+
+    [CreateAssetMenu(fileName = "LootData", menuName = "DChild/Gameplay/Loot/Loot Data")]
+    public class LootData : SerializedScriptableObject
     {
-        public abstract void DropLoot(Vector2 position);
+        [SerializeField]
+        private ILootDataContainer m_lootData;
+        public void DropLoot(Vector2 position) => m_lootData.DropLoot(position);
     }
 }

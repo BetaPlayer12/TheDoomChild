@@ -64,6 +64,7 @@ namespace DChild.Menu.Bestiary
                 m_name = "Not Assigned";
                 FileUtility.RenameAsset(this, assetPath, "UnassignedData");
             }
+            EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
 #endif 
@@ -158,6 +159,9 @@ namespace DChild.Menu.Bestiary
                 m_locatedIn = info.locations;
             }
             connection.Close();
+
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 #endif
     }
