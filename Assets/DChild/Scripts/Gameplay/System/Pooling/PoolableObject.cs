@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Pooling
 {
-    [DisallowMultipleComponent]
-    public class PoolableObject : Actor, IPoolableItem, ISpawnable
+    public abstract class PoolableObject : Actor, IPoolableItem, ISpawnable
     {
         [SerializeField]
         private PoolableItemData m_poolableItemData;

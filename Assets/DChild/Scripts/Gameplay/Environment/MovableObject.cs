@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
-    public class MovableObject : MonoBehaviour, ISerializableComponent
+    public class MovableObject : MonoBehaviour,ISerializableComponent
     {
         [System.Serializable]
         public struct SaveData : ISaveData

@@ -21,6 +21,7 @@ namespace PlayerNew
         private Animator animator;
         private WallSlide wallSlideBehavior;
         private Idle idleBehavior;
+        private Whip whipBehavior;
 
 
 
@@ -49,6 +50,7 @@ namespace PlayerNew
             groundShakerBehavior = GetComponent<GroundShaker>();
             wallSlideBehavior = GetComponent<WallSlide>();
             idleBehavior = GetComponent<Idle>();
+            whipBehavior = GetComponent<Whip>();
 
         }
         // Start is called before the first frame update
@@ -60,6 +62,7 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
+           
             if (crouchBehavior.crouching && !jogBehavior.jogging)
             {
                 inputState.absValX = 0;
@@ -68,6 +71,8 @@ namespace PlayerNew
             {
                 JogAnimationState(0);
             }
+
+           
 
             if (inputState.absValX > 0 && !wallStickBehavior.groundWallStick)
             {
@@ -172,6 +177,12 @@ namespace PlayerNew
             DashAnimationState(dashBehavior.dashing, dashBehavior.shadowMode);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
             IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
+            WhipAnimationModeState(whipBehavior.whipAtk);
+        }
+
+        void WhipAnimationModeState(bool value)
+        {
+            animator.SetBool("Whip", value);
         }
 
         void IdleAnimationModeState(bool value, int value1)
