@@ -6,6 +6,9 @@ namespace PlayerNew
 {
     public class Whip : PlayerBehaviour
     {
+
+        [SerializeField]
+        private Collider2D whipCollider;
         public bool whipAtk = false;
         // Start is called before the first frame update
         void Start()
@@ -25,8 +28,14 @@ namespace PlayerNew
             }
         }
 
+        private void WhipColliderEnable()
+        {
+            whipCollider.enabled = true;
+        }
+
         private void WhipFinishAttack()
         {
+            whipCollider.enabled = false;
             whipAtk = false;
             ToggleScripts(true);
         }
