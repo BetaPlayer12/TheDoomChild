@@ -74,8 +74,6 @@ namespace PlayerNew
             //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             onWall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
 
-            Debug.Log(pos);
-
             Debug.DrawRay(pos, lineDir * lineLength, Color.cyan);
            
 
