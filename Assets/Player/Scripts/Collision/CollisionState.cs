@@ -73,7 +73,11 @@ namespace PlayerNew
             lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
             //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             onWall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
-            //Debug.DrawRay(pos, lineDir);
+
+            Debug.Log(pos);
+
+            Debug.DrawRay(pos, lineDir * lineLength, Color.cyan);
+           
 
             pos = inputState.direction == Directions.Right ? ledgeRightPosition : ledgeLeftPosition;
             pos.x += transform.position.x;
@@ -98,7 +102,7 @@ namespace PlayerNew
             ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
 
 
-            Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + 3), Vector2.up * 4, Color.cyan);        }
+        }
 
         private void OnDrawGizmos()
         {
@@ -117,6 +121,8 @@ namespace PlayerNew
                 pos.y += transform.position.y;
 
                 Gizmos.DrawWireSphere(pos, collisionRadius);
+
+               
             }
 
             //foreach (var rayPosition in rayPositions)

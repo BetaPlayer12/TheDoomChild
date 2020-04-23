@@ -62,6 +62,7 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
+           
             if (crouchBehavior.crouching && !jogBehavior.jogging)
             {
                 inputState.absValX = 0;
@@ -70,6 +71,8 @@ namespace PlayerNew
             {
                 JogAnimationState(0);
             }
+
+           
 
             if (inputState.absValX > 0 && !wallStickBehavior.groundWallStick)
             {
