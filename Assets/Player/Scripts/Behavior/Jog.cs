@@ -23,7 +23,7 @@ namespace PlayerNew
         }
 
         // Update is called once per frame
-        protected virtual void Update()
+        protected virtual void FixedUpdate()
         {
             var right = inputState.GetButtonValue(inputButtons[0]);
             var left = inputState.GetButtonValue(inputButtons[1]);
@@ -41,7 +41,7 @@ namespace PlayerNew
                     velX *= speedMultiplier;
                 }
 
-
+                
                 velX *= left ? -1 : 1;
                 jogging = true;
 

@@ -102,8 +102,8 @@ namespace DChild.Gameplay.Combat
 
         protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
-            DealDamage(collision, hitbox);
             SpawnHitFX(collision);
+            DealDamage(collision, hitbox);
         }
 
         private void InterractWith(Collider2D collision)

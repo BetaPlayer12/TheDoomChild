@@ -59,31 +59,6 @@ namespace PlayerNew
                 //idleTimer += Time.deltaTime;
             }
 
-            //if(attackMode && idleTimer > 5.0f)
-            //{
-            //    attackMode = false;
-            //    idleState = 0;
-            //}else if (!attackMode && idleTimer > 10.0f && idleState == 0)
-            //{
-            //    attackMode = false;
-            //    idleState = RandomStatePick(0);
-            //}else if (!attackMode && idleTimer > 15.0f && idleState == 1)
-            //{
-            //    attackMode = false;
-            //    idleState = RandomStatePick(1);
-            //}
-            //else if (!attackMode && idleTimer > 20.0f && idleState == 2)
-            //{
-            //    attackMode = false;
-            //    idleState = RandomStatePick(2);
-            //}
-            //else if (!attackMode && idleTimer > 35.0f && idleState == 3)
-            //{
-            //    attackMode = false;
-            //    idleState = RandomStatePick(3);
-            //}
-            //Debug.Log("idle timer: " + idleTimer);
-
         }
 
         private int RandomStatePick(int currentState)

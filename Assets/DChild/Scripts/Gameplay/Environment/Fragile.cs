@@ -6,9 +6,10 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-    [RequireComponent(typeof(Rigidbody2D))]
     public class Fragile : MonoBehaviour
     {
+        [SerializeField]
+        private Rigidbody2D m_rigidbody;
         [SerializeField, MinValue(0)]
         private float m_breakingPoint;
         [SerializeField]
@@ -16,25 +17,21 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private UnityEvent m_onBreak;
 
-        private Rigidbody2D m_rigidbody;
-
-        private void Awake()
-        {
-            m_rigidbody = GetComponent<Rigidbody2D>();
-        }
-
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (m_rigidbody.velocity.magnitude >= m_breakingPoint)
+            if (collision.enabled)
             {
-                m_onBreak?.Invoke();
-                if (m_destroyObject)
+                if (m_rigidbody.velocity.magnitude >= m_breakingPoint)
                 {
-                    Destroy(gameObject);
-                }
-                else
-                {
-                    gameObject.SetActive(false);
+                    m_onBreak?.Invoke();
+                    if (m_destroyObject)
+                    {
+                        Destroy(gameObject);
+                    }
+                    else
+                    {
+                        m_rigidbody.gameObject.SetActive(false);
+                    }
                 }
             }
         }
