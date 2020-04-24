@@ -96,7 +96,7 @@ namespace DChild.Gameplay
 
         public static void ResumeGame()
         {
-            Time.timeScale = 1;
+            GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);
             m_playerManager?.EnableInput();
             isGamePaused = false;
             GameSystem.SetCursorVisibility(false);
@@ -104,7 +104,7 @@ namespace DChild.Gameplay
 
         public static void PauseGame()
         {
-            Time.timeScale = 0;
+            GameTime.RegisterValueChange(m_instance, 0, GameTime.Factor.Multiplication);
             m_playerManager?.DisableInput();
             isGamePaused = true;
             GameSystem.SetCursorVisibility(true);
@@ -261,6 +261,7 @@ namespace DChild.Gameplay
                 m_playerManager = null;
                 m_zoneMover = null;
                 m_activatableModules = null;
+                GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);
             }
         }
     }
