@@ -78,22 +78,6 @@ namespace DChild.Gameplay
         #endregion
         public static bool isGamePaused { get; private set; }
 
-        #region Cinematic
-        public static void PlayCutscene(Cutscene cutscene)
-        {
-            //player.EnableBrain(false);
-            cutscene.InitializeScene();
-            cutscene.Play();
-        }
-
-        public static void StopCutscene(Cutscene cutscene)
-        {
-            cutscene.Stop();
-            cutscene.SetAsComplete();
-            //player.EnableBrain(true);
-        }
-        #endregion
-
         public static void ResumeGame()
         {
             GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);

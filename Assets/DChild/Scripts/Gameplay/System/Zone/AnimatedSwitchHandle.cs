@@ -3,6 +3,7 @@ using DChild.Gameplay.Environment;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Environment
 {
@@ -11,10 +12,12 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField, MinValue(0.1)]
         private float m_transitionDelay;
-        [SerializeField, HideReferenceObjectPicker]
+        [SerializeField, HideReferenceObjectPicker, TabGroup("Enter")]
         private UnityEvent m_onEntrance = new UnityEvent();
-        [SerializeField, HideReferenceObjectPicker]
+        [SerializeField, HideReferenceObjectPicker, TabGroup("Exit")]
         private UnityEvent m_onExit = new UnityEvent();
+
+        private static Scene m_originalScene;
 
         public float transitionDelay => m_transitionDelay;
 
@@ -24,14 +27,23 @@ namespace DChild.Gameplay.Environment
 
         public void DoSceneTransition(Character character, TransitionType type)
         {
-            if (type == TransitionType.Enter)
+            switch (type)
             {
-                m_onEntrance?.Invoke();
-            }
-            else if (type == TransitionType.Exit)
-            {
-                m_onExit?.Invoke();
+                case TransitionType.Enter:
+                    m_onEntrance?.Invoke();
+                    break;
+                case TransitionType.PostEnter:
+                    character.gameObject.transform.parent = null;
+                    SceneManager.MoveGameObjectToScene(character.gameObject, m_originalScene);
+                    break;
+                case TransitionType.Exit:
+                    m_onExit?.Invoke();
+                    break;
+                case TransitionType.PostExit:
+                    //character.gameObject.transform.parent = null;
+                    //SceneManager.MoveGameObjectToScene(character.gameObject, m_originalScene);
+                    break;
             }
         }
-    } 
+    }
 }

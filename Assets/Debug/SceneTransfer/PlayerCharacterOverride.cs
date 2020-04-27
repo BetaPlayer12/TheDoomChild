@@ -24,9 +24,9 @@ namespace DChild.Gameplay.Characters.Players
             enabled = false;
         }
 
-        private void OnEnable()
+        private void OnDisable()
         {
-
+            m_moveDirectionInput = 0;
         }
 
         private void FixedUpdate()
