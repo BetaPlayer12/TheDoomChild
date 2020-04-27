@@ -38,23 +38,12 @@ namespace PlayerNew
         private float posDir;
 
 
-        //ledge climb
-        public Vector3 ledgeEdge;
-        public RaycastHit2D ledgeHit;
-        public float xPos;
-        public float yPos;
-        public Vector3 newPos;
-
-        //ledge climb
-
         private InputState inputState;
         // Start is called before the first frame update
         void Awake()
         {
             inputState = GetComponent<InputState>();
         }
-
-
 
 
         private void FixedUpdate()
@@ -85,7 +74,6 @@ namespace PlayerNew
             //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             onWall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
 
-            Debug.Log(pos);
             Debug.DrawRay(pos, lineDir * lineLength, Color.cyan);
            
 
@@ -111,14 +99,7 @@ namespace PlayerNew
             posDir = inputState.direction == Directions.Left ? 1 : -1;
             ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
 
-            
 
-            ledgeHit = Physics2D.Raycast(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), lineDir * lineLength, collisionLayer);
-            Debug.Log(ledgeHit.transform.name);
-
-
-
-            Debug.DrawRay(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), lineDir * lineLength, Color.red);
         }
 
         private void OnDrawGizmos()
@@ -141,18 +122,18 @@ namespace PlayerNew
 
                
             }
-            //
-            /*foreach (var rayPosition in rayPositions)
-            {
-                var pos = rayPosition;
 
-                var lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
+            //foreach (var rayPosition in rayPositions)
+            //{
+            //    var pos = rayPosition;
+
+            //    var lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
+            //    pos.x += transform.position.x;
+            //    pos.y += transform.position.y;
+            //    Gizmos.DrawRay(pos, lineDir * lineLength);
+            //}
             
-                pos.y += transform.position.y;
-                Gizmos.DrawRay(pos, lineDir * lineLength);
-            }
-            
-            Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);*/
+            //Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
             
         }
     }
