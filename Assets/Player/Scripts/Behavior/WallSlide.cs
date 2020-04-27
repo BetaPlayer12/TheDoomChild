@@ -18,12 +18,14 @@ namespace PlayerNew
         public bool downHold;
 
         public bool extraJump = false;
-                
+
+
 
         private void Start()
         {
             facing = GetComponent<FaceDirection>();
             jumping = GetComponent<LongJump>();
+
         }
 
         override protected void Update()
@@ -42,9 +44,7 @@ namespace PlayerNew
                 upHold = wallStickUp;
                 downHold = wallStickDown;
             }
-
-           
-
+                   
             velocityX = body2d.velocity.x;
 
             if (!collisionState.grounded && !onWallDetected && !wallSticking)
@@ -72,8 +72,8 @@ namespace PlayerNew
             }
             if(onWallDetected && !wallGrounded && !collisionState.grounded)
             {
-                //forceX = 250;
-                //forceY = 250;
+/*                forceX = 250;
+                forceY = 250;*/
 
 
             }
@@ -119,14 +119,16 @@ namespace PlayerNew
                 else
                     body2d.velocity = new Vector2(forceX * -1f, forceY);
             }
-
+                                          
         }
+
 
         override protected void Onstick()
         {
-           
-    /*      base.Onstick();
-            body2d.velocity = Vector2.zero;*/
+        /*
+            base.Onstick();
+            body2d.velocity = Vector2.zero;
+        */
 
         }
 

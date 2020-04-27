@@ -6,7 +6,8 @@ namespace PlayerNew
 {
     public class WallStick : PlayerBehaviour
     {
-        //private WallGrab wallGrab;
+        //
+        private WallGrab wallGrab;
         public bool onWallDetected;
         public bool wallSticking;
         public bool groundWallStick;
@@ -20,7 +21,8 @@ namespace PlayerNew
         protected override void Awake()
         {
             base.Awake();
-            //wallGrab = GetComponent<WallGrab>();
+            //
+            wallGrab = GetComponent<WallGrab>();
             defaultGravityScale = body2d.gravityScale;
             defaultDrag = body2d.drag;
         }
@@ -68,8 +70,10 @@ namespace PlayerNew
 
             if (!collisionState.grounded && collisionState.onWall && collisionState.onWallLeg)
             {
-                //body2d.gravityScale = 0;
-                //body2d.drag = 100;
+                //
+                body2d.gravityScale = 0;
+                body2d.drag = 100;
+                //
                 wallSticking = true;
                 wallGrounded = false;
             }
