@@ -263,11 +263,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
-            m_targetInfo.Set(null, null);
-            m_isDetecting = false;
-            m_enablePatience = false;
-            m_stateHandle.OverrideState(State.Patrol);
+            //m_selfCollider.SetActive(false);
+            //m_targetInfo.Set(null, null);
+            //m_isDetecting = false;
+            //m_enablePatience = false;
+            //m_stateHandle.OverrideState(State.Patrol);
         }
 
         private void UpdateAttackDeciderList()
