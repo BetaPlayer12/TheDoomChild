@@ -78,25 +78,9 @@ namespace DChild.Gameplay
         #endregion
         public static bool isGamePaused { get; private set; }
 
-        #region Cinematic
-        public static void PlayCutscene(Cutscene cutscene)
-        {
-            //player.EnableBrain(false);
-            cutscene.InitializeScene();
-            cutscene.Play();
-        }
-
-        public static void StopCutscene(Cutscene cutscene)
-        {
-            cutscene.Stop();
-            cutscene.SetAsComplete();
-            //player.EnableBrain(true);
-        }
-        #endregion
-
         public static void ResumeGame()
         {
-            Time.timeScale = 1;
+            GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);
             m_playerManager?.EnableInput();
             isGamePaused = false;
             GameSystem.SetCursorVisibility(false);
@@ -104,7 +88,7 @@ namespace DChild.Gameplay
 
         public static void PauseGame()
         {
-            Time.timeScale = 0;
+            GameTime.RegisterValueChange(m_instance, 0, GameTime.Factor.Multiplication);
             m_playerManager?.DisableInput();
             isGamePaused = true;
             GameSystem.SetCursorVisibility(true);
@@ -261,6 +245,7 @@ namespace DChild.Gameplay
                 m_playerManager = null;
                 m_zoneMover = null;
                 m_activatableModules = null;
+                GameTime.UnregisterValueChange(m_instance, GameTime.Factor.Multiplication);
             }
         }
     }

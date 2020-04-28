@@ -11,6 +11,16 @@ namespace DChild.Gameplay.Characters
 {
     public class DeathHandle : MonoBehaviour, IHasSkeletonDataAsset
     {
+        public struct DisposingEventArgs : IEventActionArgs
+        {
+            public DisposingEventArgs(bool isBodyDestroyed)
+            {
+                this.isBodyDestroyed = isBodyDestroyed;
+            }
+
+            public bool isBodyDestroyed { get; }
+        }
+
         [SerializeField]
         private Damageable m_source;
         [SerializeField]
@@ -22,6 +32,7 @@ namespace DChild.Gameplay.Characters
         [SerializeField]
         private bool m_destroySource;
 
+        public event EventAction<DisposingEventArgs> BodyDestroyed;
         SkeletonDataAsset IHasSkeletonDataAsset.SkeletonDataAsset => m_animator.GetComponentInChildren<SkeletonAnimation>().skeletonDataAsset;
 
         public void SetAnimation(string animation)
@@ -33,10 +44,12 @@ namespace DChild.Gameplay.Characters
         {
             if (m_destroySource)
             {
+                BodyDestroyed?.Invoke(this, new DisposingEventArgs(true));
                 Destroy(m_source.gameObject);
             }
             else
             {
+                BodyDestroyed?.Invoke(this, new DisposingEventArgs(false));
                 m_source.gameObject.SetActive(false);
                 enabled = false;
             }
