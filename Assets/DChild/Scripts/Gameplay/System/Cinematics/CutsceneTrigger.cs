@@ -109,7 +109,7 @@ namespace DChild.Gameplay.Cinematics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Sensor") == false)
+            if (collision.CompareTag("Sensor") == false && collision.CompareTag("DamageCollider") == false)
             {
                 if (collision.TryGetComponentInParent(out PlayerControlledObject controlledObject))
                 {
