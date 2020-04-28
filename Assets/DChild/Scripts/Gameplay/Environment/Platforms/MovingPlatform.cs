@@ -127,6 +127,15 @@ namespace DChild.Gameplay.Environment
             ChangeDestination();
         }
 
+        public void TeleportTo(int destination)
+        {
+            m_pingPongWaypoint = destination;
+            m_wayPointDestination = destination;
+            ChangeDestination();
+            enabled = false;
+            transform.position = m_cacheDestination;
+        }
+
         public void Initialize(int startingIndex, int destination)
         {
             m_currentWayPoint = startingIndex;
