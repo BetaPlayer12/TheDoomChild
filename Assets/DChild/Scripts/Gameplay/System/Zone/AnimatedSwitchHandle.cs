@@ -44,19 +44,19 @@ namespace DChild.Gameplay.Environment
                     }
                     character.transform.parent = m_newParent;
                     m_parentLocalPosition = character.transform.localPosition;
-
                     m_onEntrance?.Invoke();
                     break;
+
                 case TransitionType.PostEnter:
                     character.gameObject.transform.parent = m_originalParent;
                     if (m_originalParent == null)
                     {
                         SceneManager.MoveGameObjectToScene(character.gameObject, m_originalScene);
                     }
-
                     rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
                     collisionState.forceGrounded = true;
                     break;
+
                 case TransitionType.Exit:
                     character.transform.parent = m_newParent;
                     character.transform.localPosition = m_parentLocalPosition;
@@ -64,6 +64,7 @@ namespace DChild.Gameplay.Environment
                     collisionState.forceGrounded = false;
                     m_onExit?.Invoke();
                     break;
+
                 case TransitionType.PostExit:
                     character.gameObject.transform.parent = m_originalParent;
                     if (m_originalParent == null)
