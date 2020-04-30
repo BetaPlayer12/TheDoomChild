@@ -39,11 +39,11 @@ namespace DChild.Gameplay.Environment.Interractables
             {
                 if (open)
                 {
-                    SetMoveValues(m_closePosition, m_openPosition);
+                    SetMoveValues(m_doorPanel.localPosition, m_openPosition);
                 }
                 else
                 {
-                    SetMoveValues(m_openPosition, m_closePosition);
+                    SetMoveValues(m_doorPanel.localPosition, m_closePosition);
                 }
             }
 
