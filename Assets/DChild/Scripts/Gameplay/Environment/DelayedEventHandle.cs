@@ -67,7 +67,7 @@ namespace DChild.Gameplay.Environment
             {
                 if (m_delayTimer > 0)
                 {
-                    m_delayTimer -= Time.deltaTime;
+                    m_delayTimer -= GameplaySystem.time.deltaTime;
 
                     if (m_delayTimer <= 0)
                     {
