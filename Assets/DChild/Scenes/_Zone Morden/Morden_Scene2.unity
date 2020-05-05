@@ -1853,7 +1853,7 @@ GameObject:
   - component: {fileID: 274846919}
   - component: {fileID: 274846920}
   m_Layer: 0
-  m_Name: TILING_BLACKBLOB (1)
+  m_Name: DissolveEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1866,11 +1866,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274846918}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -580, y: -188, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -108.82278, y: 13.996614, z: 0}
+  m_LocalScale: {x: 1.5235727, y: 1.7664611, z: 1.5235727}
   m_Children: []
-  m_Father: {fileID: 736264871}
+  m_Father: {fileID: 671289317}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &274846920
@@ -1912,9 +1912,9 @@ SpriteRenderer:
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: e6dc65e8bdbe55049a3a25df2ad194fc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c7018969e902d5947a6757897a54db2c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 1
   m_DrawMode: 0
   m_Size: {x: 3.55, y: 2.93}
@@ -4070,7 +4070,7 @@ GameObject:
   - component: {fileID: 671289317}
   - component: {fileID: 671289318}
   m_Layer: 0
-  m_Name: TILING_BREAKABLE_WALL_FLOOR_BIG
+  m_Name: DissolveDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4085,10 +4085,12 @@ Transform:
   m_GameObject: {fileID: 671289316}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -466, y: -205, z: 0}
-  m_LocalScale: {x: 4.853029, y: 5.6267, z: 5.6267}
-  m_Children: []
-  m_Father: {fileID: 1576347590}
-  m_RootOrder: 0
+  m_LocalScale: {x: 1.0475748, y: 1.2145795, z: 1.2145795}
+  m_Children:
+  - {fileID: 1061657279}
+  - {fileID: 274846919}
+  m_Father: {fileID: 1622738794}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &671289318
 SpriteRenderer:
@@ -4129,7 +4131,7 @@ SpriteRenderer:
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: b5bba4612e4937e4eb4739c3878bf5b8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1456d2ed73db9aa43a6bc4402230b3ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4335,38 +4337,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.8742738, y: 4.876634}
   m_EdgeRadius: 0
---- !u!1 &736264870
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 736264871}
-  m_Layer: 0
-  m_Name: BlackBlob
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &736264871
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 736264870}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1061657279}
-  - {fileID: 274846919}
-  m_Father: {fileID: 2143696980}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &745915506
 GameObject:
   m_ObjectHideFlags: 0
@@ -6475,7 +6445,7 @@ GameObject:
   - component: {fileID: 1061657279}
   - component: {fileID: 1061657280}
   m_Layer: 0
-  m_Name: TILING_BLACKBLOB
+  m_Name: DissolveEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6488,11 +6458,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1061657278}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -589, y: -217, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -116.45946, y: -9.879963, z: 0}
+  m_LocalScale: {x: 1.7664609, y: 1.5235727, z: 1.5235727}
   m_Children: []
-  m_Father: {fileID: 736264871}
+  m_Father: {fileID: 671289317}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1061657280
@@ -6534,7 +6504,7 @@ SpriteRenderer:
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: e6dc65e8bdbe55049a3a25df2ad194fc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c7018969e902d5947a6757897a54db2c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 1
@@ -8499,7 +8469,7 @@ Transform:
   m_Children:
   - {fileID: 2039107124}
   m_Father: {fileID: 2143696980}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1436889029
 GameObject:
@@ -9520,37 +9490,6 @@ Transform:
   m_Father: {fileID: 2143696980}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1576347589
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1576347590}
-  m_Layer: 0
-  m_Name: Door Breakable
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1576347590
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1576347589}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 671289317}
-  m_Father: {fileID: 1622738794}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1587332290
 GameObject:
   m_ObjectHideFlags: 0
@@ -9937,7 +9876,7 @@ Transform:
   m_Children:
   - {fileID: 943774662}
   - {fileID: 380046504}
-  - {fileID: 1576347590}
+  - {fileID: 671289317}
   - {fileID: 1447173912}
   m_Father: {fileID: 2143696980}
   m_RootOrder: 8
@@ -13619,7 +13558,6 @@ Transform:
   - {fileID: 1936718247}
   - {fileID: 1217767318}
   - {fileID: 1622738794}
-  - {fileID: 736264871}
   - {fileID: 1435925997}
   m_Father: {fileID: 0}
   m_RootOrder: 4
