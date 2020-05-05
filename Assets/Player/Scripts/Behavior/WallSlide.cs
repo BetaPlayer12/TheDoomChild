@@ -16,8 +16,10 @@ namespace PlayerNew
 
         public bool upHold;
         public bool downHold;
-
         public bool extraJump = false;
+
+        public bool ledgeGrabState = false;
+        Animator m_anim;
 
 
 
@@ -25,6 +27,7 @@ namespace PlayerNew
         {
             facing = GetComponent<FaceDirection>();
             jumping = GetComponent<LongJump>();
+            m_anim = GetComponent<Animator>();
 
         }
 
@@ -38,6 +41,8 @@ namespace PlayerNew
             var wallStickJump = inputState.GetButtonValue(inputButtons[3]);
             var wallStickJumpHold = inputState.GetButtonHoldTime(inputButtons[3]);
             var wallStickUp = inputState.GetButtonValue(inputButtons[4]);
+            //
+            //ledgeGrabState = collisionState.grabLedge;
 
             if (wallSticking)
             {
@@ -72,7 +77,7 @@ namespace PlayerNew
             }
             if(onWallDetected && !wallGrounded && !collisionState.grounded)
             {
-/*                forceX = 250;
+/*              forceX = 250;
                 forceY = 250;*/
 
 
@@ -83,7 +88,16 @@ namespace PlayerNew
             if (onWallDetected && !collisionState.grounded)
             {
 
+                if (collisionState.grabLedge && onWallDetected && !collisionState.grounded)
+                {
+                    slideVelocity = 0f;
+                    ClimbWall();
+                }
+                else
+                    slideVelocity = -5f;
+
                 var velY = slideVelocity;
+
 
 
                 if (wallStickDown)
@@ -103,8 +117,7 @@ namespace PlayerNew
                 if (wallStickLeft || wallStickRight)
                 {
                     extraJump = true;
-                }
-
+                }                                            
                 body2d.velocity = new Vector2(body2d.velocity.x, velY);                               
             }
 
@@ -119,7 +132,8 @@ namespace PlayerNew
                 else
                     body2d.velocity = new Vector2(forceX * -1f, forceY);
             }
-                                          
+
+
         }
 
 
@@ -135,6 +149,23 @@ namespace PlayerNew
         protected override void Offwall()
         {
             base.Offwall();
+        }
+
+        protected void ClimbWall()
+        {
+            ledgeGrabState = true;        
+        }
+
+
+        private void StartClimbWall()
+        {            
+            transform.position = collisionState.newPos;
+            ledgeGrabState = false;
+        }
+
+        private void FinishClimbWall()
+        {
+            ledgeGrabState = false;
         }
     }
 
