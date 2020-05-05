@@ -97,7 +97,6 @@ namespace DChild.Gameplay.Characters.Enemies
             Attacking,
             Cooldown,
             Chasing,
-            Flinch,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }

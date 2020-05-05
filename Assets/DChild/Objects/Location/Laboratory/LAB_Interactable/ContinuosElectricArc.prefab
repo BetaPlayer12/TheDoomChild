@@ -16,8 +16,8 @@ MonoBehaviour:
   m_onTrue:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2094685629054898709}
-        m_MethodName: SetActive
+      - m_Target: {fileID: 5646147047474521741}
+        m_MethodName: set_enabled
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -27,7 +27,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 816591193154366496}
+      - m_Target: {fileID: 8267484532273622258}
+        m_MethodName: Play
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 9034012742706967754}
         m_MethodName: set_enabled
         m_Mode: 6
         m_Arguments:
@@ -41,18 +52,7 @@ MonoBehaviour:
   m_onFalse:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2094685629054898709}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 816591193154366496}
+      - m_Target: {fileID: 5646147047474521741}
         m_MethodName: set_enabled
         m_Mode: 6
         m_Arguments:
@@ -63,48 +63,28 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!61 &816591193154366496
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2094685629054898709}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!114 &3952167366881444530
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2094685629054898709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
+      - m_Target: {fileID: 8267484532273622258}
+        m_MethodName: Stop
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 9034012742706967754}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &8769337397945591594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -191,8 +171,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_data
       value: 
-      objectReference: {fileID: 11400000, guid: 32266be2182a96b418491a396ca2b044,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 4165982620508916501, guid: 9882f4d0beb57a44abafcc8c589913eb,
         type: 3}
       propertyPath: m_info.damage.Array.data[0].m_value
@@ -347,6 +326,24 @@ GameObject:
 --- !u!4 &5813411404160969186 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2963248956179500744, guid: 9882f4d0beb57a44abafcc8c589913eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 8769337397945591594}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &9034012742706967754 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 355137167871103968, guid: 9882f4d0beb57a44abafcc8c589913eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 8769337397945591594}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5646147047474521741 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4028985769334833575, guid: 9882f4d0beb57a44abafcc8c589913eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 8769337397945591594}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8267484532273622258 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 796838649993677784, guid: 9882f4d0beb57a44abafcc8c589913eb,
     type: 3}
   m_PrefabInstance: {fileID: 8769337397945591594}
   m_PrefabAsset: {fileID: 0}
