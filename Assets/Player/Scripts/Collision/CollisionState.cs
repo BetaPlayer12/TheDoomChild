@@ -109,18 +109,15 @@ namespace PlayerNew
             ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
 
 
-
-            //
-
             xPos = inputState.direction == Directions.Left ? xPosLeft : xPosRight;
 
 
             var leftledgeHit = Physics2D.Raycast(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), Vector2.left, 4, collisionLayer);
-            Debug.DrawRay(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), lineDir * lineLength, Color.red);
+            //Debug.DrawRay(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), lineDir * lineLength, Color.red);
 
             if (leftledgeHit.transform != null)
             {
-                Debug.Log(leftledgeHit.transform.tag);
+                //Debug.Log(leftledgeHit.transform.tag);
                 if (leftledgeHit.transform.tag == "LedgeCollider")
                 {
                     grabLedge = true;
@@ -131,13 +128,13 @@ namespace PlayerNew
                 }
                 else
                 {
-                    Debug.Log("nothing detected");
+                    //Debug.Log("nothing detected");
                     grabLedge = false;
                 }
             }
             else
             {
-                Debug.Log("nothing detected");
+                //Debug.Log("nothing detected");
                 grabLedge = false;
             }
 
