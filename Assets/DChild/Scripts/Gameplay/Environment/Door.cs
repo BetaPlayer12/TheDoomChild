@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Interractables
 {
-    public class Door : MonoBehaviour, ISerializableComponent
+    public class Door : MonoBehaviour, ISerializableComponent, ILerpHandling
     {
         [System.Serializable]
         public struct SaveData : ISaveData
@@ -137,6 +137,14 @@ namespace DChild.Gameplay.Environment.Interractables
             m_animationTime = 0;
         }
 
+        public void SetLerpValue(float lerpValue)
+        {
+            for (int i = 0; i < m_panels.Length; i++)
+            {
+                m_panels[i].Lerp(lerpValue);
+            }
+        }
+
         public virtual void Load(ISaveData data) => SetAsOpen(((SaveData)data).isOpen);
 
         public ISaveData Save() => new SaveData(m_isOpen);
@@ -186,6 +194,8 @@ namespace DChild.Gameplay.Environment.Interractables
                 m_collider2DGroup.EnableColliders();
             }
         }
+
+
 #endif
     }
 
