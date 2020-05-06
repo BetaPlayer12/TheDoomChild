@@ -22,7 +22,6 @@ namespace PlayerNew
         private WallSlide wallSlideBehavior;
         private Idle idleBehavior;
         private Whip whipBehavior;
-        private Levitate levitateBehavior;
 
 
 
@@ -42,7 +41,7 @@ namespace PlayerNew
             jogBehavior = GetComponent<Jog>();
             crouchBehavior = GetComponent<Dock>();
             wallStickBehavior = GetComponent<WallStick>();
-            wallGrabBehavior = GetComponent<WallGrab>();
+            //wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
@@ -52,7 +51,6 @@ namespace PlayerNew
             wallSlideBehavior = GetComponent<WallSlide>();
             idleBehavior = GetComponent<Idle>();
             whipBehavior = GetComponent<Whip>();
-            levitateBehavior = GetComponent<Levitate>();
 
         }
         // Start is called before the first frame update
@@ -155,8 +153,6 @@ namespace PlayerNew
                 animator.SetBool("Thrust", false);
             }
 
-
-
             if (wallSlideBehavior.onWallDetected && !collisionState.grounded)
             {
                 animator.SetBool("UpHold", wallSlideBehavior.upHold);
@@ -166,16 +162,16 @@ namespace PlayerNew
             if (!collisionState.grounded)
             {
                 crouchBehavior.crouching = false;
-                animator.SetBool("Levitate", levitateBehavior.levitateMode);
             }
             if (dashBehavior.shadowMode)
             {
                 crouchBehavior.crouching = false;
             }
 
-            
 
-            WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
+            WallClimbAnimationState(wallSlideBehavior.ledgeGrabState);
+            //
+            WallGrabAnimationState(collisionState.grabLedge);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(body2d.velocity.y);
@@ -262,10 +258,15 @@ namespace PlayerNew
         {
             animator.SetBool("WallGrab", value);
         }
-
+        
         void WallStickAnimationState(bool value)
         {
             animator.SetBool("WallStick", value);
+        }
+
+        void WallClimbAnimationState(bool value)
+        {
+            animator.SetBool("WallClimb", value);
         }
 
     }

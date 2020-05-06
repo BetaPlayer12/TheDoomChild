@@ -35,7 +35,16 @@ namespace PlayerNew
         public float collisionRadius = 10.0f;
         public Color collisionColor = Color.red;
         public float lineLength;
-        private float posDir;
+        public float posDir;
+
+        //Ledge Grab
+        public float yPos;
+        public float xPos;
+        public float xPosLeft;
+        public float xPosRight;
+        public bool grabLedge;
+        public Vector2 newPos;
+
 
 
         private InputState inputState;
@@ -99,6 +108,35 @@ namespace PlayerNew
             posDir = inputState.direction == Directions.Left ? 1 : -1;
             ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
 
+
+            xPos = inputState.direction == Directions.Left ? xPosLeft : xPosRight;
+
+
+            var leftledgeHit = Physics2D.Raycast(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), Vector2.left, 4, collisionLayer);
+            //Debug.DrawRay(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), lineDir * lineLength, Color.red);
+
+            if (leftledgeHit.transform != null)
+            {
+                //Debug.Log(leftledgeHit.transform.tag);
+                if (leftledgeHit.transform.tag == "LedgeCollider")
+                {
+                    grabLedge = true;
+                    //GrabLedge
+                    newPos = leftledgeHit.transform.gameObject.GetComponent<DebugTest>().pos;
+                    
+
+                }
+                else
+                {
+                    //Debug.Log("nothing detected");
+                    grabLedge = false;
+                }
+            }
+            else
+            {
+                //Debug.Log("nothing detected");
+                grabLedge = false;
+            }
 
         }
 

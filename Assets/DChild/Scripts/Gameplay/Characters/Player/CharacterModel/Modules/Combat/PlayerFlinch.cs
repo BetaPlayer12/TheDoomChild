@@ -53,7 +53,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_flinch = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.Flinch);
             m_physics = info.character.GetComponent<Rigidbody2D>();
             //m_collionState = m_animator.GetComponent<CollisionState>();
-           // info.state.canFlinch = true;
+            // info.state.canFlinch = true;
         }
     }
 }
