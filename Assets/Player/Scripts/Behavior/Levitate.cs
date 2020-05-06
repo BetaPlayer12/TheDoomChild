@@ -33,7 +33,7 @@ namespace PlayerNew
 
                 if (!levitateMode)
                 {
-                    if (!collisionState.grounded && canLevitate)
+                    if (!collisionState.grounded && canLevitate && !collisionState.onWall)
                     {
                         body2d.velocity = Vector2.zero;
                         levitateMode = true;
