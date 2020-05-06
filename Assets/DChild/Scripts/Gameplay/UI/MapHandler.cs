@@ -1,9 +1,9 @@
-﻿using DChild.Serialization;
+﻿using DChild.Gameplay.UI.Map;
+using DChild.Serialization;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 namespace DChild.Gameplay.UI
 {
@@ -16,8 +16,11 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private RectTransform m_viewPort;
 
-        //Handle Which maps to show
-        // On Show try to center playerMarker
+        [SerializeField]
+        private DynamicSerializableData m_data;
+
+        [SerializeField, ValueDropdown("GetAreaMaps", IsUniqueList = true)]
+        private MapAreaUI[] m_areaUIs;
 
         public void CenterTrackedPlayer()
         {
@@ -30,5 +33,22 @@ namespace DChild.Gameplay.UI
             m_content.parent = m_viewPort;
             m_playerTracker.parent = m_content;
         }
+
+        public void UpdateMap()
+        {
+            for (int i = 0; i < m_areaUIs.Length; i++)
+            {
+                m_areaUIs[i].Update(m_data);
+            }
+        }
+
+        private void Awake()
+        {
+            m_data.LoadData();
+        }
+
+#if UNITY_EDITOR
+        private IEnumerable GetAreaMaps() => FindObjectsOfType<MapAreaUI>();
+#endif
     }
 }

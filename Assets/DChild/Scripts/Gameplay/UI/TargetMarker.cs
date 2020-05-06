@@ -32,12 +32,22 @@ namespace DChild.Gameplay.UI
             m_rectTransform.anchoredPosition = m_anchorOrigin + travelPosition;
         }
 
-        private void Start()
+        private void UpdatePosition()
         {
-            m_rectTransform = GetComponent<RectTransform>();
             var position = m_target.position;
             UpdateMarkerPosition(position);
             m_prevTargetPosition = position;
+        }
+
+        private void Start()
+        {
+            m_rectTransform = GetComponent<RectTransform>();
+            UpdatePosition();
+        }
+
+        private void OnEnable()
+        {
+            UpdatePosition();
         }
 
         private void LateUpdate()
@@ -56,13 +66,6 @@ namespace DChild.Gameplay.UI
         }
 
 #if UNITY_EDITOR
-        private void UpdatePosition()
-        {
-            var position = m_target.position;
-            UpdateMarkerPosition(position);
-            m_prevTargetPosition = position;
-        }
-
         [ButtonGroup("Anchor/Button"), Button("UseCurrent")]
         private void UseCurrentAnchorPosition()
         {
