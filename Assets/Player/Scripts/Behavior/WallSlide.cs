@@ -46,7 +46,7 @@ namespace PlayerNew
 
             if (wallSticking)
             {
-                upHold = wallStickUp;
+                upHold = wallStickUp;                
                 downHold = wallStickDown;
             }
                    
@@ -85,11 +85,14 @@ namespace PlayerNew
 
 
             //wall slide
-            if (onWallDetected && !collisionState.grounded)
+            if (onWallDetected)
             {
 
-                if (collisionState.grabLedge && onWallDetected && !collisionState.grounded)
+                //
+
+                if (collisionState.grabLedge && onWallDetected && !collisionState.grounded /*&& wallStickUp*/)
                 {
+
                     slideVelocity = 0f;
                     ClimbWall();
                 }
@@ -98,7 +101,7 @@ namespace PlayerNew
 
                 var velY = slideVelocity;
 
-
+                //
 
                 if (wallStickDown)
                 {
