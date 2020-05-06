@@ -22,7 +22,7 @@ namespace PlayerNew
         private WallSlide wallSlideBehavior;
         private Idle idleBehavior;
         private Whip whipBehavior;
-
+        private Levitate levitateBehavior;
 
 
         private CollisionState collisionState;
@@ -41,6 +41,7 @@ namespace PlayerNew
             jogBehavior = GetComponent<Jog>();
             crouchBehavior = GetComponent<Dock>();
             wallStickBehavior = GetComponent<WallStick>();
+            levitateBehavior = GetComponent<Levitate>();
             //wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
@@ -51,7 +52,7 @@ namespace PlayerNew
             wallSlideBehavior = GetComponent<WallSlide>();
             idleBehavior = GetComponent<Idle>();
             whipBehavior = GetComponent<Whip>();
-
+            
         }
         // Start is called before the first frame update
         void Start()
@@ -162,6 +163,7 @@ namespace PlayerNew
             if (!collisionState.grounded)
             {
                 crouchBehavior.crouching = false;
+                animator.SetBool("Levitate", levitateBehavior.levitateMode);
             }
             if (dashBehavior.shadowMode)
             {
