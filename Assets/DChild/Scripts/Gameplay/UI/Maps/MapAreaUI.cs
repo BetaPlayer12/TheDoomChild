@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI.Map
 {
+
     public class MapAreaUI : MonoBehaviour
     {
         [SerializeField]

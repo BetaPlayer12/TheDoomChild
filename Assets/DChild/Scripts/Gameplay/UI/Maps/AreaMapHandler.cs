@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.UI
 {
-    public class MapHandler : MonoBehaviour
+    public class AreaMapHandler : MonoBehaviour
     {
         [SerializeField]
         private RectTransform m_content;
