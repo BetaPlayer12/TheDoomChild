@@ -22,6 +22,7 @@ namespace PlayerNew
         private WallSlide wallSlideBehavior;
         private Idle idleBehavior;
         private Whip whipBehavior;
+        private Levitate levitateBehavior;
 
 
 
@@ -51,6 +52,7 @@ namespace PlayerNew
             wallSlideBehavior = GetComponent<WallSlide>();
             idleBehavior = GetComponent<Idle>();
             whipBehavior = GetComponent<Whip>();
+            levitateBehavior = GetComponent<Levitate>();
 
         }
         // Start is called before the first frame update
@@ -153,6 +155,8 @@ namespace PlayerNew
                 animator.SetBool("Thrust", false);
             }
 
+
+
             if (wallSlideBehavior.onWallDetected && !collisionState.grounded)
             {
                 animator.SetBool("UpHold", wallSlideBehavior.upHold);
@@ -162,11 +166,13 @@ namespace PlayerNew
             if (!collisionState.grounded)
             {
                 crouchBehavior.crouching = false;
+                animator.SetBool("Levitate", levitateBehavior.levitateMode);
             }
             if (dashBehavior.shadowMode)
             {
                 crouchBehavior.crouching = false;
             }
+
             
 
             WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
@@ -178,6 +184,7 @@ namespace PlayerNew
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
             IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
             WhipAnimationModeState(whipBehavior.whipAtk);
+
         }
 
         void WhipAnimationModeState(bool value)
