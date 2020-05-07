@@ -148,6 +148,7 @@ namespace DChild.Gameplay.Environment
         {
             m_pingPongWaypoint = destination;
             m_wayPointDestination = destination;
+            m_cacheDestination = m_waypoints[destination];
             ChangeDestination();
             enabled = false;
             transform.position = m_cacheDestination;
@@ -188,7 +189,7 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_rigidbody = GetComponent<Rigidbody2D>();
-            m_rigidbody.position = m_waypoints[m_startWaypoint];
+            transform.position = m_waypoints[m_startWaypoint];
             m_isolatedTime = GetComponent<IIsolatedTime>();
             m_wayPointDestination = m_startWaypoint;
             m_currentWayPoint = m_wayPointDestination;

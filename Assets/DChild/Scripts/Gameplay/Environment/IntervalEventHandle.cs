@@ -41,10 +41,18 @@ namespace DChild.Gameplay.Environment
             m_activeTimer = m_activeDuration;
             m_inactiveTimer = m_inactiveDuration;
 
-            if(m_startAsActive == true)
+            if (m_startDelayTimer == 0)
             {
-                m_isActivated = true;
-                m_activeEvent?.Invoke();
+                if (m_startAsActive == true)
+                {
+                    m_isActivated = true;
+                    m_activeEvent?.Invoke();
+                }
+                else
+                {
+                    m_isActivated = false;
+                    m_inactiveEvent?.Invoke();
+                }
             }
             else
             {
@@ -57,11 +65,25 @@ namespace DChild.Gameplay.Environment
         {
             if (m_isEnabled == true)
             {
-                if(m_startDelayTimer > 0)
+                if (m_startDelayTimer > 0)
                 {
                     m_startDelayTimer -= Time.deltaTime;
+
+                    if (m_startDelayTimer <= 0)
+                    {
+                        if (m_startAsActive == true)
+                        {
+                            m_isActivated = true;
+                            m_activeEvent?.Invoke();
+                        }
+                        else
+                        {
+                            m_isActivated = false;
+                            m_inactiveEvent?.Invoke();
+                        }
+                    }
                 }
-                else if(m_startDelayTimer <= 0)
+                else if (m_startDelayTimer <= 0)
                 {
                     if (m_isActivated == true)
                     {
