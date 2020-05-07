@@ -12,6 +12,8 @@ namespace PlayerNew
         private bool canLevitate;
         [SerializeField]
         private float playerGravity;
+        [SerializeField]
+        GameObject capeObject;
         // Start is called before the first frame update
         void Start()
         {
@@ -35,6 +37,8 @@ namespace PlayerNew
                 {
                     if (!collisionState.grounded && canLevitate && !collisionState.onWall)
                     {
+                        ToggleScripts(false);
+                        capeObject.active = false;
                         body2d.velocity = Vector2.zero;
                         levitateMode = true;
                         canLevitate = false;
@@ -68,9 +72,10 @@ namespace PlayerNew
         {
             body2d.gravityScale = defGravityScale;
             levitateMode = false;
-
+            capeObject.active = true;
             canLevitate = true;
-            
+            ToggleScripts(true);
+
         }
 
 

@@ -141,7 +141,6 @@ namespace PlayerNew
                     else
                     {
                         animator.SetBool("Attack", true);
-                        SwordJumpSlashForwardFX();
                         m_swordJumpSlashForwardAttackCollider.enabled = true;
                     }
 

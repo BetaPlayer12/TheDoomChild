@@ -767,6 +767,13 @@ MonoBehaviour:
   collisionRadius: 1.24
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
   lineLength: 1.5
+  posDir: 0
+  yPos: 0
+  xPos: 0
+  xPosLeft: 0
+  xPosRight: 0
+  grabLedge: 0
+  newPos: {x: 0, y: 0}
 --- !u!114 &7567338640060585550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -859,6 +866,7 @@ MonoBehaviour:
   upHold: 0
   downHold: 0
   extraJump: 0
+  ledgeGrabState: 0
 --- !u!114 &251286694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1148,9 +1156,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputButtons: 09000000
-  dissableScripts: []
+  dissableScripts:
+  - {fileID: 6541629031177348119}
+  - {fileID: 5296830413061449066}
+  - {fileID: 8449102287724545631}
+  - {fileID: 1405919478}
+  - {fileID: 965161050}
+  - {fileID: 1086033433}
+  - {fileID: 922925365}
   enableOnlyScript: []
   levitateMode: 0
+  playerGravity: 0
+  capeObject: {fileID: 8125728846634508109}
 --- !u!1 &8518109723057449616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1828,6 +1845,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cba835612e90014b96bed1aff089d23, type: 3}
+--- !u!1 &8125728846634508109 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8125728847938269682, guid: 5cba835612e90014b96bed1aff089d23,
+    type: 3}
+  m_PrefabInstance: {fileID: 1447718591}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &9075859533659057754 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 9075859532757680357, guid: 5cba835612e90014b96bed1aff089d23,
@@ -1867,11 +1890,6 @@ PrefabInstance:
       propertyPath: m_ignoreColliderList.Array.data[0].m_target
       value: 
       objectReference: {fileID: 7567338640060585522}
-    - target: {fileID: 3601721525517648907, guid: c412e995e971b284bb8b1fb1fa00028a,
-        type: 3}
-      propertyPath: m_collisionRegistrator
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3601721525517648907, guid: c412e995e971b284bb8b1fb1fa00028a,
         type: 3}
       propertyPath: m_ignoreColliderList.Array.data[0].m_target
@@ -1994,9 +2012,9 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 8496082760434432302}
   m_PrefabAsset: {fileID: 0}
---- !u!60 &4014461280597484272 stripped
-PolygonCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4782291749891546078, guid: c412e995e971b284bb8b1fb1fa00028a,
+--- !u!198 &8065988035934465904 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1880256296413763166, guid: c412e995e971b284bb8b1fb1fa00028a,
     type: 3}
   m_PrefabInstance: {fileID: 8496082760434432302}
   m_PrefabAsset: {fileID: 0}
@@ -2042,9 +2060,9 @@ PolygonCollider2D:
     type: 3}
   m_PrefabInstance: {fileID: 8496082760434432302}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &8065988035934465904 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 1880256296413763166, guid: c412e995e971b284bb8b1fb1fa00028a,
+--- !u!60 &4014461280597484272 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4782291749891546078, guid: c412e995e971b284bb8b1fb1fa00028a,
     type: 3}
   m_PrefabInstance: {fileID: 8496082760434432302}
   m_PrefabAsset: {fileID: 0}
@@ -2142,12 +2160,12 @@ PrefabInstance:
     - target: {fileID: 4508557118282662817, guid: aecb052622672814ea7a8c4956b02c34,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.000004985786
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4508557118282662817, guid: aecb052622672814ea7a8c4956b02c34,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.000006805139
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4508557118282662817, guid: aecb052622672814ea7a8c4956b02c34,
         type: 3}

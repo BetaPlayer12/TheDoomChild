@@ -16,19 +16,14 @@ namespace PlayerNew
 
         public bool upHold;
         public bool downHold;
+
         public bool extraJump = false;
-
-        public bool ledgeGrabState = false;
-        Animator m_anim;
-
-
+                
 
         private void Start()
         {
             facing = GetComponent<FaceDirection>();
             jumping = GetComponent<LongJump>();
-            m_anim = GetComponent<Animator>();
-
         }
 
         override protected void Update()
@@ -41,15 +36,15 @@ namespace PlayerNew
             var wallStickJump = inputState.GetButtonValue(inputButtons[3]);
             var wallStickJumpHold = inputState.GetButtonHoldTime(inputButtons[3]);
             var wallStickUp = inputState.GetButtonValue(inputButtons[4]);
-            //
-            //ledgeGrabState = collisionState.grabLedge;
 
             if (wallSticking)
             {
                 upHold = wallStickUp;
                 downHold = wallStickDown;
             }
-                   
+
+           
+
             velocityX = body2d.velocity.x;
 
             if (!collisionState.grounded && !onWallDetected && !wallSticking)
@@ -77,8 +72,8 @@ namespace PlayerNew
             }
             if(onWallDetected && !wallGrounded && !collisionState.grounded)
             {
-/*              forceX = 250;
-                forceY = 250;*/
+                //forceX = 250;
+                //forceY = 250;
 
 
             }
@@ -88,17 +83,7 @@ namespace PlayerNew
             if (onWallDetected && !collisionState.grounded)
             {
 
-                if (collisionState.grabLedge && onWallDetected && !collisionState.grounded)
-                {
-                    slideVelocity = 0f;
-                    body2d.gravityScale = 0;
-                    ClimbWall();
-                }
-                else
-                    slideVelocity = -5f;
-
                 var velY = slideVelocity;
-
 
 
                 if (wallStickDown)
@@ -118,7 +103,8 @@ namespace PlayerNew
                 if (wallStickLeft || wallStickRight)
                 {
                     extraJump = true;
-                }                                            
+                }
+
                 body2d.velocity = new Vector2(body2d.velocity.x, velY);                               
             }
 
@@ -134,42 +120,19 @@ namespace PlayerNew
                     body2d.velocity = new Vector2(forceX * -1f, forceY);
             }
 
-
         }
-
 
         override protected void Onstick()
         {
-        /*
-            base.Onstick();
-            body2d.velocity = Vector2.zero;
-        */
+           
+    /*      base.Onstick();
+            body2d.velocity = Vector2.zero;*/
 
         }
 
         protected override void Offwall()
         {
             base.Offwall();
-        }
-
-        protected void ClimbWall()
-        {
-            ledgeGrabState = true;        
-        }
-
-
-        private void StartClimbWall()
-        {
-            Debug.Log("start climb wall");
-            
-            ledgeGrabState = false;
-        }
-
-        private void FinishClimbWall()
-        {
-            Debug.Log("finish climb wall");
-            //transform.position = collisionState.newPos;
-            ledgeGrabState = false;
         }
     }
 

@@ -41,7 +41,7 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
-            /*
+            
             if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall && collisionState.onWallLeg && !ledgeDetected)
             {
                 ToggleScripts(false);
@@ -74,14 +74,10 @@ namespace PlayerNew
                     ToggleScripts(true);
                     ledgeDetected = false;
                 }
-            }*/
-
-            if (collisionState.grabLedge)
-            {
-                OnWallGrab();
-                ToggleScripts(false);
-
             }
+
+
+
 
         }
 
@@ -93,18 +89,12 @@ namespace PlayerNew
                 canLedgeGrab = true;
                 ledgePos1 = transform.position;
 
-                float terminalposX = Mathf.Floor(ledgePos1.x + collisionState.newPos.x);
-                float terminalposY = Mathf.Floor(ledgePos1.y + collisionState.newPos.y);
-                ledgePos2 = new Vector2(terminalposX, terminalposY);
-
-
-/*
                 if (facing.isFacingRight)
                 {
 
                     float terminalPosX = Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) - ledgeClimbXOffset1;
                     float terminalPosY = Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1;
-
+                    
                     ledgePos2 = new Vector2(terminalPosX, terminalPosY);
 
                 }
@@ -114,7 +104,7 @@ namespace PlayerNew
                     float terminalPosY = Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1;
                     ledgePos2 = new Vector2(terminalPosX, terminalPosY);
 
-                }*/
+                }
                 canLedgeGrab = true;
                 
 
@@ -125,7 +115,6 @@ namespace PlayerNew
         {
             yield return new WaitForSeconds(0.1f);
             FinishedLedgeClimb();
-
 
         }
         private void FinishedLedgeClimb()
@@ -138,7 +127,7 @@ namespace PlayerNew
 
         private void StartLedgeClimb()
         {
-            transform.position = ledgePos2;            
+            transform.position = ledgePos2;
             climb = true;
         }
     }
