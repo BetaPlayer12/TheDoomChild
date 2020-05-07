@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.UI.Map;
 using DChild.Menu;
+using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
 
@@ -10,23 +11,34 @@ namespace DChild.Gameplay.UI
     {
         [SerializeField]
         private AreaTransferData m_transferData;
+        [ShowInInspector, OnValueChanged("SetFromLocation")]
+        private LocationData m_from;
         [SerializeField]
         private AreaNode[] m_nodes;
-        private LocationData m_from;
 
         public void SetFromLocation(LocationData from)
         {
             m_from = from;
-            var availableLocations = m_transferData.GetAvailableLocationFrom(from);
-            for (int i = 0; i < m_nodes.Length; i++)
+            if (from == null)
             {
-                if (availableLocations.Contains(m_nodes[i].location) || from.location == m_nodes[i].location)
+                for (int i = 0; i < m_nodes.Length; i++)
                 {
                     m_nodes[i].Show();
                 }
-                else
+            }
+            else
+            {
+                var availableLocations = m_transferData.GetAvailableLocationFrom(from);
+                for (int i = 0; i < m_nodes.Length; i++)
                 {
-                    m_nodes[i].Hide();
+                    if (availableLocations.Contains(m_nodes[i].location) || from.location == m_nodes[i].location)
+                    {
+                        m_nodes[i].Show();
+                    }
+                    else
+                    {
+                        m_nodes[i].Hide();
+                    }
                 }
             }
         }

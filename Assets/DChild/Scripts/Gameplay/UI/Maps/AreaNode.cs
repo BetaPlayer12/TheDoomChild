@@ -19,5 +19,10 @@ namespace DChild.Gameplay.UI.Map
         {
             gameObject.SetActive(false);
         }
-    } 
+
+        private void OnValidate()
+        {
+            gameObject.name = m_location.ToString().Replace("_", string.Empty) + "Node";
+        }
+    }
 }
