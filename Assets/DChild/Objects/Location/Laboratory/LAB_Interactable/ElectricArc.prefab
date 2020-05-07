@@ -1,5 +1,47 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!61 &8017632282059016888
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2562046922659112165}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.143157, y: 5.090007}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 4.711808, y: 8.142622}
+  m_EdgeRadius: 0
+--- !u!114 &4100048143355573549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2562046922659112165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
 --- !u!1 &4465300764984218658
 GameObject:
   m_ObjectHideFlags: 0
@@ -39,8 +81,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2963248956179500744}
-  - component: {fileID: 355137167871103968}
-  - component: {fileID: 4276977134396138449}
   m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
@@ -64,48 +104,6 @@ Transform:
   m_Father: {fileID: 2924257673064130387}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &355137167871103968
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7251675686026786111}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.143157, y: 36.89237}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 4.711808, y: 75.167244}
-  m_EdgeRadius: 0
---- !u!114 &4276977134396138449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7251675686026786111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
 --- !u!1 &8667154100106778294
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 2963275248856981486}
+  m_centerMass: {fileID: 4028985769334833573}
   m_data: {fileID: 0}
   m_info:
     damage: []
@@ -199,7 +197,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 355137167871103968}
+      - m_Target: {fileID: 0}
         m_MethodName: set_enabled
         m_Mode: 6
         m_Arguments:
@@ -235,7 +233,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 355137167871103968}
+      - m_Target: {fileID: 0}
         m_MethodName: set_enabled
         m_Mode: 6
         m_Arguments:
@@ -382,15 +380,27 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4008476746903588218}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &4028985769334833575 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 20597602291846365, guid: d08f0aacfa340394c91cf369bbccbecb,
-    type: 3}
-  m_PrefabInstance: {fileID: 4008476746903588218}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &796838649993677784 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4372442024003421858, guid: d08f0aacfa340394c91cf369bbccbecb,
+    type: 3}
+  m_PrefabInstance: {fileID: 4008476746903588218}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2562046922659112165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1454311141388888479, guid: d08f0aacfa340394c91cf369bbccbecb,
+    type: 3}
+  m_PrefabInstance: {fileID: 4008476746903588218}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4028985769334833573 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 20597602291846367, guid: d08f0aacfa340394c91cf369bbccbecb,
+    type: 3}
+  m_PrefabInstance: {fileID: 4008476746903588218}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4028985769334833575 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 20597602291846365, guid: d08f0aacfa340394c91cf369bbccbecb,
     type: 3}
   m_PrefabInstance: {fileID: 4008476746903588218}
   m_PrefabAsset: {fileID: 0}

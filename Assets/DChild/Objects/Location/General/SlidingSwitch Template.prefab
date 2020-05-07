@@ -10,7 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3148765123610745506}
   - component: {fileID: 4418376715821323584}
-  m_Layer: 0
+  - component: {fileID: 958329822318770292}
+  - component: {fileID: 8933476100573208410}
+  - component: {fileID: 5059683326275235326}
+  - component: {fileID: 6797772075655515349}
+  m_Layer: 11
   m_Name: SlidingSwitch Template
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,6 +47,138 @@ SortingGroup:
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
   m_SortingOrder: 0
+--- !u!114 &958329822318770292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861357878814113377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bf88637acc877c4c843ca64fd0abadf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_type: 1
+  m_needsButtonToInteract: 0
+  m_prompt: {fileID: 0}
+  m_collider: {fileID: 6797772075655515349}
+  m_isOn: 0
+  m_startAsOnState:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8933476100573208410}
+        m_MethodName: TeleportTo
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_startAsOffState:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8933476100573208410}
+        m_MethodName: TeleportTo
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_onState:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8933476100573208410}
+        m_MethodName: GoDestination
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_offState:
+    m_PersistentCalls:
+      m_Calls: []
+  m_viableTags:
+  - WallBreaker
+  m_hideStartAsOffState: 0
+  m_hideOffState: 1
+--- !u!114 &8933476100573208410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861357878814113377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 332cef3fded5d774fb52b53db29bb860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_speed: 0.1
+  m_startWaypoint: 0
+  m_waypoints: []
+--- !u!114 &5059683326275235326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861357878814113377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34fad4e323aad53458602de8afcbef1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_registerToWorldTime: 1
+  m_slowFactor: 0
+  m_fastFactor: 0
+  m_fXObjects:
+    m_particleSystems: []
+    m_originalSimulationSpeed: []
+  m_spineObjects:
+    m_skeletonAnimations: []
+    m_baseTimeScale: []
+  m_physicsObjects:
+    m_rigidbody2Ds: []
+    m_physicsTimeObjectInfo: []
+  m_materials: []
+--- !u!61 &6797772075655515349
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3861357878814113377}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.200187, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.3106375, y: 1.2823982}
+  m_EdgeRadius: 0
 --- !u!1 &7792028609771942046
 GameObject:
   m_ObjectHideFlags: 0
@@ -53,7 +189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2420447881260490977}
   - component: {fileID: 7349096796541831032}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Temp
   m_TagString: Untagged
   m_Icon: {fileID: 0}

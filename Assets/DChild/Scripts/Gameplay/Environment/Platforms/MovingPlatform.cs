@@ -218,9 +218,9 @@ namespace DChild.Gameplay.Environment
 
         private void OnValidate()
         {
-            if (GetComponent<Rigidbody2D>() == null)
+            if (TryGetComponent(out Rigidbody2D rigidbody))
             {
-                var rigidbody = gameObject.AddComponent<Rigidbody2D>();
+                //var rigidbody = gameObject.AddComponent<Rigidbody2D>();
                 rigidbody.isKinematic = true;
             }
 
