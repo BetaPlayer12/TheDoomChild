@@ -91,6 +91,7 @@ namespace PlayerNew
                 if (collisionState.grabLedge && onWallDetected && !collisionState.grounded)
                 {
                     slideVelocity = 0f;
+                    body2d.gravityScale = 0;
                     ClimbWall();
                 }
                 else
@@ -158,13 +159,16 @@ namespace PlayerNew
 
 
         private void StartClimbWall()
-        {            
-            transform.position = collisionState.newPos;
+        {
+            Debug.Log("start climb wall");
+            
             ledgeGrabState = false;
         }
 
         private void FinishClimbWall()
         {
+            Debug.Log("finish climb wall");
+            //transform.position = collisionState.newPos;
             ledgeGrabState = false;
         }
     }
