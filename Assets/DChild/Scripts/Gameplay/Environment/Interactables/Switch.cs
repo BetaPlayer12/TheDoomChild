@@ -7,9 +7,7 @@
  **************************************/
 
 using DChild.Gameplay.Characters;
-using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
-using DChild.Gameplay.Inventories;
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -19,8 +17,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-    [AddComponentMenu("DChild/Gameplay/Environment/Interactable/Switch")]
-    public class Switch : MonoBehaviour, IHitToInteract, IButtonToInteract, ISerializableComponent
+    public abstract class Switch : MonoBehaviour, IHitToInteract, IButtonToInteract, ISerializableComponent
     {
         public enum Type
         {
@@ -43,16 +40,16 @@ namespace DChild.Gameplay.Environment
             public bool isTriggered => m_isTriggered;
         }
 
-        [SerializeField, OnValueChanged("OnTypeChanged")]
+        [SerializeField, OnValueChanged("OnTypeChanged"),BoxGroup("Fields")]
         private Type m_type;
-        [SerializeField]
+        [SerializeField, BoxGroup("Fields")]
         private bool m_needsButtonToInteract;
-        [SerializeField, ShowIf("m_needsButtonToInteract")]
+        [SerializeField, ShowIf("m_needsButtonToInteract"), BoxGroup("Fields")]
         private Transform m_prompt;
-        [SerializeField]
+        [SerializeField, BoxGroup("Fields")]
         private Collider2D m_collider;
 #if UNITY_EDITOR
-        [SerializeField, ReadOnly]
+        [SerializeField, ReadOnly, BoxGroup("Fields")]
 #endif
         private bool m_isOn;
 
@@ -68,8 +65,6 @@ namespace DChild.Gameplay.Environment
         [SerializeField, HideIf("m_hideOffState"), TabGroup("Main/Transistion", "Off")]
         private UnityEvent m_offState;
 
-        [SerializeField, TabGroup("Main", "Restrictions")]
-        private string[] m_viableTags;
 
         public event EventAction<HitDirectionEventArgs> OnHit;
 
@@ -100,24 +95,8 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-        public bool CanBeInteractedWith(Collider2D collider2D)
-        {
-            if (!m_needsButtonToInteract)
-            {
-                if (m_viableTags.Length > 0)
-                {
-                    for (int i = 0; i < m_viableTags.Length; i++)
-                    {
-                        if (collider2D.CompareTag(m_viableTags[i]))
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-            return true;
-        }
+        public virtual bool CanBeInteractedWith(Collider2D collider2D) => !m_needsButtonToInteract;
+
 
         public void Load(ISaveData data)
         {
@@ -174,7 +153,7 @@ namespace DChild.Gameplay.Environment
         }
 
         [Button]
-        public void Interact()
+        public virtual void Interact()
         {
             switch (m_type)
             {
