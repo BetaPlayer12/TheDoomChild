@@ -68,11 +68,12 @@ namespace DChild.Gameplay.Environment
         [SerializeField, HideIf("m_hideOffState"), TabGroup("Main/Transistion", "Off")]
         private UnityEvent m_offState;
 
+        [SerializeField, TabGroup("Main", "Restrictions")]
+        private string[] m_viableTags;
+
         public event EventAction<HitDirectionEventArgs> OnHit;
 
         public Vector2 position => transform.position;
-
-        public bool canBeInteractedWith => !m_needsButtonToInteract;
 
         public bool showPrompt => m_needsButtonToInteract;
 
@@ -97,6 +98,25 @@ namespace DChild.Gameplay.Environment
             {
                 m_collider.enabled = false;
             }
+        }
+
+        public bool CanBeInteractedWith(Collider2D collider2D)
+        {
+            if (!m_needsButtonToInteract)
+            {
+                if (m_viableTags.Length > 0)
+                {
+                    for (int i = 0; i < m_viableTags.Length; i++)
+                    {
+                        if (collider2D.CompareTag(m_viableTags[i]))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void Load(ISaveData data)
@@ -305,8 +325,6 @@ namespace DChild.Gameplay.Environment
                 return ((Component)instance).transform.position;
             }
         }
-
-
 #endif
     }
 }

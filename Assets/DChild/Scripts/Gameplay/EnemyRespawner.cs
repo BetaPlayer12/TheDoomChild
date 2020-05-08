@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.AI;
+﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
 using Holysoft.Collections;
 using Holysoft.Event;
@@ -20,6 +21,7 @@ namespace DChild.Gameplay
 
         private Dictionary<Damageable, Vector3> m_damageableStartPosition;
         private Dictionary<Damageable, IResetableAIBrain> m_ressetableBrains;
+        private Dictionary<DeathHandle, Damageable> m_deathHandlePair;
         private List<Damageable> m_toRessurrect;
         private List<float> m_ressurectTimers;
 
@@ -29,6 +31,15 @@ namespace DChild.Gameplay
         {
             m_toRessurrect.Add((Damageable)sender);
             m_ressurectTimers.Add(m_respawnTime.GenerateRandomValue());
+        }
+
+        private void OnEnemyBodyDisposed(object sender, DeathHandle.DisposingEventArgs eventArgs)
+        {
+            if (eventArgs.isBodyDestroyed == false)
+            {
+                m_toRessurrect.Add(m_deathHandlePair[(DeathHandle)sender]);
+                m_ressurectTimers.Add(m_respawnTime.GenerateRandomValue()); 
+            }
         }
 
         private void Respawn(Damageable damageable)
@@ -50,6 +61,7 @@ namespace DChild.Gameplay
             var length = m_damageableList.Length;
             m_damageableStartPosition = new Dictionary<Damageable, Vector3>();
             m_ressetableBrains = new Dictionary<Damageable, IResetableAIBrain>();
+            m_deathHandlePair = new Dictionary<DeathHandle, Damageable>();
             m_ressurectTimers = new List<float>();
             Damageable damageable = null;
             for (int i = 0; i < length; i++)
@@ -57,9 +69,19 @@ namespace DChild.Gameplay
                 damageable = m_damageableList[i];
                 m_damageableStartPosition.Add(damageable, damageable.transform.position);
                 m_ressetableBrains.Add(damageable, damageable.GetComponent<IResetableAIBrain>());
-                damageable.Destroyed += OnEnemyDestroyed;
+                if (damageable.TryGetComponentInChildren(out DeathHandle deathHandle))
+                {
+                    m_deathHandlePair.Add(deathHandle, damageable);
+                    deathHandle.BodyDestroyed += OnEnemyBodyDisposed;
+                }
+                else
+                {
+                    damageable.Destroyed += OnEnemyDestroyed;
+                }
             }
         }
+
+
 
         private void LateUpdate()
         {

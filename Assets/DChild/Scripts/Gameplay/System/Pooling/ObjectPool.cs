@@ -87,13 +87,13 @@ namespace DChild.Gameplay.Pooling
             }
         }
 
-        private void OnInstanceDestroyed(object sender, PoolItemEventArgs eventArgs)
+        protected void OnInstanceDestroyed(object sender, PoolItemEventArgs eventArgs)
         {
             eventArgs.item.PoolRequest -= OnPoolRequest;
             eventArgs.item.InstanceDestroyed -= OnInstanceDestroyed;
         }
 
-        private void OnPoolRequest(object sender, PoolItemEventArgs eventArgs)
+        protected void OnPoolRequest(object sender, PoolItemEventArgs eventArgs)
         {
             if (eventArgs.hasTransform)
             {

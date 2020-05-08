@@ -23,6 +23,6 @@ namespace DChild.Gameplay.Environment.Interractables
 
         Vector2 position { get; }
 
-        bool canBeInteractedWith { get; }
+        bool CanBeInteractedWith(Collider2D collider2D);
     }
 }

@@ -102,15 +102,15 @@ namespace DChild.Gameplay.Combat
 
         protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
-            DealDamage(collision, hitbox);
             SpawnHitFX(collision);
+            DealDamage(collision, hitbox);
         }
 
         private void InterractWith(Collider2D collision)
         {
             if (collision.TryGetComponentInParent(out IHitToInteract interactable))
             {
-                if (interactable.canBeInteractedWith)
+                if (interactable.CanBeInteractedWith(collision))
                 {
                     interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
                 }

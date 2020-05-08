@@ -33,7 +33,7 @@ namespace DChild
         public void LoadZone(string sceneName, bool withLoadingScene, Action ToCallAfterSceneDone)
         {
             CallAfterSceneDone = ToCallAfterSceneDone;
-            LoadingHandle.LoadingDone += AfterSceneDone;
+            LoadingHandle.SceneDone += AfterSceneDone;
             LoadZone(sceneName, withLoadingScene);
         }
 
@@ -92,7 +92,7 @@ namespace DChild
         {
             CallAfterSceneDone();
             CallAfterSceneDone = null;
-            LoadingHandle.LoadingDone -= AfterSceneDone;
+            LoadingHandle.SceneDone -= AfterSceneDone;
         }
     }
 
