@@ -22,7 +22,7 @@ namespace PlayerNew
         private WallSlide wallSlideBehavior;
         private Idle idleBehavior;
         private Whip whipBehavior;
-
+        private Levitate levitateBehavior;
 
 
         private CollisionState collisionState;
@@ -41,7 +41,8 @@ namespace PlayerNew
             jogBehavior = GetComponent<Jog>();
             crouchBehavior = GetComponent<Dock>();
             wallStickBehavior = GetComponent<WallStick>();
-            wallGrabBehavior = GetComponent<WallGrab>();
+            levitateBehavior = GetComponent<Levitate>();
+            //wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
@@ -51,7 +52,7 @@ namespace PlayerNew
             wallSlideBehavior = GetComponent<WallSlide>();
             idleBehavior = GetComponent<Idle>();
             whipBehavior = GetComponent<Whip>();
-
+            
         }
         // Start is called before the first frame update
         void Start()
@@ -162,14 +163,17 @@ namespace PlayerNew
             if (!collisionState.grounded)
             {
                 crouchBehavior.crouching = false;
+                animator.SetBool("Levitate", levitateBehavior.levitateMode);
             }
             if (dashBehavior.shadowMode)
             {
                 crouchBehavior.crouching = false;
             }
-            
 
-            WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
+
+           // WallClimbAnimationState(wallSlideBehavior.ledgeGrabState);
+            //
+            WallGrabAnimationState(collisionState.grabLedge);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(body2d.velocity.y);
@@ -178,6 +182,7 @@ namespace PlayerNew
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
             IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
             WhipAnimationModeState(whipBehavior.whipAtk);
+
         }
 
         void WhipAnimationModeState(bool value)
@@ -255,10 +260,15 @@ namespace PlayerNew
         {
             animator.SetBool("WallGrab", value);
         }
-
+        
         void WallStickAnimationState(bool value)
         {
             animator.SetBool("WallStick", value);
+        }
+
+        void WallClimbAnimationState(bool value)
+        {
+            animator.SetBool("WallClimb", value);
         }
 
     }
