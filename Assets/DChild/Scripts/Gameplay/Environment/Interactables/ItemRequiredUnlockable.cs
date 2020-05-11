@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
+
     public class ItemRequiredUnlockable : MonoBehaviour, IButtonToInteract, ISerializableComponent
     {
         [System.Serializable]
