@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace DChild.Gameplay.Systems
 
     public class ShadowEnvironmentHandle : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField,InfoBox("These colliders will be ignored by the player when he is in SHADOW mode")]
         private Collider2D[] m_shadowColliders;
         private Collider2D[] m_playerColliders;
 
