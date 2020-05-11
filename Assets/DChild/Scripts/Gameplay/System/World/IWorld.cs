@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Systems
         void Register(IIsolatedPhysics isolatedPhysics);
         void Unregister(IIsolatedPhysics isolatedPhysics);
 
-        void Register(ShadowEnvironmentHandler handler);
+        void Register(ShadowEnvironmentHandle handler);
 
         void SetShadowColliders(bool enable);
     }

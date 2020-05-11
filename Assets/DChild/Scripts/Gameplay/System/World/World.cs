@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Systems
         private TimeIsolationHandler m_timeIsolationHandler;
         private IsolatedPhysicsHandler m_isolatedPhysicsHandler;
         private InteractiveEnvironmentHandler m_interactiveEnvironmentHandler;
-        private ShadowEnvironmentHandler m_shadowEnvironmentHandler;
+        private ShadowEnvironmentHandle m_shadowEnvironmentHandler;
         private bool m_isShadowColliderEnable;
 
         public float CalculateDeltaTime(float timeScale) => Time.deltaTime * timeScale;
@@ -71,7 +71,7 @@ namespace DChild.Gameplay.Systems
             CleanUp();
         }
 
-        public void Register(ShadowEnvironmentHandler handler)
+        public void Register(ShadowEnvironmentHandle handler)
         {
             m_shadowEnvironmentHandler.SetCollisions(m_isShadowColliderEnable);
         }

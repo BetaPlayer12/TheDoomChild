@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Combat
         }
 
         [SerializeField]
-        private bool m_canDetectInteractables;
+        protected bool m_canDetectInteractables;
         [SerializeField]
         private bool m_damageUniqueHitboxesOnly;
         [SerializeField, ShowIf("m_damageUniqueHitboxesOnly")]
@@ -127,7 +127,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("DamageCollider") || collision.CompareTag("Sensor"))
                 return;
