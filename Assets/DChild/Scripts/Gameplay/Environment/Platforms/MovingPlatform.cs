@@ -222,7 +222,10 @@ namespace DChild.Gameplay.Environment
             if (TryGetComponent(out Rigidbody2D rigidbody))
             {
                 //var rigidbody = gameObject.AddComponent<Rigidbody2D>();
-                rigidbody.isKinematic = true;
+                if (rigidbody.isKinematic == false)
+                {
+                    rigidbody.isKinematic = true;
+                }
             }
 
             if (GetComponent<IsolatedObject>() == null)
