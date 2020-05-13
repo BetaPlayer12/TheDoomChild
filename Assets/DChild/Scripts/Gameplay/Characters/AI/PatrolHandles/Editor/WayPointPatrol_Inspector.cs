@@ -52,8 +52,6 @@ namespace DChildEditor.Gameplay.Characters.AI
                 }
 
                 DrawPatrolPath(waypoints, patrolHandler.startIndex, patrolHandler.iteration);
-
-                EditorUtility.SetDirty(target);
             }
         }
 
