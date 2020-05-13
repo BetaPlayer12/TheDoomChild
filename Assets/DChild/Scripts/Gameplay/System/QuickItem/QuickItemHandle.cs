@@ -1,6 +1,7 @@
 ﻿using System;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
+using Doozy.Engine;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
@@ -34,28 +35,35 @@ namespace DChild.Gameplay.Inventories
         [SerializeField]
         private IPlayer m_player;
         [SerializeField]
-        private bool m_wrapped;
-        [SerializeField]
         private IItemContainer m_container;
+        [SerializeField]
+        private bool m_wrapped;
 
         [ShowInInspector, ReadOnly]
         private int m_currentIndex;
         private ItemSlot m_currentSlot;
+        private UsableItemData m_currentItem;
+        private bool m_hideUI;
         public event EventAction<SelectionEventArgs> SelectedItem;
         public event EventAction<SelectionEventArgs> Update;
 
         public bool isWrapped => m_wrapped;
         public int currentIndex => m_currentIndex;
         public IItemContainer container => m_container;
+        public bool hideUI => m_hideUI;
+
+        public bool CanUseCurrentItem() => m_currentItem.CanBeUse(m_player);
 
         public void UseCurrentItem()
         {
-            m_currentSlot = m_container.GetSlot(m_currentIndex);
-            if (m_player != null)
+            if (CanUseCurrentItem())
             {
-                ((UsableItemData)m_currentSlot.item).Use(m_player);
+                if (m_player != null)
+                {
+                    m_currentItem.Use(m_player);
+                }
+                m_container.AddItem(m_currentSlot.item, -1);
             }
-            m_container.AddItem(m_currentSlot.item, -1);
         }
 
         [Button, HorizontalGroup("Split"), HideInEditorMode]
@@ -105,6 +113,7 @@ namespace DChild.Gameplay.Inventories
         private void StoreSelectedItem(SelectionEventArgs.SelectionType selectionType)
         {
             m_currentSlot = m_container.GetSlot(m_currentIndex);
+            m_currentItem = (UsableItemData)m_currentSlot.item;
             using (Cache<SelectionEventArgs> cacheEventArgs = Cache<SelectionEventArgs>.Claim())
             {
                 cacheEventArgs.Value.Initialize(m_currentIndex, m_currentSlot, selectionType);
@@ -115,9 +124,26 @@ namespace DChild.Gameplay.Inventories
 
         private void OnItemUpdate(object sender, ItemEventArgs eventArgs)
         {
-            if (eventArgs.count == 0 && eventArgs.data == m_currentSlot.item)
+            if (m_container.HasItemCategory(ItemCategory.Consumable))
             {
-                Previous();
+                if (m_hideUI)
+                {
+                    GameEventMessage.SendEvent("QuickItem Show");
+                    m_hideUI = false;
+                }
+
+                if (eventArgs.count == 0 && eventArgs.data == m_currentSlot.item)
+                {
+                    StoreSelectedItem(SelectionEventArgs.SelectionType.Previous);
+                }
+            }
+            else
+            {
+                if (m_hideUI == false)
+                {
+                    GameEventMessage.SendEvent("QuickItem Hide");
+                    m_hideUI = true;
+                }
             }
         }
 
@@ -125,7 +151,15 @@ namespace DChild.Gameplay.Inventories
         {
             m_currentIndex = 0;
             m_currentSlot = m_container.GetSlot(m_currentIndex);
+            m_currentItem = (UsableItemData)m_currentSlot.item;
             m_container.ItemUpdate += OnItemUpdate;
+            m_hideUI = true;
+
+            if (m_container.HasItemCategory(ItemCategory.Consumable))
+            {
+                GameEventMessage.SendEvent("QuickItem Show");
+                m_hideUI = false;
+            }
         }
     }
 }

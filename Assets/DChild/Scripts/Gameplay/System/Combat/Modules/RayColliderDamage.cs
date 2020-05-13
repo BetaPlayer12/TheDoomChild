@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
+
     [AddComponentMenu("DChild/Gameplay/Combat/Ray Collider Damage")]
     public class RayColliderDamage : ColliderDamage
     {

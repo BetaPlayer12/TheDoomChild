@@ -15,13 +15,14 @@ namespace PlayerNew
         private LongJump longJumpBehavior;
         //private WallJump wallJumpBehavior;
         private Slash slashBehavior;
-        private ShadowDash dashBehavior;
+        private ShadowSlide dashBehavior;
         private GroundShaker groundShakerBehavior;
         private Thrust thrustBehavior;
         private Animator animator;
         private WallSlide wallSlideBehavior;
         private Idle idleBehavior;
-
+        private Whip whipBehavior;
+        private Levitate levitateBehavior;
 
 
         private CollisionState collisionState;
@@ -40,16 +41,18 @@ namespace PlayerNew
             jogBehavior = GetComponent<Jog>();
             crouchBehavior = GetComponent<Dock>();
             wallStickBehavior = GetComponent<WallStick>();
-            wallGrabBehavior = GetComponent<WallGrab>();
+            levitateBehavior = GetComponent<Levitate>();
+            //wallGrabBehavior = GetComponent<WallGrab>();
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
-            dashBehavior = GetComponent<ShadowDash>();
+            dashBehavior = GetComponent<ShadowSlide>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
             wallSlideBehavior = GetComponent<WallSlide>();
             idleBehavior = GetComponent<Idle>();
-
+            whipBehavior = GetComponent<Whip>();
+            
         }
         // Start is called before the first frame update
         void Start()
@@ -60,6 +63,7 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
+           
             if (crouchBehavior.crouching && !jogBehavior.jogging)
             {
                 inputState.absValX = 0;
@@ -68,6 +72,8 @@ namespace PlayerNew
             {
                 JogAnimationState(0);
             }
+
+           
 
             if (inputState.absValX > 0 && !wallStickBehavior.groundWallStick)
             {
@@ -157,18 +163,31 @@ namespace PlayerNew
             if (!collisionState.grounded)
             {
                 crouchBehavior.crouching = false;
+                animator.SetBool("Levitate", levitateBehavior.levitateMode);
+            }
+            if (dashBehavior.shadowMode)
+            {
+                crouchBehavior.crouching = false;
             }
 
-            
 
-            WallGrabAnimationState(wallGrabBehavior.canLedgeGrab);
+           // WallClimbAnimationState(wallSlideBehavior.ledgeGrabState);
+            //
+            WallGrabAnimationState(collisionState.grabLedge);
             CrouchAnimationState(crouchBehavior.crouching);
             GroundednessAnimationState(collisionState.grounded);
             VelocityYAnimationState(body2d.velocity.y);
             WallStickAnimationState(wallStickBehavior.onWallDetected);
-            DashAnimationState(dashBehavior.dashing, dashBehavior.shadowDashing);
+            DashAnimationState(dashBehavior.dashing, dashBehavior.shadowMode);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
             IdleAnimationModeState(idleBehavior.attackMode, idleBehavior.idleState);
+            WhipAnimationModeState(whipBehavior.whipAtk);
+
+        }
+
+        void WhipAnimationModeState(bool value)
+        {
+            animator.SetBool("Whip", value);
         }
 
         void IdleAnimationModeState(bool value, int value1)
@@ -241,10 +260,15 @@ namespace PlayerNew
         {
             animator.SetBool("WallGrab", value);
         }
-
+        
         void WallStickAnimationState(bool value)
         {
             animator.SetBool("WallStick", value);
+        }
+
+        void WallClimbAnimationState(bool value)
+        {
+            animator.SetBool("WallClimb", value);
         }
 
     }

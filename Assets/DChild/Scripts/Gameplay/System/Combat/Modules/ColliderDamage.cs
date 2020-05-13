@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Combat
         }
 
         [SerializeField]
-        private bool m_canDetectInteractables;
+        protected bool m_canDetectInteractables;
         [SerializeField]
         private bool m_damageUniqueHitboxesOnly;
         [SerializeField, ShowIf("m_damageUniqueHitboxesOnly")]
@@ -102,16 +102,18 @@ namespace DChild.Gameplay.Combat
 
         protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
-            DealDamage(collision, hitbox);
             SpawnHitFX(collision);
+            DealDamage(collision, hitbox);
         }
 
         private void InterractWith(Collider2D collision)
         {
             if (collision.TryGetComponentInParent(out IHitToInteract interactable))
             {
-                interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
-
+                if (interactable.CanBeInteractedWith(m_collider))
+                {
+                    interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
+                }
             }
         }
 
@@ -123,14 +125,9 @@ namespace DChild.Gameplay.Combat
             {
                 m_ignoreColliderList[i].IgnoreColliders(true);
             }
-
-            if (m_damageUniqueHitboxesOnly)
-            {
-                m_collisionRegistrator = new CollisionRegistrator();
-            }
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("DamageCollider") || collision.CompareTag("Sensor"))
                 return;
@@ -153,7 +150,7 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                if (collision.TryGetComponent(out Hitbox hitbox))
+                if (collision.TryGetComponentInParent(out Hitbox hitbox))
                 {
                     if (hitbox.CanBeDamageBy(m_collider))
                     {

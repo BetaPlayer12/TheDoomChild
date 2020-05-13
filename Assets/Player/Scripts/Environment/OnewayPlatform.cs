@@ -27,7 +27,7 @@ public class OnewayPlatform : MonoBehaviour
 
             if (verticalInput < 0)
             {
-                if (Input.GetButtonDown("Jump"))
+                if (Input.GetButton("Jump"))
                 {
                     
                     Physics2D.IgnoreCollision(m_playerCollider, m_collider, true);

@@ -29,8 +29,12 @@ namespace DChild.Gameplay.Systems
         public void Interact(Character character)
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-
             StartCoroutine(DoTransition(character, TransitionType.Enter));
+        }
+
+        public void Interact()
+        {
+            Interact(GameplaySystem.playerManager.player.character);
         }
 
         private IEnumerator DoTransition(Character character, TransitionType type)
@@ -72,9 +76,9 @@ namespace DChild.Gameplay.Systems
             var damageable = character.GetComponent<IDamageable>();
             damageable?.SetHitboxActive(false);
 
-            //var controller = GameplaySystem.playerManager.OverrideCharacterControls();
+            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
 
-            //StartCoroutine(DoTransition(character, TransitionType.Enter));
+            StartCoroutine(DoTransition(character, TransitionType.Enter));
         }
 
         public void OnArrival(object sender, CharacterEventArgs eventArgs)

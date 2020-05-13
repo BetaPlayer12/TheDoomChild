@@ -13,7 +13,10 @@ namespace PlayerNew
         public bool onWall;
         public bool onWallLeg;
         public bool isTouchingLedge;
+        public bool isCeilingTouch;
         public float slopeAngle;
+        
+
         public Vector2 bottomPosition = Vector2.zero;
         public Vector2 rightPosition = Vector2.zero;
         public Vector2 leftPosition = Vector2.zero;
@@ -32,7 +35,17 @@ namespace PlayerNew
         public float collisionRadius = 10.0f;
         public Color collisionColor = Color.red;
         public float lineLength;
-        private float posDir;
+        public float posDir;
+
+        //Ledge Grab
+        public float yPos;
+        public float xPos;
+        public float xPosLeft;
+        public float xPosRight;
+        public bool grabLedge;
+        public Vector2 newPos;
+
+
 
         private InputState inputState;
         // Start is called before the first frame update
@@ -40,6 +53,7 @@ namespace PlayerNew
         {
             inputState = GetComponent<InputState>();
         }
+
 
         private void FixedUpdate()
         {
@@ -52,15 +66,13 @@ namespace PlayerNew
             if (disableGround)
             {
                 grounded = false;
-            }
-            else if (forceGrounded)
+            }else if (forceGrounded)
             {
                 grounded = true;
-            }
-            else
+            }else
             {
                 grounded = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-
+               
             }
 
             pos = inputState.direction == Directions.Right ? rightPosition : leftPosition;
@@ -69,45 +81,71 @@ namespace PlayerNew
 
             lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
             //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-            var wallHit = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
-            if (wallHit.collider != null)
+            var wall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
+            if (wall.collider)
             {
-                onWall = wallHit.collider?.CompareTag("InvisibleWall") == false;
+                onWall = wall.collider.CompareTag("InvisibleWall") == false;
             }
             else
             {
                 onWall = false;
             }
-            //Debug.DrawRay(pos, lineDir);
+         
+
+            Debug.DrawRay(pos, lineDir * lineLength, Color.cyan);
+           
 
             pos = inputState.direction == Directions.Right ? ledgeRightPosition : ledgeLeftPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
 
-            lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
+            lineDir = inputState.direction == Directions.Right  ? Vector2.right : Vector2.left;
             //isTouchingLedge = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             isTouchingLedge = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
-
 
             pos = inputState.direction == Directions.Left ? rightLegPosition : leftLegPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
-            var wallLegHit = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-            if (wallLegHit != null)
-            {
-                onWallLeg = wallLegHit.CompareTag("InvisibleWall") == false;
-            }
-            else
-            {
-                onWallLeg = false;
-            }
+            onWallLeg = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
 
-            slopeLeftHit = Physics2D.Raycast(transform.position, Vector2.left, lineLength, collisionLayer);
+            slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
             slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
             slopeBotHit = Physics2D.Raycast(transform.position, Vector2.down, lineLength, collisionLayer);
+            isCeilingTouch = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + 3), Vector2.up, 4, collisionLayer);
+
 
             posDir = inputState.direction == Directions.Left ? 1 : -1;
             ledgeBotHit = Physics2D.Raycast(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down, lineLength, collisionLayer);
+
+
+            xPos = inputState.direction == Directions.Left ? xPosLeft : xPosRight;
+
+
+            var leftledgeHit = Physics2D.Raycast(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), Vector2.left, 4, collisionLayer);
+            //Debug.DrawRay(new Vector2(transform.position.x + xPos * -posDir, transform.position.y + yPos), lineDir * lineLength, Color.red);
+
+            if (leftledgeHit.transform != null)
+            {
+                //Debug.Log(leftledgeHit.transform.tag);
+                if (leftledgeHit.transform.tag == "LedgeCollider")
+                {
+                    grabLedge = true;
+                    //GrabLedge
+                    newPos = leftledgeHit.transform.gameObject.GetComponent<DebugTest>().pos;
+                    
+
+                }
+                else
+                {
+                    //Debug.Log("nothing detected");
+                    grabLedge = false;
+                }
+            }
+            else
+            {
+                //Debug.Log("nothing detected");
+                grabLedge = false;
+            }
 
         }
 
@@ -115,8 +153,11 @@ namespace PlayerNew
         {
             Gizmos.color = collisionColor;
 
-            var positions = new Vector2[] { bottomPosition, leftLegPosition, rightLegPosition };
+            var positions = new Vector2[] {bottomPosition, leftLegPosition, rightLegPosition };
             //var rayPositions = new Vector2[] { ledgeRightPosition, ledgeLeftPosition, rightPosition, leftPosition };
+
+
+
 
             foreach (var position in positions)
             {
@@ -125,6 +166,8 @@ namespace PlayerNew
                 pos.y += transform.position.y;
 
                 Gizmos.DrawWireSphere(pos, collisionRadius);
+
+               
             }
 
             //foreach (var rayPosition in rayPositions)
@@ -136,9 +179,9 @@ namespace PlayerNew
             //    pos.y += transform.position.y;
             //    Gizmos.DrawRay(pos, lineDir * lineLength);
             //}
-
-            Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
-
+            
+            //Debug.DrawRay(new Vector2(transform.position.x + (1.5f * -posDir), transform.position.y), Vector2.down * lineLength, Color.green);
+            
         }
     }
 

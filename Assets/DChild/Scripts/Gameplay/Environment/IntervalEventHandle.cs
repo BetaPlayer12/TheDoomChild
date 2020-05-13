@@ -1,6 +1,4 @@
 ﻿using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,20 +10,20 @@ namespace DChild.Gameplay.Environment
         private float m_startDelay;
         [SerializeField]
         private bool m_startAsActive;
-        [SerializeField, TabGroup("Activate")]
-        private float m_activateDelay;
-        [SerializeField, TabGroup("Deactivate")]
-        private float m_deactivateDelay;
-        [SerializeField, TabGroup("Activate")]
-        private UnityEvent m_activateEvent;
-        [SerializeField, TabGroup("Deactivate")]
-        private UnityEvent m_deactivateEvent;
+        [SerializeField, TabGroup("Active")]
+        private float m_activeDuration;
+        [SerializeField, TabGroup("Inactive")]
+        private float m_inactiveDuration;
+        [SerializeField, TabGroup("Active")]
+        private UnityEvent m_activeEvent;
+        [SerializeField, TabGroup("Inactive")]
+        private UnityEvent m_inactiveEvent;
 
         private bool m_isActivated = true;
         private bool m_isEnabled = true;
         private float m_startDelayTimer;
-        private float m_activateTimer;
-        private float m_deactivateTimer;
+        private float m_activeTimer;
+        private float m_inactiveTimer;
 
         public void Enable()
         {
@@ -40,18 +38,26 @@ namespace DChild.Gameplay.Environment
         private void Start()
         {
             m_startDelayTimer = m_startDelay;
-            m_activateTimer = m_activateDelay;
-            m_deactivateTimer = m_deactivateDelay;
+            m_activeTimer = m_activeDuration;
+            m_inactiveTimer = m_inactiveDuration;
 
-            if(m_startAsActive == true)
+            if (m_startDelayTimer == 0)
             {
-                m_isActivated = true;
-                m_activateEvent?.Invoke();
+                if (m_startAsActive == true)
+                {
+                    m_isActivated = true;
+                    m_activeEvent?.Invoke();
+                }
+                else
+                {
+                    m_isActivated = false;
+                    m_inactiveEvent?.Invoke();
+                }
             }
             else
             {
                 m_isActivated = false;
-                m_deactivateEvent?.Invoke();
+                m_inactiveEvent?.Invoke();
             }
         }
 
@@ -59,34 +65,48 @@ namespace DChild.Gameplay.Environment
         {
             if (m_isEnabled == true)
             {
-                if(m_startDelayTimer > 0)
+                if (m_startDelayTimer > 0)
                 {
                     m_startDelayTimer -= Time.deltaTime;
+
+                    if (m_startDelayTimer <= 0)
+                    {
+                        if (m_startAsActive == true)
+                        {
+                            m_isActivated = true;
+                            m_activeEvent?.Invoke();
+                        }
+                        else
+                        {
+                            m_isActivated = false;
+                            m_inactiveEvent?.Invoke();
+                        }
+                    }
                 }
-                else if(m_startDelayTimer <= 0)
+                else if (m_startDelayTimer <= 0)
                 {
                     if (m_isActivated == true)
                     {
-                        m_deactivateTimer -= Time.deltaTime;
+                        m_activeTimer -= Time.deltaTime;
 
-                        if (m_deactivateTimer <= 0)
+                        if (m_activeTimer <= 0)
                         {
                             m_isActivated = false;
-                            m_deactivateEvent?.Invoke();
+                            m_inactiveEvent?.Invoke();
 
-                            m_deactivateTimer = m_deactivateDelay;
+                            m_activeTimer = m_activeDuration;
                         }
                     }
                     else if (m_isActivated == false)
                     {
-                        m_activateTimer -= Time.deltaTime;
+                        m_inactiveTimer -= Time.deltaTime;
 
-                        if (m_activateTimer <= 0)
+                        if (m_inactiveTimer <= 0)
                         {
                             m_isActivated = true;
-                            m_activateEvent?.Invoke();
+                            m_activeEvent?.Invoke();
 
-                            m_activateTimer = m_activateDelay;
+                            m_inactiveTimer = m_inactiveDuration;
                         }
                     }
                 }

@@ -14,7 +14,9 @@ namespace PlayerNew
         Jump,
         Attack,
         Dash,
-        Interact
+        Attack2,
+        Interact,
+        Levitate
     }
 
     public enum Condition

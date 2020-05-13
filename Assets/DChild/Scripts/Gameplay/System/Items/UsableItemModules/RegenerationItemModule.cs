@@ -22,11 +22,29 @@ namespace DChild.Gameplay.Items
         {
             if (m_toRegenerate == Stat.Health)
             {
-                player.health.AddCurrentValue(m_value);
+                if (player.health.isFull == false)
+                {
+                    GameplaySystem.combatManager.Heal(player.healableModule, m_value);
+                }
             }
             else
             {
-                player.magic.AddCurrentValue(m_value);
+                if (player.magic.isFull == false)
+                {
+                    player.magic.AddCurrentValue(m_value);
+                }
+            }
+        }
+
+        public bool CanBeUse(IPlayer player)
+        {
+            if (m_toRegenerate == Stat.Health)
+            {
+                return player.health.isFull == false;
+            }
+            else
+            {
+                return player.magic.isFull == false;
             }
         }
     }

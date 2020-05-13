@@ -38,7 +38,7 @@ namespace DChild.Gameplay.Combat
             else
             {
                 var hitbox = collider.GetComponentInParent<Hitbox>();
-                m_colliderPair.Add(collider, hitbox);
+                m_colliderPair.Add(collider, hitbox); // include null
                 if (hitbox != null)
                 {
                     if (m_hitboxToColliderPair.ContainsKey(hitbox) == false)

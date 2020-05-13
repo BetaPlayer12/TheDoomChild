@@ -61,6 +61,7 @@ namespace DChild.Gameplay
         [Button]
         public void Save()
         {
+            GameEventMessage.SendEvent("Game Save Start");
             CallPreSerialization();
             SerializationHandle.Save(m_slot.id, m_slot);
         }

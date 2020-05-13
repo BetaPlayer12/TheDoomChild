@@ -127,6 +127,33 @@ namespace DChild.Gameplay.Environment
             ChangeDestination();
         }
 
+        public void GoDestination(int destination, bool passThroughWayPoints)
+        {
+            if (passThroughWayPoints)
+            {
+                GoDestination(destination);
+            }
+            else
+            {
+                m_pingPongWaypoint = destination;
+                m_wayPointDestination = destination;
+                m_currentWayPoint = destination;
+                m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
+                m_cacheDestination = m_waypoints[m_wayPointDestination];
+                enabled = true;
+            }
+        }
+
+        public void TeleportTo(int destination)
+        {
+            m_pingPongWaypoint = destination;
+            m_wayPointDestination = destination;
+            m_cacheDestination = m_waypoints[destination];
+            ChangeDestination();
+            enabled = false;
+            transform.position = m_cacheDestination;
+        }
+
         public void Initialize(int startingIndex, int destination)
         {
             m_currentWayPoint = startingIndex;
@@ -162,7 +189,7 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_rigidbody = GetComponent<Rigidbody2D>();
-            m_rigidbody.position = m_waypoints[m_startWaypoint];
+            transform.position = m_waypoints[m_startWaypoint];
             m_isolatedTime = GetComponent<IIsolatedTime>();
             m_wayPointDestination = m_startWaypoint;
             m_currentWayPoint = m_wayPointDestination;
@@ -192,9 +219,9 @@ namespace DChild.Gameplay.Environment
 
         private void OnValidate()
         {
-            if (GetComponent<Rigidbody2D>() == null)
+            if (TryGetComponent(out Rigidbody2D rigidbody))
             {
-                var rigidbody = gameObject.AddComponent<Rigidbody2D>();
+                //var rigidbody = gameObject.AddComponent<Rigidbody2D>();
                 rigidbody.isKinematic = true;
             }
 

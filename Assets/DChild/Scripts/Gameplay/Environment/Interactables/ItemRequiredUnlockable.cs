@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
+
     public class ItemRequiredUnlockable : MonoBehaviour, IButtonToInteract, ISerializableComponent
     {
         [System.Serializable]
@@ -53,6 +54,7 @@ namespace DChild.Gameplay.Environment
             var inventory = character.GetComponent<PlayerControlledObject>().owner.inventory;
             if (m_itemRequirement.HasAllItems(inventory))
             {
+                m_itemRequirement.ConsumeItems(inventory);
                 m_onUnlock?.Invoke();
                 m_isUnlocked = true;
             }

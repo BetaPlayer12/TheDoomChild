@@ -4,8 +4,10 @@ using DChild.Gameplay.Systems.WorldComponents;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Holysoft.Gameplay;
-using DChild.Gameplay.Characters.Players;
 using UnityEngine;
+using Sirenix.OdinInspector;
+using PlayerNew;
+using System;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -13,25 +15,43 @@ namespace DChild.Gameplay.Characters.Players
     {
         [SerializeField]
         private CountdownTimer m_regenInterval = new CountdownTimer(5);
-        [SerializeField]
-        [Range(0f, 1f)]
-        private float m_regenRate;
+        [SerializeField, MinValue(0)]
+        private int m_passiveRegenRate;
+        [SerializeField, MinValue(0)]
+        private int m_onKillRegen;
         private ICappedStat m_magic;
         private bool m_isFull;
         private IIsolatedTime m_time;
 
+        private PlayerNew.WallStick m_wallstickHandler;
+        private CollisionState m_collisionStateHandler;
+
 
         public void Initialize(ComplexCharacterInfo info)
         {
-            m_time = info.character.isolatedObject;
+            var character = info.character;
+            m_time = character.isolatedObject;
             m_magic = info.magic;
             m_isFull = m_magic.currentValue == m_magic.maxValue;
             m_magic.ValueChanged += OnValueChange;
+
+            m_wallstickHandler = character.GetComponentInChildren<PlayerNew.WallStick>();
+            m_collisionStateHandler = character.GetComponentInChildren<CollisionState>();
+            info.attacker.TargetDamaged += OnTargetDamaged;
         }
 
-        public void SetRegenRate(float regenRate)
+        private void OnTargetDamaged(object sender, CombatConclusionEventArgs eventArgs)
         {
-            m_regenRate = regenRate;
+            var target = eventArgs.target;
+            if (target.isCharacter && target.instance.isAlive == false)
+            {
+                m_magic.AddCurrentValue(m_onKillRegen);
+            }
+        }
+
+        public void SetPassiveRegenRate(int regenRate)
+        {
+            m_passiveRegenRate = regenRate;
         }
 
         private void OnValueChange(object sender, StatInfoEventArgs eventArgs)
@@ -51,7 +71,7 @@ namespace DChild.Gameplay.Characters.Players
         private void OnIntervalEnd(object sender, EventActionArgs eventArgs)
         {
             m_regenInterval.Reset();
-            m_magic.AddCurrentValue(Mathf.CeilToInt(m_magic.maxValue * m_regenRate));
+            m_magic.AddCurrentValue(m_passiveRegenRate);
             m_isFull = m_magic.currentValue == m_magic.maxValue;
             if (m_isFull)
             {
@@ -68,7 +88,10 @@ namespace DChild.Gameplay.Characters.Players
 
         private void Update()
         {
-            m_regenInterval.Tick(m_time.deltaTime);
+            if (m_collisionStateHandler.grounded || m_wallstickHandler.wallSticking)
+            {
+                m_regenInterval.Tick(m_time.deltaTime);
+            }
         }
 
     }
