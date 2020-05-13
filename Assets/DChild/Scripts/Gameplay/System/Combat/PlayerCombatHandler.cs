@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Combat
     {
         [SerializeField]
         private GameObject m_hitFX;
+        [SerializeField, MinValue(0f)]
+        private float m_cameraShakeDuration;
         [SerializeField, BoxGroup("IFrame")]
         private float m_invulnerabilityDuration;
         [SerializeField, BoxGroup("IFrame")]
@@ -29,6 +31,10 @@ namespace DChild.Gameplay.Combat
                     m_hitStop.Execute();
                 }
                 StartCoroutine(DisableInputTemporarily(player));
+                if (m_cameraShakeDuration > 0)
+                {
+                    StartCoroutine(CameraShakeRoutine());
+                }
             }
             StartCoroutine(TemporaryInvulnerability(player));
         }
@@ -57,6 +63,14 @@ namespace DChild.Gameplay.Combat
             player.controller.Disable();
             yield return new WaitForWorldSeconds(m_inputDisableDuration);
             player.controller.Enable();
+        }
+
+        private IEnumerator CameraShakeRoutine()
+        {
+            var cinema = GameplaySystem.cinema;
+            cinema.EnableCameraShake(true);
+            yield return new WaitForSecondsRealtime(m_cameraShakeDuration);
+            cinema.EnableCameraShake(false);
         }
 
         private void Awake()

@@ -68,7 +68,7 @@ namespace DChild.Gameplay.Cinematics
         {
             for (int i = 0; i < m_noiseList.Count; i++)
             {
-                m_noiseList[i].EnableExtention(enable);
+                m_noiseList[i].enabled = enable;
             }
         }
 
