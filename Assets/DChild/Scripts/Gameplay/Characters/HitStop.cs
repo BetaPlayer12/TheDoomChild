@@ -70,11 +70,8 @@ public class HitStop : MonoBehaviour
 
     private void Awake()
     {
-        if (m_enableHitStop)
-        {
-            m_flinchHandle.HitStopStart += OnHitStopStart;
-            m_highlightCurrentValue = 1;
-        }
+        m_flinchHandle.HitStopStart += OnHitStopStart;
+        m_highlightCurrentValue = 1;
         //m_flinchWhiteRoutine = FlinchWhiteRoutine();
     }
 }
