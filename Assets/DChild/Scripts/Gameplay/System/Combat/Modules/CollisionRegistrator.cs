@@ -6,12 +6,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Combat
 {
     public class CollisionRegistrator : MonoBehaviour
     {
+        [ShowInInspector, ReadOnly]
         private Dictionary<Hitbox, bool> m_hasHitPair;
+        [ShowInInspector, ReadOnly]
         private Dictionary<Collider2D, Hitbox> m_colliderPair;
         private Dictionary<IDamageable, Hitbox> m_damageablePair;
         private Dictionary<Hitbox, List<Collider2D>> m_hitboxToColliderPair;

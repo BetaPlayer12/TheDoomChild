@@ -104,6 +104,7 @@ namespace DChild.Gameplay.Combat
         {
             SpawnHitFX(collision);
             DealDamage(collision, hitbox);
+            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}");
         }
 
         private void InterractWith(Collider2D collision)
