@@ -1770,6 +1770,8 @@ GameObject:
   m_Component:
   - component: {fileID: 275551550}
   - component: {fileID: 275551549}
+  - component: {fileID: 275551552}
+  - component: {fileID: 275551551}
   m_Layer: 0
   m_Name: TemporaryCameraVCam
   m_TagString: Untagged
@@ -1827,6 +1829,35 @@ Transform:
   m_Father: {fileID: 1142712855}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &275551551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275551548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d70cc20219cd84593f67d248eafe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Offset: {x: 0, y: 5, z: 0}
+  m_ApplyAfter: 3
+--- !u!114 &275551552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275551548}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd39492b5a9b0234eace29cdb62e9c1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_profile: {fileID: 11400000, guid: cbbbd65dcb148304c9ca3b21d4881dee, type: 2}
+  m_amplitudeGain: 1
+  m_frequencyGain: 1
 --- !u!1 &277801524
 GameObject:
   m_ObjectHideFlags: 0
@@ -6890,6 +6921,7 @@ GameObject:
   - component: {fileID: 1138993262}
   - component: {fileID: 1138993264}
   - component: {fileID: 1138993263}
+  - component: {fileID: 1138993265}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -6964,6 +6996,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1138993265
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138993261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NoiseProfile: {fileID: 11400000, guid: cbbbd65dcb148304c9ca3b21d4881dee, type: 2}
+  m_AmplitudeGain: 1
+  m_FrequencyGain: 1
+  mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1001 &1142712854
 PrefabInstance:
   m_ObjectHideFlags: 0
