@@ -24,6 +24,8 @@ public class DummyController : MonoBehaviour
     private MovementHandle2D m_movement;
     [SerializeField, TabGroup("Behaviours")]
     private AnimatedTurnHandle m_turnHandle;
+    [SerializeField]
+    private CollisionRegistrator m_registrator;
 
     private IsolatedPhysics2D m_physics;
 
@@ -58,6 +60,10 @@ public class DummyController : MonoBehaviour
             }
         }
 
+        if (Input.GetButtonDown("Fire1"))
+        {
+            m_registrator.ResetHitCache();
+        }
         if (Input.GetButton("Fire1"))
         {
             m_attackHitBox.SetActive(true);
