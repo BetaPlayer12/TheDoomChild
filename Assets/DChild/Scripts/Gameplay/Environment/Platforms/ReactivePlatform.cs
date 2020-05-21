@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
@@ -20,6 +21,8 @@ namespace DChild.Gameplay.Environment
         private string m_reactionAnimation;
         [SerializeField, Spine.Unity.SpineAnimation, ShowIf("m_hasReactionAnimation")]
         private string m_idleAnimation;
+        [SerializeField]
+        private UnityEvent m_otherReaction;
 
         private SkeletonAnimation m_animation;
 
@@ -43,6 +46,7 @@ namespace DChild.Gameplay.Environment
                     m_animation.state.SetAnimation(0, m_reactionAnimation, false);
                     m_animation.state.AddAnimation(0, m_idleAnimation, true, 0);
                 }
+                m_otherReaction?.Invoke();
                 OnReaction?.Invoke(this, EventActionArgs.Empty);
             }
         }

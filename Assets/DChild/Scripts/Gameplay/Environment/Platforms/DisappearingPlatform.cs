@@ -41,6 +41,7 @@ namespace DChild.Gameplay.Environment
         private void DisappearPlatform()
         {
             m_willDisappear = true;
+            m_disappearDelayTimer = m_disappearingPlatformData.disappearDelay;
             if (m_animation != null)
             {
                 m_animation.state.SetAnimation(0, m_disappearingPlatformData.steppedOnAnimation, false);
