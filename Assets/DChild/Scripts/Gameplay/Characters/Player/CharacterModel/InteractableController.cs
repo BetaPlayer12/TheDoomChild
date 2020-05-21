@@ -1,11 +1,7 @@
-﻿
-using DChild.Gameplay;
+﻿using DChild.Gameplay;
 using DChild.Gameplay.Characters.Players;
 using Doozy.Engine;
 using PlayerNew;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractableController : PlayerBehaviour
@@ -14,6 +10,7 @@ public class InteractableController : PlayerBehaviour
     private InteractableDetector m_interactableDetector;
 
     private Character m_character;
+    private bool m_isHeld;
 
     private void Start()
     {
@@ -26,7 +23,15 @@ public class InteractableController : PlayerBehaviour
 
         if (interactButton)
         {
-            Interact();
+            if (m_isHeld == false)
+            {
+                Interact();
+                m_isHeld = true;
+            }
+        }
+        else
+        {
+            m_isHeld = false;
         }
     }
 
@@ -34,7 +39,7 @@ public class InteractableController : PlayerBehaviour
     {
         if (m_interactableDetector != null)
         {
-            if (m_interactableDetector.closestObject != null)
+            if (m_interactableDetector.closestObject != null && m_interactableDetector.canBeInteracted)
             {
                 m_interactableDetector.closestObject.Interact(m_character);
                 GameEventMessage.SendEvent("Object Interacted");

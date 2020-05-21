@@ -26,6 +26,8 @@ namespace DChild.Gameplay.Systems
 
         public Vector3 promptPosition => m_handle.promptPosition;
 
+        public string promptMessage => null;
+
         public void Interact(Character character)
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();

@@ -41,6 +41,8 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => m_prompt.position;
 
+        public string promptMessage => "Insert Keystone";
+
         public ISaveData Save() => new SaveData(m_currentKeyStones);
 
         public void Load(ISaveData data)

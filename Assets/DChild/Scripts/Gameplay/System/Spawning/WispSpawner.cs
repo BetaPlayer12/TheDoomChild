@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -7,22 +8,21 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-
-    public class CharacterSpawner : MonoBehaviour
+    public class WispSpawner : MonoBehaviour
     {
+        [SerializeField]
+        private GameObject m_wisp;
         [SerializeField, MinValue(1)]
         private int m_maxSpawns;
         [SerializeField]
         private RangeFloat m_spawnInterval;
         [SerializeField]
-        private SpawnArea m_spawnArea;
-        [SerializeField]
-        private GameObject[] m_possibleSpawns;
+        private HorizontalDirection m_spawnDirection;
+
         private int m_spawnedCount;
         private List<GameObject> m_spawnList;
 
         private float m_spawnTimer;
-
         public void ResetSpawner()
         {
             for (int i = m_spawnList.Count - 1; i >= 0; i--)
@@ -34,11 +34,11 @@ namespace DChild.Gameplay
 
         private void SpawnCharacter()
         {
-            var toSpawn = m_possibleSpawns[UnityEngine.Random.Range(0, m_possibleSpawns.Length)];
-            var instance = Instantiate(toSpawn) as GameObject;
-            instance.transform.position = m_spawnArea.GetRandomPosition();
+            var instance = Instantiate(m_wisp) as GameObject;
+            instance.transform.position = transform.position;
             m_spawnList.Add(instance);
             instance.GetComponent<Damageable>().Destroyed += OnInstanceDestroyed;
+            instance.GetComponent<Character>().SetFacing(m_spawnDirection);
             m_spawnedCount++;
             if (m_spawnedCount >= m_maxSpawns)
             {

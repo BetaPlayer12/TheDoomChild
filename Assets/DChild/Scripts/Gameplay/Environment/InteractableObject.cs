@@ -21,8 +21,10 @@ namespace DChild.Gameplay.Environment
 
         public bool showPrompt => true;
 
+        public string promptMessage => null;
+
 #if UNITY_EDITOR
-        [SerializeField,PropertyOrder(-1)]
+        [SerializeField, PropertyOrder(-1)]
         private Transform m_promptLocation;
 
         private void OnValidate()
