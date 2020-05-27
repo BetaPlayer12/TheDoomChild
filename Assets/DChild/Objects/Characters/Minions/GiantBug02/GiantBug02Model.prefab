@@ -258,9 +258,9 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 1
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -440,9 +440,9 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 1
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -515,7 +515,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8418541054457632661}
   - component: {fileID: 1650380322898143474}
-  - component: {fileID: 861804432416506244}
   - component: {fileID: 7106460866367168288}
   - component: {fileID: 2223875786060822814}
   m_Layer: 13
@@ -562,63 +561,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!66 &861804432416506244
-CompositeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4170123052890793504}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_GeometryType: 0
-  m_GenerationType: 0
-  m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 2183691986725825444}
-    m_ColliderPaths:
-    - - X: -4945146
-        Y: 7977054
-      - X: -4736740
-        Y: 18618422
-      - X: -7671022
-        Y: 27486930
-      - X: -12262686
-        Y: 29043626
-      - X: -14749568
-        Y: 7257095
-  - m_Collider: {fileID: 4584254079264509899}
-    m_ColliderPaths:
-    - - X: 3839516
-        Y: 28593976
-      - X: -7508629
-        Y: 29110960
-      - X: -3198851
-        Y: 7632361
-      - X: 19629020
-        Y: 6607423
-      - X: 14079101
-        Y: 21100576
-  m_CompositePaths:
-    m_Paths:
-    - - {x: 1.9628972, y: 0.6607426}
-      - {x: 1.4079095, y: 2.110058}
-      - {x: 0.38395092, y: 2.8593976}
-      - {x: -0.7508622, y: 2.911092}
-      - {x: -0.6430593, y: 2.373788}
-      - {x: -0.76710343, y: 2.7486937}
-      - {x: -1.2262691, y: 2.9043589}
-      - {x: -1.4749532, y: 0.72570974}
-      - {x: -0.4945145, y: 0.7977081}
-      - {x: -0.4795928, y: 1.5591698}
-      - {x: -0.3198829, y: 0.763236}
-  m_VertexDistance: 0.0005
-  m_OffsetDistance: 0.000005
 --- !u!114 &7106460866367168288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,6 +591,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!1 &4666997468959791844
 GameObject:

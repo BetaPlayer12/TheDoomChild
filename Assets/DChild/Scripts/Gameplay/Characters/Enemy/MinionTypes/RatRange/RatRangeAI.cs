@@ -198,6 +198,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
+            m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -383,7 +385,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
+                    m_animation.EnableRootMotion(true, false);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_animation.animationState.GetCurrent(0).MixDuration = 0;
                     break;
 
                 case State.Attacking:

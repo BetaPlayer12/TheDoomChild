@@ -177,7 +177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8093012267492075077}
   - component: {fileID: 230766351371197352}
-  - component: {fileID: 8134499012047972529}
+  - component: {fileID: 4345597959483515385}
   m_Layer: 8
   m_Name: AttackCollider
   m_TagString: Untagged
@@ -226,7 +226,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
---- !u!114 &8134499012047972529
+--- !u!114 &4345597959483515385
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -235,11 +235,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4340674787151000355}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Script: {fileID: 11500000, guid: 59adafb57d3f471409348179f9e0c77f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
-  m_ignoreColliderList: []
+  m_damageUniqueHitboxesOnly: 1
+  m_collisionRegistrator: {fileID: 4141067269209765755}
+  m_ignoreColliderList:
+  - m_target: {fileID: 2346878172047361109}
+    m_ignoreList: []
 --- !u!1 &5103003666642460853
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,6 +541,7 @@ Transform:
   - {fileID: 9134102515875250745}
   - {fileID: 6092860454140965091}
   - {fileID: 3356188271478296155}
+  - {fileID: 5159967215344382622}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -552,6 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_height: 0.5
   m_centerMass: {fileID: 5976330842748520723}
   m_isolatedObject: {fileID: 3796303687834809866}
   m_physics: {fileID: 84506873236868322}
@@ -613,6 +619,7 @@ MonoBehaviour:
   m_fastFactor: 0
   m_fXObjects:
     m_particleSystems: []
+    m_originalSimulationSpeed: []
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 7094042282392510426}
@@ -718,6 +725,7 @@ MonoBehaviour:
   m_capeTransformReference: {fileID: 6092860454140965091}
   m_attackHitBox: {fileID: 8623766415325324616}
   m_damageable: {fileID: 7094042281855199548}
+  m_collisionRegistrator: {fileID: 4141067269209765755}
   m_movement: {fileID: 6759796504830413343}
   m_turnHandle: {fileID: 110843598311956503}
 --- !u!1 &7094042282174686199
@@ -872,7 +880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: af38a3de26ed9b84abc2fe7c7f3b209d, type: 2}
+  skeletonDataAsset: {fileID: 0}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -1699,3 +1707,90 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1010700234608489420}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4141067270046649710
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7094042281855199550}
+    m_Modifications:
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143402812902998001, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+        type: 3}
+      propertyPath: m_Name
+      value: CollisionRegistrator
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7b65b44a16ad1784e80dc708dcd62c0b, type: 3}
+--- !u!4 &5159967215344382622 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9143402812902998000, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4141067270046649710}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4141067269209765755 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1377712661, guid: 7b65b44a16ad1784e80dc708dcd62c0b,
+    type: 3}
+  m_PrefabInstance: {fileID: 4141067270046649710}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01d72dcc386e3824fb819d8347b660e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
