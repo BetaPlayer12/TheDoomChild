@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Combat
         private AttackerData m_data;
 
 #if UNITY_EDITOR
-        [SerializeField, OnValueChanged("ApplyDamageModification")]
+        [SerializeField, OnValueChanged("ApplyDamageModification",true)]
 #endif
         private AttackerInfo m_info;
 

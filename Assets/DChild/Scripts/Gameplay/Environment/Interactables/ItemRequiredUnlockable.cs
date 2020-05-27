@@ -49,6 +49,8 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => m_prompt.position;
 
+        public string promptMessage => throw new System.NotImplementedException();
+
         public void Interact(Character character)
         {
             var inventory = character.GetComponent<PlayerControlledObject>().owner.inventory;
@@ -104,6 +106,8 @@ namespace DChild.Gameplay.Environment
             m_onUnlock?.Invoke();
             m_isUnlocked = true;
         }
+
+
 #endif
     }
 }

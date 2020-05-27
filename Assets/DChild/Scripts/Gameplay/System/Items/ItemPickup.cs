@@ -33,6 +33,8 @@ namespace DChild.Gameplay.Items
 
         public Vector3 promptPosition => m_promptPostion.position;
 
+        public string promptMessage => "Pick up";
+
         public void Interact(Character character)
         {
             character.GetComponent<PlayerControlledObject>().owner.inventory.AddItem(m_data);

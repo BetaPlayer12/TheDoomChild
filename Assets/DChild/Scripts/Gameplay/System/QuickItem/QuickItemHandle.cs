@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Inventories
         [ShowInInspector, ReadOnly]
         private int m_currentIndex;
         private ItemSlot m_currentSlot;
-        private UsableItemData m_currentItem;
+        private ConsumableItemData m_currentItem;
         private bool m_hideUI;
         public event EventAction<SelectionEventArgs> SelectedItem;
         public event EventAction<SelectionEventArgs> Update;
@@ -113,7 +113,7 @@ namespace DChild.Gameplay.Inventories
         private void StoreSelectedItem(SelectionEventArgs.SelectionType selectionType)
         {
             m_currentSlot = m_container.GetSlot(m_currentIndex);
-            m_currentItem = (UsableItemData)m_currentSlot.item;
+            m_currentItem = (ConsumableItemData)m_currentSlot.item;
             using (Cache<SelectionEventArgs> cacheEventArgs = Cache<SelectionEventArgs>.Claim())
             {
                 cacheEventArgs.Value.Initialize(m_currentIndex, m_currentSlot, selectionType);
@@ -151,7 +151,7 @@ namespace DChild.Gameplay.Inventories
         {
             m_currentIndex = 0;
             m_currentSlot = m_container.GetSlot(m_currentIndex);
-            m_currentItem = (UsableItemData)m_currentSlot.item;
+            m_currentItem = (ConsumableItemData)m_currentSlot.item;
             m_container.ItemUpdate += OnItemUpdate;
             m_hideUI = true;
 

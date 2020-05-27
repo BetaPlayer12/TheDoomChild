@@ -39,10 +39,10 @@ namespace DChild.Gameplay.Characters.Players
     }
 
     [AddComponentMenu("DChild/Gameplay/Player/Player")]
-    public class Player : SerializedMonoBehaviour, IPlayer
+    public class Player : MonoBehaviour, IPlayer
     {
         [SerializeField]
-        private IPlayerStats m_stats;
+        private PlayerStats m_stats;
         [SerializeField]
         private PlayerWeapon m_weapon;
         [SerializeField]
@@ -129,7 +129,7 @@ namespace DChild.Gameplay.Characters.Players
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             OnDeath?.Invoke(this, eventArgs);
-          //  m_controlledCharacter.physics.SetVelocity(Vector2.zero);
+            //  m_controlledCharacter.physics.SetVelocity(Vector2.zero);
             if (m_groundednessHandle != null)
             {
                 m_groundednessHandle.enabled = false;

@@ -11,8 +11,18 @@ namespace DChild.Gameplay.Characters.Players
     public class DetectedInteractableEventArgs : IEventActionArgs
     {
         private IButtonToInteract m_interactable;
+        private string m_message;
+        public bool showInteractionButton;
+
+        public DetectedInteractableEventArgs()
+        {
+            m_interactable = null;
+            m_message = "Interact";
+        }
 
         public IButtonToInteract interactable => m_interactable;
+
+        public string message { get => m_message; set => m_message = value == null ? "Interact" : value; }
 
         public void Initialize(IButtonToInteract interactable) => m_interactable = interactable;
     }
@@ -28,6 +38,7 @@ namespace DChild.Gameplay.Characters.Players
         public event EventAction<DetectedInteractableEventArgs> InteractableDetected;
 
         public IButtonToInteract closestObject => m_closestObject;
+        public bool canBeInteracted { get; private set; }
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -37,12 +48,38 @@ namespace DChild.Gameplay.Characters.Players
 
         private void CallInteractableDetectedEvent(IButtonToInteract interactable)
         {
-
             if (interactable == null || interactable.showPrompt)
             {
                 using (Cache<DetectedInteractableEventArgs> cacheEvent = Cache<DetectedInteractableEventArgs>.Claim())
                 {
                     cacheEvent.Value.Initialize(interactable);
+                    if (interactable != null)
+                    {
+                        string message = null;
+                        if (interactable.GetType().IsCastableTo(typeof(IInteractionRequirement)))
+                        {
+                            var requirement = (IInteractionRequirement)interactable;
+                            canBeInteracted = requirement.CanBeInteracted(m_character);
+                            if (canBeInteracted)
+                            {
+                                cacheEvent.Value.showInteractionButton = true;
+                                message = interactable.promptMessage;
+                            }
+                            else
+                            {
+                                cacheEvent.Value.showInteractionButton = false;
+                                message = requirement.requirementMessage;
+                            }
+                        }
+                        else
+                        {
+                            canBeInteracted = canBeInteracted;
+                            cacheEvent.Value.showInteractionButton = true;
+                            message = interactable.promptMessage;
+                        }
+
+                        cacheEvent.Value.message = message;
+                    }
                     InteractableDetected?.Invoke(this, cacheEvent.Value);
                     cacheEvent.Release();
                 }

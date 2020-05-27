@@ -1,11 +1,10 @@
 ﻿using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
+
     public class DelayedEventHandle : MonoBehaviour
     {
         [SerializeField, MinValue(0)]
@@ -14,10 +13,13 @@ namespace DChild.Gameplay.Environment
         private bool m_startOnAwake = false;
         [SerializeField]
         private UnityEvent m_event;
-        
+
         private float m_delayTimer;
         private bool m_startTimer = false;
         private bool m_pauseTimer = false;
+
+        public float currentDelayTimer => m_delayTimer;
+        public float delayTime => m_delay;
 
         public void StartTimer()
         {

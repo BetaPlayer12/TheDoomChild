@@ -1,13 +1,13 @@
 ﻿using Cinemachine;
 using DChild.Gameplay.Characters;
 using Sirenix.OdinInspector;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
+
     [ExecuteInEditMode]
     [SaveDuringPlay]
     [AddComponentMenu("")] // Hide in menu

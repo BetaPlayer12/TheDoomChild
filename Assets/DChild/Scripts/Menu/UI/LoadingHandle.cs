@@ -32,6 +32,7 @@ namespace DChild.Menu
         private static bool m_isInitialized;
 
         private bool m_unloadThis;
+        private bool m_canTransferScene;
 
         public static void SetLoadType(LoadType value) => loadType = value;
 
@@ -89,6 +90,8 @@ namespace DChild.Menu
                     break;
             }
         }
+
+        public void AllowSceneTransfer() => m_canTransferScene = true;
 
         private void OnAnimationEnd(object sender, EventActionArgs eventArgs)
         {
@@ -148,8 +151,14 @@ namespace DChild.Menu
             {
                 m_loadOperations[i].allowSceneActivation = true;
             }
+
             yield return endOfFrame;
-            time += Time.unscaledDeltaTime;
+            while (m_canTransferScene == false)
+            {
+                time += Time.unscaledDeltaTime;
+                yield return endOfFrame;
+            }
+
             SceneDone?.Invoke(this, EventActionArgs.Empty);
             if (loadType == LoadType.Smart)
             {

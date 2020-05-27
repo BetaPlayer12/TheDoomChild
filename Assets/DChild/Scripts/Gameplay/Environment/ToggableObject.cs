@@ -22,12 +22,12 @@ namespace DChild.Gameplay.Environment
             public bool currentState => m_currentState;
         }
 
-        [SerializeField,HideInPlayMode]
+        [SerializeField, HideInPlayMode]
         private bool m_startAs;
-        [ShowInInspector,HideInEditorMode]
+        [ShowInInspector, HideInEditorMode, OnValueChanged("ToggleState")]
         private bool m_currentState;
 
-        [SerializeField,TabGroup("True")]
+        [SerializeField, TabGroup("True")]
         private UnityEvent m_onTrue;
         [SerializeField, TabGroup("False")]
         private UnityEvent m_onFalse;
@@ -45,13 +45,20 @@ namespace DChild.Gameplay.Environment
             }
             else
             {
-                m_onTrue?.Invoke();
+                m_onFalse?.Invoke();
             }
         }
 
         private void Start()
         {
-            SetToggleState(m_startAs);  
+            SetToggleState(m_startAs);
         }
+
+#if UNITY_EDITOR
+        private void ToggleState()
+        {
+            SetToggleState(m_currentState);
+        }
+#endif
     }
 }

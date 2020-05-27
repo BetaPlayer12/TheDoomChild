@@ -1,13 +1,15 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Serialization;
+using Doozy.Engine;
 using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-    public class SoulEssenceOffering : MonoBehaviour, IButtonToInteract, ISerializableComponent
+    public class SoulEssenceOffering : MonoBehaviour, IButtonToInteract, ISerializableComponent, IInteractionRequirement
     {
         [System.Serializable]
         public struct SaveData : ISaveData
@@ -26,31 +28,52 @@ namespace DChild.Gameplay.Environment
         [InfoBox("When interacted, it will take soul essence when it has not reached the amount, it will give soul essence whn it has reached the amount")]
         [SerializeField, MinValue(1)]
         private int m_amountRequired;
-        [SerializeField, MinValue(0),MaxValue("$m_amountRequired")]
+        [SerializeField, MinValue(0), MaxValue("$m_amountRequired")]
         private int m_currentAmount;
         [SerializeField]
         private Transform m_promptPosition;
 
         [TabGroup("Main", "StartAs")]
-        [SerializeField, TabGroup("Main/StartAs","Complete")]
+        [SerializeField, TabGroup("Main/StartAs", "Complete")]
         private UnityEvent m_startAsComplete;
         [SerializeField, TabGroup("Main/StartAs", "Incomplete")]
         private UnityEvent m_startAsIncomplete;
 
         [TabGroup("Main", "Transistion")]
-        [SerializeField, TabGroup("Main/Transistion","Complete")]
+        [SerializeField, TabGroup("Main/Transistion", "Complete")]
         private UnityEvent m_onComplete;
         [SerializeField, TabGroup("Main/Transistion", "Incomplete")]
         private UnityEvent m_onIncomplete;
+
+        private Collider2D m_trigger;
 
         public bool showPrompt => true;
 
         public Vector3 promptPosition => m_promptPosition.position;
 
+        public string promptMessage => (m_currentAmount == m_amountRequired ? "Take" : "Give") + $" <sprite name=\"SoulEssenceIcon_TMP\">{m_amountRequired}";
+
+        public string requirementMessage => $"Need <sprite name=\"SoulEssenceIcon_TMP\">{m_amountRequired}";
+
+        public bool CanBeInteracted(Character character)
+        {
+            GameEventMessage.SendEvent("Soul Essence Notify");
+            var inventory = character.GetComponent<PlayerControlledObject>().owner.inventory;
+            return inventory.soulEssence >= m_amountRequired;
+        }
+
         public void Interact(Character character)
         {
             var inventory = character.GetComponent<PlayerControlledObject>().owner.inventory;
             if (m_currentAmount == m_amountRequired)
+            {
+                inventory.AddSoulEssence(m_currentAmount);
+                m_currentAmount = 0;
+                m_onIncomplete?.Invoke();
+                StopAllCoroutines();
+                StartCoroutine(DelayedReenableTrigger());
+            }
+            else
             {
                 var getAmount = Mathf.Min(inventory.soulEssence, m_amountRequired - m_currentAmount);
                 m_currentAmount += getAmount;
@@ -58,17 +81,15 @@ namespace DChild.Gameplay.Environment
                 if (m_currentAmount == m_amountRequired)
                 {
                     m_onComplete?.Invoke();
+                    StopAllCoroutines();
+                    StartCoroutine(DelayedReenableTrigger());
                 }
                 else
                 {
                     m_onIncomplete?.Invoke();
+                    StopAllCoroutines();
+                    StartCoroutine(DelayedReenableTrigger());
                 }
-            }
-            else
-            {
-                inventory.AddSoulEssence(m_currentAmount);
-                m_currentAmount = 0;
-                m_onIncomplete?.Invoke();
             }
         }
 
@@ -88,6 +109,18 @@ namespace DChild.Gameplay.Environment
         public ISaveData Save()
         {
             return new SaveData(m_currentAmount);
+        }
+
+        private IEnumerator DelayedReenableTrigger()
+        {
+            m_trigger.enabled = false;
+            yield return new WaitForWorldSeconds(1);
+            m_trigger.enabled = true;
+        }
+
+        private void Awake()
+        {
+            m_trigger = GetComponentInChildren<Collider2D>();
         }
     }
 }

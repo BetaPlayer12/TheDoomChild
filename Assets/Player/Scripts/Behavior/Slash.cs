@@ -152,7 +152,7 @@ namespace PlayerNew
 
             if (canSlash && !dashState.dashing)
             {
-                //m_collisionRegistrator.ResetHitCache();
+                m_collisionRegistrator.ResetHitCache();
                 ToggleScripts(false);
                 attacking = true;
                 if (!upHold && collisionState.grounded && !downButton)

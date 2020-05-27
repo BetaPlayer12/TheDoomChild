@@ -40,7 +40,7 @@ namespace DChild.Gameplay.Environment
             public bool isTriggered => m_isTriggered;
         }
 
-        [SerializeField, OnValueChanged("OnTypeChanged"),BoxGroup("Fields")]
+        [SerializeField, OnValueChanged("OnTypeChanged"), BoxGroup("Fields")]
         private Type m_type;
         [SerializeField, BoxGroup("Fields")]
         private bool m_needsButtonToInteract;
@@ -73,6 +73,8 @@ namespace DChild.Gameplay.Environment
         public bool showPrompt => m_needsButtonToInteract;
 
         public Vector3 promptPosition => m_prompt.position;
+
+        public string promptMessage => null;
 
         public ISaveData Save()
         {
