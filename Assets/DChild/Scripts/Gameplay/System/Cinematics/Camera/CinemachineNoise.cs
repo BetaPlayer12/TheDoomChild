@@ -67,6 +67,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         private void OnValidate()
         {
+#if UNITY_EDITOR
             var vCam = ((CinemachineVirtualCamera)VirtualCamera);
             m_perlinNoise = vCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             if (m_perlinNoise == null)
@@ -76,6 +77,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
                 m_perlinNoise.m_AmplitudeGain = m_amplitudeGain;
                 m_perlinNoise.m_FrequencyGain = m_frequencyGain;
             }
+#endif
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay.Combat;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace PlayerNew
         public bool thrustHasStarted;
         public float timeToCharge;
         public float thrustDash;
+        [SerializeField]
+        private CollisionRegistrator m_registrator;
         [SerializeField]
         private ParticleSystem swordThrustBuildUp;
         [SerializeField]
@@ -73,6 +76,7 @@ namespace PlayerNew
         {
             //Debug.Log("fasfafasf");
             //swordThrustArrow.Stop();
+            m_registrator.ResetHitCache();
             slashSwordThrustImpacts.Play();
             m_thrustImpactAttackCollider.enabled = true;
         }

@@ -20,6 +20,7 @@ namespace DChild.Gameplay.UI
 
         private int m_currentAmount;
         private int m_addedAmount;
+        private bool m_addedAmountIsNegative;
         private float m_delayTimer;
         private bool m_delayAddingOfAmount;
 
@@ -39,7 +40,16 @@ namespace DChild.Gameplay.UI
             set
             {
                 m_addedAmount = value;
-                m_addedAmountText.text = m_addedAmount.ToString();
+                m_addedAmountIsNegative = addedAmount < 0;
+                if (m_addedAmountIsNegative)
+                {
+                    m_addedAmountText.text = m_addedAmount.ToString();
+                }
+                else
+                {
+                    m_addedAmountText.text = "+" + m_addedAmount.ToString();
+                }
+
             }
         }
 
@@ -92,8 +102,17 @@ namespace DChild.Gameplay.UI
             }
             else
             {
-                addedAmount -= 1;
-                currentAmount += 1;
+                if (m_addedAmountIsNegative)
+                {
+                    addedAmount += 1;
+                    currentAmount -= 1;
+                }
+                else
+                {
+                    addedAmount -= 1;
+                    currentAmount += 1;
+                }
+
                 if (addedAmount == 0)
                 {
                     enabled = false;

@@ -7,7 +7,6 @@ namespace Holysoft.UI
 
     public sealed class UIScrollViewContentAdjustor : MonoBehaviour
     {
-#if UNITY_EDITOR
         [SerializeField]
         private RectTransform m_content;
         [SerializeField]
@@ -83,6 +82,5 @@ namespace Holysoft.UI
                 UpdateSize();
             }
         }
-#endif
     }
 }

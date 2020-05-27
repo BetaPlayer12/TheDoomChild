@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class ProjectileThrow : MonoBehaviour, IComplexCharacterModule
+    public class ProjectileThrow : MonoBehaviour
     {
         [SerializeField]
         [PreviewField(50, ObjectFieldAlignment.Left), ValidateInput("ValidateProjectile")]
@@ -19,7 +19,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Vector2 m_currentAim;
         private float m_currentThrowForce;
 
-        private Character m_character;
         public Vector2 currentAim => m_currentAim;
         public float currentThrowForce => m_currentThrowForce;
 
@@ -45,11 +44,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var projectileGO = this.InstantiateToScene(m_projectile, transform.position, transform.rotation);
             var projectile = projectileGO.GetComponent<Projectile>();
             projectile.SetVelocity(m_currentAim, m_currentThrowForce);
-        }
-
-        public void Initialize(ComplexCharacterInfo info)
-        {
-            m_character = info.character;
         }
     }
 }

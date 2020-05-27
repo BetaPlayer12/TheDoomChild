@@ -125,9 +125,16 @@ namespace DChild.Gameplay.Environment.Interractables
             }
             for (int i = 0; i < m_panels.Length; i++)
             {
-                m_panels[i].SetLerpAs(open);
+                m_panels[i].SetAs(open);
             }
-
+            if (open)
+            {
+                m_collider2DGroup.DisableColliders();
+            }
+            else
+            {
+                m_collider2DGroup.EnableColliders();
+            }
             m_isOpen = open;
         }
 

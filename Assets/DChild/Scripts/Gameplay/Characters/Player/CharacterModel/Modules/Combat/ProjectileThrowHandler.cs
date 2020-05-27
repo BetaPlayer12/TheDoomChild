@@ -55,76 +55,46 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_module.SetProjectile(projectile);
         }
 
-        private Vector2 ChangeAim(PlayerInput input, bool useKeys)
+        //private Vector2 ChangeAim(PlayerInput input, bool useKeys)
+        //{
+        //    float changeX;
+        //    float changeY;
+        //    if (useKeys)
+        //    {
+        //        var modifier = Time.deltaTime * m_changeModifier;
+        //        changeX = input.direction.horizontalInput * modifier;
+        //        changeY = input.direction.verticalInput * modifier;
+        //    }
+        //    else
+        //    {
+        //        var mouseModifier = Time.deltaTime * m_mouseChangeModifier;
+        //        changeX = input.mouseInput.shiftNormalRaw.x * mouseModifier;
+        //        changeY = input.mouseInput.shiftNormalRaw.y * mouseModifier;
+        //    }
+
+        //    var change = new Vector2(changeX, changeY);
+        //    return change;
+        //}
+
+        public void ChangeAim(Vector2 normalizedDirection, bool useKeys)
         {
-            float changeX;
-            float changeY;
-            if (useKeys)
+            Vector2 aim = normalizedDirection;
+            var modifier = Time.unscaledDeltaTime * (useKeys ? m_changeModifier : m_mouseChangeModifier);
+            aim.x *= modifier;
+            aim.y *= modifier;
+
+            m_module.AdjustAim(aim);
+            var force = m_module.currentAim * m_module.currentThrowForce;
+            if (m_trajectoryForce != force)
             {
-                var modifier = Time.deltaTime * m_changeModifier;
-                changeX = input.direction.horizontalInput * modifier;
-                changeY = input.direction.verticalInput * modifier;
-            }
-            else
-            {
-                var mouseModifier = Time.deltaTime * m_mouseChangeModifier;
-                changeX = input.mouseInput.shiftNormalRaw.x * mouseModifier;
-                changeY = input.mouseInput.shiftNormalRaw.y * mouseModifier;
-            }
-
-            var change = new Vector2(changeX, changeY);
-            return change;
-        }
-
-        private void OnUpdate(object sender, ControllerEventArgs eventArgs)
-        {
-            if (m_state.isAimingProjectile)
-            {
-                m_state.waitForBehaviour = true;
-                if (m_isCalled)
-                {
-                    //m_animation.DoSkullThrowAim(m_facing.currentFacingDirection);
-                }
-                else
-                {
-                    //m_animation.DoSkullThrowCall(m_facing.currentFacingDirection);
-                    //if (m_animation.animationState.GetCurrent(0).IsComplete)
-                    //{
-                    //    m_isCalled = true;
-                    //}
-                }
-
-                if (eventArgs.input.combat.isThrowProjectileHeld)
-                {
-                    m_state.waitForBehaviour = true;
-                    var aim = ChangeAim(eventArgs.input, m_useKeysProjectile);
-                    aim.x = 0;
-                    m_module.AdjustAim(aim);
-                    var force = m_module.currentAim * m_module.currentThrowForce;
-                    if (m_trajectoryForce != force)
-                    {
-                        m_trajectoryForce = force;
-                        m_simulator.SetVelocity(force);
-                        GameplaySystem.simulationHandler.ShowSimulation(m_simulator);
-                    }
-                }
-                else
-                {
-                    StartCoroutine(ThrowRoutine());
-                    GameplaySystem.simulationHandler.HideSimulation(m_simulator);
-
-                    m_state.canAttack = true;
-                }
+                m_trajectoryForce = force;
+                m_simulator.SetVelocity(force);
+                GameplaySystem.simulationHandler.ShowSimulation(m_simulator);
             }
         }
 
-        private void OnCall(object sender, EventActionArgs eventArgs)
+        public void Initialize()
         {
-            m_state.isAimingProjectile = true;
-            m_state.canAttack = false;
-            m_state.waitForBehaviour = true;
-            m_physics.SetVelocity(Vector2.zero);
-
             var target = (m_facing.currentFacingDirection == HorizontalDirection.Left ? new Vector2(-1, 0) : new Vector2(1, 0));
             m_module.SetDefaultAim(target);
             m_module.ResetAim();
@@ -138,17 +108,76 @@ namespace DChild.Gameplay.Characters.Players.Modules
             GameplaySystem.simulationHandler.ShowSimulation(m_simulator);
         }
 
-        private IEnumerator ThrowRoutine()
+        public void ThrowProjectile()
         {
-            ////m_animationState.isThrowingBomb = true;
-            //m_isCalled = false;
-            //m_animation.DoSkullThrowOnHit(m_facing.currentFacingDirection);
-            //yield return new WaitForAnimationEvent(m_animation.animationState, PlayerAnimation.EVENT_SKULLTHROW);
-            //m_module.Throw();
-            //m_state.isAimingProjectile = false;
-            ////m_animationState.isThrowingBomb = false;
-            ///
-            yield return null;
+            m_module.Throw();
+            GameplaySystem.simulationHandler.HideSimulation(m_simulator);
         }
+
+        //private void OnUpdate(object sender, ControllerEventArgs eventArgs)
+        //{
+        //    if (m_state.isAimingProjectile)
+        //    {
+        //        m_state.waitForBehaviour = true;
+        //        if (m_isCalled)
+        //        {
+        //            //m_animation.DoSkullThrowAim(m_facing.currentFacingDirection);
+        //        }
+        //        else
+        //        {
+        //            //m_animation.DoSkullThrowCall(m_facing.currentFacingDirection);
+        //            //if (m_animation.animationState.GetCurrent(0).IsComplete)
+        //            //{
+        //            //    m_isCalled = true;
+        //            //}
+        //        }
+
+        //        if (eventArgs.input.combat.isThrowProjectileHeld)
+        //        {
+        //            m_state.waitForBehaviour = true;
+        //            //var aim = ChangeAim(eventArgs.input, m_useKeysProjectile);
+        //            //aim.x = 0;
+        //            //m_module.AdjustAim(aim);
+        //            //var force = m_module.currentAim * m_module.currentThrowForce;
+        //            //if (m_trajectoryForce != force)
+        //            //{
+        //            //    m_trajectoryForce = force;
+        //            //    m_simulator.SetVelocity(force);
+        //            //    GameplaySystem.simulationHandler.ShowSimulation(m_simulator);
+        //            //}
+        //        }
+        //        else
+        //        {
+        //            StartCoroutine(ThrowRoutine());
+        //            GameplaySystem.simulationHandler.HideSimulation(m_simulator);
+
+        //            m_state.canAttack = true;
+        //        }
+        //    }
+        //}
+
+        ////private void OnCall(object sender, EventActionArgs eventArgs)
+        ////{
+        ////    m_state.isAimingProjectile = true;
+        ////    m_state.canAttack = false;
+        ////    m_state.waitForBehaviour = true;
+        ////    m_physics.SetVelocity(Vector2.zero);
+        ////    Initialize();
+        ////}
+
+       
+
+        //private IEnumerator ThrowRoutine()
+        //{
+        //    ////m_animationState.isThrowingBomb = true;
+        //    //m_isCalled = false;
+        //    //m_animation.DoSkullThrowOnHit(m_facing.currentFacingDirection);
+        //    //yield return new WaitForAnimationEvent(m_animation.animationState, PlayerAnimation.EVENT_SKULLTHROW);
+        //    //m_module.Throw();
+        //    //m_state.isAimingProjectile = false;
+        //    ////m_animationState.isThrowingBomb = false;
+        //    ///
+        //    yield return null;
+        //}
     }
 }
