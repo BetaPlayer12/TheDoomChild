@@ -8,7 +8,8 @@ namespace DChild.Gameplay.Environment
     [AddComponentMenu("DChild/Gameplay/Environment/InteractableObject")]
     public class InteractableObject : MonoBehaviour, IButtonToInteract
     {
-
+        [SerializeField]
+        private string m_promptMessage = "Interact";
         [SerializeField, HideInInspector]
         private Vector3 m_promptPosition;
         [SerializeField]
