@@ -80,18 +80,18 @@ namespace DChild.Gameplay
             return Physics2D.RaycastAll(origin, direction, distance, m_contactFilter.layerMask);
         }
 
-        public static bool SearchCast(Vector2 origin, Vector2 target, LayerMask layerMask, float yOffset = 3f, int increments = 1)
+        public static bool SearchCast(Vector2 origin, Vector2 target, LayerMask layerMask, out RaycastHit2D[] hitbuffers, float yOffset = 3f, int increments = 1)
         {
             int hitCount = 0;
             var toRayTarget = target - origin;
             Raycaster.SetLayerMask(layerMask);
-            Raycaster.Cast(origin, toRayTarget.normalized, toRayTarget.magnitude, true, out hitCount);
+            hitbuffers = Raycaster.Cast(origin, toRayTarget.normalized, toRayTarget.magnitude, true, out hitCount);
             var isInterrupted = IsInterrupted();
             if (isInterrupted)
             {
                 for (int i = 1; i <= increments; i++)
                 {
-                    var hasFound = OffsetSearch(toRayTarget, i);
+                    var hasFound = OffsetSearch(toRayTarget, i, out hitbuffers);
                     if (hasFound)
                     {
                         return true;
@@ -106,16 +106,16 @@ namespace DChild.Gameplay
             return true;
 
             bool IsInterrupted() => hitCount > 0;
-            bool OffsetSearch(Vector2 searchTarget, int increment)
+            bool OffsetSearch(Vector2 searchTarget, int increment, out RaycastHit2D[] buffer)
             {
                 var offsetTarget = searchTarget;
                 offsetTarget.y += yOffset * increment;
-                Raycaster.Cast(origin, offsetTarget.normalized, offsetTarget.magnitude, true, out hitCount);
+                buffer = Raycaster.Cast(origin, offsetTarget.normalized, offsetTarget.magnitude, true, out hitCount);
                 if (IsInterrupted())
                 {
                     offsetTarget = searchTarget;
                     offsetTarget.y -= yOffset;
-                    Raycaster.Cast(origin, offsetTarget.normalized, offsetTarget.magnitude, true, out hitCount);
+                    buffer = Raycaster.Cast(origin, offsetTarget.normalized, offsetTarget.magnitude, true, out hitCount);
                     return !IsInterrupted();
                 }
                 return true;

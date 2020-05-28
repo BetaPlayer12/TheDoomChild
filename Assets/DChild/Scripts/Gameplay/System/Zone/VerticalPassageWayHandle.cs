@@ -38,6 +38,8 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => Vector3.zero;
 
+        public string prompMessage => null;
+
         public void DoSceneTransition(Character character, TransitionType type)
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
@@ -60,7 +62,7 @@ namespace DChild.Gameplay.Environment
                 case TransitionType.Exit:
                     character.StopCoroutine("UpEntranceRoutine");
 
-                    if(forceFloatCoroutine != null)
+                    if (forceFloatCoroutine != null)
                     {
                         character.StopCoroutine(forceFloatCoroutine);
                         forceFloatCoroutine = null;
@@ -91,7 +93,7 @@ namespace DChild.Gameplay.Environment
 
         private IEnumerator ForceMidAirFloatRoutine(Rigidbody2D physics)
         {
-            while(true)
+            while (true)
             {
                 Debug.Log("test");
                 physics.velocity = Vector2.zero;
