@@ -20,12 +20,12 @@ public class DummyController : MonoBehaviour
     private GameObject m_attackHitBox;
     [SerializeField, TabGroup("Reference")]
     private Damageable m_damageable;
+    [SerializeField, TabGroup("Reference")]
+    private CollisionRegistrator m_collisionRegistrator;
     [SerializeField, TabGroup("Behaviours")]
     private MovementHandle2D m_movement;
     [SerializeField, TabGroup("Behaviours")]
     private AnimatedTurnHandle m_turnHandle;
-    [SerializeField]
-    private CollisionRegistrator m_registrator;
 
     private IsolatedPhysics2D m_physics;
 
@@ -62,7 +62,7 @@ public class DummyController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            m_registrator.ResetHitCache();
+            m_collisionRegistrator.ResetHitCache();
         }
         if (Input.GetButton("Fire1"))
         {

@@ -316,9 +316,7 @@ GameObject:
   - component: {fileID: 1409610333070490153}
   - component: {fileID: 4110159615884918634}
   - component: {fileID: 4055349373691877905}
-  - component: {fileID: 8280393302103068993}
   - component: {fileID: 4994041687153368315}
-  - component: {fileID: 8763051376727069156}
   m_Layer: 13
   m_Name: SkeletonUtility-SkeletonRoot
   m_TagString: Untagged
@@ -379,42 +377,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!66 &8280393302103068993
-CompositeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7109939905502988458}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_GeometryType: 1
-  m_GenerationType: 0
-  m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 7713662696251085282}
-    m_ColliderPaths:
-    - - X: -15930806
-        Y: 29281208
-      - X: -22801462
-        Y: 76192600
-      - X: 12582034
-        Y: 78589400
-      - X: 18439010
-        Y: 31941228
-  m_CompositePaths:
-    m_Paths:
-    - - {x: -1.5930811, y: 2.9281237}
-      - {x: 1.8439007, y: 3.1941261}
-      - {x: 1.2582006, y: 7.85894}
-      - {x: -2.280146, y: 7.619257}
-  m_VertexDistance: 0.0005
-  m_OffsetDistance: 0.000005
 --- !u!114 &4994041687153368315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,19 +393,6 @@ MonoBehaviour:
   - {fileID: 7713662696251085282}
   m_isInvulnerable: 0
   m_damageReduction: 0
---- !u!114 &8763051376727069156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7109939905502988458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0864555905362647844ef2ee6556571, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_compositeCollider2D: {fileID: 8280393302103068993}
 --- !u!1 &7189003159738749311
 GameObject:
   m_ObjectHideFlags: 0
@@ -661,9 +610,9 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 1
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}

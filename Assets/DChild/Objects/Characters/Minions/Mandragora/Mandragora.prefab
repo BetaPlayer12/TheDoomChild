@@ -163,7 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 6816657545238866641}
   m_animator: {fileID: 8694658257653842231}
-  m_animation: 
+  m_animation: Death2
   m_bodyDuration:
     m_startTime: 3
   m_destroySource: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_height: 0
+  m_height: 0.5
   m_centerMass: {fileID: 2658099570208437904}
   m_isolatedObject: {fileID: 6424695229996594273}
   m_physics: {fileID: 7501248501160373272}
@@ -409,7 +409,7 @@ MonoBehaviour:
   m_bodyReference:
     m_default: {fileID: 0}
     m_list: []
---- !u!60 &6693732604167013813
+--- !u!60 &4910025460300080002
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -615,12 +615,12 @@ PrefabInstance:
     - target: {fileID: 1191763446433945728, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
       propertyPath: maskMaterials.materialsMaskDisabled.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1191763446433945728, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
       propertyPath: maskMaterials.materialsOutsideMask.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1191763446433945729, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
@@ -682,11 +682,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: MandragoraModel
       objectReference: {fileID: 0}
+    - target: {fileID: 1191763446433945742, guid: a7599f23db0f7454a80df8444a1b4a11,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1191763446433945743, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: ab7e3b1776484c041af5d758e6c3e4c9, type: 2}
+      objectReference: {fileID: 2100000, guid: f895a2e838b1d4a42bdac52cc4c49da4, type: 2}
     - target: {fileID: 1700283649020493685, guid: a7599f23db0f7454a80df8444a1b4a11,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -697,8 +702,19 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -1.4156637
       objectReference: {fileID: 0}
+    - target: {fileID: 1700283649020493685, guid: a7599f23db0f7454a80df8444a1b4a11,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.99999136
+      objectReference: {fileID: 0}
+    - target: {fileID: 1700283649020493685, guid: a7599f23db0f7454a80df8444a1b4a11,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.0041670245
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7261997437735848163, guid: a7599f23db0f7454a80df8444a1b4a11, type: 3}
+    - {fileID: 3495724982000547875, guid: a7599f23db0f7454a80df8444a1b4a11, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a7599f23db0f7454a80df8444a1b4a11, type: 3}
 --- !u!114 &2202170498647244050 stripped
 MonoBehaviour:
