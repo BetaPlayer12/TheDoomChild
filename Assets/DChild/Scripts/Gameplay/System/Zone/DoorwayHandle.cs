@@ -21,13 +21,15 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => m_prompt.position;
 
+        public string prompMessage => "Enter";
+
         public void DoSceneTransition(Character character, TransitionType type)
         {
-            if(type == TransitionType.Enter)
+            if (type == TransitionType.Enter)
             {
                 OnDoorwayEnter(character);
             }
-            if(type == TransitionType.PostEnter)
+            if (type == TransitionType.PostEnter)
             {
                 OnDoorwayPostEnter(character);
             }

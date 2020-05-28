@@ -18,5 +18,7 @@ namespace DChild.Gameplay.Environment
 
         bool needsButtonInteraction { get; }
         Vector3 promptPosition { get; }
+
+        string prompMessage { get; }
     } 
 }

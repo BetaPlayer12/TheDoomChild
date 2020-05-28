@@ -18,6 +18,8 @@ namespace DChild.Gameplay.Environment
         private Transform m_temporaryParent;
         [SerializeField]
         private Transform m_trigger;
+        [SerializeField]
+        private bool m_startAsFlowing = true;
         private float m_fullVerticalScale;
         private Vector3 m_triggerScale;
 
@@ -81,6 +83,17 @@ namespace DChild.Gameplay.Environment
         {
             m_fullVerticalScale = transform.localScale.y;
             m_triggerScale = m_trigger.localScale;
+            StartAsFlowing(m_startAsFlowing);
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            //Disable players ability to jump and other movement skills;
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            //Disable players ability to jump and other movement skills;
         }
 
 #if UNITY_EDITOR

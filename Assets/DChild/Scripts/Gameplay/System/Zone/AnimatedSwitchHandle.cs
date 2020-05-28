@@ -30,6 +30,8 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => Vector3.zero;
 
+        public string prompMessage => null;
+
         public void DoSceneTransition(Character character, TransitionType type)
         {
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
