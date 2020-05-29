@@ -76,7 +76,7 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-        public override void Patrol(PathFinderAgent agent, float speed, CharacterInfo characterInfo)
+        public override void Patrol(NavigationAgent agent, float speed, CharacterInfo characterInfo)
         {
             var currentPosition = characterInfo.position;
             var movementInfo = GetInfo(currentPosition);

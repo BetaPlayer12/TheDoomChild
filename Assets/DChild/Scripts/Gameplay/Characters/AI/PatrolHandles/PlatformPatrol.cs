@@ -50,7 +50,7 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-        public override void Patrol(PathFinderAgent agent, float speed, CharacterInfo characterInfo)
+        public override void Patrol(NavigationAgent agent, float speed, CharacterInfo characterInfo)
         {
             m_characterPhysics2D.simulateGravity = m_characterPhysics2D.GetComponent<Transform>().localRotation.z != 0 ? false : true;
 
