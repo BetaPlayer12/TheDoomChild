@@ -89,8 +89,7 @@ namespace PlayerNew
             {
 
                 //
-
-                if (collisionState.grabLedge && onWallDetected && !collisionState.grounded /*&& wallStickUp*/)
+                if (collisionState.grabLedge && onWallDetected && !collisionState.grounded)
                 {
 
                     slideVelocity = 0f;

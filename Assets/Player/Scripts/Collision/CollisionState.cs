@@ -120,7 +120,7 @@ namespace PlayerNew
                 //Debug.Log(leftledgeHit.transform.tag);
                 if (leftledgeHit.transform.tag == "LedgeCollider")
                 {
-                    grabLedge = true;
+                    //grabLedge = true;
                     //GrabLedge
                     newPos = leftledgeHit.transform.gameObject.GetComponent<DebugTest>().pos;
                     
