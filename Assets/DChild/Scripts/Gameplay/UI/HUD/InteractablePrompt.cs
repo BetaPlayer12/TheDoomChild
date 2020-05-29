@@ -2,6 +2,7 @@
 using Doozy.Engine;
 using Doozy.Engine.UI;
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace DChild.Gameplay.UI
@@ -12,6 +13,8 @@ namespace DChild.Gameplay.UI
         private InteractableDetector m_detector;
         [SerializeField]
         private RectTransform m_prompt;
+        [SerializeField]
+        private TextMeshProUGUI m_message;
         private UIView m_view;
         private Vector3 m_showStartPosition;
         private void OnInteractableDetected(object sender, DetectedInteractableEventArgs eventArgs)

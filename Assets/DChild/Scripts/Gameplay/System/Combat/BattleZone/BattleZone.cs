@@ -87,7 +87,7 @@ namespace DChild.Gameplay.Combat
 
         public void Update()
         {
-            m_spawnHandle.Update(Time.deltaTime);
+            m_spawnHandle.Update(GameplaySystem.time.deltaTime);
         }
     }
 }

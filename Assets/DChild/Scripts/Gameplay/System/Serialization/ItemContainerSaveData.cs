@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Serialization
@@ -24,7 +25,7 @@ namespace DChild.Serialization
             public int count => m_count;
         }
 
-        [SerializeField]
+        [SerializeField,TableList]
         private Item[] m_datas;
 
         public ItemContainerSaveData()
@@ -36,6 +37,7 @@ namespace DChild.Serialization
         {
             this.m_datas = m_datas;
         }
+
 
         public Item[] datas { get => m_datas;  }
 

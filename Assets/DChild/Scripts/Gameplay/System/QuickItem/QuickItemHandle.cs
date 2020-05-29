@@ -151,6 +151,7 @@ namespace DChild.Gameplay.Inventories
         {
             m_currentIndex = 0;
             m_currentSlot = m_container.GetSlot(m_currentIndex);
+            m_currentItem = (UsableItemData)m_currentSlot.item;
             m_container.ItemUpdate += OnItemUpdate;
             m_hideUI = true;
 

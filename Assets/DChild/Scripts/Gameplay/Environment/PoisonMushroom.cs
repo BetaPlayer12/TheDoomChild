@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 using Spine;
 using System;
 
-namespace DChild.Gameplay.Environment
+namespace DChild.Gameplay.Environment.Obstacles
 {   
     public class PoisonMushroom : MonoBehaviour
     {

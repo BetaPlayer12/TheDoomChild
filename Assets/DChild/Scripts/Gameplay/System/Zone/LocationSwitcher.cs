@@ -29,8 +29,12 @@ namespace DChild.Gameplay.Systems
         public void Interact(Character character)
         {
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-
             StartCoroutine(DoTransition(character, TransitionType.Enter));
+        }
+
+        public void Interact()
+        {
+            Interact(GameplaySystem.playerManager.player.character);
         }
 
         private IEnumerator DoTransition(Character character, TransitionType type)

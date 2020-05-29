@@ -171,7 +171,7 @@ namespace PlayerNew
             }
 
 
-            WallClimbAnimationState(wallSlideBehavior.ledgeGrabState);
+           // WallClimbAnimationState(wallSlideBehavior.ledgeGrabState);
             //
             WallGrabAnimationState(collisionState.grabLedge);
             CrouchAnimationState(crouchBehavior.crouching);

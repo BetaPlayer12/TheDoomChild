@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/SkeletonWarrior")]
-    public class SkeletonWarriorAI : CombatAIBrain<SkeletonWarriorAI.Info>
+    public class SkeletonWarriorAI : CombatAIBrain<SkeletonWarriorAI.Info>, IResetableAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -97,7 +97,6 @@ namespace DChild.Gameplay.Characters.Enemies
             Attacking,
             Cooldown,
             Chasing,
-            Flinch,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -259,6 +258,16 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 UpdateAttackDeciderList();
             }
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(false);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.Patrol);
+            enabled = true;
         }
 
         private void UpdateAttackDeciderList()
@@ -481,5 +490,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isDetecting = false;
             m_selfCollider.SetActive(false);
         }
+
+
     }
 }

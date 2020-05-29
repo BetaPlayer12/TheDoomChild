@@ -7,101 +7,132 @@
 
 using System;
 using DChild.Gameplay.Characters.Players;
+using DChild.Serialization;
 using Holysoft.Event;
+using PlayerNew;
 using Sirenix.OdinInspector;
+using Spine.Unity;
+using Spine.Unity.Playables;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
+using UnityEngine.Timeline;
 
 namespace DChild.Gameplay.Cinematics
 {
     [RequireComponent(typeof(Collider2D))]
     [DisallowMultipleComponent]
-    public class CutsceneTrigger : MonoBehaviour
+    public class CutsceneTrigger : MonoBehaviour, ISerializableComponent
     {
         [System.Serializable]
-        public struct Serializer
+        public struct SaveData : ISaveData
         {
-            [System.Serializable]
-            public struct Data
+            [SerializeField]
+            private bool m_isTriggered;
+
+            public SaveData(bool isTriggered)
             {
-                [SerializeField]
-                private bool m_isTriggered;
-
-                public Data(bool isTriggered)
-                {
-                    this.m_isTriggered = isTriggered;
-                }
-
-                public bool isTriggered => m_isTriggered;
+                m_isTriggered = isTriggered;
             }
 
-            [SerializeField]
-            [ReadOnly]
-            private CutsceneTrigger m_director;
-            [SerializeField]
-            private Data m_serializedData;
-
-            public Serializer(CutsceneTrigger m_director) : this()
-            {
-                this.m_director = m_director;
-            }
-
-            public void Load() => m_director.Load(m_serializedData);
-            public void Save() => m_serializedData = m_director.Save();
+            public bool isTriggered => m_isTriggered;
         }
 
         [SerializeField]
-        private Cutscene m_cutscene;
+        private PlayableDirector m_cutscene;
+
+        private Collider2D m_collider;
+        private PlayerControlledObject m_controlledObject;
+        private Animator m_animator;
+        private CollisionState m_collisionState;
+        private Scene m_originalScene;
+
         private bool m_isTriggered;
 
-
-        public void Load(Serializer.Data serializedData)
+        public void Load(ISaveData data)
         {
-            m_isTriggered = serializedData.isTriggered;
-            GetComponent<Collider2D>().enabled = m_isTriggered;
+            m_isTriggered = ((SaveData)data).isTriggered;
+            if (m_collider != null)
+            {
+                m_collider.enabled = false;
+            }
         }
 
-        public Serializer.Data Save() => new Serializer.Data(m_isTriggered);
-
-        private Player GetPlayer(Collider2D collision)
+        public ISaveData Save()
         {
-            if (collision.tag == "Hitbox")
-            {
-                return collision.GetComponentInParent<Player>();
-            }
-            else
-            {
-                return null;
-            }
+            return new SaveData(m_isTriggered);
+        }
+
+        private void OnCutsceneDone(PlayableDirector obj)
+        {
+            m_controlledObject.transform.parent = null;
+            SceneManager.MoveGameObjectToScene(m_controlledObject.gameObject, m_originalScene);
+            m_animator.enabled = true;
+            GameplaySystem.playerManager.StopCharacterControlOverride();
         }
 
         private void Awake()
         {
-            m_cutscene.CutsceneEnd += OnCutsceneEnd;
+            m_collider = GetComponent<Collider2D>();
+            if (m_isTriggered)
+            {
+                m_collider.enabled = false;
+            }
+            else
+            {
+                m_cutscene.stopped += OnCutsceneDone;
+
+                var animation = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+                var timelineAsset = m_cutscene.playableAsset as TimelineAsset;
+
+                foreach (PlayableBinding binding in timelineAsset.GetOutputTrack(2).outputs)
+                {
+                    if (binding.sourceObject is SpineAnimationStateTrack)
+                    {
+                        var track = (TrackAsset)binding.sourceObject;
+                        m_cutscene.SetGenericBinding(binding.sourceObject, animation);
+                    }
+                }
+            }
+            enabled = false;
         }
 
-        private void OnCutsceneEnd(object sender, EventActionArgs eventArgs)
+        private void LateUpdate()
         {
-            m_isTriggered = true;
-            GetComponent<Collider2D>().enabled = false;
+            if (m_collisionState.grounded)
+            {
+                m_animator.enabled = false;
+                m_cutscene.Play();
+                enabled = false;
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            var player = GetPlayer(collision);
-            if (player)
+            if (collision.CompareTag("Sensor") == false && collision.CompareTag("DamageCollider") == false)
             {
-                m_cutscene.Play();
-            }
-        }
+                if (collision.TryGetComponentInParent(out PlayerControlledObject controlledObject))
+                {
+                    m_controlledObject = controlledObject;
+                    m_originalScene = m_controlledObject.gameObject.scene;
+                    m_controlledObject.transform.parent = m_cutscene.transform;
+                    m_collisionState = m_controlledObject.GetComponentInChildren<CollisionState>();
+                    m_animator = m_controlledObject.GetComponentInChildren<Animator>();
+                    GameplaySystem.playerManager.OverrideCharacterControls();
 
-        private void OnValidate()
-        {
-            var collider = GetComponent<Collider2D>();
-            if (collider)
-            {
-                collider.isTrigger = true;
+                    if (m_collisionState.grounded)
+                    {
+                        m_animator.enabled = false;
+                        m_cutscene.Play();
+                    }
+                    else
+                    {
+                        enabled = true;
+                    }
+                    m_isTriggered = true;
+                    m_collider.enabled = false;
+                }
             }
         }
     }
-
 }

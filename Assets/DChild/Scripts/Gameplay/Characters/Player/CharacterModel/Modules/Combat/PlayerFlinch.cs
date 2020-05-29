@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             //m_physics.AddForce(knockBackDirection * m_knockBackPower, ForceMode2D.Impulse);
             m_physics.velocity = Vector2.zero;
-            m_physics.AddForce(new Vector2(-7000.0f, 2000.0f), ForceMode2D.Force);
+            m_physics.AddForce(new Vector2(0, m_knockBackPower), ForceMode2D.Impulse);
             m_animator.SetTrigger("Flinch");
            
         }

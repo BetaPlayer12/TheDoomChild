@@ -141,7 +141,6 @@ namespace PlayerNew
                     else
                     {
                         animator.SetBool("Attack", true);
-                        SwordJumpSlashForwardFX();
                         m_swordJumpSlashForwardAttackCollider.enabled = true;
                     }
 
@@ -153,7 +152,7 @@ namespace PlayerNew
 
             if (canSlash && !dashState.dashing)
             {
-                m_collisionRegistrator.ResetHitCache();
+                //m_collisionRegistrator.ResetHitCache();
                 ToggleScripts(false);
                 attacking = true;
                 if (!upHold && collisionState.grounded && !downButton)
@@ -176,6 +175,10 @@ namespace PlayerNew
                         m_forwardSlashAttackCollider.enabled = true;
                     }
                     numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
+                    if(numOfClicks > 3)
+                    {
+                        numOfClicks = 1;
+                    }
                     animator.SetBool("Attack", true);
                     switch (numOfClicks)
                     {
@@ -183,20 +186,20 @@ namespace PlayerNew
                             animator.SetBool("Slash1", true);
                             animator.SetBool("Slash2", false);
                             animator.SetBool("Slash3", false);
-                            VFX_Attack1();
+                            //VFX_Attack1();
                             break;
                         case 2:
                             animator.SetBool("Slash1", false);
                             animator.SetBool("Slash2", true);
                             animator.SetBool("Slash3", false);
-                            VFX_Attack2();
+                            //VFX_Attack2();
                             m_swordCombo1AttackCollider.enabled = true;
                             break;
                         case 3:
                             animator.SetBool("Slash1", false);
                             animator.SetBool("Slash2", false);
                             animator.SetBool("Slash3", true);
-                            VFX_Attack3();
+                            //VFX_Attack3();
                             m_swordCombo2AttackCollider.enabled = true;
                             break;
                     }
@@ -372,7 +375,7 @@ namespace PlayerNew
         private void FinishAttackAnim()
         {
 
-            Debug.Log("finish attack anim");
+           
             attackCollider.enabled = false;
 
             m_forwardSlashAttackCollider.enabled = false;

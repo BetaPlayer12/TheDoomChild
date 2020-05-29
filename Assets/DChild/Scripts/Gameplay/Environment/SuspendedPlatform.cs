@@ -41,6 +41,9 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("Main", "Unsuspended")]
         private UnityEvent m_onUnsuspend;
 
+        private Rigidbody2D m_rigidbody;
+        private RigidbodyConstraints2D m_constraints;
+
         public ISaveData Save() => new SaveData(m_isSuspended);
 
         public void Load(ISaveData data)
@@ -55,6 +58,7 @@ namespace DChild.Gameplay.Environment
             {
                 m_isSuspended = false;
                 m_toUnsuspend?.Invoke();
+                m_rigidbody.constraints = m_constraints;
             }
         }
 
@@ -71,6 +75,13 @@ namespace DChild.Gameplay.Environment
                 transform.localPosition = m_unsuspendedLocalPosition;
                 m_onUnsuspend?.Invoke();
             }
+        }
+
+        private void Awake()
+        {
+            m_rigidbody = GetComponent<Rigidbody2D>();
+            m_constraints = m_rigidbody.constraints;
+            m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 
 #if UNITY_EDITOR

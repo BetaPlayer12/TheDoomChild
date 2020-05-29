@@ -81,7 +81,16 @@ namespace PlayerNew
 
             lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
             //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-            onWall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
+            var wall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
+            if (wall.collider)
+            {
+                onWall = wall.collider.CompareTag("InvisibleWall") == false;
+            }
+            else
+            {
+                onWall = false;
+            }
+         
 
             Debug.DrawRay(pos, lineDir * lineLength, Color.cyan);
            
