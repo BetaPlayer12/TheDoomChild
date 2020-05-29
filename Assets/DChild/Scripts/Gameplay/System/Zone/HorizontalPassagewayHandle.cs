@@ -28,17 +28,20 @@ namespace DChild.Gameplay.Environment
 
         public void DoSceneTransition(Character character, TransitionType type)
         {
-            if (type == TransitionType.Enter)
+            switch (type)
             {
-                OnPassagewayEnter(character, m_entranceDirection);
-            }
-            else if (type == TransitionType.PostEnter)
-            {
-                OnPassageWayPostEnter(character);
-            }
-            else if (type == TransitionType.Exit)
-            {
-                OnPassagewayExit(character, m_exitDirection);
+                case TransitionType.Enter:
+                    OnPassagewayEnter(character, m_entranceDirection);
+                    break;
+                case TransitionType.PostEnter:
+                    OnPassageWayPostEnter(character);
+                    break;
+                case TransitionType.Exit:
+                    OnPassagewayExit(character, m_exitDirection);
+                    break;
+                case TransitionType.PostExit:
+                    OnPassagewayPostExit();
+                    break;
             }
         }
 
@@ -68,6 +71,12 @@ namespace DChild.Gameplay.Environment
             rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
             CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
             collisionState.forceGrounded = false;
+        }
+
+        private void OnPassagewayPostExit()
+        {
+            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
+            controller.moveDirectionInput = 0;
         }
 
 #if UNITY_EDITOR

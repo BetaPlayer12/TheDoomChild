@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Combat
         private AttackerInfo m_info;
 
         [ShowInInspector, HideInEditorMode, MinValue(0), OnValueChanged("ApplyDamageModification")]
-        private int m_damageModifier;
+        private float m_damageModifier;
 
         private bool m_isInstantiated;
 
@@ -101,7 +101,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public void SetDamageModifier(int value)
+        public void SetDamageModifier(float value)
         {
             if (m_damageModifier != value)
             {
@@ -116,7 +116,7 @@ namespace DChild.Gameplay.Combat
             for (int i = 0; i < m_info.damage.Count; i++)
             {
                 var damage = m_info.damage[i];
-                damage.value *= m_damageModifier;
+                damage.value = Mathf.CeilToInt(damage.value * m_damageModifier);
                 m_currentDamage.Add(damage);
             }
         }

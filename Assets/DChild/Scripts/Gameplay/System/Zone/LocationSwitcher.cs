@@ -4,8 +4,10 @@ using DChild.Gameplay.Environment;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -61,6 +63,7 @@ namespace DChild.Gameplay.Systems
             else if (type == TransitionType.Exit)
             {
                 //character.transform.position = m_poster.data.position;
+                LoadingHandle.LoadingDone += OnLoadingDone;
 
                 yield return new WaitForSeconds(m_handle.transitionDelay);
 
@@ -68,9 +71,13 @@ namespace DChild.Gameplay.Systems
 
                 var damageable = character.GetComponent<IDamageable>();
                 damageable.SetHitboxActive(true);
-
-                GameplaySystem.playerManager.StopCharacterControlOverride();
             }
+        }
+
+        private void OnLoadingDone(object sender, EventActionArgs eventArgs)
+        {
+            GameplaySystem.playerManager.StopCharacterControlOverride();
+            LoadingHandle.LoadingDone -= OnLoadingDone;
         }
 
         public void GoToDestination(Character character)
@@ -92,6 +99,7 @@ namespace DChild.Gameplay.Systems
         {
             m_poster = GetComponent<LocationPoster>();
             m_poster.data.OnArrival += OnArrival;
+            Debug.Log($"{m_poster.name} is Logged");
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
