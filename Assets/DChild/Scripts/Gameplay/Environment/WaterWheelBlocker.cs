@@ -13,20 +13,30 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("Unblock")]
         private UnityEvent m_onUnblock;
 
+        private bool m_hasBlocked;
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (m_toBlock == collision)
+            if (m_hasBlocked == false)
             {
-                m_onBlock?.Invoke();
+                if (m_toBlock == collision)
+                {
+                    m_onBlock?.Invoke();
+                    m_hasBlocked = true;
+                }
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (m_toBlock == collision)
+            if (m_hasBlocked)
             {
-                m_onUnblock?.Invoke();
+                if (m_toBlock == collision)
+                {
+                    m_onUnblock?.Invoke();
+                    m_hasBlocked = false;
+                }
             }
         }
     }

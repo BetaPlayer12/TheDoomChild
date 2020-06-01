@@ -26,9 +26,9 @@ namespace DChild.Gameplay.Environment
         }
 
         [InfoBox("When interacted, it will take soul essence when it has not reached the amount, it will give soul essence whn it has reached the amount")]
-        [SerializeField, MinValue(1)]
+        [SerializeField, MinValue(1), OnValueChanged("OnAmountChanged")]
         private int m_amountRequired;
-        [SerializeField, MinValue(0), MaxValue("$m_amountRequired")]
+        [SerializeField, MinValue(0), MaxValue("$m_amountRequired"), OnValueChanged("OnAmountChanged")]
         private int m_currentAmount;
         [SerializeField]
         private Transform m_promptPosition;
@@ -122,5 +122,20 @@ namespace DChild.Gameplay.Environment
         {
             m_trigger = GetComponentInChildren<Collider2D>();
         }
+
+#if UNITY_EDITOR
+        private void OnAmountChanged()
+        {
+            if(m_amountRequired <= m_currentAmount)
+            {
+                m_onComplete?.Invoke();
+            }
+            else
+            {
+                m_onIncomplete?.Invoke();
+            }
+        }
+
+#endif
     }
 }
