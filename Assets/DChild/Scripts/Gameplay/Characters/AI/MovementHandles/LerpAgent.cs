@@ -1,4 +1,5 @@
 ﻿using Pathfinding;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -10,6 +11,8 @@ namespace DChild.Gameplay
         private AILerp m_ai;
         [SerializeField]
         private Transform m_positionReference;
+
+        private Vector2 m_destination;
 
         public override Vector2 segmentDestination => throw new System.NotImplementedException();
 
@@ -30,12 +33,27 @@ namespace DChild.Gameplay
 
         public override void SetDestination(Vector2 position)
         {
-            m_ai.destination = position;
+            m_destination = position;
         }
 
         public override void Stop()
         {
             m_ai.enabled = false;
+        }
+
+        private void Update()
+        {
+            m_ai.destination = m_destination;
+        }
+
+        private void OnEnable()
+        {
+            m_ai.onSearchPath += Update;
+        }
+
+        private void OnDisable()
+        {
+            m_ai.onSearchPath -= Update;
         }
     }
 }
