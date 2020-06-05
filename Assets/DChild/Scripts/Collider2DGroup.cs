@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Pathfinding;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,17 +9,23 @@ namespace DChild
     public class Collider2DGroup : MonoBehaviour
     {
 
+        [SerializeField]
+        private bool m_canUpdateGraph;
         [SerializeField, ValueDropdown("GetColliders", IsUniqueList = true)]
         private Collider2D[] m_colliders;
+
+        private GraphUpdateObject[] m_objectList;
 
         public void EnableColliders()
         {
             SetColliderEnable(true);
+            UpdateGraph();
         }
 
         public void DisableColliders()
         {
             SetColliderEnable(false);
+            UpdateGraph();
         }
 
         private void SetColliderEnable(bool value)
@@ -29,7 +36,30 @@ namespace DChild
             }
         }
 
+        private void UpdateGraph()
+        {
+            if (m_canUpdateGraph)
+            {
+                for (int i = 0; i < m_objectList.Length; i++)
+                {
+                    AstarPath.active?.UpdateGraphs(m_objectList[i]);
+                }
+            }
+        }
+
         private IEnumerable GetColliders() => GetComponentsInChildren<Collider2D>();
+
+        private void Awake()
+        {
+            if (m_canUpdateGraph)
+            {
+                m_objectList = new GraphUpdateObject[m_colliders.Length];
+                for (int i = 0; i < m_objectList.Length; i++)
+                {
+                    m_objectList[i] = new GraphUpdateObject(m_colliders[i].bounds);
+                }
+            }
+        }
     }
 
 }
