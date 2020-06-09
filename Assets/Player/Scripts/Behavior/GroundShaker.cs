@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,10 @@ namespace PlayerNew
         public float smashMultiplier;
         private float defGravity;
         private Animator animator;
+
+        [SerializeField, Header("Damage Stuff"), MinValue(0)]
+        private float m_damageModifier;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -39,8 +44,6 @@ namespace PlayerNew
             var attack = inputState.GetButtonValue(inputButtons[1]);
             var attackHold = inputState.GetButtonHoldTime(inputButtons[1]);
 
-           
-
             if (!collisionState.grounded && down && attack && !groundSmash && attackHold > midAirAttackHold)
             {
                 body2d.velocity = Vector2.zero;
@@ -49,7 +52,6 @@ namespace PlayerNew
                 ToggleScripts(false);
                 StartCoroutine(GroundSmashDelayRoutine());
             }
-            
         }
 
         private void StartEarthShakerFX()
@@ -72,8 +74,8 @@ namespace PlayerNew
         {
             deathEarthShakerLoop.Stop();
             deathEarthShakerImpact.Play();
+            attacker.SetDamageModifier(m_damageModifier);
             m_groundShakerAttackCollider.enabled = true;
-            
         }
 
         IEnumerator GroundSmashDelayRoutine()
@@ -86,12 +88,11 @@ namespace PlayerNew
             body2d.AddForce(new Vector2(body2d.velocity.x, -smashMultiplier), ForceMode2D.Force);
         }
 
-
         public void GroundSmashFinishAnimation()
         {
             groundSmash = false;
             body2d.velocity = Vector2.zero;
-            
+
             ToggleScripts(true);
             m_groundShakerAttackCollider.enabled = false;
             animator.SetBool("Attack", false);

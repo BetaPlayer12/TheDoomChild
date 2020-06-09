@@ -21,8 +21,7 @@ namespace PlayerNew
         protected CapsuleCollider2D capsuleCollider;
         protected Damageable damagable;
         protected BasicHealth basicHealth;
-        
-        
+        protected Attacker attacker;
 
         protected virtual void Awake()
         {
@@ -33,6 +32,7 @@ namespace PlayerNew
             capsuleCollider = GetComponent<CapsuleCollider2D>();
             damagable = GetComponentInParent<Damageable>();
             basicHealth = GetComponentInChildren<BasicHealth>();
+            attacker = GetComponentInParent<Attacker>();
         }
 
         protected virtual void ToggleScripts(bool value)

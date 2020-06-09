@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,11 @@ namespace PlayerNew
 {
     public class Slash : PlayerBehaviour
     {
-
         private Animator animator;
         public float timeBtwnAtck = 0.2f;
         private float attackTimeCounter;
         private float releaseTime = 0.0f;
+
         public float attackingTime;
         //public int attackCounter;
         private float attackHold;
@@ -76,7 +77,12 @@ namespace PlayerNew
         float lastClickedTime = 0;
         public float maxComboDelay = 1.2f;
 
-
+        [SerializeField, Header("Damage Stuff"), MinValue(0)]
+        private float m_slash1DamageModifier;
+        [SerializeField]
+        private float m_slash2DamageModifier;
+        [SerializeField]
+        private float m_slash3DamageModifier;
 
         private void Start()
         {
@@ -126,7 +132,6 @@ namespace PlayerNew
                         animator.SetBool("Attack", true);
                         JumpUpSlashFX();
                         m_swordUpSlashAttackCollider.enabled = true;
-
                     }
                     if (downButton)
                     {
@@ -136,7 +141,6 @@ namespace PlayerNew
                             JumpDownSlashFX();
                             Debug.Log("down attack");
                         }
-
                     }
                     else
                     {
@@ -155,31 +159,37 @@ namespace PlayerNew
                 m_collisionRegistrator.ResetHitCache();
                 ToggleScripts(false);
                 attacking = true;
+
                 if (!upHold && collisionState.grounded && !downButton)
                 {
-
                     lastClickedTime = Time.time;
                     numOfClicks++;
 
                     if (leftButton || rightButton && collisionState.grounded)
                     {
-
                         body2d.velocity = Vector2.zero;
                         animator.SetBool("Attack", false);
                         numOfClicks = 1;
                     }
+
                     if (numOfClicks == 1)
                     {
-                        animator.SetBool("Slash1", true);
+                        //Debug.Log("Slash1");
 
+                        animator.SetBool("Slash1", true);
+                        attacker.SetDamageModifier(m_slash1DamageModifier);
                         m_forwardSlashAttackCollider.enabled = true;
                     }
+
                     numOfClicks = Mathf.Clamp(numOfClicks, 0, 3);
+
                     if(numOfClicks > 3)
                     {
                         numOfClicks = 1;
                     }
+
                     animator.SetBool("Attack", true);
+
                     switch (numOfClicks)
                     {
                         case 1:
@@ -193,6 +203,7 @@ namespace PlayerNew
                             animator.SetBool("Slash2", true);
                             animator.SetBool("Slash3", false);
                             //VFX_Attack2();
+                            attacker.SetDamageModifier(m_slash2DamageModifier);
                             m_swordCombo1AttackCollider.enabled = true;
                             break;
                         case 3:
@@ -200,6 +211,7 @@ namespace PlayerNew
                             animator.SetBool("Slash2", false);
                             animator.SetBool("Slash3", true);
                             //VFX_Attack3();
+                            attacker.SetDamageModifier(m_slash3DamageModifier);
                             m_swordCombo2AttackCollider.enabled = true;
                             break;
                     }
@@ -374,8 +386,6 @@ namespace PlayerNew
 
         private void FinishAttackAnim()
         {
-
-           
             attackCollider.enabled = false;
 
             m_forwardSlashAttackCollider.enabled = false;
