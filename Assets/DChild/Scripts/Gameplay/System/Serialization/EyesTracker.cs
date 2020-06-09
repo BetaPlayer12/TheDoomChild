@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-    public class EyeFlyingTracker : MonoBehaviour, ISerializableComponent
+    public class EyesTracker : MonoBehaviour, ISerializableComponent
     {
         [System.Serializable]
         public class SaveData : ISaveData
