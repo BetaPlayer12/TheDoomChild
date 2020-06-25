@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Pooling
 {
@@ -40,6 +41,14 @@ namespace DChild.Gameplay.Pooling
             {
                 return CreateInstance(gameObject);
             }
+        }
+
+        public T GetOrCreateItem(GameObject gameObject, Scene scene)
+        {
+            var instance = GetOrCreateItem(gameObject);
+            instance.transform.parent = null;
+            SceneManager.MoveGameObjectToScene(instance.gameObject, scene);
+            return instance;
         }
 
         public void GetOrCreateItem(AssetReferenceT<GameObject> gameObject, int index = 0, Action<GameObject, int> CallBack = null)

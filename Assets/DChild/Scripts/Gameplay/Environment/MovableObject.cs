@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Environment
         public struct SaveData : ISaveData
         {
             [SerializeField]
-            private Vector3 m_position;
+            private SerializedVector3 m_position;
 
             public SaveData(Vector3 position)
             {

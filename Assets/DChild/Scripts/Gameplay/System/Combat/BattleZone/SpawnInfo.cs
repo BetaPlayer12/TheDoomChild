@@ -34,11 +34,14 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
 
         [SerializeField, DrawWithUnity]
         private GameObject m_entity;
+        [SerializeField]
+        private GameObject m_spawnFX;
 
         [SerializeField, TableList(ShowIndexLabels =true)]
         private SpawnData[] m_datas;
 
         public GameObject entity => m_entity;
+        public GameObject spawnFX => m_spawnFX;
         public SpawnData[] datas => m_datas;
     }
 }
