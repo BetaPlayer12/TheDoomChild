@@ -49,6 +49,20 @@ namespace DChild.Gameplay.Combat
 
         private (Damageable damageable, Character character) m_targetTuple;
 
+        public void ForceFightWithPlayer()
+        {
+            var player = GameplaySystem.playerManager.player;
+            m_targetTuple = ((Damageable)player.damageableModule, player.character);
+            StartFight();
+        }
+
+        public ISaveData Save() => new SaveData(m_isTriggered);
+
+        public void Load(ISaveData data)
+        {
+            m_isTriggered = ((SaveData)data).isTriggered;
+        }
+
         private void OnCinematicStop(PlayableDirector obj)
         {
             m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
@@ -65,6 +79,26 @@ namespace DChild.Gameplay.Combat
             m_boss.SetTarget(damageable, character);
         }
 
+        private void StartFight()
+        {
+            GameplaySystem.combatManager.MonitorBoss(m_boss);
+            switch (m_prefight)
+            {
+                case PreFight.None:
+                    m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
+                    break;
+                case PreFight.Delay:
+                    StartCoroutine(DelayedAwakeRoutine(m_targetTuple.damageable, m_targetTuple.character));
+                    break;
+                case PreFight.Cinematic:
+                    m_cinematic.stopped += OnCinematicStop;
+                    m_cinematic.Play();
+                    break;
+            }
+            m_uponTrigger?.Invoke();
+            m_isTriggered = true;
+        }
+
         private void Awake()
         {
             m_boss.GetComponent<Damageable>().Destroyed += OnBossKilled;
@@ -79,35 +113,13 @@ namespace DChild.Gameplay.Combat
                     var target = collision.GetComponentInParent<ITarget>();
                     if (target.CompareTag(Character.objectTag))
                     {
-                        GameplaySystem.combatManager.MonitorBoss(m_boss);
-                        switch (m_prefight)
-                        {
-                            case PreFight.None:
-                                m_boss.SetTarget(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
-                                break;
-                            case PreFight.Delay:
-                                StartCoroutine(DelayedAwakeRoutine(collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>()));
-                                break;
-                            case PreFight.Cinematic:
-                                m_targetTuple = (collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
-                                m_cinematic.stopped += OnCinematicStop;
-                                m_cinematic.Play();
-                                break;
-                        }
-                        m_uponTrigger?.Invoke();
-                        m_isTriggered = true;
+                        m_targetTuple = (collision.GetComponentInParent<Damageable>(), collision.GetComponentInParent<Character>());
+                        StartFight();
                     }
                 }
             }
         }
 
-
-
-        public ISaveData Save() => new SaveData(m_isTriggered);
-
-        public void Load(ISaveData data)
-        {
-            m_isTriggered = ((SaveData)data).isTriggered;
-        }
+       
     }
 }

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 448517565}
   - component: {fileID: 448517566}
   - component: {fileID: 448517568}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Weight
-  m_TagString: Untagged
+  m_TagString: InvisibleWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
   m_toUnsuspend:
     m_PersistentCalls:
@@ -100,7 +100,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 7788721321331647174}
         m_MethodName: SetActive
@@ -111,7 +111,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!50 &448517566
 Rigidbody2D:
@@ -122,10 +122,10 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 448517564}
   m_BodyType: 0
-  m_Simulated: 0
+  m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -160,9 +160,9 @@ GameObject:
   - component: {fileID: 1080020452685312493}
   - component: {fileID: 5027922752328593926}
   - component: {fileID: 5492867327321762888}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: InvisibleWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -264,6 +264,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6168857945358150083, guid: 5a183cb335624434280c35c08578a6b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 6168857945767571573, guid: 5a183cb335624434280c35c08578a6b8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -323,6 +328,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BlockedCounterWeight
+      objectReference: {fileID: 0}
+    - target: {fileID: 6168857945767575433, guid: 5a183cb335624434280c35c08578a6b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6168857945767575435, guid: 5a183cb335624434280c35c08578a6b8,
+        type: 3}
+      propertyPath: m_toTrack.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6168857945767575435, guid: 5a183cb335624434280c35c08578a6b8,
         type: 3}

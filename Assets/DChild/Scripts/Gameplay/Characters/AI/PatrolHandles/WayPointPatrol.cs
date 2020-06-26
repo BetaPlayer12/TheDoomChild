@@ -48,7 +48,7 @@ namespace DChild.Gameplay.Characters.AI
         private Iteration m_startIteration = Iteration.Forward;
         [SerializeField]
         [BoxGroup("Configuration")]
-        [ListDrawerSettings(CustomAddFunction = "AddToWaypoint"),HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
+        [ListDrawerSettings(CustomAddFunction = "AddToWaypoint"), HideIf("@UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null")]
         private Vector2[] m_wayPoints;
 
         private int m_currentIndex;
@@ -67,8 +67,10 @@ namespace DChild.Gameplay.Characters.AI
             var movementInfo = GetInfo(currentPosition);
             if (GetProposedFacing(currentPosition, movementInfo.destination) != character.currentFacing)
             {
-                CallTurnRequest();
-
+                if (currentPosition.x != movementInfo.destination.x)
+                {
+                    CallTurnRequest();
+                }
             }
             else
             {
@@ -85,7 +87,10 @@ namespace DChild.Gameplay.Characters.AI
             {
                 if (GetProposedFacing(currentPosition, agent.segmentDestination) != characterInfo.currentFacing)
                 {
-                    CallTurnRequest();
+                    if (currentPosition.x != agent.segmentDestination.x)
+                    {
+                        CallTurnRequest();
+                    }
                 }
                 else
                 {
