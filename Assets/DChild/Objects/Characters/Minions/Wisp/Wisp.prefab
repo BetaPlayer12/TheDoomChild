@@ -256,7 +256,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5334590541247454454}
-  - component: {fileID: 5334590541247454221}
   - component: {fileID: 5334590541247454222}
   - component: {fileID: 5334590541247454448}
   - component: {fileID: 5334590541247454449}
@@ -265,6 +264,7 @@ GameObject:
   - component: {fileID: 5334590541247454452}
   - component: {fileID: 5334590541247454453}
   - component: {fileID: 2704177448220676215}
+  - component: {fileID: 8830707746583552920}
   m_Layer: 13
   m_Name: Behaviours
   m_TagString: Untagged
@@ -288,19 +288,6 @@ Transform:
   m_Father: {fileID: 9158308657021561796}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5334590541247454221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334590541247454455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1b0d68cd77a89d45b04c6c47d586049, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_source: {fileID: 5334590540300677523}
 --- !u!114 &5334590541247454222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_navigation: {fileID: 5334590541084379125}
-  m_movementHandle: {fileID: 5334590541247454221}
+  m_movementHandle: {fileID: 0}
 --- !u!114 &5334590541247454452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,6 +439,22 @@ MonoBehaviour:
   bezierTangentLength: 0.4
   offset: 0.2
   factor: 0.1
+--- !u!114 &8830707746583552920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334590541247454455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d3c12617f03b77438dcd4e0c3efd17d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_source: {fileID: 2874478479385219983}
+  m_verticalAmplitude: 10
+  m_waveSpeed: 10
+  m_useCosine: 1
 --- !u!1 &8076379707015932634
 GameObject:
   m_ObjectHideFlags: 0
