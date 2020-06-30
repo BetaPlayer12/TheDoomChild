@@ -73,7 +73,7 @@ namespace DChild.Gameplay.Characters.Players
                         }
                         else
                         {
-                            canBeInteracted = canBeInteracted;
+                            canBeInteracted = true;
                             cacheEvent.Value.showInteractionButton = true;
                             message = interactable.promptMessage;
                         }
