@@ -350,7 +350,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
+                    if (/*!m_wallSensor.isDetecting &&*/ m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(false, false);

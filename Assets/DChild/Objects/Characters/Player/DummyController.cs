@@ -83,7 +83,7 @@ public class DummyController : MonoBehaviour
             m_character.SetFacing(HorizontalDirection.Right);
             //transform.localScale = new Vector3(-1, 1, 1);
         }
-        transform.localScale = m_character.facing == HorizontalDirection.Right ? transform.localScale = Vector3.one : new Vector3(-1, 1, 1);
+        transform.localScale = m_character.facing == HorizontalDirection.Right ? transform.localScale = new Vector3(-1, 1, 1) : Vector3.one;
         m_capeTransformReference.localScale = new Vector3(-transform.localScale.x, 1, 1);
     }
 }
