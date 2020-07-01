@@ -37,6 +37,7 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
         {
             m_timer = 0;
             m_entitiesToSpawn = new List<GameObject>();
+            m_fXToSpawn = new List<GameObject>();
             m_toSpawn = new List<Data>();
         }
 
@@ -70,12 +71,12 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
             {
                 if (recordList.Contains(toRecord))
                 {
-                    return m_fXToSpawn.FindIndex(x => x == fxCache);
+                    return recordList.FindIndex(x => x == fxCache);
                 }
                 else
                 {
                     recordList.Add(toRecord);
-                    return m_fXToSpawn.Count - 1;
+                    return recordList.Count - 1;
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
                         {
                             var fx = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_fXToSpawn[m_toSpawn[i].fxIndex], instance.scene);
                             fx.transform.position = position;
-                            fx.transform.rotation = Quaternion.identity;
+                            //fx.transform.rotation = Quaternion.identity;
                             fx.Play();
                         }
                         using (Cache<EventActionArgs<GameObject>> cache = Cache<EventActionArgs<GameObject>>.Claim())
