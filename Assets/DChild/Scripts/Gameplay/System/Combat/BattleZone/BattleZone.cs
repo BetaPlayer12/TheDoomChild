@@ -15,7 +15,6 @@ namespace DChild.Gameplay.Combat
         [SerializeField, TabGroup("Battle Over")]
         private UnityEvent m_onBattleOver;
 
-        
         private SpawnHandle m_spawnHandle;
 
         private int m_entityCount;
