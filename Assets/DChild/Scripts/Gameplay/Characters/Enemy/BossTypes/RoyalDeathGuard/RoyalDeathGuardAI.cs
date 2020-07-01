@@ -217,7 +217,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_deathFX;
         [SerializeField, TabGroup("Effects")]
-        private ParticleSystem m_slashGroundFX;
+        private ParticleFX m_slashGroundFX;
+        [SerializeField, TabGroup("Effects")]
+        private ParticleFX m_scytheSpinFX;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -377,8 +379,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
             m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
-            //yield return new WaitForSeconds(1.3f);
-            //m_spikeBB.enabled = true;
+            yield return new WaitForSeconds(1.3f);
+            m_slashGroundFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -393,6 +395,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attack3.animation, false);
             m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
+            yield return new WaitForSeconds(.7f);
+            //m_scytheSpinFX.gameObject.SetActive(true);
+            m_scytheSpinFX.Play(); //m_scytheSpinFX.GetComponent<ParticleSystem>().Play();
+            yield return new WaitForSeconds(1f);
+            m_scytheSpinFX.Stop();
+            //m_scytheSpinFX.gameObject.SetActive(false); //m_scytheSpinFX.GetComponent<ParticleSystem>().Stop();
             //yield return new WaitForSeconds(1.3f);
             //m_spikeBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack3.animation);
@@ -408,10 +416,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attack4.animation, false);
+            m_animation.AddAnimation(0, m_info.attack4bAnimation, true, 0)/*.MixDuration = 1*/;
             m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
             //yield return new WaitForSeconds(1.3f);
             //m_spikeBB.enabled = true;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack4.animation);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack4bAnimation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -427,7 +436,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
 
                 bool xTargetInRange = Mathf.Abs(target.x - transform.position.x) < attackRange ? true : false;
-                bool yTargetInRange = Mathf.Abs(target.y - transform.position.y) < 3 ? true : false;
+                bool yTargetInRange = Mathf.Abs(target.y - transform.position.y) < 1 ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
@@ -599,7 +608,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            m_phaseHandle.MonitorPhase();
+            if (!m_hasPhaseChanged)
+            {
+                m_phaseHandle.MonitorPhase();
+            }
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
@@ -636,7 +648,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.Attacking);
                     var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
-                    var target = new Vector2(m_targetInfo.position.x, m_startGroundPos);
+                    var target = new Vector2(m_targetInfo.position.x, GroundPosition().y /*m_startGroundPos*/);
                     m_attackCount++;
                     switch (m_currentPattern)
                     {
