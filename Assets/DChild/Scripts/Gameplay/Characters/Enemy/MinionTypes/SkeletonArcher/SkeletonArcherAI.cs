@@ -141,24 +141,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField, TabGroup("Cannon Values")]
-        private float m_speed;
-        [SerializeField, TabGroup("Cannon Values")]
-        private float m_gravityScale;
-        [SerializeField, TabGroup("Cannon Values")]
-        private Vector2 m_posOffset;
-        [SerializeField, TabGroup("Cannon Values")]
-        private float m_velOffset;
-        [SerializeField, TabGroup("Cannon Values")]
-        private Vector2 m_targetOffset;
-
         private float m_targetDistance;
 
         private ProjectileLauncher m_projectileLauncher;
-        [SerializeField]
-        private Transform m_projectileStart;
-        [SerializeField]
-        private Transform m_shootStraight;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -167,6 +152,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Attack m_chosenAttack;
         private State m_turnState;
+
+        [SerializeField]
+        private GameObject m_projectilePoint;
+        [SerializeField]
+        private GameObject m_targetPointIK;
 
 
         //[SerializeField]
@@ -233,74 +223,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
-            }
-        }
-
-        private Vector2 BallisticVel()
-        {
-
-            m_targetDistance = Vector2.Distance(m_targetInfo.position, m_projectileStart.position);
-            var dir = (m_targetInfo.position - new Vector2(m_projectileStart.position.x, m_projectileStart.position.y));
-            var h = dir.y;
-            dir.y = 0;
-            var dist = dir.magnitude;
-            dir.y = dist;
-            dist += h;
-
-            var currentSpeed = m_speed;
-
-            var vel = Mathf.Sqrt(dist * m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale);
-            return (vel * new Vector3(dir.x * m_posOffset.x, dir.y * m_posOffset.y).normalized) * m_targetOffset.sqrMagnitude; //closest to accurate
-        }
-
-        private float GroundDistance()
-        {
-            RaycastHit2D hit = Physics2D.Raycast(m_projectileStart.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
-            if (hit.collider != null)
-            {
-                return hit.distance;
-            }
-
-            return 0;
-        }
-
-        private void ShootProjectile()
-        {
-            if (m_targetInfo.isValid)
-            {
-                if (IsFacingTarget())
-                {
-                    //Dirt FX
-                    //GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
-                    //obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
-                    //obj.transform.parent = m_seedSpitTF;
-                    //obj.transform.localPosition = new Vector2(4, -1.5f);
-                    //
-
-
-                    //Shoot Spit
-                    //m_muzzleFX.Play();
-                    var target = m_targetInfo.position;
-                    target = new Vector2(target.x, target.y - 2);
-                    Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_projectileStart.position.x - 1.5f : m_projectileStart.position.x + 1.5f, m_projectileStart.position.y - 0.75f);
-                    Vector3 v_diff = (target - spitPos);
-                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-
-                    GameObject projectile = m_info.projectile.projectileInfo.projectile;
-                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
-                    var spawnPos = new Vector2(m_projectileStart.position.x, m_projectileStart.position.y - 1);
-                    instance.transform.position = /*m_projectileStart.position*/spawnPos;
-                    instance.transform.localScale = new Vector3(transform.localScale.x, 1, 1);
-                    var component = instance.GetComponent<Projectile>();
-                    component.ResetState();
-                    //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
-                    component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
-                    //return instance.gameObject;
-                }
-                else
-                {
-                    m_stateHandle.OverrideState(State.Turning);
-                }
             }
         }
         //private IEnumerator PatienceRoutine()
@@ -370,20 +292,23 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = m_attackDecider.chosenAttack.attack != Attack.Attack3 ? true : false;
-                if (m_chosenAttack != Attack.Attack3)
-                {
-                    ShootProjectile();
-                }
-                else
-                {
-                    m_info.projectile.projectileInfo.projectile.transform.localScale = transform.localScale;
-                    m_projectileLauncher.AimAt(new Vector2(m_shootStraight.position.x, m_projectileStart.position.y - GroundDistance()));
-                    m_projectileLauncher.LaunchProjectile();
-                }
-                //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
-                //m_Audiosource.clip = m_RangeAttackClip;
-                //m_Audiosource.Play();
+                //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = m_attackDecider.chosenAttack.attack != Attack.Attack3 ? true : false;
+                //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = false;
+                m_targetPointIK.transform.position = m_targetInfo.position;
+                m_projectileLauncher.AimAt(m_targetInfo.position);
+                m_projectileLauncher.LaunchProjectile();
+                //if (m_chosenAttack != Attack.Attack3)
+                //{
+                //    //ShootProjectile();
+                //    m_projectileLauncher.AimAt(m_targetInfo.position);
+                //    m_projectileLauncher.LaunchProjectile();
+                //}
+                //else
+                //{
+                //    m_info.projectile.projectileInfo.projectile.transform.localScale = transform.localScale;
+                //    m_projectileLauncher.AimAt(new Vector2(m_shootStraight.position.x, m_projectileStart.position.y - GroundDistance()));
+                //    m_projectileLauncher.LaunchProjectile();
+                //}
             }
         }
 
@@ -404,12 +329,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectileStart);
+            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
-            m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
+            //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
         }
 
 
@@ -457,7 +382,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    
+
                     switch (m_chosenAttack)
                     {
                         case Attack.Attack1:
@@ -551,6 +476,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
+                    m_targetPointIK.transform.position = m_targetInfo.position;
                     return;
             }
 
