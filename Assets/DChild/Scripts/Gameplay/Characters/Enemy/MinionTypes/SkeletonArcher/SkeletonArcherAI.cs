@@ -246,6 +246,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -276,7 +277,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.shootAttack.range),
-                                    new AttackInfo<Attack>(Attack.Attack2, m_info.shootDrawAttack.range));
+                                    new AttackInfo<Attack>(Attack.Attack2, m_info.shootDrawAttack.range),
+                                    new AttackInfo<Attack>(Attack.Attack3, m_info.shootComboAttack.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -396,8 +398,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Attack3:
                             m_flinchHandle.gameObject.SetActive(false);
                             m_animation.EnableRootMotion(false, false);
-                            //m_character.physics.AddForce(new Vector2(m_info.dodgeBackSpeed * -transform.localScale.x, 0), ForceMode2D.Impulse);
-                            m_character.physics.SetVelocity(new Vector2(m_info.dodgeBackSpeed * -transform.localScale.x, 0));
+                            //m_character.physics.SetVelocity(new Vector2(m_info.dodgeBackSpeed * -transform.localScale.x, 0));
                             m_attackHandle.ExecuteAttack(m_info.shootComboAttack.animation, m_info.idleAnimation);
                             break;
                     }
@@ -431,7 +432,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            m_chosenAttack = Vector2.Distance(transform.position, m_targetInfo.position) <= m_info.targetDistanceTolerance ? Attack.Attack3 : m_attackDecider.chosenAttack.attack;
+                            //m_chosenAttack = Vector2.Distance(transform.position, m_targetInfo.position) <= m_info.targetDistanceTolerance ? Attack.Attack3 : m_attackDecider.chosenAttack.attack;
+                            m_chosenAttack = m_attackDecider.chosenAttack.attack;
 
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
