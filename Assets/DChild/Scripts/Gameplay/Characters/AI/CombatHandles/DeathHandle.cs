@@ -35,6 +35,8 @@ namespace DChild.Gameplay.Characters
         public event EventAction<DisposingEventArgs> BodyDestroyed;
         SkeletonDataAsset IHasSkeletonDataAsset.SkeletonDataAsset => m_animator.GetComponentInChildren<SkeletonAnimation>().skeletonDataAsset;
 
+        public void SetDestroySource(bool value) => m_destroySource = value;
+
         public void SetAnimation(string animation)
         {
             m_animation = animation;
