@@ -108,6 +108,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Transform m_flinchFXFollower;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -138,7 +140,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_deathFX;
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_flinchFX;
+        private ParticleFX m_flinchFX;
         [SerializeField, TabGroup("FX")]
         private ParticleSystemRenderer m_flinchFXRenderer;
         [SerializeField, TabGroup("FX")]
@@ -194,6 +196,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
         //Patience Handler
         private void Patience()
         {
@@ -215,6 +223,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            m_deathFX.Play();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -222,10 +231,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             StopAllCoroutines();
-            //m_flinchFXFollower.SetParent(null);
-            m_flinchFXRenderer.flip = transform.position.x > m_targetInfo.position.x ?  Vector3.zero : Vector3.right;
-            //m_flinchFX.transform.localScale = transform.position.x > m_targetInfo.position.x ? Vector3.one : new Vector3(-1, 1, 1);
-            m_flinchFX.Play();
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            var flinchFX = Instantiate(m_flinchFX.gameObject, m_flinchFX.transform.position, Quaternion.identity);
+            flinchFX.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().flip = transform.position.x > m_targetInfo.position.x ? Vector3.zero : Vector3.right;
+            flinchFX.GetComponent<Transform>().localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            flinchFX.GetComponent<ParticleFX>().Play();
+
+            //m_flinchFXRenderer.flip = transform.position.x > m_targetInfo.position.x ?  Vector3.zero : Vector3.right;
+            //m_flinchFX.Play();
+
             m_animation.SetAnimation(0,IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation, false);
             m_animation.AddAnimation(0, m_info.idleAnimation, false, 0.2f).TimeScale = 20;
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
@@ -268,7 +285,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
+            m_hitbox.gameObject.SetActive(false);
+            m_slashFX.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().flip = transform.position.x > m_targetInfo.position.x ? Vector3.zero : Vector3.right;
+            m_slashFX.Play();
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
+            yield return new WaitForSeconds(.75f);
+            m_hitbox.gameObject.SetActive(true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_isSubmerged = false;
