@@ -48,17 +48,20 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("Start/Events", "Incomplete")]
         private UnityEvent m_incompleteEvent;
 
+        private bool m_readyActivate;
         private int m_activatedSlots;
+        
 
 #if UNITY_EDITOR
         [SerializeField, PropertyOrder(-1), MinValue(1), OnValueChanged("OnSizeChange")]
-        private int m_size = 1;
+        public int m_requiredSlots = 1;
 
         private void OnSizeChange()
         {
-            if (m_slots.Count > m_size)
+            if (m_slots.Count > m_requiredSlots)
             {
-                for (int i = m_slots.Count - 1; i >= m_size; i--)
+                
+                for (int i = m_slots.Count - 1; i >= m_requiredSlots; i--)
                 {
                     m_slots.RemoveAt(i);
                     m_activationIndicators.RemoveAt(i);
@@ -66,7 +69,7 @@ namespace DChild.Gameplay.Environment
             }
             else
             {
-                var missingCount = m_size - m_slots.Count;
+                var missingCount = m_requiredSlots - m_slots.Count;
                 for (int i = 0; i < missingCount; i++)
                 {
                     m_slots.Add(null);
@@ -112,9 +115,10 @@ namespace DChild.Gameplay.Environment
         private void OnSlotStateChange(object sender, EventActionArgs eventArgs)
         {
             var slot = (CelestialSlot)sender;
-            m_activatedSlots += slot.isOccupied ? 1 : -1;
+            m_activatedSlots += slot.readyLock ? 1 : -1;
             if (m_activatedSlots == m_slots.Count)
             {
+                m_readyActivate = true;
                 for (int i = 0; i < m_slots.Count; i++)
                 {
                     m_slots[i].SetLockDown(true);
