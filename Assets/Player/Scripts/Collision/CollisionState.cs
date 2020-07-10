@@ -45,13 +45,21 @@ namespace PlayerNew
         public bool grabLedge;
         public Vector2 newPos;
 
-
+        private ContactFilter2D filter;
+        private List<Collider2D> colliderList;
 
         private InputState inputState;
         // Start is called before the first frame update
         void Awake()
         {
             inputState = GetComponent<InputState>();
+
+            filter = new ContactFilter2D();
+            colliderList = new List<Collider2D>();
+
+            filter.useTriggers = false;
+            filter.useLayerMask = true;
+            filter.layerMask = collisionLayer;
         }
 
 
@@ -71,8 +79,9 @@ namespace PlayerNew
                 grounded = true;
             }else
             {
-                grounded = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
-               
+                //Check if player is grounded
+                int groundColliderResult = Physics2D.OverlapCircle(pos, collisionRadius, filter, colliderList);
+                grounded = groundColliderResult > 0 ? true : false;
             }
 
             pos = inputState.direction == Directions.Right ? rightPosition : leftPosition;
@@ -106,7 +115,9 @@ namespace PlayerNew
             pos = inputState.direction == Directions.Left ? rightLegPosition : leftLegPosition;
             pos.x += transform.position.x;
             pos.y += transform.position.y;
-            onWallLeg = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
+
+            int onWallLegResult = Physics2D.OverlapCircle(pos, collisionRadius, filter, colliderList);
+            onWallLeg = onWallLegResult > 0 ? true : false;
 
             slopeLeftHit = Physics2D.Raycast(transform.position,  Vector2.left, lineLength, collisionLayer);
             slopeRightHit = Physics2D.Raycast(transform.position, Vector2.right, lineLength, collisionLayer);
