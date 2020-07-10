@@ -382,7 +382,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_currentLightningSummonDuration = 2;
                     break;
             }
-            StartCoroutine(BloodLightningBarrageRoutine(m_currentLightningCount));
+            StartCoroutine(m_phaseHandle.currentPhase == Phase.PhaseThree ? BloodLightningBarragePhase3Routine(m_currentLightningCount) : BloodLightningBarrageRoutine(m_currentLightningCount));
             yield return null;
         }
 
@@ -602,21 +602,65 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.bloodLightningAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningAttack.animation);
             m_animation.SetAnimation(0, m_info.bloodLightningIdleAnimation, true);
+            float skip = 0;
+            float skipCache = 0;
             for (int y = 0; y < lightningCount; y++)
             {
                 float offset = 0;
                 float offsetAdd = 15 + (y * 5);
-                for (int z = 0; z < 7; z++)
+                while (skipCache == skip)
                 {
-                    if (z == 4)
+                    skip = UnityEngine.Random.Range(1, 8);
+                    yield return null;
+                }
+                skipCache = skip;
+
+                for (int z = 0; z < 10; z++)
+                {
+                    if (z == 5)
                     {
                         offset = 0;
                         offsetAdd = -offsetAdd;
                     }
                     if (z != 0)
                         offset = offset + offsetAdd;
+                    if (z != skip)
+                    {
+                        GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(m_randomSpawnCollider.bounds.center.x + offset, GroundPosition().y), Quaternion.identity);
+                    }
+                }
+                yield return new WaitForSeconds(m_currentLightningSummonDuration);
+            }
+            m_animation.SetAnimation(0, m_info.bloodLightningEndAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningEndAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.SetInvulnerability(false);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
 
-                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(m_randomSpawnCollider.bounds.center.x + offset, GroundPosition().y), Quaternion.identity);
+        private IEnumerator BloodLightningBarragePhase3Routine(int lightningCount)
+        {
+            m_animation.SetAnimation(0, m_info.bloodLightningAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningAttack.animation);
+            m_animation.SetAnimation(0, m_info.bloodLightningIdleAnimation, true);
+            for (int y = 0; y < lightningCount; y++)
+            {
+                float offset = 0;
+                float offsetAdd = 10 /*+ (y * 5)*/;
+                var startPoint =  m_randomSpawnCollider.bounds.center.x + 30;
+
+                for (int z = 0; z < 10; z++)
+                {
+                    if (z == 5)
+                    {
+                        offset = 0;
+                        offsetAdd = -offsetAdd;
+                        startPoint = m_randomSpawnCollider.bounds.center.x - 30;
+                    }
+                    if (z != 0)
+                        offset = offset + offsetAdd;
+                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(startPoint + offset, GroundPosition().y), Quaternion.identity);
                 }
                 yield return new WaitForSeconds(m_currentLightningSummonDuration);
             }
@@ -630,11 +674,11 @@ namespace DChild.Gameplay.Characters.Enemies
         #endregion
 
         #region Movement
-        private IEnumerator TeleportToTargetRoutine(Vector2 target, Attack attack, Vector2 positionOffset)
+        private IEnumerator TeleportToTargetRoutine(Vector2 target, Attack attack, Vector2 positionOffset/*, bool isGrounded*/)
         {
             m_animation.SetAnimation(0, m_info.teleportVanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportVanishAnimation);
-            transform.position = new Vector2(target.x + (m_targetInfo.transform.GetComponent<Character>().facing == HorizontalDirection.Right ? -positionOffset.x : positionOffset.x), target.y + positionOffset.y);
+            transform.position = new Vector2(target.x + (m_targetInfo.transform.GetComponent<Character>().facing == HorizontalDirection.Right ? -positionOffset.x : positionOffset.x), /*isGrounded ? GroundPosition().y :*/ target.y + positionOffset.y);
             if (!IsFacingTarget())
             {
                 CustomTurn();
@@ -749,13 +793,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(ScytheSlashRoutine());
                     break;
                 case Attack.TeleportScytheSlash:
-                    StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.ScytheSlash, new Vector2(randomFacing * 20, -5)));
+                    StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.ScytheSlash, new Vector2(randomFacing * 20, -5)/*, true*/));
                     break;
                 case Attack.ShadowClone:
                     int cloneCount = m_currentPhaseIndex == 2 ? 1 : 2;
                     for (int i = 0; i < cloneCount; i++)
                     {
-                        var clonePos = m_randomSpawnCollider.bounds.center + new Vector3(50 * randomFacing, 0, 0);
+                        var clonePos = m_randomSpawnCollider.bounds.center + new Vector3(75 * randomFacing, 0, 0);
                         var clone = Instantiate(m_info.clone, clonePos, Quaternion.identity);
                         clone.GetComponent<BlackDeathCloneAI>().SetFacing(-randomFacing);
                         randomFacing = -randomFacing;
@@ -881,18 +925,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
                     var randomAttack = UnityEngine.Random.Range(0, 2);
                     var randomGroundPos = new Vector2(RandomTeleportPoint().x, GroundPosition().y);
+                    Debug.Log("Ground Sensor Detecting is " + m_groundSensor.isDetecting);
                     switch (m_currentPattern)
                     {
                         case Pattern.AttackPattern1:
                             if (m_attackCount == 0)
                             {
-                                m_attackCount += m_groundSensor.isDetecting ? 1 : 0;
+                                //m_attackCount += m_groundSensor.isDetecting ? 1 : 0;
                                 if (m_attackCount == 0)
                                 {
                                     switch (m_currentPhaseIndex)
                                     {
                                         case 1:
-                                            StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.WaitAttackEnd, new Vector2(20, -5)));
+                                            m_attackCount++;
+                                            StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.WaitAttackEnd, new Vector2(20, -5)/*, true*/));
                                             break;
                                         default:
                                             m_attackCount++;
@@ -912,7 +958,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     if (m_attackCount == m_patternAttackCount[0] + 1)
                                     {
                                         m_stateHandle.Wait(State.Chasing);
-                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                     }
                                     else
                                     {
@@ -923,11 +969,11 @@ namespace DChild.Gameplay.Characters.Enemies
                                                 {
                                                     case Attack.TentacleAttackFront:
                                                         m_currentAttack = Attack.TentacleAttackUp;
-                                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackFront, new Vector2(25 * randomFacing, -5)));
+                                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackFront, new Vector2(25 * randomFacing, -5)/*, true*/));
                                                         break;
                                                     case Attack.TentacleAttackUp:
                                                         m_attackCount++;
-                                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackUp, new Vector2(50, -5)));
+                                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackUp, new Vector2(50, -5)/*, true*/));
                                                         break;
                                                 }
                                                 break;
@@ -938,7 +984,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                             default:
                                                 m_attackCount++;
                                                 m_currentBladeLoops = 2;
-                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)));
+                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)/*, false*/));
                                                 break;
                                         }
                                     }
@@ -951,12 +997,12 @@ namespace DChild.Gameplay.Characters.Enemies
                                         {
                                             case 1:
                                                 m_stateHandle.Wait(State.Chasing);
-                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                                 break;
                                             case 2:
                                                 m_attackCount = m_patternAttackCount[0] + 1;
                                                 m_currentBladeLoops = 2;
-                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)));
+                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)/*, false*/));
                                                 break;
                                             case 3:
                                                 m_attackCount = m_patternAttackCount[0];
@@ -978,12 +1024,12 @@ namespace DChild.Gameplay.Characters.Enemies
                                                 break;
                                             case 3:
                                                 m_currentAttack = Attack.TentacleAttackFront;
-                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.TeleportScytheSlash, Vector2.zero));
+                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.TeleportScytheSlash, Vector2.zero/*, false*/));
                                                 break;
                                             case 4:
                                                 if (m_attackCount <= 3)
                                                 {
-                                                    StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                                    StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                                     return;
                                                 }
                                                 else if (m_attackCount == 4)
@@ -1014,10 +1060,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Pattern.AttackPattern2:
                             if (m_attackCount == 0)
                             {
-                                m_attackCount += m_groundSensor.isDetecting ? 1 : 0;
+                                //m_attackCount += m_groundSensor.isDetecting ? 1 : 0;
                                 if (m_attackCount == 0)
                                 {
-                                    StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.WaitAttackEnd, new Vector2(20, -5)));
+                                    m_attackCount++;
+                                    StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.WaitAttackEnd, new Vector2(20, -5)/*, true*/));
                                 }
                                 else
                                 {
@@ -1031,7 +1078,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     if (m_attackCount == m_patternAttackCount[1] + 1)
                                     {
                                         m_stateHandle.Wait(State.Chasing);
-                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                     }
                                     else
                                     {
@@ -1051,11 +1098,11 @@ namespace DChild.Gameplay.Characters.Enemies
                                                 {
                                                     case Attack.TentacleAttackUp:
                                                         m_currentAttack = Attack.TentacleAttackFront;
-                                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, randomAttack == 1 ? Attack.ScytheSlash : Attack.TentacleAttackUp, randomAttack == 1 ? new Vector2(25 * randomFacing, -5) : new Vector2(50, -5)));
+                                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, randomAttack == 1 ? Attack.ScytheSlash : Attack.TentacleAttackUp, randomAttack == 1 ? new Vector2(25 * randomFacing, -5) : new Vector2(50, -5)/*, true*/));
                                                         break;
                                                     case Attack.TentacleAttackFront:
                                                         m_attackCount++;
-                                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackFront, new Vector2(25 * randomFacing, -5)));
+                                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackFront, new Vector2(25 * randomFacing, -5)/*, true*/));
                                                         break;
                                                 }
                                                 break;
@@ -1074,13 +1121,13 @@ namespace DChild.Gameplay.Characters.Enemies
                                         {
                                             case 1:
                                                 m_stateHandle.Wait(State.Chasing);
-                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                                 break;
                                             case 2:
                                                 m_attackCount = m_patternAttackCount[1] + 1;
                                                 m_hitCount = 0;
                                                 m_currentTentacleCount = 3;
-                                                StartCoroutine(TeleportToTargetRoutine(randomAttack == 1 ? randomGroundPos : m_targetInfo.position, randomAttack == 1 ? Attack.TentacleBlades : Attack.TentacleAttackFront, randomAttack == 1 ? Vector2.zero : new Vector2(randomFacing * 20, -5)));
+                                                StartCoroutine(TeleportToTargetRoutine(randomAttack == 1 ? randomGroundPos : m_targetInfo.position, randomAttack == 1 ? Attack.TentacleBlades : Attack.TentacleAttackFront, randomAttack == 1 ? Vector2.zero : new Vector2(randomFacing * 20, -5)/*, randomAttack == 1 ? false : true*/));
                                                 break;
                                             case 3:
                                                 m_attackCount = m_patternAttackCount[1];
@@ -1102,12 +1149,12 @@ namespace DChild.Gameplay.Characters.Enemies
                                                 break;
                                             case 3:
                                                 m_currentAttack = Attack.TentacleAttackUp;
-                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.TeleportScytheSlash, Vector2.zero));
+                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.TeleportScytheSlash, Vector2.zero/*, false*/));
                                                 break;
                                             case 4:
                                                 if (m_attackCount <= 3)
                                                 {
-                                                    StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                                    StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                                     return;
                                                 }
                                                 else if (m_attackCount == 4)
@@ -1142,7 +1189,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 case 4:
                                     if (m_attackCount <= 3)
                                     {
-                                        StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, m_randomSpawnCollider.bounds.center.y), Attack.WaitAttackEnd, new Vector2(0, -10)));
+                                        StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, m_randomSpawnCollider.bounds.center.y), Attack.WaitAttackEnd, new Vector2(0, -10)/*, false*/));
                                         return;
                                     }
                                     else if (m_attackCount == 4)
@@ -1155,14 +1202,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                     else
                                     {
                                         m_stateHandle.Wait(State.Chasing);
-                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                     }
                                     break;
                                 default:
                                     m_stateHandle.Wait(State.Chasing);
                                     m_currentLightningCount = 3;
                                     m_currentLightningSummonDuration = 2;
-                                    StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, m_randomSpawnCollider.bounds.center.y), Attack.BloodLightning, new Vector2(0, -10)));
+                                    StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, m_randomSpawnCollider.bounds.center.y), Attack.BloodLightning, new Vector2(0, -10)/*, false*/));
                                     break;
                             }
                             ///////
@@ -1176,15 +1223,15 @@ namespace DChild.Gameplay.Characters.Enemies
                                     switch (m_attackCount)
                                     {
                                         case 1:
-                                            StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackUp, new Vector2(50, -5)));
+                                            StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackUp, new Vector2(50, -5)/*, true*/));
                                             break;
                                         case 2:
-                                            StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackFront, new Vector2(25, -5)));
+                                            StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackFront, new Vector2(25, -5)/*, true*/));
                                             break;
                                         case 3:
                                             m_stateHandle.Wait(State.Chasing);
                                             m_currentTentacleCount = 3;
-                                            StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, GroundPosition().y), Attack.TentacleBlades, Vector2.zero));
+                                            StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, GroundPosition().y), Attack.TentacleBlades, Vector2.zero/*, false*/));
                                             break;
                                     }
                                     break;
@@ -1192,7 +1239,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     switch (m_attackCount)
                                     {
                                         case 1:
-                                            StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, m_randomSpawnCollider.bounds.center.y), Attack.WaitAttackEnd, new Vector2(0, -10)));
+                                            StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, m_randomSpawnCollider.bounds.center.y), Attack.WaitAttackEnd, new Vector2(0, -10)/*, false*/));
                                             break;
                                         case 2:
                                             m_currentLightningCount = 1;
@@ -1201,7 +1248,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                             break;
                                         case 3:
                                             m_stateHandle.Wait(State.Chasing);
-                                            StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                            StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                             break;
                                     }
                                     break;
@@ -1209,7 +1256,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_stateHandle.Wait(State.Chasing);
                                     m_currentLightningCount = 4;
                                     m_currentLightningSummonDuration = 1.5f;
-                                    StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, m_randomSpawnCollider.bounds.center.y), Attack.BloodLightningBarrage, new Vector2(0, -10)));
+                                    StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, m_randomSpawnCollider.bounds.center.y), Attack.BloodLightningBarrage, new Vector2(0, -10)/*, false*/));
                                     break;
                             }
                             //m_stateHandle.OverrideState(State.Chasing);
@@ -1228,7 +1275,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     {
                                         m_attackCount++;
                                         m_currentBladeLoops = m_currentPhaseIndex == 2 ? 3 : 1;
-                                        StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)));
+                                        StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)/*, false*/));
                                     }
                                     else
                                     {
@@ -1250,13 +1297,13 @@ namespace DChild.Gameplay.Characters.Enemies
                                                         break;
                                                     case 3:
                                                         m_stateHandle.Wait(State.Chasing);
-                                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                                         break;
                                                 }
                                                 break;
                                             default:
                                                 m_stateHandle.Wait(State.Chasing);
-                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                                StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                                 break;
                                         }
                                     }
@@ -1271,19 +1318,19 @@ namespace DChild.Gameplay.Characters.Enemies
                                 switch (m_attackCount)
                                 {
                                     case 1:
-                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackUp, new Vector2(50, -5)));
+                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackUp, new Vector2(50, -5)/*, true*/));
                                         break;
                                     case 2:
                                         m_currentTentacleCount = 1;
-                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, randomAttack == 1 ? Attack.TentacleBlades : Attack.TentacleAttackFront, new Vector2(25 * randomFacing, -5)));
+                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, randomAttack == 1 ? Attack.TentacleBlades : Attack.TentacleAttackFront, new Vector2(25 * randomFacing, -5)/*, true*/));
                                         break;
                                     case 3:
                                         m_currentTentacleCount = 1;
-                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackFront, new Vector2(25 * randomFacing, -5)));
+                                        StartCoroutine(TeleportToTargetRoutine(m_targetInfo.position, Attack.TentacleAttackFront, new Vector2(25 * randomFacing, -5)/*, true*/));
                                         break;
                                     case 4:
                                         m_stateHandle.Wait(State.Chasing);
-                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                        StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                         break;
                                 }
                             }
@@ -1316,7 +1363,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                                     m_clones.RemoveAt(i);
                                                 }
                                                 m_currentBladeLoops = 2;
-                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)));
+                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)/*, false*/));
                                                 ExecuteAttack(Attack.ShadowClone);
                                             }
                                             else
@@ -1330,7 +1377,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                             {
                                                 case 2:
                                                     m_stateHandle.Wait(State.Chasing);
-                                                    StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                                    StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                                     break;
                                                 case 3:
                                                     m_currentBladeLoops = 2;
@@ -1348,7 +1395,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                             break;
                                         case 5:
                                             m_stateHandle.Wait(State.Chasing);
-                                            StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero));
+                                            StartCoroutine(TeleportToTargetRoutine(RandomTeleportPoint(), Attack.WaitAttackEnd, Vector2.zero/*, false*/));
                                             break;
                                     }
                                     break;
