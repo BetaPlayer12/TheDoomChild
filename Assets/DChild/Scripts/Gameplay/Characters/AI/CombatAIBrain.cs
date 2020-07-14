@@ -23,6 +23,7 @@ namespace DChild.Gameplay.Characters.AI
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
         {
             m_targetInfo.Set(damageable, m_target);
+            Debug.Log("Murmur has TARGET");
         }
 
         protected bool IsFacingTarget() => IsFacing(m_targetInfo.position);

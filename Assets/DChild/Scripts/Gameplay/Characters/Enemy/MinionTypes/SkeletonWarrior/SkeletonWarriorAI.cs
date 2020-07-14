@@ -113,6 +113,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_boundBoxGO;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -233,6 +235,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
+            m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
@@ -485,6 +490,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.Patrol);
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
+            m_boundBoxGO.SetActive(true);
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
