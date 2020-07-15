@@ -386,9 +386,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private Vector2 GroundPosition()
+        private Vector2 GroundPosition(Vector2 startPoint)
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, Vector2.down, 1000, LayerMask.GetMask("Environment"));
             return hit.point;
         }
 
@@ -512,13 +512,22 @@ namespace DChild.Gameplay.Characters.Enemies
             var fxRenderer = m_slashGroundFX.GetComponent<ParticleSystemRenderer>();
             fxRenderer.flip = transform.localScale.x == 1 ? new Vector3(1, 0, 0) : Vector3.zero;
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
-            m_slashGroundFX.Play();
+            if (m_groundSensor.isDetecting)
+            {
+                m_slashGroundFX.Play();
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
-            m_slashGroundFX.Play();
+            if (m_groundSensor.isDetecting)
+            {
+                m_slashGroundFX.Play();
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_animation.SetAnimation(0, m_info.attack3.animation, false);
-            m_slashGroundFX.Play();
+            if (m_groundSensor.isDetecting)
+            {
+                m_slashGroundFX.Play();
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack3.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -527,6 +536,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator TentacleBladesRoutine(int tentacleCount)
         {
+            if (!m_groundSensor.isDetecting)
+            {
+                m_animation.SetAnimation(0, m_info.teleportVanishAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportVanishAnimation);
+                transform.position = new Vector2(transform.position.x, GroundPosition(m_projectilePoint.position).y);
+                m_animation.SetAnimation(0, m_info.teleportAppearAnimation, false);
+            }
             m_animation.SetAnimation(0, m_info.attack6A.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack6A.animation);
             m_animation.SetAnimation(0, m_info.attack6B.animation, true);
@@ -581,12 +597,14 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 if (m_currentPhaseIndex == 4 && m_currentPattern != Pattern.AttackPattern3)
                 {
-                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(RandomTeleportPoint().x, GroundPosition().y), Quaternion.identity);
+                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(RandomTeleportPoint().x, GroundPosition(m_randomSpawnCollider.bounds.center).y), Quaternion.identity);
+                    instance.transform.position = new Vector2(instance.transform.position.x, GroundPosition(instance.transform.position).y);
                 }
                 else
                 {
 
-                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(m_targetInfo.position.x, GroundPosition().y), Quaternion.identity);
+                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(m_targetInfo.position.x, GroundPosition(m_randomSpawnCollider.bounds.center).y), Quaternion.identity);
+                    instance.transform.position = new Vector2(instance.transform.position.x, GroundPosition(instance.transform.position).y);
                 }
                 yield return new WaitForSeconds(m_currentLightningSummonDuration);
             }
@@ -626,7 +644,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         offset = offset + offsetAdd;
                     if (z != skip)
                     {
-                        GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(m_randomSpawnCollider.bounds.center.x + offset, GroundPosition().y), Quaternion.identity);
+                        GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(m_randomSpawnCollider.bounds.center.x + offset, GroundPosition(m_randomSpawnCollider.bounds.center).y), Quaternion.identity);
+                        instance.transform.position = new Vector2(instance.transform.position.x, GroundPosition(instance.transform.position).y);
                     }
                 }
                 yield return new WaitForSeconds(m_currentLightningSummonDuration);
@@ -660,7 +679,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     if (z != 0)
                         offset = offset + offsetAdd;
-                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(startPoint + offset, GroundPosition().y), Quaternion.identity);
+                    GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(startPoint + offset, GroundPosition(m_randomSpawnCollider.bounds.center).y), Quaternion.identity);
+                    instance.transform.position = new Vector2(instance.transform.position.x, GroundPosition(instance.transform.position).y);
                 }
                 yield return new WaitForSeconds(m_currentLightningSummonDuration);
             }
@@ -924,7 +944,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Attacking);
                     var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
                     var randomAttack = UnityEngine.Random.Range(0, 2);
-                    var randomGroundPos = new Vector2(RandomTeleportPoint().x, GroundPosition().y);
+                    var randomGroundPos = new Vector2(RandomTeleportPoint().x, GroundPosition(m_projectilePoint.position).y);
                     Debug.Log("Ground Sensor Detecting is " + m_groundSensor.isDetecting);
                     switch (m_currentPattern)
                     {
@@ -984,7 +1004,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                             default:
                                                 m_attackCount++;
                                                 m_currentBladeLoops = 2;
-                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)/*, false*/));
+                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -20)/*, false*/));
                                                 break;
                                         }
                                     }
@@ -1002,7 +1022,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                             case 2:
                                                 m_attackCount = m_patternAttackCount[0] + 1;
                                                 m_currentBladeLoops = 2;
-                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)/*, false*/));
+                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -20)/*, false*/));
                                                 break;
                                             case 3:
                                                 m_attackCount = m_patternAttackCount[0];
@@ -1231,7 +1251,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                         case 3:
                                             m_stateHandle.Wait(State.Chasing);
                                             m_currentTentacleCount = 3;
-                                            StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, GroundPosition().y), Attack.TentacleBlades, Vector2.zero/*, false*/));
+                                            StartCoroutine(TeleportToTargetRoutine(new Vector2(RandomTeleportPoint().x, GroundPosition(m_projectilePoint.position).y), Attack.TentacleBlades, Vector2.zero/*, false*/));
                                             break;
                                     }
                                     break;
@@ -1275,7 +1295,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     {
                                         m_attackCount++;
                                         m_currentBladeLoops = m_currentPhaseIndex == 2 ? 3 : 1;
-                                        StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)/*, false*/));
+                                        StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -20)/*, false*/));
                                     }
                                     else
                                     {
@@ -1363,7 +1383,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                                     m_clones.RemoveAt(i);
                                                 }
                                                 m_currentBladeLoops = 2;
-                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -10)/*, false*/));
+                                                StartCoroutine(TeleportToTargetRoutine(m_randomSpawnCollider.bounds.center, Attack.BladeThrow, new Vector2(0, -20)/*, false*/));
                                                 ExecuteAttack(Attack.ShadowClone);
                                             }
                                             else

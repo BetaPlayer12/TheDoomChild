@@ -2,6 +2,7 @@
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using Doozy.Engine;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Holysoft.Pooling;
@@ -231,6 +232,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private CountdownTimer m_attackIntervalTimer;
         private List<Projectile> m_soundBallList;
 
+
+        public override void SetTarget(IDamageable damageable, Character m_target = null)
+        {
+            if (damageable != null)
+            {
+                base.SetTarget(damageable, m_target);
+                GameEventMessage.SendEvent("Boss Encounter");
+            }
+        }
 
         private void ApplyPhaseData(PhaseInfo obj)
         {

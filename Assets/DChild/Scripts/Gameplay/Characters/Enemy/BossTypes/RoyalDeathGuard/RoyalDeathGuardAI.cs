@@ -264,6 +264,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_hasPhaseChanged = true;
                 StopAllCoroutines();
+                m_scytheSpinFX.Stop();
                 m_animation.DisableRootMotion();
                 m_animation.SetEmptyAnimation(0, 0);
                 m_stateHandle.OverrideState(State.Phasing);
@@ -356,7 +357,26 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
+            m_scytheSpinFX.Stop();
             m_agent.Stop();
+            if (!m_deathHandle.gameObject.activeSelf)
+            {
+                m_animation.SetAnimation(0, m_info.defeatAnimation, true);
+            }
+            else
+            {
+                StartCoroutine(DeathStickRoutine());
+            }
+        }
+
+        private IEnumerator DeathStickRoutine()
+        {
+            var yAxis = transform.position.y;
+            while (true)
+            {
+                transform.position = new Vector2(transform.position.x, yAxis);
+                yield return null;
+            }
         }
 
         #region Attacks
