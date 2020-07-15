@@ -17,7 +17,6 @@ namespace DChild.Gameplay.Characters.AI
         [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
         protected CharacterStatsData m_statsData;
 
-
         protected AITargetInfo m_targetInfo;
 
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
@@ -50,7 +49,7 @@ namespace DChild.Gameplay.Characters.AI
             m_damageable.Destroyed += OnDestroyed;
         }
 
-        protected virtual void OnDestroyed(object sender, EventActionArgs eventArgs) => enabled = false;
+        protected virtual void OnDestroyed(object sender, EventActionArgs eventArgs) => base.enabled = false;
 
         protected virtual void Start()
         {
@@ -70,6 +69,9 @@ namespace DChild.Gameplay.Characters.AI
 
 #if UNITY_EDITOR
         public Type aiDataType => m_data.GetType();
+
+       
+
         public void InitializeField(Character character, SpineRootAnimation spineRoot, Damageable damageable, Transform centerMass)
         {
             m_character = character;

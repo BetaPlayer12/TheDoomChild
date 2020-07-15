@@ -66,6 +66,7 @@ namespace DChild.Gameplay.Combat
         private void OnCinematicStop(PlayableDirector obj)
         {
             m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
+            m_boss.Enable();
         }
 
         private void OnBossKilled(object sender, EventActionArgs eventArgs)
@@ -77,6 +78,7 @@ namespace DChild.Gameplay.Combat
         {
             yield return new WaitForSeconds(m_startDelay);
             m_boss.SetTarget(damageable, character);
+            m_boss.Enable();
         }
 
         private void StartFight()
@@ -86,6 +88,7 @@ namespace DChild.Gameplay.Combat
             {
                 case PreFight.None:
                     m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
+                    m_boss.Enable();
                     break;
                 case PreFight.Delay:
                     StartCoroutine(DelayedAwakeRoutine(m_targetTuple.damageable, m_targetTuple.character));
