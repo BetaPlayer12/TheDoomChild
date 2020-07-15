@@ -33,10 +33,12 @@ namespace DChild.Gameplay
         private ParticleSystem m_fx;
         [SerializeField, MinValue(0)]
         private float m_callNotificationDelay;
-        [SerializeField]
+        [SerializeField,OnValueChanged("OnIsUsedChanged")]
         private bool m_isUsed;
+        [SerializeField]
+        private Collider2D m_collider;
 
-        public bool showPrompt => m_isUsed == false;
+        public bool showPrompt => true;
 
         public string promptMessage => "Use";
 
@@ -47,6 +49,7 @@ namespace DChild.Gameplay
         public void Load(ISaveData data)
         {
             m_isUsed = ((SaveData)data).isUsed;
+           m_collider.enabled = !m_isUsed;
         }
 
         public void Interact(Character character)
@@ -63,6 +66,7 @@ namespace DChild.Gameplay
                 m_fx.Play(true);
                 StartCoroutine(DelayedNotifySkill());
                 m_isUsed = true;
+                m_collider.enabled = false;
             }
         }
 
@@ -76,5 +80,12 @@ namespace DChild.Gameplay
         {
             GameEventMessage.SendEvent("Primary Skill Acquired");
         }
+
+#if UNITY_EDITOR
+        private void OnIsUsedChanged()
+        {
+            m_collider.enabled = !m_isUsed;
+        } 
+#endif
     }
 }
