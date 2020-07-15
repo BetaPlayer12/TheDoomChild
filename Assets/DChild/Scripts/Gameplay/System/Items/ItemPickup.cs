@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Serialization;
+using Doozy.Engine;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace DChild.Gameplay.Items
         private Transform m_promptPostion;
         [SerializeField]
         private ItemData m_data;
+        [SerializeField]
+        private bool m_HasNotification;
 
         public bool showPrompt => true;
 
@@ -39,6 +42,10 @@ namespace DChild.Gameplay.Items
         {
             character.GetComponent<PlayerControlledObject>().owner.inventory.AddItem(m_data);
             gameObject.SetActive(false);
+            if (m_HasNotification == true)
+            {
+                GameEventMessage.SendEvent("Soul Skill Acquired");
+            }
         }
 
         public ISaveData Save() => new SaveData(!gameObject.activeSelf);
