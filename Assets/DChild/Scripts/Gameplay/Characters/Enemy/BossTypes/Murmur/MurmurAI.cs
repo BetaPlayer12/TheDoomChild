@@ -635,6 +635,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void OnDeath(object sender, EventActionArgs eventArgs)
+        {
+            StopAllCoroutines();
+            m_damageable.SetHitboxActive(false);
+            enabled = false;
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -649,7 +656,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
 
             m_soundBallList = new List<Projectile>();
+            m_damageable.Destroyed += OnDeath;
         }
+
+
 
         protected override void Start()
         {
