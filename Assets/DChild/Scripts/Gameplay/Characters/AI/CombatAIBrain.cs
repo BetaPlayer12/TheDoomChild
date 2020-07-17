@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.AI
     public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain where T : IAIInfo
     {
         [SerializeField, TabGroup("Reference")]
-        private Damageable m_damageable;
+        protected Damageable m_damageable;
         [SerializeField, TabGroup("Reference")]
         protected Transform m_centerMass;
         [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
