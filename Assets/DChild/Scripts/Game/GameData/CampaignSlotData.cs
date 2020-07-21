@@ -3,6 +3,9 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChildDebug
 {
@@ -26,8 +29,13 @@ namespace DChildDebug
         {
             m_slot.SetID(m_ID);
         }
+        [Button]
+        public void SaveChanges()
+        {
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+        }
 #endif
-
         [Button]
         public void SaveToFile()
         {
