@@ -213,6 +213,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SetTargetInfo(AITargetInfo targetInfo)
         {
+            m_enablePatience = true;
             m_targetInfo = targetInfo;
         }
 

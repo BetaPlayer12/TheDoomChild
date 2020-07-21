@@ -3,6 +3,7 @@ using UnityEngine.Playables;
 
 namespace DChild.Gameplay.Cinematics
 {
+
     [System.Serializable]
     public class DynamicInterpolationBehaviour : PlayableBehaviour
     {
