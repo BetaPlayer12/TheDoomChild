@@ -40,7 +40,9 @@ namespace DChild.Gameplay.Combat
         [SerializeField, MinValue(0.1f), ShowIf("@m_prefight == PreFight.Delay")]
         private float m_startDelay;
         [SerializeField, ShowIf("@m_prefight == PreFight.Cinematic")]
-        private PlayableDirector m_cinematic;
+        private PlayableDirector m_director;
+        [SerializeField, ShowIf("@m_prefight == PreFight.Cinematic")]
+        private PlayableAsset m_cinematic;
         [SerializeField, TabGroup("Upon Trigger")]
         private UnityEvent m_uponTrigger;
         [SerializeField, TabGroup("On Defeat")]
@@ -94,8 +96,9 @@ namespace DChild.Gameplay.Combat
                     StartCoroutine(DelayedAwakeRoutine(m_targetTuple.damageable, m_targetTuple.character));
                     break;
                 case PreFight.Cinematic:
-                    m_cinematic.stopped += OnCinematicStop;
-                    m_cinematic.Play();
+                    m_director.extrapolationMode = DirectorWrapMode.None;
+                    m_director.stopped += OnCinematicStop;
+                    m_director.Play(m_cinematic);
                     break;
             }
             m_uponTrigger?.Invoke();
@@ -123,6 +126,6 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-       
+
     }
 }
