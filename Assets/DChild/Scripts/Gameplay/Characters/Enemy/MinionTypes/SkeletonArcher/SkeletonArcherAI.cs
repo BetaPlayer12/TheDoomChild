@@ -478,7 +478,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    m_targetPointIK.transform.position = m_targetInfo.position;
+                    if (m_targetInfo.isValid)
+                    {
+                        m_targetPointIK.transform.position = m_targetInfo.position;
+                    }
                     return;
             }
 
