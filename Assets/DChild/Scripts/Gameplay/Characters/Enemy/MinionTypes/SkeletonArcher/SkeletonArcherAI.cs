@@ -443,6 +443,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
+                                m_attackDecider.hasDecidedOnAttack = false;
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
