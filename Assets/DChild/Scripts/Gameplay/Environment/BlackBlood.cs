@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Environment
     {
         protected override bool IsValidToHit(Collider2D collision)
         {
-            return (collision.GetComponentInParent<BlackBloodImmunity>()?.isActive ?? false == false);
+            return !(collision.GetComponentInParent<BlackBloodImmunity>()?.isActive ??false);
         }
     }
 }
