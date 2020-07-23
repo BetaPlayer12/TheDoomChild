@@ -257,6 +257,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_teleportFX;
         [SerializeField, TabGroup("Effects")]
         private ParticleSystem m_slashGroundFX;
+        [SerializeField, TabGroup("Cinematic")]
+        private BlackDeathCinematicPlayah m_cinematic;
         [SerializeField, TabGroup("Hit Detector")]
         private BlackDeathHitDetector m_hitDetector;
 
@@ -681,6 +683,14 @@ namespace DChild.Gameplay.Characters.Enemies
                         offset = offset + offsetAdd;
                     GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(startPoint + offset, GroundPosition(m_randomSpawnCollider.bounds.center).y), Quaternion.identity);
                     instance.transform.position = new Vector2(instance.transform.position.x, GroundPosition(instance.transform.position).y);
+                }
+                if (y == lightningCount-1)
+                {
+                    m_cinematic.PlayCinematic(2);
+                }
+                else
+                {
+                    m_cinematic.PlayCinematic(1);
                 }
                 yield return new WaitForSeconds(m_currentLightningSummonDuration);
             }
