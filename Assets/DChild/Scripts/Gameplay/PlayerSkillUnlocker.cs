@@ -4,9 +4,11 @@ using DChild.Gameplay.Environment.Interractables;
 using DChild.Serialization;
 using Doozy.Engine;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace DChild.Gameplay
 {
@@ -30,10 +32,13 @@ namespace DChild.Gameplay
         [SerializeField]
         private Transform m_prompt;
         [SerializeField]
-        private ParticleSystem m_fx;
-        [SerializeField, MinValue(0)]
-        private float m_callNotificationDelay;
-        [SerializeField,OnValueChanged("OnIsUsedChanged")]
+        private PlayableDirector m_cinematic;
+
+        //[SerializeField]
+        //private ParticleSystem m_fx;
+        //[SerializeField, MinValue(0)]
+        //private float m_callNotificationDelay;
+        [SerializeField, OnValueChanged("OnIsUsedChanged")]
         private bool m_isUsed;
         [SerializeField]
         private Collider2D m_collider;
@@ -49,30 +54,38 @@ namespace DChild.Gameplay
         public void Load(ISaveData data)
         {
             m_isUsed = ((SaveData)data).isUsed;
-           m_collider.enabled = !m_isUsed;
+            m_collider.enabled = !m_isUsed;
         }
 
         public void Interact(Character character)
         {
             if (m_isUsed == false)
             {
-                GameplaySystem.playerManager.OverrideCharacterControls();
-                switch (m_toUnlock)
+                //GameplaySystem.playerManager.OverrideCharacterControls();
+                if (character)
                 {
-                    case PrimarySkill.BlackBloodImmunity:
-                        character.GetComponentInChildren<BlackBloodImmunity>().isActive = true;
-                        break;
+                    switch (m_toUnlock)
+                    {
+                        case PrimarySkill.BlackBloodImmunity:
+                            character.GetComponentInChildren<BlackBloodImmunity>().isActive = true;
+                            break;
+                    } 
                 }
-                m_fx.Play(true);
-                StartCoroutine(DelayedNotifySkill());
+                //m_fx.Play(true);
+                //StartCoroutine(DelayedNotifySkill());
                 m_isUsed = true;
                 m_collider.enabled = false;
             }
         }
 
-        private IEnumerator DelayedNotifySkill()
+        //private IEnumerator DelayedNotifySkill()
+        //{
+        //    yield return new WaitForSeconds(m_callNotificationDelay);
+        //    NotifySkill(m_toUnlock);
+        //}
+
+        private void OnCutsceneDone(PlayableDirector obj)
         {
-            yield return new WaitForSeconds(m_callNotificationDelay);
             NotifySkill(m_toUnlock);
         }
 
@@ -81,11 +94,21 @@ namespace DChild.Gameplay
             GameEventMessage.SendEvent("Primary Skill Acquired");
         }
 
+        private void Awake()
+        {
+            m_cinematic.stopped += OnCutsceneDone;
+        }
+
 #if UNITY_EDITOR
         private void OnIsUsedChanged()
         {
             m_collider.enabled = !m_isUsed;
-        } 
+        }
+
+        private void Interact()
+        {
+            Interact(null);
+        }
 #endif
     }
 }
