@@ -60,6 +60,11 @@ namespace DChild.Gameplay.Systems
             m_player.controller.Enable();
         }
 
+        public void ForceCharacterControlOverride()
+        {
+            OverrideCharacterControls();
+        }
+
         public void Initialize()
         {
             m_collisionRegistrator = m_player.character.GetComponentInChildren<CollisionRegistrator>();
@@ -87,8 +92,8 @@ namespace DChild.Gameplay.Systems
         private void OnPlayerDeath(object sender, EventActionArgs eventArgs)
         {
             GameEventMessage.SendEvent("Game Over");
-           // m_input.Disable();
-          //  m_player.controller.Disable();
+            // m_input.Disable();
+            //  m_player.controller.Disable();
             m_playerIsDead = true;
             m_respawnDelay.Reset();
         }

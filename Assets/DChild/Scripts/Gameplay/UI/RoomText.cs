@@ -14,8 +14,8 @@ public class RoomText : MonoBehaviour, ISerializableComponent
     {
         [SerializeField]
         private bool m_Shown;
-        
-        
+
+
 
         public SaveData(bool m_Shown)
         {
@@ -41,20 +41,22 @@ public class RoomText : MonoBehaviour, ISerializableComponent
     {
         var saveData = (SaveData)data;
         m_Shown = saveData.Shown;
-        
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-   if (collision.isTrigger)
+        if (m_Shown != true)
         {
-            if (m_Shown != true)
+            if (collision.isTrigger)
             {
-                //show animation
-                m_UI.Show();
-                m_Shown = true;
-                StartCoroutine(DelayedFade());
-
-            }          
+                if (collision.TryGetComponent(out Hitbox check))
+                {
+                    //show animation
+                    m_UI.Show();
+                    m_Shown = true;
+                    StartCoroutine(DelayedFade());
+                }
+            }
         }
     }
 
