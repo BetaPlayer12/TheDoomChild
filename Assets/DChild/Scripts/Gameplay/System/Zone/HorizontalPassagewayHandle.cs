@@ -75,8 +75,7 @@ namespace DChild.Gameplay.Environment
 
         private void OnPassagewayPostExit()
         {
-            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-            controller.moveDirectionInput = 0;
+            GameplaySystem.playerManager.StopCharacterControlOverride();
         }
 
 #if UNITY_EDITOR
