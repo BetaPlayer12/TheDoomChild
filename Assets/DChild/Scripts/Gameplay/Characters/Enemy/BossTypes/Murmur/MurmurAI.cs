@@ -248,6 +248,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPhaseInfo = obj;
         }
 
+        protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            base.OnDestroyed(sender, eventArgs);
+            StopAllCoroutines();
+            //TEMP
+            this.gameObject.SetActive(false);
+        }
+
         private void UpdateAttackList(IReadOnlyList<Attack> availableAttacks)
         {
             List<AttackInfo<Attack>> infoList = new List<AttackInfo<Attack>>();
@@ -285,6 +293,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             //Target Will not disappear
+            //this.gameObject.SetActive(true);
         }
 
         protected HorizontalDirection GetProposedFacing(Vector2 characterPosition, Vector2 destination) => destination.x < characterPosition.x ? HorizontalDirection.Left : HorizontalDirection.Right;

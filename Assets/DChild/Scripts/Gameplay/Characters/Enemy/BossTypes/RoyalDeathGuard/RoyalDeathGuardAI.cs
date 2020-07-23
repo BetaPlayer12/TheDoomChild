@@ -279,7 +279,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
+                m_stateHandle.OverrideState(State.Chasing);
                 GameEventMessage.SendEvent("Boss Encounter");
             }
         }
@@ -359,6 +359,8 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             m_scytheSpinFX.Stop();
             m_agent.Stop();
+            m_hitbox.Disable();
+            this.gameObject.SetActive(false); //TEMP
             if (!m_deathHandle.gameObject.activeSelf)
             {
                 m_animation.SetAnimation(0, m_info.defeatAnimation, true);
