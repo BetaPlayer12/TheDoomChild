@@ -608,7 +608,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //{
             //    m_attackDecider[i] = new RandomAttackDecider<Attack>();
             //}
-            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.WaitBehaviourEnd, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
             //m_patternCount = new float[4];
             m_attackCache = new List<Pattern>();

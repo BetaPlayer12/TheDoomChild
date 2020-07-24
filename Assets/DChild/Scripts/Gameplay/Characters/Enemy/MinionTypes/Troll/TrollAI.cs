@@ -72,6 +72,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_rootShakeAnimation;
+            public string rootShakeAnimation => m_rootShakeAnimation;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -342,16 +345,28 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            //StopAllCoroutines();
+            //m_animation.DisableRootMotion();
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+
+            //StartCoroutine(FlinchShakeRoutine());
+            m_animation.SetAnimation(1, m_info.flinchAnimation, false);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-            //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
+        private IEnumerator FlinchShakeRoutine()
+        {
+            m_animation.SetEmptyAnimation(1, 0);
+            m_animation.AddAnimation(1, m_info.rootShakeAnimation, true, 0);
+            m_animation.animationState.GetCurrent(1).TimeScale = 3;
+            //m_animation.AddEmptyAnimation(1, 2.5f, 3);
+            yield return new WaitForSeconds(.25f);
+            m_animation.SetEmptyAnimation(1, 0);
+            yield return null;
         }
 
         public override void ApplyData()
@@ -403,6 +418,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    m_animation.DisableRootMotion();
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -448,14 +464,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Pound:
                             Debug.Log("Pound Attack");
-                            m_animation.EnableRootMotion(true, false);
+                            //m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.poundAttack.animation, m_info.idleAnimation);
                             break;
                         case Attack.Punch:
                             Debug.Log("Punch Attack");
                             if (!m_wallSensor.isDetecting)
                             {
-                                m_animation.EnableRootMotion(true, false);
+                                //m_animation.EnableRootMotion(true, false);
                                 m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
                             }
                             else
@@ -465,7 +481,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.OraOra:
                             Debug.Log("Oraora Attack");
-                            m_animation.EnableRootMotion(true, false);
+                            //m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.oraOraAttack.animation, m_info.idleAnimation);
                             break;
                     }
@@ -491,7 +507,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
-                                    m_animation.EnableRootMotion(false, false);
+                                    //m_animation.EnableRootMotion(false, false);
                                     m_animation.SetAnimation(0, m_info.run.animation, true);
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.run.speed * transform.localScale.x);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed);
@@ -519,6 +535,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_targetInfo.isValid)
                     {
                         m_stateHandle.SetState(State.Chasing);
+                        //m_animation.SetAnimation(0, m_info.detectAnimation, true);
                     }
                     else
                     {
