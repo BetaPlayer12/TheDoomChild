@@ -363,7 +363,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_stateHandle.Wait(State.Chasing);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(true);
             m_animation.SetAnimation(0, m_info.teleportVanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportVanishAnimation);
             transform.position = new Vector2(m_randomSpawnCollider.bounds.center.x, m_randomSpawnCollider.bounds.center.y -5);
