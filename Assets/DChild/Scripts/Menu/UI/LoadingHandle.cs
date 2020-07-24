@@ -201,6 +201,7 @@ namespace DChild.Menu
         {
             m_animation.AnimationEnd -= OnAnimationEnd;
             LoadingDone?.Invoke(this, EventActionArgs.Empty);
+            Debug.Log("Loading Scene Destroyed");
         }
     }
 }

@@ -313,6 +313,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_hitbox.enabled = true;
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -322,6 +323,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SubmerseRoutine()
         {
+            m_hitbox.enabled = false;
             m_animation.SetAnimation(0, m_info.submergAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.submergAnimation);
             m_animation.SetAnimation(0, m_info.submergIdleAnimation, true);
@@ -331,6 +333,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ImerseRoutine()
         {
+            m_hitbox.enabled = true;
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -342,6 +345,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
+            m_hitbox.enabled = false;
         }
 
         protected override void Awake()
@@ -407,7 +411,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-
+                    m_hitbox.enabled = true;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {

@@ -10875,7 +10875,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 55, y: 54.19995}
+  m_AnchoredPosition: {x: 55, y: 54}
   m_SizeDelta: {x: 198.2, y: -434.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &344487271
@@ -27556,7 +27556,29 @@ MonoBehaviour:
         CustomSortingLayer: Default
       Event:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 769507885}
+            m_MethodName: ResumeGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1609544206}
+            m_MethodName: StopCharacterControlOverride
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -28012,7 +28034,18 @@ MonoBehaviour:
         CustomSortingLayer: Default
       Event:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 769507885}
+            m_MethodName: PauseGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -31633,7 +31666,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.8506624, y: 0.14722222}
   m_AnchorMax: {x: 1, y: 0.21862379}
-  m_AnchoredPosition: {x: 49, y: -13}
+  m_AnchoredPosition: {x: 49, y: -13.000061}
   m_SizeDelta: {x: -98.7, y: -26.55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &786086787
@@ -56444,7 +56477,7 @@ MonoBehaviour:
   AutoHideAfterShowDelay: 3
   AutoSelectButtonAfterShow: 0
   BehaviorAtStart: 1
-  CustomStartAnchoredPosition: {x: 0, y: 66, z: 0}
+  CustomStartAnchoredPosition: {x: -55.3, y: 49.8, z: 0}
   DeselectAnyButtonSelectedOnHide: 0
   DeselectAnyButtonSelectedOnShow: 0
   DisableCanvasWhenHidden: 1
@@ -60775,6 +60808,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2248443074411803214, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
+        type: 3}
+      propertyPath: m_Events.m_Events.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ForceCharacterControlOverride
+      objectReference: {fileID: 0}
+    - target: {fileID: 2248443074411803214, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
+        type: 3}
+      propertyPath: m_Events.m_Events.Array.data[1].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StopCharacterControlOverride
       objectReference: {fileID: 0}
     - target: {fileID: 2624314046681382207, guid: d0497a2c5ae94a34ebd9a77c8d0b8894,
         type: 3}
@@ -67284,7 +67327,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 4/7
+  m_text: 1/7
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a576fbe1b6faba498194776bfd96bc4, type: 2}
   m_sharedMaterial: {fileID: 21892830720195836, guid: 6a576fbe1b6faba498194776bfd96bc4,
@@ -83653,10 +83696,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7518031642767482061, guid: abb216eb3a60a1e4c88772e3653c8706,
         type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7518031642767482061, guid: abb216eb3a60a1e4c88772e3653c8706,
+        type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7518031642767482061, guid: abb216eb3a60a1e4c88772e3653c8706,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 7518031642767482061, guid: abb216eb3a60a1e4c88772e3653c8706,
         type: 3}
+    - target: {fileID: 7518031642767482061, guid: abb216eb3a60a1e4c88772e3653c8706,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[0]
+      value: '"path":"m_skills","add_keys":{"$id":0,"$type":"System.Object[], mscorlib","$rlength":2,"$rcontent":[{"$id":1,"$type":"DChild.Gameplay.Characters.Players.PrimarySkill,
+        Assembly-CSharp",3},{"$id":2,"$type":"DChild.Gameplay.Characters.Players.PrimarySkill,
+        Assembly-CSharp",3}]},"remove_keys":null'
+      objectReference: {fileID: 0}
+    - target: {fileID: 7518031642767482061, guid: abb216eb3a60a1e4c88772e3653c8706,
+        type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[1]
+      value: '"path":"m_skills.{3es}","value":{"$id":0,"$type":"System.Boolean, mscorlib",false}'
+      objectReference: {fileID: 0}
     - target: {fileID: 7518031642767482064, guid: abb216eb3a60a1e4c88772e3653c8706,
         type: 3}
       propertyPath: m_attacker

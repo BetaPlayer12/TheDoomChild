@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Awake()
         {
-            m_brain = GetComponent<ICombatAIBrain>();
+            m_brain = GetComponentInChildren<ICombatAIBrain>(true);
         }
 #if UNITY_EDITOR
         public void InitializeFields(BestiaryData data, Health health)
