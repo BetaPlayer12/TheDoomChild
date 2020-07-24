@@ -421,14 +421,16 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             isDone = true;
                         }
+                        var direction = (int)m_character.facing;
                         yield return new WaitForAnimationComplete(m_animation.animationState, m_info.diagonalSoundInfo.animation);
                         //Give Offset for fx to be over
                         float time = 0.65f;
                         do
                         {
                             time -= GameplaySystem.time.deltaTime;
-                            destination = m_targetInfo.position;
+                            destination = m_character.centerMass.position;
                             destination.y = height;
+                            destination.x += direction;
                             MoveTo(destination, m_info.diagonalSoundChaseInfo.speed);
                             yield return null;
                         } while (time > 0);
