@@ -424,7 +424,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         var direction = (int)m_character.facing;
                         yield return new WaitForAnimationComplete(m_animation.animationState, m_info.diagonalSoundInfo.animation);
                         //Give Offset for fx to be over
-                        float time = 0.5f;
+                        float time = 0.65f;
                         do
                         {
                             time -= GameplaySystem.time.deltaTime;

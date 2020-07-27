@@ -320,7 +320,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
-            if (damageable != null)
+            if (damageable != null && m_stateHandle.currentState == State.Idle)
             {
                 base.SetTarget(damageable, m_target);
                 m_stateHandle.OverrideState(State.Intro);
@@ -363,7 +363,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_stateHandle.Wait(State.Chasing);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(true);
             m_animation.SetAnimation(0, m_info.teleportVanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportVanishAnimation);
             transform.position = new Vector2(m_randomSpawnCollider.bounds.center.x, m_randomSpawnCollider.bounds.center.y -5);
@@ -684,13 +684,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     GameObject instance = Instantiate(m_info.bloodLightning, new Vector2(startPoint + offset, GroundPosition(m_randomSpawnCollider.bounds.center).y), Quaternion.identity);
                     instance.transform.position = new Vector2(instance.transform.position.x, GroundPosition(instance.transform.position).y);
                 }
-                if (y == lightningCount-1)
+                if (m_cinematic != null)
                 {
-                    m_cinematic.PlayCinematic(2);
-                }
-                else
-                {
-                    m_cinematic.PlayCinematic(1);
+                    if (y == lightningCount - 1)
+                    {
+                        m_cinematic.PlayCinematic(2);
+                    }
+                    else
+                    {
+                        m_cinematic.PlayCinematic(1);
+                    }
                 }
                 yield return new WaitForSeconds(m_currentLightningSummonDuration);
             }
