@@ -14,9 +14,10 @@ namespace DChild.Gameplay.Cinematics
         }
 
         [SerializeField]
-        private HandleType m_action;
+        private uint m_seed;
+
         [SerializeField]
-        private bool m_affectChildren;
+        private HandleType m_action;
 
         [HideInInspector]
         public double clipStart;
@@ -24,6 +25,6 @@ namespace DChild.Gameplay.Cinematics
         public double clipEnd;
 
         public HandleType action => m_action;
-        public bool affectChildren => m_affectChildren;
+        public uint seed => m_seed;
     }
 }
