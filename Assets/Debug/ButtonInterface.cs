@@ -5,29 +5,34 @@ using UnityEngine;
 
 public class ButtonInterface : MonoBehaviour
 {
-    [SerializeField]
-    private KeyCode[] buttons;
-    [SerializeField]
-    private UIView[] ScreenItem;
-
-
-    void OnGUI()
+    [System.Serializable]
+    private class Keystorage 
     {
-        Event e = Event.current;
-        if (e.isKey)
-        {
-            buttoncheck(e.keyCode);
-            Debug.Log("Detected key code: " + e.keyCode);
-        }
+        [SerializeField]
+        public KeyCode m_buttons;
+        [SerializeField]
+        public UIView m_screenItem;
     }
-    private void buttoncheck(KeyCode check)
+
+    [SerializeField]
+    private Keystorage[] m_storage;
+    
+
+
+    void Update()
     {
-        for (int i = 0; i >= buttons.Length; i++)
+        for (int i = 0; i < m_storage.Length; i++)
         {
-            if (check == buttons[i])
+            var item = m_storage[i];
+            if (Input.GetKey(item.m_buttons))
             {
-                Debug.Log("Detected key code: " + buttons[i]);
+                item.m_screenItem.Show();
+            }
+            else
+            {
+                item.m_screenItem.Hide();
             }
         }
     }
+
 }
