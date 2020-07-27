@@ -135,7 +135,7 @@ public class BlackDeathCloneAI : AIBrain<BlackDeathCloneAI.Info>
     {
         m_damageable.Destroyed += OnDeath;
         m_deathHandle.SetAnimation(m_info.deathAnimation);
-        m_spineListener.Subscribe(m_info.deathFXEvent, m_deathFX.Play);
+        //m_spineListener.Subscribe(m_info.deathFXEvent, m_deathFX.Play);
         StartCoroutine(SpawnRoutine());
     }
 }
