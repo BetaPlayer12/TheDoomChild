@@ -42,7 +42,7 @@ namespace PlayerNew
         void Update()
         {
             
-            if (!collisionState.grounded && !collisionState.isTouchingLedge && collisionState.onWall && collisionState.onWallLeg && !ledgeDetected)
+            if (!stateManager.isGrounded && !stateManager.isTouchingLedge && stateManager.onWall && stateManager.onWallLeg && !ledgeDetected)
             {
                 ToggleScripts(false);
                 ledgeDetected = true;
@@ -50,26 +50,26 @@ namespace PlayerNew
             }
 
             //wallGrab facing right
-            if (collisionState.onWall && facing.isFacingRight && !collisionState.grounded)
+            if (stateManager.onWall && facing.isFacingRight && !stateManager.isGrounded)
             {
-                if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[1])))
+                if (ledgeDetected && stateManager.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[1])))
                 {
                     OnWallGrab();
                 }
-                else if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[3]) || inputState.GetButtonValue(inputButtons[4])))
+                else if (ledgeDetected && stateManager.onWall && (inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[3]) || inputState.GetButtonValue(inputButtons[4])))
                 {
                     ToggleScripts(true);
                     ledgeDetected = false;
                 }
             }
             //wallGrab facing left
-            else if (collisionState.onWall && !facing.isFacingRight && !collisionState.grounded)
+            else if (stateManager.onWall && !facing.isFacingRight && !stateManager.isGrounded)
             {
-                if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[3])))
+                if (ledgeDetected && stateManager.onWall && (inputState.GetButtonValue(inputButtons[0]) || inputState.GetButtonValue(inputButtons[3])))
                 {
                     OnWallGrab();
                 }
-                else if (ledgeDetected && collisionState.onWall && (inputState.GetButtonValue(inputButtons[1]) || inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[4])))
+                else if (ledgeDetected && stateManager.onWall && (inputState.GetButtonValue(inputButtons[1]) || inputState.GetButtonValue(inputButtons[2]) || inputState.GetButtonValue(inputButtons[4])))
                 {
                     ToggleScripts(true);
                     ledgeDetected = false;
@@ -92,7 +92,7 @@ namespace PlayerNew
                 if (facing.isFacingRight)
                 {
 
-                    float terminalPosX = Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) - ledgeClimbXOffset1;
+                    float terminalPosX = Mathf.Floor(ledgeBotPos.x + stateManager.rightPosition.x) - ledgeClimbXOffset1;
                     float terminalPosY = Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1;
                     
                     ledgePos2 = new Vector2(terminalPosX, terminalPosY);
@@ -100,7 +100,7 @@ namespace PlayerNew
                 }
                 else
                 {
-                    float terminalPosX = Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) + ledgeClimbXOffset1;
+                    float terminalPosX = Mathf.Floor(ledgeBotPos.x - stateManager.rightPosition.x) + ledgeClimbXOffset1;
                     float terminalPosY = Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1;
                     ledgePos2 = new Vector2(terminalPosX, terminalPosY);
 

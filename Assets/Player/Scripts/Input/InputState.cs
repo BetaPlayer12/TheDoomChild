@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
 
 namespace PlayerNew
 {
@@ -17,6 +17,7 @@ namespace PlayerNew
         Left = -1
     }
 
+    [DefaultExecutionOrder(-100)]
     public class InputState : MonoBehaviour
     {
         public Directions direction = Directions.Right;
@@ -24,30 +25,107 @@ namespace PlayerNew
         public float absValY = 0f;
 
         private Rigidbody2D body2D;
+        private StateManager collisionState;
         private Dictionary<Buttons, ButtonState> buttonStates = new Dictionary<Buttons, ButtonState>();
+
+        [HideInInspector]
+        public float horizontal;
+        [HideInInspector]
+        public float vertical;
+        [HideInInspector]
+        public bool upHeld;
+        [HideInInspector]
+        public bool downHeld;
+        [HideInInspector]
+        public bool dashPressed;
+        [HideInInspector]
+        public bool slashPressed;
+        [HideInInspector]
+        public bool slashHeld;
+        [HideInInspector] 
+        public bool levitatePressed;
+        [HideInInspector] 
+        public bool levitateHeld;
+        [HideInInspector]
+        public bool whipAttack;
+        [HideInInspector]
+        public bool whipJumpAttack;
+
+        bool readyToClear;
 
         private void Awake()
         {
             body2D = GetComponentInParent<Rigidbody2D>();
+            collisionState = GetComponent<StateManager>();
+        }
+
+        private void Update()
+        {
+            ClearInput();
+            ProcessInputs();
+
+            horizontal = Mathf.Clamp(horizontal, -1f, 1f);
         }
 
         private void FixedUpdate()
         {
-            absValX = Mathf.Abs(body2D.velocity.x);
-            if(absValX > 0 && absValX < 1)
-            {
-                absValX = 0;
-            }
-            absValY = Mathf.Abs(body2D.velocity.y);
-            if(absValY > 0 && absValY < 1)
-            {
-                absValY = 0;
-            }
+            readyToClear = true;
+
+            //absValX = Mathf.Abs(body2D.velocity.x);
+
+            //if (absValX > 0 && absValX < 1)
+            //{
+            //    absValX = 0;
+            //}
+
+            //absValY = Mathf.Abs(body2D.velocity.y);
+
+            //if (absValY > 0 && absValY < 1)
+            //{
+            //    absValY = 0;
+            //}
+        }
+
+        void ClearInput()
+        {
+            //If we're not ready to clear input, exit
+            if (!readyToClear)
+                return;
+
+            //Reset all inputs
+            horizontal = 0f;
+            vertical = 0f;
+            dashPressed = false;
+            slashPressed = false;
+            slashHeld = false;
+            levitatePressed = false;
+            levitateHeld = false;
+            whipAttack = false;
+            whipJumpAttack = false;
+
+            readyToClear = false;
+        }
+
+        private void ProcessInputs()
+        {
+            //Movement Action Buttons
+            horizontal = Input.GetAxis("Horizontal");
+            vertical = Input.GetAxis("Vertical");
+            //upHeld = Input.GetButton("Up");
+            //downHeld = Input.GetButton("Down");
+            dashPressed = Input.GetButtonDown("Dash");
+
+            //Offensive Action Buttons
+            slashPressed = Input.GetButtonDown("Fire1");
+            slashHeld = Input.GetButton("Fire1");
+            levitatePressed = Input.GetButtonDown("Levitate");
+            levitateHeld = Input.GetButton("Levitate");
+            whipAttack = Input.GetButtonDown("Fire2");
+            whipJumpAttack = Input.GetButtonDown("Fire2");
         }
 
         public void SetButtonValue(Buttons key, bool value)
         {
-
             if (!buttonStates.ContainsKey(key))
                 buttonStates.Add(key, new ButtonState());
 
@@ -63,7 +141,6 @@ namespace PlayerNew
             }
 
             state.value = value;
-
         }
 
         public bool GetButtonValue(Buttons key)
@@ -81,7 +158,5 @@ namespace PlayerNew
             else
                 return 0;
         }
-
     }
-
 }
