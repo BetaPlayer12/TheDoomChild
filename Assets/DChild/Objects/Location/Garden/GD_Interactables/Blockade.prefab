@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 5985991537482207584}
   - component: {fileID: 5985991537482207597}
   - component: {fileID: 5985991537482207586}
-  - component: {fileID: 5985991537482207587}
-  m_Layer: 0
+  - component: {fileID: 4161843955414729277}
+  m_Layer: 11
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: InvisibleWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6, y: 6}
   m_EdgeRadius: 0
---- !u!114 &5985991537482207587
+--- !u!114 &4161843955414729277
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,13 +118,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5985991537482207585}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
+  m_Script: {fileID: 11500000, guid: b44a73184fcaf434d882465cb3f84563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 5985991537482207586}
   m_isInvulnerable: 0
   m_damageReduction: 0
+  m_mask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &5985991537827838788
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +141,8 @@ GameObject:
   - component: {fileID: 5985991537827838785}
   - component: {fileID: 5985991537827838787}
   - component: {fileID: 5985991537827838790}
-  m_Layer: 0
+  - component: {fileID: 5886013926634772716}
+  m_Layer: 11
   m_Name: Blockade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,3 +271,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_maxHealth: 100
+--- !u!114 &5886013926634772716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5985991537827838788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09224c16f78e2f34eacc2f5e9ee9ba2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}

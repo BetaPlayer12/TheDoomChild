@@ -73,7 +73,7 @@ namespace DChild.Gameplay.Characters.Players
                         }
                         else
                         {
-                            canBeInteracted = canBeInteracted;
+                            canBeInteracted = true;
                             cacheEvent.Value.showInteractionButton = true;
                             message = interactable.promptMessage;
                         }
@@ -157,15 +157,18 @@ namespace DChild.Gameplay.Characters.Players
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.TryGetComponentInParent(out IButtonToInteract interactableObject))
+            if (collision.isTrigger)
             {
-                if (interactableObject.showPrompt)
+                if (collision.TryGetComponentInParent(out IButtonToInteract interactableObject))
                 {
-                    m_objectsInRange.Add(interactableObject);
-                    if (m_objectsInRange.Count == 1)
+                    if (interactableObject.showPrompt)
                     {
-                        m_closestObject = interactableObject;
-                        CallInteractableDetectedEvent(interactableObject);
+                        m_objectsInRange.Add(interactableObject);
+                        if (m_objectsInRange.Count == 1)
+                        {
+                            m_closestObject = interactableObject;
+                            CallInteractableDetectedEvent(interactableObject);
+                        }
                     }
                 }
             }

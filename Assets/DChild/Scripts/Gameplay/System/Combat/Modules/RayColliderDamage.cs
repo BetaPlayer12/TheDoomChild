@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Combat
         protected override bool IsValidToHit(Collider2D collision)
         {
             var searchCastResult = Raycaster.SearchCast(transform.position, collision.bounds.center, LayerMask.GetMask("Environment"), out RaycastHit2D[] hitbuffer);
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            if (searchCastResult == false && collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
             {
                 return collision == hitbuffer[0].collider;
             }

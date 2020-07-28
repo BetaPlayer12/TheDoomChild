@@ -11,18 +11,18 @@ namespace DChild.Gameplay.Characters.AI
     public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain where T : IAIInfo
     {
         [SerializeField, TabGroup("Reference")]
-        private Damageable m_damageable;
+        protected Damageable m_damageable;
         [SerializeField, TabGroup("Reference")]
         protected Transform m_centerMass;
         [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
         protected CharacterStatsData m_statsData;
-
 
         protected AITargetInfo m_targetInfo;
 
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
         {
             m_targetInfo.Set(damageable, m_target);
+            Debug.Log("Murmur has TARGET");
         }
 
         protected bool IsFacingTarget() => IsFacing(m_targetInfo.position);
@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Characters.AI
             m_damageable.Destroyed += OnDestroyed;
         }
 
-        protected virtual void OnDestroyed(object sender, EventActionArgs eventArgs) => enabled = false;
+        protected virtual void OnDestroyed(object sender, EventActionArgs eventArgs) => base.enabled = false;
 
         protected virtual void Start()
         {
@@ -69,6 +69,9 @@ namespace DChild.Gameplay.Characters.AI
 
 #if UNITY_EDITOR
         public Type aiDataType => m_data.GetType();
+
+       
+
         public void InitializeField(Character character, SpineRootAnimation spineRoot, Damageable damageable, Transform centerMass)
         {
             m_character = character;

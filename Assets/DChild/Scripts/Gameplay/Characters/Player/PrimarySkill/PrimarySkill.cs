@@ -8,6 +8,7 @@ namespace DChild.Gameplay.Characters.Players
         DoubleJump,
         WallJump,
         Dash,
+        BlackBloodImmunity,
         [HideInInspector]
         _COUNT
     }

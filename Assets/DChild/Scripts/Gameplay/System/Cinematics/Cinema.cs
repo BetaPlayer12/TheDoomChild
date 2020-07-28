@@ -25,6 +25,8 @@ namespace DChild.Gameplay.Cinematics
         private Transform m_trackingTarget;
         private CameraOffsetHandle m_offsetHandle;
         private LookAhead m_currentLookAhead;
+
+        private bool m_leavePreviousCamAsNull;
 #if UNITY_EDITOR
         [ShowInInspector, OnValueChanged("EnableCameraShake")]
         private bool m_cameraShake;
@@ -38,11 +40,24 @@ namespace DChild.Gameplay.Cinematics
             {
                 m_currentVCam.Deactivate();
                 m_offsetHandle.CopyOffset(m_currentVCam, vCam);
+                if (m_leavePreviousCamAsNull)
+                {
+                    m_currentVCam = vCam;
+                    m_leavePreviousCamAsNull = false;
+                }
+                else
+                {
+                    m_previousCam = m_currentVCam;
+                    m_currentVCam = vCam;
+                }
+            }
+            else
+            {
+                m_currentVCam = vCam;
+                m_leavePreviousCamAsNull = false;
             }
             vCam.Activate();
             m_offsetHandle.ApplyOffset(vCam, m_currentLookAhead);
-            m_previousCam = m_currentVCam;
-            m_currentVCam = vCam;
         }
 
         public void ResolveCamTransistion(IVirtualCamera vCam)
@@ -51,10 +66,17 @@ namespace DChild.Gameplay.Cinematics
             {
                 m_previousCam = null;
             }
-            else if (vCam == m_currentVCam && m_previousCam != null)
+            else if (vCam == m_currentVCam)
             {
-                TransistionTo(m_previousCam);
-                m_previousCam = null;
+                if (m_previousCam == null)
+                {
+                    m_leavePreviousCamAsNull = true;
+                }
+                else
+                {
+                    TransistionTo(m_previousCam);
+                    m_previousCam = null;
+                }
             }
         }
 

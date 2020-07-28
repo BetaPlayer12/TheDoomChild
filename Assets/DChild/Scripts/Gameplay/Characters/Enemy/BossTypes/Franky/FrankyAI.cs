@@ -870,6 +870,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.leapAttackEndAnimation)
             {
                 var fxPool = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_leapFX);
+                fxPool.Play();
                 fxPool.transform.position = new Vector2(transform.position.x + (17 * transform.localScale.x), transform.position.y - 1.5f);
             }
         }

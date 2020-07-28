@@ -134,5 +134,13 @@ namespace DChild.Gameplay.Cinematics
                 }
             }
         }
+
+#if UNITY_EDITOR
+        [Button]
+        private void PlayCutscene()
+        {
+            m_cutscene.Play();
+        }
+#endif
     }
 }

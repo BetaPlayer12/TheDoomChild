@@ -9,6 +9,7 @@ namespace DChild.Gameplay.Characters.AI
 {
     public interface ICombatAIBrain
     {
+        bool enabled { get; set; }
         void SetTarget(IDamageable damageable, Character m_target = null);
 
 #if UNITY_EDITOR

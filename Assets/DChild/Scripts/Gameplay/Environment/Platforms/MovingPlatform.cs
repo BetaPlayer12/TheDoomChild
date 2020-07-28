@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Environment
         public struct SaveData : ISaveData
         {
             [SerializeField]
-            private Vector2 m_position;
+            private SerializedVector2 m_position;
             [SerializeField]
             private int m_wayPoint;
             [SerializeField]
