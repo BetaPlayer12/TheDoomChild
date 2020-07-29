@@ -14,6 +14,8 @@ namespace PlayerNew
         private float m_attackDelay = 0;
         [SerializeField]
         private float m_comboDelay = 1.5f;
+        [SerializeField]
+        private float m_airAttackDelay;
 
         private bool canAttack = true;
         private int slashStateIndex = 0;
@@ -122,26 +124,34 @@ namespace PlayerNew
         {
             if (attackDelay <= 0)
             {
-                if (inputState.slashPressed && stateManager.isGrounded == true && !stateManager.isAttacking && stateManager.isDead == false)
+                if (inputState.slashPressed && !stateManager.isAttacking && stateManager.isDead == false)
                 {
                     stateManager.isAttacking = true;
                     stateManager.isInCombatMode = true;
                     stateManager.isIdle = false;
 
-                    playerMovement.DisableMovement();
-
-                    currentSlashState = slashStateIndex;
-                    attacker.SetDamageModifier(m_slashModifierList[currentSlashState]);
-                    slashStateIndex++;
-
-                    StartCoroutine(SlashDelayRoutine());
-
-                    if (slashStateIndex >= m_maxComboNumber)
+                    if (stateManager.isGrounded)
                     {
-                        slashStateIndex = 0;
-                    }
+                        playerMovement.DisableMovement();
+                        currentSlashState = slashStateIndex;
+                        attacker.SetDamageModifier(m_slashModifierList[currentSlashState]);
+                        slashStateIndex++;
 
-                    attackDelay = m_attackDelay * m_comboDelay;
+                        StartCoroutine(SlashDelayRoutine());
+
+                        if (slashStateIndex >= m_maxComboNumber)
+                        {
+                            slashStateIndex = 0;
+                        }
+
+                        attackDelay = m_attackDelay * m_comboDelay;
+                    }
+                    else
+                    {
+                        attacker.SetDamageModifier(1);
+
+                        StartCoroutine(MidairSlashDelayRoutine());
+                    }
                 }
             }
             else if (attackDelay > 0)
@@ -316,6 +326,20 @@ namespace PlayerNew
             SlashAnimationFinished();
         }
 
+        private IEnumerator MidairSlashDelayRoutine()
+        {
+            yield return new WaitForSeconds(m_airAttackDelay);
+
+            MidairSlashAnimationFinished();
+        }
+
+        public void MidairSlashAnimationFinished()
+        {
+            stateManager.isAttacking = false;
+            stateManager.isInCombatMode = true;
+            stateManager.isIdle = true;
+        }
+
         public void ReturnToIdle()
         {
             //force set to Idle
@@ -451,6 +475,7 @@ namespace PlayerNew
 
         private void FinishAttackAnim()
         {
+            m_collisionRegistrator.ResetHitCache();
             attackCollider.enabled = false;
 
             m_forwardSlashAttackCollider.enabled = false;

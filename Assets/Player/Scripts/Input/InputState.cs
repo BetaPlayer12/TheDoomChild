@@ -28,6 +28,8 @@ namespace PlayerNew
         private StateManager collisionState;
         private Dictionary<Buttons, ButtonState> buttonStates = new Dictionary<Buttons, ButtonState>();
 
+        [SerializeField]
+        private InputManager m_inputManager;
         [HideInInspector]
         public float horizontal;
         [HideInInspector]
@@ -42,9 +44,9 @@ namespace PlayerNew
         public bool slashPressed;
         [HideInInspector]
         public bool slashHeld;
-        [HideInInspector] 
+        [HideInInspector]
         public bool levitatePressed;
-        [HideInInspector] 
+        [HideInInspector]
         public bool levitateHeld;
         [HideInInspector]
         public bool whipAttack;
@@ -62,9 +64,13 @@ namespace PlayerNew
         private void Update()
         {
             ClearInput();
-            ProcessInputs();
 
-            horizontal = Mathf.Clamp(horizontal, -1f, 1f);
+            if (m_inputManager.enabled == true)
+            {
+                ProcessInputs();
+
+                horizontal = Mathf.Clamp(horizontal, -1f, 1f);
+            }
         }
 
         private void FixedUpdate()

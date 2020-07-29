@@ -52,6 +52,7 @@ namespace PlayerNew
                 groundSmash = true;
                 rigidBody.gravityScale = 0f;
                 ToggleScripts(false);
+                StopAllCoroutines();
                 StartCoroutine(GroundSmashDelayRoutine());
             }
         }
@@ -74,6 +75,7 @@ namespace PlayerNew
 
         private void DeathEarthShakerImpact()
         {
+            rigidBody.velocity = Vector2.zero;
             deathEarthShakerLoop.Stop();
             deathEarthShakerImpact.Play();
             attacker.SetDamageModifier(m_damageModifier);
