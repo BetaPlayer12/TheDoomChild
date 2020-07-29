@@ -16,16 +16,17 @@ namespace PlayerNew
             base.Awake();
         }
 
-        protected virtual void OnCrouch(bool value)
+        public virtual void OnCrouch(bool value)
         {
             crouching = value;
+            stateManager.isCrouching = value;
             ToggleScripts(!crouching);
         }
 
         void Update()
         {
             var canCrouch = inputState.GetButtonValue(inputButtons[0]);
-            if (canCrouch && collisionState.grounded && !crouching)
+            if (canCrouch && stateManager.isGrounded && !crouching)
             {
                 OnCrouch(true);
             }

@@ -45,7 +45,7 @@ namespace DChild.Gameplay.Environment
             var controller = GameplaySystem.playerManager.OverrideCharacterControls();
             controller.moveDirectionInput = 0;
             var characterPhysics = character.GetComponent<Rigidbody2D>();
-            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            StateManager collisionState = character.GetComponentInChildren<StateManager>();
 
             switch (type)
             {

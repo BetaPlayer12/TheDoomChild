@@ -21,18 +21,16 @@ namespace PlayerNew
 
         protected override void Update()
         {
-
             var canJump = inputState.GetButtonValue(inputButtons[0]);
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
-            velocityY = body2d.velocity.y;
-
-
+            velocityY = rigidBody.velocity.y;
 
             if (!canJump)
             {
                 canLongJump = false;
             }
-            if (collisionState.grounded && isLongJumping)
+
+            if (stateManager.isGrounded && isLongJumping)
             {
                 isLongJumping = false;
             }
@@ -44,32 +42,29 @@ namespace PlayerNew
                 wallSlide.extraJump = false;
             }
 
-            if (!collisionState.grounded && groundJumpExtra)
+            if (!stateManager.isGrounded && groundJumpExtra)
             {
                 jumpsRemaining = 1;
                 groundJumpExtra = false;
-            }else if (collisionState.grounded)
+            }
+            else if (stateManager.isGrounded)
             {
                 groundJumpExtra = true;
             }
 
             base.Update();
 
-            if (canLongJump && !collisionState.grounded && holdTime > longJumpDelay && !collisionState.onWall && !collisionState.onWallLeg && !crouch.crouching)
+            if (canLongJump && !stateManager.isGrounded && holdTime > longJumpDelay && !stateManager.onWall && !stateManager.onWallLeg && !crouch.crouching)
             {
-              
-                var vel = body2d.velocity;
-                body2d.velocity = new Vector2(vel.x, jumpSpeed * longJumpMultiplier);
+                var vel = rigidBody.velocity;
+                rigidBody.velocity = new Vector2(vel.x, jumpSpeed * longJumpMultiplier);
                 canLongJump = false;
                 isLongJumping = true;
             }
-
-           
         }
 
         protected override void OnJump()
         {
-           
             base.OnJump();
             canLongJump = true;
         }

@@ -6,90 +6,113 @@ namespace PlayerNew
 {
     public class Dash : PlayerBehaviour
     {
-        public FaceDirection facing;
-        public float dashForce = 200f;
-        public float dashDelay = 0.1f;
-        public float dashTime;
-        public bool dashing = false;
-        public bool canDash;
-        public float dashCoolDown;
+        [SerializeField]
+        private float m_dashVelocity;
+        [SerializeField]
+        private float m_dashCooldown;
 
-
-        protected  Vector2 dirFacing;
-        protected  float lastDashTime;
+        private float dashCooldownTimer;
+        private PlayerMovement m_movement;
 
         protected virtual void Start()
         {
-            facing = GetComponent<FaceDirection>();
+            dashCooldownTimer = m_dashCooldown;
+            m_movement = GetComponent<PlayerMovement>();
         }
-        protected virtual void FixedUpdate() {
-            float facingDir = facing.isFacingRight ? 1f : -1f;
-            var dash = inputState.GetButtonValue(inputButtons[0]);
-            var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);
 
-                if (!canDash && lastDashTime > 0.1)
-                {
-                   
-                    lastDashTime -= Time.deltaTime;
-                    OnDash(facingDir);
-                }else{
-                    if (dashing)
-                    {
-                        StartCoroutine(FinishedDashRoutine());
-                    }
+        protected virtual void FixedUpdate()
+        {
+            if (inputState.dashPressed && dashCooldownTimer <= 0 && stateManager.isFlinching == false && stateManager.isDashing == false && stateManager.isDead == false)
+            {
+                StartCoroutine(DashRoutine());
+            }
+            else if (dashCooldownTimer > 0 && (stateManager.isGrounded || stateManager.onWall))
+            {
+                dashCooldownTimer -= Time.deltaTime;
+            }
 
-                }
+            //float facingDir = facing.isFacingRight ? 1f : -1f;
+            //var dash = inputState.GetButtonValue(inputButtons[0]);
+            //var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);
 
-                if (dash && dashHold< 0.1f && canDash)
-                {
-                    ToggleScripts(true);
-                    canDash = false;
-                    dashing = false;
-                    lastDashTime = dashTime;
-                }
+            //if (!canDash && lastDashTime > 0.1)
+            //{
+            //    lastDashTime -= Time.deltaTime;
+            //    OnDash(facingDir);
+            //}
+            //else
+            //{
+            //    if (dashing)
+            //    {
+            //        StartCoroutine(FinishedDashRoutine());
+            //    }
+            //}
+
+            //if (dash && dashHold < 0.1f && canDash)
+            //{
+            //    ToggleScripts(true);
+            //    canDash = false;
+            //    dashing = false;
+            //    lastDashTime = dashTime;
+
+            //    Debug.Log("Dash");
+            //}
         }
-        //{
-        //    float facingDir = facing.isFacingRight ? 1f : -1f;
-        //    var dash = inputState.GetButtonValue(inputButtons[0]);
-        //    var dashHold = inputState.GetButtonHoldTime(inputButtons[0]);
-
-        //    if (!canDash && lastDashTime > 0.1)
-        //    {
-        //        ToggleScripts(true);
-        //        lastDashTime -= Time.deltaTime;
-        //        OnDash(facingDir);
-        //    }
-        //    else
-        //    {
-        //        if (!dashing)
-        //        {
-        //            StartCoroutine(FinishedDashRoutine());
-        //        }
-
-        //    }
-
-        //    if (dash && dashHold < 0.1f && canDash)
-        //    {
-        //        canDash = false;
-        //        dashing = false;
-        //        lastDashTime = dashTime;
-        //    }
 
         protected virtual void OnDash(float facingDir)
         {
-            var vel = body2d.velocity;
-            
-            body2d.velocity = Vector2.zero;
-            body2d.AddForce(new Vector2(facingDir * dashForce, vel.y), ForceMode2D.Force);
-            dashing = true;
+            //var vel = rigidBody.velocity;
+            //stateManager.isDashing = true;
+            //stateManager.isIdle = false;
+            //rigidBody.velocity = Vector2.zero;
+            //rigidBody.AddForce(new Vector2(facingDir * dashForce, vel.y), ForceMode2D.Force);
+            //dashing = true;
         }
 
-        IEnumerator FinishedDashRoutine()
+        //IEnumerator FinishedDashRoutine()
+        //{
+        //    //dashing = false;
+        //    //stateManager.isIdle = true;
+        //    //stateManager.isDashing = false;
+        //    yield return new WaitForSeconds(dashCoolDown);
+        //    //canDash = true;
+        //    //ToggleScripts(true);
+        //}
+
+        IEnumerator DashRoutine()
         {
-            dashing = false;
-            yield return new WaitForSeconds(dashCoolDown);
-            canDash = true;
-            ToggleScripts(true);
+            m_movement.DisableMovement();
+
+            float direction = 0;
+            stateManager.isDashing = true;
+            stateManager.isIdle = false;
+            stateManager.isAttacking = false;
+            rigidBody.velocity = Vector2.zero;
+            rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+
+            direction = facing.isFacingRight ? (float)Directions.Right : (float)Directions.Left;
+
+            Vector2 velocity = rigidBody.velocity;
+            velocity.x = direction * m_dashVelocity;
+
+            yield return null;
+
+            rigidBody.AddForce(new Vector2(direction * m_dashVelocity, 0), ForceMode2D.Impulse);
+            //rigidBody.velocity = velocity;
+            dashCooldownTimer = m_dashCooldown;
+
+            Debug.Log("Dash");
+            Debug.Log("Velocity: " + rigidBody.velocity);
+
+            yield return new WaitForSeconds(0.1f);
+
+            if (stateManager.isFlinching == false)
+            {
+                m_movement.EnableMovement();
+            }
+
+            stateManager.isDashing = false;
+            rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
     }
 }

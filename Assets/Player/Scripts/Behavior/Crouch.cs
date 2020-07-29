@@ -25,7 +25,7 @@ namespace PlayerNew
         void Update()
         {
             var canCrouch = inputState.GetButtonValue(inputButtons[0]);
-            if (canCrouch && collisionState.grounded && !crouching)
+            if (canCrouch && stateManager.isGrounded && !crouching)
             {
                 OnCrouch(true);
             }

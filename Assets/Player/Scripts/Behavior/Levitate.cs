@@ -7,80 +7,74 @@ namespace PlayerNew
 {
     public class Levitate : PlayerBehaviour
     {
-        public bool levitateMode;
-        private float defGravityScale;
-        private bool canLevitate;
         [SerializeField]
         private float playerGravity;
         [SerializeField]
+        private float m_levitateVelocityValue = 20f;
+        [SerializeField]
         GameObject capeObject;
-        // Start is called before the first frame update
+
+        private float defaultGravityScale;
+        private bool canLevitate;
+
+        public bool levitateMode;
+
         void Start()
         {
             canLevitate = true;
             levitateMode = false;
-            defGravityScale = body2d.gravityScale;
+            defaultGravityScale = rigidBody.gravityScale;
         }
 
-        // Update is called once per frame
         void Update()
         {
-            var levitate = Input.GetButtonDown("Levitate");
-            var holdtime = inputState.GetButtonHoldTime(inputButtons[0]);
-
-
-           
-            if (levitate && !levitateMode)
+            if (inputState.levitatePressed && !levitateMode)
             {
+                Debug.Log(rigidBody.velocity.y);
 
                 if (!levitateMode)
                 {
-                    if (!collisionState.grounded && canLevitate && !collisionState.onWall)
+                    if (inputState.levitateHeld && (rigidBody.velocity.y >= m_levitateVelocityValue || rigidBody.velocity.y <= -m_levitateVelocityValue))
                     {
-                        ToggleScripts(false);
-                        capeObject.active = false;
-                        body2d.velocity = Vector2.zero;
-                        levitateMode = true;
-                        canLevitate = false;
-                        body2d.gravityScale = 0f;
+                        if (!stateManager.isGrounded && canLevitate && !stateManager.onWall)
+                        {
+                            ToggleScripts(false);
+
+                            capeObject.active = false;
+                            levitateMode = true;
+                            canLevitate = false;
+                            rigidBody.velocity = Vector2.zero;
+                            rigidBody.gravityScale = 0f;
+                        }
                     }
                 }
                 else
                 {
                     ResetGravity();
                 }
-
-
             }
-            else if (levitate && levitateMode)
+            else if (!inputState.levitateHeld && levitateMode)
             {
                 ResetGravity();
             }
 
-
-
-            if (collisionState.grounded)
+            if (stateManager.isGrounded)
             {
                 ResetGravity();
             }
 
-            playerGravity = body2d.gravityScale;
-
+            playerGravity = rigidBody.gravityScale;
         }
 
         private void ResetGravity()
         {
-            body2d.gravityScale = defGravityScale;
+            //rigidBody.gravityScale = defaultGravityScale;
             levitateMode = false;
             capeObject.active = true;
             canLevitate = true;
+
             ToggleScripts(true);
-
         }
-
-
     }
-
-
 }
 

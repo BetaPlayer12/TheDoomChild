@@ -30,19 +30,19 @@ namespace PlayerNew
             var right = inputState.GetButtonValue(inputButtons[1]);
 
 
-            if(collisionState.onWallLeg && collisionState.grounded && !collisionState.onWall && !collisionState.isTouchingLedge )
+            if(stateManager.onWallLeg && stateManager.isGrounded && !stateManager.onWall && !stateManager.isTouchingLedge )
             {
                 ledgeBotPos = transform.position;
                 if (left)
                 {
-                    float terminalPosX = Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) + ledgeClimbXOffset1;
+                    float terminalPosX = Mathf.Floor(ledgeBotPos.x - stateManager.rightPosition.x) + ledgeClimbXOffset1;
                     float terminalPosY = Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1;
                     ledgePos2 = new Vector2(terminalPosX, terminalPosY);
 
                 }
                 else if (right)
                 {
-                    float terminalPosX = Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) - ledgeClimbXOffset1;
+                    float terminalPosX = Mathf.Floor(ledgeBotPos.x + stateManager.rightPosition.x) - ledgeClimbXOffset1;
                     float terminalPosY = Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1;
 
                     ledgePos2 = new Vector2(terminalPosX, terminalPosY);

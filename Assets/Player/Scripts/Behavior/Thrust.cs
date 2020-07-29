@@ -39,7 +39,7 @@ namespace PlayerNew
             var dash = inputState.GetButtonValue(inputButtons[2]);
 
             // Debug.Log(holdTime + " holding");
-            if (holdTime > timeToCharge && !chargingAttack && collisionState.grounded && !down && !dash)
+            if (holdTime > timeToCharge && !chargingAttack && stateManager.isGrounded && !down && !dash)
             {
                 ToggleScripts(false);
                 //Debug.Log("Charging");
@@ -51,7 +51,7 @@ namespace PlayerNew
                 swordThrustBuildUp.Stop();
                 swordThrustBody.Play();
                 var faceDir = facing.isFacingRight ? 1 : -1;
-                body2d.velocity = transform.right * thrustDash * faceDir;
+                rigidBody.velocity = transform.right * thrustDash * faceDir;
                 //Debug.Log("Attack");
                 chargingAttack = false;
             }
