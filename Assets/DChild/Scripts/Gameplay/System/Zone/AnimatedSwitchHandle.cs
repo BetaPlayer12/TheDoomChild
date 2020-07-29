@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Environment
         public void DoSceneTransition(Character character, TransitionType type)
         {
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
-            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            StateManager collisionState = character.GetComponentInChildren<StateManager>();
             switch (type)
             {
                 case TransitionType.Enter:

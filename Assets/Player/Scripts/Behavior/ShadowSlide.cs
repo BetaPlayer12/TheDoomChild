@@ -7,67 +7,54 @@ namespace PlayerNew
 {
     public class ShadowSlide : Dash
     {
-        
         public bool shadowDashing = false;
         public bool shadowMode = false;
         public float shadowlimeter = 0.3f; // sweetspot is 0.3f
 
         private float shadowSlideTimer;
         private bool isCeilingTouch;
-        
-
-
-
 
         override protected void FixedUpdate()
         {
             base.FixedUpdate();
-           
 
             var dash = inputState.GetButtonValue(inputButtons[0]);
             var down = inputState.GetButtonValue(inputButtons[1]);
 
             float faceDir = facing.isFacingRight ? 1 : -1;
-            var vel = body2d.velocity;
-
+            var vel = rigidBody.velocity;
 
             if (shadowMode)
             {
-               
                 shadowSlideTimer += Time.deltaTime;
 
-
-                if (collisionState.isCeilingTouch)
+                if (stateManager.isCeilingTouch)
                 {
-                   
                     shadowMode = true;
                     shadowDashing = true;
-                    body2d.AddForce(new Vector2(faceDir * dashForce, vel.y), ForceMode2D.Force);
+                    //rigidBody.AddForce(new Vector2(faceDir * , vel.y), ForceMode2D.Force);
                 }
                 else
                 {
-                    if(shadowSlideTimer > shadowlimeter)
+                    if (shadowSlideTimer > shadowlimeter)
                     {
-                       
                         shadowMode = false;
                         shadowDashing = false;
                         shadowSlideTimer = 0f;
                     }
                 }
-
-                
             }
-
 
             if (dash && !shadowMode)
             {
-                if (down && collisionState.grounded)
+                if (down && stateManager.isGrounded)
                 {
                     shadowDashing = true;
                     shadowMode = true;
                 }
             }
         }
+
         protected override void OnDash(float faceDir)
         {
             base.OnDash(faceDir);

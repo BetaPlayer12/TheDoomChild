@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Players.State
                                 IWhipGrapple, IProjectileThrowState , ILedgeGrabState
     {
         public event EventAction<CombatStateEventArgs> CombatModeChanged;
-
+         
         private bool m_waitForBehaviour;
         private bool m_isGrounded;
         private bool m_isFalling;

@@ -31,8 +31,10 @@ namespace DChild.Gameplay.Characters.Players
 
         private void FixedUpdate()
         {
-            m_input.SetButtonValue(Buttons.Left, m_moveDirectionInput < 0);
-            m_input.SetButtonValue(Buttons.Right, m_moveDirectionInput > 0);
+            m_input.horizontal = m_moveDirectionInput;
+
+            //m_input.SetButtonValue(Buttons.Left, m_moveDirectionInput < 0);
+            //m_input.SetButtonValue(Buttons.Right, m_moveDirectionInput > 0);
         }
     } 
 }
