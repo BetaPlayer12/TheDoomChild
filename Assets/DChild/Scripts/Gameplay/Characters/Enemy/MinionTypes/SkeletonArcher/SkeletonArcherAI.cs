@@ -171,6 +171,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.gameObject.SetActive(true);
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
+            m_attackDecider.hasDecidedOnAttack = false;
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
@@ -201,6 +202,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 //}
                 m_enablePatience = true;
                 //StartCoroutine(PatienceRoutine());
+            }
+        }
+
+        private void CustomTurn()
+        {
+            if (!IsFacingTarget())
+            {
+                //m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
         }
 
@@ -412,7 +423,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackHandle.ExecuteAttack(m_info.shootComboAttack.animation, m_info.idleAnimation);
                             break;
                     }
-                    m_attackDecider.hasDecidedOnAttack = false;
 
                     break;
 
@@ -498,7 +508,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     if (m_targetInfo.isValid)
                     {
-                        m_targetPointIK.transform.position = m_targetInfo.position;
+                        if (IsFacingTarget())
+                        {
+                            m_targetPointIK.transform.position = m_targetInfo.position;
+                        }
+                        else
+                        {
+                            if (m_attackDecider.hasDecidedOnAttack)
+                            {
+                                CustomTurn();
+                            }
+                        }
                     }
                     return;
             }
