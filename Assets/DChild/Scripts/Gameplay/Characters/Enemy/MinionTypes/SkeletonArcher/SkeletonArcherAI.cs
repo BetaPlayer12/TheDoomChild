@@ -314,6 +314,16 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private bool ShotBlocked()
+        {
+            Vector2 wat = m_projectilePoint.transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -435,7 +445,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             //m_chosenAttack = Vector2.Distance(transform.position, m_targetInfo.position) <= m_info.targetDistanceTolerance ? Attack.Attack3 : m_attackDecider.chosenAttack.attack;
                             m_chosenAttack = m_attackDecider.chosenAttack.attack;
 
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting && !ShotBlocked())
                             {
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -460,9 +470,16 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
+                            var xDistance = Mathf.Abs(m_targetInfo.position.x - transform.position.x);
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && xDistance >= 3)
+                            {
                                 m_stateHandle.SetState(State.Turning);
+                            }
+                            else
+                            {
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            }
                         }
                     }
                     break;
