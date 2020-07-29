@@ -137,7 +137,7 @@ namespace PlayerNew
                         attacker.SetDamageModifier(m_slashModifierList[currentSlashState]);
                         slashStateIndex++;
 
-                        StartCoroutine(SlashDelayRoutine());
+                        StartCoroutine(SlashDelayRoutine(currentSlashState));
 
                         if (slashStateIndex >= m_maxComboNumber)
                         {
@@ -157,6 +157,11 @@ namespace PlayerNew
             else if (attackDelay > 0)
             {
                 attackDelay -= Time.deltaTime;
+            }
+
+            if(stateManager.isFlinching)
+            {
+                
             }
 
             //var canSlash = Input.GetButtonDown("Fire1");
@@ -304,8 +309,8 @@ namespace PlayerNew
 
         public void ShowAttackCollider()
         {
-            m_swordSlashColliders[currentSlashState].enabled = true;
             m_collisionRegistrator.ResetHitCache();
+            m_swordSlashColliders[currentSlashState].enabled = true;
         }
 
         public void SlashAnimationFinished()
@@ -314,14 +319,18 @@ namespace PlayerNew
             stateManager.isInCombatMode = true;
             stateManager.isIdle = true;
 
-            m_swordSlashColliders[currentSlashState].enabled = false;
+            for (int i = 0; i < m_swordSlashColliders.Count; i++)
+            {
+                m_swordSlashColliders[i].enabled = false;
+            }
 
             playerMovement.EnableMovement();
         }
 
-        private IEnumerator SlashDelayRoutine()
+        private IEnumerator SlashDelayRoutine(int index)
         {
             yield return new WaitForSeconds(m_attackDelay);
+            m_swordSlashColliders[index].enabled = false;
 
             SlashAnimationFinished();
         }

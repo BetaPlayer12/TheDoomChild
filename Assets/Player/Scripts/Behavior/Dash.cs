@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace PlayerNew
         private float m_dashVelocity;
         [SerializeField]
         private float m_dashCooldown;
+        [SerializeField]
+        private float m_dashDuration;
 
         private float dashCooldownTimer;
         private PlayerMovement m_movement;
@@ -88,7 +91,7 @@ namespace PlayerNew
             stateManager.isIdle = false;
             stateManager.isAttacking = false;
             rigidBody.velocity = Vector2.zero;
-            rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+            //rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
 
             direction = facing.isFacingRight ? (float)Directions.Right : (float)Directions.Left;
 
@@ -104,10 +107,27 @@ namespace PlayerNew
             Debug.Log("Dash");
             Debug.Log("Velocity: " + rigidBody.velocity);
 
-            yield return new WaitForSeconds(0.1f);
+            float timer = m_dashDuration;
+            do
+            {
+                if (stateManager.isFlinching)
+                {
+                    break;
+                }
+                else
+                {
+                    rigidBody.velocity = Vector2.zero;
+                    rigidBody.AddForce(new Vector2(direction * m_dashVelocity, 0), ForceMode2D.Impulse);
+                    timer -= GameplaySystem.time.deltaTime;
+                    yield return null;
+                }
+            } while (timer > 0);
+
+            //yield return new WaitForSeconds(0.1f);
 
             if (stateManager.isFlinching == false)
             {
+                rigidBody.velocity = Vector2.zero;
                 m_movement.EnableMovement();
             }
 

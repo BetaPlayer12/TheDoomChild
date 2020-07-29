@@ -13,7 +13,7 @@ namespace PlayerNew
         private Jog jogging;
 
         protected float lastJumpTime = 0;
-        protected int jumpsRemaining = 0;
+        public int jumpsRemaining = 0;
 
         void Start()
         {

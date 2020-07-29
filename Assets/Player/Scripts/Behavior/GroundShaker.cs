@@ -45,7 +45,7 @@ namespace PlayerNew
             var attack = inputState.GetButtonValue(inputButtons[1]);
             var attackHold = inputState.GetButtonHoldTime(inputButtons[1]);
 
-            if (!stateManager.isGrounded && down && attack && !groundSmash && attackHold > midAirAttackHold)
+            if (!stateManager.isGrounded && down && attack && !groundSmash && attackHold > midAirAttackHold && !stateManager.onWall)
             {
                 playerMovement.DisableMovement();
                 rigidBody.velocity = Vector2.zero;

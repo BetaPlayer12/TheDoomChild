@@ -6,6 +6,8 @@ namespace PlayerNew
 {
     public class WallStick : PlayerBehaviour
     {
+        [SerializeField]
+        private LongJump m_doubleJump;
         public List<Collider2D> m_colliderList;
         private WallGrab wallGrab;
 
@@ -76,6 +78,8 @@ namespace PlayerNew
 
                 wallSticking = true;
                 wallGrounded = false;
+
+                m_doubleJump.jumpsRemaining = 1;
             }
 
             if (stateManager.isGrounded && stateManager.onWall && stateManager.onWallLeg)
