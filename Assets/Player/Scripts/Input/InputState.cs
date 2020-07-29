@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Holysoft.Event;
 
 namespace PlayerNew
 {
@@ -54,23 +55,33 @@ namespace PlayerNew
         public bool whipJumpAttack;
 
         bool readyToClear;
+        private void OnControllerEnabled(object sender, EventActionArgs eventArgs)
+        {
+            enabled = true;
+        }
+
+        private void OnControllerDisabled(object sender, EventActionArgs eventArgs)
+        {
+            readyToClear = true;
+            ClearInput();
+            enabled = false;
+        }
 
         private void Awake()
         {
             body2D = GetComponentInParent<Rigidbody2D>();
             collisionState = GetComponent<StateManager>();
+            m_inputManager.ControllerDisabled += OnControllerDisabled;
+            m_inputManager.ControllerEnabled += OnControllerEnabled;
         }
+
+
 
         private void Update()
         {
             ClearInput();
-
-            if (m_inputManager.enabled == true)
-            {
-                ProcessInputs();
-
-                horizontal = Mathf.Clamp(horizontal, -1f, 1f);
-            }
+            ProcessInputs();
+            horizontal = Mathf.Clamp(horizontal, -1f, 1f);
         }
 
         private void FixedUpdate()
