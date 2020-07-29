@@ -773,6 +773,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     DecidedOnAttack(false);
                     ChoosePattern();
+                    //if (IsTargetInRange(m_info.attack1.range))
+                    //{
+                    //    m_currentPattern = Pattern.AttackPattern1;
+                    //}
                     if (IsFacingTarget())
                     {
                         if (m_patternDecider.hasDecidedOnAttack)
