@@ -93,6 +93,7 @@ namespace DChild.Gameplay.Systems
         public void OnArrival(object sender, CharacterEventArgs eventArgs)
         {
             StartCoroutine(DoTransition(eventArgs.character, TransitionType.Exit));
+            Debug.LogError("Exit");
         }
 
         private void Awake()

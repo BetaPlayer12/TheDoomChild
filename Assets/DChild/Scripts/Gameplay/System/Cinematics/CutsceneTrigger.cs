@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Cinematics
         private Collider2D m_collider;
         private PlayerControlledObject m_controlledObject;
         private Animator m_animator;
-        private CollisionState m_collisionState;
+        private StateManager m_collisionState;
         private Scene m_originalScene;
 
         private bool m_isTriggered;
@@ -101,7 +101,7 @@ namespace DChild.Gameplay.Cinematics
 
         private void LateUpdate()
         {
-            if (m_collisionState.grounded)
+            if (m_collisionState.isGrounded)
             {
                 m_animator.enabled = false;
                 m_cutscene.Play();
@@ -118,11 +118,11 @@ namespace DChild.Gameplay.Cinematics
                     m_controlledObject = controlledObject;
                     m_originalScene = m_controlledObject.gameObject.scene;
                     m_controlledObject.transform.parent = m_cutscene.transform;
-                    m_collisionState = m_controlledObject.GetComponentInChildren<CollisionState>();
+                    m_collisionState = m_controlledObject.GetComponentInChildren<StateManager>();
                     m_animator = m_controlledObject.GetComponentInChildren<Animator>();
                     GameplaySystem.playerManager.OverrideCharacterControls();
 
-                    if (m_collisionState.grounded)
+                    if (m_collisionState.isGrounded)
                     {
                         m_animator.enabled = false;
                         m_cutscene.Play();

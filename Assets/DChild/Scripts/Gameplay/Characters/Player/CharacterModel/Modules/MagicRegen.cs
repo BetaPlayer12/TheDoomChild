@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Characters.Players
         private IIsolatedTime m_time;
 
         private PlayerNew.WallStick m_wallstickHandler;
-        private CollisionState m_collisionStateHandler;
+        private StateManager m_collisionStateHandler;
 
 
         public void Initialize(ComplexCharacterInfo info)
@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Characters.Players
             m_magic.ValueChanged += OnValueChange;
 
             m_wallstickHandler = character.GetComponentInChildren<PlayerNew.WallStick>();
-            m_collisionStateHandler = character.GetComponentInChildren<CollisionState>();
+            m_collisionStateHandler = character.GetComponentInChildren<StateManager>();
             info.attacker.TargetDamaged += OnTargetDamaged;
         }
 
@@ -88,7 +88,7 @@ namespace DChild.Gameplay.Characters.Players
 
         private void Update()
         {
-            if (m_collisionStateHandler.grounded || m_wallstickHandler.wallSticking)
+            if (m_collisionStateHandler.isGrounded || m_wallstickHandler.wallSticking)
             {
                 m_regenInterval.Tick(m_time.deltaTime);
             }

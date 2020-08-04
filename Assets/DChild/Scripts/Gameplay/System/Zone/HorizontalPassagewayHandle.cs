@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Environment
 
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
             rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            StateManager collisionState = character.GetComponentInChildren<StateManager>();
             collisionState.forceGrounded = true;
         }
 
@@ -69,8 +69,9 @@ namespace DChild.Gameplay.Environment
 
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
             rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-            CollisionState collisionState = character.GetComponentInChildren<CollisionState>();
+            StateManager collisionState = character.GetComponentInChildren<StateManager>();
             collisionState.forceGrounded = false;
+            Debug.LogError("Exit Over");
         }
 
         private void OnPassagewayPostExit()

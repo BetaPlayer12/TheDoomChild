@@ -33,7 +33,8 @@ namespace PlayerNew
         // Start is called before the first frame update
         void Start()
         {
-            defGravity = body2d.gravityScale;
+            Debug.Log("Start Ground Shaker");
+            defGravity = rigidBody.gravityScale;
             animator = GetComponent<Animator>();
         }
 
@@ -44,12 +45,14 @@ namespace PlayerNew
             var attack = inputState.GetButtonValue(inputButtons[1]);
             var attackHold = inputState.GetButtonHoldTime(inputButtons[1]);
 
-            if (!collisionState.grounded && down && attack && !groundSmash && attackHold > midAirAttackHold)
+            if (!stateManager.isGrounded && down && attack && !groundSmash && attackHold > midAirAttackHold && !stateManager.onWall)
             {
-                body2d.velocity = Vector2.zero;
+                playerMovement.DisableMovement();
+                rigidBody.velocity = Vector2.zero;
                 groundSmash = true;
-                body2d.gravityScale = 0f;
+                rigidBody.gravityScale = 0f;
                 ToggleScripts(false);
+                StopAllCoroutines();
                 StartCoroutine(GroundSmashDelayRoutine());
             }
         }
@@ -72,30 +75,32 @@ namespace PlayerNew
 
         private void DeathEarthShakerImpact()
         {
+            rigidBody.velocity = Vector2.zero;
             deathEarthShakerLoop.Stop();
             deathEarthShakerImpact.Play();
             attacker.SetDamageModifier(m_damageModifier);
             m_groundShakerAttackCollider.enabled = true;
         }
 
-        IEnumerator GroundSmashDelayRoutine()
-        {
-            yield return new WaitForSeconds(midAirDelay);
-            body2d.gravityScale = defGravity;
-            // body2d.gravityScale = defGravity * smashMultiplier;
-            Debug.Log(smashMultiplier);
-            body2d.velocity = Vector2.zero;
-            body2d.AddForce(new Vector2(body2d.velocity.x, -smashMultiplier), ForceMode2D.Force);
-        }
-
         public void GroundSmashFinishAnimation()
         {
             groundSmash = false;
-            body2d.velocity = Vector2.zero;
+            rigidBody.velocity = Vector2.zero;
 
             ToggleScripts(true);
             m_groundShakerAttackCollider.enabled = false;
             animator.SetBool("Attack", false);
+            playerMovement.EnableMovement();
+        }
+
+        IEnumerator GroundSmashDelayRoutine()
+        {
+            yield return new WaitForSeconds(midAirDelay);
+            rigidBody.gravityScale = defGravity;
+            // body2d.gravityScale = defGravity * smashMultiplier;
+            Debug.Log(smashMultiplier);
+            rigidBody.velocity = Vector2.zero;
+            rigidBody.AddForce(new Vector2(rigidBody.velocity.x, -smashMultiplier), ForceMode2D.Force);
         }
     }
 }

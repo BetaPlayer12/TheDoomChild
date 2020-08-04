@@ -171,6 +171,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.gameObject.SetActive(true);
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
+            m_attackDecider.hasDecidedOnAttack = false;
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
@@ -201,6 +202,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 //}
                 m_enablePatience = true;
                 //StartCoroutine(PatienceRoutine());
+            }
+        }
+
+        private void CustomTurn()
+        {
+            if (!IsFacingTarget())
+            {
+                //m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+                m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
         }
 
@@ -261,7 +272,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_animation.SetEmptyAnimation(0, 0);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -312,6 +323,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    m_projectileLauncher.LaunchProjectile();
                 //}
             }
+        }
+
+        private bool ShotBlocked()
+        {
+            Vector2 wat = m_projectilePoint.transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         protected override void Start()
@@ -402,7 +423,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackHandle.ExecuteAttack(m_info.shootComboAttack.animation, m_info.idleAnimation);
                             break;
                     }
-                    m_attackDecider.hasDecidedOnAttack = false;
 
                     break;
 
@@ -435,7 +455,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             //m_chosenAttack = Vector2.Distance(transform.position, m_targetInfo.position) <= m_info.targetDistanceTolerance ? Attack.Attack3 : m_attackDecider.chosenAttack.attack;
                             m_chosenAttack = m_attackDecider.chosenAttack.attack;
 
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting && !ShotBlocked())
                             {
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -460,9 +480,16 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
+                            var xDistance = Mathf.Abs(m_targetInfo.position.x - transform.position.x);
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && xDistance >= 3)
+                            {
                                 m_stateHandle.SetState(State.Turning);
+                            }
+                            else
+                            {
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            }
                         }
                     }
                     break;
@@ -481,7 +508,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     if (m_targetInfo.isValid)
                     {
-                        m_targetPointIK.transform.position = m_targetInfo.position;
+                        if (IsFacingTarget())
+                        {
+                            m_targetPointIK.transform.position = m_targetInfo.position;
+                        }
+                        else
+                        {
+                            if (m_attackDecider.hasDecidedOnAttack)
+                            {
+                                CustomTurn();
+                            }
+                        }
                     }
                     return;
             }

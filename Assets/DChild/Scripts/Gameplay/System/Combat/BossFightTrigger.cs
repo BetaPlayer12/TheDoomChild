@@ -109,7 +109,10 @@ namespace DChild.Gameplay.Combat
 
         private void Awake()
         {
-            m_boss.GetComponent<Damageable>().Destroyed += OnBossKilled;
+            if (m_boss != null)
+            {
+                m_boss.GetComponent<Damageable>().Destroyed += OnBossKilled;
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
