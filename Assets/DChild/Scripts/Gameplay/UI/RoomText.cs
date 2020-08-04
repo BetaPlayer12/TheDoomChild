@@ -14,14 +14,14 @@ namespace DChild.Gameplay.UI
             [SerializeField]
             private bool m_Shown;
 
-
-
             public SaveData(bool m_Shown)
             {
                 this.m_Shown = m_Shown;
             }
 
             public bool Shown => m_Shown;
+
+            ISaveData ISaveData.ProduceCopy => new SaveData(m_Shown);
         }
 
         [SerializeField]

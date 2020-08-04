@@ -21,6 +21,8 @@ namespace DChild.Gameplay.Environment
             }
 
             public bool isSuspended => m_isSuspended;
+
+            ISaveData ISaveData.ProduceCopy =>new SaveData(m_isSuspended);
         }
 
         [SerializeField, OnValueChanged("OnSuspensionChanged")]

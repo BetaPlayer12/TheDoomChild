@@ -19,6 +19,8 @@ namespace DChild.Gameplay.Environment
             }
 
             public bool hasChange => m_hasChanged;
+
+            ISaveData ISaveData.ProduceCopy => new SaveData(m_hasChanged);
         }
 
         [SerializeField, OnValueChanged("OnHasChanged")]

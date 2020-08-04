@@ -27,6 +27,8 @@ namespace DChild.Gameplay.Environment
             private bool m_isDestroyed;
 
             public bool isDestroyed => m_isDestroyed;
+
+            ISaveData ISaveData.ProduceCopy => new SaveData(m_isDestroyed);
         }
 
         [SerializeField]

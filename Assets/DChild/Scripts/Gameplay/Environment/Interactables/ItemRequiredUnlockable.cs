@@ -22,6 +22,8 @@ namespace DChild.Gameplay.Environment
             }
 
             public bool isUnlocked => m_isUnlocked;
+
+            ISaveData ISaveData.ProduceCopy => new SaveData(m_isUnlocked);
         }
 
         [SerializeField]

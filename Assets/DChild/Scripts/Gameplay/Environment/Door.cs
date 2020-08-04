@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Environment.Interractables
             private bool m_isOpen;
 
             public bool isOpen => m_isOpen;
+
+            ISaveData ISaveData.ProduceCopy => new SaveData(m_isOpen);
         }
 
         [System.Serializable]

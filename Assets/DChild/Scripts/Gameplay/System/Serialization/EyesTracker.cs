@@ -18,6 +18,18 @@ namespace DChild.Gameplay
             public Dictionary<SerializeID, bool> m_entities = new Dictionary<SerializeID, bool>(new SerializeID.EqualityComparer());
             [SerializeField, MinValue(0)]
             public int m_entitiesKilledCount;
+
+            ISaveData ISaveData.ProduceCopy
+            {
+                get
+                {
+                    var copy = new SaveData();
+                    var entities = new Dictionary<SerializeID, bool>(m_entities);
+                    copy.m_entities = entities;
+                    copy.m_entitiesKilledCount = m_entitiesKilledCount;
+                    return copy;
+                }
+            }
         }
 
         [System.Serializable]

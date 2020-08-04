@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Damageable m_damageable;
         [SerializeField]
-        private CharacterState m_state;
+        private State.CharacterState m_state;
         [SerializeField]
         private Magic m_magic;
         [SerializeField]
@@ -45,7 +45,7 @@ namespace DChild.Gameplay.Characters.Players
             m_character = character.GetComponentInChildren<Character>();
             m_attacker = character.GetComponentInChildren<Attacker>();
             m_damageable = character.GetComponentInChildren<Damageable>();
-            m_state = character.GetComponentInChildren<CharacterState>();
+            m_state = character.GetComponentInChildren<State.CharacterState>();
             m_magic = character.GetComponentInChildren<Magic>();
             m_physics = character.GetComponentInChildren<CharacterPhysics2D>();
             m_sensorList = character.GetComponentInChildren<PlayerSensorList>();
@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Characters.Players
         }
 
         public Character character => m_character;
-        public CharacterState state => m_state;
+        public State.CharacterState state => m_state;
         public Animator animator => m_animator;
         public RaySensor GetSensor(PlayerSensorList.SensorType sensorType) => m_sensorList.GetSensor(sensorType);
         public AnimationParametersData animationParametersData => m_animationParametersData;
