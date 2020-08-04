@@ -92,14 +92,14 @@ namespace PlayerNew
                     stateManager.ToggleGroundChecker(true);
                     velY *= slideMultiplier;
                     rigidBody.gravityScale = 0;
-                    rigidBody.drag = 100;
+                    rigidBody.drag = 20;
                 }
                 else if (wallStickUp)
                 {
                     stateManager.ToggleGroundChecker(false);
                     velY *= -slideMultiplier;
                     rigidBody.gravityScale = 0;
-                    rigidBody.drag = 100;
+                    rigidBody.drag = 20;
                 }
                 else
                 {

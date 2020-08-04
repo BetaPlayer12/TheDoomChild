@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,11 +61,13 @@ namespace PlayerNew
         private List<Collider2D> colliderList;
         private PlayerMovement playerMovement;
         private bool isGroundCheckerEnabled = true;
+        private Character m_character;
 
         void Awake()
         {
             inputState = GetComponent<InputState>();
             playerMovement = GetComponent<PlayerMovement>();
+            m_character = GetComponentInParent<Character>();
 
             filter = new ContactFilter2D();
             colliderList = new List<Collider2D>();
@@ -106,7 +110,7 @@ namespace PlayerNew
             pos.x += transform.position.x;
             pos.y += transform.position.y;
 
-            lineDir = inputState.direction == Directions.Right ? Vector2.right : Vector2.left;
+            lineDir = m_character.facing == HorizontalDirection.Right ? Vector2.right : Vector2.left;
             //onWall = Physics2D.OverlapCircle(pos, collisionRadius, collisionLayer);
             var wall = Physics2D.Raycast(pos, lineDir, lineLength, collisionLayer);
 

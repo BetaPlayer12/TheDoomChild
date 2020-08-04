@@ -56,7 +56,7 @@ public class PlayerMovement : PlayerBehaviour
 
     }
 
-    void FlipCharacterDirection()
+    public void FlipCharacterDirection()
     {
         direction *= -1;
 

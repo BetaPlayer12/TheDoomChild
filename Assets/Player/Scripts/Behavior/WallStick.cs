@@ -74,7 +74,7 @@ namespace PlayerNew
             if (!stateManager.isGrounded && stateManager.onWall && stateManager.onWallLeg)
             {
                 rigidBody.gravityScale = 0;
-                rigidBody.drag = 100;
+                rigidBody.drag = 20;
 
                 wallSticking = true;
                 wallGrounded = false;

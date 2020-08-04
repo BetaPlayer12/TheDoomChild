@@ -25,7 +25,8 @@ namespace PlayerNew
 
         protected virtual void FixedUpdate()
         {
-            if (inputState.dashPressed && dashCooldownTimer <= 0 && stateManager.isFlinching == false && stateManager.isDashing == false && stateManager.isDead == false)
+            if (inputState.dashPressed && dashCooldownTimer <= 0 && stateManager.isFlinching == false && stateManager.isDashing == false && stateManager.isDead == false 
+                && (stateManager.onWall == false && stateManager.onWallLeg == false))
             {
                 StartCoroutine(DashRoutine());
             }
@@ -116,6 +117,15 @@ namespace PlayerNew
                 }
                 else
                 {
+                    if (inputState.horizontal != 0)
+                    {
+                        if(Mathf.Sign(inputState.horizontal) != direction)
+                        {
+                            direction = inputState.horizontal;
+                            playerMovement.FlipCharacterDirection();
+                        }
+                    }
+
                     rigidBody.velocity = Vector2.zero;
                     rigidBody.AddForce(new Vector2(direction * m_dashVelocity, 0), ForceMode2D.Impulse);
                     timer -= GameplaySystem.time.deltaTime;

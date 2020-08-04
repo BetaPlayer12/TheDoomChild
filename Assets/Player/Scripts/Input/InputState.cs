@@ -75,8 +75,6 @@ namespace PlayerNew
             m_inputManager.ControllerEnabled += OnControllerEnabled;
         }
 
-
-
         private void Update()
         {
             ClearInput();
