@@ -42,7 +42,7 @@ namespace PlayerNew
             longJumpBehavior = GetComponent<LongJump>();
             //wallJumpBehavior = GetComponent<WallJump>();
             slashBehavior = GetComponent<Slash>();
-            dashBehavior = GetComponent<ShadowSlide>();
+            //dashBehavior = GetComponent<ShadowSlide>();
             thrustBehavior = GetComponent<Thrust>();
             groundShakerBehavior = GetComponent<GroundShaker>();
             wallSlideBehavior = GetComponent<WallSlide>();
@@ -153,10 +153,10 @@ namespace PlayerNew
                 //animator.SetBool("Levitate", levitateBehavior.levitateMode);
             }
 
-            if (dashBehavior.shadowMode)
-            {
-                crouchBehavior.crouching = false;
-            }
+            //if (dashBehavior.shadowMode)
+            //{
+            //    crouchBehavior.crouching = false;
+            //}
 
             // WallClimbAnimationState(wallSlideBehavior.ledgeGrabState);
 
@@ -168,7 +168,7 @@ namespace PlayerNew
             GroundednessAnimationState(stateManager.isGrounded);
             VelocityYAnimationState(body2d.velocity.y);
             WallStickAnimationState(wallStickBehavior.onWallDetected);
-            DashAnimationState(stateManager.isDashing, dashBehavior.shadowMode);
+            DashAnimationState(stateManager.isDashing, false);
             GroundShakerAnimationState(groundShakerBehavior.groundSmash);
             IdleAnimationModeState(idleBehavior.combatIdle, idleBehavior.currentIdleState);
             //WhipAnimationModeState(whipBehavior);
