@@ -75,8 +75,6 @@ namespace PlayerNew
             m_inputManager.ControllerEnabled += OnControllerEnabled;
         }
 
-
-
         private void Update()
         {
             ClearInput();
@@ -112,7 +110,7 @@ namespace PlayerNew
             //Reset all inputs
             horizontal = 0f;
             vertical = 0f;
-            dashPressed = false;
+            //dashPressed = false;
             slashPressed = false;
             slashHeld = false;
             levitatePressed = false;
