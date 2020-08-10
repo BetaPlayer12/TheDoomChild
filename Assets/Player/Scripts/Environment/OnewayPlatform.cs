@@ -74,4 +74,9 @@ public class OnewayPlatform : MonoBehaviour
             }
         }
     }
+
+    private void OnValidate()
+    {
+        tag = "Droppable";
+    }
 }

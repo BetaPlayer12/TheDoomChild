@@ -73,8 +73,8 @@ namespace PlayerNew
         {
             if (!stateManager.isGrounded && stateManager.onWall && stateManager.onWallLeg)
             {
-                rigidBody.gravityScale = 0;
-                rigidBody.drag = 20;
+                //rigidBody.gravityScale = 0;
+                //rigidBody.drag = 20;
 
                 wallSticking = true;
                 wallGrounded = false;
@@ -120,6 +120,8 @@ namespace PlayerNew
                 {
                     Physics2D.IgnoreCollision(capsuleCollider, m_colliderList[i], false);
                 }
+
+                m_colliderList.Clear();
             }
         }
     }

@@ -37,7 +37,7 @@ namespace PlayerNew
 
             if (wallSlide.extraJump && canJump)
             {
-                jumpsRemaining = 1;
+                jumpsRemaining = 2;
                 groundJumpExtra = false;
                 wallSlide.extraJump = false;
             }
