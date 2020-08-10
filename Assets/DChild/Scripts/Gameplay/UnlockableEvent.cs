@@ -77,7 +77,7 @@ namespace DChild.Gameplay
             public bool[] requirementState { get; }
             public bool isUnlocked { get; }
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(isUnlocked,requirementState);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(isUnlocked,requirementState);
         }
 
         [ShowInInspector, OnValueChanged("OnStateChange")]

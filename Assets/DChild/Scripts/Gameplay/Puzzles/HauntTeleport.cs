@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Puzzles
 
             public int deathCounter => m_deathCounter;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(m_deathCounter);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_deathCounter);
         }
 
         [SerializeField]

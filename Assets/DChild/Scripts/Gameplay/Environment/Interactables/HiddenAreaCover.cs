@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Environment
 
             public bool isInvisible => m_isInvisible;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(m_isInvisible);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isInvisible);
         }
 
         private struct ColorInfo

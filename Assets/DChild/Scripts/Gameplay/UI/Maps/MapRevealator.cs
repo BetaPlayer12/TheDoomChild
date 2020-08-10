@@ -24,17 +24,14 @@ namespace DChild.Gameplay.UI.Map
                 m_isRevealedPair.Add(new SerializeID(ID, false), isRevealed);
             }
 
-            ISaveData ISaveData.ProduceCopy
+            ISaveData ISaveData.ProduceCopy()
             {
-                get
-                {
                     var copy = new SaveData();
                     foreach (var key in m_isRevealedPair.Keys)
                     {
                         copy.SetData(key, m_isRevealedPair[key]);
                     }
                     return copy;
-                }
             }
 
             public bool IsRevealed(SerializeID ID) => m_isRevealedPair.ContainsKey(ID) ? m_isRevealedPair[ID] : false;

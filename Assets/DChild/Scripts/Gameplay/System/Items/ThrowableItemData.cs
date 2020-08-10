@@ -17,9 +17,9 @@ namespace DChild.Gameplay.Items
 
         public override void Use(IPlayer player)
         {
-            var handle = player.character.GetComponent<ProjectileThrowHandler>();
-            handle.SetProjectile(m_projectile);
-            handle.Initialize();
+            ////var handle = player.character.GetComponent<ProjectileThrowHandler>();
+            ////handle.SetProjectile(m_projectile);
+            ////handle.Initialize();
             /*Start Throw via Controller
              Controller decides when to spawn the projectile
              this only starts the process*/

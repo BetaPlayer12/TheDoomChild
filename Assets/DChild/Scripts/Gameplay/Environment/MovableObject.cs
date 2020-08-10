@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Environment
 
             public Vector3 position => m_position;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(position);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(position);
         }
 
         [SerializeField]

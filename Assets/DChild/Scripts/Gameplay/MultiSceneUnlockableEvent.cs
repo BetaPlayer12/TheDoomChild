@@ -49,7 +49,7 @@ namespace DChild.Gameplay
 
             public bool isUnlocked => m_isUnlocked;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(m_isUnlocked);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isUnlocked);
         }
 
         [ShowInInspector, OnValueChanged("OnStateChange")]

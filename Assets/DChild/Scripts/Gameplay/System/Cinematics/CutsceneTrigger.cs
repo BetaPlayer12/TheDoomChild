@@ -37,7 +37,7 @@ namespace DChild.Gameplay.Cinematics
 
             public bool isTriggered => m_isTriggered;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(m_isTriggered);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isTriggered);
         }
 
         [SerializeField]

@@ -8,13 +8,8 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
         [SerializeField]
         private Transform[] m_scaleFlips;
 
-        private Animator m_animator;
-        private string m_facingLeftParamater;
-
         public void Initialize(ComplexCharacterInfo info)
         {
-            m_animator = info.animator;
-            m_facingLeftParamater = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsFacingLeft);
             info.character.CharacterTurn += OnCharacterTurn;
             var facing = info.character.facing;
             CallUpdate(facing);
@@ -31,10 +26,6 @@ namespace DChild.Gameplay.Characters.Players.Behaviour
 
         public void CallUpdate(HorizontalDirection facing)
         {
-            if (m_animator)
-            {
-                m_animator?.SetBool(m_facingLeftParamater, facing == HorizontalDirection.Left);
-            }
             AlignTransformScales(facing);
         }
 

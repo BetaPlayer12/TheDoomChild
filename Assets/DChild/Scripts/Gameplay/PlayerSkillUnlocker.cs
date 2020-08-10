@@ -26,7 +26,7 @@ namespace DChild.Gameplay
             }
             public bool isUsed => m_isUsed;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(m_isUsed);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isUsed);
         }
 
         [SerializeField]

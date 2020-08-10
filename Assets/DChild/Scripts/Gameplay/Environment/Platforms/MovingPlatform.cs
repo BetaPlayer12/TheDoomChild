@@ -47,7 +47,7 @@ namespace DChild.Gameplay.Environment
             public int wayPoint => m_wayPoint;
             public int incrementerValue => m_incrementerValue;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(position,wayPoint,incrementerValue);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(position,wayPoint,incrementerValue);
         }
 
         [SerializeField, MinValue(0.1f), TabGroup("Setting")]

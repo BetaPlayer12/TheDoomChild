@@ -50,7 +50,7 @@ namespace DChild.Serialization
             }
 
             public ISaveData GetData(SerializeID ID) => m_savedDatas.ContainsKey(ID) ? m_savedDatas[ID] : null;
-            ISaveData ISaveData.ProduceCopy => new ZoneData(m_savedDatas);
+            ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas);
 
 #if UNITY_EDITOR
             public Dictionary<SerializeID, ISaveData> savedDatas => m_savedDatas;

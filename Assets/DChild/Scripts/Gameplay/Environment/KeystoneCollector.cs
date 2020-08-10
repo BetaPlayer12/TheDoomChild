@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Environment
 
             public int currentKeyStones => m_currentKeyStones;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(m_currentKeyStones);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_currentKeyStones);
         }
 
         [SerializeField]

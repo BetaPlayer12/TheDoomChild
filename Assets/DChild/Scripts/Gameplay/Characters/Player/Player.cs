@@ -77,8 +77,6 @@ namespace DChild.Gameplay.Characters.Players
         private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private LootPicker m_lootPicker;
-        [SerializeField]
-        private GroundednessHandle m_groundednessHandle;
 
         public event EventAction<EventActionArgs> OnDeath;
 
@@ -130,11 +128,7 @@ namespace DChild.Gameplay.Characters.Players
         {
             OnDeath?.Invoke(this, eventArgs);
             //  m_controlledCharacter.physics.SetVelocity(Vector2.zero);
-            if (m_groundednessHandle != null)
-            {
-                m_groundednessHandle.enabled = false;
-                m_groundednessHandle.ResetAnimationParameters();
-            }
+
             m_controller.Disable();
             m_damageable.SetHitboxActive(false);
         }
@@ -148,7 +142,6 @@ namespace DChild.Gameplay.Characters.Players
             m_attacker = character.GetComponentInChildren<Attacker>();
             m_magic = character.GetComponentInChildren<Magic>();
             m_lootPicker = character.GetComponentInChildren<LootPicker>();
-            m_groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
         }
 #endif
     }

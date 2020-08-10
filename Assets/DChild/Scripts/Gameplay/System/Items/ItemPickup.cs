@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Items
 
             public bool isPickedUp => m_isPickedUp;
 
-            ISaveData ISaveData.ProduceCopy => new SaveData(m_isPickedUp);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isPickedUp);
         }
         [SerializeField]
         private GameObject m_model;

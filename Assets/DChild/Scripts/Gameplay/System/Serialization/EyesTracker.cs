@@ -19,16 +19,13 @@ namespace DChild.Gameplay
             [SerializeField, MinValue(0)]
             public int m_entitiesKilledCount;
 
-            ISaveData ISaveData.ProduceCopy
+            ISaveData ISaveData.ProduceCopy()
             {
-                get
-                {
                     var copy = new SaveData();
                     var entities = new Dictionary<SerializeID, bool>(m_entities);
                     copy.m_entities = entities;
                     copy.m_entitiesKilledCount = m_entitiesKilledCount;
                     return copy;
-                }
             }
         }
 
