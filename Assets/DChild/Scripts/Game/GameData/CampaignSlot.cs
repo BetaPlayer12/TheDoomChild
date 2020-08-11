@@ -41,7 +41,7 @@ namespace DChild.Serialization
         {
             for (int i = 0; i < m_importable.Length; i++)
             {
-                m_zoneDatas.UpdateData(m_importable[i].id, m_importable[i].zoneDatas);
+                m_zoneDatas.UpdateData(m_importable[i].id, ((ISaveData)m_importable[i].zoneDatas).ProduceCopy());
             }
         }
         [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame"), TabGroup("Misc")]

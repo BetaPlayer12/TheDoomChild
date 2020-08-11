@@ -34,9 +34,21 @@ namespace DChild.Serialization
                 }
             }
 
-            public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas)
+            public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas,bool createSeparateCopy)
             {
-                m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas, new SerializeID.EqualityComparer());
+                if (createSeparateCopy)
+                {
+                    m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
+                    foreach (var ID in savedDatas.Keys)
+                    {
+                        m_savedDatas.Add(ID,savedDatas[ID].ProduceCopy());
+                    }
+                }
+                else
+                {
+                    m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas, new SerializeID.EqualityComparer());
+                }
+                
             }
 
             public void SetData(SerializeID ID, ISaveData data)
@@ -52,7 +64,7 @@ namespace DChild.Serialization
             }
 
             public ISaveData GetData(SerializeID ID) => m_savedDatas.ContainsKey(ID) ? m_savedDatas[ID] : null;
-            ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas);
+            ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas,true);
 
 #if UNITY_EDITOR
             public Dictionary<SerializeID, ISaveData> savedDatas => m_savedDatas;
@@ -304,7 +316,7 @@ namespace DChild.Serialization
                         var save = editorData.m_componenetDatas[i];
                         dictionary.Add(save.m_serializer.ID, save.m_saveData);
                     }
-                    return new ZoneData(dictionary);
+                    return new ZoneData(dictionary,false);
                 }
             }
         }
