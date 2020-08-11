@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using PlayerNew;
 using System.Collections;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -22,6 +23,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private Animator m_animator;
 
+        public event EventAction<EventActionArgs> OnExecute;
         private Rigidbody2D m_physics;
         private int m_flinch;
         private float playerGravityScale;
@@ -44,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
             bool isAerialKnockback = false;
+            OnExecute?.Invoke(this, EventActionArgs.Empty);
             m_physics.velocity = Vector2.zero;
             Vector2 knockBackDirection = Vector2.zero;
             knockBackDirection.x = directionToSource.x > 0 ? -1 : 1;

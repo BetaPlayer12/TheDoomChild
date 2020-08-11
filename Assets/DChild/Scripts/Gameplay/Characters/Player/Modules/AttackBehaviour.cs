@@ -18,16 +18,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             private float m_nextAttackDelay;
 
             public float nextAttackDelay => m_nextAttackDelay;
-            
+
             public void PlayFX(bool value)
             {
-                if (value)
+                if (m_fx != null)
                 {
-                    m_fx?.Play(true);
-                }
-                else
-                {
-                    m_fx?.Stop(true);
+                    if (value)
+                    {
+                        m_fx.Play(true);
+                    }
+                    else
+                    {
+                        m_fx.Stop(true);
+                    } 
                 }
             }
 
@@ -59,6 +62,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_animator.SetBool(m_animationParameter, false);
             m_state.isAttacking = false;
+            m_state.waitForBehaviour = false;
         }
 
         public virtual void Initialize(ComplexCharacterInfo info)

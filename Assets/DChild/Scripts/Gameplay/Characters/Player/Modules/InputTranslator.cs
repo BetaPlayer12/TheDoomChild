@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool jumpHeld;
 
         public bool slashPressed;
+        public bool slashHeld;
 
         private void OnHorizontalInput(InputValue value)
         {
@@ -42,7 +43,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnSlash(InputValue value)
         {
-            slashPressed = value.Get<float>() == 1;
+            var isTrue = value.Get<float>() == 1;
+            slashPressed = isTrue;
+            slashHeld = isTrue;
         }
 
         private void LateUpdate()
