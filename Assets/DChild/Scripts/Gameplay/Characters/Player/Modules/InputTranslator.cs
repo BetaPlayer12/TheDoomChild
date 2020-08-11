@@ -15,6 +15,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool slashPressed;
         public bool slashHeld;
 
+        public bool earthShakerPressed;
+
         private void OnHorizontalInput(InputValue value)
         {
             horizontalInput = value.Get<float>();
@@ -48,11 +50,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
             slashHeld = isTrue;
         }
 
+        private void OnEarthShaker(InputValue value)
+        {
+            earthShakerPressed = value.Get<float>() == 1;
+        }
+
         private void LateUpdate()
         {
             dashPressed = false;
             jumpPressed = false;
             slashPressed = false;
+
+            earthShakerPressed = false;
         }
     }
 }
