@@ -30,11 +30,21 @@ namespace DChild.Serialization
 
         [SerializeField, HideIf("m_newGame")]
         private PlayerCharacterData m_characterData;
-        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
+        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame"), TabGroup("Campaign")]
         private SerializeDataList m_campaignProgress;
-        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
+        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame"), TabGroup("Zone")]
         private SerializeDataList m_zoneDatas;
-        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame")]
+        [SerializeField, DrawWithUnity, TabGroup("ZoneSlots Importable")]
+        private ZoneSlot[] m_importable;
+        [Button, TabGroup("ZoneSlots Importable")]
+        public void Import()
+        {
+            for (int i = 0; i < m_importable.Length; i++)
+            {
+                m_zoneDatas.UpdateData(m_importable[i].id, m_importable[i].zoneDatas);
+            }
+        }
+        [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame"), TabGroup("Misc")]
         private SerializeDataList m_miscDatas;
 
         public CampaignSlot(int m_id)
@@ -78,6 +88,7 @@ namespace DChild.Serialization
 
         public SerializeDataList campaignProgress => m_campaignProgress;
         public SerializeDataList zoneDatas => m_zoneDatas;
+        public ZoneSlot[] Importable => m_importable;
 
         [Button]
         public void Reset()

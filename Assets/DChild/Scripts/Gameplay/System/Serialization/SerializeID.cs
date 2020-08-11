@@ -49,6 +49,19 @@ namespace DChild.Serialization
             return id.value;
         }
 
+        public override string ToString()
+        {
+#if UNITY_EDITOR
+            var connection = DChildDatabase.GetSerializeIDConnection();
+            connection.Initialize();
+            var context = connection.GetContext(m_ID);
+            connection.Close();
+            return context;
+#else
+            return base.ToString();
+#endif
+        }
+
 #if UNITY_EDITOR
 
         private bool m_isOnAppend;

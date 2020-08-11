@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Players
     public interface IPlayer
     {
         event EventAction<EventActionArgs> OnDeath;
-        CharacterState state { get; }
+        State.CharacterState state { get; }
         IPlayerStats stats { get; }
         Health health { get; }
         Magic magic { get; }
@@ -66,7 +66,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Character m_controlledCharacter;
         [SerializeField]
-        private CharacterState m_state;
+        private State.CharacterState m_state;
         [SerializeField]
         private Damageable m_damageable;
         [SerializeField]
@@ -77,14 +77,12 @@ namespace DChild.Gameplay.Characters.Players
         private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private LootPicker m_lootPicker;
-        [SerializeField]
-        private GroundednessHandle m_groundednessHandle;
 
         public event EventAction<EventActionArgs> OnDeath;
 
         public IPlayerStats stats => m_stats;
 
-        public CharacterState state => m_state;
+        public State.CharacterState state => m_state;
         public Health health => m_damageable.health;
         public Magic magic => m_magic;
         public IHealable healableModule => m_damageable;
@@ -130,11 +128,7 @@ namespace DChild.Gameplay.Characters.Players
         {
             OnDeath?.Invoke(this, eventArgs);
             //  m_controlledCharacter.physics.SetVelocity(Vector2.zero);
-            if (m_groundednessHandle != null)
-            {
-                m_groundednessHandle.enabled = false;
-                m_groundednessHandle.ResetAnimationParameters();
-            }
+
             m_controller.Disable();
             m_damageable.SetHitboxActive(false);
         }
@@ -143,12 +137,11 @@ namespace DChild.Gameplay.Characters.Players
         public void Initialize(GameObject character)
         {
             m_controlledCharacter = character.GetComponentInChildren<Character>();
-            m_state = character.GetComponentInChildren<CharacterState>();
+            m_state = character.GetComponentInChildren<State.CharacterState>();
             m_damageable = character.GetComponentInChildren<Damageable>();
             m_attacker = character.GetComponentInChildren<Attacker>();
             m_magic = character.GetComponentInChildren<Magic>();
             m_lootPicker = character.GetComponentInChildren<LootPicker>();
-            m_groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
         }
 #endif
     }
