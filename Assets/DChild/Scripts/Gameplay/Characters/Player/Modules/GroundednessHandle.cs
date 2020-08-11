@@ -64,6 +64,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else if (m_isUsingCoyote)
             {
                 //AllowCoyoteToDoThe Thing
+                //What thing?
             }
             else if (m_previouslyGrounded)
             {

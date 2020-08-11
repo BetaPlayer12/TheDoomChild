@@ -45,9 +45,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnSlash(InputValue value)
         {
-            var isTrue = value.Get<float>() == 1;
-            slashPressed = isTrue;
-            slashHeld = isTrue;
+            slashPressed = value.Get<float>() == 1;
+        }
+
+        private void OnSlashHeld(InputValue value)
+        {
+            slashHeld = value.Get<float>() == 1;
         }
 
         private void OnEarthShaker(InputValue value)
