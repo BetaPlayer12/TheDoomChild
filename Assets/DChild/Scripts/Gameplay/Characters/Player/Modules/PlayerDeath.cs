@@ -41,7 +41,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnDeath(object sender, EventActionArgs eventArgs)
         {
-            Debug.Log("Dead");
             m_source.SetHitboxActive(false);
             m_playerMovement.DisableMovement();
             m_stateManager.isDead = true;

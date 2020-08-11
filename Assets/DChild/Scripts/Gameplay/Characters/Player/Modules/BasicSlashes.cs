@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+
     public class BasicSlashes : AttackBehaviour
     {
         public enum Type
@@ -77,7 +78,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.canAttack = false;
             m_state.isAttacking = true;
-            m_state.waitForBehaviour = false;
+            m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
             switch (type)
             {

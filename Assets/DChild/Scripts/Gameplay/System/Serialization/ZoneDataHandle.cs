@@ -81,11 +81,6 @@ namespace DChild.Serialization
         private DynamicSerializableComponent[] m_dynamicSerializers;
         [OdinSerialize, HideInEditorMode]
         private ZoneData m_zoneData = new ZoneData();
-        [Button]
-        public void CreateZoneSaveFile()
-        {
-            ZoneSaveFileCreate();
-        }
 
         private CampaignSlot m_cacheSlot;
         private ComponentSerializer m_cacheComponentSerializer;
@@ -199,6 +194,12 @@ namespace DChild.Serialization
 
         #region Editor
 #if UNITY_EDITOR
+        [Button]
+        public void CreateZoneSaveFile()
+        {
+            ZoneSaveFileCreate();
+        }
+
         [System.Serializable]
         private class EditorData
         {
@@ -357,9 +358,6 @@ namespace DChild.Serialization
 
         private IEnumerable GetDynamicSerializers() => FindObjectsOfType<DynamicSerializableComponent>();
 
-
-#endif
-        #endregion
         private void ZoneSaveFileCreate()
         {
             String m_folderPath = "Assets/DChild/Objects/Misc/Zone Slots/";
@@ -373,14 +371,14 @@ namespace DChild.Serialization
             }
             if (!Directory.Exists(m_folderPath))
             {
-               
+
                 Directory.CreateDirectory(m_folderPath);
 
             }
             if (AssetDatabase.FindAssets(m_ID.ToString() + "SaveSlot", null) == null)
             {
                 Debug.Log(AssetDatabase.FindAssets(m_ID.ToString() + "SaveSlot", null));
-               var instance= AssetDatabase.LoadAssetAtPath<ZoneSlot>(m_folderPath + m_ID.ToString() + m_extension);
+                var instance = AssetDatabase.LoadAssetAtPath<ZoneSlot>(m_folderPath + m_ID.ToString() + m_extension);
                 instance.UpdateZoneSlot(m_zoneData);
                 instance.UpdateZoneID(m_ID);
                 EditorUtility.SetDirty(instance);
@@ -395,7 +393,9 @@ namespace DChild.Serialization
                 EditorUtility.SetDirty(instance);
                 AssetDatabase.SaveAssets();
             }
-
         }
+#endif
+        #endregion
+
     }
 }

@@ -5,8 +5,12 @@ using UnityEngine;
 namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
-                                  IWallStickState, IWallJumpState, IAttackState
+                                  IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState
     {
+        [SerializeField, ReadOnly]
+        private bool m_isCombatReady;
+        public bool isCombatReady { get => m_isCombatReady; set => m_isCombatReady = value; }
+
         [SerializeField, ReadOnly]
         private bool m_isGrounded;
         public bool isGrounded { get => m_isGrounded; set => m_isGrounded = value; }
@@ -32,12 +36,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool isStickingToWall { get => m_isStickingToWall; set => m_isStickingToWall = value; }
 
         [SerializeField, ReadOnly]
+        private bool m_isLevitating;
+        public bool isLevitating { get => m_isLevitating; set => m_isLevitating = value; }
+
+        [SerializeField, ReadOnly]
         private bool m_canAttack;
         public bool canAttack { get => m_canAttack; set => m_canAttack = value; }
 
         [SerializeField, ReadOnly]
         private bool m_isAttacking;
         public bool isAttacking { get => m_isAttacking; set => m_isAttacking = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isChargingAttack;
+        public bool isChargingAttack { get => m_isChargingAttack; set => m_isChargingAttack = value; }
 
         [SerializeField, ReadOnly]
         private bool m_waitForBehaviour;

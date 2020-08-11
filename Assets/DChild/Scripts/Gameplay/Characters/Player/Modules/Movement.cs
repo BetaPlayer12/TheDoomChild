@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+
     public class Movement : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
         public enum Type
