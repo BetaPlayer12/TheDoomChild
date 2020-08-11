@@ -43,6 +43,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private BasicSlashes m_basicSlashes;
         private SlashCombo m_slashCombo;
         private SwordThrust m_swordThrust;
+        private EarthShaker m_earthShaker;
         #endregion
 
         public event EventAction<EventActionArgs> ControllerDisabled;
@@ -177,6 +178,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes = m_character.GetComponentInChildren<BasicSlashes>();
             m_slashCombo = m_character.GetComponentInChildren<SlashCombo>();
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
+            m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
         }
 
         private void FixedUpdate()
@@ -354,6 +356,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_basicSlashes.Execute(BasicSlashes.Type.MidAir_Forward);
                         }
                         return;
+                    }
+                    else if (m_input.earthShakerPressed)
+                    {
+                        m_combatReadiness?.Execution();
+                        m_attackRegistrator?.ResetHitCache();
+                        m_earthShaker?.StartExecution();
+
                     }
                     #endregion
                 }
