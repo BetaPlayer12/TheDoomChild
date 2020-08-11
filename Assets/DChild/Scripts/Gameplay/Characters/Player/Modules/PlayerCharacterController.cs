@@ -41,6 +41,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private CollisionRegistrator m_attackRegistrator;
         private BasicSlashes m_basicSlashes;
+        private SlashCombo m_slashCombo;
         private SwordThrust m_swordThrust;
         #endregion
 
@@ -174,6 +175,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_attackRegistrator = m_character.GetComponentInChildren<CollisionRegistrator>();
             m_basicSlashes = m_character.GetComponentInChildren<BasicSlashes>();
+            m_slashCombo = m_character.GetComponentInChildren<SlashCombo>();
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
         }
 
@@ -213,9 +215,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_combatReadiness?.HandleDuration();
             }
 
-            if (m_state.canAttack == false)
+            if (m_state.canAttack == true)
+            {
+                m_slashCombo.HandleComboResetTimer();
+            }
+            else
             {
                 m_basicSlashes.HandleNextAttackDelay();
+                m_slashCombo.HandleComboAttackDelay();
             }
 
             if (m_state.isGrounded)
@@ -230,7 +237,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void HandleAirBehaviour()
         {
-            if (m_state.isStickingToWall)
+            if (m_state.isAttacking)
+            {
+
+                if(m_rigidbody.velocity.y < 0)
+                {
+                    m_groundedness?.Evaluate();
+                }
+            }
+            else if (m_state.isStickingToWall)
             {
                 #region WallStick Behaviour
                 if (m_input.jumpPressed)
@@ -416,12 +431,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_state.canAttack)
                 {
-                    if (m_input.slashPressed)
-                    {
-                        PrepareForAttack();
-                        m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
-                        return;
-                    }
+                    //if (m_input.slashPressed)
+                    //{
+                    //    PrepareForAttack();
+                    //    m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
+                    //    return;
+                    //}
                 }
 
                 MoveCharacter();
@@ -453,17 +468,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region Ground Attacks
                     if (m_input.slashPressed)
                     {
-                        
                         if (m_input.verticalInput > 0)
                         {
-                            PrepareForAttack();
-                            m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
-                            return;
+                            //PrepareForAttack();
+                            //m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
+                            //return;
                         }
                         else
                         {
                             PrepareForAttack();
-                            //SlashCombo
+                            m_slashCombo.Execute();
                             return;
                         }
                     }
