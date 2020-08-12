@@ -25,6 +25,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, true);
         }
 
+        public void CrouchSlashFX()
+        {
+            m_basicSlashes?.PlayFXFor(BasicSlashes.Type.Crouch, true);
+            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Crouch, true);
+        }
+
         public void SlashCombo()
         {
             m_slashCombo?.PlayFX(true);
@@ -43,6 +49,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes?.AttackOver();
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Forward, false);
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, false);
+            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Crouch, false);
 
             m_slashCombo?.AttackOver();
         }

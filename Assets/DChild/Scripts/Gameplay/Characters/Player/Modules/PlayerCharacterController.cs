@@ -456,12 +456,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_state.canAttack)
                 {
-                    //if (m_input.slashPressed)
-                    //{
-                    //    PrepareForAttack();
-                    //    m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
-                    //    return;
-                    //}
+                    if (m_input.slashPressed)
+                    {
+                        PrepareForAttack();
+                        m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
+                        return;
+                    }
                 }
 
                 MoveCharacter();
