@@ -65,6 +65,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""EarthShaker"",
+                    ""type"": ""Button"",
+                    ""id"": ""f157fa1c-dc90-4a05-ae1a-65432abdf41c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SlashHeld"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7a8ddbf-5a58-4bdb-adef-92a19b4f16d5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -237,10 +253,54 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""49c3bf7e-acb0-4aa6-9a8f-08f473576dee"",
                     ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press"",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Slash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""396b4b4c-a7bf-4985-8ae3-032b019ef2e6"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""591c33ae-3fdd-4aa2-b9f3-12f41c67cf00"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""button"",
+                    ""id"": ""5ce2cd19-6377-4021-82d6-9b464fde0915"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EarthShaker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c2679fd-e377-412f-aea2-2afeb24ea6f4"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SlashHeld"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -257,6 +317,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Slash = m_Gameplay.FindAction("Slash", throwIfNotFound: true);
+        m_Gameplay_EarthShaker = m_Gameplay.FindAction("EarthShaker", throwIfNotFound: true);
+        m_Gameplay_SlashHeld = m_Gameplay.FindAction("SlashHeld", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -304,14 +366,16 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     }
 
     // Gameplay
-    private  InputActionMap m_Gameplay;
+    private readonly InputActionMap m_Gameplay;
     private IGameplayActions m_GameplayActionsCallbackInterface;
-    private  InputAction m_Gameplay_HorizontalInput;
-    private  InputAction m_Gameplay_VerticalInput;
-    public  InputAction m_Gameplay_Crouch;
-    public InputAction m_Gameplay_Dash;
-    public InputAction m_Gameplay_Jump;
-    public InputAction m_Gameplay_Slash;
+    private readonly InputAction m_Gameplay_HorizontalInput;
+    private readonly InputAction m_Gameplay_VerticalInput;
+    private readonly InputAction m_Gameplay_Crouch;
+    private readonly InputAction m_Gameplay_Dash;
+    private readonly InputAction m_Gameplay_Jump;
+    private readonly InputAction m_Gameplay_Slash;
+    private readonly InputAction m_Gameplay_EarthShaker;
+    private readonly InputAction m_Gameplay_SlashHeld;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -322,6 +386,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Slash => m_Wrapper.m_Gameplay_Slash;
+        public InputAction @EarthShaker => m_Wrapper.m_Gameplay_EarthShaker;
+        public InputAction @SlashHeld => m_Wrapper.m_Gameplay_SlashHeld;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -349,6 +415,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Slash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlash;
                 @Slash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlash;
                 @Slash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlash;
+                @EarthShaker.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEarthShaker;
+                @EarthShaker.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEarthShaker;
+                @EarthShaker.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEarthShaker;
+                @SlashHeld.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlashHeld;
+                @SlashHeld.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlashHeld;
+                @SlashHeld.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlashHeld;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -371,6 +443,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Slash.started += instance.OnSlash;
                 @Slash.performed += instance.OnSlash;
                 @Slash.canceled += instance.OnSlash;
+                @EarthShaker.started += instance.OnEarthShaker;
+                @EarthShaker.performed += instance.OnEarthShaker;
+                @EarthShaker.canceled += instance.OnEarthShaker;
+                @SlashHeld.started += instance.OnSlashHeld;
+                @SlashHeld.performed += instance.OnSlashHeld;
+                @SlashHeld.canceled += instance.OnSlashHeld;
             }
         }
     }
@@ -383,5 +461,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSlash(InputAction.CallbackContext context);
+        void OnEarthShaker(InputAction.CallbackContext context);
+        void OnSlashHeld(InputAction.CallbackContext context);
     }
 }

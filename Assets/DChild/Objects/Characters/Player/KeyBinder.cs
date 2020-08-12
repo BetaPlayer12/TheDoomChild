@@ -4,8 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class KeyBinder :  PlayerControls
+public class KeyBinder :MonoBehaviour
 {
-   
-    
+    private PlayerControls.GameplayActions Bindings;
+
+    private void Start()
+    {
+       
+    }
+
 }
