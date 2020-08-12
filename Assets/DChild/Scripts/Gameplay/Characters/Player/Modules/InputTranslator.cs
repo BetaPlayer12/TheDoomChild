@@ -15,6 +15,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool slashPressed;
         public bool slashHeld;
 
+        private PlayerInput m_input;
+
+        public void Disable()
+        {
+            m_input.enabled = false;
+            this.enabled = false;
+        }
+
+        public void Enable()
+        {
+            m_input.enabled = true;
+            this.enabled = true;
+        }
+
         private void OnHorizontalInput(InputValue value)
         {
             horizontalInput = value.Get<float>();
@@ -49,6 +63,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void OnSlashHeld(InputValue value)
         {
             slashHeld = value.Get<float>() == 1;
+        }
+
+        private void Awake()
+        {
+            m_input = GetComponent<PlayerInput>();
         }
 
         private void LateUpdate()

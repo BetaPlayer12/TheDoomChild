@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Systems
         [SerializeField, BoxGroup("Player Data")]
         private Player m_player;
         [SerializeField]
-        private InputManager m_input;
+        private InputTranslator m_input;
         [SerializeField]
         private PlayerCharacterOverride m_overrideController;
         [SerializeField]
@@ -109,7 +109,6 @@ namespace DChild.Gameplay.Systems
             if (m_player)
             {
                 m_player = player;
-                m_input = m_player.GetComponent<InputManager>();
                 m_player.OnDeath += OnPlayerDeath;
             }
             //m_autoReflex.Initialize();

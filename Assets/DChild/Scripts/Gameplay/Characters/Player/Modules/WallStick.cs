@@ -23,6 +23,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Initialize(ComplexCharacterInfo info)
         {
             m_rigidbody = info.rigidbody;
+            m_cacheGravityScale = m_rigidbody.gravityScale;
             m_state = info.state;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WallStick);

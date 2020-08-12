@@ -26,6 +26,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IdleHandle m_idle;
         private CombatReadiness m_combatReadiness;
         private PlayerFlinch m_flinch;
+        private PlayerDeath m_death;
         private InitialDescentBoost m_initialDescentBoost;
 
         private Movement m_movement;
@@ -50,11 +51,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Disable()
         {
             enabled = false;
-            m_idle.Execute();
-            m_movement.Cancel();
-            m_crouch.Cancel();
-            m_dash.Cancel();
-            m_wallStick.Cancel();
+            m_idle?.Execute();
+            m_movement?.Cancel();
+            m_crouch?.Cancel();
+            m_dash?.Cancel();
+            m_wallStick?.Cancel();
         }
 
         public void Enable()
@@ -64,32 +65,48 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnGroundednessStateChange(object sender, EventActionArgs eventArgs)
         {
-            m_dash.Reset();
-            if (m_state.isGrounded)
+            if (m_state.isDead)
             {
-                if (m_state.isStickingToWall)
-                {
-                    m_wallMovement?.Cancel();
-                    m_wallStick?.Cancel();
-                }
-                m_initialDescentBoost?.Reset();
-                m_extraJump?.Reset();
-                m_movement?.SwitchConfigTo(Movement.Type.Jog);
 
-                if (m_state.isAttacking)
-                {
-                    m_basicSlashes.Cancel();
-                }
             }
             else
             {
-                if (m_state.isCrouched)
+                #region Groundedness Switch
+                m_dash.Reset();
+                if (m_state.isGrounded)
                 {
-                    m_crouch?.Cancel();
+                    if (m_state.isStickingToWall)
+                    {
+                        m_wallMovement?.Cancel();
+                        m_wallStick?.Cancel();
+                    }
+                    m_initialDescentBoost?.Reset();
+                    m_extraJump?.Reset();
+                    m_movement?.SwitchConfigTo(Movement.Type.Jog);
+
+                    if (m_state.isAttacking)
+                    {
+                        m_basicSlashes.Cancel();
+                    }
                 }
-                m_idle?.Cancel();
-                m_movement?.SwitchConfigTo(Movement.Type.MidAir);
+                else
+                {
+                    if (m_state.isCrouched)
+                    {
+                        m_crouch?.Cancel();
+                    }
+                    m_idle?.Cancel();
+                    m_movement?.SwitchConfigTo(Movement.Type.MidAir);
+                } 
+                #endregion
             }
+        }
+
+        private void OnDeath(object sender, EventActionArgs eventArgs)
+        {
+            Disable();
+            enabled = false;
+            m_idle?.Cancel();
         }
 
         private void OnFlinch(object sender, EventActionArgs eventArgs)
@@ -161,6 +178,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_combatReadiness = m_character.GetComponentInChildren<CombatReadiness>();
             m_flinch = m_character.GetComponentInChildren<PlayerFlinch>();
             m_flinch.OnExecute += OnFlinch;
+            m_death = m_character.GetComponentInChildren<PlayerDeath>();
+            m_death.OnExecute += OnDeath;
             m_initialDescentBoost = m_character.GetComponentInChildren<InitialDescentBoost>();
 
             m_movement = m_character.GetComponentInChildren<Movement>();
@@ -205,6 +224,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void Update()
         {
+            if (m_state.isDead)
+            {
+
+                return;
+            }
+
             m_tracker.Execute(m_input);
 
             if (m_state.waitForBehaviour)
@@ -240,7 +265,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_state.isAttacking)
             {
 
-                if(m_rigidbody.velocity.y < 0)
+                if (m_rigidbody.velocity.y < 0)
                 {
                     m_groundedness?.Evaluate();
                 }
