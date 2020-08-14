@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Environment
             }
 
             public bool currentState => m_currentState;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_currentState);
         }
 
         [SerializeField, HideInPlayMode]

@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using DChild.Gameplay;
 using System;
+using System.IO;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using Sirenix.Serialization;
 using System.Collections;
 using DChildDebug.Serialization;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 namespace DChild.Serialization
 {
@@ -50,11 +52,14 @@ namespace DChild.Serialization
             }
 
             public ISaveData GetData(SerializeID ID) => m_savedDatas.ContainsKey(ID) ? m_savedDatas[ID] : null;
+            ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas);
 
 #if UNITY_EDITOR
             public Dictionary<SerializeID, ISaveData> savedDatas => m_savedDatas;
+
 #endif
         }
+        public ZoneSlot Zone;
 
         [SerializeField]
         private SerializeID m_ID = new SerializeID(true);
@@ -177,6 +182,12 @@ namespace DChild.Serialization
 
         #region Editor
 #if UNITY_EDITOR
+        [Button]
+        public void CreateZoneSaveFile()
+        {
+            ZoneSaveFileCreate();
+        }
+
         [System.Serializable]
         private class EditorData
         {
@@ -215,6 +226,8 @@ namespace DChild.Serialization
             private List<ComponentData> m_componenetDatas;
             [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true), TabGroup("Dy")]
             private List<DynamicData> m_dynamicDatas;
+
+
 
             public void InitializeDynamicDatas()
             {
@@ -332,7 +345,45 @@ namespace DChild.Serialization
         private IEnumerable GetComponents() => FindObjectsOfType<ComponentSerializer>();
 
         private IEnumerable GetDynamicSerializers() => FindObjectsOfType<DynamicSerializableComponent>();
-#endif 
+
+        private void ZoneSaveFileCreate()
+        {
+            String m_folderPath = "Assets/DChild/Objects/Misc/Zone Slots/";
+            String m_extension = "SaveSlot.mat";
+
+            for (int i = 0; i < m_componentSerializers.Length; i++)
+            {
+                m_cacheComponentSerializer = m_componentSerializers[i];
+                m_cacheComponentSerializer.Initiatlize();
+                m_zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
+            }
+            if (!Directory.Exists(m_folderPath))
+            {
+
+                Directory.CreateDirectory(m_folderPath);
+
+            }
+            if (AssetDatabase.FindAssets(m_ID.ToString() + "SaveSlot", null) == null)
+            {
+                Debug.Log(AssetDatabase.FindAssets(m_ID.ToString() + "SaveSlot", null));
+                var instance = AssetDatabase.LoadAssetAtPath<ZoneSlot>(m_folderPath + m_ID.ToString() + m_extension);
+                instance.UpdateZoneSlot(m_zoneData);
+                instance.UpdateZoneID(m_ID);
+                EditorUtility.SetDirty(instance);
+                AssetDatabase.SaveAssets();
+            }
+            else
+            {
+                var instance = ScriptableObject.CreateInstance<ZoneSlot>();
+                instance.UpdateZoneSlot(m_zoneData);
+                instance.UpdateZoneID(m_ID);
+                AssetDatabase.CreateAsset(instance, m_folderPath + m_ID.ToString() + m_extension);
+                EditorUtility.SetDirty(instance);
+                AssetDatabase.SaveAssets();
+            }
+        }
+#endif
         #endregion
+
     }
 }

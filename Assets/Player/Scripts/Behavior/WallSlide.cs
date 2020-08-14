@@ -92,17 +92,19 @@ namespace PlayerNew
                     stateManager.ToggleGroundChecker(true);
                     velY *= slideMultiplier;
                     rigidBody.gravityScale = 0;
-                    rigidBody.drag = 100;
+                    //rigidBody.drag = 20;
                 }
                 else if (wallStickUp)
                 {
                     stateManager.ToggleGroundChecker(false);
                     velY *= -slideMultiplier;
                     rigidBody.gravityScale = 0;
-                    rigidBody.drag = 100;
+                    //rigidBody.drag = 20;
                 }
                 else
                 {
+                    rigidBody.gravityScale = defaultGravityScale;
+                    rigidBody.drag = defaultDrag;
                     stateManager.ToggleGroundChecker(true);
                 }
 
@@ -121,6 +123,7 @@ namespace PlayerNew
             //Wall Jump
             if ((onWallDetected || groundWallStick) && wallStickJump && wallStickJumpHold < 0.1f && !upHold)
             {
+                //jumping.jumpsRemaining += 1;
                 playerMovement.DisableMovement();
                 rigidBody.gravityScale = defaultGravityScale;
                 rigidBody.drag = defaultDrag;

@@ -18,6 +18,8 @@ namespace DChild.Gameplay
             [ShowInInspector]
             public bool m_isTriggered;
             public bool isTriggered => m_isTriggered;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isTriggered);
         }
 
         [SerializeField, OnValueChanged("OnValueChange")]

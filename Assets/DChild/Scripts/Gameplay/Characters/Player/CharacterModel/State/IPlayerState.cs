@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Characters.Players.State
         bool isMoving { get; }
         bool isDashing { get; }
         bool canDash { get; }
-        bool canHighJump { get; }
+        bool isHighJumping { get; }
         bool hasJumped { get;}
         bool canDoubleJump { get; }
         bool canWallJump { get; }

@@ -28,11 +28,18 @@ namespace DChild.Gameplay.Projectiles
         {
             if (LayerMask.LayerToName(collision.gameObject.layer) == "Environment" || LayerMask.LayerToName(collision.gameObject.layer) == "Default") //Default is for QueenBee Quickfix
             {
-                if (m_data.canPassThroughEnvironment == false)
-                {
-                    m_collidedWithEnvironment = true;
-                    Collide();
+                if (collision.CompareTag("Droppable")){
+
                 }
+                else
+                {
+                    if (m_data.canPassThroughEnvironment == false)
+                    {
+                        m_collidedWithEnvironment = true;
+                        Collide();
+                    }
+                }
+    
             }
             else if (collision.CompareTag("Hitbox"))
             {

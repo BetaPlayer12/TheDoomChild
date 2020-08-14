@@ -25,6 +25,8 @@ namespace DChild.Gameplay
                 m_isUsed = isUsed;
             }
             public bool isUsed => m_isUsed;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isUsed);
         }
 
         [SerializeField]

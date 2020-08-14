@@ -13,11 +13,25 @@ namespace DChild.Gameplay.UI.Map
             [SerializeField]
             private Dictionary<SerializeID, bool> m_isRevealedPair;
 
+            public SaveData()
+            {
+                m_isRevealedPair = new Dictionary<SerializeID, bool>();
+            }
+
             public SaveData(SerializeID ID, bool isRevealed)
             {
                 m_isRevealedPair = new Dictionary<SerializeID, bool>();
-
                 m_isRevealedPair.Add(new SerializeID(ID, false), isRevealed);
+            }
+
+            ISaveData ISaveData.ProduceCopy()
+            {
+                    var copy = new SaveData();
+                    foreach (var key in m_isRevealedPair.Keys)
+                    {
+                        copy.SetData(key, m_isRevealedPair[key]);
+                    }
+                    return copy;
             }
 
             public bool IsRevealed(SerializeID ID) => m_isRevealedPair.ContainsKey(ID) ? m_isRevealedPair[ID] : false;

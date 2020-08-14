@@ -28,6 +28,8 @@ namespace DChild.Gameplay.Environment
             public int slotCount => m_slotIDs.Length;
             public int numberOfActivatedSlots => m_numberOfActivatedSlots;
 
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_slotIDs,m_slotStates,m_numberOfActivatedSlots);
+
             public SerializeID GetID(int index) => m_slotIDs[index];
             public bool GetState(int index) => m_slotStates[index];
         }

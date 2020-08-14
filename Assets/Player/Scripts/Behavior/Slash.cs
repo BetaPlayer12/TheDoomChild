@@ -153,6 +153,10 @@ namespace PlayerNew
                         StartCoroutine(MidairSlashDelayRoutine());
                     }
                 }
+                else if(stateManager.isAttacking && inputState.slashPressed)
+                {
+                    Debug.Log("SLashing");
+                }
             }
             else if (attackDelay > 0)
             {
@@ -315,6 +319,11 @@ namespace PlayerNew
 
         public void SlashAnimationFinished()
         {
+            if (inputState.slashPressed)
+            {
+                Debug.Log("INT");
+            }
+
             stateManager.isAttacking = false;
             stateManager.isInCombatMode = true;
             stateManager.isIdle = true;
@@ -505,7 +514,12 @@ namespace PlayerNew
             attacking = false;
             slashing = false;
 
-            ToggleScripts(true);
+            //ToggleScripts(true);
+        }
+
+        public void Test(int dudalala)
+        {
+
         }
     }
 }
