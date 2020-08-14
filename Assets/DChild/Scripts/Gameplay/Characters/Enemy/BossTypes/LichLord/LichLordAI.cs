@@ -31,18 +31,33 @@ namespace DChild.Gameplay.Characters.Enemies
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
 
             [SerializeField]
-            private MovementInfo m_moveForward = new MovementInfo();
-            public MovementInfo moveForward => m_moveForward;
+            private MovementInfo m_move1 = new MovementInfo();
+            public MovementInfo move1 => m_move1;
 
             [SerializeField]
-            private MovementInfo m_moveBackward = new MovementInfo();
-            public MovementInfo moveBackward => m_moveBackward;
+            private MovementInfo m_move2= new MovementInfo();
+            public MovementInfo move2 => m_move2;
 
 
             [Title("Attack Behaviours")]
-            //[SerializeField, TabGroup("Attack 1")]
-            //private SimpleAttackInfo m_attack1 = new SimpleAttackInfo();
-            //public SimpleAttackInfo attack1 => m_attack1;
+            [SerializeField, TabGroup("Phase 1")]
+            private SimpleAttackInfo m_ghostOrbAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo ghostOrbAttack => m_ghostOrbAttack;
+            [SerializeField, TabGroup("Phase 1")]
+            private SimpleAttackInfo m_skeletalArmAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo skeletalArmAttack => m_skeletalArmAttack;
+            [SerializeField, TabGroup("Phase 2")]
+            private SimpleAttackInfo m_summonTotemAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo summonTotemAttack => m_summonTotemAttack;
+            [SerializeField, TabGroup("Phase 2"), ValueDropdown("GetAnimations")]
+            private string m_appearAnimation;
+            public string appearAnimation => m_appearAnimation;
+            [SerializeField, TabGroup("Phase 2"), ValueDropdown("GetAnimations")]
+            private string m_vanishAnimation;
+            public string vanishAnimation => m_vanishAnimation;
+            [SerializeField, TabGroup("Phase 3")]
+            private SimpleAttackInfo m_mapCurseAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo mapCurseAttack => m_mapCurseAttack;
 
 
             [Title("Misc")]
@@ -55,14 +70,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinch1Animation;
-            public string flinch1Animation => m_flinch1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinch2Animation;
-            public string flinch2Animation => m_flinch2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinch3Animation;
-            public string flinch3Animation => m_flinch3Animation;
+            private string m_flinchAnimation;
+            public string flinchAnimation => m_flinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idle1Animation;
             public string idle1Animation => m_idle1Animation;
@@ -72,21 +81,35 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_turnAnimation;
             public string turnAnimation => m_turnAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turn2Animation;
-            public string turn2Animation => m_turn2Animation;
 
-            //[Title("Projectiles")]
-            //[SerializeField]
-            //private SimpleProjectileAttackInfo m_projectile;
-            //public SimpleProjectileAttackInfo projectile => m_projectile;
+            [Title("Summoned Assets")]
+            [SerializeField]
+            private GameObject m_skeletalArm;
+            public GameObject skeletalArm => m_skeletalArm;
+            [SerializeField]
+            private GameObject m_totem;
+            public GameObject totem => m_totem;
+
+            [Title("Projectiles")]
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_ghostOrbProjectile;
+            public SimpleProjectileAttackInfo ghostOrbProjectile => m_ghostOrbProjectile;
+
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_lichOrbStartFXEvent;
+            public string lichOrbStartFXEvent => m_lichOrbStartFXEvent;
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
-                m_moveForward.SetData(m_skeletonDataAsset);
-                m_moveBackward.SetData(m_skeletonDataAsset);
-                //m_projectile.SetData(m_skeletonDataAsset);
+                m_move1.SetData(m_skeletonDataAsset);
+                m_move2.SetData(m_skeletonDataAsset);
+                m_ghostOrbAttack.SetData(m_skeletonDataAsset);
+                m_skeletalArmAttack.SetData(m_skeletonDataAsset);
+                m_summonTotemAttack.SetData(m_skeletonDataAsset);
+                m_mapCurseAttack.SetData(m_skeletonDataAsset);
+                m_ghostOrbProjectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -119,17 +142,16 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             AttackPattern1,
             AttackPattern2,
-            AttackPattern3,
+            //AttackPattern3,
             WaitAttackEnd,
         }
 
         private enum Attack
         {
-            Attack1,
-            Attack2,
-            Attack3,
-            Attack4,
-            ScytheSpinAttack,
+            GhostOrb,
+            SkeletalArm,
+            SummonTotem,
+            MapCurse,
             WaitAttackEnd,
         }
 
@@ -157,9 +179,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private PathFinderAgent m_agent;
         [SerializeField, TabGroup("Modules")]
         private Health m_health;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_ghostOrbStartFX;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField]
+        private Transform m_lichLordArmTF;
 
         //[SerializeField, TabGroup("Effects")]
         //private ParticleFX m_deathFX;
@@ -182,15 +210,12 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
         private Attack m_currentAttack;
-        //private ProjectileLauncher m_projectileLauncher;
+        private ProjectileLauncher m_projectileLauncher;
 
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_projectilePoint;
 
-        private int m_attackCount;
-        private int m_randomAttack;
-        private float m_startGroundPos;
-        private bool m_hasHealed;
+        private int m_hitCount;
         private bool m_hasPhaseChanged;
         private PhaseInfo m_phaseInfo;
 
@@ -256,9 +281,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_hitbox.SetInvulnerability(false);
-            var flinch = IsFacingTarget() ? m_info.flinch1Animation : m_info.flinch2Animation;
-            m_animation.SetAnimation(0, flinch, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -276,35 +300,124 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
         }
 
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            //StopAllCoroutines();
+            //m_attackDecider.hasDecidedOnAttack = false;
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            m_hitCount++;
+            if (m_hitCount == 5)
+            {
+                StopAllCoroutines();
+                m_hitCount = 0;
+                StartCoroutine(HollowFormRoutine());
+            }
+            Debug.Log("Got HIT");
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
         #region Attacks
         //Attack Routines
-        #endregion
-
-        #region Movement
-        private IEnumerator ExecuteMove(Vector2 target, float attackRange, /*float heightOffset,*/ Attack attack)
+        private IEnumerator GhostOrbAttackRoutine()
         {
-            m_animation.DisableRootMotion();
-            bool inRange = false;
-            /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
-            while (!inRange)
-            {
-
-                bool xTargetInRange = Mathf.Abs(target.x - transform.position.x) < attackRange ? true : false;
-                bool yTargetInRange = Mathf.Abs(target.y - transform.position.y) < 1 ? true : false;
-                if (xTargetInRange && yTargetInRange)
-                {
-                    inRange = true;
-                }
-                //Debug.Log("Facing Target " + IsFacingTarget());
-                DynamicMovement(new Vector2(m_targetInfo.position.x, target.y));
-                yield return null;
-            }
-            m_agent.Stop();
-
-            ExecuteAttack(attack);
+            m_animation.SetAnimation(0, m_info.ghostOrbAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ghostOrbAttack.animation);
+            var randomAttack = UnityEngine.Random.Range(0, 2);
+            m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
+        private void LaunchOrb()
+        {
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    m_projectileLauncher.AimAt(target);
+            //    m_projectileLauncher.LaunchProjectile();
+            //}
+            StartCoroutine(LaunchOrbRoutine());
+        }
+
+        private IEnumerator LaunchOrbRoutine()
+        {
+            var numberOfProjectiles = 16;
+            float angleStep = 360f / numberOfProjectiles;
+            float angle = 0f;
+
+            var target = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y);
+            for (int z = 0; z < numberOfProjectiles; z++)
+            {
+                Vector2 startPoint = new Vector2(m_projectilePoint.position.x, m_projectilePoint.position.y);
+                float projectileDirXposition = startPoint.x + Mathf.Sin((angle * Mathf.PI) / 180) * 5;
+                float projectileDirYposition = startPoint.y + Mathf.Cos((angle * Mathf.PI) / 180) * 5;
+
+                Vector2 projectileVector = new Vector2(projectileDirXposition, projectileDirYposition);
+                Vector2 projectileMoveDirection = (projectileVector - startPoint).normalized * m_info.ghostOrbProjectile.projectileInfo.speed;
+                if (z >= 4 && z <= 8)
+                {
+
+                    GameObject projectile = m_info.ghostOrbProjectile.projectileInfo.projectile;
+                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+                    instance.transform.position = m_projectilePoint.position;
+                    instance.transform.localScale = new Vector3(1, m_targetInfo.position.x > m_projectilePoint.position.x ? 1 : -1, 1);
+                    var component = instance.GetComponent<Projectile>();
+                    component.ResetState();
+                    component.GetComponent<Rigidbody2D>().velocity = projectileMoveDirection;
+                    Vector2 v = component.GetComponent<Rigidbody2D>().velocity;
+                    var projRotation = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+                    component.transform.rotation = Quaternion.AngleAxis(projRotation, Vector3.forward);
+
+                    yield return new WaitForSeconds(.1f);
+                }
+                angle += m_projectilePoint.position.x < target.x ? angleStep : -angleStep;
+            }
+            yield return null;
+        }
+
+        private IEnumerator SkeletalArmRoutine()
+        {
+            var randomAttack = UnityEngine.Random.Range(0, 2);
+            var skeletamArmPos = new Vector2(m_targetInfo.position.x + (randomAttack == 1 ? 20 : -20), GroundPosition().y - 3);
+            m_lichLordArmTF.position = skeletamArmPos;
+            m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state.SetAnimation(0, "Phase_1_Arm_Attack", false);
+            m_lichLordArmTF.localScale = new Vector3(m_targetInfo.position.x > m_lichLordArmTF.position.x ? 1 : -1, 1, 1);
+            m_animation.SetAnimation(0, m_info.skeletalArmAttack.animation, false);
+            yield return new WaitForSeconds(.1f);
+            m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.None;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.skeletalArmAttack.animation);
+            m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator SummonTotem()
+        {
+            var randomAttack = UnityEngine.Random.Range(0, 2);
+            var totemPos = new Vector2(m_targetInfo.position.x + (randomAttack == 1 ? 10 : -10), GroundPosition().y);
+            var totem = Instantiate(m_info.totem, totemPos, Quaternion.identity);
+            m_animation.SetAnimation(0, m_info.summonTotemAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonTotemAttack.animation);
+            m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator MapCurse()
+        {
+            m_animation.SetAnimation(0, m_info.mapCurseAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.mapCurseAttack.animation);
+            var randomAttack = UnityEngine.Random.Range(0, 2);
+            m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+        #endregion
+
+        #region Movement
         private void DynamicMovement(Vector2 target)
         {
             if (IsFacingTarget())
@@ -313,9 +426,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
                 //Debug.Log("Read Dynamic Movements " + velocityX + " " + velocityY);
                 m_agent.SetDestination(target);
-                m_agent.Move(IsFacingTarget() ? m_info.moveForward.speed : m_info.moveBackward.speed);
+                m_agent.Move(m_info.move1.speed);
 
-                m_animation.SetAnimation(0, IsFacingTarget() ? m_info.moveForward.animation : m_info.moveBackward.animation, true);
+                m_animation.SetAnimation(0, m_info.move1.animation, true);
             }
             else
             {
@@ -325,6 +438,19 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.OverrideState(State.Turning);
                 }
             }
+        }
+
+        private IEnumerator HollowFormRoutine()
+        {
+            m_hitbox.gameObject.SetActive(false);
+            m_animation.SetAnimation(0, m_info.vanishAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
+            m_animation.SetAnimation(0, m_info.appearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
+            m_animation.SetAnimation(0, m_info.idle1Animation, true);
+            m_hitbox.gameObject.SetActive(true);
+            m_stateHandle.OverrideState(State.Chasing);
+            yield return null;
         }
         #endregion
 
@@ -351,8 +477,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.AttackPattern1, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance),
-                                     new AttackInfo<Pattern>(Pattern.AttackPattern3, m_info.targetDistanceTolerance));
+                                     new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance));
             DecidedOnAttack(false);
         }
 
@@ -387,20 +512,20 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             switch (m_attack)
             {
-                case Attack.Attack1:
-                    //StartCoroutine(Attack1Routine());
+                case Attack.GhostOrb:
+                    StartCoroutine(GhostOrbAttackRoutine());
                     break;
-                case Attack.Attack2:
+                case Attack.SkeletalArm:
+                    StartCoroutine(SkeletalArmRoutine());
                     //StartCoroutine(Attack2Routine());
                     break;
-                case Attack.Attack3:
+                case Attack.SummonTotem:
+                    StartCoroutine(SummonTotem());
                     //StartCoroutine(Attack3Routine());
                     break;
-                case Attack.Attack4:
+                case Attack.MapCurse:
+                    StartCoroutine(MapCurse());
                     //StartCoroutine(Attack4Routine());
-                    break;
-                case Attack.ScytheSpinAttack:
-                    //m_stateHandle.OverrideState(State.Chasing);
                     break;
             }
         }
@@ -431,9 +556,11 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Awake()
         {
             base.Awake();
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-            //m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
+            m_projectileLauncher = new ProjectileLauncher(m_info.ghostOrbProjectile.projectileInfo, m_projectilePoint);
             m_patternDecider = new RandomAttackDecider<Pattern>();
             m_attackDecider = new RandomAttackDecider<Attack>();
 
@@ -441,20 +568,23 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
 
             m_attackCache = new List<Pattern>();
-            AddToAttackCache(Pattern.AttackPattern1, Pattern.AttackPattern2, Pattern.AttackPattern3);
+            AddToAttackCache(Pattern.AttackPattern1, Pattern.AttackPattern2/*, Pattern.AttackPattern3*/);
             m_attackUsed = new bool[m_attackCache.Count];
         }
 
         protected override void Start()
         {
             base.Start();
-            //m_spineListener.Subscribe(m_info.deathFXEvent, m_deathFX.Play);
+            m_spineListener.Subscribe(m_info.lichOrbStartFXEvent, m_ghostOrbStartFX.Play);
+            m_spineListener.Subscribe(m_info.ghostOrbProjectile.launchOnEvent, LaunchOrb);
             m_animation.DisableRootMotion();
-            m_startGroundPos = GroundPosition().y;
 
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
+
+            m_lichLordArmTF.SetParent(null);
+            m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
         }
 
         private void Update()
@@ -497,36 +627,62 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_movement.Stop();
                     break;
                 case State.Attacking:
-                    m_stateHandle.Wait(State.Attacking);
-                    var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
-                    var target = new Vector2(m_targetInfo.position.x, GroundPosition().y /*m_startGroundPos*/);
-                    m_attackCount++;
-                    switch (m_currentPattern)
+                    //m_stateHandle.Wait(State.Attacking);
+                    if (IsTargetInRange(m_info.targetDistanceTolerance))
                     {
-                        case Pattern.AttackPattern1:
-                            ///////
-                            m_stateHandle.OverrideState(State.ReevaluateSituation);
-                            break;
-                        case Pattern.AttackPattern2:
-                            ///////
-                            m_stateHandle.OverrideState(State.ReevaluateSituation);
-                            break;
-                        case Pattern.AttackPattern3:
-                            ///////
-                            m_stateHandle.OverrideState(State.ReevaluateSituation);
-                            break;
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        m_agent.Stop();
+                        var randomFacing = UnityEngine.Random.Range(0, 2) == 1 ? 1 : -1;
+                        var target = new Vector2(m_targetInfo.position.x, GroundPosition().y /*m_startGroundPos*/);
+                        switch (m_currentPattern)
+                        {
+                            case Pattern.AttackPattern1:
+                                switch (m_phaseHandle.currentPhase)
+                                {
+                                    case Phase.PhaseOne:
+                                        ExecuteAttack(Attack.GhostOrb);
+                                        break;
+                                    case Phase.PhaseTwo:
+                                        ExecuteAttack(Attack.SummonTotem);
+                                        break;
+                                    case Phase.PhaseThree:
+                                        ExecuteAttack(Attack.MapCurse);
+                                        break;
+                                }
+                                ///////
+                                //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                                break;
+                            case Pattern.AttackPattern2:
+                                switch (m_phaseHandle.currentPhase)
+                                {
+                                    case Phase.PhaseOne:
+                                        ExecuteAttack(Attack.SkeletalArm);
+                                        break;
+                                    case Phase.PhaseTwo:
+                                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                                        break;
+                                    case Phase.PhaseThree:
+                                        ExecuteAttack(Attack.SummonTotem);
+                                        break;
+                                }
+                                ///////
+                                //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        DynamicMovement(m_targetInfo.position);
                     }
                     break;
 
                 case State.Chasing:
-                    DecidedOnAttack(false);
-                    ChoosePattern();
                     if (IsFacingTarget())
                     {
-                        if (m_patternDecider.hasDecidedOnAttack)
+                        DecidedOnAttack(false);
+                        ChoosePattern();
+                        if (m_patternDecider.hasDecidedOnAttack )
                         {
-                            m_attackCount = 0;
-                            m_randomAttack = UnityEngine.Random.Range(0, 2);
                             m_stateHandle.SetState(State.Attacking);
                         }
                     }
