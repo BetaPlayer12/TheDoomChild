@@ -72,8 +72,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-
-
         public void Execute(Type type)
         {
             m_state.canAttack = false;
