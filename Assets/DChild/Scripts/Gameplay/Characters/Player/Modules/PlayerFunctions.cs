@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IdleHandle m_idleHandle;
         private BasicSlashes m_basicSlashes;
         private SlashCombo m_slashCombo;
-
+        private EarthShaker m_earthShaker;
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -54,12 +54,33 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo?.AttackOver();
         }
 
+        public void EarthShakerPreLoop()
+        {
+            m_earthShaker.HandlePreFall();
+        }
+
+        public void EarthShakerLoop()
+        {
+            m_earthShaker.HandleFall();
+        }
+
+        public void EarthShakerImpact()
+        {
+            m_earthShaker.Impact();
+        }
+
+        public void EarthShakerEnd()
+        {
+            m_earthShaker.EndExecution();
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             var character = info.character;
             m_idleHandle = character.GetComponentInChildren<IdleHandle>();
             m_basicSlashes = character.GetComponentInChildren<BasicSlashes>();
             m_slashCombo = character.GetComponentInChildren<SlashCombo>();
+            m_earthShaker = character.GetComponentInChildren<EarthShaker>();
         }
     }
 }

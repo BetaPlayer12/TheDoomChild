@@ -47,7 +47,9 @@ namespace DChild.Gameplay.Systems
 
         public PlayerCharacterOverride OverrideCharacterControls()
         {
+            m_input?.Disable();
             m_player.controller.Disable();
+            m_player.controller.Enable();
             m_overrideController.enabled = true;
             return m_overrideController;
         }
@@ -57,6 +59,7 @@ namespace DChild.Gameplay.Systems
         public void StopCharacterControlOverride()
         {
             m_overrideController.enabled = false;
+            m_input?.Enable();
             m_player.controller.Enable();
         }
 

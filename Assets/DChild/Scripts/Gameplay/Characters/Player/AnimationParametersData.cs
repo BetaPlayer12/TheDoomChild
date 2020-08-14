@@ -24,6 +24,8 @@ namespace DChild.Gameplay.Characters.Players
             IsDead,
             WallStick,
             Flinch,
+            EarthShaker,
+            SwordTrust
         }
 
         [SerializeField]

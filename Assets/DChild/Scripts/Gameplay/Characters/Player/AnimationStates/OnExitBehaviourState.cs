@@ -9,6 +9,7 @@ namespace DChild.Gameplay.Characters.Players
         private enum Command
         {
             EndAttack,
+            EndEarthShaker
         }
 
         [SerializeField]
@@ -23,6 +24,9 @@ namespace DChild.Gameplay.Characters.Players
             {
                 case Command.EndAttack:
                     player.FinishAttackAnim();
+                    break;
+                case Command.EndEarthShaker:
+                    player.EarthShakerEnd();
                     break;
             }
         }

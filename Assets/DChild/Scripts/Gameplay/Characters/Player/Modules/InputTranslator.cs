@@ -12,19 +12,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool jumpPressed;
         public bool jumpHeld;
 
+        public bool interactPressed;
+
         public bool slashPressed;
         public bool slashHeld;
+        public bool earthShakerPressed;
 
         private PlayerInput m_input;
 
         public void Disable()
         {
+            if (this.enabled)
+            {
+                Reset();
+            }
             m_input.enabled = false;
             this.enabled = false;
         }
 
         public void Enable()
         {
+            if(this.enabled == false)
+            {
+                Reset();
+            }
             m_input.enabled = true;
             this.enabled = true;
         }
@@ -65,16 +76,47 @@ namespace DChild.Gameplay.Characters.Players.Modules
             slashHeld = value.Get<float>() == 1;
         }
 
+        private void OnEarthShaker(InputValue value)
+        {
+            earthShakerPressed = value.Get<float>() == 1;
+        }
+
+        private void OnInteract(InputValue value)
+        {
+            interactPressed = value.Get<float>() == 1;
+        }
+
         private void Awake()
         {
             m_input = GetComponent<PlayerInput>();
         }
 
+
         private void LateUpdate()
         {
             dashPressed = false;
             jumpPressed = false;
+
+            interactPressed = false;
+
             slashPressed = false;
+            earthShakerPressed = false;
+        }
+
+        private void Reset()
+        {
+            horizontalInput = 0;
+            verticalInput = 0;
+            crouchHeld = false;
+            dashPressed = false;
+            jumpPressed = false;
+            jumpHeld = false;
+
+            interactPressed = false;
+
+            slashPressed = false;
+            slashHeld = false;
+            earthShakerPressed = false;
         }
     }
 }
