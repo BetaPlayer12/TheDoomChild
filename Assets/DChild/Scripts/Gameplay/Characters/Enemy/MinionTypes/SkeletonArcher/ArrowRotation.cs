@@ -14,10 +14,14 @@ public class ArrowRotation : MonoBehaviour
     {
         if (GetComponent<IsolatedObjectPhysics2D>().simulateGravity)
         {
+            /*
             float rotateSpeed = GetComponent<Rigidbody2D>().velocity.magnitude * (m_factor * transform.localScale.x);
             var rotateVelocity = (GetComponent<Rigidbody2D>().velocity.x * GetComponent<Rigidbody2D>().velocity.y) * m_offset;
             //transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotateVelocity));
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotateVelocity));*/
+            Vector2 v = GetComponent<Rigidbody2D>().velocity;
+            var angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
     }
 }

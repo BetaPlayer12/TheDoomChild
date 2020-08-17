@@ -52,7 +52,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
         [SerializeField]
-        private InputManager m_controller;
+        private PlayerCharacterController m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
         [SerializeField]

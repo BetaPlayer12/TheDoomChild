@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IdleHandle m_idleHandle;
         private BasicSlashes m_basicSlashes;
         private SlashCombo m_slashCombo;
-
+        private EarthShaker m_earthShaker;
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -23,6 +23,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.MidAir_Overhead, true);
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, true);
+        }
+
+        public void CrouchSlashFX()
+        {
+            m_basicSlashes?.PlayFXFor(BasicSlashes.Type.Crouch, true);
+            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Crouch, true);
         }
 
         public void SlashCombo()
@@ -43,8 +49,29 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes?.AttackOver();
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Forward, false);
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, false);
+            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Crouch, false);
 
             m_slashCombo?.AttackOver();
+        }
+
+        public void EarthShakerPreLoop()
+        {
+            m_earthShaker.HandlePreFall();
+        }
+
+        public void EarthShakerLoop()
+        {
+            m_earthShaker.HandleFall();
+        }
+
+        public void EarthShakerImpact()
+        {
+            m_earthShaker.Impact();
+        }
+
+        public void EarthShakerEnd()
+        {
+            m_earthShaker.EndExecution();
         }
 
         public void Initialize(ComplexCharacterInfo info)
@@ -53,6 +80,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_idleHandle = character.GetComponentInChildren<IdleHandle>();
             m_basicSlashes = character.GetComponentInChildren<BasicSlashes>();
             m_slashCombo = character.GetComponentInChildren<SlashCombo>();
+            m_earthShaker = character.GetComponentInChildren<EarthShaker>();
         }
     }
 }

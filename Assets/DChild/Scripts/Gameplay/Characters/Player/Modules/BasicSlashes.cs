@@ -33,15 +33,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
-            for (int i = 0; i < m_executedTypes.Count; i++)
+            if (m_executedTypes.Count > 0)
             {
-                var type = m_executedTypes[i];
-                EnableCollision(type, false);
-                PlayFXFor(type, false);
-                ClearFXFor(type);
+                base.Cancel();
+                for (int i = 0; i < m_executedTypes.Count; i++)
+                {
+                    var type = m_executedTypes[i];
+                    EnableCollision(type, false);
+                    PlayFXFor(type, false);
+                    ClearFXFor(type);
+                }
+                m_executedTypes.Clear();
             }
-            m_executedTypes.Clear();
         }
 
         public void EnableCollision(Type type, bool value)
@@ -72,14 +75,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-
-
         public void Execute(Type type)
         {
             m_state.canAttack = false;
             m_state.isAttacking = true;
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
+
             switch (type)
             {
                 case Type.Ground_Overhead:

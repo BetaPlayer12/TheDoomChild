@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Systems
         [SerializeField, BoxGroup("Player Data")]
         private Player m_player;
         [SerializeField]
-        private InputManager m_input;
+        private InputTranslator m_input;
         [SerializeField]
         private PlayerCharacterOverride m_overrideController;
         [SerializeField]
@@ -47,7 +47,9 @@ namespace DChild.Gameplay.Systems
 
         public PlayerCharacterOverride OverrideCharacterControls()
         {
+            m_input?.Disable();
             m_player.controller.Disable();
+            m_player.controller.Enable();
             m_overrideController.enabled = true;
             return m_overrideController;
         }
@@ -57,6 +59,7 @@ namespace DChild.Gameplay.Systems
         public void StopCharacterControlOverride()
         {
             m_overrideController.enabled = false;
+            m_input?.Enable();
             m_player.controller.Enable();
         }
 
@@ -109,7 +112,6 @@ namespace DChild.Gameplay.Systems
             if (m_player)
             {
                 m_player = player;
-                m_input = m_player.GetComponent<InputManager>();
                 m_player.OnDeath += OnPlayerDeath;
             }
             //m_autoReflex.Initialize();
