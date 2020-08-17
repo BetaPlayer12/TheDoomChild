@@ -23,6 +23,8 @@ namespace DChild.Gameplay.Environment
             }
 
             public int currentAmount => m_currentAmount;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_currentAmount);
         }
 
         [InfoBox("When interacted, it will take soul essence when it has not reached the amount, it will give soul essence whn it has reached the amount")]

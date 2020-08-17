@@ -14,7 +14,7 @@ namespace PlayerNew
         [SerializeField]
         private float m_dashDuration;
 
-        private float dashCooldownTimer;
+        public  float dashCooldownTimer;
         private PlayerMovement m_movement;
 
         protected virtual void Start()
@@ -25,9 +25,13 @@ namespace PlayerNew
 
         protected virtual void FixedUpdate()
         {
-            if (inputState.dashPressed && dashCooldownTimer <= 0 && stateManager.isFlinching == false && stateManager.isDashing == false && stateManager.isDead == false)
+            if (inputState.dashPressed && dashCooldownTimer <= 0)
             {
-                StartCoroutine(DashRoutine());
+                if (stateManager.isFlinching == false && stateManager.isDashing == false && stateManager.isDead == false
+                && (stateManager.onWall == false && stateManager.onWallLeg == false))
+                {
+                    StartCoroutine(DashRoutine());
+                }
             }
             else if (dashCooldownTimer > 0 && (stateManager.isGrounded || stateManager.onWall))
             {
@@ -104,8 +108,8 @@ namespace PlayerNew
             //rigidBody.velocity = velocity;
             dashCooldownTimer = m_dashCooldown;
 
-            Debug.Log("Dash");
-            Debug.Log("Velocity: " + rigidBody.velocity);
+            //Debug.Log("Dash");
+            //Debug.Log("Velocity: " + rigidBody.velocity);
 
             float timer = m_dashDuration;
             do
@@ -116,6 +120,15 @@ namespace PlayerNew
                 }
                 else
                 {
+                    if (inputState.horizontal != 0)
+                    {
+                        if (Mathf.Sign(inputState.horizontal) != direction)
+                        {
+                            direction = inputState.horizontal;
+                            playerMovement.FlipCharacterDirection();
+                        }
+                    }
+
                     rigidBody.velocity = Vector2.zero;
                     rigidBody.AddForce(new Vector2(direction * m_dashVelocity, 0), ForceMode2D.Impulse);
                     timer -= GameplaySystem.time.deltaTime;

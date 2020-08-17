@@ -38,6 +38,8 @@ namespace DChild.Gameplay.Environment
             private bool m_isTriggered;
 
             public bool isTriggered => m_isTriggered;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isTriggered);
         }
 
         [SerializeField, OnValueChanged("OnTypeChanged"), BoxGroup("Fields")]
