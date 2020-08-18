@@ -417,10 +417,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackHandle.ExecuteAttack(m_info.shootDrawAttack.animation, m_info.idleAnimation);
                             break;
                         case Attack.Attack3:
-                            m_flinchHandle.gameObject.SetActive(false);
+                            /*m_flinchHandle.gameObject.SetActive(false);
+                            m_attackHandle.ExecuteAttack(m_info.shootComboAttack.animation, m_info.idleAnimation);*/
                             m_animation.EnableRootMotion(false, false);
-                            //m_character.physics.SetVelocity(new Vector2(m_info.dodgeBackSpeed * -transform.localScale.x, 0));
-                            m_attackHandle.ExecuteAttack(m_info.shootComboAttack.animation, m_info.idleAnimation);
+                            //
+                            m_attackHandle.ExecuteAttack(m_info.shootAttack.animation, m_info.idleAnimation);
                             break;
                     }
 
