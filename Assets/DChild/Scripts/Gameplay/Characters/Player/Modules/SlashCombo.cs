@@ -18,11 +18,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_comboAttackDelayTimer;
         private float m_comboResetDelayTimer;
         private bool m_allowAttackDelayHandling;
+        private int m_slashStateAnimationParameter;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
 
+            m_slashStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SlashState);
             m_currentSlashState = 0;
             m_currentVisualSlashState = 0;
             m_comboAttackDelayTimer = -1;
@@ -36,7 +38,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_currentSlashState = 0;
             m_currentVisualSlashState = 0;
-            m_animator.SetInteger("SlashState", m_currentSlashState);
+            m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
         }
 
         public void Execute()
@@ -46,7 +48,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.canAttack = false;
 
             m_animator.SetBool(m_animationParameter, true);
-            m_animator.SetInteger("SlashState", m_currentSlashState);
+            m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
+
+            m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier);
 
             m_comboResetDelayTimer = m_comboResetDelay;
             m_comboAttackDelayTimer = m_slashComboInfo[m_currentSlashState].nextAttackDelay;
@@ -57,7 +61,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_currentSlashState = 0;
             }
-            Debug.Log("Execute");
         }
 
         public void PlayFX(bool value)
@@ -67,6 +70,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EnableCollision(bool value)
         {
+            m_rigidBody.WakeUp();
             m_slashComboInfo[m_currentVisualSlashState].ShowCollider(value);
         }
 
@@ -79,7 +83,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_slashComboInfo[i].ShowCollider(false);
             }
-            Debug.Log("Over");
         }
 
         public void AllowNextAttackDelay()

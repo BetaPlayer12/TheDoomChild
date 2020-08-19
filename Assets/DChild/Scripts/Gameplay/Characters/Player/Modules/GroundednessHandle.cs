@@ -27,6 +27,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_isUsingCoyote;
 
         public event EventAction<EventActionArgs> StateChange;
+        public bool isUsingCoyote => m_isUsingCoyote;
 
         public void Initialize(ComplexCharacterInfo info)
         {

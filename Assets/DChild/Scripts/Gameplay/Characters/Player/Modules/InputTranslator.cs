@@ -11,6 +11,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool dashPressed;
         public bool jumpPressed;
         public bool jumpHeld;
+        public bool levitatePressed;
+        public bool levitateHeld;
 
         public bool interactPressed;
 
@@ -66,6 +68,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             jumpHeld = isTrue;
         }
 
+        private void OnLevitate(InputValue value)
+        {
+            var isTrue = value.Get<float>() == 1;
+            levitatePressed = isTrue;
+            levitateHeld = isTrue;
+        }
+
         private void OnSlash(InputValue value)
         {
             slashPressed = value.Get<float>() == 1;
@@ -74,6 +83,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void OnSlashHeld(InputValue value)
         {
             slashHeld = value.Get<float>() == 1;
+        }
+
+        private void OnSlashReleased(InputValue value)
+        {
+            slashHeld = false;
         }
 
         private void OnEarthShaker(InputValue value)
@@ -96,6 +110,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             dashPressed = false;
             jumpPressed = false;
+            levitatePressed = false;
 
             interactPressed = false;
 
@@ -111,6 +126,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             dashPressed = false;
             jumpPressed = false;
             jumpHeld = false;
+            levitatePressed = false;
+            levitateHeld = false;
 
             interactPressed = false;
 

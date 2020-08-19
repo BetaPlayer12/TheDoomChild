@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -30,7 +31,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    if (GetInput())
+                    if (GetInput() == true)
                     {
                         m_instance.HandleCharge();
                     }

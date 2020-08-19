@@ -17,5 +17,9 @@ namespace DChild.Gameplay.Combat
     public class BaseColliderDamage : ColliderDamage
     {
         protected override bool IsValidToHit(Collider2D collision) => true;
+        protected override void OnTriggerEnter2D(Collider2D collision)
+        {
+            base.OnTriggerEnter2D(collision);
+        }
     }
 }

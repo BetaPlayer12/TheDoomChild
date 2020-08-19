@@ -7,12 +7,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField]
         private ParticleSystem m_chargeFX;
+        [SerializeField]
+        private ParticleSystem m_finishedChargeFX;
         [SerializeField, MinValue(0.1f)]
         private float m_chargeDuration;
         [SerializeField]
         private Info m_thrust;
 
         private float m_chargeTimer;
+        private int m_swordThrustAnimationParameter;
+
+        public override void Initialize(ComplexCharacterInfo info)
+        {
+            base.Initialize(info);
+
+            m_swordThrustAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SwordTrust);
+        }
 
         public void StartCharge()
         {
@@ -20,6 +30,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_chargeFX?.Play(true);
             m_state.isAttacking = true;
             m_state.isChargingAttack = true;
+            m_animator.SetBool(m_swordThrustAnimationParameter, true);
+            m_attacker.SetDamageModifier(m_thrust.damageModifier);
         }
 
         public void HandleCharge()
@@ -28,6 +40,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_chargeTimer -= GameplaySystem.time.deltaTime;
             }
+            else
+            {
+                m_chargeFX?.Stop(true);
+                m_finishedChargeFX?.Play(true);
+            }
         }
 
         public override void Cancel()
@@ -35,23 +52,29 @@ namespace DChild.Gameplay.Characters.Players.Modules
             base.Cancel();
             m_state.isChargingAttack = false;
             m_chargeFX?.Stop(true);
+            m_finishedChargeFX?.Stop(true);
+            m_animator.SetBool(m_swordThrustAnimationParameter, false);
         }
 
         public bool IsChargeComplete() => m_chargeTimer <= 0;
 
         public void Execute()
         {
+            m_rigidBody.WakeUp(); //Players rigidbody and targets rigidbody is asleep by the time of execution. When concerned rigid bodies are asleep there are no interactions even if colliders are enable. Capeesh
             m_chargeFX?.Stop(true);
+            m_finishedChargeFX?.Stop(true);
             m_thrust.PlayFX(true);
             m_thrust.ShowCollider(true);
             m_chargeTimer = -1;
             m_state.waitForBehaviour = true;
+            m_animator.SetBool(m_swordThrustAnimationParameter, false);
         }
 
         public void EndExecution()
         {
             m_thrust.PlayFX(false);
             m_thrust.ShowCollider(false);
+            m_state.isChargingAttack = false;
             m_state.waitForBehaviour = false;
         }
     }

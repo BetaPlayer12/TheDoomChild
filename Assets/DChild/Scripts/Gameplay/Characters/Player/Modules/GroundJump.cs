@@ -62,7 +62,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isHighJumping = true;
             m_animator.SetBool(m_animationParameter, true);
             m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_power);
-            m_rigidbody.sharedMaterial.friction = 0f;
+            //m_rigidbody.sharedMaterial.friction = 0f;
             m_timer = m_allowCutoffAfterDuration;
         }
     }

@@ -25,7 +25,9 @@ namespace DChild.Gameplay.Characters.Players
             WallStick,
             Flinch,
             EarthShaker,
-            SwordTrust
+            SwordTrust,
+            WhipAttack,
+            IsLevitating,
         }
 
         [SerializeField]

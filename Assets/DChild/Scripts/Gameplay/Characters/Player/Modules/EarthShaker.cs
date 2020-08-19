@@ -19,6 +19,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ParticleSystem m_impactFX;
         [SerializeField]
         private Collider2D m_impactCollider;
+        [SerializeField, MinValue(0)]
+        private float m_fallDamageModifier = 1;
+        [SerializeField, MinValue(0)]
+        private float m_impactDamageModifier = 1;
 
         private Rigidbody2D m_rigidbody;
         private int m_earthShakerAnimationParameter;
@@ -48,6 +52,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Impact()
         {
+            m_attacker.SetDamageModifier(m_impactDamageModifier);
+            m_rigidBody.WakeUp();
             m_fallLoopFX?.Stop(true);
             m_fallCollider.enabled = false;
             m_impactFX?.Play(true);
@@ -78,6 +84,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void StartExecution()
         {
+            m_attacker.SetDamageModifier(m_fallDamageModifier);
             m_rigidbody.velocity = Vector2.zero;
             m_originalGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;

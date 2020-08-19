@@ -8,6 +8,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private BasicSlashes m_basicSlashes;
         private SlashCombo m_slashCombo;
         private EarthShaker m_earthShaker;
+        private SwordThrust m_swordThrust;
+
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -23,6 +25,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.MidAir_Overhead, true);
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, true);
+        }
+
+        public void SwordUpSlashFX()
+        {
+            m_basicSlashes?.PlayFXFor(BasicSlashes.Type.Ground_Overhead, true);
+            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Ground_Overhead, true);
         }
 
         public void CrouchSlashFX()
@@ -47,10 +55,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void FinishAttackAnim()
         {
             m_basicSlashes?.AttackOver();
-            m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Forward, false);
-            m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, false);
-            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Crouch, false);
-
+            m_basicSlashes?.ClearExecutedCollision();
             m_slashCombo?.AttackOver();
         }
 
@@ -74,6 +79,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker.EndExecution();
         }
 
+        public void SwordThrustEnd()
+        {
+            m_swordThrust?.AttackOver();
+            m_swordThrust.EndExecution();
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             var character = info.character;
@@ -81,6 +92,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes = character.GetComponentInChildren<BasicSlashes>();
             m_slashCombo = character.GetComponentInChildren<SlashCombo>();
             m_earthShaker = character.GetComponentInChildren<EarthShaker>();
+            m_swordThrust = character.GetComponentInChildren<SwordThrust>();
         }
     }
 }
