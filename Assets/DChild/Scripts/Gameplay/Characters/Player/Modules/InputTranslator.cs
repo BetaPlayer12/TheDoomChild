@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool slashPressed;
         public bool slashHeld;
         public bool earthShakerPressed;
+        public bool whipPressed;
 
         private PlayerInput m_input;
 
@@ -95,6 +96,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             earthShakerPressed = value.Get<float>() == 1;
         }
 
+        private void OnWhip(InputValue value)
+        {
+            whipPressed = value.Get<float>() == 1;
+        }
+
         private void OnInteract(InputValue value)
         {
             interactPressed = value.Get<float>() == 1;
@@ -116,6 +122,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             slashPressed = false;
             earthShakerPressed = false;
+            whipPressed = false;
         }
 
         private void Reset()
@@ -134,6 +141,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             slashPressed = false;
             slashHeld = false;
             earthShakerPressed = false;
+            whipPressed = false;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SlashCombo m_slashCombo;
         private EarthShaker m_earthShaker;
         private SwordThrust m_swordThrust;
-
+        private WhipAttack m_whip;
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -45,6 +45,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo?.EnableCollision(true);
         }
 
+        public void GroundForwardWhipAttackFX()
+        {
+            m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
+            m_whip?.EnableCollision(WhipAttack.Type.Ground_Forward, true);
+        }
+
+        public void GroundOverheadWhipAttackFX()
+        {
+            m_whip?.PlayFXFor(WhipAttack.Type.Ground_Overhead, true);
+            m_whip?.EnableCollision(WhipAttack.Type.Ground_Overhead, true);
+        }
+
+        public void MidairForwardWhipAttackFX()
+        {
+            m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Forward, true);
+            m_whip?.EnableCollision(WhipAttack.Type.MidAir_Forward, true);
+        }
+
+        public void MidairOverheadWhipAttackFX()
+        {
+            m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Overhead, true);
+            m_whip?.EnableCollision(WhipAttack.Type.MidAir_Overhead, true);
+        }
+
         public void ContinueSlashCombo()
         {
             m_slashCombo?.ContinueCombo();
@@ -57,6 +81,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes?.AttackOver();
             m_basicSlashes?.ClearExecutedCollision();
             m_slashCombo?.AttackOver();
+            m_whip?.AttackOver();
+            m_whip?.ClearExecutedCollision();
         }
 
         public void EarthShakerPreLoop()
@@ -93,6 +119,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo = character.GetComponentInChildren<SlashCombo>();
             m_earthShaker = character.GetComponentInChildren<EarthShaker>();
             m_swordThrust = character.GetComponentInChildren<SwordThrust>();
+            m_whip = character.GetComponentInChildren<WhipAttack>();
         }
     }
 }
