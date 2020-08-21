@@ -67,6 +67,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_chargeFX?.Stop(true);
             m_preLoopFX?.Play(true);
+            m_fallCollider.enabled = true;
             m_rigidbody.gravityScale = m_originalGravity;
             m_rigidbody.velocity = Vector2.down * m_fallSpeed;
         }
@@ -77,7 +78,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_preLoopFX?.Stop(true);
                 m_fallLoopFX?.Play(true);
-                m_fallCollider.enabled = true;
             }
             m_rigidbody.velocity = Vector2.down * m_fallSpeed;
         }

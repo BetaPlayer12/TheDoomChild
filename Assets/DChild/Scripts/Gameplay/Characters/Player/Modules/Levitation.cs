@@ -6,6 +6,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class Levitation : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
+        [SerializeField]
+        private ParticleSystem m_wingsFX;
+
         private ILevitateState m_state;
         private Rigidbody2D m_rigidbody;
         private float m_cacheGravity;
@@ -23,6 +26,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Cancel()
         {
+            m_wingsFX.Stop();
+            m_wingsFX.Clear();
             m_state.isLevitating = false;
             m_rigidbody.gravityScale = m_cacheGravity;
             m_rigidbody.velocity = Vector2.zero;
@@ -31,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
+            m_wingsFX.Play();
             m_state.isLevitating = true;
             m_cacheGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;

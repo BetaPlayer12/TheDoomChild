@@ -11,12 +11,28 @@ namespace DChild.Gameplay.Combat
     [AddComponentMenu("DChild/Gameplay/Combat/Ray Collider Damage")]
     public class RayColliderDamage : ColliderDamage
     {
+        [SerializeField]
+        private bool m_hasPlayerOnlyCheck;
+
         protected override bool IsValidToHit(Collider2D collision)
         {
-            var searchCastResult = Raycaster.SearchCast(transform.position, collision.bounds.center, LayerMask.GetMask("Environment"), out RaycastHit2D[] hitbuffer);
-            if (searchCastResult == false && collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            var mask = m_hasPlayerOnlyCheck ? LayerMask.GetMask("Environment", "PlayerOnly") : LayerMask.GetMask("Environment");
+
+            var searchCastResult = Raycaster.SearchCast(transform.position, collision.bounds.center, mask, out RaycastHit2D[] hitbuffer);
+            if (searchCastResult == false)
             {
-                return collision == hitbuffer[0].collider;
+                if(collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+                {
+                    return collision == hitbuffer[0].collider;
+                }
+                else if(m_hasPlayerOnlyCheck && collision.gameObject.layer == LayerMask.NameToLayer("PlayerOnly"))
+                {
+                    return collision == hitbuffer[0].collider;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
