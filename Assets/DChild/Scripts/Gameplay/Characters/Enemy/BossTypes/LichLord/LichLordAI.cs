@@ -99,6 +99,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_lichOrbStartFXEvent;
             public string lichOrbStartFXEvent => m_lichOrbStartFXEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_mapCurseEvent;
+            public string mapCurseEvent => m_mapCurseEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_summonTotemEvent;
+            public string summonTotemEvent => m_summonTotemEvent;
 
             public override void Initialize()
             {
@@ -183,11 +189,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_ghostOrbStartFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_mapCurseFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_lichArmGroundFX;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField]
         private Transform m_lichLordArmTF;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Collider2D m_randomSpawnCollider;
 
         //[SerializeField, TabGroup("Effects")]
         //private ParticleFX m_deathFX;
@@ -342,6 +354,11 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(LaunchOrbRoutine());
         }
 
+        private void SummonTotemObject()
+        {
+            var totem = Instantiate(m_info.totem, new Vector2(RandomTeleportPoint().x, GroundPosition().y), Quaternion.identity);
+        }
+
         private IEnumerator LaunchOrbRoutine()
         {
             var numberOfProjectiles = 16;
@@ -381,10 +398,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SkeletalArmRoutine()
         {
             var randomAttack = UnityEngine.Random.Range(0, 2);
-            var skeletamArmPos = new Vector2(m_targetInfo.position.x + (randomAttack == 1 ? 20 : -20), GroundPosition().y - 3);
+            var skeletamArmPos = new Vector2(m_targetInfo.position.x + (randomAttack == 1 ? 20 : -20), GroundPosition().y);
             m_lichLordArmTF.position = skeletamArmPos;
             m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state.SetAnimation(0, "Phase_1_Arm_Attack", false);
             m_lichLordArmTF.localScale = new Vector3(m_targetInfo.position.x > m_lichLordArmTF.position.x ? 1 : -1, 1, 1);
+            m_lichArmGroundFX.Play();
             m_animation.SetAnimation(0, m_info.skeletalArmAttack.animation, false);
             yield return new WaitForSeconds(.1f);
             m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.None;
@@ -394,11 +412,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator SummonTotem()
+        private IEnumerator SummonTotemRoutine()
         {
             var randomAttack = UnityEngine.Random.Range(0, 2);
-            var totemPos = new Vector2(m_targetInfo.position.x + (randomAttack == 1 ? 10 : -10), GroundPosition().y);
-            var totem = Instantiate(m_info.totem, totemPos, Quaternion.identity);
             m_animation.SetAnimation(0, m_info.summonTotemAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonTotemAttack.animation);
             m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
@@ -451,6 +467,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.gameObject.SetActive(true);
             m_stateHandle.OverrideState(State.Chasing);
             yield return null;
+        }
+
+        private Vector3 RandomTeleportPoint()
+        {
+            Vector3 randomPos = transform.position;
+            while (Vector2.Distance(transform.position, randomPos) <= 50f)
+            {
+                randomPos = m_randomSpawnCollider.bounds.center + new Vector3(
+               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.x,
+               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.y,
+               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.z);
+            }
+            return randomPos;
         }
         #endregion
 
@@ -520,7 +549,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //StartCoroutine(Attack2Routine());
                     break;
                 case Attack.SummonTotem:
-                    StartCoroutine(SummonTotem());
+                    StartCoroutine(SummonTotemRoutine());
                     //StartCoroutine(Attack3Routine());
                     break;
                 case Attack.MapCurse:
@@ -577,6 +606,8 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_spineListener.Subscribe(m_info.lichOrbStartFXEvent, m_ghostOrbStartFX.Play);
             m_spineListener.Subscribe(m_info.ghostOrbProjectile.launchOnEvent, LaunchOrb);
+            m_spineListener.Subscribe(m_info.mapCurseEvent, m_mapCurseFX.Play);
+            m_spineListener.Subscribe(m_info.summonTotemEvent, SummonTotemObject);
             m_animation.DisableRootMotion();
 
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
