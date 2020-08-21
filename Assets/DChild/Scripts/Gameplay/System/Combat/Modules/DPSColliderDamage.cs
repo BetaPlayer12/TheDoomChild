@@ -77,13 +77,13 @@ namespace DChild.Gameplay.Combat
                     {
                         RemoveAffectedIndex(i);
                     }
-                    else
+                    else if (m_toDamage[i].isInvulnerable == false)
                     {
-                        info.damageTimer = 0;
+                        info.damageTimer = m_damageInterval;
                         var collision = m_affectedColliders[i];
                         DealDamage(collision, m_toDamage[i]);
                         SpawnHitFX(collision);
-                        if(m_toDamage[i].damageable.isAlive == false)
+                        if (m_toDamage[i].damageable.isAlive == false)
                         {
                             RemoveAffectedIndex(i);
                         }
@@ -96,8 +96,6 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-      
-
         private void OnTriggerExit2D(Collider2D collision)
         {
             if (m_affectedColliders.Contains(collision))
@@ -109,5 +107,4 @@ namespace DChild.Gameplay.Combat
             }
         }
     }
-
 }
