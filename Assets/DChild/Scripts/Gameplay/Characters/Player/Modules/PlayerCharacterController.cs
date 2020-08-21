@@ -23,6 +23,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         #region Behaviours
         private PlayerStatisticTracker m_tracker;
         private GroundednessHandle m_groundedness;
+        private PlayerPhysicsMatHandle m_physicsMat;
         private IdleHandle m_idle;
         private CombatReadiness m_combatReadiness;
         private PlayerFlinch m_flinch;
@@ -35,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Dash m_dash;
         private GroundJump m_groundJump;
         private ExtraJump m_extraJump;
+        private Levitation m_levitation;
 
         private WallStick m_wallStick;
         private WallMovement m_wallMovement;
@@ -46,6 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SlashCombo m_slashCombo;
         private SwordThrust m_swordThrust;
         private EarthShaker m_earthShaker;
+        private WhipAttack m_whip;
         #endregion
 
         public event EventAction<EventActionArgs> ControllerDisabled;
@@ -58,6 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_crouch?.Cancel();
             m_dash?.Cancel();
             m_wallStick?.Cancel();
+            m_levitation?.Cancel();
         }
 
         public void Enable()
@@ -77,11 +81,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_dash.Reset();
                 if (m_state.isGrounded)
                 {
+                    m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Ground);
+
                     if (m_state.isStickingToWall)
                     {
                         m_wallMovement?.Cancel();
                         m_wallStick?.Cancel();
                     }
+                    else if (m_state.isLevitating)
+                    {
+                        m_levitation?.Cancel();
+                    }
+
                     m_initialDescentBoost?.Reset();
                     m_extraJump?.Reset();
                     m_movement?.SwitchConfigTo(Movement.Type.Jog);
@@ -89,10 +100,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_state.isAttacking)
                     {
                         m_basicSlashes.Cancel();
+                        m_whip.Cancel();
                     }
                 }
                 else
                 {
+                    m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Midair);
+
                     if (m_state.isCrouched)
                     {
                         m_crouch?.Cancel();
@@ -161,6 +175,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
 
                 }
+                else if (m_state.isLevitating)
+                {
+                    m_levitation?.Cancel();
+                }
             }
         }
 
@@ -177,6 +195,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_tracker = m_character.GetComponentInChildren<PlayerStatisticTracker>();
             m_groundedness = m_character.GetComponentInChildren<GroundednessHandle>();
             m_groundedness.StateChange += OnGroundednessStateChange;
+            m_physicsMat = m_character.GetComponentInChildren<PlayerPhysicsMatHandle>();
             m_idle = m_character.GetComponentInChildren<IdleHandle>();
             m_combatReadiness = m_character.GetComponentInChildren<CombatReadiness>();
             m_flinch = m_character.GetComponentInChildren<PlayerFlinch>();
@@ -191,6 +210,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_dash = m_character.GetComponentInChildren<Dash>();
             m_groundJump = m_character.GetComponentInChildren<GroundJump>();
             m_extraJump = m_character.GetComponentInChildren<ExtraJump>();
+            m_levitation = m_character.GetComponentInChildren<Levitation>();
             m_wallStick = m_character.GetComponentInChildren<WallStick>();
             m_wallMovement = m_character.GetComponentInChildren<WallMovement>();
             m_wallSlide = m_character.GetComponentInChildren<WallSlide>();
@@ -201,6 +221,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo = m_character.GetComponentInChildren<SlashCombo>();
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
             m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
+            m_whip = m_character.GetComponentInChildren<WhipAttack>();
         }
 
         private void FixedUpdate()
@@ -213,6 +234,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (m_state.forcedCurrentGroundedness == false)
                 {
                     m_groundedness?.Evaluate();
+                }
+
+                if (m_groundedness?.isUsingCoyote ?? false)
+                {
+                    m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Midair);
+                }
+                else
+                {
+                    m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Ground);
                 }
             }
             else
@@ -259,6 +289,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_basicSlashes.HandleNextAttackDelay();
                 m_slashCombo.HandleComboAttackDelay();
+                m_whip.HandleNextAttackDelay();
             }
 
             if (m_state.isGrounded)
@@ -374,11 +405,37 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
+                if (m_state.isLevitating)
+                {
+                    m_levitation?.MaintainHeight();
+                    if (m_input.levitateHeld == false)
+                    {
+                        m_levitation?.Cancel();
+                    }
+                }
+
                 if (m_state.canAttack)
                 {
                     #region MidAir Attacks
-                    if (m_input.slashPressed)
+                    if (m_input.earthShakerPressed)
                     {
+                        if (m_state.isLevitating)
+                        {
+                            m_levitation?.Cancel();
+                        }
+
+                        m_combatReadiness?.Execution();
+                        m_attackRegistrator?.ResetHitCache();
+                        m_earthShaker?.StartExecution();
+                        return;
+                    }
+                    else if (m_input.slashPressed)
+                    {
+                        if (m_state.isLevitating)
+                        {
+                            m_levitation?.Cancel();
+                        }
+
                         m_combatReadiness?.Execution();
                         m_attackRegistrator?.ResetHitCache();
                         if (m_input.verticalInput > 0)
@@ -391,11 +448,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_input.earthShakerPressed)
+                    else if (m_input.whipPressed)
                     {
+                        if (m_state.isLevitating)
+                        {
+                            m_levitation?.Cancel();
+                        }
+
                         m_combatReadiness?.Execution();
                         m_attackRegistrator?.ResetHitCache();
-                        m_earthShaker?.StartExecution();
+
+                        if (m_input.verticalInput > 0)
+                        {
+                            m_whip.Execute(WhipAttack.Type.MidAir_Overhead);
+                        }
+                        else if (m_input.verticalInput == 0)
+                        {
+                            m_whip.Execute(WhipAttack.Type.MidAir_Forward);
+                        }
                         return;
                     }
                     #endregion
@@ -423,6 +493,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_skills.IsEnabled(PrimarySkill.Dash) && m_state.canDash)
                     {
+                        if (m_state.isLevitating)
+                        {
+                            m_levitation?.Cancel();
+                        }
 
                         m_groundJump?.Cancel();
                         m_dash?.ResetDurationTimer();
@@ -435,20 +509,40 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_extraJump?.HasExtras() ?? false)
                         {
+                            if (m_state.isLevitating)
+                            {
+                                m_levitation?.Cancel();
+                            }
+
                             m_extraJump?.Execute();
                         }
                     }
+                }
+                else if (m_input.levitatePressed)
+                {
+                    if (m_state.isHighJumping)
+                    {
+                        m_groundJump?.CutOffJump();
+                    }
+
+                    m_levitation?.Execute();
                 }
                 else
                 {
                     m_movement.Move(m_input.horizontalInput);
                     if (m_input.horizontalInput != 0)
                     {
-                        if (m_wallStick?.IsThereAWall() ?? false)
+                        if (m_state.isHighJumping == false && m_state.isLevitating == false)
                         {
-                            m_dash?.Reset();
-                            m_extraJump?.Reset();
-                            m_wallStick?.Execute();
+                            if (m_wallStick?.IsHeightRequirementAchieved() ?? false)
+                            {
+                                if (m_wallStick?.IsThereAWall() ?? false)
+                                {
+                                    m_dash?.Reset();
+                                    m_extraJump?.Reset();
+                                    m_wallStick?.Execute();
+                                }
+                            }
                         }
                     }
                 }
@@ -519,9 +613,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_input.verticalInput > 0)
                         {
-                            //PrepareForAttack();
-                            //m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
-                            //return;
+                            PrepareForAttack();
+                            m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
+                            return;
                         }
                         else
                         {
@@ -530,14 +624,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             return;
                         }
                     }
-                    //else if (m_input.slashHeld)
-                    //{
-                    //    PrepareForAttack();
-                    //    m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
-                    //    //Start SwordThrust
-                    //    m_swordThrust?.StartCharge();
-                    //    return;
-                    //}
+                    else if (m_input.slashHeld)
+                    {
+                        PrepareForAttack();
+                        m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
+
+                        //Start SwordThrust
+                        m_swordThrust?.StartCharge();
+                        return;
+                    }
+                    else if (m_input.whipPressed)
+                    {
+                        if (m_input.verticalInput > 0)
+                        {
+                            PrepareForAttack();
+                            m_whip.Execute(WhipAttack.Type.Ground_Overhead);
+                            return;
+                        }
+                        else
+                        {
+                            PrepareForAttack();
+                            m_whip.Execute(WhipAttack.Type.Ground_Forward);
+                            return;
+                        }
+                    }
                     #endregion
                 }
 

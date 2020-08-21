@@ -1,5 +1,108 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5573233925074938722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8961675372961754821}
+  - component: {fileID: 4665764455124903692}
+  - component: {fileID: 3976449834723296872}
+  - component: {fileID: 4095532479931446342}
+  m_Layer: 8
+  m_Name: Control
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8961675372961754821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5573233925074938722}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7518031643020262915}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4665764455124903692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5573233925074938722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 2e0d81e8951c3384cba5207fae67c9a4,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Gameplay
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &3976449834723296872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5573233925074938722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08075061a994857498b09cdda9c3f7db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalInput: 0
+  verticalInput: 0
+  crouchHeld: 0
+  dashPressed: 0
+  jumpPressed: 0
+  jumpHeld: 0
+  interactPressed: 0
+  slashPressed: 0
+  slashHeld: 0
+  earthShakerPressed: 0
+--- !u!114 &4095532479931446342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5573233925074938722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7904a9ee154894a9d1e01e72737afd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_input: {fileID: 3976449834723296872}
+  m_skills: {fileID: 7518031642767482061}
+  m_state: {fileID: 0}
+  m_character: {fileID: 0}
+  m_rigidbody: {fileID: 0}
 --- !u!1 &7518031641241396614
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,6 +708,7 @@ Transform:
   - {fileID: 7518031641492634116}
   - {fileID: 7518031642767482062}
   - {fileID: 7518031641455754585}
+  - {fileID: 8961675372961754821}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -641,7 +745,6 @@ MonoBehaviour:
   m_magic: {fileID: 0}
   m_statusEffectReciever: {fileID: 0}
   m_lootPicker: {fileID: 0}
-  m_groundednessHandle: {fileID: 0}
 --- !u!114 &7518031643020262918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,11 +786,11 @@ MonoBehaviour:
     m_state: {fileID: 0}
     m_magic: {fileID: 0}
     m_physics: {fileID: 0}
+    m_rigidbody: {fileID: 0}
     m_sensorList: {fileID: 0}
     m_animator: {fileID: 0}
     m_animationParametersData: {fileID: 11400000, guid: ae6b883081a322c4080529d346175af7,
       type: 2}
-    m_groundednessHandle: {fileID: 0}
     m_skillResetRequester: {fileID: 0}
     m_statusEffectReciever: {fileID: 0}
     m_surfaceDector: {fileID: 0}

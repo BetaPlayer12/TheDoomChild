@@ -49,6 +49,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EnableCollision(Type type, bool value)
         {
+            m_rigidBody.WakeUp();
+
             switch (type)
             {
                 case Type.Ground_Overhead:
@@ -86,15 +88,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 case Type.Ground_Overhead:
                     m_timer = m_groundOverhead.nextAttackDelay;
+                    m_attacker.SetDamageModifier(m_groundOverhead.damageModifier);
                     break;
                 case Type.Crouch:
                     m_timer = m_crouch.nextAttackDelay;
+                    m_attacker.SetDamageModifier(m_crouch.damageModifier);
                     break;
                 case Type.MidAir_Forward:
                     m_timer = m_midAirForward.nextAttackDelay;
+                    m_attacker.SetDamageModifier(m_midAirForward.damageModifier);
                     break;
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
+                    m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier);
                     break;
             }
             Record(type);
@@ -149,6 +155,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_state.canAttack = true;
                 }
             }
+        }
+
+        public void ClearExecutedCollision()
+        {
+            for (int i = 0; i < m_executedTypes.Count; i++)
+            {
+                var type = m_executedTypes[i];
+                EnableCollision(type, false);
+            }
+            m_executedTypes.Clear();
         }
 
         private void Record(Type type)

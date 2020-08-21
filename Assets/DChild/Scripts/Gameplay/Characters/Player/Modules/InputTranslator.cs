@@ -11,12 +11,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool dashPressed;
         public bool jumpPressed;
         public bool jumpHeld;
+        public bool levitatePressed;
+        public bool levitateHeld;
 
         public bool interactPressed;
 
         public bool slashPressed;
         public bool slashHeld;
         public bool earthShakerPressed;
+        public bool whipPressed;
 
         private PlayerInput m_input;
 
@@ -66,6 +69,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             jumpHeld = isTrue;
         }
 
+        private void OnLevitate(InputValue value)
+        {
+            var isTrue = value.Get<float>() == 1;
+            levitatePressed = isTrue;
+            levitateHeld = isTrue;
+        }
+
         private void OnSlash(InputValue value)
         {
             slashPressed = value.Get<float>() == 1;
@@ -76,9 +86,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             slashHeld = value.Get<float>() == 1;
         }
 
+        private void OnSlashReleased(InputValue value)
+        {
+            slashHeld = false;
+        }
+
         private void OnEarthShaker(InputValue value)
         {
             earthShakerPressed = value.Get<float>() == 1;
+        }
+
+        private void OnWhip(InputValue value)
+        {
+            whipPressed = value.Get<float>() == 1;
         }
 
         private void OnInteract(InputValue value)
@@ -96,11 +116,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             dashPressed = false;
             jumpPressed = false;
+            levitatePressed = false;
 
             interactPressed = false;
 
             slashPressed = false;
             earthShakerPressed = false;
+            whipPressed = false;
         }
 
         private void Reset()
@@ -111,12 +133,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             dashPressed = false;
             jumpPressed = false;
             jumpHeld = false;
+            levitatePressed = false;
+            levitateHeld = false;
 
             interactPressed = false;
 
             slashPressed = false;
             slashHeld = false;
             earthShakerPressed = false;
+            whipPressed = false;
         }
     }
 }

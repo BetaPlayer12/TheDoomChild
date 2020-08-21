@@ -5,7 +5,8 @@ using UnityEngine;
 namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
-                                  IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState
+                                  IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
+                                  ILevitateState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;
@@ -54,6 +55,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_waitForBehaviour;
         public bool waitForBehaviour { get => m_waitForBehaviour; set => m_waitForBehaviour = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_canFlinch = true;
+        public bool canFlinch { get => m_canFlinch; set => m_canFlinch = value; }
 
         [SerializeField, ReadOnly]
         private bool m_isDead;

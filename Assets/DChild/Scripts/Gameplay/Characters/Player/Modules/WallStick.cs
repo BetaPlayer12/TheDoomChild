@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-
-
     public class WallStick : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
         [SerializeField]
         private RaySensor m_wallSensor;
+        [SerializeField]
+        private RaySensor m_heightSensor;
 
         private float m_cacheGravityScale;
 
@@ -64,6 +64,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
             }
             return isValid;
+        }
+
+        public bool IsHeightRequirementAchieved()
+        {
+            if (m_heightSensor)
+            {
+                m_heightSensor.Cast();
+                return m_heightSensor.allRaysDetecting == false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void Execute()

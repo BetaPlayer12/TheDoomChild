@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Players
     public interface IPlayer
     {
         event EventAction<EventActionArgs> OnDeath;
-        State.CharacterState state { get; }
+        Modules.CharacterState state { get; }
         IPlayerStats stats { get; }
         Health health { get; }
         Magic magic { get; }
@@ -66,7 +66,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Character m_controlledCharacter;
         [SerializeField]
-        private State.CharacterState m_state;
+        private Modules.CharacterState m_state;
         [SerializeField]
         private Damageable m_damageable;
         [SerializeField]
@@ -82,7 +82,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public IPlayerStats stats => m_stats;
 
-        public State.CharacterState state => m_state;
+        public Modules.CharacterState state => m_state;
         public Health health => m_damageable.health;
         public Magic magic => m_magic;
         public IHealable healableModule => m_damageable;
@@ -137,7 +137,7 @@ namespace DChild.Gameplay.Characters.Players
         public void Initialize(GameObject character)
         {
             m_controlledCharacter = character.GetComponentInChildren<Character>();
-            m_state = character.GetComponentInChildren<State.CharacterState>();
+            m_state = character.GetComponentInChildren<Modules.CharacterState>();
             m_damageable = character.GetComponentInChildren<Damageable>();
             m_attacker = character.GetComponentInChildren<Attacker>();
             m_magic = character.GetComponentInChildren<Magic>();

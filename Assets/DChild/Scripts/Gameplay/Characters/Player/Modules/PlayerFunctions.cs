@@ -8,6 +8,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private BasicSlashes m_basicSlashes;
         private SlashCombo m_slashCombo;
         private EarthShaker m_earthShaker;
+        private SwordThrust m_swordThrust;
+        private WhipAttack m_whip;
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -25,6 +27,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, true);
         }
 
+        public void SwordUpSlashFX()
+        {
+            m_basicSlashes?.PlayFXFor(BasicSlashes.Type.Ground_Overhead, true);
+            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Ground_Overhead, true);
+        }
+
         public void CrouchSlashFX()
         {
             m_basicSlashes?.PlayFXFor(BasicSlashes.Type.Crouch, true);
@@ -37,6 +45,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo?.EnableCollision(true);
         }
 
+        public void GroundForwardWhipAttackFX()
+        {
+            m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
+            m_whip?.EnableCollision(WhipAttack.Type.Ground_Forward, true);
+        }
+
+        public void GroundOverheadWhipAttackFX()
+        {
+            m_whip?.PlayFXFor(WhipAttack.Type.Ground_Overhead, true);
+            m_whip?.EnableCollision(WhipAttack.Type.Ground_Overhead, true);
+        }
+
+        public void MidairForwardWhipAttackFX()
+        {
+            m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Forward, true);
+            m_whip?.EnableCollision(WhipAttack.Type.MidAir_Forward, true);
+        }
+
+        public void MidairOverheadWhipAttackFX()
+        {
+            m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Overhead, true);
+            m_whip?.EnableCollision(WhipAttack.Type.MidAir_Overhead, true);
+        }
+
         public void ContinueSlashCombo()
         {
             m_slashCombo?.ContinueCombo();
@@ -47,11 +79,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void FinishAttackAnim()
         {
             m_basicSlashes?.AttackOver();
-            m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Forward, false);
-            m_basicSlashes?.EnableCollision(BasicSlashes.Type.MidAir_Overhead, false);
-            m_basicSlashes?.EnableCollision(BasicSlashes.Type.Crouch, false);
-
+            m_basicSlashes?.ClearExecutedCollision();
             m_slashCombo?.AttackOver();
+            m_whip?.AttackOver();
+            m_whip?.ClearExecutedCollision();
         }
 
         public void EarthShakerPreLoop()
@@ -74,6 +105,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker.EndExecution();
         }
 
+        public void SwordThrustEnd()
+        {
+            m_swordThrust?.AttackOver();
+            m_swordThrust.EndExecution();
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             var character = info.character;
@@ -81,6 +118,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_basicSlashes = character.GetComponentInChildren<BasicSlashes>();
             m_slashCombo = character.GetComponentInChildren<SlashCombo>();
             m_earthShaker = character.GetComponentInChildren<EarthShaker>();
+            m_swordThrust = character.GetComponentInChildren<SwordThrust>();
+            m_whip = character.GetComponentInChildren<WhipAttack>();
         }
     }
 }
