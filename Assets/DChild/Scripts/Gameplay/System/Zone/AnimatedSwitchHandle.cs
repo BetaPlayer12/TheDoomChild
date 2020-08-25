@@ -65,7 +65,7 @@ namespace DChild.Gameplay.Environment
                     character.transform.parent = m_newParent;
                     character.transform.localPosition = m_parentLocalPosition;
                     rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-                    collisionState.forcedCurrentGroundedness = true;
+                    collisionState.forcedCurrentGroundedness = false;
                     m_onExit?.Invoke();
                     break;
 
