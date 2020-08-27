@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.Players.Modules;
 using PlayerNew;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -25,22 +26,25 @@ namespace DChild.Gameplay.Environment
 
         public void DoSceneTransition(Character character, TransitionType type)
         {
-            if (type == TransitionType.Enter)
+            switch (type)
             {
-                OnDoorwayEnter(character);
-            }
-            if (type == TransitionType.PostEnter)
-            {
-                OnDoorwayPostEnter(character);
-            }
-            else if (type == TransitionType.Exit && m_forceExitFacing)
-            {
-                character.SetFacing(m_exitFacing);
-                OnDoorwayExit(character);
-            }
-            else if (type == TransitionType.Exit)
-            {
-                OnDoorwayExit(character);
+                case TransitionType.Enter:
+                    OnDoorwayEnter(character);
+                    break;
+                case TransitionType.PostEnter:
+                    OnDoorwayPostEnter(character);
+                    break;
+                case TransitionType.Exit:
+                    if (m_forceExitFacing)
+                    {
+                        character.SetFacing(m_exitFacing);
+                    }
+
+                    OnDoorwayExit(character);
+                    break;
+                case TransitionType.PostExit:
+                    OnDoorwayPostExit();
+                    break;
             }
         }
 
@@ -57,8 +61,8 @@ namespace DChild.Gameplay.Environment
 
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
             rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            StateManager collisionState = character.GetComponentInChildren<StateManager>();
-            collisionState.forceGrounded = true;
+            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
+            collisionState.forcedCurrentGroundedness = true;
         }
 
         private void OnDoorwayExit(Character character)
@@ -68,8 +72,13 @@ namespace DChild.Gameplay.Environment
 
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
             rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-            StateManager collisionState = character.GetComponentInChildren<StateManager>();
-            collisionState.forceGrounded = false;
+            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
+            collisionState.forcedCurrentGroundedness = false;
+        }
+
+        private void OnDoorwayPostExit()
+        {
+            GameplaySystem.playerManager.StopCharacterControlOverride();
         }
     }
 }

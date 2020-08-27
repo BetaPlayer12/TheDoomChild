@@ -81,6 +81,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_dash.Reset();
                 if (m_state.isGrounded)
                 {
+                    Debug.Log("Grounded");
                     m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Ground);
 
                     if (m_state.isStickingToWall)
@@ -419,25 +420,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region MidAir Attacks
                     if (m_input.earthShakerPressed)
                     {
-                        if (m_state.isLevitating)
+                        if (m_skills.IsEnabled(PrimarySkill.EarthShaker))
                         {
-                            m_levitation?.Cancel();
+                            PrepareForMidairAttack();
+
+                            m_earthShaker?.StartExecution();
                         }
 
-                        m_combatReadiness?.Execution();
-                        m_attackRegistrator?.ResetHitCache();
-                        m_earthShaker?.StartExecution();
                         return;
                     }
                     else if (m_input.slashPressed)
                     {
-                        if (m_state.isLevitating)
-                        {
-                            m_levitation?.Cancel();
-                        }
+                        PrepareForMidairAttack();
 
-                        m_combatReadiness?.Execution();
-                        m_attackRegistrator?.ResetHitCache();
                         if (m_input.verticalInput > 0)
                         {
                             m_basicSlashes.Execute(BasicSlashes.Type.MidAir_Overhead);
@@ -450,22 +445,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.whipPressed)
                     {
-                        if (m_state.isLevitating)
+                        if (m_skills.IsEnabled(PrimarySkill.Whip))
                         {
-                            m_levitation?.Cancel();
+                            PrepareForMidairAttack();
+
+                            if (m_input.verticalInput > 0)
+                            {
+                                m_whip.Execute(WhipAttack.Type.MidAir_Overhead);
+                            }
+                            else if (m_input.verticalInput == 0)
+                            {
+                                m_whip.Execute(WhipAttack.Type.MidAir_Forward);
+                            }
                         }
 
-                        m_combatReadiness?.Execution();
-                        m_attackRegistrator?.ResetHitCache();
-
-                        if (m_input.verticalInput > 0)
-                        {
-                            m_whip.Execute(WhipAttack.Type.MidAir_Overhead);
-                        }
-                        else if (m_input.verticalInput == 0)
-                        {
-                            m_whip.Execute(WhipAttack.Type.MidAir_Forward);
-                        }
                         return;
                     }
                     #endregion
@@ -570,7 +563,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_input.slashPressed)
                     {
-                        PrepareForAttack();
+                        PrepareForGroundAttack();
                         m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
                         return;
                     }
@@ -613,40 +606,49 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_input.verticalInput > 0)
                         {
-                            PrepareForAttack();
+                            PrepareForGroundAttack();
                             m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
                             return;
                         }
                         else
                         {
-                            PrepareForAttack();
+                            PrepareForGroundAttack();
                             m_slashCombo.Execute();
                             return;
                         }
                     }
                     else if (m_input.slashHeld)
                     {
-                        PrepareForAttack();
-                        m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
+                        if (m_skills.IsEnabled(PrimarySkill.SwordThrust))
+                        {
+                            PrepareForGroundAttack();
+                            m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
 
-                        //Start SwordThrust
-                        m_swordThrust?.StartCharge();
+                            //Start SwordThrust
+                            m_swordThrust?.StartCharge();
+                        }
+
                         return;
                     }
                     else if (m_input.whipPressed)
                     {
-                        if (m_input.verticalInput > 0)
+                        if (m_skills.IsEnabled(PrimarySkill.Whip))
                         {
-                            PrepareForAttack();
-                            m_whip.Execute(WhipAttack.Type.Ground_Overhead);
-                            return;
+                            if (m_input.verticalInput > 0)
+                            {
+                                PrepareForGroundAttack();
+                                m_whip.Execute(WhipAttack.Type.Ground_Overhead);
+                                return;
+                            }
+                            else
+                            {
+                                PrepareForGroundAttack();
+                                m_whip.Execute(WhipAttack.Type.Ground_Forward);
+                                return;
+                            }
                         }
-                        else
-                        {
-                            PrepareForAttack();
-                            m_whip.Execute(WhipAttack.Type.Ground_Forward);
-                            return;
-                        }
+
+                        return;
                     }
                     #endregion
                 }
@@ -737,11 +739,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        private void PrepareForAttack()
+        private void PrepareForGroundAttack()
         {
             m_combatReadiness?.Execution();
             m_idle?.Cancel();
             m_movement?.Cancel();
+            m_attackRegistrator?.ResetHitCache();
+        }
+
+        private void PrepareForMidairAttack()
+        {
+            if (m_state.isLevitating)
+            {
+                m_levitation?.Cancel();
+            }
+
+            if (m_state.isHighJumping == true)
+            {
+                m_groundJump?.CutOffJump();
+            }
+
+            m_combatReadiness?.Execution();
             m_attackRegistrator?.ResetHitCache();
         }
         #endregion

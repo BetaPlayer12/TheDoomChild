@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Environment;
 using PlayerNew;
 using Sirenix.OdinInspector;
@@ -35,7 +36,8 @@ namespace DChild.Gameplay.Environment
         public void DoSceneTransition(Character character, TransitionType type)
         {
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
-            StateManager collisionState = character.GetComponentInChildren<StateManager>();
+            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
+            
             switch (type)
             {
                 case TransitionType.Enter:
@@ -56,14 +58,14 @@ namespace DChild.Gameplay.Environment
                         SceneManager.MoveGameObjectToScene(character.gameObject, m_originalScene);
                     }
                     rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
-                    collisionState.forceGrounded = true;
+                    collisionState.forcedCurrentGroundedness = true;
                     break;
 
                 case TransitionType.Exit:
                     character.transform.parent = m_newParent;
                     character.transform.localPosition = m_parentLocalPosition;
                     rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-                    collisionState.forceGrounded = false;
+                    collisionState.forcedCurrentGroundedness = false;
                     m_onExit?.Invoke();
                     break;
 

@@ -64,6 +64,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_isDead;
         public bool isDead { get => m_isDead; set => m_isDead = value; }
 
-        public bool forcedCurrentGroundedness;
+        [SerializeField, ReadOnly]
+        private bool m_forcedCurrentGroundedness;
+        public bool forcedCurrentGroundedness { get => m_forcedCurrentGroundedness; set => m_forcedCurrentGroundedness = value; }
     }
 }
