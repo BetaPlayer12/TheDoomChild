@@ -45,72 +45,107 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnHorizontalInput(InputValue value)
         {
-            horizontalInput = value.Get<float>();
+            if(enabled == true)
+            {
+                horizontalInput = value.Get<float>();
+            }
         }
         private void OnVerticalInput(InputValue value)
         {
-            verticalInput = value.Get<float>();
+            if (enabled == true)
+            {
+                verticalInput = value.Get<float>();
+            }
         }
 
         private void OnCrouch(InputValue value)
         {
-            crouchHeld = value.Get<float>() == 1;
+            if (enabled == true)
+            {
+                crouchHeld = value.Get<float>() == 1;
+            }
         }
 
         private void OnDash(InputValue value)
         {
-            dashPressed = value.Get<float>() == 1;
+            if (enabled == true)
+            {
+                dashPressed = value.Get<float>() == 1;
+            }
         }
 
         private void OnJump(InputValue value)
         {
-            var isTrue = value.Get<float>() == 1;
-            jumpPressed = isTrue;
-            jumpHeld = isTrue;
+            if (enabled == true)
+            {
+                var isTrue = value.Get<float>() == 1;
+                jumpPressed = isTrue;
+                jumpHeld = isTrue;
+            }
         }
 
         private void OnLevitate(InputValue value)
         {
-            var isTrue = value.Get<float>() == 1;
-            levitatePressed = isTrue;
-            levitateHeld = isTrue;
+            if (enabled == true)
+            {
+                var isTrue = value.Get<float>() == 1;
+                levitatePressed = isTrue;
+                levitateHeld = isTrue;
+            }
         }
 
         private void OnSlash(InputValue value)
         {
-            slashPressed = value.Get<float>() == 1;
+            if (enabled == true)
+            {
+                slashPressed = value.Get<float>() == 1;
+            }
         }
 
         private void OnSlashHeld(InputValue value)
         {
-            slashHeld = value.Get<float>() == 1;
+            if (enabled == true)
+            {
+                slashHeld = value.Get<float>() == 1;
+            }
         }
 
         private void OnSlashReleased(InputValue value)
         {
-            slashHeld = false;
+            if (enabled == true)
+            {
+                slashHeld = false;
+            }
         }
 
         private void OnEarthShaker(InputValue value)
         {
-            earthShakerPressed = value.Get<float>() == 1;
+            if (enabled == true)
+            {
+                earthShakerPressed = value.Get<float>() == 1;
+            }
         }
 
         private void OnWhip(InputValue value)
         {
-            whipPressed = value.Get<float>() == 1;
+            if (enabled == true)
+            {
+                whipPressed = value.Get<float>() == 1;
+            }
         }
 
         private void OnInteract(InputValue value)
         {
-            interactPressed = value.Get<float>() == 1;
+            if (enabled == true)
+            {
+                interactPressed = value.Get<float>() == 1;
+            }
         }
 
         private void Awake()
         {
             m_input = GetComponent<PlayerInput>();
         }
-
 
         private void LateUpdate()
         {

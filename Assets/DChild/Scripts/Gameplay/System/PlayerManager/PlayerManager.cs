@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Systems
         IAutoReflexHandler autoReflex { get; }
         PlayerCharacterOverride OverrideCharacterControls();
         void StopCharacterControlOverride();
+        void DisableControls();
+        void EnableControls();
     }
 
     public class PlayerManager : MonoBehaviour, IGameplaySystemModule, IGameplayInitializable, IPlayerManager
@@ -27,7 +29,9 @@ namespace DChild.Gameplay.Systems
         [SerializeField, BoxGroup("Player Data")]
         private Player m_player;
         [SerializeField]
-        private InputTranslator m_input;
+        private GameplayInput m_gameplayInput;
+        [SerializeField]
+        private InputTranslator m_characterInput;
         [SerializeField]
         private PlayerCharacterOverride m_overrideController;
         [SerializeField]
@@ -38,20 +42,44 @@ namespace DChild.Gameplay.Systems
         private AutoReflexHandler m_autoReflex;
 
         private CollisionRegistrator m_collisionRegistrator;
-
+        
         public Player player => m_player;
         public IAutoReflexHandler autoReflex => m_autoReflex;
 
-        public void DisableInput() => m_input?.Disable();
-        public void EnableInput() => m_input?.Enable();
+        public void DisableInput()
+        {
+            m_gameplayInput?.Disable();
+            m_characterInput?.Disable();
+        }
+
+        public void EnableInput()
+        {
+            m_gameplayInput?.Enable();
+            m_characterInput?.Enable();
+        }
 
         public PlayerCharacterOverride OverrideCharacterControls()
         {
-            m_input?.Disable();
+            m_gameplayInput?.Disable();
+            m_characterInput?.Disable();
             m_player.controller.Disable();
             m_player.controller.Enable();
             m_overrideController.enabled = true;
             return m_overrideController;
+        }
+
+        public void DisableControls()
+        {
+            m_gameplayInput?.Disable();
+            m_characterInput?.Disable();
+            m_player.controller.Disable();
+        }
+
+        public void EnableControls()
+        {
+            m_gameplayInput?.Enable();
+            m_characterInput?.Enable();
+            m_player.controller.Enable();
         }
 
         public void ClearCache() => m_collisionRegistrator?.ClearCache();
@@ -59,7 +87,8 @@ namespace DChild.Gameplay.Systems
         public void StopCharacterControlOverride()
         {
             m_overrideController.enabled = false;
-            m_input?.Enable();
+            m_gameplayInput?.Enable();
+            m_characterInput?.Enable();
             m_player.controller.Enable();
         }
 

@@ -32,6 +32,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Initialize(info);
             m_rigidbody = info.rigidbody;
+            m_originalGravity = m_rigidbody.gravityScale;
             m_earthShakerAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.EarthShaker);
         }
 
