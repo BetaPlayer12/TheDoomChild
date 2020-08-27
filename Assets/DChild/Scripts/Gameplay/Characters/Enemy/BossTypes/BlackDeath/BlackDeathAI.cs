@@ -553,8 +553,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 int offset = 5;
                 for (int z = 0; z < 20; z++)
                 {
-                    GameObject instance1 = Instantiate(m_info.tentacle, new Vector2(transform.position.x + offset, transform.position.y), Quaternion.identity);
-                    GameObject instance2 = Instantiate(m_info.tentacle, new Vector2(transform.position.x - offset, transform.position.y), Quaternion.identity);
+                    GameObject instance1 = Instantiate(m_info.tentacle, new Vector2(transform.position.x + offset, GroundPosition(new Vector2(transform.position.x + offset, transform.position.y)).y), Quaternion.identity);
+                    GameObject instance2 = Instantiate(m_info.tentacle, new Vector2(transform.position.x - offset, GroundPosition(new Vector2(transform.position.x + offset, transform.position.y)).y), Quaternion.identity);
                     yield return new WaitForSeconds(.1f);
                     offset += 5;
                 }

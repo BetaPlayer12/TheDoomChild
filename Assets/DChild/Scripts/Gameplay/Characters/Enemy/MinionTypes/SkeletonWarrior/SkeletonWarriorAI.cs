@@ -28,6 +28,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
+            [SerializeField]
+            private MovementInfo m_backMove = new MovementInfo();
+            public MovementInfo backMove => m_backMove;
 
             //Attack Behaviours
             [SerializeField]
@@ -81,6 +84,7 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
+                m_backMove.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
                 m_attack3.SetData(m_skeletonDataAsset);
@@ -412,11 +416,24 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Cooldown:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
                     //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                    if (!IsFacingTarget())
+                    if (IsTargetInRange(100))
                     {
-                        m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        if (!IsFacingTarget())
+                        {
+                            m_turnState = State.Cooldown;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
+                        else
+                        {
+                            m_animation.EnableRootMotion(false, false);
+                            m_animation.SetAnimation(0, m_info.backMove.animation, true);
+                            m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                        }
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
 
                     if (m_currentCD <= m_info.attackCD)
