@@ -420,9 +420,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region MidAir Attacks
                     if (m_input.earthShakerPressed)
                     {
-                        PrepareForMidairAttack();
+                        if (m_skills.IsEnabled(PrimarySkill.EarthShaker))
+                        {
+                            PrepareForMidairAttack();
 
-                        m_earthShaker?.StartExecution();
+                            m_earthShaker?.StartExecution();
+                        }
+
                         return;
                     }
                     else if (m_input.slashPressed)
@@ -441,16 +445,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.whipPressed)
                     {
-                        PrepareForMidairAttack();
+                        if (m_skills.IsEnabled(PrimarySkill.Whip))
+                        {
+                            PrepareForMidairAttack();
 
-                        if (m_input.verticalInput > 0)
-                        {
-                            m_whip.Execute(WhipAttack.Type.MidAir_Overhead);
+                            if (m_input.verticalInput > 0)
+                            {
+                                m_whip.Execute(WhipAttack.Type.MidAir_Overhead);
+                            }
+                            else if (m_input.verticalInput == 0)
+                            {
+                                m_whip.Execute(WhipAttack.Type.MidAir_Forward);
+                            }
                         }
-                        else if (m_input.verticalInput == 0)
-                        {
-                            m_whip.Execute(WhipAttack.Type.MidAir_Forward);
-                        }
+
                         return;
                     }
                     #endregion
@@ -611,27 +619,36 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.slashHeld)
                     {
-                        PrepareForGroundAttack();
-                        m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
+                        if (m_skills.IsEnabled(PrimarySkill.SwordThrust))
+                        {
+                            PrepareForGroundAttack();
+                            m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
 
-                        //Start SwordThrust
-                        m_swordThrust?.StartCharge();
+                            //Start SwordThrust
+                            m_swordThrust?.StartCharge();
+                        }
+
                         return;
                     }
                     else if (m_input.whipPressed)
                     {
-                        if (m_input.verticalInput > 0)
+                        if (m_skills.IsEnabled(PrimarySkill.Whip))
                         {
-                            PrepareForGroundAttack();
-                            m_whip.Execute(WhipAttack.Type.Ground_Overhead);
-                            return;
+                            if (m_input.verticalInput > 0)
+                            {
+                                PrepareForGroundAttack();
+                                m_whip.Execute(WhipAttack.Type.Ground_Overhead);
+                                return;
+                            }
+                            else
+                            {
+                                PrepareForGroundAttack();
+                                m_whip.Execute(WhipAttack.Type.Ground_Forward);
+                                return;
+                            }
                         }
-                        else
-                        {
-                            PrepareForGroundAttack();
-                            m_whip.Execute(WhipAttack.Type.Ground_Forward);
-                            return;
-                        }
+
+                        return;
                     }
                     #endregion
                 }
