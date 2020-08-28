@@ -14,6 +14,22 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private StoreNavigator m_storeNavigator;
 
+        private bool m_enableInput;
+
+        public void Disable()
+        {
+            m_enableInput = false;
+        }
+
+        public void Enable()
+        {
+            m_enableInput = true;
+        }
+
+        private void Awake()
+        {
+            m_enableInput = true;
+        }
 
         private void Update()
         {
@@ -22,9 +38,12 @@ namespace DChild.Gameplay.Systems
                 GameplaySystem.PauseGame();
                 GameEventMessage.SendEvent("Pause Game");
             }
-            else if (Input.GetKeyDown(m_storeOpen))
+            else if(m_enableInput == true)
             {
-                m_storeNavigator.OpenPage();
+                if (Input.GetKeyDown(m_storeOpen))
+                {
+                    m_storeNavigator.OpenPage();
+                }
             }
         }
     }
