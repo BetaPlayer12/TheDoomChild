@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Cinematics.Cameras;
+﻿using Cinemachine;
+using DChild.Gameplay.Cinematics.Cameras;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
@@ -6,6 +7,6 @@ namespace DChild.Gameplay.Cinematics
     public interface ITrackingCamera
     {
         void Track(Transform transform);
-        CinemachineNoise noiseModule { get; }
+        CinemachineBasicMultiChannelPerlin noiseModule { get; }
     }
 }
