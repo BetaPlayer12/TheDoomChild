@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics.Cameras
@@ -34,12 +35,12 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField]
         [ReadOnly]
         private CinemachineVirtualCamera m_vCam;
-        private CinemachineNoise m_noiseModule;
+        private CinemachineBasicMultiChannelPerlin m_noiseModule;
         private CinemachineCameraOffset m_offsetHandle;
         private Vector2 m_cameraPosition;
 
         public Vector3 currentOffset => m_offsetHandle?.m_Offset ?? Vector3.zero;
-        public CinemachineNoise noiseModule => m_noiseModule;
+        public CinemachineBasicMultiChannelPerlin noiseModule => m_noiseModule;
 
         public void Track(Transform target) => m_vCam.m_Follow = target;
 
@@ -94,7 +95,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         private void Awake()
         {
-            m_noiseModule = m_vCam.GetComponent<CinemachineNoise>();
+            m_noiseModule = m_vCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             m_offsetHandle = m_vCam.GetComponent<CinemachineCameraOffset>();
             m_vCam.enabled = false;
         }

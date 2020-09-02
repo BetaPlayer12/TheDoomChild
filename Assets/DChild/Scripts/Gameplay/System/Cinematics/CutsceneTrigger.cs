@@ -20,6 +20,7 @@ using UnityEngine.Timeline;
 
 namespace DChild.Gameplay.Cinematics
 {
+
     [RequireComponent(typeof(Collider2D))]
     [DisallowMultipleComponent]
     public class CutsceneTrigger : MonoBehaviour, ISerializableComponent
