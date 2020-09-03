@@ -671,7 +671,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 switch (m_phaseHandle.currentPhase)
                                 {
                                     case Phase.PhaseOne:
-                                        ExecuteAttack(Attack.GhostOrb);
+                                        //ExecuteAttack(Attack.GhostOrb);
+                                        ExecuteAttack(Attack.SummonTotem);
                                         break;
                                     case Phase.PhaseTwo:
                                         ExecuteAttack(Attack.SummonTotem);
