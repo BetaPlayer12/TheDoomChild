@@ -45,9 +45,15 @@ namespace DChildDebug.Testing
             m_camera.gameObject.SetActive(false);
         }
 
+        private void Awake()
+        {
+            m_camera.gameObject.SetActive(false);
+            m_boss.gameObject.SetActive(false);
+        }
+
         private void OnValidate()
         {
-            if (Application.isPlaying)
+            if (Application.isEditor == false || Application.isPlaying)
             {
                 m_camera.gameObject.SetActive(false);
                 m_boss.gameObject.SetActive(false);
