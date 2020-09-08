@@ -1,7 +1,6 @@
 ﻿using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
@@ -9,17 +8,21 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField, MinValue(0.1f)]
         private float m_requiredMass;
+        [SerializeField, TabGroup("Succeed")]
+        private UnityEvent m_massAcheived;
+        [SerializeField, TabGroup("fail")]
+        private UnityEvent m_massFail;
 
         private float m_currentMass;
         private bool m_hasReachedRequiredMass;
 
         private void ReactOnChangeOnMass()
         {
-            if(m_currentMass >= m_requiredMass)
+            if (m_currentMass >= m_requiredMass)
             {
-                if(m_hasReachedRequiredMass == false)
+                if (m_hasReachedRequiredMass == false)
                 {
-
+                    m_massAcheived?.Invoke();
                     m_hasReachedRequiredMass = true;
                 }
             }
@@ -27,7 +30,7 @@ namespace DChild.Gameplay.Environment
             {
                 if (m_hasReachedRequiredMass)
                 {
-
+                    m_massFail?.Invoke();
                     m_hasReachedRequiredMass = false;
                 }
             }
@@ -51,5 +54,4 @@ namespace DChild.Gameplay.Environment
             }
         }
     }
-
 }
