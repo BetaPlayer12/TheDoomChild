@@ -6,12 +6,12 @@ namespace DChild.Gameplay
     {
         public void OverridePlayerControl()
         {
-            GameplaySystem.playerManager.OverrideCharacterControls();
+            GameplaySystem.playerManager.DisableControls();
         }
 
         public void StopPlayerControlOverride()
         {
-            GameplaySystem.playerManager.StopCharacterControlOverride();
+            GameplaySystem.playerManager.EnableControls();
         }
     }
 }
