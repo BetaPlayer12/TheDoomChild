@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4508557118282662817}
   - component: {fileID: 4508557118282662816}
-  - component: {fileID: -693898706472244972}
-  m_Layer: 0
+  - component: {fileID: 7892522518991528640}
+  m_Layer: 8
   m_Name: Death_Eye_Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4508557118282662819}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.70710677}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: -1, z: 1}
+  m_LocalPosition: {x: 435.5, y: 3.6, z: 689.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -47,6 +47,7 @@ TrailRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -68,10 +69,10 @@ TrailRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -665499015
-  m_SortingLayer: 6
+  m_SortingLayerID: -1150295711
+  m_SortingLayer: -1
   m_SortingOrder: 1
-  m_Time: 0.125
+  m_Time: 0.2
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.5
@@ -79,17 +80,17 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.0021514893
-        value: 0.42525494
-        inSlope: 1.0595725
-        outSlope: 1.0595725
+        time: 0
+        value: 0.11864483
+        inSlope: 2.3384633
+        outSlope: 2.3384633
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.26654258
+        outWeight: 0.43235615
       - serializedVersion: 3
-        time: 0.07196838
-        value: 0.44903803
+        time: 0.28487426
+        value: 0.6565881
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -97,13 +98,13 @@ TrailRenderer:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.1612854
-        value: 0.44810486
-        inSlope: -1.1691177
-        outSlope: -1.1691177
+        time: 1
+        value: 0
+        inSlope: -3.978327
+        outSlope: -3.978327
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.10920385
+        inWeight: 0.06561209
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -141,12 +142,12 @@ TrailRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
-    shadowBias: 0.21
+    shadowBias: 0.5
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &-693898706472244972
+--- !u!114 &7892522518991528640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,6 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 0}
   boneName: eye1
+  followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
   followSkeletonFlip: 1

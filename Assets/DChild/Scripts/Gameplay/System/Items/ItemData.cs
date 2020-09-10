@@ -12,6 +12,8 @@ namespace DChild.Gameplay.Items
     [CreateAssetMenu(fileName = "ItemData", menuName = "DChild/Database/Item Data")]
     public class ItemData : DatabaseAsset
     {
+        #region EDITOR
+
 #if UNITY_EDITOR
         [ShowInInspector, ToggleGroup("m_enableEdit")]
         private bool m_enableEdit;
@@ -57,6 +59,7 @@ namespace DChild.Gameplay.Items
                 m_name = "Not Assigned";
                 FileUtility.RenameAsset(this, assetPath, "UnassignedData");
             }
+            EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
 
@@ -77,6 +80,7 @@ namespace DChild.Gameplay.Items
                 var fileName = m_name.Replace(" ", string.Empty);
                 fileName += "Data";
                 FileUtility.RenameAsset(this, assetPath, fileName);
+                EditorUtility.SetDirty(this);
                 AssetDatabase.SaveAssets();
             }
         }
@@ -101,9 +105,15 @@ namespace DChild.Gameplay.Items
             m_quantityLimit = info.quantityLimit;
             m_cost = info.cost;
             connection.Close();
-        }
-#endif
 
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+        }
+#endif 
+        #endregion
+
+        [SerializeField, ToggleGroup("m_enableEdit")]
+        private ItemCategory m_category;
         [SerializeField, PreviewField(100, ObjectFieldAlignment.Center), ToggleGroup("m_enableEdit")]
         private Sprite m_icon;
         [SerializeField, MinValue(1), ToggleGroup("m_enableEdit")]
@@ -115,6 +125,8 @@ namespace DChild.Gameplay.Items
 
         public int id { get => m_ID; }
         public string itemName { get => m_name; }
+        public ItemCategory category => m_category;
+
         public Sprite icon { get => m_icon; }
         public int quantityLimit { get => m_quantityLimit; }
         public int cost { get => m_cost; }

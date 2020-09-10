@@ -79,5 +79,47 @@ namespace DChild.Gameplay
 #endif
             return Physics2D.RaycastAll(origin, direction, distance, m_contactFilter.layerMask);
         }
+
+        public static bool SearchCast(Vector2 origin, Vector2 target, LayerMask layerMask, out RaycastHit2D[] hitbuffers, float yOffset = 3f, int increments = 1)
+        {
+            int hitCount = 0;
+            var toRayTarget = target - origin;
+            Raycaster.SetLayerMask(layerMask);
+            hitbuffers = Raycaster.Cast(origin, toRayTarget.normalized, toRayTarget.magnitude, true, out hitCount);
+            var isInterrupted = IsInterrupted();
+            if (isInterrupted)
+            {
+                for (int i = 1; i <= increments; i++)
+                {
+                    var hasFound = OffsetSearch(toRayTarget, i, out hitbuffers);
+                    if (hasFound)
+                    {
+                        return true;
+                    }
+                    else if (i == increments)
+                    {
+                        return hasFound;
+                    }
+                }
+                return !isInterrupted;
+            }
+            return true;
+
+            bool IsInterrupted() => hitCount > 0;
+            bool OffsetSearch(Vector2 searchTarget, int increment, out RaycastHit2D[] buffer)
+            {
+                var offsetTarget = searchTarget;
+                offsetTarget.y += yOffset * increment;
+                buffer = Raycaster.Cast(origin, offsetTarget.normalized, offsetTarget.magnitude, true, out hitCount);
+                if (IsInterrupted())
+                {
+                    offsetTarget = searchTarget;
+                    offsetTarget.y -= yOffset;
+                    buffer = Raycaster.Cast(origin, offsetTarget.normalized, offsetTarget.magnitude, true, out hitCount);
+                    return !IsInterrupted();
+                }
+                return true;
+            }
+        }
     }
 }

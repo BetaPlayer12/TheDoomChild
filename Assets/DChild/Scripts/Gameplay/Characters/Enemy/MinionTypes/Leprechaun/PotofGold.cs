@@ -29,6 +29,8 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         private bool m_waitForBehaviour;
         private bool m_hasLanded;
 
+        public Vector2 position => transform.position;
+
         public override void SpawnAt(Vector2 position, Quaternion rotation)
         {
             base.SpawnAt(position, rotation);

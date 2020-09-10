@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_height: 0.5
   m_centerMass: {fileID: 7693561344315404867}
   m_isolatedObject: {fileID: 7625108144392214626}
   m_physics: {fileID: 7625108144392214621}
@@ -51,6 +52,7 @@ MonoBehaviour:
   m_data: {fileID: 11400000, guid: b1268681c362d3644971ec088651d605, type: 2}
   m_damageable: {fileID: 3829139401251901318}
   m_centerMass: {fileID: 7693561344315404867}
+  m_statsData: {fileID: 0}
   m_turnHandle: {fileID: 8534032656445465338}
   m_agent: {fileID: 7625108144814748989}
   m_patrolHandle: {fileID: 7625108144814749120}
@@ -145,6 +147,7 @@ MonoBehaviour:
   m_fastFactor: 0
   m_fXObjects:
     m_particleSystems: []
+    m_originalSimulationSpeed: []
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 3580623147257434345}
@@ -308,9 +311,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 1374677103294768224}
   m_physics: {fileID: 7625108144392214621}
-  m_skeletonAnimation: {fileID: 0}
   m_autoFlinch: 0
+  m_skeletonAnimation: {fileID: 0}
   m_animation: Damage
+  m_idleAnimation: 
 --- !u!114 &7625108144814748991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,8 +329,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 3829139401251901318}
   m_animator: {fileID: 1374677103294768224}
+  m_animation: 
   m_bodyDuration:
     m_startTime: 3
+  m_destroySource: 0
 --- !u!114 &7625108144814748989
 MonoBehaviour:
   m_ObjectHideFlags: 0

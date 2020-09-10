@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DChild.Gameplay.Characters.Players.Modules;
+using Holysoft.Event;
 
 namespace PlayerNew
 {
@@ -11,7 +13,10 @@ namespace PlayerNew
         Down,
         Jump,
         Attack,
-        Dash
+        Dash,
+        Attack2,
+        Interact,
+        Levitate
     }
 
     public enum Condition
@@ -50,11 +55,30 @@ namespace PlayerNew
         }
     }
 
-    public class InputManager : MonoBehaviour
+    public class InputManager : MonoBehaviour, IMainController
     {
 
         public InputAxisState[] inputs;
         public InputState inputState;
+
+        public event EventAction<EventActionArgs> ControllerDisabled;
+        public event EventAction<EventActionArgs> ControllerEnabled;
+
+        public void Disable()
+        {
+            enabled = false;
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                inputState.SetButtonValue(inputs[i].button, false);
+            }
+            ControllerDisabled?.Invoke(this,EventActionArgs.Empty);
+        }
+
+        public void Enable()
+        {
+            enabled = true;
+            ControllerEnabled?.Invoke(this, EventActionArgs.Empty);
+        }
 
         // Use this for initialization
         void Start()

@@ -1,37 +1,18 @@
-﻿using DChild.Gameplay.Pathfinding;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DChild.Gameplay
 {
-    [AddComponentMenu("DChild/Gameplay/AI/Movement/Path Finder Agent")]
-    public class PathFinderAgent : MonoBehaviour
+    public abstract class PathFinderAgent : MonoBehaviour
     {
-        [SerializeField]
-        private NavigationTracker m_navigation;
-        [SerializeField]
-        private MovementHandle2D m_movementHandle;
+        public abstract Vector2 segmentDestination { get; }
+        public abstract bool hasPath { get; }
 
-        public Vector2 segmentDestination => m_navigation.currentPathSegment;
-        public bool hasPath => m_navigation.pathUpdated;
+        public abstract void SetDestination(Vector2 position);
 
-        public void SetDestination(Vector2 position)
-        {
-            if (m_navigation.IsCurrentDestination(position) == false)
-            {
-                m_navigation.SetDestination(position);
-            }
-        }
+        public abstract void Move(float speed);
 
-        public void Move(float speed)
-        {
-            m_movementHandle.MoveTowards(m_navigation.directionToPathSegment, speed);
-        }
+        public abstract void MoveTowardsForced(Vector2 direction, float speed);
 
-        public void MoveTowardsForced(Vector2 direction, float speed) => m_movementHandle.MoveTowards(direction, speed);
-
-        public void Stop()
-        {
-            m_movementHandle.Stop();
-        }
+        public abstract void Stop();
     }
 }
