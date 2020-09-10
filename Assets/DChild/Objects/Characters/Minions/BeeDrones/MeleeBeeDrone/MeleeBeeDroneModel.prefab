@@ -25,8 +25,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1455092323997312705}
-  m_LocalRotation: {x: -0, y: -0, z: -0.6416355, w: 0.76700974}
-  m_LocalPosition: {x: 0.14831837, y: 3.3297749, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0016949496, w: 0.99999857}
+  m_LocalPosition: {x: 0.042343132, y: 3.62642, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4809150871044810960}
@@ -42,10 +42,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.31604743, y: -0.52537805}
+  m_UsedByComposite: 1
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -56,7 +56,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.094833, y: 4.539061}
+  m_Size: {x: 1.25, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &7987419736015372098
 MonoBehaviour:
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonRenderer: {fileID: 4281934890231291566}
-  boneName: body 2
+  boneName: main body
   followXYPosition: 1
   followZPosition: 1
   followBoneRotation: 1
@@ -108,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 1626929057599596827}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.325, y: 0.325, z: 0.325}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 913728636318796389}
   - {fileID: 4809150871044810960}
@@ -143,7 +143,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bae9fe988085fe54491b75c17e5c58ac, type: 2}
+  - {fileID: 2100000, guid: d365ba110030a70499a0b1dc8109a4d0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -161,9 +161,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1150295711
+  m_SortingLayer: -1
+  m_SortingOrder: 98
 --- !u!114 &4281934890231291566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: b5bf218d84330f4408cd01f8e1da1b26, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: e86f8a962c422264892c66b276a5b90b, type: 2}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
@@ -200,6 +200,7 @@ MonoBehaviour:
   _animationName: Idle
   loop: 1
   timeScale: 1
+  m_alwaysUpdateMesh: 0
 --- !u!114 &7890800615663750060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,8 +287,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8243615689079779488}
   - component: {fileID: 9196341391285414727}
-  - component: {fileID: 7323971456948718369}
-  m_Layer: 13
+  - component: {fileID: 8087542855542427142}
+  m_Layer: 9
   m_Name: AggroSensor
   m_TagString: Sensor
   m_Icon: {fileID: 0}
@@ -323,8 +324,8 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 5.13}
   serializedVersion: 2
-  m_Radius: 25
---- !u!114 &7323971456948718369
+  m_Radius: 15
+--- !u!114 &8087542855542427142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -333,9 +334,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3916463157475769956}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bd17172878d8ff4cbc0d13f04dfc1a1, type: 3}
+  m_Script: {fileID: 11500000, guid: eec63e2d8574ba947936161e71632309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_model: {fileID: 3417744409185154495}
 --- !u!1 &6103672312092693161
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,7 +425,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7850633959520031897}
-  m_LocalRotation: {x: -0, y: -0, z: -0.0014380213, w: 0.999999}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0016949496, w: 0.99999857}
   m_LocalPosition: {x: 0.042343132, y: 3.62642, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -442,7 +444,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_UsedByComposite: 1
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -454,7 +456,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5, y: 5}
+  m_Size: {x: 1.25, y: 3}
   m_EdgeRadius: 0
 --- !u!114 &5960199597769773858
 MonoBehaviour:
@@ -487,7 +489,7 @@ GameObject:
   - component: {fileID: 2271356089846404865}
   - component: {fileID: 7084402005336145028}
   - component: {fileID: 8846099698472826760}
-  - component: {fileID: 6109295093888544323}
+  - component: {fileID: 3116652818867201362}
   m_Layer: 13
   m_Name: Stinger
   m_TagString: Untagged
@@ -502,8 +504,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8388348203181758078}
-  m_LocalRotation: {x: -0, y: -0, z: -0.9638238, w: 0.26654032}
-  m_LocalPosition: {x: 0.17366254, y: 2.6568227, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.96452415, w: 0.26399463}
+  m_LocalPosition: {x: 0.17326428, y: 2.6566482, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5870338401741341971}
@@ -545,7 +547,7 @@ MonoBehaviour:
   slotName: sting_bouning_box
   isTrigger: 0
   clearStateOnDisable: 1
---- !u!60 &6109295093888544323
+--- !u!60 &3116652818867201362
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -585,7 +587,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9136186913911069270}
   - component: {fileID: 6854958735687383492}
-  - component: {fileID: 6945915300931573564}
   - component: {fileID: 1525629426744955353}
   - component: {fileID: 2703143863496876181}
   m_Layer: 13
@@ -631,42 +632,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!66 &6945915300931573564
-CompositeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9041483130075558532}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_GeometryType: 0
-  m_GenerationType: 0
-  m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 3187949402011352469}
-    m_ColliderPaths:
-    - - X: 8239184
-        Y: 3637530
-      - X: 8285920
-        Y: 19887462
-      - X: -7963983
-        Y: 19934169
-      - X: -8010690
-        Y: 3684266
-  m_CompositePaths:
-    m_Paths:
-    - - {x: 0.8239155, y: 0.363753}
-      - {x: 0.8285891, y: 1.9887462}
-      - {x: -0.7963983, y: 1.993414}
-      - {x: -0.8010661, y: 0.3684266}
-  m_VertexDistance: 0.0005
-  m_OffsetDistance: 0.000005
 --- !u!114 &1525629426744955353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,4 +661,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []

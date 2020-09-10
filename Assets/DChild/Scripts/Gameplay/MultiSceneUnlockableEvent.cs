@@ -35,15 +35,21 @@ namespace DChild.Gameplay
             }
         }
 
+        [System.Serializable]
         public struct SaveData : ISaveData
         {
             public SaveData(bool isUnlocked) : this()
             {
-                this.isUnlocked = isUnlocked;
+                this.m_isUnlocked = isUnlocked;
 
             }
 
-            public bool isUnlocked { get; }
+            [SerializeField]
+            private bool m_isUnlocked;
+
+            public bool isUnlocked => m_isUnlocked;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isUnlocked);
         }
 
         [ShowInInspector, OnValueChanged("OnStateChange")]

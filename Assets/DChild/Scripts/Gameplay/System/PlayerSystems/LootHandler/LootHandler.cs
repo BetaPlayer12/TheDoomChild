@@ -1,10 +1,9 @@
 ﻿using DChild.Gameplay.Pooling;
-using DChild.Gameplay.SoulEssence;
 using Holysoft;
 using Holysoft.Collections;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Systems
 {

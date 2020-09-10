@@ -144,9 +144,22 @@ namespace DChild.Gameplay.Inventories
             List<ItemContainerSaveData.Item> savedData = new List<ItemContainerSaveData.Item>();
             for (int i = 0; i < m_list.Count; i++)
             {
-                savedData.Add(new ItemContainerSaveData.Item(m_list[i].item.id, m_list[i].count));
+                //savedData.Add(new ItemContainerSaveData.Item(m_list[i].item.id, m_list[i].count));
             }
             return new ItemContainerSaveData(savedData.ToArray());
+        }
+
+        public bool HasItemCategory(ItemCategory category)
+        {
+            for (int i = 0; i < m_list.Count; i++)
+            {
+                if (m_list[i].item.category == category)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void ClearList()
@@ -211,6 +224,8 @@ namespace DChild.Gameplay.Inventories
             }
             return true;
         }
+
+
 
 
 #endif

@@ -1,4 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using DChild.Gameplay.Characters.Players.Modules;
+using PlayerNew;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,9 +16,7 @@ namespace DChild.Gameplay.Characters.Players
 
         [Title("Modules")]
         [SerializeField]
-        private MovementHandle m_movementhandle;
-        [SerializeField]
-        private MoveSpeedTransistor m_speedTransistor;
+        private InputTranslator m_input;
 
         public float moveDirectionInput { set { m_moveDirectionInput = Mathf.Clamp(value, -1f, 1f); } }
 
@@ -25,15 +25,15 @@ namespace DChild.Gameplay.Characters.Players
             enabled = false;
         }
 
-        private void OnEnable()
+        private void OnDisable()
         {
-            m_speedTransistor.SwitchToJogSpeed();
+            m_moveDirectionInput = 0;
+            m_input.horizontalInput = m_moveDirectionInput;
         }
 
         private void FixedUpdate()
         {
-            m_movementhandle.SetMovingSpeedParameter(1);
-            m_movementhandle.Move(m_moveDirectionInput);
+            m_input.horizontalInput = m_moveDirectionInput;
         }
     } 
 }

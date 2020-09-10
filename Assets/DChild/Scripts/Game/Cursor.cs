@@ -37,6 +37,14 @@ namespace DChild
         {
             UnityEngine.Cursor.visible = isVisible;
             gameObject.SetActive(isVisible);
+            //if (isVisible)
+            //{
+            //    UnityEngine.Cursor.lockState = CursorLockMode.None;
+            //}
+            //else
+            //{
+            //    UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            //}
         }
 
         private void OnOffsetChange()
@@ -48,6 +56,7 @@ namespace DChild
         {
             m_cacheCamera = camera;
             m_cacheTransform = m_cacheCamera?.transform ?? null;
+
             enabled = m_cacheCamera;
             if (enabled)
             {
@@ -114,6 +123,11 @@ namespace DChild
             {
                 enabled = false;
             }
+        }
+
+        private void OnDestroy()
+        {
+            GameSystem.CameraChange -= OnCameraChange;
         }
     }
 }

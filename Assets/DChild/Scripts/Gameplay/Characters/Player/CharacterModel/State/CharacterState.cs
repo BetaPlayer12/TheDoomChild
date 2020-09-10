@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Players.State
                                 IWhipGrapple, IProjectileThrowState , ILedgeGrabState
     {
         public event EventAction<CombatStateEventArgs> CombatModeChanged;
-
+         
         private bool m_waitForBehaviour;
         private bool m_isGrounded;
         private bool m_isFalling;
@@ -48,7 +48,7 @@ namespace DChild.Gameplay.Characters.Players.State
         public bool isMoving { get => m_isMoving; set => m_isMoving = value; }
         public bool isDashing { get => m_isDashing; set => m_isDashing = value; }
         public bool canDash { get => m_canDash; set => m_canDash = value; }
-        public bool canHighJump { get => m_canHighJump; set => m_canHighJump = value; }
+        public bool isHighJumping { get => m_canHighJump; set => m_canHighJump = value; }
         public bool hasJumped { get => m_hasJumped; set => m_hasJumped = value; }
         public bool canDoubleJump { get => m_canDoubleJump; set => m_canDoubleJump = value; }
         public bool canWallJump { get => m_canWallJump; set => m_canWallJump = value; }

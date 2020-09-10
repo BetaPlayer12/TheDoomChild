@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Combat
 
         protected override Dictionary<AttackType, float> resistance => m_resistance;
 
-        public void SetData(AttackResistanceData data)
+        public override void SetData(AttackResistanceData data)
         {
             m_data = data;
             if (m_resistance != null)
@@ -28,6 +28,11 @@ namespace DChild.Gameplay.Combat
                     Copy(m_data.resistance, m_resistance);
                 }
             }
+        }
+
+        public override void ClearResistance()
+        {
+            m_resistance.Clear();
         }
 
         public void SetResistance(AttackType type, AttackResistanceType resistanceType) => SetResistance(type, ConvertToFloat(resistanceType));
@@ -61,6 +66,8 @@ namespace DChild.Gameplay.Combat
         {
             CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
         }
+
+      
 #endif
     }
 }

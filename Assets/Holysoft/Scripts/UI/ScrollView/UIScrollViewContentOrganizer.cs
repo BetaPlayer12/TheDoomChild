@@ -96,6 +96,12 @@ namespace Holysoft.UI
                 Organize(m_items[i], i);
             }
         }
+
+        [Button]
+        private void ClearList()
+        {
+            m_items.Clear();
+        }
 #endif
 
         private void OnValidate()
