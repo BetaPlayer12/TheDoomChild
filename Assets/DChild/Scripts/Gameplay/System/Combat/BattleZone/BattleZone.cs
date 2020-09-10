@@ -31,6 +31,10 @@ namespace DChild.Gameplay.Combat
                 var player = GameplaySystem.playerManager.player;
                 brain.SetTarget(player.damageableModule, player.character);
             }
+            if (eventArgs.info.TryGetComponent(out IBattleZoneAIBrain battleZoneBrain))
+            {
+                battleZoneBrain.SwitchToBattleZoneAI();
+            }
         }
 
         private void OnEntityDestroyed(object sender, EventActionArgs eventArgs)
@@ -87,7 +91,7 @@ namespace DChild.Gameplay.Combat
 
         public void Update()
         {
-            m_spawnHandle.Update(GameplaySystem.time.deltaTime);
+            m_spawnHandle.Update(this,GameplaySystem.time.deltaTime);
         }
     }
 }
