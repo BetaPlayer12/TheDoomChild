@@ -51,29 +51,36 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private WhipAttack m_whip;
         #endregion
 
+        private bool m_updateEnabled = true;
+
         public event EventAction<EventActionArgs> ControllerDisabled;
 
         public void Disable()
         {
-            enabled = false;
+            m_updateEnabled = false;
             m_idle?.Execute();
             m_movement?.Cancel();
             m_crouch?.Cancel();
             m_dash?.Cancel();
             m_wallStick?.Cancel();
             m_levitation?.Cancel();
+            m_basicSlashes?.Cancel();
+            m_slashCombo?.Cancel();
+            m_swordThrust?.Cancel();
+            m_earthShaker?.Cancel();
+            m_whip?.Cancel();
         }
 
         public void Enable()
         {
-            enabled = true;
+            m_updateEnabled = true;
         }
 
         private void OnGroundednessStateChange(object sender, EventActionArgs eventArgs)
         {
             if (m_state.isDead)
             {
-
+                //Then you need to git gud.
             }
             else
             {
@@ -223,6 +230,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
             m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
             m_whip = m_character.GetComponentInChildren<WhipAttack>();
+
+            m_updateEnabled = true;
         }
 
         private void FixedUpdate()
@@ -266,6 +275,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void Update()
         {
+            if (m_updateEnabled == false)
+            {
+                return;
+            }
+
             if (m_state.isDead)
             {
 

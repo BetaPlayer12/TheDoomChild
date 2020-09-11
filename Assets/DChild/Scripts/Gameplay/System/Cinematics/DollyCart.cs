@@ -15,10 +15,10 @@ namespace DChild.Gameplay.Cinematics
         private CinemachineSmoothPath m_path;
         [SerializeField]
         private bool m_doNotFollowPlayer;
-        [SerializeField,ShowIf("m_doNotFollowPlayer")]
+        [SerializeField, ShowIf("m_doNotFollowPlayer")]
         private Transform m_toFollow;
 
-        public CinemachineNoise noiseModule => null;
+        public CinemachineBasicMultiChannelPerlin noiseModule => null;
 
         public void Track(Transform transform)
         {

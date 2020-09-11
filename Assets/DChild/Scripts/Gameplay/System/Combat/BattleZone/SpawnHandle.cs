@@ -1,7 +1,9 @@
 ﻿using Holysoft.Event;
 using Sirenix.Utilities;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Combat.BattleZoneComponents
 {
@@ -11,17 +13,20 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
         {
             private int m_entityIndex;
             private int m_fxIndex;
+            private float m_fxThenInstantiateDelay;
             private SpawnInfo.SpawnData m_spawnData;
 
-            public Data(int entityIndex, int fxIndex, SpawnInfo.SpawnData spawnData)
+            public Data(int entityIndex, int fxIndex, float fxThenInstantiateDelay, SpawnInfo.SpawnData spawnData)
             {
                 m_entityIndex = entityIndex;
                 m_fxIndex = fxIndex;
+                m_fxThenInstantiateDelay = fxThenInstantiateDelay;
                 m_spawnData = spawnData;
             }
 
             public int entityIndex => m_entityIndex;
             public int fxIndex => m_fxIndex;
+            public float fxThenInstantiateDelay => m_fxThenInstantiateDelay;
             public SpawnInfo.SpawnData spawnData => m_spawnData;
         }
 
@@ -55,15 +60,15 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
                 int entityIndex = -1;
                 entityCache = info.entity;
                 entityIndex = RecordObject(m_entitiesToSpawn, entityCache);
+                int fxIndex = -1;
+                fxCache = info.spawnFX;
+                if (fxCache != null)
+                {
+                    fxIndex = RecordObject(m_fXToSpawn, fxCache);
+                }
                 for (int j = 0; j < info.datas.Length; j++)
                 {
-                    int fxIndex = -1;
-                    fxCache = info.spawnFX;
-                    if (fxCache != null)
-                    {
-                        fxIndex = RecordObject(m_fXToSpawn, fxCache);
-                    }
-                    m_toSpawn.Add(new Data(entityIndex, fxIndex, info.datas[j]));
+                    m_toSpawn.Add(new Data(entityIndex, fxIndex, info.fxThenInstantiateDelay, info.datas[j]));
                 }
             }
 
@@ -81,7 +86,7 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
             }
         }
 
-        public void Update(float delta)
+        public void Update(MonoBehaviour coroutineHandler, float delta)
         {
             if (m_toSpawn.Count > 0)
             {
@@ -91,20 +96,14 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
                     if (m_toSpawn[i].spawnData.spawnDelay < m_timer)
                     {
                         var position = m_toSpawn[i].spawnData.spawnLocation;
-                        var instance = Object.Instantiate(m_entitiesToSpawn[m_toSpawn[i].entityIndex], position, Quaternion.identity);
                         if (m_toSpawn[i].fxIndex != -1)
                         {
-                            var fx = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_fXToSpawn[m_toSpawn[i].fxIndex], instance.scene);
+                            var fx = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_fXToSpawn[m_toSpawn[i].fxIndex], coroutineHandler.gameObject.scene);
                             fx.transform.position = position;
                             //fx.transform.rotation = Quaternion.identity;
                             fx.Play();
                         }
-                        using (Cache<EventActionArgs<GameObject>> cache = Cache<EventActionArgs<GameObject>>.Claim())
-                        {
-                            cache.Value.Set(instance);
-                            EntitySpawned?.Invoke(this, cache.Value);
-                            cache.Release();
-                        }
+                        coroutineHandler.StartCoroutine(DelayedSpawn(m_entitiesToSpawn[m_toSpawn[i].entityIndex], position, m_toSpawn[i].fxThenInstantiateDelay));
                         m_toSpawn.RemoveAt(i);
                     }
                 }
@@ -113,6 +112,18 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
                 {
                     EntitiesFinishSpawning?.Invoke(this, EventActionArgs.Empty);
                 }
+            }
+        }
+
+        private IEnumerator DelayedSpawn(GameObject gameObject, Vector3 position, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            var instance = Object.Instantiate(gameObject, position, Quaternion.identity);
+            using (Cache<EventActionArgs<GameObject>> cache = Cache<EventActionArgs<GameObject>>.Claim())
+            {
+                cache.Value.Set(instance);
+                EntitySpawned?.Invoke(this, cache.Value);
+                cache.Release();
             }
         }
     }
