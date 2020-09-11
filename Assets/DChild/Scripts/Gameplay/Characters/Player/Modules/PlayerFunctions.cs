@@ -47,25 +47,25 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void GroundForwardWhipAttackFX()
         {
-            m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
+            //m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
             m_whip?.EnableCollision(WhipAttack.Type.Ground_Forward, true);
         }
 
         public void GroundOverheadWhipAttackFX()
         {
-            m_whip?.PlayFXFor(WhipAttack.Type.Ground_Overhead, true);
+            //m_whip?.PlayFXFor(WhipAttack.Type.Ground_Overhead, true);
             m_whip?.EnableCollision(WhipAttack.Type.Ground_Overhead, true);
         }
 
         public void MidairForwardWhipAttackFX()
         {
-            m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Forward, true);
+            //m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Forward, true);
             m_whip?.EnableCollision(WhipAttack.Type.MidAir_Forward, true);
         }
 
         public void MidairOverheadWhipAttackFX()
         {
-            m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Overhead, true);
+            //m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Overhead, true);
             m_whip?.EnableCollision(WhipAttack.Type.MidAir_Overhead, true);
         }
 
