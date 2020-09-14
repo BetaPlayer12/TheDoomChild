@@ -81,8 +81,11 @@ namespace DChild.Gameplay.Optimization.Modules
 #endif
         }
         public abstract void Validate();
+#if UNITY_EDITOR
         public abstract void DrawGizmos();
         public abstract void DrawHandles(UnityEngine.Object undoReference);
+#endif
+
     }
 
     [System.Serializable]
@@ -91,6 +94,7 @@ namespace DChild.Gameplay.Optimization.Modules
         [SerializeField, HideReferenceObjectPicker, TableList(AlwaysExpanded = true, IsReadOnly = true), ListDrawerSettings(DraggableItems = false), TabGroup("Configuration")]
         protected T[] m_infos = new T[0];
 
+#if UNITY_EDITOR
         public override void DrawGizmos()
         {
             for (int i = 0; i < m_infos.Length; i++)
@@ -106,6 +110,7 @@ namespace DChild.Gameplay.Optimization.Modules
                 m_infos[i].DrawHandles(Color.white,undoReference);
             }
         }
+#endif
 
         public virtual void Initalize()
         {
