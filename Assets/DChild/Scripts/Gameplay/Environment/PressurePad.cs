@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Environment
         private float m_requiredMass;
         [SerializeField, TabGroup("Succeed")]
         private UnityEvent m_massAcheived;
-        [SerializeField, TabGroup("fail")]
+        [SerializeField, TabGroup("Fail")]
         private UnityEvent m_massFail;
 
         private float m_currentMass;
@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Environment
         {
             if (collision.gameObject.TryGetComponentInParent(out Rigidbody2D rigidbody))
             {
-                m_currentMass += rigidbody.mass;
+                m_currentMass -= rigidbody.mass;
                 ReactOnChangeOnMass();
             }
         }

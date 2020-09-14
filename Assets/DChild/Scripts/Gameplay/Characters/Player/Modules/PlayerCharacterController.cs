@@ -147,6 +147,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     else
                     {
                         m_basicSlashes?.Cancel();
+                        m_whip?.Cancel();
                     }
                 }
 
@@ -171,6 +172,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_basicSlashes?.Cancel();
                     m_earthShaker?.Cancel();
+                    m_whip?.Cancel();
                 }
 
                 if (m_state.isStickingToWall)
