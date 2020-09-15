@@ -31,12 +31,14 @@ namespace DChild.Gameplay.Combat
 
         public Vector2 position => m_centerMass.position;
 
+        public Invulnerability ignoreInvulnerability => m_info.ignoreInvulnerability;
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
-            if (m_info.ignoreInvulnerability || !targetDefense.isInvulnerable)
+            if (m_info.ignoreInvulnerability >= targetDefense.invulnerabilityLevel)
             {
                 if (targetInfo.isBreakableObject)
                 {

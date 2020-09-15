@@ -177,7 +177,7 @@ namespace DChild.Gameplay.Combat
             if (colliderGameObject.CompareTag("DamageCollider") || colliderGameObject.CompareTag("Sensor"))
                 return;
 
-            if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)
+            if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability)
             {
                 using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                 {

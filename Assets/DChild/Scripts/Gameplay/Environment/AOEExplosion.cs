@@ -27,7 +27,7 @@ namespace DChild.Gameplay
         {
             m_cacheHitboxList.Clear();
             //m_cacheHitboxList = GameplaySystem.combatManager.GetValidTargetsOfCircleAOE(m_rigidbody.position, m_data.damageRadius, Physics2D.GetLayerCollisionMask(gameObject.layer));
-            m_cacheHitboxList = GameplaySystem.combatManager.GetValidTargetsOfCircleAOE(m_rigidbody.position, 5, Physics2D.GetLayerCollisionMask(gameObject.layer));
+            m_cacheHitboxList = GameplaySystem.combatManager.GetValidTargetsOfCircleAOE(m_rigidbody.position, 5, Physics2D.GetLayerCollisionMask(gameObject.layer), m_data.ignoreInvulerability);
             m_toDamage.Clear();
             for (int i = 0; i < m_cacheHitboxList.Count; i++)
             {

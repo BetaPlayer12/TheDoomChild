@@ -10,8 +10,6 @@ namespace DChild.Gameplay.Projectiles
     {
         [SerializeField]
         private AttackProjectileData m_data;
-       
-        public bool canPassThroughOnewayEnvironments = true;
 
         protected bool m_collidedWithEnvironment;
         private static Hitbox m_cacheToDamage;
@@ -30,31 +28,27 @@ namespace DChild.Gameplay.Projectiles
         {
             if (LayerMask.LayerToName(collision.gameObject.layer) == "Environment" || LayerMask.LayerToName(collision.gameObject.layer) == "Default") //Default is for QueenBee Quickfix
             {
-                if (canPassThroughOnewayEnvironments == true)
+                if (collision.CompareTag("Droppable"))
                 {
-                    if (collision.CompareTag("Droppable"))
+                    if (m_data.canPassThroughDroppables == false)
                     {
-
-                    }
-                    else
-                    {
-                        if (m_data.canPassThroughEnvironment == false)
-                        {
-                            m_collidedWithEnvironment = true;
-                            Collide();
-                        }
+                        m_collidedWithEnvironment = true;
+                        Collide();
                     }
                 }
                 else
                 {
-                    m_collidedWithEnvironment = true;
-                    Collide();
+                    if (m_data.canPassThroughEnvironment == false)
+                    {
+                        m_collidedWithEnvironment = true;
+                        Collide();
+                    }
                 }
-    
+
             }
             else if (collision.CompareTag("Hitbox"))
             {
-                if (collision.TryGetComponent(out Hitbox m_cacheToDamage) && m_cacheToDamage.isInvulnerable == false)
+                if (collision.TryGetComponent(out Hitbox m_cacheToDamage) && m_cacheToDamage.invulnerabilityLevel <= m_data.ignoreInvulnerability)
                 {
                     var damage = m_data.damage;
                     using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())

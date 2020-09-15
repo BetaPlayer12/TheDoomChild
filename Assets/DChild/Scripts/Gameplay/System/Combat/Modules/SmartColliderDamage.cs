@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Combat
                 {
                     using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                     {
-                        m_cacheResults = GameplaySystem.combatManager.GetValidTargets(transform.position, m_processingHitbox);
+                        m_cacheResults = GameplaySystem.combatManager.GetValidTargets(transform.position, m_damageDealer.ignoreInvulnerability, m_processingHitbox);
                         for (int i = 0; i < m_cacheResults.Count; i++)
                         {
                             m_cacheHitbox = m_cacheResults[i];
@@ -77,7 +77,7 @@ namespace DChild.Gameplay.Combat
             if (collision.CompareTag("DamageCollider"))
                 return;
 
-            if (collision.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)
+            if (collision.TryGetComponent(out Hitbox hitbox) && hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability)
             {
                 var targetID = hitbox.GetInstanceID();
                 m_processingHitbox.Add(hitbox);

@@ -2,19 +2,13 @@
 {
     public struct BodyDefense
     {
-        public BodyDefense(float damageReduction) : this()
+        public BodyDefense(Invulnerability level, float damageReduction) : this()
         {
             this.damageReduction = damageReduction;
-            isInvulnerable = false;
+            invulnerabilityLevel = level;
         }
 
-        public BodyDefense(bool value = true) : this()
-        {
-            isInvulnerable = value;
-            this.damageReduction = 0;
-        }
-
-        public bool isInvulnerable { get; }
+        public Invulnerability invulnerabilityLevel { get; }
         public float damageReduction { get; }
     }
 }

@@ -78,11 +78,11 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public void SetInvulnerability(bool enable)
+        public void SetInvulnerability(Invulnerability level)
         {
             for (int i = 0; i < m_hitboxes.Length; i++)
             {
-                m_hitboxes[i].SetInvulnerability(enable);
+                m_hitboxes[i].SetInvulnerability(level);
             }
         }
 
