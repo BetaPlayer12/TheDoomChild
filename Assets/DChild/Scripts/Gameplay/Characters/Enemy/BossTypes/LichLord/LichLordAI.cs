@@ -280,19 +280,19 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             CustomTurn();
             m_animation.SetAnimation(0, m_info.idle2Animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idle2Animation);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_stateHandle.ApplyQueuedState();

@@ -303,7 +303,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             CustomTurn();
             //yield return new WaitForSeconds(2);
             //m_animation.SetAnimation(0, m_info.move.animation, true);
@@ -312,7 +312,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.playerDetectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.playerDetectAnimation);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -320,7 +320,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             //SelfHeal
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             var flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBlackAnimation;
             m_animation.SetAnimation(0, flinch, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, flinch);

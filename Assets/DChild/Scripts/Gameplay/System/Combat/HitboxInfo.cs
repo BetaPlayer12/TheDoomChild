@@ -7,13 +7,13 @@ namespace DChild.Gameplay.Combat
     {
         public int targetID { get; }
         public Vector2 position { get; }
-        public bool isInvulnerable { get; }
+        public Invulnerability invulnerabilityLevel { get; }
 
         public HitboxInfo(Hitbox hitbox)
         {
             targetID = hitbox.GetInstanceID();
             position = hitbox.transform.position;
-            isInvulnerable = hitbox.defense.isInvulnerable;
+            invulnerabilityLevel = hitbox.invulnerabilityLevel;
         }
     }
 }

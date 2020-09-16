@@ -347,7 +347,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_movement.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             yield return new WaitForSeconds(2);
             m_animation.SetAnimation(0, m_info.move.animation, true);
             yield return new WaitForSeconds(5);
@@ -355,7 +355,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.introAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -363,7 +363,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_stateHandle.Wait(State.Chasing);
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.teleportVanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportVanishAnimation);
             transform.position = new Vector2(m_randomSpawnCollider.bounds.center.x, m_randomSpawnCollider.bounds.center.y -5);
@@ -663,7 +663,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.bloodLightningEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningEndAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -708,7 +708,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.bloodLightningEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningEndAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }

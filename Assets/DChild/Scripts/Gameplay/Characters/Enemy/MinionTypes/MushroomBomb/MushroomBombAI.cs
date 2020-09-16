@@ -249,7 +249,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             StopCoroutine(m_deathRoutine);
             //m_animation.AddEmptyAnimation(0, 0, 0);
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.explodeAnimation, false);
             m_explosionRadius.GetComponent<Collider2D>().enabled = true;
             m_smokeChargeFX.Stop();

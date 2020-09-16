@@ -21,11 +21,11 @@ namespace DChild.Gameplay.Combat
             var searchCastResult = Raycaster.SearchCast(transform.position, collision.bounds.center, mask, out RaycastHit2D[] hitbuffer);
             if (searchCastResult == false)
             {
-                if(collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+                if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
                 {
                     return collision == hitbuffer[0].collider;
                 }
-                else if(m_hasPlayerOnlyCheck && collision.gameObject.layer == LayerMask.NameToLayer("PlayerOnly"))
+                else if (m_hasPlayerOnlyCheck && collision.gameObject.layer == LayerMask.NameToLayer("PlayerOnly"))
                 {
                     return collision == hitbuffer[0].collider;
                 }

@@ -16,8 +16,8 @@ namespace DChild.Gameplay.Combat
         Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo);
         void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect);
         void Inflict(StatusEffectReciever reciever, params StatusEffectChance[] statusEffectChance);
-        List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes);
-        List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer);
+        List<Hitbox> GetValidTargets(Vector2 source, Invulnerability ignoresLevel, List<Hitbox> hitboxes);
+        List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer, Invulnerability ignoresLevel);
         void Damage(IDamageable damageable, AttackDamage damage);
         void Heal(IHealable healable, int health);
         void MonitorBoss(Boss boss);
@@ -120,8 +120,8 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public List<Hitbox> GetValidTargets(Vector2 source, List<Hitbox> hitboxes) => m_aOETargetHandler.ValidateTargets(source, hitboxes);
-        public List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer) => m_aOETargetHandler.GetValidTargetsOfCircleAOE(source, radius, layer);
+        public List<Hitbox> GetValidTargets(Vector2 source, Invulnerability ignoresLevel, List<Hitbox> hitboxes) => m_aOETargetHandler.ValidateTargets(source, ignoresLevel, hitboxes);
+        public List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer, Invulnerability ignoresLevel) => m_aOETargetHandler.GetValidTargetsOfCircleAOE(source, radius, layer, ignoresLevel);
 
         public void MonitorBoss(Boss boss)
         {
@@ -187,7 +187,7 @@ namespace DChild.Gameplay.Combat
             if (GameSystem.settings?.gameplay.showDamageValues ?? true)
             {
                 m_uiHandler.Update();
-            }    
-        } 
+            }
+        }
     }
 }
