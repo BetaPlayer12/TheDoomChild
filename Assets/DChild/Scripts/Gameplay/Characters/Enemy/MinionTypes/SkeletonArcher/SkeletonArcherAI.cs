@@ -18,7 +18,7 @@ using DChild.Gameplay.Projectiles;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/SkeletonArcher")]
-    public class SkeletonArcherAI : CombatAIBrain<SkeletonArcherAI.Info>
+    public class SkeletonArcherAI : CombatAIBrain<SkeletonArcherAI.Info>, IBattleZoneAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -538,6 +538,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.SetActive(false);
+        }
+
+        public void SwitchToBattleZoneAI()
+        {
+            m_stateHandle.SetState(State.Chasing);
+        }
+
+        public void SwitchToBaseAI()
+        {
+            m_stateHandle.SetState(State.ReevaluateSituation);
         }
     }
 }

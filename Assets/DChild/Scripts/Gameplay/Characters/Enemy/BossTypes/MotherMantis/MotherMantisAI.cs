@@ -383,7 +383,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //CustomTurn();
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_movement.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.EnableRootMotion(true, false);
             yield return new WaitForSeconds(2);
             m_animation.SetAnimation(0, m_info.move.animation, true);
@@ -393,7 +393,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.intro2Animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.intro2Animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
             //m_stateHandle.SetState(State.ReevaluateSituation);
@@ -403,7 +403,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            m_hitbox.SetInvulnerability(false); //wasTrue
+            m_hitbox.SetInvulnerability(Invulnerability.None); //wasTrue
             m_currentCD = 0;
             //m_isPhasing = true;
             //m_stateHandle.Wait(State.ReevaluateSituation);
@@ -416,7 +416,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, flinchAnim, false);
             m_flinchFX.Play();
             yield return new WaitForAnimationComplete(m_animation.animationState, flinchAnim);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_isPhasing = false;
             if (m_currentPhaseIndex == 4)
             {
@@ -522,7 +522,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.Cooldown);
             Attackbb.SetActive(false);
-            m_hitbox.SetInvulnerability(false); //wasTrue
+            m_hitbox.SetInvulnerability(Invulnerability.None); //wasTrue
             m_stickToGround = true;
             //var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.attack2.animation : m_info.attack2StepBack.animation;
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
@@ -537,7 +537,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(m_info.stuckDuration);
             m_animation.SetAnimation(0, m_info.unstuckAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.unstuckAnimation);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stickToGround = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
