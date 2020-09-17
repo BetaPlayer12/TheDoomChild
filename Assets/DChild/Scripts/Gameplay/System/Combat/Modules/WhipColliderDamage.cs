@@ -53,7 +53,10 @@ namespace DChild.Gameplay.Combat
                     }
                     return true;
                 }
-                return false;
+                else
+                {
+                    return Raycaster.SearchCast(transform.position, collision.bounds.center, LayerMask.GetMask(ENVIRONMENT_LAYER), out RaycastHit2D[] buffer);
+                }
             }
             else
             {
