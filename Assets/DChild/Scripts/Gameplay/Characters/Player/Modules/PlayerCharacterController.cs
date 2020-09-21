@@ -30,6 +30,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private PlayerDeath m_death;
         private InitialDescentBoost m_initialDescentBoost;
         private ObjectInteraction m_objectInteraction;
+        private ShadowGaugeRegen m_shadowGaugeRegen;
 
         private Movement m_movement;
         private Crouch m_crouch;
@@ -214,6 +215,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_death.OnExecute += OnDeath;
             m_initialDescentBoost = m_character.GetComponentInChildren<InitialDescentBoost>();
             m_objectInteraction = m_character.GetComponentInChildren<ObjectInteraction>();
+            m_shadowGaugeRegen = m_character.GetComponentInChildren<ShadowGaugeRegen>();
 
             m_movement = m_character.GetComponentInChildren<Movement>();
             m_crouch = m_character.GetComponentInChildren<Crouch>();
@@ -286,6 +288,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
 
                 return;
+            }
+
+            if (m_shadowGaugeRegen?.CanRegen() ?? false)
+            {
+                m_shadowGaugeRegen.Execute();
             }
 
             m_tracker.Execute(m_input);
@@ -425,7 +432,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 if (m_state.isLevitating)
                 {
                     m_levitation?.MaintainHeight();
-                    if (m_input.levitateHeld == false)
+                    m_levitation?.ConsumeSource();
+                    if (m_input.levitateHeld == false || (m_levitation?.HaveEnoughSourceForMaintainingHeight() ?? true) == false)
                     {
                         m_levitation?.Cancel();
                     }
@@ -529,12 +537,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.levitatePressed)
                 {
-                    if (m_state.isHighJumping)
+                    if (m_levitation?.HaveEnoughSourceForExecution() ?? false)
                     {
-                        m_groundJump?.CutOffJump();
-                    }
+                        if (m_state.isHighJumping)
+                        {
+                            m_groundJump?.CutOffJump();
+                        }
 
-                    m_levitation?.Execute();
+                        m_levitation?.Execute();
+                    }
                 }
                 else
                 {
