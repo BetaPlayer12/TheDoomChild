@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters.Players
             m_fxScale = m_fx.fx.transform.localScale;
         }
 
-        private void OnDamageableDetected(Collider2D obj)
+        private void OnDamageableDetected(TargetInfo targetInfo,Collider2D obj)
         {
             for (int i = 0; i < m_colliders.Length; i++)
             {

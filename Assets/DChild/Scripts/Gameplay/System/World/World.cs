@@ -73,13 +73,20 @@ namespace DChild.Gameplay.Systems
 
         public void Register(ShadowEnvironmentHandle handler)
         {
-            m_shadowEnvironmentHandler.SetCollisions(m_isShadowColliderEnable);
+            m_shadowEnvironmentHandler = handler;
+            if (m_shadowEnvironmentHandler != null)
+            {
+                m_shadowEnvironmentHandler.SetCollisions(m_isShadowColliderEnable);
+            }
         }
 
         public void SetShadowColliders(bool enable)
         {
             m_isShadowColliderEnable = enable;
-            m_shadowEnvironmentHandler.SetCollisions(enable);
+            if (m_shadowEnvironmentHandler != null)
+            {
+                m_shadowEnvironmentHandler.SetCollisions(enable);
+            }
         }
 
         private void Awake()
