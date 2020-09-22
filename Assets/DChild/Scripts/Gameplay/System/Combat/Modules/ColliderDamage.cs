@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Combat
 
         private Collider2D m_collider;
         private IDamageDealer m_damageDealer;
-        public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
+        public event Action<TargetInfo, Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
         protected abstract bool IsValidToHit(Collider2D collision);
 
@@ -94,8 +94,8 @@ namespace DChild.Gameplay.Combat
             using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
             {
                 InitializeTargetInfo(cacheTargetInfo, hitbox);
+                DamageableDetected?.Invoke(cacheTargetInfo.Value, collision);
                 m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
-                DamageableDetected?.Invoke(collision);
                 cacheTargetInfo?.Release();
             }
         }
