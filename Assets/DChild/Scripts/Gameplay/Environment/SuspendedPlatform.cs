@@ -61,6 +61,7 @@ namespace DChild.Gameplay.Environment
                 m_isSuspended = false;
                 m_toUnsuspend?.Invoke();
                 m_rigidbody.constraints = m_constraints;
+                m_rigidbody.WakeUp();
             }
         }
 

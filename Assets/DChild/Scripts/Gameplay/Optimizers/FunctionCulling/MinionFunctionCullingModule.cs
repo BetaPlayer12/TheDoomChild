@@ -25,6 +25,7 @@ namespace DChild.Gameplay.Optimization.Modules
                 private Transform m_centerMass;
                 [SerializeField, HideInInspector]
                 private SkeletonAnimation m_animation;
+                private BoneFollower[] m_boneFollowers;
                 [SerializeField, HideInInspector]
                 protected ICullingVisibilityChecker m_culler;
 
@@ -51,8 +52,12 @@ namespace DChild.Gameplay.Optimization.Modules
                     {
                         m_culler.UpdateRuntimeData(m_centerMass.position, m_centerMass);
                     }
-
-                    m_animation.enabled = m_culler.IsVisible(m_centerMass.position, m_centerMass, cameraBounds);
+                    var result = m_culler.IsVisible(m_centerMass.position, m_centerMass, cameraBounds);
+                    m_animation.enabled = result;
+                    for (int i = 0; i < m_boneFollowers.Length; i++)
+                    {
+                        m_boneFollowers[i].enabled = result;
+                    }
                 }
 
                 public void Initialize()
@@ -60,6 +65,7 @@ namespace DChild.Gameplay.Optimization.Modules
                     m_lossyScale = m_centerMass.lossyScale;
                     m_rotation = m_centerMass.rotation.eulerAngles;
                     m_culler.InitializeRuntimeData(m_centerMass.position, m_centerMass);
+                    m_boneFollowers = m_animation.GetComponentsInChildren<BoneFollower>(true);
                 }
 
                 #region EDITOR ONLY
