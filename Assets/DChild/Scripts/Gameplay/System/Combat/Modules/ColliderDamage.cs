@@ -20,14 +20,17 @@ namespace DChild.Gameplay.Combat
         {
             [SerializeField]
             private Collider2D m_target;
-            [SerializeField]
+            [SerializeField,ShowIf("@m_target != null")]
             private Collider2D[] m_ignoreList;
 
             public void IgnoreColliders(bool value)
             {
-                for (int i = 0; i < m_ignoreList.Length; i++)
+                if (m_target != null)
                 {
-                    Physics2D.IgnoreCollision(m_target, m_ignoreList[i], value);
+                    for (int i = 0; i < m_ignoreList.Length; i++)
+                    {
+                        Physics2D.IgnoreCollision(m_target, m_ignoreList[i], value);
+                    }
                 }
             }
         }
