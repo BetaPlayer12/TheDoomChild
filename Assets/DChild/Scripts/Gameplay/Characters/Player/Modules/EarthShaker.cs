@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Combat;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -25,6 +26,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_impactDamageModifier = 1;
 
         private Rigidbody2D m_rigidbody;
+        private Damageable m_damageable; 
         private int m_earthShakerAnimationParameter;
         private float m_originalGravity;
 
@@ -32,6 +34,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Initialize(info);
             m_rigidbody = info.rigidbody;
+            m_damageable = info.damageable;
+            m_originalGravity = m_rigidbody.gravityScale;
             m_earthShakerAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.EarthShaker);
         }
 
@@ -84,6 +88,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void StartExecution()
         {
+            m_damageable.SetInvulnerability(Invulnerability.Level_1);
             m_attacker.SetDamageModifier(m_fallDamageModifier);
             m_rigidbody.velocity = Vector2.zero;
             m_originalGravity = m_rigidbody.gravityScale;
@@ -97,6 +102,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EndExecution()
         {
+            m_damageable.SetInvulnerability(Invulnerability.None);
             m_impactFX?.Stop(true);
             m_animator.SetBool(m_animationParameter, false);
             m_animator.SetBool(m_earthShakerAnimationParameter, false);

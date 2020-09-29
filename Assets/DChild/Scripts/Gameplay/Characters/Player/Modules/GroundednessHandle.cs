@@ -62,12 +62,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 ChangeValue(true);
             }
-            else if (m_isUsingCoyote)
-            {
-                //AllowCoyoteToDoThe Thing
-                //What thing?
-                //You know. The THING
-            }
             else if (m_previouslyGrounded)
             {
                 if (m_coyoteTime > 0)
@@ -79,6 +73,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     ChangeValue(false);
                 }
             }
+            else if (m_isUsingCoyote)
+            {
+                //AllowCoyoteToDoThe Thing
+                //What thing?
+                //You know. The THING
+            }
+            
             else
             {
                 ChangeValue(false);

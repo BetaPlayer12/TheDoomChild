@@ -18,6 +18,8 @@ namespace DChild.Gameplay.Cinematics
         void Unregister(ITrackingCamera trackingCamera);
 
         void ApplyLookAhead(Cinema.LookAhead look);
+
+        void SetCameraShake(float amplitude, float frequency);
     }
 
 }

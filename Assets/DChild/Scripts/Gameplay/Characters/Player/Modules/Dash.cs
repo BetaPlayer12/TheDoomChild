@@ -6,7 +6,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Characters.Players.Modules
 {
 
-    public class Dash : MonoBehaviour, IResettableBehaviour, ICancellableBehaviour, IComplexCharacterModule
+    public class Dash : MonoBehaviour, IResettableBehaviour, ICancellableBehaviour, IComplexCharacterModule, IDash
     {
         [SerializeField, MinValue(0)]
         private float m_velocity;

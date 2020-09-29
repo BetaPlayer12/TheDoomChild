@@ -39,18 +39,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_executedTypes.Count > 0)
             {
                 base.Cancel();
+                m_animator.SetBool(m_whipAttackAnimationParameter, false);
 
-                if(m_state.isAttacking)
-                {
-                    m_animator.SetBool(m_whipAttackAnimationParameter, false);
-                }
+                //if (m_state.isAttacking)
+                //{
+                    
+                //}
 
                 for (int i = 0; i < m_executedTypes.Count; i++)
                 {
                     var type = m_executedTypes[i];
                     EnableCollision(type, false);
-                    PlayFXFor(type, false);
-                    ClearFXFor(type);
+                    //PlayFXFor(type, false);
+                    //ClearFXFor(type);
                 }
                 m_executedTypes.Clear();
             }
@@ -116,43 +117,43 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Record(type);
         }
 
-        public void PlayFXFor(Type type, bool play)
-        {
-            switch (type)
-            {
-                case Type.Ground_Forward:
-                    m_groundForward.PlayFX(play);
-                    break;
-                case Type.Ground_Overhead:
-                    m_groundOverhead.PlayFX(play);
-                    break;
-                case Type.MidAir_Forward:
-                    m_midAirForward.PlayFX(play);
-                    break;
-                case Type.MidAir_Overhead:
-                    m_midAirOverhead.PlayFX(play);
-                    break;
-            }
-        }
+        //public void PlayFXFor(Type type, bool play)
+        //{
+        //    switch (type)
+        //    {
+        //        case Type.Ground_Forward:
+        //            m_groundForward.PlayFX(play);
+        //            break;
+        //        case Type.Ground_Overhead:
+        //            m_groundOverhead.PlayFX(play);
+        //            break;
+        //        case Type.MidAir_Forward:
+        //            m_midAirForward.PlayFX(play);
+        //            break;
+        //        case Type.MidAir_Overhead:
+        //            m_midAirOverhead.PlayFX(play);
+        //            break;
+        //    }
+        //}
 
-        public void ClearFXFor(Type type)
-        {
-            switch (type)
-            {
-                case Type.Ground_Forward:
-                    m_groundForward.ClearFX();
-                    break;
-                case Type.Ground_Overhead:
-                    m_groundOverhead.ClearFX();
-                    break;
-                case Type.MidAir_Forward:
-                    m_midAirForward.ClearFX();
-                    break;
-                case Type.MidAir_Overhead:
-                    m_midAirOverhead.ClearFX();
-                    break;
-            }
-        }
+        //public void ClearFXFor(Type type)
+        //{
+        //    switch (type)
+        //    {
+        //        case Type.Ground_Forward:
+        //            m_groundForward.ClearFX();
+        //            break;
+        //        case Type.Ground_Overhead:
+        //            m_groundOverhead.ClearFX();
+        //            break;
+        //        case Type.MidAir_Forward:
+        //            m_midAirForward.ClearFX();
+        //            break;
+        //        case Type.MidAir_Overhead:
+        //            m_midAirOverhead.ClearFX();
+        //            break;
+        //    }
+        //}
 
         public override void AttackOver()
         {

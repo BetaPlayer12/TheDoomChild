@@ -12,6 +12,8 @@ namespace DChild.Gameplay.Environment
 {
     public class DisappearingPlatform : MonoBehaviour
     {
+      
+
         [SerializeField]
         private DisappearingPlatformData m_disappearingPlatformData;
         [SerializeField, TabGroup("OnDisappear")]
@@ -26,6 +28,8 @@ namespace DChild.Gameplay.Environment
         private float m_disappearDelayTimer;
         private float m_disappearDurationTimer;
         private bool m_hasReactivePlatform;
+
+        
 
         private void EnableCollider(TrackEntry trackEntry)
         {
@@ -128,5 +132,7 @@ namespace DChild.Gameplay.Environment
                 DisappearPlatform();
             }
         }
+
+      
     }
 }

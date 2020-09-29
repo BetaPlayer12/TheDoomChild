@@ -2,6 +2,7 @@
 using Holysoft.Event;
 using DChild.Gameplay.Characters;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Combat
 {
@@ -48,10 +49,7 @@ namespace DChild.Gameplay.Combat
             DamageTaken?.Invoke(this, eventArgs);
             if (m_health?.isEmpty ?? false)
             {
-                Debug.Log("dead");
                 Destroyed?.Invoke(this, EventActionArgs.Empty);
-
-                
             }
         }
 
@@ -78,11 +76,11 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public void SetInvulnerability(bool enable)
+        public void SetInvulnerability(Invulnerability level)
         {
             for (int i = 0; i < m_hitboxes.Length; i++)
             {
-                m_hitboxes[i].SetInvulnerability(enable);
+                m_hitboxes[i].SetInvulnerability(level);
             }
         }
 
@@ -93,7 +91,7 @@ namespace DChild.Gameplay.Combat
         }
 
 #if UNITY_EDITOR
-        public void InitializeField(Transform centermass,Health health)
+        public void InitializeField(Transform centermass, Health health)
         {
             m_centerMass = centermass;
             m_health = health;
@@ -102,6 +100,18 @@ namespace DChild.Gameplay.Combat
         public void InitializeField(AttackResistance resistance)
         {
             m_resistance = resistance;
+        }
+
+        [Button, ShowIf("isAlive"),HideInEditorMode]
+        private void KillSelf()
+        {
+            TakeDamage(999999999, AttackType.True);
+        }
+
+        [Button, HideIf("isAlive"), HideInEditorMode]
+        private void RessurectSelf()
+        {
+            Heal(999999999);
         }
 #endif
     }

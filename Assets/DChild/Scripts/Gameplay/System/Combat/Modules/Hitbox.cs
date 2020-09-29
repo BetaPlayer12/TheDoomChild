@@ -19,13 +19,13 @@ namespace DChild.Gameplay.Combat
         private Collider2D[] m_collider2Ds;
 
         [SerializeField]
-        private bool m_isInvulnerable;
+        private Invulnerability m_invulnerabilityLevel;
         [SerializeField, HideIf("m_isInvulnerable"), Range(0, 0.99f)]
         private float m_damageReduction;
 
         public IDamageable damageable => m_damageable;
-        public BodyDefense defense => m_isInvulnerable ? new BodyDefense(m_isInvulnerable) : new BodyDefense(m_damageReduction);
-        public bool isInvulnerable => m_isInvulnerable;
+        public BodyDefense defense => new BodyDefense(m_invulnerabilityLevel, m_damageReduction);
+        public Invulnerability invulnerabilityLevel => m_invulnerabilityLevel;
 
         public void Enable()
         {
@@ -46,9 +46,9 @@ namespace DChild.Gameplay.Combat
 
         public virtual bool CanBeDamageBy(params Collider2D[] colliders) => true;
 
-        public void SetInvulnerability(bool value)
+        public void SetInvulnerability(Invulnerability value)
         {
-            m_isInvulnerable = value;
+            m_invulnerabilityLevel = value;
         }
 
         private void Awake()

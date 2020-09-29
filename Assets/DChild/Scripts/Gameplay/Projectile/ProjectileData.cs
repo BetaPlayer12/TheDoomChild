@@ -9,11 +9,14 @@ namespace DChild.Gameplay.Projectiles
         [SerializeField]
         private AttackDamage[] m_damage;
         [SerializeField]
+        private Invulnerability m_ignoreInvulnerability;
+        [SerializeField]
         private bool m_hasConstantSpeed;
         [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
         protected GameObject m_impactFX;
 
         public AttackDamage[] damage => m_damage;
+        public Invulnerability ignoreInvulnerability => m_ignoreInvulnerability;
         public bool hasConstantSpeed => m_hasConstantSpeed;
         public GameObject impactFX { get => m_impactFX; }
 

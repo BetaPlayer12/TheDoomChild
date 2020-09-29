@@ -347,7 +347,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_movement.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             yield return new WaitForSeconds(2);
             m_animation.SetAnimation(0, m_info.move.animation, true);
             yield return new WaitForSeconds(5);
@@ -355,7 +355,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.introAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -363,7 +363,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_stateHandle.Wait(State.Chasing);
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.teleportVanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.teleportVanishAnimation);
             transform.position = new Vector2(m_randomSpawnCollider.bounds.center.x, m_randomSpawnCollider.bounds.center.y -5);
@@ -397,6 +397,14 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
+            if (m_clones[m_clones.Count - 1] != null || m_clones[m_clones.Count - 1].activeSelf)
+            {
+                for (int i = 0; i < m_clones.Count; i++)
+                {
+                    Destroy(m_clones[i]);
+                    m_clones.RemoveAt(i);
+                }
+            }
             StopAllCoroutines();
             m_movement.Stop();
         }
@@ -553,8 +561,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 int offset = 5;
                 for (int z = 0; z < 20; z++)
                 {
-                    GameObject instance1 = Instantiate(m_info.tentacle, new Vector2(transform.position.x + offset, transform.position.y), Quaternion.identity);
-                    GameObject instance2 = Instantiate(m_info.tentacle, new Vector2(transform.position.x - offset, transform.position.y), Quaternion.identity);
+                    GameObject instance1 = Instantiate(m_info.tentacle, new Vector2(transform.position.x + offset, GroundPosition(new Vector2(transform.position.x + offset, transform.position.y)).y), Quaternion.identity);
+                    GameObject instance2 = Instantiate(m_info.tentacle, new Vector2(transform.position.x - offset, GroundPosition(new Vector2(transform.position.x + offset, transform.position.y)).y), Quaternion.identity);
                     yield return new WaitForSeconds(.1f);
                     offset += 5;
                 }
@@ -655,7 +663,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.bloodLightningEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningEndAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -700,7 +708,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.bloodLightningEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bloodLightningEndAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }

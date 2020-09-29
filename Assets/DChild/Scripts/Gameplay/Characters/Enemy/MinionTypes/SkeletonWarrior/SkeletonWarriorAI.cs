@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/SkeletonWarrior")]
-    public class SkeletonWarriorAI : CombatAIBrain<SkeletonWarriorAI.Info>, IResetableAIBrain
+    public class SkeletonWarriorAI : CombatAIBrain<SkeletonWarriorAI.Info>, IResetableAIBrain, IBattleZoneAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -28,6 +28,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
+            [SerializeField]
+            private MovementInfo m_backMove = new MovementInfo();
+            public MovementInfo backMove => m_backMove;
 
             //Attack Behaviours
             [SerializeField]
@@ -81,6 +84,7 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
+                m_backMove.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
                 m_attack3.SetData(m_skeletonDataAsset);
@@ -236,6 +240,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
+            m_selfCollider.SetActive(false);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
@@ -412,11 +417,24 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Cooldown:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
                     //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                    if (!IsFacingTarget())
+                    if (IsTargetInRange(100))
                     {
-                        m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        if (!IsFacingTarget())
+                        {
+                            m_turnState = State.Cooldown;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                                m_stateHandle.SetState(State.Turning);
+                        }
+                        else
+                        {
+                            m_animation.EnableRootMotion(false, false);
+                            m_animation.SetAnimation(0, m_info.backMove.animation, true);
+                            m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                        }
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
 
                     if (m_currentCD <= m_info.attackCD)
@@ -443,6 +461,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
+                                m_attackDecider.hasDecidedOnAttack = false;
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
@@ -496,9 +515,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
-            m_selfCollider.SetActive(false);
+            m_selfCollider.SetActive(true);
         }
 
+        public void SwitchToBattleZoneAI()
+        {
+            m_stateHandle.SetState(State.Chasing);
+        }
 
+        public void SwitchToBaseAI()
+        {
+            m_stateHandle.SetState(State.ReevaluateSituation);
+        }
     }
 }

@@ -15,6 +15,9 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         [BoxGroup("Damage")]
         private float m_damageRadius;
+        [SerializeField]
+        [BoxGroup("Damage")]
+        private Invulnerability m_ignoreLevel;
 
         [SerializeField]
         [BoxGroup("Explosion")]
@@ -46,7 +49,7 @@ namespace DChild.Gameplay.Environment
                             {
                                 var hitbox = affectedColliders[i].GetComponentInParent<Hitbox>();
                                 var bodyDefense = hitbox.defense;
-                                if (bodyDefense.isInvulnerable == false)
+                                if (bodyDefense.invulnerabilityLevel <= m_ignoreLevel)
                                 {
                                     info.Value.Initialize(transform.position, 0, 1, m_damage);
                                     targetInfo.Value.Initialize(hitbox.damageable, bodyDefense.damageReduction);
