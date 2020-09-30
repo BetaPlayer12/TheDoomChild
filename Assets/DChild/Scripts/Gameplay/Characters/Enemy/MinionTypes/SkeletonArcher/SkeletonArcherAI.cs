@@ -465,18 +465,22 @@ namespace DChild.Gameplay.Characters.Enemies
                             else
                             {
                                 m_attackDecider.hasDecidedOnAttack = false;
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
-                                {
-                                    var distance = Vector2.Distance(m_targetInfo.position, transform.position);
-                                    m_animation.EnableRootMotion(false, false);
-                                    m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
-                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
-                                }
-                                else
-                                {
-                                    m_movement.Stop();
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                }
+                                //if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                                //{
+                                //    var distance = Vector2.Distance(m_targetInfo.position, transform.position);
+                                //    m_animation.EnableRootMotion(false, false);
+                                //    m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
+                                //    m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
+                                //}
+                                //else
+                                //{
+                                //    m_movement.Stop();
+                                //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                //}
+
+                                /*stupod solution*/
+                                m_movement.Stop();
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
                         }
                         else
