@@ -44,9 +44,22 @@ namespace DChild.Gameplay.Inventories
 
         void ITradableInventory.AddItem(ItemData item, int count)
         {
-            if (count != 0 && (count < 0 || m_allowBuyBack))
+            if (count > 0)
             {
-                m_items.AddItem(item, count);
+                if (m_allowBuyBack)
+                {
+                    if (m_items.GetCurrentAmount(item) < 99)
+                    {
+                        m_items.AddItem(item, count);
+                    }
+                }
+            }
+            else if (count < 0)
+            {
+                if (m_waresReference.HasLimitedCount(item))
+                {
+                    m_items.AddItem(item, count);
+                }
             }
         }
 
