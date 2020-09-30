@@ -13,10 +13,13 @@ namespace DChild.Gameplay.Items
 
         public override bool CanBeUse(IPlayer player)
         {
-            for (int i = 0; i < m_moduleList.Length; i++)
+            if (m_moduleList != null)
             {
-                if (m_moduleList[i].CanBeUse(player) == false)
-                    return false;
+                for (int i = 0; i < m_moduleList.Length; i++)
+                {
+                    if (m_moduleList[i].CanBeUse(player) == false)
+                        return false;
+                }
             }
 
             return true;

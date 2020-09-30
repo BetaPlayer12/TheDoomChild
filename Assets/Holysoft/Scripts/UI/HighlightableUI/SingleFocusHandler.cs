@@ -38,6 +38,25 @@ namespace Holysoft.UI
             }
         }
 
+        public void DontFocusOnAything(bool useState)
+        {
+            if (useState)
+            {
+                for (int i = 0; i < m_highlightHandler.Length; i++)
+                {
+                        m_highlightHandler[i].UseNormalizeState();
+                    
+                }
+            }
+            else
+            {
+                for (int i = 0; i < m_highlightHandler.Length; i++)
+                {
+                    m_highlightHandler[i].Normalize();
+                }
+            }
+        }
+
 #if UNITY_EDITOR
         [Button]
         private void GetChildrenHighlights()
