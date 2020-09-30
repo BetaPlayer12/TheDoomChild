@@ -10,7 +10,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             Crouch,
             Jog,
-            MidAir
+            MidAir,
+            Grab
         }
 
         [SerializeField]
@@ -19,6 +20,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_crouchSpeed;
         [SerializeField]
         private float m_midAirSpeed;
+        [SerializeField]
+        private float m_grabSpeed;
 
         private float m_currentSpeed;
         private Rigidbody2D m_rigidbody;
@@ -54,6 +57,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir:
                     m_currentSpeed = m_midAirSpeed;
                     break;
+                case Type.Grab:
+                    m_currentSpeed = m_grabSpeed;
+                    break;
             }
         }
 
@@ -70,6 +76,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
                     m_character.SetFacing(otherFacing);
                 }
+                m_animator.SetFloat(m_speedAnimationParameter, 1);
+            }
+            var xVelocity = m_currentSpeed * direction;
+            m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
+        }
+
+        public void GrabMove(float direction)
+        {
+            if (direction == 0)
+            {
+                m_animator.SetFloat(m_speedAnimationParameter, 0);
+            }
+            else
+            {
                 m_animator.SetFloat(m_speedAnimationParameter, 1);
             }
             var xVelocity = m_currentSpeed * direction;
