@@ -26,6 +26,7 @@ namespace DChild.Gameplay.Inventories
         public int soulEssence => m_soulEssence;
 
         int ICurrency.amount => m_soulEssence;
+        int ITradableInventory.Count => m_items.Count;
 
         public event EventAction<CurrencyUpdateEventArgs> OnAmountSet;
         public event EventAction<CurrencyUpdateEventArgs> OnAmountAdded;
@@ -154,5 +155,8 @@ namespace DChild.Gameplay.Inventories
                 itemContainer.AddItem(m_itemList.GetInfo(itemData.ID), itemData.count);
             }
         }
+
+        ItemSlot ITradableInventory.GetSlot(int index) => m_items.GetSlot(index);
+
     }
 }
