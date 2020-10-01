@@ -30,12 +30,14 @@ namespace Holysoft.UI
             enabled = false;
             m_isHighlighted = true;
             m_target.anchoredPosition3D = m_data.selected;
+            m_target.localScale = m_data.selected;
         }
 
         public override void UseNormalizeState()
         {
             enabled = false;
             m_isHighlighted = false;
+            m_target.localScale = m_data.deselected;
         }
 
         private void Awake()
