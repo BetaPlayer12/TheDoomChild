@@ -387,5 +387,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_selfCollider.SetActive(false);
         }
+
+        protected override void OnBecomePassive()
+        {
+        }
     }
 }

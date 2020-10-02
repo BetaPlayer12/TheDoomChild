@@ -15,6 +15,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool levitateHeld;
 
         public bool interactPressed;
+        public bool grabPressed;
+        public bool grabHeld;
 
         public bool slashPressed;
         public bool slashHeld;
@@ -142,6 +144,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnGrab(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var isTrue = value.Get<float>() == 1;
+                grabPressed = isTrue;
+                grabHeld = isTrue;
+            }
+        }
+
         private void Awake()
         {
             m_input = GetComponent<PlayerInput>();
@@ -154,6 +166,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             levitatePressed = false;
 
             interactPressed = false;
+            grabPressed = false;
 
             slashPressed = false;
             earthShakerPressed = false;
@@ -172,6 +185,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             levitateHeld = false;
 
             interactPressed = false;
+            grabPressed = false;
+            grabHeld = false;
 
             slashPressed = false;
             slashHeld = false;

@@ -17,21 +17,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private ICappedStat m_source;
         private Damageable m_damageable;
+        private Animator m_animator;
         private bool m_wasUsed;
+        private int m_animationParameter;
 
         public void Initialize(ComplexCharacterInfo info)
         {
             m_source = info.magic;
             m_damageable = info.damageable;
+            m_animator = info.animator;
+            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ShadowMode);
         }
 
         public void Cancel()
         {
             m_dash.Cancel();
             GameplaySystem.world.SetShadowColliders(false);
-            m_damageable.SetInvulnerability(Invulnerability.MAX);
+            m_damageable.SetInvulnerability(Invulnerability.None);
             m_wasUsed = false;
             m_tempFX?.Stop(true);
+            m_animator.SetBool(m_animationParameter, false);
         }
 
         public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
@@ -56,6 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_damageable.SetInvulnerability(Invulnerability.MAX);
                 m_wasUsed = true;
                 m_tempFX?.Play(true);
+                m_animator.SetBool(m_animationParameter, true);
             }
             m_dash.Execute();
         }
