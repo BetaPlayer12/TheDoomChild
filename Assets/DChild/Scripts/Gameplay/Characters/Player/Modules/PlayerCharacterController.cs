@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private InitialDescentBoost m_initialDescentBoost;
         private ObjectInteraction m_objectInteraction;
         private ShadowGaugeRegen m_shadowGaugeRegen;
-        private MoveObjectPrototype m_movableObjectInteraction;
+        private ObjectManipulation m_objectManipulation;
 
         private Movement m_movement;
         private Crouch m_crouch;
@@ -167,7 +167,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_state.isGrabbing)
                 {
-                    m_movableObjectInteraction.Cancel();
+                    m_objectManipulation.Cancel();
                 }
                 else
                 {
@@ -224,7 +224,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_initialDescentBoost = m_character.GetComponentInChildren<InitialDescentBoost>();
             m_objectInteraction = m_character.GetComponentInChildren<ObjectInteraction>();
             m_shadowGaugeRegen = m_character.GetComponentInChildren<ShadowGaugeRegen>();
-            m_movableObjectInteraction = m_character.GetComponentInChildren<MoveObjectPrototype>();
+            m_objectManipulation = m_character.GetComponentInChildren<ObjectManipulation>();
 
             m_movement = m_character.GetComponentInChildren<Movement>();
             m_crouch = m_character.GetComponentInChildren<Crouch>();
@@ -697,11 +697,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_input.grabPressed)
                 {
-                    if (m_movableObjectInteraction?.IsThereAMovableObject() ?? false)
+                    if (m_objectManipulation?.IsThereAMovableObject() ?? false)
                     {
                         m_idle?.Cancel();
                         m_movement?.SwitchConfigTo(Movement.Type.Grab);
-                        m_movableObjectInteraction?.Execute();
+                        m_objectManipulation?.Execute();
                     }
                 }
 
@@ -710,25 +710,25 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_input.grabHeld == false)
                     {
                         m_movement?.SwitchConfigTo(Movement.Type.Jog);
-                        m_movableObjectInteraction?.Cancel();
+                        m_objectManipulation?.Cancel();
                     }
                     else
                     {
-                        if (m_movableObjectInteraction?.IsThereAMovableObject() ?? false)
+                        if (m_objectManipulation?.IsThereAMovableObject() ?? false)
                         {
                             if (m_input.horizontalInput != 0)
                             {
-                                m_movableObjectInteraction?.MoveObject(m_input.horizontalInput, m_character.facing);
+                                m_objectManipulation?.MoveObject(m_input.horizontalInput, m_character.facing);
                             }
                             else
                             {
-                                m_movableObjectInteraction?.GrabIdle();
+                                m_objectManipulation?.GrabIdle();
                             }
                         }
                         else
                         {
                             m_movement?.SwitchConfigTo(Movement.Type.Jog);
-                            m_movableObjectInteraction?.Cancel();
+                            m_objectManipulation?.Cancel();
                         }
 
                         //if (m_input.horizontalInput != 0)
@@ -754,7 +754,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_idle?.Cancel();
                         m_movement?.Cancel();
-                        m_movableObjectInteraction?.Cancel();
+                        m_objectManipulation?.Cancel();
                         ExecuteDash();
                     }
                 }
