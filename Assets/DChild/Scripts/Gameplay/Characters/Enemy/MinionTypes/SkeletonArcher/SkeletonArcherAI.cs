@@ -553,5 +553,20 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.SetState(State.ReevaluateSituation);
         }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(false);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.Patrol);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
+        }
     }
 }

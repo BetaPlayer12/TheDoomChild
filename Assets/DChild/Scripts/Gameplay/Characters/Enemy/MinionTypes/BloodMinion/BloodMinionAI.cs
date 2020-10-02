@@ -531,6 +531,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
         }
 
-
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
+            m_stateHandle.OverrideState(State.Patrol);
+        }
     }
 }
