@@ -747,6 +747,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
         }
+
+        protected override void OnBecomePassive()
+        {
+        }
     }
 
 }

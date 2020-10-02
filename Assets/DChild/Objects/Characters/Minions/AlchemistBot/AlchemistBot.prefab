@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 3559291882642664374}
-  m_data: {fileID: 11400000, guid: 300e00fcbee46374399dd65155202b44, type: 2}
+  m_data: {fileID: 11400000, guid: 89b34a3c5a4a9004c88ed4cfc69ce34b, type: 2}
 --- !u!114 &2255151567263452440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,6 +430,7 @@ MonoBehaviour:
   m_data: {fileID: 11400000, guid: 451fe8440a84395499d39aa2104d2c5c, type: 2}
   m_damageable: {fileID: 4880194371533314815}
   m_centerMass: {fileID: 2695154159933472935}
+  m_aggroBoundary: {fileID: 8806192465151556382}
   m_statsData: {fileID: 0}
   m_spineEventListener: {fileID: 2255151567263452440}
   m_projectilePoint: {fileID: 2334146559952205838}
@@ -632,11 +633,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6853830338351071768}
     m_Modifications:
-    - target: {fileID: 234684100764676597, guid: 75e742d20466f2249a06a21fd23c6b70,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 308375960481726075, guid: 75e742d20466f2249a06a21fd23c6b70,
         type: 3}
       propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[0].Array.data[0].X
@@ -720,7 +716,7 @@ PrefabInstance:
     - target: {fileID: 1604547752390138343, guid: 75e742d20466f2249a06a21fd23c6b70,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0042789667
+      value: -0.0042760097
       objectReference: {fileID: 0}
     - target: {fileID: 3619840953106896523, guid: 75e742d20466f2249a06a21fd23c6b70,
         type: 3}
@@ -829,9 +825,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75e742d20466f2249a06a21fd23c6b70, type: 3}
---- !u!50 &6136414689092291804 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 4252242205750136963, guid: 75e742d20466f2249a06a21fd23c6b70,
+--- !u!61 &289160405476300740 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 7649749617151118235, guid: 75e742d20466f2249a06a21fd23c6b70,
     type: 3}
   m_PrefabInstance: {fileID: 7938178615382695007}
   m_PrefabAsset: {fileID: 0}
@@ -841,9 +837,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7938178615382695007}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2334146559952205838 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5642621696987522129, guid: 75e742d20466f2249a06a21fd23c6b70,
+--- !u!50 &6136414689092291804 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 4252242205750136963, guid: 75e742d20466f2249a06a21fd23c6b70,
     type: 3}
   m_PrefabInstance: {fileID: 7938178615382695007}
   m_PrefabAsset: {fileID: 0}
@@ -863,6 +859,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8806192465151556382 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1450143720009148225, guid: 75e742d20466f2249a06a21fd23c6b70,
+    type: 3}
+  m_PrefabInstance: {fileID: 7938178615382695007}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eec63e2d8574ba947936161e71632309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3704970971418819963 stripped
@@ -919,15 +927,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &3074477472753478913 stripped
-BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4936138278632272222, guid: 75e742d20466f2249a06a21fd23c6b70,
+--- !u!4 &2334146559952205838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5642621696987522129, guid: 75e742d20466f2249a06a21fd23c6b70,
     type: 3}
   m_PrefabInstance: {fileID: 7938178615382695007}
   m_PrefabAsset: {fileID: 0}
---- !u!61 &289160405476300740 stripped
+--- !u!61 &3074477472753478913 stripped
 BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 7649749617151118235, guid: 75e742d20466f2249a06a21fd23c6b70,
+  m_CorrespondingSourceObject: {fileID: 4936138278632272222, guid: 75e742d20466f2249a06a21fd23c6b70,
     type: 3}
   m_PrefabInstance: {fileID: 7938178615382695007}
   m_PrefabAsset: {fileID: 0}

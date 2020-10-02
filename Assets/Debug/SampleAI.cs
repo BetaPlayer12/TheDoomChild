@@ -152,5 +152,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             throw new NotImplementedException();
         }
+
+        protected override void OnBecomePassive()
+        {
+        }
     }
 }
