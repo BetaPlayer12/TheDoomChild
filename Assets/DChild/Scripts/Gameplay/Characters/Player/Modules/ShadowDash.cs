@@ -2,6 +2,7 @@
 using DChild.Gameplay.Combat;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
+using Spine.Unity.Examples;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -20,12 +21,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Animator m_animator;
         private bool m_wasUsed;
         private int m_animationParameter;
+        private SkeletonGhost m_skeletonGhost;
 
         public void Initialize(ComplexCharacterInfo info)
         {
             m_source = info.magic;
             m_damageable = info.damageable;
             m_animator = info.animator;
+            m_skeletonGhost = info.skeletonGhost;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ShadowMode);
         }
 
@@ -37,6 +40,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_wasUsed = false;
             m_tempFX?.Stop(true);
             m_animator.SetBool(m_animationParameter, false);
+            m_skeletonGhost.enabled = false;
         }
 
         public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
@@ -62,6 +66,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_wasUsed = true;
                 m_tempFX?.Play(true);
                 m_animator.SetBool(m_animationParameter, true);
+                m_skeletonGhost.enabled = true;
             }
             m_dash.Execute();
         }
