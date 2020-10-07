@@ -115,6 +115,13 @@ namespace DChild.Gameplay.Characters.AI
             return new PatrolInfo(position, destination);
         }
 
+        public Vector2[] GetWaypoints() => m_wayPoints;
+
+        public void SetWayPoints(Vector2[] waypoint)
+        {
+            m_wayPoints = waypoint;
+        }
+
         private bool IsNear(float position, float destination)
         {
             var distance = Mathf.Abs(destination - position);
@@ -133,6 +140,7 @@ namespace DChild.Gameplay.Characters.AI
             }
             m_currentIndex += (int)m_iteration;
         }
+
 
         private void Awake()
         {
