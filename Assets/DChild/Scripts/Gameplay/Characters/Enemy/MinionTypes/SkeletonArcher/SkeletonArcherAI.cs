@@ -158,6 +158,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private GameObject m_targetPointIK;
 
+        private Vector2 m_lastTargetPos;
+
 
         //[SerializeField]
         //private AudioSource m_Audiosource;
@@ -307,13 +309,13 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = m_attackDecider.chosenAttack.attack != Attack.Attack3 ? true : false;
                 //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = false;
-                m_targetPointIK.transform.position = m_targetInfo.position;
-                m_projectileLauncher.AimAt(m_targetInfo.position);
+                m_targetPointIK.transform.position = m_lastTargetPos;
+                m_projectileLauncher.AimAt(m_lastTargetPos);
                 m_projectileLauncher.LaunchProjectile();
                 //if (m_chosenAttack != Attack.Attack3)
                 //{
                 //    //ShootProjectile();
-                //    m_projectileLauncher.AimAt(m_targetInfo.position);
+                //    m_projectileLauncher.AimAt(m_lastTargetPos);
                 //    m_projectileLauncher.LaunchProjectile();
                 //}
                 //else
@@ -405,7 +407,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-
+                    m_lastTargetPos = m_targetInfo.position;
                     switch (m_chosenAttack)
                     {
                         case Attack.Attack1:
@@ -453,7 +455,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            //m_chosenAttack = Vector2.Distance(transform.position, m_targetInfo.position) <= m_info.targetDistanceTolerance ? Attack.Attack3 : m_attackDecider.chosenAttack.attack;
                             m_chosenAttack = m_attackDecider.chosenAttack.attack;
 
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting && !ShotBlocked())
@@ -513,9 +514,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     if (m_targetInfo.isValid)
                     {
-                        if (IsFacingTarget())
+                        if (IsFacing(m_lastTargetPos))
                         {
-                            m_targetPointIK.transform.position = m_targetInfo.position;
+                            m_targetPointIK.transform.position = m_lastTargetPos;
                         }
                         else
                         {
