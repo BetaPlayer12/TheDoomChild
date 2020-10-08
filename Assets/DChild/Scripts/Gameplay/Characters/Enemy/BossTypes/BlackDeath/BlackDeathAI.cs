@@ -399,7 +399,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             if (m_clones[m_clones.Count - 1] != null || m_clones[m_clones.Count - 1].activeSelf)
             {
-                for (int i = 0; i < m_clones.Count; i++)
+                for (int i = 0; i < m_clones.Count+1; i++)
                 {
                     Destroy(m_clones[i]);
                     m_clones.RemoveAt(i);
