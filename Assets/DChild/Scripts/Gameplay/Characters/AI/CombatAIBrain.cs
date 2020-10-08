@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.AI
 {
-    public class CombatAIManager : SerializedMonoBehaviour
+    public class CombatAIBrain : SerializedMonoBehaviour
     {
         [SerializeField]
         private List<ICombatAIBrain> m_combatAI;
