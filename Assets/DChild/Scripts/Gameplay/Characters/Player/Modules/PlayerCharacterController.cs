@@ -730,15 +730,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_movement?.SwitchConfigTo(Movement.Type.Jog);
                             m_objectManipulation?.Cancel();
                         }
-
-                        //if (m_input.horizontalInput != 0)
-                        //{
-
-                        //}
-                        //else
-                        //{
-
-                        //}
                     }
                 }
 
