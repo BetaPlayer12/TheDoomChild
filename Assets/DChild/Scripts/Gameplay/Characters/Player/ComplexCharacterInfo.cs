@@ -4,6 +4,7 @@ using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using PlayerNew;
+using Spine.Unity.Examples;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
@@ -39,6 +40,8 @@ namespace DChild.Gameplay.Characters.Players
         private SurfaceDetector m_surfaceDector;
         [SerializeField]
         private PlayerBehaviour m_playerBehaviour;
+        [SerializeField]
+        private SkeletonGhost m_skeletonGhost;
 
         public ComplexCharacterInfo(GameObject character, AnimationParametersData animationParametersData)
         {
@@ -54,6 +57,7 @@ namespace DChild.Gameplay.Characters.Players
             m_skillResetRequester = character.GetComponentInChildren<SkillResetRequester>();
             m_statusEffectReciever = character.GetComponentInChildren<StatusEffectReciever>();
             m_surfaceDector = character.GetComponentInChildren<SurfaceDetector>();
+            m_skeletonGhost = character.GetComponentInChildren<SkeletonGhost>();
         }
 
         public Character character => m_character;
@@ -70,6 +74,6 @@ namespace DChild.Gameplay.Characters.Players
         public Damageable damageable => m_damageable;
         public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
         public SurfaceDetector surfaceDector => m_surfaceDector;
-
+        public SkeletonGhost skeletonGhost => m_skeletonGhost;
     }
 }
