@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, DraggableItems = false, Expanded = true), HorizontalGroup("Start/Reference/Box/Split")]
         private List<CelestialSlot> m_slots = new List<CelestialSlot>(new CelestialSlot[1]);
 
-        [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true), HorizontalGroup("Start/Reference/Box/Split")]
+        [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, Expanded = true), HorizontalGroup("Start/Reference/Box/Split")]
         private List<CelestialIndicator> m_activationIndicators = new List<CelestialIndicator>(new CelestialIndicator[1]);
 
         [TabGroup("Start", "Events")]
