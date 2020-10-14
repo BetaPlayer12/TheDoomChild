@@ -33,6 +33,7 @@ namespace DChild.Gameplay.Combat
 
         public event EventAction<DamageEventArgs> DamageTaken;
         public event EventAction<EventActionArgs> Destroyed;
+        public event EventAction<EventActionArgs> Healed;
 
         public Vector2 position => m_centerMass.position;
 
@@ -56,6 +57,7 @@ namespace DChild.Gameplay.Combat
         public void Heal(int health)
         {
             m_health?.AddCurrentValue(health);
+            Healed?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void SetHitboxActive(bool enable)
