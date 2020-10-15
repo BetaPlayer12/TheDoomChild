@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField]
         private SerializeID m_ID = new SerializeID(true);
-
+        [SerializeField]
         private CelestialCube m_storedCube;
         private bool m_lockDownWhenStored;
         private bool m_readyLock;
@@ -22,6 +22,18 @@ namespace DChild.Gameplay.Environment
         public bool isOccupied => m_storedCube;
         public bool readyLock => m_readyLock;
         public SerializeID ID => m_ID;
+
+        private void OnDrawGizmos()
+        {
+            
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.color = new Color(1, 1, 1, 1);
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.right * 5);
+        }
 
         public void SetLockDown(bool lockDown)
         {
