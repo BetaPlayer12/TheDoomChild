@@ -43,11 +43,10 @@ namespace DChild.Gameplay.Combat
 
         public Health health => m_health;
 
-        public void TakeDamage(int totalDamage, AttackType type)
+        public virtual void TakeDamage(int totalDamage, AttackType type)
         {
             m_health?.ReduceCurrentValue(totalDamage);
-            var eventArgs = new DamageEventArgs(totalDamage, type);
-            DamageTaken?.Invoke(this, eventArgs);
+            CallDamageTaken(totalDamage, type);
             if (m_health?.isEmpty ?? false)
             {
                 Destroyed?.Invoke(this, EventActionArgs.Empty);
@@ -84,6 +83,12 @@ namespace DChild.Gameplay.Combat
             {
                 m_hitboxes[i].SetInvulnerability(level);
             }
+        }
+        
+        protected void CallDamageTaken(int totalDamage, AttackType type)
+        {
+            var eventArgs = new DamageEventArgs(totalDamage, type);
+            DamageTaken?.Invoke(this, eventArgs);
         }
 
         private void Awake()

@@ -4,6 +4,7 @@ using Sirenix.Serialization;
 
 namespace Holysoft.Gameplay.UI
 {
+
     public abstract class CappedStatUI : SerializedMonoBehaviour
     {
         //#if UNITY_EDITOR
@@ -46,7 +47,6 @@ namespace Holysoft.Gameplay.UI
         private void OnValueChange(object sender, StatInfoEventArgs eventArgs) => currentValue = eventArgs.currentValue;
 
         //#if UNITY_EDITOR
-        private ICappedStat m_previous;
 
         protected virtual void Awake()
         {
@@ -56,7 +56,8 @@ namespace Holysoft.Gameplay.UI
             }
         }
 
-        private void UpdateUI()
+        private ICappedStat m_previous;
+        protected virtual void UpdateUI()
         {
             if (m_previous != null)
             {
