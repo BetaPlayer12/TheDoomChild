@@ -2,6 +2,7 @@
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
@@ -15,7 +16,8 @@ namespace DChild.Gameplay.Environment
         private float m_approximation;
         [ShowInInspector, HideInEditorMode, OnValueChanged("CallStateChange")]
         private bool m_isOccupied;
-
+        [SerializeField, TabGroup("On")]
+        private UnityEvent m_onEvents;
         private float m_proximitymin;
         private float m_cubePosition;
         private float m_proximitymax;
