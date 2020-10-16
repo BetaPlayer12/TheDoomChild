@@ -1,6 +1,8 @@
 ﻿using DChild.Serialization;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
@@ -10,6 +12,10 @@ namespace DChild.Gameplay.Environment
         private SerializeID m_ID = new SerializeID(true);
         [SerializeField]
         private CelestialCube m_storedCube;
+        [SerializeField, TabGroup("On")]
+        private UnityEvent m_onEvents;
+        [SerializeField, TabGroup("Off")]
+        private UnityEvent m_offEvents;
         private bool m_lockDownWhenStored;
         private bool m_readyLock;
         private float m_proximitymin;
