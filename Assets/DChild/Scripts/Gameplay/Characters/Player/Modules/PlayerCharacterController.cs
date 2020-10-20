@@ -134,7 +134,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void OnDeath(object sender, EventActionArgs eventArgs)
         {
             Disable();
-            enabled = false;
             m_idle?.Cancel();
         }
 
@@ -253,6 +252,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             //if (m_state.waitForBehaviour)
             //    return;
 
+            if (m_state.isDead)
+                return;
+
             if (m_state.isGrounded)
             {
                 if (m_state.forcedCurrentGroundedness == false)
@@ -290,15 +292,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void Update()
         {
             if (m_updateEnabled == false)
-            {
                 return;
-            }
 
             if (m_state.isDead)
-            {
-
                 return;
-            }
 
             if (m_shadowGaugeRegen?.CanRegen() ?? false)
             {
@@ -730,15 +727,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_movement?.SwitchConfigTo(Movement.Type.Jog);
                             m_objectManipulation?.Cancel();
                         }
-
-                        //if (m_input.horizontalInput != 0)
-                        //{
-
-                        //}
-                        //else
-                        //{
-
-                        //}
                     }
                 }
 

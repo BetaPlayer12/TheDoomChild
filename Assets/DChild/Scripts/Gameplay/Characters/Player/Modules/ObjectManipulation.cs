@@ -13,7 +13,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private RaySensor m_grabRangeSensor;
         [SerializeField]
-        private float m_grabForce;
+        private float m_pushForce;
+        [SerializeField]
+        private float m_pullForce;
 
         private Animator m_animator;
         private IGrabState m_state;
@@ -121,22 +123,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 //gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                 //gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, gameObject.GetComponent<Rigidbody2D>().velocity.y);
                 //gameObject.transform.parent = parent.transform;
-            }   
+            }
         }
 
         public void MoveObject(float direction, HorizontalDirection facing)
         {
-            if(facing == HorizontalDirection.Left)
+            bool isPulling = false;
+
+            if (facing == HorizontalDirection.Left)
             {
-                if(direction > 0)
+                if (direction > 0)
                 {
                     m_animator.SetBool(m_isPullingAnimationParameter, true);
                     m_animator.SetBool(m_isPushingAnimationParameter, false);
+                    isPulling = true;
                 }
                 else
                 {
                     m_animator.SetBool(m_isPushingAnimationParameter, true);
                     m_animator.SetBool(m_isPullingAnimationParameter, false);
+                    isPulling = false;
                 }
             }
             else
@@ -145,15 +151,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_animator.SetBool(m_isPushingAnimationParameter, true);
                     m_animator.SetBool(m_isPullingAnimationParameter, false);
+                    isPulling = false;
                 }
                 else
                 {
                     m_animator.SetBool(m_isPullingAnimationParameter, true);
                     m_animator.SetBool(m_isPushingAnimationParameter, false);
+                    isPulling = true;
                 }
             }
 
-            m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_grabForce);
+            if (isPulling == true)
+            {
+                m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_pullForce);
+            }
+            else
+            {
+                m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_pushForce);
+            }
         }
 
         public void Initialize(ComplexCharacterInfo info)

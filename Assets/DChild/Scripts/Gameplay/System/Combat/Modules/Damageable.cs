@@ -33,6 +33,7 @@ namespace DChild.Gameplay.Combat
 
         public event EventAction<DamageEventArgs> DamageTaken;
         public event EventAction<EventActionArgs> Destroyed;
+        public event EventAction<EventActionArgs> Healed;
 
         public Vector2 position => m_centerMass.position;
 
@@ -42,11 +43,10 @@ namespace DChild.Gameplay.Combat
 
         public Health health => m_health;
 
-        public void TakeDamage(int totalDamage, AttackType type)
+        public virtual void TakeDamage(int totalDamage, AttackType type)
         {
             m_health?.ReduceCurrentValue(totalDamage);
-            var eventArgs = new DamageEventArgs(totalDamage, type);
-            DamageTaken?.Invoke(this, eventArgs);
+            CallDamageTaken(totalDamage, type);
             if (m_health?.isEmpty ?? false)
             {
                 Destroyed?.Invoke(this, EventActionArgs.Empty);
@@ -56,6 +56,7 @@ namespace DChild.Gameplay.Combat
         public void Heal(int health)
         {
             m_health?.AddCurrentValue(health);
+            Healed?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void SetHitboxActive(bool enable)
@@ -82,6 +83,12 @@ namespace DChild.Gameplay.Combat
             {
                 m_hitboxes[i].SetInvulnerability(level);
             }
+        }
+        
+        protected void CallDamageTaken(int totalDamage, AttackType type)
+        {
+            var eventArgs = new DamageEventArgs(totalDamage, type);
+            DamageTaken?.Invoke(this, eventArgs);
         }
 
         private void Awake()

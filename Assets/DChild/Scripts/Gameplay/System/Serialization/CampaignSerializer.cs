@@ -76,9 +76,9 @@ namespace DChild.Gameplay
         }
 
         [Button]
-        public void Load(bool byPassLoadingFromFile = false)
+        public void Load(bool bypassLoadingFromFile = false)
         {
-            if (byPassLoadingFromFile == false)
+            if (bypassLoadingFromFile == false)
             {
                 SerializationHandle.Load(m_slot.id, ref m_slot);
             }
