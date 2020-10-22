@@ -13,6 +13,9 @@ namespace DChild.Gameplay.Characters.Players
         SwordThrust,
         EarthShaker,
         Whip,
+        Levitate,
+        ShadowDash,
+        ShadowSlide,
         [HideInInspector]
         _COUNT
     }

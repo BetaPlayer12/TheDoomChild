@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private InputTranslator m_input;
         [SerializeField]
-        private PlayerSkills m_skills;
+        private PlayerModuleActivator m_skills;
         [SerializeField]
         private CharacterState m_state;
         [SerializeField]
@@ -364,7 +364,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_wallStick?.Cancel();
                         m_wallMovement?.Cancel();
                     }
-                    else if (m_skills.IsEnabled(PrimarySkill.WallJump))
+                    else if (m_skills.IsModuleActive(PrimarySkill.WallJump))
                     {
                         m_wallStick?.Cancel();
                         m_wallMovement?.Cancel();
@@ -466,7 +466,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region MidAir Attacks
                     if (m_input.earthShakerPressed)
                     {
-                        if (m_skills.IsEnabled(PrimarySkill.EarthShaker))
+                        if (m_skills.IsModuleActive(PrimarySkill.EarthShaker))
                         {
                             PrepareForMidairAttack();
 
@@ -491,7 +491,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.whipPressed)
                     {
-                        if (m_skills.IsEnabled(PrimarySkill.Whip))
+                        if (m_skills.IsModuleActive(PrimarySkill.Whip))
                         {
                             PrepareForMidairAttack();
 
@@ -530,7 +530,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_input.dashPressed)
                 {
-                    if (m_skills.IsEnabled(PrimarySkill.Dash) && m_state.canDash)
+                    if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
                     {
                         if (m_state.isLevitating)
                         {
@@ -543,7 +543,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.jumpPressed)
                 {
-                    if (m_skills.IsEnabled(PrimarySkill.DoubleJump))
+                    if (m_skills.IsModuleActive(PrimarySkill.DoubleJump))
                     {
                         if (m_extraJump?.HasExtras() ?? false)
                         {
@@ -651,7 +651,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_input.dashPressed)
                 {
-                    if (m_skills.IsEnabled(PrimarySkill.Slide) && m_state.canSlide)
+                    if (m_skills.IsModuleActive(PrimarySkill.Slide) && m_state.canSlide)
                     {
                         m_idle?.Cancel();
                         m_movement?.Cancel();
@@ -705,7 +705,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.slashHeld)
                     {
-                        if (m_skills.IsEnabled(PrimarySkill.SwordThrust))
+                        if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
                         {
                             PrepareForGroundAttack();
                             m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
@@ -718,7 +718,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.whipPressed)
                     {
-                        if (m_skills.IsEnabled(PrimarySkill.Whip))
+                        if (m_skills.IsModuleActive(PrimarySkill.Whip))
                         {
                             if (m_input.verticalInput > 0)
                             {
@@ -792,7 +792,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.dashPressed)
                 {
-                    if (m_skills.IsEnabled(PrimarySkill.Dash) && m_state.canDash)
+                    if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
                     {
                         m_idle?.Cancel();
                         m_movement?.Cancel();
