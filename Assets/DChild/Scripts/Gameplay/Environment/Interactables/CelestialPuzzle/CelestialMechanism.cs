@@ -117,7 +117,7 @@ namespace DChild.Gameplay.Environment
         private void OnSlotStateChange(object sender, EventActionArgs eventArgs)
         {
             var slot = (CelestialSlot)sender;
-            m_activatedSlots += slot.readyLock ? 1 : -1;
+            m_activatedSlots += slot.isOccupied ? 1 : -1;
             if (m_activatedSlots == m_slots.Count)
             {
                 m_readyActivate = true;
