@@ -24,34 +24,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_isPullingAnimationParameter;
         private int m_isPushingAnimationParameter;
 
-        //void Update()
-        //{
-        //    var thereIsAMovableObject = IsThereAMovableObject();
-
-        //    if (Input.GetKey(KeyCode.P))
-        //    {
-        //        if (thereIsAMovableObject == true)
-        //        {
-        //            Debug.Log("testr");
-
-        //            var gameObject = m_cacheCollider.gameObject.transform.parent;
-        //            gameObject.transform.parent = m_grabArea.transform;
-        //            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (m_cacheCollider != null)
-        //        {
-        //            var gameObject = m_cacheCollider.gameObject.transform.parent;
-        //            var parent = gameObject.GetComponent<MovableObject>().GetParentObject();
-        //            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-        //            gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        //            gameObject.transform.parent = parent.transform;
-        //        }
-        //    }
-        //}
-
         public void GrabIdle()
         {
             m_animator.SetBool(m_isPullingAnimationParameter, false);
@@ -103,10 +75,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.isGrabbing = true;
             m_animator.SetBool(m_isGrabbingAnimationParameter, true);
-
-            //var gameObject = m_movableObject.gameObject.transform.parent;
-            //gameObject.transform.parent = m_grabArea.transform;
-            //gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         }
 
         public void Cancel()
@@ -115,20 +83,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_isGrabbingAnimationParameter, false);
             m_animator.SetBool(m_isPullingAnimationParameter, false);
             m_animator.SetBool(m_isPushingAnimationParameter, false);
-
-            if (m_movableObject != null)
-            {
-                //var gameObject = m_movableObject.gameObject.transform.parent;
-                //var parent = gameObject.GetComponent<MovableObject>().GetParentObject();
-                //gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-                //gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, gameObject.GetComponent<Rigidbody2D>().velocity.y);
-                //gameObject.transform.parent = parent.transform;
-            }
         }
 
         public void MoveObject(float direction, HorizontalDirection facing)
         {
-            bool isPulling = false;
+            bool isPulling;
 
             if (facing == HorizontalDirection.Left)
             {
