@@ -44,5 +44,4 @@ namespace DChild.Gameplay.Environment
             transform.position = position;
         }
     }
-
 }

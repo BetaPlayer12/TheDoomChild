@@ -47,7 +47,7 @@ namespace DChild.Gameplay.Environment
             public int wayPoint => m_wayPoint;
             public int incrementerValue => m_incrementerValue;
 
-            ISaveData ISaveData.ProduceCopy() => new SaveData(position,wayPoint,incrementerValue);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(position, wayPoint, incrementerValue);
         }
 
         [SerializeField, MinValue(0.1f), TabGroup("Setting")]
@@ -71,6 +71,7 @@ namespace DChild.Gameplay.Environment
         private int m_pingPongWaypoint;
 
         public event EventAction<UpdateEventArgs> DestinationReached;
+        public event EventAction<UpdateEventArgs> DestinationChanged;
 
 #if UNITY_EDITOR
         public Vector2[] waypoints { get => m_waypoints; set => m_waypoints = value; }
@@ -102,6 +103,7 @@ namespace DChild.Gameplay.Environment
             m_pingPongWaypoint += next ? 1 : -1;
             m_wayPointDestination = (int)Mathf.PingPong(m_pingPongWaypoint, m_listSize - 1);
             ChangeDestination();
+            DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
         }
 
         public void GoToNextWayPoint()
@@ -110,6 +112,7 @@ namespace DChild.Gameplay.Environment
             {
                 m_wayPointDestination++;
                 ChangeDestination();
+                DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
             }
         }
 
@@ -119,14 +122,20 @@ namespace DChild.Gameplay.Environment
             {
                 m_wayPointDestination--;
                 ChangeDestination();
+                DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
             }
         }
 
         public void GoDestination(int destination)
         {
             m_pingPongWaypoint = destination;
+            var differentDestination = m_wayPointDestination != destination;
             m_wayPointDestination = destination;
             ChangeDestination();
+            if (differentDestination)
+            {
+                DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
+            }
         }
 
         public void GoDestination(int destination, bool passThroughWayPoints)
@@ -138,11 +147,16 @@ namespace DChild.Gameplay.Environment
             else
             {
                 m_pingPongWaypoint = destination;
+                var differentDestination = m_wayPointDestination != destination;
                 m_wayPointDestination = destination;
                 m_currentWayPoint = destination;
                 m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
                 m_cacheDestination = m_waypoints[m_wayPointDestination];
                 enabled = true;
+                if (differentDestination)
+                {
+                    DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
+                }
             }
         }
 
