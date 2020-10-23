@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -24,13 +25,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_grabSpeed;
 
         private float m_currentSpeed;
+        private IPlayerModifer m_modifier;
         private Rigidbody2D m_rigidbody;
         private Character m_character;
         private Animator m_animator;
         private int m_speedAnimationParameter;
 
+        [ShowInInspector, ReadOnly, HideInEditorMode]
+        protected float speed => m_currentSpeed * m_modifier.Get(PlayerModifier.MoveSpeed);
+
         public void Initialize(ComplexCharacterInfo info)
         {
+            m_modifier = info.modifier;
             m_character = info.character;
             m_rigidbody = info.rigidbody;
             SwitchConfigTo(Type.Jog);
@@ -78,7 +84,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 m_animator.SetFloat(m_speedAnimationParameter, 1);
             }
-            var xVelocity = m_currentSpeed * direction;
+            var xVelocity = speed * direction;
             m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
         }
 
@@ -92,7 +98,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_animator.SetFloat(m_speedAnimationParameter, 1);
             }
-            var xVelocity = m_currentSpeed * direction;
+            var xVelocity = speed * direction;
             m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
         }
     }

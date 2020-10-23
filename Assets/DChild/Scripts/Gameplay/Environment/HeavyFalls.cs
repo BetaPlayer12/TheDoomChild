@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Characters.Players;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,20 +14,23 @@ namespace DChild.Gameplay.Environment
 
         private Dictionary<Rigidbody2D, int> m_rigidbodyReferenceCount;
         private List<Rigidbody2D> m_rigidbodyList;
-        private RaycastHit2D[] m_hitBuffer;
-        private ContactFilter2D m_objectToGroundFilter;
-        private List<ContactPoint2D> m_contactPoint2Ds;
+        private static ContactFilter2D m_objectToGroundFilter;
+        private static List<ContactPoint2D> m_contactPoint2Ds;
+        private static bool m_staticInitialized;
 
         private void Awake()
         {
             m_rigidbodyReferenceCount = new Dictionary<Rigidbody2D, int>();
             m_rigidbodyList = new List<Rigidbody2D>();
-            m_hitBuffer = new RaycastHit2D[16];
-            m_objectToGroundFilter = new ContactFilter2D();
-            m_objectToGroundFilter.useTriggers = false;
-            m_objectToGroundFilter.useLayerMask = true;
-            m_objectToGroundFilter.SetLayerMask(LayerMask.GetMask("Environment"));
-            m_contactPoint2Ds = new List<ContactPoint2D>();
+            if (m_staticInitialized == false)
+            {
+                m_objectToGroundFilter = new ContactFilter2D();
+                m_objectToGroundFilter.useTriggers = false;
+                m_objectToGroundFilter.useLayerMask = true;
+                m_objectToGroundFilter.SetLayerMask(LayerMask.GetMask("Environment"));
+                m_contactPoint2Ds = new List<ContactPoint2D>();
+                m_staticInitialized = true;
+            }
         }
 
         private void FixedUpdate()
@@ -76,6 +80,11 @@ namespace DChild.Gameplay.Environment
                         m_rigidbodyList.Add(rigidbody);
                     }
                 }
+
+                if (collision.TryGetComponentInParent(out PlayerControlledObject playerObject))
+                {
+                    playerObject.owner.behaviourModule.SetModuleActive(PrimarySkill.Levitate, false);
+                }
             }
         }
 
@@ -94,6 +103,11 @@ namespace DChild.Gameplay.Environment
                             m_rigidbodyList.Remove(rigidbody);
                         }
                     }
+                }
+
+                if (collision.TryGetComponentInParent(out PlayerControlledObject playerObject))
+                {
+                    playerObject.owner.behaviourModule.SetModuleActive(PrimarySkill.Levitate, true);
                 }
             }
         }
