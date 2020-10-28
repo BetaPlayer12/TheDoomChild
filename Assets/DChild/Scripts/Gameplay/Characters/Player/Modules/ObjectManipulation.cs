@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private Animator m_animator;
         private IGrabState m_state;
+        private IPlayerModifer m_modifier;
         private Collider2D m_movableObject;
         private int m_isGrabbingAnimationParameter;
         private int m_isPullingAnimationParameter;
@@ -122,17 +123,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (isPulling == true)
             {
-                m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_pullForce);
+                m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce);
             }
             else
             {
-                m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_pushForce);
+                m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce);
             }
         }
 
         public void Initialize(ComplexCharacterInfo info)
         {
             m_state = info.state;
+            m_modifier = info.modifier;
             m_animator = info.animator;
             m_isGrabbingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrabbing);
             m_isPullingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsPulling);

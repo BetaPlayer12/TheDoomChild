@@ -25,8 +25,8 @@ namespace DChild.Gameplay.Environment
 
         [SerializeField]
         private bool m_isHeavy;
-        [SerializeField]
-        private GameObject m_parentObject;
+
+        private Rigidbody2D m_rigidBody;
 
         public bool isHeavy => m_isHeavy;
 
@@ -34,16 +34,15 @@ namespace DChild.Gameplay.Environment
 
         public ISaveData Save() => new SaveData(transform.position);
 
-        public GameObject GetParentObject()
-        {
-            return m_parentObject;
-        }
-
         public void MoveObject(float direction, float moveForce)
         {
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            m_rigidBody.velocity = new Vector2(direction * moveForce, 0);
+            //m_rigidBody.AddForce(new Vector2(direction * moveForce, 0), ForceMode2D.Impulse);
+        }
 
-            rb.velocity = new Vector2(direction * moveForce, 0);
+        private void Awake()
+        {
+            m_rigidBody = GetComponent<Rigidbody2D>();
         }
     }
 }
