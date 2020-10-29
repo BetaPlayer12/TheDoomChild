@@ -1,7 +1,10 @@
 ﻿using DChild.Serialization;
+using Holysoft.Event;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
@@ -12,27 +15,66 @@ namespace DChild.Gameplay.Environment
         {
             [SerializeField]
             private SerializedVector3 m_position;
+            [SerializeField]
+            private bool m_canBeMoved;
 
-            public SaveData(Vector3 position)
+            public SaveData(Vector3 position, bool canBeMoved)
             {
                 m_position = position;
+                m_canBeMoved = canBeMoved;
             }
 
             public Vector3 position => m_position;
+            public bool canBeMoved => m_canBeMoved;
 
-            ISaveData ISaveData.ProduceCopy() => new SaveData(position);
+            ISaveData ISaveData.ProduceCopy() => new SaveData(position, canBeMoved);
         }
 
         [SerializeField]
         private bool m_isHeavy;
         [SerializeField]
         private GameObject m_parentObject;
+        [SerializeField]
+        private bool m_canBeMove;
+        [SerializeField, TabGroup("Grabbed")]
+        private UnityEvent m_onGrabbed;
+        [SerializeField, TabGroup("Let Go")]
+        private UnityEvent m_onLetGo;
+
+        public event EventAction<EventActionArgs> BecameUnmovable;
 
         public bool isHeavy => m_isHeavy;
+        public bool canBeMove => m_canBeMove;
 
-        public void Load(ISaveData data) => transform.position = ((SaveData)data).position;
+        public void Load(ISaveData data)
+        {
+            var saveData = ((SaveData)data);
+            transform.position = saveData.position;
+            m_canBeMove = saveData.canBeMoved;
+        }
 
-        public ISaveData Save() => new SaveData(transform.position);
+        public ISaveData Save() => new SaveData(transform.position, m_canBeMove);
+
+        public void SetMovable(bool value)
+        {
+            m_canBeMove = value;
+            if (value == false)
+            {
+                BecameUnmovable?.Invoke(this, EventActionArgs.Empty);
+            }
+        }
+
+        public void SetGrabState(bool isGrabbed)
+        {
+            if (isGrabbed)
+            {
+                m_onGrabbed?.Invoke();
+            }
+            else
+            {
+                m_onLetGo?.Invoke();
+            }
+        }
 
         public GameObject GetParentObject()
         {

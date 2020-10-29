@@ -11,10 +11,16 @@ namespace Holysoft.Gameplay.UI
         [SerializeField, MinValue(0)]
         private float m_baseMaxValue = 0;
         [SerializeField]
+        private Vector2 m_padding = new Vector2();
+        [SerializeField]
         private Vector2 m_expansionRate = new Vector2();
 
         private Vector2 m_baseDimension = new Vector2();
+        private Vector2 m_stretchDimenension = new Vector2();
+        private Vector2 m_anchorDimension = new Vector2();
         private float m_currentMaxValue = 0;
+
+        private Vector2 m_newSizeDelta = new Vector2();
 
         public override float maxValue
         {
@@ -27,8 +33,8 @@ namespace Holysoft.Gameplay.UI
 
                     var difference = value - m_baseMaxValue;
                     var expandedRectSize = m_baseDimension + (m_expansionRate * difference);
-
-                    m_rectTransform.sizeDelta = expandedRectSize - anchorDimensions;
+                    m_newSizeDelta = expandedRectSize - m_anchorDimension;
+                    enabled = true;
                     m_currentMaxValue = value;
                 }
             }
@@ -45,7 +51,8 @@ namespace Holysoft.Gameplay.UI
         {
             var rect = m_rectTransform.rect;
             m_baseDimension = new Vector2(rect.width, rect.height);
-            m_expansionRate = m_baseDimension / m_baseMaxValue;
+            m_stretchDimenension = m_baseDimension - m_padding;
+            m_expansionRate = m_stretchDimenension / m_baseMaxValue;
         }
 #endif
 
@@ -54,7 +61,17 @@ namespace Holysoft.Gameplay.UI
             m_currentMaxValue = m_baseMaxValue;
             var rect = m_rectTransform.rect;
             m_baseDimension = new Vector2(rect.width, rect.height);
+            m_stretchDimenension = m_baseDimension - m_padding;
+            var sizeDelta = m_rectTransform.sizeDelta;
+            m_anchorDimension = new Vector2(m_baseDimension.x - sizeDelta.x, m_baseDimension.y - sizeDelta.y);
             base.Awake();
+            enabled = false;
+        }
+
+        private void LateUpdate()
+        {
+            m_rectTransform.sizeDelta = m_newSizeDelta;
+            enabled = false;
         }
 
         private void OnValidate()
