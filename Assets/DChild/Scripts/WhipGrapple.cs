@@ -68,7 +68,7 @@ public class WhipGrapple : MonoBehaviour
         {
             if (hit[i] != null)
             {
-                if (hit[i].tag == "Droppable")
+                if (hit[i].tag == "Grappable")
                 {
                     m_detectedGrappables.Add(hit[i]);
                 }

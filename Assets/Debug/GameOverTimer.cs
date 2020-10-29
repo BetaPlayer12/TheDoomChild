@@ -1,5 +1,4 @@
 ﻿using DChild;
-using DChild.Gameplay;
 using Holysoft.Collections;
 using Holysoft.Event;
 using System;
@@ -21,10 +20,7 @@ public class GameOverTimer : MonoBehaviour
 
     private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
     {
-        ////Auto Reload the Campaign
-        //GameSystem.LoadMainMenu();
-        //Use This instead of the above when save point is actually saving
-        GameplaySystem.ReloadGame();
+        GameSystem.LoadMainMenu();
     }
 
     private void Update()

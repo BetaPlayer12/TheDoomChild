@@ -617,10 +617,5 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.SetState(State.ReevaluateSituation);
         }
-
-        protected override void OnBecomePassive()
-        {
-            ResetAI();
-        }
     }
 }

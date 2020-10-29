@@ -581,13 +581,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(0.5f); // Must be event based after this;
 
                 var projectile = m_soundBallList[i];
-                if (projectile != null)
-                {
-                    projectile.Impacted -= OnEarlyImpact;
-                    m_soundBallList[i].transform.parent = null;
-                    var toTarget = (m_targetInfo.position - (Vector2)m_soundBallList[i].transform.position).normalized;
-                    projectile.SetVelocity(toTarget, m_info.soundball.speed);
-                }
+                m_soundBallList[i].transform.parent = null;
+                var toTarget = (m_targetInfo.position - (Vector2)m_soundBallList[i].transform.position).normalized;
+                projectile.SetVelocity(toTarget, m_info.soundball.speed);
             }
 
 
@@ -602,16 +598,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 instance.transform.parent = chargeInstance.GetComponentInParent<ParticleFX>().transform.parent;
                 instance.transform.position = chargeInstance.transform.position;
                 instance.SetVelocity(Vector2.zero, 0);
-                instance.Impacted += OnEarlyImpact;
                 m_soundBallList.Add(instance);
-            }
-
-            void OnEarlyImpact(object sender, EventActionArgs eventArgs)
-            {
-                var projectile = (Projectile)sender;
-                projectile.Impacted -= OnEarlyImpact;
-                var index = m_soundBallList.FindIndex(x => x == projectile);
-                m_soundBallList[index] = null;
             }
         }
 
@@ -759,10 +746,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     break;
             }
-        }
-
-        protected override void OnBecomePassive()
-        {
         }
     }
 

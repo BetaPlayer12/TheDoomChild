@@ -31,7 +31,7 @@ namespace DChild.Gameplay.Puzzles
         [SerializeField]
         private Damageable m_entity;
         [SerializeField]
-        private Dictionary<int, Vector2> m_info = new Dictionary<int, Vector2>();
+        private Dictionary<int, Transform> m_dictionary;
 
         private IResetableAIBrain m_entitybrain;
 
@@ -55,10 +55,10 @@ namespace DChild.Gameplay.Puzzles
 
         private void UpdateEntityPosition()
         {
-            if (m_info.ContainsKey(m_deathCounter))
+            if (m_dictionary.ContainsKey(m_deathCounter))
             {
                 m_entity.gameObject.SetActive(true);
-                m_entity.transform.position = m_info[m_deathCounter];
+                m_entity.transform.position = m_dictionary[m_deathCounter].position;
                 m_entitybrain.ResetAI();
             }
             else
@@ -77,5 +77,7 @@ namespace DChild.Gameplay.Puzzles
         {
             m_entity.Destroyed -= OnEntityDestroyed;
         }
+
+      
     }
 }

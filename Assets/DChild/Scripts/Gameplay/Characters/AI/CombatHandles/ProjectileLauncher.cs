@@ -57,7 +57,5 @@ namespace DChild.Gameplay.Characters
         }
 
         public void LaunchProjectile() => m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, m_spawnPoint.right, m_projectileInfo.speed);
-
-        public void LaunchProjectile(Vector2 flightDirection) => m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, flightDirection, m_projectileInfo.speed);
     }
 }

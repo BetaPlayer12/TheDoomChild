@@ -1,5 +1,4 @@
 ﻿using DChild.Gameplay.Items;
-using DChild.Serialization;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -19,8 +18,6 @@ namespace DChild.Gameplay.Inventories
 
         public int soulEssence => m_soulEssence;
         public IItemContainer items => m_items;
-
-        public int Count => m_items.Count;
 
         public void AddSoulEssence(int value)
         {
@@ -42,30 +39,9 @@ namespace DChild.Gameplay.Inventories
             }
         }
 
-        void ITradableInventory.AddItem(ItemData item, int count)
+        public void AddItem(ItemData item, int count)
         {
-            if (count > 0)
-            {
-                if (m_allowBuyBack)
-                {
-                    if (m_items.GetCurrentAmount(item) < 99)
-                    {
-                        m_items.AddItem(item, count);
-                    }
-                }
-            }
-            else if (count < 0)
-            {
-                if (m_waresReference.HasLimitedCount(item))
-                {
-                    m_items.AddItem(item, count);
-                }
-            }
-        }
-
-        public void AddToWares(ItemData item, int count = 1)
-        {
-            if (count > 0)
+            if (count != 0 && (count < 0 || m_allowBuyBack))
             {
                 m_items.AddItem(item, count);
             }
@@ -73,8 +49,10 @@ namespace DChild.Gameplay.Inventories
 
         public int GetCurrentAmount(ItemData itemData) => m_items.GetCurrentAmount(itemData);
 
-        public bool CanAfford(int cost) => true;
-        public ItemSlot GetSlot(int index) => m_items.GetSlot(index);
+        public bool CanAfford(int cost)
+        {
+            return true;
+        }
 
         private void Start()
         {

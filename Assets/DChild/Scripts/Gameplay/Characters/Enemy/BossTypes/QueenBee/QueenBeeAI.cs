@@ -1065,9 +1065,5 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_colliderDamageGO.SetActive(true);
         }
-
-        protected override void OnBecomePassive()
-        {
-        }
     }
 }

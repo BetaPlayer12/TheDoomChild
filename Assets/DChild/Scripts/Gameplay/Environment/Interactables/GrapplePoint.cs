@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Environment.Interractables
 
         private void OnValidate()
         {
-            gameObject.tag = "Droppable";
+            gameObject.tag = "Grappable";
         }
     }
 }

@@ -18,47 +18,47 @@ namespace PlayerNew
         {
             base.FixedUpdate();
 
-            var dash = inputState.GetButtonValue(inputButtons[0]);
-            var down = inputState.GetButtonValue(inputButtons[1]);
+            //var dash = inputState.GetButtonValue(inputButtons[0]);
+            //var down = inputState.GetButtonValue(inputButtons[1]);
 
-            float faceDir = facing.isFacingRight ? 1 : -1;
-            var vel = rigidBody.velocity;
+            //float faceDir = facing.isFacingRight ? 1 : -1;
+            //var vel = rigidBody.velocity;
 
-            if (shadowMode)
-            {
-                shadowSlideTimer += Time.deltaTime;
+            //if (shadowMode)
+            //{
+            //    shadowSlideTimer += Time.deltaTime;
 
-                if (stateManager.isCeilingTouch)
-                {
-                    shadowMode = true;
-                    shadowDashing = true;
-                    //rigidBody.AddForce(new Vector2(faceDir * , vel.y), ForceMode2D.Force);
-                }
-                else
-                {
-                    if (shadowSlideTimer > shadowlimeter)
-                    {
-                        shadowMode = false;
-                        shadowDashing = false;
-                        shadowSlideTimer = 0f;
-                    }
-                }
-            }
+            //    if (stateManager.isCeilingTouch)
+            //    {
+            //        shadowMode = true;
+            //        shadowDashing = true;
+            //        //rigidBody.AddForce(new Vector2(faceDir * , vel.y), ForceMode2D.Force);
+            //    }
+            //    else
+            //    {
+            //        if (shadowSlideTimer > shadowlimeter)
+            //        {
+            //            shadowMode = false;
+            //            shadowDashing = false;
+            //            shadowSlideTimer = 0f;
+            //        }
+            //    }
+            //}
 
-            if (dash && !shadowMode)
-            {
-                if (down && stateManager.isGrounded)
-                {
-                    shadowDashing = true;
-                    shadowMode = true;
-                }
-            }
+            //if (dash && !shadowMode)
+            //{
+            //    if (down && stateManager.isGrounded)
+            //    {
+            //        shadowDashing = true;
+            //        shadowMode = true;
+            //    }
+            //}
         }
 
-        protected override void OnDash(float faceDir)
-        {
-            base.OnDash(faceDir);
-        }
+        //protected override void OnDash(float faceDir)
+        //{
+        //    base.OnDash(faceDir);
+        //}
     }
 }
 

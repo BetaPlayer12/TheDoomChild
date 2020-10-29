@@ -19,10 +19,5 @@ namespace DChild.Gameplay
         {
             GameplaySystem.playerManager.EnableControls();
         }
-
-        public void MakePlayerInvulnerable(bool value)
-        {
-            GameplaySystem.playerManager.player.damageableModule.SetHitboxActive(value);
-        }
     }
 }

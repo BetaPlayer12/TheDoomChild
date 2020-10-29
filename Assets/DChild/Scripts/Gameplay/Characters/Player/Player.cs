@@ -25,8 +25,6 @@ namespace DChild.Gameplay.Characters.Players
         IHealable healableModule { get; }
         IDamageable damageableModule { get; }
         IAttacker attackModule { get; }
-        PlayerModuleActivator behaviourModule { get; }
-        PlayerSkills skills { get; }
         PlayerModifierHandle modifiers { get; }
         PlayerWeapon weapon { get; }
         ExtendedAttackResistance attackResistance { get; }
@@ -53,10 +51,6 @@ namespace DChild.Gameplay.Characters.Players
         private StatusEffectResistance m_statusResistance;
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
-        [SerializeField]
-        private PlayerModuleActivator m_behaviourModule;
-        [SerializeField]
-        private PlayerSkills m_skills;
         [SerializeField]
         private PlayerCharacterController m_controller;
         [SerializeField]
@@ -95,8 +89,6 @@ namespace DChild.Gameplay.Characters.Players
         public IDamageable damageableModule => m_damageable;
         public IAttacker attackModule => m_attacker;
         public PlayerModifierHandle modifiers => m_modifiers;
-        public PlayerModuleActivator behaviourModule => m_behaviourModule;
-        public PlayerSkills skills => m_skills;
         public PlayerWeapon weapon => m_weapon;
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;

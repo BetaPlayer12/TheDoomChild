@@ -446,19 +446,5 @@ namespace DChild.Gameplay.Characters.Enemies
             m_canShoot = false;
             m_isDetecting = false;
         }
-
-        public void ResetAI()
-        {
-            m_targetInfo.Set(null, null);
-            m_isDetecting = false;
-            m_enablePatience = false;
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
-            enabled = true;
-        }
-
-        protected override void OnBecomePassive()
-        {
-            ResetAI();
-        }
     }
 }

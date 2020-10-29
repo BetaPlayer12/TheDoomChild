@@ -275,9 +275,5 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
         }
-
-        protected override void OnBecomePassive()
-        {
-        }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using DChild.Serialization;
 using Holysoft.Event;
-using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
@@ -10,49 +8,77 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField]
         private SerializeID m_ID = new SerializeID(true);
-        [SerializeField]
-        private CelestialCube m_cube;
+
+        private CelestialCube m_storedCube;
+        private bool m_lockDownWhenStored;
+        private bool m_readyLock;
+        private float m_proximitymin;
+        private float m_proximitymax;
+        private float m_cubePosition;
         [SerializeField]
         private float m_approximation;
-        [ShowInInspector, HideInEditorMode, OnValueChanged("CallStateChange")]
-        private bool m_isOccupied;
-
-        private float m_proximitymin;
-        private float m_cubePosition;
-        private float m_proximitymax;
 
         public event EventAction<EventActionArgs> StateChange;
-        public bool isOccupied => m_isOccupied;
+        public bool isOccupied => m_storedCube;
+        public bool readyLock => m_readyLock;
         public SerializeID ID => m_ID;
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.color = new Color(1, 1, 1, 1);
-            Gizmos.DrawLine(transform.position, transform.position + Vector3.right * 5);
-        }
 
         public void SetLockDown(bool lockDown)
         {
+            m_lockDownWhenStored = lockDown;
+            if (m_storedCube != null)
+            {
+                m_storedCube.SetInteraction(!m_lockDownWhenStored);
+            }
+        }
 
-        }
-#if UNITY_EDITOR
-        private void CallStateChange()
+        private void OnCubeStateChange(object sender, EventActionArgs eventArgs)
         {
-            StateChange?.Invoke(this, EventActionArgs.Empty);
+            var cube = (CelestialCube)sender;
+            if (m_storedCube == null)
+            {
+                if (cube.isInASlot == false)
+                {
+                    m_storedCube = cube;
+                    //Do Something;
+                    StateChange?.Invoke(this, EventActionArgs.Empty);
+                    if (m_lockDownWhenStored)
+                    {
+                        m_storedCube.SetInteraction(false);
+                    }
+                    m_storedCube.OnStateChange -= OnCubeStateChange;
+                }
+            }
+            else
+            {
+                cube.OnStateChange -= OnCubeStateChange;
+            }
         }
-#endif
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.TryGetComponentInParent(out CelestialCube cube))
+            if (m_storedCube == null)
             {
-                if (m_cube == cube)
+                if (collision.gameObject.TryGetComponentInParent(out CelestialCube cube))
                 {
-                    StateChange?.Invoke(this, EventActionArgs.Empty);
-                    //Do Something;
+                    if (cube.isInASlot)
+                    {
+                        cube.OnStateChange += OnCubeStateChange;
+                    }
+                    else
+                    {
+                        m_storedCube = cube;
+                        cube.SetState(true);
+                        StateChange?.Invoke(this, EventActionArgs.Empty);
+                        if (m_lockDownWhenStored)
+                        {
+                            m_storedCube.SetInteraction(false);
+                        }
+                        //Do Something;
+                    }
                 }
             }
+
         }
 
 
@@ -61,36 +87,37 @@ namespace DChild.Gameplay.Environment
         {
             if (collision.gameObject.TryGetComponentInParent(out CelestialCube cube))
             {
-                if (m_cube == cube)
+                if (m_storedCube == cube)
                 {
+                    m_storedCube.SetState(false);
+                    m_storedCube = null;
                     StateChange?.Invoke(this, EventActionArgs.Empty);
-                    m_isOccupied = false;
+                    m_readyLock = false;
                 }
+                cube.OnStateChange -= OnCubeStateChange;
             }
         }
 
         private void OnTriggerStay2D(Collider2D collision)
         {
+            m_proximitymin = transform.position.x;
+            m_proximitymin = m_proximitymin - m_approximation;
+            m_proximitymax = transform.position.x;
+            m_proximitymax = m_proximitymax + m_approximation;
             if (collision.gameObject.TryGetComponentInParent(out CelestialCube cube))
             {
-                if (m_cube == cube)
+                if (cube.isInASlot)
                 {
-                    m_proximitymin = transform.position.x;
-                    m_proximitymin = m_proximitymin - m_approximation;
-                    m_proximitymax = transform.position.x;
-                    m_proximitymax = m_proximitymax + m_approximation;
-
                     m_cubePosition = cube.transform.position.x;
                     if (m_cubePosition >= m_proximitymin && m_cubePosition <= m_proximitymax)
                     {
-                        m_isOccupied = true;
+                        m_readyLock = true;
 
                     }
                     else
                     {
-                        m_isOccupied = false;
+                        m_readyLock = false;
                     }
-
                 }
             }
         }

@@ -1,5 +1,4 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -11,8 +10,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             Crouch,
             Jog,
-            MidAir,
-            Grab
+            MidAir
         }
 
         [SerializeField]
@@ -21,22 +19,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_crouchSpeed;
         [SerializeField]
         private float m_midAirSpeed;
-        [SerializeField]
-        private float m_grabSpeed;
 
         private float m_currentSpeed;
-        private IPlayerModifer m_modifier;
         private Rigidbody2D m_rigidbody;
         private Character m_character;
         private Animator m_animator;
         private int m_speedAnimationParameter;
 
-        [ShowInInspector, ReadOnly, HideInEditorMode]
-        protected float speed => m_currentSpeed * m_modifier.Get(PlayerModifier.MoveSpeed);
-
         public void Initialize(ComplexCharacterInfo info)
         {
-            m_modifier = info.modifier;
             m_character = info.character;
             m_rigidbody = info.rigidbody;
             SwitchConfigTo(Type.Jog);
@@ -63,13 +54,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir:
                     m_currentSpeed = m_midAirSpeed;
                     break;
-                case Type.Grab:
-                    m_currentSpeed = m_grabSpeed;
-                    break;
             }
         }
 
-        public void Move(float direction, bool faceDirection)
+        public void Move(float direction)
         {
             if (direction == 0)
             {
@@ -77,18 +65,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                if (faceDirection == true)
+                if (Mathf.Sign(direction) != (int)m_character.facing)
                 {
-                    if (Mathf.Sign(direction) != (int)m_character.facing)
-                    {
-                        var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
-                        m_character.SetFacing(otherFacing);
-                    }
+                    var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
+                    m_character.SetFacing(otherFacing);
                 }
-
                 m_animator.SetFloat(m_speedAnimationParameter, 1);
             }
-            var xVelocity = speed * direction;
+            var xVelocity = m_currentSpeed * direction;
             m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
         }
     }

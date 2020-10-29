@@ -170,10 +170,5 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.OverrideState(State.Grow);
         }
-
-        protected override void OnBecomePassive()
-        {
-
-        }
     }
 }

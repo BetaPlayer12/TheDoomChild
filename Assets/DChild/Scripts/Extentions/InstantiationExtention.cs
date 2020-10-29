@@ -15,6 +15,7 @@ namespace DChild
         public static GameObject InstantiateToScene(this MonoBehaviour mono, GameObject gameObject, Transform parent)
         {
             var instance = Object.Instantiate(gameObject, parent);
+            SceneManager.MoveGameObjectToScene(instance, mono.gameObject.scene);
             return instance;
         }
 

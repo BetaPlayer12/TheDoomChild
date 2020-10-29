@@ -249,9 +249,5 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.OverrideState(State.Spawn);
         }
-
-        protected override void OnBecomePassive()
-        {
-        }
     }
 }

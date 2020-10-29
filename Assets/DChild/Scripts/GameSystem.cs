@@ -94,7 +94,7 @@ namespace DChild
 
         public static void LoadMainMenu()
         {
-            dataManager.InitializeCampaignSlotList();
+            dataManager.InitializeCampaginSlotList();
             m_zoneLoader.LoadMainMenu();
         }
 

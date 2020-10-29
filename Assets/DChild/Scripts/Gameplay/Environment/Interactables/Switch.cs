@@ -255,17 +255,11 @@ namespace DChild.Gameplay.Environment
             HandleGizmoValidation(m_gizmosToDraw, m_onState, new Color(0, 0.5595117f, 1f));
             HandleGizmoValidation(m_gizmosToDraw, m_offState, new Color(1, 0.7397324f, 0));
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawCube(transform.position, Vector3.one * 2f);
             foreach (var key in m_gizmosToDraw.Keys)
             {
                 var info = m_gizmosToDraw[key];
                 Gizmos.color = info.color;
-                if (transform.position != info.position)
-                {
-                    Gizmos.DrawLine(transform.position, info.position);
-                    Gizmos.DrawSphere(info.position, 2f);
-                }
+                Gizmos.DrawLine(transform.position, info.position);
             }
         }
 

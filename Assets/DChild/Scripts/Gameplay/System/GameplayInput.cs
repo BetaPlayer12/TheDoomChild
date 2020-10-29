@@ -10,6 +10,9 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private KeyCode m_storeOpen;
 
+        //Temporary Solution
+        [SerializeField]
+        private StoreNavigator m_storeNavigator;
 
         private bool m_enableInput;
 
@@ -39,7 +42,7 @@ namespace DChild.Gameplay.Systems
             {
                 if (Input.GetKeyDown(m_storeOpen))
                 {
-                    GameplaySystem.uiModeHandle.OpenStorePage();
+                    m_storeNavigator.OpenPage();
                 }
             }
         }

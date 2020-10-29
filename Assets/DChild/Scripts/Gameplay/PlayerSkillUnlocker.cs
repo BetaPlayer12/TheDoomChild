@@ -66,13 +66,12 @@ namespace DChild.Gameplay
                 //GameplaySystem.playerManager.OverrideCharacterControls();
                 if (character)
                 {
-                    character.GetComponent<PlayerControlledObject>().owner.skills.UnlockSkill(m_toUnlock, true);
-                    //switch (m_toUnlock)
-                    //{
-                    //    case PrimarySkill.BlackBloodImmunity:
-                    //        character.GetComponentInChildren<BlackBloodImmunity>().isActive = true;
-                    //        break;
-                    //} 
+                    switch (m_toUnlock)
+                    {
+                        case PrimarySkill.BlackBloodImmunity:
+                            character.GetComponentInChildren<BlackBloodImmunity>().isActive = true;
+                            break;
+                    } 
                 }
 		m_cinematic.Play();
                 //m_fx.Play(true);

@@ -2,7 +2,6 @@
 using DChild.Gameplay.Combat;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
-using Spine.Unity.Examples;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -12,45 +11,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private Dash m_dash;
         [SerializeField, MinValue(0)]
-        private int m_baseSourceRequiredAmount;
+        private int m_sourceRequiredAmount;
         [SerializeField]
         private ParticleSystem m_tempFX;
 
         private ICappedStat m_source;
-        private IPlayerModifer m_modifier;
         private Damageable m_damageable;
-        private Animator m_animator;
         private bool m_wasUsed;
-        private int m_animationParameter;
-        private SkeletonGhost m_skeletonGhost;
-
-        [ShowInInspector, ReadOnly, HideInEditorMode]
-        protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
 
         public void Initialize(ComplexCharacterInfo info)
         {
             m_source = info.magic;
-            m_modifier = info.modifier;
             m_damageable = info.damageable;
-            m_animator = info.animator;
-            m_skeletonGhost = info.skeletonGhost;
-            m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ShadowMode);
         }
 
         public void Cancel()
         {
             m_dash.Cancel();
             GameplaySystem.world.SetShadowColliders(false);
-            m_damageable.SetInvulnerability(Invulnerability.None);
+            m_damageable.SetInvulnerability(Invulnerability.MAX);
             m_wasUsed = false;
             m_tempFX?.Stop(true);
-            m_animator.SetBool(m_animationParameter, false);
-            m_skeletonGhost.enabled = false;
         }
 
-        public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue ;
+        public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
 
-        public void ConsumeSource() => m_source.ReduceCurrentValue(sourceRequiredAmount);
+        public void ConsumeSource() => m_source.ReduceCurrentValue(m_sourceRequiredAmount);
 
         public void HandleCooldown() => m_dash.HandleCooldown();
 
@@ -70,8 +56,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_damageable.SetInvulnerability(Invulnerability.MAX);
                 m_wasUsed = true;
                 m_tempFX?.Play(true);
-                m_animator.SetBool(m_animationParameter, true);
-                m_skeletonGhost.enabled = true;
             }
             m_dash.Execute();
         }

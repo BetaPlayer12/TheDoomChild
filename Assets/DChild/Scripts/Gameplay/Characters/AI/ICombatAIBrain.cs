@@ -12,8 +12,6 @@ namespace DChild.Gameplay.Characters.AI
         bool enabled { get; set; }
         void SetTarget(IDamageable damageable, Character m_target = null);
 
-        void BecomePassive(bool value);
-
 #if UNITY_EDITOR
         Type aiDataType { get; }
         void SetData(AIData data);

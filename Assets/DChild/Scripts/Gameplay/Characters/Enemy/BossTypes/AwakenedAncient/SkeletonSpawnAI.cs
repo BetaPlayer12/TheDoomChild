@@ -415,13 +415,5 @@ namespace DChild.Gameplay.Characters.Enemies
         {
 
         }
-
-        public void ResetAI()
-        {
-        }
-
-        protected override void OnBecomePassive()
-        {
-        }
     }
 }

@@ -7,7 +7,6 @@ using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Menu;
 using DChild.Serialization;
-using Doozy.Engine;
 using Holysoft.Event;
 using System;
 using UnityEngine;
@@ -50,7 +49,7 @@ namespace DChild.Gameplay
         private static CampaignSerializer m_campaignSerializer;
         private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
-        private static UIModeHandle m_uiModeHandle;
+
 
         public static ICombatManager combatManager => m_combatManager;
         public static IFXManager fXManager => m_fxManager;
@@ -75,7 +74,6 @@ namespace DChild.Gameplay
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
         public static IHealthTracker healthTracker => m_healthTracker;
-        public static IUIModeHandle uiModeHandle => m_uiModeHandle;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }
@@ -110,14 +108,8 @@ namespace DChild.Gameplay
             m_healthTracker?.RemoveAllTrackers();
             LoadingHandle.SetLoadType(loadType);
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
-            //Reload Items
+            m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
             LoadingHandle.SceneDone += LoadGameDone;
-            
-        }
-
-        public static void ReloadGame()
-        {
-            LoadGame(campaignSerializer.slot, LoadingHandle.LoadType.Force);
         }
 
         public static void SetCurrentCampaign(CampaignSlot campaignSlot)
@@ -136,9 +128,6 @@ namespace DChild.Gameplay
         {
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_campaignSerializer.Load();
-            GameEventMessage.SendEvent("UI Reset");
-            m_playerManager.player.healableModule.Heal(999999);
-            m_playerManager.player.controller.Enable();
             LoadingHandle.SceneDone -= LoadGameDone;
         }
 
@@ -154,7 +143,6 @@ namespace DChild.Gameplay
             AssignModule(out m_zoneMover);
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_healthTracker);
-            AssignModule(out m_uiModeHandle);
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();

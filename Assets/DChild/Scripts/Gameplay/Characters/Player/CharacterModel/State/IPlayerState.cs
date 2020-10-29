@@ -31,6 +31,5 @@ namespace DChild.Gameplay.Characters.Players.State
         bool isAimingProjectile { get; }
         bool isJogging { get; }
         bool isSprinting { get; }
-        bool isSliding { get; }
     }
 }

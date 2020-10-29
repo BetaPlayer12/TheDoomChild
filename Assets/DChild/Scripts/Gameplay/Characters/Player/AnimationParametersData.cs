@@ -28,11 +28,6 @@ namespace DChild.Gameplay.Characters.Players
             SwordTrust,
             WhipAttack,
             IsLevitating,
-            IsGrabbing,
-            IsPulling,
-            IsPushing,
-            ShadowMode,
-            IsSliding
         }
 
         [SerializeField]
