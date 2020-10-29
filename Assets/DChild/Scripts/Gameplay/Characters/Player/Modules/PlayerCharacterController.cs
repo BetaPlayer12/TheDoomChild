@@ -570,7 +570,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    m_movement.Move(m_input.horizontalInput);
+                    m_movement.Move(m_input.horizontalInput, true);
                     if (m_input.horizontalInput != 0)
                     {
                         if (m_state.isHighJumping == false && m_state.isLevitating == false)
@@ -745,7 +745,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     return;
                 }
 
-                if (m_input.grabPressed)
+                if (m_input.grabPressed || m_input.grabHeld)
                 {
                     if (m_objectManipulation?.IsThereAMovableObject() ?? false)
                     {
@@ -989,7 +989,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (isGrabbing == false)
             {
-                m_movement?.Move(m_input.horizontalInput);
+                m_movement?.Move(m_input.horizontalInput, true);
                 if (m_input.horizontalInput == 0)
                 {
                     m_idle?.Execute();
@@ -1001,7 +1001,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                m_movement?.GrabMove(m_input.horizontalInput);
+                m_movement?.Move(m_input.horizontalInput, false);
             }
         }
 

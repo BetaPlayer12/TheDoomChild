@@ -15,7 +15,6 @@ public class SkullThrow : MonoBehaviour, ICancellableBehaviour, IResettableBehav
 
     private Character m_character;
     private ProjectileLauncher m_launcher;
-    private ProjectileLaunchHandle m_projectileHandle;
 
     private void Update()
     {
@@ -27,8 +26,8 @@ public class SkullThrow : MonoBehaviour, ICancellableBehaviour, IResettableBehav
 
     public void Execute()
     {
-        m_projectileHandle.Launch(m_projectile.projectile, m_spawnPoint.position, new Vector2((float)m_character.facing, 0), m_projectile.speed);
-        //m_launcher.LaunchProjectile();
+        //m_projectileHandle.Launch(m_projectile.projectile, m_spawnPoint.position, new Vector2((float)m_character.facing, 0), m_projectile.speed);
+        m_launcher.LaunchProjectile(new Vector2((float)m_character.facing, 0));
     }
 
     public void Cancel()
@@ -44,8 +43,6 @@ public class SkullThrow : MonoBehaviour, ICancellableBehaviour, IResettableBehav
     public void Initialize(ComplexCharacterInfo info)
     {
         m_character = info.character;
-
-        m_projectileHandle = new ProjectileLaunchHandle();
         m_launcher = new ProjectileLauncher(m_projectile, m_spawnPoint);
 
         m_launcher.SetProjectile(m_projectile);

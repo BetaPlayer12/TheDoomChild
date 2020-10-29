@@ -69,7 +69,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        public void Move(float direction)
+        public void Move(float direction, bool faceDirection)
         {
             if (direction == 0)
             {
@@ -77,25 +77,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                if (Mathf.Sign(direction) != (int)m_character.facing)
+                if (faceDirection == true)
                 {
-                    var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
-                    m_character.SetFacing(otherFacing);
+                    if (Mathf.Sign(direction) != (int)m_character.facing)
+                    {
+                        var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
+                        m_character.SetFacing(otherFacing);
+                    }
                 }
-                m_animator.SetFloat(m_speedAnimationParameter, 1);
-            }
-            var xVelocity = speed * direction;
-            m_rigidbody.velocity = new Vector2(xVelocity, m_rigidbody.velocity.y);
-        }
 
-        public void GrabMove(float direction)
-        {
-            if (direction == 0)
-            {
-                m_animator.SetFloat(m_speedAnimationParameter, 0);
-            }
-            else
-            {
                 m_animator.SetFloat(m_speedAnimationParameter, 1);
             }
             var xVelocity = speed * direction;
