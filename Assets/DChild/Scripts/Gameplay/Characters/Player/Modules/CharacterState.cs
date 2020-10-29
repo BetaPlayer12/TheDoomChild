@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
                                   IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
-                                  ILevitateState
+                                  ILevitateState, IGrabState, ISlideState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;
@@ -27,6 +27,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isDashing;
         public bool isDashing { get => m_isDashing; set => m_isDashing = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_canSlide;
+        public bool canSlide { get => m_canSlide; set => m_canSlide = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isSliding;
+        public bool isSliding { get => m_isSliding; set => m_isSliding = value; }
 
         [SerializeField, ReadOnly]
         private bool m_isHighJumping;
@@ -51,6 +59,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isChargingAttack;
         public bool isChargingAttack { get => m_isChargingAttack; set => m_isChargingAttack = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isGrabbing;
+        public bool isGrabbing { get => m_isGrabbing; set => m_isGrabbing = value; }
 
         [SerializeField, ReadOnly]
         private bool m_waitForBehaviour;

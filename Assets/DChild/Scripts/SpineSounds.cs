@@ -2,6 +2,7 @@
 using Spine.Unity;
 using Spine;
 using Sirenix.OdinInspector;
+using System;
 
 namespace DChild
 {
@@ -49,11 +50,28 @@ namespace DChild
             }
         }
 
+        private void OnAnimationStop(TrackEntry trackEntry)
+        {
+            m_cacheAnimation = trackEntry.Animation.Name;
+            for (int i = 0; i < m_data.animationCount; i++)
+            {
+                m_cacheAnimationInfo = m_data.GetAnimationInfo(i);
+                if (m_cacheAnimation == m_cacheAnimationInfo.animationName)
+                {
+                    m_cacheAnimationInfo.StopSound(m_callback);
+                    break;
+                }
+            }
+        }
+
         private void Start()
         {
             m_callback = GetComponent<CallBackSounds>();
             m_skeletonAnimation.state.Event += OnEvents;
             m_skeletonAnimation.state.Start += OnAnimationStart;
+            m_skeletonAnimation.state.Interrupt += OnAnimationStop;
         }
+
+
     }
 }

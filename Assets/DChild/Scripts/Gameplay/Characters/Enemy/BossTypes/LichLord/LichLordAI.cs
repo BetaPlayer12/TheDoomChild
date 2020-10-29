@@ -201,13 +201,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Collider2D m_randomSpawnCollider;
 
-        //[SerializeField, TabGroup("Effects")]
-        //private ParticleFX m_deathFX;
-        //[SerializeField, TabGroup("Effects")]
-        //private ParticleFX m_slashGroundFX;
-        //[SerializeField, TabGroup("Effects")]
-        //private ParticleFX m_scytheSpinFX;
-
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -230,6 +223,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_hitCount;
         private bool m_hasPhaseChanged;
         private PhaseInfo m_phaseInfo;
+        private Vector3 m_totemLastPos;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -356,7 +350,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SummonTotemObject()
         {
-            var totem = Instantiate(m_info.totem, new Vector2(RandomTeleportPoint().x, GroundPosition().y), Quaternion.identity);
+            var totem = Instantiate(m_info.totem, new Vector2(RandomTeleportPoint(m_totemLastPos).x, GroundPosition().y), Quaternion.identity);
+            m_totemLastPos = totem.transform.position;
         }
 
         private IEnumerator LaunchOrbRoutine()
@@ -417,8 +412,10 @@ namespace DChild.Gameplay.Characters.Enemies
             var randomAttack = UnityEngine.Random.Range(0, 2);
             m_animation.SetAnimation(0, m_info.summonTotemAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonTotemAttack.animation);
-            m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
-            m_stateHandle.ApplyQueuedState();
+            //m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
+            m_animation.SetAnimation(0, m_info.vanishAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             yield return null;
         }
 
@@ -461,6 +458,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.vanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
+            transform.position = new Vector2(RandomTeleportPoint(transform.position).x, transform.position.y);
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
             m_animation.SetAnimation(0, m_info.appearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
@@ -469,10 +471,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private Vector3 RandomTeleportPoint()
+        private Vector3 RandomTeleportPoint(Vector3 transformPos)
         {
-            Vector3 randomPos = transform.position;
-            while (Vector2.Distance(transform.position, randomPos) <= 50f)
+            Vector3 randomPos = transformPos;
+            while (Vector2.Distance(transformPos, randomPos) <= 50f)
             {
                 randomPos = m_randomSpawnCollider.bounds.center + new Vector3(
                (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.x,
@@ -671,8 +673,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 switch (m_phaseHandle.currentPhase)
                                 {
                                     case Phase.PhaseOne:
-                                        //ExecuteAttack(Attack.GhostOrb);
-                                        ExecuteAttack(Attack.SummonTotem);
+                                        ExecuteAttack(Attack.GhostOrb);
+                                        //ExecuteAttack(Attack.SummonTotem);
                                         break;
                                     case Phase.PhaseTwo:
                                         ExecuteAttack(Attack.SummonTotem);
@@ -738,6 +740,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_stickToGround = false;
             //m_currentCD = 0;
+        }
+
+        protected override void OnBecomePassive()
+        {
         }
     }
 }

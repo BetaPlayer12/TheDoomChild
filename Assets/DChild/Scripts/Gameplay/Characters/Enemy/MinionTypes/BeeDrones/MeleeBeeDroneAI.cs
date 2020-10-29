@@ -353,6 +353,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
         }
+
+        public void ResetAI()
+        {
+            m_targetInfo.Set(null, null);
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
+        }
     }
 }
 

@@ -16,7 +16,7 @@ namespace DChild
 
         public CampaignSlotList campaignSlotList => m_campaignSlotList;
 
-        public void InitializeCampaginSlotList()
+        public void InitializeCampaignSlotList()
         {
             CampaignSlot[] slots = new CampaignSlot[m_campaignSlotList.slotCount];
             for (int i = 0; i < slots.Length; i++)
@@ -39,7 +39,7 @@ namespace DChild
         {
             if(m_doNotUseExistingFiles == false)
             {
-                InitializeCampaginSlotList();
+                InitializeCampaignSlotList();
             }
         }
     }

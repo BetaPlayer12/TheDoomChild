@@ -4,6 +4,7 @@ using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Combat.StatusAilment;
 using PlayerNew;
+using Spine.Unity.Examples;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players
@@ -22,6 +23,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Magic m_magic;
         [SerializeField]
+        private PlayerModifierHandle m_modifier;
+        [SerializeField]
         private CharacterPhysics2D m_physics;
         [SerializeField]
         private Rigidbody2D m_rigidbody;
@@ -39,6 +42,8 @@ namespace DChild.Gameplay.Characters.Players
         private SurfaceDetector m_surfaceDector;
         [SerializeField]
         private PlayerBehaviour m_playerBehaviour;
+        [SerializeField]
+        private SkeletonGhost m_skeletonGhost;
 
         public ComplexCharacterInfo(GameObject character, AnimationParametersData animationParametersData)
         {
@@ -54,6 +59,7 @@ namespace DChild.Gameplay.Characters.Players
             m_skillResetRequester = character.GetComponentInChildren<SkillResetRequester>();
             m_statusEffectReciever = character.GetComponentInChildren<StatusEffectReciever>();
             m_surfaceDector = character.GetComponentInChildren<SurfaceDetector>();
+            m_skeletonGhost = character.GetComponentInChildren<SkeletonGhost>();
         }
 
         public Character character => m_character;
@@ -61,15 +67,15 @@ namespace DChild.Gameplay.Characters.Players
         public Animator animator => m_animator;
         public RaySensor GetSensor(PlayerSensorList.SensorType sensorType) => m_sensorList.GetSensor(sensorType);
         public AnimationParametersData animationParametersData => m_animationParametersData;
+        public IPlayerModifer modifier => m_modifier;
         public CharacterPhysics2D physics => m_physics;
         public Rigidbody2D rigidbody => m_rigidbody;
         public SkillResetRequester skillResetRequester => m_skillResetRequester;
-
         public Magic magic => m_magic;
         public Attacker attacker => m_attacker;
         public Damageable damageable => m_damageable;
         public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
         public SurfaceDetector surfaceDector => m_surfaceDector;
-
+        public SkeletonGhost skeletonGhost => m_skeletonGhost;
     }
 }

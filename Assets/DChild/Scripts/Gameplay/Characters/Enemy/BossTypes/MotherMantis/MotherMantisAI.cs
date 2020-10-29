@@ -908,5 +908,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stickToGround = false;
             m_currentCD = 0;
         }
+
+        protected override void OnBecomePassive()
+        {
+
+        }
     }
 }

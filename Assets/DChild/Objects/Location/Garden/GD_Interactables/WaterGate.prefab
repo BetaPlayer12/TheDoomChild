@@ -1,35 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &77961952699055080
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3551925012225873669}
-  m_Layer: 11
-  m_Name: Waterfalls
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3551925012225873669
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 77961952699055080}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -12.9403, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1136465300672901129}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &154930957849742100
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +28,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3551925012225873669}
   - {fileID: 6161312883735605414}
   - {fileID: 916655832495520089}
   m_Father: {fileID: 0}
@@ -142,8 +111,8 @@ MonoBehaviour:
   m_onBlock:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2066354327013072707}
-        m_MethodName: BlockWater
+      - m_Target: {fileID: 1163672916074912949}
+        m_MethodName: BlockFlow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -156,8 +125,8 @@ MonoBehaviour:
   m_onUnblock:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2066354327013072707}
-        m_MethodName: UnblockWater
+      - m_Target: {fileID: 1163672916074912949}
+        m_MethodName: StartFlow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -257,10 +226,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6161312883735605414}
-  - component: {fileID: 2066354327013072707}
+  - component: {fileID: 1163672916074912949}
   - component: {fileID: 2873308762516263746}
   m_Layer: 16
-  m_Name: Handle
+  m_Name: Waterfalls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,11 +245,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -12.9403, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 5005971102076826805}
   m_Father: {fileID: 1136465300672901129}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2066354327013072707
+--- !u!114 &1163672916074912949
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,12 +259,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7525994427545473747}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d47c9b76bbbf4d2498be2b7d3aefdab7, type: 3}
+  m_Script: {fileID: 11500000, guid: c5096cdb748a0374e9fca33871bd2010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_waterfallSegment:
-  - {fileID: 0}
-  - {fileID: 0}
+  m_reference: {fileID: 4875545646833676685}
+  m_clones: 1
+  m_parent: {fileID: 6161312883735605414}
+  m_startAsFlowing: 1
 --- !u!61 &2873308762516263746
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -366,7 +337,7 @@ PrefabInstance:
     - target: {fileID: 748244609821535364, guid: 4a5d03785c5edc24bb73fbc49724c62a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 748244609821535364, guid: 4a5d03785c5edc24bb73fbc49724c62a,
         type: 3}
@@ -511,3 +482,90 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 493937033256637917}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8252308649626255469
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6161312883735605414}
+    m_Modifications:
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034907298067625190, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+        type: 3}
+      propertyPath: m_Name
+      value: Waterfall
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9, type: 3}
+--- !u!4 &5005971102076826805 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4034907298067625176, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8252308649626255469}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4875545646833676685 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3544187846776746464, guid: 9e6cdad6323b55e4dab59e0ec8ddb9d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8252308649626255469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab89773d3d2709543b5d191143d1b1a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -34,7 +35,8 @@ namespace DChild.Gameplay
 
         private void SpawnCharacter()
         {
-            var instance = Instantiate(m_wisp) as GameObject;
+            var poolableObject = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_wisp, gameObject.scene);
+            var instance = poolableObject.gameObject;
             instance.transform.position = transform.position;
             m_spawnList.Add(instance);
             instance.GetComponent<Damageable>().Destroyed += OnInstanceDestroyed;
@@ -48,13 +50,18 @@ namespace DChild.Gameplay
 
         private void OnInstanceDestroyed(object sender, EventActionArgs eventArgs)
         {
+           
             var damageable = (Damageable)sender;
+            damageable.GetComponent<PoolableObject>().CallPoolRequest();
             for (int i = 0; i < m_spawnList.Count; i++)
             {
+
                 if (m_spawnList[i] == damageable.gameObject)
                 {
+                   
                     m_spawnList.RemoveAt(i);
                     m_spawnedCount--;
+                    Debug.Log(m_spawnedCount);
                     if (enabled == false)
                     {
                         m_spawnTimer = m_spawnInterval.GenerateRandomValue();
@@ -72,6 +79,7 @@ namespace DChild.Gameplay
 
         private void LateUpdate()
         {
+            m_spawnTimer-=GameplaySystem.time.deltaTime;
             if (m_spawnTimer <= 0)
             {
                 SpawnCharacter();
