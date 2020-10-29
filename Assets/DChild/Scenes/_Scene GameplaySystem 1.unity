@@ -11310,6 +11310,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2788755914411323432, guid: 0d3c22d394fbc2d4993eb7f9ed26e74d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2851508262600512673, guid: 0d3c22d394fbc2d4993eb7f9ed26e74d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11538,18 +11543,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60d0c39a165c5734282daa8758832381, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &340849783 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4294471023827248785, guid: 0d3c22d394fbc2d4993eb7f9ed26e74d,
-    type: 3}
-  m_PrefabInstance: {fileID: 340849780}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 340849794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &340849784 stripped
@@ -32065,7 +32058,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &746464862
 RectTransform:
   m_ObjectHideFlags: 0
@@ -47844,8 +47837,9 @@ GameObject:
   - component: {fileID: 1167632435}
   - component: {fileID: 1167632437}
   - component: {fileID: 1167632436}
+  - component: {fileID: 1167632438}
   m_Layer: 5
-  m_Name: Image
+  m_Name: PlayerStat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47911,6 +47905,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1167632434}
   m_CullTransparentMesh: 0
+--- !u!114 &1167632438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167632434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179749212d60ec547b34b86fc2a86d81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 443602041}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_healthStat
+      Entry: 10
+      Data: 0
+  m_healthGlow: {fileID: 1918303273}
 --- !u!1 &1169591483
 GameObject:
   m_ObjectHideFlags: 0
@@ -52670,7 +52690,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75000006}
-  m_AnchoredPosition: {x: -13.309, y: 0.00030612946}
+  m_AnchoredPosition: {x: -13.309006, y: 0.00030612946}
   m_SizeDelta: {x: -13.308, y: 8.39}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!1 &1294794268
@@ -75429,7 +75449,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 9.974, y: 0}
+  m_AnchoredPosition: {x: 9.973999, y: 0}
   m_SizeDelta: {x: 13.668, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1961333857
@@ -89958,7 +89978,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_info.m_damageable
       value: 
-      objectReference: {fileID: 340849783}
+      objectReference: {fileID: 0}
     - target: {fileID: 7518031643020262916, guid: abb216eb3a60a1e4c88772e3653c8706,
         type: 3}
       propertyPath: m_info.m_state
@@ -90073,7 +90093,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_damageable
       value: 
-      objectReference: {fileID: 340849783}
+      objectReference: {fileID: 0}
     - target: {fileID: 7518031643020262919, guid: abb216eb3a60a1e4c88772e3653c8706,
         type: 3}
       propertyPath: m_attacker
