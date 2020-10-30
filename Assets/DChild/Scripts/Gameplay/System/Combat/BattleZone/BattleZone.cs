@@ -68,7 +68,8 @@ namespace DChild.Gameplay.Combat
             if (m_waveIndex < m_waves.Length - 1)
             {
                 m_waveIndex++;
-                m_spawnHandle.Initialize(m_waves[m_waveIndex].spawnInfo);
+                var waveInfo = m_waves[m_waveIndex];
+                m_spawnHandle.Initialize(waveInfo.spawnInfo, waveInfo.waveStartDelay);
                 m_spawnEnded = false;
             }
             else
@@ -82,7 +83,8 @@ namespace DChild.Gameplay.Combat
         {
             m_spawnHandle = new SpawnHandle();
             m_waveIndex = 0;
-            m_spawnHandle.Initialize(m_waves[m_waveIndex].spawnInfo);
+            var waveInfo = m_waves[m_waveIndex];
+            m_spawnHandle.Initialize(waveInfo.spawnInfo, waveInfo.waveStartDelay);
             m_spawnHandle.EntitiesFinishSpawning += OnSpawnEnd;
             m_spawnHandle.EntitySpawned += OnSpawn;
             enabled = false;

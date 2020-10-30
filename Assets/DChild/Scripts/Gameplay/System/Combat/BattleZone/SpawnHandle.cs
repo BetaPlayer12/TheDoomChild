@@ -34,6 +34,7 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
         private List<GameObject> m_fXToSpawn;
         private List<Data> m_toSpawn;
         private float m_timer;
+        private float m_delayTimer;
 
         public EventAction<EventActionArgs> EntitiesFinishSpawning;
         public EventAction<EventActionArgs<GameObject>> EntitySpawned;
@@ -46,8 +47,9 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
             m_toSpawn = new List<Data>();
         }
 
-        public void Initialize(SpawnInfo[] infoList)
+        public void Initialize(SpawnInfo[] infoList, float startDelay)
         {
+            m_delayTimer = startDelay;
             m_timer = 0;
             m_entitiesToSpawn.Clear();
             m_fXToSpawn.Clear();
@@ -88,29 +90,36 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
 
         public void Update(MonoBehaviour coroutineHandler, float delta)
         {
-            if (m_toSpawn.Count > 0)
+            if (m_delayTimer > 0)
             {
-                m_timer += delta;
-                for (int i = m_toSpawn.Count - 1; i >= 0; i--)
+                m_delayTimer -= delta;
+            }
+            else
+            {
+                if (m_toSpawn.Count > 0)
                 {
-                    if (m_toSpawn[i].spawnData.spawnDelay < m_timer)
+                    m_timer += delta;
+                    for (int i = m_toSpawn.Count - 1; i >= 0; i--)
                     {
-                        var position = m_toSpawn[i].spawnData.spawnLocation;
-                        if (m_toSpawn[i].fxIndex != -1)
+                        if (m_toSpawn[i].spawnData.spawnDelay < m_timer)
                         {
-                            var fx = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_fXToSpawn[m_toSpawn[i].fxIndex], coroutineHandler.gameObject.scene);
-                            fx.transform.position = position;
-                            //fx.transform.rotation = Quaternion.identity;
-                            fx.Play();
+                            var position = m_toSpawn[i].spawnData.spawnLocation;
+                            if (m_toSpawn[i].fxIndex != -1)
+                            {
+                                var fx = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_fXToSpawn[m_toSpawn[i].fxIndex], coroutineHandler.gameObject.scene);
+                                fx.transform.position = position;
+                                //fx.transform.rotation = Quaternion.identity;
+                                fx.Play();
+                            }
+                            coroutineHandler.StartCoroutine(DelayedSpawn(m_entitiesToSpawn[m_toSpawn[i].entityIndex], position, m_toSpawn[i].fxThenInstantiateDelay));
+                            m_toSpawn.RemoveAt(i);
                         }
-                        coroutineHandler.StartCoroutine(DelayedSpawn(m_entitiesToSpawn[m_toSpawn[i].entityIndex], position, m_toSpawn[i].fxThenInstantiateDelay));
-                        m_toSpawn.RemoveAt(i);
                     }
-                }
 
-                if (m_toSpawn.Count == 0)
-                {
-                    EntitiesFinishSpawning?.Invoke(this, EventActionArgs.Empty);
+                    if (m_toSpawn.Count == 0)
+                    {
+                        EntitiesFinishSpawning?.Invoke(this, EventActionArgs.Empty);
+                    }
                 }
             }
         }
