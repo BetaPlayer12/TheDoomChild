@@ -48,6 +48,8 @@ namespace DChild.Gameplay.Characters.Players
             }
         }
 
+        [SerializeField]
+        private PlayerPassiveModule m_passiveModule;
         [ShowInInspector]
         private Dictionary<Module, State> m_statePair;
         [ShowInInspector]
@@ -60,7 +62,7 @@ namespace DChild.Gameplay.Characters.Players
             var state = m_statePair[module];
             state.active = isActive;
             m_statePair[module] = state;
-            OnUpdate?.Invoke(this, new UpdateEventArgs(module, IsModuleActive(module)));
+            EndUpdate(module);
         }
 
         public void SetModuleLock(Module module, bool isUnlocked)
@@ -68,7 +70,7 @@ namespace DChild.Gameplay.Characters.Players
             var state = m_statePair[module];
             state.active = isUnlocked;
             m_statePair[module] = state;
-            OnUpdate?.Invoke(this, new UpdateEventArgs(module, IsModuleActive(module)));
+            EndUpdate(module);
         }
 
         public bool IsModuleActive(Module module)
@@ -82,7 +84,7 @@ namespace DChild.Gameplay.Characters.Players
             var state = m_skillPair[module];
             state.active = isActive;
             m_skillPair[module] = state;
-            OnUpdate?.Invoke(this, new UpdateEventArgs(module, IsModuleActive(module)));
+            EndUpdate(module);
         }
 
         public void SetModuleLock(PrimarySkill module, bool isUnlocked)
@@ -90,7 +92,7 @@ namespace DChild.Gameplay.Characters.Players
             var state = m_skillPair[module];
             state.active = isUnlocked;
             m_skillPair[module] = state;
-            OnUpdate?.Invoke(this, new UpdateEventArgs(module, IsModuleActive(module)));
+            EndUpdate(module);
         }
 
         public bool IsModuleActive(PrimarySkill module)
@@ -106,7 +108,9 @@ namespace DChild.Gameplay.Characters.Players
                 m_statePair = new Dictionary<Module, State>();
                 for (int i = 0; i < (int)Module._COUNT; i++)
                 {
-                    m_statePair.Add((Module)i, new State(true, true));
+                    var module = (Module)i;
+                    m_statePair.Add(module, new State(true, true));
+                    m_passiveModule.SetModuleActive(module, true);
                 }
             }
 
@@ -115,9 +119,25 @@ namespace DChild.Gameplay.Characters.Players
                 m_skillPair = new Dictionary<PrimarySkill, State>();
                 for (int i = 0; i < (int)PrimarySkill._COUNT; i++)
                 {
-                    m_skillPair.Add((PrimarySkill)i, new State(true, true));
+                    var skill = (PrimarySkill)i;
+                    m_skillPair.Add(skill, new State(true, true));
+                    m_passiveModule.SetModuleActive(skill, true);
                 }
             }
+        }
+
+        private void EndUpdate(Module module)
+        {
+            var isActive = IsModuleActive(module);
+            m_passiveModule.SetModuleActive(module, isActive);
+            OnUpdate?.Invoke(this, new UpdateEventArgs(module, isActive));
+        }
+
+        private void EndUpdate(PrimarySkill module)
+        {
+            var isActive = IsModuleActive(module);
+            m_passiveModule.SetModuleActive(module, isActive);
+            OnUpdate?.Invoke(this, new UpdateEventArgs(module, isActive));
         }
 
         public void Reset()
