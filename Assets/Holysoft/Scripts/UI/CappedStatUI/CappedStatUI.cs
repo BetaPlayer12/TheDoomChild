@@ -1,17 +1,15 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using UnityEngine;
 
 namespace Holysoft.Gameplay.UI
 {
-
     public abstract class CappedStatUI : SerializedMonoBehaviour
     {
+        //#if UNITY_EDITOR
         [OdinSerialize, OnValueChanged("UpdateUI")]
+        //#endif
         private ICappedStat m_stat;
-        [SerializeField]
-        private bool m_trackMissingValue;
 
         public abstract float maxValue { set; }
         public abstract float currentValue { set; }
@@ -40,31 +38,15 @@ namespace Holysoft.Gameplay.UI
         protected virtual void Initialize(float maxValue, float currentValue)
         {
             this.maxValue = maxValue;
-            if (m_trackMissingValue)
-            {
-                currentValue = maxValue - currentValue;
-            }
-            else
-            {
-                currentValue = currentValue;
-            }
+            this.currentValue = currentValue;
         }
 
         private void OnMaxValueChange(object sender, StatInfoEventArgs eventArgs) => maxValue = eventArgs.maxValue;
 
-        private void OnValueChange(object sender, StatInfoEventArgs eventArgs)
-        {
-            if (m_trackMissingValue)
-            {
-                currentValue = eventArgs.maxValue - eventArgs.currentValue;
-            }
-            else
-            {
-                currentValue = eventArgs.currentValue;
-            }
-        }
+        private void OnValueChange(object sender, StatInfoEventArgs eventArgs) => currentValue = eventArgs.currentValue;
 
         //#if UNITY_EDITOR
+        private ICappedStat m_previous;
 
         protected virtual void Awake()
         {
@@ -74,8 +56,7 @@ namespace Holysoft.Gameplay.UI
             }
         }
 
-        private ICappedStat m_previous;
-        protected virtual void UpdateUI()
+        private void UpdateUI()
         {
             if (m_previous != null)
             {

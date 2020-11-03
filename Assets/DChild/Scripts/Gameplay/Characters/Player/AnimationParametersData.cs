@@ -31,7 +31,8 @@ namespace DChild.Gameplay.Characters.Players
             IsGrabbing,
             IsPulling,
             IsPushing,
-            ShadowMode
+            ShadowMode,
+            IsSliding
         }
 
         [SerializeField]

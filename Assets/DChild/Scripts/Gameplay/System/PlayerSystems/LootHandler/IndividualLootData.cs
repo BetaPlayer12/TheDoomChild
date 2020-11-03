@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.Essence;
+using Holysoft.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,6 +10,7 @@ using Sirenix.Utilities.Editor;
 
 namespace DChild.Gameplay.Systems
 {
+
     [System.Serializable]
     public class IndividualLootData : ILootDataContainer
     {
@@ -49,7 +51,7 @@ namespace DChild.Gameplay.Systems
                 else
                 {
                     EditorGUILayout.LabelField($"{label} ({m_count}){suffix}");
-                } 
+                }
             }
         }
 #endif

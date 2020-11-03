@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Characters.Players
             {
                 m_modifiers.Add(modifier, value);
             }
-            ModifierChange?.Invoke(this, new ModifierChangeEventArgs(modifier, value));
+            ModifierChange?.Invoke(this, new ModifierChangeEventArgs(modifier, m_modifiers[modifier]));
         }
 
         public void Set(PlayerModifier modifier, float value)

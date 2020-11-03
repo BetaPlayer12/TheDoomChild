@@ -23,6 +23,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Magic m_magic;
         [SerializeField]
+        private PlayerModifierHandle m_modifier;
+        [SerializeField]
         private CharacterPhysics2D m_physics;
         [SerializeField]
         private Rigidbody2D m_rigidbody;
@@ -65,10 +67,10 @@ namespace DChild.Gameplay.Characters.Players
         public Animator animator => m_animator;
         public RaySensor GetSensor(PlayerSensorList.SensorType sensorType) => m_sensorList.GetSensor(sensorType);
         public AnimationParametersData animationParametersData => m_animationParametersData;
+        public IPlayerModifer modifier => m_modifier;
         public CharacterPhysics2D physics => m_physics;
         public Rigidbody2D rigidbody => m_rigidbody;
         public SkillResetRequester skillResetRequester => m_skillResetRequester;
-
         public Magic magic => m_magic;
         public Attacker attacker => m_attacker;
         public Damageable damageable => m_damageable;
