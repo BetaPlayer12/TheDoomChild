@@ -8,10 +8,14 @@ namespace DChild.Gameplay.Characters.Players
         DoubleJump,
         WallJump,
         Dash,
+        Slide,
         BlackBloodImmunity,
         SwordThrust,
         EarthShaker,
         Whip,
+        Levitate,
+        ShadowDash,
+        ShadowSlide,
         [HideInInspector]
         _COUNT
     }

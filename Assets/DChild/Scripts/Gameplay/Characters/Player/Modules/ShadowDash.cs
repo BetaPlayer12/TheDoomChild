@@ -12,20 +12,25 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private Dash m_dash;
         [SerializeField, MinValue(0)]
-        private int m_sourceRequiredAmount;
+        private int m_baseSourceRequiredAmount;
         [SerializeField]
         private ParticleSystem m_tempFX;
 
         private ICappedStat m_source;
+        private IPlayerModifer m_modifier;
         private Damageable m_damageable;
         private Animator m_animator;
         private bool m_wasUsed;
         private int m_animationParameter;
         private SkeletonGhost m_skeletonGhost;
 
+        [ShowInInspector, ReadOnly, HideInEditorMode]
+        protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_source = info.magic;
+            m_modifier = info.modifier;
             m_damageable = info.damageable;
             m_animator = info.animator;
             m_skeletonGhost = info.skeletonGhost;
@@ -43,9 +48,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_skeletonGhost.enabled = false;
         }
 
-        public bool HaveEnoughSourceForExecution() => m_sourceRequiredAmount <= m_source.currentValue;
+        public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue ;
 
-        public void ConsumeSource() => m_source.ReduceCurrentValue(m_sourceRequiredAmount);
+        public void ConsumeSource() => m_source.ReduceCurrentValue(sourceRequiredAmount);
 
         public void HandleCooldown() => m_dash.HandleCooldown();
 

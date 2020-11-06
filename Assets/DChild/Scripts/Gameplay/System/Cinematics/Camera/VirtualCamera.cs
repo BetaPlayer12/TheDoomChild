@@ -42,6 +42,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
         public Vector3 currentOffset => m_offsetHandle?.m_Offset ?? Vector3.zero;
         public CinemachineBasicMultiChannelPerlin noiseModule => m_noiseModule;
 
+
         public void Track(Transform target) => m_vCam.m_Follow = target;
 
         public void Activate()
