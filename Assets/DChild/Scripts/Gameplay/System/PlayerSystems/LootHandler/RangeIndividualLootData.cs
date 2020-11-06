@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.Essence;
+using Sirenix.Utilities.Editor;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,7 +14,7 @@ namespace DChild.Gameplay.Systems
     {
         [SerializeField]
         private LootReference m_reference;
-        [SerializeField, Min(1), OnInspectorGUI("OnLootReferenceGUI")]
+        [SerializeField, OnInspectorGUI("OnLootReferenceGUI")]
         private Holysoft.Collections.RangeInt m_count;
 
         public void DropLoot(Vector2 position)
@@ -22,6 +23,15 @@ namespace DChild.Gameplay.Systems
         }
 
 #if UNITY_EDITOR
+        private void OnLootReferenceGUI()
+        {
+            var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
+            if (soulEssence)
+            {
+                SirenixEditorGUI.InfoMessageBox($"Soul Essence: {soulEssence.value * m_count.min} - {soulEssence.value * m_count.max}");
+            }
+        }
+
         void ILootDataContainer.DrawDetails(bool drawContainer, string label = null)
         {
             if (m_reference != null)

@@ -63,8 +63,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1005843668509373886}
   - component: {fileID: 5801295117953072708}
-  - component: {fileID: 8694155828510076667}
   - component: {fileID: 6829168826477118546}
+  - component: {fileID: 2206046285683010298}
   m_Layer: 13
   m_Name: HitboxBB
   m_TagString: Untagged
@@ -102,7 +102,27 @@ MonoBehaviour:
   slotName: Hitbox
   isTrigger: 1
   clearStateOnDisable: 1
---- !u!60 &8694155828510076667
+--- !u!114 &6829168826477118546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311498561828451219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 4236772851404963276}
+  boneName: hitbox
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
+--- !u!60 &2206046285683010298
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,26 +154,6 @@ PolygonCollider2D:
       - {x: 3.9369, y: -5.9284}
       - {x: 0.9499, y: 2.4536}
       - {x: -0.0255, y: 3.2156}
---- !u!114 &6829168826477118546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 311498561828451219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 4236772851404963276}
-  boneName: hitbox
-  followXYPosition: 1
-  followZPosition: 1
-  followBoneRotation: 1
-  followSkeletonFlip: 1
-  followLocalScale: 0
-  initializeOnAwake: 1
 --- !u!1 &405843674199121542
 GameObject:
   m_ObjectHideFlags: 0
@@ -3019,6 +3019,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1195093580567525329}
   - component: {fileID: 3138587116686809386}
+  - component: {fileID: 4003925194665336499}
   m_Layer: 1
   m_Name: SelfCollider
   m_TagString: Untagged
@@ -3033,9 +3034,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6189249388287310957}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7208811, w: 0.6930587}
+  m_LocalPosition: {x: 0.09282308, y: -1.0212667, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 1749727750417117833}
   m_RootOrder: 1
@@ -3053,9 +3054,29 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -1, y: 0.39}
   serializedVersion: 2
-  m_Radius: 2.5
+  m_Radius: 2
+--- !u!114 &4003925194665336499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6189249388287310957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonRenderer: {fileID: 4236772851404963276}
+  boneName: cloth back2
+  followXYPosition: 1
+  followZPosition: 1
+  followBoneRotation: 1
+  followSkeletonFlip: 1
+  followLocalScale: 0
+  initializeOnAwake: 1
 --- !u!1 &6313186516462538977
 GameObject:
   m_ObjectHideFlags: 0
