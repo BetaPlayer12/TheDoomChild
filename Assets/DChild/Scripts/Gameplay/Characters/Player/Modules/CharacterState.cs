@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
                                   IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
-                                  ILevitateState, IGrabState, ISlideState
+                                  ILevitateState, IGrabState, ISlideState, ILedgeGrabState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;
@@ -79,5 +79,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_forcedCurrentGroundedness;
         public bool forcedCurrentGroundedness { get => m_forcedCurrentGroundedness; set => m_forcedCurrentGroundedness = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isInShadowMode;
+        public bool isInShadowMode { get => m_isInShadowMode; set => m_isInShadowMode = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isInRageMode;
+        public bool isInRageMode { get => m_isInRageMode; set => m_isInRageMode = value; }
     }
 }

@@ -890,67 +890,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
-                if (m_input.horizontalInput != 0)
-                {
-                    var signInput = Mathf.Sign(m_input.horizontalInput);
-                    if (signInput != (float)m_character.facing)
-                    {
-                        FlipCharacter();
-                    }
-                }
-                m_activeSlide?.Execute();
+                m_activeSlide?.Cancel();
+                m_activeSlide?.ResetCooldownTimer();
+
+                //if (m_input.horizontalInput != 0)
+                //{
+                //    var signInput = Mathf.Sign(m_input.horizontalInput);
+                //    if (signInput != (float)m_character.facing)
+                //    {
+                //        FlipCharacter();
+                //    }
+                //}
+                //m_activeSlide?.Execute();
             }
-
-            //if (m_activeSlide?.IsSlideDurationOver() ?? true)
-            //{
-            //    m_activeSlide?.Cancel();
-            //    m_activeSlide?.ResetCooldownTimer();
-            //}
-            //else
-            //{
-            //    if (m_input.horizontalInput != 0)
-            //    {
-            //        var signInput = Mathf.Sign(m_input.horizontalInput);
-            //        if (signInput != (float)m_character.facing)
-            //        {
-            //            FlipCharacter();
-            //        }
-            //    }
-            //    m_activeSlide?.Execute();
-            //}
-
-            //if (m_crouch?.IsThereNoCeiling() ?? true)
-            //{
-            //    if (m_activeSlide?.IsSlideDurationOver() ?? true)
-            //    {
-            //        m_activeSlide?.Cancel();
-            //        m_activeSlide?.ResetCooldownTimer();
-            //    }
-            //    else
-            //    {
-            //        if (m_input.horizontalInput != 0)
-            //        {
-            //            var signInput = Mathf.Sign(m_input.horizontalInput);
-            //            if (signInput != (float)m_character.facing)
-            //            {
-            //                FlipCharacter();
-            //            }
-            //        }
-            //        m_activeSlide?.Execute();
-            //    }
-            //}
-            //else
-            //{
-            //    if (m_input.horizontalInput != 0)
-            //    {
-            //        var signInput = Mathf.Sign(m_input.horizontalInput);
-            //        if (signInput != (float)m_character.facing)
-            //        {
-            //            FlipCharacter();
-            //        }
-            //    }
-            //    m_activeSlide?.Execute();
-            //}
         }
 
         private void ExecuteDash()
