@@ -3,6 +3,7 @@ using DChild.Gameplay;
 using DChild.Gameplay.Characters;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using Spine.Unity.Modules;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,8 @@ public class LichLordSarcophagus : MonoBehaviour
     private ParticleFX m_explosionFX;
     [SerializeField, TabGroup("Reference")]
     private Collider2D m_bodyCollider;
+    [SerializeField, TabGroup("Reference")]
+    private SpineRootMotion m_spineRootMotion;
     [SerializeField, TabGroup("Reference")]
     private Collider2D m_hurtbox;
     [SerializeField, ValueDropdown("GetEvents")]
@@ -40,8 +43,12 @@ public class LichLordSarcophagus : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        StartCoroutine(PreExplodeRoutine());
         m_spineListener.Subscribe(m_event, ExplosionStart);
+    }
+
+    public void ExplosionPrep()
+    {
+        StartCoroutine(PreExplodeRoutine());
     }
 
     private void ExplosionStart()
@@ -63,9 +70,8 @@ public class LichLordSarcophagus : MonoBehaviour
 
     private IEnumerator PreExplodeRoutine()
     {
-        //temporary
-        yield return new WaitForSeconds(5);
-        //
+        GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        m_spineRootMotion.EnableRootMotion(true, true);
         m_spine.SetAnimation(0, m_explodeAnimation, false);
         yield return null;
     }

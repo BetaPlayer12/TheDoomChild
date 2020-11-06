@@ -89,6 +89,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private GameObject m_totem;
             public GameObject totem => m_totem;
+            [SerializeField]
+            private GameObject m_summonedMinion;
+            public GameObject summonedMinion => m_summonedMinion;
 
             [Title("Projectiles")]
             [SerializeField]
@@ -224,6 +227,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_hasPhaseChanged;
         private PhaseInfo m_phaseInfo;
         private Vector3 m_totemLastPos;
+        private Vector3 m_minionLastPos;
+        private List<GameObject> m_minionsCache;
+        private List<GameObject> m_sarcophagusCache;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -259,6 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_stateHandle.currentState != State.Phasing)
             {
+                m_hitbox.gameObject.SetActive(true);
                 m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.ApplyQueuedState();
             }
@@ -350,8 +357,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SummonTotemObject()
         {
-            var totem = Instantiate(m_info.totem, new Vector2(RandomTeleportPoint(m_totemLastPos).x, GroundPosition().y), Quaternion.identity);
-            m_totemLastPos = totem.transform.position;
+            if (m_sarcophagusCache.Count < 2)
+            {
+                var totem = Instantiate(m_info.totem, new Vector2(RandomTeleportPoint(m_totemLastPos).x, GroundPosition().y), Quaternion.identity);
+                m_sarcophagusCache.Add(totem);
+                m_totemLastPos = totem.transform.position;
+            }
         }
 
         private IEnumerator LaunchOrbRoutine()
@@ -409,13 +420,38 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SummonTotemRoutine()
         {
-            var randomAttack = UnityEngine.Random.Range(0, 2);
             m_animation.SetAnimation(0, m_info.summonTotemAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonTotemAttack.animation);
-            //m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
             m_animation.SetAnimation(0, m_info.vanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            yield return new WaitForSeconds(3f);
+            SummonTotemObject();
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForSeconds(2f);
+                var minion = Instantiate(m_info.summonedMinion, RandomTeleportPoint(m_minionLastPos), Quaternion.identity);
+                m_minionLastPos = minion.transform.position;
+                m_minionsCache.Add(minion);
+            }
+            while (m_minionsCache.Count > 0)
+            {
+                for (int i = 0; i < m_minionsCache.Count; i++)
+                {
+                    if (!m_minionsCache[i].activeSelf)
+                    {
+                        m_minionsCache.RemoveAt(i);
+                    }
+                }
+                yield return null;
+            }
+            var totem = UnityEngine.Random.Range(0, 1);
+            transform.position = new Vector2(m_sarcophagusCache[totem].transform.position.x, m_sarcophagusCache[totem].transform.position.y +5);
+            m_sarcophagusCache[totem].GetComponent<LichLordSarcophagus>().ExplosionPrep();
+            //yield return new WaitForSeconds(3f);
+            m_animation.SetAnimation(0, m_info.appearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
+            m_sarcophagusCache.RemoveAt(totem);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -570,7 +606,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
                 }
             }
-            for (int i = 0; i < m_attackUsed.Length; ++i)
+            for (int i = 0; i < m_attackUsed.Length; ++i) 
             {
                 m_attackUsed[i] = false;
             }
@@ -598,6 +634,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
 
+            m_minionsCache = new List<GameObject>();
+            m_sarcophagusCache = new List<GameObject>();
             m_attackCache = new List<Pattern>();
             AddToAttackCache(Pattern.AttackPattern1, Pattern.AttackPattern2/*, Pattern.AttackPattern3*/);
             m_attackUsed = new bool[m_attackCache.Count];

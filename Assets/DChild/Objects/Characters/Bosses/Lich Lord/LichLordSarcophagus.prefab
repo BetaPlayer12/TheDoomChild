@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3441399437910450017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1730610092412245490}
+  m_Layer: 16
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1730610092412245490
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3441399437910450017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2559353253726784444}
+  m_Father: {fileID: 5610398458618409913}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4757430112491136829
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,7 +74,7 @@ GameObject:
   - component: {fileID: 5280495745204116490}
   - component: {fileID: 3200231973770695132}
   m_Layer: 11
-  m_Name: Collider
+  m_Name: EnvironmentCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,11 +87,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4791152055079539430}
-  m_LocalRotation: {x: 0, y: 0, z: -0.71102405, w: 0.7031677}
-  m_LocalPosition: {x: -0.17818417, y: -3.9696615, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.17818451, y: -3.9696617, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 5610398458618409913}
+  m_Father: {fileID: 1730610092412245490}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5280495745204116490
@@ -79,7 +110,7 @@ MonoBehaviour:
   boneName: bone3
   followXYPosition: 1
   followZPosition: 1
-  followBoneRotation: 1
+  followBoneRotation: 0
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
@@ -107,7 +138,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4, y: 7}
+  m_Size: {x: 7, y: 4}
   m_EdgeRadius: 0
 --- !u!114 &408692008699904978
 MonoBehaviour:
@@ -142,6 +173,7 @@ GameObject:
   - component: {fileID: 5610398458618409912}
   - component: {fileID: 5610398458618409915}
   - component: {fileID: 5610398458618409914}
+  - component: {fileID: 504085358744146297}
   m_Layer: 13
   m_Name: Model
   m_TagString: Untagged
@@ -160,7 +192,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2559353253726784444}
+  - {fileID: 1730610092412245490}
   - {fileID: 6547719087205657767}
   - {fileID: 5441104868676675791}
   m_Father: {fileID: 9119202865208580550}
@@ -250,6 +282,23 @@ MonoBehaviour:
   loop: 0
   timeScale: 1
   m_alwaysUpdateMesh: 1
+--- !u!114 &504085358744146297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5610398458618409893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6a2e545a980c74b97fa2444c15f4ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sourceBoneName: root
+  useX: 1
+  useY: 0
+  rb: {fileID: 1982135631342044222}
+  siblingBoneNames: []
 --- !u!1 &6237296116582944583
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,19 +345,19 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6237296116582944583}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 50
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 1
 --- !u!66 &2816893311047565020
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -395,6 +444,7 @@ MonoBehaviour:
   m_spineListener: {fileID: 7317453595354514382}
   m_explosionFX: {fileID: 408692008699904978}
   m_bodyCollider: {fileID: 3200231973770695132}
+  m_spineRootMotion: {fileID: 504085358744146297}
   m_hurtbox: {fileID: 5981254404373809486}
   m_event: Explosion_FX
   m_skeletonAnimation: {fileID: 5610398458618409914}
