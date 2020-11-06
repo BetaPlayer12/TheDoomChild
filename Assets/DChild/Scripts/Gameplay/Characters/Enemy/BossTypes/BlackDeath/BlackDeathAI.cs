@@ -397,12 +397,15 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             base.OnDestroyed(sender, eventArgs);
-            if (m_clones[m_clones.Count - 1] != null || m_clones[m_clones.Count - 1].activeSelf)
+            if (m_clones.Count > 0)
             {
-                for (int i = 0; i < m_clones.Count+1; i++)
+                if (m_clones[m_clones.Count - 1] != null && m_clones[m_clones.Count - 1].activeSelf)
                 {
-                    Destroy(m_clones[i]);
-                    m_clones.RemoveAt(i);
+                    for (int i = 0; i < m_clones.Count + 1; i++)
+                    {
+                        Destroy(m_clones[i]);
+                        m_clones.RemoveAt(i);
+                    }
                 }
             }
             StopAllCoroutines();
