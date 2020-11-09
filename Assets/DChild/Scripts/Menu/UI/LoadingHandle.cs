@@ -57,24 +57,24 @@ namespace DChild.Menu
 
         public void DoLoad()
         {
-            m_unloadThis = false;
-            m_unloadOperations.Clear();
-            scenesToUnload?.RemoveAll(x => x == string.Empty);
-            for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
-            {
-                var operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
-                m_unloadOperations.Add(operation);
-            }
-            scenesToUnload?.Clear();
+            //m_unloadThis = false;
+            //m_unloadOperations.Clear();
+            //scenesToUnload?.RemoveAll(x => x == string.Empty);
+            //for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
+            //{
+            //    var operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+            //    m_unloadOperations.Add(operation);
+            //}
+            //scenesToUnload?.Clear();
 
-            m_loadOperations.Clear();
-            scenesToLoad?.RemoveAll(x => x == string.Empty);
-            for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
-            {
-                m_loadOperations.Add(SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive));
-                m_loadOperations[i].allowSceneActivation = false;
-            }
-            scenesToLoad?.Clear();
+            //m_loadOperations.Clear();
+            //scenesToLoad?.RemoveAll(x => x == string.Empty);
+            //for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
+            //{
+            //    m_loadOperations.Add(SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive));
+            //    m_loadOperations[i].allowSceneActivation = false;
+            //}
+            //scenesToLoad?.Clear();
             StartCoroutine(MonitorProgess());
         }
 
@@ -104,44 +104,37 @@ namespace DChild.Menu
             m_animation.PlayStart();
             var endOfFrame = new WaitForEndOfFrame();
 
-            yield return endOfFrame;
-            if (m_unloadOperations.Count > 0)
+            m_unloadThis = false;
+            m_unloadOperations.Clear();
+            scenesToUnload?.RemoveAll(x => x == string.Empty);
+            for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
             {
-                do
+                var operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+                while (operation.isDone == false)
                 {
-                    for (int i = m_unloadOperations.Count - 1; i >= 0; i--)
-                    {
-                        if (m_unloadOperations[i].isDone)
-                        {
-                            m_unloadOperations.RemoveAt(i);
-                        }
-                    }
                     yield return endOfFrame;
                     time += Time.unscaledDeltaTime;
-                } while (m_unloadOperations.Count > 0);
-                yield return endOfFrame;
-                time += Time.unscaledDeltaTime;
+                }
             }
+            scenesToUnload?.Clear();
 
-            if (m_loadOperations.Count > 0)
+
+            m_loadOperations.Clear();
+            scenesToLoad?.RemoveAll(x => x == string.Empty);
+            for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
             {
-                bool isLoading = false;
-                do
+                var operation = SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive);
+                m_loadOperations.Add(operation);
+                operation.allowSceneActivation = false;
+                while (operation.progress < 0.9f)
                 {
-                    isLoading = false;
-                    for (int i = 0; i < m_loadOperations.Count; i++)
-                    {
-                        if (m_loadOperations[i].progress < 0.9f)
-                        {
-                            isLoading = true;
-                            break;
-                        }
-                    }
                     yield return endOfFrame;
                     time += Time.unscaledDeltaTime;
-                } while (isLoading);
+                }
             }
+            scenesToLoad?.Clear();
             m_animation.PlayEnd();
+
             if (loadType == LoadType.Force)
             {
                 yield return new WaitForSeconds(2.25f);
