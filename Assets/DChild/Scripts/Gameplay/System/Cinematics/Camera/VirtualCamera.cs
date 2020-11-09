@@ -92,6 +92,10 @@ namespace DChild.Gameplay.Cinematics.Cameras
         private void OnValidate()
         {
             m_vCam = GetComponentInChildren<CinemachineVirtualCamera>(true);
+            if (Application.isPlaying)
+            {
+                m_vCam.enabled = false;
+            }
         }
 
         private void Awake()

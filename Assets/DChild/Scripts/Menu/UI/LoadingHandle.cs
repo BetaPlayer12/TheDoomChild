@@ -75,7 +75,7 @@ namespace DChild.Menu
             //    m_loadOperations[i].allowSceneActivation = false;
             //}
             //scenesToLoad?.Clear();
-            StartCoroutine(MonitorProgess());
+            StartCoroutine(ExecuteLoadUnloadScene());
         }
 
         public void SendEvents()
@@ -98,12 +98,13 @@ namespace DChild.Menu
             SceneManager.UnloadSceneAsync(gameObject.scene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
         }
 
-        private IEnumerator MonitorProgess()
+        private IEnumerator ExecuteLoadUnloadScene()
         {
             var time = 0f;
             m_animation.PlayStart();
             var endOfFrame = new WaitForEndOfFrame();
 
+            //Wait for Unloading to Be done, Unload scenes one by one
             m_unloadThis = false;
             m_unloadOperations.Clear();
             scenesToUnload?.RemoveAll(x => x == string.Empty);
@@ -119,6 +120,7 @@ namespace DChild.Menu
             scenesToUnload?.Clear();
 
 
+            //Wait for Loading to Be done, Load scenes one by one
             m_loadOperations.Clear();
             scenesToLoad?.RemoveAll(x => x == string.Empty);
             for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
