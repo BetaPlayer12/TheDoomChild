@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Inventories;
+﻿using DChild.Gameplay.Characters.NPC;
+using DChild.Gameplay.Inventories;
 using Holysoft.Event;
 using Holysoft.UI;
 using Sirenix.OdinInspector;
@@ -11,6 +12,8 @@ namespace DChild.Menu.Trading
 {
     public class MerchantTradingManager : MonoBehaviour
     {
+        [SerializeField]
+        private NPCProfileUI m_traderProfile;
         [SerializeField]
         private FilteredTradePool m_filteredTradePool;
         [SerializeField]
@@ -43,6 +46,11 @@ namespace DChild.Menu.Trading
             m_tradeHandle.SetTradeType(m_tradeOption.tradeType);
             m_filteredTradePool.ApplyFilter(TradePoolFilter.All);
             m_initiator.GetTradableUI(0).Select();
+        }
+
+        public void SetProfile(NPCProfile profile)
+        {
+            m_traderProfile.Set(profile);
         }
 
         public void SetTradingPool(ITradableInventory merchant, ITraderAskingPrice merchantAskingPrice,ITradableInventory player)

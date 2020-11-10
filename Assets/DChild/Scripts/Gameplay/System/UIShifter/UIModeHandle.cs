@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Inventories;
+﻿using DChild.Gameplay.Characters.NPC;
+using DChild.Gameplay.Inventories;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trading;
 using Doozy.Engine;
@@ -12,8 +13,9 @@ namespace DChild.Gameplay.Systems
 		private MerchantTradingManager m_merchantManager;
 		[SerializeField]
 		private StoreNavigator m_storeNavigator;
-		public void OpenTradeWindow(ITradableInventory merchantInventory,ITraderAskingPrice merchantAskingPrice)
+		public void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory,ITraderAskingPrice merchantAskingPrice)
 		{
+			m_merchantManager.SetProfile(merchantData);
 			m_merchantManager.SetTradingPool(merchantInventory, merchantAskingPrice,GameplaySystem.playerManager.player.inventory);
 			GameEventMessage.SendEvent("Trade Open");
 		}

@@ -14,6 +14,8 @@ namespace DChild.Gameplay.Characters.NPC
     public class Merchant : SerializedMonoBehaviour, IButtonToInteract, ITraderAskingPrice
     {
         [SerializeField]
+        private NPCProfile m_npcData;
+        [SerializeField]
         private Transform m_prompt;
         [SerializeField]
         private MerchantInventory m_inventory;
@@ -31,7 +33,7 @@ namespace DChild.Gameplay.Characters.NPC
 
         public void Interact(Character character)
         {
-            GameplaySystem.uiModeHandle.OpenTradeWindow(m_inventory,this);
+            GameplaySystem.uiModeHandle.OpenTradeWindow(m_npcData,m_inventory,this);
         }
 
         public void ResetWares() => m_inventory.ResetWares();
