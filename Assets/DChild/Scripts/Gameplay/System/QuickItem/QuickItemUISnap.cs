@@ -19,9 +19,6 @@ namespace DChild.Gameplay.Inventories
         [SerializeField]
         private QuickItemElement m_next;
 
-        [SerializeField]
-        private Canvas m_disabledCanvas;
-
         private void OnItemSelect(object sender, QuickItemHandle.SelectionEventArgs eventArgs)
         {
             if (eventArgs.selectionType != QuickItemHandle.SelectionEventArgs.SelectionType.None)
@@ -52,15 +49,6 @@ namespace DChild.Gameplay.Inventories
         {
             m_handle.SelectedItem += OnItemSelect;
             UpdateUI(m_handle.currentIndex);
-        }
-
-        private void LateUpdate()
-        {
-            var enableItem = m_handle.CanUseCurrentItem();
-            if (enableItem != !m_disabledCanvas.enabled)
-            {
-                m_disabledCanvas.enabled = !enableItem;
-            }
         }
     }
 }
