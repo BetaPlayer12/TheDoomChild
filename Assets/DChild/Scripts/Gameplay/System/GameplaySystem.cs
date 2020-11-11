@@ -1,4 +1,5 @@
-﻿using DChild.Configurations;
+﻿using DarkTonic.MasterAudio;
+using DChild.Configurations;
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Databases;
@@ -86,6 +87,8 @@ namespace DChild.Gameplay
             m_playerManager?.EnableInput();
             isGamePaused = false;
             GameSystem.SetCursorVisibility(false);
+
+            MasterAudio.UnpauseEverything();
         }
 
         public static void PauseGame()
@@ -94,6 +97,8 @@ namespace DChild.Gameplay
             m_playerManager?.DisableInput();
             isGamePaused = true;
             GameSystem.SetCursorVisibility(true);
+
+            MasterAudio.PauseEverything();
         }
 
         public static void ClearCaches()
@@ -112,7 +117,7 @@ namespace DChild.Gameplay
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
             //Reload Items
             LoadingHandle.SceneDone += LoadGameDone;
-            
+
         }
 
         public static void ReloadGame()
