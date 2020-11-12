@@ -1,4 +1,5 @@
-﻿using DChild.Configurations;
+﻿using DarkTonic.MasterAudio;
+using DChild.Configurations;
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Databases;
@@ -31,11 +32,15 @@ namespace DChild.Gameplay
         [SerializeField]
         private bool m_doNotTeleportPlayerOnAwake;
 
+        [SerializeField]
+        private AudioListenerPositioner m_audioListener;
+
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;
         private static GameplayModifiers m_modifiers;
         public static GameplayModifiers modifiers => m_modifiers;
+        public static AudioListenerPositioner audioListener { get; private set; }
 
         #region Modules
         private static IGameplayActivatable[] m_activatableModules;
@@ -51,6 +56,7 @@ namespace DChild.Gameplay
         private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
         private static UIModeHandle m_uiModeHandle;
+
 
         public static ICombatManager combatManager => m_combatManager;
         public static IFXManager fXManager => m_fxManager;
@@ -86,6 +92,8 @@ namespace DChild.Gameplay
             m_playerManager?.EnableInput();
             isGamePaused = false;
             GameSystem.SetCursorVisibility(false);
+
+            MasterAudio.UnpauseEverything();
         }
 
         public static void PauseGame()
@@ -94,6 +102,8 @@ namespace DChild.Gameplay
             m_playerManager?.DisableInput();
             isGamePaused = true;
             GameSystem.SetCursorVisibility(true);
+
+            MasterAudio.PauseEverything();
         }
 
         public static void ClearCaches()
@@ -112,7 +122,7 @@ namespace DChild.Gameplay
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
             //Reload Items
             LoadingHandle.SceneDone += LoadGameDone;
-            
+
         }
 
         public static void ReloadGame()
@@ -208,6 +218,7 @@ namespace DChild.Gameplay
         private void Start()
         {
             //m_cinema.SetTrackingTarget(m_player.model);
+            audioListener = m_audioListener;
             m_settings = GameSystem.settings?.gameplay ?? null;
             m_modifiers = new GameplayModifiers();
             isGamePaused = false;

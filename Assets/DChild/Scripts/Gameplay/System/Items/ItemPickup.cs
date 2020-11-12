@@ -34,6 +34,8 @@ namespace DChild.Gameplay.Items
         private ItemData m_data;
         [SerializeField]
         private bool m_HasNotification;
+        [SerializeField,ShowIf("m_HasNotification")]
+        private string m_notifEvent;
 
         private Collider2D m_trigger;
 
@@ -50,7 +52,8 @@ namespace DChild.Gameplay.Items
             m_trigger.enabled = false;
             if (m_HasNotification == true)
             {
-                GameEventMessage.SendEvent("Soul Skill Acquired");
+                //GameEventMessage.SendEvent("Soul Skill Acquired");
+                GameEventMessage.SendEvent(m_notifEvent);
             }
         }
 

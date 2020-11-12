@@ -70,7 +70,7 @@ namespace DChild.Gameplay
             }
         }
 
-        private void LateUpdate()
+        private void Update()
         {
             if (m_toFollowType == ToFollow.Camera && m_camera == null)
             {

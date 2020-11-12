@@ -10,6 +10,16 @@ namespace DChild.Gameplay
             GameEventMessage.SendEvent(value ? "Cinematic Start" : "Cinematic End");
         }
 
+        public void MoveAudioListenerToPlayer()
+        {
+            GameplaySystem.audioListener.AttachToPlayer();
+        }
+
+        public void MoveAudioListenerToCamera()
+        {
+            GameplaySystem.audioListener.AttachToCamera();
+        }
+
         public void OverridePlayerControl()
         {
             GameplaySystem.playerManager.DisableControls();

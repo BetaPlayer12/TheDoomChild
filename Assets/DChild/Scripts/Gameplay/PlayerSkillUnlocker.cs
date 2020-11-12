@@ -74,7 +74,7 @@ namespace DChild.Gameplay
                     //        break;
                     //} 
                 }
-		m_cinematic.Play();
+                m_cinematic?.Play();
                 //m_fx.Play(true);
                 //StartCoroutine(DelayedNotifySkill());
                 m_isUsed = true;
@@ -109,7 +109,7 @@ namespace DChild.Gameplay
             m_collider.enabled = !m_isUsed;
         }
 
-	[Button]
+        [Button]
         private void Interact()
         {
             Interact(null);
