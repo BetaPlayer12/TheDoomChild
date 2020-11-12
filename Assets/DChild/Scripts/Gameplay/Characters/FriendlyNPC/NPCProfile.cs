@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.NPC
 {
-    [CreateAssetMenu(fileName = "NPCProfile", menuName = "DChild/Gameplay/Database/NPC Profile")]
+    [CreateAssetMenu(fileName = "NPCProfile", menuName = "DChild/Database/NPC Profile")]
     public class NPCProfile : ScriptableObject
     {
         [SerializeField]
