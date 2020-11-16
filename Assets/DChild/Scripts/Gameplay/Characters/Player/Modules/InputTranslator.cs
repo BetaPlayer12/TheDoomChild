@@ -22,6 +22,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool slashHeld;
         public bool earthShakerPressed;
         public bool whipPressed;
+        public bool skullThrowPressed;
 
         private PlayerInput m_input;
 
@@ -37,7 +38,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Enable()
         {
-            if(this.enabled == false)
+            if (this.enabled == false)
             {
                 Reset();
             }
@@ -47,11 +48,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnHorizontalInput(InputValue value)
         {
-            if(enabled == true)
+            if (enabled == true)
             {
                 horizontalInput = value.Get<float>();
             }
         }
+
         private void OnVerticalInput(InputValue value)
         {
             if (enabled == true)
@@ -136,6 +138,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnSkullThrow(InputValue value)
+        {
+            if(enabled == true)
+            {
+                skullThrowPressed = value.Get<float>() == 1;
+            }
+        }
+
         private void OnInteract(InputValue value)
         {
             if (enabled == true)
@@ -171,6 +181,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             slashPressed = false;
             earthShakerPressed = false;
             whipPressed = false;
+            skullThrowPressed = false;
         }
 
         private void Reset()
@@ -192,6 +203,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             slashHeld = false;
             earthShakerPressed = false;
             whipPressed = false;
+            skullThrowPressed = false;
         }
     }
 }
