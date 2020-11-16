@@ -56,6 +56,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SwordThrust m_swordThrust;
         private EarthShaker m_earthShaker;
         private WhipAttack m_whip;
+        private SkullThrow m_skullThrow;
         #endregion
 
         private bool m_updateEnabled = true;
@@ -78,6 +79,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust?.Cancel();
             m_earthShaker?.Cancel();
             m_whip?.Cancel();
+            m_skullThrow?.Cancel();
+
+            if (m_state.isGrounded)
+            {
+                m_movement?.SwitchConfigTo(Movement.Type.Jog);
+            }
         }
 
         public void Enable()
@@ -190,6 +197,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_basicSlashes?.Cancel();
                     m_earthShaker?.Cancel();
                     m_whip?.Cancel();
+                    m_skullThrow?.Cancel();
                 }
 
                 if (m_state.isStickingToWall)
@@ -254,6 +262,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
             m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
             m_whip = m_character.GetComponentInChildren<WhipAttack>();
+            m_skullThrow = m_character.GetComponentInChildren<SkullThrow>();
 
             m_updateEnabled = true;
         }
@@ -332,6 +341,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_basicSlashes.HandleNextAttackDelay();
                 m_slashCombo.HandleComboAttackDelay();
                 m_whip.HandleNextAttackDelay();
+                m_skullThrow.HandleNextAttackDelay();
             }
 
             if (m_state.isGrounded)
@@ -737,6 +747,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             }
                         }
 
+                        return;
+                    }
+                    else if (m_input.skullThrowPressed)
+                    {
+                        PrepareForGroundAttack();
+                        m_skullThrow.Execute();
                         return;
                     }
                     #endregion
