@@ -109,6 +109,26 @@ namespace DChild.Gameplay.Items
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
+
+        [Button, ToggleGroup("m_enableEdit")]
+        private void UpdateSelf()
+        {
+            if (m_connectToDatabase)
+            {
+                var connection = DChildDatabase.GetItemConnection();
+                connection.Initialize();
+                var databaseName = connection.GetNameOf(m_ID);
+                if (connection.GetNameOf(m_ID) != m_name)
+                {
+                    m_name = databaseName;
+                }
+                connection.Close();
+            }
+            else
+            {
+                m_name = m_customName;
+            }
+        }
 #endif 
         #endregion
 

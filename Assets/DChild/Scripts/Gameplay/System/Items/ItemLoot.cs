@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Items
         private void OnDataChange()
         {
             m_spriteRenderer.sprite = m_data.icon;
-            gameObject.name = m_data.name.Replace(" ", string.Empty) + "Loot";
+            gameObject.name = m_data.itemName.Replace(" ", string.Empty) + "Loot";
         }
 
         [Button, HideInPrefabInstances]
