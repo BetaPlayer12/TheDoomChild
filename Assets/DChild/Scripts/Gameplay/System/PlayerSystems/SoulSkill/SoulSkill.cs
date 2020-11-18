@@ -130,10 +130,10 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             connection.Initialize();
             var databaseName = connection.GetNameOf(m_ID);
             connection.Close();
-            if (m_connectToDatabase && m_name != databaseName)
-            {
-                UpdateReference();
-            }
+            //if (m_connectToDatabase && m_name != databaseName)
+            //{
+            //    UpdateReference();
+            //}
         }
 #endif
 
