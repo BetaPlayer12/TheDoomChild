@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Crouch m_crouch;
         private Dash m_dash;
         private Slide m_slide;
+        private LedgeGrab m_ledgeGrab;
         private GroundJump m_groundJump;
         private ExtraJump m_extraJump;
         private Levitation m_levitation;
@@ -246,6 +247,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_crouch = m_character.GetComponentInChildren<Crouch>();
             m_dash = m_character.GetComponentInChildren<Dash>();
             m_slide = m_character.GetComponentInChildren<Slide>();
+            m_ledgeGrab = m_character.GetComponentInChildren<LedgeGrab>();
             m_groundJump = m_character.GetComponentInChildren<GroundJump>();
             m_extraJump = m_character.GetComponentInChildren<ExtraJump>();
             m_levitation = m_character.GetComponentInChildren<Levitation>();
@@ -294,7 +296,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 if (m_state.isStickingToWall)
+                {
+                    if (m_input.verticalInput > 0)
+                    {
+                        if (m_ledgeGrab?.IsDoable() ?? false)
+                        {
+                            m_wallMovement?.Cancel();
+                            m_wallStick?.Cancel();
+                            m_ledgeGrab?.Execute();
+                        }
+                    }
+
                     return;
+                }
+
+                if ((int)m_character.facing == m_input.horizontalInput)
+                {
+                    if (m_ledgeGrab?.IsDoable() ?? false)
+                    {
+                        m_ledgeGrab?.Execute();
+                    }
+                }
 
                 m_initialDescentBoost?.Handle();
                 if (m_rigidbody.velocity.y <= 0)
