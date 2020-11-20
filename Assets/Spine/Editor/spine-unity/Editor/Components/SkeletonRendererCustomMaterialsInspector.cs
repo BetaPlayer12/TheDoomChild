@@ -38,6 +38,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using Spine.Unity.Examples;
+using Sirenix.Utilities.Editor;
 
 namespace Spine.Unity.Editor {
 
@@ -135,7 +136,9 @@ namespace Spine.Unity.Editor {
 			_customMaterialOverridesPrev = CopyList(componentCustomMaterialOverrides);
 			_customSlotMaterialsPrev = CopyList(componentCustomSlotMaterials);
 
-			if (SpineInspectorUtility.LargeCenteredButton(SpineInspectorUtility.TempContent("Clear and Reapply Changes", tooltip: "Removes all non-serialized overrides in the SkeletonRenderer and reapplies the overrides on this component."))) {
+			//if (SpineInspectorUtility.LargeCenteredButton(SpineInspectorUtility.TempContent("Clear and Reapply Changes", tooltip: "Removes all non-serialized overrides in the SkeletonRenderer and reapplies the overrides on this component."))) {
+			if (GUILayout.Button("Clear and Reapply Changes"))
+			{
 				if (skeletonRenderer != null) {
 					#if SPINE_OPTIONAL_MATERIALOVERRIDE
 					skeletonRenderer.CustomMaterialOverride.Clear();
