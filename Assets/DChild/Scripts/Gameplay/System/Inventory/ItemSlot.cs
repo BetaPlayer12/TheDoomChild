@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Inventories
             public int count { get; }
         }
 
+        [System.Serializable]
         public struct Restriction
         {
             public bool canBeSold;
