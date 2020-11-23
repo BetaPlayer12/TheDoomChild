@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Crouch m_crouch;
         private Dash m_dash;
         private Slide m_slide;
+        private LedgeGrab m_ledgeGrab;
         private GroundJump m_groundJump;
         private ExtraJump m_extraJump;
         private Levitation m_levitation;
@@ -56,6 +57,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SwordThrust m_swordThrust;
         private EarthShaker m_earthShaker;
         private WhipAttack m_whip;
+        private SkullThrow m_skullThrow;
         #endregion
 
         private bool m_updateEnabled = true;
@@ -78,6 +80,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust?.Cancel();
             m_earthShaker?.Cancel();
             m_whip?.Cancel();
+            m_skullThrow?.Cancel();
+
+            if (m_state.isGrounded)
+            {
+                m_movement?.SwitchConfigTo(Movement.Type.Jog);
+            }
         }
 
         public void Enable()
@@ -190,6 +198,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_basicSlashes?.Cancel();
                     m_earthShaker?.Cancel();
                     m_whip?.Cancel();
+                    m_skullThrow?.Cancel();
                 }
 
                 if (m_state.isStickingToWall)
@@ -238,6 +247,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_crouch = m_character.GetComponentInChildren<Crouch>();
             m_dash = m_character.GetComponentInChildren<Dash>();
             m_slide = m_character.GetComponentInChildren<Slide>();
+            m_ledgeGrab = m_character.GetComponentInChildren<LedgeGrab>();
             m_groundJump = m_character.GetComponentInChildren<GroundJump>();
             m_extraJump = m_character.GetComponentInChildren<ExtraJump>();
             m_levitation = m_character.GetComponentInChildren<Levitation>();
@@ -254,6 +264,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
             m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
             m_whip = m_character.GetComponentInChildren<WhipAttack>();
+            m_skullThrow = m_character.GetComponentInChildren<SkullThrow>();
 
             m_updateEnabled = true;
         }
@@ -285,7 +296,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 if (m_state.isStickingToWall)
+                {
+                    if (m_input.verticalInput > 0)
+                    {
+                        if (m_ledgeGrab?.IsDoable() ?? false)
+                        {
+                            m_wallMovement?.Cancel();
+                            m_wallStick?.Cancel();
+                            m_ledgeGrab?.Execute();
+                        }
+                    }
+
                     return;
+                }
+
+                if ((int)m_character.facing == m_input.horizontalInput)
+                {
+                    if (m_ledgeGrab?.IsDoable() ?? false)
+                    {
+                        m_ledgeGrab?.Execute();
+                    }
+                }
 
                 m_initialDescentBoost?.Handle();
                 if (m_rigidbody.velocity.y <= 0)
@@ -332,6 +363,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_basicSlashes.HandleNextAttackDelay();
                 m_slashCombo.HandleComboAttackDelay();
                 m_whip.HandleNextAttackDelay();
+                m_skullThrow.HandleNextAttackDelay();
             }
 
             if (m_state.isGrounded)
@@ -737,6 +769,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             }
                         }
 
+                        return;
+                    }
+                    else if (m_input.skullThrowPressed)
+                    {
+                        PrepareForGroundAttack();
+                        m_skullThrow.Execute();
                         return;
                     }
                     #endregion

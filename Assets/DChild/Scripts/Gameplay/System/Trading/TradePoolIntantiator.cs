@@ -29,18 +29,22 @@ namespace DChild.Menu.Trading
 
             for (int i = 0; i < inventory.Count; i++)
             {
-                if (createSlots)
+                var itemSlot =inventory.GetSlot(i);
+                if (itemSlot.restrictions.canBeSold)
                 {
-                    var slot = this.InstantiateToScene(m_template, m_pool).GetComponent<TradableItemUI>();
-                    slot.Set(inventory.GetSlot(i));
-                    m_instantiatedSlots.Add(slot);
-                }
-                else
-                {
-                    m_instantiatedSlots[i].Set(inventory.GetSlot(i));
-                    if (i >= m_instantiatedSlots.Count - 1)
+                    if (createSlots)
                     {
-                        createSlots = true;
+                        var slot = this.InstantiateToScene(m_template, m_pool).GetComponent<TradableItemUI>();
+                        slot.Set(itemSlot);
+                        m_instantiatedSlots.Add(slot);
+                    }
+                    else
+                    {
+                        m_instantiatedSlots[i].Set(itemSlot);
+                        if (i >= m_instantiatedSlots.Count - 1)
+                        {
+                            createSlots = true;
+                        }
                     }
                 }
             }

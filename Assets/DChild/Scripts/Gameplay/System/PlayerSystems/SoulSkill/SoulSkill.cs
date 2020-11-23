@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             for (int i = 0; i < m_modules.Length; i++)
             {
-                m_modules[i].AttachTo(GetInstanceID(),player);
+                m_modules[i].AttachTo(GetInstanceID(), player);
             }
         }
 
@@ -119,7 +119,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             for (int i = 0; i < m_modules.Length; i++)
             {
-                m_modules[i].DetachFrom(GetInstanceID(),player);
+                m_modules[i].DetachFrom(GetInstanceID(), player);
             }
         }
 
@@ -130,11 +130,13 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             connection.Initialize();
             var databaseName = connection.GetNameOf(m_ID);
             connection.Close();
-            if (m_connectToDatabase && m_name != databaseName)
-            {
-                UpdateReference();
-            }
+            //if (m_connectToDatabase && m_name != databaseName)
+            //{
+            //    UpdateReference();
+            //}
         }
 #endif
+
+        public string name => m_name;
     }
 }

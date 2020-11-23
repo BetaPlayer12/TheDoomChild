@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,10 +10,8 @@ namespace DChild.Gameplay
     [SerializeField]
     public class PrimarySkillNotification : MonoBehaviour
     {
-#if UNITY_EDITOR
-        [SerializeField, OnInspectorGUI("UpdateNotification")]
-#endif
-        private PrimarySkillData m_notifiedSkill;
+        [SerializeField]
+        private PrimarySkillList m_notifiedSkill;
         [SerializeField]
         private Image m_border;
         [SerializeField]
@@ -24,32 +23,33 @@ namespace DChild.Gameplay
 
         public void SetNotifiedSkill(PrimarySkillData skill)
         {
-            m_notifiedSkill = skill;
             m_border.sprite = skill.border;
             m_icon.sprite = skill.icon;
             m_skillName.text = skill.name;
             m_description.text = skill.description;
         }
 
-#if UNITY_EDITOR
-        private void UpdateNotification()
+        private void OnSkillUpdate(object sender, PrimarySkillUpdateEventArgs eventArgs)
         {
-            if (Application.isPlaying)
+            if (eventArgs.isEnabled)
             {
-                if (m_notifiedSkill == null)
+                var skill = eventArgs.skill;
+                for (int i = 0; i < m_notifiedSkill.Count; i++)
                 {
-                    m_icon.sprite = null;
-                    m_skillName.text = "No Skill";
-                    m_description.text = "No Description";
-                }
-                else
-                {
-                    m_icon.sprite = m_notifiedSkill.icon;
-                    m_skillName.text = m_notifiedSkill.name;
-                    m_description.text = m_notifiedSkill.description;
+                    var skillData = m_notifiedSkill.GetData(i);
+                    if (skillData.skill == skill)
+                    {
+                        SetNotifiedSkill(skillData);
+                        break;
+                    }
                 }
             }
         }
-#endif
+
+        private void Start()
+        {
+            GameplaySystem.playerManager.player.skills.SkillUpdate += OnSkillUpdate;
+        }
+
     }
 }
