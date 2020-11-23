@@ -15,6 +15,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_destinationSensor;
         [SerializeField, MinValue(0f)]
         private float m_destinationFromWallOffset;
+        [SerializeField]
+        private RaySensor m_clearingSensor;
+        [SerializeField]
+        private RaySensor m_footingSensor;
 
         private int m_animation;
         private Character m_character;
@@ -48,7 +52,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_destinationSensor.isDetecting)
                     {
                         m_destination = m_destinationSensor.GetValidHits()[0].point;
-                        return true;
+                        var clearingPos = m_clearingSensor.transform.position;
+                        clearingPos.x = destinationPosition.x;
+                        m_clearingSensor.transform.position = clearingPos;
+                        m_clearingSensor.Cast();
+                        if (m_clearingSensor.isDetecting == false)
+                        {
+                            m_footingSensor.Cast();
+                            if (m_footingSensor.isDetecting == false)
+                            {
+                                return true;
+                            }
+                        }
                     }
                 }
             }
