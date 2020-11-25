@@ -118,6 +118,18 @@ namespace DChild.Gameplay.Environment.Interractables
             m_collider2DGroup.EnableColliders();
         }
 
+        public void ToggleState()
+        {
+            if (m_isOpen)
+            {
+                Close();
+            }
+            else
+            {
+                Open();
+            }
+        }
+
         public void SetAsOpen(bool open)
         {
             if (m_animator == null)
@@ -153,6 +165,7 @@ namespace DChild.Gameplay.Environment.Interractables
                 m_panels[i].Lerp(lerpValue);
             }
         }
+
 
         public virtual void Load(ISaveData data) => SetAsOpen(((SaveData)data).isOpen);
 
