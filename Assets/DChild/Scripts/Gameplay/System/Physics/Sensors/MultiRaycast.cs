@@ -63,7 +63,7 @@ namespace DChild.Gameplay
             hits = new RaycastHit2D[m_count];
         }
 
-        public void Cast(Vector2 origin, Vector2 direction)
+        public void Cast(Vector2 origin, Vector2 direction, bool debugMode = false)
         {
             direction = direction.normalized;
             isDetecting = false;
@@ -76,7 +76,7 @@ namespace DChild.Gameplay
             for (int i = 0; i < m_count; i++)
             {
                 var position = origin + (offsetDirection * m_offsets[i]);
-                hitBuffers = Raycaster.Cast(position, direction, m_castDistance, m_ignoreTrigger, out hitCount);
+                hitBuffers = Raycaster.Cast(position, direction, m_castDistance, m_ignoreTrigger, out hitCount, debugMode);
                 hits[i] = hitBuffers[0];
 
                 if (hitCount > 0)

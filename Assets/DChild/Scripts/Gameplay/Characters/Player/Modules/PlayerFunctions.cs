@@ -11,7 +11,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SwordThrust m_swordThrust;
         private WhipAttack m_whip;
         private SkullThrow m_skullThrow;
-
+        private LedgeGrab m_ledgeGrab;
+        
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -119,6 +120,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_skullThrow?.SpawnProjectile();
         }
 
+        public void EndLedgeGrab()
+        {
+            m_ledgeGrab?.EndExecution();
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             var character = info.character;
@@ -129,6 +135,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust = character.GetComponentInChildren<SwordThrust>();
             m_whip = character.GetComponentInChildren<WhipAttack>();
             m_skullThrow = character.GetComponentInChildren<SkullThrow>();
+            m_ledgeGrab = character.GetComponentInChildren<LedgeGrab>();
         }
     }
 }
