@@ -75,6 +75,7 @@ namespace DChild.Menu
             //    m_loadOperations[i].allowSceneActivation = false;
             //}
             //scenesToLoad?.Clear();
+            Debug.LogError("False Positive: Loading Start");
             StartCoroutine(ExecuteLoadUnloadScene());
         }
 
@@ -104,6 +105,7 @@ namespace DChild.Menu
             m_animation.PlayStart();
             var endOfFrame = new WaitForEndOfFrame();
 
+            Debug.LogError("False Positive: Unloading Scenes Start");
             //Wait for Unloading to Be done, Unload scenes one by one
             m_unloadThis = false;
             m_unloadOperations.Clear();
@@ -116,10 +118,13 @@ namespace DChild.Menu
                     yield return endOfFrame;
                     time += Time.unscaledDeltaTime;
                 }
+                Debug.LogError($"False Positive: {scenesToUnload[i]} Unload Done");
             }
             scenesToUnload?.Clear();
+            Debug.LogError("False Positive: Unloading Scenes Done");
 
 
+            Debug.LogError("False Positive: Loading Scenes Start");
             //Wait for Loading to Be done, Load scenes one by one
             m_loadOperations.Clear();
             scenesToLoad?.RemoveAll(x => x == string.Empty);
@@ -130,11 +135,14 @@ namespace DChild.Menu
                 operation.allowSceneActivation = false;
                 while (operation.progress < 0.9f)
                 {
+                    Debug.LogError($"Progress Tracker: {scenesToLoad[i]} -- {operation.progress}");
                     yield return endOfFrame;
                     time += Time.unscaledDeltaTime;
                 }
+                Debug.LogError($"False Positive: {scenesToLoad[i]} Load Done");
             }
             scenesToLoad?.Clear();
+            Debug.LogError("False Positive: Loading Scenes Done");
             m_animation.PlayEnd();
 
             if (loadType == LoadType.Force)
@@ -142,10 +150,13 @@ namespace DChild.Menu
                 yield return new WaitForSeconds(2.25f);
                 time += 2.25f;
             }
+
+            Debug.LogError("False Positive: Scene Activation Start");
             for (int i = 0; i < m_loadOperations.Count; i++)
             {
                 m_loadOperations[i].allowSceneActivation = true;
             }
+            Debug.LogError("False Positive: Scene Activation Done");
 
             yield return endOfFrame;
             while (m_canTransferScene == false)
@@ -154,7 +165,9 @@ namespace DChild.Menu
                 yield return endOfFrame;
             }
 
+            Debug.LogError("False Positive: Scene Done Event Sent");
             SceneDone?.Invoke(this, EventActionArgs.Empty);
+            Debug.LogError("False Positive: Scene Done Reaction Done");
             if (loadType == LoadType.Smart)
             {
                 GameEventMessage.SendEvent("Load Done");
