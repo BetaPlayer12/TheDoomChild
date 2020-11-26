@@ -10,14 +10,28 @@ namespace DChild.Gameplay.Inventories
 {
     public class UniqueItemContainer : MonoBehaviour, IItemContainer
     {
+        [System.Serializable]
+        public class RestrictionInfo
+        {
+            [SerializeField]
+            private ItemData m_itemData;
+            [SerializeField]
+            private ItemSlot.Restriction m_restriction;
+
+            public ItemData itemData => m_itemData;
+            public ItemSlot.Restriction restriction => m_restriction;
+        }
+
         [SerializeField]
         private bool m_restrictSize;
         [SerializeField, MinValue(1), ShowIf("m_restrictSize"), ValidateInput("ValidateSize", "Size has exceeded maxSize", InfoMessageType.Error)]
         private int m_maxSize;
 
         [SerializeField, TableList(ShowIndexLabels = true, NumberOfItemsPerPage = 5, ShowPaging = true),
-        ValidateInput("ValidateList", "There are duplicate ItemData or Size has exceeded maxSize", InfoMessageType.Error, IncludeChildren = true), HideReferenceObjectPicker]
+        ValidateInput("ValidateList", "There are duplicate ItemData or Size has exceeded maxSize", InfoMessageType.Error, IncludeChildren = true), TabGroup("Items")]
         private List<ItemSlot> m_list = new List<ItemSlot>();
+        [SerializeField, TableList(ShowIndexLabels = true, NumberOfItemsPerPage = 5, ShowPaging = true), TabGroup("Restriction")]
+        private List<RestrictionInfo> m_restrictions = new List<RestrictionInfo>();
 
         public event EventAction<ItemEventArgs> ItemUpdate;
 
@@ -97,6 +111,22 @@ namespace DChild.Gameplay.Inventories
             }
         }
 
+        private bool FindRestrictions(ItemData item, out ItemSlot.Restriction restriction)
+        {
+            RestrictionInfo restrictionInfo = null;
+            for (int i = 0; i < m_restrictions.Count; i++)
+            {
+                restrictionInfo = m_restrictions[i];
+                if (restrictionInfo.itemData == item)
+                {
+                    restriction = restrictionInfo.restriction;
+                    return true;
+                }
+            }
+            restriction = new ItemSlot.Restriction();
+            return false;
+        }
+
         private void SendItemUpdateEvent(ItemData item, int count)
         {
             using (Cache<ItemEventArgs> eventArgs = Cache<ItemEventArgs>.Claim())
@@ -171,6 +201,10 @@ namespace DChild.Gameplay.Inventories
         {
             var slot = new ItemSlot(item, count);
             slot.RestrictCount();
+            if (FindRestrictions(item, out ItemSlot.Restriction restriction))
+            {
+                slot.SetRestriction(restriction);
+            }
             m_list.Add(slot);
         }
 

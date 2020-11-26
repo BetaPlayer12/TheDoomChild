@@ -1,10 +1,10 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using Sirenix.OdinInspector;
-using Spine.Unity.Modules;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+
     public class Movement : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
         public enum Type

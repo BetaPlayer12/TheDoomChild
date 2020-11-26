@@ -11,9 +11,9 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [System.Serializable]
         private class ShakeInfo
         {
-            [SerializeField, MinValue(0f)]
+            [SerializeField]
             private AnimationCurve m_amplitude;
-            [SerializeField, MinValue(0f)]
+            [SerializeField]
             private AnimationCurve m_frequency;
             [SerializeField, MinValue(0f)]
             private float m_duration;
@@ -50,6 +50,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             if (m_shakeOnDamage)
             {
                 StopAllCoroutines();
+                GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.AllDirection);
                 m_shakeRoutine = StartCoroutine(CameraShakeRoutine(m_onDamageShake));
             }
         }
@@ -59,6 +60,25 @@ namespace DChild.Gameplay.Cinematics.Cameras
             if (m_shakeOnAttackHit)
             {
                 StopAllCoroutines();
+                if (eventArgs.target.isBreakableObject)
+                {
+                    switch (eventArgs.target.breakableObject.type)
+                    {
+                        case Environment.BreakableObject.Type.Others:
+                            GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.AllDirection);
+                            break;
+                        case Environment.BreakableObject.Type.Floor:
+                            GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.VerticalOnly);
+                            break;
+                        case Environment.BreakableObject.Type.Wall:
+                            GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.HorizontalOnly);
+                            break;
+                    }
+                }
+                else
+                {
+                    GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.AllDirection);
+                }
                 m_shakeRoutine = StartCoroutine(CameraShakeRoutine(m_onAttackHitShake));
             }
         }

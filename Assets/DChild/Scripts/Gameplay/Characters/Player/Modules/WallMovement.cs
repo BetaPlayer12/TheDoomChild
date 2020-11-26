@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 case SensorType.Overhead:
                     m_overheadSensor.Cast();
-                    return m_overheadSensor.allRaysDetecting;
+                    return m_overheadSensor.allRaysDetecting && m_overheadSensor.GetProminentHitCollider().gameObject.CompareTag("InvisibleWall") == false;
                 case SensorType.Body:
                     m_bodySensor.Cast();
                     return m_bodySensor.allRaysDetecting;

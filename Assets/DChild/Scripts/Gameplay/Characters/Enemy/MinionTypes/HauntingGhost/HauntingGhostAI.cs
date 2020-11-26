@@ -84,7 +84,8 @@ namespace DChild.Gameplay.Characters.Enemies
             Patrol,
             Cooldown,
             Turning,
-            Idle,
+            Attacking,
+            Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -154,7 +155,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 base.SetTarget(damageable);
                 m_selfCollider.SetActive(true);
-                if (m_stateHandle.currentState != State.Idle && !m_isDetecting)
+                if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
@@ -166,7 +167,14 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                //if (!m_enablePatience)
+                //{
+                //    m_enablePatience = true;
+                //    //Patience();
+                //    StartCoroutine(PatienceRoutine());
+                //}
                 m_enablePatience = true;
+                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -187,7 +195,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_stateHandle.ApplyQueuedState();
+            //m_stateHandle.ApplyQueuedState();
         }
         private Vector2 WallPosition()
         {
@@ -270,6 +278,55 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         #endregion
 
+        #region Movement
+        private IEnumerator ExecuteMove(float attackRange, /*float heightOffset,*/ Attack attack)
+        {
+            m_animation.DisableRootMotion();
+            bool inRange = false;
+            /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
+            while (!inRange)
+            {
+
+                bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < attackRange ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 1 ? true : false;
+                if (xTargetInRange && yTargetInRange)
+                {
+                    inRange = true;
+                }
+                DynamicMovement(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y));
+                yield return null;
+            }
+            ExecuteAttack(attack);
+            yield return null;
+        }
+
+        private void DynamicMovement(Vector2 target)
+        {
+            if (IsFacingTarget())
+            {
+                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
+                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
+                if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > .25f)
+                {
+                    m_agent.SetDestination(new Vector2(transform.position.x, target.y));
+                }
+                else
+                {
+                    m_agent.SetDestination(target);
+                }
+                //m_agent.SetDestination(target);
+                m_agent.Move(m_info.move.speed);
+
+                m_animation.SetAnimation(0, m_info.move.animation, true);
+            }
+            else
+            {
+                m_turnState = State.Attacking;
+                    m_stateHandle.OverrideState(State.Turning);
+            }
+        }
+        #endregion
+
         protected override void Start()
         {
             base.Start();
@@ -311,10 +368,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    m_turnState = State.ReevaluateSituation;
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.patrol.animation)
+                    {
+                        m_turnState = State.ReevaluateSituation;
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    }
                     break;
 
                 case State.Turning:
@@ -323,6 +383,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute();
+                    break;
+                case State.Attacking:
+                    m_stateHandle.Wait(State.Cooldown);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_agent.Stop();
+                    StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_attackDecider.chosenAttack.attack));
+                    m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:
                     //m_stateHandle.Wait(State.ReevaluateSituation);
@@ -358,16 +425,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
 
                     break;
-                case State.Idle:
-                    m_agent.Stop();
-                    if (IsFacingTarget())
+                case State.Chasing:
+                    m_attackDecider.DecideOnAttack();
+                    if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                     {
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    }
-                    else
-                    {
-                        m_turnState = State.Detect;
-                        m_stateHandle.SetState(State.Turning);
+                        m_agent.Stop();
+                        m_stateHandle.SetState(State.Attacking);
                     }
                     break;
 
@@ -376,7 +439,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_targetInfo.isValid)
                     {
 
-                        m_stateHandle.OverrideState(State.Idle);
+                        m_stateHandle.OverrideState(State.Chasing);
                     }
                     else
 

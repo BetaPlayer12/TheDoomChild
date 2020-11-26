@@ -121,6 +121,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""SkullThrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""45bdfdf7-5e75-4839-be13-6dc77f575e8d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -398,6 +406,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Grab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e430af7-8e71-47b8-a47f-6efe9cb0376a"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkullThrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -419,6 +438,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_Levitate = m_Gameplay.FindAction("Levitate", throwIfNotFound: true);
         m_Gameplay_Whip = m_Gameplay.FindAction("Whip", throwIfNotFound: true);
         m_Gameplay_Grab = m_Gameplay.FindAction("Grab", throwIfNotFound: true);
+        m_Gameplay_SkullThrow = m_Gameplay.FindAction("SkullThrow", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -481,6 +501,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Levitate;
     private readonly InputAction m_Gameplay_Whip;
     private readonly InputAction m_Gameplay_Grab;
+    private readonly InputAction m_Gameplay_SkullThrow;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -498,6 +519,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Levitate => m_Wrapper.m_Gameplay_Levitate;
         public InputAction @Whip => m_Wrapper.m_Gameplay_Whip;
         public InputAction @Grab => m_Wrapper.m_Gameplay_Grab;
+        public InputAction @SkullThrow => m_Wrapper.m_Gameplay_SkullThrow;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -546,6 +568,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Grab.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
                 @Grab.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
                 @Grab.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
+                @SkullThrow.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
+                @SkullThrow.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
+                @SkullThrow.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -589,6 +614,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Grab.started += instance.OnGrab;
                 @Grab.performed += instance.OnGrab;
                 @Grab.canceled += instance.OnGrab;
+                @SkullThrow.started += instance.OnSkullThrow;
+                @SkullThrow.performed += instance.OnSkullThrow;
+                @SkullThrow.canceled += instance.OnSkullThrow;
             }
         }
     }
@@ -608,5 +636,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnLevitate(InputAction.CallbackContext context);
         void OnWhip(InputAction.CallbackContext context);
         void OnGrab(InputAction.CallbackContext context);
+        void OnSkullThrow(InputAction.CallbackContext context);
     }
 }

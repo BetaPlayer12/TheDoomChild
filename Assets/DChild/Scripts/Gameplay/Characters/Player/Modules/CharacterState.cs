@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
                                   IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
-                                  ILevitateState, IGrabState, ISlideState
+                                  ILevitateState, IGrabState, ISlideState, ILedgeGrabState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;

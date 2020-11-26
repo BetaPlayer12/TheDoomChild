@@ -41,8 +41,6 @@ namespace DChild
         public sealed override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             var rootMotion = animator.GetComponentInChildren<SpineRootMotion>();
-            rootMotion.useX = false;
-            rootMotion.useY = false;
             rootMotion.enabled = false;
         }
     }

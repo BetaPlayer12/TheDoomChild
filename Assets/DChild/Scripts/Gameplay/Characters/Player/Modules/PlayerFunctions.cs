@@ -10,9 +10,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private EarthShaker m_earthShaker;
         private SwordThrust m_swordThrust;
         private WhipAttack m_whip;
-
+        private SkullThrow m_skullThrow;
         private LedgeGrab m_ledgeGrab;
-
+        
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -86,6 +86,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo?.AttackOver();
             m_whip?.AttackOver();
             m_whip?.ClearExecutedCollision();
+            m_skullThrow?.AttackOver();
         }
 
         public void EarthShakerPreLoop()
@@ -114,9 +115,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust.EndExecution();
         }
 
+        public void SkullThrowSpawnProjectile()
+        {
+            m_skullThrow?.SpawnProjectile();
+        }
+
         public void EndLedgeGrab()
         {
-            m_ledgeGrab.EndExecution();
+            m_ledgeGrab?.EndExecution();
         }
 
         public void Initialize(ComplexCharacterInfo info)
@@ -128,7 +134,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker = character.GetComponentInChildren<EarthShaker>();
             m_swordThrust = character.GetComponentInChildren<SwordThrust>();
             m_whip = character.GetComponentInChildren<WhipAttack>();
-
+            m_skullThrow = character.GetComponentInChildren<SkullThrow>();
             m_ledgeGrab = character.GetComponentInChildren<LedgeGrab>();
         }
     }

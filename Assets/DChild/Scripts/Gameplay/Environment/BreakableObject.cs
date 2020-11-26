@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Combat;
+﻿
+using DChild.Gameplay.Combat;
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -15,6 +16,13 @@ namespace DChild.Gameplay.Environment
     [AddComponentMenu("DChild/Gameplay/Environment/Breakable Object")]
     public class BreakableObject : MonoBehaviour, ISerializableComponent
     {
+        public enum Type
+        {
+            Others,
+            Floor,
+            Wall
+        }
+
         [System.Serializable]
         public struct SaveData : ISaveData
         {
@@ -33,6 +41,8 @@ namespace DChild.Gameplay.Environment
 
         [SerializeField]
         private Damageable m_object;
+        [SerializeField]
+        private Type m_type;
         [ShowInInspector, OnValueChanged("SetObjectStateDebug")]
         private bool m_isDestroyed;
         [SerializeField]
@@ -54,6 +64,8 @@ namespace DChild.Gameplay.Environment
         private Debris m_instantiatedDebris;
         private Rigidbody2D[] m_leftOverDebris;
         private SortingHandle m_sortingHandle;
+
+        public Type type => m_type;
 
         public void SetObjectState(bool isDestroyed)
         {
@@ -139,7 +151,7 @@ namespace DChild.Gameplay.Environment
                 }
                 m_leftOverDebris = null;
             }
-            if(m_instantiatedDebris != null)
+            if (m_instantiatedDebris != null)
             {
                 Addressables.ReleaseInstance(m_instantiatedDebris.gameObject);
             }

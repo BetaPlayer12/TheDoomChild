@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.Essence;
-using Sirenix.Utilities.Editor;
 
 #if UNITY_EDITOR
+using Sirenix.Utilities.Editor;
 using UnityEditor;
 #endif
 
@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Systems
             var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
             if (soulEssence)
             {
-                SirenixEditorGUI.InfoMessageBox($"Soul Essence: {soulEssence.value * m_count.min} - {soulEssence.value * m_count.max}");
+                SirenixEditorGUI.InfoMessageBox($"Soul Essence: ({soulEssence.value * m_count.min} -  {soulEssence.value * m_count.max})");
             }
         }
 

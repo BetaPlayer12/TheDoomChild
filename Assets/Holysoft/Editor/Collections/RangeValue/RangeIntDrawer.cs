@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace HolysoftEditor.Collections
 {
- 
     public class RangeIntDrawer : OdinValueDrawer<Holysoft.Collections.RangeInt>
     {
         protected override void DrawPropertyLayout(GUIContent label)
