@@ -34,20 +34,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_turnAnimation;
             public string turnAnimation => m_turnAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathStartAnimation;
-            public string deathStartAnimation => m_deathStartAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathFallLoopAnimation;
-            public string deathFallLoopAnimation => m_deathFallLoopAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathFallImpact1Animation;
-            public string deathFallImpact1Animation => m_deathFallImpact1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_deathFallImpact2Animation;
-            public string deathFallImpact2Animation => m_deathFallImpact2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_flinchAnimation;
-            public string flinchAnimation => m_flinchAnimation;
+            private string m_deathAnimation;
+            public string deathAnimation => m_deathAnimation;
 
             public override void Initialize()
             {
@@ -125,21 +113,6 @@ namespace DChild.Gameplay.Characters.Enemies
             base.ApplyData();
         }
 
-        private IEnumerator DeathRoutine()
-        {
-            m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
-            m_animation.EnableRootMotion(true, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
-            yield return new WaitForSeconds(1.6f);
-            //m_animation.DisableRootMotion();
-            m_character.physics.simulateGravity = true;
-            m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
-            var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.deathFallImpact1Animation : m_info.deathFallImpact2Animation;
-            m_bodyCollider.SetActive(true);
-            m_animation.SetAnimation(0, animation, false);
-            yield return null;
-        }
-
         private bool IsInRange(Vector2 position, float distance) => Vector2.Distance(position, m_character.centerMass.position) <= distance;
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
@@ -148,7 +121,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
-            StartCoroutine(DeathRoutine());
         }
 
         protected override void Start()
@@ -165,7 +137,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
+            m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
 
