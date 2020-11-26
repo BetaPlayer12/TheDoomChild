@@ -49,6 +49,11 @@ public class LichLordSarcophagus : MonoBehaviour
         StartCoroutine(ExplosionRoutine());
     }
 
+    public void ExplosionPrep()
+    {
+        StartCoroutine(PreExplodeRoutine());
+    }
+
     private IEnumerator ExplosionRoutine()
     {
         m_explosionFX.Play();
