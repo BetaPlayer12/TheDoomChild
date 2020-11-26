@@ -197,7 +197,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void SetAI(AITargetInfo targetInfo)
+        public void SetAI(AITargetInfo targetInfo)
         {
             m_isDetecting = true;
             m_targetInfo = targetInfo;
