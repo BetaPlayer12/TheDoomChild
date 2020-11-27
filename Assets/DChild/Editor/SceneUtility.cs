@@ -15,12 +15,18 @@ public static class SceneUtility
         m_spriteRendererList.Clear();
         for (int i = 0; i < sprites.Length; i++)
         {
-            ReorientSpriteRenderer(sprites[i]);
+            if (PrefabUtility.IsPartOfAnyPrefab(sprites[i]) == false)
+            {
+                ReorientSpriteRenderer(sprites[i]);
+            }
+            EditorUtility.DisplayProgressBar("Sprite Renderer Optimization", $"Reorientation ({i + 1}/{sprites.Length})", (i + 1f) / sprites.Length);
         }
         for (int i = 0; i < m_spriteRendererList.Count; i++)
         {
             ReorientSpriteRenderer(m_spriteRendererList[i]);
+            EditorUtility.DisplayProgressBar("Sprite Renderer Optimization", $"Follow up Reorientation ({i + 1}/{m_spriteRendererList.Count})", (i + 1f) / m_spriteRendererList.Count);
         }
+        EditorUtility.ClearProgressBar();
         m_spriteRendererList.Clear();
     }
 
@@ -67,13 +73,14 @@ public static class SceneUtility
         }
         else
         {
-            if (scale.x < 0)
+            var lossyScale = transform.lossyScale;
+            if (lossyScale.x < 0)
             {
                 scale.x *= -1;
                 renderer.flipX = !renderer.flipX;
                 hasChanges = true;
             }
-            if (scale.y < 0)
+            if (lossyScale.y < 0)
             {
                 scale.y *= -1;
                 renderer.flipY = !renderer.flipY;
