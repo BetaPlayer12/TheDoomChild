@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 5651536668056510395}
   - component: {fileID: 8284409964764210521}
   - component: {fileID: 1274139935989384666}
-  - component: {fileID: 2834244501207595452}
   - component: {fileID: 3486751707605571659}
   - component: {fileID: 6264629859761768695}
   - component: {fileID: 5108326075696162538}
+  - component: {fileID: 8962445262990782274}
   m_Layer: 13
   m_Name: LichLordSpikes
   m_TagString: Untagged
@@ -76,23 +76,9 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 499354484466701003}
-    m_ColliderPaths:
-    - - X: 37499707
-        Y: 11003418
-      - X: 37499707
-        Y: 38750000
-      - X: -37500000
-        Y: 38749707
-      - X: -37499707
-        Y: 11003418
+  m_ColliderPaths: []
   m_CompositePaths:
-    m_Paths:
-    - - {x: 3.7499416, y: 1.1003418}
-      - {x: 3.7499416, y: 3.875}
-      - {x: -3.75, y: 3.8749416}
-      - {x: -3.7499416, y: 1.1003418}
+    m_Paths: []
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!114 &1274139935989384666
@@ -114,22 +100,6 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
---- !u!114 &2834244501207595452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 243454653546255554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList: []
 --- !u!114 &3486751707605571659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +148,23 @@ MonoBehaviour:
   m_emerge2Animation: Thorns_Emerge_Version2
   m_submerge1Animation: Thorns_Emerge_Version_Submerge
   m_submerge2Animation: Thorns_Emerge_Version2_Submerge
+--- !u!114 &8962445262990782274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243454653546255554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
+  m_ignoreColliderList: []
+  m_damageInterval: 1
 --- !u!1 &1698464101735713123
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,7 +427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2192425627830514506
 Transform:
   m_ObjectHideFlags: 0

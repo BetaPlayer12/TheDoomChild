@@ -197,6 +197,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        public void SetAI(AITargetInfo targetInfo)
+        {
+            m_isDetecting = true;
+            m_targetInfo = targetInfo;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
