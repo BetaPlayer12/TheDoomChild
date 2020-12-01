@@ -11,7 +11,7 @@ namespace DChild.Gameplay.UI.Map
         [SerializeField]
         private LocationData m_location;
 
-        public void GoHere()
+        public void AttemptLocationTransfer()
         {
             GameSystem.RequestConfirmation(OnAccept, $"Travel to {m_location.location.ToString()}");
         }
