@@ -40,7 +40,6 @@ public class LichLordSarcophagus : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        StartCoroutine(PreExplodeRoutine());
         m_spineListener.Subscribe(m_event, ExplosionStart);
     }
 
@@ -68,9 +67,6 @@ public class LichLordSarcophagus : MonoBehaviour
 
     private IEnumerator PreExplodeRoutine()
     {
-        //temporary
-        yield return new WaitForSeconds(5);
-        //
         m_spine.SetAnimation(0, m_explodeAnimation, false);
         yield return null;
     }
