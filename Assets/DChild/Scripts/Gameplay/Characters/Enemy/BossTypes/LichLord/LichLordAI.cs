@@ -259,6 +259,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!m_hasPhaseChanged)
             {
+                StopAllCoroutines();
                 m_hasPhaseChanged = true;
                 m_animation.DisableRootMotion();
                 m_animation.SetEmptyAnimation(0, 0);
@@ -590,8 +591,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.summonTotemAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonTotemAttack.animation);
-            m_animation.SetAnimation(0, m_info.vanishAnimation, false);
             m_hitbox.gameObject.SetActive(false);
+            m_animation.SetAnimation(0, m_info.vanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
             yield return new WaitForSeconds(2f);
             while (m_zombiesCache.Count > 0)
@@ -673,7 +674,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector3 RandomTeleportPoint(Vector3 transformPos)
         {
             Vector3 randomPos = transformPos;
-            while (Vector2.Distance(transformPos, randomPos) <= 50f)
+            while (Vector2.Distance(transformPos, randomPos) <= 75f)
             {
                 randomPos = m_randomSpawnCollider.bounds.center + new Vector3(
                (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.x,
@@ -854,7 +855,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Phasing:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    StopAllCoroutines();
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
