@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-
     public class DelayedEventHandle : MonoBehaviour
     {
         [SerializeField, MinValue(0)]
