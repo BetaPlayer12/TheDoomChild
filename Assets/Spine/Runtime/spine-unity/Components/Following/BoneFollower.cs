@@ -77,6 +77,8 @@ namespace Spine.Unity
         public bool initializeOnAwake = true;
         #endregion
 
+        [SerializeField]
+        private bool m_updateOnFixedUpdate;
         [NonSerialized] public bool valid;
         [NonSerialized] public Bone bone;
 
@@ -123,7 +125,7 @@ namespace Spine.Unity
 
 #if UNITY_EDITOR
             if (Application.isEditor)
-                LateUpdate();
+                UpdateBone();
 #endif
         }
 
@@ -133,7 +135,23 @@ namespace Spine.Unity
                 skeletonRenderer.OnRebuild -= HandleRebuildRenderer;
         }
 
-        public void LateUpdate()
+        private void FixedUpdate()
+        {
+            if (m_updateOnFixedUpdate)
+            {
+                UpdateBone();
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (m_updateOnFixedUpdate == false)
+            {
+                UpdateBone();
+            }
+        }
+
+        public void UpdateBone()
         {
             if (SkeletonRenderer.isVisible)
             {
