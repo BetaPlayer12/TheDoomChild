@@ -8,6 +8,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
     {
         [SerializeField]
         private RaySensor m_ceilingSensor;
+        [SerializeField]
+        private RaySensor m_crouchHeightSensor;
 
         private Animator m_animator;
         private int m_animationParameter;
@@ -55,6 +57,38 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
             }
             return isValid;
+        }
+
+        public bool IsCrouchingPossible()
+        {
+            bool canCrouch = true;
+            m_crouchHeightSensor.Cast();
+
+            if (m_crouchHeightSensor.allRaysDetecting)
+            {
+                var hits = m_ceilingSensor.GetUniqueHits();
+                for (int i = 0; i < hits.Length; i++)
+                {
+                    m_cacheCollider = hits[i].collider;
+                    if (m_cacheCollider.isTrigger)
+                    {
+                        canCrouch = true;
+                    }
+                    else
+                    {
+                        if (m_cacheCollider.CompareTag("InvisibleWall") == false)
+                        {
+                            canCrouch = false;
+                        }
+                        else
+                        {
+                            canCrouch = true;
+                        }
+                    }
+                }
+            }
+
+            return canCrouch;
         }
 
         public void Execute()

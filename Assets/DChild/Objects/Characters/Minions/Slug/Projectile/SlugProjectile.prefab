@@ -48,7 +48,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4845,6 +4845,9 @@ MonoBehaviour:
     m_particleSystems:
     - {fileID: 3859436293340362053}
     - {fileID: 3832993027293727716}
+    m_originalSimulationSpeed:
+    - 1
+    - 1
   m_spineObjects:
     m_skeletonAnimations: []
     m_baseTimeScale: []
@@ -4870,7 +4873,7 @@ MonoBehaviour:
   m_simulateGravity: 1
   m_gravity:
     m_gravityScale: 1
-    m_direction: {x: -0.00000004371139, y: 1}
+    m_direction: {x: 0, y: -1}
     m_angle: -90
     m_drawDirection: 0
   m_useLinearDrag: 0
@@ -4889,12 +4892,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 9631ec6848e04c84aa2994890ed606b2, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_waitForParticlesEnd: 0
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
   m_model: {fileID: 0}
-  m_data: {fileID: 11400000, guid: b9481f7f006a1d04c9d217a808d5ff3b, type: 2}
+  m_data: {fileID: 0}
 --- !u!114 &2362674429783577668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4907,13 +4910,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 6804000004151493132}
-  m_data: {fileID: 11400000, guid: a114423f5348d2344b863450b7de0c91, type: 2}
+  m_centerMass: {fileID: 0}
+  m_data: {fileID: 0}
   m_info:
-    damage:
-    - m_type: 0
-      m_value: 25
-    critChance: 8
+    damage: []
+    critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
 --- !u!114 &3141098848231150435
@@ -4929,6 +4930,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!60 &4212660984842769207
 PolygonCollider2D:
@@ -5012,7 +5015,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9730,12 +9733,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 0463c9a3fe2d4f345b56bb3a2ea1b7d1, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_particleSystems:
   - {fileID: 4440453343587419579}
   - {fileID: 2029281881613830025}
-  m_playOnAwake: 1
-  m_poolOnStop: 1
+  m_playOnAwake: 0
+  m_poolOnStop: 0
 --- !u!1 &7286732807724175548
 GameObject:
   m_ObjectHideFlags: 0
@@ -9880,6 +9883,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6804000004151493132}
     m_Modifications:
+    - target: {fileID: 457552031508149412, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
+        type: 3}
+      propertyPath: m_poolableItemData
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 457552031508149412, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
+        type: 3}
+      propertyPath: m_playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 457552031508149412, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
+        type: 3}
+      propertyPath: m_poolOnStop
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1011757827253742918, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
         type: 3}
       propertyPath: m_Layer
@@ -9909,6 +9927,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692011570255613538, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4692011570255613539, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
         type: 3}
@@ -9978,6 +10001,11 @@ PrefabInstance:
     - target: {fileID: 4692011570255613549, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729801794122870979, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
+        type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8149786750008204014, guid: 761ffc0500c5a974b8ea26234ee2f7c7,
