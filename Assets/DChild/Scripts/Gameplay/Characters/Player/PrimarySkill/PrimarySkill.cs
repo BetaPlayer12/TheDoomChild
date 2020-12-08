@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Players
         SwordThrust,
         EarthShaker,
         Whip,
-        Levitate,
+        DevilWings,
         ShadowDash,
         ShadowSlide,
         [HideInInspector]

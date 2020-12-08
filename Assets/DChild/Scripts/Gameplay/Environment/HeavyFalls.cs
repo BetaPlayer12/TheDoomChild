@@ -83,7 +83,7 @@ namespace DChild.Gameplay.Environment
 
                 if (collision.TryGetComponentInParent(out PlayerControlledObject playerObject))
                 {
-                    playerObject.owner.behaviourModule.SetModuleActive(PrimarySkill.Levitate, false);
+                    playerObject.owner.behaviourModule.SetModuleActive(PrimarySkill.DevilWings, false);
                 }
             }
         }
@@ -107,7 +107,7 @@ namespace DChild.Gameplay.Environment
 
                 if (collision.TryGetComponentInParent(out PlayerControlledObject playerObject))
                 {
-                    playerObject.owner.behaviourModule.SetModuleActive(PrimarySkill.Levitate, true);
+                    playerObject.owner.behaviourModule.SetModuleActive(PrimarySkill.DevilWings, true);
                 }
             }
         }
