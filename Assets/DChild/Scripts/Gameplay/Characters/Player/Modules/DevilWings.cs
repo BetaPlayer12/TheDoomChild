@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class Levitation : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
+    public class DevilWings : MonoBehaviour, ICancellableBehaviour, IComplexCharacterModule
     {
         [SerializeField, MinValue(0)]
         private int m_sourceRequiredAmount;
