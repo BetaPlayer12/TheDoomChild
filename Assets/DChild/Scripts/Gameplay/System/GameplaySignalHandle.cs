@@ -35,4 +35,8 @@ namespace DChild.Gameplay
             GameplaySystem.playerManager.player.damageableModule.SetHitboxActive(value);
         }
     }
+    public class CinematicSceneTransfer : MonoBehaviour
+    {
+
+    }
 }
