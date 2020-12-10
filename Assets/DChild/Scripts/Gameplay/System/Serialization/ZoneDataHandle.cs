@@ -138,7 +138,7 @@ namespace DChild.Serialization
                 {
                     m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
                 }
-                yield return null;
+               yield return null;
             }
         }
 
@@ -159,7 +159,6 @@ namespace DChild.Serialization
             if (m_useEditorData)
             {
                 proposedData = m_editorData;
-
             }
 #endif
             bool hasData = false;
