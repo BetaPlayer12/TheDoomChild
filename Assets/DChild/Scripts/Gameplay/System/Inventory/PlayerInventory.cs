@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.Players.SoulSkills;
+﻿
+using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
 using DChild.Serialization;
