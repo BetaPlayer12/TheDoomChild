@@ -40,4 +40,5 @@ namespace DChild.Gameplay
             GameplaySystem.playerManager.player.damageableModule.SetHitboxActive(value);
         }
     }
+}
   
