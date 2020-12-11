@@ -92,6 +92,9 @@ MonoBehaviour:
     m_particleSystems:
     - {fileID: 447492043302447038}
     - {fileID: 6474933386064446274}
+    m_originalSimulationSpeed:
+    - 1
+    - 1
   m_spineObjects:
     m_skeletonAnimations: []
     m_baseTimeScale: []
@@ -114,10 +117,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00762718fcc9fe449aef23fb022b5dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_simulateGravity: 0
+  m_simulateGravity: 1
   m_gravity:
     m_gravityScale: 1
-    m_direction: {x: -0.00000004371139, y: 1}
+    m_direction: {x: 0, y: -1}
     m_angle: -90
     m_drawDirection: 0
   m_useLinearDrag: 0
@@ -164,12 +167,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 0463c9a3fe2d4f345b56bb3a2ea1b7d1, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_waitForParticlesEnd: 0
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
   m_model: {fileID: 0}
-  m_data: {fileID: 11400000, guid: 180299995f418714d85ba602df799254, type: 2}
+  m_data: {fileID: 0}
 --- !u!114 &1889599794523640436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 7249804826797229116}
+  m_centerMass: {fileID: 0}
   m_data: {fileID: 0}
   m_info:
     damage: []
@@ -202,6 +205,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!1 &625314043421165918
 GameObject:
@@ -255,7 +260,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4973,13 +4978,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 0463c9a3fe2d4f345b56bb3a2ea1b7d1, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_particleSystems:
   - {fileID: 2063349902460941182}
   - {fileID: 813007640134948248}
   - {fileID: 3137991104302813108}
-  m_playOnAwake: 1
-  m_poolOnStop: 1
+  m_playOnAwake: 0
+  m_poolOnStop: 0
 --- !u!1 &1171558346941368067
 GameObject:
   m_ObjectHideFlags: 0
@@ -5028,7 +5033,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9782,7 +9787,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -14536,7 +14541,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -19430,7 +19435,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -24148,12 +24153,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 0463c9a3fe2d4f345b56bb3a2ea1b7d1, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_particleSystems:
   - {fileID: 535781202714739595}
   - {fileID: 2799453356872368569}
-  m_playOnAwake: 1
-  m_poolOnStop: 1
+  m_playOnAwake: 0
+  m_poolOnStop: 0
 --- !u!114 &2944000696238057744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24166,12 +24171,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 0463c9a3fe2d4f345b56bb3a2ea1b7d1, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_particleSystems:
   - {fileID: 447492043302447038}
   - {fileID: 6474933386064446274}
-  m_playOnAwake: 1
-  m_poolOnStop: 1
+  m_playOnAwake: 0
+  m_poolOnStop: 0
 --- !u!1 &8811513194210352066
 GameObject:
   m_ObjectHideFlags: 0
@@ -24359,7 +24364,7 @@ PrefabInstance:
     - target: {fileID: 4495809865520671381, guid: 3bbab92c3af906747a7798719cff3ba9,
         type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4495809865520671381, guid: 3bbab92c3af906747a7798719cff3ba9,
         type: 3}
@@ -24384,7 +24389,7 @@ PrefabInstance:
     - target: {fileID: 7028440610074070633, guid: 3bbab92c3af906747a7798719cff3ba9,
         type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7028440610074070633, guid: 3bbab92c3af906747a7798719cff3ba9,
         type: 3}
