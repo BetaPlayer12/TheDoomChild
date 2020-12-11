@@ -1,4 +1,9 @@
-﻿using Doozy.Engine;
+﻿using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Systems.Serialization;
+using DChild.Menu;
+using Doozy.Engine;
+using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay
@@ -35,8 +40,5 @@ namespace DChild.Gameplay
             GameplaySystem.playerManager.player.damageableModule.SetHitboxActive(value);
         }
     }
-    public class CinematicSceneTransfer : MonoBehaviour
-    {
-
-    }
 }
+  
