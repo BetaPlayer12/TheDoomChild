@@ -64,6 +64,7 @@ namespace DChild
             {
                 if (m_activeZone != string.Empty && m_activeZone != sceneName)
                 {
+                    RoomActivityManager.UnloadAllRooms();
                     LoadingHandle.UnloadScenes(m_activeZone);
                     m_activeZone = string.Empty;
                 }
