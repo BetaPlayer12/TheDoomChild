@@ -1,4 +1,5 @@
 ﻿using DChild;
+using DChild.Gameplay;
 using Holysoft.Collections;
 using Holysoft.Event;
 using System;
@@ -20,7 +21,9 @@ public class GameOverTimer : MonoBehaviour
 
     private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
     {
-        GameSystem.LoadMainMenu();
+        //GameplaySystem.campaignSerializer.Load();
+        GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, DChild.Menu.LoadingHandle.LoadType.Force);
+        //GameSystem.LoadMainMenu();
     }
 
     private void Update()
