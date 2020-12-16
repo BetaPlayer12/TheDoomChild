@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private LedgeGrab m_ledgeGrab;
         private GroundJump m_groundJump;
         private ExtraJump m_extraJump;
-        private Levitation m_levitation;
+        private DevilWings m_devilWings;
         private ShadowDash m_shadowDash;
         private ShadowSlide m_shadowSlide;
 
@@ -73,7 +73,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_dash?.Cancel();
             m_slide?.Cancel();
             m_wallStick?.Cancel();
-            m_levitation?.Cancel();
+            m_devilWings?.Cancel();
             m_shadowDash?.Cancel();
             m_basicSlashes?.Cancel();
             m_slashCombo?.Cancel();
@@ -116,7 +116,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_state.isLevitating)
                     {
-                        m_levitation?.Cancel();
+                        m_devilWings?.Cancel();
                     }
 
                     m_initialDescentBoost?.Reset();
@@ -213,7 +213,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_state.isLevitating)
                 {
-                    m_levitation?.Cancel();
+                    m_devilWings?.Cancel();
                 }
             }
         }
@@ -250,7 +250,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ledgeGrab = m_character.GetComponentInChildren<LedgeGrab>();
             m_groundJump = m_character.GetComponentInChildren<GroundJump>();
             m_extraJump = m_character.GetComponentInChildren<ExtraJump>();
-            m_levitation = m_character.GetComponentInChildren<Levitation>();
+            m_devilWings = m_character.GetComponentInChildren<DevilWings>();
             m_shadowDash = m_character.GetComponentInChildren<ShadowDash>();
             m_shadowSlide = m_character.GetComponentInChildren<ShadowSlide>();
             m_wallStick = m_character.GetComponentInChildren<WallStick>();
@@ -485,11 +485,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_state.isLevitating)
                 {
-                    m_levitation?.MaintainHeight();
-                    m_levitation?.ConsumeSource();
-                    if (m_input.levitateHeld == false || (m_levitation?.HaveEnoughSourceForMaintainingHeight() ?? true) == false)
+                    m_devilWings?.MaintainHeight();
+                    m_devilWings?.ConsumeSource();
+                    if (m_input.levitateHeld == false || (m_devilWings?.HaveEnoughSourceForMaintainingHeight() ?? true) == false)
                     {
-                        m_levitation?.Cancel();
+                        m_devilWings?.Cancel();
                     }
                 }
 
@@ -566,7 +566,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_state.isLevitating)
                         {
-                            m_levitation?.Cancel();
+                            m_devilWings?.Cancel();
                         }
 
                         m_groundJump?.Cancel();
@@ -581,7 +581,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         {
                             if (m_state.isLevitating)
                             {
-                                m_levitation?.Cancel();
+                                m_devilWings?.Cancel();
                             }
 
                             m_extraJump?.Execute();
@@ -590,14 +590,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.levitatePressed)
                 {
-                    if (m_levitation?.HaveEnoughSourceForExecution() ?? false)
+                    if (m_devilWings?.HaveEnoughSourceForExecution() ?? false)
                     {
                         if (m_state.isHighJumping)
                         {
                             m_groundJump?.CutOffJump();
                         }
 
-                        m_levitation?.Execute();
+                        m_devilWings?.Execute();
                     }
                 }
                 else
@@ -899,20 +899,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_activeSlide?.IsSlideDurationOver() ?? true)
                 {
-                    m_activeSlide?.Cancel();
-                    m_activeSlide?.ResetCooldownTimer();
-
                     if (m_crouch.IsThereNoCeiling())
                     {
-
+                        m_activeSlide?.Cancel();
+                        m_activeSlide?.ResetCooldownTimer();
                     }
                     else
                     {
-                        if (m_state.isCrouched == false)
+                        if (m_crouch.IsCrouchingPossible())
                         {
-                            m_crouch?.Execute();
-                            m_idle?.Cancel();
-                            m_movement?.SwitchConfigTo(Movement.Type.Crouch);
+                            m_activeSlide?.Cancel();
+                            m_activeSlide?.ResetCooldownTimer();
+
+                            if (m_state.isCrouched == false)
+                            {
+                                m_crouch?.Execute();
+                                m_idle?.Cancel();
+                                m_movement?.SwitchConfigTo(Movement.Type.Crouch);
+                            }
                         }
                     }
                 }
@@ -1000,7 +1004,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_state.isLevitating)
             {
-                m_levitation?.Cancel();
+                m_devilWings?.Cancel();
             }
 
             if (m_state.isHighJumping == true)

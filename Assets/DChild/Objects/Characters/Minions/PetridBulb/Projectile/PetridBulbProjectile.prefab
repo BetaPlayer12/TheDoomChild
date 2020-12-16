@@ -149,13 +149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: c15645cbf485ab04e97efe502f60c4e6, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_particleSystems:
   - {fileID: 2505439419723957657}
   - {fileID: 2505439419354862874}
   - {fileID: 2505439420245653714}
-  m_playOnAwake: 1
-  m_poolOnStop: 1
+  m_playOnAwake: 0
+  m_poolOnStop: 0
 --- !u!1 &2674388513953620676
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,7 +207,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4925,12 +4925,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 0463c9a3fe2d4f345b56bb3a2ea1b7d1, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_particleSystems:
   - {fileID: 4690651537525296431}
   - {fileID: 6966601795490942749}
-  m_playOnAwake: 1
-  m_poolOnStop: 1
+  m_playOnAwake: 0
+  m_poolOnStop: 0
 --- !u!1 &5093777954747754501
 GameObject:
   m_ObjectHideFlags: 0
@@ -5023,6 +5023,10 @@ MonoBehaviour:
     - {fileID: 2505439419723957657}
     - {fileID: 2505439419354862874}
     - {fileID: 2505439420245653714}
+    m_originalSimulationSpeed:
+    - 1
+    - 1
+    - 1
   m_spineObjects:
     m_skeletonAnimations: []
     m_baseTimeScale: []
@@ -5045,10 +5049,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00762718fcc9fe449aef23fb022b5dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_simulateGravity: 0
+  m_simulateGravity: 1
   m_gravity:
     m_gravityScale: 1
-    m_direction: {x: -0.00000004371139, y: 1}
+    m_direction: {x: 0, y: -1}
     m_angle: -90
     m_drawDirection: 0
   m_useLinearDrag: 0
@@ -5067,12 +5071,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: cb0d1b7c1e7784248b3248cb280ae375, type: 2}
+  m_poolableItemData: {fileID: 0}
   m_waitForParticlesEnd: 0
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
   m_model: {fileID: 0}
-  m_data: {fileID: 11400000, guid: 811be26d0aaa22f43a4605748d432e24, type: 2}
+  m_data: {fileID: 0}
 --- !u!114 &6651470932714626256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5085,12 +5089,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 2516258228121651864}
-  m_data: {fileID: 11400000, guid: b22cfdabe1626fd4bb63a1b33a2a7c15, type: 2}
+  m_centerMass: {fileID: 0}
+  m_data: {fileID: 0}
   m_info:
-    damage:
-    - m_type: 0
-      m_value: 25
+    damage: []
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
@@ -5107,6 +5109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!70 &4717233831338348962
 CapsuleCollider2D:
@@ -5172,7 +5176,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9913,7 +9917,7 @@ PrefabInstance:
     - target: {fileID: 6975760566433371372, guid: 3112328f8d0ebe745954c76ba6031316,
         type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6975760566433371372, guid: 3112328f8d0ebe745954c76ba6031316,
         type: 3}
@@ -10018,7 +10022,7 @@ PrefabInstance:
     - target: {fileID: 6975760566668248175, guid: 3112328f8d0ebe745954c76ba6031316,
         type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6975760566668248175, guid: 3112328f8d0ebe745954c76ba6031316,
         type: 3}
@@ -10033,7 +10037,7 @@ PrefabInstance:
     - target: {fileID: 6975760567207770404, guid: 3112328f8d0ebe745954c76ba6031316,
         type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6975760567207770404, guid: 3112328f8d0ebe745954c76ba6031316,
         type: 3}

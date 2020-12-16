@@ -13,6 +13,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_chargeDuration;
         [SerializeField]
         private Info m_thrust;
+        [SerializeField]
+        private float m_thrustForce;
 
         private float m_chargeTimer;
         private int m_swordThrustAnimationParameter;

@@ -403,7 +403,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void MoveToAttackPosition(Attack attack/*, Vector2 target*/)
         {
-            //StopAllCoroutines();
             //Debug.Log("Triple Attack!");
             switch (attack)
             {
@@ -1031,6 +1030,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_attackDecider.chosenAttack.range)*/ && m_chosenAttack != m_previousAttack)
                     {
                         //m_agent.Stop();
+                        StopAllCoroutines();
                         m_movePointsGO.transform.localScale = new Vector3(UnityEngine.Random.Range(-1, 1), 1, 1);
                         m_movePointsGO.transform.localScale = new Vector3(m_movePointsGO.transform.localScale.x == 0 ? 1 : m_movePointsGO.transform.localScale.x, 1, 1);
                         m_previousAttack = m_chosenAttack;

@@ -44,6 +44,7 @@ namespace DChild.Gameplay.UI.Map
             GameEventMessage.SendEvent("Location Transfer");
             var playerManager = GameplaySystem.playerManager;
             var character = playerManager.player.character;
+
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
             rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
             CharacterState collisionState = character.GetComponentInChildren<CharacterState>();

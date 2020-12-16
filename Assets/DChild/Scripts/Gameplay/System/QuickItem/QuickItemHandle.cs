@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Inventories
 {
+
     public class QuickItemHandle : SerializedMonoBehaviour
     {
         public class SelectionEventArgs : IEventActionArgs
