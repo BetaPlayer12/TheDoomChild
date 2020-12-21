@@ -22,8 +22,8 @@ public class GameOverTimer : MonoBehaviour
     private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
     {
         //GameplaySystem.campaignSerializer.Load();
-        GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, DChild.Menu.LoadingHandle.LoadType.Force);
-        //GameSystem.LoadMainMenu();
+        //GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, DChild.Menu.LoadingHandle.LoadType.Force);
+        GameSystem.LoadMainMenu();
     }
 
     private void Update()

@@ -214,6 +214,7 @@ namespace DChild.Gameplay.Environment
             m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
             m_listSize = m_waypoints.Length;
             ChangeDestination();
+            enabled = false;
         }
 
         private void Update()
