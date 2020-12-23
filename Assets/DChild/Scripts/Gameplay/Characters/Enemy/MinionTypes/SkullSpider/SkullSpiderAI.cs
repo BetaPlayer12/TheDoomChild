@@ -95,6 +95,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Detect,
+            Idle,
             Patrol,
             Turning,
             Attacking,
@@ -147,6 +148,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_explodeFX;
+
+        [SerializeField]
+        private bool m_willPatrol;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -249,16 +253,31 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack.animation)
+            {
+                StopAllCoroutines();
+                StartCoroutine(FlinchRoutine());
+                m_stateHandle.Wait(State.ReevaluateSituation);
+            }
+        }
+
+        private IEnumerator FlinchRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.death1Animation || m_animation.GetCurrentAnimation(0).ToString() != m_info.death2Animation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack.animation)
+            //{
+            //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.death1Animation || m_animation.GetCurrentAnimation(0).ToString() != m_info.death2Animation)
+            //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //    m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //}
         }
 
         public override void ApplyData()
@@ -291,7 +310,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
-
+            m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 
@@ -330,6 +349,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation || m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation)
                             m_stateHandle.SetState(State.Turning);
                     }
+                    break;
+
+                case State.Idle:
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
 
                 case State.Patrol:

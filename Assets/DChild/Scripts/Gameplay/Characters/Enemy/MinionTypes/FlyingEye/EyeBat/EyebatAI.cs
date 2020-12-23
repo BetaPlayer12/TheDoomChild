@@ -198,6 +198,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            m_animation.SetAnimation(0, m_info.idle2Animation, true);
             m_stateHandle.ApplyQueuedState();
         }
         private Vector2 WallPosition()
@@ -282,7 +283,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case Attack.Attack:
                     //m_animation.EnableRootMotion(true, false);
-                    //m_attackHandle.ExecuteAttack(m_info.attackMove.animation, m_info.idleAnimation);
                     StartCoroutine(AttackRoutine());
                     break;
             }
@@ -300,7 +300,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attack.animation, false).AnimationStart = 0.25f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, false);
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
             //m_animation.EnableRootMotion(false, false);
             m_stateHandle.ApplyQueuedState();
@@ -347,7 +346,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_agent.SetDestination(target);
                 m_agent.Move(m_info.move.speed);
 
-                m_animation.SetAnimation(0, m_info.move.animation, true);
+                if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
+                {
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                }
             }
             else
             {
@@ -399,13 +405,17 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.patrol.animation)
+                    m_turnState = State.ReevaluateSituation;
+                    if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
                     {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    }
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;
 
                 case State.Turning:
@@ -434,7 +444,14 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
                             m_animation.EnableRootMotion(false, false);
-                            m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
+                            if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
+                            {
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            }
+                            else
+                            {
+                                m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                            }
                             CalculateRunPath();
                             m_agent.Move(m_info.move.speed);
                         }

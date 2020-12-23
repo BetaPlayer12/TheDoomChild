@@ -37,6 +37,8 @@ namespace DChild.Gameplay.Items
         [SerializeField,ShowIf("m_HasNotification")]
         private string m_notifEvent;
 
+        private bool m_hasBeenPickedUp;
+
         private Collider2D m_trigger;
 
         public bool showPrompt => true;
@@ -55,15 +57,16 @@ namespace DChild.Gameplay.Items
                 //GameEventMessage.SendEvent("Soul Skill Acquired");
                 GameEventMessage.SendEvent(m_notifEvent);
             }
+            m_hasBeenPickedUp = true;
         }
 
-        public ISaveData Save() => new SaveData(!gameObject.activeSelf);
+        public ISaveData Save() => new SaveData(m_hasBeenPickedUp);
 
         public void Load(ISaveData data)
         {
-            var hasNotBeenPickedUp = ((SaveData)data).isPickedUp == false;
-            m_model.SetActive(hasNotBeenPickedUp);
-            m_trigger.enabled = hasNotBeenPickedUp;
+            m_hasBeenPickedUp = ((SaveData)data).isPickedUp == false;
+            m_model.SetActive(!m_hasBeenPickedUp);
+            m_trigger.enabled = !m_hasBeenPickedUp;
         }
 
         private void Awake()
