@@ -31,15 +31,15 @@ namespace DChild.Gameplay.Combat
 
         protected override bool IsValidToHit(Collider2D collision)
         {
+            var position = transform.position;
+            var direction = collision.bounds.center - position;
+            var castedAll = Raycaster.CastAll(position, direction.normalized, direction.magnitude);
             // Cannot Hit Enemies on the other side of grills
 
-            if (m_canDetectInteractables)
+            if (collision.TryGetComponentInParent(out IHitToInteract interactable))
             {
-                if (collision.TryGetComponentInParent(out IHitToInteract interactable))
+                if (m_canDetectInteractables)
                 {
-                    var position = transform.position;
-                    var direction = collision.bounds.center - position;
-                    var castedAll = Raycaster.CastAll(position, direction.normalized, direction.magnitude);
                     for (int i = 0; i < castedAll.Length; i++)
                     {
                         if (castedAll[i].collider == collision)
@@ -55,7 +55,29 @@ namespace DChild.Gameplay.Combat
                 }
                 else
                 {
-                    return Raycaster.SearchCast(transform.position, collision.bounds.center, LayerMask.GetMask(ENVIRONMENT_LAYER), out RaycastHit2D[] buffer);
+                    return false;
+                }
+            }
+            else if (collision.TryGetComponentInParent(out IDamageable damageable))
+            {
+                if (Raycaster.SearchCast(transform.position, collision.bounds.center, LayerMask.GetMask(ENVIRONMENT_LAYER), out RaycastHit2D[] buffer))
+                {
+                    return true;
+                }
+                else
+                {
+                    for (int i = 0; i < castedAll.Length; i++)
+                    {
+                        if (castedAll[i].collider == collision)
+                        {
+                            break;
+                        }
+                        else if (m_canPassthroughList.Contains(castedAll[i].collider) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
                 }
             }
             else
