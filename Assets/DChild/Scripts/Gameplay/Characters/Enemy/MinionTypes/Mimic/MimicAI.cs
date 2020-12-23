@@ -198,9 +198,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
-                m_stateHandle.SetState(State.Patrol);
+                StartCoroutine(SinkRoutine());
             }
         }
+
+        private IEnumerator SinkRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.sinkIdleAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sinkIdleAnimation);
+            //m_animation.SetAnimation(0, m_info.si, true);
+            m_stateHandle.SetState(State.Idle);
+            yield return null;
+        }
+
         //private IEnumerator PatienceRoutine()
         //{
         //    //if (m_enablePatience)
@@ -229,16 +239,33 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            Debug.Log("DO THE RAWR");
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack.animation)
+            {
+                StopAllCoroutines();
+                m_animation.SetAnimation(0, m_info.idleAnimation, false);
+                StartCoroutine(FlinchRoutine());
+                m_stateHandle.Wait(State.Cooldown);
+            }
+        }
+
+        private IEnumerator FlinchRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack.animation)
+            //{
+            //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.death1Animation || m_animation.GetCurrentAnimation(0).ToString() != m_info.death2Animation)
+            //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //    m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //}
         }
 
         public override void ApplyData()
@@ -267,10 +294,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
-            m_hitbox.gameObject.SetActive(false);
+            //m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-            m_hitbox.gameObject.SetActive(true);
+            //m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
