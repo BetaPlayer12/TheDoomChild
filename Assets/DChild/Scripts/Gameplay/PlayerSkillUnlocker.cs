@@ -74,7 +74,15 @@ namespace DChild.Gameplay
                             break;
                     }
                 }
-                m_cinematic?.Play();
+
+                if (m_cinematic == null)
+                {
+                    GameEventMessage.SendEvent("Primary Skill Acquired");
+                }
+                else
+                {
+                    m_cinematic.Play();
+                }
                 //m_fx.Play(true);
                 //StartCoroutine(DelayedNotifySkill());
                 m_isUsed = true;
