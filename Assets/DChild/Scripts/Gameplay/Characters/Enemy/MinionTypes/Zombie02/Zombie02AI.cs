@@ -149,6 +149,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("BoundingBox")]
+        private GameObject m_spitBB;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -309,6 +312,18 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator Attack2Routine()
+        {
+            m_animation.SetAnimation(0, m_info.attack2.animation, false);
+            yield return new WaitForSeconds(.25f);
+            m_spitBB.SetActive(true);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+            m_spitBB.SetActive(false);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -390,7 +405,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Attack2:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                            //m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                            StartCoroutine(Attack2Routine());
                             break;
                         case Attack.HeadAttack:
                             m_animation.EnableRootMotion(true, false);
