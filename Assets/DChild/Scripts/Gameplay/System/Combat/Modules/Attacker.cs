@@ -70,6 +70,10 @@ namespace DChild.Gameplay.Combat
 
         public void SetDamage(params AttackDamage[] damage)
         {
+            if (m_info == null)
+            {
+                m_info = new AttackerInfo();
+            }
             m_info.damage.Clear();
             m_info.damage.AddRange(damage);
             if (m_isInstantiated == false)
@@ -125,7 +129,10 @@ namespace DChild.Gameplay.Combat
 
         private void Awake()
         {
-            m_info = new AttackerInfo();
+            if (m_info == null)
+            {
+                m_info = new AttackerInfo();
+            }
             if (m_data != null)
             {
                 m_info.Copy(m_data.info);

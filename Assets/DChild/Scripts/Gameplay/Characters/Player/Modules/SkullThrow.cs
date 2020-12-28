@@ -88,7 +88,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             ////startingPosition.x *= (int)m_character.facing;
             //startingPosition.x = 0;
             //startingPosition += (Vector2)m_character.centerMass.position + new Vector2(5 * (int)m_character.facing,0);
-            return (Vector2)m_character.centerMass.position;
+            return (Vector2)m_spawnPoint.position;
         }
 
         private void UpdateTrajectorySimulation()
