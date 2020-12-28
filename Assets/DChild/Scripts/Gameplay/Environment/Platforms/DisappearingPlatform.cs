@@ -132,7 +132,5 @@ namespace DChild.Gameplay.Environment
                 DisappearPlatform();
             }
         }
-
-      
     }
 }

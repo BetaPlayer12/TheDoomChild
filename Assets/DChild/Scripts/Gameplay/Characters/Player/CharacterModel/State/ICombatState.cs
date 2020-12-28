@@ -8,11 +8,4 @@
         bool isAttacking { get; set; }
         bool isGrounded { get; }
     }
-
-    public interface IProjectileThrowState
-    {
-        bool canAttack { set; }
-        bool waitForBehaviour { set; }
-        bool isAimingProjectile { get; set; }
-    }
 }

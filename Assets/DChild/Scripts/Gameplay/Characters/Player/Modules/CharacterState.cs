@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
                                   IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
-                                  ILevitateState, IGrabState, ISlideState, ILedgeGrabState
+                                  ILevitateState, IGrabState, ISlideState, ILedgeGrabState, IProjectileThrowState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;
@@ -63,6 +63,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isGrabbing;
         public bool isGrabbing { get => m_isGrabbing; set => m_isGrabbing = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isAimingProjectile;
+        public bool isAimingProjectile { get => m_isAimingProjectile; set => m_isAimingProjectile = value; }
 
         [SerializeField, ReadOnly]
         private bool m_waitForBehaviour;
