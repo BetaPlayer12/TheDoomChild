@@ -237,8 +237,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
+            StopAllCoroutines();
             m_movement.Stop();
         }
 
@@ -481,6 +482,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
         }
 
         public void SwitchToBattleZoneAI()
