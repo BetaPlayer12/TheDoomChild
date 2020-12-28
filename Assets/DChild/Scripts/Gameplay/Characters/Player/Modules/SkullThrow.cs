@@ -26,6 +26,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Vector2 m_minAimValue;
         [SerializeField, BoxGroup("Aim")]
         private Vector2 m_maxAimValue;
+        [SerializeField, BoxGroup("Aim"),MinValue(0f)]
+        private float m_aimSensitivity = 1f;
 
         private Vector2 m_currentAim; //Relative to Character Facing
 
@@ -47,7 +49,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void MoveAim(Vector2 delta)
         {
-            var relativeDelta = delta;
+            var relativeDelta = delta.normalized * m_aimSensitivity;
             relativeDelta.x *= (int)m_character.facing;
             var newAim = m_currentAim += relativeDelta;
             if (newAim.x < m_minAimValue.x)
