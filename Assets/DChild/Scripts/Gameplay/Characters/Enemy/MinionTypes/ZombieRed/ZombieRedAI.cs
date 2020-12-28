@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/ZombieRed")]
-    public class ZombieRedAI : CombatAIBrain<ZombieRedAI.Info>
+    public class ZombieRedAI : CombatAIBrain<ZombieRedAI.Info>, IResetableAIBrain, IBattleZoneAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -481,6 +481,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
+        }
+
+        public void SwitchToBattleZoneAI()
+        {
+            m_stateHandle.SetState(State.Chasing);
+        }
+
+        public void SwitchToBaseAI()
+        {
+            m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
         protected override void OnBecomePassive()
