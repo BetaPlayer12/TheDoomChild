@@ -58,8 +58,11 @@ namespace DChild.Gameplay.Characters.AI
 
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
         {
+            if (m_targetInfo == null)
+            {
+                m_targetInfo = new AITargetInfo();
+            }
             m_targetInfo.Set(damageable, m_target);
-            Debug.Log("Murmur has TARGET");
         }
 
         protected bool IsFacingTarget() => IsFacing(m_targetInfo.position);
@@ -96,7 +99,10 @@ namespace DChild.Gameplay.Characters.AI
 
         protected override void Awake()
         {
-            m_targetInfo = new AITargetInfo();
+            if (m_targetInfo == null)
+            {
+                m_targetInfo = new AITargetInfo();
+            }
             base.Awake();
             m_damageable.Destroyed += OnDestroyed;
         }
