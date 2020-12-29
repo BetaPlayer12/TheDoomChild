@@ -118,6 +118,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_groundSensor;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -200,6 +202,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
             m_animation.SetAnimation(0, m_info.idle2Animation, true);
+            m_agent.Stop();
             m_stateHandle.ApplyQueuedState();
         }
         private Vector2 WallPosition()
@@ -336,7 +339,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > .25f)
+                if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > .25f && !m_groundSensor.isDetecting)
                 {
                     m_agent.SetDestination(new Vector2(transform.position.x, target.y));
                 }
