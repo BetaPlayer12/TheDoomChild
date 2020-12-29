@@ -137,7 +137,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_currentAttack = Attack.Attack;
             m_flinchHandle.gameObject.SetActive(true);
-            m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
         }
@@ -193,10 +192,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_animation.DisableRootMotion();
-            StopAllCoroutines();
             m_agent.Stop();
-            m_stateHandle.Wait(State.Cooldown);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            StopAllCoroutines();
             StartCoroutine(FlinchRoutine());
         }
 
@@ -205,7 +203,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idle2Animation, true);
-            m_stateHandle.ApplyQueuedState();
+            m_stateHandle.OverrideState(State.Cooldown); 
             yield return null;
         }
 
@@ -285,9 +283,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            StopAllCoroutines();
             m_agent.Stop();
-            m_character.physics.simulateGravity = true;
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
         }
+
         #region Attack
         private void ExecuteAttack(Attack m_attack)
         {
@@ -295,7 +295,6 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (/*m_attack*/ m_currentAttack)
             {
                 case Attack.Attack:
-                    //m_animation.EnableRootMotion(true, false);
                     StartCoroutine(AttackRoutine());
                     break;
             }
@@ -310,11 +309,9 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.25f);
             m_agent.Stop();
             m_character.physics.SetVelocity(15 * transform.localScale.x, 0);
-            //m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attack.animation, false).AnimationStart = 0.25f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
-            //m_animation.EnableRootMotion(false, false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -323,7 +320,6 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Movement
         private IEnumerator ExecuteMove(float attackRange, /*float heightOffset,*/ Attack attack)
         {
-            m_animation.DisableRootMotion();
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             while (!inRange)
@@ -380,6 +376,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
+            m_animation.DisableRootMotion();
             //m_selfCollider.SetActive(false);
         }
 
@@ -456,7 +453,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
-                            m_animation.EnableRootMotion(false, false);
                             if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
                             {
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);

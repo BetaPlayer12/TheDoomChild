@@ -198,6 +198,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
+                m_hitbox.gameObject.SetActive(false);
                 StartCoroutine(SinkRoutine());
             }
         }
@@ -287,8 +288,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.immerseAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.immerseAnimation);
+            yield return new WaitForSeconds(.25f);
             m_hitbox.gameObject.SetActive(true);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.immerseAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
