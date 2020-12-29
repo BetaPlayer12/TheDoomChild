@@ -13,32 +13,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
---- !u!61 &1181546047091341803
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5221172201786698717}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.064257145, y: -0.018708706}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.48, y: 10.32}
-    newSize: {x: 1.13, y: 5.79}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2.1655483, y: 10.055428}
-  m_EdgeRadius: 0
 --- !u!212 &7023735304211402762
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -99,8 +73,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7044926938182414292}
   - component: {fileID: 8893607689992519433}
-  - component: {fileID: 1798042731825970515}
-  m_Layer: 9
+  - component: {fileID: 6620627658047352768}
+  - component: {fileID: 5633639962009524108}
+  m_Layer: 11
   m_Name: Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +109,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.09473485, y: -0.050935745}
+  m_Offset: {x: 0.09324813, y: 0.012547016}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -145,9 +120,9 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.9826493, y: 9.504774}
+  m_Size: {x: 2.2079716, y: 9.987245}
   m_EdgeRadius: 0
---- !u!114 &1798042731825970515
+--- !u!114 &6620627658047352768
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,15 +131,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 7400534533206127826}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34b489c0ee0d08c42a6db5b55d62de1f, type: 3}
+  m_Script: {fileID: 11500000, guid: b44a73184fcaf434d882465cb3f84563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 8893607689992519433}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
-  m_viableTags:
-  - WallBreaker
+  m_mask:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &5633639962009524108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7400534533206127826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fabdf12606ef5e499330fa622d86401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6491929798649774593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -256,6 +244,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_maxHealth
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164840035017208880, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8302337d0dac39146b4f6aaaf90bbe60, type: 3}

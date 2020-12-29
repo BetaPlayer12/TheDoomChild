@@ -69,6 +69,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        public void UpdateFaceDirection(float direction)
+        {
+            if (Mathf.Sign(direction) != (int)m_character.facing)
+            {
+                var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
+                m_character.SetFacing(otherFacing);
+            }
+        }
+
         public void Move(float direction, bool faceDirection)
         {
             if (direction == 0)
@@ -79,11 +88,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (faceDirection == true)
                 {
-                    if (Mathf.Sign(direction) != (int)m_character.facing)
-                    {
-                        var otherFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
-                        m_character.SetFacing(otherFacing);
-                    }
+                    UpdateFaceDirection(direction);
                 }
 
                 m_animator.SetFloat(m_speedAnimationParameter, 1);

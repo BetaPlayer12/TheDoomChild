@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Combat
 
         [SerializeField]
         private Invulnerability m_invulnerabilityLevel;
-        [SerializeField, HideIf("m_isInvulnerable"), Range(0, 0.99f)]
+        [SerializeField, HideIf("@m_invulnerabilityLevel == Invulnerability.MAX"), Range(0, 0.99f)]
         private float m_damageReduction;
 
         public IDamageable damageable => m_damageable;

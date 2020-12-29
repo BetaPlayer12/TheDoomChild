@@ -84,7 +84,7 @@ namespace DChild.Gameplay.Environment
         {
             m_rigidbody = GetComponent<Rigidbody2D>();
             m_constraints = m_rigidbody.constraints;
-            m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+           // m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 
 #if UNITY_EDITOR
