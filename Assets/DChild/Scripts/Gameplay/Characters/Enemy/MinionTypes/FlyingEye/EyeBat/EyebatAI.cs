@@ -197,13 +197,22 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             m_agent.Stop();
             m_stateHandle.Wait(State.Cooldown);
+            StartCoroutine(FlinchRoutine());
+        }
+
+        private IEnumerator FlinchRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idle2Animation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.idle2Animation, true);
-            m_agent.Stop();
-            m_stateHandle.ApplyQueuedState();
+            //m_animation.SetAnimation(0, m_info.idle2Animation, true);
+            //m_stateHandle.ApplyQueuedState();
         }
         private Vector2 WallPosition()
         {
