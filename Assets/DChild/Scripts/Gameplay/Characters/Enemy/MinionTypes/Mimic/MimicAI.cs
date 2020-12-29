@@ -285,8 +285,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.immerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.immerseAnimation);
+            m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -306,6 +308,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            m_hitbox.gameObject.SetActive(false);
             m_selfCollider.SetActive(false);
 
             m_animation.SetAnimation(0, m_info.sinkIdleAnimation, false);
