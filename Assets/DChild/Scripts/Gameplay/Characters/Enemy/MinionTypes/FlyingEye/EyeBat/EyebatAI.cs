@@ -191,6 +191,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_animation.DisableRootMotion();
             StopAllCoroutines();
             m_agent.Stop();
             m_stateHandle.Wait(State.Cooldown);
