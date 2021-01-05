@@ -385,7 +385,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_state.isAttacking)
             {
-
                 if (m_rigidbody.velocity.y < 0)
                 {
                     m_groundedness?.Evaluate();
@@ -411,11 +410,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.dashPressed)
                 {
-                    m_wallStick?.Cancel();
-                    FlipCharacter();
-                    m_dash?.ResetDurationTimer();
-                    m_dash?.Execute();
-                    m_dash?.Reset();
+                    if(m_skills.IsModuleActive(PrimarySkill.Dash))
+                    {
+                        m_wallStick?.Cancel();
+                        FlipCharacter();
+                        m_dash?.ResetDurationTimer();
+                        m_dash?.Execute();
+                        m_dash?.Reset();
+                    }
                 }
                 else
                 {
@@ -595,14 +597,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.levitatePressed)
                 {
-                    if (m_devilWings?.HaveEnoughSourceForExecution() ?? false)
+                    if(m_skills.IsModuleActive(PrimarySkill.DevilWings))
                     {
-                        if (m_state.isHighJumping)
+                        if (m_devilWings?.HaveEnoughSourceForExecution() ?? false)
                         {
-                            m_groundJump?.CutOffJump();
-                        }
+                            if (m_state.isHighJumping)
+                            {
+                                m_groundJump?.CutOffJump();
+                            }
 
-                        m_devilWings?.Execute();
+                            m_devilWings?.Execute();
+                        }
                     }
                 }
                 else
@@ -793,9 +798,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.skullThrowPressed)
                     {
-                        PrepareForGroundAttack();
-                        m_skullThrow.StartAim();
-                        m_skullThrow.Execute();
+                        if(m_skills.IsModuleActive(PrimarySkill.SkullThrow))
+                        {
+                            PrepareForGroundAttack();
+                            m_skullThrow.StartAim();
+                            m_skullThrow.Execute();
+                        }
                         return;
                     }
                     #endregion
