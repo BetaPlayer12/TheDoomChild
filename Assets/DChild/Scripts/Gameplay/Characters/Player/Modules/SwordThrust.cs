@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private float m_thrustForce;
 
+        private Character m_character;
+        private IPlayerModifer m_modifier;
         private float m_chargeTimer;
         private int m_swordThrustAnimationParameter;
 
@@ -23,6 +25,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Initialize(info);
 
+            m_character = info.character;
+            m_modifier = info.modifier;
             m_swordThrustAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SwordTrust);
         }
 
@@ -69,6 +73,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_thrust.ShowCollider(true);
             m_chargeTimer = -1;
             m_state.waitForBehaviour = true;
+            m_rigidBody.AddForce(new Vector2((float)m_character.facing * m_thrustForce * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
             m_animator.SetBool(m_swordThrustAnimationParameter, false);
         }
 

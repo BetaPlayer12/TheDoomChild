@@ -15,6 +15,7 @@ namespace DChild.Gameplay.Characters.Players
         DevilWings,
         ShadowDash,
         ShadowSlide,
+        SkullThrow,
         [HideInInspector]
         _COUNT
     }
