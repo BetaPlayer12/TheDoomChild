@@ -137,6 +137,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_crouch?.Cancel();
                     }
+                    else if (m_state.isAimingProjectile)
+                    {
+                        m_skullThrow.EndAim();
+                        m_skullThrow.Cancel();
+                    }
                     m_idle?.Cancel();
                     m_movement?.SwitchConfigTo(Movement.Type.MidAir);
                 }
@@ -641,6 +646,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_chargeAttackHandle?.Execute();
                 }
+                else if (m_state.isAimingProjectile)
+                {
+                    if (m_input.horizontalInput != 0)
+                    {
+                        m_movement.UpdateFaceDirection(m_input.horizontalInput);
+                    }
+
+                    m_skullThrow.MoveAim(m_input.m_mouseDelta.normalized);
+                    if (m_input.skullThrowReleased)
+                    {
+                        m_skullThrow.EndAim();
+                        m_skullThrow.StartThrow();
+                        //Throw Projectile
+                    }
+                }
             }
             else if (m_state.isSliding)
             {
@@ -774,6 +794,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     else if (m_input.skullThrowPressed)
                     {
                         PrepareForGroundAttack();
+                        m_skullThrow.StartAim();
                         m_skullThrow.Execute();
                         return;
                     }

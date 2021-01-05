@@ -110,6 +110,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.waitForBehaviour = false;
             m_state.canAttack = true;
             m_state.isAttacking = false;
+            m_rigidbody.gravityScale = m_originalGravity;
         }
     }
 }
