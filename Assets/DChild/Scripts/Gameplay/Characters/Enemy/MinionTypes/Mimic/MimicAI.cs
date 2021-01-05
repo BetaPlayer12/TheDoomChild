@@ -386,7 +386,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
 
 
-                    m_animation.EnableRootMotion(true, false);
+                    m_animation.EnableRootMotion(true, true);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack:
