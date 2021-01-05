@@ -69,18 +69,21 @@ namespace DChild.Gameplay.Combat
             {
                 m_type = ColliderType.Box;
                 m_boxCollider = collider2D;
+                SetContactFilterLayerMask(collider2D.gameObject);
             }
 
             public void SetCollider(CircleCollider2D collider2D)
             {
                 m_type = ColliderType.Circle;
                 m_circleCollider = collider2D;
+                SetContactFilterLayerMask(collider2D.gameObject);
             }
 
             public void SetCollider(CapsuleCollider2D collider2D)
             {
                 m_type = ColliderType.Capsule;
                 m_capsuleCollider = collider2D;
+                SetContactFilterLayerMask(collider2D.gameObject);
             }
 
             private void SetContactFilterLayerMask(GameObject collider)
@@ -283,6 +286,7 @@ namespace DChild.Gameplay.Combat
             if (m_stopOnCollision)
             {
                 hitCount = m_collisionSimulation.Cast(position);
+
                 if (hitCount > 0)
                 {
                     m_simulatedPositions.Add(position);
