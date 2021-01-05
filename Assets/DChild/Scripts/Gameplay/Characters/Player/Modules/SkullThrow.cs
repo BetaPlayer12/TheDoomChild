@@ -5,6 +5,7 @@ using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Projectiles;
+using Holysoft.Collections;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,10 +24,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, BoxGroup("Aim")]
         private Vector2 m_defaultAim;
         [SerializeField, BoxGroup("Aim")]
-        private Vector2 m_minAimValue;
-        [SerializeField, BoxGroup("Aim")]
-        private Vector2 m_maxAimValue;
-        [SerializeField, BoxGroup("Aim"),MinValue(0f)]
+        private RangeFloat m_horizontalThreshold;
+        [SerializeField, BoxGroup("Aim"), MinValue(0f)]
+        private float m_verticalThreshold;
+        [SerializeField, BoxGroup("Aim"), MinValue(0f)]
         private float m_aimSensitivity = 1f;
 
         private Vector2 m_currentAim; //Relative to Character Facing
@@ -52,23 +53,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var relativeDelta = delta.normalized * m_aimSensitivity;
             relativeDelta.x *= (int)m_character.facing;
             var newAim = m_currentAim += relativeDelta;
-            if (newAim.x < m_minAimValue.x)
+            if (newAim.x < m_horizontalThreshold.min)
             {
-                newAim.x = m_minAimValue.x;
+                newAim.x = m_horizontalThreshold.min;
                 m_character.SetFacing(m_character.facing == HorizontalDirection.Left ? HorizontalDirection.Right : HorizontalDirection.Left);
             }
-            else if (newAim.x > m_maxAimValue.x)
+            else if (newAim.x > m_horizontalThreshold.max)
             {
-                newAim.x = m_maxAimValue.x;
+                newAim.x = m_horizontalThreshold.max;
             }
 
-            if (newAim.y < m_minAimValue.y)
+            if (newAim.y < m_verticalThreshold * -1)
             {
-                newAim.y = m_minAimValue.y;
+                newAim.y = m_verticalThreshold * -1;
             }
-            else if (newAim.y > m_maxAimValue.y)
+            else if (newAim.y > m_verticalThreshold)
             {
-                newAim.y = m_maxAimValue.y;
+                newAim.y = m_verticalThreshold;
             }
             m_currentAim = newAim;
             UpdateTrajectorySimulation();
@@ -95,10 +96,36 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var simulator = GameplaySystem.simulationHandler.GetTrajectorySimulator();
             simulator.SetStartPosition(GetStartingPosition());
-            var velocity = m_currentAim.normalized * m_projectile.speed;
+
+            var velocity = CalculateThrowDirection() * m_projectile.speed;
             velocity.x *= (int)m_character.facing;
             simulator.SetVelocity(velocity);
             simulator.SimulateTrajectory();
+        }
+
+        private Vector2 CalculateThrowDirection()
+        {
+            var normalizedAim = m_currentAim;
+            normalizedAim.x = CalculateNormalizedValue(normalizedAim.x, m_horizontalThreshold.min, m_horizontalThreshold.max);
+            var ySign = Mathf.Sign(normalizedAim.y);
+            normalizedAim.y = Mathf.Abs(normalizedAim.y) / m_verticalThreshold * ySign;
+            return normalizedAim;
+
+            float CalculateNormalizedValue(float value, float min, float max)
+            {
+                if (value == min)
+                {
+                    return 0.01f;
+                }
+                else if (value == max)
+                {
+                    return 1f;
+                }
+                else
+                {
+                    return (normalizedAim.x - min) / (max - min);
+                }
+            }
         }
 
         private void UpdateTrajectoryProjectile()
@@ -106,9 +133,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var projectile = m_projectile.projectile;
             var simulator = GameplaySystem.simulationHandler.GetTrajectorySimulator();
             var physics = projectile.GetComponent<IsolatedObjectPhysics2D>();
-            var rigidbody = projectile.GetComponent<Rigidbody2D>();
-            float gravity = physics.simulateGravity ? rigidbody.gravityScale : 0;
-            simulator.SetObjectValues(rigidbody.mass, gravity, projectile.GetComponent<Collider2D>());
+            float gravity = physics.simulateGravity ? physics.gravity.gravityScale : 0;
+            simulator.SetObjectValues(projectile.GetComponent<Rigidbody2D>().mass, gravity, projectile.GetComponent<Collider2D>());
         }
         #endregion
 
@@ -127,9 +153,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SpawnProjectile()
         {
-            var currentFlightDirection = m_currentAim.normalized;
-            currentFlightDirection.x *= (float)m_character.facing;
-            m_launcher.LaunchProjectile(currentFlightDirection);
+            var direction = CalculateThrowDirection();
+            direction.x *= (int)m_character.facing;
+            m_launcher.LaunchProjectile(direction);
         }
 
         public override void AttackOver()
