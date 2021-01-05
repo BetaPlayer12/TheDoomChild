@@ -487,7 +487,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SwitchToBattleZoneAI()
         {
-            m_stateHandle.SetState(State.Chasing);
+            m_stateHandle.SetState(State.Detect);
         }
 
         public void SwitchToBaseAI()
