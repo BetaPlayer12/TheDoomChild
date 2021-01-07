@@ -76,6 +76,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.isGrabbing = true;
             m_animator.SetBool(m_isGrabbingAnimationParameter, true);
+
+            if (m_movableObject != null)
+            {
+                m_movableObject.gameObject.GetComponentInParent<MovableObject>().SetGrabState(true);
+            }
         }
 
         public void Cancel()
@@ -84,6 +89,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_isGrabbingAnimationParameter, false);
             m_animator.SetBool(m_isPullingAnimationParameter, false);
             m_animator.SetBool(m_isPushingAnimationParameter, false);
+
+            if(m_movableObject != null)
+            {
+                m_movableObject.gameObject.GetComponentInParent<MovableObject>().SetGrabState(false);
+            }
         }
 
         public void MoveObject(float direction, HorizontalDirection facing)
