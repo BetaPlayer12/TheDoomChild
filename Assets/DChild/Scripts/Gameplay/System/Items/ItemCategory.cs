@@ -2,6 +2,7 @@
 {
     public enum ItemCategory
     {
+        Throwable,
         Consumable,
         Quest,
         Key

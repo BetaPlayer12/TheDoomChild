@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Collections;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -29,6 +30,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ProjectileLauncher m_launcher;
         private int m_skullThrowAnimationParameter;
         private bool m_updateProjectileInfo;
+
+        public event EventAction<EventActionArgs> ExecutionRequested;
+
+        public void RequestExecution()
+        {
+            ExecutionRequested?.Invoke(this, EventActionArgs.Empty);
+        }
 
         #region Aim
         public void StartAim()
