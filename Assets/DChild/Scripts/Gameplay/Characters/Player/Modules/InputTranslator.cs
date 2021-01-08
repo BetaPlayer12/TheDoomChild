@@ -160,6 +160,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnQuickItemUse(InputValue value)
+        {
+            if (enabled == true)
+            {
+                skullThrowHeld = value.Get<float>() == 1;
+            }
+        }
+
         private void OnInteract(InputValue value)
         {
             if (enabled == true)
