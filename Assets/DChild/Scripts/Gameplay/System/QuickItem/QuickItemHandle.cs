@@ -159,8 +159,14 @@ namespace DChild.Gameplay.Inventories
             if (m_container.HasItemCategory(ItemCategory.Consumable))
             {
                 GameEventMessage.SendEvent("QuickItem Show");
-                m_hideUI = false;
+               
             }
+            //else
+            //{
+               
+                  //  GameEventMessage.SendEvent("QuickItem Hide");
+                   
+            //}
         }
     }
 }
