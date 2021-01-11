@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Inventories
 {
-
     public class QuickItemHandle : SerializedMonoBehaviour
     {
         public class SelectionEventArgs : IEventActionArgs
@@ -125,7 +124,7 @@ namespace DChild.Gameplay.Inventories
 
         private void OnItemUpdate(object sender, ItemEventArgs eventArgs)
         {
-            if (m_container.HasItemCategory(ItemCategory.Consumable))
+            if (HasItemsInQuickSlot())
             {
                 if (m_hideUI)
                 {
@@ -148,6 +147,11 @@ namespace DChild.Gameplay.Inventories
             }
         }
 
+        private bool HasItemsInQuickSlot()
+        {
+            return m_container.HasItemCategory(ItemCategory.Consumable) || m_container.HasItemCategory(ItemCategory.Throwable);
+        }
+
         private void Awake()
         {
             m_currentIndex = 0;
@@ -156,7 +160,7 @@ namespace DChild.Gameplay.Inventories
             m_container.ItemUpdate += OnItemUpdate;
             m_hideUI = true;
 
-            if (m_container.HasItemCategory(ItemCategory.Consumable))
+            if (HasItemsInQuickSlot())
             {
                 GameEventMessage.SendEvent("QuickItem Show");
                

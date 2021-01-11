@@ -144,6 +144,7 @@ namespace DChild.Gameplay
 
         private static void LoadGameDone(object sender, EventActionArgs eventArgs)
         {
+
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_campaignSerializer.Load();
             GameEventMessage.SendEvent("UI Reset");
