@@ -62,12 +62,15 @@ namespace DChild.Gameplay.Environment
                 m_animation.state.AddAnimation(0, m_disappearingPlatformData.aboutToDisappearAnimation, true, 0);
             }
         }
-        private void OnPlatformReaction(object sender, EventActionArgs eventArgs)
+        private void OnPlatformReaction(object sender, CollisionEventActionArgs eventArgs)
         {
             if (m_willDisappear == false)
             {
-                DisappearPlatform();
-                enabled = true;
+                if (eventArgs.collision.collider.TryGetComponentInParent(out Character character))
+                {
+                    DisappearPlatform();
+                    enabled = true;
+                }
             }
         }
 

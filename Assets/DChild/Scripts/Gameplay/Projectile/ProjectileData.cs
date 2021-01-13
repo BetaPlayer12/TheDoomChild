@@ -12,12 +12,16 @@ namespace DChild.Gameplay.Projectiles
         private Invulnerability m_ignoreInvulnerability;
         [SerializeField]
         private bool m_hasConstantSpeed;
+        [SerializeField]
+        private bool m_willFaceVelocity;
         [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
         protected GameObject m_impactFX;
 
         public AttackDamage[] damage => m_damage;
         public Invulnerability ignoreInvulnerability => m_ignoreInvulnerability;
         public bool hasConstantSpeed => m_hasConstantSpeed;
+
+        public bool willFaceVelocity => m_willFaceVelocity;
         public GameObject impactFX { get => m_impactFX; }
 
         protected virtual bool ValidateExplosion(GameObject newExplosion)

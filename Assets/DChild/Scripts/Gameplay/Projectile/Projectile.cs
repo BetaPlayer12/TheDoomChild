@@ -49,6 +49,12 @@ namespace DChild.Gameplay.Projectiles
         public void SetVelocity(Vector2 directionNormal, float speed)
         {
             transform.right = directionNormal;
+            if (directionNormal.x < 0)
+            {
+                var scale = transform.localScale;
+                scale.y *= -1;
+                transform.localScale = scale;
+            }
             m_physics.SetVelocity(directionNormal * speed);
             //m_isolatedPhysicsTime.CalculateActualVelocity();
         }

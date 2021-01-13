@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using Spine;
 using Spine.Unity;
 using System;
@@ -16,6 +17,8 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private GameObject m_particle;
         [SerializeField]
+        private bool m_reactToCharactersOnly;
+        [SerializeField]
         private bool m_hasReactionAnimation;
         [SerializeField, Spine.Unity.SpineAnimation, ShowIf("m_hasReactionAnimation")]
         private string m_reactionAnimation;
@@ -26,7 +29,7 @@ namespace DChild.Gameplay.Environment
 
         private SkeletonAnimation m_animation;
 
-        public event EventAction<EventActionArgs> OnReaction;
+        public event EventAction<CollisionEventActionArgs> OnReaction;
 
         private void Start()
         {
@@ -37,6 +40,14 @@ namespace DChild.Gameplay.Environment
         {
             if (collider.enabled)
             {
+                if (m_reactToCharactersOnly)
+                {
+                    if (collider.collider.TryGetComponentInParent(out Character character) == false)
+                    {
+                        return;
+                    }
+                }
+
                 if (m_particle != null)
                 {
                     Instantiate(m_particle, collider.collider.transform.position, Quaternion.identity);
@@ -47,7 +58,12 @@ namespace DChild.Gameplay.Environment
                     m_animation.state.AddAnimation(0, m_idleAnimation, true, 0);
                 }
                 m_otherReaction?.Invoke();
-                OnReaction?.Invoke(this, EventActionArgs.Empty);
+                using (Cache<CollisionEventActionArgs> cacheEvent = Cache<CollisionEventActionArgs>.Claim())
+                {
+                    cacheEvent.Value.Set(collider);
+                    OnReaction?.Invoke(this, cacheEvent.Value);
+                    Cache<CollisionEventActionArgs>.Release(cacheEvent);
+                }
             }
         }
     }
