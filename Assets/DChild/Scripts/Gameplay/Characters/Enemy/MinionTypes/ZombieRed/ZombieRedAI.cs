@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/ZombieRed")]
-    public class ZombieRedAI : CombatAIBrain<ZombieRedAI.Info>, IResetableAIBrain, IBattleZoneAIBrain
+    public class ZombieRedAI : CombatAIBrain<ZombieRedAI.Info>
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -85,7 +85,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Spawning,
             Detect,
-            Idle,
             Patrol,
             Turning,
             Attacking,
@@ -131,9 +130,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
-
-        [SerializeField]
-        private bool m_willPatrol;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -237,9 +233,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            base.OnDestroyed(sender, eventArgs);
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             StopAllCoroutines();
+            base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
 
@@ -296,7 +291,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
-            m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
         }
 
         protected override void Awake()
@@ -339,11 +333,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
-                    break;
-
-                case State.Idle:
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
 
                 case State.Patrol:
@@ -482,17 +471,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
-        }
-
-        public void SwitchToBattleZoneAI()
-        {
-            m_stateHandle.SetState(State.Detect);
-        }
-
-        public void SwitchToBaseAI()
-        {
-            m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
         protected override void OnBecomePassive()
