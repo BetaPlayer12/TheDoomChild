@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DChild.Menu.Trading
 {
@@ -24,6 +25,8 @@ namespace DChild.Menu.Trading
         private TradePlayerCurrencies m_playerCurrencies;
         [SerializeField]
         private TradeOptionHandle m_tradeOption;
+        [SerializeField]
+        private Image m_highlight;
 
         private ITradableInventory m_currentMerchant;
         private ITradableInventory m_currentPlayer;
@@ -35,25 +38,18 @@ namespace DChild.Menu.Trading
 
         public void UpdateInvetoryItems()
         {
-            if (m_tradeOption.tradeType == TradeType.Buy)
-            {
-                m_initiator.Instantiate(m_currentMerchant);
-            }
-            else
-            {
-                m_initiator.Instantiate(m_currentPlayer);
-            }
-            m_tradeHandle.SetTradeType(m_tradeOption.tradeType);
-            m_filteredTradePool.ApplyFilter(TradePoolFilter.All);
+            UpdateTradingPool();
             m_initiator.GetTradableUI(0).Select();
         }
+
+
 
         public void SetProfile(NPCProfile profile)
         {
             m_traderProfile.Set(profile);
         }
 
-        public void SetTradingPool(ITradableInventory merchant, ITraderAskingPrice merchantAskingPrice,ITradableInventory player)
+        public void SetTradingPool(ITradableInventory merchant, ITraderAskingPrice merchantAskingPrice, ITradableInventory player)
         {
             m_tradeOption.ChangeToBuyOption(true);
             m_tradeHandle.SetTraders(merchant, player);
@@ -64,12 +60,28 @@ namespace DChild.Menu.Trading
             m_initiator.GetTradableUI(0).Select();
             m_currentMerchant = merchant;
             m_currentPlayer = player;
+            m_tradeHandle.SetItemToTrade(null);
+            m_highlight.enabled = false;
             UpdateCurrency();
         }
 
         public void SetTradingFilter(TradePoolFilter filter)
         {
             m_filteredTradePool.ApplyFilter(filter);
+        }
+
+        private void UpdateTradingPool()
+        {
+            if (m_tradeOption.tradeType == TradeType.Buy)
+            {
+                m_initiator.Instantiate(m_currentMerchant);
+            }
+            else
+            {
+                m_initiator.Instantiate(m_currentPlayer);
+            }
+            m_tradeHandle.SetTradeType(m_tradeOption.tradeType);
+            m_filteredTradePool.ApplyFilter(TradePoolFilter.All);
         }
 
         private void OnSlotIntiateDone(object sender, EventActionArgs eventArgs)
@@ -84,13 +96,25 @@ namespace DChild.Menu.Trading
 
         private void OnItemSelected(object sender, EventActionArgs eventArgs)
         {
-            m_tradeHandle.SetItemToTrade(((TradableItemUI)sender).itemSlot.item);
+            var uiSlot = ((TradableItemUI)sender);
+            m_tradeHandle.SetItemToTrade(uiSlot.itemSlot.item);
+            m_highlight.enabled = true;
+            m_highlight.rectTransform.position = uiSlot.transform.position;
+        }
+
+        private void OnItemSoldOut(object sender, EventActionArgs eventArgs)
+        {
+            UpdateTradingPool();
+            m_highlight.enabled = false;
         }
 
         private void Awake()
         {
             m_initiator.OnPoolUpdate += OnSlotIntiateDone;
             m_filteredTradePool.ApplyFilter(TradePoolFilter.All);
+            m_tradeHandle.ItemSoldOut += OnItemSoldOut;
         }
+
+
     }
 }

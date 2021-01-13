@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Items;
+using Holysoft.Event;
 using Holysoft.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,8 @@ namespace DChild.Menu.Trading
         private ITradableInventory m_player;
         private IUIHighlight m_tradeButtonHighlight;
         private TradeType m_tradeType;
+
+        public event EventAction<EventActionArgs> ItemSoldOut;
 
         public void SetTraders(ITradableInventory merchant, ITradableInventory player)
         {
@@ -59,6 +62,7 @@ namespace DChild.Menu.Trading
             if (m_tradeType == TradeType.Buy)
             {
                 CommenceTrade(m_player, m_merchant);
+
             }
             else
             {
@@ -78,23 +82,33 @@ namespace DChild.Menu.Trading
         private void UpdateShowcase()
         {
             m_showcase.UpdateItemInfo(m_currentItem);
-            m_showcase.UpdateItemCost(m_merchantAskingPrice.GetAskingPrice(m_currentItem, m_tradeType));
-            m_showcase.UpdateItemCounts(m_merchant.GetCurrentAmount(m_currentItem), m_player.GetCurrentAmount(m_currentItem));
+            var askingPrice = m_merchantAskingPrice.GetAskingPrice(m_currentItem, m_tradeType);
+            m_showcase.UpdateItemCost(askingPrice);
+            var merchantItemCount = m_merchant.GetCurrentAmount(m_currentItem);
+            var playerItemCount = m_player.GetCurrentAmount(m_currentItem);
+            m_showcase.UpdateItemCounts(merchantItemCount, playerItemCount);
 
             if (m_tradeType == TradeType.Buy)
             {
-                m_tradeButton.interactable = m_player.GetCurrentAmount(m_currentItem) < m_currentItem.quantityLimit;
+                m_tradeButton.interactable = merchantItemCount > 0 &&
+                                            m_player.soulEssence >= askingPrice &&
+                                            playerItemCount < m_currentItem.quantityLimit;
                 if (m_tradeButton.interactable == false)
                 {
                     m_tradeButtonHighlight.Normalize();
                 }
+                if (merchantItemCount == 0)
+                {
+                    ItemSoldOut?.Invoke(this, EventActionArgs.Empty);
+                }
             }
             else
             {
-                m_tradeButton.interactable = m_player.GetCurrentAmount(m_currentItem) > 0;
+                m_tradeButton.interactable = playerItemCount > 0;
                 if (m_tradeButton.interactable == false)
                 {
                     m_tradeButtonHighlight.Normalize();
+                    ItemSoldOut?.Invoke(this, EventActionArgs.Empty);
                 }
             }
         }
