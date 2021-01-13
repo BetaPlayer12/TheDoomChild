@@ -254,7 +254,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();
@@ -541,7 +540,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
         }
 
         protected override void OnBecomePassive()
