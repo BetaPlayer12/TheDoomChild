@@ -106,7 +106,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_slide.Reset();
                 if (m_state.isGrounded)
                 {
-                    Debug.Log("Grounded");
                     m_physicsMat.SetPhysicsTo(PlayerPhysicsMatHandle.Type.Ground);
 
                     if (m_state.isStickingToWall)
@@ -223,6 +222,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnProjectileThrowRequest(object sender, EventActionArgs eventArgs)
+        {
+            m_input.skullThrowPressed = true;
+        }
+
         private void FlipCharacter()
         {
             var oppositeFacing = m_character.facing == HorizontalDirection.Right ? HorizontalDirection.Left : HorizontalDirection.Right;
@@ -270,6 +274,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
             m_whip = m_character.GetComponentInChildren<WhipAttack>();
             m_skullThrow = m_character.GetComponentInChildren<SkullThrow>();
+            m_skullThrow.ExecutionRequested += OnProjectileThrowRequest;
 
             m_updateEnabled = true;
         }
@@ -659,7 +664,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
 
                     m_skullThrow.MoveAim(m_input.m_mouseDelta.normalized);
-                    if (m_input.skullThrowReleased)
+                    if (m_input.skullThrowReleased || m_input.skullThrowHeld == false)
                     {
                         m_skullThrow.EndAim();
                         m_skullThrow.StartThrow();
@@ -798,7 +803,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.skullThrowPressed)
                     {
-                        if(m_skills.IsModuleActive(PrimarySkill.SkullThrow))
+                        if (m_skills.IsModuleActive(PrimarySkill.SkullThrow))
                         {
                             PrepareForGroundAttack();
                             m_skullThrow.StartAim();

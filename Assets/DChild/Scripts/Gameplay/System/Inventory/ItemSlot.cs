@@ -39,8 +39,8 @@ namespace DChild.Gameplay.Inventories
             this.m_count = m_count;
             restrictions = new Restriction()
             {
-                canBeSold = true,
-                hasInfiniteCount = false
+                canBeSold = m_item.canBeSold,
+                hasInfiniteCount = m_item.hasInfiniteUses
             };
         }
 

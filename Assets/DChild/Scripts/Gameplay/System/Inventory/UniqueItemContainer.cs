@@ -207,12 +207,12 @@ namespace DChild.Gameplay.Inventories
         private void AddNewSlot(ItemData item, int count)
         {
             var slot = new ItemSlot(item, count);
-            slot.CountChange += OnSlotCountChange;
             slot.RestrictCount();
             if (FindRestrictions(item, out ItemSlot.Restriction restriction))
             {
                 slot.SetRestriction(restriction);
             }
+            slot.CountChange += OnSlotCountChange;
             m_list.Add(slot);
         }
 

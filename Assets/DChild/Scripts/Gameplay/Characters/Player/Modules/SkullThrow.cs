@@ -1,14 +1,7 @@
-﻿using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Characters.Players.Behaviour;
-using DChild.Gameplay.Characters.Players.Modules;
-using DChild.Gameplay.Characters.Players.State;
-using DChild.Gameplay.Projectiles;
+﻿using DChild.Gameplay.Characters.Players.State;
 using Holysoft.Collections;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -36,12 +29,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Character m_character;
         private ProjectileLauncher m_launcher;
         private int m_skullThrowAnimationParameter;
+        private bool m_updateProjectileInfo;
+
+        public event EventAction<EventActionArgs> ExecutionRequested;
+
+        public void RequestExecution()
+        {
+            ExecutionRequested?.Invoke(this, EventActionArgs.Empty);
+        }
 
         #region Aim
         public void StartAim()
         {
             m_currentAim = m_defaultAim;
-            UpdateTrajectoryProjectile();
+            if (m_updateProjectileInfo)
+            {
+                UpdateTrajectoryProjectile();
+                m_updateProjectileInfo = false;
+            }
             var simulatorHandle = GameplaySystem.simulationHandler;
             simulatorHandle.ShowSimulation(simulatorHandle.GetTrajectorySimulator());
             UpdateTrajectorySimulation();
@@ -138,6 +143,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
         }
         #endregion
 
+        public void SetProjectileInfo(ProjectileInfo info)
+        {
+            if (m_projectile != info)
+            {
+                m_projectile = info;
+                m_launcher.SetProjectile(m_projectile);
+                m_updateProjectileInfo = true;
+            }
+        }
+
         public void HandleNextAttackDelay()
         {
             if (m_timer >= 0)
@@ -201,6 +216,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_launcher.SetProjectile(m_projectile);
             m_launcher.SetSpawnPoint(m_spawnPoint);
+            m_updateProjectileInfo = true;
         }
     }
 

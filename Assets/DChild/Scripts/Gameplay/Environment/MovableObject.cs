@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private GameObject m_parentObject;
         [SerializeField]
-        private bool m_canBeMove;
+        private bool m_canBeMoved;
         [SerializeField, TabGroup("Grabbed")]
         private UnityEvent m_onGrabbed;
         [SerializeField, TabGroup("Let Go")]
@@ -44,22 +44,24 @@ namespace DChild.Gameplay.Environment
         public event EventAction<EventActionArgs> BecameUnmovable;
 
         public bool isHeavy => m_isHeavy;
-        public bool canBeMove => m_canBeMove;
+        public bool canBeMove => m_canBeMoved;
 
         public void Load(ISaveData data)
         {
             var saveData = ((SaveData)data);
             transform.position = saveData.position;
-            m_canBeMove = saveData.canBeMoved;
+            m_canBeMoved = saveData.canBeMoved;
         }
 
-        public ISaveData Save() => new SaveData(transform.position, m_canBeMove);
+        public ISaveData Save() => new SaveData(transform.position, m_canBeMoved);
 
         public void SetMovable(bool value)
         {
-            m_canBeMove = value;
+            m_canBeMoved = value;
             if (value == false)
             {
+                Rigidbody2D rb = GetComponent<Rigidbody2D>();
+                rb.velocity = Vector2.zero;
                 BecameUnmovable?.Invoke(this, EventActionArgs.Empty);
             }
         }

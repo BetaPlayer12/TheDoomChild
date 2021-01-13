@@ -24,6 +24,17 @@ namespace DChild.Gameplay.Projectiles
 
         protected abstract void Collide();
 
+        protected virtual void FixedUpdate()
+        {
+            if (m_data.willFaceVelocity)
+            {
+                var velocity = m_physics.velocity;
+                float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+                Debug.Log(angle);
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            }
+        }
+
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
             if (LayerMask.LayerToName(collision.gameObject.layer) == "Environment" || LayerMask.LayerToName(collision.gameObject.layer) == "Default") //Default is for QueenBee Quickfix
