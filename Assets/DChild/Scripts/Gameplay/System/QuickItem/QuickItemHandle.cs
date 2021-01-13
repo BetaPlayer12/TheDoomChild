@@ -163,8 +163,14 @@ namespace DChild.Gameplay.Inventories
             if (HasItemsInQuickSlot())
             {
                 GameEventMessage.SendEvent("QuickItem Show");
-                m_hideUI = false;
+               
             }
+            //else
+            //{
+               
+                  //  GameEventMessage.SendEvent("QuickItem Hide");
+                   
+            //}
         }
     }
 }
