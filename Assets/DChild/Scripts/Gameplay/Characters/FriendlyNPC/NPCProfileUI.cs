@@ -11,15 +11,12 @@ namespace DChild.Gameplay.Characters.NPC
         [SerializeField]
         private TextMeshProUGUI m_name;
         [SerializeField]
-        private TextMeshProUGUI m_nameBackdrop;
-        [SerializeField]
         private TextMeshProUGUI m_title;
 
         public void Set(NPCProfile profile)
         {
             m_icon.sprite = profile.baseIcon;
             m_name.text = profile.characterName;
-            m_nameBackdrop.text = profile.characterName;
             if (m_title)
             {
                 m_title.text = profile.title;

@@ -53,6 +53,15 @@ namespace DChild.Menu.Trading
             else
             {
                 gameObject.SetActive(false);
+                m_itemSlot.CountChange -= OnCountChange;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (m_itemSlot != null)
+            {
+                m_itemSlot.CountChange -= OnCountChange;
             }
         }
     }

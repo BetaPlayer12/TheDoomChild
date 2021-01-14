@@ -81,34 +81,45 @@ namespace DChild.Menu.Trading
 
         private void UpdateShowcase()
         {
-            m_showcase.UpdateItemInfo(m_currentItem);
-            var askingPrice = m_merchantAskingPrice.GetAskingPrice(m_currentItem, m_tradeType);
-            m_showcase.UpdateItemCost(askingPrice);
-            var merchantItemCount = m_merchant.GetCurrentAmount(m_currentItem);
-            var playerItemCount = m_player.GetCurrentAmount(m_currentItem);
-            m_showcase.UpdateItemCounts(merchantItemCount, playerItemCount);
-
-            if (m_tradeType == TradeType.Buy)
+            if (m_currentItem == null)
             {
-                m_tradeButton.interactable = merchantItemCount > 0 &&
-                                            m_player.soulEssence >= askingPrice &&
-                                            playerItemCount < m_currentItem.quantityLimit;
-                if (m_tradeButton.interactable == false)
-                {
-                    m_tradeButtonHighlight.Normalize();
-                }
-                if (merchantItemCount == 0)
-                {
-                    ItemSoldOut?.Invoke(this, EventActionArgs.Empty);
-                }
+                m_showcase.UpdateItemInfo(null);
+                m_showcase.UpdateItemCost(0);
+                m_showcase.UpdateItemCounts(0, 0);
+                m_tradeButton.interactable = false;
+                m_tradeButtonHighlight.Normalize();
             }
             else
             {
-                m_tradeButton.interactable = playerItemCount > 0;
-                if (m_tradeButton.interactable == false)
+                m_showcase.UpdateItemInfo(m_currentItem);
+                var askingPrice = m_merchantAskingPrice.GetAskingPrice(m_currentItem, m_tradeType);
+                m_showcase.UpdateItemCost(askingPrice);
+                var merchantItemCount = m_merchant.GetCurrentAmount(m_currentItem);
+                var playerItemCount = m_player.GetCurrentAmount(m_currentItem);
+                m_showcase.UpdateItemCounts(merchantItemCount, playerItemCount);
+
+                if (m_tradeType == TradeType.Buy)
                 {
-                    m_tradeButtonHighlight.Normalize();
-                    ItemSoldOut?.Invoke(this, EventActionArgs.Empty);
+                    m_tradeButton.interactable = merchantItemCount > 0 &&
+                                                m_player.soulEssence >= askingPrice &&
+                                                playerItemCount < m_currentItem.quantityLimit;
+                    if (m_tradeButton.interactable == false)
+                    {
+                        m_tradeButtonHighlight.Normalize();
+                    }
+                    if (merchantItemCount == 0)
+                    {
+                        ItemSoldOut?.Invoke(this, EventActionArgs.Empty);
+                    }
+                }
+                else
+                {
+                    m_tradeButton.interactable = playerItemCount > 0;
+                    if (m_tradeButton.interactable == false)
+                    {
+                        m_tradeButtonHighlight.Normalize();
+                        ItemSoldOut?.Invoke(this, EventActionArgs.Empty);
+                    }
                 }
             }
         }
