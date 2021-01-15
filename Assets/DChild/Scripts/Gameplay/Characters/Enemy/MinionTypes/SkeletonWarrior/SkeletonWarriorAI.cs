@@ -535,7 +535,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
 
-                    if (m_currentCD <= m_info.attackCD)
+                    if (m_currentCD <= m_info.attackCD && !m_wallSensor.isDetecting)
                     {
                         m_currentCD += Time.deltaTime;
                     }
