@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Zombie02")]
-    public class Zombie02AI : CombatAIBrain<Zombie02AI.Info>
+    public class Zombie02AI : CombatAIBrain<Zombie02AI.Info>, IResetableAIBrain, IBattleZoneAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -149,6 +149,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("BoundingBox")]
+        private GameObject m_spitBB;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -252,6 +255,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();
@@ -305,6 +309,18 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
+        }
+
+        private IEnumerator Attack2Routine()
+        {
+            m_animation.SetAnimation(0, m_info.attack2.animation, false);
+            yield return new WaitForSeconds(.25f);
+            m_spitBB.SetActive(true);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+            m_spitBB.SetActive(false);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -389,7 +405,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                         case Attack.Attack2:
                             m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                            //m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                            StartCoroutine(Attack2Routine());
                             break;
                         case Attack.HeadAttack:
                             m_animation.EnableRootMotion(true, false);
@@ -500,6 +517,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
+            GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
+        }
+
+        public void SwitchToBattleZoneAI()
+        {
+            m_stateHandle.SetState(State.Chasing);
+        }
+
+        public void SwitchToBaseAI()
+        {
+            m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
         protected override void OnBecomePassive()
