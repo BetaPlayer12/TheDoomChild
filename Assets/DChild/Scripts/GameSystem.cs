@@ -61,6 +61,12 @@ namespace DChild
             m_cursor?.SetVisibility(isVisible);
         }
 
+        public static void ResetCursorPosition()
+        {
+            m_cursor.SetLockState(CursorLockMode.Locked);
+            m_cursor.SetLockState(CursorLockMode.None);
+        }
+
         public static bool RequestConfirmation(EventAction<EventActionArgs> listener, string message)
         {
             if (m_confirmationHander == null)
