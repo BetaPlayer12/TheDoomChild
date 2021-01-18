@@ -41,6 +41,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         #region Aim
         public void StartAim()
         {
+            GameSystem.ResetCursorPosition(); //FOr Quality of Life thing
             m_currentAim = m_defaultAim;
             if (m_updateProjectileInfo)
             {
