@@ -163,6 +163,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleSystem m_rockThrowFX;
         [SerializeField, TabGroup("AttackHitbox")]
         private GameObject m_attackHitbox;
+        [SerializeField, TabGroup("AttackHitbox")]
+        private GameObject m_armHitbox;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -277,6 +279,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            m_armHitbox.SetActive(true);
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
@@ -472,6 +475,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             Debug.Log("Punch Attack");
                             if (!m_wallSensor.isDetecting)
                             {
+                                m_armHitbox.SetActive(false);
                                 //m_animation.EnableRootMotion(true, false);
                                 m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
                             }
