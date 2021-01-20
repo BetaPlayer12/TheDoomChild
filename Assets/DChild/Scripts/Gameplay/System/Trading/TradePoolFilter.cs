@@ -5,7 +5,6 @@
         All,
         Weapons,
         Consumables,
-        Somethings,
-        Armors,
+        Keys,
     }
 }
