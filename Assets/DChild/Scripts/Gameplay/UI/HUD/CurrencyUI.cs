@@ -23,6 +23,7 @@ namespace DChild.Gameplay.UI
         private bool m_addedAmountIsNegative;
         private float m_delayTimer;
         private bool m_delayAddingOfAmount;
+        private static GameplayUIHandle m_gameplayUIHandle;
 
         private int currentAmount
         {
@@ -77,7 +78,7 @@ namespace DChild.Gameplay.UI
             addedAmount += eventArgs.amount;
             m_delayTimer = m_addAmountDelay;
             m_delayAddingOfAmount = true;
-            GameEventMessage.SendEvent("Soul Essence Added");
+            m_gameplayUIHandle.ShowPromptSoulEssenceChangeNotify();
             enabled = true;
         }
 
@@ -116,7 +117,7 @@ namespace DChild.Gameplay.UI
                 if (addedAmount == 0)
                 {
                     enabled = false;
-                    GameEventMessage.SendEvent("Soul Essence Hide");
+                    m_gameplayUIHandle.ShowSoulEssenceNotify(false);
                 }
             }
         }
