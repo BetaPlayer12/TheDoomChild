@@ -35,6 +35,7 @@ namespace DChild.Gameplay.Systems
 		{
 			m_storeNavigator.OpenPage();
 		}
+
         public void MonitorBoss(Boss boss)
         {
             m_bossCombat?.SetBoss(boss);
@@ -52,7 +53,7 @@ namespace DChild.Gameplay.Systems
 
         public void PromptKeystoneFragmentNotification()
         {
-            throw new System.NotImplementedException();
+            GameEventMessage.SendEvent("Fragment Acquired");
         }
 
         public void PromptBestiaryNotification()
@@ -127,7 +128,6 @@ namespace DChild.Gameplay.Systems
             {
              
             }
-
         }
 
         public void ShowGameOverScreen(bool willshow)
