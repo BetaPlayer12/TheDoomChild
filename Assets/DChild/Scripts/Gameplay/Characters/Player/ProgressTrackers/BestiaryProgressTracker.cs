@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using DChild.Gameplay.Systems;
 using DChild.Menu.Bestiary;
 using Doozy.Engine;
 using UnityEngine;
@@ -12,11 +13,13 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Attacker m_attacker;
 
+        private static GameplayUIHandle m_gameplayUIHandle;
+
         public void RecordCreatureToBestiary(int ID)
         {
             if (m_progress.HasInfoOf(ID) == false)
             {
-                GameEventMessage.SendEvent("Notification");
+                m_gameplayUIHandle.PromptBestiaryNotification();
             }
             m_progress.SetProgress(ID, true);
         }
