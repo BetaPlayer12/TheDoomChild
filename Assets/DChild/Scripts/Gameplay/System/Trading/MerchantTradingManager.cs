@@ -31,11 +31,6 @@ namespace DChild.Menu.Trading
         private ITradableInventory m_currentMerchant;
         private ITradableInventory m_currentPlayer;
 
-        public void UpdateCurrency()
-        {
-            m_playerCurrencies.UpdateUI(m_currentPlayer.soulEssence, 0);
-        }
-
         public void UpdateInvetoryItems()
         {
             UpdateTradingPool();
@@ -70,6 +65,11 @@ namespace DChild.Menu.Trading
             m_filteredTradePool.ApplyFilter(filter);
         }
 
+        private void UpdateCurrency()
+        {
+            m_playerCurrencies.UpdateUI(m_currentPlayer.soulEssence, 0);
+        }
+
         private void UpdateTradingPool()
         {
             if (m_tradeOption.tradeType == TradeType.Buy)
@@ -102,19 +102,24 @@ namespace DChild.Menu.Trading
             m_highlight.rectTransform.position = uiSlot.transform.position;
         }
 
+        private void OnItemSold(object sender, EventActionArgs eventArgs)
+        {
+            UpdateCurrency();
+        }
+
         private void OnItemSoldOut(object sender, EventActionArgs eventArgs)
         {
             UpdateTradingPool();
             m_highlight.enabled = false;
         }
 
+
         private void Awake()
         {
             m_initiator.OnPoolUpdate += OnSlotIntiateDone;
             m_filteredTradePool.ApplyFilter(TradePoolFilter.All);
+            m_tradeHandle.ItemSold += OnItemSold;
             m_tradeHandle.ItemSoldOut += OnItemSoldOut;
         }
-
-
     }
 }
