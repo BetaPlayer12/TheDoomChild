@@ -161,6 +161,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ShadowMorph"",
+                    ""type"": ""Button"",
+                    ""id"": ""407d129f-98d0-432f-90b4-022e5f7eb20c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -526,6 +534,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf276c84-55d4-4d9f-8dcd-d16bbb948c4f"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShadowMorph"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -552,6 +571,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_QuickItemCycle = m_Gameplay.FindAction("QuickItemCycle", throwIfNotFound: true);
         m_Gameplay_StoreOpen = m_Gameplay.FindAction("StoreOpen", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_ShadowMorph = m_Gameplay.FindAction("ShadowMorph", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -619,6 +639,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_QuickItemCycle;
     private readonly InputAction m_Gameplay_StoreOpen;
     private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_ShadowMorph;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -641,6 +662,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @QuickItemCycle => m_Wrapper.m_Gameplay_QuickItemCycle;
         public InputAction @StoreOpen => m_Wrapper.m_Gameplay_StoreOpen;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @ShadowMorph => m_Wrapper.m_Gameplay_ShadowMorph;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -704,6 +726,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @ShadowMorph.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
+                @ShadowMorph.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
+                @ShadowMorph.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -762,6 +787,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @ShadowMorph.started += instance.OnShadowMorph;
+                @ShadowMorph.performed += instance.OnShadowMorph;
+                @ShadowMorph.canceled += instance.OnShadowMorph;
             }
         }
     }
@@ -786,5 +814,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnQuickItemCycle(InputAction.CallbackContext context);
         void OnStoreOpen(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnShadowMorph(InputAction.CallbackContext context);
     }
 }
