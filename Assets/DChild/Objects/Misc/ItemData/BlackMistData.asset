@@ -26,19 +26,7 @@ MonoBehaviour:
       Data: 0|DChild.Gameplay.Items.IUsableItemModule[], Assembly-CSharp
     - Name: 
       Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 1|DChild.Gameplay.Items.InstantRegenerationItemModule, Assembly-CSharp
-    - Name: m_toRegenerate
-      Entry: 3
-      Data: 1
-    - Name: m_value
-      Entry: 3
-      Data: 60
-    - Name: 
-      Entry: 8
-      Data: 
+      Data: 0
     - Name: 
       Entry: 13
       Data: 
@@ -47,10 +35,22 @@ MonoBehaviour:
       Data: 
     - Name: m_durationEffectList
       Entry: 7
-      Data: 2|DChild.Gameplay.Items.IDurationItemEffect[], Assembly-CSharp
+      Data: 1|DChild.Gameplay.Items.IDurationItemEffect[], Assembly-CSharp
     - Name: 
       Entry: 12
-      Data: 0
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Gameplay.Items.PlayerModificationItemEffect, Assembly-CSharp
+    - Name: m_toModify
+      Entry: 3
+      Data: 4
+    - Name: m_value
+      Entry: 4
+      Data: -0.5
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -77,11 +77,11 @@ MonoBehaviour:
   m_initialized: 1
   m_category: 1
   m_icon: {fileID: 21300000, guid: 4e8e90355ea3d1a4eadb9ac766ae4cb8, type: 3}
-  m_quantityLimit: 10
-  m_cost: 200
-  m_description: Recover an amount of Shadow Gauge
+  m_quantityLimit: 2
+  m_cost: 250
+  m_description: Temporarily reduce SP consumption, but drinking this is painful
   m_canBeSold: 1
   m_hasInfiniteUses: 0
-  m_durationEffect: 0
-  m_duration: 0
+  m_durationEffect: 1
+  m_duration: 5
   m_moduleSummary: 

@@ -40,7 +40,7 @@ namespace DChild.Gameplay.Systems
             {
                 if (Input.GetKeyDown(m_storeOpen))
                 {
-                    GameplaySystem.gameplayModeHandle.OpenStorePage();
+                    GameplaySystem.gamplayUIHandle.OpenStorePage();
                 }
             }
         }

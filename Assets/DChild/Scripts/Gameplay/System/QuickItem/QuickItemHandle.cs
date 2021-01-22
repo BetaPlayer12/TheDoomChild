@@ -45,7 +45,6 @@ namespace DChild.Gameplay.Inventories
         private ItemSlot m_currentSlot;
         private ConsumableItemData m_currentItem;
         private bool m_hideUI;
-        private static GameplayUIHandle m_gameplayUIHandle;
         public event EventAction<SelectionEventArgs> SelectedItem;
         public event EventAction<SelectionEventArgs> Update;
 
@@ -130,7 +129,7 @@ namespace DChild.Gameplay.Inventories
             {
                 if (m_hideUI)
                 {
-                    m_gameplayUIHandle.ShowQuickItem(true);
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
                     m_hideUI = false;
                 }
 
@@ -143,7 +142,7 @@ namespace DChild.Gameplay.Inventories
             {
                 if (m_hideUI == false)
                 {
-                    m_gameplayUIHandle.ShowQuickItem(false);
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
                     m_hideUI = true;
                 }
             }
@@ -164,10 +163,8 @@ namespace DChild.Gameplay.Inventories
 
             if (HasItemsInQuickSlot())
             {
-                m_gameplayUIHandle.ShowQuickItem(true);
-
+                GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
             }
-           
         }
     }
 }
