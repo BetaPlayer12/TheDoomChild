@@ -255,6 +255,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            m_selfCollider.SetActive(false);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
@@ -511,7 +512,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
+            m_selfCollider.SetActive(true);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_enablePatience = false;
