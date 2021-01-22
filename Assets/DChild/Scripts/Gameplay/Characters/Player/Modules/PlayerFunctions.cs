@@ -12,7 +12,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private WhipAttack m_whip;
         private SkullThrow m_skullThrow;
         private LedgeGrab m_ledgeGrab;
-        
+        private ShadowMorph m_shadowMorph;
+
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -125,6 +126,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_ledgeGrab?.EndExecution();
         }
 
+        public void EndShadowMorphCharge()
+        {
+            Debug.Log("DONE SHADOW MORPH CHARGE");
+            m_shadowMorph.EndExecution();
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             var character = info.character;
@@ -136,6 +143,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whip = character.GetComponentInChildren<WhipAttack>();
             m_skullThrow = character.GetComponentInChildren<SkullThrow>();
             m_ledgeGrab = character.GetComponentInChildren<LedgeGrab>();
+            m_shadowMorph = character.GetComponentInChildren<ShadowMorph>();
         }
     }
 }

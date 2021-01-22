@@ -1,6 +1,7 @@
 ﻿using System;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
+using DChild.Gameplay.Systems;
 using Doozy.Engine;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -128,7 +129,7 @@ namespace DChild.Gameplay.Inventories
             {
                 if (m_hideUI)
                 {
-                    GameEventMessage.SendEvent("QuickItem Show");
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
                     m_hideUI = false;
                 }
 
@@ -141,7 +142,7 @@ namespace DChild.Gameplay.Inventories
             {
                 if (m_hideUI == false)
                 {
-                    GameEventMessage.SendEvent("QuickItem Hide");
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
                     m_hideUI = true;
                 }
             }
@@ -162,15 +163,8 @@ namespace DChild.Gameplay.Inventories
 
             if (HasItemsInQuickSlot())
             {
-                GameEventMessage.SendEvent("QuickItem Show");
-               
+                GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
             }
-            //else
-            //{
-               
-                  //  GameEventMessage.SendEvent("QuickItem Hide");
-                   
-            //}
         }
     }
 }

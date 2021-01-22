@@ -12,7 +12,8 @@ namespace DChild.Gameplay.Characters.Players
         {
             EndAttack,
             EndEarthShaker,
-            EndLedgeGrab
+            EndLedgeGrab,
+            EndShadowMorphCharge
         }
 
         [SerializeField]
@@ -33,6 +34,9 @@ namespace DChild.Gameplay.Characters.Players
                     break;
                 case Command.EndLedgeGrab:
                     player.EndLedgeGrab();
+                    break;
+                case Command.EndShadowMorphCharge:
+                    player.EndShadowMorphCharge();
                     break;
             }
         }

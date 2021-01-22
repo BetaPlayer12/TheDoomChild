@@ -55,7 +55,7 @@ namespace DChild.Gameplay
         private static CampaignSerializer m_campaignSerializer;
         private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
-        private static UIModeHandle m_uiModeHandle;
+        private static GameplayUIHandle m_gameplayUIHandle;
 
 
         public static ICombatManager combatManager => m_combatManager;
@@ -81,7 +81,7 @@ namespace DChild.Gameplay
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
         public static IHealthTracker healthTracker => m_healthTracker;
-        public static IUIModeHandle uiModeHandle => m_uiModeHandle;
+        public static IGameplayUIHandle gamplayUIHandle => m_gameplayUIHandle;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }
@@ -147,7 +147,7 @@ namespace DChild.Gameplay
 
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_campaignSerializer.Load();
-            GameEventMessage.SendEvent("UI Reset");
+            m_gameplayUIHandle.ResetGameplayUI();
             m_playerManager.player.healableModule.Heal(999999);
             m_playerManager.player.controller.Enable();
             LoadingHandle.SceneDone -= LoadGameDone;
@@ -165,7 +165,7 @@ namespace DChild.Gameplay
             AssignModule(out m_zoneMover);
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_healthTracker);
-            AssignModule(out m_uiModeHandle);
+            AssignModule(out m_gameplayUIHandle);
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();

@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool jumpHeld;
         public bool levitatePressed;
         public bool levitateHeld;
+        public bool shadowMorphPressed;
 
         public bool interactPressed;
         public bool grabPressed;
@@ -100,6 +101,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 var isTrue = value.Get<float>() == 1;
                 levitatePressed = isTrue;
                 levitateHeld = isTrue;
+            }
+        }
+
+        private void OnShadowMorph(InputValue value)
+        {
+            if (enabled == true)
+            {
+                shadowMorphPressed = value.Get<float>() == 1;
             }
         }
 
@@ -203,6 +212,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             dashPressed = false;
             jumpPressed = false;
             levitatePressed = false;
+            shadowMorphPressed = false;
 
             interactPressed = false;
             grabPressed = false;
@@ -224,6 +234,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             jumpHeld = false;
             levitatePressed = false;
             levitateHeld = false;
+            shadowMorphPressed = false;
 
             interactPressed = false;
             grabPressed = false;

@@ -45,6 +45,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private DevilWings m_devilWings;
         private ShadowDash m_shadowDash;
         private ShadowSlide m_shadowSlide;
+        private ShadowMorph m_shadowMorph;
 
         private WallStick m_wallStick;
         private WallMovement m_wallMovement;
@@ -81,6 +82,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker?.Cancel();
             m_whip?.Cancel();
             m_skullThrow?.Cancel();
+            m_shadowMorph.Cancel();
 
             if (m_state.isGrounded)
             {
@@ -262,6 +264,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_devilWings = m_character.GetComponentInChildren<DevilWings>();
             m_shadowDash = m_character.GetComponentInChildren<ShadowDash>();
             m_shadowSlide = m_character.GetComponentInChildren<ShadowSlide>();
+            m_shadowMorph = m_character.GetComponentInChildren<ShadowMorph>();
             m_wallStick = m_character.GetComponentInChildren<WallStick>();
             m_wallMovement = m_character.GetComponentInChildren<WallMovement>();
             m_wallSlide = m_character.GetComponentInChildren<WallSlide>();
@@ -364,6 +367,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_combatReadiness?.HandleDuration();
             }
 
+            if (m_state.isInShadowMode)
+            {
+                if (m_shadowMorph.HaveEnoughSourceForExecution())
+                {
+                    m_shadowMorph.ConsumeSource();
+                }
+                else
+                {
+                    m_shadowMorph?.Cancel();
+                }
+            }
+
             if (m_state.canAttack == true)
             {
                 m_slashCombo.HandleComboResetTimer();
@@ -415,7 +430,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.dashPressed)
                 {
-                    if(m_skills.IsModuleActive(PrimarySkill.Dash))
+                    if (m_skills.IsModuleActive(PrimarySkill.Dash))
                     {
                         m_wallStick?.Cancel();
                         FlipCharacter();
@@ -602,7 +617,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.levitatePressed)
                 {
-                    if(m_skills.IsModuleActive(PrimarySkill.DevilWings))
+                    if (m_skills.IsModuleActive(PrimarySkill.DevilWings))
                     {
                         if (m_devilWings?.HaveEnoughSourceForExecution() ?? false)
                         {
@@ -820,6 +835,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     return;
                 }
 
+                if (m_input.shadowMorphPressed)
+                {
+                    Debug.Log("SHADOW MORPH!");
+                    m_idle?.Cancel();
+                    m_movement?.Cancel();
+                    m_objectManipulation?.Cancel();
+                    m_shadowMorph.Execute();
+                    return;
+                }
+
                 if (m_input.grabPressed || m_input.grabHeld)
                 {
                     if (m_objectManipulation?.IsThereAMovableObject() ?? false)
@@ -976,10 +1001,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void ExecuteDash()
         {
-            if (m_shadowDash?.HaveEnoughSourceForExecution() ?? false)
+            if (m_shadowMorph?.IsInShadowMode() ?? false)
             {
-                m_activeDash = m_shadowDash;
-                m_shadowDash.ConsumeSource();
+                if (m_shadowDash?.HaveEnoughSourceForExecution() ?? false)
+                {
+                    m_activeDash = m_shadowDash;
+                    m_shadowDash.ConsumeSource();
+                }
+                else
+                {
+                    m_shadowMorph.Cancel();
+                    m_activeDash = m_dash;
+                    Debug.Log("No Mana");
+                }
             }
             else
             {
@@ -992,10 +1026,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void ExecuteSlide()
         {
-            if (m_shadowSlide?.HaveEnoughSourceForExecution() ?? false)
+            if (m_shadowMorph?.IsInShadowMode() ?? false)
             {
-                m_activeSlide = m_shadowSlide;
-                m_shadowSlide.ConsumeSource();
+                if (m_shadowSlide?.HaveEnoughSourceForExecution() ?? false)
+                {
+                    m_activeSlide = m_shadowSlide;
+                    m_shadowSlide.ConsumeSource();
+                }
+                else
+                {
+                    m_shadowMorph.Cancel();
+                    m_activeSlide = m_slide;
+                }
             }
             else
             {

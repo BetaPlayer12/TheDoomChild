@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Characters.NPC
 
         public void Interact(Character character)
         {
-            GameplaySystem.uiModeHandle.OpenTradeWindow(m_npcData,m_inventory,this);
+            GameplaySystem.gamplayUIHandle.OpenTradeWindow(m_npcData,m_inventory,this);
         }
 
         public void ResetWares() => m_inventory.ResetWares();

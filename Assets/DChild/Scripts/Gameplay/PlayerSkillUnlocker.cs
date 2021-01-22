@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using Doozy.Engine;
 using Sirenix.OdinInspector;
@@ -45,6 +46,8 @@ namespace DChild.Gameplay
         [SerializeField]
         private Collider2D m_collider;
 
+        private static GameplayUIHandle m_gameplayUIHandle;
+
         public bool showPrompt => true;
 
         public string promptMessage => "Use";
@@ -77,7 +80,7 @@ namespace DChild.Gameplay
 
                 if (m_cinematic == null)
                 {
-                    GameEventMessage.SendEvent("Primary Skill Acquired");
+                    m_gameplayUIHandle.PromptPrimarySkillNotification();
                 }
                 else
                 {
@@ -103,7 +106,7 @@ namespace DChild.Gameplay
 
         private void NotifySkill(PrimarySkill skill)
         {
-            GameEventMessage.SendEvent("Primary Skill Acquired");
+            m_gameplayUIHandle.PromptPrimarySkillNotification();
         }
 
         private void Awake()
