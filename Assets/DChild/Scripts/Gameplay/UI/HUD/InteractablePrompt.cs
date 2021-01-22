@@ -25,10 +25,10 @@ namespace DChild.Gameplay.UI
         private TextMeshProUGUI m_requirementMessage;
         private UIView m_view;
         private Vector3 m_showStartPosition;
-        private static GameplayUIHandle m_gameplayUIHandle;
+        
         private void OnInteractableDetected(object sender, DetectedInteractableEventArgs eventArgs)
         {
-            m_gameplayUIHandle.ShowInteractionPrompt(false);
+            GameplaySystem.gamplayUIHandle.ShowInteractionPrompt(false);
             if (eventArgs.interactable?.showPrompt ?? false)
             {
                 var position = eventArgs.interactable.promptPosition;
@@ -40,7 +40,7 @@ namespace DChild.Gameplay.UI
                 m_invalidPrompt.enabled = !eventArgs.showInteractionButton;
                 m_promptMessage.text = eventArgs.message;
                 m_requirementMessage.text = eventArgs.message;
-                m_gameplayUIHandle.ShowInteractionPrompt(true); 
+                GameplaySystem.gamplayUIHandle.ShowInteractionPrompt(true); 
             }
         }
 

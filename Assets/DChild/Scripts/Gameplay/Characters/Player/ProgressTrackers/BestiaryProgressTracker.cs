@@ -13,13 +13,12 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Attacker m_attacker;
 
-        private static GameplayUIHandle m_gameplayUIHandle;
 
         public void RecordCreatureToBestiary(int ID)
         {
             if (m_progress.HasInfoOf(ID) == false)
             {
-                m_gameplayUIHandle.PromptBestiaryNotification();
+                GameplaySystem.gamplayUIHandle.PromptBestiaryNotification();
             }
             m_progress.SetProgress(ID, true);
         }
