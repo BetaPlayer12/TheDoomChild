@@ -332,11 +332,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
 
                 m_initialDescentBoost?.Handle();
-                if (m_rigidbody.velocity.y <= 0)
+                if (m_rigidbody.velocity.y < 1f)
                 {
                     if (m_state.forcedCurrentGroundedness == false)
                     {
                         m_groundedness?.Evaluate();
+                        Debug.Log("Check for ground");
                     }
                     m_extraJump?.EndExecution();
                 }
@@ -837,11 +838,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_input.shadowMorphPressed)
                 {
-                    Debug.Log("SHADOW MORPH!");
                     m_idle?.Cancel();
                     m_movement?.Cancel();
                     m_objectManipulation?.Cancel();
-                    m_shadowMorph.Execute();
+
+                    if (m_state.isInShadowMode)
+                    {
+                        m_shadowMorph.Cancel();
+                    }
+                    else
+                    {
+                        m_shadowMorph.Execute();
+                    }
+
                     return;
                 }
 
@@ -1012,7 +1021,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_shadowMorph.Cancel();
                     m_activeDash = m_dash;
-                    Debug.Log("No Mana");
                 }
             }
             else

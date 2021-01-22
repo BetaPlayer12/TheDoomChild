@@ -43,7 +43,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EndExecution()
         {
-            m_state.isInShadowMode = true;
             m_state.waitForBehaviour = false;
 
             EndShadowMorphExecution?.Invoke(this, EventActionArgs.Empty);
@@ -52,6 +51,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
+            m_state.isInShadowMode = true;
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
 
