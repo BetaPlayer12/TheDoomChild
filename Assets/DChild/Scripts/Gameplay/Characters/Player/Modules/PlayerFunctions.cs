@@ -129,8 +129,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void EndShadowMorphCharge()
         {
             Debug.Log("DONE SHADOW MORPH CHARGE");
-            m_shadowMorph.EndCharge();
-
+            m_shadowMorph.EndExecution();
         }
 
         public void Initialize(ComplexCharacterInfo info)
