@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Systems
 
 
         private bool m_enableInput;
-        private static GameplayUIHandle m_gameplayUIHandle;
+        
 
         public void Disable()
         {
@@ -34,13 +34,13 @@ namespace DChild.Gameplay.Systems
             if (Input.GetKeyDown(m_pause))
             {
                 GameplaySystem.PauseGame();
-                m_gameplayUIHandle.ShowPauseMenu(true);
+                GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
             }
             else if(m_enableInput == true)
             {
                 if (Input.GetKeyDown(m_storeOpen))
                 {
-                    GameplaySystem.gameplayModeHandle.OpenStorePage();
+                    GameplaySystem.gamplayUIHandle.OpenStorePage();
                 }
             }
         }

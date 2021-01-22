@@ -44,6 +44,7 @@ namespace DChild.Gameplay.Systems
         public void ResetGameplayUI()
         {
             GameEventMessage.SendEvent("UI Reset");
+            ShowBossHealth(false);
         }
 
         public void PromptPrimarySkillNotification()
@@ -53,7 +54,7 @@ namespace DChild.Gameplay.Systems
 
         public void PromptKeystoneFragmentNotification()
         {
-            GameEventMessage.SendEvent("Fragment Acquired");
+            GameEventMessage.SendEvent("Fragment Acquired"); // Currently Being called via string in ItemPickup
         }
 
         public void PromptBestiaryNotification()

@@ -61,7 +61,7 @@ namespace DChild.Gameplay.Environment
 
         public bool CanBeInteracted(Character character)
         {
-            m_gameplayUIHandle.ShowSoulEssenceNotify(true);
+            GameplaySystem.gamplayUIHandle.ShowSoulEssenceNotify(true);
             var inventory = character.GetComponent<PlayerControlledObject>().owner.inventory;
             return inventory.soulEssence >= m_amountRequired;
         }

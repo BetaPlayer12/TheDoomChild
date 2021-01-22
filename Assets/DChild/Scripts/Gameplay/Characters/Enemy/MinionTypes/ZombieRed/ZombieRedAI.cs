@@ -190,6 +190,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SetAI(AITargetInfo targetInfo)
         {
+            Debug.Log("Red Zombie Summoning");
             m_isDetecting = true;
             m_targetInfo = targetInfo;
             m_stateHandle.OverrideState(State.Spawning);
@@ -238,6 +239,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            m_selfCollider.SetActive(false);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             StopAllCoroutines();
             m_movement.Stop();
@@ -274,7 +276,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SpawnRoutine()
         {
-            m_animation.SetAnimation(0, m_info.spawn1Animation, false);
+            m_animation.SetAnimation(0, m_info.spawn1Animation, false).TimeScale = 2.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spawn1Animation);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
@@ -296,7 +298,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
-            m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
+            if (!m_isDetecting)
+            {
+                m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
+            }
         }
 
         protected override void Awake()
@@ -476,7 +481,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
+            m_selfCollider.SetActive(true);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_enablePatience = false;

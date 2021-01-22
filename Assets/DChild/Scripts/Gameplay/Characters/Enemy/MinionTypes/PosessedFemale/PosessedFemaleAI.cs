@@ -213,22 +213,22 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            //m_stateHandle.Wait(State.Cooldown);
             StopAllCoroutines();
-            m_agent.Stop();
-            m_stateHandle.Wait(State.Cooldown);
             StartCoroutine(FlinchRoutine());
         }
 
         private IEnumerator FlinchRoutine()
         {
+            m_agent.Stop();
             var flinch = UnityEngine.Random.Range(0, 2) == 0 ? m_info.flinchAnimation : m_info.flinch2Animation;
             m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, flinch, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
             m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
+            m_stateHandle.OverrideState(State.Cooldown);
             yield return null;
         }
 

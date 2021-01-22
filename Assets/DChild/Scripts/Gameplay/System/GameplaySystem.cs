@@ -81,7 +81,7 @@ namespace DChild.Gameplay
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
         public static IHealthTracker healthTracker => m_healthTracker;
-        public static IGameplayUIHandle gameplayModeHandle => m_gameplayUIHandle;
+        public static IGameplayUIHandle gamplayUIHandle => m_gameplayUIHandle;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }

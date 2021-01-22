@@ -46,8 +46,6 @@ namespace DChild.Gameplay
         [SerializeField]
         private Collider2D m_collider;
 
-        private static GameplayUIHandle m_gameplayUIHandle;
-
         public bool showPrompt => true;
 
         public string promptMessage => "Use";
@@ -80,7 +78,7 @@ namespace DChild.Gameplay
 
                 if (m_cinematic == null)
                 {
-                    m_gameplayUIHandle.PromptPrimarySkillNotification();
+                    GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
                 }
                 else
                 {
@@ -106,7 +104,7 @@ namespace DChild.Gameplay
 
         private void NotifySkill(PrimarySkill skill)
         {
-            m_gameplayUIHandle.PromptPrimarySkillNotification();
+            GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
         }
 
         private void Awake()
