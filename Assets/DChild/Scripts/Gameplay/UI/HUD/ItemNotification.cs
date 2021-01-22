@@ -23,13 +23,13 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private IItemContainer[] m_toListen;
 
-        private static GameplayUIHandle m_gameplayUIHandle;
+        
         public void ShowNextNotif()
         {
             if (m_messages.Count > 0)
             {
                 m_notification.text = m_messages[0];
-                m_gameplayUIHandle.ShowItemAcquired(true);
+                GameplaySystem.gamplayUIHandle.ShowItemAcquired(true);
             }
         }
 
@@ -41,7 +41,7 @@ namespace DChild.Gameplay.UI
             {
                 m_notificationTimer.Reset();
                 m_notification.text = message;
-                m_gameplayUIHandle.ShowItemAcquired(true);
+                GameplaySystem.gamplayUIHandle.ShowItemAcquired(true);
             }
             m_messages.Add(message);
             enabled = true;
@@ -51,7 +51,7 @@ namespace DChild.Gameplay.UI
         private void OnNotifEnd(object sender, EventActionArgs eventArgs)
         {
             m_messages.RemoveAt(0);
-            m_gameplayUIHandle.ShowItemAcquired(false);
+            GameplaySystem.gamplayUIHandle.ShowItemAcquired(false);
         }
 
         private void Awake()
