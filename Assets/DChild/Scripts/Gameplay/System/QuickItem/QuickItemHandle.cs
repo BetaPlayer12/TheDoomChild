@@ -1,6 +1,7 @@
 ﻿using System;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
+using DChild.Gameplay.Systems;
 using Doozy.Engine;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -124,11 +125,11 @@ namespace DChild.Gameplay.Inventories
 
         private void OnItemUpdate(object sender, ItemEventArgs eventArgs)
         {
-            if (m_container.HasItemCategory(ItemCategory.Consumable))
+            if (HasItemsInQuickSlot())
             {
                 if (m_hideUI)
                 {
-                    GameEventMessage.SendEvent("QuickItem Show");
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
                     m_hideUI = false;
                 }
 
@@ -141,10 +142,15 @@ namespace DChild.Gameplay.Inventories
             {
                 if (m_hideUI == false)
                 {
-                    GameEventMessage.SendEvent("QuickItem Hide");
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
                     m_hideUI = true;
                 }
             }
+        }
+
+        private bool HasItemsInQuickSlot()
+        {
+            return m_container.HasItemCategory(ItemCategory.Consumable) || m_container.HasItemCategory(ItemCategory.Throwable);
         }
 
         private void Awake()
@@ -155,10 +161,9 @@ namespace DChild.Gameplay.Inventories
             m_container.ItemUpdate += OnItemUpdate;
             m_hideUI = true;
 
-            if (m_container.HasItemCategory(ItemCategory.Consumable))
+            if (HasItemsInQuickSlot())
             {
-                GameEventMessage.SendEvent("QuickItem Show");
-                m_hideUI = false;
+                GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
             }
         }
     }

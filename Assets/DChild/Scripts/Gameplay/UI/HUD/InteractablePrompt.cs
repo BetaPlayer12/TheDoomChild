@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Systems;
 using Doozy.Engine;
 using Doozy.Engine.UI;
 using Sirenix.OdinInspector;
@@ -24,9 +25,10 @@ namespace DChild.Gameplay.UI
         private TextMeshProUGUI m_requirementMessage;
         private UIView m_view;
         private Vector3 m_showStartPosition;
+        
         private void OnInteractableDetected(object sender, DetectedInteractableEventArgs eventArgs)
         {
-            GameEventMessage.SendEvent("Interaction Prompt Hide");
+            GameplaySystem.gamplayUIHandle.ShowInteractionPrompt(false);
             if (eventArgs.interactable?.showPrompt ?? false)
             {
                 var position = eventArgs.interactable.promptPosition;
@@ -38,7 +40,7 @@ namespace DChild.Gameplay.UI
                 m_invalidPrompt.enabled = !eventArgs.showInteractionButton;
                 m_promptMessage.text = eventArgs.message;
                 m_requirementMessage.text = eventArgs.message;
-                GameEventMessage.SendEvent("Interaction Prompt Show");
+                GameplaySystem.gamplayUIHandle.ShowInteractionPrompt(true); 
             }
         }
 

@@ -25,10 +25,21 @@ namespace DChild.Menu.Trading
 
         public void UpdateItemInfo(ItemData item)
         {
-            m_icon.sprite = item.icon;
-            m_itemName.text = item.itemName;
-            m_cost.text = item.cost.ToString();
-            m_description.text = item.description;
+            if (item == null)
+            {
+                m_icon.enabled = false;
+                m_itemName.text = "";
+                m_cost.text = "0";
+                m_description.text = "";
+            }
+            else
+            {
+                m_icon.enabled = true;
+                m_icon.sprite = item.icon;
+                m_itemName.text = item.itemName;
+                m_cost.text = item.cost.ToString();
+                m_description.text = item.description;
+            }
         }
 
         public void UpdateItemCost(int cost)

@@ -87,7 +87,7 @@ namespace DChild.Gameplay.Combat
 
         private void StartFight()
         {
-            GameplaySystem.combatManager.MonitorBoss(m_boss);
+            GameplaySystem.gamplayUIHandle.MonitorBoss(m_boss);
             switch (m_prefight)
             {
                 case PreFight.None:

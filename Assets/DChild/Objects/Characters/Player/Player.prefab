@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4665764455124903692}
   - component: {fileID: 3976449834723296872}
   - component: {fileID: 4095532479931446342}
+  - component: {fileID: 2855776680568274793}
   m_Layer: 8
   m_Name: Control
   m_TagString: Untagged
@@ -76,6 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08075061a994857498b09cdda9c3f7db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_mousePosition: {x: 0, y: 0}
+  m_mouseDelta: {x: 0, y: 0}
   horizontalInput: 0
   verticalInput: 0
   crouchHeld: 0
@@ -84,6 +87,7 @@ MonoBehaviour:
   jumpHeld: 0
   levitatePressed: 0
   levitateHeld: 0
+  shadowMorphPressed: 0
   interactPressed: 0
   grabPressed: 0
   grabHeld: 0
@@ -91,6 +95,9 @@ MonoBehaviour:
   slashHeld: 0
   earthShakerPressed: 0
   whipPressed: 0
+  skullThrowPressed: 0
+  skullThrowReleased: 0
+  skullThrowHeld: 0
 --- !u!114 &4095532479931446342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,10 +111,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_input: {fileID: 3976449834723296872}
-  m_skills: {fileID: 7518031642767482061}
+  m_skills: {fileID: 0}
   m_state: {fileID: 0}
   m_character: {fileID: 0}
   m_rigidbody: {fileID: 0}
+--- !u!114 &2855776680568274793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5573233925074938722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b738035a607d043b5c6eee197633af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_passiveModule:
+    m_blackBloodImmunity: {fileID: 0}
 --- !u!1 &7518031641241396614
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +175,7 @@ MonoBehaviour:
   m_restrictSize: 0
   m_maxSize: 0
   m_list: []
+  m_restrictions: []
 --- !u!1 &7518031641434086438
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,6 +222,7 @@ MonoBehaviour:
   m_restrictSize: 0
   m_maxSize: 0
   m_list: []
+  m_restrictions: []
 --- !u!1 &7518031641455754583
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,6 +519,7 @@ MonoBehaviour:
   m_restrictSize: 0
   m_maxSize: 0
   m_list: []
+  m_restrictions: []
 --- !u!1 &7518031642767482060
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,7 +595,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 12
     - Name: 
       Entry: 7
       Data: 
@@ -628,7 +652,7 @@ MonoBehaviour:
       Data: 4
     - Name: $v
       Entry: 5
-      Data: true
+      Data: false
     - Name: 
       Entry: 8
       Data: 
@@ -669,11 +693,60 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 8
+    - Name: $v
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 9
+    - Name: $v
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 10
+    - Name: $v
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 11
+    - Name: $v
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
       Entry: 8
       Data: 
+  m_moduleActivator: {fileID: 0}
 --- !u!114 &7518031642767482063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,7 +826,7 @@ GameObject:
   - component: {fileID: 7518031643020262918}
   - component: {fileID: 7518031643020262916}
   m_Layer: 8
-  m_Name: Player (2)
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -794,6 +867,8 @@ MonoBehaviour:
   m_attackResistance: {fileID: 7518031641492634120}
   m_statusResistance: {fileID: 7518031641492634117}
   m_modifiers: {fileID: 7518031641492634121}
+  m_behaviourModule: {fileID: 0}
+  m_skills: {fileID: 0}
   m_controller: {fileID: 4095532479931446342}
   m_inventory: {fileID: 7518031641455754584}
   m_soulCrystalHandle: {fileID: 0}
@@ -850,6 +925,7 @@ MonoBehaviour:
     m_damageable: {fileID: 0}
     m_state: {fileID: 0}
     m_magic: {fileID: 0}
+    m_modifier: {fileID: 0}
     m_physics: {fileID: 0}
     m_rigidbody: {fileID: 0}
     m_sensorList: {fileID: 0}

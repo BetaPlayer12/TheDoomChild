@@ -40,6 +40,17 @@ namespace DChild.Gameplay.Inventories
                 var slotInfo = m_waresReference.GetInfo(i);
                 m_items.SetItem(slotInfo.item, slotInfo.count);
             }
+
+            for (int i = 0; i < m_items.Count; i++)
+            {
+               var slot =  m_items.GetSlot(i);
+                var restriction = new ItemSlot.Restriction
+                {
+                    canBeSold = true,
+                    hasInfiniteCount = slot.restrictions.hasInfiniteCount
+                };
+                slot.SetRestriction(restriction);
+            }
         }
 
         void ITradableInventory.AddItem(ItemData item, int count)
@@ -80,6 +91,5 @@ namespace DChild.Gameplay.Inventories
         {
             ResetWares();
         }
-
     }
 }

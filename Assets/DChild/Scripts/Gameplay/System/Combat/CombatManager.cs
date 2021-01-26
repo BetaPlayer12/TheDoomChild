@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Combat
         List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer, Invulnerability ignoresLevel);
         void Damage(IDamageable damageable, AttackDamage damage);
         void Heal(IHealable healable, int health);
-        void MonitorBoss(Boss boss);
+       
     }
 
     public class CombatManager : SerializedMonoBehaviour, ICombatManager, IGameplaySystemModule, IGameplayInitializable
@@ -31,8 +31,7 @@ namespace DChild.Gameplay.Combat
         private CriticalDamageHandle m_criticalDamageHandle;
         [SerializeField, HideLabel, Title("UI")]
         private CombatUIHandler m_uiHandler;
-        [SerializeField]
-        private BossCombatUI m_bossCombat;
+       
         private AOETargetHandler m_aOETargetHandler;
         private PlayerCombatHandler m_playerCombatHandler;
         private ResistanceHandler m_resistanceHandler;
@@ -123,10 +122,7 @@ namespace DChild.Gameplay.Combat
         public List<Hitbox> GetValidTargets(Vector2 source, Invulnerability ignoresLevel, List<Hitbox> hitboxes) => m_aOETargetHandler.ValidateTargets(source, ignoresLevel, hitboxes);
         public List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer, Invulnerability ignoresLevel) => m_aOETargetHandler.GetValidTargetsOfCircleAOE(source, radius, layer, ignoresLevel);
 
-        public void MonitorBoss(Boss boss)
-        {
-            m_bossCombat?.SetBoss(boss);
-        }
+       
 
         public void Initialize()
         {

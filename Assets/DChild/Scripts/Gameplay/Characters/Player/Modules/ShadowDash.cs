@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_damageable.SetInvulnerability(Invulnerability.None);
             m_wasUsed = false;
             m_tempFX?.Stop(true);
-            m_animator.SetBool(m_animationParameter, false);
+            //m_animator.SetBool(m_animationParameter, false);
             m_skeletonGhost.enabled = false;
         }
 
@@ -70,7 +70,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_damageable.SetInvulnerability(Invulnerability.MAX);
                 m_wasUsed = true;
                 m_tempFX?.Play(true);
-                m_animator.SetBool(m_animationParameter, true);
+                //m_animator.SetBool(m_animationParameter, true);
                 m_skeletonGhost.enabled = true;
             }
             m_dash.Execute();

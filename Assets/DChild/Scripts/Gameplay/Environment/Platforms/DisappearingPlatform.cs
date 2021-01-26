@@ -12,8 +12,6 @@ namespace DChild.Gameplay.Environment
 {
     public class DisappearingPlatform : MonoBehaviour
     {
-      
-
         [SerializeField]
         private DisappearingPlatformData m_disappearingPlatformData;
         [SerializeField, TabGroup("OnDisappear")]
@@ -29,7 +27,7 @@ namespace DChild.Gameplay.Environment
         private float m_disappearDurationTimer;
         private bool m_hasReactivePlatform;
 
-        
+
 
         private void EnableCollider(TrackEntry trackEntry)
         {
@@ -52,12 +50,15 @@ namespace DChild.Gameplay.Environment
                 m_animation.state.AddAnimation(0, m_disappearingPlatformData.aboutToDisappearAnimation, true, 0);
             }
         }
-        private void OnPlatformReaction(object sender, EventActionArgs eventArgs)
+        private void OnPlatformReaction(object sender, CollisionEventActionArgs eventArgs)
         {
             if (m_willDisappear == false)
             {
-                DisappearPlatform();
-                enabled = true;
+                if (eventArgs.collision.collider.TryGetComponentInParent(out Character character))
+                {
+                    DisappearPlatform();
+                    enabled = true;
+                }
             }
         }
 
@@ -129,10 +130,11 @@ namespace DChild.Gameplay.Environment
             //Check whether collider is coming from opposite side of effector
             if (m_hasReactivePlatform == false && collider.enabled)
             {
-                DisappearPlatform();
+                if (collider.collider.TryGetComponentInParent(out Character character))
+                {
+                    DisappearPlatform();
+                }
             }
         }
-
-      
     }
 }

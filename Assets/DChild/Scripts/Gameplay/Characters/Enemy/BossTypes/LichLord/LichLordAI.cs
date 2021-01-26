@@ -89,6 +89,24 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private GameObject m_totem;
             public GameObject totem => m_totem;
+            [SerializeField]
+            private GameObject m_curseObject;
+            public GameObject curseObject => m_curseObject;
+            [SerializeField]
+            private GameObject m_summonedMinion;
+            public GameObject summonedMinion => m_summonedMinion;
+            [SerializeField]
+            private GameObject m_summonedZombie;
+            public GameObject summonedZombie => m_summonedZombie;
+            [SerializeField]
+            private GameObject m_summonedZombie2;
+            public GameObject summonedZombie2 => m_summonedZombie2;
+            [SerializeField]
+            private GameObject m_summonedZombie3;
+            public GameObject summonedZombie3 => m_summonedZombie3;
+            [SerializeField]
+            private GameObject m_spike;
+            public GameObject spike => m_spike;
 
             [Title("Projectiles")]
             [SerializeField]
@@ -157,6 +175,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GhostOrb,
             SkeletalArm,
             SummonTotem,
+            SummonZombies,
             MapCurse,
             WaitAttackEnd,
         }
@@ -224,6 +243,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_hasPhaseChanged;
         private PhaseInfo m_phaseInfo;
         private Vector3 m_totemLastPos;
+        private Vector3 m_minionLastPos;
+        private Vector3 m_zombieLastPos;
+        private List<GameObject> m_minionsCache;
+        private List<GameObject> m_zombiesCache;
+        private List<GameObject> m_sarcophagusCache;
+        private List<GameObject> m_spikeCache;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -234,8 +259,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!m_hasPhaseChanged)
             {
-                m_hasPhaseChanged = true;
                 StopAllCoroutines();
+                m_hasPhaseChanged = true;
                 m_animation.DisableRootMotion();
                 m_animation.SetEmptyAnimation(0, 0);
                 m_stateHandle.OverrideState(State.Phasing);
@@ -259,6 +284,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_stateHandle.currentState != State.Phasing)
             {
+                m_hitbox.gameObject.SetActive(true);
                 m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.ApplyQueuedState();
             }
@@ -286,16 +312,55 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_hitbox.SetInvulnerability(Invulnerability.None);
+            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_stateHandle.ApplyQueuedState();
+            m_hasPhaseChanged = false;
+            if (m_phaseHandle.currentPhase == Phase.PhaseThree)
+            {
+                for (int i = 0; i < m_sarcophagusCache.Count; i++)
+                {
+                    m_sarcophagusCache[i].GetComponent<LichLordSarcophagus>().ExplosionPrep();
+                }
+                for (int i = 0; i < m_spikeCache.Count; i++)
+                {
+                    m_spikeCache[i].GetComponent<LichLordSpike>().SubmergeSpike();
+                }
+                while (m_spikeCache.Count != 0)
+                {
+                    for (int i = 0; i < m_spikeCache.Count; i++)
+                    {
+                        if (m_spikeCache[i] == null)
+                        {
+                            m_spikeCache.RemoveAt(i);
+                        }
+                    }
+                    yield return null;
+                }
+                StartCoroutine(MapCurseRoutine());
+                while (m_sarcophagusCache.Count != 0)
+                {
+                    for (int i = 0; i < m_sarcophagusCache.Count; i++)
+                    {
+                        if (m_sarcophagusCache[i] == null)
+                        {
+                            m_sarcophagusCache.RemoveAt(i);
+                        }
+                    }
+                    yield return null;
+                }
+            }
+            else
+            {
+                m_hitbox.SetInvulnerability(Invulnerability.None);
+                m_stateHandle.ApplyQueuedState();
+            }
             yield return null;
         }
 
         private Vector2 GroundPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(m_randomSpawnCollider.bounds.center, Vector2.down, 1000, LayerMask.GetMask("Environment"));
             return hit.point;
         }
 
@@ -312,13 +377,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_attackDecider.hasDecidedOnAttack = false;
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_hitCount++;
-            if (m_hitCount == 5)
+            if (m_hitCount == 5 && m_phaseHandle.currentPhase == Phase.PhaseOne)
             {
                 StopAllCoroutines();
                 m_hitCount = 0;
                 StartCoroutine(HollowFormRoutine());
             }
-            Debug.Log("Got HIT");
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -350,8 +414,69 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SummonTotemObject()
         {
-            var totem = Instantiate(m_info.totem, new Vector2(RandomTeleportPoint(m_totemLastPos).x, GroundPosition().y), Quaternion.identity);
-            m_totemLastPos = totem.transform.position;
+            switch (m_currentPattern)
+            {
+                case Pattern.AttackPattern1:
+                    if (m_sarcophagusCache.Count < 2)
+                    {
+                        var totem = Instantiate(m_info.totem, new Vector2(RandomTeleportPoint(m_totemLastPos).x, GroundPosition().y), Quaternion.identity);
+                        m_sarcophagusCache.Add(totem);
+                        m_totemLastPos = totem.transform.position;
+                        if (m_spikeCache.Count == 0)
+                        {
+                            var pos = new Vector2(m_randomSpawnCollider.bounds.center.x, m_totemLastPos.y);
+                            var spikePos = pos;
+                            var increment = 10;
+                            for (int i = 0; i < 20; i++)
+                            {
+                                if (i == 10)
+                                {
+                                    increment = -increment;
+                                    spikePos = pos;
+                                }
+                                var spike = Instantiate(m_info.spike, spikePos, Quaternion.identity);
+                                spike.GetComponent<LichLordSpike>().EmergeSpike();
+                                m_spikeCache.Add(spike);
+                                spikePos = new Vector2(spikePos.x + increment, spikePos.y);
+                            }
+                        }
+                    }
+                    break;
+                case Pattern.AttackPattern2:
+                    for (int i = 0; i < 5; i++)
+                    {
+                        GameObject zombieObject = null;
+                        int selectedZombie = UnityEngine.Random.Range(0, 3);
+                        switch (selectedZombie)
+                        {
+                            case 0:
+                                zombieObject = m_info.summonedZombie;
+                                break;
+                            case 1:
+                                zombieObject = m_info.summonedZombie2;
+                                break;
+                            case 2:
+                                zombieObject = m_info.summonedZombie3;
+                                break;
+                        }
+                        var zombie = Instantiate(zombieObject, new Vector2(RandomTeleportPoint(m_zombieLastPos).x, m_totemLastPos.y), Quaternion.identity);
+                        switch (selectedZombie)
+                        {
+                            case 0:
+                                zombie.GetComponent<Zombie01AI>().SetAI(m_targetInfo);
+                                break;
+                            case 1:
+                                zombie.GetComponent<Zombie02AI>().SetAI(m_targetInfo);
+                                break;
+                            case 2:
+                                zombie.GetComponent<ZombieRedAI>().SetAI(m_targetInfo);
+                                break;
+                        }
+                        m_zombieLastPos = zombie.transform.position;
+                        m_zombiesCache.Add(zombie);
+                    }
+                    break;
+            }
         }
 
         private IEnumerator LaunchOrbRoutine()
@@ -409,22 +534,98 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SummonTotemRoutine()
         {
-            var randomAttack = UnityEngine.Random.Range(0, 2);
             m_animation.SetAnimation(0, m_info.summonTotemAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonTotemAttack.animation);
-            //m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
             m_animation.SetAnimation(0, m_info.vanishAnimation, false);
+            m_hitbox.gameObject.SetActive(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            yield return new WaitForSeconds(3f);
+            SummonTotemObject();
+            for (int i = 0; i < 5; i++)
+            {
+                yield return new WaitForSeconds(2f);
+                var minion = Instantiate(m_info.summonedMinion, RandomTeleportPoint(m_minionLastPos), Quaternion.identity);
+                minion.GetComponent<PosessedFemaleAI>().SetAI(m_targetInfo);
+                m_minionLastPos = minion.transform.position;
+                m_minionsCache.Add(minion);
+            }
+            while (m_minionsCache.Count > 0)
+            {
+                for (int i = 0; i < m_minionsCache.Count; i++)
+                {
+                    if (!m_minionsCache[i].activeSelf)
+                    {
+                        m_minionsCache.RemoveAt(i);
+                    }
+                }
+                yield return null;
+            }
+            var totem = UnityEngine.Random.Range(0, 1);
+            transform.position = new Vector2(m_sarcophagusCache[totem].transform.position.x, m_sarcophagusCache[totem].transform.position.y +5);
+            m_sarcophagusCache[totem].GetComponent<LichLordSarcophagus>().ExplosionPrep();
+            //yield return new WaitForSeconds(3f);
+            m_animation.SetAnimation(0, m_info.appearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
+            m_sarcophagusCache.RemoveAt(totem);
+            m_hitbox.gameObject.SetActive(true);
+            //for (int i = 0; i < m_spikeCache.Count; i++)
+            //{
+            //    m_spikeCache[i].GetComponent<LichLordSpike>().SubmergeSpike();
+            //}
+            //while (m_spikeCache.Count != 0)
+            //{
+            //    for (int i = 0; i < m_spikeCache.Count; i++)
+            //    {
+            //        if (m_spikeCache[i] == null)
+            //        {
+            //            m_spikeCache.RemoveAt(i);
+            //        }
+            //    }
+            //    yield return null;
+            //}
+            m_stateHandle.OverrideState(State.Chasing);
             yield return null;
         }
 
-        private IEnumerator MapCurse()
+        private IEnumerator SummonZombiesRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.summonTotemAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.summonTotemAttack.animation);
+            m_hitbox.gameObject.SetActive(false);
+            m_animation.SetAnimation(0, m_info.vanishAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
+            yield return new WaitForSeconds(2f);
+            while (m_zombiesCache.Count > 0)
+            {
+                for (int i = 0; i < m_zombiesCache.Count; i++)
+                {
+                    if (!m_zombiesCache[i].activeSelf)
+                    {
+                        m_zombiesCache.RemoveAt(i);
+                    }
+                }
+                yield return null;
+            }
+            m_animation.SetAnimation(0, m_info.appearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
+            m_hitbox.gameObject.SetActive(true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private void MapCurse()
+        {
+            m_mapCurseFX.Play();
+            var totem = Instantiate(m_info.curseObject, new Vector2(RandomTeleportPoint(m_totemLastPos).x, GroundPosition().y), Quaternion.identity);
+        }
+
+        private IEnumerator MapCurseRoutine()
         {
             m_animation.SetAnimation(0, m_info.mapCurseAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.mapCurseAttack.animation);
             var randomAttack = UnityEngine.Random.Range(0, 2);
             m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -437,7 +638,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                //Debug.Log("Read Dynamic Movements " + velocityX + " " + velocityY);
                 m_agent.SetDestination(target);
                 m_agent.Move(m_info.move1.speed);
 
@@ -474,7 +674,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector3 RandomTeleportPoint(Vector3 transformPos)
         {
             Vector3 randomPos = transformPos;
-            while (Vector2.Distance(transformPos, randomPos) <= 50f)
+            while (Vector2.Distance(transformPos, randomPos) <= 75f)
             {
                 randomPos = m_randomSpawnCollider.bounds.center + new Vector3(
                (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.x,
@@ -554,8 +754,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(SummonTotemRoutine());
                     //StartCoroutine(Attack3Routine());
                     break;
+                case Attack.SummonZombies:
+                    StartCoroutine(SummonZombiesRoutine());
+                    //StartCoroutine(Attack3Routine());
+                    break;
                 case Attack.MapCurse:
-                    StartCoroutine(MapCurse());
+                    StartCoroutine(MapCurseRoutine());
                     //StartCoroutine(Attack4Routine());
                     break;
             }
@@ -570,7 +774,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
                 }
             }
-            for (int i = 0; i < m_attackUsed.Length; ++i)
+            for (int i = 0; i < m_attackUsed.Length; ++i) 
             {
                 m_attackUsed[i] = false;
             }
@@ -598,6 +802,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
 
+            m_minionsCache = new List<GameObject>();
+            m_zombiesCache = new List<GameObject>();
+            m_sarcophagusCache = new List<GameObject>();
+            m_spikeCache = new List<GameObject>();
             m_attackCache = new List<Pattern>();
             AddToAttackCache(Pattern.AttackPattern1, Pattern.AttackPattern2/*, Pattern.AttackPattern3*/);
             m_attackUsed = new bool[m_attackCache.Count];
@@ -608,7 +816,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_spineListener.Subscribe(m_info.lichOrbStartFXEvent, m_ghostOrbStartFX.Play);
             m_spineListener.Subscribe(m_info.ghostOrbProjectile.launchOnEvent, LaunchOrb);
-            m_spineListener.Subscribe(m_info.mapCurseEvent, m_mapCurseFX.Play);
+            m_spineListener.Subscribe(m_info.mapCurseEvent, MapCurse);
             m_spineListener.Subscribe(m_info.summonTotemEvent, SummonTotemObject);
             m_animation.DisableRootMotion();
 
@@ -646,12 +854,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     //}
                     break;
                 case State.Phasing:
-                    Debug.Log("Phase Time");
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
-                    Debug.Log("Turning Steet");
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
                     m_agent.Stop();
@@ -674,13 +880,13 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     case Phase.PhaseOne:
                                         ExecuteAttack(Attack.GhostOrb);
-                                        //ExecuteAttack(Attack.SummonTotem);
                                         break;
                                     case Phase.PhaseTwo:
                                         ExecuteAttack(Attack.SummonTotem);
                                         break;
                                     case Phase.PhaseThree:
-                                        ExecuteAttack(Attack.MapCurse);
+                                        //ExecuteAttack(Attack.SummonTotem);
+                                        m_stateHandle.OverrideState(State.ReevaluateSituation);
                                         break;
                                 }
                                 ///////
@@ -696,7 +902,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                                         break;
                                     case Phase.PhaseThree:
-                                        ExecuteAttack(Attack.SummonTotem);
+                                        //ExecuteAttack(Attack.MapCurse);
+                                        ExecuteAttack(Attack.SummonZombies);
                                         break;
                                 }
                                 ///////

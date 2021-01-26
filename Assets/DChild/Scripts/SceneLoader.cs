@@ -1,4 +1,5 @@
-﻿using DChild.Menu;
+﻿using DChild.Gameplay.Optimizers;
+using DChild.Menu;
 using Holysoft.Collections;
 using Holysoft.Event;
 using System;
@@ -41,6 +42,7 @@ namespace DChild
         {
             if (withLoadingScene)
             {
+                RoomActivityManager.UnloadAllRooms();
                 if (m_activeZone != null && m_activeZone != string.Empty /*&& m_activeZone != sceneName*/)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);
@@ -54,12 +56,13 @@ namespace DChild
                 }
                 //if (m_activeZone != sceneName)
                 //{
-                    LoadingHandle.LoadScenes(sceneName);
+                LoadingHandle.LoadScenes(sceneName);
                 //}
                 SceneManager.LoadScene(m_loadingScene.sceneName, LoadSceneMode.Additive);
             }
             else
             {
+                RoomActivityManager.UnloadAllRooms();
                 if (m_activeZone != string.Empty && m_activeZone != sceneName)
                 {
                     LoadingHandle.UnloadScenes(m_activeZone);

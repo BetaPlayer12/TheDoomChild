@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using Doozy.Engine;
 using Sirenix.OdinInspector;
@@ -48,6 +49,7 @@ namespace DChild.Gameplay.Environment
         private UnityEvent m_onIncomplete;
 
         private Collider2D m_trigger;
+        private static GameplayUIHandle m_gameplayUIHandle;
 
         public bool showPrompt => true;
 
@@ -59,7 +61,7 @@ namespace DChild.Gameplay.Environment
 
         public bool CanBeInteracted(Character character)
         {
-            GameEventMessage.SendEvent("Soul Essence Notify");
+            GameplaySystem.gamplayUIHandle.ShowSoulEssenceNotify(true);
             var inventory = character.GetComponent<PlayerControlledObject>().owner.inventory;
             return inventory.soulEssence >= m_amountRequired;
         }

@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using Doozy.Engine;
 using Sirenix.OdinInspector;
@@ -74,7 +75,15 @@ namespace DChild.Gameplay
                             break;
                     }
                 }
-                m_cinematic?.Play();
+
+                if (m_cinematic == null)
+                {
+                    GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
+                }
+                else
+                {
+                    m_cinematic.Play();
+                }
                 //m_fx.Play(true);
                 //StartCoroutine(DelayedNotifySkill());
                 m_isUsed = true;
@@ -95,7 +104,7 @@ namespace DChild.Gameplay
 
         private void NotifySkill(PrimarySkill skill)
         {
-            GameEventMessage.SendEvent("Primary Skill Acquired");
+            GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
         }
 
         private void Awake()

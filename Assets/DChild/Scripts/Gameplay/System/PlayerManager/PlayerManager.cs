@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Systems
         Player player { get; }
         IAutoReflexHandler autoReflex { get; }
         PlayerCharacterOverride OverrideCharacterControls();
+
         void StopCharacterControlOverride();
         void DisableControls();
         void EnableControls();
@@ -42,7 +43,7 @@ namespace DChild.Gameplay.Systems
         private AutoReflexHandler m_autoReflex;
 
         private CollisionRegistrator m_collisionRegistrator;
-        
+       
         public Player player => m_player;
         public IAutoReflexHandler autoReflex => m_autoReflex;
 
@@ -123,7 +124,7 @@ namespace DChild.Gameplay.Systems
         }
         private void OnPlayerDeath(object sender, EventActionArgs eventArgs)
         {
-            GameEventMessage.SendEvent("Game Over");
+            GameplaySystem.gamplayUIHandle.ShowGameOverScreen(true);
             // m_input.Disable();
             //  m_player.controller.Disable();
             m_playerIsDead = true;

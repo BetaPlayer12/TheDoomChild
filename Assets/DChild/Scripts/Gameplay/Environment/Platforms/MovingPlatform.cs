@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Systems.WorldComponents;
 using DChild.Serialization;
+using Holysoft;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -209,18 +210,20 @@ namespace DChild.Gameplay.Environment
             m_isolatedTime = GetComponent<IIsolatedTime>();
             m_wayPointDestination = m_startWaypoint;
             m_currentWayPoint = m_wayPointDestination;
+            m_cacheDestination = m_waypoints[m_wayPointDestination];
             m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
             m_listSize = m_waypoints.Length;
             ChangeDestination();
+            enabled = false;
         }
 
         private void Update()
         {
             var currentPosition = (Vector2)transform.position;
-            if (currentPosition != m_cacheDestination)
+            if (RoundVectorValuesTo(2, currentPosition) != RoundVectorValuesTo(2, m_cacheDestination))
             {
                 transform.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
-                if (currentPosition == m_cacheCurrentWaypoint)
+                if (RoundVectorValuesTo(2, currentPosition) == RoundVectorValuesTo(2, m_cacheCurrentWaypoint))
                 {
                     m_currentWayPoint += m_incrementerValue;
                     m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
@@ -248,6 +251,11 @@ namespace DChild.Gameplay.Environment
             {
                 gameObject.AddComponent<IsolatedObject>();
             }
+        }
+
+        private Vector2 RoundVectorValuesTo(uint decimalPlace, Vector2 vector2)
+        {
+            return new Vector2(MathfExt.RoundDecimalTo(decimalPlace, vector2.x), MathfExt.RoundDecimalTo(decimalPlace, vector2.y));
         }
     }
 }
