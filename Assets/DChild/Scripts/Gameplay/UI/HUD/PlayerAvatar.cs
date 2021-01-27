@@ -34,6 +34,7 @@ namespace DChild.Gameplay.UI
         private ModeShiftInfo m_shadowMode;
 
         private ModeShiftInfo m_currentMode;
+        private AnimationReferenceAsset m_currentIdleMode;
         private SkeletonGraphic m_animation;
         private CharacterState m_state;
 
@@ -44,13 +45,15 @@ namespace DChild.Gameplay.UI
 
         private void OnShadowMorphEnd(object sender, EventActionArgs eventArgs)
         {
-            ChangeToAnimation(m_currentMode.endAnimation, m_normalIdle);
+            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
+            m_currentIdleMode = m_normalIdle;
         }
 
         private void OnShadowMorphExecuted(object sender, EventActionArgs eventArgs)
         {
             ChangeToAnimation(m_shadowMode.startAnimation, m_shadowMode.loopAnimation);
             m_currentMode = m_shadowMode;
+            m_currentIdleMode = m_currentMode.loopAnimation;
         }
 
         private void ChangeToAnimation(AnimationReferenceAsset start, AnimationReferenceAsset loop)
@@ -71,7 +74,8 @@ namespace DChild.Gameplay.UI
             shadowMorph.ExecuteShadowMorph += OnShadowMorphExecuted;
             shadowMorph.EndShadowMorphExecution += OnShadowMorphEnd;
 
-            m_animation.AnimationState.SetAnimation(0, m_normalIdle, true);
+            m_currentIdleMode = m_normalIdle;
+            m_animation.AnimationState.SetAnimation(0, m_currentIdleMode, true);
         }
     }
 }

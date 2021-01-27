@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
+using DChild.Gameplay.Environment;
 using DChild.Gameplay.Inventories;
 using DChild.Menu.Trading;
 using System.Collections;
@@ -12,6 +13,9 @@ namespace DChild.Gameplay.Systems
         void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory, ITraderAskingPrice merchantAskingPrice);
         void OpenStorePage(StorePage storePage);
         void OpenStorePage();
+
+        void OpenWorldMap(Location fromLocation);
+
         void MonitorBoss(Boss boss);
         void ResetGameplayUI();
         void PromptPrimarySkillNotification();

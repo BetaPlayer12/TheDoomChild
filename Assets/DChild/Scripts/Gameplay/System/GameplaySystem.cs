@@ -122,7 +122,6 @@ namespace DChild.Gameplay
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
             //Reload Items
             LoadingHandle.SceneDone += LoadGameDone;
-
         }
 
         public static void ReloadGame()

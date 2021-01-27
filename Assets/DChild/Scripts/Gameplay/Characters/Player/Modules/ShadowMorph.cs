@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
+using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
@@ -16,6 +17,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, MinValue(0)]
         private int m_sourceConsumptionRate;
 
+        private Damageable m_damageable;
         private ICappedStat m_source;
         private IShadowModeState m_state;
         private Animator m_animator;
@@ -43,15 +45,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EndExecution()
         {
-            m_state.isInShadowMode = true;
             m_state.waitForBehaviour = false;
 
             EndShadowMorphExecution?.Invoke(this, EventActionArgs.Empty);
-            Debug.Log("Dugang dugang");
         }
 
         public void Execute()
         {
+            m_damageable.SetInvulnerability(Invulnerability.MAX);
+            m_state.isInShadowMode = true;
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
 
@@ -60,6 +62,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Cancel()
         {
+            m_damageable.SetInvulnerability(Invulnerability.None);
             m_state.isInShadowMode = false;
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
@@ -67,6 +70,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Initialize(ComplexCharacterInfo info)
         {
+            m_damageable = info.damageable;
             m_source = info.magic;
             m_state = info.state;
             m_animator = info.animator;

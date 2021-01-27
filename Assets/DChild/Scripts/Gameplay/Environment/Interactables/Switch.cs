@@ -17,7 +17,6 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-
     public abstract class Switch : MonoBehaviour, IHitToInteract, IButtonToInteract, ISerializableComponent
     {
         public enum Type
