@@ -17,8 +17,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             else
             {
                 m_armor?.ReduceCurrentValue(totalDamage);
+                CallDamageTaken(totalDamage, type);
             }
-            CallDamageTaken(totalDamage, type);
         }
     }
 }
