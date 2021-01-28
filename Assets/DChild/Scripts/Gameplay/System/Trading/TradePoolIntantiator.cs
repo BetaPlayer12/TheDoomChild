@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Inventories;
+using DChild.Gameplay.Items;
 using Holysoft.Event;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,14 +24,15 @@ namespace DChild.Menu.Trading
         public List<TradableItemUI> instantiatedSlots => m_instantiatedSlots;
         public int slotCount => m_instantiatedSlots.Count;
 
-        public void Instantiate(ITradableInventory inventory)
+        public void Instantiate(ITradableInventory inventory, TradePoolFilter filter)
         {
+            //Generate Slots
             bool createSlots = m_instantiatedSlots.Count == 0;
-
+            int slotCreated = 0;
             for (int i = 0; i < inventory.Count; i++)
             {
-                var itemSlot =inventory.GetSlot(i);
-                if (itemSlot.restrictions.canBeSold)
+                var itemSlot = inventory.GetSlot(i);
+                if (itemSlot.restrictions.canBeSold && IsPartOfFilter(itemSlot.item, filter))
                 {
                     if (createSlots)
                     {
@@ -46,9 +48,11 @@ namespace DChild.Menu.Trading
                             createSlots = true;
                         }
                     }
+                    slotCreated++;
                 }
             }
 
+            //Cleanup Excess Slots
             if (m_instantiatedSlots.Count > inventory.Count)
             {
                 for (int i = m_instantiatedSlots.Count - 1; i >= inventory.Count; i--)
@@ -57,7 +61,38 @@ namespace DChild.Menu.Trading
                     m_instantiatedSlots.RemoveAt(i);
                 }
             }
+
+            if (m_instantiatedSlots.Count != slotCreated)
+            {
+                for (int i = m_instantiatedSlots.Count - 1; i >= slotCreated; i--)
+                {
+                    Destroy(m_instantiatedSlots[i].gameObject);
+                    m_instantiatedSlots.RemoveAt(i);
+                }
+            }
+
             OnPoolUpdate?.Invoke(this, EventActionArgs.Empty);
+
+            bool IsPartOfFilter(ItemData item, TradePoolFilter tradeFilter)
+            {
+                if (tradeFilter == TradePoolFilter.All)
+                {
+                    return true;
+                }
+                switch (item.category)
+                {
+                    case ItemCategory.Throwable:
+                        return tradeFilter == TradePoolFilter.Weapons;
+                    case ItemCategory.Consumable:
+                        return tradeFilter == TradePoolFilter.Consumables;
+                    case ItemCategory.Quest:
+                        return tradeFilter == TradePoolFilter.Keys;
+                    case ItemCategory.Key:
+                        return tradeFilter == TradePoolFilter.Keys;
+                    default:
+                        return true;
+                }
+            }
         }
 
         public TradableItemUI GetTradableUI(int index) => m_instantiatedSlots[index];

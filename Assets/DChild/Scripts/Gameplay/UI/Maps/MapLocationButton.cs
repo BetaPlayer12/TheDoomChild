@@ -7,54 +7,60 @@ using Holysoft.Event;
 using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using Holysoft.UI;
+using DChild.Gameplay.Environment;
 
 namespace DChild.Gameplay.UI.Map
 {
     public class MapLocationButton : MonoBehaviour
     {
-        [SerializeField,HideInPrefabAssets]
+        [SerializeField, HideInPrefabAssets]
         private LocationData m_location;
+        [SerializeField]
+        private UIHighlight m_playerIndicator;
+        [SerializeField]
+        private UIHighlight m_availabilityIndicator;
+        [SerializeField]
+        private WorldMapHandler m_worldMap; //Delete This as this is just a temp Hack to track the player
 
-        public void AttemptLocationTransfer()
+        private bool m_indicatorHighlighted;
+
+        public LocationData locationData => m_location;
+        public Location location => m_location.location;
+
+        public void HighlightPlayerIndicator(bool highlight)
         {
-            GameSystem.RequestConfirmation(OnAccept, $"Travel to {m_location.location.ToString()}");
+            m_indicatorHighlighted = highlight;
+            HighlightIndicator(m_playerIndicator, highlight);
         }
 
-        private void OnAccept(object sender, EventActionArgs eventArgs)
+        public void HighlightAvailabilityIndicator(bool highlight)
         {
-            var playerManager = GameplaySystem.playerManager;
-            var character = playerManager.player.character;
-            character.transform.position = m_location.position;
-
-            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-            controller.moveDirectionInput = 0;
-            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
-            rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
-            collisionState.forcedCurrentGroundedness = true;
-
-            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
-            GameplaySystem.ResumeGame();
-            GameSystem.LoadZone(m_location.scene, true, OnSceneDone);
-
+            HighlightIndicator(m_availabilityIndicator, highlight);
         }
 
-        private void OnSceneDone()
+        public string GetTransferMessage()
         {
-            GameEventMessage.SendEvent("Location Transfer");
-            var playerManager = GameplaySystem.playerManager;
-            var character = playerManager.player.character;
+            var locationName = $"{m_location.location.ToString().Replace("_", " ")} \n";
+            var message = m_indicatorHighlighted ? "Travel back to Location" : "Travel to Location";
+            return locationName + message;
+        }
 
-            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
-            rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
-            collisionState.forcedCurrentGroundedness = false;
-            GameplaySystem.playerManager.StopCharacterControlOverride();
+        private void HighlightIndicator(UIHighlight indicator, bool highlight)
+        {
+            if (highlight)
+            {
+                indicator.UseHighlightState();
+            }
+            else
+            {
+                indicator.UseNormalizeState();
+            }
         }
 
         private void OnValidate()
         {
-            if(m_location != null)
+            if (m_location != null)
             {
                 gameObject.name = "TravelButton - " + m_location.location.ToString();
             }
