@@ -32,15 +32,13 @@ namespace DChild.Gameplay.UI
             m_fx.ShowShadowFX(true);
         }
 
-
-
         private void Start()
         {
             var player = GameplaySystem.playerManager.player;
             m_state = player.state;
             player.damageableModule.DamageTaken += OnPlayerDamaged;
 
-            var shadowMorph = player.GetComponent<ShadowMorph>();
+            var shadowMorph = player.character.GetComponentInChildren<ShadowMorph>();
             shadowMorph.ExecuteShadowMorph += OnShadowMorphExecuted;
             shadowMorph.EndShadowMorphExecution += OnShadowMorphEnd;
 

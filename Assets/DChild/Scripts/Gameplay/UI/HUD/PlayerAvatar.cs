@@ -80,5 +80,9 @@ namespace DChild.Gameplay.UI
             m_animation.AnimationState.SetAnimation(0, start, false);
             m_animation.AnimationState.AddAnimation(0, loop, true, 0);
         }
+        private void Awake()
+        {
+            m_animation = GetComponent<SkeletonGraphic>();
+        }
     }
 }
