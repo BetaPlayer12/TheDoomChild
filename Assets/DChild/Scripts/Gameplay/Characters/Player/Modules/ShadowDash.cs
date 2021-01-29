@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Combat;
+using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using Spine.Unity.Examples;
@@ -27,6 +28,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [ShowInInspector, ReadOnly, HideInEditorMode]
         protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
 
+        public event EventAction<EventActionArgs> ExecuteShadowDash;
+        public event EventAction<EventActionArgs> EndShadowDashExecution;
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_source = info.magic;
@@ -46,6 +50,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_tempFX?.Stop(true);
             m_animator.SetBool(m_animationParameter, false);
             m_skeletonGhost.enabled = false;
+
+            EndShadowDashExecution?.Invoke(this, EventActionArgs.Empty);
         }
 
         public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue ;
@@ -74,6 +80,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_skeletonGhost.enabled = true;
             }
             m_dash.Execute();
+            ExecuteShadowDash?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Reset()

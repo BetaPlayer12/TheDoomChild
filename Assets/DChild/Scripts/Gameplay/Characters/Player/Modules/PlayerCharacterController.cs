@@ -154,6 +154,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             Disable();
             m_idle?.Cancel();
+            m_shadowMorph?.Cancel();
         }
 
         private void OnFlinch(object sender, EventActionArgs eventArgs)

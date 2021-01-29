@@ -6,7 +6,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
                                   IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
-                                  ILevitateState, IGrabState, ISlideState, ILedgeGrabState, IProjectileThrowState, IShadowModeState
+                                  ILevitateState, IGrabState, ISlideState, ILedgeGrabState, IProjectileThrowState, IShadowModeState,
+                                  IEnragedState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;
@@ -83,6 +84,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isDead;
         public bool isDead { get => m_isDead; set => m_isDead = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isEnraged;
+        public bool isEnraged { get => m_isEnraged; set => m_isEnraged = value; }
 
         [SerializeField, ReadOnly]
         private bool m_forcedCurrentGroundedness;

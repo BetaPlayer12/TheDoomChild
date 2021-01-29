@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
+using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using System;
@@ -25,6 +26,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_animationParameter;
         private float m_stackedConsumptionRate;
 
+        public event EventAction<EventActionArgs> ExecuteDevilWings;
+        public event EventAction<EventActionArgs> EndDevilWingsExecution;
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_state = info.state;
@@ -45,6 +49,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.velocity = Vector2.zero;
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
+
+            EndDevilWingsExecution?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Execute()
@@ -56,6 +62,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.gravityScale = 0;
             m_rigidbody.velocity = Vector2.zero;
             m_animator.SetBool(m_animationParameter, true);
+
+            ExecuteDevilWings?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void MaintainHeight()
