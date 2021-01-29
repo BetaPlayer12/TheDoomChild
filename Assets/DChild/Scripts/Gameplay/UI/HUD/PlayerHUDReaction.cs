@@ -39,8 +39,8 @@ namespace DChild.Gameplay.UI
             player.damageableModule.DamageTaken += OnPlayerDamaged;
 
             var shadowMorph = player.character.GetComponentInChildren<ShadowMorph>();
-            shadowMorph.ExecuteShadowMorph += OnShadowMorphExecuted;
-            shadowMorph.EndShadowMorphExecution += OnShadowMorphEnd;
+            shadowMorph.ExecuteModule += OnShadowMorphExecuted;
+            shadowMorph.End += OnShadowMorphEnd;
 
             m_avatar.ExecuteIdle();
             m_fx.HideAll();
