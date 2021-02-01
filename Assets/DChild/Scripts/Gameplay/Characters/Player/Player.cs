@@ -22,6 +22,7 @@ namespace DChild.Gameplay.Characters.Players
         IPlayerStats stats { get; }
         Health health { get; }
         Magic magic { get; }
+        Health armor { get; }
         IHealable healableModule { get; }
         IDamageable damageableModule { get; }
         IAttacker attackModule { get; }
@@ -80,6 +81,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Magic m_magic;
         [SerializeField]
+        private Health m_armor;
+        [SerializeField]
         private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private LootPicker m_lootPicker;
@@ -91,6 +94,7 @@ namespace DChild.Gameplay.Characters.Players
         public Modules.CharacterState state => m_state;
         public Health health => m_damageable.health;
         public Magic magic => m_magic;
+        public Health armor => m_armor;
         public IHealable healableModule => m_damageable;
         public IDamageable damageableModule => m_damageable;
         public IAttacker attackModule => m_attacker;

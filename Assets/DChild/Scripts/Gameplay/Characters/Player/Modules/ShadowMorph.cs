@@ -6,6 +6,7 @@ using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
+using Spine.Unity;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -16,6 +17,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_sourceRequiredAmount;
         [SerializeField, MinValue(0)]
         private int m_sourceConsumptionRate;
+        //HACK
+        [SerializeField, SpineSkin(dataField = "m_skeletonData")]
+        private string m_originalSkinName;
+        [SerializeField, SpineSkin(dataField ="m_skeletonData")]
+        private string m_shadowMorphSkinName;
+        [SerializeField]
+        private SkeletonAnimation m_skeletonData;
 
         private Damageable m_damageable;
         private ICappedStat m_source;
@@ -24,8 +32,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_animationParameter;
         private float m_stackedConsumptionRate;
 
-        public event EventAction<EventActionArgs> ExecuteShadowMorph;
-        public event EventAction<EventActionArgs> EndShadowMorphExecution;
+        public event EventAction<EventActionArgs> ExecuteModule;
+        public event EventAction<EventActionArgs> End;
 
         public bool IsInShadowMode() => m_state.isInShadowMode;
 
@@ -47,21 +55,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.waitForBehaviour = false;
 
-            EndShadowMorphExecution?.Invoke(this, EventActionArgs.Empty);
+            End?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Execute()
         {
+            m_skeletonData.Skeleton.SetSkin(m_shadowMorphSkinName);
             m_damageable.SetInvulnerability(Invulnerability.MAX);
             m_state.isInShadowMode = true;
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
 
-            ExecuteShadowMorph?.Invoke(this, EventActionArgs.Empty);
+            ExecuteModule?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Cancel()
         {
+            m_skeletonData.Skeleton.SetSkin(m_originalSkinName);
             m_damageable.SetInvulnerability(Invulnerability.None);
             m_state.isInShadowMode = false;
             m_animator.SetBool(m_animationParameter, false);
