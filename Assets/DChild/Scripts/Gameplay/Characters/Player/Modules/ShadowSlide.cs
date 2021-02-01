@@ -28,8 +28,8 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
     [ShowInInspector, ReadOnly, HideInEditorMode]
     protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
 
-    public event EventAction<EventActionArgs> ExecuteShadowSlide;
-    public event EventAction<EventActionArgs> EndShadowSlideExecution;
+    public event EventAction<EventActionArgs> ExecuteModule;
+    public event EventAction<EventActionArgs> End;
 
     public void Initialize(ComplexCharacterInfo info)
     {
@@ -51,7 +51,7 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
         m_animator.SetBool(m_animationParameter, false);
         m_skeletonGhost.enabled = false;
 
-        EndShadowSlideExecution?.Invoke(this, EventActionArgs.Empty);
+        End?.Invoke(this, EventActionArgs.Empty);
     }
 
     public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue;
@@ -81,7 +81,7 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
         }
 
         m_slide.Execute();
-        ExecuteShadowSlide?.Invoke(this, EventActionArgs.Empty);
+        ExecuteModule?.Invoke(this, EventActionArgs.Empty);
     }
 
     public void Reset()

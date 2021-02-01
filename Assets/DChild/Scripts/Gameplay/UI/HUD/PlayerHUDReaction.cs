@@ -51,20 +51,20 @@ namespace DChild.Gameplay.UI
             player.damageableModule.DamageTaken += OnPlayerDamaged;
 
             var shadowMorph = player.character.GetComponentInChildren<ShadowMorph>();
-            shadowMorph.ExecuteShadowMorph += OnShadowMorphExecuted;
-            shadowMorph.EndShadowMorphExecution += OnShadowMorphEnd;
+            shadowMorph.ExecuteModule += OnShadowMorphExecuted;
+            shadowMorph.End += OnShadowMorphEnd;
 
             var shadowDash = player.character.GetComponentInChildren<ShadowDash>();
-            shadowDash.ExecuteShadowDash += OnShadowMorphExecuted;
-            shadowDash.EndShadowDashExecution += OnShadowMorphEnd;
+            shadowDash.ExecuteModule += OnShadowMorphExecuted;
+            shadowDash.End += OnShadowMorphEnd;
 
             var shadowSlide = player.character.GetComponentInChildren<ShadowSlide>();
-            shadowSlide.ExecuteShadowSlide += OnShadowMorphExecuted;
-            shadowSlide.EndShadowSlideExecution += OnShadowMorphEnd;
+            shadowSlide.ExecuteModule += OnShadowMorphExecuted;
+            shadowSlide.End += OnShadowMorphEnd;
 
             var devilWings = player.character.GetComponentInChildren<DevilWings>();
-            devilWings.ExecuteDevilWings += OnShadowMorphExecuted;
-            devilWings.EndDevilWingsExecution += OnShadowMorphEnd;
+            devilWings.ExecuteModule += OnShadowMorphExecuted;
+            devilWings.End += OnShadowMorphEnd;
 
             m_avatar.ExecuteIdle();
             m_fx.HideAll();

@@ -32,8 +32,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_animationParameter;
         private float m_stackedConsumptionRate;
 
-        public event EventAction<EventActionArgs> ExecuteShadowMorph;
-        public event EventAction<EventActionArgs> EndShadowMorphExecution;
+        public event EventAction<EventActionArgs> ExecuteModule;
+        public event EventAction<EventActionArgs> End;
 
         public bool IsInShadowMode() => m_state.isInShadowMode;
 
@@ -55,7 +55,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.waitForBehaviour = false;
 
-            EndShadowMorphExecution?.Invoke(this, EventActionArgs.Empty);
+            //End?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Execute()
@@ -66,7 +66,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
 
-            ExecuteShadowMorph?.Invoke(this, EventActionArgs.Empty);
+            ExecuteModule?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Cancel()
@@ -76,6 +76,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isInShadowMode = false;
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
+
+            End?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Initialize(ComplexCharacterInfo info)
