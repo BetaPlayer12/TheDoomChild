@@ -55,7 +55,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_state.waitForBehaviour = false;
 
-            End?.Invoke(this, EventActionArgs.Empty);
+            //End?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Execute()
@@ -76,6 +76,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isInShadowMode = false;
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
+
+            End?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Initialize(ComplexCharacterInfo info)
