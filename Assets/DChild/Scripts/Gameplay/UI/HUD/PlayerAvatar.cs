@@ -36,13 +36,13 @@ namespace DChild.Gameplay.UI
 
         public void ExecuteFlinch()
         {
-            ChangeToAnimation(m_flinch, m_normalIdle);
+            ChangeToAnimation(m_flinch, m_currentIdleMode);
         }
 
         public void EndShadowMorph()
         {
-            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
             m_currentIdleMode = m_normalIdle;
+            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
         }
 
         public void ExecuteShadowMorph()
