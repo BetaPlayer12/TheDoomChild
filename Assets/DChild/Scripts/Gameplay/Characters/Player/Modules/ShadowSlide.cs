@@ -78,10 +78,10 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
             m_tempFX?.Play(true);
             m_animator.SetBool(m_animationParameter, true);
             //m_skeletonGhost.enabled = true;
+            ExecuteModule?.Invoke(this, EventActionArgs.Empty);
         }
 
         m_slide.Execute();
-        ExecuteModule?.Invoke(this, EventActionArgs.Empty);
     }
 
     public void Reset()
