@@ -21,10 +21,10 @@ namespace DChild.Gameplay.Inventories
 
         private void OnItemSelect(object sender, QuickItemHandle.SelectionEventArgs eventArgs)
         {
-            UpdateUI(eventArgs.currentIndex);
-            //if (eventArgs.selectionType != QuickItemHandle.SelectionEventArgs.SelectionType.None)
-            //{
-            //}
+            if (eventArgs.selectionType != QuickItemHandle.SelectionEventArgs.SelectionType.None)
+            {
+                UpdateUI(eventArgs.currentIndex);
+            }
         }
 
         private void UpdateUI(int currentIndex)

@@ -114,12 +114,6 @@ namespace DChild.Gameplay.Inventories
         private void StoreSelectedItem(SelectionEventArgs.SelectionType selectionType)
         {
             m_currentSlot = m_container.GetSlot(m_currentIndex);
-            if (m_currentSlot == null)
-            {
-                m_currentIndex--;
-                m_currentSlot = m_container.GetSlot(m_currentIndex);
-            }
-
             m_currentItem = (ConsumableItemData)m_currentSlot.item;
             using (Cache<SelectionEventArgs> cacheEventArgs = Cache<SelectionEventArgs>.Claim())
             {
@@ -143,11 +137,6 @@ namespace DChild.Gameplay.Inventories
                 {
                     StoreSelectedItem(SelectionEventArgs.SelectionType.Previous);
                 }
-                else
-                {
-                    StoreSelectedItem(SelectionEventArgs.SelectionType.None);
-                }
-
             }
             else
             {

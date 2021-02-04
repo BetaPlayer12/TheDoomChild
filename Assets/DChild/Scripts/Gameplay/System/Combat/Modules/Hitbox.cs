@@ -14,8 +14,6 @@ namespace DChild.Gameplay.Combat
     [AddComponentMenu("DChild/Gameplay/Combat/Hitbox")]
     public class Hitbox : MonoBehaviour
     {
-        public const string TAG = "Hitbox";
-
         private IDamageable m_damageable;
         [SerializeField, DisableInPlayMode, HideInEditorMode]
         private Collider2D[] m_collider2Ds;
@@ -70,14 +68,6 @@ namespace DChild.Gameplay.Combat
             else
             {
                 m_collider2Ds = GetComponentsInChildren<Collider2D>();
-            }
-
-            foreach (var collider2D in m_collider2Ds)
-            {
-                if(collider2D.tag != Hitbox.TAG)
-                {
-                    collider2D.tag = Hitbox.TAG;
-                }
             }
         }
     }

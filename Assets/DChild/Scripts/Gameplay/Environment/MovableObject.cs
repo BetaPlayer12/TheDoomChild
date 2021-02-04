@@ -68,15 +68,12 @@ namespace DChild.Gameplay.Environment
 
         public void SetGrabState(bool isGrabbed)
         {
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
             if (isGrabbed)
             {
                 m_onGrabbed?.Invoke();
             }
             else
             {
-                rb.velocity = Vector2.zero;
                 m_onLetGo?.Invoke();
             }
         }

@@ -2,7 +2,6 @@
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
-using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using Spine.Unity.Examples;
@@ -28,9 +27,6 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
     [ShowInInspector, ReadOnly, HideInEditorMode]
     protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
 
-    public event EventAction<EventActionArgs> ExecuteModule;
-    public event EventAction<EventActionArgs> End;
-
     public void Initialize(ComplexCharacterInfo info)
     {
         m_source = info.magic;
@@ -50,8 +46,6 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
         m_tempFX?.Stop(true);
         m_animator.SetBool(m_animationParameter, false);
         m_skeletonGhost.enabled = false;
-
-        End?.Invoke(this, EventActionArgs.Empty);
     }
 
     public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue;
@@ -78,7 +72,6 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
             m_tempFX?.Play(true);
             m_animator.SetBool(m_animationParameter, true);
             //m_skeletonGhost.enabled = true;
-            ExecuteModule?.Invoke(this, EventActionArgs.Empty);
         }
 
         m_slide.Execute();

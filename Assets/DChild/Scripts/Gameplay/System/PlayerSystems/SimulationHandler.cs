@@ -9,26 +9,20 @@ namespace DChild.Gameplay
         [SerializeField]
         private TrajectorySimulator m_trajectorySimulator;
         [SerializeField]
-        private TrajectoryUI[] m_trajectoryUIs;
+        private TrajectoryUI m_trajectoryUI;
 
         public TrajectorySimulator GetTrajectorySimulator() => m_trajectorySimulator;
 
         public void HideSimulation(TrajectorySimulator simulator)
         {
-            for (int i = 0; i < m_trajectoryUIs.Length; i++)
-            {
-                m_trajectoryUIs[i].Hide();
-            }
+            m_trajectoryUI.Hide();
         }
 
         public void ShowSimulation(TrajectorySimulator simulator)
         {
-            for (int i = 0; i < m_trajectoryUIs.Length; i++)
-            {
-                m_trajectoryUIs[i].AttachTo(simulator);
-                m_trajectoryUIs[i].Show();
-            }
+            m_trajectoryUI.AttachTo(simulator);
             simulator.SimulateTrajectory();
+            m_trajectoryUI.Show();
         }
     }
 }

@@ -50,7 +50,7 @@ namespace DChild.Menu.Trading
             m_tradeHandle.SetTraders(merchant, player);
             m_tradeHandle.SetMerchantAskingPrice(merchantAskingPrice);
             m_tradeHandle.SetTradeType(m_tradeOption.tradeType);
-            m_initiator.Instantiate(merchant, TradePoolFilter.All);
+            m_initiator.Instantiate(merchant);
             m_filteredTradePool.ApplyFilter(TradePoolFilter.All);
             m_initiator.GetTradableUI(0).Select();
             m_currentMerchant = merchant;
@@ -62,7 +62,6 @@ namespace DChild.Menu.Trading
 
         public void SetTradingFilter(TradePoolFilter filter)
         {
-            m_initiator.Instantiate(m_currentMerchant, filter);
             m_filteredTradePool.ApplyFilter(filter);
         }
 
@@ -75,11 +74,11 @@ namespace DChild.Menu.Trading
         {
             if (m_tradeOption.tradeType == TradeType.Buy)
             {
-                m_initiator.Instantiate(m_currentMerchant, TradePoolFilter.All);
+                m_initiator.Instantiate(m_currentMerchant);
             }
             else
             {
-                m_initiator.Instantiate(m_currentPlayer, TradePoolFilter.All);
+                m_initiator.Instantiate(m_currentPlayer);
             }
             m_tradeHandle.SetTradeType(m_tradeOption.tradeType);
             m_filteredTradePool.ApplyFilter(TradePoolFilter.All);

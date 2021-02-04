@@ -47,18 +47,12 @@ namespace DChild.Gameplay.Cinematics.Cameras
 
         public void Activate()
         {
-            if (m_vCam != null)
-            {
-                m_vCam.enabled = true;
-            }
+            m_vCam.enabled = true;
         }
 
         public void Deactivate()
         {
-            if (m_vCam != null)
-            {
-                m_vCam.enabled = false;
-            }
+            m_vCam.enabled = false;
         }
 
         public void ApplyOffset(Vector3 offset)
@@ -118,6 +112,8 @@ namespace DChild.Gameplay.Cinematics.Cameras
             GameplaySystem.cinema.TransistionTo(this);
             GetCameraStartingPosition();
         }
+
+
 #endif
     }
 

@@ -139,7 +139,6 @@ namespace DChild.Gameplay.Cinematics
         public void ClearLists()
         {
             m_currentVCam = null;
-            m_previousCam = null;
             m_trackingCameras?.Clear();
             m_noiseList?.Clear();
         }

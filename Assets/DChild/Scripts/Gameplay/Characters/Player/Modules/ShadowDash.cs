@@ -1,6 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Combat;
-using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using Spine.Unity.Examples;
@@ -28,9 +27,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [ShowInInspector, ReadOnly, HideInEditorMode]
         protected int sourceRequiredAmount => Mathf.FloorToInt(m_baseSourceRequiredAmount * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement));
 
-        public event EventAction<EventActionArgs> ExecuteModule;
-        public event EventAction<EventActionArgs> End;
-
         public void Initialize(ComplexCharacterInfo info)
         {
             m_source = info.magic;
@@ -48,13 +44,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_damageable.SetInvulnerability(Invulnerability.None);
             m_wasUsed = false;
             m_tempFX?.Stop(true);
-            m_animator.SetBool(m_animationParameter, false);
+            //m_animator.SetBool(m_animationParameter, false);
             m_skeletonGhost.enabled = false;
-
-            End?.Invoke(this, EventActionArgs.Empty);
         }
 
-        public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue;
+        public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue ;
 
         public void ConsumeSource() => m_source.ReduceCurrentValue(sourceRequiredAmount);
 
@@ -76,9 +70,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_damageable.SetInvulnerability(Invulnerability.MAX);
                 m_wasUsed = true;
                 m_tempFX?.Play(true);
-                m_animator.SetBool(m_animationParameter, true);
+                //m_animator.SetBool(m_animationParameter, true);
                 m_skeletonGhost.enabled = true;
-                ExecuteModule?.Invoke(this, EventActionArgs.Empty);
             }
             m_dash.Execute();
         }

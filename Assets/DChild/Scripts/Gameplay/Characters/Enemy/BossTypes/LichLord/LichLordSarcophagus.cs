@@ -41,7 +41,6 @@ public class LichLordSarcophagus : MonoBehaviour
     private void Start()
     {
         m_spineListener.Subscribe(m_event, ExplosionStart);
-        StartCoroutine(DisableMaskRoutine());
     }
 
     private void ExplosionStart()
@@ -52,13 +51,6 @@ public class LichLordSarcophagus : MonoBehaviour
     public void ExplosionPrep()
     {
         StartCoroutine(PreExplodeRoutine());
-    }
-
-    private IEnumerator DisableMaskRoutine()
-    {
-        yield return new WaitForSeconds(.1f);
-        GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.None;
-        yield return null;
     }
 
     private IEnumerator ExplosionRoutine()

@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Items
             if (m_applyPerUpdate)
             {
                 m_stackingValue += m_value * deltaTime;
-                if (m_stackingValue > 0)
+                if(m_stackingValue > 0)
                 {
                     apply = true;
                     var integer = Mathf.FloorToInt(m_stackingValue);
@@ -70,14 +70,14 @@ namespace DChild.Gameplay.Items
                 {
                     if (player.health.isFull == false)
                     {
-                        GameplaySystem.combatManager.Heal(player.healableModule, valueToApply);
+                        GameplaySystem.combatManager.Heal(player.healableModule, m_value);
                     }
                 }
                 else
                 {
                     if (player.magic.isFull == false)
                     {
-                        player.magic.AddCurrentValue(valueToApply);
+                        player.magic.AddCurrentValue(m_value);
                     }
                 }
             }
@@ -85,13 +85,16 @@ namespace DChild.Gameplay.Items
 
         public override string ToString()
         {
-            var value = m_applyPerUpdate ? m_value / m_interval : m_interval;
+            var value = m_applyPerUpdate ? m_value/ m_interval : m_interval;
             var second = m_applyPerUpdate ? 1 : m_interval;
             if (m_value >= 0)
             {
                 return $"Regenerate {value} {m_toRegenerate.ToString()} per {second} second(s)";
             }
-            return "";
+            else
+            {
+                return $"Consumes {-value} {m_toRegenerate.ToString()} per {second} second(s)";
+            }
         }
     }
 }

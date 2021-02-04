@@ -6,19 +6,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
     public class PlayerDamageable : Damageable
     {
         [SerializeField]
-        private Health m_armor;
+        private Health m_ambrosia;
 
         public override void TakeDamage(int totalDamage, AttackType type)
         {
-            if (m_armor?.isEmpty ?? true)
+            if (m_ambrosia?.isEmpty ?? true)
             {
                 base.TakeDamage(totalDamage, type);
             }
             else
             {
-                m_armor?.ReduceCurrentValue(totalDamage);
+                m_ambrosia?.ReduceCurrentValue(totalDamage);
+                CallDamageTaken(totalDamage, type);
             }
-            CallDamageTaken(totalDamage, type);
         }
     }
 }

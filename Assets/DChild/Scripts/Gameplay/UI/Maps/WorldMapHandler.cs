@@ -1,14 +1,8 @@
-﻿using DChild.Gameplay.Characters.Players.Modules;
-using DChild.Gameplay.Environment;
-using DChild.Gameplay.Systems.Serialization;
+﻿using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.UI.Map;
 using DChild.Menu;
-using Doozy.Engine;
-using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
-using System;
-using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.UI
@@ -16,70 +10,52 @@ namespace DChild.Gameplay.UI
     public class WorldMapHandler : MonoBehaviour
     {
         [SerializeField]
-        private ConfirmationHandler m_confirmation;
-        [SerializeField, ValueDropdown("GetMapLocationButtons", IsUniqueList = true)]
-        private MapLocationButton[] m_locationButtons;
+        private AreaTransferData m_transferData;
+        [ShowInInspector, OnValueChanged("SetFromLocation")]
+        private LocationData m_from;
+        [SerializeField]
+        private AreaNode[] m_nodes;
 
-        private LocationData m_transferingTo;
-
-        public void SetFromLocation(Location from)
+        public void SetFromLocation(LocationData from)
         {
-            foreach (var button in m_locationButtons)
+            m_from = from;
+            if (from == null)
             {
-                button.HighlightPlayerIndicator(button.location == from);
+                for (int i = 0; i < m_nodes.Length; i++)
+                {
+                    m_nodes[i].Show();
+                }
+            }
+            else
+            {
+                var availableLocations = m_transferData.GetAvailableLocationFrom(from);
+                for (int i = 0; i < m_nodes.Length; i++)
+                {
+                    if (availableLocations.Contains(m_nodes[i].location) || from.location == m_nodes[i].location)
+                    {
+                        m_nodes[i].Show();
+                    }
+                    else
+                    {
+                        m_nodes[i].Hide();
+                    }
+                }
             }
         }
 
-        public void SetFromLocation(LocationData locationData) => SetFromLocation(locationData.location);
-
-        public void RequestTransfer(MapLocationButton button)
+        public void GoTo(AreaNode areaNode)
         {
-            m_transferingTo = button.locationData;
-            m_confirmation.RequestConfirmation(OnAccept, button.GetTransferMessage());
-        }
-
-        private void OnAccept(object sender, EventActionArgs eventArgs)
-        {
-            var playerManager = GameplaySystem.playerManager;
-            var character = playerManager.player.character;
-            character.transform.position = m_transferingTo.position;
-
-            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-            controller.moveDirectionInput = 0;
-            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
-            rigidBody.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
-            collisionState.forcedCurrentGroundedness = true;
-            SetFromLocation(m_transferingTo.location);
-
-
-            LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
-            GameplaySystem.ResumeGame();
-            GameSystem.LoadZone(m_transferingTo.scene, true, OnSceneDone);
-        }
-
-        private void OnSceneDone()
-        {
-            GameEventMessage.SendEvent("Location Transfer");
-            var playerManager = GameplaySystem.playerManager;
-            var character = playerManager.player.character;
-
-            Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
-            rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-            CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
-            collisionState.forcedCurrentGroundedness = false;
-            GameplaySystem.playerManager.StopCharacterControlOverride();
-        }
-
-
-        private IEnumerable GetMapLocationButtons() => FindObjectsOfType<MapLocationButton>();
-
-        private void Awake()
-        {
-            for (int i = 0; i < m_locationButtons.Length; i++)
+            var destination = m_transferData.GetDestination(m_from, areaNode.location);
+            if (destination)
             {
-                m_locationButtons[i].HighlightAvailabilityIndicator(true);
+                Cache<LoadZoneFunctionHandle> cacheLoadZoneHandle = Cache<LoadZoneFunctionHandle>.Claim();
+                var player = GameplaySystem.playerManager.player;
+                cacheLoadZoneHandle.Value.Initialize(destination, player.character, cacheLoadZoneHandle);
+                LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
+                GameSystem.LoadZone(destination.scene, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                GameplaySystem.ClearCaches();
             }
+            //Close UI After
         }
     }
 }

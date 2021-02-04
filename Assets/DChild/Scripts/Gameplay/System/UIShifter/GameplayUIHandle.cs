@@ -1,7 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Combat.UI;
-using DChild.Gameplay.Environment;
 using DChild.Gameplay.Inventories;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trading;
@@ -18,8 +17,6 @@ namespace DChild.Gameplay.Systems
 		private StoreNavigator m_storeNavigator;
         [SerializeField]
         private BossCombatUI m_bossCombat;
-        [SerializeField]
-        private WorldMapHandler m_worldMap;
 
         public void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory,ITraderAskingPrice merchantAskingPrice)
 		{
@@ -34,13 +31,7 @@ namespace DChild.Gameplay.Systems
 			m_storeNavigator.OpenPage();
 		}
 
-        public void OpenWorldMap(Location fromLocation)
-        {
-            GameEventMessage.SendEvent("WorldMap Open");
-            m_worldMap.SetFromLocation(fromLocation);
-        }
-
-        public void OpenStorePage()
+		public void OpenStorePage()
 		{
 			m_storeNavigator.OpenPage();
 		}
@@ -174,6 +165,7 @@ namespace DChild.Gameplay.Systems
             {
                 GameEventMessage.SendEvent("Hide UI");
             }
+
         }
     }
 }

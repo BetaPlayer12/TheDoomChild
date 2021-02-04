@@ -25,7 +25,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, MinValue(0)]
         private float m_impactDamageModifier = 1;
 
-        private IPlayerModifer m_modifier;
         private Rigidbody2D m_rigidbody;
         private Damageable m_damageable; 
         private int m_earthShakerAnimationParameter;
@@ -34,7 +33,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
-            m_modifier = info.modifier;
             m_rigidbody = info.rigidbody;
             m_damageable = info.damageable;
             m_originalGravity = m_rigidbody.gravityScale;
@@ -58,7 +56,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Impact()
         {
-            m_attacker.SetDamageModifier(m_impactDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            m_attacker.SetDamageModifier(m_impactDamageModifier);
             m_rigidBody.WakeUp();
             m_fallLoopFX?.Stop(true);
             m_fallCollider.enabled = false;
@@ -91,7 +89,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void StartExecution()
         {
             m_damageable.SetInvulnerability(Invulnerability.Level_1);
-            m_attacker.SetDamageModifier(m_fallDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+            m_attacker.SetDamageModifier(m_fallDamageModifier);
             m_rigidbody.velocity = Vector2.zero;
             m_originalGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;

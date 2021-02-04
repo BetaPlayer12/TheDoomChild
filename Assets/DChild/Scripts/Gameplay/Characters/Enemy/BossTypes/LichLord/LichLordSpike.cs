@@ -61,8 +61,6 @@ public class LichLordSpike : MonoBehaviour
     {
         m_emergeAnimation = UnityEngine.Random.Range(0, 2) == 0 ? m_emerge1Animation : m_emerge2Animation;
         m_spine.SetAnimation(0, m_emergeAnimation, false);
-        yield return new WaitForSeconds(.1f);
-        GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.None;
         yield return new WaitForAnimationComplete(m_spine.animationState, m_emergeAnimation);
         m_hurtbox.gameObject.SetActive(true);
         yield return null;
