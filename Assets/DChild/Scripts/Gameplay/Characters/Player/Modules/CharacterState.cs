@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -88,9 +89,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isEnraged;
         public bool isEnraged { get => m_isEnraged; set => m_isEnraged = value; }
+        public event EventAction<EnrageEventArgs> EnrageChange;
 
         [SerializeField, ReadOnly]
         private bool m_forcedCurrentGroundedness;
+
         public bool forcedCurrentGroundedness { get => m_forcedCurrentGroundedness; set => m_forcedCurrentGroundedness = value; }
     }
 }

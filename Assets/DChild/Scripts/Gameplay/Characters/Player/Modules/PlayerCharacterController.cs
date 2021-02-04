@@ -889,7 +889,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else
                     {
-                        if (m_objectManipulation?.IsThereAMovableObject() ?? false)
+                        if (m_objectManipulation.IsThereAMovableObject())
                         {
                             if (m_input.horizontalInput != 0)
                             {
@@ -1051,18 +1051,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void ExecuteSlide()
         {
-            if (m_shadowMorph?.IsInShadowMode() ?? false)
+            if (m_shadowSlide?.HaveEnoughSourceForExecution() ?? false)
             {
-                if (m_shadowSlide?.HaveEnoughSourceForExecution() ?? false)
-                {
-                    m_activeSlide = m_shadowSlide;
-                    m_shadowSlide.ConsumeSource();
-                }
-                else
-                {
-                    m_shadowMorph.Cancel();
-                    m_activeSlide = m_slide;
-                }
+                m_activeSlide = m_shadowSlide;
+                m_shadowSlide.ConsumeSource();
             }
             else
             {
