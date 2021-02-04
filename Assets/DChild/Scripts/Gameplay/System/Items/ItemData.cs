@@ -128,6 +128,8 @@ namespace DChild.Gameplay.Items
             {
                 m_name = m_customName;
             }
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 #endif 
         #endregion

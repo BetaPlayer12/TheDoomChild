@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Projectiles
                 }
 
             }
-            else if (collision.CompareTag("Hitbox"))
+            else if (collision.CompareTag(Hitbox.TAG))
             {
                 if (collision.TryGetComponent(out Hitbox m_cacheToDamage) && m_cacheToDamage.invulnerabilityLevel <= m_data.ignoreInvulnerability)
                 {

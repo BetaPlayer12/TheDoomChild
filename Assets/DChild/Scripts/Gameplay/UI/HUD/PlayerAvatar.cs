@@ -1,7 +1,4 @@
-﻿using DChild.Gameplay.Characters.Players.Modules;
-using DChild.Gameplay.Combat;
-using Holysoft.Event;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using Spine.Unity;
 using System;
 using UnityEngine;
@@ -32,28 +29,57 @@ namespace DChild.Gameplay.UI
 
         [SerializeField]
         private ModeShiftInfo m_shadowMode;
+        [SerializeField]
+        private ModeShiftInfo m_rageMode;
 
         private ModeShiftInfo m_currentMode;
         private AnimationReferenceAsset m_currentIdleMode;
         private SkeletonGraphic m_animation;
-        private CharacterState m_state;
 
-        private void OnPlayerDamaged(object sender, Damageable.DamageEventArgs eventArgs)
+        public void ExecuteFlinch()
         {
-            ChangeToAnimation(m_flinch, m_normalIdle);
+            ChangeToAnimation(m_flinch, m_currentIdleMode);
         }
 
-        private void OnShadowMorphEnd(object sender, EventActionArgs eventArgs)
+        public void EndShadowMorph()
         {
-            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
             m_currentIdleMode = m_normalIdle;
+            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
         }
 
-        private void OnShadowMorphExecuted(object sender, EventActionArgs eventArgs)
+        public void ExecuteShadowMorph()
         {
             ChangeToAnimation(m_shadowMode.startAnimation, m_shadowMode.loopAnimation);
             m_currentMode = m_shadowMode;
             m_currentIdleMode = m_currentMode.loopAnimation;
+        }
+
+        public void EndRage()
+        {
+            m_currentIdleMode = m_normalIdle;
+            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
+        }
+
+        public void ExecuteRage()
+        {
+            ChangeToAnimation(m_rageMode.startAnimation, m_rageMode.loopAnimation);
+            m_currentMode = m_rageMode;
+            m_currentIdleMode = m_currentMode.loopAnimation;
+        }
+
+        public void EndArmor()
+        {
+        }
+
+        public void ExecuteArmor()
+        {
+        }
+
+        public void ExecuteIdle()
+        {
+            m_currentIdleMode = m_normalIdle;
+            var idleTrack = m_animation.AnimationState.SetAnimation(0, m_currentIdleMode, true);
+            idleTrack.MixDuration = 0f;
         }
 
         private void ChangeToAnimation(AnimationReferenceAsset start, AnimationReferenceAsset loop)
@@ -61,21 +87,9 @@ namespace DChild.Gameplay.UI
             m_animation.AnimationState.SetAnimation(0, start, false);
             m_animation.AnimationState.AddAnimation(0, loop, true, 0);
         }
-
-        private void Start()
+        private void Awake()
         {
             m_animation = GetComponent<SkeletonGraphic>();
-
-            var player = GameplaySystem.playerManager.player;
-            m_state = player.state;
-            player.damageableModule.DamageTaken += OnPlayerDamaged;
-
-            var shadowMorph = player.GetComponent<ShadowMorph>();
-            shadowMorph.ExecuteShadowMorph += OnShadowMorphExecuted;
-            shadowMorph.EndShadowMorphExecution += OnShadowMorphEnd;
-
-            m_currentIdleMode = m_normalIdle;
-            m_animation.AnimationState.SetAnimation(0, m_currentIdleMode, true);
         }
     }
 }

@@ -294,11 +294,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SpawnRoutine()
         {
+            GetComponentInChildren<Hitbox>().SetInvulnerability(Invulnerability.MAX);
             var spawn = UnityEngine.Random.Range(0, 2) == 0 ? m_info.spawn1Animation : m_info.spawn2Animation;
             m_animation.SetAnimation(0, spawn, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, spawn);
             m_animation.SetAnimation(0, m_info.vomitAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vomitAnimation);
+            GetComponentInChildren<Hitbox>().SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;

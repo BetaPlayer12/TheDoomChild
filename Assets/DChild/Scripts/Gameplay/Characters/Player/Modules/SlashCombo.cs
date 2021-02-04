@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private List<Info> m_slashComboInfo;
 
+        private IPlayerModifer m_modifier;
         private int m_currentSlashState;
         private int m_currentVisualSlashState;
         private float m_comboAttackDelayTimer;
@@ -24,6 +25,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Initialize(info);
 
+            m_modifier = info.modifier;
             m_slashStateAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SlashState);
             m_currentSlashState = 0;
             m_currentVisualSlashState = 0;
@@ -50,7 +52,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
 
-            m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier);
+            m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
 
             m_comboResetDelayTimer = m_comboResetDelay;
             m_comboAttackDelayTimer = m_slashComboInfo[m_currentSlashState].nextAttackDelay;

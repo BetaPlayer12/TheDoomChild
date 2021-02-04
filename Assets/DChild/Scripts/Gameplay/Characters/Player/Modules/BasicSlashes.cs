@@ -23,11 +23,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private Info m_midAirOverhead;
 
+        private IPlayerModifer m_modifier;
         private List<Type> m_executedTypes;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
+            m_modifier = info.modifier;
             m_executedTypes = new List<Type>();
         }
 
@@ -88,19 +90,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 case Type.Ground_Overhead:
                     m_timer = m_groundOverhead.nextAttackDelay;
-                    m_attacker.SetDamageModifier(m_groundOverhead.damageModifier);
+                    m_attacker.SetDamageModifier(m_groundOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
                 case Type.Crouch:
                     m_timer = m_crouch.nextAttackDelay;
-                    m_attacker.SetDamageModifier(m_crouch.damageModifier);
+                    m_attacker.SetDamageModifier(m_crouch.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
                 case Type.MidAir_Forward:
                     m_timer = m_midAirForward.nextAttackDelay;
-                    m_attacker.SetDamageModifier(m_midAirForward.damageModifier);
+                    m_attacker.SetDamageModifier(m_midAirForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
-                    m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier);
+                    m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
             }
             Record(type);
