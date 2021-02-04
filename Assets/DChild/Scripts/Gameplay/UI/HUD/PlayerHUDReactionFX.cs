@@ -20,6 +20,7 @@ namespace DChild.Gameplay.UI
             m_fireFX.enabled = show;
         }
 
+
         public void HideAll()
         {
             ShowShadowFX(false);

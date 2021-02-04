@@ -29,6 +29,8 @@ namespace DChild.Gameplay.UI
 
         [SerializeField]
         private ModeShiftInfo m_shadowMode;
+        [SerializeField]
+        private ModeShiftInfo m_rageMode;
 
         private ModeShiftInfo m_currentMode;
         private AnimationReferenceAsset m_currentIdleMode;
@@ -54,10 +56,15 @@ namespace DChild.Gameplay.UI
 
         public void EndRage()
         {
+            m_currentIdleMode = m_normalIdle;
+            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
         }
 
         public void ExecuteRage()
         {
+            ChangeToAnimation(m_rageMode.startAnimation, m_rageMode.loopAnimation);
+            m_currentMode = m_rageMode;
+            m_currentIdleMode = m_currentMode.loopAnimation;
         }
 
         public void EndArmor()
