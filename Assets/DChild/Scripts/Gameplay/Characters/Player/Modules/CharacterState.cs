@@ -86,10 +86,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_isDead;
         public bool isDead { get => m_isDead; set => m_isDead = value; }
 
+        public event EventAction<EnrageEventArgs> EnrageChange;
         [SerializeField, ReadOnly]
         private bool m_isEnraged;
-        public bool isEnraged { get => m_isEnraged; set => m_isEnraged = value; }
-        public event EventAction<EnrageEventArgs> EnrageChange;
+        public bool isEnraged
+        {
+            get
+            {
+                return m_isEnraged;
+            }
+
+            set
+            {
+                if (m_isEnraged != value)
+                {
+                    EnrageChange?.Invoke(this, new EnrageEventArgs(value));
+                }
+
+                m_isEnraged = value;
+            }
+        }
 
         [SerializeField, ReadOnly]
         private bool m_forcedCurrentGroundedness;
