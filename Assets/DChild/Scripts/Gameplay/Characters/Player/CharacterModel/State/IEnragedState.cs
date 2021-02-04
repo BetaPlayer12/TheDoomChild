@@ -16,6 +16,6 @@ namespace DChild.Gameplay.Characters.Players.State
     {
         bool isEnraged { get; set; }
 
-        public event EventAction<EnrageEventArgs> EnrageChange;
+        event EventAction<EnrageEventArgs> EnrageChange;
     }
 }
