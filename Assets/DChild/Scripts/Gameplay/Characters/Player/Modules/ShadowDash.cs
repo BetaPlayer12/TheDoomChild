@@ -54,7 +54,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             End?.Invoke(this, EventActionArgs.Empty);
         }
 
-        public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue ;
+        public bool HaveEnoughSourceForExecution() => sourceRequiredAmount <= m_source.currentValue;
 
         public void ConsumeSource() => m_source.ReduceCurrentValue(sourceRequiredAmount);
 
@@ -78,9 +78,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_tempFX?.Play(true);
                 m_animator.SetBool(m_animationParameter, true);
                 m_skeletonGhost.enabled = true;
+                ExecuteModule?.Invoke(this, EventActionArgs.Empty);
             }
             m_dash.Execute();
-            ExecuteModule?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Reset()
