@@ -1,6 +1,9 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
+using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.UI
@@ -12,8 +15,9 @@ namespace DChild.Gameplay.UI
         [SerializeField]
         private PlayerHUDReactionFX m_fx;
 
-        private CharacterState m_state;
+        private Characters.Players.Modules.CharacterState m_state;
         private int m_shadowExecutionCount;
+        private bool m_isEnrageActive;
 
         private void OnPlayerDamaged(object sender, Damageable.DamageEventArgs eventArgs)
         {
@@ -44,6 +48,36 @@ namespace DChild.Gameplay.UI
             m_shadowExecutionCount++;
         }
 
+        private void OnEnrageChange(object sender, EnrageEventArgs eventArgs)
+        {
+            if (eventArgs.value)
+            {
+                if (m_isEnrageActive == false)
+                {
+                    m_isEnrageActive = true;
+                    if (m_shadowExecutionCount == 0)
+                    {
+                        m_avatar.ExecuteRage(true);
+                    }
+                    else
+                    {
+                        m_avatar.ExecuteRage(false);
+                        m_avatar.ExecuteShadowMorph(false);
+                    }
+                    m_fx.ShowFireFX(true);
+                }
+            }
+            else
+            {
+                if (m_isEnrageActive)
+                {
+                    m_isEnrageActive = false;
+                    m_avatar.EndRage();
+                    m_fx.ShowFireFX(false);
+                }
+            }
+        }
+
         private void Start()
         {
             var player = GameplaySystem.playerManager.player;
@@ -65,6 +99,8 @@ namespace DChild.Gameplay.UI
             var devilWings = player.character.GetComponentInChildren<DevilWings>();
             devilWings.ExecuteModule += OnShadowMorphExecuted;
             devilWings.End += OnShadowMorphEnd;
+
+            player.state.EnrageChange += OnEnrageChange;
 
             m_avatar.ExecuteIdle();
             m_fx.HideAll();
