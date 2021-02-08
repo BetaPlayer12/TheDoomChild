@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4023921901076999128}
+  - component: {fileID: 4598808012473988786}
   m_Layer: 14
   m_Name: Icon
   m_TagString: Untagged
@@ -33,6 +34,22 @@ Transform:
   m_Father: {fileID: 4339375883249263508}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &4598808012473988786
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158145163111674086}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0193547, y: -0.03483861}
+  serializedVersion: 2
+  m_Radius: 0.06645517
 --- !u!1 &4339375881390426199
 GameObject:
   m_ObjectHideFlags: 0
@@ -5048,8 +5065,12 @@ MonoBehaviour:
     m_startTime: 1
   m_rigidbody: {fileID: 1151509154680446654}
   m_animator: {fileID: 8978225926666375850}
+  m_collision: {fileID: 4598808012473988786}
   m_pickUpVelocity: 70
   m_floatGravity: -0.5
+  m_floatDuration: 3
+  m_fallGravity: 0.5
+  m_fadeAfterRestingDuration: 3
   m_value: 10
 --- !u!95 &8978225926666375850
 Animator:

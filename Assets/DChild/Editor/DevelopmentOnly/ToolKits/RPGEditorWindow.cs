@@ -44,6 +44,7 @@ namespace DChildEditor.Toolkit
             });
 
             //Enemies
+            #region Enemies
             List<string> bossNames = new List<string>();
             Sprite phaseIcon = AssetDatabase.LoadAssetAtPath<Sprite>(SCRIPT_ICONS + "BossPhase.png");
             AddGenericItemList<BossPhaseData>("t:BossPhaseData", (data) =>
@@ -94,7 +95,8 @@ namespace DChildEditor.Toolkit
                 {
                     tree.Add($"Characters/Boss/{result}/{data.name.Replace("Data", "").Replace("Info", "")}", data, data.infoImage);
                 }
-            });
+            }); 
+            #endregion
 
             tree.EnumerateTree().SortMenuItemsByName(true);
 
