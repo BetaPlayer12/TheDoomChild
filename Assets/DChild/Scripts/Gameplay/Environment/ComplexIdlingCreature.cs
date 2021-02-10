@@ -170,6 +170,34 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+
+        [System.Serializable]
+        public class FlipBehaviour : BaseAnimationBehaviour
+        {
+#if UNITY_EDITOR
+            protected override bool showLoopProp => false;
+#endif
+
+            private Transform m_transform;
+
+            public override void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
+            {
+                base.Initialize(rootObject, animation, instruction, ref timer, snap);
+                m_transform = rootObject.transform;
+            }
+
+            public override void Update(GameObject rootObject, ref float timer)
+            {
+                var scale = m_transform.localScale;
+                scale.x *= -1;
+                m_transform.localScale = scale;
+                m_isActive = false;
+                m_isDone = true;
+            }
+        }
+
+
+
         [System.Serializable]
         public class RedirectionBehaviour : IBehaviour
         {

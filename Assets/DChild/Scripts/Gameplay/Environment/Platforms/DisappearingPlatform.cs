@@ -94,7 +94,10 @@ namespace DChild.Gameplay.Environment
                     if (m_animation != null)
                     {
                         m_animation.state.SetAnimation(0, m_disappearingPlatformData.disappearAnimation, false);
-                        m_animation.state.AddAnimation(0, m_disappearingPlatformData.hiddenAnimation, true, 0.5f);
+                        if (m_disappearingPlatformData.hiddenAnimation != "")
+                        {
+                            m_animation.state.AddAnimation(0, m_disappearingPlatformData.hiddenAnimation, true, 0.5f);
+                        }
                     }
 
                     m_willDisappear = false;
