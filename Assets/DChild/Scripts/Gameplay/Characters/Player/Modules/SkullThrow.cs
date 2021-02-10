@@ -22,6 +22,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_verticalThreshold;
         [SerializeField, BoxGroup("Aim"), MinValue(0f)]
         private float m_aimSensitivity = 1f;
+        [SerializeField]
+        private bool m_adjustableXSpeed;
 
         private Vector2 m_currentAim; //Relative to Character Facing
 
@@ -43,6 +45,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             GameSystem.ResetCursorPosition(); //FOr Quality of Life thing
             m_currentAim = m_defaultAim;
+
+            if(m_adjustableXSpeed == false)
+            {
+                m_currentAim.x = m_horizontalThreshold.max;
+            }
+
             if (m_updateProjectileInfo)
             {
                 UpdateTrajectoryProjectile();
@@ -111,7 +119,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private Vector2 CalculateThrowDirection()
         {
-            var normalizedAim = m_currentAim;
+            var normalizedAim = Vector2.zero;
+
+            if (m_adjustableXSpeed)
+            {
+                normalizedAim = m_currentAim;
+            }
+            else
+            {
+                normalizedAim = m_currentAim;
+                normalizedAim.x = m_horizontalThreshold.max;
+            }
+
             normalizedAim.x = CalculateNormalizedValue(normalizedAim.x, m_horizontalThreshold.min, m_horizontalThreshold.max);
             var ySign = Mathf.Sign(normalizedAim.y);
             normalizedAim.y = Mathf.Abs(normalizedAim.y) / m_verticalThreshold * ySign;

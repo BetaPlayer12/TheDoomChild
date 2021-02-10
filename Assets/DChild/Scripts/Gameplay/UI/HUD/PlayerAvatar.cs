@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Boo.Lang;
+using Sirenix.OdinInspector;
 using Spine.Unity;
 using System;
 using UnityEngine;
@@ -29,7 +30,10 @@ namespace DChild.Gameplay.UI
 
         [SerializeField]
         private ModeShiftInfo m_shadowMode;
+        [SerializeField]
+        private ModeShiftInfo m_rageMode;
 
+        private List<ModeShiftInfo> m_activeModes;
         private ModeShiftInfo m_currentMode;
         private AnimationReferenceAsset m_currentIdleMode;
         private SkeletonGraphic m_animation;
@@ -41,23 +45,38 @@ namespace DChild.Gameplay.UI
 
         public void EndShadowMorph()
         {
-            m_currentIdleMode = m_normalIdle;
-            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
+            EndMode(m_shadowMode);
+            //m_currentIdleMode = m_normalIdle;
+            //ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
         }
 
-        public void ExecuteShadowMorph()
+        public void ExecuteShadowMorph(bool executeAnimation = true)
         {
-            ChangeToAnimation(m_shadowMode.startAnimation, m_shadowMode.loopAnimation);
-            m_currentMode = m_shadowMode;
-            m_currentIdleMode = m_currentMode.loopAnimation;
+            if (executeAnimation)
+            {
+                ChangeToAnimation(m_shadowMode.startAnimation, m_shadowMode.loopAnimation);
+                m_currentMode = m_shadowMode;
+                m_currentIdleMode = m_currentMode.loopAnimation;
+            }
+            RecordToList(m_shadowMode);
         }
 
         public void EndRage()
         {
+            EndMode(m_rageMode);
+            //m_currentIdleMode = m_normalIdle;
+            //ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
         }
 
-        public void ExecuteRage()
+        public void ExecuteRage(bool executeAnimation = true)
         {
+            if (executeAnimation)
+            {
+                ChangeToAnimation(m_rageMode.startAnimation, m_rageMode.loopAnimation);
+                m_currentMode = m_rageMode;
+                m_currentIdleMode = m_currentMode.loopAnimation;
+            }
+            RecordToList(m_rageMode);
         }
 
         public void EndArmor()
@@ -66,6 +85,31 @@ namespace DChild.Gameplay.UI
 
         public void ExecuteArmor()
         {
+        }
+
+        private void EndMode(ModeShiftInfo mode)
+        {
+            if (m_currentMode == mode)
+            {
+                m_activeModes.RemoveAt(m_activeModes.Count - 1);
+                if (m_activeModes.Count == 0)
+                {
+                    m_currentIdleMode = m_normalIdle;
+                    ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
+                    m_currentMode = null;
+                }
+                else
+                {
+                    var nextMode = m_activeModes[m_activeModes.Count - 1];
+                    ChangeToAnimation(m_currentMode.endAnimation, nextMode.loopAnimation);
+                    m_currentMode = nextMode;
+                    m_currentIdleMode = nextMode.loopAnimation;
+                }
+            }
+            else
+            {
+                m_activeModes.Remove(mode);
+            }
         }
 
         public void ExecuteIdle()
@@ -80,9 +124,20 @@ namespace DChild.Gameplay.UI
             m_animation.AnimationState.SetAnimation(0, start, false);
             m_animation.AnimationState.AddAnimation(0, loop, true, 0);
         }
+
+        private void RecordToList(ModeShiftInfo mode)
+        {
+            if (m_activeModes.Contains(mode))
+            {
+                m_activeModes.Remove(mode);
+            }
+                m_activeModes.Add(mode);
+        }
+
         private void Awake()
         {
             m_animation = GetComponent<SkeletonGraphic>();
+            m_activeModes = new List<ModeShiftInfo>();
         }
     }
 }

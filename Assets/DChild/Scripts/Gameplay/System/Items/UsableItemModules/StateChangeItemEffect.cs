@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using UnityEngine;
 
 namespace DChild.Gameplay.Items
 {
@@ -9,14 +10,27 @@ namespace DChild.Gameplay.Items
             Rage
         }
 
+        [SerializeField]
+        private State m_stateToChange;
+
         public void StartEffect(IPlayer player)
         {
-            throw new System.NotImplementedException();
+            switch (m_stateToChange)
+            {
+                case State.Rage:
+                    player.state.isEnraged = true;
+                    break;
+            }
         }
 
         public void StopEffect(IPlayer player)
         {
-            throw new System.NotImplementedException();
+            switch (m_stateToChange)
+            {
+                case State.Rage:
+                    player.state.isEnraged = true;
+                    break;
+            }
         }
     }
 }

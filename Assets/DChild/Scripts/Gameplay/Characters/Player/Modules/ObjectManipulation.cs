@@ -49,22 +49,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else
                     {
-                        if (m_movableObject.CompareTag("InvisibleWall") == false)
+                        if (m_movableObject.gameObject.GetComponentInParent<MovableObject>() != null)
                         {
-                            if (m_movableObject.gameObject.GetComponentInParent<MovableObject>() != null)
-                            {
 
-                                isValid = true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
+                            isValid = true;
                         }
                         else
                         {
                             return false;
                         }
+
+                        //if (m_movableObject.CompareTag("InvisibleWall") == false)
+                        //{
+                        //    if (m_movableObject.gameObject.GetComponentInParent<MovableObject>() != null)
+                        //    {
+
+                        //        isValid = true;
+                        //    }
+                        //    else
+                        //    {
+                        //        return false;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    return false;
+                        //}
                     }
                 }
             }
