@@ -466,7 +466,7 @@ GameObject:
   - component: {fileID: 8917580080780404321}
   m_Layer: 13
   m_Name: QUEEN BEE/R_ForeArm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -629,6 +629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_colliders: []
 --- !u!1 &822862140513903159
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,6 +681,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &835831294900065561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1391,7 +1393,7 @@ GameObject:
   - component: {fileID: 8733908603681102776}
   m_Layer: 13
   m_Name: QUEEN BEE/UPPER BODY3
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1785,7 +1787,7 @@ GameObject:
   - component: {fileID: 1356597929976776912}
   m_Layer: 13
   m_Name: LEFT WING6
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1920,7 +1922,7 @@ GameObject:
   - component: {fileID: 9052232457250336680}
   m_Layer: 13
   m_Name: QUEEN BEE/L_Arm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2000,7 +2002,7 @@ GameObject:
   - component: {fileID: 2720492919063829432}
   m_Layer: 13
   m_Name: QUEEN BEE/UPPER RIGHT LEG/mid leg uf
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2185,7 +2187,7 @@ GameObject:
   - component: {fileID: 7287317534514889139}
   m_Layer: 13
   m_Name: QUEEN BEE/UPPER RIGHT LEG/top leg uf
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3098,7 +3100,7 @@ MonoBehaviour:
   - {fileID: 9215436613554374838}
   - {fileID: 7287317534514889139}
   - {fileID: 2720492919063829432}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
 --- !u!114 &5290681609380418611
 MonoBehaviour:
@@ -3400,6 +3402,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!114 &5280032607097867904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3413,6 +3416,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!60 &7328764048952945108
 PolygonCollider2D:
@@ -4985,6 +4990,7 @@ MonoBehaviour:
     m_config: {fileID: 11400000, guid: 5552f880aa6967942b909cb254204301, type: 2}
     m_rayColor: {r: 0, g: 1, b: 0, a: 1}
   m_enable: 1
+  m_debugMode: 1
 --- !u!114 &3727422790195012938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5051,6 +5057,7 @@ MonoBehaviour:
   followSkeletonFlip: 0
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &5021568529251040075
 GameObject:
   m_ObjectHideFlags: 0
@@ -5873,6 +5880,7 @@ MonoBehaviour:
   followSkeletonFlip: 0
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &5865886164407566278
 GameObject:
   m_ObjectHideFlags: 0
@@ -6568,7 +6576,7 @@ GameObject:
   - component: {fileID: 4577983130758869709}
   m_Layer: 13
   m_Name: QUEEN BEE/L_ForeArm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7260,7 +7268,7 @@ GameObject:
   - component: {fileID: 5886281572343155742}
   m_Layer: 13
   m_Name: head
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7814,6 +7822,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!114 &1475133383323072244
 MonoBehaviour:
@@ -7835,6 +7845,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!1 &8335866150013457477
 GameObject:
   m_ObjectHideFlags: 0
@@ -8576,7 +8587,7 @@ GameObject:
   - component: {fileID: 1499978772843057134}
   m_Layer: 13
   m_Name: QUEEN BEE/LOWER LEFT LEG/top leg lb
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8774,7 +8785,7 @@ GameObject:
   - component: {fileID: 9215436613554374838}
   m_Layer: 13
   m_Name: QUEEN BEE/LOWER LEFT LEG/mid leg lb
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
