@@ -11,6 +11,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_destinationFinder;
         [SerializeField, MinValue(0)]
         private float m_distanceFromLegContactForDestination;
+        [SerializeField]
+        private RaySensor m_spaceChecker;
+        [SerializeField, MinValue(0)]
+        private float m_spaceCheckerOffset;
 
         private Rigidbody2D m_physics;
         private Character m_character;
@@ -27,7 +31,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool CheckForStepClimbableSurface()
         {
             m_legForwardEnvironment.Cast();
-            if (m_legForwardEnvironment.isDetecting)
+            if (m_legForwardEnvironment.allRaysDetecting)
             {
                 m_hitBuffer = m_legForwardEnvironment.GetValidHits();
                 var legEnvironmentContact = m_hitBuffer[0].point;
@@ -44,8 +48,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     Raycaster.Cast(possibleDestination, Vector2.up, m_character.height, true, out int hitcount);
                     if (hitcount == 0)
                     {
-                        m_climbToHere = possibleDestination;
-                        return true;
+                        destinationPosition = m_spaceChecker.transform.position;
+                        destinationPosition.x = legEnvironmentContact.x + (m_spaceCheckerOffset * (int)m_character.facing);
+                        m_spaceChecker.transform.position = destinationPosition;
+                        m_spaceChecker.Cast();
+                        if (m_spaceChecker.isDetecting == false)
+                        {
+                            m_climbToHere = possibleDestination;
+                            return true;
+                        }
                     }
                 }
             }
