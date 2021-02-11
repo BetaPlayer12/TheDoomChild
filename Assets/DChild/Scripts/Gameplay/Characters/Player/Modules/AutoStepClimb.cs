@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private RaySensor m_spaceChecker;
         [SerializeField, MinValue(0)]
-        private float m_spaceCheckerOffset;
+        private Vector2 m_spaceCheckerOffset;
 
         private Rigidbody2D m_physics;
         private Character m_character;
@@ -45,11 +45,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_hitBuffer = m_destinationFinder.GetValidHits();
                     var possibleDestination = m_hitBuffer[0].point;
                     Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
-                    Raycaster.Cast(possibleDestination, Vector2.up, m_character.height, true, out int hitcount);
+                    Raycaster.Cast(possibleDestination, Vector2.up, m_character.height, true, out int hitcount, true);
                     if (hitcount == 0)
                     {
-                        destinationPosition = m_spaceChecker.transform.position;
-                        destinationPosition.x = legEnvironmentContact.x + (m_spaceCheckerOffset * (int)m_character.facing);
+                        destinationPosition = possibleDestination;
+                        destinationPosition.x += (m_spaceCheckerOffset.x * (int)m_character.facing);
+                        destinationPosition.y += m_spaceCheckerOffset.y;
                         m_spaceChecker.transform.position = destinationPosition;
                         m_spaceChecker.Cast();
                         if (m_spaceChecker.isDetecting == false)
