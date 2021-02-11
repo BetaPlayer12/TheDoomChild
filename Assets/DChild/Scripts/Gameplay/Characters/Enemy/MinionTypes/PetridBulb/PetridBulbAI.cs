@@ -200,12 +200,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             //StartCoroutine(DeathRoutine());
             //m_stateHandle.OverrideState(State.Dead);
-            if (m_canShoot)
-            {
-                StopAllCoroutines();
-                m_stateHandle.OverrideState(State.Dead);
-                StartCoroutine(DeathRoutine());
-            }
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dead);
+            StartCoroutine(DeathRoutine());
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -282,8 +279,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_canShoot = false;
             m_aggroSensorGO.SetActive(false);
             m_animation.EnableRootMotion(true, false);
-            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
-            yield return new WaitForSeconds(5f);
+            m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+            //yield return new WaitForSeconds(5f);
             m_canShoot = true;
             m_aggroSensorGO.SetActive(true);
             m_stateHandle.ApplyQueuedState();
