@@ -45,13 +45,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else
                     {
-                        if (m_cacheCollider.CompareTag("InvisibleWall") == false)
+                        if (m_cacheCollider.CompareTag("InvisibleWall") == true)
                         {
                             isValid = false;
                         }
+                        else if (m_cacheCollider.CompareTag("Droppable") == true)
+                        {
+                            isValid = true;
+                        }
                         else
                         {
-                            return true;
+                            return false;
                         }
                     }
                 }

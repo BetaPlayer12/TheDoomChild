@@ -46,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ShadowDash m_shadowDash;
         private ShadowSlide m_shadowSlide;
         private ShadowMorph m_shadowMorph;
+        private AutoStepClimb m_stepClimb;
 
         private WallStick m_wallStick;
         private WallMovement m_wallMovement;
@@ -270,6 +271,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_wallMovement = m_character.GetComponentInChildren<WallMovement>();
             m_wallSlide = m_character.GetComponentInChildren<WallSlide>();
             m_wallJump = m_character.GetComponentInChildren<WallJump>();
+            m_stepClimb = m_character.GetComponentInChildren<AutoStepClimb>();
 
             m_attackRegistrator = m_character.GetComponentInChildren<CollisionRegistrator>();
             m_basicSlashes = m_character.GetComponentInChildren<BasicSlashes>();
@@ -944,6 +946,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else
                 {
                     MoveCharacter(m_state.isGrabbing);
+                    if (m_stepClimb.CheckForStepClimbableSurface())
+                    {
+                        if (m_input.horizontalInput != 0)
+                        {
+                            m_stepClimb.ClimbSurface();
+                        }
+                    }
                 }
                 #endregion
             }
