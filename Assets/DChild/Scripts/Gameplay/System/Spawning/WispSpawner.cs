@@ -37,10 +37,14 @@ namespace DChild.Gameplay
         {
             var poolableObject = GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_wisp, gameObject.scene);
             var instance = poolableObject.gameObject;
+            var character = instance.GetComponent<Character>();
             instance.transform.position = transform.position;
             m_spawnList.Add(instance);
             instance.GetComponent<Damageable>().Destroyed += OnInstanceDestroyed;
-            instance.GetComponent<Character>().SetFacing(m_spawnDirection);
+            character.SetFacing(m_spawnDirection);
+            var scale = character.transform.localScale;
+            scale.x *= (int)m_spawnDirection;
+            character.transform.localScale = scale;
             m_spawnedCount++;
             if (m_spawnedCount >= m_maxSpawns)
             {
@@ -50,7 +54,7 @@ namespace DChild.Gameplay
 
         private void OnInstanceDestroyed(object sender, EventActionArgs eventArgs)
         {
-           
+
             var damageable = (Damageable)sender;
             damageable.GetComponent<PoolableObject>().CallPoolRequest();
             for (int i = 0; i < m_spawnList.Count; i++)
@@ -58,7 +62,7 @@ namespace DChild.Gameplay
 
                 if (m_spawnList[i] == damageable.gameObject)
                 {
-                   
+
                     m_spawnList.RemoveAt(i);
                     m_spawnedCount--;
                     Debug.Log(m_spawnedCount);
@@ -79,7 +83,7 @@ namespace DChild.Gameplay
 
         private void LateUpdate()
         {
-            m_spawnTimer-=GameplaySystem.time.deltaTime;
+            m_spawnTimer -= GameplaySystem.time.deltaTime;
             if (m_spawnTimer <= 0)
             {
                 SpawnCharacter();
