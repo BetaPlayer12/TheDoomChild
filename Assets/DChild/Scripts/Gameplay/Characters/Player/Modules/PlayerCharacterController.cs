@@ -948,7 +948,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     MoveCharacter(m_state.isGrabbing);
                     if (m_stepClimb.CheckForStepClimbableSurface())
                     {
-                        m_stepClimb.ClimbSurface();
+                        if (m_input.horizontalInput != 0)
+                        {
+                            m_stepClimb.ClimbSurface();
+                        }
                     }
                 }
                 #endregion
