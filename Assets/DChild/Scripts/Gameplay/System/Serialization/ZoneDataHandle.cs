@@ -9,6 +9,7 @@ using System.Collections;
 using DChildDebug.Serialization;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using Cinemachine;
 
 namespace DChild.Serialization
 {
@@ -154,6 +155,8 @@ namespace DChild.Serialization
 
         private void Start()
         {
+            FindObjectOfType<CinemachineBrain>().enabled = true;
+
             var proposedData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
 #if UNITY_EDITOR
             if (m_useEditorData)
