@@ -123,6 +123,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -256,7 +258,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             m_selfCollider.SetActive(false);
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
+            m_hitbox.Disable();
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();
@@ -294,13 +296,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SpawnRoutine()
         {
-            GetComponentInChildren<Hitbox>().SetInvulnerability(Invulnerability.MAX);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             var spawn = UnityEngine.Random.Range(0, 2) == 0 ? m_info.spawn1Animation : m_info.spawn2Animation;
             m_animation.SetAnimation(0, spawn, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, spawn);
             m_animation.SetAnimation(0, m_info.vomitAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vomitAnimation);
-            GetComponentInChildren<Hitbox>().SetInvulnerability(Invulnerability.None);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -520,7 +522,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
+            m_hitbox.Enable();
         }
 
         public void SwitchToBattleZoneAI()
