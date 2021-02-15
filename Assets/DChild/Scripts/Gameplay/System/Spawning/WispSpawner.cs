@@ -3,7 +3,9 @@ using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using Holysoft.Collections;
 using Holysoft.Event;
+using Holysoft.Pooling;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,11 +42,12 @@ namespace DChild.Gameplay
             var character = instance.GetComponent<Character>();
             instance.transform.position = transform.position;
             m_spawnList.Add(instance);
-            instance.GetComponent<Damageable>().Destroyed += OnInstanceDestroyed;
             character.SetFacing(m_spawnDirection);
             var scale = character.transform.localScale;
             scale.x *= (int)m_spawnDirection;
             character.transform.localScale = scale;
+            instance.GetComponent<Damageable>().Destroyed += OnInstanceDestroyed;
+            instance.GetComponent<PoolableObject>().PoolRequest += OnInstancePooled;
             m_spawnedCount++;
             if (m_spawnedCount >= m_maxSpawns)
             {
@@ -52,15 +55,12 @@ namespace DChild.Gameplay
             }
         }
 
-        private void OnInstanceDestroyed(object sender, EventActionArgs eventArgs)
+        private void OnInstancePooled(object sender, PoolItemEventArgs eventArgs)
         {
-
-            var damageable = (Damageable)sender;
-            damageable.GetComponent<PoolableObject>().CallPoolRequest();
+            var poolableObject = (PoolableObject)sender;
             for (int i = 0; i < m_spawnList.Count; i++)
             {
-
-                if (m_spawnList[i] == damageable.gameObject)
+                if (m_spawnList[i] == poolableObject.gameObject)
                 {
 
                     m_spawnList.RemoveAt(i);
@@ -73,6 +73,12 @@ namespace DChild.Gameplay
                     enabled = true;
                 }
             }
+        }
+
+        private void OnInstanceDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            var damageable = (Damageable)sender;
+            damageable.GetComponent<PoolableObject>().CallPoolRequest();
         }
 
         private void Start()
