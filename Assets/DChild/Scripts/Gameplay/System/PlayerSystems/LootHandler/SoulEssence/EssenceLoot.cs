@@ -69,6 +69,7 @@ namespace DChild.Gameplay.Essence
             //CallPoolRequest();
         }
 
+
         protected override void OnPopDurationEnd(object sender, EventActionArgs eventArgs)
         {
             base.OnPopDurationEnd(sender, eventArgs);
