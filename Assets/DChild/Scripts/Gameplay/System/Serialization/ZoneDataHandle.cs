@@ -133,11 +133,18 @@ namespace DChild.Serialization
             for (int i = 0; i < m_componentSerializers.Length; i++)
             {
                 m_cacheComponentSerializer = m_componentSerializers[i];
-                m_cacheComponentSerializer.Initiatlize();
-
-                if (hasData)
+                try
                 {
-                    m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+                    m_cacheComponentSerializer.Initiatlize();
+
+                    if (hasData)
+                    {
+                        m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception($"Error Occured In {m_cacheComponentSerializer.gameObject.name} \n {e.Message}");
                 }
                yield return null;
             }
