@@ -60,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
+            GameplaySystem.world.SetShadowColliders(true);
             m_skeletonData.Skeleton.SetSkin(m_shadowMorphSkinName);
             m_damageable.SetInvulnerability(Invulnerability.MAX);
             m_state.isInShadowMode = true;
@@ -71,6 +72,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Cancel()
         {
+            GameplaySystem.world.SetShadowColliders(false);
             m_skeletonData.Skeleton.SetSkin(m_originalSkinName);
             m_damageable.SetInvulnerability(Invulnerability.None);
             m_state.isInShadowMode = false;
