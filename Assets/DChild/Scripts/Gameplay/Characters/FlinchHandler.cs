@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Characters
         [SerializeField]
         private IsolatedPhysics2D m_physics;
         [SerializeField]
-        private bool m_autoFlinch;
+        public bool m_autoFlinch;
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
