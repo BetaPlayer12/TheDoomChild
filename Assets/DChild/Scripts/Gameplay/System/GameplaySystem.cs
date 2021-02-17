@@ -108,6 +108,8 @@ namespace DChild.Gameplay
 
         public static void ClearCaches()
         {
+            MasterAudio.StopEverything();
+            //MasterAudio.StopAllPlaylists();
             m_cinema?.ClearLists();
             m_healthTracker?.RemoveAllTrackers();
             m_playerManager?.ClearCache();
