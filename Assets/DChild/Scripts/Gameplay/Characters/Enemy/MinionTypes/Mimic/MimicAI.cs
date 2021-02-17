@@ -290,7 +290,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.immerseAnimation, false);
             yield return new WaitForSeconds(.25f);
             m_hitbox.gameObject.SetActive(true);

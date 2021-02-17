@@ -71,6 +71,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!1 &1452499518639036817
 GameObject:
@@ -178,7 +180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 8918976730604906077}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
 --- !u!114 &6435465842260426723
 MonoBehaviour:
@@ -238,6 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_colliders: []
 --- !u!1 &3293976672080875837
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +499,7 @@ GameObject:
   - component: {fileID: 8918976730604906077}
   m_Layer: 13
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -535,6 +538,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &8918976730604906077
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -704,6 +708,7 @@ MonoBehaviour:
     m_config: {fileID: 11400000, guid: af0d671eeed6966448292346634a9426, type: 2}
     m_rayColor: {r: 0.40903324, g: 1, b: 0.2688679, a: 1}
   m_enable: 1
+  m_debugMode: 1
 --- !u!114 &577081199536731559
 MonoBehaviour:
   m_ObjectHideFlags: 0
