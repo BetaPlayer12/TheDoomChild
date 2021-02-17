@@ -66,12 +66,39 @@ namespace DChild.Gameplay.Cinematics
             return new SaveData(m_isTriggered);
         }
 
+        public void ForcePlayCutscene()
+        {
+            StartCutscene(GameplaySystem.playerManager.player.character.GetComponent<PlayerControlledObject>());
+        }
+
         private void OnCutsceneDone(PlayableDirector obj)
         {
             m_controlledObject.transform.parent = null;
             SceneManager.MoveGameObjectToScene(m_controlledObject.gameObject, m_originalScene);
             m_animator.enabled = true;
             GameplaySystem.playerManager.StopCharacterControlOverride();
+        }
+
+        private void StartCutscene(PlayerControlledObject controlledObject)
+        {
+            m_controlledObject = controlledObject;
+            m_originalScene = m_controlledObject.gameObject.scene;
+            m_controlledObject.transform.parent = m_cutscene.transform;
+            m_collisionState = m_controlledObject.GetComponentInChildren<StateManager>();
+            m_animator = m_controlledObject.GetComponentInChildren<Animator>();
+            GameplaySystem.playerManager.OverrideCharacterControls();
+
+            if (m_collisionState.isGrounded)
+            {
+                m_animator.enabled = false;
+                m_cutscene.Play();
+            }
+            else
+            {
+                enabled = true;
+            }
+            m_isTriggered = true;
+            m_collider.enabled = false;
         }
 
         private void Awake()
@@ -116,27 +143,12 @@ namespace DChild.Gameplay.Cinematics
             {
                 if (collision.TryGetComponentInParent(out PlayerControlledObject controlledObject))
                 {
-                    m_controlledObject = controlledObject;
-                    m_originalScene = m_controlledObject.gameObject.scene;
-                    m_controlledObject.transform.parent = m_cutscene.transform;
-                    m_collisionState = m_controlledObject.GetComponentInChildren<StateManager>();
-                    m_animator = m_controlledObject.GetComponentInChildren<Animator>();
-                    GameplaySystem.playerManager.OverrideCharacterControls();
-
-                    if (m_collisionState.isGrounded)
-                    {
-                        m_animator.enabled = false;
-                        m_cutscene.Play();
-                    }
-                    else
-                    {
-                        enabled = true;
-                    }
-                    m_isTriggered = true;
-                    m_collider.enabled = false;
+                    StartCutscene(controlledObject);
                 }
             }
         }
+
+
 
 #if UNITY_EDITOR
         [Button]
