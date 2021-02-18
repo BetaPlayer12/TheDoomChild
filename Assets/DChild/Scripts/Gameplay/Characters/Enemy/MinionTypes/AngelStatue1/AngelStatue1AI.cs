@@ -88,6 +88,13 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_wingRightDestroyAnimation;
             public string wingRightDestroyAnimation => m_wingRightDestroyAnimation;
 
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_projectile;
+            public SimpleProjectileAttackInfo projectile => m_projectile;
+            [SerializeField]
+            private float m_launchDelay;
+            public float launchDelay => m_launchDelay;
+
 
             public override void Initialize()
             {
@@ -96,6 +103,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackRight.SetData(m_skeletonDataAsset);
                 m_fistAttackLeft.SetData(m_skeletonDataAsset);
                 m_fistAttackRight.SetData(m_skeletonDataAsset);
+                m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -124,6 +132,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_boundBoxGO;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
@@ -150,7 +160,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
-        
+
+        private ProjectileLauncher m_projectileLauncher;
+        [SerializeField]
+        private Transform m_projectileStart;
+
 
         private State m_turnState;
         private string m_attackLeftAnimation;
@@ -228,6 +242,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
+            StartCoroutine(DeathRoutine());
+        }
+
+        private IEnumerator DeathRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathAnimation);
+            yield return null;
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -332,12 +354,33 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator LaunchProjectilRoutine()
+        {
+            yield return new WaitForSeconds(m_info.launchDelay);
+            LaunchProjectile();
+            yield return null;
+        }
+
+        private void LaunchProjectile()
+        {
+            if (m_targetInfo.isValid)
+            {
+
+                //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                m_projectileLauncher.LaunchProjectile();
+                //m_Audiosource.clip = m_RangeAttackClip;
+                //m_Audiosource.Play();
+            }
+        }
+
         protected override void Start()
         {
             base.Start();
             m_selfCollider.SetActive(false);
             m_attackLeftAnimation = m_info.fistAttackLeft.animation;
             m_attackRightAnimation = m_info.fistAttackRight.animation;
+
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
         }
 
         protected override void Awake()
@@ -346,6 +389,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectileStart);
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
         }
 
@@ -370,6 +414,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (IsTargetInRange(m_info.attackLeft.range))
                     {
                         m_stateHandle.Wait(State.Cooldown);
+
+                        //var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
+                        m_projectileLauncher.AimAt(m_targetInfo.position);
+                        //StartCoroutine(LaunchProjectilRoutine());
 
                         if (m_targetInfo.position.x < transform.position.x)
                         {
