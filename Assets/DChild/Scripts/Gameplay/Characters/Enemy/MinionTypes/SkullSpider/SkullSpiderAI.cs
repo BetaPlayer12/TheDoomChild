@@ -219,7 +219,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
-                m_stateHandle.SetState(State.Patrol);
+                m_hitbox.Disable();
+                m_animation.SetAnimation(0, m_info.assembleAnimation, false).TimeScale = 0;
+                m_stateHandle.SetState(State.Idle);
             }
         }
         //private IEnumerator PatienceRoutine()
@@ -297,6 +299,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1f);
             m_hitbox.Enable();
             m_animation.animationState.TimeScale = 1;
+            m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.assembleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.assembleAnimation);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
