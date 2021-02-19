@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Items
         [SerializeField]
         private GameObject m_model;
         [SerializeField]
-        private Transform m_promptPosition;
+        private Vector3 m_promptOffset;
         [SerializeField]
         private ItemData m_data;
         [SerializeField]
@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Items
 
         public bool showPrompt => true;
 
-        public Vector3 promptPosition => m_promptPosition.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public string promptMessage => "Pick up";
 
@@ -69,6 +69,12 @@ namespace DChild.Gameplay.Items
             m_trigger.enabled = !m_hasBeenPickedUp;
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
+        }
         private void Awake()
         {
             m_trigger = GetComponentInChildren<Collider2D>();

@@ -10,6 +10,7 @@ using DChildDebug.Serialization;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using Cinemachine;
+using PixelCrushers.DialogueSystem;
 
 namespace DChild.Serialization
 {

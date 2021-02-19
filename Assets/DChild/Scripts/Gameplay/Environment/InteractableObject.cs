@@ -10,29 +10,20 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField]
         private string m_promptMessage = "Interact";
-        [SerializeField, HideInInspector]
-        private Vector3 m_promptPosition;
+        [SerializeField]
+        private Vector3 m_promptOffset;
         [SerializeField]
         private bool m_oneTimeInteraction;
         [SerializeField]
         private UnityEvent m_onInteraction;
         private bool m_canInteract;
 
-        public Vector3 promptPosition => m_promptPosition;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public bool showPrompt => true;
 
-        public string promptMessage => null;
+        public string promptMessage => m_promptMessage;
 
-#if UNITY_EDITOR
-        [SerializeField, PropertyOrder(-1)]
-        private Transform m_promptLocation;
-
-        private void OnValidate()
-        {
-            m_promptPosition = m_promptLocation.position;
-        }
-#endif
         public void Interact(Character character)
         {
             if (m_canInteract)
@@ -56,6 +47,13 @@ namespace DChild.Gameplay.Environment
                     m_canInteract = false;
                 }
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
         }
 
         private void Awake()
