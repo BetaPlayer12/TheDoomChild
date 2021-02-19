@@ -17,10 +17,13 @@ public class QBSpearProjectile : MonoBehaviour
         if(collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
             var fx = m_spawnHandol.InstantiateFX(m_spearFX, transform.position);
-
-            //fx.transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            var mainFX = fx.GetComponent<ParticleSystem>().main;
-            mainFX.startRotation = transform.localScale.x > 0 ? (float)Mathf.PI * .5f : (float)Mathf.PI + ((float)Mathf.PI * .5f);
+            Debug.Log("Spear Rotation: " + transform.parent.rotation.z);
+            if (transform.parent.rotation.eulerAngles.z < 270)
+            {
+                fx.transform.localScale = new Vector3(-1, -1, 1);
+            }
+            //var mainFX = fx.GetComponent<ParticleSystem>().main;
+            //mainFX.startRotation = transform.localScale.x > 0 ? (float)Mathf.PI * .4f : (float)Mathf.PI + ((float)Mathf.PI * .5f);
             fx.transform.rotation = transform.rotation /** Quaternion.Euler(transform.localScale.x > 0 ? Vector3.forward : Vector3.back)*/;
             fx.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, -transform.rotation.y);
         }

@@ -73,5 +73,13 @@ namespace DChild.Gameplay.UI
 
 
         private IEnumerable GetMapLocationButtons() => FindObjectsOfType<MapLocationButton>();
+
+        private void Awake()
+        {
+            for (int i = 0; i < m_locationButtons.Length; i++)
+            {
+                m_locationButtons[i].HighlightAvailabilityIndicator(true);
+            }
+        }
     }
 }

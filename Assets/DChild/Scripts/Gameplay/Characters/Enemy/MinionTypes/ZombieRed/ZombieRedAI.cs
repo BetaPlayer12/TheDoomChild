@@ -106,6 +106,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitBox;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -240,7 +242,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             m_selfCollider.SetActive(false);
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
+            m_hitBox.Disable();
             StopAllCoroutines();
             m_movement.Stop();
         }
@@ -276,10 +278,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SpawnRoutine()
         {
+            m_hitBox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.spawn1Animation, false).TimeScale = 2.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spawn1Animation);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_hitBox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -487,7 +491,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
-            GetComponentInChildren<Hitbox>().gameObject.SetActive(true);
+            m_hitBox.Enable();
         }
 
         public void SwitchToBattleZoneAI()

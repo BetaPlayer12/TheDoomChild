@@ -2514,6 +2514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_colliders: []
 --- !u!1 &1415926198663650284
 GameObject:
   m_ObjectHideFlags: 0
@@ -4689,19 +4690,19 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 150b82a29810ba54482af2bd815fb248, type: 2}
-  - {fileID: 2100000, guid: 77a91138bc8136a4d965ca1a2fae034c, type: 2}
-  - {fileID: 2100000, guid: 150b82a29810ba54482af2bd815fb248, type: 2}
-  - {fileID: 2100000, guid: bc75e79b19d25f5468141e7dd9828b9d, type: 2}
-  - {fileID: 2100000, guid: 77a91138bc8136a4d965ca1a2fae034c, type: 2}
-  - {fileID: 2100000, guid: ee976e16d400469438b5345a7820123a, type: 2}
-  - {fileID: 2100000, guid: 150b82a29810ba54482af2bd815fb248, type: 2}
-  - {fileID: 2100000, guid: e81e6b75c76d304429dae12802c579d3, type: 2}
-  - {fileID: 2100000, guid: 150b82a29810ba54482af2bd815fb248, type: 2}
-  - {fileID: 2100000, guid: 77a91138bc8136a4d965ca1a2fae034c, type: 2}
-  - {fileID: 2100000, guid: bc75e79b19d25f5468141e7dd9828b9d, type: 2}
-  - {fileID: 2100000, guid: 77a91138bc8136a4d965ca1a2fae034c, type: 2}
-  - {fileID: 2100000, guid: bc75e79b19d25f5468141e7dd9828b9d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4734,7 +4735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: b1351249af96dd848a869310803cd193, type: 2}
+  skeletonDataAsset: {fileID: 0}
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
@@ -7402,7 +7403,7 @@ GameObject:
   - component: {fileID: 6934128605124706063}
   m_Layer: 13
   m_Name: Upperskull
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7596,7 +7597,7 @@ MonoBehaviour:
   - {fileID: 7637428945870016927}
   - {fileID: 6934128605124706063}
   - {fileID: 8935140605182867483}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
 --- !u!114 &1951262630457998169
 MonoBehaviour:
@@ -8894,7 +8895,7 @@ GameObject:
   - component: {fileID: 7114048776080542392}
   m_Layer: 13
   m_Name: bone
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9942,7 +9943,7 @@ GameObject:
   - component: {fileID: 8935140605182867483}
   m_Layer: 13
   m_Name: ColliderDamage
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9981,6 +9982,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!58 &8935140605182867483
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -11437,7 +11439,7 @@ GameObject:
   - component: {fileID: 7637428945870016927}
   m_Layer: 13
   m_Name: bone4
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 2800000, guid: 97a43f11e00735147a9dc3dff6d68191, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

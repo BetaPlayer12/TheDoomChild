@@ -1,6 +1,4 @@
-﻿using DChild.Gameplay.Characters.Players.Modules;
-using DChild.Gameplay.Combat;
-using Holysoft.Event;
+﻿using Boo.Lang;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using System;
@@ -32,28 +30,93 @@ namespace DChild.Gameplay.UI
 
         [SerializeField]
         private ModeShiftInfo m_shadowMode;
+        [SerializeField]
+        private ModeShiftInfo m_rageMode;
 
+        private List<ModeShiftInfo> m_activeModes;
         private ModeShiftInfo m_currentMode;
         private AnimationReferenceAsset m_currentIdleMode;
         private SkeletonGraphic m_animation;
-        private CharacterState m_state;
 
-        private void OnPlayerDamaged(object sender, Damageable.DamageEventArgs eventArgs)
+        public void ExecuteFlinch()
         {
-            ChangeToAnimation(m_flinch, m_normalIdle);
+            ChangeToAnimation(m_flinch, m_currentIdleMode);
         }
 
-        private void OnShadowMorphEnd(object sender, EventActionArgs eventArgs)
+        public void EndShadowMorph()
         {
-            ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
+            EndMode(m_shadowMode);
+            //m_currentIdleMode = m_normalIdle;
+            //ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
+        }
+
+        public void ExecuteShadowMorph(bool executeAnimation = true)
+        {
+            if (executeAnimation)
+            {
+                ChangeToAnimation(m_shadowMode.startAnimation, m_shadowMode.loopAnimation);
+                m_currentMode = m_shadowMode;
+                m_currentIdleMode = m_currentMode.loopAnimation;
+            }
+            RecordToList(m_shadowMode);
+        }
+
+        public void EndRage()
+        {
+            EndMode(m_rageMode);
+            //m_currentIdleMode = m_normalIdle;
+            //ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
+        }
+
+        public void ExecuteRage(bool executeAnimation = true)
+        {
+            if (executeAnimation)
+            {
+                ChangeToAnimation(m_rageMode.startAnimation, m_rageMode.loopAnimation);
+                m_currentMode = m_rageMode;
+                m_currentIdleMode = m_currentMode.loopAnimation;
+            }
+            RecordToList(m_rageMode);
+        }
+
+        public void EndArmor()
+        {
+        }
+
+        public void ExecuteArmor()
+        {
+        }
+
+        private void EndMode(ModeShiftInfo mode)
+        {
+            if (m_currentMode == mode)
+            {
+                m_activeModes.RemoveAt(m_activeModes.Count - 1);
+                if (m_activeModes.Count == 0)
+                {
+                    m_currentIdleMode = m_normalIdle;
+                    ChangeToAnimation(m_currentMode.endAnimation, m_currentIdleMode);
+                    m_currentMode = null;
+                }
+                else
+                {
+                    var nextMode = m_activeModes[m_activeModes.Count - 1];
+                    ChangeToAnimation(m_currentMode.endAnimation, nextMode.loopAnimation);
+                    m_currentMode = nextMode;
+                    m_currentIdleMode = nextMode.loopAnimation;
+                }
+            }
+            else
+            {
+                m_activeModes.Remove(mode);
+            }
+        }
+
+        public void ExecuteIdle()
+        {
             m_currentIdleMode = m_normalIdle;
-        }
-
-        private void OnShadowMorphExecuted(object sender, EventActionArgs eventArgs)
-        {
-            ChangeToAnimation(m_shadowMode.startAnimation, m_shadowMode.loopAnimation);
-            m_currentMode = m_shadowMode;
-            m_currentIdleMode = m_currentMode.loopAnimation;
+            var idleTrack = m_animation.AnimationState.SetAnimation(0, m_currentIdleMode, true);
+            idleTrack.MixDuration = 0f;
         }
 
         private void ChangeToAnimation(AnimationReferenceAsset start, AnimationReferenceAsset loop)
@@ -62,20 +125,19 @@ namespace DChild.Gameplay.UI
             m_animation.AnimationState.AddAnimation(0, loop, true, 0);
         }
 
-        private void Start()
+        private void RecordToList(ModeShiftInfo mode)
+        {
+            if (m_activeModes.Contains(mode))
+            {
+                m_activeModes.Remove(mode);
+            }
+                m_activeModes.Add(mode);
+        }
+
+        private void Awake()
         {
             m_animation = GetComponent<SkeletonGraphic>();
-
-            var player = GameplaySystem.playerManager.player;
-            m_state = player.state;
-            player.damageableModule.DamageTaken += OnPlayerDamaged;
-
-            var shadowMorph = player.GetComponent<ShadowMorph>();
-            shadowMorph.ExecuteShadowMorph += OnShadowMorphExecuted;
-            shadowMorph.EndShadowMorphExecution += OnShadowMorphEnd;
-
-            m_currentIdleMode = m_normalIdle;
-            m_animation.AnimationState.SetAnimation(0, m_currentIdleMode, true);
+            m_activeModes = new List<ModeShiftInfo>();
         }
     }
 }
