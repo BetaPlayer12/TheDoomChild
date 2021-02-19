@@ -35,21 +35,21 @@ namespace DChild.Serialization
                 }
             }
 
-            public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas,bool createSeparateCopy)
+            public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas, bool createSeparateCopy)
             {
                 if (createSeparateCopy)
                 {
                     m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
                     foreach (var ID in savedDatas.Keys)
                     {
-                        m_savedDatas.Add(ID,savedDatas[ID].ProduceCopy());
+                        m_savedDatas.Add(ID, savedDatas[ID].ProduceCopy());
                     }
                 }
                 else
                 {
                     m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas, new SerializeID.EqualityComparer());
                 }
-                
+
             }
 
             public void SetData(SerializeID ID, ISaveData data)
@@ -65,7 +65,7 @@ namespace DChild.Serialization
             }
 
             public ISaveData GetData(SerializeID ID) => m_savedDatas.ContainsKey(ID) ? m_savedDatas[ID] : null;
-            ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas,true);
+            ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas, true);
 
 #if UNITY_EDITOR
             public Dictionary<SerializeID, ISaveData> savedDatas => m_savedDatas;
@@ -146,7 +146,7 @@ namespace DChild.Serialization
                 {
                     throw new Exception($"Error Occured In {m_cacheComponentSerializer.gameObject.name} \n {e.Message}");
                 }
-               yield return null;
+                yield return null;
             }
         }
 
@@ -162,7 +162,11 @@ namespace DChild.Serialization
 
         private void Start()
         {
-            FindObjectOfType<CinemachineBrain>().enabled = true;
+            var cinemachineBrain = FindObjectOfType<CinemachineBrain>();
+            if (cinemachineBrain != null)
+            {
+                cinemachineBrain.enabled = true;
+            }
 
             var proposedData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
 #if UNITY_EDITOR
@@ -353,7 +357,7 @@ namespace DChild.Serialization
                         var save = editorData.m_componenetDatas[i];
                         dictionary.Add(save.m_serializer.ID, save.m_saveData);
                     }
-                    return new ZoneData(dictionary,false);
+                    return new ZoneData(dictionary, false);
                 }
             }
         }

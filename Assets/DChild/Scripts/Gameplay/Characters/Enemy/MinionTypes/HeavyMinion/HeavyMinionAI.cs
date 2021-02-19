@@ -25,23 +25,20 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_walk = new MovementInfo();
             public MovementInfo walk => m_walk;
-            [SerializeField]
-            private MovementInfo m_run = new MovementInfo();
-            public MovementInfo run => m_run;
 
             //Attack Behaviours
-            [SerializeField, TabGroup("Attack")]
-            private SimpleAttackInfo m_attackStart = new SimpleAttackInfo();
-            public SimpleAttackInfo attackStart => m_attackStart;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
-            private string m_attackLoop;
-            public string attackLoop => m_attackLoop;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
-            private string m_attackEnd;
-            public string attackEnd => m_attackEnd;
-            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
-            private string m_attackAnticipation;
-            public string attackAnticipation => m_attackAnticipation;
+            [SerializeField, TabGroup("Tackle")]
+            private SimpleAttackInfo m_attackTackle = new SimpleAttackInfo();
+            public SimpleAttackInfo attackTackle => m_attackTackle;
+            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Tackle")]
+            private string m_attackTackleAnticipationAnimation;
+            public string attackTackleAnticipationAnimation => m_attackTackleAnticipationAnimation;
+            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Tackle")]
+            private string m_attackTackleChargeAnimation;
+            public string attackTackleChargeAnimation => m_attackTackleChargeAnimation;
+            [SerializeField, TabGroup("Melee")]
+            private SimpleAttackInfo m_attackMelee = new SimpleAttackInfo();
+            public SimpleAttackInfo attackMelee => m_attackMelee;
             [SerializeField, MinValue(0)]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -71,8 +68,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
 #if UNITY_EDITOR
                 m_walk.SetData(m_skeletonDataAsset);
-                m_run.SetData(m_skeletonDataAsset);
-                m_attackStart.SetData(m_skeletonDataAsset);
+                m_attackTackle.SetData(m_skeletonDataAsset);
+                m_attackMelee.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -91,7 +88,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum Attack
         {
-            Attack,
+            AttackTackle,
+            AttackMelee,
             [HideInInspector]
             _COUNT
         }
@@ -132,6 +130,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
+        private Attack m_currentAttack;
+        private float m_currentAttackRange;
+
+        private bool[] m_attackUsed;
+        private List<Attack> m_attackCache;
+        private List<float> m_attackRangeCache;
 
         private State m_turnState;
 
@@ -145,6 +149,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_flinchHandle.m_autoFlinch = true;
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
@@ -232,19 +237,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            m_animation.animationState.TimeScale = .5f;
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                StopAllCoroutines();
+                m_animation.animationState.TimeScale = .5f;
+                m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.animationState.TimeScale = 1f;
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetEmptyAnimation(0, 0);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                m_animation.animationState.TimeScale = 1f;
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetEmptyAnimation(0, 0);
+
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
         }
 
         public override void ApplyData()
@@ -268,38 +279,90 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attackStart.range));
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AttackTackle, m_info.attackTackle.range), 
+                                    new AttackInfo<Attack>(Attack.AttackMelee, m_info.attackMelee.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(3f);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
 
-        private IEnumerator AttackRoutine()
+        private IEnumerator AttackTackleRoutine()
         {
-            m_animation.SetAnimation(0, m_info.attackStart.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStart.animation);
-            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
-            m_animation.SetAnimation(0, m_info.attackLoop, true);
-            float countdown = 0;
-            while (countdown < 1.5f /*|| !m_wallSensor.isDetecting*/)
-            {
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.run.speed * 2.5f);
-                countdown += Time.deltaTime;
-                yield return null;
-            }
-            m_hitbox.SetInvulnerability(Invulnerability.None);
-            m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.attackEnd, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEnd);
+            m_animation.SetAnimation(0, m_info.attackTackleAnticipationAnimation, false);
+            m_flinchHandle.m_autoFlinch = true;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackleAnticipationAnimation);
+            m_animation.SetAnimation(0, m_info.attackTackleChargeAnimation, true);
+            yield return new WaitForSeconds(1.5f);
+            m_flinchHandle.m_autoFlinch = false;
+            m_animation.SetAnimation(0, m_info.attackTackle.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackle.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        private void ChooseAttack()
+        {
+            if (!m_attackDecider.hasDecidedOnAttack)
+            {
+                IsAllAttackComplete();
+                for (int i = 0; i < m_attackCache.Count; i++)
+                {
+                    m_attackDecider.DecideOnAttack();
+                    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
+                    {
+                        m_attackUsed[i] = true;
+                        m_currentAttack = m_attackCache[i];
+                        m_currentAttackRange = m_attackRangeCache[i];
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void IsAllAttackComplete()
+        {
+            for (int i = 0; i < m_attackUsed.Length; ++i)
+            {
+                if (!m_attackUsed[i])
+                {
+                    return;
+                }
+            }
+            for (int i = 0; i < m_attackUsed.Length; ++i)
+            {
+                m_attackUsed[i] = false;
+            }
+        }
+
+        void AddToAttackCache(params Attack[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackCache.Add(list[i]);
+            }
+        }
+
+        void AddToRangeCache(params float[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackRangeCache.Add(list[i]);
+            }
+        }
+
+        void UpdateRangeCache(params float[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackRangeCache[i] = list[i];
+            }
         }
 
         protected override void Start()
@@ -320,6 +383,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
+
+            m_attackCache = new List<Attack>();
+            AddToAttackCache(Attack.AttackTackle, Attack.AttackMelee);
+            m_attackRangeCache = new List<float>();
+            AddToRangeCache(m_info.attackTackle.range, m_info.attackMelee.range);
+            m_attackUsed = new bool[m_attackCache.Count];
         }
 
 
@@ -367,23 +436,32 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     if (IsFacingTarget())
                     {
-                        if (IsTargetInRange(m_info.attackStart.range) && !m_wallSensor.allRaysDetecting)
+                        if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting)
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
 
-                            StartCoroutine(AttackRoutine());
-
+                            switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
+                            {
+                                case Attack.AttackTackle:
+                                    m_animation.EnableRootMotion(true, false);
+                                    //m_attackHandle.ExecuteAttack(m_info.attackTackle.animation, m_info.idleAnimation);
+                                    StartCoroutine(AttackTackleRoutine());
+                                    break;
+                                case Attack.AttackMelee:
+                                    m_animation.EnableRootMotion(true, false);
+                                    m_attackHandle.ExecuteAttack(m_info.attackMelee.animation, m_info.idleAnimation);
+                                    break;
+                            }
                             m_attackDecider.hasDecidedOnAttack = false;
                         }
                         else
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                             {
-                                var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                 m_animation.EnableRootMotion(false, false);
-                                m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
-                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.run.speed : m_info.walk.speed);
+                                m_animation.SetAnimation(0, m_info.walk.animation, true);
+                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.walk.speed);
                             }
                             else
                             {
@@ -425,10 +503,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
-                        m_attackDecider.hasDecidedOnAttack = true;
+                        m_flinchHandle.m_autoFlinch = false;
+                        m_attackDecider.hasDecidedOnAttack = false;
+                        ChooseAttack();
                         if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                         {
-                            m_attackDecider.hasDecidedOnAttack = false;
                             m_movement.Stop();
                             m_stateHandle.SetState(State.Attacking);
                         }
