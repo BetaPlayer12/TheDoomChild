@@ -39,6 +39,10 @@ namespace DChild.Gameplay
         {
             GameplaySystem.playerManager.player.damageableModule.SetHitboxActive(value);
         }
+
+        public void ShowDialogue(bool value)
+        {
+            GameEventMessage.SendEvent(value ? "Dialogue Start" : "Dialogue End");
+        }
     }
 }
-  

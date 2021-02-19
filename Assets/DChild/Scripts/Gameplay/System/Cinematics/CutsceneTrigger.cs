@@ -7,6 +7,7 @@
 
 using System;
 using DChild.Gameplay.Characters.Players;
+using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Serialization;
 using Holysoft.Event;
 using PlayerNew;
@@ -47,7 +48,7 @@ namespace DChild.Gameplay.Cinematics
         private Collider2D m_collider;
         private PlayerControlledObject m_controlledObject;
         private Animator m_animator;
-        private StateManager m_collisionState;
+        private CharacterState m_collisionState;
         private Scene m_originalScene;
 
         private bool m_isTriggered;
@@ -84,7 +85,7 @@ namespace DChild.Gameplay.Cinematics
             m_controlledObject = controlledObject;
             m_originalScene = m_controlledObject.gameObject.scene;
             m_controlledObject.transform.parent = m_cutscene.transform;
-            m_collisionState = m_controlledObject.GetComponentInChildren<StateManager>();
+            m_collisionState = m_controlledObject.owner.state;
             m_animator = m_controlledObject.GetComponentInChildren<Animator>();
             GameplaySystem.playerManager.OverrideCharacterControls();
 

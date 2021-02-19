@@ -25,7 +25,7 @@ namespace DChild.Gameplay
         {
             m_border.sprite = skill.border;
             m_icon.sprite = skill.icon;
-            m_skillName.text = skill.name;
+            m_skillName.text = skill.skillName;
             m_description.text = skill.description;
         }
 

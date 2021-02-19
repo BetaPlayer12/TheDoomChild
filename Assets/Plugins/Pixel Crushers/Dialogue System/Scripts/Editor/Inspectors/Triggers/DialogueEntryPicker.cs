@@ -42,6 +42,11 @@ namespace PixelCrushers.DialogueSystem
             return idToIndex.ContainsKey(id) ? idToIndex[id] : -1;
         }
 
+        public string GetDialogue(int id)
+        {
+            return entryTexts[GetIndex(id)];
+        }
+
         public int Draw(Rect rect, string label, int id)
         {
             return GetID(EditorGUI.Popup(rect, label, GetIndex(id), entryTexts));
