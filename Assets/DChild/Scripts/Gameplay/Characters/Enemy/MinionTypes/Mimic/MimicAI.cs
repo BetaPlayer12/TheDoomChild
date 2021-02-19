@@ -145,6 +145,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             //m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
@@ -244,6 +245,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("DO THE RAWR");
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack.animation)
             {
+                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                 StopAllCoroutines();
                 m_animation.SetAnimation(0, m_info.idleAnimation, false);
                 StartCoroutine(FlinchRoutine());
@@ -256,6 +258,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -287,7 +290,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            yield return new WaitForSeconds(1f);
             m_animation.SetAnimation(0, m_info.immerseAnimation, false);
             yield return new WaitForSeconds(.25f);
             m_hitbox.gameObject.SetActive(true);
@@ -303,6 +305,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             //m_hitbox.gameObject.SetActive(true);
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -343,17 +346,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
-                    if (IsFacingTarget())
-                    {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(DetectRoutine());
-                    }
-                    else
-                    {
-                        m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
-                    }
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    StartCoroutine(DetectRoutine());
                     break;
 
                 case State.Idle:
@@ -435,6 +429,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
+                                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -444,6 +439,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.EnableRootMotion(true, false);
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
+                                    GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
                                 }
                                 else
@@ -451,6 +447,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_movement.Stop();
                                     if (m_animation.animationState.GetCurrent(0).IsComplete)
                                     {
+                                        GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                     }
                                 }

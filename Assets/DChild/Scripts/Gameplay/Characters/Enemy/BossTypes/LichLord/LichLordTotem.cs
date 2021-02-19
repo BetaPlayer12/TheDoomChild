@@ -56,7 +56,7 @@ public class LichLordTotem : MonoBehaviour
     {
         if (collision)
         {
-            collision.GetComponentInParent<IsolatedObject>().Slower(.5f);
+            collision.GetComponentInParent<IsolatedObject>().Slower(.75f);
         }
     }
 
