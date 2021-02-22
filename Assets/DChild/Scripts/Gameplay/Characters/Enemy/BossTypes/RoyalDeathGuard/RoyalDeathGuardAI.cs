@@ -210,12 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
-
-        [SerializeField, TabGroup("HurtBoxes")]
-        private Collider2D m_spikeBB;
-
-        [SerializeField, TabGroup("Effects")]
-        private ParticleFX m_deathFX;
+        
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_slashGroundFX;
         [SerializeField, TabGroup("Effects")]
@@ -424,7 +419,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_scytheSpinFX.Stop();
             //m_scytheSpinFX.gameObject.SetActive(false); //m_scytheSpinFX.GetComponent<ParticleSystem>().Stop();
             //yield return new WaitForSeconds(1.3f);
-            //m_spikeBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack3.animation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -441,7 +435,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.AddAnimation(0, m_info.attack4bAnimation, true, 0)/*.MixDuration = 1*/;
             m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
             //yield return new WaitForSeconds(1.3f);
-            //m_spikeBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack4bAnimation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
