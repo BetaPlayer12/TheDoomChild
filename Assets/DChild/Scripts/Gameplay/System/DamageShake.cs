@@ -1,4 +1,6 @@
-﻿using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
 using DChild.Gameplay.Environment.Interractables;
 using Holysoft.Event;
 using System.Collections;
@@ -7,33 +9,33 @@ using UnityEngine;
 
 public class DamageShake : MonoBehaviour
 {
-    
-    Vector2 startingPos;
+    [SerializeField]
+    private float m_radiusOffset = 1;
+    [SerializeField]
+    private float m_duration = 1f;
 
+    private Vector2 m_startingPos;
     private IHitToInteract m_interractable;
-  
-   
+
     private void Awake()
     {
         m_interractable = GetComponent<IHitToInteract>();
         m_interractable.OnHit += OnHit;
-        startingPos.x = transform.position.x;
-        startingPos.y = transform.position.y;
+        m_startingPos.x = transform.position.x;
+        m_startingPos.y = transform.position.y;
     }
 
     private void OnHit(object sender, HitDirectionEventArgs eventArgs)
     {
-        StartCoroutine(Shake());
+        StopAllCoroutines();
+        StartCoroutine(Shake(eventArgs.direction));
     }
-    IEnumerator Shake()
+    IEnumerator Shake(HorizontalDirection direction)
     {
-        yield return new WaitForSeconds(0);
-        float timePassed = 0;
-        while (timePassed < 1)
-        {
-            timePassed += Time.deltaTime;
-            transform.position = new Vector2(startingPos.x, startingPos.y) + Random.insideUnitCircle * 1;
-            yield return null;
-        }
+        var offset = Random.insideUnitCircle;
+        offset.x = 1 * (int)direction;
+        transform.position = m_startingPos + offset * m_radiusOffset;
+        yield return new WaitForSeconds(m_duration);
+        transform.position = m_startingPos;
     }
 }
