@@ -44,6 +44,8 @@ namespace DChild.Gameplay.Cinematics
 
         [SerializeField]
         private PlayableDirector m_cutscene;
+        [SerializeField]
+        private PlayableAsset m_cinematic;
 
         private Collider2D m_collider;
         private PlayerControlledObject m_controlledObject;
@@ -86,12 +88,20 @@ namespace DChild.Gameplay.Cinematics
             m_originalScene = m_controlledObject.gameObject.scene;
             m_controlledObject.transform.parent = m_cutscene.transform;
             m_collisionState = m_controlledObject.owner.state;
-            m_animator = m_controlledObject.GetComponentInChildren<Animator>();
+            var rigidBody = controlledObject.GetComponent<Rigidbody2D>();
+            var velocity = rigidBody.velocity;
+            velocity.x = 0;
             GameplaySystem.playerManager.OverrideCharacterControls();
+            rigidBody.velocity = velocity;
+            m_animator = m_controlledObject.GetComponentInChildren<Animator>();
 
             if (m_collisionState.isGrounded)
             {
                 m_animator.enabled = false;
+                if (m_cinematic != null)
+                {
+                    m_cutscene.playableAsset = m_cinematic;
+                }
                 m_cutscene.Play();
             }
             else
@@ -133,6 +143,10 @@ namespace DChild.Gameplay.Cinematics
             if (m_collisionState.isGrounded)
             {
                 m_animator.enabled = false;
+                if (m_cinematic != null)
+                {
+                    m_cutscene.playableAsset = m_cinematic;
+                }
                 m_cutscene.Play();
                 enabled = false;
             }
@@ -148,8 +162,6 @@ namespace DChild.Gameplay.Cinematics
                 }
             }
         }
-
-
 
 #if UNITY_EDITOR
         [Button]
