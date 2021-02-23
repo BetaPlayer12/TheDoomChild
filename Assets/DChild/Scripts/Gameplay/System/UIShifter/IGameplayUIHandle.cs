@@ -21,6 +21,9 @@ namespace DChild.Gameplay.Systems
         void PromptPrimarySkillNotification();
         void PromptKeystoneFragmentNotification();
         void PromptBestiaryNotification();
+
+        void PromptJournalUpdateNotification(float duration);
+
         void ShowQuickItem(bool willshow);
         void ShowBossHealth(bool willshow);
         void RevealBossName();
