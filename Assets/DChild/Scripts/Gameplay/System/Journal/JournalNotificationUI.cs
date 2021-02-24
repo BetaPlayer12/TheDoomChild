@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DChild.Gameplay.System.Journal
+namespace DChild.Gameplay.Systems.Journal
 {
     public class JournalNotificationUI : MonoBehaviour
     {

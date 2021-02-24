@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DChild.Gameplay.System.Journal
+namespace DChild.Gameplay.Systems.Journal
 {
     public class JournalData : MonoBehaviour
     {
