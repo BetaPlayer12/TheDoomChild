@@ -177,11 +177,16 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        public void PromptJournalUpdateNotification(float duration)
+        public void ShowJournalNotificationPrompt(float duration)
         {
             GameEventMessage.SendEvent("Hide JournalUpdate");
             StopCoroutine("PromptJournalUpdateRoutine");
             StartCoroutine(PromptJournalUpdateRoutine(duration));
+        }
+
+        public void PromptJournalUpdateNotification()
+        {
+            GameEventMessage.SendEvent("Show JournalInfo");
         }
 
         private IEnumerator PromptJournalUpdateRoutine(float duration)
@@ -190,5 +195,7 @@ namespace DChild.Gameplay.Systems
             yield return new WaitForSeconds(duration);
             GameEventMessage.SendEvent("Hide JournalUpdate");
         }
+
+
     }
 }

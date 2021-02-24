@@ -1,4 +1,6 @@
 ﻿using Doozy.Engine;
+using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
@@ -12,7 +14,8 @@ namespace DChild.Gameplay.Systems
 
 
         private bool m_enableInput;
-        
+        private bool m_inputOverridden;
+
 
         public void Disable()
         {
@@ -22,6 +25,19 @@ namespace DChild.Gameplay.Systems
         public void Enable()
         {
             m_enableInput = true;
+        }
+
+        public void OverrideNewInfoNotif(float duration)
+        {
+            StopAllCoroutines();
+            StartCoroutine(OverrideStoreOpen(duration));
+        }
+
+        private IEnumerator OverrideStoreOpen(float duration)
+        {
+            m_inputOverridden = true;
+            yield return new WaitForSeconds(duration);
+            m_inputOverridden = false;
         }
 
         private void Awake()
@@ -36,13 +52,29 @@ namespace DChild.Gameplay.Systems
                 GameplaySystem.PauseGame();
                 GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
             }
-            else if(m_enableInput == true)
+            else if (m_enableInput == true)
             {
                 if (Input.GetKeyDown(m_storeOpen))
                 {
-                    GameplaySystem.gamplayUIHandle.OpenStorePage();
+                    if (m_inputOverridden)
+                    {
+                        GameplaySystem.gamplayUIHandle.PromptJournalUpdateNotification();
+                    }
+                    else
+                    {
+                        GameplaySystem.gamplayUIHandle.OpenStorePage();
+                    }
                 }
             }
         }
+
+#if UNITY_EDITOR
+        [Button,HideInEditorMode]
+        private void SimulateOverride()
+        {
+            GameplaySystem.gamplayUIHandle.ShowJournalNotificationPrompt(3);
+            OverrideNewInfoNotif(3);
+        }
+#endif
     }
 }

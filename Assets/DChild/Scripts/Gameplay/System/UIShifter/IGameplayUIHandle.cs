@@ -22,7 +22,8 @@ namespace DChild.Gameplay.Systems
         void PromptKeystoneFragmentNotification();
         void PromptBestiaryNotification();
 
-        void PromptJournalUpdateNotification(float duration);
+        void ShowJournalNotificationPrompt(float duration);
+        void PromptJournalUpdateNotification();
 
         void ShowQuickItem(bool willshow);
         void ShowBossHealth(bool willshow);
