@@ -7,6 +7,7 @@ namespace DChild.Gameplay.Systems.Journal
 {
     public class JournalNotificationUI : MonoBehaviour
     {
+        [SerializeField]
         private Image m_notifinfo;
 
         private void UpdateUI(JournalData journaldata)

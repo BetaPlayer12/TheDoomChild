@@ -4,9 +4,12 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Systems.Journal
 {
-    public class JournalData : MonoBehaviour
+    [CreateAssetMenu(fileName ="JournalData",menuName ="DChild/Database/Journal Data")]
+    public class JournalData : ScriptableObject
     {
+        [SerializeField]
         private int m_id;
+        [SerializeField]
         private Sprite m_notification;
     }
 }
