@@ -6,6 +6,7 @@ using DChild.Gameplay.Inventories;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trading;
 using Doozy.Engine;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
@@ -175,5 +176,26 @@ namespace DChild.Gameplay.Systems
                 GameEventMessage.SendEvent("Hide UI");
             }
         }
+
+        public void ShowJournalNotificationPrompt(float duration)
+        {
+            GameEventMessage.SendEvent("Hide JournalUpdate");
+            StopCoroutine("PromptJournalUpdateRoutine");
+            StartCoroutine(PromptJournalUpdateRoutine(duration));
+        }
+
+        public void PromptJournalUpdateNotification()
+        {
+            GameEventMessage.SendEvent("Show JournalInfo");
+        }
+
+        private IEnumerator PromptJournalUpdateRoutine(float duration)
+        {
+            GameEventMessage.SendEvent("Show JournalUpdate");
+            yield return new WaitForSeconds(duration);
+            GameEventMessage.SendEvent("Hide JournalUpdate");
+        }
+
+
     }
 }
