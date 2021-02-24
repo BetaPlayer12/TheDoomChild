@@ -168,14 +168,17 @@ namespace DChild.Gameplay.Inventories
         {
             m_currentIndex = 0;
             m_currentSlot = m_container.GetSlot(m_currentIndex);
-            m_currentItem = (ConsumableItemData)m_currentSlot.item;
-            m_container.ItemUpdate += OnItemUpdate;
-            m_hideUI = true;
-
-            if (HasItemsInQuickSlot())
+            if (m_currentSlot != null)
             {
-                GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
+                m_currentItem = (ConsumableItemData)m_currentSlot.item;
+                m_container.ItemUpdate += OnItemUpdate;
             }
+        }
+
+        private void Start()
+        {
+            m_hideUI = true;
+            GameplaySystem.gamplayUIHandle.ShowQuickItem(HasItemsInQuickSlot());
         }
     }
 }

@@ -1,15 +1,29 @@
 ﻿using Doozy.Engine;
 using PixelCrushers.DialogueSystem;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DChild.UI
 {
 
     public class DoozyUISubtitlePanel : StandardUISubtitlePanel
     {
+        private static List<Button> m_continueButtons = new List<Button>();
+        private static bool isActive = true;
+
+        public static void SetContinueButtonInteractibility(bool value)
+        {
+            isActive = value;
+            for (int i = 0; i < m_continueButtons.Count; i++)
+            {
+                m_continueButtons[i].interactable = value;
+            }
+        }
+
         public override void HideImmediate()
         {
-            GameEventMessage.SendEvent($"Dialogue Close");
+            //GameEventMessage.SendEvent($"Dialogue End");
         }
 
         public override void Open()
@@ -18,7 +32,7 @@ namespace DChild.UI
             panelState = PanelState.Opening;
             onOpen.Invoke();
 
-            GameEventMessage.SendEvent($"Dialogue Open");
+            //GameEventMessage.SendEvent($"Dialogue Start");
 
             // With quick panel changes, panel may not reach OnEnable/OnDisable before being reused.
             // Update panelStack here also to handle this case:
@@ -34,7 +48,7 @@ namespace DChild.UI
                 if (panelState == PanelState.Closed || panelState == PanelState.Closing) return;
                 panelState = PanelState.Closing;
                 onClose.Invoke();
-                //GameEventMessage.SendEvent($"Dialogue Close");
+                //GameEventMessage.SendEvent($"Dialogue End");
 
                 // Deselect ours:
                 if (UnityEngine.EventSystems.EventSystem.current != null && selectables.Contains(UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject))
@@ -44,6 +58,17 @@ namespace DChild.UI
             }
             ClearText();
             hasFocus = false;
+        }
+
+        private void Awake()
+        {
+            m_continueButtons.Add(continueButton);
+            continueButton.interactable = isActive;
+        }
+
+        private void OnDestroy()
+        {
+            m_continueButtons.Remove(continueButton);
         }
     }
 
