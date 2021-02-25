@@ -1,13 +1,11 @@
 ﻿using DChild.Gameplay.Characters;
 using DChild.Gameplay.Environment.Interractables;
 using Holysoft.Event;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace DChild.Gameplay.Systems
+namespace DChild.Gameplay.Combat
 {
-    public class ReactonHit : MonoBehaviour, IHitToInteract
+    public class ReactOnHit : MonoBehaviour, IHitToInteract
     {
         public Vector2 position => transform.position;
 

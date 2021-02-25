@@ -91,10 +91,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EndAim()
         {
-            //var simulatorHandle = GameplaySystem.simulationHandler;
-            //simulatorHandle.HideSimulation(simulatorHandle.GetTrajectorySimulator());
-            //m_animator.SetBool(m_skullThrowAnimationParameter, false);
-            //m_throwState.isAimingProjectile = false;
+            var simulatorHandle = GameplaySystem.simulationHandler;
+            simulatorHandle.HideSimulation(simulatorHandle.GetTrajectorySimulator());
+            m_animator.SetBool(m_skullThrowAnimationParameter, false);
+            m_throwState.isAimingProjectile = false;
         }
 
         private Vector2 GetStartingPosition()

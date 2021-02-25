@@ -44,6 +44,7 @@ namespace DChild.Gameplay.Narrative
         public void EndEvent()
         {
             m_isDone = true;
+            m_tutorialTriggerGroup.SetActive(false);
         }
 
         public void Load(ISaveData data)

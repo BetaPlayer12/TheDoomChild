@@ -88,6 +88,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whip?.AttackOver();
             m_whip?.ClearExecutedCollision();
             m_skullThrow?.AttackOver();
+
+            Debug.Log("FinishAttack");
         }
 
         public void EarthShakerPreLoop()

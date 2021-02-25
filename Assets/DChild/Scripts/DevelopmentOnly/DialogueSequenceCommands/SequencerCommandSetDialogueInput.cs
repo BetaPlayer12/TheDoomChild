@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using PixelCrushers.DialogueSystem;
+using DChild.UI;
 
 namespace PixelCrushers.DialogueSystem.SequencerCommands
 {
@@ -12,6 +13,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
         {
             var parameter = GetParameterAsBool(0);
             DialogueManager.SetDialogueSystemInput(parameter);
+            DoozyUISubtitlePanel.SetContinueButtonInteractibility(parameter);
             hasExecuted = true;
         }
 
