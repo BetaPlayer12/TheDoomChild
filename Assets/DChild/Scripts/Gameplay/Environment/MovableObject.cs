@@ -41,6 +41,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("Let Go")]
         private UnityEvent m_onLetGo;
 
+        private Rigidbody2D m_rigidbody;
         public event EventAction<EventActionArgs> BecameUnmovable;
 
         public bool isHeavy => m_isHeavy;
@@ -60,23 +61,20 @@ namespace DChild.Gameplay.Environment
             m_canBeMoved = value;
             if (value == false)
             {
-                Rigidbody2D rb = GetComponent<Rigidbody2D>();
-                rb.velocity = Vector2.zero;
+                m_rigidbody.velocity = Vector2.zero;
                 BecameUnmovable?.Invoke(this, EventActionArgs.Empty);
             }
         }
 
         public void SetGrabState(bool isGrabbed)
         {
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
             if (isGrabbed)
             {
                 m_onGrabbed?.Invoke();
             }
             else
             {
-                rb.velocity = Vector2.zero;
+                StopMovement();
                 m_onLetGo?.Invoke();
             }
         }
@@ -88,9 +86,17 @@ namespace DChild.Gameplay.Environment
 
         public void MoveObject(float direction, float moveForce)
         {
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            m_rigidbody.velocity = new Vector2(direction * moveForce, 0);
+        }
 
-            rb.velocity = new Vector2(direction * moveForce, 0);
+        public void StopMovement()
+        {
+            m_rigidbody.velocity = Vector2.zero;
+        }
+
+        private void Awake()
+        {
+            m_rigidbody = GetComponent<Rigidbody2D>();
         }
     }
 }
