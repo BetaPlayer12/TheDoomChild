@@ -49,13 +49,12 @@ namespace DChild.Gameplay.Environment
             {
                 if (m_cube == cube)
                 {
+                    m_isOccupied = true;
                     StateChange?.Invoke(this, EventActionArgs.Empty);
                     //Do Something;
                 }
             }
         }
-
-
 
         private void OnTriggerExit2D(Collider2D collision)
         {
