@@ -22,16 +22,13 @@ public class DropCube : MonoBehaviour
     public bool m_isDropping;
     [SerializeField]
     public bool dropped;
+    Collider m_Collider;
     [Button]
     public void Drop()
     {
-
-
         m_isDropping = true;
-
     }
 
-    Collider m_Collider;
 
     public void SetLerpAs(bool drop)
     {
@@ -74,7 +71,6 @@ public class DropCube : MonoBehaviour
         {
             if (dropped == false)
             {
-                
                 SetMoveValues(m_cube.localPosition, m_EndPosition);
                 m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_speed);
                 if (Mathf.Approximately(m_cube.localPosition.y, m_EndPosition.y) && Mathf.Approximately(m_cube.localPosition.x, m_EndPosition.x))
@@ -86,17 +82,15 @@ public class DropCube : MonoBehaviour
             {
                 SetMoveValues(m_cube.localPosition, m_StartPosition);
                 m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_speed);
-                if (Mathf.Approximately(m_cube.localPosition.y, m_StartPosition.y)&& Mathf.Approximately(m_cube.localPosition.x, m_StartPosition.x))
+                if (Mathf.Approximately(m_cube.localPosition.y, m_StartPosition.y) && Mathf.Approximately(m_cube.localPosition.x, m_StartPosition.x))
                 {
                     m_isDropping = false;
                     dropped = false;
                     m_cubecrusher.GetComponent<Collider2D>().enabled = false;
-                   
-                    
                 }
             }
 
         }
-       
+
     }
 }
