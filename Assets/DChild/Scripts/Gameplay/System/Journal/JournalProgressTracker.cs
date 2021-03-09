@@ -1,6 +1,7 @@
 ﻿using DChild.Serialization;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems.Journal
@@ -10,35 +11,32 @@ namespace DChild.Gameplay.Systems.Journal
         public struct SaveData : ISaveData
         {
             [SerializeField]
-            public int[] m_recordedJournalIDs;
-            public SaveData(int[] m_recordedJournalIDs)
+            private int[] m_recordedJournalIDs;
+
+            public SaveData(IReadOnlyCollection<int> m_recordedJournalIDs)
             {
-                this.m_recordedJournalIDs = m_recordedJournalIDs;
+                this.m_recordedJournalIDs = m_recordedJournalIDs.ToArray();
             }
+
+            public int[] recordedJournalIDs => m_recordedJournalIDs;
+
             ISaveData ISaveData.ProduceCopy() => new SaveData(m_recordedJournalIDs);
         }
         [SerializeField]
-        public int[] m_recordedJournalIDs;
-        [SerializeField]
         public JournalNotification m_notification;
-        public bool m_isrecorded;
+
+        private List<int> m_recordedJournalIDs;
 
         public void UpdateJournal(JournalData journaldata)
         {
-
-        }
-
-        public void IsNewProgress(JournalData journaldata)
-        {
-            if (m_isrecorded == true)
+            if (IsNewProgress(journaldata))
             {
-
-            }
-            else
-            {
-                m_isrecorded = true;
+                m_recordedJournalIDs.Add(journaldata.ID);
+                m_notification.UpdateNotification(journaldata);
             }
         }
+
+        public bool IsNewProgress(JournalData journaldata) => m_recordedJournalIDs.Contains(journaldata.ID) == false;
 
         public ISaveData Save()
         {
@@ -48,7 +46,15 @@ namespace DChild.Gameplay.Systems.Journal
         public void Load(ISaveData data)
         {
             var saveData = (SaveData)data;
-            m_recordedJournalIDs = saveData.m_recordedJournalIDs;
+            if (m_recordedJournalIDs == null)
+            {
+                m_recordedJournalIDs = new List<int>(saveData.recordedJournalIDs);
+            }
+            else
+            {
+                m_recordedJournalIDs.Clear();
+                m_recordedJournalIDs.AddRange(saveData.recordedJournalIDs);
+            }
         }
     }
 }
