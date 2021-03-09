@@ -29,6 +29,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_animator.SetBool(m_isPullingAnimationParameter, false);
             m_animator.SetBool(m_isPushingAnimationParameter, false);
+
+            if (m_movableObject != null)
+            {
+                m_movableObject.gameObject?.GetComponentInParent<MovableObject>().StopMovement();
+            }
         }
 
         public bool IsThereAMovableObject()
@@ -51,11 +56,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_movableObject.gameObject.GetComponentInParent<MovableObject>() != null)
                         {
-
                             isValid = true;
                         }
                         else
                         {
+                            m_movableObject = null;
+
                             return false;
                         }
 
@@ -89,7 +95,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (m_movableObject != null)
             {
-                m_movableObject.gameObject.GetComponentInParent<MovableObject>().SetGrabState(true);
+                m_movableObject.gameObject?.GetComponentInParent<MovableObject>().SetGrabState(true);
             }
         }
 
@@ -100,9 +106,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_isPullingAnimationParameter, false);
             m_animator.SetBool(m_isPushingAnimationParameter, false);
 
-            if(m_movableObject != null)
+            if (m_movableObject != null)
             {
-                m_movableObject.gameObject.GetComponentInParent<MovableObject>().SetGrabState(false);
+                m_movableObject.gameObject?.GetComponentInParent<MovableObject>().SetGrabState(false);
             }
         }
 

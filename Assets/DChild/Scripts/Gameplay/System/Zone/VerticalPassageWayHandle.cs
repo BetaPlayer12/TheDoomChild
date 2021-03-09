@@ -86,7 +86,9 @@ namespace DChild.Gameplay.Environment
 
                     forceFloatCoroutine = character.StartCoroutine(ForceMidAirFloatRoutine(characterPhysics));
                     break;
-
+                case TransitionType.PostExit:
+                    GameplaySystem.playerManager.StopCharacterControlOverride();
+                    break;
             }
         }
 
