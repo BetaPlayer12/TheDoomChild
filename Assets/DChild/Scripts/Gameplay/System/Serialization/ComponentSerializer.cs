@@ -14,12 +14,29 @@ namespace DChild.Serialization
         [InfoBox("This GameObject must be ACTIVE", InfoMessageType = InfoMessageType.Warning, VisibleIf = "@gameObject.activeSelf")]
         public SerializeID ID => m_id;
 
-        public ISaveData SaveData() => m_component.Save();
-        public void LoadData(ISaveData data) => m_component.Load(data);
+        public ISaveData SaveData()
+        {
+            ValidateInitialization();
+            return m_component.Save();
+        }
+
+        public void LoadData(ISaveData data)
+        {
+            ValidateInitialization();
+            m_component.Load(data);
+        }
 
         public void Initiatlize()
         {
             m_component = GetComponent<ISerializableComponent>();
+        }
+
+        private void ValidateInitialization()
+        {
+            if(m_component == null)
+            {
+                Initiatlize();
+            }
         }
 
 #if UNITY_EDITOR
