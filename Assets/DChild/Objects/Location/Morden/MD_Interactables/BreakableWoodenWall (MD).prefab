@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6553645201804394220}
   - component: {fileID: 8087851902140841007}
   - component: {fileID: 8579122607067329403}
-  - component: {fileID: 1951283467232640342}
+  - component: {fileID: 6244518602160519803}
   m_Layer: 11
   m_Name: Model
   m_TagString: Hitbox
@@ -109,7 +109,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.92, y: 5.03}
   m_EdgeRadius: 0
---- !u!114 &1951283467232640342
+--- !u!114 &6244518602160519803
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,15 +118,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5001079625528289936}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34b489c0ee0d08c42a6db5b55d62de1f, type: 3}
+  m_Script: {fileID: 11500000, guid: b44a73184fcaf434d882465cb3f84563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 8579122607067329403}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
-  m_viableTags:
-  - WallBreaker
+  m_mask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1001 &1587431032655236957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -142,7 +143,7 @@ PrefabInstance:
     - target: {fileID: 1823332508653810786, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
       propertyPath: m_Name
-      value: BreakableWoodenWall (COD)
+      value: BreakableWoodenWall (MD)
       objectReference: {fileID: 0}
     - target: {fileID: 3057636377595108563, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
