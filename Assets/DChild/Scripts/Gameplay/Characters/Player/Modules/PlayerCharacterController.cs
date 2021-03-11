@@ -434,14 +434,24 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else if (m_input.dashPressed)
                 {
-                    if (m_skills.IsModuleActive(PrimarySkill.Dash))
+                    if (m_state.isInShadowMode == false)
                     {
-                        m_wallStick?.Cancel();
-                        FlipCharacter();
-                        m_dash?.ResetDurationTimer();
-                        m_dash?.Execute();
-                        m_dash?.Reset();
+                        if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                        {
+                            m_wallStick?.Cancel();
+                            FlipCharacter();
+                            ExecuteDash();
+                        }
                     }
+
+                    //if (m_skills.IsModuleActive(PrimarySkill.Dash))
+                    //{
+                    //    m_wallStick?.Cancel();
+                    //    FlipCharacter();
+                    //    m_dash?.ResetDurationTimer();
+                    //    m_dash?.Execute();
+                    //    m_dash?.Reset();
+                    //}
                 }
                 else
                 {
@@ -1078,15 +1088,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (isGrabbing == false)
             {
-                m_movement?.Move(m_input.horizontalInput, true);
                 if (m_input.horizontalInput == 0)
                 {
                     m_idle?.Execute();
                 }
                 else
                 {
+                    Debug.Log("Cancel Idle");
                     m_idle?.Cancel();
                 }
+
+                m_movement?.Move(m_input.horizontalInput, true);
             }
             else
             {
