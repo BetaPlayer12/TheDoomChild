@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
 using DChild.Gameplay.Systems;
 using Doozy.Engine;
+using Doozy.Engine.Nody;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
@@ -42,6 +44,8 @@ namespace DChild.Gameplay.Inventories
 
         [ShowInInspector, ReadOnly]
         private int m_currentIndex;
+        [SerializeField]
+        private GraphController m_graph;
         private ItemSlot m_currentSlot;
         private ConsumableItemData m_currentItem;
         private bool m_hideUI;
@@ -164,6 +168,18 @@ namespace DChild.Gameplay.Inventories
             return m_container.HasItemCategory(ItemCategory.Consumable) || m_container.HasItemCategory(ItemCategory.Throwable);
         }
 
+        private IEnumerator DelayedInitialiationRoutine()
+        {
+            do
+            {
+                yield return null;
+            } while (m_graph.Initialized == false);
+            yield return null;
+            var hasQuickSlot = HasItemsInQuickSlot();
+            m_hideUI = hasQuickSlot == false;
+            GameplaySystem.gamplayUIHandle.ShowQuickItem(hasQuickSlot);
+        }
+
         private void Awake()
         {
             m_currentIndex = 0;
@@ -178,7 +194,8 @@ namespace DChild.Gameplay.Inventories
         private void Start()
         {
             m_hideUI = true;
-            GameplaySystem.gamplayUIHandle.ShowQuickItem(HasItemsInQuickSlot());
+            //This waits for the Nody Graph to initialize itself
+            StartCoroutine(DelayedInitialiationRoutine());
         }
     }
 }
