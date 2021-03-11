@@ -17,7 +17,9 @@ public class DropCube : MonoBehaviour
     private Vector2 m_start;
     private Vector2 m_destination;
     [SerializeField]
-    private float m_speed;
+    private float m_Fallspeed;
+    [SerializeField]
+    private float m_Returnspeed;
     [SerializeField]
     public bool m_isDropping;
     [SerializeField]
@@ -31,8 +33,22 @@ public class DropCube : MonoBehaviour
 
     }
 
-    Collider m_Collider;
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
 
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+        {
+            m_isDropping = false;
+            StartCoroutine(DelayCoroutine());
+            dropped = true;
+           
+        }
+    }
+    IEnumerator DelayCoroutine()
+    {
+        yield return new WaitForSeconds(2);
+        m_isDropping = true;
+    }
     public void SetLerpAs(bool drop)
     {
         if (drop)
@@ -53,6 +69,8 @@ public class DropCube : MonoBehaviour
     {
         m_cube.localPosition = Vector2.Lerp(m_start, m_destination, lerpValue);
     }
+   
+
 #if UNITY_EDITOR
 
 
@@ -76,7 +94,7 @@ public class DropCube : MonoBehaviour
             {
                 
                 SetMoveValues(m_cube.localPosition, m_EndPosition);
-                m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_speed);
+                m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_Fallspeed);
                 if (Mathf.Approximately(m_cube.localPosition.y, m_EndPosition.y) && Mathf.Approximately(m_cube.localPosition.x, m_EndPosition.x))
                 {
                     dropped = true;
@@ -85,7 +103,7 @@ public class DropCube : MonoBehaviour
             if (dropped == true)
             {
                 SetMoveValues(m_cube.localPosition, m_StartPosition);
-                m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_speed);
+                m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_Returnspeed);
                 if (Mathf.Approximately(m_cube.localPosition.y, m_StartPosition.y)&& Mathf.Approximately(m_cube.localPosition.x, m_StartPosition.x))
                 {
                     m_isDropping = false;

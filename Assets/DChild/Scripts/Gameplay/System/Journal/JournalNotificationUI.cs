@@ -10,9 +10,9 @@ namespace DChild.Gameplay.Systems.Journal
         [SerializeField]
         private Image m_notifinfo;
 
-        private void UpdateUI(JournalData journaldata)
+        public void UpdateUI(JournalData journaldata)
         {
-
+            m_notifinfo.sprite = journaldata.notification;
         }
     }
 }

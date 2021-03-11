@@ -70,6 +70,9 @@ namespace DChild.Gameplay.Cinematics
                 m_currentVCam = vCam;
                 m_leavePreviousCamAsNull = false;
             }
+#if UNITY_EDITOR
+            Debug.Log($"Camera Activated: {vCam.name}");
+#endif
             vCam.Activate();
             m_offsetHandle.ApplyOffset(vCam, m_currentLookAhead);
         }

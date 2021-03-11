@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -146,7 +146,7 @@ PrefabInstance:
     - target: {fileID: 4232424379244517138, guid: 13b5a6612a17c1e4ba3f7b654fb8e56b,
         type: 3}
       propertyPath: m_onState.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_IntArgument
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6102731768918147985, guid: 13b5a6612a17c1e4ba3f7b654fb8e56b,
         type: 3}
@@ -16725,7 +16725,7 @@ MonoBehaviour:
   m_ZDamping: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 100
+  m_CameraDistance: 66
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -23193,6 +23193,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 85917658}
     m_Modifications:
+    - target: {fileID: 6119480510109305079, guid: 998ab1a4ccd137c41ac33dcc21478a78,
+        type: 3}
+      propertyPath: m_toUnlock
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8113220063569852916, guid: 998ab1a4ccd137c41ac33dcc21478a78,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26309,7 +26314,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 60
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -27741,6 +27746,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_onState.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232424379244517138, guid: 13b5a6612a17c1e4ba3f7b654fb8e56b,
+        type: 3}
+      propertyPath: m_onState.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_IntArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6102731768918147985, guid: 13b5a6612a17c1e4ba3f7b654fb8e56b,
         type: 3}
@@ -30788,8 +30798,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55bacb1abe738174a91753e1fcf04d58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tilingSprite: {fileID: 21300000, guid: 3a81d2b7eb446194c8a467a9c97ac406, type: 3}
-  m_fromReference: {fileID: 1297976306}
 --- !u!1 &519580046
 GameObject:
   m_ObjectHideFlags: 0
@@ -35359,7 +35367,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &582471113
 Transform:
   m_ObjectHideFlags: 0
@@ -47934,9 +47942,29 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a131a9b665e43bc4ebc4719478312cf5, type: 2}
+      objectReference: {fileID: 2100000, guid: 2af99e08f239bf341891ecd4393b4c54, type: 2}
+    - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5abf92b6c9b2b294097a78cb0417e6d7, type: 2}
+    - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2af99e08f239bf341891ecd4393b4c54, type: 2}
+    - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
+        type: 3}
+      propertyPath: m_Materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5abf92b6c9b2b294097a78cb0417e6d7, type: 2}
     - target: {fileID: 7090695359494195661, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Mesh
@@ -48497,9 +48525,9 @@ GameObject:
   m_Component:
   - component: {fileID: 787191843}
   - component: {fileID: 787191842}
-  - component: {fileID: 787191841}
   - component: {fileID: 787191844}
   - component: {fileID: 787191845}
+  - component: {fileID: 787191841}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -48507,14 +48535,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &787191841
-AudioListener:
+--- !u!114 &787191841
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 787191840}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f99cecbefd328f74cb1134ca2f728657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &787191842
 Camera:
   m_ObjectHideFlags: 0
@@ -48540,7 +48572,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
+  field of view: 60
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
