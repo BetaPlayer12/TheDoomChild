@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Systems.Journal
 {
-    public class JournalProgressTracker : MonoBehaviour
+    public class JournalProgress : MonoBehaviour
     {
         public struct SaveData : ISaveData
         {
@@ -54,6 +54,14 @@ namespace DChild.Gameplay.Systems.Journal
             {
                 m_recordedJournalIDs.Clear();
                 m_recordedJournalIDs.AddRange(saveData.recordedJournalIDs);
+            }
+        }
+
+        private void Awake()
+        {
+            if (m_recordedJournalIDs == null)
+            {
+                m_recordedJournalIDs = new List<int>();
             }
         }
     }
