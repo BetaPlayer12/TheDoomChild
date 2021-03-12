@@ -17,6 +17,7 @@ using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
+using System.Linq;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -219,9 +220,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_lichLordArmTF;
         [SerializeField, TabGroup("Spawn Points")]
         private Collider2D m_randomSpawnCollider;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_projectilePoints;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_skeletalArmPoints;
+        [SerializeField, TabGroup("Spawn Points")]
+        private List<Transform> m_lichLordPortPoints;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
+
+        //TESTING
+        [SerializeField]
+        private GameObject m_lichLordPhaseThreeSequence;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -361,6 +372,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         yield return null;
                     }
+                    m_lichLordPhaseThreeSequence.SetActive(true);
                     break;
             }
             //if (m_phaseHandle.currentPhase == Phase.PhaseThree)
@@ -411,10 +423,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator GhostOrbAttackRoutine()
         {
             m_animation.SetAnimation(0, m_info.ghostOrbAttack.animation, false);
+            List<float> posDistance = new List<float>();
+            for (int i = 0; i < m_projectilePoints.Count; i++)
+            {
+                posDistance.Add(Vector2.Distance(m_targetInfo.position, m_projectilePoints[i].position));
+            }
+            m_projectilePoint.position = m_projectilePoints[posDistance.IndexOf(posDistance.Min())].position;
+            m_ghostOrbStartFX.transform.position = m_projectilePoint.position;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ghostOrbAttack.animation);
             var randomAttack = UnityEngine.Random.Range(0, 2);
             m_animation.SetAnimation(0, randomAttack == 1 ? m_info.idle1Animation : m_info.idle2Animation, false);
-            if (m_phaseHandle.currentPhase == Phase.PhaseTwo)
+            if (m_phaseHandle.currentPhase != Phase.PhaseOne)
             {
                 StartCoroutine(HollowFormRoutine());
             }
@@ -447,7 +466,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (m_sarcophagusCache[i] == null)
                             {
                                 var startXPos = m_randomSpawnCollider.bounds.center.x - (m_randomSpawnCollider.bounds.size.x / 2);
-                                var xIncrement = 35 * i;
+                                var xIncrement = 30 * i;
                                 var totem = Instantiate(m_info.totem, new Vector2(startXPos + xIncrement, GroundPosition().y), Quaternion.identity);
                                 m_sarcophagusCache[i] = totem;
                             }
@@ -503,9 +522,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 var pos = new Vector2(m_randomSpawnCollider.bounds.center.x, GroundPosition().y);
                 var spikePos = pos;
                 var increment = 10;
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 14; i++)
                 {
-                    if (i == 10)
+                    if (i == 7)
                     {
                         increment = -increment;
                         spikePos = pos;
@@ -559,6 +578,16 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var randomAttack = UnityEngine.Random.Range(0, 2);
             var skeletamArmPos = new Vector2(m_targetInfo.position.x + (randomAttack == 1 ? 20 : -20), GroundPosition().y);
+            if (m_phaseHandle.currentPhase == Phase.PhaseThree)
+            {
+                Debug.Log("Phase3 Skeletal Arm Points CHECK");
+                List<float> posDistance = new List<float>();
+                for (int i = 0; i < m_skeletalArmPoints.Count; i++)
+                {
+                    posDistance.Add(Vector2.Distance(m_targetInfo.position, m_skeletalArmPoints[i].position));
+                }
+                skeletamArmPos = m_skeletalArmPoints[posDistance.IndexOf(posDistance.Min())].position;
+            }
             m_lichLordArmTF.position = skeletamArmPos;
             m_lichLordArmTF.GetComponentInChildren<SkeletonAnimation>().state.SetAnimation(0, "Phase_1_Arm_Attack", false);
             m_lichLordArmTF.localScale = new Vector3(m_targetInfo.position.x > m_lichLordArmTF.position.x ? 1 : -1, 1, 1);
@@ -695,7 +724,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void MapCurse()
         {
             m_mapCurseFX.Play();
-            var totem = Instantiate(m_info.curseObject, new Vector2(m_randomSpawnCollider.bounds.center.x, GroundPosition().y), Quaternion.identity);
+            //var totem = Instantiate(m_info.curseObject, new Vector2(m_randomSpawnCollider.bounds.center.x, GroundPosition().y), Quaternion.identity);
         }
 
         private IEnumerator MapCurseRoutine()
@@ -737,7 +766,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.vanishAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
-            transform.position = new Vector2(RandomTeleportPoint(transform.position).x, transform.position.y);
+            if (m_phaseHandle.currentPhase == Phase.PhaseThree)
+            {
+                int newPosIndex = UnityEngine.Random.Range(0, m_lichLordPortPoints.Count);
+                while (transform.position == m_lichLordPortPoints[newPosIndex].position)
+                {
+                    newPosIndex = UnityEngine.Random.Range(0, m_lichLordPortPoints.Count);
+                }
+                transform.position = m_lichLordPortPoints[newPosIndex].position;
+            }
+            else
+            {
+                transform.position = new Vector2(RandomTeleportPoint(transform.position).x, transform.position.y);
+            }
             if (!IsFacingTarget())
             {
                 CustomTurn();
@@ -753,7 +794,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector3 RandomTeleportPoint(Vector3 transformPos)
         {
             Vector3 randomPos = transformPos;
-            while (Vector2.Distance(transformPos, randomPos) <= 75f)
+            while (Vector2.Distance(transformPos, randomPos) <= UnityEngine.Random.Range(25f, 50f))
             {
                 randomPos = m_randomSpawnCollider.bounds.center + new Vector3(
                (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.x,
@@ -891,6 +932,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_spikeCache = new List<GameObject>();
             m_attackCache = new List<Pattern>();
+            //m_projectilePoints = new List<Transform>();
+            //m_skeletalArmPoints = new List<Transform>();
             AddToAttackCache(Pattern.AttackPattern1, Pattern.AttackPattern2/*, Pattern.AttackPattern3*/);
             m_attackUsed = new bool[m_attackCache.Count];
         }
@@ -910,6 +953,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_lichLordArmTF.SetParent(null);
             m_lichLordArmTF.GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+
+            //TESTING
+            m_projectilePoint.SetParent(null);
+            m_lichLordPhaseThreeSequence.SetActive(false);
         }
 
         private void Update()
@@ -969,8 +1016,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                                         break;
                                     case Phase.PhaseThree:
-                                        //ExecuteAttack(Attack.SummonTotem);
-                                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                                        ExecuteAttack(Attack.GhostOrb); //REVISED
+                                        //m_stateHandle.OverrideState(State.ReevaluateSituation); //ORIGINAL
                                         break;
                                 }
                                 ///////
@@ -993,8 +1040,12 @@ namespace DChild.Gameplay.Characters.Enemies
                                         }
                                         break;
                                     case Phase.PhaseThree:
-                                        StopAllCoroutines();
-                                        ExecuteAttack(Attack.SummonZombies);
+                                        ExecuteAttack(Attack.SkeletalArm); //REVISED
+
+
+                                        //ORIGANL V
+                                        //StopAllCoroutines();
+                                        //ExecuteAttack(Attack.SummonZombies);
                                         break;
                                 }
                                 ///////

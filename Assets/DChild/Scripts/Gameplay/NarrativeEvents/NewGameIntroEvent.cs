@@ -63,6 +63,18 @@ namespace DChild.Gameplay.Narrative
             return new SaveData(m_isDone);
         }
 
+        public void StartEvent()
+       {
+#if UNITY_EDITOR
+            if (m_skipThis)
+            {
+                return;
+            }
+#endif
+            m_isDone = true;
+            m_introCutsceneTrigger.ForcePlayCutscene();
+        }
+
         private void OnCutsceneEnd(PlayableDirector obj)
         {
             m_tutorialTriggerGroup.SetActive(true);
@@ -70,28 +82,8 @@ namespace DChild.Gameplay.Narrative
 
         private void Awake()
         {
-            m_tutorialTriggerGroup.SetActive(false);
-        }
-
-        private void Start()
-        {
-#if UNITY_EDITOR
-            if (m_skipThis)
-            {
-                m_isDone = true;
-            }
-#endif
-
             m_introCutscene.stopped += OnCutsceneEnd;
-            if (m_isDone)
-            {
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                gameObject.SetActive(true);
-                m_introCutsceneTrigger.ForcePlayCutscene();
-            }
+            m_tutorialTriggerGroup.SetActive(false);
         }
     }
 }
