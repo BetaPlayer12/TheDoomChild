@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,7 +70,10 @@ public class DropCube : MonoBehaviour
     {
         m_cube.localPosition = Vector2.Lerp(m_start, m_destination, lerpValue);
     }
-   
+   private Vector2 RoundVectorValuesTo(uint decimalPlace, Vector2 vector2)
+    {
+        return new Vector2(MathfExt.RoundDecimalTo(decimalPlace, vector2.x), MathfExt.RoundDecimalTo(decimalPlace, vector2.y));
+    }
 
 #if UNITY_EDITOR
 
@@ -95,22 +99,23 @@ public class DropCube : MonoBehaviour
                 
                 SetMoveValues(m_cube.localPosition, m_EndPosition);
                 m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_Fallspeed);
-                if (Mathf.Approximately(m_cube.localPosition.y, m_EndPosition.y) && Mathf.Approximately(m_cube.localPosition.x, m_EndPosition.x))
-                {
-                    dropped = true;
-                }
+              // if (Mathf.Approximately(m_cube.localPosition.y, m_EndPosition.y) && Mathf.Approximately(m_cube.localPosition.x, m_EndPosition.x))
+               // {
+                  // dropped = true;
+               // }
             }
             if (dropped == true)
             {
                 SetMoveValues(m_cube.localPosition, m_StartPosition);
                 m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_Returnspeed);
-                if (Mathf.Approximately(m_cube.localPosition.y, m_StartPosition.y)&& Mathf.Approximately(m_cube.localPosition.x, m_StartPosition.x))
+                //if (Mathf.Approximately(m_cube.localPosition.y, m_StartPosition.y)&& Mathf.Approximately(m_cube.localPosition.x, m_StartPosition.x))
+                //{     
+               // }
+                if(RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_StartPosition))
                 {
                     m_isDropping = false;
                     dropped = false;
                     m_cubecrusher.GetComponent<Collider2D>().enabled = false;
-                   
-                    
                 }
             }
 
