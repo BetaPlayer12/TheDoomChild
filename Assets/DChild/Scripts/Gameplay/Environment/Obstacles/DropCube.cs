@@ -96,21 +96,16 @@ public class DropCube : MonoBehaviour
         {
             if (dropped == false)
             {
-                
+              
                 SetMoveValues(m_cube.localPosition, m_EndPosition);
-                m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_Fallspeed);
-              // if (Mathf.Approximately(m_cube.localPosition.y, m_EndPosition.y) && Mathf.Approximately(m_cube.localPosition.x, m_EndPosition.x))
-               // {
-                  // dropped = true;
-               // }
+               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_Fallspeed);
+               
             }
             if (dropped == true)
             {
                 SetMoveValues(m_cube.localPosition, m_StartPosition);
-                m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_Returnspeed);
-                //if (Mathf.Approximately(m_cube.localPosition.y, m_StartPosition.y)&& Mathf.Approximately(m_cube.localPosition.x, m_StartPosition.x))
-                //{     
-               // }
+                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_Returnspeed);
+              
                 if(RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_StartPosition))
                 {
                     m_isDropping = false;
