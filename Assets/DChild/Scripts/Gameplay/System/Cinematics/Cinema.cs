@@ -37,7 +37,7 @@ namespace DChild.Gameplay.Cinematics
         private bool m_leavePreviousCamAsNull;
         [ShowInInspector, OnValueChanged("EnableCameraShake")]
         private bool m_cameraShake;
-        [SerializeField, ShowIf("m_cameraShake")]
+        [SerializeField]
         private Dictionary<ShakeType, NoiseSettings> m_noiseSettings;
         [SerializeField, ShowIf("m_cameraShake")]
         private ShakeType m_currentShakeType;
