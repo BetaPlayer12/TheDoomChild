@@ -143,6 +143,18 @@ namespace DChild.Gameplay
             }
         }
 
+        public static void SetInputActive(bool isActive)
+        {
+            if (isActive)
+            {
+                m_playerManager?.gameplayInput.Enable();
+            }
+            else
+            {
+                m_playerManager?.gameplayInput.Disable();
+            }
+        }
+
         private static void LoadGameDone(object sender, EventActionArgs eventArgs)
         {
 

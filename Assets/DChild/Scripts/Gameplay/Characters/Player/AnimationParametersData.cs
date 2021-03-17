@@ -33,7 +33,8 @@ namespace DChild.Gameplay.Characters.Players
             IsPushing,
             ShadowMode,
             IsSliding,
-            SkullThrow,
+            ProjectileThrow,
+            ProjectileThrowVariant,
             LedgeGrab
         }
 

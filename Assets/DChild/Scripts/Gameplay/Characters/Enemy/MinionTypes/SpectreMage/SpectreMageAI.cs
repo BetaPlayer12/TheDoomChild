@@ -214,26 +214,29 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            StopAllCoroutines();
-            m_agent.Stop();
-            m_stateHandle.Wait(State.Cooldown);
-            if (!IsFacingTarget())
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
             {
-                CustomTurn();
-            }
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.attack.animation)
-            {
-                StartCoroutine(CounterFlinchRoutine());
-            }
-            else
-            {
-                StartCoroutine(FlinchRoutine());
+                StopAllCoroutines();
+                m_agent.Stop();
+                m_stateHandle.Wait(State.Cooldown);
+                if (!IsFacingTarget())
+                {
+                    CustomTurn();
+                }
+                if (m_animation.GetCurrentAnimation(0).ToString() == m_info.attack.animation)
+                {
+                    StartCoroutine(CounterFlinchRoutine());
+                }
+                else
+                {
+                    StartCoroutine(FlinchRoutine());
+                }
             }
         }
 
         private IEnumerator FlinchRoutine()
         {
-            m_hitbox.gameObject.SetActive(false);
+            m_hitbox.Disable();
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.fadeOutAnimation, false);
@@ -247,8 +250,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetAnimation(0, m_info.fadeInAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fadeInAnimation);
-            m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.Enable();
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -258,6 +261,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.counterFlinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.counterFlinchAnimation);
+            m_animation.DisableRootMotion();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
             if (!IsFacingTarget())
             {
                 CustomTurn();
@@ -335,9 +340,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
-            m_bodyCollider.SetActive(true);
+            StopAllCoroutines();
+            //m_bodyCollider.SetActive(true);
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_agent.Stop();
-            m_character.physics.simulateGravity = true;
+            //m_character.physics.simulateGravity = true;
         }
 
         private void ChooseAttack()
@@ -540,11 +547,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(m_turnState);
-                    StopAllCoroutines();
-                    m_agent.Stop();
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.flinchAnimation && m_animation.GetCurrentAnimation(0).ToString() != m_info.counterFlinchAnimation)
+                    {
+                        m_stateHandle.Wait(m_turnState);
+                        //StopAllCoroutines();
+                        m_agent.Stop();
+                        m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    }
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);

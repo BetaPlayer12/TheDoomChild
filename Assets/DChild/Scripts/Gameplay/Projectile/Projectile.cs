@@ -35,6 +35,8 @@ namespace DChild.Gameplay.Projectiles
 
         protected abstract ProjectileData projectileData { get; }
 
+        public bool hasConstantSpeed => projectileData.hasConstantSpeed;
+
         public virtual void ResetState()
         {
             if (m_waitForParticlesEnd)

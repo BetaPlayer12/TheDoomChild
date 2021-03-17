@@ -115,9 +115,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
+        private GameObject m_boundingBox;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_explodeBB;
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -143,8 +143,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
-        [SerializeField, TabGroup("FX")]
-        private ParticleFX m_explodeFX;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -247,6 +245,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_hitbox.Disable();
+            m_boundingBox.SetActive(false);
             m_movement.Stop();
         }
 
@@ -304,6 +304,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.assembleAnimation);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_boundingBox.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -327,6 +328,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
             m_animation.animationState.TimeScale = m_willPatrol ? 1 : 0;
             m_hitbox.Disable();
+            m_boundingBox.SetActive(false);
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 
@@ -505,6 +507,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
+            m_hitbox.Enable();
+            m_boundingBox.SetActive(true);
         }
 
         protected override void OnBecomePassive()

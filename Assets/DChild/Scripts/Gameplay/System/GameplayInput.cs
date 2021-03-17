@@ -12,25 +12,28 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private KeyCode m_storeOpen;
 
-
-        private bool m_enableInput;
+        private bool m_enableStoreInput;
         private bool m_inputOverridden;
-
 
         public void Disable()
         {
-            m_enableInput = false;
+            enabled = false;
         }
 
         public void Enable()
         {
-            m_enableInput = true;
+            enabled = true;
         }
 
         public void OverrideNewInfoNotif(float duration)
         {
             StopAllCoroutines();
             StartCoroutine(OverrideStoreOpen(duration));
+        }
+
+        public void SetStoreInputActive(bool isActive)
+        {
+            m_enableStoreInput = isActive;
         }
 
         private IEnumerator OverrideStoreOpen(float duration)
@@ -42,7 +45,7 @@ namespace DChild.Gameplay.Systems
 
         private void Awake()
         {
-            m_enableInput = true;
+            m_enableStoreInput = true;
         }
 
         private void Update()
@@ -52,7 +55,7 @@ namespace DChild.Gameplay.Systems
                 GameplaySystem.PauseGame();
                 GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
             }
-            else if (m_enableInput == true)
+            else if (m_enableStoreInput == true)
             {
                 if (Input.GetKeyDown(m_storeOpen))
                 {
