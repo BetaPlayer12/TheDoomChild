@@ -25,6 +25,8 @@ public class DropCube : MonoBehaviour
     public bool m_isDropping;
     [SerializeField]
     public bool dropped;
+    [SerializeField]
+    public int delay;
     [Button]
     public void Drop()
     {
@@ -47,29 +49,15 @@ public class DropCube : MonoBehaviour
     }
     IEnumerator DelayCoroutine()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(delay);
         m_isDropping = true;
-    }
-    public void SetLerpAs(bool drop)
-    {
-        if (drop)
-        {
-            SetMoveValues(m_cube.localPosition, m_StartPosition);
-        }
-        else
-        {
-            SetMoveValues(m_cube.localPosition, m_EndPosition);
-        }
     }
     private void SetMoveValues(Vector2 start, Vector2 destination)
     {
         m_start = start;
         m_destination = destination;
     }
-    public void Lerp(float lerpValue)
-    {
-        m_cube.localPosition = Vector2.Lerp(m_start, m_destination, lerpValue);
-    }
+   
    private Vector2 RoundVectorValuesTo(uint decimalPlace, Vector2 vector2)
     {
         return new Vector2(MathfExt.RoundDecimalTo(decimalPlace, vector2.x), MathfExt.RoundDecimalTo(decimalPlace, vector2.y));
@@ -96,21 +84,16 @@ public class DropCube : MonoBehaviour
         {
             if (dropped == false)
             {
-                
+              
                 SetMoveValues(m_cube.localPosition, m_EndPosition);
-                m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_Fallspeed);
-              // if (Mathf.Approximately(m_cube.localPosition.y, m_EndPosition.y) && Mathf.Approximately(m_cube.localPosition.x, m_EndPosition.x))
-               // {
-                  // dropped = true;
-               // }
+               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_Fallspeed);
+               
             }
             if (dropped == true)
             {
                 SetMoveValues(m_cube.localPosition, m_StartPosition);
-                m_cube.localPosition = Vector2.Lerp(m_start, m_destination, m_Returnspeed);
-                //if (Mathf.Approximately(m_cube.localPosition.y, m_StartPosition.y)&& Mathf.Approximately(m_cube.localPosition.x, m_StartPosition.x))
-                //{     
-               // }
+                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_Returnspeed);
+              
                 if(RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_StartPosition))
                 {
                     m_isDropping = false;
