@@ -1111,6 +1111,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_combatReadiness?.Execution();
             m_idle?.Cancel();
             m_movement?.Cancel();
+            m_objectManipulation?.Cancel();
             m_attackRegistrator?.ResetHitCache();
         }
 
