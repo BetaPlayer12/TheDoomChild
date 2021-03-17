@@ -1,4 +1,5 @@
-﻿using Doozy.Engine;
+﻿using DChild.Gameplay;
+using Doozy.Engine;
 using Holysoft.Collections;
 using Holysoft.Event;
 using System.Collections;
@@ -162,7 +163,7 @@ namespace DChild.Menu
                     operation = null;
                 }
 
-                if(operation != null)
+                if (operation != null)
                 {
                     m_loadOperations.Add(operation);
                     operation.allowSceneActivation = false;
@@ -232,6 +233,8 @@ namespace DChild.Menu
             {
                 m_animation.AnimationEnd += OnAnimationEnd;
             }
+
+            GameplaySystem.SetInputActive(false);
         }
 
         private void Update()
@@ -247,6 +250,7 @@ namespace DChild.Menu
         {
             m_animation.AnimationEnd -= OnAnimationEnd;
             LoadingDone?.Invoke(this, EventActionArgs.Empty);
+            GameplaySystem.SetInputActive(true);
             Debug.Log("Loading Scene Destroyed");
         }
     }

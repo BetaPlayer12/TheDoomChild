@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
+using DChild.Gameplay.Projectiles;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -31,6 +32,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Character m_character;
         private ProjectileLauncher m_launcher;
         private int m_skullThrowAnimationParameter;
+        private int m_skullThrowVariantParameter;
         private bool m_updateProjectileInfo;
 
         public event EventAction<EventActionArgs> ExecutionRequested;
@@ -169,6 +171,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_projectile = info;
                 m_launcher.SetProjectile(m_projectile);
+                var skullThrowVariantIndex = info.projectile.GetComponent<Projectile>().hasConstantSpeed ? 0 : 1;
+                m_animator.SetInteger(m_skullThrowVariantParameter, skullThrowVariantIndex);
                 m_updateProjectileInfo = true;
             }
         }
@@ -232,8 +236,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator = info.animator;
             m_character = info.character;
             m_launcher = new ProjectileLauncher(m_projectile, m_spawnPoint);
-            m_skullThrowAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SkullThrow);
-
+            m_skullThrowAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ProjectileThrow);
+            m_skullThrowVariantParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ProjectileThrowVariant);
             m_launcher.SetProjectile(m_projectile);
             m_launcher.SetSpawnPoint(m_spawnPoint);
             m_updateProjectileInfo = true;
