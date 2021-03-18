@@ -18,6 +18,8 @@ public class DropCube : MonoBehaviour
     private Vector2 m_start;
     private Vector2 m_destination;
     [SerializeField]
+    private AnimationCurve m_speedCurve;
+    [SerializeField]
     private float m_Fallspeed;
     [SerializeField]
     private float m_Returnspeed;
