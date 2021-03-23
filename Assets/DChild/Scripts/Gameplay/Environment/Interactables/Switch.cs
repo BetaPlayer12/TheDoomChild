@@ -47,7 +47,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField, BoxGroup("Fields")]
         private bool m_needsButtonToInteract;
         [SerializeField, ShowIf("m_needsButtonToInteract"), BoxGroup("Fields")]
-        private Transform m_prompt;
+        private Vector3 m_promptOffset;
         [SerializeField, BoxGroup("Fields")]
         private Collider2D m_collider;
 #if UNITY_EDITOR
@@ -74,7 +74,7 @@ namespace DChild.Gameplay.Environment
 
         public bool showPrompt => m_needsButtonToInteract;
 
-        public Vector3 promptPosition => m_prompt.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public string promptMessage => null;
 
@@ -266,6 +266,13 @@ namespace DChild.Gameplay.Environment
                     Gizmos.DrawLine(transform.position, info.position);
                     Gizmos.DrawSphere(info.position, 2f);
                 }
+            }
+
+            if (showPrompt)
+            {
+                var position = promptPosition;
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawSphere(position, 1f); 
             }
         }
 
