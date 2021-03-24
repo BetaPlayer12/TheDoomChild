@@ -9,17 +9,24 @@ namespace DChild.Gameplay.Puzzles
         [SerializeField]
         private GameObject m_entity;
         [SerializeField]
-        private Transform m_prompt;
+        private Vector3 m_promptOffset;
 
         public bool showPrompt => true;
 
         public string promptMessage => null;
 
-        public Vector3 promptPosition => m_prompt.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public void Interact(Character character)
         {
             m_entity.gameObject.SetActive(true);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
         }
     }
 }

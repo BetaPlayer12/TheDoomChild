@@ -10,7 +10,9 @@ namespace DChild.Gameplay.Environment
     public class DoorwayHandle : ISwitchHandle
     {
         [SerializeField]
-        private Transform m_prompt;
+        private Transform m_promptSource;
+        [SerializeField]
+        private Vector3 m_promptOffset;
         [SerializeField]
         private bool m_forceExitFacing;
         [SerializeField, ShowIf("m_forceExitFacing")]
@@ -20,7 +22,7 @@ namespace DChild.Gameplay.Environment
 
         public bool needsButtonInteraction => true;
 
-        public Vector3 promptPosition => m_prompt.position;
+        public Vector3 promptPosition => m_promptSource.position + m_promptOffset;
 
         public string prompMessage => "Enter";
 

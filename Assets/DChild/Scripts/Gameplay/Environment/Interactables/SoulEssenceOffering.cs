@@ -34,7 +34,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField, MinValue(0), MaxValue("$m_amountRequired"), OnValueChanged("OnAmountChanged")]
         private int m_currentAmount;
         [SerializeField]
-        private Transform m_promptPosition;
+        private Vector3 m_promptOffset;
 
         [TabGroup("Main", "StartAs")]
         [SerializeField, TabGroup("Main/StartAs", "Complete")]
@@ -53,7 +53,7 @@ namespace DChild.Gameplay.Environment
 
         public bool showPrompt => true;
 
-        public Vector3 promptPosition => m_promptPosition.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public string promptMessage => (m_currentAmount == m_amountRequired ? "Take" : "Give") + $" <sprite name=\"SoulEssenceIcon_TMP\">{m_amountRequired}";
 
@@ -125,6 +125,13 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_trigger = GetComponentInChildren<Collider2D>();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
         }
 
 #if UNITY_EDITOR

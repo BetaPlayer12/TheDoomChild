@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Environment
         }
 
         [SerializeField]
-        private Transform m_prompt;
+        private Vector3 m_promptOffset;
         [SerializeField]
         private ILootDataContainer m_loot;
         private bool m_isLooted;
@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Environment
 
         public string promptMessage => "Open";
 
-        public Vector3 promptPosition => m_prompt.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
         public void Load(ISaveData data)
         {
            m_isLooted = ((SaveData)data).isLooted;
@@ -70,5 +70,11 @@ namespace DChild.Gameplay.Environment
             Debug.Log("Chest Opened");
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
+        }
     }
 }

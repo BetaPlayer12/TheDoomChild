@@ -31,10 +31,10 @@ namespace DChild.Gameplay.Items
         [SerializeField]
         private SpriteRenderer m_sprite;
         [SerializeField]
-        private Transform m_promptPosition;
+        private Vector3 m_promptOffset;
         [SerializeField]
         private string m_eventPrefix;
-        [SerializeField, MinValue(0), MaxValue("@(m_fragmentDatas.Length - 1)"),OnValueChanged("UpdateSprite")]
+        [SerializeField, MinValue(0), MaxValue("@(m_fragmentDatas.Length - 1)"), OnValueChanged("UpdateSprite")]
         private int m_fragmentIndex;
         [SerializeField, OnValueChanged("UpdateSprite")]
         private ItemData[] m_fragmentDatas;
@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Items
 
         public bool showPrompt => true;
 
-        public Vector3 promptPosition => m_promptPosition.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public string promptMessage => "Pick up";
 
@@ -73,6 +73,13 @@ namespace DChild.Gameplay.Items
         private void Awake()
         {
             m_trigger = GetComponentInChildren<Collider2D>();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
         }
     }
 }
