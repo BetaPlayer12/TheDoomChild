@@ -5401,6 +5401,7 @@ GameObject:
   - component: {fileID: 209598533}
   - component: {fileID: 209598536}
   - component: {fileID: 209598535}
+  - component: {fileID: 209598537}
   m_Layer: 0
   m_Name: ZoneDataHandle
   m_TagString: Untagged
@@ -6221,6 +6222,31 @@ MonoBehaviour:
   - {fileID: 1596894769}
   - {fileID: 1074759793}
   - {fileID: 1847077541}
+--- !u!114 &209598537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209598532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6546d1f34e0077748a93d4c356aa9411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addTrigger: 16
+  removeTrigger: 1024
+  databases:
+  - {fileID: 11400000, guid: d8c00830af0382c4d90162ae66b7f650, type: 2}
+  condition:
+    luaConditions: []
+    questConditions: []
+    acceptedTags: []
+    acceptedGameObjects: []
+    luaWizardIndex: -1
+    lastEvaluationValue: 0
+  once: 0
+  onePerFrame: 0
 --- !u!1 &216188152
 GameObject:
   m_ObjectHideFlags: 0
@@ -7903,8 +7929,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 7e9ace828767c6d4ab3ab03c8862f417, type: 3}
 --- !u!4 &268343963 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5685036448263305127, guid: 7e9ace828767c6d4ab3ab03c8862f417,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 268343962}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &272814320
@@ -18593,6 +18618,81 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 8.56, y: 0.81215745}
   m_EdgeRadius: 0
+--- !u!1001 &679078912
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 948599927}
+    m_Modifications:
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589671780883123364, guid: c2194613be983f64bb1c84eab9b3c7ce,
+        type: 3}
+      propertyPath: m_Name
+      value: DChildDialogueManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c2194613be983f64bb1c84eab9b3c7ce, type: 3}
+--- !u!4 &679078913 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6589671780883093892, guid: c2194613be983f64bb1c84eab9b3c7ce,
+    type: 3}
+  m_PrefabInstance: {fileID: 679078912}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &682360035
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25740,6 +25840,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 268343963}
+  - {fileID: 679078913}
   - {fileID: 1296822921}
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -34764,7 +34865,7 @@ PrefabInstance:
     - target: {fileID: 6328404106272714187, guid: 2a81254e3a90d774c8cd2ac8b114a82a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6328404106272714187, guid: 2a81254e3a90d774c8cd2ac8b114a82a,
         type: 3}
@@ -42059,6 +42160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1602910491}
   - component: {fileID: 1602910490}
+  - component: {fileID: 1602910492}
   m_Layer: 0
   m_Name: GhostHaunting
   m_TagString: Untagged
@@ -42112,10 +42214,10 @@ MonoBehaviour:
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 144.718445
+      Data: 154.820145
     - Name: 
       Entry: 4
-      Data: -104.532837
+      Data: -90.03911
     - Name: 
       Entry: 8
       Data: 
@@ -42133,10 +42235,10 @@ MonoBehaviour:
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: -26.8735657
+      Data: -15.8675079
     - Name: 
       Entry: 4
-      Data: -49.10747
+      Data: -38.10141
     - Name: 
       Entry: 8
       Data: 
@@ -42154,10 +42256,10 @@ MonoBehaviour:
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 188.658951
+      Data: 196.87323
     - Name: 
       Entry: 4
-      Data: 219.3653
+      Data: 230.107056
     - Name: 
       Entry: 8
       Data: 
@@ -42175,10 +42277,10 @@ MonoBehaviour:
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 362.046448
+      Data: 370.8926
     - Name: 
       Entry: 4
-      Data: 246.940826
+      Data: 258.94632
     - Name: 
       Entry: 8
       Data: 
@@ -42196,10 +42298,10 @@ MonoBehaviour:
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: -360.534851
+      Data: -350.757324
     - Name: 
       Entry: 4
-      Data: 66.7920151
+      Data: 80.3301
     - Name: 
       Entry: 8
       Data: 
@@ -42214,6 +42316,7 @@ MonoBehaviour:
       Data: 
   m_deathCounter: 0
   m_entity: {fileID: 0}
+  m_deathCounterDatabaseVariable: GhostDeathCounter
 --- !u!4 &1602910491
 Transform:
   m_ObjectHideFlags: 0
@@ -42228,6 +42331,141 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1602910492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602910489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2e3066672a3834182d094e4029952d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questName: GhostHaunt
+  questStateIndicatorLevels:
+  - questState: 2
+    condition:
+      luaConditions:
+      - Variable["GhostDeathCounter"] == 3
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1602910490}
+          m_MethodName: UseIndex
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - questState: 2
+    condition:
+      luaConditions:
+      - Variable["GhostDeathCounter"] == 4
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1602910490}
+          m_MethodName: UseIndex
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - questState: 2
+    condition:
+      luaConditions:
+      - Variable["GhostDeathCounter"] == 5
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1602910490}
+          m_MethodName: UseIndex
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - questState: 2
+    condition:
+      luaConditions:
+      - Variable["GhostDeathCounter"] == 6
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1602910490}
+          m_MethodName: UseIndex
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - questState: 2
+    condition:
+      luaConditions:
+      - Variable["GhostDeathCounter"] == 7
+      questConditions: []
+      acceptedTags: []
+      acceptedGameObjects: []
+      luaWizardIndex: -1
+      lastEvaluationValue: 0
+    indicatorLevel: 0
+    onEnterState:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1602910490}
+          m_MethodName: UseIndex
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 4
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  questEntryStateIndicatorLevels: []
 --- !u!1 &1612852106
 GameObject:
   m_ObjectHideFlags: 0

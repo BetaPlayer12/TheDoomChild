@@ -4,6 +4,7 @@ using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
 using DChild.Serialization;
 using Holysoft.Event;
+using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -30,6 +31,8 @@ namespace DChild.Gameplay.Puzzles
         private int m_deathCounter;
         [SerializeField]
         private Damageable m_entity;
+        [SerializeField,VariablePopup(true)]
+        private string m_deathCounterDatabaseVariable;
         [SerializeField]
         private Dictionary<int, Vector2> m_info = new Dictionary<int, Vector2>();
 
@@ -47,9 +50,16 @@ namespace DChild.Gameplay.Puzzles
             UpdateEntityPosition();
         }
 
+        public void UseIndex(int index)
+        {
+            m_deathCounter = index;
+            UpdateEntityPosition();
+        }
+
         private void OnEntityDestroyed(object sender, EventActionArgs eventArgs)
         {
             m_deathCounter++;
+            DialogueLua.SetVariable(m_deathCounterDatabaseVariable, m_deathCounter);
             UpdateEntityPosition();
         }
 
