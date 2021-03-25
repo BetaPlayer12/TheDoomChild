@@ -244,6 +244,7 @@ namespace DChild.Menu
                 SceneManager.UnloadSceneAsync(m_loadingScene.sceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
                 m_unloadThis = false;
             }
+            GameplaySystem.SetInputActive(false);
         }
 
         private void OnDestroy()

@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Characters.NPC
         [SerializeField]
         private NPCProfile m_npcData;
         [SerializeField]
-        private Transform m_prompt;
+        private Vector3 m_promptOffset;
         [SerializeField]
         private MerchantInventory m_inventory;
         [BoxGroup("AskingPrice")]
@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.NPC
 
         public string promptMessage => "Trade";
 
-        public Vector3 promptPosition => m_prompt.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public void Interact(Character character)
         {
@@ -55,6 +55,13 @@ namespace DChild.Gameplay.Characters.NPC
         private void Awake()
         {
             ResetWares();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
         }
 
 #if UNITY_EDITOR
