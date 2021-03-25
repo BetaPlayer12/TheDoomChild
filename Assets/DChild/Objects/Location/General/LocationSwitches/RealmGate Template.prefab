@@ -118,7 +118,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4103643442703686668}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -137,21 +137,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 13.296219, y: 1}
   m_EdgeRadius: 0
---- !u!114 &2020380570509374188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4103643442703686668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3562ad78cbfa81441aaff7610ceeeac7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_data: {fileID: 0}
-  m_locationPoint: {fileID: 2075923831988787531}
-  m_prevPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &1550469311533457947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,8 +152,7 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 955387972395096965}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -177,9 +161,24 @@ MonoBehaviour:
     - Name: m_handle
       Entry: 7
       Data: 0|DChild.Gameplay.Environment.DoorwayHandle, Assembly-CSharp
-    - Name: m_prompt
-      Entry: 10
+    - Name: m_promptSource
+      Entry: 6
+      Data: 
+    - Name: m_promptOffset
+      Entry: 7
+      Data: UnityEngine.Vector3, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
       Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: m_forceExitFacing
       Entry: 5
       Data: true
@@ -190,6 +189,21 @@ MonoBehaviour:
       Entry: 8
       Data: 
   m_destination: {fileID: 0}
+--- !u!114 &2020380570509374188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4103643442703686668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3562ad78cbfa81441aaff7610ceeeac7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 0}
+  m_locationPoint: {fileID: 2075923831988787531}
+  m_prevPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &5300325422749060827
 PrefabInstance:
   m_ObjectHideFlags: 0

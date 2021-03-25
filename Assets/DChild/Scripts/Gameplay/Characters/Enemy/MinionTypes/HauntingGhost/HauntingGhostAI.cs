@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/HauntingGhost")]
-    public class HauntingGhostAI : CombatAIBrain<HauntingGhostAI.Info>
+    public class HauntingGhostAI : CombatAIBrain<HauntingGhostAI.Info>, IResetableAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
