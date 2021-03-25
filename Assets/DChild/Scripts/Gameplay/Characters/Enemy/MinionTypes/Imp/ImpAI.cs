@@ -209,7 +209,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -234,6 +233,16 @@ namespace DChild.Gameplay.Characters.Enemies
             var barrelPos = new Vector3(transform.position.x + (2 * transform.localScale.x), transform.position.y - 5, transform.position.z);
             var barrel = Instantiate(m_info.barrel, barrelPos, Quaternion.identity);
             m_barrelCache = barrel;
+        }
+
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            //if (hit.collider != null)
+            //{
+            //    return hit.point;
+            //}
+            return hit.point;
         }
 
         private Vector2 WallPosition()
@@ -348,7 +357,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
-            var newPos = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 20);
+            var newPos = new Vector2(m_targetInfo.position.x, GroundPosition().y + 20);
             while (!inRange)
             {
 
