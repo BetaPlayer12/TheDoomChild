@@ -206,7 +206,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -259,7 +258,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator CounterFlinchRoutine()
         {
             m_animation.EnableRootMotion(true, true);
-            m_animation.SetAnimation(0, m_info.counterFlinchAnimation, false);
+            m_animation.SetAnimation(0, m_info.counterFlinchAnimation, false).TrackTime = .5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.counterFlinchAnimation);
             m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
@@ -294,7 +293,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                StopAllCoroutines();
+                //StopAllCoroutines();
                 m_agent.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_targetInfo.Set(null, null);
@@ -339,10 +338,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
+            base.OnDestroyed(sender, eventArgs);
             //m_bodyCollider.SetActive(true);
-            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            //m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_agent.Stop();
             //m_character.physics.simulateGravity = true;
         }
@@ -557,7 +556,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
                     StartCoroutine(ExecuteMove(/*m_currentAttackRange*/ m_attackRangeCache[0], m_currentAttack));
                     m_attackDecider.hasDecidedOnAttack = false;

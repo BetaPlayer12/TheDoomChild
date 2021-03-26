@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/HauntingGhost")]
-    public class HauntingGhostAI : CombatAIBrain<HauntingGhostAI.Info>
+    public class HauntingGhostAI : CombatAIBrain<HauntingGhostAI.Info>, IResetableAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -368,13 +368,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.patrol.animation)
-                    {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
-                    }
+                    m_turnState = State.ReevaluateSituation;
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;
 
                 case State.Turning:
@@ -469,6 +466,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ResetAI()
         {
+            m_animation.SetEmptyAnimation(0, 0);
+            m_bodyCollider.SetActive(false);
+            m_damageable.SetHitboxActive(true);
+            m_character.physics.simulateGravity = false;
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
