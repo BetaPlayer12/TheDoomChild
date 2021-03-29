@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.Enemies;
+﻿
+using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
