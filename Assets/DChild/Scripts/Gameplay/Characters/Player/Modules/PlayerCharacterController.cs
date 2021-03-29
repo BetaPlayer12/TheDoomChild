@@ -59,7 +59,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SwordThrust m_swordThrust;
         private EarthShaker m_earthShaker;
         private WhipAttack m_whip;
-        private SkullThrow m_skullThrow;
+        private ProjectileThrow m_skullThrow;
         #endregion
 
         private bool m_updateEnabled = true;
@@ -279,7 +279,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
             m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
             m_whip = m_character.GetComponentInChildren<WhipAttack>();
-            m_skullThrow = m_character.GetComponentInChildren<SkullThrow>();
+            m_skullThrow = m_character.GetComponentInChildren<ProjectileThrow>();
             m_skullThrow.ExecutionRequested += OnProjectileThrowRequest;
 
             m_updateEnabled = true;
@@ -745,6 +745,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         PrepareForGroundAttack();
                         m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
+                        return;
+                    }
+                    else if (m_input.whipPressed)
+                    {
+                        if (m_skills.IsModuleActive(PrimarySkill.Whip))
+                        {
+                            PrepareForGroundAttack();
+                            m_whip.Execute(WhipAttack.Type.Crouch_Forward);
+                            return;
+                        }
+
                         return;
                     }
                 }

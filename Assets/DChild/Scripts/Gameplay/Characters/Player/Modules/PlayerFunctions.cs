@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private EarthShaker m_earthShaker;
         private SwordThrust m_swordThrust;
         private WhipAttack m_whip;
-        private SkullThrow m_skullThrow;
+        private ProjectileThrow m_skullThrow;
         private LedgeGrab m_ledgeGrab;
         private ShadowMorph m_shadowMorph;
 
@@ -73,6 +73,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whip?.EnableCollision(WhipAttack.Type.MidAir_Overhead, true);
         }
 
+        public void CrouchForwardWhipAttackFX()
+        {
+            //m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
+            m_whip?.EnableCollision(WhipAttack.Type.Crouch_Forward, true);
+        }
+
         public void ContinueSlashCombo()
         {
             m_slashCombo?.ContinueCombo();
@@ -120,7 +126,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SkullThrowSpawnProjectile()
         {
-            m_skullThrow?.SpawnProjectile();
+            m_skullThrow?.ThrowProjectile();
+        }
+
+        public void SpawnIdleProjectile()
+        {
+            m_skullThrow?.SpawnIdleProjectile();
         }
 
         public void EndLedgeGrab()
@@ -143,7 +154,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker = character.GetComponentInChildren<EarthShaker>();
             m_swordThrust = character.GetComponentInChildren<SwordThrust>();
             m_whip = character.GetComponentInChildren<WhipAttack>();
-            m_skullThrow = character.GetComponentInChildren<SkullThrow>();
+            m_skullThrow = character.GetComponentInChildren<ProjectileThrow>();
             m_ledgeGrab = character.GetComponentInChildren<LedgeGrab>();
             m_shadowMorph = character.GetComponentInChildren<ShadowMorph>();
         }

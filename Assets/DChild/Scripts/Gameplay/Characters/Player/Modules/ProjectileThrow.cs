@@ -4,10 +4,12 @@ using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Spine.Unity;
+using DChild.Gameplay.Pooling;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-    public class SkullThrow : AttackBehaviour
+    public class ProjectileThrow : AttackBehaviour
     {
         [SerializeField]
         private ProjectileInfo m_projectile;
@@ -34,8 +36,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_skullThrowAnimationParameter;
         private int m_skullThrowVariantParameter;
         private bool m_updateProjectileInfo;
+        private Projectile m_spawnedProjectile;
 
         public event EventAction<EventActionArgs> ExecutionRequested;
+        public event EventAction<EventActionArgs> ProjectileThrown;
 
         public void RequestExecution()
         {
@@ -48,7 +52,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             GameSystem.ResetCursorPosition(); //FOr Quality of Life thing
             m_currentAim = m_defaultAim;
 
-            if(m_adjustableXSpeed == false)
+            if (m_adjustableXSpeed == false)
             {
                 m_currentAim.x = m_horizontalThreshold.max;
             }
@@ -190,11 +194,68 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        public void SpawnProjectile()
+        public void ThrowProjectile()
         {
             var direction = CalculateThrowDirection();
             direction.x *= (int)m_character.facing;
-            m_launcher.LaunchProjectile(direction);
+
+            if (m_spawnedProjectile != null)
+            {
+                m_spawnedProjectile.transform.parent = null;
+
+                if (m_spawnedProjectile.TryGetComponentInChildren(out Animator animator))
+                {
+                    animator.SetTrigger("Shoot");
+                }
+                if (m_spawnedProjectile.TryGetComponent(out Collider2D collider))
+                {
+                    collider.enabled = true;
+                }
+                if (m_spawnedProjectile.TryGetComponent(out IsolatedObjectPhysics2D physics))
+                {
+                    physics.Enable();
+                }
+
+                m_launcher.LaunchProjectile(direction, m_spawnedProjectile.gameObject);
+
+                var scale = m_spawnedProjectile.transform.localScale;
+                scale.x = 1;
+                m_spawnedProjectile.transform.localScale = scale;
+            }
+            else
+            {
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
+                instance.transform.position = m_spawnPoint.position;
+
+                if (instance.TryGetComponentInChildren(out Animator animator))
+                {
+                    animator.SetTrigger("Shoot");
+                }
+
+                m_launcher.LaunchProjectile(direction, instance.gameObject);
+            }
+
+            ProjectileThrown?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        public void SpawnIdleProjectile()
+        {
+            m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
+            m_spawnedProjectile.transform.position = m_spawnPoint.position;
+            m_spawnedProjectile.transform.parent = transform;
+
+            var scale = m_spawnedProjectile.transform.localScale;
+            scale.y = 1;
+            m_spawnedProjectile.transform.localScale = scale;
+
+            if (m_spawnedProjectile.TryGetComponent(out Collider2D collider))
+            {
+                collider.enabled = false;
+            }
+            if (m_spawnedProjectile.TryGetComponent(out IsolatedObjectPhysics2D physics))
+            {
+                physics.Disable();
+            }
         }
 
         public override void AttackOver()
@@ -208,8 +269,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_timer = m_skullThrowCooldown;
             m_state.canAttack = false;
             m_state.isAttacking = true;
-            m_animator.SetBool(m_animationParameter, true);
             m_animator.SetBool(m_skullThrowAnimationParameter, true);
+            m_animator.SetBool(m_animationParameter, true);
         }
 
         public void StartThrow()
@@ -222,6 +283,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             base.Cancel();
             EndAim();
             m_animator.SetBool(m_skullThrowAnimationParameter, false);
+
+            if (m_spawnedProjectile != null)
+            {
+                Destroy(m_spawnedProjectile.gameObject);
+            }
         }
 
         public override void Reset()
@@ -243,5 +309,4 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_updateProjectileInfo = true;
         }
     }
-
 }
