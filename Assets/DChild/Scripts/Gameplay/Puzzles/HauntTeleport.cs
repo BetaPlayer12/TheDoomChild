@@ -4,6 +4,7 @@ using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
 using DChild.Serialization;
 using Holysoft.Event;
+using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -29,7 +30,11 @@ namespace DChild.Gameplay.Puzzles
         [SerializeField]
         private int m_deathCounter;
         [SerializeField]
+        public int respawnDelay;
+        [SerializeField]
         private Damageable m_entity;
+        [SerializeField,VariablePopup(true)]
+        private string m_deathCounterDatabaseVariable;
         [SerializeField]
         private Dictionary<int, Vector2> m_info = new Dictionary<int, Vector2>();
 
@@ -47,18 +52,32 @@ namespace DChild.Gameplay.Puzzles
             UpdateEntityPosition();
         }
 
-        private void OnEntityDestroyed(object sender, EventActionArgs eventArgs)
+        public void UseIndex(int index)
         {
-            m_deathCounter++;
+            m_deathCounter = index;
             UpdateEntityPosition();
         }
 
+        private void OnEntityDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            m_deathCounter++;
+            DialogueLua.SetVariable(m_deathCounterDatabaseVariable, m_deathCounter);
+            StartCoroutine(DelayUpdatePosition());
+            
+        }
+        IEnumerator DelayUpdatePosition()
+        {
+            yield return new WaitForSeconds(respawnDelay);
+            UpdateEntityPosition();
+
+        }
         private void UpdateEntityPosition()
         {
             if (m_info.ContainsKey(m_deathCounter))
             {
                 m_entity.gameObject.SetActive(true);
                 m_entity.transform.position = m_info[m_deathCounter];
+                m_entity.Heal(9999);
                 m_entitybrain.ResetAI();
             }
             else

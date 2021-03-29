@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Environment
         }
 
         [SerializeField]
-        private Transform m_prompt;
+        private Vector3 m_promptOffset;
 
         [SerializeField]
         private ItemRequirement m_itemRequirement;
@@ -41,7 +41,7 @@ namespace DChild.Gameplay.Environment
 
         public bool showPrompt => true;
 
-        public Vector3 promptPosition => m_prompt.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public string promptMessage => "Insert Keystone";
 
@@ -66,6 +66,13 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
+        }
+
 #if UNITY_EDITOR
         private void UpdateReactionCount()
         {
@@ -83,10 +90,6 @@ namespace DChild.Gameplay.Environment
             }
             m_reactions = list;
         }
-
-
-
-
 #endif
     }
 

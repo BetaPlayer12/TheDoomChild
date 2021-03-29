@@ -33,7 +33,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private PrimarySkill m_toUnlock;
         [SerializeField]
-        private Transform m_prompt;
+        private Vector3 m_promptOffset;
         [SerializeField]
         private PlayableDirector m_cinematic;
 
@@ -50,7 +50,7 @@ namespace DChild.Gameplay
 
         public string promptMessage => "Use";
 
-        public Vector3 promptPosition => m_prompt.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public ISaveData Save() => new SaveData(m_isUsed);
 
@@ -111,6 +111,13 @@ namespace DChild.Gameplay
         private void Awake()
         {
             m_cinematic.stopped += OnCutsceneDone;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
         }
 
 #if UNITY_EDITOR
