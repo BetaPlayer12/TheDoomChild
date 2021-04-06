@@ -17,7 +17,8 @@ public class DropCube : MonoBehaviour
     // Start is called before the first frame update
     private Vector2 m_start;
     private Vector2 m_destination;
-    private Vector2 m_startingPos;
+    private Vector2 m_currentPos;
+    private bool m_shake = false;
     [SerializeField]
     private AnimationCurve m_speedCurve;
     [SerializeField]
@@ -35,9 +36,9 @@ public class DropCube : MonoBehaviour
     [Button]
     public void Drop()
     {
-
+        m_shake = true;
         StartCoroutine(DelayCoroutine());
-       
+        transform.position = m_currentPos;
 
     }
 
@@ -55,12 +56,10 @@ public class DropCube : MonoBehaviour
     }
     IEnumerator DelayCoroutine()
     {
-        m_startingPos.x = transform.position.x;
-        m_startingPos.y = transform.position.y;
-         var offset = Random.insideUnitCircle;
-        transform.position = m_startingPos + offset * m_radiusOffset;
+        m_currentPos.x = transform.position.x;
+        m_currentPos.y = transform.position.y;
         yield return new WaitForSeconds(delay);
-       // transform.position = m_startingPos;
+        m_shake = false;
         m_isDropping = true;
     }
    
@@ -93,6 +92,11 @@ public class DropCube : MonoBehaviour
    
     public void Update()
     {
+        var offset = Random.insideUnitCircle;
+        if (m_shake == true)
+        {
+            transform.position = m_currentPos + offset * m_radiusOffset;
+        }
         if (m_isDropping == true)
         {
             if (dropped == false)
