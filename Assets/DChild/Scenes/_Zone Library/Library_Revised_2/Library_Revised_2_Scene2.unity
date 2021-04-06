@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -42488,6 +42488,7 @@ MonoBehaviour:
       Entry: 8
       Data: 
   m_deathCounter: 0
+  respawnDelay: 5
   m_entity: {fileID: 711985448}
   m_deathCounterDatabaseVariable: GhostDeathCounter
 --- !u!4 &1602910491
@@ -42521,7 +42522,7 @@ MonoBehaviour:
   - questState: 2
     condition:
       luaConditions:
-      - Variable["GhostDeathCounter"] == 3
+      - Variable["GhostDeathCounter"] == 6
       questConditions: []
       acceptedTags: []
       acceptedGameObjects: []
@@ -42545,7 +42546,7 @@ MonoBehaviour:
   - questState: 2
     condition:
       luaConditions:
-      - Variable["GhostDeathCounter"] == 4
+      - Variable["GhostDeathCounter"] == 7
       questConditions: []
       acceptedTags: []
       acceptedGameObjects: []
@@ -42569,7 +42570,7 @@ MonoBehaviour:
   - questState: 2
     condition:
       luaConditions:
-      - Variable["GhostDeathCounter"] == 5
+      - Variable["GhostDeathCounter"] == 4
       questConditions: []
       acceptedTags: []
       acceptedGameObjects: []
@@ -42593,7 +42594,7 @@ MonoBehaviour:
   - questState: 2
     condition:
       luaConditions:
-      - Variable["GhostDeathCounter"] == 6
+      - Variable["GhostDeathCounter"] == 8
       questConditions: []
       acceptedTags: []
       acceptedGameObjects: []
@@ -42617,7 +42618,7 @@ MonoBehaviour:
   - questState: 2
     condition:
       luaConditions:
-      - Variable["GhostDeathCounter"] == 7
+      - Variable["GhostDeathCounter"] == 3
       questConditions: []
       acceptedTags: []
       acceptedGameObjects: []

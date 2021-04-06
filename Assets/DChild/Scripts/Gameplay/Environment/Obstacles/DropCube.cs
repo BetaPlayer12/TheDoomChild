@@ -17,6 +17,8 @@ public class DropCube : MonoBehaviour
     // Start is called before the first frame update
     private Vector2 m_start;
     private Vector2 m_destination;
+    private Vector2 m_currentPos;
+    private bool m_shake = false;
     [SerializeField]
     private AnimationCurve m_speedCurve;
     [SerializeField]
@@ -29,12 +31,14 @@ public class DropCube : MonoBehaviour
     public bool dropped;
     [SerializeField]
     public int delay;
+    [SerializeField]
+    private float m_radiusOffset = 1;
     [Button]
     public void Drop()
     {
-
-
-        m_isDropping = true;
+        m_shake = true;
+        StartCoroutine(DelayCoroutine());
+        transform.position = m_currentPos;
 
     }
 
@@ -43,17 +47,22 @@ public class DropCube : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
-            m_isDropping = false;
+           
             StartCoroutine(DelayCoroutine());
+            m_isDropping = false;
             dropped = true;
            
         }
     }
     IEnumerator DelayCoroutine()
     {
+        m_currentPos.x = transform.position.x;
+        m_currentPos.y = transform.position.y;
         yield return new WaitForSeconds(delay);
+        m_shake = false;
         m_isDropping = true;
     }
+   
     private void SetMoveValues(Vector2 start, Vector2 destination)
     {
         m_start = start;
@@ -80,8 +89,14 @@ public class DropCube : MonoBehaviour
         m_EndPosition = m_cube.localPosition;
     }
 #endif
+   
     public void Update()
     {
+        var offset = Random.insideUnitCircle;
+        if (m_shake == true)
+        {
+            transform.position = m_currentPos + offset * m_radiusOffset;
+        }
         if (m_isDropping == true)
         {
             if (dropped == false)
