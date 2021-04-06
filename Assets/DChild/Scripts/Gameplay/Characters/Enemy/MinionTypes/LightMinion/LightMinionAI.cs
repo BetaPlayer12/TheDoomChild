@@ -65,6 +65,14 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_detectAnimation;
+            public string detectAnimation => m_detectAnimation;
+
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_trailEvent;
+            public string trailEvent => m_trailEvent;
 
 
             public override void Initialize()
@@ -127,6 +135,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_trailFX;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -274,8 +285,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, false);
-            yield return new WaitForSeconds(3f);
+            m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -284,8 +295,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.attackStart.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStart.animation);
+            //m_trailFX.gameObject.SetActive(true);
+            m_trailFX.Play();
             m_hitbox.SetInvulnerability(Invulnerability.Level_1);
             m_animation.SetAnimation(0, m_info.attackLoop, true);
+            //yield return new WaitForSeconds(.4f);
             float countdown = 0;
             while (countdown < 1.5f /*|| !m_wallSensor.isDetecting*/)
             {
@@ -293,6 +307,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 countdown += Time.deltaTime;
                 yield return null;
             }
+            m_trailFX.Stop();
+            //m_trailFX.gameObject.SetActive(false);
             m_hitbox.SetInvulnerability(Invulnerability.None);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attackEnd, false);
