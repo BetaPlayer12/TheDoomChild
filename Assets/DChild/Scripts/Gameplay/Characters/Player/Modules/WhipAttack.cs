@@ -11,7 +11,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Ground_Forward,
             Ground_Overhead,
             MidAir_Forward,
-            MidAir_Overhead
+            MidAir_Overhead,
+            Crouch_Forward
         }
 
         [SerializeField]
@@ -22,6 +23,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Info m_midAirForward;
         [SerializeField]
         private Info m_midAirOverhead;
+        [SerializeField]
+        private Info m_crouchForward;
 
         private IPlayerModifer m_modifier;
         private int m_whipAttackAnimationParameter;
@@ -71,6 +74,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Overhead:
                     m_midAirOverhead.ShowCollider(value);
                     break;
+                case Type.Crouch_Forward:
+                    m_crouchForward.ShowCollider(value);
+                    break;
             }
 
             if (value)
@@ -108,6 +114,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    break;
+                case Type.Crouch_Forward:
+                    m_timer = m_crouchForward.nextAttackDelay;
+                    m_attacker.SetDamageModifier(m_crouchForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
             }
             Record(type);

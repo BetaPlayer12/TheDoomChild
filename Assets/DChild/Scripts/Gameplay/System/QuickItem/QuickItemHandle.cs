@@ -12,6 +12,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Inventories
 {
+
     public class QuickItemHandle : SerializedMonoBehaviour
     {
         public class SelectionEventArgs : IEventActionArgs
@@ -48,6 +49,8 @@ namespace DChild.Gameplay.Inventories
         private GraphController m_graph;
         private ItemSlot m_currentSlot;
         private ConsumableItemData m_currentItem;
+        private QuickItemCountRemover m_itemCountRemover;
+
         private bool m_hideUI;
         public event EventAction<SelectionEventArgs> SelectedItem;
         public event EventAction<SelectionEventArgs> Update;
@@ -67,7 +70,7 @@ namespace DChild.Gameplay.Inventories
                 {
                     m_currentItem.Use(m_player);
                 }
-                m_container.AddItem(m_currentSlot.item, -1);
+                m_itemCountRemover.Remove(m_currentSlot.item, 1);
             }
         }
 
@@ -196,6 +199,7 @@ namespace DChild.Gameplay.Inventories
             m_hideUI = true;
             //This waits for the Nody Graph to initialize itself
             StartCoroutine(DelayedInitialiationRoutine());
+            m_itemCountRemover = new QuickItemCountRemover(m_player, m_container);
         }
     }
 }
