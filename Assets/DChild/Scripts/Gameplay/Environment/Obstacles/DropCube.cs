@@ -11,23 +11,29 @@ public class DropCube : MonoBehaviour
     [SerializeField]
     private Transform m_cubecrusher;
     [SerializeField, HorizontalGroup("Start"), ShowIf("m_cube")]
-    private Vector2 m_StartPosition;
+    private Vector2 m_startPosition;
     [SerializeField, HorizontalGroup("End"), ShowIf("m_cube")]
-    private Vector2 m_EndPosition;
+    private Vector2 m_endPosition;
     // Start is called before the first frame update
     private Vector2 m_start;
     private Vector2 m_destination;
     private Vector2 m_currentPos;
     private bool m_shake = false;
     [SerializeField]
-    private AnimationCurve m_speedCurve;
+    private AnimationCurve m_fallSpeedCurve;
     [SerializeField]
-    private float m_Fallspeed;
+    private AnimationCurve m_returnSpeedCurve;
+    private float m_fallTime;
+    private float m_returnTime;
+    private float m_fallSpeed;
     [SerializeField]
-    private float m_Returnspeed;
+    private float m_maxFallSpeed;
+    private float m_returnSpeed;
     [SerializeField]
+    private float m_maxReturnSpeed;
+    private float m_currentFallSpeed;
+    private float m_currentReturnSpeed;
     public bool m_isDropping;
-    [SerializeField]
     public bool dropped;
     [SerializeField]
     public int delay;
@@ -36,6 +42,8 @@ public class DropCube : MonoBehaviour
     [Button]
     public void Drop()
     {
+        m_fallTime = 0;
+        m_returnTime = 0;
         m_shake = true;
         StartCoroutine(DelayCoroutine());
         transform.position = m_currentPos;
@@ -49,6 +57,7 @@ public class DropCube : MonoBehaviour
         {
            
             StartCoroutine(DelayCoroutine());
+            transform.position = m_currentPos;
             m_isDropping = false;
             dropped = true;
            
@@ -80,13 +89,13 @@ public class DropCube : MonoBehaviour
     [ResponsiveButtonGroup("Start/Button"), Button("Use Current"), ShowIf("m_cube")]
     private void UseCurrentForStartPosition()
     {
-        m_StartPosition = m_cube.localPosition;
+        m_startPosition = m_cube.localPosition;
     }
 
     [ResponsiveButtonGroup("End/Button"), Button("Use Current"), ShowIf("m_cube")]
     private void UseCurrentForEndPosition()
     {
-        m_EndPosition = m_cube.localPosition;
+        m_endPosition = m_cube.localPosition;
     }
 #endif
    
@@ -97,21 +106,29 @@ public class DropCube : MonoBehaviour
         {
             transform.position = m_currentPos + offset * m_radiusOffset;
         }
+        
+        
+
         if (m_isDropping == true)
         {
             if (dropped == false)
             {
-              
-                SetMoveValues(m_cube.localPosition, m_EndPosition);
-               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_Fallspeed);
+                m_fallTime += Time.deltaTime;
+                m_fallSpeed = m_fallSpeedCurve.Evaluate(m_fallTime);
+                m_currentFallSpeed = m_maxFallSpeed * m_fallSpeed;
+                SetMoveValues(m_cube.localPosition, m_endPosition);
+               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentFallSpeed);
                
             }
             if (dropped == true)
             {
-                SetMoveValues(m_cube.localPosition, m_StartPosition);
-                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_Returnspeed);
+                m_returnTime += Time.deltaTime;
+                m_returnSpeed = m_returnSpeedCurve.Evaluate(m_returnTime);
+                m_currentReturnSpeed = m_maxReturnSpeed * m_returnSpeed;
+                SetMoveValues(m_cube.localPosition, m_startPosition);
+                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentReturnSpeed);
               
-                if(RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_StartPosition))
+                if(RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_startPosition))
                 {
                     m_isDropping = false;
                     dropped = false;

@@ -132,7 +132,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.011086002}
+  m_Offset: {x: -0.0070961267, y: -0.4107564}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -143,7 +143,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.88, y: 0.892172}
+  m_Size: {x: 0.66711664, y: 0.122436166}
   m_EdgeRadius: 0
 --- !u!114 &8571157467503727299
 MonoBehaviour:
@@ -159,20 +159,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_cube: {fileID: 8571157467503727296}
   m_cubecrusher: {fileID: 8571157467678407455}
-  m_StartPosition: {x: 7.31, y: 43}
-  m_EndPosition: {x: 7.31, y: 34.78}
-  m_speedCurve:
+  m_startPosition: {x: 0, y: 0}
+  m_endPosition: {x: 0, y: 0}
+  m_fallSpeedCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Fallspeed: 5
-  m_Returnspeed: 5
+  m_returnSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_maxFallSpeed: 2
+  m_maxReturnSpeed: 2
   m_isDropping: 0
   dropped: 0
   delay: 1
-  m_radiusOffset: 1
+  m_radiusOffset: 0.5
 --- !u!50 &4783893513713941664
 Rigidbody2D:
   serializedVersion: 4
