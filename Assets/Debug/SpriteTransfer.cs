@@ -1,57 +1,60 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class SpriteTransfer : MonoBehaviour
+namespace DChildDebug
 {
-    [SerializeField, AssetSelector]
-    private Sprite[] m_properReference;
-    [SerializeField]
-    private string m_prefix;
-
-    [Button]
-    private void BeginTransfer()
+    public class SpriteTransfer : MonoBehaviour
     {
-        var sprites = FindObjectsOfType<SpriteRenderer>();
-        for (int i = 0; i < sprites.Length; i++)
+        [SerializeField, AssetSelector]
+        private Sprite[] m_properReference;
+        [SerializeField]
+        private string m_prefix;
+
+        [Button]
+        private void BeginTransfer()
         {
-            var renderer = sprites[i];
-            var sprite = renderer.sprite;
-            if (sprite != null)
+            var sprites = FindObjectsOfType<SpriteRenderer>();
+            for (int i = 0; i < sprites.Length; i++)
             {
-                if (sprite.name.StartsWith(m_prefix) == false)
+                var renderer = sprites[i];
+                var sprite = renderer.sprite;
+                if (sprite != null)
                 {
-                    var supposedName = m_prefix + sprite.name;
-                    var replacement = GetSprite(supposedName);
-                    if (replacement)
+                    if (sprite.name.StartsWith(m_prefix) == false)
                     {
-                        renderer.sprite = replacement;
-                        Debug.Log($"Transfer Success");
-                    }
-                    else
-                    {
-                        Debug.Log($"Cant Find Replacement For = {sprite.name}");
+                        var supposedName = m_prefix + sprite.name;
+                        var replacement = GetSprite(supposedName);
+                        if (replacement)
+                        {
+                            renderer.sprite = replacement;
+                            Debug.Log($"Transfer Success");
+                        }
+                        else
+                        {
+                            Debug.Log($"Cant Find Replacement For = {sprite.name}");
+                        }
                     }
                 }
+                else
+                {
+                    Debug.Log($"Sprite Missing");
+                }
             }
-            else
+        }
+
+        private Sprite GetSprite(string name)
+        {
+            for (int i = 0; i < m_properReference.Length; i++)
             {
-                Debug.Log($"Sprite Missing");
+                if (m_properReference[i].name == name)
+                {
+                    return m_properReference[i];
+                }
             }
+            return null;
         }
     }
 
-    private Sprite GetSprite(string name)
-    {
-        for (int i = 0; i < m_properReference.Length; i++)
-        {
-            if (m_properReference[i].name == name)
-            {
-                return m_properReference[i];
-            }
-        }
-        return null;
-    }
 }

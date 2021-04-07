@@ -1762,7 +1762,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dde6157916c2a0c4da4182f141330af9, type: 2}
+  - {fileID: 2100000, guid: edb3ea944ac8af649b8214137aa77850, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1795,7 +1795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 632edbf830efecb45a24a1702dcf8628, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 403a6fae6b2686144926096f3d4e1cff, type: 2}
   initialSkinName: default
   initialFlipX: 1
   initialFlipY: 0
@@ -5006,7 +5006,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -12.736778, y: 7}
+  m_Offset: {x: -25.304611, y: 10.498316}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5017,7 +5017,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 56.600693, y: 15}
+  m_Size: {x: 92.17203, y: 21.996632}
   m_EdgeRadius: 0
 --- !u!114 &6041339411304193821
 MonoBehaviour:
@@ -5032,6 +5032,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_model: {fileID: 8361752972411478910}
+--- !u!114 &608297219173210958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8796790308499993399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: 86cbd17d348e67b44817367653305d7e, type: 2}
+  m_particleSystems:
+  - {fileID: 8796790308499993392}
+  - {fileID: 8796790308255833187}
+  - {fileID: 8796790309420429270}
+  - {fileID: 8796790309136478622}
+  m_playOnAwake: 1
+  m_poolOnStop: 0
 --- !u!1 &8800650802500769024
 GameObject:
   m_ObjectHideFlags: 0
@@ -5491,16 +5511,31 @@ PrefabInstance:
     - target: {fileID: 251869642683197137, guid: c46d5eff14ad4b245bc21301bdfeaa66,
         type: 3}
       propertyPath: m_Name
-      value: Fire_For_Lava_Monster (1)
+      value: Fire_For_Lava_Monster
       objectReference: {fileID: 0}
     - target: {fileID: 251869642683197142, guid: c46d5eff14ad4b245bc21301bdfeaa66,
         type: 3}
       propertyPath: InitialModule.startRotation.scalar
       value: -1.5707963
       objectReference: {fileID: 0}
+    - target: {fileID: 251869642683197142, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 251869642683197142, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 251869642683197143, guid: c46d5eff14ad4b245bc21301bdfeaa66,
         type: 3}
       propertyPath: m_RenderAlignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 251869642977151365, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+        type: 3}
+      propertyPath: playOnAwake
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 251869642977151366, guid: c46d5eff14ad4b245bc21301bdfeaa66,
@@ -5538,6 +5573,11 @@ PrefabInstance:
       propertyPath: ShapeModule.m_Position.z
       value: -2.7
       objectReference: {fileID: 0}
+    - target: {fileID: 251869643876203056, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 251869643876203057, guid: c46d5eff14ad4b245bc21301bdfeaa66,
         type: 3}
       propertyPath: m_RenderAlignment
@@ -5563,6 +5603,11 @@ PrefabInstance:
       propertyPath: ShapeModule.m_Position.z
       value: -2.7
       objectReference: {fileID: 0}
+    - target: {fileID: 251869644124988536, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 251869644124988537, guid: c46d5eff14ad4b245bc21301bdfeaa66,
         type: 3}
       propertyPath: m_RenderAlignment
@@ -5570,9 +5615,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c46d5eff14ad4b245bc21301bdfeaa66, type: 3}
+--- !u!1 &8796790308499993399 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 251869642683197137, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+    type: 3}
+  m_PrefabInstance: {fileID: 8748990178559497702}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8796790308499993398 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 251869642683197136, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+    type: 3}
+  m_PrefabInstance: {fileID: 8748990178559497702}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8796790308255833187 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 251869642977151365, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+    type: 3}
+  m_PrefabInstance: {fileID: 8748990178559497702}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8796790309420429270 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 251869643876203056, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+    type: 3}
+  m_PrefabInstance: {fileID: 8748990178559497702}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8796790309136478622 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 251869644124988536, guid: c46d5eff14ad4b245bc21301bdfeaa66,
+    type: 3}
+  m_PrefabInstance: {fileID: 8748990178559497702}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8796790308499993392 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 251869642683197142, guid: c46d5eff14ad4b245bc21301bdfeaa66,
     type: 3}
   m_PrefabInstance: {fileID: 8748990178559497702}
   m_PrefabAsset: {fileID: 0}
