@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Projectiles
     {
         [SerializeField]
         private AttackProjectileData m_data;
-
+       
         protected bool m_collidedWithEnvironment;
         private static Hitbox m_cacheToDamage;
 
@@ -102,6 +102,7 @@ namespace DChild.Gameplay.Projectiles
         {
             base.Awake();
             GetComponent<Attacker>().SetDamage(projectileData.damage);
+
         }
 
         private void OnValidate()

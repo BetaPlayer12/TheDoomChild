@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Projectiles
     {
         protected override bool ValidateExplosion(GameObject newExplosion)
         {
-            var hasAOEExplosion = m_impactFX.GetComponent<AOEExplosion>() != null;
+            var hasAOEExplosion = m_impactFX.GetComponent<ExplosionEffects>() != null;
             if (hasAOEExplosion == false)
             {
                 m_impactFX = null;
