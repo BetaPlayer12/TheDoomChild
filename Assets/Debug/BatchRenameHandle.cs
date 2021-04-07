@@ -2,21 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace DChildDebug
 {
     public class BatchRenameHandle : MonoBehaviour
     {
-        private enum PrefabInclusion
-        {
-            All,
-            PrefabOnly,
-            NonPrefabOnly
-        }
-
         private enum FilterType
         {
             None,
@@ -29,8 +19,6 @@ namespace DChildDebug
         private GameObject m_scope;
         [SerializeField, ShowIf("@m_scope != null")]
         private bool m_includeChildrenOfChildren;
-        [SerializeField]
-        private PrefabInclusion m_inclusion;
         [SerializeField]
         private FilterType m_stringFilterType;
         [SerializeField, ShowIf("@m_stringFilterType != FilterType.None")]
@@ -51,7 +39,6 @@ namespace DChildDebug
             //Gather
             if (m_scope)
             {
-
                 if (m_includeChildrenOfChildren)
                 {
                     cache.AddRange(m_scope.GetComponentsInChildren<Transform>().Select(x => x.gameObject).ToArray());
@@ -72,31 +59,7 @@ namespace DChildDebug
             }
 
             //Filter
-#if UNITY_EDITOR
-            switch (m_inclusion)
-            {
-                case PrefabInclusion.All:
-                    break;
-                case PrefabInclusion.PrefabOnly:
-                    for (int i = cache.Count - 1; i >= 0; i--)
-                    {
-                        if (PrefabUtility.IsPartOfPrefabInstance(cache[i]) == false)
-                        {
-                            cache.RemoveAt(i);
-                        }
-                    }
-                    break;
-                case PrefabInclusion.NonPrefabOnly:
-                    for (int i = cache.Count - 1; i >= 0; i--)
-                    {
-                        if (PrefabUtility.IsPartOfPrefabInstance(cache[i]))
-                        {
-                            cache.RemoveAt(i);
-                        }
-                    }
-                    break;
-            }
-#endif
+
             switch (m_stringFilterType)
             {
                 case FilterType.None:
