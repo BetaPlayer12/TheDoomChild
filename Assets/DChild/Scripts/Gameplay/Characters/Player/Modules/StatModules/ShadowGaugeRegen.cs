@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_stackingRegen;
         private bool m_enableDelayedRegen;
         private int m_previousShadowGauge;
+        private bool m_isEnabled;
 
         private bool shadowGaugeHasBeenReduced => m_previousShadowGauge > m_shadowGauge.currentValue;
 
@@ -27,7 +28,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_previousShadowGauge = m_shadowGauge.currentValue;
         }
 
-        public bool CanRegen() => m_shadowGauge.currentValue < m_shadowGauge.maxValue;
+        public void Enable(bool isEnabled)
+        {
+            m_isEnabled = isEnabled;
+        }
+
+        public bool CanRegen() => m_isEnabled && m_shadowGauge.currentValue < m_shadowGauge.maxValue;
 
         public void Execute()
         {

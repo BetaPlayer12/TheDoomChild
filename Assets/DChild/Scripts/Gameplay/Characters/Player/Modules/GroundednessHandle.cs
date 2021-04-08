@@ -21,6 +21,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Vector2 boxSize;
         [SerializeField]
         private float angle;
+        [SerializeField]
+        private float m_groundCheckOffset;
 
         private bool m_previouslyGrounded;
         private IGroundednessState m_state;
@@ -29,9 +31,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ContactFilter2D m_filter;
         private List<Collider2D> m_colliderList;
         private bool m_isUsingCoyote;
-
+        
         public event EventAction<EventActionArgs> StateChange;
         public bool isUsingCoyote => m_isUsingCoyote;
+        public float groundCheckOffset => m_groundCheckOffset;
 
         public void Initialize(ComplexCharacterInfo info)
         {
