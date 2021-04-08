@@ -10,16 +10,12 @@ namespace DChild.Gameplay.Projectiles
     {
         [SerializeField]
         private AttackProjectileData m_data;
-       
+
         protected bool m_collidedWithEnvironment;
         private static Hitbox m_cacheToDamage;
 
         protected override ProjectileData projectileData => m_data;
-        public override void ForceCollision()
-        {
-            Collide();
-        }
-      
+
         public override void ResetState()
         {
             base.ResetState();
@@ -102,7 +98,6 @@ namespace DChild.Gameplay.Projectiles
         {
             base.Awake();
             GetComponent<Attacker>().SetDamage(projectileData.damage);
-
         }
 
         private void OnValidate()

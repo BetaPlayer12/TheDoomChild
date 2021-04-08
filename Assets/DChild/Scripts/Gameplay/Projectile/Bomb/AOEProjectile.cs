@@ -19,20 +19,16 @@ namespace DChild.Gameplay.Projectiles
             base.ResetState();
             gameObject.SetActive(true);
         }
-        public override void ForceCollision()
-        {
-            Detonate(transform.position);
-        }
 
         public virtual void Detonate(Vector2 position)
         {
-            //var explosion = (ExplosionEffects)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_data.impactFX);
-            //explosion.transform.parent = null;
-            //explosion.SpawnAt(position, Quaternion.identity);
-            //explosion.Detonate();
-            //gameObject.SetActive(false);
-            //UnloadProjectile();
-            //CallImpactedEvent();
+            var explosion = (AOEExplosion)GameSystem.poolManager.GetPool<PoolableObjectPool>().GetOrCreateItem(m_data.impactFX);
+            explosion.transform.parent = null;
+            explosion.SpawnAt(position, Quaternion.identity);
+            explosion.Detonate();
+            gameObject.SetActive(false);
+            UnloadProjectile();
+            CallImpactedEvent();
         }
 
         private void OnValidate()

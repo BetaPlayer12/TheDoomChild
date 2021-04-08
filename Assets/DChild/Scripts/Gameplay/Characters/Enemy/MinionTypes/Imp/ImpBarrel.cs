@@ -52,9 +52,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
-        private BaseColliderDamage m_explosionDamageable;
-        [SerializeField, TabGroup("Reference")]
-        private Collider2D m_explosionHitBox;
+        private GameObject m_explosionHitBox;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
@@ -64,8 +62,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_explosionFX;
         //Patience Handler
-
-        private ImpAI m_imp;
 
 
         private float m_currentSpawnTime;
@@ -78,11 +74,6 @@ namespace DChild.Gameplay.Characters.Enemies
         public void GetTarget(AITargetInfo target)
         {
             m_targetInfo = target;
-        }
-
-        public void SetImp(ImpAI imp)
-        {
-            m_imp = imp;
         }
 
         //Patience Handler
@@ -125,10 +116,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_character.physics.SetVelocity(Vector2.zero);
             m_character.physics.simulateGravity = false;
-            m_explosionHitBox.enabled = true;
+            m_explosionHitBox.SetActive(true);
             m_explosionFX.Play();
             yield return new WaitForSeconds(.15f);
-            m_explosionHitBox.enabled = false;
+            m_explosionHitBox.SetActive(false);
             yield return new WaitForSeconds(2f);
             Destroy(this.gameObject);
             yield return null;
@@ -138,17 +129,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             //m_turnHandle.TurnDone += OnTurnDone;
-            m_explosionDamageable.DamageableDetected += Laugh;
             m_deathHandle.SetAnimation(null);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             //m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
         }
 
-        private void Laugh(TargetInfo arg1, Collider2D arg2)
-        {
-            m_imp.Laugh();
-        }
 
         private void Update()
         {

@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters
             instance.transform.position = spawnPoint;
             var component = instance.GetComponent<Projectile>();
             component.ResetState();
-            component.Launch(flightDirection, speed);
+            component.SetVelocity(flightDirection, speed);
             return instance.gameObject;
         }
 
@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Characters
         {
             var component = projectile.GetComponent<Projectile>();
             component.ResetState();
-            component.Launch(flightDirection, speed);
+            component.SetVelocity(flightDirection, speed);
 
             return projectile.gameObject;
         }
