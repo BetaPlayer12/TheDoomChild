@@ -586,7 +586,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     projectile.Impacted -= OnEarlyImpact;
                     m_soundBallList[i].transform.parent = null;
                     var toTarget = (m_targetInfo.position - (Vector2)m_soundBallList[i].transform.position).normalized;
-                    projectile.Launch(toTarget, m_info.soundball.speed);
+                    projectile.SetVelocity(toTarget, m_info.soundball.speed);
                 }
             }
 
@@ -601,7 +601,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.soundball.projectile);
                 instance.transform.parent = chargeInstance.GetComponentInParent<ParticleFX>().transform.parent;
                 instance.transform.position = chargeInstance.transform.position;
-                instance.Launch(Vector2.zero, 0);
+                instance.SetVelocity(Vector2.zero, 0);
                 instance.Impacted += OnEarlyImpact;
                 m_soundBallList.Add(instance);
             }

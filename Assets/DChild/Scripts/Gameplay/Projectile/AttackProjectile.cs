@@ -15,11 +15,7 @@ namespace DChild.Gameplay.Projectiles
         private static Hitbox m_cacheToDamage;
 
         protected override ProjectileData projectileData => m_data;
-        public override void ForceCollision()
-        {
-            Collide();
-        }
-      
+
         public override void ResetState()
         {
             base.ResetState();

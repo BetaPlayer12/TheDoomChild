@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void Add(PlayerModifier modifier, float value)
         {
-            if (m_modifiers.ContainsKey(modifier))
+            if (m_modifiers.ContainsKey(modifier) == false)
             {
                 m_modifiers[modifier] += value;
             }
