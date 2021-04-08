@@ -62,14 +62,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-
-            [Title("Events")]
-            [SerializeField, ValueDropdown("GetEvents")]
-            private string m_detectFXEvent;
-            public string detectFXEvent => m_detectFXEvent;
 
 
             public override void Initialize()
@@ -133,16 +125,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
-        
-        [SerializeField, TabGroup("FX")]
-        private ParticleFX m_headFX;
-        [SerializeField, TabGroup("FX")]
-        private ParticleSystemRenderer m_renderer;
-
-        private MaterialPropertyBlock m_propertyBlock;
-
-        [SerializeField]
-        private SpineEventListener m_spineListener;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -251,7 +233,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
-            m_headFX.Stop();
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -305,11 +286,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
-            m_animation.SetAnimation(0, m_info.detectAnimation, false).TimeScale = .5f;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(3f);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -387,19 +365,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void IncreaseHeadFX()
-        {
-            var mainFX = m_headFX.gameObject.GetComponent<ParticleSystem>().main;
-            mainFX.startSize = 1.5f;
-            m_propertyBlock.SetVector("Vector2_3CFAEA88", new Vector4(-2, 0));
-            m_renderer.SetPropertyBlock(m_propertyBlock);
-        }
-
         protected override void Start()
         {
             base.Start();
             m_selfCollider.SetActive(false);
-            m_spineListener.Subscribe(m_info.detectFXEvent, IncreaseHeadFX);
         }
 
         protected override void Awake()
@@ -413,7 +382,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
-            m_propertyBlock = new MaterialPropertyBlock();
             UpdateAttackDeciderList();
 
             m_attackCache = new List<Attack>();
@@ -577,9 +545,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.SetActive(true);
-            var mainFX = m_headFX.GetComponent<ParticleSystem>().main;
-            mainFX.startSize = 1f;
-            m_renderer.material.SetVector("Main_Speed", new Vector2(-1, 0));
         }
 
         public void SwitchToBattleZoneAI()
