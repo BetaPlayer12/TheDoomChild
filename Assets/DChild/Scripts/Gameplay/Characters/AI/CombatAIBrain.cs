@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat.StatusAilment;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -56,6 +57,11 @@ namespace DChild.Gameplay.Characters.AI
 
         protected AITargetInfo m_targetInfo;
 
+        protected Attacker m_attacker;
+        protected AttackResistance m_attackResistance;
+        protected StatusInflictor m_statusInflictor;
+        protected StatusEffectResistance m_statusResistance;
+
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (m_targetInfo == null)
@@ -97,6 +103,15 @@ namespace DChild.Gameplay.Characters.AI
         protected bool IsTargetInRange(float distance) => Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distance;
         protected Vector2 DirectionToTarget() => (m_targetInfo.position - (Vector2)m_character.transform.position).normalized;
 
+        protected void LoadCharacterStatData(CharacterStatsData statData)
+        {
+            m_damageable.health.SetMaxValue(statData.maxHealth);
+            m_attacker?.SetData(statData.damage);
+            m_attackResistance?.SetData(statData.attackResistance);
+            m_statusInflictor?.SetData(statData.statusInfliction);
+            m_statusResistance?.SetData(statData.statusResistanceData);
+        }
+
         protected override void Awake()
         {
             if (m_targetInfo == null)
@@ -105,13 +120,22 @@ namespace DChild.Gameplay.Characters.AI
             }
             base.Awake();
             m_damageable.Destroyed += OnDestroyed;
+
+            m_attacker = GetComponent<Attacker>();
+            m_attackResistance = GetComponentInChildren<AttackResistance>();
+            m_statusInflictor = GetComponent<StatusInflictor>();
+            m_statusResistance = GetComponentInChildren<StatusEffectResistance>();
         }
 
         protected virtual void OnDestroyed(object sender, EventActionArgs eventArgs) => base.enabled = false;
 
         protected virtual void Start()
         {
-
+            if (m_statsData != null)
+            {
+                LoadCharacterStatData(m_statsData);
+                m_damageable.health.ResetValueToMax();
+            }
         }
 
         protected virtual void LateUpdate()
