@@ -138,6 +138,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_headFX;
         [SerializeField, TabGroup("FX")]
         private ParticleSystemRenderer m_renderer;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_detectionFX;
 
         private MaterialPropertyBlock m_propertyBlock;
 
@@ -389,6 +391,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void IncreaseHeadFX()
         {
+            m_detectionFX.Play();
             var mainFX = m_headFX.gameObject.GetComponent<ParticleSystem>().main;
             mainFX.startSize = 1.5f;
             m_propertyBlock.SetVector("Vector2_3CFAEA88", new Vector4(-2, 0));
