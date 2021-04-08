@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using DChild.Gameplay.Combat.StatusAilment;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -51,10 +52,15 @@ namespace DChild.Gameplay.Characters.AI
         protected Transform m_centerMass;
         [SerializeField]
         private AggroBoundary m_aggroBoundary;
-        [SerializeField, OnValueChanged("InitializeInfo"), TabGroup("Data")]
+        [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
         protected CharacterStatsData m_statsData;
 
         protected AITargetInfo m_targetInfo;
+
+        private Attacker m_attacker;
+        private AttackResistance m_attackResistance;
+        private StatusInflictor m_statusInflictor;
+        private StatusEffectResistance m_statusResistance;
 
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -97,6 +103,16 @@ namespace DChild.Gameplay.Characters.AI
         protected bool IsTargetInRange(float distance) => Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distance;
         protected Vector2 DirectionToTarget() => (m_targetInfo.position - (Vector2)m_character.transform.position).normalized;
 
+        protected void LoadCharacterStatData(CharacterStatsData statData)
+        {
+            m_damageable.health.SetMaxValue(statData.maxHealth);
+            m_attacker?.SetData(statData.damage);
+            m_attackResistance?.SetData(statData.attackResistance);
+            m_attackResistance?.SetData(statData.attackResistance);
+            m_statusInflictor?.SetData(statData.statusInfliction);
+            m_statusResistance?.SetData(statData.statusResistanceData);
+        }
+
         protected override void Awake()
         {
             if (m_targetInfo == null)
@@ -105,13 +121,22 @@ namespace DChild.Gameplay.Characters.AI
             }
             base.Awake();
             m_damageable.Destroyed += OnDestroyed;
+
+            m_attacker = GetComponent<Attacker>();
+            m_attackResistance = GetComponentInChildren<AttackResistance>();
+            m_statusInflictor = GetComponent<StatusInflictor>();
+            m_statusResistance = GetComponentInChildren<StatusEffectResistance>();
         }
 
         protected virtual void OnDestroyed(object sender, EventActionArgs eventArgs) => base.enabled = false;
 
         protected virtual void Start()
         {
-
+            if (m_statsData != null)
+            {
+                LoadCharacterStatData(m_statsData);
+                m_damageable.health.ResetValueToMax();
+            }
         }
 
         protected virtual void LateUpdate()

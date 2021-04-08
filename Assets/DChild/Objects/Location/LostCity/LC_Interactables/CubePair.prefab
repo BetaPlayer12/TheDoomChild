@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 8571157467503727298}
   - component: {fileID: 8571157467503727299}
   - component: {fileID: 4783893513713941664}
-  - component: {fileID: 2998078377768928147}
   m_Layer: 11
   m_Name: SmashCube
   m_TagString: Untagged
@@ -64,7 +63,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 6.111, y: 5.859, z: 1}
   m_Children:
-  - {fileID: 8203627083205536881}
   - {fileID: 8571157468695394347}
   m_Father: {fileID: 292591087355769662}
   m_RootOrder: 0
@@ -132,7 +130,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0070961267, y: -0.4107564}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -143,7 +141,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.66711664, y: 0.122436166}
+  m_Size: {x: 0.88, y: 0.87}
   m_EdgeRadius: 0
 --- !u!114 &8571157467503727299
 MonoBehaviour:
@@ -159,62 +157,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_cube: {fileID: 8571157467503727296}
   m_cubecrusher: {fileID: 8571157467678407455}
-  m_startPosition: {x: 0, y: 0}
-  m_endPosition: {x: 0, y: 0}
-  m_fallSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_returnSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_maxFallSpeed: 2
-  m_maxReturnSpeed: 2
+  m_StartPosition: {x: 7.31, y: 43}
+  m_EndPosition: {x: 7.31, y: 34.78}
+  m_Fallspeed: 5
+  m_Returnspeed: 5
   m_isDropping: 0
   dropped: 0
-  delay: 1
-  m_radiusOffset: 0.5
+  delay: 2
 --- !u!50 &4783893513713941664
 Rigidbody2D:
   serializedVersion: 4
@@ -236,19 +185,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!114 &2998078377768928147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8571157467503727308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53225741fa1374744a3334286005bac2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_toParent: {fileID: 8571157467503727296}
 --- !u!1 &8571157467678407451
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_type: 0
   m_needsButtonToInteract: 0
-  m_promptOffset: {x: 0, y: 0, z: 0}
+  m_prompt: {fileID: 0}
   m_collider: {fileID: 0}
   m_isOn: 0
   m_startAsOnState:
@@ -629,7 +565,7 @@ Transform:
   m_Children:
   - {fileID: 8571157467678407455}
   m_Father: {fileID: 8571157467503727296}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8571157468695394346
 MonoBehaviour:
@@ -733,60 +669,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &8913642605377477121
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8203627083205536881}
-  - component: {fileID: 8330672059006922169}
-  m_Layer: 11
-  m_Name: blocker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8203627083205536881
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8913642605377477121}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8571157467503727296}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &8330672059006922169
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8913642605377477121}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.0053142905, y: -0.00000023841858}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.88308537, y: 0.88914347}
-  m_EdgeRadius: 0

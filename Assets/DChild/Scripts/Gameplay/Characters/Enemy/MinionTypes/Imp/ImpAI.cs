@@ -108,7 +108,6 @@ namespace DChild.Gameplay.Characters.Enemies
             Patrol,
             Cooldown,
             Turning,
-            Despawned,
             Attacking,
             Chasing,
             ReevaluateSituation,
@@ -163,18 +162,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
         private bool m_isDetecting;
-        private bool m_isDoingAction;
         private GameObject m_barrelCache;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            if (!m_isDoingAction)
-            {
-                m_stateHandle.OverrideState(State.Despawned);
-                m_animation.DisableRootMotion();
-                //m_stateHandle.ApplyQueuedState();
-                StartCoroutine(DespawnRoutine());
-            }
+            m_animation.DisableRootMotion();
+            m_stateHandle.ApplyQueuedState();
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
@@ -221,66 +214,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.plantBomb.animation)
-            {
-                m_isDoingAction = true;
-                m_stateHandle.Wait(State.Cooldown);
-                m_agent.Stop();
-                StopAllCoroutines();
-                StartCoroutine(FlinchRoutine());
-            }
+            m_stateHandle.Wait(State.Cooldown);
+            m_agent.Stop();
+            m_animation.EnableRootMotion(true, true);
+            StopAllCoroutines();
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
-        private IEnumerator FlinchRoutine()
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.EnableRootMotion(true, true);
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_isDoingAction = false;
-            m_animation.SetAnimation(0, m_info.idleAnimation, false).MixDuration = 0;
-            StartCoroutine(DespawnRoutine());
-            yield return null;
+            m_animation.DisableRootMotion();
+            m_stateHandle.OverrideState(State.Cooldown);
         }
-
-        //private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
-        //{
-        //    m_animation.DisableRootMotion();
-        //    m_stateHandle.OverrideState(State.Cooldown);
-        //}
 
         private void SpawnBarrel()
         {
             var barrelPos = new Vector3(transform.position.x + (2 * transform.localScale.x), transform.position.y - 5, transform.position.z);
             var barrel = Instantiate(m_info.barrel, barrelPos, Quaternion.identity);
-            barrel.GetComponent<ImpBarrel>().SetImp(this.gameObject.GetComponent<ImpAI>());
             m_barrelCache = barrel;
-        }
-
-        public void Laugh()
-        {
-            if (!m_isDoingAction)
-            {
-                m_isDoingAction = true;
-                StopAllCoroutines();
-                StartCoroutine(LaughRoutine());
-
-            }
-        }
-
-        private IEnumerator LaughRoutine()
-        {
-            if (m_stateHandle.currentState == State.Despawned)
-            {
-                m_animation.SetAnimation(0, m_info.reappearing1Animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.reappearing1Animation);
-                m_hitbox.Enable();
-            }
-            m_animation.SetAnimation(0, m_info.laughAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.laughAnimation);
-            m_isDoingAction = false;
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
-            yield return null;
         }
 
         private Vector2 GroundPosition()
@@ -343,24 +295,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
-            yield return null;
-        }
-
-        private IEnumerator DespawnRoutine()
-        {
-            var disappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.disappearing1Animation : m_info.disappearing2Animation;
-            m_animation.SetAnimation(0, disappearAnim, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, disappearAnim);
-            m_hitbox.Disable();
-            var random = UnityEngine.Random.Range(0, 2);
-            transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 10 : -10), GroundPosition().y + 20);
-            yield return new WaitForSeconds(1f);
-            var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
-            m_animation.SetAnimation(0, reappearAnim, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.Enable();
-            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -474,7 +408,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
-            //m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathBeginAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
@@ -518,10 +452,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute();
                     break;
-
-                case State.Despawned:
-                    break;
-
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -571,7 +501,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     m_agent.Stop();
-                    m_hitbox.Enable();
                     m_stateHandle.SetState(State.Attacking);
                     break;
 
@@ -593,12 +522,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_targetInfo.isValid)
+            if (/*m_enablePatience*/ Vector2.Distance(transform.position, m_targetInfo.position) > 50)
             {
-                if (/*m_enablePatience*/ Vector2.Distance(transform.position, m_targetInfo.position) > 50)
-                {
-                    Patience();
-                }
+                Patience();
             }
         }
 
@@ -616,7 +542,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_enablePatience = false;
-            m_isDoingAction = false;
             m_hitbox.Enable();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;

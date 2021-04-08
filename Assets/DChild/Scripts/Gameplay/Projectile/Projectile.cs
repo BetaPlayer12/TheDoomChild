@@ -7,7 +7,6 @@ using Holysoft.Event;
 using Holysoft.Pooling;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DChild.Gameplay.Projectiles
 {
@@ -25,11 +24,6 @@ namespace DChild.Gameplay.Projectiles
         private ParticleCallback m_particleCallback;
         [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
         private GameObject m_model;
-        [SerializeField, PropertyOrder(101), TabGroup("Launch")]
-        private UnityEvent m_onLaunch; 
-        [SerializeField, PropertyOrder(101), TabGroup("Reset")]
-        private UnityEvent m_onReset;
-
 
         protected IsolatedPhysics2D m_physics;
         public event EventAction<EventActionArgs> Impacted;
@@ -43,8 +37,6 @@ namespace DChild.Gameplay.Projectiles
 
         public bool hasConstantSpeed => projectileData.hasConstantSpeed;
 
-        public abstract void ForceCollision();
-
         public virtual void ResetState()
         {
             if (m_waitForParticlesEnd)
@@ -52,16 +44,10 @@ namespace DChild.Gameplay.Projectiles
                 m_model?.SetActive(true);
                 m_particleSystem?.Play();
             }
-            m_onReset.Invoke();
         }
 
         public void ChangeTrajectory(Vector2 directionNormal) => transform.right = directionNormal;
 
-        public void Launch(Vector2 directionNormal, float speed)
-        {
-            SetVelocity(directionNormal, speed);
-            m_onLaunch.Invoke();
-        }
         public void SetVelocity(Vector2 directionNormal, float speed)
         {
             transform.right = directionNormal;
