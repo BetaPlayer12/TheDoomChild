@@ -5,23 +5,24 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-    [CreateAssetMenu(fileName = "CharacterStatsData", menuName = "DChild/Gameplay/Character Stats Data" )]
+    [CreateAssetMenu(fileName = "CharacterStatsData", menuName = "DChild/Gameplay/Character Stats Data")]
     public class CharacterStatsData : ScriptableObject
     {
         [SerializeField]
         private int m_maxHealth;
-        [SerializeField]
-        private AttackDamage m_damage;
-        [SerializeField, InlineEditorAttribute]
+        [SerializeField, InlineEditor]
+        private AttackerData m_damage;
+        [SerializeField, InlineEditor]
         private AttackResistanceData m_attackResistance;
-        [SerializeField]
+        [SerializeField, InlineEditor]
         private StatusEffectChanceData m_statusInfliction;
-        [SerializeField]
+        [SerializeField, InlineEditor]
         private StatusEffectChanceData m_statusResistanceData;
 
-        public void Apply(Character character)
-        {
-            //TODO: ApplyStats
-        }
+        public int maxHealth => m_maxHealth;
+        public AttackerData damage => m_damage;
+        public AttackResistanceData attackResistance => m_attackResistance;
+        public StatusEffectChanceData statusInfliction => m_statusInfliction;
+        public StatusEffectChanceData statusResistanceData => m_statusResistanceData;
     }
 }
