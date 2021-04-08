@@ -57,10 +57,10 @@ namespace DChild.Gameplay.Characters.AI
 
         protected AITargetInfo m_targetInfo;
 
-        protected Attacker m_attacker;
-        protected AttackResistance m_attackResistance;
-        protected StatusInflictor m_statusInflictor;
-        protected StatusEffectResistance m_statusResistance;
+        private Attacker m_attacker;
+        private AttackResistance m_attackResistance;
+        private StatusInflictor m_statusInflictor;
+        private StatusEffectResistance m_statusResistance;
 
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -107,6 +107,7 @@ namespace DChild.Gameplay.Characters.AI
         {
             m_damageable.health.SetMaxValue(statData.maxHealth);
             m_attacker?.SetData(statData.damage);
+            m_attackResistance?.SetData(statData.attackResistance);
             m_attackResistance?.SetData(statData.attackResistance);
             m_statusInflictor?.SetData(statData.statusInfliction);
             m_statusResistance?.SetData(statData.statusResistanceData);
