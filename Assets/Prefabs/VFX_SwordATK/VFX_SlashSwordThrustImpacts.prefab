@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3470783344562329727}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: VFX_SlashSwordThrustImpacts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,87 +28,9 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 2841543981903195023}
-  - {fileID: 1487076911935573943}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6069039618728897644
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1487076911935573943}
-  - component: {fileID: 7945879900239451382}
-  - component: {fileID: 8925965320618081188}
-  m_Layer: 8
-  m_Name: ThrustImpactCollider
-  m_TagString: WallBreaker
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1487076911935573943
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6069039618728897644}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.17, y: 4.16, z: 0}
-  m_LocalScale: {x: -0.5, y: 0.5, z: 0.5}
-  m_Children: []
-  m_Father: {fileID: 3470783344562329727}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7945879900239451382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6069039618728897644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 1
-  m_damageUniqueHitboxesOnly: 1
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList:
-  - m_target: {fileID: 0}
-    m_ignoreList:
-    - {fileID: 8925965320618081188}
---- !u!61 &8925965320618081188
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6069039618728897644}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -3.152748, y: -0.04374695}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 22.193558, y: 7.568207}
-  m_EdgeRadius: 0
 --- !u!1001 &3470783345887416136
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116,16 +38,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3470783344562329727}
     m_Modifications:
-    - target: {fileID: 1676889518959845734, guid: f872c67e27a80f24cbd9d3c31f90a88c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1676889519229351188, guid: f872c67e27a80f24cbd9d3c31f90a88c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 1676889519360255175, guid: f872c67e27a80f24cbd9d3c31f90a88c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -201,11 +113,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: slash_sword_thrust_Impacts 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1676889519360255178, guid: f872c67e27a80f24cbd9d3c31f90a88c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 1676889519702758408, guid: f872c67e27a80f24cbd9d3c31f90a88c,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
@@ -225,11 +132,6 @@ PrefabInstance:
         type: 3}
       propertyPath: ColorModule.gradient.maxGradient.key2.g
       value: 0.7661799
-      objectReference: {fileID: 0}
-    - target: {fileID: 1676889519702758415, guid: f872c67e27a80f24cbd9d3c31f90a88c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1676889519788611464, guid: f872c67e27a80f24cbd9d3c31f90a88c,
         type: 3}
@@ -255,21 +157,6 @@ PrefabInstance:
         type: 3}
       propertyPath: ColorModule.gradient.maxGradient.ctime2
       value: 20046
-      objectReference: {fileID: 0}
-    - target: {fileID: 1676889519788611471, guid: f872c67e27a80f24cbd9d3c31f90a88c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3070165920707667249, guid: f872c67e27a80f24cbd9d3c31f90a88c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3915942905524772114, guid: f872c67e27a80f24cbd9d3c31f90a88c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f872c67e27a80f24cbd9d3c31f90a88c, type: 3}

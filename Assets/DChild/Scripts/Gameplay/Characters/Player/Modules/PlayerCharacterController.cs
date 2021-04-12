@@ -195,6 +195,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
+                    m_shadowGaugeRegen?.Enable(true);
                     m_idle?.Cancel();
                     m_movement?.Cancel();
                 }
@@ -254,6 +255,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_initialDescentBoost = m_character.GetComponentInChildren<InitialDescentBoost>();
             m_objectInteraction = m_character.GetComponentInChildren<ObjectInteraction>();
             m_shadowGaugeRegen = m_character.GetComponentInChildren<ShadowGaugeRegen>();
+            m_shadowGaugeRegen.Enable(true);
             m_objectManipulation = m_character.GetComponentInChildren<ObjectManipulation>();
 
             m_movement = m_character.GetComponentInChildren<Movement>();
@@ -335,7 +337,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
 
                 m_initialDescentBoost?.Handle();
-                if (m_rigidbody.velocity.y < 1f)
+                if (m_rigidbody.velocity.y < m_groundedness?.groundCheckOffset)
                 {
                     if (m_state.forcedCurrentGroundedness == false)
                     {
@@ -887,6 +889,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else
                     {
+                        m_shadowGaugeRegen?.Enable(false);
                         m_shadowMorph.Execute();
                     }
 
