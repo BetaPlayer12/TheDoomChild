@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ProjectileThrow m_skullThrow;
         private LedgeGrab m_ledgeGrab;
         private ShadowMorph m_shadowMorph;
+        private ShadowGaugeRegen m_shadowGaugeRegen;
 
         public void DefaultIdleStateFinished()
         {
@@ -142,6 +143,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void EndShadowMorphCharge()
         {
             Debug.Log("DONE SHADOW MORPH CHARGE");
+            m_shadowGaugeRegen?.Enable(true);
             m_shadowMorph.EndExecution();
         }
 
@@ -157,6 +159,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_skullThrow = character.GetComponentInChildren<ProjectileThrow>();
             m_ledgeGrab = character.GetComponentInChildren<LedgeGrab>();
             m_shadowMorph = character.GetComponentInChildren<ShadowMorph>();
+            m_shadowGaugeRegen = character.GetComponentInChildren<ShadowGaugeRegen>();
         }
     }
 }

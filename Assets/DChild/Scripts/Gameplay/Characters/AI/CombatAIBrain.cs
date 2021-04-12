@@ -52,7 +52,7 @@ namespace DChild.Gameplay.Characters.AI
         protected Transform m_centerMass;
         [SerializeField]
         private AggroBoundary m_aggroBoundary;
-        [SerializeField, ValueDropdown("GetData"), OnValueChanged("InitializeInfo"), TabGroup("Data")]
+        [SerializeField, TabGroup("Data")]
         protected CharacterStatsData m_statsData;
 
         protected AITargetInfo m_targetInfo;
