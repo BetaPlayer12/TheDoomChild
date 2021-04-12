@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-    [CreateAssetMenu(fileName = "CharacterStatsData", menuName = "DChild/Gameplay/Character Stats Data")]
+    [CreateAssetMenu(fileName = "CharacterStatsData", menuName = "DChild/Gameplay/Character Stats Data" )]
     public class CharacterStatsData : ScriptableObject
     {
         [SerializeField]
@@ -19,10 +19,9 @@ namespace DChild.Gameplay
         [SerializeField]
         private StatusEffectChanceData m_statusResistanceData;
 
-        public int maxHealth => m_maxHealth;
-        public AttackDamage damage => m_damage;
-        public AttackResistanceData attackResistance => m_attackResistance;
-        public StatusEffectChanceData statusInfliction => m_statusInfliction;
-        public StatusEffectChanceData statusResistanceData => m_statusResistanceData;
+        public void Apply(Character character)
+        {
+            //TODO: ApplyStats
+        }
     }
 }

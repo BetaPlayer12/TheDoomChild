@@ -14,7 +14,6 @@ public class DamageShake : MonoBehaviour
     [SerializeField]
     private float m_duration = 1f;
 
-    private bool m_shake=false;
     private Vector2 m_startingPos;
     private IHitToInteract m_interractable;
 
@@ -25,30 +24,18 @@ public class DamageShake : MonoBehaviour
         m_startingPos.x = transform.position.x;
         m_startingPos.y = transform.position.y;
     }
-    private void Update()
-    {
-        var offset = Random.insideUnitCircle;
-        if (m_shake == true)
-        {
-            transform.position = m_startingPos + offset * m_radiusOffset;
-        }
-        
-    }
 
     private void OnHit(object sender, HitDirectionEventArgs eventArgs)
     {
         StopAllCoroutines();
-        m_shake = true;
-        StartCoroutine(Shake());
-        
+        StartCoroutine(Shake(eventArgs.direction));
     }
-    IEnumerator Shake()
+    IEnumerator Shake(HorizontalDirection direction)
     {
-       
+        var offset = Random.insideUnitCircle;
+        offset.x = 1 * (int)direction;
+        transform.position = m_startingPos + offset * m_radiusOffset;
         yield return new WaitForSeconds(m_duration);
         transform.position = m_startingPos;
-        m_shake = false;
-
     }
-
 }
