@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 483787536694027892}
   m_Layer: 13
   m_Name: rightarm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,6 +52,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &483787536694027892
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -123,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_colliders: []
 --- !u!1 &566135165252264537
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,6 +173,7 @@ MonoBehaviour:
     m_config: {fileID: 11400000, guid: 85eb7210a2ae6a647a4e69bb9af636ca, type: 2}
     m_rayColor: {r: 1, g: 0.08614111, b: 0, a: 1}
   m_enable: 1
+  m_debugMode: 1
 --- !u!114 &1285177951176238106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +201,7 @@ GameObject:
   - component: {fileID: 449224400092511674}
   m_Layer: 13
   m_Name: leftleg
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -237,6 +240,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &449224400092511674
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -405,6 +409,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -465,6 +470,7 @@ MonoBehaviour:
   _animationName: idle
   loop: 1
   timeScale: 1
+  m_alwaysUpdateMesh: 1
 --- !u!114 &2197468370539629927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,7 +513,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5897591082141548689}
   - component: {fileID: 3728016528683857112}
-  - component: {fileID: 6994932541154819360}
   m_Layer: 13
   m_Name: Attaccbb
   m_TagString: Untagged
@@ -545,39 +550,6 @@ MonoBehaviour:
   slotName: attack bb
   isTrigger: 1
   clearStateOnDisable: 1
---- !u!60 &6994932541154819360
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2438540630208269974}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.3956, y: 1.3183}
-      - {x: -0.91569996, y: -0.086}
-      - {x: -1.5661, y: -1.8419}
-      - {x: 1.9294, y: -1.8892}
-      - {x: 5.1117, y: -1.2353}
-      - {x: 5.9084, y: 0.7449}
-      - {x: 4.7030997, y: 2.3216999}
-      - {x: 2.2226999, y: 2.405}
 --- !u!1 &2650957214316891562
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,7 +563,7 @@ GameObject:
   - component: {fileID: 1225947971922596193}
   m_Layer: 13
   m_Name: rightarm2
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -630,6 +602,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &1225947971922596193
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -666,7 +639,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1725258093713183360}
   - component: {fileID: 5768215916984805912}
-  - component: {fileID: 8220162948761877988}
   - component: {fileID: 4208290831406282330}
   m_Layer: 13
   m_Name: Sensors
@@ -704,23 +676,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c374c2142697f42b772f38146544f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8220162948761877988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4276399966458943890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ef34c6b21e5c9f41bea592ec22b4bd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_sensors:
-  - m_sensor: {fileID: 8900714860929753877}
-    m_turnWhenDetection: 1
-  - m_sensor: {fileID: 4318506908457898235}
-    m_turnWhenDetection: 1
 --- !u!114 &4208290831406282330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,7 +709,7 @@ GameObject:
   - component: {fileID: 2761844417944802015}
   m_Layer: 13
   m_Name: leftleg2
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -793,6 +748,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &2761844417944802015
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -902,7 +858,7 @@ GameObject:
   - component: {fileID: 1141022680877066613}
   m_Layer: 13
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -941,6 +897,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &1141022680877066613
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -980,7 +937,7 @@ GameObject:
   - component: {fileID: 7391356217871240236}
   m_Layer: 13
   m_Name: rightleg
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1019,6 +976,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &7391356217871240236
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1150,6 +1108,7 @@ MonoBehaviour:
     m_config: {fileID: 11400000, guid: 8e6853c49221bde43a887b83550eb6d4, type: 2}
     m_rayColor: {r: 0, g: 1, b: 0, a: 1}
   m_enable: 1
+  m_debugMode: 1
 --- !u!114 &8355969712736539572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1177,7 +1136,7 @@ GameObject:
   - component: {fileID: 4251203739234980045}
   m_Layer: 13
   m_Name: leftarm2
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1216,6 +1175,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &4251203739234980045
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1255,7 +1215,7 @@ GameObject:
   - component: {fileID: 5452145898953178607}
   m_Layer: 13
   m_Name: rightleg2
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1294,6 +1254,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &5452145898953178607
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1333,7 +1294,7 @@ GameObject:
   - component: {fileID: 1884463342724526580}
   m_Layer: 13
   m_Name: leftarm
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1372,6 +1333,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &1884463342724526580
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1411,7 +1373,7 @@ GameObject:
   - component: {fileID: 8054514558942460647}
   m_Layer: 13
   m_Name: mainbody
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1450,6 +1412,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!61 &8054514558942460647
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1727,7 +1690,7 @@ MonoBehaviour:
   - {fileID: 1884463342724526580}
   - {fileID: 4251203739234980045}
   - {fileID: 1141022680877066613}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
 --- !u!114 &1141143352026088181
 MonoBehaviour:
@@ -1742,6 +1705,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!1 &9221745358670648694
 GameObject:

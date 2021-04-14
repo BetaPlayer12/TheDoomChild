@@ -11,6 +11,7 @@ namespace DChildEditor.Toolkit
     public class LootTableToolKit : OdinEditorWindow
     {
         private static LootTableToolKit m_instance;
+
         [MenuItem("Tools/Kit/Loot Table ToolKit")]
         private static void OpenWindow()
         {
