@@ -10,6 +10,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_wallSensor;
         [SerializeField]
         private RaySensor m_heightSensor;
+        [SerializeField]
+        private float m_wallStickOffset;
 
         private float m_cacheGravityScale;
 
@@ -54,7 +56,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_cacheCollider.CompareTag("InvisibleWall") == false)
                         {
-                            isValid = true;
+                            if (hits[i].distance < m_wallStickOffset)
+                            {
+                                isValid = true;
+                            }
                         }
                         else
                         {
@@ -90,6 +95,5 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_animator.SetBool(m_animationParameter, true);
             }
         }
-
     }
 }

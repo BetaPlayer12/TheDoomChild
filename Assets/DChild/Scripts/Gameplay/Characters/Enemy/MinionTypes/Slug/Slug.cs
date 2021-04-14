@@ -167,7 +167,7 @@ namespace DChild.Gameplay.Characters.Enemies
             acidSpit.transform.parent = null;
             var direction = targetPos - (Vector2)m_spitSpawn.position;
             acidSpit.ChangeTrajectory(direction.normalized);
-            acidSpit.SetVelocity(direction, 2f);
+            acidSpit.Launch(direction, 2f);
             yield return new WaitForAnimationComplete(m_animation.animationState, SlugAnimation.ANIMATION_SPIT);
             m_waitForBehaviourEnd = false;
             m_behaviour.SetActiveBehaviour(null);
