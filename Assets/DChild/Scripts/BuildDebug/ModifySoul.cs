@@ -4,23 +4,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ModifySoul : MonoBehaviour
+namespace DChildDebug.Window
 {
-    [SerializeField]
-    public int m_soul = 999999;
-    [Button]
-    private void AddSouls()
+    public class ModifySoul : MonoBehaviour
     {
-        GameplaySystem.playerManager.player.inventory.AddSoulEssence(m_soul);
-    }
-    [Button]
-    private void DeductSouls()
-    {
-        GameplaySystem.playerManager.player.inventory.AddSoulEssence(-m_soul);
-    }
-    [Button]
-    private void EmptySouls()
-    {
-        GameplaySystem.playerManager.player.inventory.SetSoulEssence(0);
+        [SerializeField]
+        public int m_soul = 999999;
+        [Button]
+        public void AddSouls()
+        {
+            GameplaySystem.playerManager.player.inventory.AddSoulEssence(m_soul);
+        }
+        [Button]
+        public void DeductSouls()
+        {
+            GameplaySystem.playerManager.player.inventory.AddSoulEssence(-m_soul);
+        }
+        [Button]
+        public void EmptySouls()
+        {
+            GameplaySystem.playerManager.player.inventory.SetSoulEssence(0);
+        }
     }
 }

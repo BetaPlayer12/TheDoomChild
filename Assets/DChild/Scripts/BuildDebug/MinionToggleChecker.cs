@@ -5,29 +5,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinionToggleChecker : MonoBehaviour
+namespace DChildDebug.Window
 {
-    [SerializeField]
-    private GameObject m_minions;
-
-    private void Toggle(object sender, EventActionArgs eventArgs)
+    public class MinionToggleChecker : MonoBehaviour
     {
-        if(MinionToggle.toggleValue==true)
+        [SerializeField]
+        private GameObject m_minions;
+
+        private void Toggle(object sender, EventActionArgs eventArgs)
         {
-            m_minions.SetActive(true);
+            if (MinionToggle.toggleValue == true)
+            {
+                m_minions.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("it worked");
+                m_minions.SetActive(false);
+            }
+
+
         }
-        else
+
+        private void Start()
         {
-            Debug.Log("it worked");
-            m_minions.SetActive(false);
+            MinionToggle.minionToggleInstance.OnToggle += Toggle;
         }
-        
 
     }
-
-    private void Start()
-    {
-        MinionToggle.minionToggleInstance.OnToggle += Toggle;        
-    }
-
 }

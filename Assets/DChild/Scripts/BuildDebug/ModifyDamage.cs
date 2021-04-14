@@ -5,20 +5,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ModifyDamage : MonoBehaviour
+namespace DChildDebug.Window
 {
-    [SerializeField]
-    public float m_damage = 999999;
-    [Button]
-    private void AddDamage()
+    public class ModifyDamage : MonoBehaviour
     {
-        GameplaySystem.playerManager.player.modifiers.Add(DChild.Gameplay.Characters.Players.PlayerModifier.AttackDamage, m_damage);
-       
-    }
-    [Button]
-    private void ReduceDamage()
-    {
-        GameplaySystem.playerManager.player.modifiers.Add(DChild.Gameplay.Characters.Players.PlayerModifier.AttackDamage, -m_damage);
+        [SerializeField]
+        public float m_damage = 999999;
+        [Button]
+        public void AddDamage()
+        {
+            GameplaySystem.playerManager.player.modifiers.Add(DChild.Gameplay.Characters.Players.PlayerModifier.AttackDamage, m_damage);
 
+        }
+        [Button]
+        public void ReduceDamage()
+        {
+            GameplaySystem.playerManager.player.modifiers.Add(DChild.Gameplay.Characters.Players.PlayerModifier.AttackDamage, -m_damage);
+
+        }
     }
 }
