@@ -11,17 +11,17 @@ namespace DChildDebug.Window
         [SerializeField]
         public int m_soul = 999999;
         [Button]
-        private void AddSouls()
+        public void AddSouls()
         {
             GameplaySystem.playerManager.player.inventory.AddSoulEssence(m_soul);
         }
         [Button]
-        private void DeductSouls()
+        public void DeductSouls()
         {
             GameplaySystem.playerManager.player.inventory.AddSoulEssence(-m_soul);
         }
         [Button]
-        private void EmptySouls()
+        public void EmptySouls()
         {
             GameplaySystem.playerManager.player.inventory.SetSoulEssence(0);
         }

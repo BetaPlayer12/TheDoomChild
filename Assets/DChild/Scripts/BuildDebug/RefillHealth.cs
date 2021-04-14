@@ -9,7 +9,7 @@ namespace DChildDebug.Window
     public class RefillHealth : MonoBehaviour
     {
         [Button]
-        private void Refill()
+        public void Refill()
         {
             GameplaySystem.playerManager.player.health.ResetValueToMax();
         }

@@ -12,13 +12,13 @@ namespace DChildDebug.Window
         [SerializeField]
         public float m_damage = 999999;
         [Button]
-        private void AddDamage()
+        public void AddDamage()
         {
             GameplaySystem.playerManager.player.modifiers.Add(DChild.Gameplay.Characters.Players.PlayerModifier.AttackDamage, m_damage);
 
         }
         [Button]
-        private void ReduceDamage()
+        public void ReduceDamage()
         {
             GameplaySystem.playerManager.player.modifiers.Add(DChild.Gameplay.Characters.Players.PlayerModifier.AttackDamage, -m_damage);
 

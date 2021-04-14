@@ -1,18 +1,25 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Inventories;
+using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleInfiniteItem : MonoBehaviour
+namespace DChildDebug.Window
 {
-    // Start is called before the first frame update
-    void Start()
+    public class ToggleInfiniteItem : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        [SerializeField]
+        private QuickItemHandle m_quickItem;
+        [Button]
+        public void ToggleOn()
+        {
+            m_quickItem.removeItemCountOnConsume = false;
+        }
+        [Button]
+        public void ToggleOff()
+        {
+            m_quickItem.removeItemCountOnConsume = true;
+        }
     }
 }
