@@ -8,7 +8,7 @@ using UnityEngine;
 public class ModifyDamage : MonoBehaviour
 {
     [SerializeField]
-    public float m_damage;
+    public float m_damage = 999999;
     [Button]
     private void AddDamage()
     {

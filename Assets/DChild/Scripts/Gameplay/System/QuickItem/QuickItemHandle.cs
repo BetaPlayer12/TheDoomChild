@@ -47,6 +47,7 @@ namespace DChild.Gameplay.Inventories
         private int m_currentIndex;
         [SerializeField]
         private GraphController m_graph;
+        private bool m_removeItemCountOnConsume;
         private ItemSlot m_currentSlot;
         private ConsumableItemData m_currentItem;
         private QuickItemCountRemover m_itemCountRemover;
@@ -55,9 +56,11 @@ namespace DChild.Gameplay.Inventories
         public event EventAction<SelectionEventArgs> SelectedItem;
         public event EventAction<SelectionEventArgs> Update;
 
+
         public bool isWrapped => m_wrapped;
         public int currentIndex => m_currentIndex;
         public IItemContainer container => m_container;
+        public bool removeItemCountOnConsume { get => m_removeItemCountOnConsume; set => m_removeItemCountOnConsume = value; }
         public bool hideUI => m_hideUI;
 
         public bool CanUseCurrentItem() => m_currentItem.CanBeUse(m_player);
@@ -70,7 +73,10 @@ namespace DChild.Gameplay.Inventories
                 {
                     m_currentItem.Use(m_player);
                 }
-                m_itemCountRemover.Remove(m_currentSlot.item, 1);
+                if (m_removeItemCountOnConsume)
+                {
+                    m_itemCountRemover.Remove(m_currentSlot.item, 1);
+                }
             }
         }
 
@@ -192,6 +198,7 @@ namespace DChild.Gameplay.Inventories
                 m_currentItem = (ConsumableItemData)m_currentSlot.item;
                 m_container.ItemUpdate += OnItemUpdate;
             }
+            m_removeItemCountOnConsume = true;
         }
 
         private void Start()
