@@ -117,6 +117,7 @@ MonoBehaviour:
   m_fastFactor: 0
   m_fXObjects:
     m_particleSystems: []
+    m_originalSimulationSpeed: []
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 1907353872235826173}
@@ -157,6 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_height: 0
   m_centerMass: {fileID: 0}
   m_isolatedObject: {fileID: 3423455632081051373}
   m_physics: {fileID: 3423455632081051346}
@@ -196,14 +198,19 @@ MonoBehaviour:
   m_data: {fileID: 11400000, guid: b1268681c362d3644971ec088651d605, type: 2}
   m_damageable: {fileID: 8318298354739939593}
   m_centerMass: {fileID: 0}
+  m_aggroBoundary: {fileID: 0}
+  m_statsData: {fileID: 0}
+  m_spineEventListener: {fileID: 0}
+  m_hitbox: {fileID: 0}
   m_turnHandle: {fileID: 3476115680190538869}
   m_agent: {fileID: 3423455631425745842}
-  m_patrolHandle: {fileID: 3423455631425745743}
   m_attackHandle:
     m_animation: {fileID: 6143059689997378287}
+  m_patrolHandle: {fileID: 3423455631425745743}
   m_deathHandle: {fileID: 3423455631425745840}
   m_flinchHandle: {fileID: 3423455631425745841}
-  m_spineListener: {fileID: 3423455631425745844}
+  m_selfSensor: {fileID: 0}
+  m_groundSensor: {fileID: 0}
 --- !u!114 &8318298354739939593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,9 +315,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 6143059689997378287}
   m_physics: {fileID: 3423455632081051346}
-  m_skeletonAnimation: {fileID: 0}
   m_autoFlinch: 0
+  m_skeletonAnimation: {fileID: 0}
   m_animation: Damage
+  m_idleAnimation: 
 --- !u!114 &3423455631425745840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,6 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 8318298354739939593}
   m_animator: {fileID: 6143059689997378287}
+  m_animation: 
   m_bodyDuration:
     m_startTime: 3
   m_destroySource: 0
