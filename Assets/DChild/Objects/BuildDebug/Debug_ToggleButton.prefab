@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2652905335275567881}
+  - component: {fileID: 8976864511458294222}
   m_Layer: 5
   m_Name: Debug_ToggleButton
   m_TagString: Untagged
@@ -37,6 +38,25 @@ RectTransform:
   m_AnchoredPosition: {x: -596.8, y: 385.7}
   m_SizeDelta: {x: 492.40002, y: 64.5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8976864511458294222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530109985555994543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af70f83bce0b82e409a0fb6470b3d72f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_highlight: {fileID: 5149562558816591796}
+  OnTrue:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFalse:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3947584249834565932
 GameObject:
   m_ObjectHideFlags: 0
@@ -50,6 +70,7 @@ GameObject:
   - component: {fileID: 8723666048629827575}
   - component: {fileID: 7789054211657078350}
   - component: {fileID: 8248570702283970110}
+  - component: {fileID: 5149562558816591796}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -154,7 +175,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8723666048629827575}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8976864511458294222}
+        m_MethodName: ToggleState
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8248570702283970110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,11 +209,11 @@ MonoBehaviour:
   ButtonName: Toggle
   ClickMode: 0
   DeselectButtonAfterClick: 0
-  DisableButtonBetweenClicksInterval: 0.2
+  DisableButtonBetweenClicksInterval: 0.5
   DoubleClickRegisterInterval: 0.2
   InputData:
-    EnableAlternateInputs: 1
-    InputMode: 2
+    EnableAlternateInputs: 0
+    InputMode: 0
     KeyCode: 13
     KeyCodeAlt: 32
     VirtualButtonName: Submit
@@ -2447,6 +2479,20 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 1
   TextLabel: {fileID: 0}
+--- !u!114 &5149562558816591796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3947584249834565932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa79ff140b6e5024b9810c35b1da1d5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_targetGraphic: {fileID: 8723666048629827575}
+  m_data: {fileID: 11400000, guid: fa5cd2abb6ba8dd469e3eb8722a2fe27, type: 2}
 --- !u!1 &8673554043967305937
 GameObject:
   m_ObjectHideFlags: 0
