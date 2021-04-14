@@ -224,6 +224,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
+                var mainFX = m_headFX.GetComponent<ParticleSystem>().main;
+                mainFX.startSize = 1f;
+                m_renderer.material.SetVector("Main_Speed", new Vector2(-1, 0));
             }
         }
         //private IEnumerator PatienceRoutine()
@@ -580,9 +583,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.SetActive(true);
-            var mainFX = m_headFX.GetComponent<ParticleSystem>().main;
-            mainFX.startSize = 1f;
-            m_renderer.material.SetVector("Main_Speed", new Vector2(-1, 0));
         }
 
         public void SwitchToBattleZoneAI()
