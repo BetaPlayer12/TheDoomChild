@@ -27,6 +27,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_height: 0
   m_centerMass: {fileID: 0}
   m_isolatedObject: {fileID: 6289867219346373792}
   m_physics: {fileID: 6289867219346373791}
@@ -88,6 +89,7 @@ MonoBehaviour:
   m_fastFactor: 0
   m_fXObjects:
     m_particleSystems: []
+    m_originalSimulationSpeed: []
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 3964360219252720657}
@@ -147,6 +149,8 @@ MonoBehaviour:
   m_data: {fileID: 11400000, guid: 52866ec1e4dcd344597efb3ad2329814, type: 2}
   m_damageable: {fileID: 844458342611839812}
   m_centerMass: {fileID: 2523711151135993600}
+  m_aggroBoundary: {fileID: 0}
+  m_statsData: {fileID: 0}
   m_deathHandle: {fileID: 6289867219999576573}
   m_spineListener: {fileID: 6289867219999576569}
   m_groundSensor: {fileID: 1169650589039917923}
@@ -211,8 +215,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 844458342611839812}
   m_animator: {fileID: 3280905412057186466}
+  m_animation: 
   m_bodyDuration:
     m_startTime: 3
+  m_destroySource: 0
 --- !u!114 &6289867219999576569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,12 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 3964360219252720657}
-  m_eventInfo: []
-  m_animationStartInfo:
-  - m_animationName: Attack2
-    m_soundToPlay: MELEEATTACK
-  - m_animationName: Death
-    m_soundToPlay: DEADBEE
+  m_data: {fileID: 0}
 --- !u!1001 &5763228950148725212
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -283,10 +284,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6448217776570068415}
     m_Modifications:
-    - target: {fileID: 6126963602680793720, guid: 8314546b1d42f87438ed8f6274ace693,
+    - target: {fileID: 678103186551974203, guid: 8314546b1d42f87438ed8f6274ace693,
         type: 3}
-      propertyPath: m_Name
-      value: FloatingEyeModel
+      propertyPath: m_Materials.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1552707200837622959, guid: 8314546b1d42f87438ed8f6274ace693,
         type: 3}
@@ -342,6 +343,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6126963602680793720, guid: 8314546b1d42f87438ed8f6274ace693,
+        type: 3}
+      propertyPath: m_Name
+      value: FloatingEyeModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8718729925850512845, guid: 8314546b1d42f87438ed8f6274ace693,
+        type: 3}
+      propertyPath: skeletonDataAsset
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8314546b1d42f87438ed8f6274ace693, type: 3}
@@ -400,15 +411,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
-      propertyPath: m_Name
-      value: FloatingEye
-      objectReference: {fileID: 0}
-    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_TagString
-      value: Character
+      propertyPath: m_maxHealth
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -465,15 +471,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_Name
+      value: FloatingEye
+      objectReference: {fileID: 0}
+    - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
+        type: 3}
+      propertyPath: m_TagString
+      value: Character
+      objectReference: {fileID: 0}
     - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_UseFullKinematicContacts
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_maxHealth
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}

@@ -108,7 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 3911757957973329245}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
 --- !u!1 &5861807805471678490
 GameObject:
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 3911757957973329245}
   m_Layer: 16
   m_Name: Main
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -235,7 +235,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 92e520591f0968946b6bcfa9d5310378, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -420,6 +420,7 @@ MonoBehaviour:
     m_config: {fileID: 11400000, guid: fe772052b871fd540945875c2976014b, type: 2}
     m_rayColor: {r: 0, g: 1, b: 0, a: 1}
   m_enable: 1
+  m_debugMode: 1
 --- !u!114 &9135008660993300804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,6 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_colliders: []
 --- !u!1 &9031625998214809944
 GameObject:
   m_ObjectHideFlags: 0
