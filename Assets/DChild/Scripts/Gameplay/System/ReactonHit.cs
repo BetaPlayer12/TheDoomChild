@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-    public class ReactOnHit : MonoBehaviour, IHitToInteract
+    public class ReactonHit : MonoBehaviour, IHitToInteract
     {
         public Vector2 position => transform.position;
 

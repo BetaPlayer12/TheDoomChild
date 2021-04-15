@@ -68,13 +68,14 @@ namespace DChild.Gameplay
                 if (character)
                 {
                     character.GetComponent<PlayerControlledObject>().owner.skills.UnlockSkill(m_toUnlock, true);
-                    //Delete This
-                    //switch (m_toUnlock)
-                    //{
-                    //    case PrimarySkill.BlackBloodImmunity:
-                    //        character.GetComponentInChildren<BlackBloodImmunity>().isActive = true;
-                    //        break;
-                    //}
+
+                    //Delete This. To be updated later.
+                    switch (m_toUnlock)
+                    {
+                        case PrimarySkill.BlackBloodImmunity:
+                            character.GetComponentInChildren<BlackBloodImmunity>().isActive = true;
+                            break;
+                    }
                 }
 
                 if (m_cinematic == null)
