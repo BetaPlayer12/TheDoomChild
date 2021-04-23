@@ -2,6 +2,7 @@
 using DChild.Serialization;
 using Holysoft.Collections;
 using Holysoft.Event;
+using System;
 
 namespace DChild.Menu
 {
@@ -14,7 +15,8 @@ namespace DChild.Menu
             isDemoGame = slot.demoGame;
             location = slot.location;
             completion = slot.completion;
-            duration = slot.duration;
+            var span = TimeSpan.FromSeconds(slot.duration);
+            duration = $"{((int)span.TotalHours).ToString("D2")}:{span.Minutes.ToString("D2")}:{span.Seconds.ToString("D2")}";
         }
 
         public int ID { get; }
@@ -22,7 +24,7 @@ namespace DChild.Menu
         public bool isDemoGame { get; }
         public Location location { get; }
         public int completion { get; }
-        public TimeKeeper duration { get; }
+        public string duration { get; }
     }
 
     public interface ICampaignSelect

@@ -6,6 +6,9 @@ using System.Collections;
 using UnityEngine;
 using Spine.Unity;
 using UnityEngine.UI;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 using DChildEditor;
@@ -61,11 +64,13 @@ namespace DChild.Menu.Bestiary
                 m_name = "Not Assigned";
                 FileUtility.RenameAsset(this, assetPath, "UnassignedData");
             }
+            EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
 #endif 
         #endregion
-
+        [SerializeField, ShowIf("@m_title != string.Empty || m_enableEdit"), ToggleGroup("m_enableEdit")]
+        private string m_title;
         [SerializeField, PreviewField(100), ToggleGroup("m_enableEdit")]
         private Sprite m_indexImage;
         [SerializeField, PreviewField(100), ToggleGroup("m_enableEdit")]
@@ -78,11 +83,13 @@ namespace DChild.Menu.Bestiary
         private string m_idleAnimation;
         [SerializeField, TextArea, ToggleGroup("m_enableEdit")]
         private string m_description;
-        [SerializeField, ValueDropdown("GetLocations", IsUniqueList = true), ToggleGroup("m_enableEdit")]
+        //[SerializeField, ValueDropdown("GetLocations", IsUniqueList = true), ToggleGroup("m_enableEdit")]
+        [SerializeField,DrawWithUnity]
         private Location[] m_locatedIn;
 
         public int id { get => m_ID; }
         public string creatureName { get => m_name; }
+        public string title => m_title;
         public Sprite indexImage { get => m_indexImage; }
         public Sprite infoImage { get => m_infoImage; }
         public Sprite sketchImage { get => m_sketchImage; }
@@ -109,15 +116,21 @@ namespace DChild.Menu.Bestiary
             }
         }
 
-        private IEnumerable GetLocations()
-        {
-            var list = new ValueDropdownList<Location>();
+        private IEnumerable GetLocations() => Enum.GetValues(typeof(Location)).Cast<Location>();
 
-            for (int i = 0; i < (int)Location._COUNT; i++)
+        [Button, ToggleGroup("m_enableEdit"), HideIf("m_connectToDatabase")]
+        private void AddToDatabase()
+        {
+            var connection = DChildDatabase.GetBestiaryConnection();
+            connection.Initialize();
+            if (m_ID != -1)
             {
-                list.Add((Location)i);
+                connection.Insert(m_ID, m_name, m_title, m_description);
+                connection.UpdateLocation(m_ID, m_locatedIn);
             }
-            return list;
+            connection.Close();
+            m_connectToDatabase = true;
+            AssetDatabase.SaveAssets();
         }
 
         [Button, ToggleGroup("m_enableEdit"), ShowIf("m_connectToDatabase")]
@@ -127,7 +140,7 @@ namespace DChild.Menu.Bestiary
             connection.Initialize();
             if (m_ID != -1)
             {
-                connection.Update(m_ID, m_name, m_description);
+                connection.Update(m_ID, m_name, m_title, m_description);
                 connection.UpdateLocation(m_ID, m_locatedIn);
             }
             connection.Close();
@@ -146,6 +159,9 @@ namespace DChild.Menu.Bestiary
                 m_locatedIn = info.locations;
             }
             connection.Close();
+
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
         }
 #endif
     }

@@ -1,4 +1,5 @@
-﻿// Copyright (c) Pixel Crushers. All rights reserved.
+// Recompile at 10/02/2020 6:15:37 PM
+// Copyright (c) Pixel Crushers. All rights reserved.
 
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace PixelCrushers.DialogueSystem.Wrappers
 
 #else
 
+    [HelpURL("https://pixelcrushers.com/dialogue_system/manual2x/html/dialogue_u_is.html#dialogueUITypewriterEffect")]
     [AddComponentMenu("")]
     public class TextMeshProTypewriterEffect : PixelCrushers.DialogueSystem.TextMeshProTypewriterEffect
     {

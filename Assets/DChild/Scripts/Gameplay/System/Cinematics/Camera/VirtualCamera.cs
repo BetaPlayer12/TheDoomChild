@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics.Cameras
@@ -32,22 +33,46 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField]
         private bool m_isAlreadyTracking;
         [SerializeField]
-        [HideInInspector]
+        [ReadOnly]
         private CinemachineVirtualCamera m_vCam;
-        private CinemachineNoise m_noiseModule;
+        private CinemachineBasicMultiChannelPerlin m_noiseModule;
+        private CinemachineCameraOffset m_offsetHandle;
+        private Vector2 m_cameraPosition;
 
-        public CinemachineNoise noiseModule => m_noiseModule;
+        public Vector3 currentOffset => m_offsetHandle?.m_Offset ?? Vector3.zero;
+        public CinemachineBasicMultiChannelPerlin noiseModule => m_noiseModule;
+
 
         public void Track(Transform target) => m_vCam.m_Follow = target;
 
         public void Activate()
         {
-            m_vCam.enabled = true;
+            if (m_vCam != null)
+            {
+                m_vCam.enabled = true;
+            }
         }
 
         public void Deactivate()
         {
-            m_vCam.enabled = false;
+            if (m_vCam != null)
+            {
+                m_vCam.enabled = false;
+            }
+        }
+
+        public void ApplyOffset(Vector3 offset)
+        {
+            if (m_offsetHandle)
+            {
+                m_offsetHandle.m_Offset = offset;
+            }
+        }
+
+        private void GetCameraStartingPosition()
+        {
+            m_cameraPosition = transform.position;
+            Debug.Log(m_cameraPosition);
         }
 
         private void OnEnable()
@@ -73,13 +98,27 @@ namespace DChild.Gameplay.Cinematics.Cameras
         private void OnValidate()
         {
             m_vCam = GetComponentInChildren<CinemachineVirtualCamera>(true);
+            if (Application.isPlaying)
+            {
+                m_vCam.enabled = false;
+            }
         }
 
         private void Awake()
         {
-            m_noiseModule = GetComponent<CinemachineNoise>();
+            m_noiseModule = m_vCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            m_offsetHandle = m_vCam.GetComponent<CinemachineCameraOffset>();
             m_vCam.enabled = false;
         }
+
+#if UNITY_EDITOR
+        [Button, HideInEditorMode]
+        private void UseThis()
+        {
+            GameplaySystem.cinema.TransistionTo(this);
+            GetCameraStartingPosition();
+        }
+#endif
     }
 
 }

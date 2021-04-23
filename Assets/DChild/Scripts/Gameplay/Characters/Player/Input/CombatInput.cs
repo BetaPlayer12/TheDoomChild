@@ -80,5 +80,10 @@ namespace DChild.Inputs
 
 
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

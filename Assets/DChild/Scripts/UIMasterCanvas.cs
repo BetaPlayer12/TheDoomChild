@@ -14,7 +14,7 @@ namespace DChild
             GameSystem.CameraChange += OnCameraChange;
         }
 
-        private void nDestroy()
+        private void OnDestroy()
         {
             GameSystem.CameraChange -= OnCameraChange;
         }
@@ -22,6 +22,7 @@ namespace DChild
         private void OnCameraChange(object sender, CameraChangeEventArgs eventArgs)
         {
             m_canvas.worldCamera = eventArgs.camera;
+            m_canvas.enabled = eventArgs.camera != null;
         }
     }
 }

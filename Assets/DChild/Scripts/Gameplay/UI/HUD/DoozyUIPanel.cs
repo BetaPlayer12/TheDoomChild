@@ -11,7 +11,7 @@ namespace DChild.UI
             panelState = PanelState.Opening;
             onOpen.Invoke();
 
-            GameEventMessage.SendEvent($"Dialogue Open");
+            //GameEventMessage.SendEvent($"Dialogue Open");
 
             // With quick panel changes, panel may not reach OnEnable/OnDisable before being reused.
             // Update panelStack here also to handle this case:
@@ -27,7 +27,7 @@ namespace DChild.UI
                 if (panelState == PanelState.Closed || panelState == PanelState.Closing) return;
                 panelState = PanelState.Closing;
 
-                GameEventMessage.SendEvent($"Dialogue Close");
+                //GameEventMessage.SendEvent($"Dialogue Close");
 
                 onClose.Invoke();
                 // Deselect ours:

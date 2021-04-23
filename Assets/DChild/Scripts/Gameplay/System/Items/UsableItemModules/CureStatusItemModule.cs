@@ -10,9 +10,19 @@ namespace DChild.Gameplay.Items
         [SerializeField]
         private StatusEffectType m_toCure;
 
+        public bool CanBeUse(IPlayer player)
+        {
+            return player.statusEffectReciever.IsInflictedWith(m_toCure);
+        }
+
         public void Use(IPlayer player)
         {
             player.statusEffectReciever.StopStatusEffect(m_toCure);
+        }
+
+        public override string ToString()
+        {
+            return $"Cure {m_toCure.ToString()}";
         }
     }
 }

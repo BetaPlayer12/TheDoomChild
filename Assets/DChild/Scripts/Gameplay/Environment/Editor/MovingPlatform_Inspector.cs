@@ -39,6 +39,7 @@ namespace DChildEditor.Gameplay.Environment
             }
 
             DrawPatrolPath(waypoints);
+            EditorUtility.SetDirty(target);
         }
     }
 

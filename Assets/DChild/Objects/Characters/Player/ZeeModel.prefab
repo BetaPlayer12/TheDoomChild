@@ -176,10 +176,11 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bde1f3a21b7a859448f3ff7bc7d920e8, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -198,7 +199,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 177472211
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
 --- !u!114 &3867976476120059514
 MonoBehaviour:
@@ -212,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  skeletonDataAsset: {fileID: 0}
   initialSkinName: 
   initialFlipX: 1
   initialFlipY: 0
@@ -224,6 +225,7 @@ MonoBehaviour:
   clearStateOnDisable: 0
   tintBlack: 0
   singleSubmesh: 0
+  fixDrawOrder: 0
   addNormals: 0
   calculateTangents: 0
   maskInteraction: 0
@@ -248,6 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneRoot: {fileID: 0}
+  flipBy180DegreeRotation: 0
   skeletonRenderer: {fileID: 3867976476120059514}
 --- !u!114 &3867976476120059396
 MonoBehaviour:
@@ -422,12 +425,12 @@ MonoBehaviour:
   m_turnAnimation: 0_Turn
   m_turnEvent: swap shoulders
   m_rightShoulder:
-    m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+    m_asset: {fileID: 0}
     m_slot: R shoulder1
     m_leftVersion: R shoulder1
     m_rightVersion: R shoulder2
   m_leftShoulder:
-    m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+    m_asset: {fileID: 0}
     m_slot: L shoulder1
     m_leftVersion: L shoulder2
     m_rightVersion: L shoulder1
@@ -443,7 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e6444a8892f5a45a5b2f81e9eb7959, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  m_asset: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 9ec46c1a293010745b24ebad7ec7750e, type: 3}
   m_audioSource: {fileID: 5064490871438429226}
 --- !u!114 &5064490871438429244
@@ -458,7 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4ef7c05864d0234384cef6aec0d9f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  m_asset: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 708f87165bfead843ad4e555a55e5606, type: 3}
   m_audioClip2: {fileID: 8300000, guid: 6536ceec45a539b478f204a561b49ae5, type: 3}
   m_audioSource: {fileID: 5064490871438429226}
@@ -494,14 +497,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b04758996d48e449ebbf1ed65f9047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playAmb: {fileID: 1753503260069499607, guid: fd1eee256a20d47499accbcea8ff600a, type: 2}
-  playIdle: {fileID: 24500006, guid: fd1eee256a20d47499accbcea8ff600a, type: 2}
-  playFalls: {fileID: 3657601760694058222, guid: fd1eee256a20d47499accbcea8ff600a,
-    type: 2}
-  playBossFight: {fileID: -6918149723208425368, guid: fd1eee256a20d47499accbcea8ff600a,
-    type: 2}
-  nearBossFight: {fileID: 995085537875779399, guid: fd1eee256a20d47499accbcea8ff600a,
-    type: 2}
+  playAmb: {fileID: 0}
+  playIdle: {fileID: 0}
+  playFalls: {fileID: 0}
+  playBossFight: {fileID: 0}
+  nearBossFight: {fileID: 0}
 --- !u!61 &406703818409123768
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -540,7 +540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750e2759eee791c42aa5ca1abca4f001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  m_asset: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7195dcf7aa7098441919beb99f201259, type: 3}
   m_audioSource: {fileID: 5064490871438429226}
 --- !u!114 &6643172311728193690
@@ -555,7 +555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3576e7f5ff591ca4db634673b6e27c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  m_asset: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: bad22e5b9e9b3c844bfa36300c026b3d, type: 3}
   m_audioSource: {fileID: 5064490871438429226}
 --- !u!114 &3852333269934554901
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac927740e5142e745b8637f17d91f426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  m_asset: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 3c20179d1dd296e4d9fd9f0b39d31657, type: 3}
   m_audioClip2: {fileID: 8300000, guid: af2a01a95daf4d047af949ac091aaa2a, type: 3}
   m_audioSource: {fileID: 5064490871438429226}
@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d92e74456f224b241ba1c3d0ec6e3ede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  m_asset: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7dbb82fa8f2ab1b44849679bbdf45c1c, type: 3}
   m_audioSource: {fileID: 5064490871438429226}
 --- !u!114 &6194826055895908207
@@ -601,7 +601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e093880afed94d94e9841cf7a9c8c793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  m_asset: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0a9b74a65cc023e4da2e248541e74e6c, type: 3}
   m_audioSource: {fileID: 5064490871438429226}
 --- !u!114 &7695696697906238105
@@ -616,7 +616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3697e42501f50cc489a9eddc2c3384c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_asset: {fileID: 11400000, guid: 492711a699ffe9649aa0ccdee56fb481, type: 2}
+  m_asset: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 46b7cc7cd610abd4dbcac45843ae6bc0, type: 3}
   m_audioSource: {fileID: 5064490871438429226}
 --- !u!1 &3867976476255913365
@@ -1146,16 +1146,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7350472491086077557}
     m_Modifications:
-    - target: {fileID: 4508557118282662819, guid: aecb052622672814ea7a8c4956b02c34,
-        type: 3}
-      propertyPath: m_Name
-      value: Death_Eye_Trail
-      objectReference: {fileID: 0}
-    - target: {fileID: 4508557118282662819, guid: aecb052622672814ea7a8c4956b02c34,
-        type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: -693898706472244972, guid: aecb052622672814ea7a8c4956b02c34,
         type: 3}
       propertyPath: skeletonRenderer
@@ -1216,6 +1206,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4508557118282662819, guid: aecb052622672814ea7a8c4956b02c34,
+        type: 3}
+      propertyPath: m_Name
+      value: Death_Eye_Trail
+      objectReference: {fileID: 0}
+    - target: {fileID: 4508557118282662819, guid: aecb052622672814ea7a8c4956b02c34,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aecb052622672814ea7a8c4956b02c34, type: 3}
 --- !u!4 &4508557118911064813 stripped
@@ -1231,11 +1231,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7350472491086077557}
     m_Modifications:
-    - target: {fileID: 2017277710025458935, guid: acfff72e7ad0aa048be64bf7f24d676c,
-        type: 3}
-      propertyPath: m_Name
-      value: Death_1st_Slash_Sideward V3
-      objectReference: {fileID: 0}
     - target: {fileID: 275129050489362489, guid: acfff72e7ad0aa048be64bf7f24d676c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1306,6 +1301,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 28
       objectReference: {fileID: 0}
+    - target: {fileID: 2017277710025458935, guid: acfff72e7ad0aa048be64bf7f24d676c,
+        type: 3}
+      propertyPath: m_Name
+      value: Death_1st_Slash_Sideward V3
+      objectReference: {fileID: 0}
     - target: {fileID: 6188628321326368373, guid: acfff72e7ad0aa048be64bf7f24d676c,
         type: 3}
       propertyPath: playOnAwake
@@ -1336,11 +1336,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7350472491086077557}
     m_Modifications:
-    - target: {fileID: 4045559918136754740, guid: 4405cf7c8696a2a469ca2ea7b9405411,
-        type: 3}
-      propertyPath: m_Name
-      value: Death_Slash_Downward V3
-      objectReference: {fileID: 0}
     - target: {fileID: 2308952728219885306, guid: 4405cf7c8696a2a469ca2ea7b9405411,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1411,6 +1406,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 28
       objectReference: {fileID: 0}
+    - target: {fileID: 4045559918136754740, guid: 4405cf7c8696a2a469ca2ea7b9405411,
+        type: 3}
+      propertyPath: m_Name
+      value: Death_Slash_Downward V3
+      objectReference: {fileID: 0}
     - target: {fileID: 8518581267018318006, guid: 4405cf7c8696a2a469ca2ea7b9405411,
         type: 3}
       propertyPath: playOnAwake
@@ -1441,11 +1441,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7350472491086077557}
     m_Modifications:
-    - target: {fileID: 5157721950442736632, guid: 3743ddd12649a42489f2c2d606964ee7,
-        type: 3}
-      propertyPath: m_Name
-      value: Death_Slash_Upward V3
-      objectReference: {fileID: 0}
     - target: {fileID: 688851736863623546, guid: 3743ddd12649a42489f2c2d606964ee7,
         type: 3}
       propertyPath: playOnAwake
@@ -1465,6 +1460,11 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startRotation.scalar
       value: -0.14084807
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157721950442736632, guid: 3743ddd12649a42489f2c2d606964ee7,
+        type: 3}
+      propertyPath: m_Name
+      value: Death_Slash_Upward V3
       objectReference: {fileID: 0}
     - target: {fileID: 6898480829646853942, guid: 3743ddd12649a42489f2c2d606964ee7,
         type: 3}

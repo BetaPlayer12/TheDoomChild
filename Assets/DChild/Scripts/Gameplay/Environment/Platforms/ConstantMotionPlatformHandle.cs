@@ -14,13 +14,22 @@ namespace DChild.Gameplay.Environment
             [SerializeField, InlineEditor]
             private MovingPlatform m_instance;
             [SerializeField, MinValue(0)]
-            private int m_movementDelay;
+            private float m_startDelay;
+            [SerializeField, MinValue(0)]
+            private float m_movementDelay;
             [SerializeField]
             private bool m_reverseMovement;
+            [SerializeField]
+            private bool m_loop;
 
-            public MovingPlatform instance { get => m_instance; }
-            public int movementDelay { get => m_movementDelay; }
+            public MovingPlatform instance => m_instance;
+
+            public float startDelay => m_startDelay;
+
+            public float movementDelay => m_movementDelay;
             public bool reverseMovement => m_reverseMovement;
+
+            public bool loop => m_loop;
         }
 
         [SerializeField, OnValueChanged("OnUpdateDestinationChange")]
@@ -66,12 +75,28 @@ namespace DChild.Gameplay.Environment
             m_cacheHandleInfo = m_dictionary[eventArgs.instance];
             if (eventArgs.isGoingForward)
             {
+                var atTheEnd = eventArgs.currentWaypointIndex == (eventArgs.waypointCount - 1);
+                if (atTheEnd && m_cacheHandleInfo.loop)
+                {
+                    m_cacheHandleInfo.instance.GoDestination(0, false);
+                }
+                else
+                {
+                    MovePlatform(m_cacheHandleInfo.instance, m_cacheHandleInfo.movementDelay, !atTheEnd);
+                }
 
-                MovePlatform(m_cacheHandleInfo.instance, m_cacheHandleInfo.movementDelay, eventArgs.currentWaypointIndex != (eventArgs.waypointCount - 1));
             }
             else
             {
-                MovePlatform(m_cacheHandleInfo.instance, m_cacheHandleInfo.movementDelay, eventArgs.currentWaypointIndex == 0);
+                var atTheEnd = eventArgs.currentWaypointIndex == 0;
+                if (atTheEnd && m_cacheHandleInfo.loop)
+                {
+                    m_cacheHandleInfo.instance.GoDestination(eventArgs.waypointCount - 1, false);
+                }
+                else
+                {
+                    MovePlatform(m_cacheHandleInfo.instance, m_cacheHandleInfo.movementDelay, atTheEnd);
+                }
             }
         }
 
@@ -132,13 +157,21 @@ namespace DChild.Gameplay.Environment
                 {
                     m_dictionary.Add(ID, m_cacheHandleInfo);
                     m_cacheHandleInfo.instance.DestinationReached += OnDestinationReached;
-                    if (m_cacheHandleInfo.reverseMovement)
+
+                    if (m_cacheHandleInfo.startDelay == 0)
                     {
-                        m_cacheHandleInfo.instance.GoToPreviousWaypoint();
+                        if (m_cacheHandleInfo.reverseMovement)
+                        {
+                            m_cacheHandleInfo.instance.GoToPreviousWaypoint();
+                        }
+                        else
+                        {
+                            m_cacheHandleInfo.instance.GoToNextWayPoint();
+                        }
                     }
                     else
                     {
-                        m_cacheHandleInfo.instance.GoToNextWayPoint();
+                        StartCoroutine(DoDelayedMove(m_cacheHandleInfo.instance, m_cacheHandleInfo.startDelay, m_cacheHandleInfo.reverseMovement == false));
                     }
                 }
             }

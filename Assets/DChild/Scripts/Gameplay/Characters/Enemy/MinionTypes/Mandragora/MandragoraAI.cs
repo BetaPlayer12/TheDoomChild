@@ -99,6 +99,8 @@ namespace DChild.Gameplay.Characters.Enemies
             _COUNT
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -114,17 +116,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_spriteMask;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
-
-        [SerializeField]
-        private GameObject m_screamHitbox;
-        [SerializeField]
-        private ParticleSystem m_screamFX;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
 
         private float m_targetDistance;
+        private bool m_hasDetected;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -132,6 +134,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            m_selfCollider.SetActive(false);
 
             m_spineEventListener.Subscribe(m_info.attackEvent, SpawnProjectile);
             //GameplaySystem.SetBossHealth(m_character);
@@ -140,8 +143,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void SpawnProjectile()
         {
             Debug.Log("Scream Attack");
-            m_screamHitbox.SetActive(true);
-            m_screamFX.Play();
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -157,16 +158,20 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                if (m_stateHandle.currentState != State.Chasing)
+                m_selfCollider.SetActive(true);
+                if (m_stateHandle.currentState != State.Chasing && !m_hasDetected)
                 {
+                    m_hasDetected = true;
                     m_stateHandle.SetState(State.Detect);
                 }
                 m_currentPatience = 0;
                 m_enablePatience = false;
+                //StopCoroutine(PatienceRoutine());
             }
             else
             {
                 m_enablePatience = true;
+                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -184,11 +189,21 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
+                m_hasDetected = false;
+                m_selfCollider.SetActive(false);
                 m_stateHandle.SetState(State.Burrowed);
             }
         }
+        //private IEnumerator PatienceRoutine()
+        //{
+        //    yield return new WaitForSeconds(m_info.patience);
+        //    m_targetInfo.Set(null, null);
+        //    m_hasDetected = false;
+        //    m_stateHandle.SetState(State.Burrowed);
+        //}
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
@@ -200,12 +215,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            StopAllCoroutines();
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -213,6 +231,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.None;
+            m_spriteMask.SetActive(false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -244,6 +264,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Burrowed:
                     m_animation.EnableRootMotion(false, false);
+                    m_spriteMask.SetActive(true);
                     m_animation.SetAnimation(0, m_info.burrowedAnimation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
@@ -264,25 +285,26 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            if (IsTargetInRange(m_info.attack.range))
                             {
-                                m_screamHitbox.SetActive(false);
-                                if (IsTargetInRange(m_info.attack.range))
-                                {
-                                    m_movement.Stop();
-                                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    m_stateHandle.SetState(State.Attacking);
-                                }
-                                else
-                                {
-                                    m_animation.EnableRootMotion(false, false);
-                                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                                    m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
-                                }
+                                m_movement.Stop();
+                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.SetState(State.Attacking);
                             }
                             else
                             {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_animation.EnableRootMotion(false, false);
+                                if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting && m_edgeSensor.isDetecting)
+                                {
+                                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                                    //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
+                                }
+                                else
+                                {
+                                    m_movement.Stop();
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
                             }
                         }
                         else
@@ -312,6 +334,30 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+            m_stateHandle.OverrideState(State.Burrowed);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+            m_hasDetected = false;
+            m_selfCollider.SetActive(false);
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(false);
+            m_targetInfo.Set(null, null);
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

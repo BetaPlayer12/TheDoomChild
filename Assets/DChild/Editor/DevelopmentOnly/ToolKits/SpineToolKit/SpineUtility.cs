@@ -107,7 +107,7 @@ namespace DChildEditor.Toolkit
             var compositeCollider = hierarchy.AddComponent<CompositeCollider2D>();
             compositeCollider.isTrigger = true;
             hierarchy.AddComponent<Hitbox>();
-            hierarchy.AddComponent<ColliderDamage>();
+            hierarchy.AddComponent<BaseColliderDamage>();
             return hierarchy;
         }
 

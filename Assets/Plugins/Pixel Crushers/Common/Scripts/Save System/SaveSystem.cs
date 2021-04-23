@@ -56,6 +56,24 @@ namespace PixelCrushers
 
         private static bool m_isQuitting = false;
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            m_instance = null;
+            m_savers = new List<Saver>();
+            m_savedGameData = new SavedGameData();
+            m_serializer = null;
+            m_storer = null;
+            m_sceneTransitionManager = null;
+            m_playerSpawnpoint = null;
+            m_currentSceneIndex = NoSceneIndex;
+            m_addedScenes = new List<string>();
+            m_currentAsyncOperation = null;
+            m_isQuitting = false;
+        }
+#endif
+
         /// <summary>
         /// When loading a game, load the scene that the game was saved in.
         /// </summary>

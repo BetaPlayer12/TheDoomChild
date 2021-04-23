@@ -29,6 +29,10 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         private bool m_waitForBehaviour;
         private bool m_hasLanded;
 
+        public Vector2 position => transform.position;
+
+        public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
+
         public override void SpawnAt(Vector2 position, Quaternion rotation)
         {
             base.SpawnAt(position, rotation);
@@ -66,7 +70,7 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
 
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
-            if (!targetDefense.isInvulnerable)
+            if (targetDefense.invulnerabilityLevel == Invulnerability.None)
             {
                 //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
                 //{

@@ -2,7 +2,10 @@
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
 using UnityEngine;
-
+#if UNITY_EDITOR
+using System.IO;
+using UnityEditor;
+#endif
 namespace DChild.Gameplay.Items
 {
     public class ItemLoot : Loot
@@ -17,7 +20,23 @@ namespace DChild.Gameplay.Items
         private void OnDataChange()
         {
             m_spriteRenderer.sprite = m_data.icon;
-            gameObject.name = m_data.name.Replace(" ", string.Empty) + "Loot";
+            gameObject.name = m_data.itemName.Replace(" ", string.Empty) + "Loot";
+        }
+
+        [Button, HideInPrefabInstances]
+        private void CreateLootReference()
+        {
+            var lootReference = ScriptableObject.CreateInstance<LootReference>();
+            lootReference.Initialize(gameObject);
+
+            var prefabPath = AssetDatabase.GetAssetPath(gameObject);
+            var directory = Directory.GetParent(prefabPath);
+            var path = $"{directory}\\{gameObject.name.Replace("Loot", string.Empty)}LootReference.asset";
+            if (AssetDatabase.LoadAssetAtPath<LootReference>(path) == null)
+            {
+                AssetDatabase.CreateAsset(lootReference, path);
+                AssetDatabase.SaveAssets();
+            }
         }
 #endif
 

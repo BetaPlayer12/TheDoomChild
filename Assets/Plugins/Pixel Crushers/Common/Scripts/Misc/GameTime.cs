@@ -36,6 +36,17 @@ namespace PixelCrushers
         private static float s_manualDeltaTime = 0;
         private static bool s_manualPaused = false;
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            s_mode = GameTimeMode.UnityStandard;
+            s_manualTime = 0;
+            s_manualDeltaTime = 0;
+            s_manualPaused = false;
+        }
+#endif
+
         public static GameTimeMode mode
         {
             get { return s_mode; }

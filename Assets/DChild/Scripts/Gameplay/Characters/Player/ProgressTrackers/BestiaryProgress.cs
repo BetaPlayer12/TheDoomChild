@@ -51,6 +51,16 @@ namespace DChild.Gameplay.Characters.Players
 
         public void LoadData(AcquisitionData saveData)
         {
+            if (m_progress == null)
+            {
+                m_progress = new Dictionary<int, bool>();
+                var IDs = m_list.GetIDs();
+                for (int i = 0; i < IDs.Length; i++)
+                {
+                    m_progress.Add(IDs[i], false);
+                }
+            }
+
             var size = saveData.count;
             for (int i = 0; i < size; i++)
             {
@@ -68,11 +78,14 @@ namespace DChild.Gameplay.Characters.Players
 
         private void Awake()
         {
-            m_progress = new Dictionary<int, bool>();
-            var IDs = m_list.GetIDs();
-            for (int i = 0; i < IDs.Length; i++)
+            if (m_progress == null)
             {
-                m_progress.Add(IDs[i], false);
+                m_progress = new Dictionary<int, bool>();
+                var IDs = m_list.GetIDs();
+                for (int i = 0; i < IDs.Length; i++)
+                {
+                    m_progress.Add(IDs[i], false);
+                }
             }
         }
     }

@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361bf799921acd8419c03fca16ed3f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_dontDestroyOnLoad: 0
   m_instanceCursor: {fileID: 0}
   m_introHandler:
     m_introScene:
@@ -200,165 +201,589 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aee1a3355eec4a49ac8d49a997706d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_campaignSlotList:
-    m_slotCount: 4
-    m_slots:
-    - m_id: 1
-      m_demoGame: 1
-      m_newGame: 1
-      m_sceneToLoad:
-        m_sceneName: _Zone GardenPrototype
-        m_scenePath: Assets/DChild/Scenes/Zones/_Zone GardenPrototype.unity
-      m_location: 14
-      m_spawnPosition:
-        x: 0
-        y: 0
-      m_completion: 0
-      m_duration:
-        m_hours: 0
-        m_minutes: 0
-        m_seconds: 0
-        m_secondsTimer: 0
-      m_characterData:
-        m_inventoryData:
-          m_soulEssence: 0
-          m_items:
-            m_datas: []
-          m_soulCrystals:
-            m_datas: []
-          m_questItems:
-            m_datas: []
-        m_bestiaryProgressData:
-          m_serializeDatas: []
-        m_skills:
-          m_movementSkills: 
-        m_soulSkillAcquisitionData:
-          m_serializeDatas: []
-        m_equippedSoulSkillData:
-          m_armorSkill: 0
-          m_supportSkill: 0
-          m_weaponSkill1: 0
-          m_weaponSkill2: 0
-    - m_id: 2
-      m_demoGame: 0
-      m_newGame: 1
-      m_sceneToLoad:
-        m_sceneName: 
-        m_scenePath: 
-      m_location: 18
-      m_spawnPosition:
-        x: 0
-        y: 0
-      m_completion: 0
-      m_duration:
-        m_hours: 0
-        m_minutes: 0
-        m_seconds: 0
-        m_secondsTimer: 0
-      m_characterData:
-        m_inventoryData:
-          m_soulEssence: 0
-          m_items:
-            m_datas: []
-          m_soulCrystals:
-            m_datas: []
-          m_questItems:
-            m_datas: []
-        m_bestiaryProgressData:
-          m_serializeDatas:
-          - m_ID: 0
-            m_hasData: 0
-        m_skills:
-          m_movementSkills: 
-        m_soulSkillAcquisitionData:
-          m_serializeDatas:
-          - m_ID: 0
-            m_hasData: 0
-        m_equippedSoulSkillData:
-          m_armorSkill: 0
-          m_supportSkill: 0
-          m_weaponSkill1: 0
-          m_weaponSkill2: 0
-    - m_id: 3
-      m_demoGame: 0
-      m_newGame: 1
-      m_sceneToLoad:
-        m_sceneName: 
-        m_scenePath: 
-      m_location: 18
-      m_spawnPosition:
-        x: 0
-        y: 0
-      m_completion: 0
-      m_duration:
-        m_hours: 0
-        m_minutes: 0
-        m_seconds: 0
-        m_secondsTimer: 0
-      m_characterData:
-        m_inventoryData:
-          m_soulEssence: 0
-          m_items:
-            m_datas: []
-          m_soulCrystals:
-            m_datas: []
-          m_questItems:
-            m_datas: []
-        m_bestiaryProgressData:
-          m_serializeDatas:
-          - m_ID: 0
-            m_hasData: 0
-        m_skills:
-          m_movementSkills: 
-        m_soulSkillAcquisitionData:
-          m_serializeDatas:
-          - m_ID: 0
-            m_hasData: 0
-        m_equippedSoulSkillData:
-          m_armorSkill: 0
-          m_supportSkill: 0
-          m_weaponSkill1: 0
-          m_weaponSkill2: 0
-    - m_id: 4
-      m_demoGame: 0
-      m_newGame: 1
-      m_sceneToLoad:
-        m_sceneName: 
-        m_scenePath: 
-      m_location: 18
-      m_spawnPosition:
-        x: 0
-        y: 0
-      m_completion: 0
-      m_duration:
-        m_hours: 0
-        m_minutes: 0
-        m_seconds: 0
-        m_secondsTimer: 0
-      m_characterData:
-        m_inventoryData:
-          m_soulEssence: 0
-          m_items:
-            m_datas: []
-          m_soulCrystals:
-            m_datas: []
-          m_questItems:
-            m_datas: []
-        m_bestiaryProgressData:
-          m_serializeDatas:
-          - m_ID: 0
-            m_hasData: 0
-        m_skills:
-          m_movementSkills: 
-        m_soulSkillAcquisitionData:
-          m_serializeDatas:
-          - m_ID: 0
-            m_hasData: 0
-        m_equippedSoulSkillData:
-          m_armorSkill: 0
-          m_supportSkill: 0
-          m_weaponSkill1: 0
-          m_weaponSkill2: 0
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_campaignSlotList
+      Entry: 7
+      Data: 0|DChild.CampaignSlotList, Assembly-CSharp
+    - Name: m_slotCount
+      Entry: 3
+      Data: 2
+    - Name: m_slots
+      Entry: 7
+      Data: 1|DChild.Serialization.CampaignSlot[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 2|DChild.Serialization.CampaignSlot, Assembly-CSharp
+    - Name: m_id
+      Entry: 3
+      Data: 1
+    - Name: m_demoGame
+      Entry: 5
+      Data: false
+    - Name: m_newGame
+      Entry: 5
+      Data: true
+    - Name: m_sceneToLoad
+      Entry: 6
+      Data: 
+    - Name: m_location
+      Entry: 3
+      Data: 18
+    - Name: m_spawnPosition
+      Entry: 7
+      Data: DChild.Serialization.SerializedVector2, Assembly-CSharp
+    - Name: x
+      Entry: 4
+      Data: 0
+    - Name: y
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_completion
+      Entry: 3
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 0
+    - Name: m_characterData
+      Entry: 7
+      Data: 3|DChild.Serialization.PlayerCharacterData, Assembly-CSharp
+    - Name: m_inventoryData
+      Entry: 7
+      Data: 4|DChild.Serialization.PlayerInventoryData, Assembly-CSharp
+    - Name: m_soulEssence
+      Entry: 3
+      Data: 0
+    - Name: m_items
+      Entry: 7
+      Data: 5|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+    - Name: m_datas
+      Entry: 7
+      Data: 6|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_soulCrystals
+      Entry: 7
+      Data: 7|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+    - Name: m_datas
+      Entry: 7
+      Data: 8|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_questItems
+      Entry: 7
+      Data: 9|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+    - Name: m_datas
+      Entry: 7
+      Data: 10|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_bestiaryProgressData
+      Entry: 7
+      Data: 11|DChild.Serialization.AcquisitionData, Assembly-CSharp
+    - Name: m_serializeDatas
+      Entry: 7
+      Data: 12|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: DChild.Serialization.AcquisitionData+SerializeData, Assembly-CSharp
+    - Name: m_ID
+      Entry: 3
+      Data: 0
+    - Name: m_hasData
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_skills
+      Entry: 7
+      Data: DChild.Serialization.PrimarySkillsData, Assembly-CSharp
+    - Name: m_movementSkills
+      Entry: 6
+      Data: 
+    - Name: m_movementSkillList
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_soulSkillAcquisitionData
+      Entry: 7
+      Data: 13|DChild.Serialization.AcquisitionData, Assembly-CSharp
+    - Name: m_serializeDatas
+      Entry: 7
+      Data: 14|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: DChild.Serialization.AcquisitionData+SerializeData, Assembly-CSharp
+    - Name: m_ID
+      Entry: 3
+      Data: 0
+    - Name: m_hasData
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_equippedSoulSkillData
+      Entry: 7
+      Data: DChild.Serialization.EquippedSoulSkillData, Assembly-CSharp
+    - Name: m_armorSkill
+      Entry: 3
+      Data: 0
+    - Name: m_supportSkill
+      Entry: 3
+      Data: 0
+    - Name: m_weaponSkill1
+      Entry: 3
+      Data: 0
+    - Name: m_weaponSkill2
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_campaignProgress
+      Entry: 7
+      Data: 15|DChild.Serialization.SerializeDataList, Assembly-CSharp
+    - Name: m_saveDatas
+      Entry: 7
+      Data: 16|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 17|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_zoneDatas
+      Entry: 7
+      Data: 18|DChild.Serialization.SerializeDataList, Assembly-CSharp
+    - Name: m_saveDatas
+      Entry: 7
+      Data: 19|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 20|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_importable
+      Entry: 6
+      Data: 
+    - Name: m_miscDatas
+      Entry: 7
+      Data: 21|DChild.Serialization.SerializeDataList, Assembly-CSharp
+    - Name: m_saveDatas
+      Entry: 7
+      Data: 22|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 23|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 24|DChild.Serialization.CampaignSlot, Assembly-CSharp
+    - Name: m_id
+      Entry: 3
+      Data: 2
+    - Name: m_demoGame
+      Entry: 5
+      Data: false
+    - Name: m_newGame
+      Entry: 5
+      Data: true
+    - Name: m_sceneToLoad
+      Entry: 6
+      Data: 
+    - Name: m_location
+      Entry: 3
+      Data: 18
+    - Name: m_spawnPosition
+      Entry: 7
+      Data: DChild.Serialization.SerializedVector2, Assembly-CSharp
+    - Name: x
+      Entry: 4
+      Data: 0
+    - Name: y
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_completion
+      Entry: 3
+      Data: 0
+    - Name: m_duration
+      Entry: 4
+      Data: 0
+    - Name: m_characterData
+      Entry: 7
+      Data: 25|DChild.Serialization.PlayerCharacterData, Assembly-CSharp
+    - Name: m_inventoryData
+      Entry: 7
+      Data: 26|DChild.Serialization.PlayerInventoryData, Assembly-CSharp
+    - Name: m_soulEssence
+      Entry: 3
+      Data: 0
+    - Name: m_items
+      Entry: 7
+      Data: 27|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+    - Name: m_datas
+      Entry: 7
+      Data: 28|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_soulCrystals
+      Entry: 7
+      Data: 29|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+    - Name: m_datas
+      Entry: 7
+      Data: 30|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_questItems
+      Entry: 7
+      Data: 31|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
+    - Name: m_datas
+      Entry: 7
+      Data: 32|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_bestiaryProgressData
+      Entry: 7
+      Data: 33|DChild.Serialization.AcquisitionData, Assembly-CSharp
+    - Name: m_serializeDatas
+      Entry: 7
+      Data: 34|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: DChild.Serialization.AcquisitionData+SerializeData, Assembly-CSharp
+    - Name: m_ID
+      Entry: 3
+      Data: 0
+    - Name: m_hasData
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_skills
+      Entry: 7
+      Data: DChild.Serialization.PrimarySkillsData, Assembly-CSharp
+    - Name: m_movementSkills
+      Entry: 6
+      Data: 
+    - Name: m_movementSkillList
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_soulSkillAcquisitionData
+      Entry: 7
+      Data: 35|DChild.Serialization.AcquisitionData, Assembly-CSharp
+    - Name: m_serializeDatas
+      Entry: 7
+      Data: 36|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: DChild.Serialization.AcquisitionData+SerializeData, Assembly-CSharp
+    - Name: m_ID
+      Entry: 3
+      Data: 0
+    - Name: m_hasData
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_equippedSoulSkillData
+      Entry: 7
+      Data: DChild.Serialization.EquippedSoulSkillData, Assembly-CSharp
+    - Name: m_armorSkill
+      Entry: 3
+      Data: 0
+    - Name: m_supportSkill
+      Entry: 3
+      Data: 0
+    - Name: m_weaponSkill1
+      Entry: 3
+      Data: 0
+    - Name: m_weaponSkill2
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_campaignProgress
+      Entry: 7
+      Data: 37|DChild.Serialization.SerializeDataList, Assembly-CSharp
+    - Name: m_saveDatas
+      Entry: 7
+      Data: 38|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 39|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_zoneDatas
+      Entry: 7
+      Data: 40|DChild.Serialization.SerializeDataList, Assembly-CSharp
+    - Name: m_saveDatas
+      Entry: 7
+      Data: 41|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 42|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_importable
+      Entry: 6
+      Data: 
+    - Name: m_miscDatas
+      Entry: 7
+      Data: 43|DChild.Serialization.SerializeDataList, Assembly-CSharp
+    - Name: m_saveDatas
+      Entry: 7
+      Data: 44|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+        Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 45|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_doNotUseExistingFiles: 0
 --- !u!1 &182492772
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,8 +1020,6 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -617,8 +1040,6 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -733,8 +1154,6 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -755,8 +1174,6 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -769,13 +1186,9 @@ MonoBehaviour:
   OnInverseVisibilityChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Doozy.Engine.Progress.ProgressEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   OnVisibilityChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Doozy.Engine.Progress.ProgressEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   SelectedButton: {fileID: 0}
   ShowBehavior:
     Animation:
@@ -881,8 +1294,6 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -903,8 +1314,6 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls: []
-        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -947,8 +1356,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
@@ -1050,8 +1457,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: <font="BACKCOUNTRY-Regular SDF">Do you really want to exit the game?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a576fbe1b6faba498194776bfd96bc4, type: 2}
@@ -1081,7 +1486,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 44
+  m_fontSize: 23.75
   m_fontSizeBase: 44
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1208,8 +1613,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_spriteAsset: {fileID: 0}
   m_material: {fileID: 0}
@@ -1283,8 +1686,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_fontAsset: {fileID: 11400000, guid: 03de9f858562ece4c9ac9d91b56d9ad5, type: 2}
   m_spriteAsset: {fileID: 0}
   m_material: {fileID: 0}
@@ -1361,8 +1762,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: fcac2d2871d391c45afa58c11b73d5e9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -1625,66 +2024,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.8
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_Navigation.m_Mode
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_Navigation.m_SelectOnRight
-      value: 
-      objectReference: {fileID: 1589300817408219455}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 182492780}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Affirm
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580537, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: OnPointerEnter.OnTrigger.Event.m_PersistentCalls.m_Calls.Array.size
@@ -1755,6 +2094,81 @@ PrefabInstance:
       propertyPath: TargetLabel
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 1589300817408219455}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 182492780}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Affirm
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_RaycastTarget
@@ -1768,7 +2182,7 @@ PrefabInstance:
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_fontSize
-      value: 50
+      value: 22.6
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -1987,66 +2401,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.8
       objectReference: {fileID: 0}
-    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_Navigation.m_Mode
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_Navigation.m_SelectOnLeft
-      value: 
-      objectReference: {fileID: 1589300817079366029}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 182492780}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Decline
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3297773408028580537, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: OnPointerEnter.OnTrigger.Event.m_PersistentCalls.m_Calls.Array.size
@@ -2117,6 +2471,81 @@ PrefabInstance:
       propertyPath: TargetLabel
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 1589300817079366029}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 182492780}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Decline
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408028580538, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3297773408558630375, guid: a38bd721f37cadc40a96c6797a60b4d8,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_RaycastTarget
@@ -2130,7 +2559,7 @@ PrefabInstance:
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
       propertyPath: m_fontSize
-      value: 50
+      value: 29.9
       objectReference: {fileID: 0}
     - target: {fileID: 3297773408558630376, guid: a38bd721f37cadc40a96c6797a60b4d8,
         type: 3}
@@ -2214,11 +2643,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 12426}
     m_Modifications:
-    - target: {fileID: 4107655941417975627, guid: 831bca7ddc4d5b64f9032ee0fe471fb9,
-        type: 3}
-      propertyPath: m_Name
-      value: GameSettings
-      objectReference: {fileID: 0}
     - target: {fileID: 3815068029433346613, guid: 831bca7ddc4d5b64f9032ee0fe471fb9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2273,6 +2697,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4107655941417975627, guid: 831bca7ddc4d5b64f9032ee0fe471fb9,
+        type: 3}
+      propertyPath: m_Name
+      value: GameSettings
       objectReference: {fileID: 0}
     - target: {fileID: 6015312374807856255, guid: 831bca7ddc4d5b64f9032ee0fe471fb9,
         type: 3}

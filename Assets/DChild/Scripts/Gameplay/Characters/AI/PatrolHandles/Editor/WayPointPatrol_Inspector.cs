@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.AI;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 
 namespace DChildEditor.Gameplay.Characters.AI
@@ -33,22 +34,30 @@ namespace DChildEditor.Gameplay.Characters.AI
 
         private void OnSceneGUI()
         {
-            var patrolHandler = target as WayPointPatrol;
-
-            if (patrolHandler.useCurrentPosition && patrolHandler.overridePatrolIndex >= 0)
+            if (PrefabStageUtility.GetCurrentPrefabStage() == null)
             {
-                patrolHandler.wayPoints[patrolHandler.overridePatrolIndex] = patrolHandler.transform.position;
+                var patrolHandler = target as WayPointPatrol;
+
+                if (patrolHandler.useCurrentPosition && patrolHandler.overridePatrolIndex >= 0)
+                {
+                    patrolHandler.wayPoints[patrolHandler.overridePatrolIndex] = patrolHandler.transform.position;
+                }
+
+                var waypoints = patrolHandler.wayPoints;
+                Handles.color = Color.blue;
+
+                EditorGUI.BeginChangeCheck();
+                for (int i = 0; i < waypoints.Length; i++)
+                {
+                    waypoints[i] = Handles.FreeMoveHandle(waypoints[i], Quaternion.identity, 0.5f, Vector3.one * 0.05f, Handles.CubeHandleCap);
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    EditorUtility.SetDirty(patrolHandler);
+                }
+
+                DrawPatrolPath(waypoints, patrolHandler.startIndex, patrolHandler.iteration);
             }
-
-            var waypoints = patrolHandler.wayPoints;
-            Handles.color = Color.blue;
-
-            for (int i = 0; i < waypoints.Length; i++)
-            {
-                waypoints[i] = Handles.FreeMoveHandle(waypoints[i], Quaternion.identity, 0.5f, Vector3.one * 0.05f, Handles.CubeHandleCap);
-            }
-
-            DrawPatrolPath(waypoints, patrolHandler.startIndex, patrolHandler.iteration);
         }
 
 

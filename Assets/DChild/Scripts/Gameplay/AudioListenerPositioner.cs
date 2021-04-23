@@ -9,14 +9,37 @@ namespace DChild.Gameplay
     [AddComponentMenu("DChild/Gameplay/Audio/Audio Listener Positioner")]
     public class AudioListenerPositioner : MonoBehaviour
     {
-        private Transform m_camera;
+        private enum ToFollow
+        {
+            Player,
+            Camera
+        }
+        [SerializeField]
+        private ToFollow m_toFollowType;
 
+        private Transform m_camera;
+        private Transform m_toFollow;
         private static AudioListenerPositioner m_instance;
 
         private void OnCameraChange(object sender, CameraChangeEventArgs eventArgs)
         {
-            m_camera = eventArgs.camera?.transform ?? null;
-            enabled = m_camera;
+            if (m_toFollowType == ToFollow.Camera)
+            {
+                m_camera = eventArgs.camera?.transform ?? null;
+                enabled = m_camera;
+            }
+        }
+
+        public void AttachToCamera()
+        {
+            m_toFollow = m_camera;
+            m_toFollowType = ToFollow.Camera;
+        }
+
+        public void AttachToPlayer()
+        {
+            m_toFollow = GameplaySystem.playerManager.player.character.centerMass;
+            m_toFollowType = ToFollow.Player;
         }
 
         private void Awake()
@@ -34,15 +57,34 @@ namespace DChild.Gameplay
         private void Start()
         {
             GameSystem.CameraChange += OnCameraChange;
-            m_camera = GameSystem.mainCamera?.transform ?? null;
-            enabled = m_camera;
+            switch (m_toFollowType)
+            {
+                case ToFollow.Player:
+                    m_toFollow = GameplaySystem.playerManager.player.character.centerMass;
+                    break;
+                case ToFollow.Camera:
+                    m_camera = GameSystem.mainCamera?.transform ?? null;
+                    enabled = m_camera;
+                    m_toFollow = m_camera;
+                    break;
+            }
         }
 
-        private void LateUpdate()
+        private void Update()
         {
-            var position = m_camera.position;
-            position.z = 0;
-            transform.position = position;
+            if (m_toFollowType == ToFollow.Camera && m_camera == null)
+            {
+                if (GameSystem.mainCamera != null)
+                {
+                    m_camera = GameSystem.mainCamera?.transform;
+                }
+            }
+            if(m_toFollow != null)
+            {
+                var position = m_toFollow.position;
+                position.z = 0;
+                transform.position = position;
+            }
         }
 
         private void OnDestroy()
@@ -52,5 +94,5 @@ namespace DChild.Gameplay
                 m_instance = null;
             }
         }
-    } 
+    }
 }

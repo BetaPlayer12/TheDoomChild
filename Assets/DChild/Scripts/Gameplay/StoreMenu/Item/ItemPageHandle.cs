@@ -1,4 +1,6 @@
 ﻿using DChild.Gameplay.Items;
+using Holysoft.Event;
+using Holysoft.UI;
 using System;
 using UnityEngine;
 
@@ -10,6 +12,8 @@ namespace DChild.Menu.Item
         private ItemInfoPage m_info;
         [SerializeField]
         private ItemContainerUI m_containerUI;
+        [SerializeField]
+        private SingleFocusHandler m_highlighter;
         [SerializeField]
         private UsableItemMenuHandle m_usableItemMenuHandle;
 
@@ -27,10 +31,19 @@ namespace DChild.Menu.Item
             m_info.SetInfo(eventArgs.firstSlot);
         }
 
+        private void OnItemUsedConsumed(object sender, EventActionArgs eventArgs)
+        {
+            m_info.SetInfo(null);
+            m_highlighter.DontFocusOnAnything();
+            m_containerUI.UpdateUI();
+        }
+
         private void Awake()
         {
             m_containerUI.NewPage += OnNewPage;
+            m_usableItemMenuHandle.AllItemCountConsumed += OnItemUsedConsumed;
         }
+
 
     }
 }

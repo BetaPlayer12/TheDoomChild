@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private CountdownTimer m_holdTimer;
 
-        private IPlayerState m_state;
+        //private IPlayerState m_state;
         private StatusEffectReciever m_statusEffectReciever;
         private bool m_isEffectStopped;
 
@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_statusEffectReciever = info.statusEffectReciever;
             m_statusEffectReciever.StatusEnd += OnStatusEnd;
-            m_state = info.state;
+            //m_state = info.state;
         }
 
         private void OnStatusEnd(object sender, StatusEffectRecieverEventArgs eventArgs)
@@ -31,25 +31,25 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Handle(DirectionalInput input)
         {
-            var noOtherInputHeld = m_state.isMoving == false && m_state.waitForBehaviour == false;
-            if (m_state.isCrouched && input.isDownHeld && noOtherInputHeld)
-            {
-                if(m_isEffectStopped == false)
-                {
-                    m_statusEffectReciever.SetActive(StatusEffectType.Bleeding, false);
-                    m_isEffectStopped = true;
-                }
-                m_holdTimer.Tick(Time.deltaTime);
-            }
-            else
-            {
-                if (m_isEffectStopped == true)
-                {
-                    m_statusEffectReciever.SetActive(StatusEffectType.Bleeding, true);
-                    m_isEffectStopped = false;
-                }
-                m_holdTimer.Reset();
-            }
+            //var noOtherInputHeld = m_state.isMoving == false && m_state.waitForBehaviour == false;
+            //if (m_state.isCrouched && input.isDownHeld && noOtherInputHeld)
+            //{
+            //    if(m_isEffectStopped == false)
+            //    {
+            //        m_statusEffectReciever.SetActive(StatusEffectType.Bleeding, false);
+            //        m_isEffectStopped = true;
+            //    }
+            //    m_holdTimer.Tick(Time.deltaTime);
+            //}
+            //else
+            //{
+            //    if (m_isEffectStopped == true)
+            //    {
+            //        m_statusEffectReciever.SetActive(StatusEffectType.Bleeding, true);
+            //        m_isEffectStopped = false;
+            //    }
+            //    m_holdTimer.Reset();
+            //}
         }
 
         private void Awake()

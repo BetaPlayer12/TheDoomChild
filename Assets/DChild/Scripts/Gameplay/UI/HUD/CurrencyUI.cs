@@ -17,11 +17,23 @@ namespace DChild.Gameplay.UI
 
         [SerializeField]
         private float m_addAmountDelay;
+        [SerializeField, MinValue(0)]
+        private float m_updateRateFactor;
+        [SerializeField, MinValue(0)]
+        private float m_increaseUpdateRateInterval = 1;
+        [SerializeField, MinValue(0)]
+        private float m_maxUpdateIncreaseStack = 1;
+
 
         private int m_currentAmount;
         private int m_addedAmount;
+        private bool m_addedAmountIsNegative;
         private float m_delayTimer;
         private bool m_delayAddingOfAmount;
+        private int m_updateRateStack;
+        private int m_currentUpdateFactor;
+        private float m_updateRateIntervalTimer;
+
 
         private int currentAmount
         {
@@ -39,7 +51,15 @@ namespace DChild.Gameplay.UI
             set
             {
                 m_addedAmount = value;
-                m_addedAmountText.text = m_addedAmount.ToString();
+                m_addedAmountIsNegative = addedAmount < 0;
+                if (m_addedAmountIsNegative)
+                {
+                    m_addedAmountText.text = m_addedAmount.ToString();
+                }
+                else
+                {
+                    m_addedAmountText.text = "+" + m_addedAmount.ToString();
+                }
             }
         }
 
@@ -67,8 +87,11 @@ namespace DChild.Gameplay.UI
             addedAmount += eventArgs.amount;
             m_delayTimer = m_addAmountDelay;
             m_delayAddingOfAmount = true;
-            GameEventMessage.SendEvent("Soul Essence Added");
+            GameplaySystem.gamplayUIHandle.ShowPromptSoulEssenceChangeNotify();
             enabled = true;
+            m_updateRateStack = 0;
+            m_currentUpdateFactor = 1;
+            m_updateRateIntervalTimer = m_increaseUpdateRateInterval;
         }
 
         private void Awake()
@@ -82,22 +105,49 @@ namespace DChild.Gameplay.UI
 
         private void LateUpdate()
         {
-            if (m_delayAddingOfAmount)
+            if (GameplaySystem.isGamePaused == false)
             {
-                m_delayTimer -= Time.unscaledDeltaTime;
-                if (m_delayTimer <= 0)
+                var deltaTime = Time.unscaledDeltaTime;
+                if (m_delayAddingOfAmount)
                 {
-                    m_delayAddingOfAmount = false;
+                    m_delayTimer -= deltaTime;
+                    if (m_delayTimer <= 0)
+                    {
+                        m_delayAddingOfAmount = false;
+                    }
                 }
-            }
-            else
-            {
-                addedAmount -= 1;
-                currentAmount += 1;
-                if (addedAmount == 0)
+                else
                 {
-                    enabled = false;
-                    GameEventMessage.SendEvent("Soul Essence Hide");
+                    bool stopUpdate = false;
+                    if (m_addedAmountIsNegative)
+                    {
+                        addedAmount += m_currentUpdateFactor;
+                        currentAmount -= m_currentUpdateFactor;
+                        stopUpdate = addedAmount >= 0;
+                    }
+                    else
+                    {
+                        addedAmount -= m_currentUpdateFactor;
+                        currentAmount += m_currentUpdateFactor;
+                        stopUpdate = addedAmount <= 0;
+                    }
+
+                    if (stopUpdate)
+                    {
+                        enabled = false;
+                        GameplaySystem.gamplayUIHandle.ShowSoulEssenceNotify(false);
+                    }
+                }
+
+                if (m_updateRateStack < m_maxUpdateIncreaseStack)
+                {
+                    m_updateRateIntervalTimer -= deltaTime;
+                    if (m_updateRateIntervalTimer < 0)
+                    {
+                        m_currentUpdateFactor += Mathf.CeilToInt(Mathf.Pow(m_updateRateFactor, m_updateRateStack));
+                        m_updateRateStack++;
+                        m_updateRateIntervalTimer = m_increaseUpdateRateInterval;
+                    }
                 }
             }
         }

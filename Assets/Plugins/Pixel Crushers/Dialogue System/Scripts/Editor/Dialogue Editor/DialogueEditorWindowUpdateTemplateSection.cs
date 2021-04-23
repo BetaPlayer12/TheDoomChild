@@ -161,6 +161,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     AddMissingFieldsToTemplate(entry.fields, template.dialogueEntryFields);
                 }
             }
+            SaveTemplate();
         }
 
         private void UpdateTemplateFromAssets<T>(List<T> assets, List<Field> templateFields) where T : Asset

@@ -65,6 +65,10 @@ namespace DChild.Gameplay.Characters.Players
 
         public void LoadData(AcquisitionData saveData)
         {
+            if (m_soulSkills == null)
+            {
+                Initialize();
+            }
             var size = saveData.count;
             for (int i = 0; i < size; i++)
             {
@@ -89,6 +93,14 @@ namespace DChild.Gameplay.Characters.Players
         }
 
         private void Awake()
+        {
+            if (m_soulSkills == null)
+            {
+                Initialize();
+            }
+        }
+
+        private void Initialize()
         {
             m_soulSkills = new Dictionary<int, bool>();
             var ids = m_list.GetIDs();

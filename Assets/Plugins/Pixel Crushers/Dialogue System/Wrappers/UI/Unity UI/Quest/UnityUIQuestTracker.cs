@@ -9,7 +9,6 @@ namespace PixelCrushers.DialogueSystem.Wrappers
     /// This wrapper class keeps references intact if you switch between the 
     /// compiled assembly and source code versions of the original class.
     /// </summary>
-    [HelpURL("http://pixelcrushers.com/dialogue_system/manual/html/quest_log_window.html#questSystemTrackerHUD")]
     [AddComponentMenu("Pixel Crushers/Dialogue System/UI/Unity UI/Quest/Unity UI Quest Tracker HUD (on Dialogue Manager or child)")]
     public class UnityUIQuestTracker : PixelCrushers.DialogueSystem.UnityUIQuestTracker
     {

@@ -31,7 +31,7 @@ namespace DChild.Gameplay.Characters.AI
                 var rayOrigin = (Vector2)m_model.position;
                 var toRayTarget = m_targetComponent.position - rayOrigin;
                 int hitCount = 0;
-                Raycaster.SetLayerCollisionMask(LayerMask.NameToLayer("Environment"));
+                Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
                 Raycaster.Cast(rayOrigin, toRayTarget.normalized, toRayTarget.magnitude, true, out hitCount);
                 if (RegisterSpottedPlayer(hitCount) == false)
                 {
@@ -55,14 +55,17 @@ namespace DChild.Gameplay.Characters.AI
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (m_spottedTarget == null)
+            if (collision.tag != "Sensor")
             {
-                var target = collision.GetComponentInParent<ITarget>();
-                if (target != null)
+                if (m_spottedTarget == null)
                 {
-                    m_spottedTarget = collision;
-                    m_targetComponent = target;
-                    m_targetRegistered = false;
+                    var target = collision.GetComponentInParent<ITarget>();
+                    if (target != null)
+                    {
+                        m_spottedTarget = collision;
+                        m_targetComponent = target;
+                        m_targetRegistered = false;
+                    }
                 }
             }
         }

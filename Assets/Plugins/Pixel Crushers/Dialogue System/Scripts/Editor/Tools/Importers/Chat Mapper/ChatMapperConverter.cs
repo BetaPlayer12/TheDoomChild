@@ -32,6 +32,7 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         static ChatMapperConverter()
         {
+            EditorApplication.projectWindowItemOnGUI -= OnProjectWindowItemOnGUI;
             EditorApplication.projectWindowItemOnGUI += OnProjectWindowItemOnGUI;
         }
 

@@ -1,45 +1,44 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Environment;
+using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
+using System;
 using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
     [RequireComponent(typeof(LocationPoster))]
-    public class LocationSwitcher : SerializedMonoBehaviour
+    public class LocationSwitcher : SerializedMonoBehaviour, IButtonToInteract
     {
         [SerializeField]
         private LocationData m_destination;
-        [SerializeField]
-        private float m_transitionDelay = 0.5f;
+
         [SerializeField]
         private ISwitchHandle m_handle;
 
         private LocationPoster m_poster;
 
-        private void Awake()
+        public bool showPrompt => m_handle.needsButtonInteraction;
+
+        public Vector3 promptPosition => m_handle.promptPosition;
+
+        public string promptMessage => null;
+
+        public void Interact(Character character)
         {
-            m_poster = GetComponent<LocationPoster>();
-            m_poster.data.OnArrival += OnArrival;
+            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
+            StartCoroutine(DoTransition(character, TransitionType.Enter));
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        public void Interact()
         {
-            var playerControlledObject = collision.GetComponent<Hitbox>();
-
-            if (playerControlledObject != null)
-            {
-                Character character = collision.GetComponentInParent<Character>();
-
-                if (character != null)
-                {
-                    GoToDestination(character);
-                }
-            }
+            Interact(GameplaySystem.playerManager.player.character);
         }
 
         private IEnumerator DoTransition(Character character, TransitionType type)
@@ -48,25 +47,37 @@ namespace DChild.Gameplay.Systems
 
             if (type == TransitionType.Enter)
             {
-                yield return new WaitForSeconds(m_transitionDelay);
+                GameplaySystem.campaignSerializer.UpdateData();
+
+                yield return new WaitForSeconds(m_handle.transitionDelay);
 
                 m_handle.DoSceneTransition(character, TransitionType.PostEnter);
 
                 LoadingHandle.SetLoadType(LoadingHandle.LoadType.Smart);
-                LoadZoneFunctionHandle loadZoneFunctionHandle = new LoadZoneFunctionHandle(m_destination, character);
-                GameSystem.LoadZone(m_destination.scene, true, loadZoneFunctionHandle.CallLocationArriveEvent);
+                Cache<LoadZoneFunctionHandle> cacheLoadZoneHandle = Cache<LoadZoneFunctionHandle>.Claim();
+                cacheLoadZoneHandle.Value.Initialize(m_destination, character, cacheLoadZoneHandle);
+                GameSystem.LoadZone(m_destination.scene, true, cacheLoadZoneHandle.Value.CallLocationArriveEvent);
+                GameplaySystem.ClearCaches();
+
             }
             else if (type == TransitionType.Exit)
             {
-                character.transform.position = m_poster.data.position;
+                //character.transform.position = m_poster.data.position;
+                LoadingHandle.LoadingDone += OnLoadingDone;
 
-                yield return new WaitForSeconds(m_transitionDelay);
+                yield return new WaitForSeconds(m_handle.transitionDelay);
+
+                m_handle.DoSceneTransition(character, TransitionType.PostExit);
 
                 var damageable = character.GetComponent<IDamageable>();
                 damageable.SetHitboxActive(true);
-
-                GameplaySystem.playerManager.StopCharacterControlOverride();
             }
+        }
+
+        private void OnLoadingDone(object sender, EventActionArgs eventArgs)
+        {
+            GameplaySystem.playerManager.StopCharacterControlOverride();
+            LoadingHandle.LoadingDone -= OnLoadingDone;
         }
 
         public void GoToDestination(Character character)
@@ -82,11 +93,45 @@ namespace DChild.Gameplay.Systems
         public void OnArrival(object sender, CharacterEventArgs eventArgs)
         {
             StartCoroutine(DoTransition(eventArgs.character, TransitionType.Exit));
+            Debug.LogError("Exit");
+        }
+
+        private void Awake()
+        {
+            m_poster = GetComponent<LocationPoster>();
+            m_poster.data.OnArrival += OnArrival;
+            Debug.Log($"{m_poster.name} is Logged");
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (m_handle.needsButtonInteraction == false)
+            {
+                if (collision.TryGetComponent(out Hitbox hitbox))
+                {
+                    Character character = collision.GetComponentInParent<Character>();
+
+                    if (character != null)
+                    {
+                        GoToDestination(character);
+                    }
+                }
+            }
         }
 
         private void OnDestroy()
         {
             m_poster.data.OnArrival -= OnArrival;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (showPrompt)
+            {
+                var position = promptPosition;
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawSphere(position, 1f);
+            }
         }
     }
 }

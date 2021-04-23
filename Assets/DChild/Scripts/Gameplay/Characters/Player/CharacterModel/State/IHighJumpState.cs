@@ -2,7 +2,6 @@
 {
     public interface IHighJumpState
     {
-        bool canHighJump { get; set; }
-        bool hasJumped { get; set; }
+        bool isHighJumping { get; set; }
     }
 }

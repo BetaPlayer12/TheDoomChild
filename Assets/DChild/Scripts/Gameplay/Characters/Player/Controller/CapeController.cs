@@ -8,21 +8,19 @@ using UnityEngine;
 public class CapeController : MonoBehaviour
 {
     [SerializeField]
-    private Animator m_animator;
+    private Transform m_playerTF;
     [SerializeField]
-    private Character m_character;
+    private Transform m_capeTFReference;
 
     private void Update()
     {
-        if(Input.GetAxisRaw("Horizontal") == 0)
+        if (m_playerTF.localScale.x < 0)
         {
-            m_animator.SetTrigger(m_character.facing == HorizontalDirection.Right ? "isFacingRight" : "isFacingLeft");
-            //Debug.Log(m_character.facing == HorizontalDirection.Right ? "isFacingRight" : "isFacingLeft");
+            m_capeTFReference.localScale = Vector3.left;
         }
         else
         {
-            m_animator.SetTrigger("isMoving");
+            m_capeTFReference.localScale = Vector3.one;
         }
-
     }
 }

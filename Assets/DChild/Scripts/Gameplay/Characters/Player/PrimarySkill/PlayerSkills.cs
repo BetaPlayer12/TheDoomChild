@@ -21,16 +21,17 @@ namespace DChild.Gameplay.Characters.Players
 
     public class PlayerSkills : SerializedMonoBehaviour, IPrimarySkills
     {
+        [SerializeField]
+        private PlayerModuleActivator m_moduleActivator;
         [SerializeField, HideReferenceObjectPicker]
         private Dictionary<PrimarySkill, bool> m_skills = new Dictionary<PrimarySkill, bool>();
 
         public event EventAction<PrimarySkillUpdateEventArgs> SkillUpdate;
 
-        public bool IsEnabled(PrimarySkill skill) => m_skills[skill];
-
-        public void Enable(PrimarySkill skill, bool enableSkill)
+        public void UnlockSkill(PrimarySkill skill, bool enableSkill)
         {
             m_skills[skill] = enableSkill;
+            m_moduleActivator.SetModuleLock(skill, enableSkill);
             SkillUpdate?.Invoke(this, new PrimarySkillUpdateEventArgs(skill, enableSkill));
         }
 
@@ -48,9 +49,17 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PrimarySkillsData savedData)
         {
             var data = savedData.movementSkills;
-            for (int i = 0; i < data.Length; i++)
+            if (data != null)
             {
-                m_skills[(PrimarySkill)i] = data[i];
+                m_moduleActivator.Validate();
+                m_moduleActivator.Reset();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    var skill = (PrimarySkill)i;
+                    var isUnlocked = data[i];
+                    m_skills[skill] = isUnlocked;
+                    m_moduleActivator.SetModuleLock(skill, isUnlocked);
+                }
             }
         }
     }

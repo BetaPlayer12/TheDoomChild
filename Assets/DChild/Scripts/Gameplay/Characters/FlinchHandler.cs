@@ -16,11 +16,11 @@ namespace DChild.Gameplay.Characters
         private SpineRootAnimation m_spine;
         [SerializeField]
         private IsolatedPhysics2D m_physics;
+        [SerializeField]
+        public bool m_autoFlinch;
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
-        [SerializeField]
-        private bool m_autoFlinch;
 
         public void InitializeField(SpineRootAnimation spineRoot,IsolatedPhysics2D physics, SkeletonAnimation animation)
         {
@@ -31,36 +31,59 @@ namespace DChild.Gameplay.Characters
 #endif
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_animation;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
+        private string m_idleAnimation;
 
         private bool m_isFlinching;
 
+        public event EventAction<EventActionArgs> HitStopStart;
         public event EventAction<EventActionArgs> FlinchStart;
         public event EventAction<EventActionArgs> FlinchEnd;
+        public bool autoFlinching => m_autoFlinch;
+        public bool isFlinching => m_isFlinching;
 
         public void SetAnimation(string animation) => m_animation = animation;
 
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
         {
+         
             Flinch();
         }
 
         public void Flinch()
         {
-            if (m_isFlinching == false)
+            HitStopStart?.Invoke(this, new EventActionArgs());
+            if (m_autoFlinch)
             {
-                //StopAllCoroutines(); //Gian Editz
-                m_physics?.SetVelocity(Vector2.zero);
-                StartCoroutine(FlinchRoutine());
+                if (m_isFlinching == false)
+                {
+                    //StopAllCoroutines(); //Gian Editz
+                    StartFlinch();
+                }
             }
+            else
+            {
+                StartFlinch();
+            }
+        }
+
+
+        private void StartFlinch()
+        {
+            m_physics?.SetVelocity(Vector2.zero);
+            StartCoroutine(FlinchRoutine());
         }
 
         private IEnumerator FlinchRoutine()
         {
             FlinchStart?.Invoke(this, new EventActionArgs());
-            if (m_isFlinching)
+            if (m_autoFlinch)
             {
+                m_spine.SetAnimation(0, m_idleAnimation, true);
                 m_spine.SetAnimation(0, m_animation, false, 0);
-                m_spine.AddEmptyAnimation(0, 0.2f, 0);
+                m_spine.AddAnimation(0, m_idleAnimation, false, 0.2f).TimeScale = 20;
+
+                //m_spine.AddEmptyAnimation(0, 0.2f, 0);
             }
             m_isFlinching = true;
             m_spine.AnimationSet += OnAnimationSet;

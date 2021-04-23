@@ -69,6 +69,16 @@ namespace PixelCrushers.DialogueSystem
         private static int m_currentLanguageID = -1;
         private static bool m_useDefaultIfUndefined = true;
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            m_language = string.Empty;
+            m_currentLanguageID = -1;
+            m_useDefaultIfUndefined = true;
+        }
+#endif
+
         public static int GetCurrentLanguageID(TextTable textTable)
         {
             if (m_currentLanguageID == -1 && textTable != null)

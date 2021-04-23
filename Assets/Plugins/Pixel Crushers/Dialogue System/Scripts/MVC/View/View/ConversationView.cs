@@ -599,10 +599,10 @@ namespace PixelCrushers.DialogueSystem
                 bool validSpeakerTransform = CharacterInfoHasValidTransform(lastSubtitle.speakerInfo);
                 bool validListenerTransform = CharacterInfoHasValidTransform(lastSubtitle.listenerInfo);
                 bool speakerIsListener = validSpeakerTransform && validListenerTransform && (lastSubtitle.speakerInfo.transform == lastSubtitle.listenerInfo.transform);
-                if (validSpeakerTransform) lastSubtitle.speakerInfo.transform.BroadcastMessage(DialogueSystemMessages.OnConversationCancelled, sequencer.listener, SendMessageOptions.DontRequireReceiver);
-                if (validListenerTransform && !speakerIsListener) lastSubtitle.listenerInfo.transform.BroadcastMessage(DialogueSystemMessages.OnConversationCancelled, sequencer.speaker, SendMessageOptions.DontRequireReceiver);
+                if (validSpeakerTransform) lastSubtitle.speakerInfo.transform.BroadcastMessage(DialogueSystemMessages.OnConversationCancelled, sequencer.listener ?? transform, SendMessageOptions.DontRequireReceiver);
+                if (validListenerTransform && !speakerIsListener) lastSubtitle.listenerInfo.transform.BroadcastMessage(DialogueSystemMessages.OnConversationCancelled, sequencer.speaker ?? transform, SendMessageOptions.DontRequireReceiver);
             }
-            DialogueManager.instance.BroadcastMessage(DialogueSystemMessages.OnConversationCancelled, sequencer.speaker, SendMessageOptions.DontRequireReceiver);
+            DialogueManager.instance.BroadcastMessage(DialogueSystemMessages.OnConversationCancelled, sequencer.speaker ?? transform, SendMessageOptions.DontRequireReceiver);
         }
 
         private bool CharacterInfoHasValidTransform(CharacterInfo characterInfo)

@@ -105,7 +105,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var acidSpit = (AcidSpitProjectile)GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_acidSpit);
             var direction = targetPos - (Vector2)m_spitSpawn.position;
             acidSpit.ChangeTrajectory(direction.normalized);
-            acidSpit.SetVelocity(direction, 1.5f);
+            acidSpit.Launch(direction, 1.5f);
             yield return new WaitForAnimationComplete(m_animation.animationState, BellAnimation.ANIMATION_ACID_SPIT);
             m_waitForBehaviourEnd = false;
             m_behaviour.SetActiveBehaviour(null);

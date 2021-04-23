@@ -69,6 +69,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_smokeFXEvent;
             public string smokeFXEvent => m_smokeFXEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_smokeStopFXEvent;
+            public string smokeStopFXEvent => m_smokeStopFXEvent;
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
@@ -118,10 +121,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_smokeFX;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("AttackHitBoxes")]
+        private GameObject m_smokeHitbox;
 
         private float m_targetDistance;
 
@@ -140,7 +147,8 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
 
             m_spineEventListener.Subscribe(m_info.dartFXEvent, LaunchProjectile);
-            m_spineEventListener.Subscribe(m_info.smokeFXEvent, LaunchProjectile);
+            m_spineEventListener.Subscribe(m_info.smokeFXEvent, SmokeStart);
+            m_spineEventListener.Subscribe(m_info.smokeStopFXEvent, SmokeEnd);
             //GameplaySystem.SetBossHealth(m_character);
         }
 
@@ -148,16 +156,30 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                var target = m_targetInfo.position; //No Parabola      
+                var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
+                //var target = m_targetInfo.position; //No Parabola      
                 Vector2 spitPos = m_projectileStart.position;
                 Vector3 v_diff = (target - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
 
                 //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                m_projectileLauncher.AimAt(target);
                 m_projectileLauncher.LaunchProjectile();
                 //m_Audiosource.clip = m_RangeAttackClip;
                 //m_Audiosource.Play();
             }
+        }
+
+        private void SmokeStart()
+        {
+            m_smokeHitbox.SetActive(true);
+            m_smokeFX.Play();
+        }
+
+        private void SmokeEnd()
+        {
+            m_smokeHitbox.SetActive(false);
+            m_smokeFX.Stop();
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -212,12 +234,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            StopAllCoroutines();
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -307,6 +332,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
+                        Debug.Log(IsFacingTarget());
                         if (IsFacingTarget())
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
@@ -323,6 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     //    m_animation.SetAnimation(0, m_info.surpriseAnimation, false);
                                     //    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                                     //}
+                                    m_attackDecider.hasDecidedOnAttack = false;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
@@ -358,6 +385,26 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Burrowed);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+        }
+
+        public void ResetAI()
+        {
+            m_targetInfo.Set(null, null);
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

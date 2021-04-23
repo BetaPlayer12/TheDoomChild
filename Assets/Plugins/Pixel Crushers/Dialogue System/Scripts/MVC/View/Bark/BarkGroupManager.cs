@@ -33,6 +33,14 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            s_applicationIsQuitting = false;
+        }
+#endif
+
         public Dictionary<string, HashSet<BarkGroupMember>> groups = new Dictionary<string, HashSet<BarkGroupMember>>();
 
         private  class BarkRequest

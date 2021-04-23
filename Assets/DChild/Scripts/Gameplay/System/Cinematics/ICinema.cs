@@ -8,14 +8,20 @@ namespace DChild.Gameplay.Cinematics
     {
         Camera mainCamera { get; }
         void EnableCameraShake(bool enable);
-        void ClearLists();
-        void SetDefaultCam(IVirtualCamera vCam);
         void TransistionTo(IVirtualCamera vCam);
-        void TransistionToDefaultCamera();
+
+        void ResolveCamTransistion(IVirtualCamera vCam);
+
         void AllowTracking(ITrackingCamera trackingCamera);
         void RemoveTracking(ITrackingCamera trackingCamera);
         void Register(ITrackingCamera trackingCamera);
         void Unregister(ITrackingCamera trackingCamera);
+
+        void ApplyLookAhead(Cinema.LookAhead look);
+
+        void SetCameraShake(float amplitude, float frequency);
+
+        void SetCameraShakeProfile(Cinema.ShakeType shakeType);
     }
 
 }

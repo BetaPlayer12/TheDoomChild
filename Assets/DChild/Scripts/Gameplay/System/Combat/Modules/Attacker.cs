@@ -18,22 +18,27 @@ namespace DChild.Gameplay.Combat
         private AttackerData m_data;
 
 #if UNITY_EDITOR
-        [SerializeField, OnValueChanged("ApplyDamageModification")]
+        [SerializeField, OnValueChanged("ApplyDamageModification", true)]
 #endif
         private AttackerInfo m_info;
 
         [ShowInInspector, HideInEditorMode, MinValue(0), OnValueChanged("ApplyDamageModification")]
-        private int m_damageModifier;
+        private float m_damageModifier;
 
         private bool m_isInstantiated;
 
         private List<AttackDamage> m_currentDamage;
+
+        public Vector2 position => m_centerMass.position;
+
+        public Invulnerability ignoreInvulnerability => m_info.ignoreInvulnerability;
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
-            if (m_info.ignoreInvulnerability || !targetDefense.isInvulnerable)
+            if (m_info.ignoreInvulnerability >= targetDefense.invulnerabilityLevel)
             {
                 if (targetInfo.isBreakableObject)
                 {
@@ -60,12 +65,15 @@ namespace DChild.Gameplay.Combat
                     }
                     cacheInfo.Release();
                 }
-
             }
         }
 
         public void SetDamage(params AttackDamage[] damage)
         {
+            if (m_info == null)
+            {
+                m_info = new AttackerInfo();
+            }
             m_info.damage.Clear();
             m_info.damage.AddRange(damage);
             if (m_isInstantiated == false)
@@ -99,7 +107,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public void SetDamageModifier(int value)
+        public void SetDamageModifier(float value)
         {
             if (m_damageModifier != value)
             {
@@ -114,14 +122,17 @@ namespace DChild.Gameplay.Combat
             for (int i = 0; i < m_info.damage.Count; i++)
             {
                 var damage = m_info.damage[i];
-                damage.value *= m_damageModifier;
+                damage.value = Mathf.CeilToInt(damage.value * m_damageModifier);
                 m_currentDamage.Add(damage);
             }
         }
 
         private void Awake()
         {
-            m_info = new AttackerInfo();
+            if (m_info == null)
+            {
+                m_info = new AttackerInfo();
+            }
             if (m_data != null)
             {
                 m_info.Copy(m_data.info);
@@ -136,7 +147,6 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-
 #if UNITY_EDITOR
         [Button]
         private void UseSelfAsCenterMass()
@@ -147,7 +157,10 @@ namespace DChild.Gameplay.Combat
         private void ApplyData()
         {
             m_info.Copy(m_data.info);
-            ApplyDamageModification();
+            if (m_currentDamage != null)
+            {
+                ApplyDamageModification();
+            }
         }
 
         public void InitializeField(Transform centerMass)

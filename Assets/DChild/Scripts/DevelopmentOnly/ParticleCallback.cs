@@ -1,10 +1,13 @@
 ﻿using Holysoft.Event;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay
 {
     public class ParticleCallback : MonoBehaviour
     {
+        [SerializeField]
+        private UnityEvent OnCallBack;
         public event EventAction<EventActionArgs> CallBack;
 
         private TrailRenderer m_renderer;
@@ -13,12 +16,14 @@ namespace DChild.Gameplay
         private void OnParticleSystemStopped()
         {
             CallBack?.Invoke(this, EventActionArgs.Empty);
+            OnCallBack?.Invoke();
         }
 
         private void Awake()
         {
             m_renderer = GetComponent<TrailRenderer>();
             m_previousSegmentCount = 0;
+            enabled = m_renderer;
         }
 
         private void LateUpdate()

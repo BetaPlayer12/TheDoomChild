@@ -64,8 +64,20 @@ namespace DChild.Gameplay
                 }
             }
 
+            public SaveData(bool isUnlocked, bool[] requirements)
+            {
+                this.isUnlocked = isUnlocked;
+                requirementState = new bool[requirements.Length];
+                for (int i = 0; i < requirementState.Length; i++)
+                {
+                    requirementState[i] = requirements[i];
+                }
+            }
+
             public bool[] requirementState { get; }
             public bool isUnlocked { get; }
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(isUnlocked,requirementState);
         }
 
         [ShowInInspector, OnValueChanged("OnStateChange")]

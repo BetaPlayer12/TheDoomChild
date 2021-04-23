@@ -23,13 +23,13 @@ namespace DChild.Gameplay.Characters
         public void Execute(string turn, string idle)
         {
             m_turnAnimation = turn;
-            m_animation.SetAnimation(0, turn, false);
+            var turnAnimation = m_animation.SetAnimation(0, turn, false);
             m_animation.AddAnimation(0, idle, true, 0); //with idle
             //m_animation.AddEmptyAnimation(0, 0, 0);
-            StartCoroutine(TurnRoutine());
+            StartCoroutine(TurnRoutine(turnAnimation.Animation.Duration));
         }
 
-        private IEnumerator TurnRoutine()
+        private IEnumerator TurnRoutine(float duration)
         {
             m_isTurning = true;
             m_animation.EnableRootMotion(m_useRootMotionX, m_useRootMotionY);
@@ -39,6 +39,11 @@ namespace DChild.Gameplay.Characters
             while (m_isTurning)
             {
                 yield return null;
+                duration -= GameplaySystem.time.deltaTime;
+                if (duration <= 0 && m_animation.skeletonAnimation.enabled == false)
+                {
+                    break;
+                }
             }
             m_animation.DisableRootMotion();
             m_animation.AnimationSet -= OnAnimationSet;

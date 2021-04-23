@@ -68,6 +68,5 @@ namespace DChild
         protected bool m_initialized;
 #endif
         public int id => m_ID;
-        public string name => m_name;
     }
 }

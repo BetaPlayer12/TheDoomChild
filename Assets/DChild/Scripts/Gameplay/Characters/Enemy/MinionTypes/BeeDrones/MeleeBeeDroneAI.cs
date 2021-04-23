@@ -178,6 +178,18 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private IEnumerator AttackRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_animation.SetAnimation(0, m_info.chargeAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeAnimation);
+            m_animation.SetAnimation(0, m_info.meleeAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.meleeAttack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             //m_Audiosource.clip = m_DeadClip;
@@ -260,8 +272,9 @@ namespace DChild.Gameplay.Characters.Enemies
                  
                     m_agent.Stop();
                     m_animation.EnableRootMotion(false, false);
-                    m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation, m_info.idleAnimation);
-                    m_stateHandle.Wait(State.WaitBehaviourEnd);
+                    //m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation, m_info.idleAnimation);
+                    //m_stateHandle.Wait(State.WaitBehaviourEnd);
+                    StartCoroutine(AttackRoutine());
                     break;
                 case State.Chasing:
                     if (IsFacingTarget())
@@ -332,6 +345,26 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 Patience();
             }
+        }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Patrol);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+        }
+
+        public void ResetAI()
+        {
+            m_targetInfo.Set(null, null);
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

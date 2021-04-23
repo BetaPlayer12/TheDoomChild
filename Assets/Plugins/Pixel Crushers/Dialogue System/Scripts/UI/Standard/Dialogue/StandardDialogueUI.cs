@@ -45,7 +45,7 @@ namespace PixelCrushers.DialogueSystem
             VerifyAssignments();
             conversationUIElements.Initialize();
             alertUIElements.HideImmediate();
-            conversationUIElements.HideImmediate();
+            //conversationUIElements.HideImmediate();
             QTEIndicatorElements.HideImmediate();
         }
 
@@ -218,6 +218,11 @@ namespace PixelCrushers.DialogueSystem
         public virtual void OverrideActorMenuPanel(Transform actorTransform, MenuPanelNumber menuPanelNumber, StandardUIMenuPanel customPanel)
         {
             conversationUIElements.standardMenuControls.OverrideActorMenuPanel(actorTransform, menuPanelNumber, customPanel ?? conversationUIElements.defaultMenuPanel);
+        }
+
+        public virtual void OverrideActorMenuPanel(Actor actor, MenuPanelNumber menuPanelNumber, StandardUIMenuPanel customPanel)
+        {
+            conversationUIElements.standardMenuControls.OverrideActorMenuPanel(actor, menuPanelNumber, customPanel ?? conversationUIElements.defaultMenuPanel);
         }
 
         #endregion

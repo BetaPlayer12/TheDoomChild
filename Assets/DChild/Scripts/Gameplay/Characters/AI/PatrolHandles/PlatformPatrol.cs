@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Holysoft.Event;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.AI
@@ -29,6 +30,8 @@ namespace DChild.Gameplay.Characters.AI
         private Vector2 m_snapToPosition;
         private Vector2 m_groundNormal;
         private float m_snapRotation;
+        public event EventAction<EventActionArgs> RotateToEdge;
+        public event EventAction<EventActionArgs> RotateToWall;
 
         public override void Patrol(MovementHandle2D movement, float speed, CharacterInfo characterInfo)
         {
@@ -36,7 +39,10 @@ namespace DChild.Gameplay.Characters.AI
 
             if (m_shouldSnapToLedge || m_shouldSnapToWall)
             {
-                ExecuteAutoRotate();
+                if (m_autoRotate)
+                {
+                    ExecuteAutoRotate();
+                }
             }
             else
             {
@@ -63,14 +69,16 @@ namespace DChild.Gameplay.Characters.AI
         {
             if (m_wallSensor.isDetecting)
             {
-                m_shouldSnapToWall = true;
                 if (m_autoRotate)
                 {
+                    m_shouldSnapToWall = true;
                     CalculateSnapValues(m_wallSensor.GetHits()[0]);
                 }
                 else
                 {
-                    //Event thingy
+                    m_shouldSnapToLedge = true;
+                    CalculateSnapValues(m_wallSensor.GetHits()[0]);
+                    RotateToWall?.Invoke(this, new EventActionArgs());
                 }
             }
             else
@@ -86,14 +94,16 @@ namespace DChild.Gameplay.Characters.AI
                 m_edgeWallSensor.Cast();
                 if (m_edgeWallSensor.isDetecting)
                 {
-                    m_shouldSnapToLedge = true;
                     if (m_autoRotate)
                     {
+                        m_shouldSnapToLedge = true;
                         CalculateSnapValues(m_edgeWallSensor.GetHits()[0]);
                     }
                     else
                     {
-                        //Event thingy
+                        m_shouldSnapToLedge = true;
+                        CalculateSnapValues(m_edgeWallSensor.GetHits()[0]);
+                        RotateToEdge?.Invoke(this, new EventActionArgs());
                     }
                 }
             }
@@ -109,7 +119,7 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-        private void CalculateSnapValues(RaycastHit2D hit)
+        public void CalculateSnapValues(RaycastHit2D hit)
         {
             m_snapToPosition = hit.point + m_snapOffset;
             m_groundNormal = hit.normal;
@@ -117,7 +127,7 @@ namespace DChild.Gameplay.Characters.AI
             m_snapRotation = Vector2.SignedAngle(Vector2.right, groundAngle);
         }
 
-        private void ExecuteAutoRotate()
+        public void ExecuteAutoRotate()
         {
             m_toRotate.position = m_snapToPosition;
             m_toRotate.rotation = Quaternion.Euler(0, 0, m_snapRotation);

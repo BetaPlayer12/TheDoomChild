@@ -100,6 +100,23 @@ namespace DChild.Gameplay.Characters.Enemies
                 Debug.Log("GROUNDED DEDDED");
             }
         }
+
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Idle);
+        }
+
+        public void ResetAI()
+        {
+            m_targetInfo.Set(null, null);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
+        }
     }
 }
 

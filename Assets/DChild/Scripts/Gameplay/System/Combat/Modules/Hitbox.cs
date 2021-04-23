@@ -11,22 +11,23 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-    [RequireComponent(typeof(Collider2D))]
     [AddComponentMenu("DChild/Gameplay/Combat/Hitbox")]
     public class Hitbox : MonoBehaviour
     {
+        public const string TAG = "Hitbox";
+
         private IDamageable m_damageable;
-        [SerializeField, HideInInspector]
+        [SerializeField, DisableInPlayMode, HideInEditorMode]
         private Collider2D[] m_collider2Ds;
 
         [SerializeField]
-        private bool m_isInvulnerable;
-        [SerializeField, HideIf("m_isInvulnerable"), Range(0, 0.99f)]
+        private Invulnerability m_invulnerabilityLevel;
+        [SerializeField, HideIf("@m_invulnerabilityLevel == Invulnerability.MAX"), Range(0, 0.99f)]
         private float m_damageReduction;
 
         public IDamageable damageable => m_damageable;
-        public BodyDefense defense => m_isInvulnerable ? new BodyDefense(m_isInvulnerable) : new BodyDefense(m_damageReduction);
-        public bool isInvulnerable => m_isInvulnerable;
+        public BodyDefense defense => new BodyDefense(m_invulnerabilityLevel, m_damageReduction);
+        public Invulnerability invulnerabilityLevel => m_invulnerabilityLevel;
 
         public void Enable()
         {
@@ -36,6 +37,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        [Button]
         public void Disable()
         {
             for (int i = 0; i < m_collider2Ds.Length; i++)
@@ -44,9 +46,11 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public void SetInvulnerability(bool value)
+        public virtual bool CanBeDamageBy(params Collider2D[] colliders) => true;
+
+        public void SetInvulnerability(Invulnerability value)
         {
-            m_isInvulnerable = value;
+            m_invulnerabilityLevel = value;
         }
 
         private void Awake()
@@ -65,7 +69,15 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                m_collider2Ds = new Collider2D[] { GetComponent<Collider2D>() };
+                m_collider2Ds = GetComponentsInChildren<Collider2D>();
+            }
+
+            foreach (var collider2D in m_collider2Ds)
+            {
+                if(collider2D.tag != Hitbox.TAG)
+                {
+                    collider2D.tag = Hitbox.TAG;
+                }
             }
         }
     }

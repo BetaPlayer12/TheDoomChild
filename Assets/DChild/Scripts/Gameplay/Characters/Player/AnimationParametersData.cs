@@ -9,32 +9,38 @@ namespace DChild.Gameplay.Characters.Players
     {
         public enum Parameter
         {
+            IsIdle,
+            IdleState,
+            IsGrounded,
+            CombatMode,
+            IsAttacking,
+            SlashState,
+            IsDashing,
+            Jump,
             SpeedX,
             SpeedY,
-            IsFacingLeft,
-            IsCrouching,
-            IsMidAir,
-            Jump,
-            Land,
-            IsDashing,
-            DoubleJump,
-            LedgeGrab,
-            Attack,
-            AttackYDirection,
-            WallStickTrigger,
-            WallSlide,
+            IsCrouched,
+            YInput,
+            IsDead,
             WallStick,
-            PlatformDrop,
             Flinch,
-            Death,
-            Turn
-           //, IsGrounded
-
+            EarthShaker,
+            SwordTrust,
+            WhipAttack,
+            IsLevitating,
+            IsGrabbing,
+            IsPulling,
+            IsPushing,
+            ShadowMode,
+            IsSliding,
+            ProjectileThrow,
+            ProjectileThrowVariant,
+            LedgeGrab
         }
 
         [SerializeField]
         private Dictionary<Parameter, string> m_labels;
 
-        public string GetParameterLabel(Parameter parameter) => m_labels[parameter];
+        public int GetParameterLabel(Parameter parameter) => Animator.StringToHash(m_labels[parameter]);
     }
 }

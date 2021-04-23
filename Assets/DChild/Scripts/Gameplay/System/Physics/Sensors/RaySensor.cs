@@ -34,6 +34,10 @@ namespace DChild.Gameplay
         private MultiRaycast m_multiRaycast;
         [SerializeField]
         private bool m_enable = true;
+#if UNITY_EDITOR
+        [SerializeField]
+        private bool m_debugMode = true;
+#endif
 
         private Vector2[] m_rayOffsets;
         private float m_prevAngle;
@@ -168,7 +172,11 @@ namespace DChild.Gameplay
         {
             if (m_enable)
             {
+#if UNITY_EDITOR
+                m_multiRaycast.Cast(transform.position, transform.right, m_debugMode);
+#else
                 m_multiRaycast.Cast(transform.position, transform.right);
+#endif
                 m_uniqueHits = null;
                 m_updatedUniqueHits = false;
                 m_validHits = null;

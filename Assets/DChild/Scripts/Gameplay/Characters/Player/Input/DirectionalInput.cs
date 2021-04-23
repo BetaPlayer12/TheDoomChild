@@ -54,6 +54,11 @@ namespace DChild.Inputs
             m_isDownPressed = false;
         }
 
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Update()
         {
             HandleHorizontalInput();

@@ -39,7 +39,7 @@ namespace DChild.Menu.MainMenu
         }
         private void Start()
         {
-            m_animation.zSkeleton.state.Complete += OnComplete;
+            //m_animation.zSkeleton.state.Complete += OnComplete;
         }
 
         void Update()

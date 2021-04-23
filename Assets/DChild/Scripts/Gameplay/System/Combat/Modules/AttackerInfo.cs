@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Combat
             damage = new List<AttackDamage>();
             critChance = 0;
             critDamageModifier = 1;
-            ignoreInvulnerability = false;
+            ignoreInvulnerability = Invulnerability.None;
         }
 
         public List<AttackDamage> damage;
@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Combat
         public int critChance;
         [MinValue(0), ShowIf("CanCrit")]
         public int critDamageModifier = 1;
-        public bool ignoreInvulnerability;
+        public Invulnerability ignoreInvulnerability;
 
         public void Copy(AttackerInfo source)
         {

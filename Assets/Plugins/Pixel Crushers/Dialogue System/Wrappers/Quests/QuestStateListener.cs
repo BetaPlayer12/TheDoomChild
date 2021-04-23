@@ -9,7 +9,7 @@ namespace PixelCrushers.DialogueSystem.Wrappers
     /// This wrapper class keeps references intact if you switch between the 
     /// compiled assembly and source code versions of the original class.
     /// </summary>
-    [HelpURL("http://pixelcrushers.com/dialogue_system/manual/html/quest_log_window.html#questIndicator")]
+    [HelpURL("https://pixelcrushers.com/dialogue_system/manual2x/html/quests.html#questIndicators")]
     [AddComponentMenu("Pixel Crushers/Dialogue System/Quest System/Quest Indicators/Quest State Listener")]
     public class QuestStateListener : PixelCrushers.DialogueSystem.QuestStateListener
     {

@@ -23,7 +23,7 @@ namespace DChildDebug
 
         [SerializeField, BoxGroup("Mesh Creation"), MinValue(1), OnValueChanged("OnEditorRecomposition")]
         private int pointPerUnits = 5;
-        [SerializeField, BoxGroup("Mesh Creation"), OnValueChanged("OnEditorRecomposition")]
+        [SerializeField, BoxGroup("Mesh Creation"), OnValueChanged("OnEditorRecomposition", true)]
         private Vector2 size = new Vector2(6f, 2f);
 
         [SerializeField, BoxGroup("Liquid")]
@@ -165,44 +165,47 @@ namespace DChildDebug
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
-            if (rb == null || rb.bodyType == RigidbodyType2D.Static)
-                return; //we don't care about static rigidbody, they can't "fall" in water
-
-            Bounds bounds = collision.bounds;
-
-            List<int> touchedColumnIndices = new List<int>();
-            float divisionWith = m_Width / m_Columns.Length;
-
-            Vector3 localMin = transform.InverseTransformPoint(bounds.min);
-            Vector3 localMax = transform.InverseTransformPoint(bounds.max);
-
-            // find all our springs within the bounds
-            var xMin = localMin.x;
-            var xMax = localMax.x;
-
-            for (var i = 0; i < m_Columns.Length; i++)
+            if (collision.isTrigger == false)
             {
-                if (m_Columns[i].xPosition > xMin && m_Columns[i].xPosition < xMax)
-                    touchedColumnIndices.Add(i);
-            }
+                Rigidbody2D rb = collision.GetComponentInParent<Rigidbody2D>();
+                if (rb == null || rb.bodyType == RigidbodyType2D.Static)
+                    return; //we don't care about static rigidbody, they can't "fall" in water
 
-            // if we have no hits we should loop back through and find the 2 closest verts and use them
-            if (touchedColumnIndices.Count == 0)
-            {
+                Bounds bounds = collision.bounds;
+
+                List<int> touchedColumnIndices = new List<int>();
+                float divisionWith = m_Width / m_Columns.Length;
+
+                Vector3 localMin = transform.InverseTransformPoint(bounds.min);
+                Vector3 localMax = transform.InverseTransformPoint(bounds.max);
+
+                // find all our springs within the bounds
+                var xMin = localMin.x;
+                var xMax = localMax.x;
+
                 for (var i = 0; i < m_Columns.Length; i++)
                 {
-                    // widen our search to included divisitionWidth padding on each side so we definitely get a couple hits
-                    if (m_Columns[i].xPosition + divisionWith > xMin && m_Columns[i].xPosition - divisionWith < xMax)
+                    if (m_Columns[i].xPosition > xMin && m_Columns[i].xPosition < xMax)
                         touchedColumnIndices.Add(i);
                 }
-            }
 
-            float testForce = 0.2f;
-            for (int i = 0; i < touchedColumnIndices.Count; ++i)
-            {
-                int idx = touchedColumnIndices[i];
-                m_Columns[idx].velocity -= testForce;
+                // if we have no hits we should loop back through and find the 2 closest verts and use them
+                if (touchedColumnIndices.Count == 0)
+                {
+                    for (var i = 0; i < m_Columns.Length; i++)
+                    {
+                        // widen our search to included divisitionWidth padding on each side so we definitely get a couple hits
+                        if (m_Columns[i].xPosition + divisionWith > xMin && m_Columns[i].xPosition - divisionWith < xMax)
+                            touchedColumnIndices.Add(i);
+                    }
+                }
+
+                float testForce = 0.2f;
+                for (int i = 0; i < touchedColumnIndices.Count; ++i)
+                {
+                    int idx = touchedColumnIndices[i];
+                    m_Columns[idx].velocity -= testForce;
+                }
             }
         }
 
@@ -212,6 +215,16 @@ namespace DChildDebug
             GetReferences();
             RecomputeMesh();
             meshVertices = m_Mesh.vertices;
+            if (TryGetComponent(out BoxCollider2D collider))
+            {
+                var colliderSize = collider.size;
+                colliderSize.Set(size.x, size.y);
+                collider.size = colliderSize;
+            }
+            else
+            {
+                gameObject.AddComponent<BoxCollider2D>();
+            }
         }
 #endif
     }

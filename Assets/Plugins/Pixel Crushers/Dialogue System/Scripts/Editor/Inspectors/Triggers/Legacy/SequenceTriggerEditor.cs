@@ -12,6 +12,7 @@ namespace PixelCrushers.DialogueSystem
     {
 
         private Rect sequenceRect;
+        private SequenceSyntaxState syntaxState = SequenceSyntaxState.Unchecked;
 
         public void OnEnable()
         {
@@ -32,7 +33,7 @@ namespace PixelCrushers.DialogueSystem
             }
             serializedObject.ApplyModifiedProperties();
             EditorGUI.BeginChangeCheck();
-            var newSequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence"), trigger.sequence, ref sequenceRect);
+            var newSequence = SequenceEditorTools.DrawLayout(new GUIContent("Sequence"), trigger.sequence, ref sequenceRect, ref syntaxState);
             var changed = EditorGUI.EndChangeCheck();
             serializedObject.Update();
             if (changed) serializedObject.FindProperty("sequence").stringValue = newSequence;

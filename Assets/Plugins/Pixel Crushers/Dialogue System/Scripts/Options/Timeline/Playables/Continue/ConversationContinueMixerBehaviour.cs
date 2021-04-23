@@ -1,5 +1,4 @@
-// Recompile at 30/10/2019 11:36:42 AM
-
+// Recompile at 12/11/2020 1:44:33 PM
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -27,13 +26,46 @@ namespace PixelCrushers.DialogueSystem
                 if (inputWeight > 0.001f && !played.Contains(i))
                 {
                     played.Add(i);
+                    var inputPlayable = (ScriptPlayable<ContinueConversationBehaviour>)playable.GetInput(i);
+                    ContinueConversationBehaviour input = inputPlayable.GetBehaviour();
                     if (Application.isPlaying)
                     {
-                        DialogueManager.instance.BroadcastMessage("OnConversationContinueAll", SendMessageOptions.DontRequireReceiver);
+                        switch (input.operation)
+                        {
+                            case ContinueConversationBehaviour.Operation.Continue:
+                                DialogueManager.instance.BroadcastMessage("OnConversationContinueAll", SendMessageOptions.DontRequireReceiver);
+                                break;
+                            case ContinueConversationBehaviour.Operation.ClearSubtitleText:
+                                var standardDialogueUI = DialogueManager.dialogueUI as StandardDialogueUI;
+                                if (standardDialogueUI != null)
+                                {
+                                    if (input.clearAllPanels)
+                                    {
+                                        for (int j = 0; j < standardDialogueUI.conversationUIElements.subtitlePanels.Length; j++)
+                                        {
+                                            if (standardDialogueUI.conversationUIElements.subtitlePanels[j] == null) continue;
+                                            standardDialogueUI.conversationUIElements.subtitlePanels[j].ClearText();
+                                        }
+                                    }
+                                    else if (0 <= input.clearPanelNumber && input.clearPanelNumber < standardDialogueUI.conversationUIElements.subtitlePanels.Length &&
+                                        standardDialogueUI.conversationUIElements.subtitlePanels[input.clearPanelNumber] != null)
+                                    {
+                                        standardDialogueUI.conversationUIElements.subtitlePanels[input.clearPanelNumber].ClearText();
+                                    }
+                                }
+                                break;
+                        }
                     }
                     else
                     {
-                        PreviewUI.ShowMessage("Continue", 3, -1);
+                        switch (input.operation)
+                        {
+                            case ContinueConversationBehaviour.Operation.Continue:
+                                PreviewUI.ShowMessage("Continue", 3, -1);
+                                break;
+                            case ContinueConversationBehaviour.Operation.ClearSubtitleText:
+                                break;
+                        }
                     }
                 }
                 else if (inputWeight <= 0.001f && played.Contains(i))

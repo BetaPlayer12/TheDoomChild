@@ -80,5 +80,10 @@ namespace DChild.Gameplay.Characters
         {
             throw new System.NotImplementedException();
         }
+
+        public void SetInvulnerability(Invulnerability level)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -21,6 +21,14 @@ namespace PixelCrushers.DialogueSystem
 
         private static Stack<DialogueEntry> m_stack = new Stack<DialogueEntry>();
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            m_stack = new Stack<DialogueEntry>();
+        }
+#endif
+
         private void OnEnable()
         {
             Lua.RegisterFunction("PushConversationPosition", null, SymbolExtensions.GetMethodInfo(() => PushConversationPosition()));

@@ -5,19 +5,37 @@ using Holysoft.Event;
 using DChild.Gameplay.Combat;
 using Spine;
 using UnityEngine;
+using Spine.Unity;
 
 namespace DChild.Gameplay.Characters
 {
-    public class DeathHandle : MonoBehaviour
+    public class DeathHandle : MonoBehaviour, IHasSkeletonDataAsset
     {
+        public struct DisposingEventArgs : IEventActionArgs
+        {
+            public DisposingEventArgs(bool isBodyDestroyed)
+            {
+                this.isBodyDestroyed = isBodyDestroyed;
+            }
+
+            public bool isBodyDestroyed { get; }
+        }
+
         [SerializeField]
         private Damageable m_source;
         [SerializeField]
         private SpineRootAnimation m_animator;
+        [SerializeField, Spine.Unity.SpineAnimation]
+        private string m_animation;
         [SerializeField]
         private CountdownTimer m_bodyDuration;
+        [SerializeField]
+        private bool m_destroySource;
 
-        private string m_animation;
+        public event EventAction<DisposingEventArgs> BodyDestroyed;
+        SkeletonDataAsset IHasSkeletonDataAsset.SkeletonDataAsset => m_animator.GetComponentInChildren<SkeletonAnimation>().skeletonDataAsset;
+
+        public void SetDestroySource(bool value) => m_destroySource = value;
 
         public void SetAnimation(string animation)
         {
@@ -26,15 +44,32 @@ namespace DChild.Gameplay.Characters
 
         private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
         {
-            m_source.gameObject.SetActive(false);
-            enabled = false;
+            if (m_destroySource)
+            {
+                BodyDestroyed?.Invoke(this, new DisposingEventArgs(true));
+                Destroy(m_source.gameObject);
+            }
+            else
+            {
+                BodyDestroyed?.Invoke(this, new DisposingEventArgs(false));
+                m_source.gameObject.SetActive(false);
+                enabled = false;
+            }
         }
 
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            m_source.SetHitboxActive(false);
-            m_animator.SetAnimation(0, m_animation, false, 0);
-            m_animator.animationState.Complete += OnDeathAnimationComplete;
+            if (m_animator == null)
+            {
+                m_bodyDuration.Reset();
+                enabled = true;
+            }
+            else
+            {
+                m_source.SetHitboxActive(false);
+                m_animator.SetAnimation(0, m_animation, false, 0);
+                m_animator.animationState.Complete += OnDeathAnimationComplete;
+            }
         }
 
         private void OnDeathAnimationComplete(TrackEntry trackEntry)

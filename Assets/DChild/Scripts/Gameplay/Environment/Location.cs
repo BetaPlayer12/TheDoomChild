@@ -23,6 +23,8 @@ namespace DChild.Gameplay.Environment
         Garden,
         City_Of_The_Dead,
         Realm_Of_Nightmare,
+        Morden,
+        World_Map,
         [HideInInspector]
         _COUNT,
         [HideInInspector]

@@ -10,9 +10,12 @@ namespace DChild
             GameSystem.SetCamera(GetComponent<Camera>());
         }
 
-        private void nDestroy()
+        private void OnDestroy()
         {
-            GameSystem.SetCamera(null);
+            if (GameSystem.mainCamera == GetComponent<Camera>())
+            {
+                GameSystem.SetCamera(null);
+            }
         }
     }
 }

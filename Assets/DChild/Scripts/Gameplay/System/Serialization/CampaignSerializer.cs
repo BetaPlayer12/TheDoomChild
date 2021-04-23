@@ -5,6 +5,8 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
 using UnityEngine;
+using System.Threading.Tasks;
+using Doozy.Engine;
 #if UNITY_EDITOR
 using DChildDebug;
 #endif
@@ -59,19 +61,55 @@ namespace DChild.Gameplay
         [Button]
         public void Save()
         {
+            GameEventMessage.SendEvent("Game Save Start");
+            CallPreSerialization();
+            SerializationHandle.Save(m_slot.id, m_slot);
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+            GameEventMessage.SendEvent("Game Save Start");
+            CallPreSerialization();
+            await SerializationHandle.SaveAsync(m_slot.id, m_slot);
+            GameEventMessage.SendEvent("Game Save End");
+            return true;
+        }
+
+        [Button]
+        public void Load(bool bypassLoadingFromFile = false)
+        {
+            if (bypassLoadingFromFile == false)
+            {
+                SerializationHandle.Load(m_slot.id, ref m_slot);
+            }
+            CallPostDeserialization();
+        }
+
+        public void UpdateData()
+        {
+            CallPreSerialization();
+        }
+
+        public async Task<bool> LoadAsync()
+        {
+            GameEventMessage.SendEvent("Game Load Start");
+            await SerializationHandle.LoadAsync(m_slot.id,m_slot);
+            CallPostDeserialization();
+            GameEventMessage.SendEvent("Game Load End");
+            return true;
+        }
+
+        private void CallPreSerialization()
+        {
             using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
             {
                 cacheEventArgs.Value.Initialize(m_slot);
                 PreSerialization?.Invoke(this, cacheEventArgs.Value);
                 cacheEventArgs.Release();
             }
-            SerializationHandle.Save(m_slot.id, m_slot);
         }
-
-        [Button]
-        public void Load()
+        private void CallPostDeserialization()
         {
-            SerializationHandle.Load(m_slot.id, ref m_slot);
             using (Cache<CampaignSlotUpdateEventArgs> cacheEventArgs = Cache<CampaignSlotUpdateEventArgs>.Claim())
             {
                 cacheEventArgs.Value.Initialize(m_slot);

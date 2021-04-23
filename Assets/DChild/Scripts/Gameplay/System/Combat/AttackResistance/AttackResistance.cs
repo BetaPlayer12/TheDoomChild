@@ -23,8 +23,9 @@ namespace DChild.Gameplay.Combat
         protected abstract Dictionary<AttackType, float> resistance { get; }
         public event EventAction<ResistanceEventArgs> ResistanceChange;
 
+        public abstract void SetData(AttackResistanceData data);
+        public abstract void ClearResistance();
         public abstract void SetResistance(AttackType type, float resistanceValue);
-
         public float GetResistance(AttackType type) => resistance.ContainsKey(type) ? resistance[type] : 0;
 
         protected void CallResistanceChange(ResistanceEventArgs eventArgs) => ResistanceChange?.Invoke(this, eventArgs);

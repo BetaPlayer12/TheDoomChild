@@ -2,6 +2,7 @@
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using Sirenix.OdinInspector;
+using Spine.Unity;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters
@@ -27,8 +28,17 @@ namespace DChild.Gameplay.Characters
             instance.transform.position = spawnPoint;
             var component = instance.GetComponent<Projectile>();
             component.ResetState();
-            component.SetVelocity(flightDirection, speed);
+            component.Launch(flightDirection, speed);
             return instance.gameObject;
+        }
+
+        public GameObject Launch(GameObject projectile, Vector2 flightDirection, float speed)
+        {
+            var component = projectile.GetComponent<Projectile>();
+            component.ResetState();
+            component.Launch(flightDirection, speed);
+
+            return projectile.gameObject;
         }
     }
 
@@ -57,5 +67,9 @@ namespace DChild.Gameplay.Characters
         }
 
         public void LaunchProjectile() => m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, m_spawnPoint.right, m_projectileInfo.speed);
+
+        public void LaunchProjectile(Vector2 flightDirection) => m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, flightDirection, m_projectileInfo.speed);
+
+        public void LaunchProjectile(Vector2 flightDirection, GameObject projectile) => m_handle.Launch(projectile, flightDirection, m_projectileInfo.speed);
     }
 }

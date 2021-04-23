@@ -22,17 +22,20 @@ namespace DChild.Gameplay.Characters.AI
     [System.Serializable, HideInEditorMode]
     public class RandomAttackDecider<T> where T : System.Enum
     {
-
         public RandomAttackDecider()
         {
             attackList = new List<AttackInfo<T>>();
+            m_sameAttackCount = -1;
+            m_maxSameAttackCount = 0;
         }
 
         public bool hasDecidedOnAttack;
         [ShowInInspector, OnValueChanged("ValidateAttack")]
         public AttackInfo<T> chosenAttack { get; private set; }
         private List<AttackInfo<T>> attackList;
-
+        private int m_maxSameAttackCount;
+        private int m_previousChosenAttack;
+        private int m_sameAttackCount;
 
         public void SetList(params AttackInfo<T>[] list)
         {
@@ -44,27 +47,68 @@ namespace DChild.Gameplay.Characters.AI
         {
             if (hasDecidedOnAttack == false)
             {
-                var index = UnityEngine.Random.Range(0, attackList.Count);
-                chosenAttack = attackList[index];
+                bool sameAttack = false;
+                int chosenAttackIndex = -1;
+                do
+                {
+                    var index = UnityEngine.Random.Range(0, attackList.Count);
+                    chosenAttack = attackList[index];
+                    chosenAttackIndex = Convert.ToInt32(chosenAttack.attack);
+                    sameAttack = m_previousChosenAttack == chosenAttackIndex;
+                } while (m_maxSameAttackCount > 0 && sameAttack && m_maxSameAttackCount == m_sameAttackCount);
+                EvaluateSameAttack(sameAttack, chosenAttackIndex);
                 hasDecidedOnAttack = true;
             }
+        }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="maxRepeatAttack">If you want the attacks to repeat infinitely value should be <=0 </param>
+        public void SetMaxRepeatAttack(int maxRepeatAttack)
+        {
+            m_maxSameAttackCount = maxRepeatAttack;
+            m_sameAttackCount = Math.Min(m_sameAttackCount, m_maxSameAttackCount);
         }
 
         public void DecideOnAttack(params T[] list)
         {
             if (hasDecidedOnAttack == false)
             {
-                var index = UnityEngine.Random.Range(0, list.Length - 1);
-                var enumIndex = Convert.ToInt32(list[index]);
+                bool sameAttack = false;
+                int chosenAttackIndex = -1;
+                do
+                {
+                    var index = UnityEngine.Random.Range(0, list.Length - 1);
+                    var enumIndex = Convert.ToInt32(list[index]);
+                    sameAttack = m_previousChosenAttack == enumIndex;
+                } while (m_maxSameAttackCount > 0 && sameAttack && m_maxSameAttackCount == m_sameAttackCount);
+
                 for (int i = 0; i < attackList.Count; i++)
                 {
-                    if (Convert.ToInt32(attackList[i].attack) == enumIndex)
+                    if (Convert.ToInt32(attackList[i].attack) == chosenAttackIndex)
                     {
                         chosenAttack = attackList[i];
                         break;
                     }
                 }
+                EvaluateSameAttack(sameAttack, chosenAttackIndex);
                 hasDecidedOnAttack = true;
+            }
+        }
+
+        private void EvaluateSameAttack(bool sameAttack, int chosenAttackIndex)
+        {
+            if (sameAttack)
+            {
+                m_sameAttackCount++;
+            }
+            else
+            {
+                m_sameAttackCount = 0;
+                m_previousChosenAttack = chosenAttackIndex;
             }
         }
 

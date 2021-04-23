@@ -1,12 +1,21 @@
-﻿using DChild.Gameplay.Combat;
+﻿using System;
+using DChild.Gameplay;
+using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.AI;
 using UnityEngine;
+using Spine;
+using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
+using System.Collections.Generic;
+using DChild;
+using DChild.Gameplay.Characters.Enemies;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
+    [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Mantis")]
     public class MantisAI : CombatAIBrain<MantisAI.Info>
     {
         [System.Serializable]
@@ -27,8 +36,20 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_scratchDeflectAttack = new SimpleAttackInfo();
             public SimpleAttackInfo scratchDeflectAttack => m_scratchDeflectAttack;
+            [SerializeField]
+            private SimpleAttackInfo m_leapAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo leapAttack => m_leapAttack;
+            [SerializeField, MinValue(0)]
+            private float m_leapWaitTime;
+            public float leapWaitTime => m_leapWaitTime;
+            [SerializeField]
+            private Vector2 m_leapDistance;
+            public Vector2 leapDistance => m_leapDistance;
             //
 
+            [SerializeField, MinValue(0)]
+            private float m_waitTime;
+            public float waitTime => m_waitTime;
             [SerializeField, MinValue(0)]
             private float m_patience;
             public float patience => m_patience;
@@ -40,9 +61,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_moveRootAnimation;
-            public string moveRootAnimation => m_moveRootAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_damageAnimation;
             public string damageAnimation => m_damageAnimation;
@@ -66,6 +84,7 @@ namespace DChild.Gameplay.Characters.Enemies
             public string turnAnimation => m_turnAnimation;
 
 
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -73,17 +92,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_move.SetData(m_skeletonDataAsset);
                 scratchAttack.SetData(m_skeletonDataAsset);
                 scratchDeflectAttack.SetData(m_skeletonDataAsset);
+                leapAttack.SetData(m_skeletonDataAsset);
 #endif
             }
         }
 
         private enum State
         {
-            Idle,
+            Detect,
             Patrol,
             Turning,
             Attacking,
             Chasing,
+            Flinch,
             ReevaluateSituation,
             WaitBehaviourEnd,
         }
@@ -92,10 +113,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Scratch,
             ScratchDeflect,
+            Leap,
             [HideInInspector]
             _COUNT
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -106,43 +130,73 @@ namespace DChild.Gameplay.Characters.Enemies
         private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
+        private bool m_isDetecting;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
+
+        [SerializeField]
+        private bool m_willPatrol;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
 
+        private State m_turnState;
+
+
+        //[SerializeField]
+        //private AudioSource m_Audiosource;
+        //[SerializeField]
+        //private AudioClip m_AttackClip;
+        //[SerializeField]
+        //private AudioClip m_DeadClip;
+
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
             {
-                base.SetTarget(damageable, m_target);
-                m_stateHandle.SetState(State.Chasing);
+                base.SetTarget(damageable);
+                m_selfCollider.SetActive(true);
+                if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
+                }
                 m_currentPatience = 0;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
                 m_enablePatience = false;
             }
             else
             {
-                if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                {
-                    m_enablePatience = true;
-                }
+                //if (!m_enablePatience)
+                //{
+                //    m_enablePatience = true;
+                //    //Patience();
+                //    StartCoroutine(PatienceRoutine());
+                //}
+                m_enablePatience = true;
+                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -160,21 +214,50 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
+                m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
             }
         }
+        //private IEnumerator PatienceRoutine()
+        //{
+        //    //if (m_enablePatience)
+        //    //{
+        //    //    while (m_currentPatience < m_info.patience)
+        //    //    {
+        //    //        m_currentPatience += m_character.isolatedObject.deltaTime;
+        //    //        yield return null;
+        //    //    }
+        //    //}
+        //    yield return new WaitForSeconds(m_info.patience);
+        //    m_targetInfo.Set(null, null);
+        //    m_isDetecting = false;
+        //    m_enablePatience = false;
+        //    m_stateHandle.SetState(State.Patrol);
+        //}
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
+            //m_Audiosource.clip = m_DeadClip;
+            //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }
 
-        public void SetDirection(float direction)
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            transform.localScale = new Vector3(direction, transform.localScale.y, transform.localScale.z);
+            StopAllCoroutines();
+            m_attackDecider.hasDecidedOnAttack = false;
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        }
+
+        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         public override void ApplyData()
@@ -182,24 +265,57 @@ namespace DChild.Gameplay.Characters.Enemies
             base.ApplyData();
             if (m_attackDecider != null)
             {
-                Debug.Log("Update attack list trigger function");
                 UpdateAttackDeciderList();
             }
         }
+
         private void UpdateAttackDeciderList()
         {
-            Debug.Log("Update attack list trigger");
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Scratch, m_info.scratchAttack.range));
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Scratch, m_info.scratchAttack.range),
+                                    /*new AttackInfo<Attack>(Attack.ScratchDeflect, m_info.scratchDeflectAttack.range),*/
+                                    new AttackInfo<Attack>(Attack.Leap, m_info.leapAttack.range)/**/);
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
-        private IEnumerator Wait()
+        private IEnumerator DetectRoutine()
         {
-            while (m_animation.skeletonAnimation.AnimationState.GetCurrent(0).IsComplete)
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            yield return new WaitForSeconds(m_info.waitTime);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
+        }
+
+
+        private IEnumerator LeapAttackRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.leapPrepAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapPrepAnimation);
+            yield return new WaitForSeconds(m_info.leapWaitTime);
+            var leapDir = new Vector2(m_info.leapDistance.x * transform.localScale.x, m_info.leapDistance.y);
+            m_character.physics.SetVelocity(leapDir);
+            //m_character.physics.AddForce(leapDir, ForceMode2D.Impulse);
+            m_animation.SetAnimation(0, m_info.leapAnimation, false);
+            yield return new WaitForSeconds(.5f);
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAnimation);
+            m_movement.Stop();
+            m_attackDecider.hasDecidedOnAttack = false;
+            if (!m_wallSensor.isDetecting)
             {
-                Debug.Log("Wait Animation END");
-                yield return null;
+                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             }
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            m_selfCollider.SetActive(false);
         }
 
         protected override void Awake()
@@ -209,80 +325,113 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_flinchHandle.FlinchStart += OnFlinchStart;
+            m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
 
+
         private void Update()
         {
+            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
+            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
-                case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                case State.Detect:
+                    m_movement.Stop();
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
                     break;
 
                 case State.Patrol:
-                    m_animation.EnableRootMotion(true, false);
-                    m_animation.SetAnimation(0, m_info.moveRootAnimation, true);
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
+                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_willPatrol)
+                    {
+                        m_turnState = State.ReevaluateSituation;
+                        m_animation.EnableRootMotion(true, false);
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
+                    }
+                    else
+                    {
+                        m_movement.Stop();
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                    m_movement.Stop();
+                    m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
+
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
 
-                    //StartCoroutine(Wait()); //This is just to fix the transition issue with attacking
-                    m_movement.Stop();
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Scratch:
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation);
-                            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
                             break;
-                        //case Attack.ScratchDeflect: TO BE IMPLEMENTED
-                        //    m_animation.EnableRootMotion(true, false);
-                        //    m_attackHandle.ExecuteAttack(m_info.scratchDeflectAttack.animation);
-                        //    m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-                        //    break;
+                        case Attack.ScratchDeflect:
+                            m_animation.EnableRootMotion(true, false);
+                            m_attackHandle.ExecuteAttack(m_info.scratchAttack.animation, m_info.idleAnimation);
+                            break;
+                        case Attack.Leap:
+                            //m_animation.EnableRootMotion(true, true);
+                            //m_attackHandle.ExecuteAttack(m_info.leapRootAnimation, m_info.idleAnimation);
+                            m_animation.EnableRootMotion(false, false);
+                            StartCoroutine(LeapAttackRoutine());
+                            break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
+
                     break;
                 case State.Chasing:
                     {
                         if (IsFacingTarget())
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                            m_attackDecider.DecideOnAttack();
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
-                                m_attackDecider.DecideOnAttack();
-                                if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
-                                {
-                                    m_stateHandle.SetState(State.Attacking);
-                                }
-                                else
-                                {
-                                    m_animation.EnableRootMotion(true, true);
-                                    m_animation.SetAnimation(0, m_info.leapRootAnimation, true);
-                                    //m_animation.SetAnimation(0, m_info.moveRootAnimation, true);
-                                    //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
-                                }
-
+                                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
+                                m_movement.Stop();
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_stateHandle.SetState(State.Attacking);
                             }
                             else
                             {
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                                {
+                                    m_animation.EnableRootMotion(true, false);
+                                    m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2f;
+                                    //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
+                                }
+                                else
+                                {
+                                    m_movement.Stop();
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
                             }
                         }
                         else
                         {
-                            m_stateHandle.OverrideState(State.Turning);
+                            m_turnState = State.ReevaluateSituation;
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                                m_stateHandle.SetState(State.Turning);
                         }
                     }
                     break;
@@ -299,17 +448,38 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.WaitBehaviourEnd:
-                    //Debug.Log("Still wetting");
                     return;
             }
 
             if (m_enablePatience)
             {
                 Patience();
+                //StartCoroutine(PatienceRoutine());
             }
+        }
 
-            m_wallSensor.transform.localScale = new Vector3(transform.localScale.x, m_wallSensor.transform.localScale.y, m_wallSensor.transform.localScale.z);
-            m_groundSensor.transform.localScale = new Vector3(transform.localScale.x, m_groundSensor.transform.localScale.y, m_groundSensor.transform.localScale.z);
+        protected override void OnTargetDisappeared()
+        {
+            m_stateHandle.OverrideState(State.Patrol);
+            m_currentPatience = 0;
+            m_enablePatience = false;
+            m_isDetecting = false;
+            m_selfCollider.SetActive(false);
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(false);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

@@ -29,9 +29,9 @@ namespace DChild.Gameplay.Environment
 
         private static Rigidbody2D m_cacheRigidbody;
 
-        [ShowInInspector, ReadOnly]
+        [ShowInInspector,HideInPrefabAssets]
         private float m_force;
-        [SerializeField, ReadOnly]
+        [SerializeField,HideInPrefabAssets]
         private float m_angle;
         private float m_fadeSpeed;
 

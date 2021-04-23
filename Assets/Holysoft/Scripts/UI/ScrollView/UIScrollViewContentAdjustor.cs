@@ -7,9 +7,7 @@ namespace Holysoft.UI
 
     public sealed class UIScrollViewContentAdjustor : MonoBehaviour
     {
-#if UNITY_EDITOR
         [SerializeField]
-        [ValidateInput("ValidateContent")]
         private RectTransform m_content;
         [SerializeField]
         [MinValue(0)]
@@ -31,6 +29,33 @@ namespace Holysoft.UI
         [MinValue(0)]
         [ShowIf("m_hasVerticalScroll")]
         private float m_heightIncrement = 500;
+        private IReferenceFactoryData m_contentReference;
+        private IScrollViewContentGrid m_contentGrid;
+
+        public void UpdateSize()
+        {
+            if (m_hasHorizontalScroll)
+            {
+                var contentWidth = m_widthIncrement * (m_contentGrid.restrictInstancePerRow ? m_contentGrid.instancePerRow : m_contentReference.instanceCount);
+                m_content.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, contentWidth < m_minWidth ? m_minWidth : contentWidth);
+            }
+            else
+            {
+                m_content.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, m_minWidth);
+
+            }
+            if (m_hasVerticalScroll && m_contentGrid.restrictInstancePerRow)
+            {
+                int columnCount = m_contentReference.instanceCount / m_contentGrid.instancePerRow;
+                var contentHeight = m_heightIncrement * columnCount;
+                m_content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentHeight < m_minHeight ? m_minHeight : contentHeight);
+            }
+            else
+            {
+                m_content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, m_minHeight);
+            }
+            m_content.ForceUpdateRectTransforms();
+        }
 
         private bool ValidateContent(RectTransform content)
         {
@@ -39,37 +64,23 @@ namespace Holysoft.UI
             return true;
         }
 
+        private void Awake()
+        {
+            m_contentReference = GetComponent<IReferenceFactoryData>();
+            m_contentGrid = GetComponent<IScrollViewContentGrid>();
+        }
+
         private void OnValidate()
         {
             if (m_content != null)
             {
-                var contentReference = GetComponent<IReferenceFactoryData>();
-                var contentGrid = GetComponent<IScrollViewContentGrid>();
-                if (m_hasHorizontalScroll)
+                if (m_contentReference == null)
                 {
-                    var contentWidth = m_widthIncrement * (contentGrid.restrictInstancePerRow ? contentGrid.instancePerRow : contentReference.instanceCount);
-                    m_content.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, contentWidth < m_minWidth ? m_minWidth : contentWidth);
+                    m_contentReference = GetComponent<IReferenceFactoryData>();
+                    m_contentGrid = GetComponent<IScrollViewContentGrid>();
                 }
-                else
-                {
-                    m_content.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, m_minWidth);
-
-                }
-                if (m_hasVerticalScroll && contentGrid.restrictInstancePerRow)
-                {
-                    int columnCount = contentReference.instanceCount / contentGrid.instancePerRow;
-                    var contentHeight = m_heightIncrement * columnCount;
-                    m_content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentHeight < m_minHeight ? m_minHeight : contentHeight);
-                }
-                else
-                {
-                    m_content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, m_minHeight);
-                }
-                m_content.ForceUpdateRectTransforms();
-
-
+                UpdateSize();
             }
         }
-#endif
     }
 }

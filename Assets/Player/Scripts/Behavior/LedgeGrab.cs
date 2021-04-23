@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild.Gameplay;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace PlayerNew
     public class LedgeGrab : PlayerBehaviour
 
     {
+        [SerializeField]
+        private Character m_character;
         private FaceDirection facing;
 
         public bool canLedgeGrab = false;
@@ -31,11 +34,11 @@ namespace PlayerNew
         // Update is called once per frame
         void Update()
         {
-            if (collisionState.onWall && !collisionState.grounded && !ledgeDetected)
+            if (stateManager.onWall && !stateManager.isGrounded && !ledgeDetected)
             {
+                ToggleScripts(false);
                 ledgeDetected = true;
                 ledgeBotPos = trans.position;
-                ToggleScripts(false);
                 CheckLedgeClimb();
 
                 //call animation
@@ -48,13 +51,13 @@ namespace PlayerNew
         {
             if (facing.isFacingRight)
             {
-                ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) - ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
-                ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x + collisionState.rightPosition.x) + ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
+                ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x + stateManager.rightPosition.x) - ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
+                ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x + stateManager.rightPosition.x) + ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
             }
             else
             {
-                ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) + ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
-                ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x - collisionState.rightPosition.x) - ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
+                ledgePos1 = new Vector2(Mathf.Floor(ledgeBotPos.x - stateManager.rightPosition.x) + ledgeClimbXOffset1, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset1);
+                ledgePos2 = new Vector2(Mathf.Floor(ledgeBotPos.x - stateManager.rightPosition.x) - ledgeClimbXOffset2, Mathf.Floor(ledgeBotPos.y) + ledgeClimbYOffset2);
             }
 
             FinishedLedgeClimb();
@@ -62,7 +65,7 @@ namespace PlayerNew
 
         private void FinishedLedgeClimb()
         {
-            transform.position = ledgePos2;
+            m_character.transform.position = ledgePos2;
             ledgeDetected = false;
             ToggleScripts(false);
         }

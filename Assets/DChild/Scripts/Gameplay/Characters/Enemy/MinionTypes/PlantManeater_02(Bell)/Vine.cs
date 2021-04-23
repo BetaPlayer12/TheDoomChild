@@ -20,12 +20,14 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         private SkeletonAnimation m_animation;
 
         public Vector2 position => transform.position;
-      
+
+        public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
-            if (!targetDefense.isInvulnerable)
+            if (targetDefense.invulnerabilityLevel == Invulnerability.None)
             {
                 //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
                 //{

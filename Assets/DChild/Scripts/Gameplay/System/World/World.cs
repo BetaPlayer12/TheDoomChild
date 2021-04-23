@@ -25,6 +25,8 @@ namespace DChild.Gameplay.Systems
         private TimeIsolationHandler m_timeIsolationHandler;
         private IsolatedPhysicsHandler m_isolatedPhysicsHandler;
         private InteractiveEnvironmentHandler m_interactiveEnvironmentHandler;
+        private ShadowEnvironmentHandle m_shadowEnvironmentHandler;
+        private bool m_isShadowColliderEnable;
 
         public float CalculateDeltaTime(float timeScale) => Time.deltaTime * timeScale;
         public float CalculateFixedDeltaTime(float timeScale) => 0.02f * timeScale;
@@ -32,7 +34,7 @@ namespace DChild.Gameplay.Systems
         public void SetTimeScale(float timeScale)
         {
             m_timeScale = timeScale;
-            if(m_prevTimeScale != timeScale)
+            if (m_prevTimeScale != timeScale)
             {
                 m_timeIsolationHandler.AlignTimeScale();
                 m_prevTimeScale = timeScale;
@@ -67,6 +69,24 @@ namespace DChild.Gameplay.Systems
             m_deltaTime = Time.deltaTime;
             m_fixedDeltaTime = Time.fixedDeltaTime;
             CleanUp();
+        }
+
+        public void Register(ShadowEnvironmentHandle handler)
+        {
+            m_shadowEnvironmentHandler = handler;
+            if (m_shadowEnvironmentHandler != null)
+            {
+                m_shadowEnvironmentHandler.SetCollisions(m_isShadowColliderEnable);
+            }
+        }
+
+        public void SetShadowColliders(bool enable)
+        {
+            m_isShadowColliderEnable = enable;
+            if (m_shadowEnvironmentHandler != null)
+            {
+                m_shadowEnvironmentHandler.SetCollisions(enable);
+            }
         }
 
         private void Awake()

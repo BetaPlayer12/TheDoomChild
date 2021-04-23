@@ -1,24 +1,58 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
+using Sirenix.OdinInspector;
+using DChild.Gameplay.Essence;
+using Holysoft.Collections;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using Sirenix.Utilities.Editor;
+#endif
 
 namespace DChild.Gameplay.Systems
 {
-    [CreateAssetMenu(fileName = "IndividualLootData", menuName = "DChild/Gameplay/Loot/Individual Loot Data")]
-    public class IndividualLootData : LootData
-    {
-        [SerializeField,ValidateInput("ValidateLoot","GameObject must have Loot component")]
-        private GameObject m_loot;
-        [SerializeField, MinValue(1)]
-        private int m_count;
 
-        public override void DropLoot(Vector2 position)
+    [System.Serializable]
+    public class IndividualLootData : ILootDataContainer
+    {
+        [SerializeField]
+        private LootReference m_reference;
+        [SerializeField, Min(1), OnInspectorGUI("OnLootReferenceGUI")]
+        private int m_count = 1;
+
+        public void DropLoot(Vector2 position)
         {
-            GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_loot, m_count, position));
+            GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_reference.loot, m_count, position));
         }
+
 #if UNITY_EDITOR
-        private bool ValidateLoot(GameObject loot)
+        public LootReference reference => m_reference;
+        public int count => m_count;
+
+        private void OnLootReferenceGUI()
         {
-            return loot?.GetComponent<Loot>() ?? false;
+            var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
+            if (soulEssence)
+            {
+                SirenixEditorGUI.InfoMessageBox($"Soul Essence: {soulEssence.value * m_count}");
+            }
+        }
+
+        void ILootDataContainer.DrawDetails(bool drawContainer, string label = null)
+        {
+            if (m_reference != null)
+            {
+                var soulEssence = m_reference?.loot?.GetComponent<SoulEssenceLoot>() ?? null;
+                var suffix = label;
+                label = m_reference.name.Replace("LootReference", string.Empty);
+                if (soulEssence)
+                {
+                    EditorGUILayout.LabelField($"{label} ({soulEssence.value * m_count}){suffix}");
+                }
+                else
+                {
+                    EditorGUILayout.LabelField($"{label} ({m_count}){suffix}");
+                }
+            }
         }
 #endif
     }

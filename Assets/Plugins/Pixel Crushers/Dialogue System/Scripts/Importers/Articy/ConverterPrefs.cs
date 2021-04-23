@@ -55,6 +55,7 @@ namespace PixelCrushers.DialogueSystem.Articy
 
         public string ProjectFilename { get; set; }
         public string PortraitFolder { get; set; }
+        public bool UseDefaultActorsIfNoneAssignedToDialogue { get; set; }
         public bool StageDirectionsAreSequences { get; set; }
         public FlowFragmentModes FlowFragmentMode { get; set; }
         public string OtherScriptFields { get; set; }
@@ -87,6 +88,7 @@ namespace PixelCrushers.DialogueSystem.Articy
         {
             ProjectFilename = string.Empty;
             PortraitFolder = string.Empty;
+            UseDefaultActorsIfNoneAssignedToDialogue = true;
             StageDirectionsAreSequences = true;
             FlowFragmentMode = FlowFragmentModes.ConversationGroups;
             OtherScriptFields = string.Empty;

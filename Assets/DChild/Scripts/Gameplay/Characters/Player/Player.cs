@@ -11,19 +11,23 @@ using DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using DChild.Gameplay.Characters.Players.Behaviour;
+using PlayerNew;
 
 namespace DChild.Gameplay.Characters.Players
 {
     public interface IPlayer
     {
         event EventAction<EventActionArgs> OnDeath;
-        CharacterState state { get; }
+        Modules.CharacterState state { get; }
         IPlayerStats stats { get; }
         Health health { get; }
         Magic magic { get; }
+        Health armor { get; }
         IHealable healableModule { get; }
         IDamageable damageableModule { get; }
         IAttacker attackModule { get; }
+        PlayerModuleActivator behaviourModule { get; }
+        PlayerSkills skills { get; }
         PlayerModifierHandle modifiers { get; }
         PlayerWeapon weapon { get; }
         ExtendedAttackResistance attackResistance { get; }
@@ -38,10 +42,10 @@ namespace DChild.Gameplay.Characters.Players
     }
 
     [AddComponentMenu("DChild/Gameplay/Player/Player")]
-    public class Player : SerializedMonoBehaviour, IPlayer
+    public class Player : MonoBehaviour, IPlayer
     {
         [SerializeField]
-        private IPlayerStats m_stats;
+        private PlayerStats m_stats;
         [SerializeField]
         private PlayerWeapon m_weapon;
         [SerializeField]
@@ -50,6 +54,10 @@ namespace DChild.Gameplay.Characters.Players
         private StatusEffectResistance m_statusResistance;
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
+        [SerializeField]
+        private PlayerModuleActivator m_behaviourModule;
+        [SerializeField]
+        private PlayerSkills m_skills;
         [SerializeField]
         private PlayerCharacterController m_controller;
         [SerializeField]
@@ -65,7 +73,7 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Character m_controlledCharacter;
         [SerializeField]
-        private CharacterState m_state;
+        private Modules.CharacterState m_state;
         [SerializeField]
         private Damageable m_damageable;
         [SerializeField]
@@ -73,23 +81,26 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Magic m_magic;
         [SerializeField]
+        private Health m_armor;
+        [SerializeField]
         private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private LootPicker m_lootPicker;
-        [SerializeField]
-        private GroundednessHandle m_groundednessHandle;
 
         public event EventAction<EventActionArgs> OnDeath;
 
         public IPlayerStats stats => m_stats;
 
-        public CharacterState state => m_state;
+        public Modules.CharacterState state => m_state;
         public Health health => m_damageable.health;
         public Magic magic => m_magic;
+        public Health armor => m_armor;
         public IHealable healableModule => m_damageable;
         public IDamageable damageableModule => m_damageable;
         public IAttacker attackModule => m_attacker;
         public PlayerModifierHandle modifiers => m_modifiers;
+        public PlayerModuleActivator behaviourModule => m_behaviourModule;
+        public PlayerSkills skills => m_skills;
         public PlayerWeapon weapon => m_weapon;
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
@@ -110,7 +121,7 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PlayerCharacterData data)
         {
             m_serializer.LoadData(data);
-            m_soulCrystalHandle.InitializeHandles();
+            m_soulCrystalHandle?.InitializeHandles();
         }
 
         public void SetPosition(Vector2 position)
@@ -128,9 +139,8 @@ namespace DChild.Gameplay.Characters.Players
         private void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             OnDeath?.Invoke(this, eventArgs);
-            m_controlledCharacter.physics.SetVelocity(Vector2.zero);
-            m_groundednessHandle.enabled = false;
-            m_groundednessHandle.ResetAnimationParameters();
+            //  m_controlledCharacter.physics.SetVelocity(Vector2.zero);
+
             m_controller.Disable();
             m_damageable.SetHitboxActive(false);
         }
@@ -139,12 +149,11 @@ namespace DChild.Gameplay.Characters.Players
         public void Initialize(GameObject character)
         {
             m_controlledCharacter = character.GetComponentInChildren<Character>();
-            m_state = character.GetComponentInChildren<CharacterState>();
+            m_state = character.GetComponentInChildren<Modules.CharacterState>();
             m_damageable = character.GetComponentInChildren<Damageable>();
             m_attacker = character.GetComponentInChildren<Attacker>();
             m_magic = character.GetComponentInChildren<Magic>();
             m_lootPicker = character.GetComponentInChildren<LootPicker>();
-            m_groundednessHandle = character.GetComponentInChildren<GroundednessHandle>();
         }
 #endif
     }

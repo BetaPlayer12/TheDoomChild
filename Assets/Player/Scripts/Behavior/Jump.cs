@@ -5,34 +5,32 @@ namespace PlayerNew
 {
     public class Jump : PlayerBehaviour
     {
-
         public float jumpSpeed = 200f;
         public float jumpDelay = .1f;
         public int jumpCount = 2;
 
+        private Dock crouching;
         private Jog jogging;
 
         protected float lastJumpTime = 0;
-        protected int jumpsRemaining = 0;
+        public int jumpsRemaining = 0;
 
-        // Use this for initialization
         void Start()
         {
             jogging = GetComponent<Jog>();
+            crouching = GetComponent<Dock>();
         }
 
-        // Update is called once per frame
         protected virtual void Update()
         {
-
             var canJump = inputState.GetButtonValue(inputButtons[0]);
             var holdTime = inputState.GetButtonHoldTime(inputButtons[0]);
 
-
-
-            if (collisionState.grounded)
+            if (stateManager.isGrounded)
             {
-                if (canJump && holdTime < 0.1f)
+                stateManager.isJumping = false;
+
+                if (canJump && holdTime < 0.1f && !stateManager.onWall && !stateManager.onWallLeg && !crouching.crouching)
                 {
                     jumpsRemaining = jumpCount - 1;
                     OnJump();
@@ -40,29 +38,26 @@ namespace PlayerNew
             }
             else
             {
-
-                if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay)
+                if (canJump && holdTime < 0.1f && Time.time - lastJumpTime > jumpDelay && !stateManager.onWall && !stateManager.onWallLeg && !crouching.crouching)
                 {
-
                     if (jumpsRemaining > 0)
                     {
                         OnJump();
                         jumpsRemaining--;
-
                     }
                 }
             }
-
-
         }
 
         protected virtual void OnJump()
         {
-            var vel = body2d.velocity;
+            stateManager.isIdle = false;
+            stateManager.isJumping = true;
+
+            var vel = rigidBody.velocity;
             lastJumpTime = Time.time;
-            body2d.velocity = new Vector2(vel.x, jumpSpeed);
-
-
+            rigidBody.velocity = new Vector2(vel.x, jumpSpeed);
+            rigidBody.sharedMaterial.friction = 0f;
         }
     }
 }

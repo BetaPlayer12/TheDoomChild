@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
-
 
 namespace DChild.Serialization
 {
@@ -12,7 +10,7 @@ namespace DChild.Serialization
         [System.Serializable]
         public struct Item
         {
-            [SerializeField]
+            [SerializeField,ItemDataID]
             private int m_ID;
             [SerializeField]
             private int m_count;
@@ -27,7 +25,7 @@ namespace DChild.Serialization
             public int count => m_count;
         }
 
-        [SerializeField]
+        [SerializeField,TableList]
         private Item[] m_datas;
 
         public ItemContainerSaveData()
@@ -40,14 +38,13 @@ namespace DChild.Serialization
             this.m_datas = m_datas;
         }
 
+
         public Item[] datas { get => m_datas;  }
 
-#if UNITY_EDITOR
         public ItemContainerSaveData(ItemContainerSaveData m_datas)
         {
             List<Item> itemList = new List<Item>(m_datas.datas);
             this.m_datas = itemList.ToArray();
         }
-#endif
     }
 }

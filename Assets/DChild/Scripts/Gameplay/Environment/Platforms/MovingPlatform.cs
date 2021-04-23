@@ -1,4 +1,6 @@
 ﻿using DChild.Gameplay.Systems.WorldComponents;
+using DChild.Serialization;
+using Holysoft;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
@@ -7,7 +9,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Environment
 {
     [AddComponentMenu("DChild/Gameplay/Environment/Moving Platform")]
-    public class MovingPlatform : MonoBehaviour
+    public class MovingPlatform : MonoBehaviour, ISerializableComponent
     {
         public struct UpdateEventArgs : IEventActionArgs
         {
@@ -23,6 +25,30 @@ namespace DChild.Gameplay.Environment
             public int currentWaypointIndex { get; }
             public int waypointCount { get; }
             public bool isGoingForward { get; }
+        }
+
+        [System.Serializable]
+        public struct SaveData : ISaveData
+        {
+            [SerializeField]
+            private SerializedVector2 m_position;
+            [SerializeField]
+            private int m_wayPoint;
+            [SerializeField]
+            private int m_incrementerValue;
+
+            public SaveData(Vector2 position, int wayPoint, int incrementerValue)
+            {
+                m_position = position;
+                m_wayPoint = wayPoint;
+                m_incrementerValue = incrementerValue;
+            }
+
+            public Vector2 position => m_position;
+            public int wayPoint => m_wayPoint;
+            public int incrementerValue => m_incrementerValue;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(position, wayPoint, incrementerValue);
         }
 
         [SerializeField, MinValue(0.1f), TabGroup("Setting")]
@@ -43,7 +69,10 @@ namespace DChild.Gameplay.Environment
         private Vector2 m_cacheCurrentWaypoint;
         private int m_listSize;
 
+        private int m_pingPongWaypoint;
+
         public event EventAction<UpdateEventArgs> DestinationReached;
+        public event EventAction<UpdateEventArgs> DestinationChanged;
 
 #if UNITY_EDITOR
         public Vector2[] waypoints { get => m_waypoints; set => m_waypoints = value; }
@@ -57,12 +86,34 @@ namespace DChild.Gameplay.Environment
         }
 #endif
 
+        public ISaveData Save() => new SaveData(m_cacheDestination, m_wayPointDestination, m_incrementerValue);
+
+        public void Load(ISaveData data)
+        {
+            var saveData = (SaveData)data;
+            transform.position = saveData.position;
+            m_cacheDestination = saveData.position;
+            m_cacheCurrentWaypoint = m_cacheDestination;
+            m_wayPointDestination = saveData.wayPoint;
+            m_currentWayPoint = m_wayPointDestination;
+            m_incrementerValue = saveData.incrementerValue;
+        }
+
+        public void PingPongNextWaypoint(bool next)
+        {
+            m_pingPongWaypoint += next ? 1 : -1;
+            m_wayPointDestination = (int)Mathf.PingPong(m_pingPongWaypoint, m_listSize - 1);
+            ChangeDestination();
+            DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
+        }
+
         public void GoToNextWayPoint()
         {
             if (m_currentWayPoint < m_listSize - 1)
             {
                 m_wayPointDestination++;
                 ChangeDestination();
+                DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
             }
         }
 
@@ -72,13 +123,52 @@ namespace DChild.Gameplay.Environment
             {
                 m_wayPointDestination--;
                 ChangeDestination();
+                DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
             }
         }
 
         public void GoDestination(int destination)
         {
+            m_pingPongWaypoint = destination;
+            var differentDestination = m_wayPointDestination != destination;
             m_wayPointDestination = destination;
             ChangeDestination();
+            if (differentDestination)
+            {
+                DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
+            }
+        }
+
+        public void GoDestination(int destination, bool passThroughWayPoints)
+        {
+            if (passThroughWayPoints)
+            {
+                GoDestination(destination);
+            }
+            else
+            {
+                m_pingPongWaypoint = destination;
+                var differentDestination = m_wayPointDestination != destination;
+                m_wayPointDestination = destination;
+                m_currentWayPoint = destination;
+                m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
+                m_cacheDestination = m_waypoints[m_wayPointDestination];
+                enabled = true;
+                if (differentDestination)
+                {
+                    DestinationChanged?.Invoke(this, new UpdateEventArgs(GetInstanceID(), m_currentWayPoint, m_listSize, m_incrementerValue == 1));
+                }
+            }
+        }
+
+        public void TeleportTo(int destination)
+        {
+            m_pingPongWaypoint = destination;
+            m_wayPointDestination = destination;
+            m_cacheDestination = m_waypoints[destination];
+            ChangeDestination();
+            enabled = false;
+            transform.position = m_cacheDestination;
         }
 
         public void Initialize(int startingIndex, int destination)
@@ -98,9 +188,11 @@ namespace DChild.Gameplay.Environment
                 if (proposedIncrementerValue != m_incrementerValue)
                 {
                     m_incrementerValue = proposedIncrementerValue;
+                    m_currentWayPoint += m_incrementerValue;
+                    m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
                 }
-
-                if (enabled == false)
+                // Maintain Pathway to Destination
+                else if (enabled == false)
                 {
                     m_currentWayPoint += m_incrementerValue;
                     m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
@@ -114,22 +206,24 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             m_rigidbody = GetComponent<Rigidbody2D>();
-            m_rigidbody.position = m_waypoints[m_startWaypoint];
+            transform.position = m_waypoints[m_startWaypoint];
             m_isolatedTime = GetComponent<IIsolatedTime>();
             m_wayPointDestination = m_startWaypoint;
             m_currentWayPoint = m_wayPointDestination;
+            m_cacheDestination = m_waypoints[m_wayPointDestination];
             m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
             m_listSize = m_waypoints.Length;
             ChangeDestination();
+            enabled = false;
         }
 
         private void Update()
         {
-            var currentPosition = m_rigidbody.position;
-            if (currentPosition != m_cacheDestination)
+            var currentPosition = (Vector2)transform.position;
+            if (RoundVectorValuesTo(2, currentPosition) != RoundVectorValuesTo(2, m_cacheDestination))
             {
-                m_rigidbody.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
-                if (currentPosition == m_cacheCurrentWaypoint)
+                transform.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
+                if (RoundVectorValuesTo(2, currentPosition) == RoundVectorValuesTo(2, m_cacheCurrentWaypoint))
                 {
                     m_currentWayPoint += m_incrementerValue;
                     m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
@@ -144,16 +238,24 @@ namespace DChild.Gameplay.Environment
 
         private void OnValidate()
         {
-            if (GetComponent<Rigidbody2D>() == null)
+            if (TryGetComponent(out Rigidbody2D rigidbody))
             {
-                var rigidbody = gameObject.AddComponent<Rigidbody2D>();
-                rigidbody.isKinematic = true;
+                //var rigidbody = gameObject.AddComponent<Rigidbody2D>();
+                if (rigidbody.isKinematic == false)
+                {
+                    rigidbody.isKinematic = true;
+                }
             }
 
             if (GetComponent<IsolatedObject>() == null)
             {
                 gameObject.AddComponent<IsolatedObject>();
             }
+        }
+
+        private Vector2 RoundVectorValuesTo(uint decimalPlace, Vector2 vector2)
+        {
+            return new Vector2(MathfExt.RoundDecimalTo(decimalPlace, vector2.x), MathfExt.RoundDecimalTo(decimalPlace, vector2.y));
         }
     }
 }

@@ -1,5 +1,4 @@
-// Recompile at 30/10/2019 11:36:42 AM
-
+// Recompile at 12/11/2020 1:44:33 PM
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -14,6 +13,15 @@ namespace PixelCrushers.DialogueSystem
     [Serializable]
     public class ContinueConversationBehaviour : PlayableBehaviour
     {
+        public enum Operation { Continue, ClearSubtitleText }
+
+        [Tooltip("Continue past current subtitle or just clear text in subtitle panels.")]
+        public Operation operation = Operation.Continue;
+
+        [Tooltip("If Operation is Clear Subtitle Text, clear these panel(s).")]
+        public int clearPanelNumber = 0;
+
+        public bool clearAllPanels = false;
     }
 }
 #endif

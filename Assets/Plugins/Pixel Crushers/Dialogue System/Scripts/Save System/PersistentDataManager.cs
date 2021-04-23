@@ -113,6 +113,15 @@ namespace PixelCrushers.DialogueSystem
 
         private static HashSet<GameObject> listeners = new HashSet<GameObject>();
 
+#if UNITY_2019_3_OR_NEWER
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void InitStaticVariables()
+        {
+            GetCustomSaveData = null;
+            listeners = new HashSet<GameObject>();
+        }
+#endif
+
         #endregion
 
         #region Register Persistent Data Components

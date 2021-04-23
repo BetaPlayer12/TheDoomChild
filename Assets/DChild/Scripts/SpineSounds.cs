@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using Spine.Unity;
 using Spine;
-using DarkTonic.MasterAudio;
-using System;
 using Sirenix.OdinInspector;
-using static DChild.SoundData;
+using System;
 
 namespace DChild
 {
@@ -15,14 +13,13 @@ namespace DChild
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
         [SerializeField, InlineEditor]
-        private SoundData m_data;
+        private SpineSoundData m_data;
         private CallBackSounds m_callback;
 
         private static string m_cacheEvent;
-        private static SoundData.EventInfo m_cacheEventInfo;
+        private static SpineSoundData.EventInfo m_cacheEventInfo;
         private static string m_cacheAnimation;
-        private static SoundData.AnimationInfo m_cacheAnimationInfo;
-
+        private static SpineSoundData.AnimationInfo m_cacheAnimationInfo;
 
         private void OnEvents(TrackEntry trackEntry, Spine.Event e)
         {
@@ -46,7 +43,22 @@ namespace DChild
                 m_cacheAnimationInfo = m_data.GetAnimationInfo(i);
                 if (m_cacheAnimation == m_cacheAnimationInfo.animationName)
                 {
+                    m_cacheAnimationInfo.StopSound(m_callback); //Gian Edit to fix the sounds that mutes when played again more than once
                     m_cacheAnimationInfo.PlaySound(m_callback);
+                    break;
+                }
+            }
+        }
+
+        private void OnAnimationStop(TrackEntry trackEntry)
+        {
+            m_cacheAnimation = trackEntry.Animation.Name;
+            for (int i = 0; i < m_data.animationCount; i++)
+            {
+                m_cacheAnimationInfo = m_data.GetAnimationInfo(i);
+                if (m_cacheAnimation == m_cacheAnimationInfo.animationName)
+                {
+                    m_cacheAnimationInfo.StopSound(m_callback);
                     break;
                 }
             }
@@ -57,6 +69,9 @@ namespace DChild
             m_callback = GetComponent<CallBackSounds>();
             m_skeletonAnimation.state.Event += OnEvents;
             m_skeletonAnimation.state.Start += OnAnimationStart;
+            m_skeletonAnimation.state.Interrupt += OnAnimationStop;
         }
+
+
     }
 }

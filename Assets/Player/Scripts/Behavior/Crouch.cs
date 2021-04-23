@@ -6,7 +6,8 @@ namespace PlayerNew
 {
     public class Crouch : PlayerBehaviour
     {
-
+        [SerializeField]
+        private GroundShaker groundsmash;
         public bool crouching;
 
 
@@ -24,14 +25,14 @@ namespace PlayerNew
         void Update()
         {
             var canCrouch = inputState.GetButtonValue(inputButtons[0]);
-            if (canCrouch && collisionState.grounded && !crouching)
+            if (canCrouch && stateManager.isGrounded && !crouching)
             {
                 OnCrouch(true);
             }
             else if (crouching && !canCrouch)
             {
                 OnCrouch(false);
-            }
+            }            
         }
     }
 

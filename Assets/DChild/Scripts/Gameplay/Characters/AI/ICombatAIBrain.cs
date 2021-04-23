@@ -9,7 +9,10 @@ namespace DChild.Gameplay.Characters.AI
 {
     public interface ICombatAIBrain
     {
+        bool enabled { get; set; }
         void SetTarget(IDamageable damageable, Character m_target = null);
+
+        void BecomePassive(bool value);
 
 #if UNITY_EDITOR
         Type aiDataType { get; }

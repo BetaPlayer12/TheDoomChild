@@ -6,7 +6,10 @@
  * 
  **************************************/
 
+using DChild.Gameplay.Characters;
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +17,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-    [AddComponentMenu("DChild/Gameplay/Environment/Interactable/Switch")]
-    public class Switch : MonoBehaviour, IHitToInteract
+    public abstract class Switch : MonoBehaviour, IHitToInteract, IButtonToInteract, ISerializableComponent
     {
         public enum Type
         {
@@ -24,25 +26,99 @@ namespace DChild.Gameplay.Environment
             Trigger
         }
 
-        [SerializeField, OnValueChanged("OnTypeChanged")]
+        [System.Serializable]
+        public struct SaveData : ISaveData
+        {
+            public SaveData(bool isOpen)
+            {
+                this.m_isTriggered = isOpen;
+            }
+
+            [SerializeField]
+            private bool m_isTriggered;
+
+            public bool isTriggered => m_isTriggered;
+
+            ISaveData ISaveData.ProduceCopy() => new SaveData(m_isTriggered);
+        }
+
+        [SerializeField, OnValueChanged("OnTypeChanged"), BoxGroup("Fields")]
         private Type m_type;
-        [SerializeField]
+        [SerializeField, BoxGroup("Fields")]
+        private bool m_needsButtonToInteract;
+        [SerializeField, ShowIf("m_needsButtonToInteract"), BoxGroup("Fields")]
+        private Vector3 m_promptOffset;
+        [SerializeField, BoxGroup("Fields")]
         private Collider2D m_collider;
 #if UNITY_EDITOR
-        [SerializeField, ReadOnly]
+        [SerializeField, ReadOnly, BoxGroup("Fields")]
 #endif
         private bool m_isOn;
 
-        [SerializeField]
+        [TabGroup("Main", "StartAs")]
+        [SerializeField, TabGroup("Main/StartAs", "On")]
         private UnityEvent m_startAsOnState;
-        [SerializeField, HideIf("m_hideStartAsOffState")]
+        [SerializeField, HideIf("m_hideStartAsOffState"), TabGroup("Main/StartAs", "Off")]
         private UnityEvent m_startAsOffState;
-        [SerializeField]
+
+        [TabGroup("Main", "Transistion")]
+        [SerializeField, TabGroup("Main/Transistion", "On")]
         private UnityEvent m_onState;
-        [SerializeField, HideIf("m_hideOffState")]
+        [SerializeField, HideIf("m_hideOffState"), TabGroup("Main/Transistion", "Off")]
         private UnityEvent m_offState;
 
 
+        public event EventAction<HitDirectionEventArgs> OnHit;
+
+        public Vector2 position => transform.position;
+
+        public bool showPrompt => m_needsButtonToInteract;
+
+        public Vector3 promptPosition => transform.position + m_promptOffset;
+
+        public string promptMessage => null;
+
+        public ISaveData Save()
+        {
+            return new SaveData(m_isOn);
+        }
+
+        public void EnableCollision()
+        {
+            if (m_collider != null)
+            {
+                m_collider.enabled = true;
+            }
+        }
+
+        public void DisableCollision()
+        {
+            if (m_collider != null)
+            {
+                m_collider.enabled = false;
+            }
+        }
+
+        public virtual bool CanBeInteractedWith(Collider2D collider2D) => !m_needsButtonToInteract;
+
+
+        public void Load(ISaveData data)
+        {
+            m_isOn = ((SaveData)data).isTriggered;
+            if (m_isOn)
+            {
+                m_startAsOnState?.Invoke();
+                if (m_type == Type.OneTime)
+                {
+                    m_collider.enabled = false;
+                }
+            }
+            else
+            {
+                m_startAsOffState?.Invoke();
+                m_collider.enabled = true;
+            }
+        }
         public void SetAs(bool value)
         {
             m_isOn = value;
@@ -69,7 +145,19 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-        public void Interact()
+        public void Interact(HorizontalDirection direction)
+        {
+            OnHit?.Invoke(this, new HitDirectionEventArgs(direction));
+            Interact();
+        }
+
+        public void Interact(Character character)
+        {
+            Interact();
+        }
+
+        [Button]
+        public virtual void Interact()
         {
             switch (m_type)
             {
@@ -163,14 +251,28 @@ namespace DChild.Gameplay.Environment
 
             Dictionary<GameObject, GizmoInfo> m_gizmosToDraw = new Dictionary<GameObject, GizmoInfo>();
 
-            HandleGizmoValidation(m_gizmosToDraw, m_onState, Color.green);
-            HandleGizmoValidation(m_gizmosToDraw, m_offState, Color.red);
 
+            HandleGizmoValidation(m_gizmosToDraw, m_onState, new Color(0, 0.5595117f, 1f));
+            HandleGizmoValidation(m_gizmosToDraw, m_offState, new Color(1, 0.7397324f, 0));
+
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawCube(transform.position, Vector3.one * 2f);
             foreach (var key in m_gizmosToDraw.Keys)
             {
                 var info = m_gizmosToDraw[key];
                 Gizmos.color = info.color;
-                Gizmos.DrawLine(transform.position, info.position);
+                if (transform.position != info.position)
+                {
+                    Gizmos.DrawLine(transform.position, info.position);
+                    Gizmos.DrawSphere(info.position, 2f);
+                }
+            }
+
+            if (showPrompt)
+            {
+                var position = promptPosition;
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawSphere(position, 1f); 
             }
         }
 

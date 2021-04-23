@@ -53,6 +53,16 @@ namespace PixelCrushers.DialogueSystem
 
         public UsableEvents events;
 
+        public virtual void Start()
+        {
+            //--- No longer used. Instead, get name as needed in case Display Name changes during play:
+            //if (string.IsNullOrEmpty(overrideName))
+            //{
+            //    DialogueActor dialogueActor = GetComponentInChildren<DialogueActor>();
+            //    if (dialogueActor != null) overrideName = dialogueActor.GetActorName();
+            //}
+        }
+
         /// <summary>
         /// Gets the name of the override, including parsing if it contains a [lua]
         /// or [var] tag.
@@ -71,15 +81,6 @@ namespace PixelCrushers.DialogueSystem
             else
             {
                 return DialogueManager.GetLocalizedText(overrideName);
-            }
-        }
-
-        public virtual void Start()
-        {
-            if (string.IsNullOrEmpty(overrideName))
-            {
-                DialogueActor overrideActorName = GetComponentInChildren<DialogueActor>();
-                if (overrideActorName != null) overrideName = overrideActorName.GetActorName();
             }
         }
 

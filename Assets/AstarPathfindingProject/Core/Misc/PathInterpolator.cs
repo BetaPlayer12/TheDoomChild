@@ -182,6 +182,11 @@ namespace Pathfinding.Util {
 			MoveToSegment(segmentIndex, factor);
 		}
 
+		public Vector3 GetSegment(int index)
+		{
+			return path[index];
+		}
+
 		protected virtual void PrevSegment () {
 			segmentIndex--;
 			currentSegmentLength = (path[segmentIndex+1] - path[segmentIndex]).magnitude;

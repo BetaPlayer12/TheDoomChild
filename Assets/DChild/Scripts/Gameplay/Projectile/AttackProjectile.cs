@@ -15,7 +15,11 @@ namespace DChild.Gameplay.Projectiles
         private static Hitbox m_cacheToDamage;
 
         protected override ProjectileData projectileData => m_data;
-
+        public override void ForceCollision()
+        {
+            Collide();
+        }
+      
         public override void ResetState()
         {
             base.ResetState();
@@ -24,19 +28,42 @@ namespace DChild.Gameplay.Projectiles
 
         protected abstract void Collide();
 
+        protected virtual void FixedUpdate()
+        {
+            if (m_data.willFaceVelocity)
+            {
+                var velocity = m_physics.velocity;
+                float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+                Debug.Log(angle);
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            }
+        }
+
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            if (LayerMask.LayerToName(collision.gameObject.layer) == "Environment")
+            if (LayerMask.LayerToName(collision.gameObject.layer) == "Environment" || LayerMask.LayerToName(collision.gameObject.layer) == "Default") //Default is for QueenBee Quickfix
             {
-                if (m_data.canPassThroughEnvironment == false)
+                if (collision.CompareTag("Droppable"))
                 {
-                    m_collidedWithEnvironment = true;
-                    Collide();
+                    if (m_data.canPassThroughDroppables == false)
+                    {
+                        m_collidedWithEnvironment = true;
+                        Collide();
+                    }
                 }
+                else
+                {
+                    if (m_data.canPassThroughEnvironment == false)
+                    {
+                        m_collidedWithEnvironment = true;
+                        Collide();
+                    }
+                }
+
             }
-            else if (collision.CompareTag("Hitbox"))
+            else if (collision.CompareTag(Hitbox.TAG))
             {
-                if (collision.TryGetComponent(out Hitbox m_cacheToDamage) && m_cacheToDamage.isInvulnerable == false)
+                if (collision.TryGetComponent(out Hitbox m_cacheToDamage) && m_cacheToDamage.invulnerabilityLevel <= m_data.ignoreInvulnerability)
                 {
                     var damage = m_data.damage;
                     using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())

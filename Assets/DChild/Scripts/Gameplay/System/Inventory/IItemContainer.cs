@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 namespace DChild.Gameplay.Inventories
 {
-
     public interface IItemContainer
     {
         bool restrictSize { get; }
@@ -23,5 +22,7 @@ namespace DChild.Gameplay.Inventories
 
         ItemContainerSaveData Save();
         void ClearList();
+
+        bool HasItemCategory(ItemCategory category);
     }
 }

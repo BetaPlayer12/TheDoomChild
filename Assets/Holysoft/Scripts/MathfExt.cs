@@ -94,5 +94,14 @@ namespace Holysoft
             return output;
         }
 
+        public static float RoundDecimalTo(uint decimalPlaces,float value)
+        {
+            var factor = 1;
+            for (int i = 0; i < decimalPlaces; i++)
+            {
+                factor *= 10;
+            }
+            return Mathf.Round(value * factor) / factor;
+        }
     }
 }
