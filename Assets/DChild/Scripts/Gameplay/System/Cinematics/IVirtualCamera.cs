@@ -4,6 +4,8 @@ namespace DChild.Gameplay.Cinematics
 {
     public interface IVirtualCamera
     {
+
+        string name { get; }
         Vector3 currentOffset { get; }
         void Activate();
         void Deactivate();

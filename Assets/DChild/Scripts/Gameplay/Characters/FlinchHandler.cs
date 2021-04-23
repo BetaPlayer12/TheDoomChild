@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Characters
         [SerializeField]
         private IsolatedPhysics2D m_physics;
         [SerializeField]
-        private bool m_autoFlinch;
+        public bool m_autoFlinch;
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
@@ -39,6 +39,8 @@ namespace DChild.Gameplay.Characters
         public event EventAction<EventActionArgs> HitStopStart;
         public event EventAction<EventActionArgs> FlinchStart;
         public event EventAction<EventActionArgs> FlinchEnd;
+        public bool autoFlinching => m_autoFlinch;
+        public bool isFlinching => m_isFlinching;
 
         public void SetAnimation(string animation) => m_animation = animation;
 
@@ -65,8 +67,6 @@ namespace DChild.Gameplay.Characters
             }
         }
 
-        public bool autoFlinching => m_autoFlinch;
-        public bool isFlinching => m_isFlinching;
 
         private void StartFlinch()
         {

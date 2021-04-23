@@ -401,6 +401,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
+                    m_movement.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_animation.animationState.GetCurrent(0).MixDuration = 0;
                     break;
@@ -497,6 +498,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
         }
 
-
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
+        }
     }
 }

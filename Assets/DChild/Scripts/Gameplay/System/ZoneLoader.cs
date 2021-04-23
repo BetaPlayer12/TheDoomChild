@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Systems
         private string m_zoneToLoad;
         private bool m_unloadCurrentZone;
         private Action m_callback;
+       
 
         public void SetAsActiveZone(string sceneName) => m_activeZone = sceneName;
 
@@ -45,7 +46,7 @@ namespace DChild.Gameplay.Systems
         private IEnumerator DelayRoutine(float delay)
         {
             yield return new WaitForSeconds(delay);
-            GameEventMessage.SendEvent("Hide UI");
+            GameplaySystem.gamplayUIHandle.ShowGameplayUI(false);
         }
 
         private IEnumerator ZoneTransferRoutine()
@@ -69,7 +70,7 @@ namespace DChild.Gameplay.Systems
 
             }
             m_callback?.Invoke();
-            GameEventMessage.SendEvent("Show UI");
+            GameplaySystem.gamplayUIHandle.ShowGameplayUI(true);
             m_activeZone = m_zoneToLoad;
             Time.timeScale = 1;
             Debug.Log($"Loading Time: {time}");

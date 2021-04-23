@@ -1,4 +1,6 @@
 ﻿using DChild;
+using DChild.Gameplay;
+using Doozy.Engine;
 using Holysoft.Collections;
 using Holysoft.Event;
 using System;
@@ -20,7 +22,12 @@ public class GameOverTimer : MonoBehaviour
 
     private void OnCountdownEnd(object sender, EventActionArgs eventArgs)
     {
-        GameSystem.LoadMainMenu();
+        m_timer.Reset();
+        enabled = false;
+        GameplaySystem.campaignSerializer.Load();
+        GameEventMessage.SendEvent("Boss Gone");
+        GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, DChild.Menu.LoadingHandle.LoadType.Force);
+        //GameSystem.LoadMainMenu();
     }
 
     private void Update()

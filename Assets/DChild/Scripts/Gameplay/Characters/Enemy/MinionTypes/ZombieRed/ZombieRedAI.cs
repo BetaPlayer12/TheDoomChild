@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/ZombieRed")]
-    public class ZombieRedAI : CombatAIBrain<ZombieRedAI.Info>
+    public class ZombieRedAI : CombatAIBrain<ZombieRedAI.Info>, IResetableAIBrain, IBattleZoneAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -58,6 +58,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_detectAnimation;
             public string detectAnimation => m_detectAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_spawn1Animation;
+            public string spawn1Animation => m_spawn1Animation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -80,7 +83,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Spawning,
             Detect,
+            Idle,
             Patrol,
             Turning,
             Attacking,
@@ -101,6 +106,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitBox;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -126,6 +133,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+
+        [SerializeField]
+        private bool m_willPatrol;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -180,6 +190,14 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        public void SetAI(AITargetInfo targetInfo)
+        {
+            Debug.Log("Red Zombie Summoning");
+            m_isDetecting = true;
+            m_targetInfo = targetInfo;
+            m_stateHandle.OverrideState(State.Spawning);
+        }
+
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
@@ -222,8 +240,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_selfCollider.SetActive(false);
+            m_hitBox.Disable();
+            StopAllCoroutines();
             m_movement.Stop();
         }
 
@@ -256,6 +276,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
+        private IEnumerator SpawnRoutine()
+        {
+            m_hitBox.SetInvulnerability(Invulnerability.MAX);
+            m_animation.SetAnimation(0, m_info.spawn1Animation, false).TimeScale = 2.5f;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spawn1Animation);
+            m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_hitBox.SetInvulnerability(Invulnerability.None);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         private IEnumerator DetectRoutine()
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
@@ -269,6 +302,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
+            if (!m_isDetecting)
+            {
+                m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
+            }
         }
 
         protected override void Awake()
@@ -292,6 +329,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
+                case State.Spawning:
+                    m_movement.Stop();
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    StartCoroutine(SpawnRoutine());
+                    break;
+
                 case State.Detect:
                     m_movement.Stop();
                     if (IsFacingTarget())
@@ -305,6 +348,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
+                    break;
+
+                case State.Idle:
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
 
                 case State.Patrol:
@@ -433,6 +481,32 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.SetActive(false);
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(true);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+            m_hitBox.Enable();
+        }
+
+        public void SwitchToBattleZoneAI()
+        {
+            m_stateHandle.SetState(State.Detect);
+        }
+
+        public void SwitchToBaseAI()
+        {
+            m_stateHandle.SetState(State.ReevaluateSituation);
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

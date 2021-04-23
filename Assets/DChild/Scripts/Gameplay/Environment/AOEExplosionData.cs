@@ -9,12 +9,15 @@ namespace DChild.Gameplay
     {
         [SerializeField]
         private AttackDamage[] m_damage;
+        [SerializeField]
+        private Invulnerability m_ignoreInvulerability;
         [SerializeField, MinValue(1f)]
         private float m_damageRadius;
         [SerializeField]
         private ExplosionData m_explosionData;
 
         public AttackDamage[] damage => m_damage;
+        public Invulnerability ignoreInvulerability => m_ignoreInvulerability;
         public float damageRadius => m_damageRadius;
         public float explosiveRadius => m_explosionData.explosiveRadius;
         public float explosivePower => m_explosionData.explosiveRadius;

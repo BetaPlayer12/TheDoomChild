@@ -9,6 +9,8 @@ using System.Collections;
 using DChildDebug.Serialization;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using Cinemachine;
+using PixelCrushers.DialogueSystem;
 
 namespace DChild.Serialization
 {
@@ -34,21 +36,21 @@ namespace DChild.Serialization
                 }
             }
 
-            public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas,bool createSeparateCopy)
+            public ZoneData(Dictionary<SerializeID, ISaveData> savedDatas, bool createSeparateCopy)
             {
                 if (createSeparateCopy)
                 {
                     m_savedDatas = new Dictionary<SerializeID, ISaveData>(new SerializeID.EqualityComparer());
                     foreach (var ID in savedDatas.Keys)
                     {
-                        m_savedDatas.Add(ID,savedDatas[ID].ProduceCopy());
+                        m_savedDatas.Add(ID, savedDatas[ID].ProduceCopy());
                     }
                 }
                 else
                 {
                     m_savedDatas = new Dictionary<SerializeID, ISaveData>(savedDatas, new SerializeID.EqualityComparer());
                 }
-                
+
             }
 
             public void SetData(SerializeID ID, ISaveData data)
@@ -64,7 +66,7 @@ namespace DChild.Serialization
             }
 
             public ISaveData GetData(SerializeID ID) => m_savedDatas.ContainsKey(ID) ? m_savedDatas[ID] : null;
-            ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas,true);
+            ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas, true);
 
 #if UNITY_EDITOR
             public Dictionary<SerializeID, ISaveData> savedDatas => m_savedDatas;
@@ -126,14 +128,52 @@ namespace DChild.Serialization
                 m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
             }
         }
+
+        private IEnumerator LoadComponentsRoutine(bool hasData)
+        {
+            for (int i = 0; i < m_componentSerializers.Length; i++)
+            {
+                m_cacheComponentSerializer = m_componentSerializers[i];
+                try
+                {
+                    m_cacheComponentSerializer.Initiatlize();
+
+                    if (hasData)
+                    {
+                        m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception($"Error Occured In {m_cacheComponentSerializer.gameObject.name} \n {e.Message}");
+                }
+                yield return null;
+            }
+        }
+
+        private IEnumerator LoadDynamicComponentsRoutine()
+        {
+            for (int i = 0; i < m_dynamicSerializers.Length; i++)
+            {
+                m_dynamicSerializers[i].Initialize();
+                m_dynamicSerializers[i].Load();
+                yield return null;
+            }
+        }
+
         private void Start()
         {
+            var cinemachineBrain = FindObjectOfType<CinemachineBrain>();
+            if (cinemachineBrain != null)
+            {
+                cinemachineBrain.enabled = true;
+            }
+
             var proposedData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
 #if UNITY_EDITOR
             if (m_useEditorData)
             {
                 proposedData = m_editorData;
-
             }
 #endif
             bool hasData = false;
@@ -143,16 +183,17 @@ namespace DChild.Serialization
                 m_zoneData = proposedData;
             }
 
-            for (int i = 0; i < m_componentSerializers.Length; i++)
-            {
-                m_cacheComponentSerializer = m_componentSerializers[i];
-                m_cacheComponentSerializer.Initiatlize();
+            StartCoroutine(LoadComponentsRoutine(hasData));
+            //for (int i = 0; i < m_componentSerializers.Length; i++)
+            //{
+            //    m_cacheComponentSerializer = m_componentSerializers[i];
+            //    m_cacheComponentSerializer.Initiatlize();
 
-                if (hasData)
-                {
-                    m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
-                }
-            }
+            //    if (hasData)
+            //    {
+            //        m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+            //    }
+            //}
 
 #if UNITY_EDITOR
             if (m_useEditorData)
@@ -173,12 +214,12 @@ namespace DChild.Serialization
                 }
             }
 #else
-
-            for (int i = 0; i < m_dynamicSerializers.Length; i++)
-            {
-                m_dynamicSerializers[i].Initialize();
-                m_dynamicSerializers[i].Load();
-            }
+            StartCoroutine(LoadDynamicComponentsRoutine());
+            //for (int i = 0; i < m_dynamicSerializers.Length; i++)
+            //{
+            //    m_dynamicSerializers[i].Initialize();
+            //    m_dynamicSerializers[i].Load();
+            //}
 #endif
 
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
@@ -317,7 +358,7 @@ namespace DChild.Serialization
                         var save = editorData.m_componenetDatas[i];
                         dictionary.Add(save.m_serializer.ID, save.m_saveData);
                     }
-                    return new ZoneData(dictionary,false);
+                    return new ZoneData(dictionary, false);
                 }
             }
         }

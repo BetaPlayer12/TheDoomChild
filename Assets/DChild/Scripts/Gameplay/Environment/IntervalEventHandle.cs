@@ -35,8 +35,9 @@ namespace DChild.Gameplay.Environment
             m_isEnabled = false;
         }
 
-        private void Start()
+        private void Initialize()
         {
+            enabled = true;
             m_startDelayTimer = m_startDelay;
             m_activeTimer = m_activeDuration;
             m_inactiveTimer = m_inactiveDuration;
@@ -59,6 +60,16 @@ namespace DChild.Gameplay.Environment
                 m_isActivated = false;
                 m_inactiveEvent?.Invoke();
             }
+        }
+
+        public void Reset()
+        {
+            Initialize();
+        }
+
+        private void Start()
+        {
+            Initialize();
         }
 
         void Update()

@@ -49,9 +49,16 @@ namespace DChild.Gameplay.Inventories
                 }
                 if (m_count)
                 {
-                    m_count.text = slot.count.ToString();
-                    m_currentSlot = slot;
-                    m_currentSlot.CountChange += OnCountChange;
+                    if (slot.restrictions.hasInfiniteCount)
+                    {
+                        m_count.text = "\u221E"; //Infinity Symbol
+                    }
+                    else
+                    {
+                        m_count.text = slot.count.ToString();
+                        m_currentSlot = slot;
+                        m_currentSlot.CountChange += OnCountChange;
+                    }
                 }
             }
         }

@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Environment
             return value;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             var position = transform.position;
             position.x = GetClampValue(m_clampX, position.x);
@@ -44,5 +44,4 @@ namespace DChild.Gameplay.Environment
             transform.position = position;
         }
     }
-
 }

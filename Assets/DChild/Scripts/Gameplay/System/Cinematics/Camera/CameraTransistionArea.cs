@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Cinematics
             if (collision.CompareTag("Hitbox"))
             {
                 var player = collision.GetComponentInParent<PlayerControlledObject>();
-                if (player != null && player.tag == Character.objectTag)
+                if (player != null && player.owner.character == GameplaySystem.playerManager.player.character)
                 {
                     GameplaySystem.cinema.TransistionTo(m_vCam);
                     m_collider = collision;
@@ -32,6 +32,4 @@ namespace DChild.Gameplay.Cinematics
             }
         }
     }
-
-
 }

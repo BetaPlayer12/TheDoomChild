@@ -90,8 +90,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 1271021180185261400}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
+--- !u!114 &5185519216700941944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3522135452137300090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 1
 --- !u!212 &4119409511528652691
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -142,19 +155,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5860607953811042267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8214882475894332031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_maxHealth: 1
 --- !u!1001 &2563154332778560325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -162,6 +162,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 631825597494281124, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hitbox
+      objectReference: {fileID: 0}
     - target: {fileID: 1401469137337768767, guid: f0d6278d2f66d5344b76dacbcf596621,
         type: 3}
       propertyPath: m_Name
@@ -226,7 +231,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_health
       value: 
-      objectReference: {fileID: 5860607953811042267}
+      objectReference: {fileID: 5185519216700941944}
+    - target: {fileID: 5008636110333182838, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7713767410971931232, guid: f0d6278d2f66d5344b76dacbcf596621,
         type: 3}
       propertyPath: m_createDebris
@@ -245,9 +255,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0d6278d2f66d5344b76dacbcf596621, type: 3}
---- !u!1 &8214882475894332031 stripped
+--- !u!1 &3522135452137300090 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 5878050045173408058, guid: f0d6278d2f66d5344b76dacbcf596621,
+  m_CorrespondingSourceObject: {fileID: 1401469137337768767, guid: f0d6278d2f66d5344b76dacbcf596621,
     type: 3}
   m_PrefabInstance: {fileID: 2563154332778560325}
   m_PrefabAsset: {fileID: 0}

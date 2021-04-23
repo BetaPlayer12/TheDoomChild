@@ -4,22 +4,39 @@ using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 namespace DChild.Gameplay.Inventories
 {
     public class UniqueItemContainer : MonoBehaviour, IItemContainer
     {
+        [System.Serializable]
+        public class RestrictionInfo
+        {
+            [SerializeField]
+            private ItemData m_itemData;
+            [SerializeField]
+            private ItemSlot.Restriction m_restriction;
+
+            public ItemData itemData => m_itemData;
+            public ItemSlot.Restriction restriction => m_restriction;
+        }
+
         [SerializeField]
         private bool m_restrictSize;
         [SerializeField, MinValue(1), ShowIf("m_restrictSize"), ValidateInput("ValidateSize", "Size has exceeded maxSize", InfoMessageType.Error)]
         private int m_maxSize;
 
         [SerializeField, TableList(ShowIndexLabels = true, NumberOfItemsPerPage = 5, ShowPaging = true),
-        ValidateInput("ValidateList", "There are duplicate ItemData or Size has exceeded maxSize", InfoMessageType.Error, IncludeChildren = true), HideReferenceObjectPicker]
+        ValidateInput("ValidateList", "There are duplicate ItemData or Size has exceeded maxSize", InfoMessageType.Error, IncludeChildren = true), TabGroup("Items")]
         private List<ItemSlot> m_list = new List<ItemSlot>();
+        [SerializeField, TableList(ShowIndexLabels = true, NumberOfItemsPerPage = 5, ShowPaging = true), TabGroup("Restriction")]
+        private List<RestrictionInfo> m_restrictions = new List<RestrictionInfo>();
 
         public event EventAction<ItemEventArgs> ItemUpdate;
+
+        private bool m_hasUpdatedSlot;
 
         public bool restrictSize => m_restrictSize;
         public int MaxSize => m_maxSize;
@@ -44,6 +61,7 @@ namespace DChild.Gameplay.Inventories
                 var info = GetInfoOf(item);
                 if (info.isContainedInList)
                 {
+                    m_hasUpdatedSlot = true;
                     m_list[info.index].AddCount(count);
                     m_list[info.index].RestrictCount();
                     if (m_list[info.index].count == 0)
@@ -55,6 +73,7 @@ namespace DChild.Gameplay.Inventories
                     {
                         SendItemUpdateEvent(item, m_list[info.index].count);
                     }
+                    m_hasUpdatedSlot = false;
                 }
                 else if (count > 0)
                 {
@@ -73,6 +92,7 @@ namespace DChild.Gameplay.Inventories
             var info = GetInfoOf(item);
             if (info.isContainedInList)
             {
+                m_hasUpdatedSlot = true;
                 if (count == 0)
                 {
                     m_list.RemoveAt(info.index);
@@ -84,6 +104,7 @@ namespace DChild.Gameplay.Inventories
                     m_list[info.index].RestrictCount();
                     SendItemUpdateEvent(item, GetSlot(GetInfoOf(item).index).count);
                 }
+                m_hasUpdatedSlot = false;
             }
             else if (count > 0)
             {
@@ -92,9 +113,25 @@ namespace DChild.Gameplay.Inventories
                 {
                     AddNewSlot(item, count);
                 }
-
                 SendItemUpdateEvent(item, GetSlot(GetInfoOf(item).index).count);
             }
+
+        }
+
+        private bool FindRestrictions(ItemData item, out ItemSlot.Restriction restriction)
+        {
+            RestrictionInfo restrictionInfo = null;
+            for (int i = 0; i < m_restrictions.Count; i++)
+            {
+                restrictionInfo = m_restrictions[i];
+                if (restrictionInfo.itemData == item)
+                {
+                    restriction = restrictionInfo.restriction;
+                    return true;
+                }
+            }
+            restriction = new ItemSlot.Restriction();
+            return false;
         }
 
         private void SendItemUpdateEvent(ItemData item, int count)
@@ -171,7 +208,33 @@ namespace DChild.Gameplay.Inventories
         {
             var slot = new ItemSlot(item, count);
             slot.RestrictCount();
+            if (FindRestrictions(item, out ItemSlot.Restriction restriction))
+            {
+                slot.SetRestriction(restriction);
+            }
+            slot.CountChange += OnSlotCountChange;
             m_list.Add(slot);
+        }
+
+        private void OnSlotCountChange(object sender, ItemSlot.InfoChangeEventArgs eventArgs)
+        {
+            if (m_hasUpdatedSlot)
+            {
+                //Skip
+            }
+            else
+            {
+                var itemSlot = (ItemSlot)sender;
+                if (eventArgs.count <= 0)
+                {
+                    m_list.Remove(itemSlot);
+                    SendItemUpdateEvent(itemSlot.item, 0);
+                }
+                else
+                {
+                    SendItemUpdateEvent(itemSlot.item, itemSlot.count);
+                }
+            }
         }
 
         private (bool isContainedInList, int index) GetInfoOf(ItemData data)
@@ -224,11 +287,6 @@ namespace DChild.Gameplay.Inventories
             }
             return true;
         }
-
-
-
-
 #endif
-
     }
 }

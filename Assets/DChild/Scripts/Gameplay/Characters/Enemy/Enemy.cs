@@ -44,6 +44,8 @@ namespace DChild.Gameplay.Characters.Enemies
         public abstract void InitializeAs(bool isAlive);
         protected abstract new CombatCharacterAnimation animation { get; }
 
+        public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
+
         public override void DisableController() => m_brain.Enable(false);
         public override void EnableController() => m_brain.Enable(true);
 
@@ -82,7 +84,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public virtual void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
         {
-            if (!targetDefense.isInvulnerable)
+            if (targetDefense.invulnerabilityLevel == Invulnerability.None)
             {
                 //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
                 //{

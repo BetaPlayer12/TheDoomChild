@@ -31,6 +31,10 @@ namespace DChild.Gameplay.Combat
                 var player = GameplaySystem.playerManager.player;
                 brain.SetTarget(player.damageableModule, player.character);
             }
+            if (eventArgs.info.TryGetComponent(out IBattleZoneAIBrain battleZoneBrain))
+            {
+                battleZoneBrain.SwitchToBattleZoneAI();
+            }
         }
 
         private void OnEntityDestroyed(object sender, EventActionArgs eventArgs)
@@ -64,7 +68,8 @@ namespace DChild.Gameplay.Combat
             if (m_waveIndex < m_waves.Length - 1)
             {
                 m_waveIndex++;
-                m_spawnHandle.Initialize(m_waves[m_waveIndex].spawnInfo);
+                var waveInfo = m_waves[m_waveIndex];
+                m_spawnHandle.Initialize(waveInfo.spawnInfo, waveInfo.waveStartDelay);
                 m_spawnEnded = false;
             }
             else
@@ -78,7 +83,8 @@ namespace DChild.Gameplay.Combat
         {
             m_spawnHandle = new SpawnHandle();
             m_waveIndex = 0;
-            m_spawnHandle.Initialize(m_waves[m_waveIndex].spawnInfo);
+            var waveInfo = m_waves[m_waveIndex];
+            m_spawnHandle.Initialize(waveInfo.spawnInfo, waveInfo.waveStartDelay);
             m_spawnHandle.EntitiesFinishSpawning += OnSpawnEnd;
             m_spawnHandle.EntitySpawned += OnSpawn;
             enabled = false;
@@ -87,7 +93,7 @@ namespace DChild.Gameplay.Combat
 
         public void Update()
         {
-            m_spawnHandle.Update(GameplaySystem.time.deltaTime);
+            m_spawnHandle.Update(this,GameplaySystem.time.deltaTime);
         }
     }
 }

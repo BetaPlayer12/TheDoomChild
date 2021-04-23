@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Essence
@@ -10,6 +11,12 @@ namespace DChild.Gameplay.Essence
 
 #if UNITY_EDITOR
         public int value => m_value;
+
+        [Button]
+        private void StartPop()
+        {
+            SpawnAt(transform.position, transform.rotation);
+        }
 #endif
 
         protected override void OnApplyPickup(IPlayer player)

@@ -1,5 +1,8 @@
-﻿using DChild.Gameplay.Characters.Players;
+﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Modules;
+using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Items
@@ -7,22 +10,20 @@ namespace DChild.Gameplay.Items
     [CreateAssetMenu(fileName = "ThrowableItemData", menuName = "DChild/Database/Throwable Item Data")]
     public class ThrowableItemData : ConsumableItemData
     {
-        [SerializeField]
-        private GameObject m_projectile;
+        [SerializeField, ToggleGroup("m_enableEdit")]
+        private ProjectileInfo m_projectile;
+        private static bool m_isOnCooldown;
 
         public override bool CanBeUse(IPlayer player)
         {
-            return true;
+            return m_isOnCooldown == false && player.state.isAttacking == false;
         }
 
         public override void Use(IPlayer player)
         {
-            ////var handle = player.character.GetComponent<ProjectileThrowHandler>();
-            ////handle.SetProjectile(m_projectile);
-            ////handle.Initialize();
-            /*Start Throw via Controller
-             Controller decides when to spawn the projectile
-             this only starts the process*/
+            var handle = player.character.GetComponentInChildren<ProjectileThrow>();
+            handle.SetProjectileInfo(m_projectile);
+            handle.RequestExecution();
         }
     }
 }

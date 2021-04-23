@@ -175,7 +175,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    m_hitbox.SetInvulnerability(false);
+                    m_hitbox.SetInvulnerability(Invulnerability.None);
                     m_animation.EnableRootMotion(false, false);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
@@ -183,7 +183,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Harden:
                     {
-                        m_hitbox.SetInvulnerability(true);
+                        m_hitbox.SetInvulnerability(Invulnerability.MAX);
                         m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.hardenAnimation, true);
                     }
@@ -215,6 +215,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.Idle);
             m_currentPatience = 0;
             m_enablePatience = false;
+        }
+
+        protected override void OnBecomePassive()
+        {
         }
     }
 }

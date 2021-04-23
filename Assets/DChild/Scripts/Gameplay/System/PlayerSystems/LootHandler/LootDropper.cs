@@ -21,7 +21,10 @@ namespace DChild.Gameplay.Systems
         [Button, HideInPrefabAssets]
         public void DropLoot()
         {
-            m_loot.DropLoot(m_damageable.position);
+            if (m_loot != null)
+            {
+                m_loot.DropLoot(m_damageable.position);
+            }
         }
 
         public void SetLootData(LootData lootData)

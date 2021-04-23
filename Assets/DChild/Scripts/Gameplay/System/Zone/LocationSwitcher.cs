@@ -123,5 +123,15 @@ namespace DChild.Gameplay.Systems
         {
             m_poster.data.OnArrival -= OnArrival;
         }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (showPrompt)
+            {
+                var position = promptPosition;
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawSphere(position, 1f);
+            }
+        }
     }
 }

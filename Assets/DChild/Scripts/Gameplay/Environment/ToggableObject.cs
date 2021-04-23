@@ -38,6 +38,11 @@ namespace DChild.Gameplay.Environment
 
         public ISaveData Save() => new SaveData(m_currentState);
 
+        public void ToggleState()
+        {
+            SetToggleState(!m_currentState);
+        }
+
         public void SetToggleState(bool value)
         {
             m_currentState = value;
@@ -55,12 +60,5 @@ namespace DChild.Gameplay.Environment
         {
             SetToggleState(m_startAs);
         }
-
-#if UNITY_EDITOR
-        private void ToggleState()
-        {
-            SetToggleState(m_currentState);
-        }
-#endif
     }
 }

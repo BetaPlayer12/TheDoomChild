@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.UI.Map
 {
+
     [System.Serializable]
     public class MapMover
     {

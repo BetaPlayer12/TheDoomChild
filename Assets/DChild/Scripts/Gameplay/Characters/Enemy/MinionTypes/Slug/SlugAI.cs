@@ -184,10 +184,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 BallisticVel()
         {
+            Vector2 targetCenterMass = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
             m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
 
-            m_targetDistance = Vector2.Distance(m_targetInfo.position, m_throwPoint.position);
-            var dir = (m_targetInfo.position - new Vector2(m_throwPoint.position.x, m_throwPoint.position.y));
+            m_targetDistance = Vector2.Distance(targetCenterMass, m_throwPoint.position);
+            var dir = (targetCenterMass - new Vector2(m_throwPoint.position.x, m_throwPoint.position.y));
             var h = dir.y;
             dir.y = 0;
             var dist = dir.magnitude;
@@ -227,7 +228,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     //Shoot Spit
                     m_muzzleFX.Play();
-                    var target = m_targetInfo.position;
+                    Vector2 target = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
                     target = new Vector2(target.x, target.y - 2);
                     Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
                     Vector3 v_diff = (target - spitPos);
@@ -482,7 +483,6 @@ namespace DChild.Gameplay.Characters.Enemies
                                 {
                                     m_animation.EnableRootMotion(true, false);
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2f;
-                                    //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
                                 }
                                 else
                                 {
@@ -529,6 +529,21 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.SetActive(false);
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(false);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

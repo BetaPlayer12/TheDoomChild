@@ -130,7 +130,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator GrowRoutine()
         {
             m_stateHandle.Wait(State.Idle);
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.growAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.growAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -140,7 +140,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DeathRoutine()
         {
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.openAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.openAnimation);
             m_animation.AddAnimation(0, m_info.idleOpenAnimation, false, 0);
@@ -182,7 +182,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (m_currentSpawnTime <= m_info.spawnTime)
                     {
-                        m_hitbox.SetInvulnerability(false);
+                        m_hitbox.SetInvulnerability(Invulnerability.None);
                         m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                         m_currentSpawnTime += Time.deltaTime;
@@ -204,6 +204,10 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.Grow);
+        }
+
+        protected override void OnBecomePassive()
+        {
         }
     }
 }

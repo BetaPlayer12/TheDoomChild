@@ -29,17 +29,21 @@ namespace DChild.Gameplay.Items
         [SerializeField]
         private GameObject m_model;
         [SerializeField]
-        private Transform m_promptPosition;
+        private Vector3 m_promptOffset;
         [SerializeField]
         private ItemData m_data;
         [SerializeField]
         private bool m_HasNotification;
+        [SerializeField,ShowIf("m_HasNotification")]
+        private string m_notifEvent;
+
+        private bool m_hasBeenPickedUp;
 
         private Collider2D m_trigger;
 
         public bool showPrompt => true;
 
-        public Vector3 promptPosition => m_promptPosition.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public string promptMessage => "Pick up";
 
@@ -50,19 +54,27 @@ namespace DChild.Gameplay.Items
             m_trigger.enabled = false;
             if (m_HasNotification == true)
             {
-                GameEventMessage.SendEvent("Soul Skill Acquired");
+                //GameEventMessage.SendEvent("Soul Skill Acquired");
+                GameEventMessage.SendEvent(m_notifEvent);
             }
+            m_hasBeenPickedUp = true;
         }
 
-        public ISaveData Save() => new SaveData(!gameObject.activeSelf);
+        public ISaveData Save() => new SaveData(m_hasBeenPickedUp);
 
         public void Load(ISaveData data)
         {
-            var hasNotBeenPickedUp = ((SaveData)data).isPickedUp == false;
-            m_model.SetActive(hasNotBeenPickedUp);
-            m_trigger.enabled = hasNotBeenPickedUp;
+            m_hasBeenPickedUp = ((SaveData)data).isPickedUp == false;
+            m_model.SetActive(!m_hasBeenPickedUp);
+            m_trigger.enabled = !m_hasBeenPickedUp;
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
+        }
         private void Awake()
         {
             m_trigger = GetComponentInChildren<Collider2D>();

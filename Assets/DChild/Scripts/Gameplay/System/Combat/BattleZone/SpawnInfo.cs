@@ -36,12 +36,15 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
         private GameObject m_entity;
         [SerializeField]
         private GameObject m_spawnFX;
+        [SerializeField,MinValue(0)]
+        private float m_fxThenInstantiateDelay;
 
         [SerializeField, TableList(ShowIndexLabels =true)]
         private SpawnData[] m_datas;
 
         public GameObject entity => m_entity;
         public GameObject spawnFX => m_spawnFX;
+        public float fxThenInstantiateDelay => m_fxThenInstantiateDelay;
         public SpawnData[] datas => m_datas;
     }
 }

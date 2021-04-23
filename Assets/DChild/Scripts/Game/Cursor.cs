@@ -47,6 +47,11 @@ namespace DChild
             //}
         }
 
+        public void SetLockState(CursorLockMode state)
+        {
+            UnityEngine.Cursor.lockState = state;
+        }
+
         private void OnOffsetChange()
         {
             m_offset3D = new Vector3(m_offset.x, m_offset.y, 0);

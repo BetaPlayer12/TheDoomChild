@@ -20,14 +20,17 @@ namespace DChild.Gameplay.Combat
         {
             [SerializeField]
             private Collider2D m_target;
-            [SerializeField]
+            [SerializeField,ShowIf("@m_target != null")]
             private Collider2D[] m_ignoreList;
 
             public void IgnoreColliders(bool value)
             {
-                for (int i = 0; i < m_ignoreList.Length; i++)
+                if (m_target != null)
                 {
-                    Physics2D.IgnoreCollision(m_target, m_ignoreList[i], value);
+                    for (int i = 0; i < m_ignoreList.Length; i++)
+                    {
+                        Physics2D.IgnoreCollision(m_target, m_ignoreList[i], value);
+                    }
                 }
             }
         }
@@ -43,7 +46,7 @@ namespace DChild.Gameplay.Combat
 
         private Collider2D m_collider;
         private IDamageDealer m_damageDealer;
-        public event Action<Collider2D> DamageableDetected; //Turn this into EventActionArgs After
+        public event Action<TargetInfo, Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
         protected abstract bool IsValidToHit(Collider2D collision);
 
@@ -94,8 +97,8 @@ namespace DChild.Gameplay.Combat
             using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
             {
                 InitializeTargetInfo(cacheTargetInfo, hitbox);
+                DamageableDetected?.Invoke(cacheTargetInfo.Value, collision);
                 m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
-                DamageableDetected?.Invoke(collision);
                 cacheTargetInfo?.Release();
             }
         }
@@ -177,7 +180,7 @@ namespace DChild.Gameplay.Combat
             if (colliderGameObject.CompareTag("DamageCollider") || colliderGameObject.CompareTag("Sensor"))
                 return;
 
-            if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.isInvulnerable == false)
+            if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability)
             {
                 using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                 {

@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -6,7 +7,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
                                   IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
-                                  ILevitateState
+                                  ILevitateState, IGrabState, ISlideState, ILedgeGrabState, IProjectileThrowState, IShadowModeState,
+                                  IEnragedState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;
@@ -27,6 +29,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isDashing;
         public bool isDashing { get => m_isDashing; set => m_isDashing = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_canSlide;
+        public bool canSlide { get => m_canSlide; set => m_canSlide = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isSliding;
+        public bool isSliding { get => m_isSliding; set => m_isSliding = value; }
 
         [SerializeField, ReadOnly]
         private bool m_isHighJumping;
@@ -53,6 +63,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool isChargingAttack { get => m_isChargingAttack; set => m_isChargingAttack = value; }
 
         [SerializeField, ReadOnly]
+        private bool m_isGrabbing;
+        public bool isGrabbing { get => m_isGrabbing; set => m_isGrabbing = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isAimingProjectile;
+        public bool isAimingProjectile { get => m_isAimingProjectile; set => m_isAimingProjectile = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_isInShadowMode;
+        public bool isInShadowMode { get => m_isInShadowMode; set => m_isInShadowMode = value; }
+
+        [SerializeField, ReadOnly]
         private bool m_waitForBehaviour;
         public bool waitForBehaviour { get => m_waitForBehaviour; set => m_waitForBehaviour = value; }
 
@@ -64,8 +86,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_isDead;
         public bool isDead { get => m_isDead; set => m_isDead = value; }
 
+        public event EventAction<EnrageEventArgs> EnrageChange;
+        [SerializeField, ReadOnly]
+        private bool m_isEnraged;
+        public bool isEnraged
+        {
+            get
+            {
+                return m_isEnraged;
+            }
+
+            set
+            {
+                if (m_isEnraged != value)
+                {
+                    EnrageChange?.Invoke(this, new EnrageEventArgs(value));
+                }
+
+                m_isEnraged = value;
+            }
+        }
+
         [SerializeField, ReadOnly]
         private bool m_forcedCurrentGroundedness;
+
         public bool forcedCurrentGroundedness { get => m_forcedCurrentGroundedness; set => m_forcedCurrentGroundedness = value; }
     }
 }

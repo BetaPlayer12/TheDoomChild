@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
+using DChild.Gameplay.Systems;
 using Doozy.Engine;
+using Doozy.Engine.Nody;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
@@ -9,6 +12,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Inventories
 {
+
     public class QuickItemHandle : SerializedMonoBehaviour
     {
         public class SelectionEventArgs : IEventActionArgs
@@ -41,15 +45,22 @@ namespace DChild.Gameplay.Inventories
 
         [ShowInInspector, ReadOnly]
         private int m_currentIndex;
+        [SerializeField]
+        private GraphController m_graph;
+        private bool m_removeItemCountOnConsume;
         private ItemSlot m_currentSlot;
         private ConsumableItemData m_currentItem;
+        private QuickItemCountRemover m_itemCountRemover;
+
         private bool m_hideUI;
         public event EventAction<SelectionEventArgs> SelectedItem;
         public event EventAction<SelectionEventArgs> Update;
 
+
         public bool isWrapped => m_wrapped;
         public int currentIndex => m_currentIndex;
         public IItemContainer container => m_container;
+        public bool removeItemCountOnConsume { get => m_removeItemCountOnConsume; set => m_removeItemCountOnConsume = value; }
         public bool hideUI => m_hideUI;
 
         public bool CanUseCurrentItem() => m_currentItem.CanBeUse(m_player);
@@ -62,7 +73,10 @@ namespace DChild.Gameplay.Inventories
                 {
                     m_currentItem.Use(m_player);
                 }
-                m_container.AddItem(m_currentSlot.item, -1);
+                if (m_removeItemCountOnConsume)
+                {
+                    m_itemCountRemover.Remove(m_currentSlot.item, 1);
+                }
             }
         }
 
@@ -113,6 +127,12 @@ namespace DChild.Gameplay.Inventories
         private void StoreSelectedItem(SelectionEventArgs.SelectionType selectionType)
         {
             m_currentSlot = m_container.GetSlot(m_currentIndex);
+            if (m_currentSlot == null)
+            {
+                m_currentIndex--;
+                m_currentSlot = m_container.GetSlot(m_currentIndex);
+            }
+
             m_currentItem = (ConsumableItemData)m_currentSlot.item;
             using (Cache<SelectionEventArgs> cacheEventArgs = Cache<SelectionEventArgs>.Claim())
             {
@@ -124,11 +144,11 @@ namespace DChild.Gameplay.Inventories
 
         private void OnItemUpdate(object sender, ItemEventArgs eventArgs)
         {
-            if (m_container.HasItemCategory(ItemCategory.Consumable))
+            if (HasItemsInQuickSlot())
             {
                 if (m_hideUI)
                 {
-                    GameEventMessage.SendEvent("QuickItem Show");
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
                     m_hideUI = false;
                 }
 
@@ -136,30 +156,57 @@ namespace DChild.Gameplay.Inventories
                 {
                     StoreSelectedItem(SelectionEventArgs.SelectionType.Previous);
                 }
+                else
+                {
+                    StoreSelectedItem(SelectionEventArgs.SelectionType.None);
+                }
+
             }
             else
             {
                 if (m_hideUI == false)
                 {
-                    GameEventMessage.SendEvent("QuickItem Hide");
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
                     m_hideUI = true;
                 }
             }
+        }
+
+        private bool HasItemsInQuickSlot()
+        {
+            return m_container.HasItemCategory(ItemCategory.Consumable) || m_container.HasItemCategory(ItemCategory.Throwable);
+        }
+
+        private IEnumerator DelayedInitialiationRoutine()
+        {
+            do
+            {
+                yield return null;
+            } while (m_graph.Initialized == false);
+            yield return null;
+            var hasQuickSlot = HasItemsInQuickSlot();
+            m_hideUI = hasQuickSlot == false;
+            GameplaySystem.gamplayUIHandle.ShowQuickItem(hasQuickSlot);
         }
 
         private void Awake()
         {
             m_currentIndex = 0;
             m_currentSlot = m_container.GetSlot(m_currentIndex);
-            m_currentItem = (ConsumableItemData)m_currentSlot.item;
-            m_container.ItemUpdate += OnItemUpdate;
-            m_hideUI = true;
-
-            if (m_container.HasItemCategory(ItemCategory.Consumable))
+            if (m_currentSlot != null)
             {
-                GameEventMessage.SendEvent("QuickItem Show");
-                m_hideUI = false;
+                m_currentItem = (ConsumableItemData)m_currentSlot.item;
+                m_container.ItemUpdate += OnItemUpdate;
             }
+            m_removeItemCountOnConsume = true;
+        }
+
+        private void Start()
+        {
+            m_hideUI = true;
+            //This waits for the Nody Graph to initialize itself
+            StartCoroutine(DelayedInitialiationRoutine());
+            m_itemCountRemover = new QuickItemCountRemover(m_player, m_container);
         }
     }
 }

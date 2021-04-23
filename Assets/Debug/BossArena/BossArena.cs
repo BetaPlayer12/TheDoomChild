@@ -21,7 +21,7 @@ namespace DChildDebug.Testing
         {
             var player = GameplaySystem.playerManager.player;
             player.character.transform.position = m_playerStartPosition.position;
-            GameplaySystem.combatManager.MonitorBoss(m_boss);
+            GameplaySystem.gamplayUIHandle.MonitorBoss(m_boss);
             m_camera.gameObject.SetActive(true);
             m_boss.gameObject.SetActive(true);
             m_boss.SetTarget(player.damageableModule, player.character);

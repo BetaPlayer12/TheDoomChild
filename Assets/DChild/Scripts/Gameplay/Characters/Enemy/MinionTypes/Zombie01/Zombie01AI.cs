@@ -70,6 +70,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_spawnAnimation;
+            public string spawnAnimation => m_spawnAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_detectAnimation;
             public string detectAnimation => m_detectAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -100,6 +103,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Spawning,
             Detect,
             Patrol,
             Turning,
@@ -121,6 +125,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitBox;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -200,6 +206,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        public void SetAI(AITargetInfo targetInfo)
+        {
+            m_isDetecting = true;
+            m_targetInfo = targetInfo;
+            m_stateHandle.OverrideState(State.Spawning);
+        }
+
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
@@ -242,8 +255,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_selfCollider.SetActive(false);
+            m_hitBox.Disable();
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            StopAllCoroutines();
             m_movement.Stop();
         }
 
@@ -275,6 +291,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
+        }
+
+        private IEnumerator SpawnRoutine()
+        {
+            m_hitBox.SetInvulnerability(Invulnerability.MAX);
+            m_animation.SetAnimation(0, m_info.spawnAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spawnAnimation);
+            m_hitBox.SetInvulnerability(Invulnerability.None);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private IEnumerator DetectRoutine()
@@ -354,6 +381,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
+                case State.Spawning:
+                    m_movement.Stop();
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    StartCoroutine(SpawnRoutine());
+                    break;
+
                 case State.Detect:
                     m_movement.Stop();
                     if (IsFacingTarget())
@@ -503,6 +536,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.SetActive(false);
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(true);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+            m_hitBox.Enable();
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

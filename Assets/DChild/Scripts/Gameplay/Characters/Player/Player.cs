@@ -22,9 +22,12 @@ namespace DChild.Gameplay.Characters.Players
         IPlayerStats stats { get; }
         Health health { get; }
         Magic magic { get; }
+        Health armor { get; }
         IHealable healableModule { get; }
         IDamageable damageableModule { get; }
         IAttacker attackModule { get; }
+        PlayerModuleActivator behaviourModule { get; }
+        PlayerSkills skills { get; }
         PlayerModifierHandle modifiers { get; }
         PlayerWeapon weapon { get; }
         ExtendedAttackResistance attackResistance { get; }
@@ -52,6 +55,10 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerModifierHandle m_modifiers;
         [SerializeField]
+        private PlayerModuleActivator m_behaviourModule;
+        [SerializeField]
+        private PlayerSkills m_skills;
+        [SerializeField]
         private PlayerCharacterController m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
@@ -74,6 +81,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private Magic m_magic;
         [SerializeField]
+        private Health m_armor;
+        [SerializeField]
         private StatusEffectReciever m_statusEffectReciever;
         [SerializeField]
         private LootPicker m_lootPicker;
@@ -85,10 +94,13 @@ namespace DChild.Gameplay.Characters.Players
         public Modules.CharacterState state => m_state;
         public Health health => m_damageable.health;
         public Magic magic => m_magic;
+        public Health armor => m_armor;
         public IHealable healableModule => m_damageable;
         public IDamageable damageableModule => m_damageable;
         public IAttacker attackModule => m_attacker;
         public PlayerModifierHandle modifiers => m_modifiers;
+        public PlayerModuleActivator behaviourModule => m_behaviourModule;
+        public PlayerSkills skills => m_skills;
         public PlayerWeapon weapon => m_weapon;
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;

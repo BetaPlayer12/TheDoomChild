@@ -5,15 +5,14 @@ using UnityEngine;
 
 namespace HolysoftEditor.Collections
 {
-    [OdinDrawer]
     public class RangeIntDrawer : OdinValueDrawer<Holysoft.Collections.RangeInt>
     {
-        protected override void DrawPropertyLayout(IPropertyValueEntry<Holysoft.Collections.RangeInt> entry, GUIContent label)
+        protected override void DrawPropertyLayout(GUIContent label)
         {
-            var rangeFloat = entry.SmartValue;
+            var rangeFloat = ValueEntry.SmartValue;
             SirenixEditorGUI.BeginBox(label);
-            var newMin = EditorGUILayout.IntField(label, rangeFloat.min);
-            var newMax = EditorGUILayout.IntField(label, rangeFloat.max);
+            var newMin = EditorGUILayout.IntField("Min", rangeFloat.min);
+            var newMax = EditorGUILayout.IntField("Max", rangeFloat.max);
             SirenixEditorGUI.EndBox();
 
 
@@ -26,7 +25,7 @@ namespace HolysoftEditor.Collections
                 newMax = newMin;
             }
 
-            entry.SmartValue = new Holysoft.Collections.RangeInt(newMin, newMax);
+            ValueEntry.SmartValue = new Holysoft.Collections.RangeInt(newMin, newMax);
         }
     }
 

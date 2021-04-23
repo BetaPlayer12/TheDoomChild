@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/SkeletonWarrior")]
-    public class SkeletonWarriorAI : CombatAIBrain<SkeletonWarriorAI.Info>, IResetableAIBrain
+    public class SkeletonWarriorAI : CombatAIBrain<SkeletonWarriorAI.Info>, IResetableAIBrain, IBattleZoneAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -149,6 +149,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
+        private Attack m_currentAttack;
+        private float m_currentAttackRange;
+
+        private bool[] m_attackUsed;
+        private List<Attack> m_attackCache;
+        private List<float> m_attackRangeCache;
 
         private State m_turnState;
 
@@ -250,12 +256,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            m_animation.animationState.TimeScale = .5f;
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            m_animation.animationState.TimeScale = 1f;
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
                 m_animation.SetEmptyAnimation(0, 0);
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -318,6 +326,64 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private void ChooseAttack()
+        {
+            if (!m_attackDecider.hasDecidedOnAttack)
+            {
+                IsAllAttackComplete();
+                for (int i = 0; i < m_attackCache.Count; i++)
+                {
+                    m_attackDecider.DecideOnAttack();
+                    if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
+                    {
+                        m_attackUsed[i] = true;
+                        m_currentAttack = m_attackCache[i];
+                        m_currentAttackRange = m_attackRangeCache[i];
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void IsAllAttackComplete()
+        {
+            for (int i = 0; i < m_attackUsed.Length; ++i)
+            {
+                if (!m_attackUsed[i])
+                {
+                    return;
+                }
+            }
+            for (int i = 0; i < m_attackUsed.Length; ++i)
+            {
+                m_attackUsed[i] = false;
+            }
+        }
+
+        void AddToAttackCache(params Attack[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackCache.Add(list[i]);
+            }
+        }
+
+        void AddToRangeCache(params float[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackRangeCache.Add(list[i]);
+            }
+        }
+
+        void UpdateRangeCache(params float[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+            {
+                m_attackRangeCache[i] = list[i];
+            }
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -336,6 +402,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
+
+            m_attackCache = new List<Attack>();
+            AddToAttackCache(Attack.Attack1, Attack.Attack2, Attack.Attack3, Attack.RunAttack);
+            m_attackRangeCache = new List<float>();
+            AddToRangeCache(m_info.attack1.range, m_info.attack2.range, m_info.attack3.range, m_info.runAttack.range);
+            m_attackUsed = new bool[m_attackCache.Count];
         }
 
 
@@ -382,36 +454,62 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Attacking:
-                    m_stateHandle.Wait(State.Cooldown);
-
-
-                    switch (m_attackDecider.chosenAttack.attack)
+                    if (IsFacingTarget())
                     {
-                        case Attack.Attack1:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
-                            break;
-                        case Attack.Attack2:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
-                            break;
-                        case Attack.Attack3:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.attack3.animation, m_info.idleAnimation);
-                            break;
-                        case Attack.RunAttack:
-                            if (!m_wallSensor.isDetecting)
+                        if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting)
+                        {
+                            m_stateHandle.Wait(State.Cooldown);
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+
+                            switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
                             {
-                                StartCoroutine(RunAttackRoutine());
+                                case Attack.Attack1:
+                                    m_animation.EnableRootMotion(true, false);
+                                    m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
+                                    break;
+                                case Attack.Attack2:
+                                    m_animation.EnableRootMotion(true, false);
+                                    m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                                    break;
+                                case Attack.Attack3:
+                                    m_animation.EnableRootMotion(true, false);
+                                    m_attackHandle.ExecuteAttack(m_info.attack3.animation, m_info.idleAnimation);
+                                    break;
+                                case Attack.RunAttack:
+                                    if (!m_wallSensor.isDetecting)
+                                    {
+                                        StartCoroutine(RunAttackRoutine());
+                                    }
+                                    else
+                                    {
+                                        m_stateHandle.ApplyQueuedState();
+                                    }
+                                    break;
+                            }
+                            m_attackDecider.hasDecidedOnAttack = false;
+                        }
+                        else
+                        {
+                            if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                            {
+                                var distance = Vector2.Distance(m_targetInfo.position, transform.position);
+                                m_animation.EnableRootMotion(false, false);
+                                m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
+                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
                             }
                             else
                             {
-                                m_stateHandle.ApplyQueuedState();
+                                m_movement.Stop();
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
-                            break;
+                        }
                     }
-                    m_attackDecider.hasDecidedOnAttack = false;
-
+                    else
+                    {
+                        m_turnState = State.ReevaluateSituation;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
                     break;
 
                 case State.Cooldown:
@@ -437,7 +535,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
 
-                    if (m_currentCD <= m_info.attackCD)
+                    if (m_currentCD <= m_info.attackCD && !m_wallSensor.isDetecting)
                     {
                         m_currentCD += Time.deltaTime;
                     }
@@ -450,38 +548,30 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
-                        if (IsFacingTarget())
+                        //m_attackDecider.DecideOnAttack();
+                        m_attackDecider.hasDecidedOnAttack = false;
+                        ChooseAttack();
+                        if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                         {
-                            m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
-                            {
-                                m_movement.Stop();
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                m_stateHandle.SetState(State.Attacking);
-                            }
-                            else
-                            {
-                                m_attackDecider.hasDecidedOnAttack = false;
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
-                                {
-                                    var distance = Vector2.Distance(m_targetInfo.position, transform.position);
-                                    m_animation.EnableRootMotion(false, false);
-                                    m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
-                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
-                                }
-                                else
-                                {
-                                    m_movement.Stop();
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                }
-                            }
+                            m_movement.Stop();
+                            m_stateHandle.SetState(State.Attacking);
                         }
-                        else
-                        {
-                            m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                                m_stateHandle.SetState(State.Turning);
-                        }
+                        //else
+                        //{
+                        //    m_attackDecider.hasDecidedOnAttack = false;
+                        //    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                        //    {
+                        //        var distance = Vector2.Distance(m_targetInfo.position, transform.position);
+                        //        m_animation.EnableRootMotion(false, false);
+                        //        m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
+                        //        m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
+                        //    }
+                        //    else
+                        //    {
+                        //        m_movement.Stop();
+                        //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        //    }
+                        //}
                     }
                     break;
 
@@ -518,6 +608,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(true);
         }
 
+        public void SwitchToBattleZoneAI()
+        {
+            m_stateHandle.SetState(State.Chasing);
+        }
 
+        public void SwitchToBaseAI()
+        {
+            m_stateHandle.SetState(State.ReevaluateSituation);
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
+        }
     }
 }

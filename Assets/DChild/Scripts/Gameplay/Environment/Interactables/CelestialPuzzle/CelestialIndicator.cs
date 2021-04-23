@@ -14,6 +14,10 @@ namespace DChild.Gameplay.Environment
         private bool m_isOn;
         private bool m_firstInitialization;
 
+        private void OnDrawGizmos()
+        {
+            
+        }
         public void SetState(bool isOn)
         {
             if (m_firstInitialization == false)

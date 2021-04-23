@@ -113,6 +113,62 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Button"",
+                    ""id"": ""56d2adb8-e9d0-450f-8df9-020441bace75"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SkullThrow"",
+                    ""type"": ""Button"",
+                    ""id"": ""45bdfdf7-5e75-4839-be13-6dc77f575e8d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""QuickItemUse"",
+                    ""type"": ""Button"",
+                    ""id"": ""677553d6-20ed-4e6d-82bb-7a2a5f0fb77c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""QuickItemCycle"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fa95fc1-904f-4304-99ae-1bbdea430345"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""StoreOpen"",
+                    ""type"": ""Button"",
+                    ""id"": ""620e2f13-ed4d-4faa-9f19-83fd271c6bbb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8c8d89d-c5c6-4e1a-8f9a-211db00633d5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ShadowMorph"",
+                    ""type"": ""Button"",
+                    ""id"": ""407d129f-98d0-432f-90b4-022e5f7eb20c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -181,6 +237,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""HorizontalInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2be8d5cd-18d3-4b04-b7e7-f14e5f24793e"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -379,6 +446,105 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Whip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a60632ac-7dd2-4b4b-a2ea-59c0186dcb3f"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e430af7-8e71-47b8-a47f-6efe9cb0376a"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkullThrow"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e2431c23-5039-4e63-8668-80500091367b"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickItemUse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""de7b048c-fce5-47b2-b8dd-45ac5bfd5934"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickItemCycle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""e5c2e4f9-1b70-4a9f-b004-842431038c84"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickItemCycle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""8e1e4bf0-4c3b-40a0-8087-d5143ba0208b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuickItemCycle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9d9129ef-4910-4d66-8c95-b800d75991eb"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StoreOpen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5ed84032-9951-419d-86f4-4d435f95e1e3"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf276c84-55d4-4d9f-8dcd-d16bbb948c4f"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShadowMorph"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -399,6 +565,13 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
         m_Gameplay_Levitate = m_Gameplay.FindAction("Levitate", throwIfNotFound: true);
         m_Gameplay_Whip = m_Gameplay.FindAction("Whip", throwIfNotFound: true);
+        m_Gameplay_Grab = m_Gameplay.FindAction("Grab", throwIfNotFound: true);
+        m_Gameplay_SkullThrow = m_Gameplay.FindAction("SkullThrow", throwIfNotFound: true);
+        m_Gameplay_QuickItemUse = m_Gameplay.FindAction("QuickItemUse", throwIfNotFound: true);
+        m_Gameplay_QuickItemCycle = m_Gameplay.FindAction("QuickItemCycle", throwIfNotFound: true);
+        m_Gameplay_StoreOpen = m_Gameplay.FindAction("StoreOpen", throwIfNotFound: true);
+        m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_ShadowMorph = m_Gameplay.FindAction("ShadowMorph", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -460,6 +633,13 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Interact;
     private readonly InputAction m_Gameplay_Levitate;
     private readonly InputAction m_Gameplay_Whip;
+    private readonly InputAction m_Gameplay_Grab;
+    private readonly InputAction m_Gameplay_SkullThrow;
+    private readonly InputAction m_Gameplay_QuickItemUse;
+    private readonly InputAction m_Gameplay_QuickItemCycle;
+    private readonly InputAction m_Gameplay_StoreOpen;
+    private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_ShadowMorph;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -476,6 +656,13 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
         public InputAction @Levitate => m_Wrapper.m_Gameplay_Levitate;
         public InputAction @Whip => m_Wrapper.m_Gameplay_Whip;
+        public InputAction @Grab => m_Wrapper.m_Gameplay_Grab;
+        public InputAction @SkullThrow => m_Wrapper.m_Gameplay_SkullThrow;
+        public InputAction @QuickItemUse => m_Wrapper.m_Gameplay_QuickItemUse;
+        public InputAction @QuickItemCycle => m_Wrapper.m_Gameplay_QuickItemCycle;
+        public InputAction @StoreOpen => m_Wrapper.m_Gameplay_StoreOpen;
+        public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @ShadowMorph => m_Wrapper.m_Gameplay_ShadowMorph;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -521,6 +708,27 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Whip.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWhip;
                 @Whip.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWhip;
                 @Whip.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWhip;
+                @Grab.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
+                @Grab.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
+                @Grab.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
+                @SkullThrow.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
+                @SkullThrow.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
+                @SkullThrow.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSkullThrow;
+                @QuickItemUse.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemUse;
+                @QuickItemUse.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemUse;
+                @QuickItemUse.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemUse;
+                @QuickItemCycle.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemCycle;
+                @QuickItemCycle.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemCycle;
+                @QuickItemCycle.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnQuickItemCycle;
+                @StoreOpen.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStoreOpen;
+                @StoreOpen.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStoreOpen;
+                @StoreOpen.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStoreOpen;
+                @Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @ShadowMorph.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
+                @ShadowMorph.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
+                @ShadowMorph.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -561,6 +769,27 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Whip.started += instance.OnWhip;
                 @Whip.performed += instance.OnWhip;
                 @Whip.canceled += instance.OnWhip;
+                @Grab.started += instance.OnGrab;
+                @Grab.performed += instance.OnGrab;
+                @Grab.canceled += instance.OnGrab;
+                @SkullThrow.started += instance.OnSkullThrow;
+                @SkullThrow.performed += instance.OnSkullThrow;
+                @SkullThrow.canceled += instance.OnSkullThrow;
+                @QuickItemUse.started += instance.OnQuickItemUse;
+                @QuickItemUse.performed += instance.OnQuickItemUse;
+                @QuickItemUse.canceled += instance.OnQuickItemUse;
+                @QuickItemCycle.started += instance.OnQuickItemCycle;
+                @QuickItemCycle.performed += instance.OnQuickItemCycle;
+                @QuickItemCycle.canceled += instance.OnQuickItemCycle;
+                @StoreOpen.started += instance.OnStoreOpen;
+                @StoreOpen.performed += instance.OnStoreOpen;
+                @StoreOpen.canceled += instance.OnStoreOpen;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+                @ShadowMorph.started += instance.OnShadowMorph;
+                @ShadowMorph.performed += instance.OnShadowMorph;
+                @ShadowMorph.canceled += instance.OnShadowMorph;
             }
         }
     }
@@ -579,5 +808,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnLevitate(InputAction.CallbackContext context);
         void OnWhip(InputAction.CallbackContext context);
+        void OnGrab(InputAction.CallbackContext context);
+        void OnSkullThrow(InputAction.CallbackContext context);
+        void OnQuickItemUse(InputAction.CallbackContext context);
+        void OnQuickItemCycle(InputAction.CallbackContext context);
+        void OnStoreOpen(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnShadowMorph(InputAction.CallbackContext context);
     }
 }

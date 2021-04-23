@@ -5,6 +5,8 @@ using System;
 using Holysoft.Collections;
 using DChild.Gameplay.Environment;
 using UnityEditor;
+using PixelCrushers.DialogueSystem;
+using DLocation = DChild.Gameplay.Environment.Location;
 
 namespace DChild.Serialization
 {
@@ -20,12 +22,12 @@ namespace DChild.Serialization
         [SerializeField, BoxGroup("Slot Info")]
         private SceneInfo m_sceneToLoad;
         [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info")]
-        private Location m_location;
+        private DLocation m_location;
         [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info")]
         private SerializedVector2 m_spawnPosition;
         [SerializeField, HideIf("m_newGame"), MinValue(0), BoxGroup("Slot Info")]
         private int m_completion;
-        [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info"),ClockTime]
+        [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info"), ClockTime]
         private float m_duration;
 
         [SerializeField, HideIf("m_newGame")]
@@ -46,12 +48,14 @@ namespace DChild.Serialization
         }
         [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame"), TabGroup("Misc")]
         private SerializeDataList m_miscDatas;
+        [SerializeField, HideReferenceObjectPicker]
+        private string m_dialogueSaveData;
 
         public CampaignSlot(int m_id)
         {
             this.m_id = m_id;
             m_newGame = true;
-            m_location = Location.None;
+            m_location = DLocation.None;
             m_spawnPosition = new SerializedVector2();
             m_completion = 0;
             m_duration = 0;
@@ -59,13 +63,14 @@ namespace DChild.Serialization
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
             m_miscDatas = new SerializeDataList();
+            m_dialogueSaveData = null;
         }
 
         public CampaignSlot()
         {
             this.m_id = 1;
             m_newGame = true;
-            m_location = Location.None;
+            m_location = DLocation.None;
             m_spawnPosition = new SerializedVector2();
             m_completion = 0;
             m_duration = 0;
@@ -73,13 +78,14 @@ namespace DChild.Serialization
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
             m_miscDatas = new SerializeDataList();
+            m_dialogueSaveData = null;
         }
 
         public int id => m_id;
         public bool demoGame => m_demoGame;
         public bool newGame => m_newGame;
         public SceneInfo sceneToLoad => m_sceneToLoad;
-        public Location location => m_location;
+        public DLocation location => m_location;
         public int completion => m_completion;
         public float duration => m_duration;
 
@@ -88,19 +94,25 @@ namespace DChild.Serialization
 
         public SerializeDataList campaignProgress => m_campaignProgress;
         public SerializeDataList zoneDatas => m_zoneDatas;
+        public string dialogueSaveData => m_dialogueSaveData;
         public ZoneSlot[] Importable => m_importable;
+
 
         [Button]
         public void Reset()
         {
             m_newGame = true;
-            m_location = m_demoGame ? Location.Garden : Location.None;
+            m_location = m_demoGame ? DLocation.Garden : DLocation.None;
             m_spawnPosition = new SerializedVector2();
+            m_spawnPosition.x = -1252.7f;
+            m_spawnPosition.y = 89.2f;
             m_completion = 0;
             m_duration = 0;
             m_characterData = new PlayerCharacterData();
             m_campaignProgress = new SerializeDataList();
             m_zoneDatas = new SerializeDataList();
+            m_miscDatas = new SerializeDataList();
+            m_dialogueSaveData = null;
         }
 
         public void Copy(CampaignSlot slot)
@@ -114,9 +126,10 @@ namespace DChild.Serialization
             m_characterData = new PlayerCharacterData(slot.characterData);
             m_campaignProgress = new SerializeDataList(slot.campaignProgress);
             m_zoneDatas = new SerializeDataList(slot.zoneDatas);
+            m_dialogueSaveData = slot.dialogueSaveData;
         }
 
-        public void UpdateLocation(SceneInfo scene, Location location, Vector2 spawnPosition)
+        public void UpdateLocation(SceneInfo scene, DLocation location, Vector2 spawnPosition)
         {
             m_sceneToLoad = scene;
             m_location = location;
@@ -138,6 +151,8 @@ namespace DChild.Serialization
         public void UpdateData(SerializeID ID, ISaveData saveData) => m_miscDatas.UpdateData(ID, saveData);
 
         public T GetData<T>(SerializeID ID) where T : ISaveData => (T)m_miscDatas.GetData(ID);
+
+        public void UpdateDialogueSaveData() => m_dialogueSaveData = PersistentDataManager.GetSaveData();
         #region EditorOnly
 #if UNITY_EDITOR
         public CampaignSlot(CampaignSlot slot)

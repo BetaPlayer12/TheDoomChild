@@ -1,4 +1,5 @@
-﻿using Doozy.Engine;
+﻿using DChild.Gameplay;
+using Doozy.Engine;
 using Holysoft.Collections;
 using Holysoft.Event;
 using System.Collections;
@@ -42,6 +43,7 @@ namespace DChild.Menu
             {
                 scenesToLoad = new List<string>();
             }
+
             scenesToLoad.AddRange(scenes);
         }
 
@@ -57,25 +59,26 @@ namespace DChild.Menu
 
         public void DoLoad()
         {
-            m_unloadThis = false;
-            m_unloadOperations.Clear();
-            scenesToUnload?.RemoveAll(x => x == string.Empty);
-            for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
-            {
-                var operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
-                m_unloadOperations.Add(operation);
-            }
-            scenesToUnload?.Clear();
+            //m_unloadThis = false;
+            //m_unloadOperations.Clear();
+            //scenesToUnload?.RemoveAll(x => x == string.Empty);
+            //for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
+            //{
+            //    var operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+            //    m_unloadOperations.Add(operation);
+            //}
+            //scenesToUnload?.Clear();
 
-            m_loadOperations.Clear();
-            scenesToLoad?.RemoveAll(x => x == string.Empty);
-            for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
-            {
-                m_loadOperations.Add(SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive));
-                m_loadOperations[i].allowSceneActivation = false;
-            }
-            scenesToLoad?.Clear();
-            StartCoroutine(MonitorProgess());
+            //m_loadOperations.Clear();
+            //scenesToLoad?.RemoveAll(x => x == string.Empty);
+            //for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
+            //{
+            //    m_loadOperations.Add(SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive));
+            //    m_loadOperations[i].allowSceneActivation = false;
+            //}
+            //scenesToLoad?.Clear();
+            Debug.LogError("False Positive: Loading Start");
+            StartCoroutine(ExecuteLoadUnloadScene());
         }
 
         public void SendEvents()
@@ -98,59 +101,101 @@ namespace DChild.Menu
             SceneManager.UnloadSceneAsync(gameObject.scene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
         }
 
-        private IEnumerator MonitorProgess()
+        private IEnumerator ExecuteLoadUnloadScene()
         {
             var time = 0f;
             m_animation.PlayStart();
             var endOfFrame = new WaitForEndOfFrame();
 
-            yield return endOfFrame;
-            if (m_unloadOperations.Count > 0)
+            Debug.LogError("False Positive: Unloading Scenes Start");
+            //Wait for Unloading to Be done, Unload scenes one by one
+            m_unloadThis = false;
+            m_unloadOperations.Clear();
+            scenesToUnload?.RemoveAll(x => x == string.Empty);
+            AsyncOperation operation = null;
+            for (int i = 0; i < (scenesToUnload?.Count ?? 0); i++)
             {
-                do
+                Debug.LogError($"False Positive: \"{scenesToUnload[i]}\" Unload Start");
+                if (scenesToUnload[i] != "")
                 {
-                    for (int i = m_unloadOperations.Count - 1; i >= 0; i--)
+                    try
                     {
-                        if (m_unloadOperations[i].isDone)
-                        {
-                            m_unloadOperations.RemoveAt(i);
-                        }
+                        operation = SceneManager.UnloadSceneAsync(scenesToUnload[i]);
                     }
-                    yield return endOfFrame;
-                    time += Time.unscaledDeltaTime;
-                } while (m_unloadOperations.Count > 0);
-                yield return endOfFrame;
-                time += Time.unscaledDeltaTime;
-            }
+                    catch (System.Exception)
+                    {
+                        operation = null;
+                    }
 
-            if (m_loadOperations.Count > 0)
-            {
-                bool isLoading = false;
-                do
-                {
-                    isLoading = false;
-                    for (int i = 0; i < m_loadOperations.Count; i++)
+                    if (operation != null)
                     {
-                        if (m_loadOperations[i].progress < 0.9f)
+                        while (operation.isDone == false)
                         {
-                            isLoading = true;
-                            break;
+                            yield return endOfFrame;
+                            time += Time.unscaledDeltaTime;
                         }
                     }
-                    yield return endOfFrame;
-                    time += Time.unscaledDeltaTime;
-                } while (isLoading);
+                    else
+                    {
+                        Debug.LogError("Attempt to unload invalid scene: " + scenesToUnload[i]);
+                    }
+                }
+                Debug.LogError($"False Positive: \"{scenesToUnload[i]}\" Unload Done");
             }
+            scenesToUnload?.Clear();
+            Debug.LogError("False Positive: Unloading Scenes Done");
+
+
+            Debug.LogError("False Positive: Loading Scenes Start");
+            //Wait for Loading to Be done, Load scenes one by one
+            m_loadOperations.Clear();
+            scenesToLoad?.RemoveAll(x => x == string.Empty);
+            for (int i = 0; i < (scenesToLoad?.Count ?? 0); i++)
+            {
+                Debug.LogError($"False Positive: \"{scenesToLoad[i]}\" Load Start");
+
+                try
+                {
+                    operation = SceneManager.LoadSceneAsync(scenesToLoad[i], LoadSceneMode.Additive);
+                }
+                catch (System.Exception)
+                {
+                    operation = null;
+                }
+
+                if (operation != null)
+                {
+                    m_loadOperations.Add(operation);
+                    operation.allowSceneActivation = false;
+                    while (operation.progress < 0.9f)
+                    {
+                        Debug.LogError($"Progress Tracker: \"{scenesToLoad[i]}\" -- {operation.progress}");
+                        yield return endOfFrame;
+                        time += Time.unscaledDeltaTime;
+                    }
+                    Debug.LogError($"False Positive: \"{scenesToLoad[i]}\" Load Done");
+                }
+                else
+                {
+                    Debug.LogError("Attempt to load invalid scene: " + scenesToLoad[i]);
+                }
+            }
+            scenesToLoad?.Clear();
+            Debug.LogError("False Positive: Loading Scenes Done");
             m_animation.PlayEnd();
+
             if (loadType == LoadType.Force)
             {
                 yield return new WaitForSeconds(2.25f);
                 time += 2.25f;
             }
+
+            Debug.LogError("False Positive: Scene Activation Start");
             for (int i = 0; i < m_loadOperations.Count; i++)
             {
                 m_loadOperations[i].allowSceneActivation = true;
             }
+            Debug.LogError("False Positive: Scene Activation Done");
 
             yield return endOfFrame;
             while (m_canTransferScene == false)
@@ -159,7 +204,9 @@ namespace DChild.Menu
                 yield return endOfFrame;
             }
 
+            Debug.LogError("False Positive: Scene Done Event Sent");
             SceneDone?.Invoke(this, EventActionArgs.Empty);
+            Debug.LogError("False Positive: Scene Done Reaction Done");
             if (loadType == LoadType.Smart)
             {
                 GameEventMessage.SendEvent("Load Done");
@@ -186,6 +233,8 @@ namespace DChild.Menu
             {
                 m_animation.AnimationEnd += OnAnimationEnd;
             }
+
+            GameplaySystem.SetInputActive(false);
         }
 
         private void Update()
@@ -195,12 +244,14 @@ namespace DChild.Menu
                 SceneManager.UnloadSceneAsync(m_loadingScene.sceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
                 m_unloadThis = false;
             }
+            GameplaySystem.SetInputActive(false);
         }
 
         private void OnDestroy()
         {
             m_animation.AnimationEnd -= OnAnimationEnd;
             LoadingDone?.Invoke(this, EventActionArgs.Empty);
+            GameplaySystem.SetInputActive(true);
             Debug.Log("Loading Scene Destroyed");
         }
     }

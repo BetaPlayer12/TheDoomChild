@@ -210,12 +210,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
-
-        [SerializeField, TabGroup("HurtBoxes")]
-        private Collider2D m_spikeBB;
-
-        [SerializeField, TabGroup("Effects")]
-        private ParticleFX m_deathFX;
+        
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_slashGroundFX;
         [SerializeField, TabGroup("Effects")]
@@ -303,7 +298,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             CustomTurn();
             //yield return new WaitForSeconds(2);
             //m_animation.SetAnimation(0, m_info.move.animation, true);
@@ -312,7 +307,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.playerDetectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.playerDetectAnimation);
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -320,7 +315,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             //SelfHeal
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             var flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinchBlackAnimation;
             m_animation.SetAnimation(0, flinch, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
@@ -424,7 +419,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_scytheSpinFX.Stop();
             //m_scytheSpinFX.gameObject.SetActive(false); //m_scytheSpinFX.GetComponent<ParticleSystem>().Stop();
             //yield return new WaitForSeconds(1.3f);
-            //m_spikeBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack3.animation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -441,7 +435,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.AddAnimation(0, m_info.attack4bAnimation, true, 0)/*.MixDuration = 1*/;
             m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
             //yield return new WaitForSeconds(1.3f);
-            //m_spikeBB.enabled = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack4bAnimation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -814,6 +807,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_stickToGround = false;
             //m_currentCD = 0;
+        }
+
+        protected override void OnBecomePassive()
+        {
         }
     }
 }

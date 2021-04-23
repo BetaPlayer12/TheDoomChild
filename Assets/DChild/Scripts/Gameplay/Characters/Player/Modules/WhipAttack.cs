@@ -11,7 +11,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Ground_Forward,
             Ground_Overhead,
             MidAir_Forward,
-            MidAir_Overhead
+            MidAir_Overhead,
+            Crouch_Forward
         }
 
         [SerializeField]
@@ -22,7 +23,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Info m_midAirForward;
         [SerializeField]
         private Info m_midAirOverhead;
+        [SerializeField]
+        private Info m_crouchForward;
 
+        private IPlayerModifer m_modifier;
         private int m_whipAttackAnimationParameter;
         private List<Type> m_executedTypes;
 
@@ -30,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Initialize(info);
 
+            m_modifier = info.modifier;
             m_executedTypes = new List<Type>();
             m_whipAttackAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.WhipAttack);
         }
@@ -39,19 +44,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_executedTypes.Count > 0)
             {
                 base.Cancel();
-
-                if(m_state.isAttacking)
-                {
-                    m_animator.SetBool(m_whipAttackAnimationParameter, false);
-                }
+                m_animator.SetBool(m_whipAttackAnimationParameter, false);
 
                 for (int i = 0; i < m_executedTypes.Count; i++)
                 {
                     var type = m_executedTypes[i];
                     EnableCollision(type, false);
-                    PlayFXFor(type, false);
-                    ClearFXFor(type);
                 }
+
                 m_executedTypes.Clear();
             }
         }
@@ -73,6 +73,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     break;
                 case Type.MidAir_Overhead:
                     m_midAirOverhead.ShowCollider(value);
+                    break;
+                case Type.Crouch_Forward:
+                    m_crouchForward.ShowCollider(value);
                     break;
             }
 
@@ -98,60 +101,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 case Type.Ground_Forward:
                     m_timer = m_groundForward.nextAttackDelay;
-                    m_attacker.SetDamageModifier(m_groundForward.damageModifier);
+                    m_attacker.SetDamageModifier(m_groundForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
                 case Type.Ground_Overhead:
                     m_timer = m_groundOverhead.nextAttackDelay;
-                    m_attacker.SetDamageModifier(m_groundOverhead.damageModifier);
+                    m_attacker.SetDamageModifier(m_groundOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
                 case Type.MidAir_Forward:
                     m_timer = m_midAirForward.nextAttackDelay;
-                    m_attacker.SetDamageModifier(m_midAirForward.damageModifier);
+                    m_attacker.SetDamageModifier(m_midAirForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
-                    m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier);
+                    m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+                    break;
+                case Type.Crouch_Forward:
+                    m_timer = m_crouchForward.nextAttackDelay;
+                    m_attacker.SetDamageModifier(m_crouchForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
                     break;
             }
             Record(type);
-        }
-
-        public void PlayFXFor(Type type, bool play)
-        {
-            switch (type)
-            {
-                case Type.Ground_Forward:
-                    m_groundForward.PlayFX(play);
-                    break;
-                case Type.Ground_Overhead:
-                    m_groundOverhead.PlayFX(play);
-                    break;
-                case Type.MidAir_Forward:
-                    m_midAirForward.PlayFX(play);
-                    break;
-                case Type.MidAir_Overhead:
-                    m_midAirOverhead.PlayFX(play);
-                    break;
-            }
-        }
-
-        public void ClearFXFor(Type type)
-        {
-            switch (type)
-            {
-                case Type.Ground_Forward:
-                    m_groundForward.ClearFX();
-                    break;
-                case Type.Ground_Overhead:
-                    m_groundOverhead.ClearFX();
-                    break;
-                case Type.MidAir_Forward:
-                    m_midAirForward.ClearFX();
-                    break;
-                case Type.MidAir_Overhead:
-                    m_midAirOverhead.ClearFX();
-                    break;
-            }
         }
 
         public override void AttackOver()

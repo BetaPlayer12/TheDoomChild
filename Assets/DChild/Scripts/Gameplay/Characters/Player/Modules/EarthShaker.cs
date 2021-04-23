@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Combat;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -24,14 +25,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, MinValue(0)]
         private float m_impactDamageModifier = 1;
 
+        private IPlayerModifer m_modifier;
         private Rigidbody2D m_rigidbody;
+        private Damageable m_damageable; 
         private int m_earthShakerAnimationParameter;
         private float m_originalGravity;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
+            m_modifier = info.modifier;
             m_rigidbody = info.rigidbody;
+            m_damageable = info.damageable;
             m_originalGravity = m_rigidbody.gravityScale;
             m_earthShakerAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.EarthShaker);
         }
@@ -53,7 +58,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Impact()
         {
-            m_attacker.SetDamageModifier(m_impactDamageModifier);
+            m_attacker.SetDamageModifier(m_impactDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_rigidBody.WakeUp();
             m_fallLoopFX?.Stop(true);
             m_fallCollider.enabled = false;
@@ -85,7 +90,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void StartExecution()
         {
-            m_attacker.SetDamageModifier(m_fallDamageModifier);
+            m_damageable.SetInvulnerability(Invulnerability.Level_1);
+            m_attacker.SetDamageModifier(m_fallDamageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
             m_rigidbody.velocity = Vector2.zero;
             m_originalGravity = m_rigidbody.gravityScale;
             m_rigidbody.gravityScale = 0;
@@ -98,6 +104,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EndExecution()
         {
+            m_damageable.SetInvulnerability(Invulnerability.None);
             m_impactFX?.Stop(true);
             m_animator.SetBool(m_animationParameter, false);
             m_animator.SetBool(m_earthShakerAnimationParameter, false);
@@ -105,6 +112,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.waitForBehaviour = false;
             m_state.canAttack = true;
             m_state.isAttacking = false;
+            m_rigidbody.gravityScale = m_originalGravity;
         }
     }
 }

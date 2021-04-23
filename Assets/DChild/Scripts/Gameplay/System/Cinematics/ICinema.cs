@@ -20,6 +20,8 @@ namespace DChild.Gameplay.Cinematics
         void ApplyLookAhead(Cinema.LookAhead look);
 
         void SetCameraShake(float amplitude, float frequency);
+
+        void SetCameraShakeProfile(Cinema.ShakeType shakeType);
     }
 
 }

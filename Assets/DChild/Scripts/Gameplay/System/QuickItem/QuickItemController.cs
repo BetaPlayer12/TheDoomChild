@@ -1,48 +1,92 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DChild.Gameplay.Inventories
 {
     public class QuickItemController : MonoBehaviour
     {
         [SerializeField]
+        private PlayerInput m_input;
+        [SerializeField]
         private QuickItemHandle m_handle;
-        private string m_useButton = "QuickItemUse";
-        private string m_prevButton = "QuickItemPrev";
-        private string m_nextButton = "QuickItemNext";
 
-        private bool m_hasPressed;
-        private string m_pressedButton;
+        private bool m_allowCycle;
 
-        private void Update()
+        private void Awake()
         {
-            if (m_hasPressed)
+            var actionMap = m_input.actions.FindActionMap("Gameplay");
+            var useAction = actionMap.FindAction("QuickItemUse");
+            useAction.performed += OnUseAction;
+            var cycleAction = actionMap.FindAction("QuickItemCycle");
+            cycleAction.performed += OnCycleAction;
+            m_allowCycle = true;
+        }
+        private void OnUseAction(InputAction.CallbackContext obj)
+        {
+            if (obj.ReadValue<float>() == 1)
             {
-                if (Input.GetButtonUp(m_pressedButton))
+                if (GameplaySystem.isGamePaused == false && m_handle.hideUI == false)
                 {
-                    m_hasPressed = false;
+                    m_allowCycle = false;
+                    m_handle.UseCurrentItem();
                 }
             }
             else
             {
+                m_allowCycle = true;
+            }
+        }
+
+        private void OnCycleAction(InputAction.CallbackContext obj)
+        {
+            if (m_allowCycle)
+            {
                 if (GameplaySystem.isGamePaused == false && m_handle.hideUI == false)
                 {
-                    if (Input.GetButtonDown(m_useButton))
-                    {
-                        m_handle.UseCurrentItem();
-                        m_pressedButton = m_useButton;
-                    }
-                    if (Input.GetButtonDown(m_prevButton))
+                    if (obj.ReadValue<float>() == -1)
                     {
                         m_handle.Previous();
-                        m_pressedButton = m_prevButton;
                     }
-                    else if (Input.GetButtonDown(m_nextButton))
+                    else
                     {
                         m_handle.Next();
-                        m_pressedButton = m_prevButton;
                     }
                 }
             }
         }
+
+
+        //private void Update()
+        //{
+        //    if (m_hasPressed)
+        //    {
+        //        if (Input.GetButtonUp(m_pressedButton))
+        //        {
+        //            m_hasPressed = false;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (GameplaySystem.isGamePaused == false && m_handle.hideUI == false)
+        //        {
+        //            if (Input.GetButtonDown(m_useButton))
+        //            {
+        //                m_handle.UseCurrentItem();
+        //                m_pressedButton = m_useButton;
+        //            }
+        //            if (Input.GetButtonDown(m_prevButton))
+        //            {
+        //                m_handle.Previous();
+        //                m_pressedButton = m_prevButton;
+        //            }
+        //            else if (Input.GetButtonDown(m_nextButton))
+        //            {
+        //                m_handle.Next();
+        //                m_pressedButton = m_prevButton;
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

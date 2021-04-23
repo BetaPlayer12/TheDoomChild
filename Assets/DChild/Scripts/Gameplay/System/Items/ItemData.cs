@@ -109,6 +109,28 @@ namespace DChild.Gameplay.Items
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
         }
+
+        [Button, ToggleGroup("m_enableEdit")]
+        private void UpdateSelf()
+        {
+            if (m_connectToDatabase)
+            {
+                var connection = DChildDatabase.GetItemConnection();
+                connection.Initialize();
+                var databaseName = connection.GetNameOf(m_ID);
+                if (connection.GetNameOf(m_ID) != m_name)
+                {
+                    m_name = databaseName;
+                }
+                connection.Close();
+            }
+            else
+            {
+                m_name = m_customName;
+            }
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+        }
 #endif 
         #endregion
 
@@ -122,6 +144,8 @@ namespace DChild.Gameplay.Items
         private int m_cost;
         [SerializeField, TextArea, ToggleGroup("m_enableEdit")]
         private string m_description;
+        [SerializeField, ToggleGroup("m_enableEdit")]
+        private bool m_canBeSold = true;
 
         public int id { get => m_ID; }
         public string itemName { get => m_name; }
@@ -131,5 +155,7 @@ namespace DChild.Gameplay.Items
         public int quantityLimit { get => m_quantityLimit; }
         public int cost { get => m_cost; }
         public string description { get => m_description; }
+        public bool canBeSold => m_canBeSold;
+        public virtual bool hasInfiniteUses => false;
     }
 }

@@ -9,14 +9,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class GroundednessHandle : MonoBehaviour, IComplexCharacterModule
     {
-        [SerializeField, MinValue(0.1)]
-        private float m_collisionRadius = 10.0f;
+        //[SerializeField, MinValue(0.1)]
+        //private float m_collisionRadius = 10.0f;
         [SerializeField]
         private Vector2 m_origin;
         [SerializeField]
         private LayerMask m_collisionLayer;
         [SerializeField, MinValue(0f)]
         private float m_coyoteTime;
+        [SerializeField]
+        private Vector2 boxSize;
+        [SerializeField]
+        private float angle;
+        [SerializeField]
+        private float m_groundCheckOffset;
 
         private bool m_previouslyGrounded;
         private IGroundednessState m_state;
@@ -25,9 +31,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ContactFilter2D m_filter;
         private List<Collider2D> m_colliderList;
         private bool m_isUsingCoyote;
-
+        
         public event EventAction<EventActionArgs> StateChange;
         public bool isUsingCoyote => m_isUsingCoyote;
+        public float groundCheckOffset => m_groundCheckOffset;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -56,17 +63,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Evaluate()
         {
-            int groundColliderResult = Physics2D.OverlapCircle(m_origin + (Vector2)transform.position, m_collisionRadius, m_filter, m_colliderList);
+            //int groundColliderResult = Physics2D.OverlapCircle(m_origin + (Vector2)transform.position, m_collisionRadius, m_filter, m_colliderList);
+            //var isGrounded = groundColliderResult > 0 ? true : false;
+
+            int groundColliderResult = Physics2D.OverlapBox(m_origin + (Vector2)transform.position, boxSize, angle, m_filter, m_colliderList);
             var isGrounded = groundColliderResult > 0 ? true : false;
+
             if (isGrounded)
             {
                 ChangeValue(true);
-            }
-            else if (m_isUsingCoyote)
-            {
-                //AllowCoyoteToDoThe Thing
-                //What thing?
-                //You know. The THING
             }
             else if (m_previouslyGrounded)
             {
@@ -79,6 +84,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     ChangeValue(false);
                 }
             }
+            else if (m_isUsingCoyote)
+            {
+                //AllowCoyoteToDoThe Thing
+                //What thing?
+                //You know. The THING
+            }
+            
             else
             {
                 ChangeValue(false);
@@ -97,7 +109,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(m_origin + (Vector2)transform.position, m_collisionRadius);
+            //Gizmos.DrawWireSphere(m_origin + (Vector2)transform.position, m_collisionRadius);
+
+            Gizmos.DrawWireCube(m_origin + (Vector2)transform.position, boxSize);
         }
     }
 }

@@ -21,6 +21,8 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
 
     public Vector2 position => transform.position;
 
+    public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
+
     public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
     public void SpawnAt(Vector2 position, HorizontalDirection facing)
@@ -60,7 +62,7 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
 
     public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
     {
-        if (!targetDefense.isInvulnerable)
+        if (targetDefense.invulnerabilityLevel == Invulnerability.None)
         {
             //using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
             //{

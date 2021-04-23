@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &80711190333800741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9115572504015091341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_maxHealth: 1
 --- !u!61 &1257317999905296483
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -103,8 +90,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 1257317999905296483}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
+--- !u!114 &6443656872855976215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4350766941457370248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 1
 --- !u!212 &4919895536354182396
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -162,6 +162,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 631825597494281124, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hitbox
+      objectReference: {fileID: 0}
     - target: {fileID: 1401469137337768767, guid: f0d6278d2f66d5344b76dacbcf596621,
         type: 3}
       propertyPath: m_Name
@@ -226,7 +231,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_health
       value: 
-      objectReference: {fileID: 80711190333800741}
+      objectReference: {fileID: 6443656872855976215}
+    - target: {fileID: 5008636110333182838, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6919461856735510106, guid: f0d6278d2f66d5344b76dacbcf596621,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -239,9 +249,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0d6278d2f66d5344b76dacbcf596621, type: 3}
---- !u!1 &9115572504015091341 stripped
+--- !u!1 &4350766941457370248 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 5878050045173408058, guid: f0d6278d2f66d5344b76dacbcf596621,
+  m_CorrespondingSourceObject: {fileID: 1401469137337768767, guid: f0d6278d2f66d5344b76dacbcf596621,
     type: 3}
   m_PrefabInstance: {fileID: 3391777567041427383}
   m_PrefabAsset: {fileID: 0}

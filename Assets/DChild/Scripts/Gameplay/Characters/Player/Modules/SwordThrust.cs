@@ -13,7 +13,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_chargeDuration;
         [SerializeField]
         private Info m_thrust;
+        [SerializeField]
+        private float m_thrustForce;
 
+        private Character m_character;
+        private IPlayerModifer m_modifier;
         private float m_chargeTimer;
         private int m_swordThrustAnimationParameter;
 
@@ -21,6 +25,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.Initialize(info);
 
+            m_character = info.character;
+            m_modifier = info.modifier;
             m_swordThrustAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SwordTrust);
         }
 
@@ -31,7 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isAttacking = true;
             m_state.isChargingAttack = true;
             m_animator.SetBool(m_swordThrustAnimationParameter, true);
-            m_attacker.SetDamageModifier(m_thrust.damageModifier);
+            m_attacker.SetDamageModifier(m_thrust.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
         }
 
         public void HandleCharge()
@@ -67,6 +73,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_thrust.ShowCollider(true);
             m_chargeTimer = -1;
             m_state.waitForBehaviour = true;
+            m_rigidBody.AddForce(new Vector2((float)m_character.facing * m_thrustForce * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
             m_animator.SetBool(m_swordThrustAnimationParameter, false);
         }
 

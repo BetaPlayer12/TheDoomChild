@@ -7,8 +7,15 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
-    public class Cinema : MonoBehaviour, ICinema, IGameplaySystemModule, IGameplayInitializable
+    public class Cinema : SerializedMonoBehaviour, ICinema, IGameplaySystemModule, IGameplayInitializable
     {
+        public enum ShakeType
+        {
+            AllDirection,
+            HorizontalOnly,
+            VerticalOnly
+        }
+
         public enum LookAhead
         {
             None,
@@ -30,6 +37,10 @@ namespace DChild.Gameplay.Cinematics
         private bool m_leavePreviousCamAsNull;
         [ShowInInspector, OnValueChanged("EnableCameraShake")]
         private bool m_cameraShake;
+        [SerializeField]
+        private Dictionary<ShakeType, NoiseSettings> m_noiseSettings;
+        [SerializeField, ShowIf("m_cameraShake")]
+        private ShakeType m_currentShakeType;
         [ShowInInspector, MinValue(0), ShowIf("m_cameraShake")]
         private float m_shakeAmplitude;
         [ShowInInspector, MinValue(0), ShowIf("m_cameraShake")]
@@ -59,6 +70,9 @@ namespace DChild.Gameplay.Cinematics
                 m_currentVCam = vCam;
                 m_leavePreviousCamAsNull = false;
             }
+#if UNITY_EDITOR
+            Debug.Log($"Camera Activated: {vCam.name}");
+#endif
             vCam.Activate();
             m_offsetHandle.ApplyOffset(vCam, m_currentLookAhead);
         }
@@ -128,6 +142,7 @@ namespace DChild.Gameplay.Cinematics
         public void ClearLists()
         {
             m_currentVCam = null;
+            m_previousCam = null;
             m_trackingCameras?.Clear();
             m_noiseList?.Clear();
         }
@@ -185,6 +200,15 @@ namespace DChild.Gameplay.Cinematics
             m_mainCamera = camera;
         }
 
+        public void SetCameraShakeProfile(ShakeType shakeType)
+        {
+            m_currentShakeType = shakeType;
+            for (int i = 0; i < m_noiseList.Count; i++)
+            {
+                m_noiseList[i].m_NoiseProfile = m_noiseSettings[shakeType];
+            }
+        }
+
         public void Initialize()
         {
             m_trackingCameras = new List<ITrackingCamera>();
@@ -203,8 +227,6 @@ namespace DChild.Gameplay.Cinematics
         {
             m_trackingTarget = centerOfMass;
         }
-
-
 #endif
     }
 }

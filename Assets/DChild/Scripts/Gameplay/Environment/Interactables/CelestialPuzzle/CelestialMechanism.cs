@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, DraggableItems = false, Expanded = true), HorizontalGroup("Start/Reference/Box/Split")]
         private List<CelestialSlot> m_slots = new List<CelestialSlot>(new CelestialSlot[1]);
 
-        [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true), HorizontalGroup("Start/Reference/Box/Split")]
+        [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, Expanded = true), HorizontalGroup("Start/Reference/Box/Split")]
         private List<CelestialIndicator> m_activationIndicators = new List<CelestialIndicator>(new CelestialIndicator[1]);
 
         [TabGroup("Start", "Events")]
@@ -117,7 +117,7 @@ namespace DChild.Gameplay.Environment
         private void OnSlotStateChange(object sender, EventActionArgs eventArgs)
         {
             var slot = (CelestialSlot)sender;
-            m_activatedSlots += slot.readyLock ? 1 : -1;
+            m_activatedSlots += slot.isOccupied ? 1 : -1;
             if (m_activatedSlots == m_slots.Count)
             {
                 m_readyActivate = true;

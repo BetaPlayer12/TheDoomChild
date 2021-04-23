@@ -10,6 +10,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private EarthShaker m_earthShaker;
         private SwordThrust m_swordThrust;
         private WhipAttack m_whip;
+        private ProjectileThrow m_skullThrow;
+        private LedgeGrab m_ledgeGrab;
+        private ShadowMorph m_shadowMorph;
+        private ShadowGaugeRegen m_shadowGaugeRegen;
+
         public void DefaultIdleStateFinished()
         {
             m_idleHandle?.GenerateRandomState();
@@ -47,26 +52,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void GroundForwardWhipAttackFX()
         {
-            m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
+            //m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
             m_whip?.EnableCollision(WhipAttack.Type.Ground_Forward, true);
         }
 
         public void GroundOverheadWhipAttackFX()
         {
-            m_whip?.PlayFXFor(WhipAttack.Type.Ground_Overhead, true);
+            //m_whip?.PlayFXFor(WhipAttack.Type.Ground_Overhead, true);
             m_whip?.EnableCollision(WhipAttack.Type.Ground_Overhead, true);
         }
 
         public void MidairForwardWhipAttackFX()
         {
-            m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Forward, true);
+            //m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Forward, true);
             m_whip?.EnableCollision(WhipAttack.Type.MidAir_Forward, true);
         }
 
         public void MidairOverheadWhipAttackFX()
         {
-            m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Overhead, true);
+            //m_whip?.PlayFXFor(WhipAttack.Type.MidAir_Overhead, true);
             m_whip?.EnableCollision(WhipAttack.Type.MidAir_Overhead, true);
+        }
+
+        public void CrouchForwardWhipAttackFX()
+        {
+            //m_whip?.PlayFXFor(WhipAttack.Type.Ground_Forward, true);
+            m_whip?.EnableCollision(WhipAttack.Type.Crouch_Forward, true);
         }
 
         public void ContinueSlashCombo()
@@ -83,6 +94,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_slashCombo?.AttackOver();
             m_whip?.AttackOver();
             m_whip?.ClearExecutedCollision();
+            m_skullThrow?.AttackOver();
+
+            Debug.Log("FinishAttack");
         }
 
         public void EarthShakerPreLoop()
@@ -111,6 +125,28 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust.EndExecution();
         }
 
+        public void SkullThrowSpawnProjectile()
+        {
+            m_skullThrow?.ThrowProjectile();
+        }
+
+        public void SpawnIdleProjectile()
+        {
+            m_skullThrow?.SpawnIdleProjectile();
+        }
+
+        public void EndLedgeGrab()
+        {
+            m_ledgeGrab?.EndExecution();
+        }
+
+        public void EndShadowMorphCharge()
+        {
+            Debug.Log("DONE SHADOW MORPH CHARGE");
+            m_shadowGaugeRegen?.Enable(true);
+            m_shadowMorph.EndExecution();
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             var character = info.character;
@@ -120,6 +156,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_earthShaker = character.GetComponentInChildren<EarthShaker>();
             m_swordThrust = character.GetComponentInChildren<SwordThrust>();
             m_whip = character.GetComponentInChildren<WhipAttack>();
+            m_skullThrow = character.GetComponentInChildren<ProjectileThrow>();
+            m_ledgeGrab = character.GetComponentInChildren<LedgeGrab>();
+            m_shadowMorph = character.GetComponentInChildren<ShadowMorph>();
+            m_shadowGaugeRegen = character.GetComponentInChildren<ShadowGaugeRegen>();
         }
     }
 }

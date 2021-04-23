@@ -11,7 +11,9 @@ namespace DChild.Gameplay.Characters.Players
         ShadowMagic_Requirement,
         Jump_Power,
         WallStick_Duration,
-        Damage,
+        AttackDamage,
+        MoveSpeed,
+        AttackSpeed,
         [HideInInspector]
         _COUNT
     }

@@ -49,6 +49,7 @@ namespace DChild.Gameplay.Systems
         [Button,ShowIf("@m_data != null")]
         private void SaveData()
         {
+            m_data?.Set(gameObject.scene, m_locationPoint.position);
             m_data?.SaveAsset();
         }
 #endif

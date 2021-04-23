@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using Doozy.Engine;
 using Sirenix.OdinInspector;
@@ -32,7 +33,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private PrimarySkill m_toUnlock;
         [SerializeField]
-        private Transform m_prompt;
+        private Vector3 m_promptOffset;
         [SerializeField]
         private PlayableDirector m_cinematic;
 
@@ -49,7 +50,7 @@ namespace DChild.Gameplay
 
         public string promptMessage => "Use";
 
-        public Vector3 promptPosition => m_prompt.position;
+        public Vector3 promptPosition => transform.position + m_promptOffset;
 
         public ISaveData Save() => new SaveData(m_isUsed);
 
@@ -66,14 +67,25 @@ namespace DChild.Gameplay
                 //GameplaySystem.playerManager.OverrideCharacterControls();
                 if (character)
                 {
+                    character.GetComponent<PlayerControlledObject>().owner.skills.UnlockSkill(m_toUnlock, true);
+
+                    //Delete This. To be updated later.
                     switch (m_toUnlock)
                     {
                         case PrimarySkill.BlackBloodImmunity:
                             character.GetComponentInChildren<BlackBloodImmunity>().isActive = true;
                             break;
-                    } 
+                    }
                 }
-		m_cinematic.Play();
+
+                if (m_cinematic == null)
+                {
+                    GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
+                }
+                else
+                {
+                    m_cinematic.Play();
+                }
                 //m_fx.Play(true);
                 //StartCoroutine(DelayedNotifySkill());
                 m_isUsed = true;
@@ -94,12 +106,19 @@ namespace DChild.Gameplay
 
         private void NotifySkill(PrimarySkill skill)
         {
-            GameEventMessage.SendEvent("Primary Skill Acquired");
+            GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
         }
 
         private void Awake()
         {
             m_cinematic.stopped += OnCutsceneDone;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var position = promptPosition;
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(position, 1f);
         }
 
 #if UNITY_EDITOR
@@ -108,7 +127,7 @@ namespace DChild.Gameplay
             m_collider.enabled = !m_isUsed;
         }
 
-	[Button]
+        [Button]
         private void Interact()
         {
             Interact(null);

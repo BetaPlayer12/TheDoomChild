@@ -49,6 +49,8 @@ namespace DChild.Gameplay.Combat
         private UnityEvent m_uponTrigger;
         [SerializeField, TabGroup("On Defeat")]
         private UnityEvent m_onDefeat;
+        [SerializeField, TabGroup("Already Defeated")]
+        private UnityEvent m_alreadyDefeated;
         private bool m_isTriggered;
 
         private (Damageable damageable, Character character) m_targetTuple;
@@ -65,6 +67,10 @@ namespace DChild.Gameplay.Combat
         public void Load(ISaveData data)
         {
             m_isTriggered = ((SaveData)data).isTriggered;
+            if (m_isTriggered)
+            {
+                m_alreadyDefeated?.Invoke();
+            }
         }
 
         private void OnCinematicStop(PlayableDirector obj)
@@ -87,7 +93,7 @@ namespace DChild.Gameplay.Combat
 
         private void StartFight()
         {
-            GameplaySystem.combatManager.MonitorBoss(m_boss);
+            GameplaySystem.gamplayUIHandle.MonitorBoss(m_boss);
             switch (m_prefight)
             {
                 case PreFight.None:

@@ -42,16 +42,23 @@ namespace DChild.Gameplay.Cinematics.Cameras
         public Vector3 currentOffset => m_offsetHandle?.m_Offset ?? Vector3.zero;
         public CinemachineBasicMultiChannelPerlin noiseModule => m_noiseModule;
 
+
         public void Track(Transform target) => m_vCam.m_Follow = target;
 
         public void Activate()
         {
-            m_vCam.enabled = true;
+            if (m_vCam != null)
+            {
+                m_vCam.enabled = true;
+            }
         }
 
         public void Deactivate()
         {
-            m_vCam.enabled = false;
+            if (m_vCam != null)
+            {
+                m_vCam.enabled = false;
+            }
         }
 
         public void ApplyOffset(Vector3 offset)
@@ -91,6 +98,10 @@ namespace DChild.Gameplay.Cinematics.Cameras
         private void OnValidate()
         {
             m_vCam = GetComponentInChildren<CinemachineVirtualCamera>(true);
+            if (Application.isPlaying)
+            {
+                m_vCam.enabled = false;
+            }
         }
 
         private void Awake()
@@ -107,8 +118,6 @@ namespace DChild.Gameplay.Cinematics.Cameras
             GameplaySystem.cinema.TransistionTo(this);
             GetCameraStartingPosition();
         }
-
-
 #endif
     }
 

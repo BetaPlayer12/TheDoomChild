@@ -5,6 +5,7 @@ using DChild.Gameplay.Combat;
 using UnityEngine;
 using PlayerNew;
 using DChild.Gameplay.Characters.Players.State;
+using System;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -32,6 +33,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_source.SetHitboxActive(false);
             m_state.isDead = true;
             m_animator.SetBool(m_deathParameter, true);
+            m_source.Healed += OnHealed;
+        }
+
+        private void OnHealed(object sender, EventActionArgs eventArgs)
+        {
+            m_source.SetHitboxActive(true);
+            m_state.isDead = false;
+            m_animator.SetBool(m_deathParameter, false);
+            m_source.Healed -= OnHealed;
         }
     }
 }

@@ -19,5 +19,10 @@ namespace DChild.Gameplay.Items
         {
             player.statusEffectReciever.StopStatusEffect(m_toCure);
         }
+
+        public override string ToString()
+        {
+            return $"Cure {m_toCure.ToString()}";
+        }
     }
 }

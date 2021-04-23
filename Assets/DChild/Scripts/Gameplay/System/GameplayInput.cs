@@ -1,4 +1,6 @@
 ﻿using Doozy.Engine;
+using Sirenix.OdinInspector;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
@@ -10,25 +12,40 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private KeyCode m_storeOpen;
 
-        //Temporary Solution
-        [SerializeField]
-        private StoreNavigator m_storeNavigator;
-
-        private bool m_enableInput;
+        private bool m_enableStoreInput;
+        private bool m_inputOverridden;
 
         public void Disable()
         {
-            m_enableInput = false;
+            enabled = false;
         }
 
         public void Enable()
         {
-            m_enableInput = true;
+            enabled = true;
+        }
+
+        public void OverrideNewInfoNotif(float duration)
+        {
+            StopAllCoroutines();
+            StartCoroutine(OverrideStoreOpen(duration));
+        }
+
+        public void SetStoreInputActive(bool isActive)
+        {
+            m_enableStoreInput = isActive;
+        }
+
+        private IEnumerator OverrideStoreOpen(float duration)
+        {
+            m_inputOverridden = true;
+            yield return new WaitForSeconds(duration);
+            m_inputOverridden = false;
         }
 
         private void Awake()
         {
-            m_enableInput = true;
+            m_enableStoreInput = true;
         }
 
         private void Update()
@@ -36,15 +53,31 @@ namespace DChild.Gameplay.Systems
             if (Input.GetKeyDown(m_pause))
             {
                 GameplaySystem.PauseGame();
-                GameEventMessage.SendEvent("Pause Game");
+                GameplaySystem.gamplayUIHandle.ShowPauseMenu(true);
             }
-            else if(m_enableInput == true)
+            else if (m_enableStoreInput == true)
             {
                 if (Input.GetKeyDown(m_storeOpen))
                 {
-                    m_storeNavigator.OpenPage();
+                    if (m_inputOverridden)
+                    {
+                        GameplaySystem.gamplayUIHandle.PromptJournalUpdateNotification();
+                    }
+                    else
+                    {
+                        GameplaySystem.gamplayUIHandle.OpenStorePage();
+                    }
                 }
             }
         }
+
+#if UNITY_EDITOR
+        [Button,HideInEditorMode]
+        private void SimulateOverride()
+        {
+            GameplaySystem.gamplayUIHandle.ShowJournalNotificationPrompt(3);
+            OverrideNewInfoNotif(3);
+        }
+#endif
     }
 }

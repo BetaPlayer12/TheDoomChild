@@ -5,6 +5,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class InputTranslator : MonoBehaviour
     {
+        public Vector2 m_mousePosition;
+        public Vector2 m_mouseDelta;
+
         public float horizontalInput;
         public float verticalInput;
         public bool crouchHeld;
@@ -13,13 +16,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool jumpHeld;
         public bool levitatePressed;
         public bool levitateHeld;
+        public bool shadowMorphPressed;
 
         public bool interactPressed;
+        public bool grabPressed;
+        public bool grabHeld;
 
         public bool slashPressed;
         public bool slashHeld;
         public bool earthShakerPressed;
         public bool whipPressed;
+        public bool skullThrowPressed;
+        public bool skullThrowReleased;
+        public bool skullThrowHeld;
 
         private PlayerInput m_input;
 
@@ -35,7 +44,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Enable()
         {
-            if(this.enabled == false)
+            if (this.enabled == false)
             {
                 Reset();
             }
@@ -45,11 +54,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnHorizontalInput(InputValue value)
         {
-            if(enabled == true)
+            if (enabled == true)
             {
                 horizontalInput = value.Get<float>();
             }
         }
+
         private void OnVerticalInput(InputValue value)
         {
             if (enabled == true)
@@ -94,6 +104,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnShadowMorph(InputValue value)
+        {
+            if (enabled == true)
+            {
+                shadowMorphPressed = value.Get<float>() == 1;
+            }
+        }
+
         private void OnSlash(InputValue value)
         {
             if (enabled == true)
@@ -134,6 +152,31 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnSkullThrow(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var inputValue = value.Get<float>() == 1;
+                if (inputValue == false)
+                {
+                    if (skullThrowHeld == true)
+                    {
+                        skullThrowReleased = true;
+                    }
+                }
+                skullThrowPressed = inputValue;
+                skullThrowHeld = inputValue;
+            }
+        }
+
+        private void OnQuickItemUse(InputValue value)
+        {
+            if (enabled == true)
+            {
+                skullThrowHeld = value.Get<float>() == 1;
+            }
+        }
+
         private void OnInteract(InputValue value)
         {
             if (enabled == true)
@@ -142,9 +185,26 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
+        private void OnGrab(InputValue value)
+        {
+            if (enabled == true)
+            {
+                var isTrue = value.Get<float>() == 1;
+                grabPressed = isTrue;
+                grabHeld = isTrue;
+            }
+        }
+
         private void Awake()
         {
             m_input = GetComponent<PlayerInput>();
+            m_mousePosition = Input.mousePosition;
+        }
+
+        private void Update()
+        {
+            m_mouseDelta = (Vector2)Input.mousePosition - m_mousePosition;
+            m_mousePosition = Input.mousePosition;
         }
 
         private void LateUpdate()
@@ -152,12 +212,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             dashPressed = false;
             jumpPressed = false;
             levitatePressed = false;
+            shadowMorphPressed = false;
 
             interactPressed = false;
+            grabPressed = false;
 
             slashPressed = false;
             earthShakerPressed = false;
             whipPressed = false;
+            skullThrowPressed = false;
+            skullThrowReleased = false;
         }
 
         private void Reset()
@@ -170,13 +234,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
             jumpHeld = false;
             levitatePressed = false;
             levitateHeld = false;
+            shadowMorphPressed = false;
 
             interactPressed = false;
+            grabPressed = false;
+            grabHeld = false;
 
             slashPressed = false;
             slashHeld = false;
             earthShakerPressed = false;
             whipPressed = false;
+            skullThrowPressed = false;
+            skullThrowHeld = false;
+            skullThrowReleased = false;
         }
     }
 }

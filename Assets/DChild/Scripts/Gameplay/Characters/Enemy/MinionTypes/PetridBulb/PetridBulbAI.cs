@@ -199,7 +199,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.flinch1Animation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             //StartCoroutine(DeathRoutine());
-            //StopAllCoroutines();
             //m_stateHandle.OverrideState(State.Dead);
             StopAllCoroutines();
             m_stateHandle.OverrideState(State.Dead);
@@ -277,11 +276,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
             m_canShoot = false;
             m_aggroSensorGO.SetActive(false);
             m_animation.EnableRootMotion(true, false);
-            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+            m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(5f);
             m_canShoot = true;
             m_aggroSensorGO.SetActive(true);
@@ -366,11 +366,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
                 case State.Dead:
-                    //StopAllCoroutines();
                     break;
 
                 case State.Attacking:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(State.ReevaluateSituation);
 
                     StartCoroutine(AttackRoutine());
 
@@ -445,6 +444,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_canShoot = false;
             m_isDetecting = false;
+        }
+
+        public void ResetAI()
+        {
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

@@ -492,7 +492,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
                                 m_movement.Stop();
-                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                m_animation.SetAnimation(0, m_info.idleAnimation, false);
                                 m_stateHandle.SetState(State.Attacking);
                             }
                             else
@@ -547,6 +547,21 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.SetActive(false);
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(false);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
         }
     }
 }

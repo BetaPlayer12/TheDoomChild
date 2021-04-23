@@ -64,5 +64,8 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             m_name += " Crystal";
         }
 #endif
+
+        public string name => m_name;
+
     }
 }

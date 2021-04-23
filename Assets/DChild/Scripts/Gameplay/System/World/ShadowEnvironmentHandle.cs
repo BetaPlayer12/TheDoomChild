@@ -23,10 +23,10 @@ namespace DChild.Gameplay.Systems
             }
         }
 
-        private void Awake()
+        private void Start()
         {
-            GameplaySystem.world.Register(this);
             m_playerColliders = GameplaySystem.playerManager.player.character.colliders.colliders;
+            GameplaySystem.world.Register(this);
         }
     }
 }

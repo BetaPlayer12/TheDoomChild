@@ -108,7 +108,7 @@ namespace DChildEditor.Utility
                         m_info[index] = new Info(key, m_spriteToCountPair[key]);
                         index++;
                     }
-                    //m_info = m_info.OrderByDescending(x => x.count).ToArray();
+                    m_info = m_info.OrderByDescending(x => x.count).ToArray();
                     m_sortingLayers.Clear();
                     for (int i = 0; i < m_visibleRenderers.Count; i++)
                     {

@@ -53,9 +53,9 @@ namespace DChild.Gameplay.Combat
 
         private IEnumerator TemporaryInvulnerability(IPlayer player)
         {
-            player.damageableModule.SetInvulnerability(true);
+            player.damageableModule.SetInvulnerability(Invulnerability.MAX);
             yield return new WaitForWorldSeconds(m_invulnerabilityDuration);
-            player.damageableModule.SetInvulnerability(false);
+            player.damageableModule.SetInvulnerability(Invulnerability.None);
         }
 
         private IEnumerator DisableInputTemporarily(IPlayer player)

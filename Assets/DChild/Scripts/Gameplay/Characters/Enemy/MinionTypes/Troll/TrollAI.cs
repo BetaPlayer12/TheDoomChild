@@ -163,6 +163,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleSystem m_rockThrowFX;
         [SerializeField, TabGroup("AttackHitbox")]
         private GameObject m_attackHitbox;
+        [SerializeField, TabGroup("AttackHitbox")]
+        private GameObject m_armHitbox;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -217,8 +219,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_info.dirtProjectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
 
-            m_targetDistance = Vector2.Distance(m_targetInfo.position, m_throwPoint.position);
-            var dir = (m_targetInfo.position - new Vector2(m_throwPoint.position.x, m_throwPoint.position.y));
+            m_targetDistance = Vector2.Distance(m_targetInfo.position, transform.position);
+            var dir = (m_targetInfo.position - new Vector2(transform.position.x, transform.position.y));
             var h = dir.y;
             dir.y = 0;
             var dist = dir.magnitude;
@@ -277,6 +279,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            m_armHitbox.SetActive(true);
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
@@ -472,6 +475,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             Debug.Log("Punch Attack");
                             if (!m_wallSensor.isDetecting)
                             {
+                                m_armHitbox.SetActive(false);
                                 //m_animation.EnableRootMotion(true, false);
                                 m_attackHandle.ExecuteAttack(m_info.punchAttack.animation, m_info.idleAnimation);
                             }
@@ -560,6 +564,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.SetActive(false);
+        }
+
+        public void ResetAI()
+        {
+            m_selfCollider.SetActive(false);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_enablePatience = false;
+            m_stateHandle.OverrideState(State.Patrol);
+            enabled = true;
+        }
+
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
+            m_stateHandle.OverrideState(State.Patrol);
         }
     }
 }

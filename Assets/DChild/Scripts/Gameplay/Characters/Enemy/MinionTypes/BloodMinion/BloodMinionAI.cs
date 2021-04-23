@@ -390,7 +390,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_turnState = State.ReevaluateSituation;
                         m_isSubmerged = true;
                         m_animation.EnableRootMotion(true, false);
-                        m_animation.SetAnimation(0, m_info.submergeMove.animation, true).TimeScale = .5f;
+                        m_animation.SetAnimation(0, m_info.submergeMove.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.submergeMove.speed, characterInfo);
                     }
@@ -531,6 +531,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
         }
 
-
+        protected override void OnBecomePassive()
+        {
+            ResetAI();
+            m_stateHandle.OverrideState(State.Patrol);
+        }
     }
 }

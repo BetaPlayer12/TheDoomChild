@@ -27,6 +27,8 @@ namespace DChild.Gameplay.Environment
         private float m_disappearDurationTimer;
         private bool m_hasReactivePlatform;
 
+
+
         private void EnableCollider(TrackEntry trackEntry)
         {
             if (trackEntry.Animation.Name == m_disappearingPlatformData.reappearAnimation)
@@ -48,12 +50,15 @@ namespace DChild.Gameplay.Environment
                 m_animation.state.AddAnimation(0, m_disappearingPlatformData.aboutToDisappearAnimation, true, 0);
             }
         }
-        private void OnPlatformReaction(object sender, EventActionArgs eventArgs)
+        private void OnPlatformReaction(object sender, CollisionEventActionArgs eventArgs)
         {
             if (m_willDisappear == false)
             {
-                DisappearPlatform();
-                enabled = true;
+                if (eventArgs.collision.collider.TryGetComponentInParent(out Character character))
+                {
+                    DisappearPlatform();
+                    enabled = true;
+                }
             }
         }
 
@@ -89,7 +94,10 @@ namespace DChild.Gameplay.Environment
                     if (m_animation != null)
                     {
                         m_animation.state.SetAnimation(0, m_disappearingPlatformData.disappearAnimation, false);
-                        m_animation.state.AddAnimation(0, m_disappearingPlatformData.hiddenAnimation, true, 0.5f);
+                        if (m_disappearingPlatformData.hiddenAnimation != "")
+                        {
+                            m_animation.state.AddAnimation(0, m_disappearingPlatformData.hiddenAnimation, true, 0.5f);
+                        }
                     }
 
                     m_willDisappear = false;
@@ -125,7 +133,10 @@ namespace DChild.Gameplay.Environment
             //Check whether collider is coming from opposite side of effector
             if (m_hasReactivePlatform == false && collider.enabled)
             {
-                DisappearPlatform();
+                if (collider.collider.TryGetComponentInParent(out Character character))
+                {
+                    DisappearPlatform();
+                }
             }
         }
     }

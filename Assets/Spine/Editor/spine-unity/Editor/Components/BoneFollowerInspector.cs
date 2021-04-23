@@ -93,7 +93,7 @@ namespace Spine.Unity.Editor {
 
 			if (!targetBoneFollower.valid || needsReset) {
 				targetBoneFollower.Initialize();
-				targetBoneFollower.LateUpdate();
+				targetBoneFollower.UpdateBone();
 				needsReset = false;
 				SceneView.RepaintAll();
 			}
@@ -126,7 +126,7 @@ namespace Spine.Unity.Editor {
 					foreach (var o in targets) {
 						var bf = (BoneFollower)o;
 						bf.Initialize();
-						bf.LateUpdate();
+						bf.UpdateBone();
 					}
 					SceneView.RepaintAll();
 				}
@@ -139,7 +139,7 @@ namespace Spine.Unity.Editor {
 
 			if (needsReset && Event.current.type == EventType.Layout) {
 				targetBoneFollower.Initialize();
-				targetBoneFollower.LateUpdate();
+				targetBoneFollower.UpdateBone();
 				needsReset = false;
 				SceneView.RepaintAll();
 			}

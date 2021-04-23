@@ -403,7 +403,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void MoveToAttackPosition(Attack attack/*, Vector2 target*/)
         {
-            //StopAllCoroutines();
             //Debug.Log("Triple Attack!");
             switch (attack)
             {
@@ -507,7 +506,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //CustomTurn();
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             while (Vector2.Distance(transform.position, m_tripleDronePoint.position) > 1.5)
             {
                 if (IsFacingTarget())
@@ -531,7 +530,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             //m_stateHandle.SetState(State.ReevaluateSituation);
@@ -546,7 +545,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.animationState.TimeScale = 1f;
             //m_turnState = State.Phasing;
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.EnableRootMotion(false, false);
             if (m_currentPhaseIndex >= 3 && !m_isFinalPhase)
             {
@@ -581,7 +580,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_flinchHandle.gameObject.SetActive(false);
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.flinchFallStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchFallStartAnimation);
             var target = new Vector2(transform.position.x, m_tripleDronePoint.position.y);
@@ -593,7 +592,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.fallRecoverAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.fallRecoverAnimation);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -651,7 +650,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.phase2AtkChargeStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase2AtkChargeStartAnimation);
             m_animation.DisableRootMotion();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_bodyCollider.SetActive(false);
             m_QBStingerChargeFX.gameObject.SetActive(true);
             m_QBStingerChargeFX.Play();
@@ -689,7 +688,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForSeconds(.25f);
                 transform.position = new Vector2(transform.position.x, m_targetInfo.position.y);
             }
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
 
             transform.position = m_returnPoint.position;
             m_QBStingerChargeFX.gameObject.SetActive(false);
@@ -746,7 +745,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SpearThrowRoutine()
         {
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //CustomTurn();
             var targetPos = new Vector2(transform.position.x, m_spearThrowPoint.position.y);
             while (Vector2.Distance(transform.position, targetPos) > 1.5f)
@@ -767,7 +766,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.gameObject.SetActive(true);
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.spearThrowAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spearThrowAttack.animation);
             m_flinchHandle.gameObject.SetActive(false);
@@ -779,7 +778,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator GroundStingerRecoverRoutine()
         {
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.stuckRecoverAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.stuckRecoverAnimation);
             StartCoroutine(GroundStingerRoutine());
@@ -820,7 +819,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_agent.Stop();
             //m_modelTransform.localRotation = Quaternion.Euler(Vector3.zero);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.phase4AtkStingerImpactAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase4AtkStingerImpactAnimation);
             m_animation.SetAnimation(0, m_info.stuckStateAnimation, true);
@@ -1031,6 +1030,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_attackDecider.chosenAttack.range)*/ && m_chosenAttack != m_previousAttack)
                     {
                         //m_agent.Stop();
+                        StopAllCoroutines();
                         m_movePointsGO.transform.localScale = new Vector3(UnityEngine.Random.Range(-1, 1), 1, 1);
                         m_movePointsGO.transform.localScale = new Vector3(m_movePointsGO.transform.localScale.x == 0 ? 1 : m_movePointsGO.transform.localScale.x, 1, 1);
                         m_previousAttack = m_chosenAttack;
@@ -1064,6 +1064,10 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_colliderDamageGO.SetActive(true);
+        }
+
+        protected override void OnBecomePassive()
+        {
         }
     }
 }

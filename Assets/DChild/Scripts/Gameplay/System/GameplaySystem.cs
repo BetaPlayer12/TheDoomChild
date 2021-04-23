@@ -1,4 +1,5 @@
-﻿using DChild.Configurations;
+﻿using DarkTonic.MasterAudio;
+using DChild.Configurations;
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Databases;
@@ -7,6 +8,7 @@ using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Menu;
 using DChild.Serialization;
+using Doozy.Engine;
 using Holysoft.Event;
 using System;
 using UnityEngine;
@@ -30,11 +32,15 @@ namespace DChild.Gameplay
         [SerializeField]
         private bool m_doNotTeleportPlayerOnAwake;
 
+        [SerializeField]
+        private AudioListenerPositioner m_audioListener;
+
         private GameplaySettings m_settings;
         private static GameplaySystem m_instance;
         private static CampaignSlot m_campaignToLoad;
         private static GameplayModifiers m_modifiers;
         public static GameplayModifiers modifiers => m_modifiers;
+        public static AudioListenerPositioner audioListener { get; private set; }
 
         #region Modules
         private static IGameplayActivatable[] m_activatableModules;
@@ -49,6 +55,7 @@ namespace DChild.Gameplay
         private static CampaignSerializer m_campaignSerializer;
         private static ZoneMoverHandle m_zoneMover;
         private static HealthTracker m_healthTracker;
+        private static GameplayUIHandle m_gameplayUIHandle;
 
 
         public static ICombatManager combatManager => m_combatManager;
@@ -74,6 +81,7 @@ namespace DChild.Gameplay
         public static ISimulationHandler simulationHandler => m_simulation;
         public static ILootHandler lootHandler => m_lootHandler;
         public static IHealthTracker healthTracker => m_healthTracker;
+        public static IGameplayUIHandle gamplayUIHandle => m_gameplayUIHandle;
         public static CampaignSerializer campaignSerializer => m_campaignSerializer;
         #endregion
         public static bool isGamePaused { get; private set; }
@@ -84,6 +92,8 @@ namespace DChild.Gameplay
             m_playerManager?.EnableInput();
             isGamePaused = false;
             GameSystem.SetCursorVisibility(false);
+
+            MasterAudio.UnpauseEverything();
         }
 
         public static void PauseGame()
@@ -92,10 +102,14 @@ namespace DChild.Gameplay
             m_playerManager?.DisableInput();
             isGamePaused = true;
             GameSystem.SetCursorVisibility(true);
+
+            MasterAudio.PauseEverything();
         }
 
         public static void ClearCaches()
         {
+            MasterAudio.StopEverything();
+            //MasterAudio.StopAllPlaylists();
             m_cinema?.ClearLists();
             m_healthTracker?.RemoveAllTrackers();
             m_playerManager?.ClearCache();
@@ -108,8 +122,13 @@ namespace DChild.Gameplay
             m_healthTracker?.RemoveAllTrackers();
             LoadingHandle.SetLoadType(loadType);
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);
-            m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
+            //Reload Items
             LoadingHandle.SceneDone += LoadGameDone;
+        }
+
+        public static void ReloadGame()
+        {
+            LoadGame(campaignSerializer.slot, LoadingHandle.LoadType.Force);
         }
 
         public static void SetCurrentCampaign(CampaignSlot campaignSlot)
@@ -124,10 +143,26 @@ namespace DChild.Gameplay
             }
         }
 
+        public static void SetInputActive(bool isActive)
+        {
+            if (isActive)
+            {
+                m_playerManager?.gameplayInput.Enable();
+            }
+            else
+            {
+                m_playerManager?.gameplayInput.Disable();
+            }
+        }
+
         private static void LoadGameDone(object sender, EventActionArgs eventArgs)
         {
+
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_campaignSerializer.Load();
+            m_gameplayUIHandle.ResetGameplayUI();
+            m_playerManager.player.healableModule.Heal(999999);
+            m_playerManager.player.controller.Enable();
             LoadingHandle.SceneDone -= LoadGameDone;
         }
 
@@ -143,6 +178,7 @@ namespace DChild.Gameplay
             AssignModule(out m_zoneMover);
             AssignModule(out m_campaignSerializer);
             AssignModule(out m_healthTracker);
+            AssignModule(out m_gameplayUIHandle);
         }
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
@@ -196,6 +232,7 @@ namespace DChild.Gameplay
         private void Start()
         {
             //m_cinema.SetTrackingTarget(m_player.model);
+            audioListener = m_audioListener;
             m_settings = GameSystem.settings?.gameplay ?? null;
             m_modifiers = new GameplayModifiers();
             isGamePaused = false;

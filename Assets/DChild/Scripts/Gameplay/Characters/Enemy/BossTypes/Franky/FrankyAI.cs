@@ -349,7 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_movement.Stop();
-            m_hitbox.SetInvulnerability(true);
+            m_hitbox.SetInvulnerability(Invulnerability.MAX);
             yield return new WaitForSeconds(2);
             m_animation.SetAnimation(0, m_info.move.animation, true);
             yield return new WaitForSeconds(5);
@@ -357,17 +357,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.introAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.roarAnimation, false);
             yield return new WaitForSeconds(3.9f);
-            m_hitbox.SetInvulnerability(false);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
             StartCoroutine(LeapAttackRoutine(6));
             yield return null;
@@ -997,6 +997,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stickToGround = false;
             //m_currentCD = 0;
+        }
+
+        protected override void OnBecomePassive()
+        {
         }
     }
 }

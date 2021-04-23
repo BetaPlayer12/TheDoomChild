@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1128658187562125205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861839597580024172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 1
 --- !u!61 &566719122696298192
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -90,21 +103,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 566719122696298192}
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
---- !u!114 &3969861733758454642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5266358408778875753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_maxHealth: 1
 --- !u!212 &3376091919492832004
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -162,10 +162,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 631825597494281124, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_TagString
+      value: Hitbox
+      objectReference: {fileID: 0}
     - target: {fileID: 1401469137337768767, guid: f0d6278d2f66d5344b76dacbcf596621,
         type: 3}
       propertyPath: m_Name
       value: Rock(v3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1401469137337768767, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1401469137337768767, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2328408926331466638, guid: f0d6278d2f66d5344b76dacbcf596621,
         type: 3}
@@ -226,7 +241,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_health
       value: 
-      objectReference: {fileID: 3969861733758454642}
+      objectReference: {fileID: -1128658187562125205}
+    - target: {fileID: 5008636110333182838, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6919461856735510106, guid: f0d6278d2f66d5344b76dacbcf596621,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -250,9 +270,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0d6278d2f66d5344b76dacbcf596621, type: 3}
---- !u!1 &5266358408778875753 stripped
+--- !u!1 &861839597580024172 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 5878050045173408058, guid: f0d6278d2f66d5344b76dacbcf596621,
+  m_CorrespondingSourceObject: {fileID: 1401469137337768767, guid: f0d6278d2f66d5344b76dacbcf596621,
     type: 3}
   m_PrefabInstance: {fileID: 1767339930011279955}
   m_PrefabAsset: {fileID: 0}

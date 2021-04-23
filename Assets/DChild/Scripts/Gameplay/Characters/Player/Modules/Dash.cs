@@ -1,12 +1,12 @@
-﻿using DChild.Gameplay.Characters.Players.Behaviour;
+﻿
+using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
-
-    public class Dash : MonoBehaviour, IResettableBehaviour, ICancellableBehaviour, IComplexCharacterModule
+    public class Dash : MonoBehaviour, IResettableBehaviour, ICancellableBehaviour, IComplexCharacterModule, IDash
     {
         [SerializeField, MinValue(0)]
         private float m_velocity;
@@ -18,6 +18,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_cooldownTimer;
         private float m_durationTimer;
 
+        private IPlayerModifer m_modifier;
         private Character m_character;
         private Rigidbody2D m_rigidbody;
         private IDashState m_state;
@@ -26,6 +27,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Initialize(ComplexCharacterInfo info)
         {
+            m_modifier = info.modifier;
             m_character = info.character;
             m_rigidbody = info.rigidbody;
             m_state = info.state;
@@ -53,10 +55,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        public void ResetCooldownTimer()
-        {
-            m_cooldownTimer = m_cooldown;
-        }
+        public void ResetCooldownTimer() => m_cooldownTimer = m_cooldown * m_modifier.Get(PlayerModifier.Cooldown_Dash);
 
         public void HandleDurationTimer() => m_durationTimer -= GameplaySystem.time.deltaTime;
 
@@ -74,7 +73,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             var direction = (float)m_character.facing;
             m_rigidbody.velocity = Vector2.zero;
-            m_rigidbody.AddForce(new Vector2(direction * m_velocity, 0), ForceMode2D.Impulse);
+            m_rigidbody.AddForce(new Vector2(direction * m_velocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
 
         }
 

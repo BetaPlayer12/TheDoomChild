@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 namespace DChild.Gameplay.Inventories
 {
-
     public interface IItemContainer
     {
         bool restrictSize { get; }
