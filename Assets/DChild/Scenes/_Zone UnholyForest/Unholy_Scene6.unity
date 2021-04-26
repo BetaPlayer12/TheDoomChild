@@ -2330,31 +2330,13 @@ Transform:
   m_LocalPosition: {x: -233.6, y: -63.5, z: 0}
   m_LocalScale: {x: 1.0000004, y: 1.0000004, z: 1}
   m_Children:
-  - {fileID: 928296683}
-  - {fileID: 1742295459}
-  - {fileID: 276875386}
-  - {fileID: 2124447680}
-  - {fileID: 607639968}
-  - {fileID: 1363365049}
-  - {fileID: 348782904}
-  - {fileID: 542039085}
   - {fileID: 758279962}
   - {fileID: 96634429}
-  - {fileID: 244905586}
   - {fileID: 128743112}
-  - {fileID: 1072848145}
-  - {fileID: 1133914297}
-  - {fileID: 187405015}
-  - {fileID: 1827412076}
-  - {fileID: 1883150832}
-  - {fileID: 1450924002}
-  - {fileID: 1740885302}
+  - {fileID: 268616750}
   - {fileID: 1816459556}
   - {fileID: 773783510}
   - {fileID: 1982500713}
-  - {fileID: 2066501613}
-  - {fileID: 767989882}
-  - {fileID: 268616750}
   - {fileID: 1446064349}
   m_Father: {fileID: 559048520}
   m_RootOrder: 45
@@ -4395,7 +4377,7 @@ GameObject:
   - component: {fileID: 96634429}
   - component: {fileID: 96634430}
   m_Layer: 0
-  m_Name: fg plant02 (13)
+  m_Name: Tree_Trunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4413,7 +4395,7 @@ Transform:
   m_LocalScale: {x: 1.8779507, y: 1.8779507, z: 1.87795}
   m_Children: []
   m_Father: {fileID: 59239339}
-  m_RootOrder: 9
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &96634430
 SpriteRenderer:
@@ -6514,7 +6496,7 @@ GameObject:
   - component: {fileID: 128743112}
   - component: {fileID: 128743113}
   m_Layer: 0
-  m_Name: fg plant02 (15)
+  m_Name: FG_Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6528,11 +6510,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 128743111}
   m_LocalRotation: {x: 0, y: -0, z: 0.99409217, w: -0.10853896}
-  m_LocalPosition: {x: -437.00012, y: 36.000008, z: -25}
+  m_LocalPosition: {x: -437.00012, y: 36, z: -25}
   m_LocalScale: {x: 2.9324565, y: 2.9324565, z: 2.932454}
   m_Children: []
   m_Father: {fileID: 59239339}
-  m_RootOrder: 11
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -10.741}
 --- !u!212 &128743113
 SpriteRenderer:
@@ -7222,7 +7204,9 @@ GameObject:
   m_Component:
   - component: {fileID: 139246019}
   - component: {fileID: 139246021}
+  - component: {fileID: 139246023}
   - component: {fileID: 139246020}
+  - component: {fileID: 139246022}
   m_Layer: 0
   m_Name: EditorOnly
   m_TagString: EditorOnly
@@ -7273,6 +7257,1287 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f55d93ec9c8534c4687dbce7e3f9044b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &139246022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139246018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19a76f19b7a5da046a80ff5916e0cb5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 21300000, guid: fac7c0a2d2d2c2442a6f702783371536, type: 3}
+    - {fileID: 21300000, guid: ad9a0425ab309db4e8850e5613e0e776, type: 3}
+    - {fileID: 2100000, guid: c6c1c77e38e18254ba61f6812c456599, type: 2}
+    - {fileID: 21300000, guid: 0e69663911f59924d87d7607fed5d358, type: 3}
+    - {fileID: 21300000, guid: bfaad375c2985924196b678c6215a892, type: 3}
+    - {fileID: 2100000, guid: 25da182f51c13a242ad4c09082d37970, type: 2}
+    - {fileID: 21300000, guid: 68cb14bba381f0148b0efc0ef05c776b, type: 3}
+    - {fileID: 21300000, guid: b065f93cbaae36d4a8894835c6c62661, type: 3}
+    - {fileID: 2100000, guid: 8553076c30394d843bdb8a95cda47477, type: 2}
+    - {fileID: 21300000, guid: 1619a6a2544f9ac47a8ada1c738e2a0e, type: 3}
+    - {fileID: 21300000, guid: 1fed7844b608f964abf62fa4f4e618cd, type: 3}
+    - {fileID: 2100000, guid: 5fb788705b3d2c040ab4e543d4638464, type: 2}
+    - {fileID: 21300000, guid: aa681482c6d753a44a000ba38a62195e, type: 3}
+    - {fileID: 21300000, guid: 9a9be078273b3384f9c14740ee7ce52e, type: 3}
+    - {fileID: 21300000, guid: 328a4994a9782b14c86e78d1bcba7b72, type: 3}
+    - {fileID: 21300000, guid: 82cbdb629a9b2b64a9fdf1dd9bc7ca11, type: 3}
+    - {fileID: 21300000, guid: 3fbfd3ea223c6c1479aabd2fb22a7901, type: 3}
+    - {fileID: 21300000, guid: dfce1d6f156835a40bad938777b8c3c2, type: 3}
+    - {fileID: 21300000, guid: e5bdd11b5766ecc4688b113c3e3f024e, type: 3}
+    - {fileID: 21300000, guid: a72e435bb785d1f45b4698df0b9846f5, type: 3}
+    - {fileID: 21300000, guid: 05f1655894d85c6479e4be3f11225edd, type: 3}
+    - {fileID: 21300000, guid: 2fe2c88b7b8e5544ab3443eb07a3013f, type: 3}
+    - {fileID: 21300000, guid: d787fd9d6a3057143a5589ea67a749be, type: 3}
+    - {fileID: 21300000, guid: 528f7446d2b4ba04c929e0c8ffa11047, type: 3}
+    - {fileID: 21300000, guid: 01f591412f6f55947b695e410399190f, type: 3}
+    - {fileID: 21300000, guid: 9e078cc3de2948544abbc3a0040addd5, type: 3}
+    - {fileID: 21300000, guid: 6386dfa4c1cdffa4da3ec87ebb79bc08, type: 3}
+    - {fileID: 21300000, guid: 2d72921264a2fe34db3c86a8bcf2ed6b, type: 3}
+    - {fileID: 21300000, guid: d65a6bb948ef1b64c8d55f758273f2ac, type: 3}
+    - {fileID: 21300000, guid: 741f672aba814dd48810a15325c1ff7a, type: 3}
+    - {fileID: 21300000, guid: d52d30e9b72f1bf48a99488ffbd5f685, type: 3}
+    - {fileID: 21300000, guid: bb966d2d93a93504385842a270131823, type: 3}
+    - {fileID: 21300000, guid: c9fcf61aa833d67479a8ad043639ab71, type: 3}
+    - {fileID: 21300000, guid: 5432474040882e14e8fba5dc3cf55418, type: 3}
+    - {fileID: 21300000, guid: 603acc2ba48efbd4d9887c6967f60173, type: 3}
+    - {fileID: 21300000, guid: e0431c7db2440944a88cdab7f6c722e9, type: 3}
+    - {fileID: 21300000, guid: dba2c403ee196564ab0d24ce5e257ce5, type: 3}
+    - {fileID: 21300000, guid: a33866f86785cd747a6d884b464a391a, type: 3}
+    - {fileID: 21300000, guid: 6a177a96b3bcd2b4db00f1acd32358e2, type: 3}
+    - {fileID: 21300000, guid: 82377f2bb46fa9d4c99755dac33a6926, type: 3}
+    - {fileID: 21300000, guid: 596f3340283998a4296c6ad407164158, type: 3}
+    - {fileID: 21300000, guid: 7866d0864936cbe479d2c9530de42f23, type: 3}
+    - {fileID: 21300000, guid: 2db0d5c0b704cc449bf0db862972c8e8, type: 3}
+    - {fileID: 21300000, guid: d70224454b59ac849ae4153f3ac317c7, type: 3}
+    - {fileID: 21300000, guid: 2ec618d424426ab4cb32995e516c06a2, type: 3}
+    - {fileID: 21300000, guid: 98b02316320771e4b84be0c8a648b83d, type: 3}
+    - {fileID: 21300000, guid: 916ec0385e5e6e74c943df44b191cfc3, type: 3}
+    - {fileID: 21300000, guid: b756cc014fe66f34ea24280820047acf, type: 3}
+    - {fileID: 21300000, guid: 99c8339806e845a4bbb1ebea7113b3d6, type: 3}
+    - {fileID: 21300000, guid: 4354f3c0ec3260844a6913377011b7f2, type: 3}
+    - {fileID: 21300000, guid: 07403eeaa774e3644900aedf9c7b03ed, type: 3}
+    - {fileID: 21300000, guid: edf2d2917140d5c4895f9413f9b8f227, type: 3}
+    - {fileID: 21300000, guid: e51c615e15dc7cf4ea1d8f43e60eb74f, type: 3}
+    - {fileID: 21300000, guid: bbed8347cb89fff49aa9bc5aeb64e692, type: 3}
+    - {fileID: 21300000, guid: 3d42982fac643da46937882067104190, type: 3}
+    - {fileID: 21300000, guid: 294b3373092c2354483550afabb80c00, type: 3}
+    - {fileID: 21300000, guid: ed669051faf8a4848af39e89833ab43a, type: 3}
+    - {fileID: 21300000, guid: 6356df31d430d464eb7276c20f977956, type: 3}
+    - {fileID: 21300000, guid: d57c74eec8e0b4243865399508f508e7, type: 3}
+    - {fileID: 21300000, guid: c38c92f37aaed734aa6445328f663cb5, type: 3}
+    - {fileID: 21300000, guid: cfc8a64ea58b07847aacbd6999a6da80, type: 3}
+    - {fileID: 21300000, guid: 2be730a408844274f9086be54157e64e, type: 3}
+    - {fileID: 21300000, guid: 352b781c696d0f648b91bc9c0e4131db, type: 3}
+    - {fileID: 21300000, guid: 6bf39eb6006273744bbf171149e3adf3, type: 3}
+    - {fileID: 21300000, guid: 95c8c48efe20b7b46a8497a6dce163da, type: 3}
+    - {fileID: 21300000, guid: 51e1bb9dc83f0554fbb106e36fd4c5a5, type: 3}
+    - {fileID: 21300000, guid: cf83a927c47508b4f9eb7ea91dc88958, type: 3}
+    - {fileID: 21300000, guid: 39f84b2c96b7fc7438a12b7f539ead2b, type: 3}
+    - {fileID: 21300000, guid: bc4337a47038a8043933101ffed0e518, type: 3}
+    - {fileID: 21300000, guid: 9fc5755c91db6d742b4b10f8c83aee6e, type: 3}
+    - {fileID: 21300000, guid: 7a0dec93e119136479d59dfd6f5ddc25, type: 3}
+    - {fileID: 21300000, guid: 0d23ca48de7f04649b52c27a6bcf4efb, type: 3}
+    - {fileID: 21300000, guid: 24607115a91855346954fe4224c0e945, type: 3}
+    - {fileID: 21300000, guid: ed70e89eb20c6b846bc0d56532c2b0ad, type: 3}
+    - {fileID: 21300000, guid: 236031250d5c99745822c83a8e69d5c6, type: 3}
+    - {fileID: 21300000, guid: e47409e24ec9cb944ad48a5faf28f07f, type: 3}
+    - {fileID: 21300000, guid: 687197fa1f69ae046bc3de51b3f99c9a, type: 3}
+    - {fileID: 21300000, guid: 60c9209c8f108d343b72435d47d5c063, type: 3}
+    - {fileID: 21300000, guid: defe4bc9cd26cd14898bbd9c898774fd, type: 3}
+    - {fileID: 21300000, guid: c643eb59d9a26784f84c3e31fa306ea6, type: 3}
+    - {fileID: 21300000, guid: 3a4c9550d34d66f409b164775da180b7, type: 3}
+    - {fileID: 21300000, guid: a037209ad65c2194293a2454fe7bc521, type: 3}
+    - {fileID: 21300000, guid: f20a82cafcdbcd942b2c637f7205f38b, type: 3}
+    - {fileID: 21300000, guid: 313b50566f753ba43a0d243a4cae21ba, type: 3}
+    - {fileID: 21300000, guid: 4b34d469cc0046a44901c7f46d830eb8, type: 3}
+    - {fileID: 21300000, guid: c0f88fa679708ee4caeabf39361dc3a7, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_stuffToDo
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[UnityEngine.Sprite, UnityEngine.CoreModule],[DChildDebug.Gameplay.Environment.FoilageReplacement+Command,
+        Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[UnityEngine.Sprite,
+        UnityEngine.CoreModule]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 42
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 2|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 1
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 3
+    - Name: $v
+      Entry: 7
+      Data: 3|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 4
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 6
+    - Name: $v
+      Entry: 7
+      Data: 4|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 7
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 9
+    - Name: $v
+      Entry: 7
+      Data: 5|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 10
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 12
+    - Name: $v
+      Entry: 7
+      Data: 6|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 13
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 14
+    - Name: $v
+      Entry: 7
+      Data: 7|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 15
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 16
+    - Name: $v
+      Entry: 7
+      Data: 8|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 17
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 18
+    - Name: $v
+      Entry: 7
+      Data: 9|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 19
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 20
+    - Name: $v
+      Entry: 7
+      Data: 10|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 21
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 22
+    - Name: $v
+      Entry: 7
+      Data: 11|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 23
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 24
+    - Name: $v
+      Entry: 7
+      Data: 12|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 25
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 26
+    - Name: $v
+      Entry: 7
+      Data: 13|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 27
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 28
+    - Name: $v
+      Entry: 7
+      Data: 14|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 29
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 30
+    - Name: $v
+      Entry: 7
+      Data: 15|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 31
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 32
+    - Name: $v
+      Entry: 7
+      Data: 16|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 33
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 34
+    - Name: $v
+      Entry: 7
+      Data: 17|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 35
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 36
+    - Name: $v
+      Entry: 7
+      Data: 18|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 37
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 38
+    - Name: $v
+      Entry: 7
+      Data: 19|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 39
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 40
+    - Name: $v
+      Entry: 7
+      Data: 20|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 31
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 41
+    - Name: $v
+      Entry: 7
+      Data: 21|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 33
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 42
+    - Name: $v
+      Entry: 7
+      Data: 22|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 43
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 44
+    - Name: $v
+      Entry: 7
+      Data: 23|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 45
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 46
+    - Name: $v
+      Entry: 7
+      Data: 24|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 47
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 48
+    - Name: $v
+      Entry: 7
+      Data: 25|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 49
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 50
+    - Name: $v
+      Entry: 7
+      Data: 26|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 51
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 52
+    - Name: $v
+      Entry: 7
+      Data: 27|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 53
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 54
+    - Name: $v
+      Entry: 7
+      Data: 28|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 55
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 56
+    - Name: $v
+      Entry: 7
+      Data: 29|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 57
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 58
+    - Name: $v
+      Entry: 7
+      Data: 30|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 59
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 60
+    - Name: $v
+      Entry: 7
+      Data: 31|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 61
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 62
+    - Name: $v
+      Entry: 7
+      Data: 32|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 63
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 64
+    - Name: $v
+      Entry: 7
+      Data: 33|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 65
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 66
+    - Name: $v
+      Entry: 7
+      Data: 34|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 67
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 68
+    - Name: $v
+      Entry: 7
+      Data: 35|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 69
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 70
+    - Name: $v
+      Entry: 7
+      Data: 36|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 71
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 72
+    - Name: $v
+      Entry: 7
+      Data: 37|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 73
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 74
+    - Name: $v
+      Entry: 7
+      Data: 38|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 75
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 76
+    - Name: $v
+      Entry: 7
+      Data: 39|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 77
+    - Name: m_material
+      Entry: 10
+      Data: 5
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 78
+    - Name: $v
+      Entry: 7
+      Data: 40|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 79
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 80
+    - Name: $v
+      Entry: 7
+      Data: 41|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 81
+    - Name: m_material
+      Entry: 10
+      Data: 11
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 82
+    - Name: $v
+      Entry: 7
+      Data: 42|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 83
+    - Name: m_material
+      Entry: 10
+      Data: 2
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 10
+      Data: 84
+    - Name: $v
+      Entry: 7
+      Data: 43|DChildDebug.Gameplay.Environment.FoilageReplacement+Command, Assembly-CSharp
+    - Name: m_replaceWith
+      Entry: 10
+      Data: 85
+    - Name: m_material
+      Entry: 10
+      Data: 8
+    - Name: m_reorentationOffset
+      Entry: 4
+      Data: 270
+    - Name: m_updateFlip
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  m_scope: {fileID: 1318127860}
+--- !u!114 &139246023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139246018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24ebaa4f25d64943ac5056df0cce9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_scope: {fileID: 1318127860}
+  m_includeChildrenOfChildren: 0
+  m_stringFilterType: 2
+  m_filter: GameObject
+  m_isCaseSensitive: 1
+  m_prefix: Foreground_Plant
+  m_startingIndex: 1
 --- !u!1 &140019970
 GameObject:
   m_ObjectHideFlags: 0
@@ -9109,7 +10374,7 @@ GameObject:
   - component: {fileID: 187405015}
   - component: {fileID: 187405016}
   m_Layer: 0
-  m_Name: fg plant02 (18)
+  m_Name: Foreground_Plant (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9122,12 +10387,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 187405014}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -389.00015, y: 24.00001, z: -12}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: 0, y: 0, z: 0.57357645, w: 0.81915206}
+  m_LocalPosition: {x: 154.5039, y: -99.17409, z: -12}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 14
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &187405016
 SpriteRenderer:
@@ -9147,7 +10412,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 77d98e441f91f9a48b889c89cf161ccd, type: 2}
+  - {fileID: 2100000, guid: 8553076c30394d843bdb8a95cda47477, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9168,7 +10433,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 75
-  m_Sprite: {fileID: 21300000, guid: 328a4994a9782b14c86e78d1bcba7b72, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 82cbdb629a9b2b64a9fdf1dd9bc7ca11, type: 3}
   m_Color: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -12704,7 +13969,7 @@ GameObject:
   - component: {fileID: 244905586}
   - component: {fileID: 244905587}
   m_Layer: 0
-  m_Name: fg plant02 (14)
+  m_Name: Foreground_Plant (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12717,12 +13982,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 244905585}
-  m_LocalRotation: {x: 0, y: -0, z: 0.99409217, w: -0.10853896}
-  m_LocalPosition: {x: -429.00012, y: 17.000006, z: -22}
-  m_LocalScale: {x: 2.3223493, y: 2.3223493, z: 2.3223476}
+  m_LocalRotation: {x: -0, y: -0, z: 0.09359463, w: 0.9956104}
+  m_LocalPosition: {x: 194.69608, y: -93.37877, z: -22}
+  m_LocalScale: {x: 2.3223505, y: 2.3223505, z: 2.3223476}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 10
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -10.741}
 --- !u!212 &244905587
 SpriteRenderer:
@@ -12742,7 +14007,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ca9148f4e72c60b4fa980d247004058b, type: 2}
+  - {fileID: 2100000, guid: 5fb788705b3d2c040ab4e543d4638464, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13925,7 +15190,7 @@ GameObject:
   - component: {fileID: 268616750}
   - component: {fileID: 268616751}
   m_Layer: 0
-  m_Name: fg plant02 (28)
+  m_Name: FG_Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13943,7 +15208,7 @@ Transform:
   m_LocalScale: {x: 1.8779507, y: 1.8779507, z: 1.87795}
   m_Children: []
   m_Father: {fileID: 59239339}
-  m_RootOrder: 24
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &268616751
 SpriteRenderer:
@@ -14392,7 +15657,7 @@ GameObject:
   - component: {fileID: 276875386}
   - component: {fileID: 276875387}
   m_Layer: 0
-  m_Name: fg plant02 (2)
+  m_Name: Foreground_Plant (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14405,11 +15670,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 276875385}
-  m_LocalRotation: {x: 0, y: -0, z: 0.99438864, w: -0.105789214}
-  m_LocalPosition: {x: -501.00015, y: 18.000002, z: -10}
-  m_LocalScale: {x: 2.6450014, y: 2.6450014, z: 2.645}
+  m_LocalRotation: {x: 0, y: 0, z: 0.57357645, w: 0.81915206}
+  m_LocalPosition: {x: 266.63364, y: -96.54106, z: -10}
+  m_LocalScale: {x: 2.6450036, y: 2.6450036, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
+  m_Father: {fileID: 1318127861}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -10.424001}
 --- !u!212 &276875387
@@ -14430,7 +15695,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f2ae6503368526746887846a831fa1d4, type: 2}
+  - {fileID: 2100000, guid: 25da182f51c13a242ad4c09082d37970, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14451,7 +15716,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 73
-  m_Sprite: {fileID: 21300000, guid: 05f1655894d85c6479e4be3f11225edd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2fe2c88b7b8e5544ab3443eb07a3013f, type: 3}
   m_Color: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -15291,7 +16556,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 0ce8f07ca9bdb6d49a20af85cd0a1e11, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -18730,7 +19995,7 @@ GameObject:
   - component: {fileID: 348782904}
   - component: {fileID: 348782905}
   m_Layer: 0
-  m_Name: fg plant02 (10)
+  m_Name: Foreground_Plant (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18743,11 +20008,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348782903}
-  m_LocalRotation: {x: 0, y: -0, z: 0.99438864, w: -0.105789214}
-  m_LocalPosition: {x: -486.00018, y: 22.000008, z: -10}
-  m_LocalScale: {x: 2.6450014, y: 2.6450014, z: 2.645}
+  m_LocalRotation: {x: 0, y: 0, z: 0.57357645, w: 0.81915206}
+  m_LocalPosition: {x: 251.5203, y: -100.0887, z: -10}
+  m_LocalScale: {x: 2.6450036, y: 2.6450036, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
+  m_Father: {fileID: 1318127861}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -10.424001}
 --- !u!212 &348782905
@@ -18768,7 +20033,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f2ae6503368526746887846a831fa1d4, type: 2}
+  - {fileID: 2100000, guid: 25da182f51c13a242ad4c09082d37970, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -18789,7 +20054,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 73
-  m_Sprite: {fileID: 21300000, guid: 05f1655894d85c6479e4be3f11225edd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2fe2c88b7b8e5544ab3443eb07a3013f, type: 3}
   m_Color: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -31426,7 +32691,7 @@ GameObject:
   - component: {fileID: 542039085}
   - component: {fileID: 542039086}
   m_Layer: 0
-  m_Name: fg plant02 (11)
+  m_Name: Foreground_Plant (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31439,11 +32704,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542039084}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -465.0001, y: 20.000008, z: -10.5}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 230.58969, y: -97.45879, z: -10.5}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
+  m_Father: {fileID: 1318127861}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &542039086
@@ -31464,7 +32729,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f84b82d7e0f44fe47ae530fe715306a6, type: 2}
+  - {fileID: 2100000, guid: 8553076c30394d843bdb8a95cda47477, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -31739,6 +33004,7 @@ Transform:
   - {fileID: 206143932}
   - {fileID: 1025421020}
   - {fileID: 899628564}
+  - {fileID: 1318127861}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -36519,7 +37785,7 @@ GameObject:
   - component: {fileID: 607639968}
   - component: {fileID: 607639969}
   m_Layer: 0
-  m_Name: fg plant02 (8)
+  m_Name: Foreground_Plant (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36532,11 +37798,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607639967}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -483.00012, y: 20.000008, z: -11}
-  m_LocalScale: {x: 2.0049107, y: 2.0049107, z: 2.00491}
+  m_LocalRotation: {x: 0, y: 0, z: 0.57357645, w: 0.81915206}
+  m_LocalPosition: {x: 248.58163, y: -97.99948, z: -11}
+  m_LocalScale: {x: 2.0049121, y: 2.0049121, z: 2.00491}
   m_Children: []
-  m_Father: {fileID: 59239339}
+  m_Father: {fileID: 1318127861}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &607639969
@@ -36557,7 +37823,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ab9e31ab42e12994c95521251b0cfdda, type: 2}
+  - {fileID: 2100000, guid: 5fb788705b3d2c040ab4e543d4638464, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -36578,7 +37844,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 70
-  m_Sprite: {fileID: 21300000, guid: cfc8a64ea58b07847aacbd6999a6da80, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2be730a408844274f9086be54157e64e, type: 3}
   m_Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -44091,7 +45357,7 @@ PrefabInstance:
     - target: {fileID: 9185422780870033395, guid: 3e73a45a4d3989b4b980b2e547419014,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9185422780870033395, guid: 3e73a45a4d3989b4b980b2e547419014,
         type: 3}
@@ -44807,7 +46073,7 @@ GameObject:
   - component: {fileID: 767989882}
   - component: {fileID: 767989883}
   m_Layer: 0
-  m_Name: fg plant02 (27)
+  m_Name: Foreground_Plant (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44820,13 +46086,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767989881}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -363.0001, y: 29.00001, z: -15}
-  m_LocalScale: {x: 2.9888508, y: 2.9888508, z: 2.9888499}
+  m_LocalRotation: {x: -0, y: -0, z: 0.66061246, w: 0.75072706}
+  m_LocalPosition: {x: 128.36533, y: -101.5, z: -15}
+  m_LocalScale: {x: 2.9888527, y: 2.9888527, z: 2.9888499}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 23
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 82.693}
 --- !u!212 &767989883
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -44845,7 +46111,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 5fb788705b3d2c040ab4e543d4638464, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -44866,7 +46132,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 85
-  m_Sprite: {fileID: 21300000, guid: 352b781c696d0f648b91bc9c0e4131db, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6bf39eb6006273744bbf171149e3adf3, type: 3}
   m_Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -45131,7 +46397,7 @@ GameObject:
   - component: {fileID: 773783510}
   - component: {fileID: 773783511}
   m_Layer: 0
-  m_Name: fg plant02 (24)
+  m_Name: Log
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45149,7 +46415,7 @@ Transform:
   m_LocalScale: {x: 1.8779507, y: 1.8779507, z: 1.87795}
   m_Children: []
   m_Father: {fileID: 59239339}
-  m_RootOrder: 20
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &773783511
 SpriteRenderer:
@@ -51046,7 +52312,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873914891}
   m_LocalRotation: {x: -0, y: -0, z: -0.08643198, w: 0.99625784}
-  m_LocalPosition: {x: 412.59998, y: -100.8, z: -2}
+  m_LocalPosition: {x: 412.59998, y: -100.8, z: 0}
   m_LocalScale: {x: 1.0450537, y: 1.0450537, z: 1.0450537}
   m_Children: []
   m_Father: {fileID: 463141647}
@@ -54763,7 +56029,7 @@ GameObject:
   - component: {fileID: 928296683}
   - component: {fileID: 928296684}
   m_Layer: 0
-  m_Name: fg plant02
+  m_Name: Foreground_Plant (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54776,11 +56042,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 928296682}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -515.00024, y: 16.00001, z: -11}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: 0, y: 0, z: 0.57357645, w: 0.81915206}
+  m_LocalPosition: {x: 280.68753, y: -94.96252, z: -11}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
+  m_Father: {fileID: 1318127861}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &928296684
@@ -54801,7 +56067,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8485f7abd5619e4419590a75589763f3, type: 2}
+  - {fileID: 2100000, guid: 5fb788705b3d2c040ab4e543d4638464, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -54822,7 +56088,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 70
-  m_Sprite: {fileID: 21300000, guid: cfc8a64ea58b07847aacbd6999a6da80, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2be730a408844274f9086be54157e64e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -63205,7 +64471,7 @@ GameObject:
   - component: {fileID: 1072848145}
   - component: {fileID: 1072848146}
   m_Layer: 0
-  m_Name: fg plant02 (16)
+  m_Name: Foreground_Plant (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63218,12 +64484,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1072848144}
-  m_LocalRotation: {x: -0, y: -0, z: 0.99786156, w: 0.065364}
-  m_LocalPosition: {x: -448.00012, y: 17.000006, z: -22}
-  m_LocalScale: {x: 2.8512459, y: 2.014466, z: 3.0991764}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7616332, w: 0.64800835}
+  m_LocalPosition: {x: 213.68753, y: -93.94949, z: -22}
+  m_LocalScale: {x: 2.8512483, y: 2.0144675, z: 3.0991764}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 12
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 9.217}
 --- !u!212 &1072848146
 SpriteRenderer:
@@ -63243,7 +64509,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a4046b874aba911469e63d47fbe36801, type: 2}
+  - {fileID: 2100000, guid: 5fb788705b3d2c040ab4e543d4638464, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -63264,7 +64530,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 92
-  m_Sprite: {fileID: 21300000, guid: ed669051faf8a4848af39e89833ab43a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6356df31d430d464eb7276c20f977956, type: 3}
   m_Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -67100,7 +68366,7 @@ GameObject:
   - component: {fileID: 1133914297}
   - component: {fileID: 1133914298}
   m_Layer: 0
-  m_Name: fg plant02 (17)
+  m_Name: Foreground_Plant (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67113,12 +68379,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1133914296}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -400.00015, y: 22.000004, z: -11}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: -0.7071068}
+  m_LocalPosition: {x: 165.55905, y: -97.5054, z: -11}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 13
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1133914298
 SpriteRenderer:
@@ -67138,7 +68404,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f2ae6503368526746887846a831fa1d4, type: 2}
+  - {fileID: 2100000, guid: 5fb788705b3d2c040ab4e543d4638464, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -67159,7 +68425,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 74
-  m_Sprite: {fileID: 21300000, guid: cfc8a64ea58b07847aacbd6999a6da80, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2be730a408844274f9086be54157e64e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -76844,6 +78110,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1318127860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1318127861}
+  m_Layer: 8
+  m_Name: Foreground_Vegetation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1318127861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318127860}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 928296683}
+  - {fileID: 1742295459}
+  - {fileID: 276875386}
+  - {fileID: 2124447680}
+  - {fileID: 607639968}
+  - {fileID: 1363365049}
+  - {fileID: 348782904}
+  - {fileID: 542039085}
+  - {fileID: 244905586}
+  - {fileID: 1072848145}
+  - {fileID: 1133914297}
+  - {fileID: 187405015}
+  - {fileID: 1827412076}
+  - {fileID: 1883150832}
+  - {fileID: 1450924002}
+  - {fileID: 1740885302}
+  - {fileID: 2066501613}
+  - {fileID: 767989882}
+  m_Father: {fileID: 559048520}
+  m_RootOrder: 54
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1318683665
 GameObject:
   m_ObjectHideFlags: 0
@@ -78704,7 +80018,7 @@ GameObject:
   - component: {fileID: 1363365049}
   - component: {fileID: 1363365050}
   m_Layer: 0
-  m_Name: fg plant02 (9)
+  m_Name: Foreground_Plant (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78717,11 +80031,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1363365048}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -474.00018, y: 24.00001, z: -12}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: -0.7071068}
+  m_LocalPosition: {x: 239.46564, y: -101.72734, z: -12}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
+  m_Father: {fileID: 1318127861}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1363365050
@@ -78742,7 +80056,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f2ae6503368526746887846a831fa1d4, type: 2}
+  - {fileID: 2100000, guid: c6c1c77e38e18254ba61f6812c456599, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -78763,7 +80077,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 75
-  m_Sprite: {fileID: 21300000, guid: aa681482c6d753a44a000ba38a62195e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9a9be078273b3384f9c14740ee7ce52e, type: 3}
   m_Color: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -85937,7 +87251,7 @@ Transform:
   m_LocalScale: {x: 1.2930003, y: 1.2930003, z: 1.293}
   m_Children: []
   m_Father: {fileID: 59239339}
-  m_RootOrder: 25
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1446064350
 SpriteRenderer:
@@ -86567,7 +87881,7 @@ GameObject:
   - component: {fileID: 1450924002}
   - component: {fileID: 1450924003}
   m_Layer: 0
-  m_Name: fg plant02 (21)
+  m_Name: Foreground_Plant (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86580,12 +87894,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450924001}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -423.00015, y: 22.000008, z: -11}
-  m_LocalScale: {x: 2.0049107, y: 2.0049107, z: 2.00491}
+  m_LocalRotation: {x: 0, y: 0, z: 0.57357645, w: 0.81915206}
+  m_LocalPosition: {x: 188.54868, y: -98.19629, z: -11}
+  m_LocalScale: {x: 2.0049121, y: 2.0049121, z: 2.00491}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 17
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1450924003
 SpriteRenderer:
@@ -86605,7 +87919,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ab9e31ab42e12994c95521251b0cfdda, type: 2}
+  - {fileID: 2100000, guid: 5fb788705b3d2c040ab4e543d4638464, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -86626,7 +87940,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 72
-  m_Sprite: {fileID: 21300000, guid: cfc8a64ea58b07847aacbd6999a6da80, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2be730a408844274f9086be54157e64e, type: 3}
   m_Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -99131,7 +100445,7 @@ GameObject:
   - component: {fileID: 1740885302}
   - component: {fileID: 1740885303}
   m_Layer: 0
-  m_Name: fg plant02 (22)
+  m_Name: Foreground_Plant (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99144,12 +100458,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1740885301}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -412.0001, y: 26.000006, z: -12}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: -0.7071068}
+  m_LocalPosition: {x: 177.43338, y: -101.86406, z: -12}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 18
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1740885303
 SpriteRenderer:
@@ -99169,7 +100483,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f2ae6503368526746887846a831fa1d4, type: 2}
+  - {fileID: 2100000, guid: c6c1c77e38e18254ba61f6812c456599, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99190,7 +100504,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 75
-  m_Sprite: {fileID: 21300000, guid: aa681482c6d753a44a000ba38a62195e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9a9be078273b3384f9c14740ee7ce52e, type: 3}
   m_Color: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -99212,7 +100526,7 @@ GameObject:
   - component: {fileID: 1742295459}
   - component: {fileID: 1742295460}
   m_Layer: 0
-  m_Name: fg plant02 (1)
+  m_Name: Foreground_Plant (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99225,11 +100539,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1742295458}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -508.00018, y: 22.000008, z: -12}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: 0, y: 0, z: 0.57357645, w: 0.81915206}
+  m_LocalPosition: {x: 273.5104, y: -100.74954, z: -12}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
+  m_Father: {fileID: 1318127861}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1742295460
@@ -99250,7 +100564,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: abf4512f600aa0b449ffb35bb5704bf1, type: 2}
+  - {fileID: 2100000, guid: 8553076c30394d843bdb8a95cda47477, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99271,7 +100585,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 75
-  m_Sprite: {fileID: 21300000, guid: 3fbfd3ea223c6c1479aabd2fb22a7901, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dfce1d6f156835a40bad938777b8c3c2, type: 3}
   m_Color: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -103573,7 +104887,7 @@ GameObject:
   - component: {fileID: 1816459556}
   - component: {fileID: 1816459557}
   m_Layer: 0
-  m_Name: fg plant02 (23)
+  m_Name: Stone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103591,7 +104905,7 @@ Transform:
   m_LocalScale: {x: 1.2410343, y: 0.7446207, z: 1.2410339}
   m_Children: []
   m_Father: {fileID: 59239339}
-  m_RootOrder: 19
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1816459557
 SpriteRenderer:
@@ -104302,7 +105616,7 @@ GameObject:
   - component: {fileID: 1827412076}
   - component: {fileID: 1827412077}
   m_Layer: 0
-  m_Name: fg plant02 (19)
+  m_Name: Foreground_Plant (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104315,12 +105629,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1827412075}
-  m_LocalRotation: {x: 0, y: -0, z: 0.99438864, w: -0.105789214}
-  m_LocalPosition: {x: -381.00012, y: 21.000008, z: -10}
-  m_LocalScale: {x: 2.6450014, y: 2.6450014, z: 2.645}
+  m_LocalRotation: {x: 0, y: 0, z: 0.57357645, w: 0.81915206}
+  m_LocalPosition: {x: 146.59756, y: -95.93513, z: -10}
+  m_LocalScale: {x: 2.6450036, y: 2.6450036, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 15
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -10.424001}
 --- !u!212 &1827412077
 SpriteRenderer:
@@ -104340,7 +105654,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a4046b874aba911469e63d47fbe36801, type: 2}
+  - {fileID: 2100000, guid: 25da182f51c13a242ad4c09082d37970, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -104361,7 +105675,7 @@ SpriteRenderer:
   m_SortingLayerID: 2073808055
   m_SortingLayer: 2
   m_SortingOrder: 73
-  m_Sprite: {fileID: 21300000, guid: 05f1655894d85c6479e4be3f11225edd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2fe2c88b7b8e5544ab3443eb07a3013f, type: 3}
   m_Color: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -108568,7 +109882,7 @@ GameObject:
   - component: {fileID: 1883150832}
   - component: {fileID: 1883150833}
   m_Layer: 0
-  m_Name: fg plant02 (20)
+  m_Name: Foreground_Plant (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108581,12 +109895,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883150831}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -414.00012, y: 20.000011, z: -10.5}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 179.61273, y: -95.92685, z: -10.5}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 16
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1883150833
 SpriteRenderer:
@@ -108606,7 +109920,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a4046b874aba911469e63d47fbe36801, type: 2}
+  - {fileID: 2100000, guid: 8553076c30394d843bdb8a95cda47477, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114848,7 +116162,7 @@ GameObject:
   - component: {fileID: 1982500713}
   - component: {fileID: 1982500714}
   m_Layer: 0
-  m_Name: fg plant02 (25)
+  m_Name: FG_Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114866,7 +116180,7 @@ Transform:
   m_LocalScale: {x: 3.2864134, y: 3.2864134, z: 3.2864125}
   m_Children: []
   m_Father: {fileID: 59239339}
-  m_RootOrder: 21
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1982500714
 SpriteRenderer:
@@ -119459,7 +120773,7 @@ GameObject:
   - component: {fileID: 2066501613}
   - component: {fileID: 2066501614}
   m_Layer: 0
-  m_Name: fg plant02 (26)
+  m_Name: Foreground_Plant (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119472,12 +120786,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066501612}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -377.00015, y: 22.000008, z: -13}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 142.5694, y: -96.814514, z: -13}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
-  m_RootOrder: 22
+  m_Father: {fileID: 1318127861}
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2066501614
 SpriteRenderer:
@@ -119497,7 +120811,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ab9e31ab42e12994c95521251b0cfdda, type: 2}
+  - {fileID: 2100000, guid: c6c1c77e38e18254ba61f6812c456599, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -127423,7 +128737,7 @@ GameObject:
   - component: {fileID: 2124447680}
   - component: {fileID: 2124447681}
   m_Layer: 0
-  m_Name: fg plant02 (3)
+  m_Name: Foreground_Plant (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127436,11 +128750,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2124447679}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9998872, w: -0.015020826}
-  m_LocalPosition: {x: -497.0002, y: 18.000006, z: -10.5}
-  m_LocalScale: {x: 2.6450012, y: 2.6450012, z: 2.645}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 262.63553, y: -96.42091, z: -10.5}
+  m_LocalScale: {x: 2.645003, y: 2.645003, z: 2.645}
   m_Children: []
-  m_Father: {fileID: 59239339}
+  m_Father: {fileID: 1318127861}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2124447681
@@ -127461,7 +128775,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a4046b874aba911469e63d47fbe36801, type: 2}
+  - {fileID: 2100000, guid: c6c1c77e38e18254ba61f6812c456599, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

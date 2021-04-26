@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_colliders: []
 --- !u!1 &1175082179370156005
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,6 +227,7 @@ MonoBehaviour:
   _animationName: Idle
   loop: 1
   timeScale: 1
+  m_alwaysUpdateMesh: 0
 --- !u!114 &5446373826794539565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,9 +274,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 0}
   m_physics: {fileID: 0}
-  m_skeletonAnimation: {fileID: 2123680739354926895}
   m_autoFlinch: 0
+  m_skeletonAnimation: {fileID: 2123680739354926895}
   m_animation: Damage
+  m_idleAnimation: 
 --- !u!1 &3613346759348152128
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,6 +330,7 @@ MonoBehaviour:
   followSkeletonFlip: 1
   followLocalScale: 0
   initializeOnAwake: 1
+  m_updateOnFixedUpdate: 0
 --- !u!58 &916764035917509625
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -432,7 +436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_collider2Ds: []
-  m_isInvulnerable: 0
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
 --- !u!1 &8259655424990286632
 GameObject:

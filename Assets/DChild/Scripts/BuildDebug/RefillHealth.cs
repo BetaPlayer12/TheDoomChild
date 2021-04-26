@@ -4,11 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RefillHealth : MonoBehaviour
+namespace DChildDebug.Window
 {
-    [Button]
-    private void Refill()
+    public class RefillHealth : MonoBehaviour
     {
-        GameplaySystem.playerManager.player.health.ResetValueToMax();
+        [Button]
+        public void Refill()
+        {
+            GameplaySystem.playerManager.player.health.ResetValueToMax();
+        }
     }
 }
