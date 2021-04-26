@@ -1,16 +1,14 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChildDebug.Window
 {
-    public class MinionToggle : MonoBehaviour, IToggleDebugBehaviour
+    public class BattleZoneToggle : MonoBehaviour, IToggleDebugBehaviour
     {
-        public static MinionToggle minionToggleInstance;
-        public event EventAction<EventActionArgs> OnToggle;
+        public static BattleZoneToggle instance { get; private set; }
         public static bool toggleValue = true;
+        public event EventAction<EventActionArgs> OnToggle;
 
         public bool value => toggleValue;
 
@@ -28,9 +26,16 @@ namespace DChildDebug.Window
             OnToggle?.Invoke(this, EventActionArgs.Empty);
         }
 
-        private void Awake()
+        private void Start()
         {
-            minionToggleInstance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
