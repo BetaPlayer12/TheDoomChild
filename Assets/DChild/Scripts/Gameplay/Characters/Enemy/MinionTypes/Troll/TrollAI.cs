@@ -12,6 +12,8 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Projectiles;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -265,8 +267,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     Vector3 v_diff = (target - spitPos);
                     float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
 
-                    GameObject projectile = Instantiate(m_info.dirtProjectile, spitPos, Quaternion.identity);
-                    projectile.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                    //GameObject projectile = Instantiate(m_info.dirtProjectile, spitPos, Quaternion.identity);
+                    //projectile.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+
+                    GameObject projectile = m_info.dirtProjectile;
+                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+                    instance.transform.position = m_throwPoint.position;
+                    var component = instance.GetComponent<Projectile>();
+                    component.ResetState();
+                    //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                    component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
                 }
                 else
                 {
