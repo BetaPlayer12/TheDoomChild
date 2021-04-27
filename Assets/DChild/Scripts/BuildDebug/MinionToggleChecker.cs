@@ -23,14 +23,11 @@ namespace DChildDebug.Window
                 Debug.Log("it worked");
                 m_minions.SetActive(false);
             }
-
-
         }
 
         private void Start()
         {
             MinionToggle.minionToggleInstance.OnToggle += Toggle;
         }
-
     }
 }

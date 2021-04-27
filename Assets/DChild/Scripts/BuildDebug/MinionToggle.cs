@@ -6,11 +6,13 @@ using UnityEngine;
 
 namespace DChildDebug.Window
 {
-    public class MinionToggle : MonoBehaviour
+    public class MinionToggle : MonoBehaviour, IToggleDebugBehaviour
     {
         public static MinionToggle minionToggleInstance;
         public event EventAction<EventActionArgs> OnToggle;
         public static bool toggleValue = true;
+
+        public bool value => toggleValue;
 
         [Button]
         public void ToggleOn()
