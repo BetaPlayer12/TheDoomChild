@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public event EventAction<PrimarySkillUpdateEventArgs> SkillUpdate;
 
-        public void UnlockSkill(PrimarySkill skill, bool enableSkill)
+        public void SetSkillStatus(PrimarySkill skill, bool enableSkill)
         {
             m_skills[skill] = enableSkill;
             m_moduleActivator.SetModuleLock(skill, enableSkill);
