@@ -11,7 +11,9 @@ namespace DChildDebug.Window
     {
         [SerializeField]
         private PrimarySkill m_skill;
-        public bool value => throw new System.NotImplementedException();
+        [SerializeField]
+        private PlayerModuleActivator m_skills;
+        public bool value => m_skills.IsModuleActive(m_skill);
 
         [Button]
         public void ToggleOn()
