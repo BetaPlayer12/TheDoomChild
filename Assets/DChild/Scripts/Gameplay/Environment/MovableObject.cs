@@ -86,7 +86,7 @@ namespace DChild.Gameplay.Environment
 
         public void MoveObject(float direction, float moveForce)
         {
-            m_rigidbody.velocity = new Vector2(direction * moveForce, 0);
+            m_rigidbody.velocity = new Vector2(direction * moveForce, m_rigidbody.velocity.y);
         }
 
         public void StopMovement()
