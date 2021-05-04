@@ -342,7 +342,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_state.forcedCurrentGroundedness == false)
                     {
                         m_groundedness?.Evaluate();
-                        Debug.Log("Check for ground");
+                        //Debug.Log("Check for ground");
                     }
                     m_extraJump?.EndExecution();
                 }

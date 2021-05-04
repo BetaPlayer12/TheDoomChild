@@ -67,7 +67,7 @@ namespace DChild.Gameplay
                 //GameplaySystem.playerManager.OverrideCharacterControls();
                 if (character)
                 {
-                    character.GetComponent<PlayerControlledObject>().owner.skills.UnlockSkill(m_toUnlock, true);
+                    character.GetComponent<PlayerControlledObject>().owner.skills.SetSkillStatus(m_toUnlock, true);
 
                     //Delete This. To be updated later.
                     switch (m_toUnlock)

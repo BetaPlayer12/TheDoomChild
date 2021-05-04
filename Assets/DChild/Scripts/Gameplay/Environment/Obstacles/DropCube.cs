@@ -36,7 +36,9 @@ public class DropCube : MonoBehaviour
     public bool m_isDropping;
     public bool dropped;
     [SerializeField]
-    public int delay;
+    public float m_FallDelay;
+    [SerializeField]
+    public float m_ReturnDelay;
     [SerializeField]
     private float m_radiusOffset = 1;
     [Button]
@@ -45,7 +47,7 @@ public class DropCube : MonoBehaviour
         m_fallTime = 0;
         m_returnTime = 0;
         m_shake = true;
-        StartCoroutine(DelayCoroutine());
+        StartCoroutine(FallDelayCoroutine());
         transform.position = m_currentPos;
 
     }
@@ -56,22 +58,30 @@ public class DropCube : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
            
-            StartCoroutine(DelayCoroutine());
+            StartCoroutine(ReturnDelayCoroutine());
             transform.position = m_currentPos;
             m_isDropping = false;
             dropped = true;
            
         }
     }
-    IEnumerator DelayCoroutine()
+    IEnumerator FallDelayCoroutine()
     {
         m_currentPos.x = transform.position.x;
         m_currentPos.y = transform.position.y;
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(m_FallDelay);
         m_shake = false;
         m_isDropping = true;
     }
-   
+    IEnumerator ReturnDelayCoroutine()
+    {
+        m_currentPos.x = transform.position.x;
+        m_currentPos.y = transform.position.y;
+        yield return new WaitForSeconds(m_ReturnDelay);
+        m_shake = false;
+        m_isDropping = true;
+    }
+
     private void SetMoveValues(Vector2 start, Vector2 destination)
     {
         m_start = start;
