@@ -152,8 +152,7 @@ namespace DChild.Gameplay.Characters.AI
 
 #if UNITY_EDITOR
         public Type aiDataType => m_data.GetType();
-
-
+        public CharacterStatsData statsData { get => m_statsData; set => m_statsData = value; }
 
         public void InitializeField(Character character, SpineRootAnimation spineRoot, Damageable damageable, Transform centerMass)
         {
