@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -161,11 +162,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ClearExecutedCollision()
         {
-            for (int i = 0; i < m_executedTypes.Count; i++)
+            //for (int i = 0; i < m_executedTypes.Count; i++)
+            //{
+            //    var type = m_executedTypes[i];
+            //    EnableCollision(type, false);
+            //    Debug.Log("Clear");
+            //}
+
+            foreach (Type type in Enum.GetValues(typeof(Type)))
             {
-                var type = m_executedTypes[i];
                 EnableCollision(type, false);
+                Debug.Log(type);
             }
+
             m_executedTypes.Clear();
         }
 
@@ -175,6 +184,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_executedTypes.Add(type);
             }
+
+            Debug.Log(m_executedTypes.Count);
         }
+
+        public (int index, float value) getSomething() { return (0, 1f); }
     }
 }
