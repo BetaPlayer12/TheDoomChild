@@ -33,8 +33,6 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private bool m_isHeavy;
         [SerializeField]
-        private GameObject m_parentObject;
-        [SerializeField]
         private bool m_canBeMoved;
         [SerializeField, TabGroup("Grabbed")]
         private UnityEvent m_onGrabbed;
@@ -71,17 +69,14 @@ namespace DChild.Gameplay.Environment
             if (isGrabbed)
             {
                 m_onGrabbed?.Invoke();
+                m_rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
             else
             {
                 StopMovement();
                 m_onLetGo?.Invoke();
+                m_rigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             }
-        }
-
-        public GameObject GetParentObject()
-        {
-            return m_parentObject;
         }
 
         public void MoveObject(float direction, float moveForce)
