@@ -143,6 +143,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAnticDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private bool m_battlezonemode;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -498,7 +499,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience)
+            if (m_enablePatience && !m_battlezonemode)
             {
                 Patience();
                 //StartCoroutine(PatienceRoutine());
@@ -527,11 +528,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SwitchToBattleZoneAI()
         {
+            m_battlezonemode = true;
             m_stateHandle.SetState(State.Chasing);
         }
 
         public void SwitchToBaseAI()
         {
+            m_battlezonemode = false;
             m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
