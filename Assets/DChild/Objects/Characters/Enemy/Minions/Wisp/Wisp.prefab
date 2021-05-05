@@ -1,122 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5334590541247454455
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5334590541247454454}
-  - component: {fileID: 5334590541247454448}
-  - component: {fileID: 5334590541247454449}
-  - component: {fileID: 5334590541247454450}
-  - component: {fileID: 5334590541247454453}
-  - component: {fileID: 8830707746583552920}
-  m_Layer: 13
-  m_Name: Behaviours
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5334590541247454454
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334590541247454455}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 7860300544978049659}
-  m_Father: {fileID: 9158308657021561796}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5334590541247454448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334590541247454455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_spine: {fileID: 3515696310375615918}
-  m_physics: {fileID: 5334590540300677523}
-  m_autoFlinch: 1
-  m_skeletonAnimation: {fileID: 1252086774898442858}
-  m_animation: ALCHEMIST_BOT_Flinch
-  m_idleAnimation: ALCHEMIST_BOT_Idle
---- !u!114 &5334590541247454449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334590541247454455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5830f2bbb3b8ac149905b0850dbf3c4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_source: {fileID: 1655709890455938632}
-  m_animator: {fileID: 3515696310375615918}
-  m_animation: 
-  m_bodyDuration:
-    m_startTime: 5
-  m_destroySource: 0
---- !u!114 &5334590541247454450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334590541247454455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbc4547d9c85dc7448f8ee8e7cd55f26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_character: {fileID: 3551457272445622065}
-  m_animation: {fileID: 3515696310375615918}
-  m_useRootMotionX: 0
-  m_useRootMotionY: 0
---- !u!114 &5334590541247454453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334590541247454455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dd8599297ea1c84ba2f23b8f6c74e50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animation: {fileID: 1252086774898442858}
---- !u!114 &8830707746583552920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5334590541247454455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d3c12617f03b77438dcd4e0c3efd17d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_source: {fileID: 2874478479385219983}
-  m_verticalAmplitude: 0.1
-  m_waveSpeed: 2.5
-  m_useCosine: 1
 --- !u!114 &1655709890455938632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +162,7 @@ MonoBehaviour:
   m_damageable: {fileID: 1655709890455938632}
   m_centerMass: {fileID: 8023666750153541015}
   m_aggroBoundary: {fileID: 0}
-  m_statsData: {fileID: 0}
+  m_statsData: {fileID: 11400000, guid: 876212be139d598469f07b24a491e5b2, type: 2}
   m_spineEventListener: {fileID: 5334590540300677551}
   m_bodyCollider: {fileID: 0}
   m_turnHandle: {fileID: 5334590541247454450}
@@ -287,6 +170,123 @@ MonoBehaviour:
   m_deathHandle: {fileID: 5334590541247454449}
   m_flinchHandle: {fileID: 5334590541247454448}
   m_startingDirection: 1
+--- !u!1 &5334590541247454455
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5334590541247454454}
+  - component: {fileID: 5334590541247454448}
+  - component: {fileID: 5334590541247454449}
+  - component: {fileID: 5334590541247454450}
+  - component: {fileID: 5334590541247454453}
+  - component: {fileID: 8830707746583552920}
+  m_Layer: 13
+  m_Name: Behaviours
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5334590541247454454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334590541247454455}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7860300544978049659}
+  m_Father: {fileID: 9158308657021561796}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5334590541247454448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334590541247454455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spine: {fileID: 3515696310375615918}
+  m_physics: {fileID: 5334590540300677523}
+  m_autoFlinch: 1
+  m_skeletonAnimation: {fileID: 1252086774898442858}
+  m_animation: ALCHEMIST_BOT_Flinch
+  m_idleAnimation: ALCHEMIST_BOT_Idle
+--- !u!114 &5334590541247454449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334590541247454455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5830f2bbb3b8ac149905b0850dbf3c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_source: {fileID: 1655709890455938632}
+  m_animator: {fileID: 3515696310375615918}
+  m_animation: 
+  m_bodyDuration:
+    m_startTime: 5
+  m_destroySource: 0
+--- !u!114 &5334590541247454450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334590541247454455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc4547d9c85dc7448f8ee8e7cd55f26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_character: {fileID: 3551457272445622065}
+  m_animation: {fileID: 3515696310375615918}
+  m_useRootMotionX: 0
+  m_useRootMotionY: 0
+--- !u!114 &5334590541247454453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334590541247454455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dd8599297ea1c84ba2f23b8f6c74e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animation: {fileID: 1252086774898442858}
+--- !u!114 &8830707746583552920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5334590541247454455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d3c12617f03b77438dcd4e0c3efd17d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_source: {fileID: 2874478479385219983}
+  m_verticalAmplitude: 0.1
+  m_waveSpeed: 2.5
+  m_useCosine: 1
 --- !u!1 &8076379707015932634
 GameObject:
   m_ObjectHideFlags: 0
