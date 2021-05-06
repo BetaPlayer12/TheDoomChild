@@ -40,10 +40,12 @@ namespace DChild.Gameplay.Environment
         private UnityEvent m_onLetGo;
 
         private Rigidbody2D m_rigidbody;
+        private bool m_isGrabbed = false;
+        private bool m_isTouchingPlayer = false;
         public event EventAction<EventActionArgs> BecameUnmovable;
 
         public bool isHeavy => m_isHeavy;
-        public bool canBeMove => m_canBeMoved;
+        public bool canBeMoved => m_canBeMoved;
 
         public void Load(ISaveData data)
         {
@@ -68,12 +70,14 @@ namespace DChild.Gameplay.Environment
         {
             if (isGrabbed)
             {
+                m_isGrabbed = true;
                 m_onGrabbed?.Invoke();
                 m_rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
             else
             {
                 StopMovement();
+                m_isGrabbed = false;
                 m_onLetGo?.Invoke();
                 m_rigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             }
@@ -81,12 +85,61 @@ namespace DChild.Gameplay.Environment
 
         public void MoveObject(float direction, float moveForce)
         {
-            m_rigidbody.velocity = new Vector2(direction * moveForce, m_rigidbody.velocity.y);
+            if (m_canBeMoved == true)
+            {
+                m_rigidbody.velocity = new Vector2(direction * moveForce, m_rigidbody.velocity.y);
+            }
         }
 
         public void StopMovement()
         {
-            m_rigidbody.velocity = Vector2.zero;
+            m_rigidbody.velocity = new Vector2(0, m_rigidbody.velocity.y);
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            {
+                m_rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+            }
+            else if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                if (m_isGrabbed == false)
+                {
+                    m_rigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                }
+            }
+        }
+
+        private void OnCollisionStay2D(Collision2D collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            {
+                if (m_isGrabbed == false && m_isTouchingPlayer == true)
+                {
+                    m_rigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                }
+                else
+                {
+                    m_rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+                }
+            }
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                m_isTouchingPlayer = true;
+            }
+        }
+
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            {
+                m_rigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            }
+            if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                m_isTouchingPlayer = false;
+            }
         }
 
         private void Awake()
