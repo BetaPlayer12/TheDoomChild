@@ -344,24 +344,32 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > .25f && !m_groundSensor.isDetecting)
+                if (!m_selfSensor.isDetecting)
                 {
-                    m_agent.SetDestination(new Vector2(transform.position.x, target.y));
-                }
-                else
-                {
-                    m_agent.SetDestination(target);
-                }
-                //m_agent.SetDestination(target);
-                m_agent.Move(m_info.move.speed);
+                    if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > 5f /*&& !m_groundSensor.isDetecting*/)
+                    {
+                        m_agent.SetDestination(new Vector2(transform.position.x, target.y));
+                    }
+                    else
+                    {
+                        m_agent.SetDestination(target);
+                    }
+                    //m_agent.SetDestination(target);
+                    m_agent.Move(m_info.move.speed);
 
-                if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
-                {
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
+                    {
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    }
                 }
                 else
                 {
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    m_agent.Stop();
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 }
             }
             else
