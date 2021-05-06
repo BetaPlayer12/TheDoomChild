@@ -9,7 +9,7 @@ public class ToggleFlyMode : MonoBehaviour, IToggleDebugBehaviour
     [SerializeField]
     public GameObject m_player;
 
-    public bool value => throw new System.NotImplementedException();
+    public bool value => m_player.GetComponentInChildren<Rigidbody2D>().gravityScale == 0;
 
     [Button]
     public void ToggleOn()
