@@ -804,6 +804,52 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_groundJump?.Execute();
                 }
             }
+            else if (m_state.isGrabbing)
+            {
+                if (m_input.grabHeld == false)
+                {
+                    m_movement?.SwitchConfigTo(Movement.Type.Jog);
+                    m_objectManipulation?.Cancel();
+                }
+                else if (m_input.dashPressed)
+                {
+                    if (m_state.isInShadowMode == false)
+                    {
+                        if (m_state.isInShadowMode == false)
+                        {
+                            if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                            {
+                                m_idle?.Cancel();
+                                m_movement?.Cancel();
+                                m_objectManipulation?.Cancel();
+                                m_movement?.SwitchConfigTo(Movement.Type.Jog);
+                                ExecuteDash();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (m_objectManipulation.IsThereAMovableObject())
+                    {
+                        if (m_input.horizontalInput != 0)
+                        {
+                            m_objectManipulation?.MoveObject(m_input.horizontalInput, m_character.facing);
+                        }
+                        else
+                        {
+                            m_objectManipulation?.GrabIdle();
+                        }
+                    }
+                    else
+                    {
+                        m_movement?.SwitchConfigTo(Movement.Type.Jog);
+                        m_objectManipulation?.Cancel();
+                    }
+                }
+
+                MoveCharacter(m_state.isGrabbing);
+            }
             else
             {
                 //From Standing
@@ -903,34 +949,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_idle?.Cancel();
                         m_movement?.SwitchConfigTo(Movement.Type.Grab);
                         m_objectManipulation?.Execute();
-                    }
-                }
-
-                if (m_state.isGrabbing)
-                {
-                    if (m_input.grabHeld == false)
-                    {
-                        m_movement?.SwitchConfigTo(Movement.Type.Jog);
-                        m_objectManipulation?.Cancel();
-                    }
-                    else
-                    {
-                        if (m_objectManipulation.IsThereAMovableObject())
-                        {
-                            if (m_input.horizontalInput != 0)
-                            {
-                                m_objectManipulation?.MoveObject(m_input.horizontalInput, m_character.facing);
-                            }
-                            else
-                            {
-                                m_objectManipulation?.GrabIdle();
-                            }
-                        }
-                        else
-                        {
-                            m_movement?.SwitchConfigTo(Movement.Type.Jog);
-                            m_objectManipulation?.Cancel();
-                        }
                     }
                 }
 
