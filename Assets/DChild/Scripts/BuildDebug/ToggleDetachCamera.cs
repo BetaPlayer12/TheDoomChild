@@ -13,7 +13,7 @@ namespace DChildDebug.Window
         public Camera m_detachable;
         private bool detached = false;
         private float speed = 30.0f;
-        public bool value => throw new System.NotImplementedException();
+        public bool value => detached;
 
         [Button]
         public void ToggleOn()

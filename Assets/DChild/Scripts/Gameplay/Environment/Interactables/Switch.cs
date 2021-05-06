@@ -17,6 +17,7 @@ using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
+
     public abstract class Switch : MonoBehaviour, IHitToInteract, IButtonToInteract, ISerializableComponent
     {
         public enum Type
@@ -272,7 +273,7 @@ namespace DChild.Gameplay.Environment
             {
                 var position = promptPosition;
                 Gizmos.color = Color.cyan;
-                Gizmos.DrawSphere(position, 1f); 
+                Gizmos.DrawSphere(position, 1f);
             }
         }
 
