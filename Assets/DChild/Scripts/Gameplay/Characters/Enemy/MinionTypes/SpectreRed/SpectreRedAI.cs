@@ -89,6 +89,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Detect,
             Patrol,
+            Idle,
             Cooldown,
             Turning,
             Attacking,
@@ -125,6 +126,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+
+        [SerializeField]
+        private bool m_willPatrol;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -488,7 +492,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
@@ -526,6 +530,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     }
+                    break;
+
+                case State.Idle:
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_agent.Stop();
                     break;
 
                 case State.Turning:

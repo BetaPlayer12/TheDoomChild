@@ -103,6 +103,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Spawning,
             Detect,
             Patrol,
+            Idle,
             Turning,
             Attacking,
             Cooldown,
@@ -154,6 +155,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("BoundingBox")]
         private GameObject m_spitBB;
+
+        [SerializeField]
+        private bool m_willPatrol;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -345,7 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -392,6 +396,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_movement.Stop();
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
+                    break;
+
+                case State.Idle:
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_movement.Stop();
                     break;
 
                 case State.Turning:
