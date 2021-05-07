@@ -3,8 +3,10 @@ using DChild.Serialization;
 using Holysoft;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
-using System;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChild.Gameplay.Environment
 {
@@ -55,7 +57,7 @@ namespace DChild.Gameplay.Environment
         private float m_speed;
         [SerializeField, OnValueChanged("ValidateStartingWaypoint"), TabGroup("Setting")]
         private int m_startWaypoint;
-        [SerializeField, ListDrawerSettings(CustomAddFunction = "AddWaypoint"), TabGroup("Setting"), HideInInlineEditors]
+        [SerializeField, ListDrawerSettings(CustomAddFunction = "AddWaypoint",OnBeginListElementGUI = "OnBeginWayPointElementGUI", OnEndListElementGUI ="OnEndWayPointElementGUI"), TabGroup("Setting"), HideInInlineEditors]
         private Vector2[] m_waypoints;
         [ShowInInspector, OnValueChanged("ChangeDestination"), TabGroup("Debug")]
         private int m_wayPointDestination;
@@ -83,6 +85,20 @@ namespace DChild.Gameplay.Environment
         {
             m_startWaypoint = (int)Mathf.Repeat(m_startWaypoint, m_waypoints.Length);
             transform.position = m_waypoints[m_startWaypoint];
+        }
+
+        private void OnBeginWayPointElementGUI(int index)
+        {
+            EditorGUILayout.BeginHorizontal();
+        }
+
+        private void OnEndWayPointElementGUI(int index)
+        {
+            if(GUILayout.Button("Use Current Position"))
+            {
+                m_waypoints[index] = transform.position;
+            }
+            EditorGUILayout.EndHorizontal();
         }
 #endif
 
