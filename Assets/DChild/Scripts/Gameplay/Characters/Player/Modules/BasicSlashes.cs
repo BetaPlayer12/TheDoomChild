@@ -172,7 +172,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             foreach (Type type in Enum.GetValues(typeof(Type)))
             {
                 EnableCollision(type, false);
-                Debug.Log(type);
             }
 
             m_executedTypes.Clear();
