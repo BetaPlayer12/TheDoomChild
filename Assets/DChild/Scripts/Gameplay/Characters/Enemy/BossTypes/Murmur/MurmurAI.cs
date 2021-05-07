@@ -36,6 +36,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_defeatAnimation;
+            public string defeatAnimation => m_defeatAnimation;
 
             [SerializeField]
             private MovementInfo m_moveInfo = new MovementInfo();
@@ -253,7 +256,8 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
             //TEMP
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
+            m_animation.SetAnimation(0, m_info.defeatAnimation, false);
         }
 
         private void UpdateAttackList(IReadOnlyList<Attack> availableAttacks)
