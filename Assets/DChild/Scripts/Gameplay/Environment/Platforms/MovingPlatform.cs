@@ -195,7 +195,7 @@ namespace DChild.Gameplay.Environment
                 else if (enabled == false)
                 {
                     m_currentWayPoint += m_incrementerValue;
-                    m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
+ 
                 }
                 m_cacheDestination = m_waypoints[m_wayPointDestination];
             }
