@@ -365,14 +365,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_tracker.Execute(m_input);
 
-            if (m_state.waitForBehaviour)
-                return;
-
-            if (m_state.isCombatReady)
-            {
-                m_combatReadiness?.HandleDuration();
-            }
-
             if (m_state.isInShadowMode)
             {
                 if (m_shadowMorph.HaveEnoughSourceForExecution())
@@ -382,7 +374,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else
                 {
                     m_shadowMorph?.Cancel();
+                    m_shadowGaugeRegen?.Enable(true);
                 }
+            }
+
+            if (m_state.waitForBehaviour)
+                return;
+
+            if (m_state.isCombatReady)
+            {
+                m_combatReadiness?.HandleDuration();
             }
 
             if (m_state.canAttack == true)
@@ -932,6 +933,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_state.isInShadowMode)
                     {
                         m_shadowMorph.Cancel();
+                        m_shadowGaugeRegen?.Enable(true);
                     }
                     else
                     {
