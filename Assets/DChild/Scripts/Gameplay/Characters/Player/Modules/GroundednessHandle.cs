@@ -100,6 +100,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private IEnumerator CoyoteRoutine()
         {
+            Debug.Log("CoyoteRoutine");
             m_isUsingCoyote = true;
             yield return new WaitForSeconds(m_coyoteTime);
             m_isUsingCoyote = false;

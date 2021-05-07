@@ -141,7 +141,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void EndShadowMorphCharge()
         {
             Debug.Log("DONE SHADOW MORPH CHARGE");
-            m_shadowGaugeRegen?.Enable(true);
+            //m_shadowGaugeRegen?.Enable(true);
             m_shadowMorph.EndExecution();
         }
 
