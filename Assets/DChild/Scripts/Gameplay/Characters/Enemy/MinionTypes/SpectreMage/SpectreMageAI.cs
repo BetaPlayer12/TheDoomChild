@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Pathfinding;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -456,18 +457,45 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > .25f)
+                
+                Vector3 v_diff = (target - new Vector2(transform.position.x, transform.position.x));
+                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                //m_groundSensorParent.localScale = new Vector3(transform.position.x > m_targetInfo.position.x ? 1 : -1, 1, 1);
+
+                bool isCloseToGround = false;
+
+                if (m_targetInfo.position.y < transform.position.y)
                 {
-                    m_agent.SetDestination(new Vector2(transform.position.x, target.y));
+                    isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false; 
+                }
+
+                if (!m_selfSensor.isDetecting && !isCloseToGround)
+                {
+                    if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > 5f /*&& !m_groundSensor.isDetecting*/)
+                    {
+                        m_agent.SetDestination(new Vector2(transform.position.x, target.y));
+                    }
+                    else
+                    {
+                        m_agent.SetDestination(target);
+                    }
+                    //m_agent.SetDestination(target);
+                    m_agent.Move(m_info.move.speed);
+
+                    if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
+                    {
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    }
                 }
                 else
                 {
-                    m_agent.SetDestination(target);
+                    m_agent.Stop();
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 }
-                //m_agent.SetDestination(target);
-                m_agent.Move(m_info.move.speed);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
             }
             else
             {
@@ -475,6 +503,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                     m_stateHandle.OverrideState(State.Turning);
             }
+        }
+
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            return hit.point;
         }
         #endregion
 
@@ -599,7 +633,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     m_attackDecider.hasDecidedOnAttack = false;
                     ChooseAttack();
-                    if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
+                    if (m_attackDecider.hasDecidedOnAttack /*&& !ShotBlocked()*/)
                     {
                         m_agent.Stop();
                         m_stateHandle.SetState(State.Attacking);
