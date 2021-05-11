@@ -237,6 +237,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
             m_movement.Stop();
         }
 
