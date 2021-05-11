@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Pathfinding;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -322,6 +323,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
+            var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
             while (!inRange)
             {
 
@@ -331,20 +333,28 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     inRange = true;
                 }
-                DynamicMovement(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y));
+                DynamicMovement(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y), moveSpeed);
                 yield return null;
             }
             ExecuteAttack(attack);
             yield return null;
         }
 
-        private void DynamicMovement(Vector2 target)
+        private void DynamicMovement(Vector2 target, float moveSpeed)
         {
             if (IsFacingTarget())
             {
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                if (!m_selfSensor.isDetecting)
+
+                bool isCloseToGround = false;
+
+                if (m_targetInfo.position.y < transform.position.y)
+                {
+                    isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
+                }
+
+                if (!m_selfSensor.isDetecting && !isCloseToGround)
                 {
                     if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > 5f /*&& !m_groundSensor.isDetecting*/)
                     {
@@ -355,7 +365,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_agent.SetDestination(target);
                     }
                     //m_agent.SetDestination(target);
-                    m_agent.Move(m_info.move.speed);
+                    m_agent.Move(moveSpeed);
 
                     if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
                     {
@@ -377,6 +387,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_turnState = State.Attacking;
                 m_stateHandle.OverrideState(State.Turning);
             }
+        }
+
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            return hit.point;
         }
         #endregion
 
