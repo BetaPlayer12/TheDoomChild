@@ -419,6 +419,16 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private bool ShotBlocked()
+        {
+            Vector2 wat = m_projectilePoints[0].transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+        }
+
         private IEnumerator AttackRoutine()
         {
             m_animation.SetAnimation(0, m_info.attack.animation, false);
@@ -439,7 +449,7 @@ namespace DChild.Gameplay.Characters.Enemies
             while (!inRange)
             {
                 bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < attackRange ? true : false;
-                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 1 ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < attackRange ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
@@ -631,12 +641,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     break;
                 case State.Chasing:
-                    m_attackDecider.hasDecidedOnAttack = false;
-                    ChooseAttack();
-                    if (m_attackDecider.hasDecidedOnAttack /*&& !ShotBlocked()*/)
+                    if (!ShotBlocked())
                     {
-                        m_agent.Stop();
-                        m_stateHandle.SetState(State.Attacking);
+                        m_attackDecider.hasDecidedOnAttack = false;
+                        ChooseAttack();
+                        if (m_attackDecider.hasDecidedOnAttack /*&& !ShotBlocked()*/)
+                        {
+                            m_agent.Stop();
+                            m_stateHandle.SetState(State.Attacking);
+                        }
                     }
                     break;
 
