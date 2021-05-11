@@ -360,6 +360,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             bool inRange = false;
+            var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 5);
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             while (!inRange)
             {
@@ -370,31 +371,54 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     inRange = true;
                 }
-                DynamicMovement(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y));
+                DynamicMovement(new Vector2(m_targetInfo.position.x, m_targetInfo.position.y), moveSpeed);
                 yield return null;
             }
             ExecuteAttack(attack);
             yield return null;
         }
 
-        private void DynamicMovement(Vector2 target)
+        private void DynamicMovement(Vector2 target, float moveSpeed)
         {
             if (IsFacingTarget())
             {
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > .25f)
+
+                bool isCloseToGround = false;
+
+                if (m_targetInfo.position.y < transform.position.y)
                 {
-                    m_agent.SetDestination(new Vector2(transform.position.x, target.y));
+                    isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
+                }
+
+                if (!m_selfSensor.isDetecting && !isCloseToGround)
+                {
+                    if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > 5f /*&& !m_groundSensor.isDetecting*/)
+                    {
+                        m_agent.SetDestination(new Vector2(transform.position.x, target.y));
+                    }
+                    else
+                    {
+                        m_agent.SetDestination(target);
+                    }
+                    //m_agent.SetDestination(target);
+                    m_agent.Move(moveSpeed);
+
+                    if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
+                    {
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    }
                 }
                 else
                 {
-                    m_agent.SetDestination(target);
+                    m_agent.Stop();
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 }
-                //m_agent.SetDestination(target);
-                m_agent.Move(m_info.move.speed);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
             }
             else
             {
@@ -402,6 +426,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                     m_stateHandle.OverrideState(State.Turning);
             }
+        }
+
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            return hit.point;
         }
         #endregion
 

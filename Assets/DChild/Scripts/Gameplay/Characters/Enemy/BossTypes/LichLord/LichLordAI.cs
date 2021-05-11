@@ -226,6 +226,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<Transform> m_skeletalArmPoints;
         [SerializeField, TabGroup("Spawn Points")]
         private List<Transform> m_lichLordPortPoints;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_playerP3Point;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Transform m_lichP3Point;
+
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -428,7 +433,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 posDistance.Add(Vector2.Distance(m_targetInfo.position, m_projectilePoints[i].position));
             }
-            m_projectilePoint.position = m_projectilePoints[posDistance.IndexOf(posDistance.Min())].position;
+            m_projectilePoint.position = m_phaseHandle.currentPhase == Phase.PhaseThree ? m_projectilePoints[posDistance.IndexOf(posDistance.Min())].position : new Vector3(m_randomSpawnCollider.bounds.center.x, m_randomSpawnCollider.bounds.center.y + 15);
             m_ghostOrbStartFX.transform.position = m_projectilePoint.position;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.ghostOrbAttack.animation);
             var randomAttack = UnityEngine.Random.Range(0, 2);
@@ -724,6 +729,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void MapCurse()
         {
             m_mapCurseFX.Play();
+            m_targetInfo.transform.position = m_playerP3Point.position;
+            transform.position = m_lichP3Point.position;
             //var totem = Instantiate(m_info.curseObject, new Vector2(m_randomSpawnCollider.bounds.center.x, GroundPosition().y), Quaternion.identity);
         }
 
