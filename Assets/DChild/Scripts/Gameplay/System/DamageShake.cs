@@ -20,7 +20,7 @@ public class DamageShake : MonoBehaviour
 
     private void Awake()
     {
-        m_interractable = GetComponent<IHitToInteract>();
+        m_interractable = GetComponentInParent<IHitToInteract>();
         m_interractable.OnHit += OnHit;
         m_startingPos.x = transform.position.x;
         m_startingPos.y = transform.position.y;

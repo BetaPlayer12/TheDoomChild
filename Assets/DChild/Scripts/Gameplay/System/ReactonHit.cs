@@ -19,6 +19,5 @@ namespace DChild.Gameplay.Combat
         {
             OnHit?.Invoke(this, new HitDirectionEventArgs(direction));
         }
-
     }
 }
