@@ -181,7 +181,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackLeftAnimation = m_info.attackLeft.animation;
                 m_attackRightAnimation = m_info.attackRight.animation;
             }
-            m_animation.SetEmptyAnimation(0, 0);
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
@@ -281,8 +280,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         //m_health.SetHealthPercentage(m_leftHealth);
                         //m_leftHealth = ((float)m_health.currentValue / m_health.maxValue);
-                        m_shieldLeftDestroyed = true;
-                        m_animation.SetAnimation(1, m_info.wingLeftDestroyAnimation, false);
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingLeftDestroyAnimation)
+                        {
+                            StopAllCoroutines();
+                            StartCoroutine(WingsDestroyedRoutine(1, m_info.wingLeftDestroyAnimation));
+                        }
                     }
                 }
             }
@@ -308,8 +310,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         //m_health.SetHealthPercentage(m_rightHealth);
                         //m_rightHealth = ((float)m_health.currentValue / m_health.maxValue);
-                        m_shieldRightDestroyed = true;
-                        m_animation.SetAnimation(2, m_info.wingRightDestroyAnimation, false);
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingRightDestroyAnimation)
+                        {
+                            StopAllCoroutines();
+                            StartCoroutine(WingsDestroyedRoutine(2, m_info.wingRightDestroyAnimation));
+                        }
                     }
                 }
             }
@@ -319,6 +324,23 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackLeftAnimation = m_info.attackLeftNoShieldAnimation;
                 m_attackRightAnimation = m_info.attackRightNoShieldAnimation;
             }
+        }
+
+        private IEnumerator WingsDestroyedRoutine(int index, string animation)
+        {
+            m_animation.animationState.GetCurrent(0).TimeScale = 0;
+            m_animation.SetAnimation(index, animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, animation);
+            if (animation == m_info.wingLeftDestroyAnimation)
+            {
+                m_shieldLeftDestroyed = true;
+            }
+            else if (animation == m_info.wingRightDestroyAnimation)
+            {
+                m_shieldRightDestroyed = true;
+            }
+            m_stateHandle.OverrideState(State.Cooldown);
+            yield return null;
         }
 
         public override void ApplyData()
@@ -347,9 +369,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ExecuteAttackRoutine(string attack)
         {
+            m_animation.SetEmptyAnimation(0, 0);
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, attack, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, attack);
+            m_animation.SetAnimation(0, attack, false).MixDuration = 0;
+            yield return new WaitForSeconds(m_attackLeftAnimation == m_info.fistAttackLeft.animation ? 4.9f : 3);
+            m_animation.animationState.TimeScale = 0;
+            if (m_attackLeftAnimation == m_info.fistAttackLeft.animation)
+            {
+                m_attackLeftAnimation = m_info.attackLeft.animation;
+                m_attackRightAnimation = m_info.attackRight.animation;
+            }
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -421,11 +450,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
                         if (m_targetInfo.position.x < transform.position.x)
                         {
-                            m_attackHandle.ExecuteAttack(m_attackLeftAnimation, null);
+                            //m_attackHandle.ExecuteAttack(m_attackLeftAnimation, null);
+                            StartCoroutine(ExecuteAttackRoutine(m_attackLeftAnimation));
                         }
                         else
                         {
-                            m_attackHandle.ExecuteAttack(m_attackRightAnimation, null);
+                            //m_attackHandle.ExecuteAttack(m_attackRightAnimation, null);
+                            StartCoroutine(ExecuteAttackRoutine(m_attackRightAnimation));
                         }
                     }
                     break;
@@ -438,6 +469,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
+                        m_animation.animationState.TimeScale = 1;
                         m_currentCD = 0;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }

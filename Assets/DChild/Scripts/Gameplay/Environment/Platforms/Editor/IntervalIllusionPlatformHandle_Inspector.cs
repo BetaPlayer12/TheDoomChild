@@ -16,14 +16,13 @@ namespace DChildEditor.Gameplay.Environment
         private void OnSceneGUI()
         {
             var listProp = Tree.GetPropertyAtUnityPath("m_list");
-            var list = (IntervalIllusionPlatformHandle.Info[])listProp.ValueEntry.WeakSmartValue;
+            var list = (IllusionPlatform[])listProp.ValueEntry.WeakSmartValue;
             m_labelPair.Clear();
 
 
             for (int i = 0; i < list.Length; i++)
             {
-                var info = list[i];
-                var platform = info.platform;
+                var platform = list[i];
                 if (platform != null)
                 {
                     if (m_labelPair.ContainsKey(platform))

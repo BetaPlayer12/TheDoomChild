@@ -20,7 +20,9 @@ public class HitStop : MonoBehaviour
     [SerializeField, TabGroup("Renderer")]
     private MeshRenderer m_Rendererer;
 
-    private float m_highlightCurrentValue;
+    private MaterialPropertyBlock m_propertyBlock;
+
+    //private float m_highlightCurrentValue;
     //private IEnumerator m_flinchWhiteRoutine;
 
     private void OnHitStopStart(object sender, EventActionArgs eventArgs)
@@ -56,22 +58,32 @@ public class HitStop : MonoBehaviour
 
     private IEnumerator FlinchWhiteRoutine()
     {
-        m_Rendererer.material.SetFloat("Highlight", 1);
-        while (m_Rendererer.material.GetFloat("Highlight") >= .1f)
+        m_propertyBlock.SetFloat("Highlight", 1);
+        m_Rendererer.SetPropertyBlock(m_propertyBlock);
+        float highLightCurrentValue = 1;
+        //Debug.Log("Current Highlight " + m_Rendererer.material.GetFloat("Highlight"));
+        while (highLightCurrentValue > 0.01f)
         {
-            m_highlightCurrentValue -= Time.deltaTime * m_whiteDecayTime;
-            m_Rendererer.material.SetFloat("Highlight", m_highlightCurrentValue);
+            highLightCurrentValue -= Time.deltaTime * m_whiteDecayTime;
+            m_propertyBlock.SetFloat("Highlight", highLightCurrentValue);
+            m_Rendererer.SetPropertyBlock(m_propertyBlock);
             yield return null;
         }
-        m_Rendererer.material.SetFloat("Highlight", 0);
-        m_highlightCurrentValue = 1;
+        m_propertyBlock.SetFloat("Highlight", 0);
+        m_Rendererer.SetPropertyBlock(m_propertyBlock);
         yield return null;
+    }
+
+    private void Start()
+    {
+        m_Rendererer.GetPropertyBlock(m_propertyBlock);
     }
 
     private void Awake()
     {
+        m_propertyBlock = new MaterialPropertyBlock();
         m_flinchHandle.HitStopStart += OnHitStopStart;
-        m_highlightCurrentValue = 1;
+        //m_highlightCurrentValue = 1;
         //m_flinchWhiteRoutine = FlinchWhiteRoutine();
     }
 }

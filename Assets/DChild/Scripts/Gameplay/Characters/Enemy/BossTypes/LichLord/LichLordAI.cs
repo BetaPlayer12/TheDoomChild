@@ -527,9 +527,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 var pos = new Vector2(m_randomSpawnCollider.bounds.center.x, GroundPosition().y);
                 var spikePos = pos;
                 var increment = 10;
-                for (int i = 0; i < 14; i++)
+                for (int i = 0; i < 20; i++)
                 {
-                    if (i == 7)
+                    if (i == 10)
                     {
                         increment = -increment;
                         spikePos = pos;
