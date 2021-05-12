@@ -1018,10 +1018,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_list:
-  - m_platform: {fileID: 1554778174}
-    m_appearanceDuration: 2
-  - m_platform: {fileID: 1775322819}
-    m_appearanceDuration: 2
+  - {fileID: 1554778174}
+  - {fileID: 1775322819}
 --- !u!1 &198441396
 GameObject:
   m_ObjectHideFlags: 0
@@ -3293,6 +3291,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: BreakableWoodenWall (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2877531109606086263, guid: 354732a6681b41743be4899f1969fe48,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6886216149381644072, guid: 354732a6681b41743be4899f1969fe48,
+        type: 3}
+      propertyPath: m_createDebris
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 354732a6681b41743be4899f1969fe48, type: 3}
 --- !u!114 &372267263 stripped
@@ -3894,6 +3902,8 @@ MonoBehaviour:
     - {fileID: 894142296}
     - {fileID: 828737599}
     - {fileID: 1017423620}
+    - {fileID: 1364072447}
+    - {fileID: 1244923814}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -3933,7 +3943,7 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 3
+      Data: 5
     - Name: 
       Entry: 7
       Data: 5|DChild.Serialization.ZoneDataHandle+EditorData+ComponentData, Assembly-CSharp
@@ -3989,6 +3999,42 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 11|DChild.Serialization.ZoneDataHandle+EditorData+ComponentData, Assembly-CSharp
+    - Name: m_serializer
+      Entry: 10
+      Data: 3
+    - Name: m_saveData
+      Entry: 7
+      Data: 12|DChild.Gameplay.Environment.BreakableObject+SaveData, Assembly-CSharp
+    - Name: m_isDestroyed
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 13|DChild.Serialization.ZoneDataHandle+EditorData+ComponentData, Assembly-CSharp
+    - Name: m_serializer
+      Entry: 10
+      Data: 4
+    - Name: m_saveData
+      Entry: 7
+      Data: 14|DChild.Gameplay.Environment.SuspendedPlatform+SaveData, Assembly-CSharp
+    - Name: m_isSuspended
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -3996,7 +4042,7 @@ MonoBehaviour:
       Data: 
     - Name: m_dynamicDatas
       Entry: 7
-      Data: 11|System.Collections.Generic.List`1[[DChild.Serialization.ZoneDataHandle+EditorData+DynamicData,
+      Data: 15|System.Collections.Generic.List`1[[DChild.Serialization.ZoneDataHandle+EditorData+DynamicData,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
@@ -4018,6 +4064,8 @@ MonoBehaviour:
   - {fileID: 894142296}
   - {fileID: 828737599}
   - {fileID: 1017423620}
+  - {fileID: 1364072447}
+  - {fileID: 1244923814}
   m_dynamicSerializers: []
   m_useEditorData: 0
 --- !u!4 &446046234
@@ -15700,10 +15748,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_list:
-  - m_platform: {fileID: 162180601}
-    m_appearanceDuration: 2
-  - m_platform: {fileID: 1540670035}
-    m_appearanceDuration: 2
+  - {fileID: 162180601}
+  - {fileID: 1540670035}
 --- !u!1001 &1241697546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16144,7 +16190,7 @@ PrefabInstance:
     - target: {fileID: 6474852823615978683, guid: e77910b70161abe4c8e0fed189d5fdea,
         type: 3}
       propertyPath: m_toTrack.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6474852823615978683, guid: e77910b70161abe4c8e0fed189d5fdea,
         type: 3}
@@ -16207,6 +16253,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1244923810}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1244923814 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3876566356776836597, guid: e77910b70161abe4c8e0fed189d5fdea,
+    type: 3}
+  m_PrefabInstance: {fileID: 1244923810}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169904169d11e8b46aaa137c9857a428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1248539734
 GameObject:
   m_ObjectHideFlags: 0
@@ -17807,6 +17865,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1364072447 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6608903295481166667, guid: 354732a6681b41743be4899f1969fe48,
+    type: 3}
+  m_PrefabInstance: {fileID: 1364072445}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169904169d11e8b46aaa137c9857a428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1378201864
