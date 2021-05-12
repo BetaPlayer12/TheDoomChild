@@ -73,6 +73,14 @@ public class LiquidInteraction : MonoBehaviour
     private void Start()
     {
         m_material.SetInt("_RippleAutoTime", 0);
+        for (int i = 1; i <= 10; i++)
+        {
+            m_material.SetFloat("_RippleSpeed_" + i, 0.5f);
+        }
+        for (int i = 1; i <= 10; i++)
+        {
+            m_material.SetFloat("_RippleTime_" + i, -0.001f);
+        }
     }
 
     private void Awake()
