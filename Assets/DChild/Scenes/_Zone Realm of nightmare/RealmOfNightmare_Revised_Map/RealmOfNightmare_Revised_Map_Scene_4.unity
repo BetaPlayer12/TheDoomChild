@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -12313,7 +12313,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 60
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -14691,7 +14691,7 @@ MonoBehaviour:
   m_ZDamping: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 55
+  m_CameraDistance: 66
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -28583,9 +28583,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2074363138}
   - component: {fileID: 2074363137}
-  - component: {fileID: 2074363136}
   - component: {fileID: 2074363139}
   - component: {fileID: 2074363140}
+  - component: {fileID: 2074363136}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -28593,14 +28593,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &2074363136
-AudioListener:
+--- !u!114 &2074363136
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2074363135}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f99cecbefd328f74cb1134ca2f728657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!20 &2074363137
 Camera:
   m_ObjectHideFlags: 0
@@ -28626,8 +28630,8 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
-  orthographic: 1
+  field of view: 60
+  orthographic: 0
   orthographic size: 10
   m_Depth: -1
   m_CullingMask:
