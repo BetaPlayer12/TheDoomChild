@@ -119,7 +119,7 @@ namespace DChild.Gameplay.Environment
             var instance = Instantiate(debris, m_object.position, Quaternion.identity);
             m_instantiatedDebris = instance.GetComponent<Debris>();
             m_instantiatedDebris.transform.parent = transform;
-            m_instantiatedDebris.transform.localScale = transform.localScale;
+            m_instantiatedDebris.transform.localScale = Vector3.one;
             m_instantiatedDebris.transform.parent = null;
             m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
             m_leftOverDebris = m_instantiatedDebris.GetDetachables();

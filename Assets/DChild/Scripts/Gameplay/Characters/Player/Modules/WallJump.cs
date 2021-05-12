@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Animator m_animator;
         private int m_animationParameter;
 
+        public event EventAction<EventActionArgs> ExecuteModule;
+
         public void Initialize(ComplexCharacterInfo info)
         {
             m_character = info.character;
@@ -33,6 +36,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var velocity = m_power;
             velocity.x *= (float)m_character.facing;
             m_rigidbody.velocity = velocity;
+            ExecuteModule?.Invoke(this, EventActionArgs.Empty);
+
             StartCoroutine(DisableInputRoutine());
         }
 

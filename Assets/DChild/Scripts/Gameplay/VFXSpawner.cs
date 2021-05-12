@@ -5,6 +5,7 @@ using UnityEngine.AddressableAssets;
 
 namespace DChild.Gameplay
 {
+
     public class VFXSpawner : MonoBehaviour
     {
         [SerializeField]
