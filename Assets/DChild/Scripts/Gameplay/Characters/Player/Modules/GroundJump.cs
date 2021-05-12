@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_timer;
 
         public float highJumpCutoffThreshold => m_cutOffPower;
+        public event EventAction<EventActionArgs> ExecuteModule;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -64,6 +66,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_power);
             //m_rigidbody.sharedMaterial.friction = 0f;
             m_timer = m_allowCutoffAfterDuration;
+
+            ExecuteModule?.Invoke(this, EventActionArgs.Empty);
         }
     }
 }
