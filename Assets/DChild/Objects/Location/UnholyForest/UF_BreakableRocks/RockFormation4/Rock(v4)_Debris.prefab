@@ -1,5 +1,16 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!210 &4701224668093717423
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4625283799781647008}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 1
 --- !u!1 &4425124606232469855
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,6 +21,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4260663754227664169}
   - component: {fileID: 4474780514700266222}
+  - component: {fileID: 151186491116975358}
+  - component: {fileID: 477706966523257425}
   m_Layer: 16
   m_Name: Rock4Debri2
   m_TagString: Untagged
@@ -81,17 +94,88 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!210 &4701224668093717423
-SortingGroup:
+--- !u!50 &151186491116975358
+Rigidbody2D:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4625283799781647008}
+  m_GameObject: {fileID: 4425124606232469855}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 5
+  m_GravityScale: 5
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!60 &477706966523257425
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425124606232469855}
   m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.2, y: 1.96}
+    newSize: {x: 2.2, y: 1.96}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.42999998, y: -0.85999995}
+      - {x: 0.64, y: -0.79999995}
+      - {x: 0.74, y: -0.84}
+      - {x: 0.91999996, y: -0.84999996}
+      - {x: 1.1, y: -0.78}
+      - {x: 1.1, y: -0.65999997}
+      - {x: 1.09, y: -0.61}
+      - {x: 1.0799999, y: -0.32999998}
+      - {x: 1.06, y: -0.25}
+      - {x: 0.96999997, y: -0.02}
+      - {x: 0.9, y: 0.19}
+      - {x: 0.84999996, y: 0.26999998}
+      - {x: 0.78999996, y: 0.29}
+      - {x: 0.66999996, y: 0.47}
+      - {x: 0.51, y: 0.62}
+      - {x: 0.31, y: 0.76}
+      - {x: 0.03, y: 0.9}
+      - {x: -0.24, y: 0.97999996}
+      - {x: -0.34, y: 0.97999996}
+      - {x: -0.42999998, y: 0.85999995}
+      - {x: -0.5, y: 0.65999997}
+      - {x: -0.5, y: 0.58}
+      - {x: -0.88, y: 0.38}
+      - {x: -1, y: 0.25}
+      - {x: -1.0799999, y: 0.099999994}
+      - {x: -1.1, y: 0.02}
+      - {x: -1.1, y: -0.29}
+      - {x: -0.98999995, y: -0.42999998}
+      - {x: -0.94, y: -0.53}
+      - {x: -0.9, y: -0.90999997}
+      - {x: -0.78999996, y: -0.97999996}
+      - {x: -0.65999997, y: -0.97999996}
+      - {x: -0.48, y: -0.93}
+      - {x: -0.29999998, y: -0.91999996}
+      - {x: -0.28, y: -0.88}
+      - {x: 0.31, y: -0.88}
 --- !u!1 &5641030836335596869
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +186,8 @@ GameObject:
   m_Component:
   - component: {fileID: 886346500035170287}
   - component: {fileID: 1440464276284310887}
+  - component: {fileID: 3814638313494063537}
+  - component: {fileID: 6483400121823613131}
   m_Layer: 16
   m_Name: Rock4Debri3
   m_TagString: Untagged
@@ -173,6 +259,98 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &3814638313494063537
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5641030836335596869}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 5
+  m_GravityScale: 5
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!60 &6483400121823613131
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5641030836335596869}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.28, y: 2}
+    newSize: {x: 2.28, y: 2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.39999998, y: -0.71}
+      - {x: 0.53, y: -0.61}
+      - {x: 0.66999996, y: -0.52}
+      - {x: 0.78999996, y: -0.42999998}
+      - {x: 0.90999997, y: -0.28}
+      - {x: 0.91999996, y: -0.21}
+      - {x: 1.04, y: -0.13}
+      - {x: 1.05, y: 0.099999994}
+      - {x: 1.11, y: 0.32}
+      - {x: 1.11, y: 0.56}
+      - {x: 1.0799999, y: 0.64}
+      - {x: 0.96, y: 0.79999995}
+      - {x: 0.79999995, y: 0.97999996}
+      - {x: 0.78, y: 1}
+      - {x: 0.38, y: 1}
+      - {x: 0.26999998, y: 0.98999995}
+      - {x: 0, y: 0.98999995}
+      - {x: -0.12, y: 0.90999997}
+      - {x: -0.24, y: 0.82}
+      - {x: -0.32999998, y: 0.78}
+      - {x: -0.45, y: 0.63}
+      - {x: -0.7, y: 0.41}
+      - {x: -0.77, y: 0.29}
+      - {x: -0.78, y: 0.24}
+      - {x: -0.94, y: 0.11}
+      - {x: -1.04, y: -0.01}
+      - {x: -1.06, y: -0.12}
+      - {x: -1.12, y: -0.19}
+      - {x: -1.12, y: -0.22999999}
+      - {x: -1.09, y: -0.32999998}
+      - {x: -1.02, y: -0.47}
+      - {x: -0.87, y: -0.56}
+      - {x: -0.72999996, y: -0.55}
+      - {x: -0.64, y: -0.53999996}
+      - {x: -0.53999996, y: -0.59}
+      - {x: -0.48999998, y: -0.59999996}
+      - {x: -0.38, y: -0.64}
+      - {x: -0.35, y: -0.74}
+      - {x: -0.22, y: -0.9}
+      - {x: -0.19999999, y: -0.95}
+      - {x: -0.14, y: -1}
+      - {x: -0.07, y: -1}
+      - {x: 0.01, y: -0.97999996}
+      - {x: 0.14999999, y: -0.97999996}
+      - {x: 0.32, y: -0.9}
+      - {x: 0.38, y: -0.84}
 --- !u!1 &5771017262649175851
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,6 +361,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9007600781276761027}
   - component: {fileID: 5211889282498119462}
+  - component: {fileID: 5533234674570755289}
+  - component: {fileID: 5943521223365305844}
   m_Layer: 16
   m_Name: Rock4Debri1
   m_TagString: Untagged
@@ -254,6 +434,66 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &5533234674570755289
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5771017262649175851}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 5
+  m_GravityScale: 5
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!60 &5943521223365305844
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5771017262649175851}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.92, y: 0.96}
+    newSize: {x: 0.92, y: 0.96}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.42999998, y: 0.12}
+      - {x: 0.12, y: 0.48}
+      - {x: -0.07, y: 0.48}
+      - {x: -0.45, y: 0.35999998}
+      - {x: -0.45999998, y: 0.29}
+      - {x: -0.45999998, y: -0.11}
+      - {x: -0.41, y: -0.22}
+      - {x: -0.35, y: -0.35999998}
+      - {x: -0.28, y: -0.48}
+      - {x: 0.08, y: -0.48}
+      - {x: 0.24, y: -0.45999998}
+      - {x: 0.45, y: -0.22999999}
+      - {x: 0.45999998, y: -0.17}
+      - {x: 0.45999998, y: 0.02}
 --- !u!1 &6141579674078676039
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,6 +504,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8263973236328261952}
   - component: {fileID: 5740784815282610897}
+  - component: {fileID: 986264705610562732}
+  - component: {fileID: 8248402564690914189}
   m_Layer: 16
   m_Name: Rock4Debri5
   m_TagString: Untagged
@@ -335,6 +577,99 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &986264705610562732
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6141579674078676039}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 5
+  m_GravityScale: 5
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!60 &8248402564690914189
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6141579674078676039}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.88, y: 1.92}
+    newSize: {x: 2.88, y: 1.92}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.14999999, y: -0.96}
+      - {x: 0.29999998, y: -0.94}
+      - {x: 0.32, y: -0.96}
+      - {x: 0.59, y: -0.96}
+      - {x: 0.91999996, y: -0.83}
+      - {x: 1.02, y: -0.75}
+      - {x: 1.15, y: -0.53}
+      - {x: 1.39, y: -0.29}
+      - {x: 1.4399999, y: -0.22}
+      - {x: 1.4399999, y: -0.06}
+      - {x: 1.3399999, y: 0.02}
+      - {x: 1.3399999, y: 0.17}
+      - {x: 1.27, y: 0.35999998}
+      - {x: 1.15, y: 0.64}
+      - {x: 1.03, y: 0.82}
+      - {x: 0.85999995, y: 0.82}
+      - {x: 0.72999996, y: 0.94}
+      - {x: 0.56, y: 0.94}
+      - {x: 0.38, y: 0.9}
+      - {x: 0.31, y: 0.94}
+      - {x: 0.22, y: 0.94}
+      - {x: 0.089999996, y: 0.88}
+      - {x: -0.17, y: 0.90999997}
+      - {x: -0.29, y: 0.90999997}
+      - {x: -0.56, y: 0.82}
+      - {x: -0.63, y: 0.77}
+      - {x: -0.72999996, y: 0.61}
+      - {x: -0.91999996, y: 0.51}
+      - {x: -1.06, y: 0.42}
+      - {x: -1.26, y: 0.26999998}
+      - {x: -1.35, y: 0.26}
+      - {x: -1.39, y: 0.22999999}
+      - {x: -1.39, y: 0}
+      - {x: -1.28, y: -0.21}
+      - {x: -1.38, y: -0.39999998}
+      - {x: -1.4, y: -0.53999996}
+      - {x: -1.4, y: -0.65}
+      - {x: -1.37, y: -0.74}
+      - {x: -1.18, y: -0.91999996}
+      - {x: -1.13, y: -0.93}
+      - {x: -1.06, y: -0.94}
+      - {x: -0.96999997, y: -0.96}
+      - {x: -0.7, y: -0.96}
+      - {x: -0.48, y: -0.90999997}
+      - {x: -0.26, y: -0.88}
+      - {x: -0.19999999, y: -0.94}
+      - {x: -0.13, y: -0.96}
 --- !u!1 &8128256363473602905
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,6 +680,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2004123770867517395}
   - component: {fileID: 1359582801639218073}
+  - component: {fileID: 6397889555764068654}
+  - component: {fileID: 6900275062134616999}
   m_Layer: 16
   m_Name: Rock4Debri4
   m_TagString: Untagged
@@ -416,6 +753,71 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &6397889555764068654
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8128256363473602905}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 5
+  m_GravityScale: 5
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!60 &6900275062134616999
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8128256363473602905}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.2, y: 1.32}
+    newSize: {x: 1.2, y: 1.32}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.59999996, y: -0.03}
+      - {x: 0.5, y: 0.11}
+      - {x: 0.39, y: 0.37}
+      - {x: 0.28, y: 0.53}
+      - {x: 0.16, y: 0.65}
+      - {x: 0.14, y: 0.65999997}
+      - {x: -0.35999998, y: 0.65999997}
+      - {x: -0.37, y: 0.65}
+      - {x: -0.45999998, y: 0.48}
+      - {x: -0.45, y: 0.39999998}
+      - {x: -0.42, y: 0.25}
+      - {x: -0.45, y: 0.14}
+      - {x: -0.55, y: -0.04}
+      - {x: -0.55, y: -0.65}
+      - {x: -0.53999996, y: -0.65999997}
+      - {x: 0.19999999, y: -0.65999997}
+      - {x: 0.41, y: -0.56}
+      - {x: 0.48999998, y: -0.44}
+      - {x: 0.59999996, y: -0.34}
 --- !u!1001 &2847143226338270149
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -477,6 +879,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_angleOffset
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_forceOffset
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7472415926648306021, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
         type: 3}
