@@ -114,6 +114,17 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+        [Button, HideInEditorMode, HideIf("m_isDestroyed")]
+        public void BreakObject()
+        {
+            m_isDestroyed = true;
+            m_onDestroy?.Invoke();
+            if (m_createDebris)
+            {
+                InstantiateDebris(m_debris);
+            }
+        }
+
         private void InstantiateDebris(GameObject debris)
         {
             var instance = Instantiate(debris, m_object.position, Quaternion.identity);
@@ -184,16 +195,7 @@ namespace DChild.Gameplay.Environment
         }
 
 #if UNITY_EDITOR
-        [Button, HideInEditorMode, HideIf("m_isDestroyed")]
-        private void BreakObject()
-        {
-            m_isDestroyed = true;
-            m_onDestroy?.Invoke();
-            if (m_createDebris)
-            {
-                InstantiateDebris(m_debris);
-            }
-        }
+        
 
         [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
         private void FixObject()

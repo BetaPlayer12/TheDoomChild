@@ -1,4 +1,7 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Characters.Players.Modules;
+using Holysoft.Event;
+using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,51 +11,48 @@ namespace DChild.Gameplay.Environment
 {
     public class IntervalIllusionPlatformHandle : MonoBehaviour
     {
-        [System.Serializable]
-        public class Info
-        {
-            [SerializeField,HorizontalGroup,LabelWidth(80)]
-            private IllusionPlatform m_platform;
-            [SerializeField, MinValue(0), HorizontalGroup]
-            private float m_appearanceDuration = 1;
+        [SerializeField]
+        private IllusionPlatform[] m_list;
+        private int m_currentSequenceIndex;
 
-            public IllusionPlatform platform => m_platform;
-            public float appearanceDuration => m_appearanceDuration;
+        private void OnPlayerJumpExecution(object sender, EventActionArgs eventArgs)
+        {
+            var newIndex = (int)Mathf.Repeat(m_currentSequenceIndex + 1, m_list.Length);
+            RevealPlatformsAtConfiguration(newIndex);
+            m_currentSequenceIndex = newIndex;
         }
 
-        [SerializeField]
-        private Info[] m_list;
-        private int m_currentRevealedIndex;
-        private float m_timer;
+        private void RevealPlatformsAtConfiguration(int index)
+        {
+            m_list[m_currentSequenceIndex].Disappear(false);
+            m_list[index].Appear(false);
+        }
+
+        private void Reset()
+        {
+            m_currentSequenceIndex = 0;
+            m_list[0].Appear(true);
+            for (int i = 1; i < m_list.Length; i++)
+            {
+                m_list[i].Disappear(true);
+            }
+        }
 
         private void Start()
         {
-            for (int i = 0; i < m_list.Length; i++)
-            {
-                if (m_currentRevealedIndex == i)
-                {
-                    var info = m_list[i];
-                    info.platform.Appear(true);
-                    m_timer = info.appearanceDuration;
-                }
-                else
-                {
-                    m_list[i].platform.Disappear(true);
-                }
-            }
+            var character = GameplaySystem.playerManager.player.character;
+            character.GetComponentInChildren<WallJump>().ExecuteModule += OnPlayerJumpExecution;
+            character.GetComponentInChildren<GroundJump>().ExecuteModule += OnPlayerJumpExecution;
+            character.GetComponentInChildren<ExtraJump>().ExecuteModule += OnPlayerJumpExecution;
+            Reset();
         }
 
-        private void Update()
+        private void OnDestroy()
         {
-            m_timer -= GameplaySystem.time.deltaTime;
-            if (m_timer <= 0)
-            {
-                m_list[m_currentRevealedIndex].platform?.Disappear(false);
-                m_currentRevealedIndex = (int)Mathf.Repeat(m_currentRevealedIndex + 1, m_list.Length);
-                var info = m_list[m_currentRevealedIndex];
-                info.platform?.Appear(false);
-                m_timer = info.appearanceDuration;
-            }
+            var character = GameplaySystem.playerManager.player.character;
+            character.GetComponentInChildren<WallJump>().ExecuteModule -= OnPlayerJumpExecution;
+            character.GetComponentInChildren<GroundJump>().ExecuteModule -= OnPlayerJumpExecution;
+            character.GetComponentInChildren<ExtraJump>().ExecuteModule -= OnPlayerJumpExecution;
         }
     }
 }
