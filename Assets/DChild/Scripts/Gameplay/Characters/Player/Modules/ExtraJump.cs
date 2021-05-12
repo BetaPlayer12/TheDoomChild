@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Animator m_animator;
         private int m_animationParameter;
         private int m_currentCount;
+
+        public event EventAction<EventActionArgs> ExecuteModule;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -46,6 +49,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_currentCount--;
                 m_rigidbody.velocity = new Vector2(0, m_power);
                 m_animator.SetBool(m_animationParameter, true);
+
+                ExecuteModule?.Invoke(this, EventActionArgs.Empty);
             }
         }
     }
