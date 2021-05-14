@@ -2,6 +2,7 @@
 using DChild.Gameplay.Combat;
 using Holysoft.Pooling;
 using Sirenix.Utilities;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Projectiles
@@ -27,6 +28,23 @@ namespace DChild.Gameplay.Projectiles
         }
 
         protected abstract void Collide();
+        private void OnProjectileDealDamage(object sender, CombatConclusionEventArgs eventArgs)
+        {
+            CallAttackerAttacked(eventArgs);
+            if (m_data.isPiercing == false)
+            {
+                m_collidedWithEnvironment = false;
+                Collide();
+            }
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            var attacker = GetComponent<Attacker>();
+            attacker.TargetDamaged += OnProjectileDealDamage;
+            attacker.SetDamage(projectileData.damage);
+        }
 
         protected virtual void FixedUpdate()
         {
@@ -38,6 +56,7 @@ namespace DChild.Gameplay.Projectiles
                 transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             }
         }
+
 
         protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
@@ -61,47 +80,6 @@ namespace DChild.Gameplay.Projectiles
                 }
 
             }
-            else if (collision.CompareTag(Hitbox.TAG))
-            {
-                if (collision.TryGetComponent(out Hitbox m_cacheToDamage) && m_cacheToDamage.invulnerabilityLevel <= m_data.ignoreInvulnerability)
-                {
-                    var damage = m_data.damage;
-                    using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
-                    {
-                        using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
-                        {
-                            using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
-                            {
-                                for (int i = 0; i < damage.Length; i++)
-                                {
-                                    cacheInfo.Value.Initialize(transform.position, 0, 1, damage[i]);
-                                    cacheTargetInfo.Value.Initialize(m_cacheToDamage.damageable, m_cacheToDamage.defense.damageReduction);
-                                    using (Cache<AttackInfo> cacheResult = GameplaySystem.combatManager.ResolveConflict(cacheInfo, cacheTargetInfo.Value))
-                                    {
-                                        cacheEventArgs.Value.Initialize(cacheInfo, cacheTargetInfo.Value, cacheResult);
-                                        CallAttackerAttacked(cacheEventArgs.Value);
-                                        cacheResult.Release();
-                                    }
-                                }
-                                cacheEventArgs.Release();
-                            }
-                            cacheTargetInfo?.Release();
-                        }
-                        cacheInfo.Release();
-                    }
-                }
-                if (m_data.isPiercing == false)
-                {
-                    m_collidedWithEnvironment = false;
-                    Collide();
-                }
-            }
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            GetComponent<Attacker>().SetDamage(projectileData.damage);
         }
 
         private void OnValidate()

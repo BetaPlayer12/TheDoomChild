@@ -85,6 +85,8 @@ namespace DChild.Gameplay.Characters.Players
             state.active = isActive;
             m_skillPair[module] = state;
             EndUpdate(module);
+            //Do this incase the thing is actually a passive module
+            m_passiveModule.SetModuleActive(module, isActive); 
         }
 
         public void SetModuleLock(PrimarySkill module, bool isUnlocked)
