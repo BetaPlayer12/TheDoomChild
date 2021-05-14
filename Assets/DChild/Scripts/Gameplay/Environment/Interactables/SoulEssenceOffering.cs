@@ -51,7 +51,7 @@ namespace DChild.Gameplay.Environment
         private Collider2D m_trigger;
         private static GameplayUIHandle m_gameplayUIHandle;
 
-        public bool showPrompt => true;
+        public bool showPrompt => m_currentAmount < m_amountRequired;
 
         public Vector3 promptPosition => transform.position + m_promptOffset;
 
