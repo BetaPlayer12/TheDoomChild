@@ -264,6 +264,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             m_selfCollider.SetActive(false);
             m_hitbox.Disable();
+            m_spitBB.SetActive(false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();
@@ -279,7 +280,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_animation.SetAnimation(0, m_info.run.animation, false);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
