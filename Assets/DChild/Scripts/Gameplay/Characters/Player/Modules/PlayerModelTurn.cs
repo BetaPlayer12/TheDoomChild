@@ -5,6 +5,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class PlayerModelTurn : MonoBehaviour, IComplexCharacterModule
     {
+        [SerializeField, SpineSkin(dataField = "m_skeletonData")]
+        private string m_leftFacingSkinName;
+        [SerializeField, SpineSkin(dataField = "m_skeletonData")]
+        private string m_rightFacingSkinName;
+        [SerializeField]
+        private SkeletonAnimation m_skeletonData;
+
         [System.Serializable]
         private class AttachmentHandle
         {
