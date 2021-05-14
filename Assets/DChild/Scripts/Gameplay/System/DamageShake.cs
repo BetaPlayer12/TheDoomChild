@@ -7,48 +7,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageShake : MonoBehaviour
+namespace DChild.Gameplay.Combat
 {
-    [SerializeField]
-    private float m_radiusOffset = 1;
-    [SerializeField]
-    private float m_duration = 1f;
-
-    private bool m_shake=false;
-    private Vector2 m_startingPos;
-    private IHitToInteract m_interractable;
-
-    private void Awake()
+    public class DamageShake : MonoBehaviour
     {
-        m_interractable = GetComponentInParent<IHitToInteract>();
-        m_interractable.OnHit += OnHit;
-        m_startingPos.x = transform.position.x;
-        m_startingPos.y = transform.position.y;
-    }
-    private void Update()
-    {
-        var offset = Random.insideUnitCircle;
-        if (m_shake == true)
+        [SerializeField]
+        private float m_radiusOffset = 1;
+        [SerializeField]
+        private float m_duration = 1f;
+        [SerializeField]
+        private Transform[] m_affectedTransforms;
+
+        private Vector2[] m_startingPositionList;
+        private IHitToInteract m_interractable;
+
+        private void OnHit(object sender, HitDirectionEventArgs eventArgs)
         {
-            transform.position = m_startingPos + offset * m_radiusOffset;
+            StopAllCoroutines();
+            StartCoroutine(Shake());
         }
-        
-    }
+        IEnumerator Shake()
+        {
 
-    private void OnHit(object sender, HitDirectionEventArgs eventArgs)
-    {
-        StopAllCoroutines();
-        m_shake = true;
-        StartCoroutine(Shake());
-        
-    }
-    IEnumerator Shake()
-    {
-       
-        yield return new WaitForSeconds(m_duration);
-        transform.position = m_startingPos;
-        m_shake = false;
+            enabled = true;
+            yield return new WaitForSeconds(m_duration);
+            for (int i = 0; i < m_startingPositionList.Length; i++)
+            {
+                m_affectedTransforms[i].position = m_startingPositionList[i];
+            }
+            enabled = false;
+        }
 
+        private void Start()
+        {
+            m_interractable = GetComponentInParent<IHitToInteract>();
+            m_interractable.OnHit += OnHit;
+            m_startingPositionList = new Vector2[m_affectedTransforms.Length];
+            for (int i = 0; i < m_startingPositionList.Length; i++)
+            {
+                m_startingPositionList[i] = m_affectedTransforms[i].position;
+            }
+            enabled = false;
+        }
+        private void Update()
+        {
+            var offset = Random.insideUnitCircle;
+            for (int i = 0; i < m_startingPositionList.Length; i++)
+            {
+                m_affectedTransforms[i].position = m_startingPositionList[i] + offset * m_radiusOffset;
+            }
+        }
     }
 
 }
