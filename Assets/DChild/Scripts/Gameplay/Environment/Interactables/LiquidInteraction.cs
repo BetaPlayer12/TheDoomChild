@@ -7,6 +7,8 @@ public class LiquidInteraction : MonoBehaviour
 {
     [SerializeField]
     private Material m_material;
+    [SerializeField]
+    private Material m_materialFront;
 
     private List<Vector4> m_rippleLocations;
 
@@ -53,6 +55,7 @@ public class LiquidInteraction : MonoBehaviour
         var ripplePos = new Vector2(calc2, m_material.GetVector("_RippleLocation_" + (m_rippleLocations.Count).ToString()).y);
         m_rippleLocations[m_rippleLocations.Count - 1] = ripplePos;
         m_material.SetVector("_RippleLocation_" + (m_rippleLocations.Count).ToString(), m_rippleLocations[m_rippleLocations.Count - 1]);
+        m_materialFront.SetVector("_RippleLocation_" + (m_rippleLocations.Count).ToString(), m_rippleLocations[m_rippleLocations.Count - 1]);
 
         StartCoroutine(RippleModeRoutine(m_rippleLocations.Count));
     }
@@ -64,15 +67,28 @@ public class LiquidInteraction : MonoBehaviour
         while (time <= 1.8f)
         {
             m_material.SetFloat("_RippleTime_" + (count).ToString(), time += GameplaySystem.time.deltaTime);
+            m_materialFront.SetFloat("_RippleTime_" + (count).ToString(), time += GameplaySystem.time.deltaTime);
             yield return null;
         }
         m_material.SetFloat("_RippleTime_" + (count).ToString(), -0.001f);
+        m_materialFront.SetFloat("_RippleTime_" + (count).ToString(), -0.001f);
         yield return null;
     }
 
     private void Start()
     {
         m_material.SetInt("_RippleAutoTime", 0);
+        m_materialFront.SetInt("_RippleAutoTime", 0);
+        for (int i = 1; i <= 10; i++)
+        {
+            m_material.SetFloat("_RippleSpeed_" + i, 0.5f);
+            m_materialFront.SetFloat("_RippleSpeed_" + i, 0.5f);
+        }
+        for (int i = 1; i <= 10; i++)
+        {
+            m_material.SetFloat("_RippleTime_" + i, -0.001f);
+            m_materialFront.SetFloat("_RippleTime_" + i, -0.001f);
+        }
     }
 
     private void Awake()

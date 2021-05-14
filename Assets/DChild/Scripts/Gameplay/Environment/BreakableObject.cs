@@ -51,6 +51,10 @@ namespace DChild.Gameplay.Environment
         private GameObject m_debris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
         private bool m_copySorting;
+        [SerializeField, ShowIf("m_createDebris"), Indent]
+        private bool m_applyDebrisColorChange;
+        [SerializeField, ShowIf("m_applyDebrisColorChange"), Indent]
+        private Color m_colorToApply = Color.white;
 
         [SerializeField, TabGroup("On Destroy")]
         private UnityEvent m_onDestroy;
@@ -141,6 +145,10 @@ namespace DChild.Gameplay.Environment
                 {
                     renderers[i].sortingLayerID = m_sortingHandle.sortingLayerID;
                 }
+            }
+            if (m_applyDebrisColorChange)
+            {
+                m_instantiatedDebris.GetComponent<RendererColorChangeHandle>().ApplyColor(m_colorToApply);
             }
         }
 
