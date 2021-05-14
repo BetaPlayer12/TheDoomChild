@@ -365,12 +365,21 @@ namespace DChild.Gameplay.Characters.Enemies
             //this.gameObject.SetActive(false); //TEMP
             if (!m_deathHandle.gameObject.activeSelf)
             {
-                m_animation.SetAnimation(0, m_info.defeatAnimation, true);
+                this.enabled = false;
+                StartCoroutine(DefeatRoutine());
+                StartCoroutine(DeathStickRoutine());
             }
             else
             {
                 StartCoroutine(DeathStickRoutine());
             }
+        }
+
+        private IEnumerator DefeatRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.defeatAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.defeatAnimation);
+            this.gameObject.SetActive(false);
         }
 
         private IEnumerator DeathStickRoutine()
