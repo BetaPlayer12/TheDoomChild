@@ -228,8 +228,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetEmptyAnimation(0, 0);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -361,8 +362,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    Debug.Log("IDLE CHASING");
                                     m_movement.Stop();
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
                             }
                         }
