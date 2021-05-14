@@ -257,6 +257,8 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             //TEMP
             //this.gameObject.SetActive(false);
+            this.enabled = false;
+            GetComponentInChildren<Hitbox>().Disable();
             m_animation.SetAnimation(0, m_info.defeatAnimation, false);
         }
 

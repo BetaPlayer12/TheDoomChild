@@ -33,13 +33,9 @@ namespace DChildDebug.Window
             }
         }
 
-        private void Awake()
-        {
-            m_isToggled = GetComponent<IToggleDebugBehaviour>().value;
-        }
-
         private void Start()
         {
+            m_isToggled = GetComponent<IToggleDebugBehaviour>().value;
             if (m_isToggled)
             {
                 m_highlight.UseHighlightState();
