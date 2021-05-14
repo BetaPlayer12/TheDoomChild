@@ -264,6 +264,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             m_selfCollider.SetActive(false);
             m_hitbox.Disable();
+            m_spitBB.SetActive(false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();

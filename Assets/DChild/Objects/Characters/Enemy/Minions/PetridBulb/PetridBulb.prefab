@@ -387,6 +387,24 @@ MonoBehaviour:
   m_projectileStart: {fileID: 3045579265655036325}
   m_boneName: Aim_Shoot
   m_modelTF: {fileID: 5220323593016453691}
+--- !u!114 &8719007166101537065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4447919600772987438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18353210c1fef634ba85c229444944bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_hitStopTime: 0.025
+  m_whiteDecayTime: 4
+  m_enableHitStop: 0
+  m_animation: {fileID: 608283619933842545}
+  m_flinchHandle: {fileID: 875314166653190821}
+  m_Rendererer: {fileID: 5220323593016453685}
 --- !u!1 &8908593851252099362
 GameObject:
   m_ObjectHideFlags: 0
@@ -1010,6 +1028,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 902897497b3d27a47bcd0f5c727fb398, type: 3}
+--- !u!70 &5220323593197397729 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1407243981126452052, guid: 902897497b3d27a47bcd0f5c727fb398,
+    type: 3}
+  m_PrefabInstance: {fileID: 6626440297843156405}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5220323593197397728 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1407243981126452053, guid: 902897497b3d27a47bcd0f5c727fb398,
@@ -1082,18 +1106,6 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 6626440297843156405}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8950249739291512241 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2864417868559591428, guid: 902897497b3d27a47bcd0f5c727fb398,
-    type: 3}
-  m_PrefabInstance: {fileID: 6626440297843156405}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5220323593016453690 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1407243979662053263, guid: 902897497b3d27a47bcd0f5c727fb398,
@@ -1106,18 +1118,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!23 &5220323593016453685 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1407243979662053248, guid: 902897497b3d27a47bcd0f5c727fb398,
+    type: 3}
+  m_PrefabInstance: {fileID: 6626440297843156405}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5220323593016453691 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1407243979662053262, guid: 902897497b3d27a47bcd0f5c727fb398,
     type: 3}
   m_PrefabInstance: {fileID: 6626440297843156405}
   m_PrefabAsset: {fileID: 0}
---- !u!70 &5220323593197397729 stripped
-CapsuleCollider2D:
-  m_CorrespondingSourceObject: {fileID: 1407243981126452052, guid: 902897497b3d27a47bcd0f5c727fb398,
+--- !u!114 &8950249739291512241 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2864417868559591428, guid: 902897497b3d27a47bcd0f5c727fb398,
     type: 3}
   m_PrefabInstance: {fileID: 6626440297843156405}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffe2ff51b484f14592540b701d34e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7428688047426831774
 PrefabInstance:
   m_ObjectHideFlags: 0
