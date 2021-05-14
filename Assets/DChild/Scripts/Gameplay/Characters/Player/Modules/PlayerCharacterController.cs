@@ -84,6 +84,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whip?.Cancel();
             m_skullThrow?.Cancel();
             m_shadowMorph.Cancel();
+            m_shadowGaugeRegen.Enable(true);
 
             if (m_state.isGrounded)
             {

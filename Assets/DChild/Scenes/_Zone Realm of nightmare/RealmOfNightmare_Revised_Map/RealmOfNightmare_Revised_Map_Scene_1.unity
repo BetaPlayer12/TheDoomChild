@@ -1622,7 +1622,7 @@ PrefabInstance:
     - target: {fileID: 1176331013734725149, guid: 9efa14bf9ee14e346bca2e98bc97ae16,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1176331013734725149, guid: 9efa14bf9ee14e346bca2e98bc97ae16,
         type: 3}
@@ -4528,7 +4528,7 @@ PrefabInstance:
     - target: {fileID: 7305329270035087520, guid: d4cf99ac62ccc9e49ad9a3b3b6b92bdd,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7305329270035087520, guid: d4cf99ac62ccc9e49ad9a3b3b6b92bdd,
         type: 3}
@@ -5494,6 +5494,7 @@ MonoBehaviour:
     - {fileID: 2134290680}
     - {fileID: 1848587354}
     - {fileID: 385796303}
+    - {fileID: 1302312599}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -5533,7 +5534,7 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 6
+      Data: 7
     - Name: 
       Entry: 7
       Data: 5|DChild.Serialization.ZoneDataHandle+EditorData+ComponentData, Assembly-CSharp
@@ -5643,6 +5644,24 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 17|DChild.Serialization.ZoneDataHandle+EditorData+ComponentData, Assembly-CSharp
+    - Name: m_serializer
+      Entry: 10
+      Data: 6
+    - Name: m_saveData
+      Entry: 7
+      Data: 18|DChild.Gameplay.Environment.ItemRequiredUnlockable+SaveData, Assembly-CSharp
+    - Name: m_isUnlocked
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -5650,7 +5669,7 @@ MonoBehaviour:
       Data: 
     - Name: m_dynamicDatas
       Entry: 7
-      Data: 17|System.Collections.Generic.List`1[[DChild.Serialization.ZoneDataHandle+EditorData+DynamicData,
+      Data: 19|System.Collections.Generic.List`1[[DChild.Serialization.ZoneDataHandle+EditorData+DynamicData,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
@@ -5675,7 +5694,9 @@ MonoBehaviour:
   - {fileID: 2134290680}
   - {fileID: 1848587354}
   - {fileID: 385796303}
+  - {fileID: 1302312599}
   m_dynamicSerializers: []
+  m_questsListener: []
   m_useEditorData: 0
 --- !u!4 &739146860
 Transform:
@@ -6970,7 +6991,7 @@ PrefabInstance:
     - target: {fileID: 7776743258244639093, guid: 312891fc5581a054fa3ebefc0806f2f8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7776743258244639093, guid: 312891fc5581a054fa3ebefc0806f2f8,
         type: 3}
@@ -7002,7 +7023,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.285825
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8400940596142838034, guid: 312891fc5581a054fa3ebefc0806f2f8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 312891fc5581a054fa3ebefc0806f2f8, type: 3}
 --- !u!4 &949092579 stripped
 Transform:
@@ -9059,6 +9081,12 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.285825
       objectReference: {fileID: 0}
+    - target: {fileID: 8400940596142838034, guid: 312891fc5581a054fa3ebefc0806f2f8,
+        type: 3}
+      propertyPath: m_itemRequirement
+      value: 
+      objectReference: {fileID: 11400000, guid: 06ebecc527b70774ca865770d9c10718,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 312891fc5581a054fa3ebefc0806f2f8, type: 3}
 --- !u!4 &1302312597 stripped
@@ -9067,6 +9095,27 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1302312596}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1302312598 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 727305284045773062, guid: 312891fc5581a054fa3ebefc0806f2f8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1302312596}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1302312599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302312598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169904169d11e8b46aaa137c9857a428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_id:
+    m_ID: 441
+    m_showHandle: 1
 --- !u!1 &1336138417
 GameObject:
   m_ObjectHideFlags: 0
@@ -11321,7 +11370,7 @@ PrefabInstance:
     - target: {fileID: 2429537028785659068, guid: 1498e7dc989cc84408ed1abfecb427ad,
         type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2429537028785659068, guid: 1498e7dc989cc84408ed1abfecb427ad,
         type: 3}
