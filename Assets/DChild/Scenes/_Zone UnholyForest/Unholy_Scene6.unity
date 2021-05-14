@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -45868,6 +45868,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 752100662}
+  - component: {fileID: 752100663}
   m_Layer: 0
   m_Name: Enemies
   m_TagString: Untagged
@@ -45899,6 +45900,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &752100663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752100661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c42f22068ecdb824aa998ac50e7ff881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_minions: {fileID: 752100661}
 --- !u!1 &753297641
 GameObject:
   m_ObjectHideFlags: 0
@@ -72258,22 +72272,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1344bdc1e53bf2b4b86f92e00075aba6, type: 2}
+      objectReference: {fileID: 2100000, guid: d59aa8a9a1bad6943a8fe757d9c8ba82, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 64120b5317992c34189dc9cf98adfd53, type: 2}
+      objectReference: {fileID: 2100000, guid: 916dbcbdee353fe41899b378e1eca582, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 1344bdc1e53bf2b4b86f92e00075aba6, type: 2}
+      objectReference: {fileID: 2100000, guid: d59aa8a9a1bad6943a8fe757d9c8ba82, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: 64120b5317992c34189dc9cf98adfd53, type: 2}
+      objectReference: {fileID: 2100000, guid: 916dbcbdee353fe41899b378e1eca582, type: 2}
     - target: {fileID: 7090695359494195661, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Mesh
@@ -93106,6 +93120,7 @@ MonoBehaviour:
     m_showHandle: 1
   m_componentSerializers: []
   m_dynamicSerializers: []
+  m_questsListener: []
   m_useEditorData: 0
 --- !u!4 &1534504991
 Transform:
