@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Combat.BattleZoneComponents
 {
+    [System.Serializable]
     public class SpawnHandle
     {
         private struct Data
