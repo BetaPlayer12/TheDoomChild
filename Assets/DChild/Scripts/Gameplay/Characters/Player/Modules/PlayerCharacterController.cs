@@ -194,6 +194,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_objectManipulation.Cancel();
                 }
+                else if (m_state.isInShadowMode)
+                {
+                    m_shadowMorph?.Cancel();
+                }
                 else
                 {
                     m_shadowGaugeRegen?.Enable(true);
@@ -224,6 +228,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else if (m_state.isLevitating)
                 {
                     m_devilWings?.Cancel();
+                }
+                else if (m_state.isInShadowMode)
+                {
+                    m_shadowMorph?.Cancel();
                 }
             }
         }
