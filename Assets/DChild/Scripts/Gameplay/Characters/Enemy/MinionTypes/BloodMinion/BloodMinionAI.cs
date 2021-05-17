@@ -156,6 +156,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             //m_animation.DisableRootMotion();
+            m_flinchHandle.m_autoFlinch = true;
             m_isSubmerged = false;
             m_stateHandle.ApplyQueuedState();
         }
@@ -213,6 +214,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
@@ -230,30 +232,36 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            if (!IsFacingTarget())
+            if (m_flinchHandle.m_autoFlinch)
             {
-                CustomTurn();
+                StopAllCoroutines();
+                if (!IsFacingTarget())
+                {
+                    CustomTurn();
+                }
+                var flinchFX = Instantiate(m_flinchFX.gameObject, m_flinchFX.transform.position, Quaternion.identity);
+                flinchFX.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().flip = transform.position.x > m_targetInfo.position.x ? Vector3.zero : Vector3.right;
+                flinchFX.GetComponent<Transform>().localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+                flinchFX.GetComponent<ParticleFX>().Play();
+
+                //m_flinchFXRenderer.flip = transform.position.x > m_targetInfo.position.x ?  Vector3.zero : Vector3.right;
+                //m_flinchFX.Play();
+
+                m_animation.SetAnimation(0, IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation, false);
+                m_animation.AddAnimation(0, m_info.idleAnimation, false, 0.2f).TimeScale = 20;
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             }
-            var flinchFX = Instantiate(m_flinchFX.gameObject, m_flinchFX.transform.position, Quaternion.identity);
-            flinchFX.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().flip = transform.position.x > m_targetInfo.position.x ? Vector3.zero : Vector3.right;
-            flinchFX.GetComponent<Transform>().localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-            flinchFX.GetComponent<ParticleFX>().Play();
-
-            //m_flinchFXRenderer.flip = transform.position.x > m_targetInfo.position.x ?  Vector3.zero : Vector3.right;
-            //m_flinchFX.Play();
-
-            m_animation.SetAnimation(0,IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, false, 0.2f).TimeScale = 20;
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            //m_flinchFXFollower.SetParent(this.transform);
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                //m_flinchFXFollower.SetParent(this.transform);
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
         }
 
         public override void ApplyData()
@@ -269,6 +277,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.Patrol);
@@ -412,6 +421,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
                     m_hitbox.enabled = true;
+                    m_flinchHandle.m_autoFlinch = false;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
