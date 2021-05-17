@@ -105,6 +105,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_bodycollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -298,6 +300,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void ExecuteAttack(Attack m_attack)
         {
             m_agent.Stop();
+            m_bodycollider.enabled = true;
             switch (/*m_attack*/ m_currentAttack)
             {
                 case Attack.Attack:
@@ -318,6 +321,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.attack.animation, false).AnimationStart = 0.25f;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            m_bodycollider.enabled = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -354,7 +358,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 bool isCloseToGround = false;
 
-                if (m_targetInfo.position.y < transform.position.y)
+                if (m_targetInfo.position.y < transform.position.y /*&& m_groundSensor.allRaysDetecting*/)
                 {
                     isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
                 }
@@ -406,6 +410,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_animation.DisableRootMotion();
+            m_bodycollider.enabled = false;
             //m_selfCollider.SetActive(false);
         }
 
