@@ -358,7 +358,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 bool isCloseToGround = false;
 
-                if (m_targetInfo.position.y < transform.position.y /*&& m_groundSensor.allRaysDetecting*/)
+                if (m_targetInfo.position.y < transform.position.y && m_groundSensor.allRaysDetecting)
                 {
                     isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
                 }
@@ -367,7 +367,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > 5f /*&& !m_groundSensor.isDetecting*/)
                     {
-                        m_agent.SetDestination(new Vector2(transform.position.x, target.y));
+                        m_agent.SetDestination(new Vector2(transform.position.x, target.y + 5));
                     }
                     else
                     {
