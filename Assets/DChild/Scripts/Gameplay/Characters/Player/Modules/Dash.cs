@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
 using Sirenix.OdinInspector;
+using Spine.Unity.Examples;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -24,6 +25,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IDashState m_state;
         private Animator m_animator;
         private int m_animationParameter;
+        private SkeletonGhost m_skeletonGhost;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -34,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.canDash = true;
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsDashing);
+            m_skeletonGhost = info.skeletonGhost;
         }
 
         public void Cancel()
@@ -41,6 +44,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.velocity = Vector2.zero;
             m_state.isDashing = false;
             m_animator.SetBool(m_animationParameter, false);
+            m_skeletonGhost.enabled = false;
         }
 
         public void HandleCooldown()
@@ -74,7 +78,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var direction = (float)m_character.facing;
             m_rigidbody.velocity = Vector2.zero;
             m_rigidbody.AddForce(new Vector2(direction * m_velocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
-
+            m_skeletonGhost.enabled = true;
         }
 
         public void Reset()
