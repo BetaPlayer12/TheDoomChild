@@ -128,7 +128,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentCD;
         private bool m_enablePatience;
         private bool m_isDetecting;
-        private bool m_isCharging;
+        //private bool m_isCharging;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -143,6 +143,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private State m_turnState;
+        private IEnumerator m_chargeBreakRoutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -217,15 +218,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             StopAllCoroutines();
-            if (m_isCharging)
-            {
-                m_isCharging = false;
-                StartCoroutine(CounterStrikeRoutine());
-            }
-            else
-            {
-                StartCoroutine(FlincRoutine());
-            }
+            StartCoroutine(FlincRoutine());
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
         }
@@ -307,11 +300,26 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.prepAttackAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAttackAnimation);
-            m_isCharging = true;
             m_animation.SetAnimation(0, m_info.attack.animation, true);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            StartCoroutine(m_chargeBreakRoutine);
             yield return new WaitForSeconds(3);
-            m_isCharging = false;
+            StopCoroutine(m_chargeBreakRoutine);
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.attackBreakAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackBreakAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator ChargeBreakRoutine()
+        {
+            while (m_edgeSensor.isDetecting)
+            {
+                yield return null;
+            }
+            m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attackBreakAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackBreakAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -347,6 +355,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
+            m_chargeBreakRoutine = ChargeBreakRoutine();
         }
 
         protected override void Awake()

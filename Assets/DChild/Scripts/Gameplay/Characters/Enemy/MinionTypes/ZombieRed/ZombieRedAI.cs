@@ -156,6 +156,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            m_flinchHandle.m_autoFlinch = true;
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
         }
@@ -215,6 +216,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
@@ -250,16 +252,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.run.animation, false);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetAnimation(0, m_info.run.animation, false);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
         }
 
         public override void ApplyData()
@@ -374,11 +382,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.run.animation);
+                    m_animation.animationState.GetCurrent(0).MixDuration = 0;
                     break;
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
+                    m_flinchHandle.m_autoFlinch = false;
 
 
                     switch (m_attackDecider.chosenAttack.attack)
@@ -488,6 +498,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(true);
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
