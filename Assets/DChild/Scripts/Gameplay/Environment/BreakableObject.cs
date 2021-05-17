@@ -138,7 +138,7 @@ namespace DChild.Gameplay.Environment
             m_instantiatedDebris.transform.parent = null;
             m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
             m_leftOverDebris = m_instantiatedDebris.GetDetachables();
-            if (m_copySorting)
+            if (m_copySorting && m_sortingHandle != null)
             {
                 var renderers = instance.GetComponentsInChildren<SpriteRenderer>();
                 for (int i = 0; i < renderers.Length; i++)
