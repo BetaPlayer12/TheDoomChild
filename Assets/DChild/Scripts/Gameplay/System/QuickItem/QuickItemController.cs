@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DChild.Gameplay.Combat;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,7 @@ namespace DChild.Gameplay.Inventories
         private QuickItemHandle m_handle;
 
         private bool m_allowCycle;
+        private IDamageable m_playerDamageable;
 
         private void Awake()
         {
@@ -21,12 +23,15 @@ namespace DChild.Gameplay.Inventories
             var cycleAction = actionMap.FindAction("QuickItemCycle");
             cycleAction.performed += OnCycleAction;
             m_allowCycle = true;
+
+            m_playerDamageable = GameplaySystem.playerManager.player.damageableModule;
         }
+
         private void OnUseAction(InputAction.CallbackContext obj)
         {
             if (obj.ReadValue<float>() == 1)
             {
-                if (GameplaySystem.isGamePaused == false && m_handle.hideUI == false)
+                if (GameplaySystem.isGamePaused == false && m_handle.hideUI == false && m_playerDamageable.isAlive)
                 {
                     m_allowCycle = false;
                     m_handle.UseCurrentItem();
