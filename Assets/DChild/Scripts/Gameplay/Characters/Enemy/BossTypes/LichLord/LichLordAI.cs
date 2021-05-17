@@ -1,23 +1,17 @@
-﻿using System;
-using DChild.Gameplay;
-using DChild.Gameplay.Characters;
-using DChild.Gameplay.Combat;
+﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using DChild.Gameplay.Characters.AI;
 using UnityEngine;
-using Spine;
 using Spine.Unity;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using DChild;
-using DChild.Gameplay.Characters.Enemies;
 using Doozy.Engine;
-using Spine.Unity.Modules;
-using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Projectiles;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -472,7 +466,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 var startXPos = m_randomSpawnCollider.bounds.center.x - (m_randomSpawnCollider.bounds.size.x / 2);
                                 var xIncrement = 30 * i;
-                                var totem = Instantiate(m_info.totem, new Vector2(startXPos + xIncrement, GroundPosition().y), Quaternion.identity);
+                                var totem = this.InstantiateToScene(m_info.totem, new Vector2(startXPos + xIncrement, GroundPosition().y), Quaternion.identity);
                                 m_sarcophagusCache[i] = totem;
                             }
 
@@ -499,7 +493,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 zombieObject = m_info.summonedZombie3;
                                 break;
                         }
-                        var zombie = Instantiate(zombieObject, new Vector2(RandomTeleportPoint(m_zombieLastPos).x, GroundPosition().y), Quaternion.identity);
+                        var zombie = this.InstantiateToScene(zombieObject, new Vector2(RandomTeleportPoint(m_zombieLastPos).x, GroundPosition().y), Quaternion.identity);
                         switch (selectedZombie)
                         {
                             case 0:
@@ -534,7 +528,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         increment = -increment;
                         spikePos = pos;
                     }
-                    var spike = Instantiate(m_info.spike, spikePos, Quaternion.identity);
+                    var spike = this.InstantiateToScene(m_info.spike, spikePos, Quaternion.identity);
                     spike.GetComponent<LichLordSpike>().EmergeSpike();
                     m_spikeCache.Add(spike);
                     spikePos = new Vector2(spikePos.x + increment, spikePos.y);
@@ -664,7 +658,7 @@ namespace DChild.Gameplay.Characters.Enemies
             for (int i = 0; i < minionCount; i++)
             {
                 yield return new WaitForSeconds(2f);
-                var minion = Instantiate(m_info.summonedMinion, RandomTeleportPoint(m_minionLastPos), Quaternion.identity);
+                var minion = this.InstantiateToScene(m_info.summonedMinion, RandomTeleportPoint(m_minionLastPos), Quaternion.identity);
                 minion.GetComponent<PosessedFemaleAI>().SetAI(m_targetInfo);
                 m_minionLastPos = minion.transform.position;
                 m_minionsCache.Add(minion);
@@ -731,7 +725,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_mapCurseFX.Play();
             m_targetInfo.transform.position = m_playerP3Point.position;
             transform.position = m_lichP3Point.position;
-            //var totem = Instantiate(m_info.curseObject, new Vector2(m_randomSpawnCollider.bounds.center.x, GroundPosition().y), Quaternion.identity);
         }
 
         private IEnumerator MapCurseRoutine()
