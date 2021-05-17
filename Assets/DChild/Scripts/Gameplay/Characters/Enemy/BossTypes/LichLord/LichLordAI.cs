@@ -229,10 +229,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private SpineEventListener m_spineListener;
 
-        //TESTING
-        [SerializeField]
-        private GameObject m_lichLordPhaseThreeSequence;
-
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         State m_turnState;
@@ -371,7 +367,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         yield return null;
                     }
-                    m_lichLordPhaseThreeSequence.SetActive(true);
                     break;
             }
             //if (m_phaseHandle.currentPhase == Phase.PhaseThree)
@@ -956,7 +951,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //TESTING
             m_projectilePoint.SetParent(null);
-            m_lichLordPhaseThreeSequence.SetActive(false);
         }
 
         private void Update()

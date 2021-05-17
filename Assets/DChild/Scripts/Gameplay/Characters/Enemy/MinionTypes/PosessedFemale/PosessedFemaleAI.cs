@@ -349,7 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void Explode()
         {
             Debug.Log("EXPLODE FEMALE");
-            var explodeFX = Instantiate(m_info.explodeFX, new Vector2(transform.position.x, transform.position.y + 10), Quaternion.identity);
+            var explodeFX = this.InstantiateToScene(m_info.explodeFX, new Vector2(transform.position.x, transform.position.y + 10), Quaternion.identity);
             StartCoroutine(SpawnExplodeHitboxRoutine());
         }
 
