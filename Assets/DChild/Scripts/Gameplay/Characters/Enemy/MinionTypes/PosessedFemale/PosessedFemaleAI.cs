@@ -155,6 +155,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_currentAttack = Attack.Attack;
             m_flinchHandle.gameObject.SetActive(true);
+            m_flinchHandle.m_autoFlinch = true;
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
@@ -212,11 +213,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            //m_stateHandle.Wait(State.Cooldown);
-            StopAllCoroutines();
-            StartCoroutine(FlinchRoutine());
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                //m_stateHandle.Wait(State.Cooldown);
+                StopAllCoroutines();
+                StartCoroutine(FlinchRoutine());
+            }
         }
 
         private IEnumerator FlinchRoutine()
@@ -259,6 +263,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_enablePatience = false;
                 m_isDetecting = false;
                 m_stateHandle.SetState(State.Patrol);
@@ -498,6 +503,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
+                    m_flinchHandle.m_autoFlinch = false;
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
                     StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_attackDecider.chosenAttack.attack));
@@ -584,6 +590,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
