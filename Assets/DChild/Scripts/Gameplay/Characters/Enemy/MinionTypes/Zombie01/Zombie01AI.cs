@@ -171,6 +171,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            m_flinchHandle.m_autoFlinch = true;
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
         }
@@ -229,6 +230,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
@@ -265,16 +267,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.run.animation, false);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetAnimation(0, m_info.deathAnimation, false);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
         }
 
         public override void ApplyData()
@@ -316,7 +324,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator LeapAttackRoutine()
         {
             m_movement.Stop();
-            m_flinchHandle.gameObject.SetActive(false);
+            //m_flinchHandle.gameObject.SetActive(false);
             var leapDir = new Vector2(m_info.leapDistance.x * transform.localScale.x, m_info.leapDistance.y);
             m_character.physics.SetVelocity(leapDir);
             //m_character.physics.AddForce(leapDir, ForceMode2D.Impulse);
@@ -325,7 +333,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAnimation);
             m_movement.Stop();
-            m_flinchHandle.gameObject.SetActive(true);
+            //m_flinchHandle.gameObject.SetActive(true);
             m_attackDecider.hasDecidedOnAttack = false;
             if (!m_wallSensor.isDetecting)
             {
@@ -425,6 +433,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
+                    m_flinchHandle.m_autoFlinch = false;
 
 
                     switch (m_attackDecider.chosenAttack.attack)
@@ -542,6 +551,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(true);
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
