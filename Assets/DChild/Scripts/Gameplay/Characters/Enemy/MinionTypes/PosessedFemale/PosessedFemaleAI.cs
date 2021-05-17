@@ -215,30 +215,34 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_flinchHandle.m_autoFlinch)
             {
+                StopAllCoroutines();
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_stateHandle.OverrideState(State.WaitBehaviourEnd);
                 //m_stateHandle.Wait(State.Cooldown);
-                StopAllCoroutines();
-                StartCoroutine(FlinchRoutine());
             }
         }
 
-        private IEnumerator FlinchRoutine()
-        {
-            m_agent.Stop();
-            var flinch = UnityEngine.Random.Range(0, 2) == 0 ? m_info.flinchAnimation : m_info.flinch2Animation;
-            m_hitbox.gameObject.SetActive(false);
-            m_animation.SetAnimation(0, flinch, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
-            m_hitbox.gameObject.SetActive(true);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.Cooldown);
-            yield return null;
-        }
+        //private IEnumerator FlinchRoutine()
+        //{
+        //    m_agent.Stop();
+        //    var flinch = UnityEngine.Random.Range(0, 2) == 0 ? m_info.flinchAnimation : m_info.flinch2Animation;
+        //    m_hitbox.gameObject.SetActive(false);
+        //    m_animation.SetAnimation(0, flinch, false);
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
+        //    m_hitbox.gameObject.SetActive(true);
+        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //    m_stateHandle.OverrideState(State.Cooldown);
+        //    yield return null;
+        //}
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            //m_stateHandle.ApplyQueuedState();
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation && m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    m_animation.SetEmptyAnimation(0, 0);
+                m_stateHandle.ApplyQueuedState();
+            }
         }
         private Vector2 WallPosition()
         {
@@ -345,7 +349,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void Explode()
         {
             Debug.Log("EXPLODE FEMALE");
-            var explodeFX = Instantiate(m_info.explodeFX, new Vector2(transform.position.x, transform.position.y + 10), Quaternion.identity);
+            var explodeFX = this.InstantiateToScene(m_info.explodeFX, new Vector2(transform.position.x, transform.position.y + 10), Quaternion.identity);
             StartCoroutine(SpawnExplodeHitboxRoutine());
         }
 
