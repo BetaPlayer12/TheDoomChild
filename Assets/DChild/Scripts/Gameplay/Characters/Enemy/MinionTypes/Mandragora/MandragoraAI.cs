@@ -26,6 +26,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
 
+            [SerializeField, MinValue(0)]
+            private float m_attackCD;
+            public float attackCD => m_attackCD;
             //Attack Behaviours
             [SerializeField]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
@@ -84,6 +87,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Burrowed,
             Turning,
             Attacking,
+            Cooldown,
             Chasing,
             Flinch,
             ReevaluateSituation,
@@ -127,9 +131,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float m_targetDistance;
         private bool m_hasDetected;
+        private float m_currentCD;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
+
+        private State m_turnState;
 
         protected override void Start()
         {
@@ -147,6 +154,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_flinchHandle.m_autoFlinch = true;
             m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
@@ -191,6 +199,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_enablePatience = false;
                 m_hasDetected = false;
                 m_selfCollider.SetActive(false);
@@ -215,17 +224,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.move.animation, false);
-            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-            //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation && m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
         }
 
         private IEnumerator DetectRoutine()
@@ -271,15 +285,45 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
                 case State.Attacking:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(State.Cooldown);
+                    m_flinchHandle.m_autoFlinch = false;
 
                     m_animation.EnableRootMotion(true, false);
                     m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+
+                    break;
+
+                case State.Cooldown:
+                    //m_stateHandle.Wait(State.ReevaluateSituation);
+                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    if (!IsFacingTarget())
+                    {
+                        m_turnState = State.Cooldown;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                    else
+                    {
+                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                        {
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        }
+                    }
+
+                    if (m_currentCD <= m_info.attackCD)
+                    {
+                        m_currentCD += Time.deltaTime;
+                    }
+                    else
+                    {
+                        m_currentCD = 0;
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    }
 
                     break;
                 case State.Chasing:
@@ -310,6 +354,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
+                            m_turnState = State.ReevaluateSituation;
                             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                                 m_stateHandle.SetState(State.Turning);
                         }
@@ -351,6 +396,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;

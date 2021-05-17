@@ -139,6 +139,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            m_flinchHandle.m_autoFlinch = true;
             m_attackBB.SetActive(false);
             m_stateHandle.OverrideState(State.Cooldown);
         }
@@ -190,6 +191,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_currentCD = 0;
@@ -223,16 +225,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetEmptyAnimation(0, 0);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
         }
 
         public override void ApplyData()
@@ -327,7 +335,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-
+                    m_flinchHandle.m_autoFlinch = false;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -431,6 +439,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.Patrol);
