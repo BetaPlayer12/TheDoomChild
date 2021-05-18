@@ -56,6 +56,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public override void Cancel()
         {
             base.Cancel();
+            m_thrust.ShowCollider(false);
             m_state.isChargingAttack = false;
             m_chargeFX?.Stop(true);
             m_finishedChargeFX?.Stop(true);
