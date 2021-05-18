@@ -1,4 +1,5 @@
-﻿using Holysoft;
+﻿using DChild.Gameplay;
+using Holysoft;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -121,22 +122,23 @@ public class DropCube : MonoBehaviour
 
         if (m_isDropping == true)
         {
+            var deltaTime = GameplaySystem.time.deltaTime;
             if (dropped == false)
             {
-                m_fallTime += Time.deltaTime;
+                m_fallTime += deltaTime;
                 m_fallSpeed = m_fallSpeedCurve.Evaluate(m_fallTime);
                 m_currentFallSpeed = m_maxFallSpeed * m_fallSpeed;
                 SetMoveValues(m_cube.localPosition, m_endPosition);
-               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentFallSpeed);
+               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentFallSpeed* deltaTime);
                
             }
             if (dropped == true)
             {
-                m_returnTime += Time.deltaTime;
+                m_returnTime += deltaTime;
                 m_returnSpeed = m_returnSpeedCurve.Evaluate(m_returnTime);
                 m_currentReturnSpeed = m_maxReturnSpeed * m_returnSpeed;
                 SetMoveValues(m_cube.localPosition, m_startPosition);
-                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentReturnSpeed);
+                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentReturnSpeed* deltaTime);
               
                 if(RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_startPosition))
                 {
