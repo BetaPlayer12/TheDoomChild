@@ -172,6 +172,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else
                     {
+                        m_swordThrust?.Cancel();
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
                     }
