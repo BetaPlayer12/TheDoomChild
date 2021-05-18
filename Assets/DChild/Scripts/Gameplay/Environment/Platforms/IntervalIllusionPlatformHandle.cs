@@ -24,8 +24,8 @@ namespace DChild.Gameplay.Environment
 
         private void RevealPlatformsAtConfiguration(int index)
         {
-            m_list[m_currentSequenceIndex].Disappear(false);
-            m_list[index].Appear(false);
+            m_list[m_currentSequenceIndex]?.Disappear(false);
+            m_list[index]?.Appear(false);
         }
 
         private void Reset()
@@ -34,7 +34,7 @@ namespace DChild.Gameplay.Environment
             m_list[0].Appear(true);
             for (int i = 1; i < m_list.Length; i++)
             {
-                m_list[i].Disappear(true);
+                m_list[i]?.Disappear(true);
             }
         }
 
