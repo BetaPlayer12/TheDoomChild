@@ -69,7 +69,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Disable()
         {
             m_updateEnabled = false;
-            m_idle?.Execute();
+            m_idle?.Execute(false);
             m_movement?.Cancel();
             m_crouch?.Cancel();
             m_dash?.Cancel();
@@ -1133,11 +1133,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 if (m_input.horizontalInput == 0)
                 {
-                    m_idle?.Execute();
+                    m_idle?.Execute(m_state.allowExtendedIdle);
                 }
                 else
                 {
-                    Debug.Log("Cancel Idle");
                     m_idle?.Cancel();
                 }
 
