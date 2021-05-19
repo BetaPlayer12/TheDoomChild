@@ -15,9 +15,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ShadowMorph m_shadowMorph;
         private ShadowGaugeRegen m_shadowGaugeRegen;
 
-        public void DefaultIdleStateFinished()
+        public void IdleStateFinished()
         {
-            m_idleHandle?.GenerateRandomState();
+            m_idleHandle?.BackToDefaultIdle();
         }
 
         public void SwordJumpSlashForwardFX()
