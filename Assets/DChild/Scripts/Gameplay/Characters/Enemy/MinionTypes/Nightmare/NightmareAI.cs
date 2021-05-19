@@ -289,7 +289,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            yield return new WaitForSeconds(3.5f);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -300,7 +300,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.prepAttackAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAttackAnimation);
-            m_animation.SetAnimation(0, m_info.attack.animation, true);
+            m_animation.SetAnimation(0, m_info.attack.animation, true).TimeScale = 1.5f;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             StartCoroutine(m_chargeBreakRoutine);
             yield return new WaitForSeconds(3);

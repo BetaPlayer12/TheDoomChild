@@ -145,6 +145,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_flinchHandle.m_autoFlinch = true;
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             //m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
@@ -196,7 +197,7 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_selfCollider.SetActive(false);
-                m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_hitbox.gameObject.SetActive(false);
@@ -208,6 +209,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.sinkIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sinkIdleAnimation);
+            m_targetInfo.Set(null, null);
             //m_animation.SetAnimation(0, m_info.si, true);
             m_stateHandle.SetState(State.Idle);
             yield return null;
@@ -244,7 +246,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             Debug.Log("DO THE RAWR");
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack.animation)
+            if (m_flinchHandle.m_autoFlinch)
             {
                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                 StopAllCoroutines();
@@ -259,6 +261,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
+            m_flinchHandle.m_autoFlinch = true;
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -347,6 +350,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(DetectRoutine());
                     break;
@@ -419,6 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
+                        m_flinchHandle.m_autoFlinch = false;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -498,6 +503,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
