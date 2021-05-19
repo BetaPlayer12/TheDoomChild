@@ -167,7 +167,14 @@ namespace DChild.Gameplay.Pathfinding
                 {
                     m_pathIndex++;
                     m_previousPathSegment = m_currentPathSegment;
-                    m_currentPathSegment = m_path[m_pathIndex];
+                    if (m_path.Count > m_pathIndex)
+                    {
+                        m_currentPathSegment = m_path[m_pathIndex];
+                    }
+                    else
+                    {
+                        m_pathIndex = m_path.Count;
+                    }
                     m_prevDirectionToPathSegment = directionToPathSegment;
                 }
             }

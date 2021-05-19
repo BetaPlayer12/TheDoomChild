@@ -120,9 +120,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Sensors")]
-        private RaySensor m_selfSensor;
-        [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_roofSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_selfSensor;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -150,6 +152,19 @@ namespace DChild.Gameplay.Characters.Enemies
         private void CustomTurn()
         {
             transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
+        private void VelocityTurn()
+        {
+            if (m_character.physics.velocity.x > 10)
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (m_character.physics.velocity.x < -10)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
             m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
@@ -325,6 +340,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
+
+        private IEnumerator LazerRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            m_bodycollider.enabled = false;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
         #endregion
 
         #region Movement
@@ -351,56 +376,70 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
         {
-            if (IsFacingTarget())
+            VelocityTurn();
+
+            var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
+            var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
+
+            bool isCloseToGround = false;
+            bool isCloseToRoof = false;
+
+            if (m_targetInfo.position.y < transform.position.y && m_groundSensor.allRaysDetecting)
             {
-                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
+                isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
+            }
+            if (m_targetInfo.position.y > transform.position.y && m_roofSensor.allRaysDetecting)
+            {
+                isCloseToRoof = Vector2.Distance(transform.position, RoofPosition()) < 5f ? true : false;
+            }
 
-                bool isCloseToGround = false;
-
-                if (m_targetInfo.position.y < transform.position.y && m_groundSensor.allRaysDetecting)
+            if (!m_selfSensor.isDetecting && !isCloseToGround && !isCloseToRoof /*&& !GetComponentInChildren<NavigationTracker>().IsCurrentDestination(transform.position)*/)
+            {
+                if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > 5f /*&& !m_groundSensor.isDetecting*/)
                 {
-                    isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
-                }
-
-                if (!m_selfSensor.isDetecting && !isCloseToGround)
-                {
-                    if (Mathf.Abs(m_targetInfo.position.y - transform.position.y) > 5f /*&& !m_groundSensor.isDetecting*/)
-                    {
-                        m_agent.SetDestination(new Vector2(transform.position.x, target.y + 5));
-                    }
-                    else
-                    {
-                        m_agent.SetDestination(target);
-                    }
-                    //m_agent.SetDestination(target);
-                    m_agent.Move(moveSpeed);
-
-                    if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
-                    {
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    }
-                    else
-                    {
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                    }
+                    m_agent.SetDestination(new Vector2(transform.position.x, target.y/* + 5*/));
                 }
                 else
                 {
-                    m_agent.Stop();
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_agent.SetDestination(target);
+                }
+                //m_agent.SetDestination(target);
+                m_agent.Move(moveSpeed);
+
+                if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
+                {
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.TimeScale = 2*/;
+                }
+                else
+                {
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true)/*.TimeScale = 2*/;
                 }
             }
             else
             {
-                m_turnState = State.Attacking;
-                m_stateHandle.OverrideState(State.Turning);
+                m_agent.Stop();
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
+
+            //if (IsFacingTarget())
+            //{
+            //}
+            //else
+            //{
+            //    m_turnState = State.Attacking;
+            //    m_stateHandle.OverrideState(State.Turning);
+            //}
         }
 
         private Vector2 GroundPosition()
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            return hit.point;
+        }
+
+        private Vector2 RoofPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1000, LayerMask.GetMask("Environment"));
             return hit.point;
         }
         #endregion
@@ -436,6 +475,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_agent.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -471,7 +511,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_flinchHandle.m_autoFlinch = false;
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
                     StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_attackDecider.chosenAttack.attack));
@@ -513,6 +552,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
+                        m_flinchHandle.m_autoFlinch = false;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
