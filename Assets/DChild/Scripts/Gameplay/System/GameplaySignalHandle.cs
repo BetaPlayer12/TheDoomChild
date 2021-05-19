@@ -13,7 +13,7 @@ namespace DChild.Gameplay
     {
         public void DoCinematicUIMode(bool value)
         {
-            GameEventMessage.SendEvent(value ? "Cinematic Start" : "Cinematic End");
+             GameEventMessage.SendEvent(value ? "Cinematic Start" : "Cinematic End");
         }
 
         public void MoveAudioListenerToPlayer()

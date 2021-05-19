@@ -406,7 +406,27 @@ namespace DChild.Serialization
             return (m_ID, zoneData);
         }
 
-        private IEnumerable GetComponents() => FindObjectsOfType<ComponentSerializer>();
+        private IEnumerable GetComponents()
+        {
+            var serializers = FindObjectsOfType<ComponentSerializer>();
+            var list = new ValueDropdownList<ComponentSerializer>();
+
+            foreach (var serializer in serializers)
+            {
+                var text = $"{serializer.gameObject.name} ({serializer.ID.ToString()})";
+                var item = new ValueDropdownItem<ComponentSerializer>(text, serializer);
+                if (list.Contains(item))
+                {
+                    int index = 1;
+                    do
+                    {
+                        item.Text = $"--{text} [{index}]";
+                    } while (list.Contains(item));
+                }
+                list.Add(item);
+            }
+            return list;
+        }
 
         private IEnumerable GetDynamicSerializers() => FindObjectsOfType<DynamicSerializableComponent>();
 
