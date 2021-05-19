@@ -246,7 +246,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_projectilePoint;
 
         private int m_hitCount;
-        //private bool m_hasPhaseChanged;
+        private bool m_hasPhaseChanged;
         private PhaseInfo m_phaseInfo;
         //private Vector3 m_totemLastPos;
         private Vector3 m_minionLastPos;
@@ -263,16 +263,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            //if (!m_hasPhaseChanged)
-            //{
-            //}
-            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
-            StopAllCoroutines();
-            m_stateHandle.OverrideState(State.Phasing);
-            //m_hasPhaseChanged = true;
-            m_phaseHandle.ApplyChange();
-            m_animation.DisableRootMotion();
-            m_animation.SetEmptyAnimation(0, 0);
+            if (!m_hasPhaseChanged)
+            {
+                m_hitbox.SetInvulnerability(Invulnerability.Level_1);
+                StopAllCoroutines();
+                m_stateHandle.OverrideState(State.Phasing);
+                m_hasPhaseChanged = true;
+                m_phaseHandle.ApplyChange();
+                m_animation.DisableRootMotion();
+                m_animation.SetEmptyAnimation(0, 0);
+            }
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
@@ -321,7 +321,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            //m_hasPhaseChanged = false;
+            m_hasPhaseChanged = false;
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
@@ -395,6 +395,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            //StopAllCoroutines();
             //m_attackDecider.hasDecidedOnAttack = false;
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_hitCount++;
@@ -954,10 +955,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //if (!m_hasPhaseChanged && m_stateHandle.currentState != State.Phasing)
-            //{
-            //}
-            m_phaseHandle.MonitorPhase();
+            if (!m_hasPhaseChanged && m_stateHandle.currentState != State.Phasing)
+            {
+                m_phaseHandle.MonitorPhase();
+            }
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
