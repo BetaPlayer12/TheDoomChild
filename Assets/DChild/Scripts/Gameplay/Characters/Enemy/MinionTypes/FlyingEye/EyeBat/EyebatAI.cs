@@ -125,6 +125,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_roofSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+        [SerializeField, TabGroup("Lazer")]
+        private LineRenderer m_lineRenderer;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -319,7 +321,8 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (/*m_attack*/ m_currentAttack)
             {
                 case Attack.Attack:
-                    StartCoroutine(AttackRoutine());
+                    //StartCoroutine(AttackRoutine());
+                    StartCoroutine(LazerRoutine());
                     break;
             }
         }
@@ -344,7 +347,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator LazerRoutine()
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            yield return new WaitForSeconds(1.5f);
+            m_lineRenderer.SetPosition(1, ShotPosition());
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_lineRenderer.SetPosition(1, Vector2.zero);
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
             m_bodycollider.enabled = false;
             m_stateHandle.ApplyQueuedState();
@@ -376,7 +382,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
         {
-            VelocityTurn();
+            if (ShotBlocked())
+            {
+                VelocityTurn();
+            }
+            else
+            {
+                if (!IsFacingTarget())
+                {
+                    CustomTurn();
+                }
+            }
 
             var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
             var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
@@ -441,6 +457,25 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1000, LayerMask.GetMask("Environment"));
             return hit.point;
+        }
+
+        private bool ShotBlocked()
+        {
+            Vector2 wat = m_selfSensor.transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+        }
+
+        private Vector2 ShotPosition()
+        {
+            Vector2 wat = m_selfSensor.transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            return hit.transform.position;
         }
         #endregion
 
