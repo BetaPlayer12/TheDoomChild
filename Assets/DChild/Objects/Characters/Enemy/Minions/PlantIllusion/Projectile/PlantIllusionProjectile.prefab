@@ -4705,6 +4705,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4846,6 +4847,11 @@ MonoBehaviour:
     - {fileID: 7104668156018543323}
     - {fileID: 7104668155667451406}
     - {fileID: 7104668157026505244}
+    m_originalSimulationSpeed:
+    - 1
+    - 1
+    - 1
+    - 1
   m_spineObjects:
     m_skeletonAnimations: []
     m_baseTimeScale: []
@@ -4895,6 +4901,12 @@ MonoBehaviour:
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
   m_model: {fileID: 0}
+  m_onLaunch:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onReset:
+    m_PersistentCalls:
+      m_Calls: []
   m_data: {fileID: 11400000, guid: 24922ad26c05ce54884e562ca9b069f7, type: 2}
 --- !u!114 &672428565146695744
 MonoBehaviour:
@@ -4928,6 +4940,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
+  m_damageUniqueHitboxesOnly: 0
+  m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!60 &8758554806828436124
 PolygonCollider2D:
@@ -5003,6 +5017,7 @@ TrailRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9821,6 +9836,7 @@ ParticleSystemRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9894,10 +9910,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8642896022612618760}
     m_Modifications:
-    - target: {fileID: 2204159902300109455, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+    - target: {fileID: 2204159901719154633, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
         type: 3}
-      propertyPath: m_Name
-      value: Plant_Illusion_Projectile
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204159901719154638, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204159901719154638, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204159902039149332, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204159902039149334, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204159902039149339, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204159902039149339, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2204159902300109452, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
         type: 3}
@@ -9974,30 +10020,15 @@ PrefabInstance:
       propertyPath: stopAction
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 2204159901719154638, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+    - target: {fileID: 2204159902300109455, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
         type: 3}
-      propertyPath: playOnAwake
-      value: 1
+      propertyPath: m_Name
+      value: Plant_Illusion_Projectile
       objectReference: {fileID: 0}
-    - target: {fileID: 2204159901719154638, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+    - target: {fileID: 2204159902300109455, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
         type: 3}
-      propertyPath: stopAction
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2204159902039149339, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2204159902039149339, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
-        type: 3}
-      propertyPath: stopAction
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2204159902039149332, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
-        type: 3}
-      propertyPath: m_RenderAlignment
-      value: 2
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2204159903045506012, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
         type: 3}
@@ -10008,6 +10039,16 @@ PrefabInstance:
         type: 3}
       propertyPath: stopAction
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204159903045506015, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204159903215475061, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7ae4ceef9c3b0148a5dcbe9ee21cd24, type: 3}
