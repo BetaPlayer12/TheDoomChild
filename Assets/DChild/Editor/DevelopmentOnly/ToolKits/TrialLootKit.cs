@@ -1,4 +1,6 @@
-﻿using DChild.Gameplay.Systems;
+﻿using DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
@@ -30,8 +32,14 @@ namespace DChildEditor.Toolkit
 
 
         [TableList(DrawScrollView = true, HideToolbar = true, AlwaysExpanded = true)]
-        public List<LootToolKitInfo> m_lootDroppers = new List<LootToolKitInfo>();
-   
+        public List<LootToolKitInfo> m_breakableLootDroppers = new List<LootToolKitInfo>();
+
+        [TableList(DrawScrollView = true, HideToolbar = true, AlwaysExpanded = true)]
+        public List<LootToolKitInfo> m_minionLootDroppers = new List<LootToolKitInfo>();
+
+        [TableList(DrawScrollView = true, HideToolbar = true, AlwaysExpanded = true)]
+        public List<LootToolKitInfo> m_bossLootDroppers = new List<LootToolKitInfo>();
+
         [Serializable]
         public class LootToolKitInfo
         {
@@ -100,18 +108,72 @@ namespace DChildEditor.Toolkit
 
                 if (prefabList[i].TryGetComponent(out LootDropper loot))
                 {
-
-                    var instance = new LootToolKitInfo();
-                    instance.theGameObject = loot.gameObject;
-                    instance.theLootData = loot.lootData;
-                    m_lootDroppers.Add(instance);
+                    if (prefabList[i].TryGetComponent(out ICombatAIBrain statData))
+                    {
+                       if(!prefabList[i].TryGetComponent(out Boss boss))
+                        {
+                            var instance = new LootToolKitInfo();
+                            instance.theGameObject = loot.gameObject;
+                            instance.theLootData = loot.lootData;
+                            m_minionLootDroppers.Add(instance);
+                        }
+                    }       
+                  
                 }
-                EditorUtility.DisplayProgressBar("LootDropper Progress", $"Filtering{i}/{m_lootDroppers.Count}", i / (float)m_lootDroppers.Count);
+                EditorUtility.DisplayProgressBar("LootDropper Progress", $"Filtering{i}/{m_minionLootDroppers.Count}", i / (float)m_minionLootDroppers.Count);
             }
             EditorUtility.ClearProgressBar();
         }
 
-        
+        public void PopulateBreakableList()
+        {
+
+            EditorUtility.DisplayProgressBar("LootDropper Progress", $"Gather All GameObjects", 0);
+            var prefabList = new List<GameObject>(AssetDatabase.FindAssets("t:GameObject").Select(guid => AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid))));
+            for (int i = 0; i < prefabList.Count; i++)
+            {
+
+                if (prefabList[i].TryGetComponent(out LootDropper loot))
+                {
+                    if (!prefabList[i].TryGetComponent(out ICombatAIBrain statData))
+                    {
+                        var instance = new LootToolKitInfo();
+                        instance.theGameObject = loot.gameObject;
+                        instance.theLootData = loot.lootData;
+                        m_breakableLootDroppers.Add(instance);
+                    }
+
+                }
+                EditorUtility.DisplayProgressBar("LootDropper Progress", $"Filtering{i}/{m_breakableLootDroppers.Count}", i / (float)m_breakableLootDroppers.Count);
+            }
+            EditorUtility.ClearProgressBar();
+        }
+
+        public void PopulateBossLootList()
+        {
+
+            EditorUtility.DisplayProgressBar("LootDropper Progress", $"Gather All GameObjects", 0);
+            var prefabList = new List<GameObject>(AssetDatabase.FindAssets("t:GameObject").Select(guid => AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid))));
+            for (int i = 0; i < prefabList.Count; i++)
+            {
+
+                if (prefabList[i].TryGetComponent(out LootDropper loot))
+                {
+                    if (prefabList[i].TryGetComponent(out Boss statData))
+                    {
+                        var instance = new LootToolKitInfo();
+                        instance.theGameObject = loot.gameObject;
+                        instance.theLootData = loot.lootData;
+                        m_bossLootDroppers.Add(instance);
+                    }
+
+                }
+                EditorUtility.DisplayProgressBar("LootDropper Progress", $"Filtering{i}/{m_bossLootDroppers.Count}", i / (float)m_bossLootDroppers.Count);
+            }
+            EditorUtility.ClearProgressBar();
+        }
+
+
 #endif
     }
 }
