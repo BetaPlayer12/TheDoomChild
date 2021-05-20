@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using System;
 using DChild.Menu.Bestiary;
+using DChildEditor.Test;
 
 namespace DChildEditor.Toolkit
 {
@@ -97,6 +98,22 @@ namespace DChildEditor.Toolkit
                 }
             });
             #endregion
+
+
+            //loot
+            var loots = new TrialLootKit();
+            loots.PopulateList();
+            tree.Add($"Minion Loot Data Editor", loots);
+
+            //Character Stats
+            var characterStats = new TrialStatsKit();
+            characterStats.PopulateList();
+            tree.Add($"Character Stats Data Editor", characterStats);
+
+            //Character Stats
+            var bossStats = new TrialBossKit();
+            bossStats.PopulateList();
+            tree.Add($"Boss Stats Data Editor", bossStats);
 
             tree.EnumerateTree().SortMenuItemsByName(true);
 
