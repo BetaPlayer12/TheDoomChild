@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Items
 {
+
     [System.Serializable]
     public struct RegeneratingItemEffect : IUpdatableItemEffect
     {

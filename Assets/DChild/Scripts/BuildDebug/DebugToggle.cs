@@ -8,6 +8,7 @@ using UnityEngine.Events;
 
 namespace DChildDebug.Window
 {
+
     public class DebugToggle : MonoBehaviour
     {
         [SerializeField]
@@ -17,6 +18,8 @@ namespace DChildDebug.Window
         [SerializeField, TabGroup("False")]
         private UnityEvent OnFalse;
         private bool m_isToggled;
+
+        private IToggleDebugBehaviour m_source;
 
         public void ToggleState()
         {
@@ -33,9 +36,9 @@ namespace DChildDebug.Window
             }
         }
 
-        private void Start()
+        public void UpdateToggleHighlight()
         {
-            m_isToggled = GetComponent<IToggleDebugBehaviour>().value;
+            m_isToggled = m_source.value;
             if (m_isToggled)
             {
                 m_highlight.UseHighlightState();
@@ -44,7 +47,15 @@ namespace DChildDebug.Window
             {
                 m_highlight.UseNormalizeState();
             }
+
         }
+        private void Start()
+        {
+            m_source = GetComponent<IToggleDebugBehaviour>();
+            UpdateToggleHighlight();
+        }
+
+
     }
 
 }
