@@ -391,69 +391,6 @@ Transform:
   m_Father: {fileID: 5935521781793366607}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2522661030236304932
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6468160863307977567}
-  - component: {fileID: 4497957532725686516}
-  - component: {fileID: 4421974281793550961}
-  m_Layer: 13
-  m_Name: RoofSensor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6468160863307977567
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2522661030236304932}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 28163800024986065}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4497957532725686516
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2522661030236304932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_multiRaycast:
-    m_config: {fileID: 11400000, guid: 7e6eca9a6334f4a409608a9e1defd909, type: 2}
-    m_rayColor: {r: 0.37114525, g: 0, b: 1, a: 1}
-  m_enable: 1
-  m_debugMode: 1
---- !u!114 &4421974281793550961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2522661030236304932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fc6cc8feceba564aa4ef1a737c6bf25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_leftRotation: 270
-  m_rightRotation: 90
 --- !u!1 &2961243177262322408
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,7 +578,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6367352334980429938}
-  - {fileID: 6468160863307977567}
   - {fileID: 1537293725831688733}
   - {fileID: 7677474975380039785}
   m_Father: {fileID: 1900037900003793775}
@@ -673,7 +609,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_sensors:
   - {fileID: 6252020469901605787}
-  - {fileID: 4497957532725686516}
   - {fileID: 2254021866145952123}
   m_useDistance: 1
   m_castPerDistance: 0.5
@@ -1335,7 +1270,7 @@ Transform:
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 28163800024986065}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9125544379983584122
 MonoBehaviour:
@@ -1417,7 +1352,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 28163800024986065}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2254021866145952123
 MonoBehaviour:
@@ -1541,7 +1476,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6483080843576271502}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0

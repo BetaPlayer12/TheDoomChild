@@ -532,15 +532,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void LaunchProjectile()
         {
-            if (!IsFacingTarget())
+            if (IsFacingTarget())
             {
-                CustomTurn();
+                for (int i = 0; i < m_projectilePoints.Count; i++)
+                {
+                    m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoints[i]);
+                    m_projectileLauncher.AimAt(m_targetInfo.position);
+                    m_projectileLauncher.LaunchProjectile();
+                }
             }
-            for (int i = 0; i < m_projectilePoints.Count; i++)
+            else
             {
-                m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoints[i]);
-                m_projectileLauncher.AimAt(m_targetInfo.position);
-                m_projectileLauncher.LaunchProjectile();
+                m_stateHandle.OverrideState(State.Turning);
             }
         }
 
