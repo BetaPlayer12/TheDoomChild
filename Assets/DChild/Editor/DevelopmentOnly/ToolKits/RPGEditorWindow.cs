@@ -95,7 +95,7 @@ namespace DChildEditor.Toolkit
                 {
                     tree.Add($"Characters/Boss/{result}/{data.name.Replace("Data", "").Replace("Info", "")}", data, data.infoImage);
                 }
-            }); 
+            });
             #endregion
 
             tree.EnumerateTree().SortMenuItemsByName(true);
