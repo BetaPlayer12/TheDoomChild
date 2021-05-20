@@ -89,6 +89,95 @@ MonoBehaviour:
   m_subGraph: {fileID: 11400000, guid: da4b6a6853ce54b47b1f9b92852498bc, type: 2}
   ErrorNoGraphReferenced: 0
   ErrorReferencedGraphIsNotSubGraph: 0
+--- !u!114 &-4592411694585817557
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49838f034688f144f945024b91856c5d, type: 3}
+  m_Name: SubGraphNode
+  m_EditorClassIdentifier: 
+  ErrorNodeNameIsEmpty: 0
+  ErrorDuplicateNameFoundInGraph: 0
+  m_inputSockets:
+  - m_connectionMode: 1
+    m_connections:
+    - m_inputConnectionPoint: {x: 202, y: 4}
+      m_outputConnectionPoint: {x: -2, y: 4}
+      m_id: 6863bb64-17b9-4151-8e11-c5f935e6992d
+      m_inputNodeId: be086652-a724-4dd6-93c6-f33d6453b33e
+      m_inputSocketId: 370027b1-62c9-4330-be82-9477f84a435d
+      m_outputNodeId: e7cc51eb-ba11-40af-9921-c64cc62532da
+      m_outputSocketId: 36c6f80d-250f-4de3-97e6-b96c14f23a8d
+    m_connectionPoints:
+    - {x: -2, y: 4}
+    - {x: 202, y: 4}
+    m_direction: 0
+    m_canBeDeleted: 0
+    m_canBeReordered: 0
+    m_curveModifier: 0
+    m_height: 24
+    m_width: 216
+    m_x: 0
+    m_y: 38
+    m_id: 370027b1-62c9-4330-be82-9477f84a435d
+    m_nodeId: be086652-a724-4dd6-93c6-f33d6453b33e
+    m_socketName: InputSocket_0
+    m_value: '{}'
+    m_valueTypeQualifiedName: Doozy.Engine.Nody.Connections.PassthroughConnection,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_outputSockets:
+  - m_connectionMode: 0
+    m_connections:
+    - m_inputConnectionPoint: {x: -2, y: 4}
+      m_outputConnectionPoint: {x: 202, y: 4}
+      m_id: cc91acef-22a0-4df3-91ab-62c576997443
+      m_inputNodeId: e7cc51eb-ba11-40af-9921-c64cc62532da
+      m_inputSocketId: 71561642-9a33-44c6-9368-c9ccbdb5a702
+      m_outputNodeId: be086652-a724-4dd6-93c6-f33d6453b33e
+      m_outputSocketId: 862854e2-fdd0-474b-8312-9be6d03907b9
+    m_connectionPoints:
+    - {x: -2, y: 4}
+    - {x: 202, y: 4}
+    m_direction: 1
+    m_canBeDeleted: 0
+    m_canBeReordered: 0
+    m_curveModifier: 0
+    m_height: 24
+    m_width: 216
+    m_x: 0
+    m_y: 62
+    m_id: 862854e2-fdd0-474b-8312-9be6d03907b9
+    m_nodeId: be086652-a724-4dd6-93c6-f33d6453b33e
+    m_socketName: OutputSocket_0
+    m_value: '{}'
+    m_valueTypeQualifiedName: Doozy.Engine.Nody.Connections.PassthroughConnection,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_nodeType: 3
+  m_allowDuplicateNodeName: 0
+  m_allowEmptyNodeName: 0
+  m_canBeDeleted: 1
+  m_debugMode: 0
+  m_useFixedUpdate: 0
+  m_useLateUpdate: 0
+  m_useUpdate: 0
+  m_height: 148
+  m_width: 216
+  m_x: -480
+  m_y: 312
+  m_minimumInputSocketsCount: 1
+  m_minimumOutputSocketsCount: 1
+  m_graphId: 9cfebe8a-249c-4454-b9df-fd388d16c5ef
+  m_id: be086652-a724-4dd6-93c6-f33d6453b33e
+  m_name: TradingGraph
+  m_notes: 
+  m_subGraph: {fileID: 11400000, guid: e09babc29a1540b4592741ddb9af56c2, type: 2}
+  ErrorNoGraphReferenced: 0
+  ErrorReferencedGraphIsNotSubGraph: 0
 --- !u!114 &-2348091122647014119
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -299,6 +388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DebugMode: 0
   m_nodes:
+  - {fileID: -4592411694585817557}
   - {fileID: 2428872216750409146}
   - {fileID: 2608552063461255197}
   - {fileID: 9047721963383590275}
@@ -309,7 +399,7 @@ MonoBehaviour:
   m_version: 1
   m_description: 
   m_id: 9cfebe8a-249c-4454-b9df-fd388d16c5ef
-  m_lastModified: 132628543944254695
+  m_lastModified: 132658774373999320
 --- !u!114 &2428872216750409146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -470,6 +560,13 @@ MonoBehaviour:
       m_inputSocketId: 71561642-9a33-44c6-9368-c9ccbdb5a702
       m_outputNodeId: afe1c601-3046-46c2-b99f-9271a344381c
       m_outputSocketId: 5561bcce-85a9-49fd-9bd0-3fb2fe91b90a
+    - m_inputConnectionPoint: {x: -2, y: 4}
+      m_outputConnectionPoint: {x: 202, y: 4}
+      m_id: cc91acef-22a0-4df3-91ab-62c576997443
+      m_inputNodeId: e7cc51eb-ba11-40af-9921-c64cc62532da
+      m_inputSocketId: 71561642-9a33-44c6-9368-c9ccbdb5a702
+      m_outputNodeId: be086652-a724-4dd6-93c6-f33d6453b33e
+      m_outputSocketId: 862854e2-fdd0-474b-8312-9be6d03907b9
     m_connectionPoints:
     - {x: -2, y: 4}
     - {x: 202, y: 4}
@@ -592,6 +689,32 @@ MonoBehaviour:
     m_value: '{"ButtonCategory":"Debug","ButtonName":"Fast Travel","GameEvent":"","TimeDelay":3.0,"Trigger":0}'
     m_valueTypeQualifiedName: Doozy.Engine.UI.Connections.UIConnection, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - m_connectionMode: 0
+    m_connections:
+    - m_inputConnectionPoint: {x: 202, y: 4}
+      m_outputConnectionPoint: {x: -2, y: 4}
+      m_id: 6863bb64-17b9-4151-8e11-c5f935e6992d
+      m_inputNodeId: be086652-a724-4dd6-93c6-f33d6453b33e
+      m_inputSocketId: 370027b1-62c9-4330-be82-9477f84a435d
+      m_outputNodeId: e7cc51eb-ba11-40af-9921-c64cc62532da
+      m_outputSocketId: 36c6f80d-250f-4de3-97e6-b96c14f23a8d
+    m_connectionPoints:
+    - {x: -2, y: 4}
+    - {x: 202, y: 4}
+    m_direction: 1
+    m_canBeDeleted: 1
+    m_canBeReordered: 1
+    m_curveModifier: 0
+    m_height: 24
+    m_width: 216
+    m_x: 0
+    m_y: 158
+    m_id: 36c6f80d-250f-4de3-97e6-b96c14f23a8d
+    m_nodeId: e7cc51eb-ba11-40af-9921-c64cc62532da
+    m_socketName: OutputSocket_4
+    m_value: '{"ButtonCategory":"Debug","ButtonName":"Store","GameEvent":"","TimeDelay":3.0,"Trigger":0}'
+    m_valueTypeQualifiedName: Doozy.Engine.UI.Connections.UIConnection, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   m_nodeType: 4
   m_allowDuplicateNodeName: 0
   m_allowEmptyNodeName: 0
@@ -600,7 +723,7 @@ MonoBehaviour:
   m_useFixedUpdate: 0
   m_useLateUpdate: 0
   m_useUpdate: 0
-  m_height: 200
+  m_height: 224
   m_width: 216
   m_x: -216
   m_y: 48
@@ -613,10 +736,10 @@ MonoBehaviour:
   m_onEnterShowViews:
   - Category: Debug
     InstantAction: 0
-    Name: Window
+    Name: Main
   - Category: Debug
     InstantAction: 0
-    Name: Main
+    Name: Window
   m_onEnterHideViews: []
   m_onExitShowViews: []
   m_onExitHideViews:

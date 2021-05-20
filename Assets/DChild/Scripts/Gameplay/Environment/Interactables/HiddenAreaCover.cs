@@ -112,11 +112,16 @@ namespace DChild.Gameplay.Environment
         {
             StopAllCoroutines();
             LerpColors(isVisible ? 0 : 1);
+            SetRenderersActive(isVisible);
         }
 
         private IEnumerator LerpTo(bool isVisible)
         {
             int destination = isVisible ? 0 : 1;
+            if (isVisible)
+            {
+                SetRenderersActive(true);
+            }
             int signModifier = isVisible ? -1 : 1;
             do
             {
@@ -124,6 +129,10 @@ namespace DChild.Gameplay.Environment
                 LerpColors(m_lerpDuration.lerpValue);
                 yield return null;
             } while (m_lerpDuration.lerpValue != destination);
+            if (isVisible == false)
+            {
+                SetRenderersActive(false);
+            }
         }
 
         private void LerpColors(float lerpValue)
@@ -139,6 +148,16 @@ namespace DChild.Gameplay.Environment
                 var skeleton = m_spines[i].skeleton;
                 m_spines[i].skeleton.SetColor(color);
             }
+        }
+
+        private void SetRenderersActive(bool isTrue)
+        {
+            for (int i = 0; i < m_sprites.Length; i++)
+            {
+                m_sprites[i].enabled = isTrue;
+            }
+
+            //Enable Mesh Renderer for Skeleton Renderers
         }
 
         private void Awake()

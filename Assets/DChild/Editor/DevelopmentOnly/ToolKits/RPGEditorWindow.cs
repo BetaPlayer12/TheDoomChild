@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using System;
 using DChild.Menu.Bestiary;
+using DChildEditor.Test;
 
 namespace DChildEditor.Toolkit
 {
@@ -95,9 +96,8 @@ namespace DChildEditor.Toolkit
                 {
                     tree.Add($"Characters/Boss/{result}/{data.name.Replace("Data", "").Replace("Info", "")}", data, data.infoImage);
                 }
-            }); 
+            });
             #endregion
-
             tree.EnumerateTree().SortMenuItemsByName(true);
 
             return tree;

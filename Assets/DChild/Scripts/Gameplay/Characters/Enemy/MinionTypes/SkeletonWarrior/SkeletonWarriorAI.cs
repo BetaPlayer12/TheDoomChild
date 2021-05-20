@@ -429,7 +429,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
-                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -471,6 +470,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            m_flinchHandle.m_autoFlinch = false;
 
                             switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
                             {
@@ -553,7 +553,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
-                        m_flinchHandle.m_autoFlinch = false;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 

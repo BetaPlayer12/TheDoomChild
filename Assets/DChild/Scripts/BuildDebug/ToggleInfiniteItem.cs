@@ -12,7 +12,7 @@ namespace DChildDebug.Window
         [SerializeField]
         private QuickItemHandle m_quickItem;
 
-        public bool value => m_quickItem.removeItemCountOnConsume;
+        public bool value => m_quickItem.removeItemCountOnConsume == false;
 
         [Button]
         public void ToggleOn()

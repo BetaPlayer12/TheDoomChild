@@ -14,8 +14,8 @@ namespace DChild.Gameplay.Inventories
             private ItemData m_item;
             [SerializeField, OnValueChanged("OnLimitCountChange")]
             private bool m_hasLimitedCount;
-            [SerializeField, EnableIf("m_hasLimitedCount")]
-            private int m_count;
+            [SerializeField, EnableIf("m_hasLimitedCount"), MinValue(1)]
+            private int m_count =1 ;
 
             public ItemData item => m_item;
             public bool hasLimitedCount => m_hasLimitedCount;
