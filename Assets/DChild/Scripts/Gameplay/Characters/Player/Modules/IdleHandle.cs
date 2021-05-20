@@ -74,5 +74,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_isInIdle = true;
             }
         }
+
+        public void BackToDefaultIdle()
+        {
+            m_currentIdleIndex = 0;
+            m_animator.SetInteger(m_idleStateAnimationParameter, m_currentIdleIndex);
+        }
     }
 }
