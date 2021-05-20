@@ -62,8 +62,16 @@ namespace DChild.Menu.Trading
 
         public void SetTradingFilter(TradePoolFilter filter)
         {
-            m_initiator.Instantiate(m_currentMerchant, filter);
+            if (m_tradeOption.tradeType == TradeType.Buy)
+            {
+                m_initiator.Instantiate(m_currentMerchant, filter);
+            }
+            else
+            {
+                m_initiator.Instantiate(m_currentPlayer, filter);
+            }
             m_filteredTradePool.ApplyFilter(filter);
+            m_initiator.GetTradableUI(0).Select();
         }
 
         private void UpdateCurrency()
@@ -73,16 +81,8 @@ namespace DChild.Menu.Trading
 
         private void UpdateTradingPool()
         {
-            if (m_tradeOption.tradeType == TradeType.Buy)
-            {
-                m_initiator.Instantiate(m_currentMerchant, TradePoolFilter.All);
-            }
-            else
-            {
-                m_initiator.Instantiate(m_currentPlayer, TradePoolFilter.All);
-            }
+            SetTradingFilter(TradePoolFilter.All);
             m_tradeHandle.SetTradeType(m_tradeOption.tradeType);
-            m_filteredTradePool.ApplyFilter(TradePoolFilter.All);
         }
 
         private void OnSlotIntiateDone(object sender, EventActionArgs eventArgs)
