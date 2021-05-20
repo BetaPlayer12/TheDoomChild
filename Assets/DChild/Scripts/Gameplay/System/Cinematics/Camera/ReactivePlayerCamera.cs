@@ -8,31 +8,18 @@ namespace DChild.Gameplay.Cinematics.Cameras
 {
     public class ReactivePlayerCamera : MonoBehaviour, IGameplayInitializable
     {
-        [System.Serializable]
-        private class ShakeInfo
-        {
-            [SerializeField]
-            private AnimationCurve m_amplitude;
-            [SerializeField]
-            private AnimationCurve m_frequency;
-            [SerializeField, MinValue(0f)]
-            private float m_duration;
-
-            public AnimationCurve amplitude => m_amplitude;
-            public AnimationCurve frequency => m_frequency;
-            public float duration => m_duration;
-        }
-
         [SerializeField]
         private bool m_shakeOnDamage;
         [SerializeField, ShowIf("m_shakeOnDamage")]
-        private ShakeInfo m_onDamageShake;
+        private CameraShakeInfo m_onDamageShake;
         [SerializeField]
         private bool m_shakeOnAttackHit;
         [SerializeField, ShowIf("m_shakeOnAttackHit")]
-        private ShakeInfo m_onAttackHitShake;
+        private CameraShakeInfo m_onAttackHitShake;
         [SerializeField, MinValue(0f)]
         private float m_shakePause;
+
+
 
         private ICinema m_cinema;
         private Coroutine m_shakeRoutine;
@@ -83,7 +70,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             }
         }
 
-        private IEnumerator CameraShakeRoutine(ShakeInfo shakeInfo)
+        private IEnumerator CameraShakeRoutine(CameraShakeInfo shakeInfo)
         {
             var timer = 0f;
 
