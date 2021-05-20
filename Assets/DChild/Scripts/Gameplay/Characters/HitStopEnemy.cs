@@ -1,29 +1,29 @@
 ﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Combat;
+using DChild.Gameplay.Systems;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitStop : MonoBehaviour
+public class HitStopEnemy : MonoBehaviour
 {
-    [SerializeField]
-    private float m_hitStopTime;
     [SerializeField]
     private float m_whiteDecayTime;
     [SerializeField]
     private bool m_enableHitStop;
     [SerializeField, TabGroup("Reference")]
     protected SpineRootAnimation m_animation;
+    [SerializeField, TabGroup("Reference")]
+    private List<Collider2D> m_hitboxColliders;
     [SerializeField, TabGroup("Modules")]
     private FlinchHandler m_flinchHandle;
     [SerializeField, TabGroup("Renderer")]
     private MeshRenderer m_Rendererer;
 
     private MaterialPropertyBlock m_propertyBlock;
-
-    //private float m_highlightCurrentValue;
-    //private IEnumerator m_flinchWhiteRoutine;
+    private HitStopHandle m_hitstop;
 
     private void OnHitStopStart(object sender, EventActionArgs eventArgs)
     {
@@ -32,28 +32,15 @@ public class HitStop : MonoBehaviour
         StartCoroutine(FlinchWhiteRoutine());
         if (m_enableHitStop)
         {
-            StartCoroutine(HitStopRoutine());
+            foreach (Collider2D collider in m_hitboxColliders)
+            {
+                if (collider.IsTouchingLayers(LayerMask.GetMask("Player")))
+                {
+                    m_hitstop.Execute();
+                    break;
+                }
+            }
         }
-    }
-
-    private void StartRoutines()
-    {
-        StopAllCoroutines();
-        StartCoroutine(FlinchWhiteRoutine());
-        if (m_enableHitStop)
-        {
-            StartCoroutine(HitStopRoutine());
-        }
-    }
-
-    private IEnumerator HitStopRoutine()
-    {
-        m_animation.animationState.TimeScale = 0;
-        var currentTrackTime = m_animation.animationState.GetCurrent(0).TrackTime;
-        yield return new WaitForSeconds(m_hitStopTime);
-        m_animation.animationState.GetCurrent(0).TrackTime = currentTrackTime + m_hitStopTime;
-        m_animation.animationState.TimeScale = 1;
-        yield return null;
     }
 
     private IEnumerator FlinchWhiteRoutine()
@@ -61,7 +48,6 @@ public class HitStop : MonoBehaviour
         m_propertyBlock.SetFloat("Highlight", 1);
         m_Rendererer.SetPropertyBlock(m_propertyBlock);
         float highLightCurrentValue = 1;
-        //Debug.Log("Current Highlight " + m_Rendererer.material.GetFloat("Highlight"));
         while (highLightCurrentValue > 0.01f)
         {
             highLightCurrentValue -= Time.deltaTime * m_whiteDecayTime;
@@ -83,7 +69,6 @@ public class HitStop : MonoBehaviour
     {
         m_propertyBlock = new MaterialPropertyBlock();
         m_flinchHandle.HitStopStart += OnHitStopStart;
-        //m_highlightCurrentValue = 1;
-        //m_flinchWhiteRoutine = FlinchWhiteRoutine();
+        m_hitstop = GetComponent<HitStopHandle>();
     }
 }
