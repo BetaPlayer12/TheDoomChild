@@ -47,7 +47,9 @@ namespace DChild.Gameplay.Combat
         private Collider2DInfo[] m_ignoreColliderList;
 
 
-        private Collider2D m_collider;
+        private Collider2D[] m_colliders;
+        private Collider2D m_triggeredCollider;
+        private ColliderDistance2D m_triggeredColliderDistance2D;
         private IDamageDealer m_damageDealer;
         public event Action<TargetInfo, Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
@@ -68,32 +70,33 @@ namespace DChild.Gameplay.Combat
 
         protected void SpawnHitFX(Collider2D collision)
         {
-            ColliderDistance2D colliderDistance = m_collider.Distance(collision);
-            if (!colliderDistance.isValid)
+            var hasHitFX = collision.TryGetComponentInParent(out HitFXHandle onHitFX);
+            if (m_damageFXHandle != null || hasHitFX)
             {
-                return;
-            }
+                ColliderDistance2D colliderDistance = m_triggeredColliderDistance2D;
+                if (!colliderDistance.isValid)
+                {
+                    return;
+                }
 
-            Vector2 hitPoint;
+                Vector2 hitPoint;
 
-            // if its overlapped then this collider's nearest vertex is inside the other collider
-            // so the position adjustment shouldn't be necessary
-            if (colliderDistance.isOverlapped)
-            {
-                hitPoint = colliderDistance.pointA; // point on the surface of this collider
-            }
-            else
-            {
-                // move the hit location inside the collider a bit
-                // this assumes the colliders are basically touching
-                hitPoint = colliderDistance.pointB - (0.01f * colliderDistance.normal);
-            }
-            var hitDirection = GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint);
+                // if its overlapped then this collider's nearest vertex is inside the other collider
+                // so the position adjustment shouldn't be necessary
+                if (colliderDistance.isOverlapped)
+                {
+                    hitPoint = colliderDistance.pointA; // point on the surface of this collider
+                }
+                else
+                {
+                    // move the hit location inside the collider a bit
+                    // this assumes the colliders are basically touching
+                    hitPoint = colliderDistance.pointB - (0.01f * colliderDistance.normal);
+                }
+                var hitDirection = GameplayUtility.GetHorizontalDirection(m_triggeredCollider.bounds.center, hitPoint);
 
-            m_damageFXHandle?.SpawnFX(hitPoint, hitDirection);
-            if (collision.TryGetComponentInParent(out HitFXHandle onHitFX))
-            {
-                onHitFX.SpawnFX(hitPoint, hitDirection);
+                m_damageFXHandle?.SpawnFX(hitPoint, hitDirection);
+                onHitFX?.SpawnFX(hitPoint, hitDirection);
             }
         }
 
@@ -119,16 +122,41 @@ namespace DChild.Gameplay.Combat
         {
             if (collision.TryGetComponentInParent(out IHitToInteract interactable))
             {
-                if (interactable.CanBeInteractedWith(m_collider))
+                if (interactable.CanBeInteractedWith(m_triggeredCollider))
                 {
                     interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
                 }
             }
         }
 
+        private Collider2D GetTriggeredCollider(Collider2D collider2D)
+        {
+            if (m_colliders.Length == 1)
+            {
+                var otherCollider = m_colliders[0];
+                m_triggeredColliderDistance2D = otherCollider.Distance(collider2D);
+                return otherCollider;
+            }
+            else
+            {
+                foreach (var otherCollider in m_colliders)
+                {
+                    if (otherCollider != null)
+                    {
+                        var colliderDistance = otherCollider.Distance(collider2D);
+                        if (colliderDistance.isOverlapped)
+                        {
+                            m_triggeredColliderDistance2D = colliderDistance;
+                            return otherCollider;
+                        }
+                    }
+                }
+                return null;
+            }
+        }
+
         protected virtual void Awake()
         {
-            m_collider = GetComponent<Collider2D>();
             m_damageDealer = GetComponentInParent<IDamageDealer>();
             for (int i = 0; i < m_ignoreColliderList.Length; i++)
             {
@@ -136,22 +164,29 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        protected virtual void OnTriggerEnter2D(Collider2D collision)
+        private void Start()
         {
-            if (collision.CompareTag("DamageCollider") || collision.CompareTag("Sensor"))
+            m_colliders = GetComponentsInChildren<Collider2D>(true);
+        }
+
+        protected virtual void OnTriggerEnter2D(Collider2D collider2D)
+        {
+            if (collider2D.CompareTag("DamageCollider") || collider2D.CompareTag("Sensor"))
                 return;
 
-            var validToHit = IsValidToHit(collision);
+            var validToHit = IsValidToHit(collider2D);
+
             if (m_damageUniqueHitboxesOnly)
             {
-                var hitbox = m_collisionRegistrator.GetHitbox(collision);
+                var hitbox = m_collisionRegistrator.GetHitbox(collider2D);
                 if (hitbox != null && m_collisionRegistrator.HasDamagedHitbox(hitbox) == false)
                 {
-                    if (hitbox.CanBeDamageBy(m_collider))
+                    m_triggeredCollider = GetTriggeredCollider(collider2D);
+                    if (hitbox.CanBeDamageBy(m_colliders))
                     {
                         if (validToHit)
                         {
-                            OnValidCollider(collision, hitbox);
+                            OnValidCollider(collider2D, hitbox);
                         }
                     }
                     m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
@@ -159,13 +194,14 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                if (collision.TryGetComponentInParent(out Hitbox hitbox))
+                if (collider2D.TryGetComponentInParent(out Hitbox hitbox))
                 {
-                    if (hitbox.CanBeDamageBy(m_collider))
+                    m_triggeredCollider = GetTriggeredCollider(collider2D);
+                    if (hitbox.CanBeDamageBy(m_colliders))
                     {
                         if (validToHit)
                         {
-                            OnValidCollider(collision, hitbox);
+                            OnValidCollider(collider2D, hitbox);
                         }
                     }
                 }
@@ -173,7 +209,8 @@ namespace DChild.Gameplay.Combat
 
             if (m_canDetectInteractables && validToHit)
             {
-                InterractWith(collision);
+                m_triggeredCollider = GetTriggeredCollider(collider2D);
+                InterractWith(collider2D);
             }
         }
 
@@ -187,6 +224,7 @@ namespace DChild.Gameplay.Combat
 
             if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability)
             {
+                m_triggeredCollider = collision.otherCollider;
                 using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                 {
                     InitializeTargetInfo(cacheTargetInfo, hitbox);
@@ -199,7 +237,7 @@ namespace DChild.Gameplay.Combat
                     if (collision.contactCount > 0)
                     {
                         var hitPoint = collision.GetContact(0).point;
-                        onHitFX.SpawnFX(hitPoint, GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint));
+                        onHitFX.SpawnFX(hitPoint, GameplayUtility.GetHorizontalDirection(collision.otherCollider.bounds.center, hitPoint));
                     }
                 }
 
