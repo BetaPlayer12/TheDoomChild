@@ -396,7 +396,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
+                //m_stateHandle.OverrideState(State.Intro);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
                 GameEventMessage.SendEvent("Boss Encounter");
             }
         }
