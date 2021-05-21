@@ -39,16 +39,17 @@ namespace DChild.Menu.Trading
                         var slot = this.InstantiateToScene(m_template, m_pool).GetComponent<TradableItemUI>();
                         slot.Set(itemSlot);
                         m_instantiatedSlots.Add(slot);
+                        slotCreated++;
                     }
                     else
                     {
-                        m_instantiatedSlots[i].Set(itemSlot);
-                        if (i >= m_instantiatedSlots.Count - 1)
+                        m_instantiatedSlots[slotCreated].Set(itemSlot);
+                        slotCreated++;
+                        if (slotCreated == m_instantiatedSlots.Count)
                         {
                             createSlots = true;
                         }
                     }
-                    slotCreated++;
                 }
             }
 

@@ -95,8 +95,32 @@ namespace DChildEditor.Toolkit
                 {
                     tree.Add($"Characters/Boss/{result}/{data.name.Replace("Data", "").Replace("Info", "")}", data, data.infoImage);
                 }
-            }); 
+            });
             #endregion
+
+
+            //loot
+            var loots = new TrialLootKit();
+            loots.PopulateList();
+            tree.Add($"Loot Data Editor/Minion Loot", loots);
+
+            var breakableLoots = new TrialLootKit();
+            breakableLoots.PopulateBreakableList();
+            tree.Add("Loot Data Editor/Breakable Objects Loot", breakableLoots);
+
+            var bossLoot = new TrialLootKit();
+           bossLoot.PopulateBossLootList();
+            tree.Add("Loot Data Editor/Boss Loot", bossLoot);
+
+            //Character Stats
+            var characterStats = new TrialStatsKit();
+            characterStats.PopulateList();
+            tree.Add($"Enemy Stats Data Editor/Minion Stats", characterStats);
+
+            //Character Stats
+            var bossStats = new TrialBossKit();
+            bossStats.PopulateList();
+            tree.Add($"Enemy Stats Data Editor/Boss Stats", bossStats);
 
             tree.EnumerateTree().SortMenuItemsByName(true);
 

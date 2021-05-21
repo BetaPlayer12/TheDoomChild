@@ -157,6 +157,20 @@ MonoBehaviour:
   m_groundSensor: {fileID: 77297547266891390}
   m_edgeSensor: {fileID: 1711586685354806814}
   m_willPatrol: 0
+--- !u!114 &3507416194675661530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185860289843598656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3f4b5be4fef55349baf2131acf38ed9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_duration:
+    m_startTime: 0.15
 --- !u!114 &4401402430066791011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,10 +243,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18353210c1fef634ba85c229444944bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hitStopTime: 0.025
   m_whiteDecayTime: 4
-  m_enableHitStop: 0
+  m_enableHitStop: 1
   m_animation: {fileID: 3288899218771263308}
+  m_hitboxColliders:
+  - {fileID: 4367102224215523865}
   m_flinchHandle: {fileID: 3021976132712452504}
   m_Rendererer: {fileID: 8600803381583185243}
 --- !u!1 &874894259683507448
@@ -1443,6 +1458,12 @@ MonoBehaviour:
 --- !u!4 &5397316827508017005 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5232966731765465065, guid: 3cd360b28d46da540bd8aa67eb2040a2,
+    type: 3}
+  m_PrefabInstance: {fileID: 177932362880628868}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &4367102224215523865 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4531523783917632157, guid: 3cd360b28d46da540bd8aa67eb2040a2,
     type: 3}
   m_PrefabInstance: {fileID: 177932362880628868}
   m_PrefabAsset: {fileID: 0}
