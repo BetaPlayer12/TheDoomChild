@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay;
+﻿using Cinemachine;
+using DChild.Gameplay;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ namespace DChildDebug.Window
         [Button]
         public void ToggleOn()
         {
-            m_detachable = GameplaySystem.cinema.mainCamera;
+            //m_detachable = GameplaySystem.cinema.mainCamera;
+            m_detachable.GetComponent<CinemachineBrain>().enabled = false;
             GameplaySystem.playerManager.OverrideCharacterControls();
             detached = true;
         }
@@ -26,7 +28,8 @@ namespace DChildDebug.Window
         [Button]
         public void ToggleOff()
         {
-            m_detachable = GameplaySystem.cinema.mainCamera;
+            //m_detachable = GameplaySystem.cinema.mainCamera;
+            m_detachable.GetComponent<CinemachineBrain>().enabled = true;
             GameplaySystem.playerManager.StopCharacterControlOverride();
             detached = false;
         }
@@ -35,13 +38,45 @@ namespace DChildDebug.Window
             if (detached == true)
             {
                 if (Input.GetKey(KeyCode.A))
-                    m_detachable.transform.position += Vector3.left * speed * Time.deltaTime;
+                {
+                    Vector3 position = m_detachable.transform.position;
+                    position.x--;
+                    m_detachable.transform.position = position;
+                }
+
                 if (Input.GetKey(KeyCode.D))
-                    m_detachable.transform.position += Vector3.right * speed * Time.deltaTime;
+                {
+                    Vector3 position = m_detachable.transform.position;
+                    position.x++;
+                    m_detachable.transform.position = position;
+                }
+
                 if (Input.GetKey(KeyCode.W))
-                    m_detachable.transform.position += Vector3.up * speed * Time.deltaTime;
+                {
+                    Vector3 position = m_detachable.transform.position;
+                    position.y++;
+                    m_detachable.transform.position = position;
+                }
+
                 if (Input.GetKey(KeyCode.S))
-                    m_detachable.transform.position += Vector3.down * speed * Time.deltaTime;
+                {
+                    Vector3 position = m_detachable.transform.position;
+                    position.y--;
+                    m_detachable.transform.position = position;
+                }
+                if (Input.GetKey(KeyCode.Z))
+                {
+                    Vector3 position = m_detachable.transform.position;
+                    position.z++;
+                    m_detachable.transform.position = position;
+                }
+
+                if (Input.GetKey(KeyCode.X))
+                {
+                    Vector3 position = m_detachable.transform.position;
+                    position.z--;
+                    m_detachable.transform.position = position;
+                }
             }
         }
     }
