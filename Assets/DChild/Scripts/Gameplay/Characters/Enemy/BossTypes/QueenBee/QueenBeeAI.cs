@@ -366,15 +366,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            if (/*m_animation.GetCurrentAnimation(0).ToString() == m_info.spearThrowAttack.animation*/ m_currentPhaseIndex != 3)
+            if (m_flinchHandle.autoFlinching)
             {
-                m_stateHandle.OverrideState(State.Fall);
+                StopAllCoroutines();
+                if (/*m_animation.GetCurrentAnimation(0).ToString() == m_info.spearThrowAttack.animation*/ m_currentPhaseIndex != 3)
+                {
+                    m_stateHandle.OverrideState(State.Fall);
+                }
             }
-            else /*if (m_stateHandle.currentState != State.Fall)*/
+            else
             {
-                m_animation.SetAnimation(0, IsFacingTarget() ? m_info.stuckStateFlinchForwardAnimation : m_info.stuckStateFlinchBackwardAnimation, false);
-                m_stateHandle.OverrideState(State.Stucc);
+                if (m_phaseHandle.currentPhase == Phase.PhaseFour)
+                {
+                    StopAllCoroutines();
+                    m_animation.SetAnimation(0, IsFacingTarget() ? m_info.stuckStateFlinchForwardAnimation : m_info.stuckStateFlinchBackwardAnimation, false);
+                    m_stateHandle.OverrideState(State.Stucc);
+                }
             }
         }
 
@@ -549,6 +556,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(false, false);
             if (m_currentPhaseIndex >= 3 && !m_isFinalPhase)
             {
+                m_flinchHandle.m_autoFlinch = false;
                 m_isFinalPhase = true;
                 m_chosenAttack = Attack.GroundStingerAttack;
                 var spear = Instantiate(m_info.spearDrop, transform.position, Quaternion.identity);
@@ -579,7 +587,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
-            m_flinchHandle.gameObject.SetActive(false);
+            m_flinchHandle.m_autoFlinch = false;
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             m_animation.SetAnimation(0, m_info.flinchFallStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchFallStartAnimation);
@@ -611,7 +619,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_stateHandle.Wait(State.ReevaluateSituation);
-            m_flinchHandle.gameObject.SetActive(m_currentPhaseIndex == 2 ? true : false);
+            m_flinchHandle.m_autoFlinch = m_currentPhaseIndex == 2 ? true : false;
             m_agent.Stop();
             m_droneSpointsGO.transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
             m_animation.SetAnimation(0, m_info.summonDroneAnimation, false).TimeScale = 2f;
@@ -624,7 +632,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.orderDroneAttackLoopAnimation, true);
                 yield return new WaitForSeconds(1);
             }
-            m_flinchHandle.gameObject.SetActive(false);
+            m_flinchHandle.m_autoFlinch = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
             //for (int i = 0; i < /*m_spawnPoints.Count*/4; i++)
             //{
@@ -763,13 +771,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 yield return null;
             }
-            m_flinchHandle.gameObject.SetActive(true);
+            m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.spearThrowAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spearThrowAttack.animation);
-            m_flinchHandle.gameObject.SetActive(false);
+            m_flinchHandle.m_autoFlinch = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
             m_stateHandle.ApplyQueuedState();
@@ -824,7 +832,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phase4AtkStingerImpactAnimation);
             m_animation.SetAnimation(0, m_info.stuckStateAnimation, true);
             m_attackDecider.hasDecidedOnAttack = false;
-            m_flinchHandle.gameObject.SetActive(true);
+            //m_flinchHandle.m_autoFlinch= true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -941,7 +949,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_flinchHandle.gameObject.SetActive(false);
+            m_flinchHandle.m_autoFlinch = false;
             m_spineListener.Subscribe(m_info.spearProjectile.launchOnEvent, LaunchSpearProjectile);
             m_spineListener.Subscribe(m_info.beeProjectile.launchOnEvent, LaunchBeeProjectile);
 
