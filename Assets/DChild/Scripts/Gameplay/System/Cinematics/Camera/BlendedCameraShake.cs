@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             private CameraShakeInfo m_shakeInfo;
             private float m_time;
 
-            public bool isDone => m_time >= m_shakeInfo.duration;
+            public bool isDone => m_time >= (m_shakeInfo?.duration ?? 0f);
 
             public void SetShakeInfo(CameraShakeInfo info)
             {
@@ -38,12 +38,17 @@ namespace DChild.Gameplay.Cinematics.Cameras
         private bool m_isBlending;
         private bool m_isShaking;
 
-        public bool isDone => m_currentShake.isDone;
+        public bool isDone => m_currentShake?.isDone ?? true;
 
         public void SetShakeTo(CameraShakeInfo cameraShakeInfo)
         {
-            if (m_currentShake == null || isDone)
+            if (isDone)
             {
+                if (m_currentShake == null)
+                {
+                    m_currentShake = new ShakeHandle();
+                    m_previousShake = new ShakeHandle();
+                }
                 m_currentShake.SetShakeInfo(cameraShakeInfo);
                 m_isBlending = false;
             }
