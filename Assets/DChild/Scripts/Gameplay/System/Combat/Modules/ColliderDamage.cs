@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Combat
         {
             [SerializeField]
             private Collider2D m_target;
-            [SerializeField,ShowIf("@m_target != null")]
+            [SerializeField, ShowIf("@m_target != null")]
             private Collider2D[] m_ignoreList;
 
             public void IgnoreColliders(bool value)
@@ -42,7 +42,10 @@ namespace DChild.Gameplay.Combat
         [SerializeField, ShowIf("m_damageUniqueHitboxesOnly")]
         private CollisionRegistrator m_collisionRegistrator;
         [SerializeField]
+        private DamageFXHandle m_damageFXHandle;
+        [SerializeField]
         private Collider2DInfo[] m_ignoreColliderList;
+
 
         private Collider2D m_collider;
         private IDamageDealer m_damageDealer;
@@ -65,30 +68,32 @@ namespace DChild.Gameplay.Combat
 
         protected void SpawnHitFX(Collider2D collision)
         {
+            ColliderDistance2D colliderDistance = m_collider.Distance(collision);
+            if (!colliderDistance.isValid)
+            {
+                return;
+            }
+
+            Vector2 hitPoint;
+
+            // if its overlapped then this collider's nearest vertex is inside the other collider
+            // so the position adjustment shouldn't be necessary
+            if (colliderDistance.isOverlapped)
+            {
+                hitPoint = colliderDistance.pointA; // point on the surface of this collider
+            }
+            else
+            {
+                // move the hit location inside the collider a bit
+                // this assumes the colliders are basically touching
+                hitPoint = colliderDistance.pointB - (0.01f * colliderDistance.normal);
+            }
+            var hitDirection = GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint);
+
+            m_damageFXHandle?.SpawnFX(hitPoint, hitDirection);
             if (collision.TryGetComponentInParent(out HitFXHandle onHitFX))
             {
-                ColliderDistance2D colliderDistance = m_collider.Distance(collision);
-                if (!colliderDistance.isValid)
-                {
-                    return;
-                }
-
-                Vector2 hitPoint;
-
-                // if its overlapped then this collider's nearest vertex is inside the other collider
-                // so the position adjustment shouldn't be necessary
-                if (colliderDistance.isOverlapped)
-                {
-                    hitPoint = colliderDistance.pointA; // point on the surface of this collider
-                }
-                else
-                {
-                    // move the hit location inside the collider a bit
-                    // this assumes the colliders are basically touching
-                    hitPoint = colliderDistance.pointB - (0.01f * colliderDistance.normal);
-                }
-
-                onHitFX.SpawnFX(hitPoint, GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint));
+                onHitFX.SpawnFX(hitPoint, hitDirection);
             }
         }
 

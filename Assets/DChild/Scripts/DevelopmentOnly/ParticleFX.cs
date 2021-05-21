@@ -24,6 +24,8 @@ namespace DChild.Gameplay
         private ParticleSystem[] m_particleSystems;
         [SerializeField]
         private bool m_playOnAwake;
+        [SerializeField]
+        private bool m_baseFlipped;
         private State m_state;
 #if UNITY_EDITOR
         [SerializeField]
@@ -114,6 +116,10 @@ namespace DChild.Gameplay
 
         public override void SetFacing(HorizontalDirection horizontalDirection)
         {
+            var signDirection = (int)horizontalDirection * (m_baseFlipped ? -1 : 1);
+            var scale = transform.localScale;
+            scale.x *= signDirection;
+            transform.localScale = scale;
         }
     }
 }

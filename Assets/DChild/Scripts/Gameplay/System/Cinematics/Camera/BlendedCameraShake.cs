@@ -27,8 +27,8 @@ namespace DChild.Gameplay.Cinematics.Cameras
             public float GetCurrentAmplitude() => m_shakeInfo.amplitude.Evaluate(m_time);
             public float GetCurrentFrequency() => m_shakeInfo.frequency.Evaluate(m_time);
         }
-        [SerializeField]
-        private AnimationCurve m_blendCurve;
+        [SerializeField,HideReferenceObjectPicker]
+        private AnimationCurve m_blendCurve = new AnimationCurve(new Keyframe(0,1),new Keyframe(1,0));
         [SerializeField, MinValue(0)]
         private float m_duration;
 

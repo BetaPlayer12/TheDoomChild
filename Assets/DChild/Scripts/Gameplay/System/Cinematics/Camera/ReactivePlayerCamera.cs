@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics.Cameras
 {
-    public class ReactivePlayerCamera : MonoBehaviour, IGameplayInitializable
+    public class ReactivePlayerCamera : SerializedMonoBehaviour, IGameplayInitializable
     {
         [SerializeField]
         private bool m_shakeOnDamage;
@@ -19,6 +19,8 @@ namespace DChild.Gameplay.Cinematics.Cameras
         [SerializeField, MinValue(0f)]
         private float m_shakePause;
 
+        [SerializeField]
+        private ICameraShakeHandle m_cameraShake;
 
 
         private ICinema m_cinema;
@@ -74,17 +76,18 @@ namespace DChild.Gameplay.Cinematics.Cameras
         {
             var timer = 0f;
 
-            if (m_shakeRoutine != null)
-            {
-                m_cinema.EnableCameraShake(false);
-                yield return new WaitForSeconds(m_shakePause);
-            }
-
+            //if (m_shakeRoutine != null)
+            //{
+            //    m_cinema.EnableCameraShake(false);
+            //    yield return new WaitForSeconds(m_shakePause);
+            //}
+            m_cameraShake.SetShakeTo(shakeInfo);
             m_cinema.EnableCameraShake(true);
             do
             {
-                m_cinema.SetCameraShake(shakeInfo.amplitude.Evaluate(timer), shakeInfo.frequency.Evaluate(timer));
-                timer += GameplaySystem.time.deltaTime;
+                var deltaTime = GameplaySystem.time.deltaTime;
+                m_cameraShake.UpdateShake(m_cinema, deltaTime);
+                timer += deltaTime;
                 yield return null;
             } while (timer <= shakeInfo.duration);
 
