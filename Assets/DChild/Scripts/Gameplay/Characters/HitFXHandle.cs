@@ -13,7 +13,10 @@ namespace DChild.Gameplay.Characters
 
         public void SpawnFX(Vector2 position, HorizontalDirection direction)
         {
-            m_spawnHandle.InstantiateFX(m_fx, position, direction);
+            if (m_fx != null)
+            {
+                m_spawnHandle.InstantiateFX(m_fx, position, direction);
+            }
         }
     }
 }
