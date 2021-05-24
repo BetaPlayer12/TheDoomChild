@@ -109,7 +109,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             Attack,
-            AttackEnrage,
+            //AttackEnrage,
             [HideInInspector]
             _COUNT
         }
@@ -138,6 +138,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_selfSensor;
         [SerializeField, TabGroup("Hitbox")]
         private GameObject m_explodeHitbox;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_summonFX;
+
+        [SerializeField]
+        private Transform m_knocbackDirection;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -202,7 +207,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_isDetecting = true;
             m_targetInfo = targetInfo;
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_summonFX.Play();
+            m_stateHandle.OverrideState(State.Detect);
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -213,6 +219,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
+            m_agent.Stop();
+            StartCoroutine(KnockbackRoutine());
             if (m_flinchHandle.m_autoFlinch)
             {
                 StopAllCoroutines();
@@ -222,18 +230,32 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        //private IEnumerator FlinchRoutine()
-        //{
-        //    m_agent.Stop();
-        //    var flinch = UnityEngine.Random.Range(0, 2) == 0 ? m_info.flinchAnimation : m_info.flinch2Animation;
-        //    m_hitbox.gameObject.SetActive(false);
-        //    m_animation.SetAnimation(0, flinch, false);
-        //    yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
-        //    m_hitbox.gameObject.SetActive(true);
-        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-        //    m_stateHandle.OverrideState(State.Cooldown);
-        //    yield return null;
-        //}
+        private IEnumerator KnockbackRoutine()
+        {
+            float time = 0;
+            while (time < .25f)
+            {
+                m_character.physics.SetVelocity(50 * (transform.position.x > m_targetInfo.position.x ? 1 : -1), 0);
+                time += Time.deltaTime;
+                yield return null;
+            }
+            m_agent.Stop();
+            //Vector3 v_diff = (new Vector3(m_targetInfo.position.x, m_targetInfo.position.y ) - transform.position);
+            //float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+            //m_knocbackDirection.rotation = Quaternion.Euler(0f, 0f, (atan2 * Mathf.Rad2Deg) + (transform.position.x > m_targetInfo.position.x ? 180 : 0));
+
+            //m_animation.DisableRootMotion();
+            //float time = 0;
+            //while (time < .25f)
+            //{
+            //    //GetComponent<Rigidbody2D>().velocity = (transform.position.x > m_targetInfo.position.x ? 50f : -50f) * m_knocbackDirection.right;
+            //    m_character.physics.SetVelocity((transform.position.x > m_targetInfo.position.x ? 50f : -50f) * m_knocbackDirection.right);
+            //    time += Time.deltaTime;
+            //    yield return null;
+            //}
+            //m_agent.Stop();
+            yield return null;
+        }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
@@ -286,7 +308,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attack.range)
-                                  , new AttackInfo<Attack>(Attack.AttackEnrage, m_info.attackEnrage.range));
+                                  /*, new AttackInfo<Attack>(Attack.AttackEnrage, m_info.attackEnrage.range)*/);
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -328,14 +350,14 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (/*m_attack*/ m_currentAttack)
             {
                 case Attack.Attack:
-                    m_animation.EnableRootMotion(true, false);
-                    //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                    m_animation.EnableRootMotion(false, false);
                     StartCoroutine(ExplodeRoutine());
+                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
-                case Attack.AttackEnrage:
-                    m_animation.EnableRootMotion(true, false);
-                    m_attackHandle.ExecuteAttack(m_info.attackEnrage.animation, m_info.idleAnimation);
-                    break;
+                //case Attack.AttackEnrage:
+                //    m_animation.EnableRootMotion(false, false);
+                //    m_attackHandle.ExecuteAttack(m_info.attackEnrage.animation, m_info.idleAnimation);
+                //    break;
             }
         }
 
@@ -447,7 +469,8 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_currentAttack = Attack.AttackEnrage;
+            //m_currentAttack = Attack.AttackEnrage;
+            m_currentAttack = Attack.Attack;
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_spineEventListener.Subscribe(m_info.explodeEvent, Explode);
             //m_selfCollider.SetActive(false);
