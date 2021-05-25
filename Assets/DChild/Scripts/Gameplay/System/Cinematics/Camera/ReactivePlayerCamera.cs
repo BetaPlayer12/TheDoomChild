@@ -41,7 +41,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             if (m_shakeOnDamage)
             {
                 StopAllCoroutines();
-                GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.AllDirection);
+                GameplaySystem.cinema.SetCameraShakeProfile(CameraShakeType.AllDirection);
                 m_shakeRoutine = StartCoroutine(CameraShakeRoutine(m_onDamageShake));
             }
         }
@@ -56,19 +56,19 @@ namespace DChild.Gameplay.Cinematics.Cameras
                     switch (eventArgs.target.breakableObject.type)
                     {
                         case Environment.BreakableObject.Type.Others:
-                            GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.AllDirection);
+                            GameplaySystem.cinema.SetCameraShakeProfile(CameraShakeType.AllDirection);
                             break;
                         case Environment.BreakableObject.Type.Floor:
-                            GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.VerticalOnly);
+                            GameplaySystem.cinema.SetCameraShakeProfile(CameraShakeType.VerticalOnly);
                             break;
                         case Environment.BreakableObject.Type.Wall:
-                            GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.HorizontalOnly);
+                            GameplaySystem.cinema.SetCameraShakeProfile(CameraShakeType.HorizontalOnly);
                             break;
                     }
                 }
                 else
                 {
-                    GameplaySystem.cinema.SetCameraShakeProfile(Cinema.ShakeType.AllDirection);
+                    GameplaySystem.cinema.SetCameraShakeProfile(CameraShakeType.AllDirection);
                 }
                 m_shakeRoutine = StartCoroutine(CameraShakeRoutine(m_onAttackHitShake));
             }

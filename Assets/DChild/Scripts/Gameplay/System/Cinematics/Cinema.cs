@@ -9,20 +9,6 @@ namespace DChild.Gameplay.Cinematics
 {
     public class Cinema : SerializedMonoBehaviour, ICinema, IGameplaySystemModule, IGameplayInitializable
     {
-        public enum ShakeType
-        {
-            AllDirection,
-            HorizontalOnly,
-            VerticalOnly
-        }
-
-        public enum LookAhead
-        {
-            None,
-            Up,
-            Down,
-        }
-
         [SerializeField]
         private Camera m_mainCamera;
         private IVirtualCamera m_currentVCam;
@@ -31,16 +17,16 @@ namespace DChild.Gameplay.Cinematics
         private List<CinemachineBasicMultiChannelPerlin> m_noiseList;
         [SerializeField]
         private Transform m_trackingTarget;
-        private CameraOffsetHandle m_offsetHandle;
-        private LookAhead m_currentLookAhead;
+        private CameraPeekHandle m_offsetHandle;
+        private CameraPeekMode m_currentLookAhead;
 
         private bool m_leavePreviousCamAsNull;
         [ShowInInspector, OnValueChanged("EnableCameraShake")]
         private bool m_cameraShake;
         [SerializeField]
-        private Dictionary<ShakeType, NoiseSettings> m_noiseSettings;
+        private Dictionary<CameraShakeType, NoiseSettings> m_noiseSettings;
         [SerializeField, ShowIf("m_cameraShake")]
-        private ShakeType m_currentShakeType;
+        private CameraShakeType m_currentShakeType;
         [ShowInInspector, MinValue(0), ShowIf("m_cameraShake")]
         private float m_shakeAmplitude;
         [ShowInInspector, MinValue(0), ShowIf("m_cameraShake")]
@@ -97,7 +83,13 @@ namespace DChild.Gameplay.Cinematics
             }
         }
 
-        public void ApplyLookAhead(LookAhead look)
+        public void SetCameraPeekConfiguration(CameraPeekConfiguration configuration)
+        {
+            m_offsetHandle.SetConfiguration(configuration);
+            m_offsetHandle.ApplyOffset(m_currentVCam, m_currentLookAhead);
+        }
+
+        public void ApplyCameraPeekMode(CameraPeekMode look)
         {
             m_currentLookAhead = look;
             m_offsetHandle.ApplyOffset(m_currentVCam, m_currentLookAhead);
@@ -200,7 +192,7 @@ namespace DChild.Gameplay.Cinematics
             m_mainCamera = camera;
         }
 
-        public void SetCameraShakeProfile(ShakeType shakeType)
+        public void SetCameraShakeProfile(CameraShakeType shakeType)
         {
             m_currentShakeType = shakeType;
             for (int i = 0; i < m_noiseList.Count; i++)
@@ -213,7 +205,7 @@ namespace DChild.Gameplay.Cinematics
         {
             m_trackingCameras = new List<ITrackingCamera>();
             m_noiseList = new List<CinemachineBasicMultiChannelPerlin>();
-            m_offsetHandle = GetComponent<CameraOffsetHandle>();
+            m_offsetHandle = GetComponent<CameraPeekHandle>();
         }
 
 
