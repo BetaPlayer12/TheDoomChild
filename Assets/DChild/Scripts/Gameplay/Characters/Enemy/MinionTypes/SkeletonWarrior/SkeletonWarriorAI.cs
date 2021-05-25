@@ -536,9 +536,17 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            m_animation.EnableRootMotion(false, false);
-                            m_animation.SetAnimation(0, m_info.backMove.animation, true);
-                            m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                            if (m_groundSensor.allRaysDetecting)
+                            {
+                                m_animation.EnableRootMotion(false, false);
+                                m_animation.SetAnimation(0, m_info.backMove.animation, true);
+                                m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                            }
+                            else
+                            {
+                                m_movement.Stop();
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            }
                         }
                     }
                     else
@@ -555,7 +563,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_currentCD = 0;
                         m_selfCollider.SetActive(true);
-                        m_flinchHandle.m_autoFlinch = false;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -568,6 +575,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                         {
                             m_movement.Stop();
+                            m_flinchHandle.m_autoFlinch = false;
                             m_stateHandle.SetState(State.Attacking);
                         }
                         //else

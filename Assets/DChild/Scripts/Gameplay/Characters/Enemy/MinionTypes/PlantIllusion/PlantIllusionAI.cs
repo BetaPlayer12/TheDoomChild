@@ -22,6 +22,9 @@ namespace DChild.Gameplay.Characters.Enemies
         public class Info : BaseInfo
         {
             //Attack Behaviours
+            [SerializeField, MinValue(0)]
+            private float m_attackCD;
+            public float attackCD => m_attackCD;
             [SerializeField]
             private SimpleAttackInfo m_attack1 = new SimpleAttackInfo();
             public SimpleAttackInfo attack1 => m_attack1;
@@ -94,6 +97,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Burrowed,
             Turning,
             Attacking,
+            Cooldown,
             Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
@@ -130,6 +134,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("AttackHitBoxes")]
         private GameObject m_smokeHitbox;
 
+        private float m_currentCD;
         private float m_targetDistance;
 
         [ShowInInspector]
@@ -156,14 +161,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
-                //var target = m_targetInfo.position; //No Parabola      
-                Vector2 spitPos = m_projectileStart.position;
-                Vector3 v_diff = (target - spitPos);
-                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-
-                //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
-                m_projectileLauncher.AimAt(target);
                 m_projectileLauncher.LaunchProjectile();
                 //m_Audiosource.clip = m_RangeAttackClip;
                 //m_Audiosource.Play();
@@ -185,6 +182,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            //m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
@@ -195,6 +193,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
+                m_flinchHandle.m_autoFlinch = false;
                 m_stateHandle.SetState(State.Chasing);
                 m_currentPatience = 0;
                 m_enablePatience = false;
@@ -220,6 +219,7 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Burrowed);
             }
@@ -229,21 +229,40 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            m_animation.SetEmptyAnimation(1, 0);
             base.OnDestroyed(sender, eventArgs);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack1Hide.animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.attack2Hide.animation)
+            {
+                StartCoroutine(FlinchRoutine());
+            }
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.Wait(State.ReevaluateSituation);
+            }
+        }
+
+        private IEnumerator FlinchRoutine()
+        {
+            m_animation.SetAnimation(1, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetEmptyAnimation(1, 0);
+            yield return null;
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_stateHandle.ApplyQueuedState();
+            }
         }
 
         private IEnumerator AttackRoutine()
@@ -313,12 +332,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Attacking:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_stateHandle.Wait(State.Cooldown);
 
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack1:
+                            var target = new Vector2(m_targetInfo.position.x, m_projectileStart.position.y);
+                            //var target = m_targetInfo.position; //No Parabola      
+                            Vector2 spitPos = m_projectileStart.position;
+                            Vector3 v_diff = (target - spitPos);
+                            float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+
+                            //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                            m_projectileLauncher.AimAt(target);
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.attack1Hide.animation, m_info.idleAnimation);
                             break;
@@ -328,6 +355,34 @@ namespace DChild.Gameplay.Characters.Enemies
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
+
+                    break;
+
+                case State.Cooldown:
+                    //m_stateHandle.Wait(State.ReevaluateSituation);
+                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    if (!IsFacingTarget())
+                    {
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
+                    else
+                    {
+                        if (m_animation.animationState.GetCurrent(0).IsComplete)
+                        {
+                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        }
+                    }
+
+                    if (m_currentCD <= m_info.attackCD)
+                    {
+                        m_currentCD += Time.deltaTime;
+                    }
+                    else
+                    {
+                        m_currentCD = 0;
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    }
 
                     break;
                 case State.Chasing:
@@ -397,6 +452,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;

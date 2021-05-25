@@ -369,6 +369,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.spitAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.m_autoFlinch = true;
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;

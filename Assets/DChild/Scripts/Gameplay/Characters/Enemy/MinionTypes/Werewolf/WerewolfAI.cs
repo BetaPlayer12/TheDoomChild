@@ -338,7 +338,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
                     m_flinchHandle.m_autoFlinch = false;
 
-
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Bite:
