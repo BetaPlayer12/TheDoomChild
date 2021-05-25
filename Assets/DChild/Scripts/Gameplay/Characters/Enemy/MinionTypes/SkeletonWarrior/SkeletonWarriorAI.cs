@@ -429,6 +429,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -470,7 +471,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                            m_flinchHandle.m_autoFlinch = false;
 
                             switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
                             {
@@ -548,11 +548,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (m_currentCD <= m_info.attackCD && !m_wallSensor.isDetecting)
                     {
+                        m_selfCollider.SetActive(false);
                         m_currentCD += Time.deltaTime;
                     }
                     else
                     {
                         m_currentCD = 0;
+                        m_selfCollider.SetActive(true);
+                        m_flinchHandle.m_autoFlinch = false;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -622,12 +625,14 @@ namespace DChild.Gameplay.Characters.Enemies
         public void SwitchToBattleZoneAI()
         {
             m_battlezonemode = true;
+            m_flinchHandle.m_autoFlinch = false;
             m_stateHandle.SetState(State.Chasing);
         }
 
         public void SwitchToBaseAI()
         {
             m_battlezonemode = false;
+            m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
