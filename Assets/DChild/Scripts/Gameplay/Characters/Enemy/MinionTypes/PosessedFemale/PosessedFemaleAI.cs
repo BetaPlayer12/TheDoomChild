@@ -353,6 +353,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case Attack.Attack:
                     m_animation.EnableRootMotion(false, false);
+                    m_selfCollider.SetActive(false);
                     StartCoroutine(ExplodeRoutine());
                     //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
@@ -620,6 +621,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
+            m_selfCollider.SetActive(true);
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
