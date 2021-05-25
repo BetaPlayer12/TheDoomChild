@@ -233,12 +233,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator KnockbackRoutine()
         {
             float time = 0;
+            m_agent.enabled = false;
             while (time < .25f)
             {
                 m_character.physics.SetVelocity(50 * (transform.position.x > m_targetInfo.position.x ? 1 : -1), 0);
                 time += Time.deltaTime;
                 yield return null;
             }
+            m_agent.enabled = true;
             m_agent.Stop();
             //Vector3 v_diff = (new Vector3(m_targetInfo.position.x, m_targetInfo.position.y ) - transform.position);
             //float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
