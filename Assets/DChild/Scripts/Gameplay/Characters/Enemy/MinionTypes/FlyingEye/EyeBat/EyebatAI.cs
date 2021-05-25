@@ -365,7 +365,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.swoopStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.swoopStartAnimation);
             m_animation.SetAnimation(0, m_info.swoopAnimation, false);
-            m_character.physics.SetVelocity(15 * transform.localScale.x, -15f);
+            m_character.physics.SetVelocity(25 * transform.localScale.x, -25f);
             yield return new WaitForSeconds(.25f);
             m_agent.Stop();
             m_character.physics.SetVelocity(15 * transform.localScale.x, 0);
