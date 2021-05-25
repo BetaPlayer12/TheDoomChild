@@ -12,6 +12,8 @@ namespace DChild.Gameplay.Cinematics.Cameras
         private bool m_shakeOnDamage;
         [SerializeField, ShowIf("m_shakeOnDamage")]
         private CameraShakeInfo m_onDamageShake;
+
+
         [SerializeField]
         private bool m_shakeOnAttackHit;
         [SerializeField, ShowIf("m_shakeOnAttackHit")]
