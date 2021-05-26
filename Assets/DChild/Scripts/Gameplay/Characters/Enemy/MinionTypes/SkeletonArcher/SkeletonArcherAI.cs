@@ -172,6 +172,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_flinchHandle.gameObject.SetActive(true);
+            m_selfCollider.SetActive(false);
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
@@ -447,6 +448,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
+                        m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
