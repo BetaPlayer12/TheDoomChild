@@ -20,7 +20,6 @@ namespace DChildDebug.Window
             m_isOn = true;
             m_player.GetComponentInChildren<Collider2D>().enabled = false;
             //m_player.GetComponentInChildren<Rigidbody2D>().gravityScale = 0;
-           
         }
 
         [Button]
