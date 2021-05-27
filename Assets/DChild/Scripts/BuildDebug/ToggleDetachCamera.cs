@@ -6,13 +6,11 @@ using UnityEngine;
 namespace DChildDebug.Window
 {
 
-    public class ToggleDetachCamera : MonoBehaviour, IToggleDebugBehaviour
+    public class ToggleDetachCamera : MonoBehaviour
     {
         [SerializeField]
-        private float speed = 30.0f;
+        private DetachCameraControls m_controller;
         private Camera m_detachable;
-        private bool detached = false;
-        public bool value => detached;
 
         [Button]
         public void ToggleOn()
@@ -20,7 +18,7 @@ namespace DChildDebug.Window
             m_detachable = GameplaySystem.cinema.mainCamera;
             m_detachable.GetComponent<CinemachineBrain>().enabled = false;
             GameplaySystem.playerManager.OverrideCharacterControls();
-            detached = true;
+            m_controller.enabled = true;
         }
 
         [Button]
@@ -29,53 +27,8 @@ namespace DChildDebug.Window
             m_detachable = GameplaySystem.cinema.mainCamera;
             m_detachable.GetComponent<CinemachineBrain>().enabled = true;
             GameplaySystem.playerManager.StopCharacterControlOverride();
-            detached = false;
+            m_controller.enabled = false;
         }
-        void Update()
-        {
-            if (detached == true)
-            {
-                if (Input.GetKey(KeyCode.A))
-                {
-                    Vector3 position = m_detachable.transform.position;
-                    position.x--;
-                    m_detachable.transform.position = position;
-                }
-
-                if (Input.GetKey(KeyCode.D))
-                {
-                    Vector3 position = m_detachable.transform.position;
-                    position.x++;
-                    m_detachable.transform.position = position;
-                }
-
-                if (Input.GetKey(KeyCode.W))
-                {
-                    Vector3 position = m_detachable.transform.position;
-                    position.y++;
-                    m_detachable.transform.position = position;
-                }
-
-                if (Input.GetKey(KeyCode.S))
-                {
-                    Vector3 position = m_detachable.transform.position;
-                    position.y--;
-                    m_detachable.transform.position = position;
-                }
-                if (Input.GetKey(KeyCode.Mouse0))
-                {
-                    Vector3 position = m_detachable.transform.position;
-                    position.z++;
-                    m_detachable.transform.position = position;
-                }
-
-                if (Input.GetKey(KeyCode.Mouse1))
-                {
-                    Vector3 position = m_detachable.transform.position;
-                    position.z--;
-                    m_detachable.transform.position = position;
-                }
-            }
-        }
+       
     }
 }
