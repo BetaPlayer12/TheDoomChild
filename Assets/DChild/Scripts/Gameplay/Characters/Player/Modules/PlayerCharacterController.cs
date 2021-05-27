@@ -721,18 +721,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                     if (m_skullThrow?.HasReachedVerticalThreshold() == true)
                     {
-                        GameplaySystem.cinema.ApplyLookAhead(Cinematics.Cinema.LookAhead.Up);
+                        GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.Up);
                     }
                     else
                     {
-                        GameplaySystem.cinema.ApplyLookAhead(Cinematics.Cinema.LookAhead.None);
+                        GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
                     }
 
                     if (m_input.skullThrowReleased || m_input.skullThrowHeld == false)
                     {
                         m_skullThrow.EndAim();
                         m_skullThrow.StartThrow();
-                        GameplaySystem.cinema.ApplyLookAhead(Cinematics.Cinema.LookAhead.None);
+                        GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
                     }
                 }
             }
