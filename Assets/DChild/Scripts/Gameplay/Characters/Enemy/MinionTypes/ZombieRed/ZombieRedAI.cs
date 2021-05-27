@@ -157,6 +157,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
+            m_selfCollider.SetActive(false);
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
         }
@@ -255,8 +256,9 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_flinchHandle.m_autoFlinch)
             {
                 StopAllCoroutines();
+                m_currentCD += m_currentCD + 0.5f;
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                m_stateHandle.Wait(State.Cooldown);
             }
         }
 
@@ -266,7 +268,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
                     m_animation.SetAnimation(0, m_info.run.animation, false);
-                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                m_stateHandle.ApplyQueuedState();
             }
         }
 
@@ -346,6 +348,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Detect:
                     m_movement.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -388,7 +391,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_flinchHandle.m_autoFlinch = false;
 
 
                     switch (m_attackDecider.chosenAttack.attack)
@@ -421,6 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_currentCD = 0;
+                            m_selfCollider.SetActive(true);
                             m_stateHandle.OverrideState(State.ReevaluateSituation);
                         }
                     }
@@ -428,6 +431,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Chasing:
                     {
+                        m_flinchHandle.m_autoFlinch = false;
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();

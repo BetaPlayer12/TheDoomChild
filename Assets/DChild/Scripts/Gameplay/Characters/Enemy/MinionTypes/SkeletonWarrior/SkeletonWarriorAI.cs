@@ -171,6 +171,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
+            m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -262,8 +263,9 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopAllCoroutines();
                 m_animation.animationState.TimeScale = .5f;
+                m_currentCD += m_currentCD + 0.5f;
                 m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                m_stateHandle.Wait(State.Cooldown);
             }
         }
 
@@ -275,7 +277,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
                     m_animation.SetEmptyAnimation(0, 0);
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                m_stateHandle.ApplyQueuedState();
             }
         }
 
@@ -332,6 +334,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForSeconds(m_info.runAttackDuration);
             //m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0.25f;
+            m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }

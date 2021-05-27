@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DChild.Gameplay;
+using UnityEngine;
 
 namespace DChild
 {
@@ -7,14 +8,22 @@ namespace DChild
     {
         private void Awake()
         {
-            GameSystem.SetCamera(GetComponent<Camera>());
+            var camera = GetComponent<Camera>();
+            GameSystem.SetCamera(camera);
+            GameplaySystem.cinema?.SetMainCamera(camera);
         }
 
         private void OnDestroy()
         {
-            if (GameSystem.mainCamera == GetComponent<Camera>())
+            var camera = GetComponent<Camera>();
+            if (GameSystem.mainCamera == camera)
             {
                 GameSystem.SetCamera(null);
+            }
+            var cinema = GameplaySystem.cinema;
+            if (cinema != null && cinema.mainCamera == camera)
+            {
+                cinema.SetMainCamera(null);
             }
         }
     }

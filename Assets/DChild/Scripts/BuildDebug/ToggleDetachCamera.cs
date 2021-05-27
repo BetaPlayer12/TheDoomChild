@@ -1,8 +1,6 @@
 ﻿using Cinemachine;
 using DChild.Gameplay;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChildDebug.Window
@@ -11,15 +9,15 @@ namespace DChildDebug.Window
     public class ToggleDetachCamera : MonoBehaviour, IToggleDebugBehaviour
     {
         [SerializeField]
-        public Camera m_detachable;
-        private bool detached = false;
         private float speed = 30.0f;
+        private Camera m_detachable;
+        private bool detached = false;
         public bool value => detached;
 
         [Button]
         public void ToggleOn()
         {
-            //m_detachable = GameplaySystem.cinema.mainCamera;
+            m_detachable = GameplaySystem.cinema.mainCamera;
             m_detachable.GetComponent<CinemachineBrain>().enabled = false;
             GameplaySystem.playerManager.OverrideCharacterControls();
             detached = true;
@@ -28,7 +26,7 @@ namespace DChildDebug.Window
         [Button]
         public void ToggleOff()
         {
-            //m_detachable = GameplaySystem.cinema.mainCamera;
+            m_detachable = GameplaySystem.cinema.mainCamera;
             m_detachable.GetComponent<CinemachineBrain>().enabled = true;
             GameplaySystem.playerManager.StopCharacterControlOverride();
             detached = false;
