@@ -718,11 +718,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
 
                     m_skullThrow.MoveAim(m_input.m_mouseDelta.normalized);
+
+                    if (m_skullThrow?.HasReachedVerticalThreshold() == true)
+                    {
+                        GameplaySystem.cinema.ApplyLookAhead(Cinematics.Cinema.LookAhead.Up);
+                    }
+                    else
+                    {
+                        GameplaySystem.cinema.ApplyLookAhead(Cinematics.Cinema.LookAhead.None);
+                    }
+
                     if (m_input.skullThrowReleased || m_input.skullThrowHeld == false)
                     {
                         m_skullThrow.EndAim();
                         m_skullThrow.StartThrow();
-                        //Throw Projectile
+                        GameplaySystem.cinema.ApplyLookAhead(Cinematics.Cinema.LookAhead.None);
                     }
                 }
             }
