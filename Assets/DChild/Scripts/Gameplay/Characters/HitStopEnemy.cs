@@ -29,7 +29,7 @@ public class HitStopEnemy : MonoBehaviour
     {
         Debug.Log("HitStop");
         StopAllCoroutines();
-        StartCoroutine(FlinchWhiteRoutine());
+        //StartCoroutine(FlinchWhiteRoutine());
         if (m_enableHitStop)
         {
             foreach (Collider2D collider in m_hitboxColliders)

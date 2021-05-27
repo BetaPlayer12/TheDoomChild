@@ -21,31 +21,31 @@ namespace DChild.Gameplay.Cinematics
                     m_holdTime = 0;
                     if (m_isPeeking)
                     {
-                        GameplaySystem.cinema.ApplyLookAhead(LookAhead.None);
+                        GameplaySystem.cinema.ApplyCameraPeekMode(CameraPeekMode.None);
                         m_isPeeking = false;
                     }
                     break;
                 case 1:
                     if (m_isPeeking == false)
                     {
-                        EvaluatePeek(LookAhead.Up);
+                        EvaluatePeek(CameraPeekMode.Up);
                     }
                     break;
                 case -1:
                     if (m_isPeeking == false)
                     {
-                        EvaluatePeek(LookAhead.Down);
+                        EvaluatePeek(CameraPeekMode.Down);
                     }
                     break;
             }
         }
 
-        private void EvaluatePeek(LookAhead peek)
+        private void EvaluatePeek(CameraPeekMode peek)
         {
             m_holdTime += Time.deltaTime;
             if (m_holdTime >= m_holdForPeek)
             {
-                GameplaySystem.cinema.ApplyLookAhead(peek);
+                GameplaySystem.cinema.ApplyCameraPeekMode(peek);
                 m_isPeeking = true;
             }
         }

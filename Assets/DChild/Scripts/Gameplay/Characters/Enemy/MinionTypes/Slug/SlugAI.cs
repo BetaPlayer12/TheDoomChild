@@ -178,6 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool m_isDetecting;
         private float m_currentCD;
+        private Vector2 m_targetLastPos;
 
         protected override void Start()
         {
@@ -191,7 +192,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 BallisticVel()
         {
-            Vector2 targetCenterMass = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
+            Vector2 targetCenterMass = m_targetLastPos;
             m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
 
             m_targetDistance = Vector2.Distance(targetCenterMass, m_throwPoint.position);
@@ -229,10 +230,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                if (!IsFacingTarget())
-                {
-                    CustomTurn();
-                }
+                //if (!IsFacingTarget())
+                //{
+                //    CustomTurn();
+                //}
                 //Dirt FX
                 //GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
                 //obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
@@ -243,7 +244,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 //Shoot Spit
                 m_muzzleFX.Play();
-                Vector2 target = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
+                Vector2 target = m_targetLastPos;
                 target = new Vector2(target.x, target.y - 2);
                 Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
                 Vector3 v_diff = (target - spitPos);
@@ -355,7 +356,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -364,9 +365,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SlugProjectileRoutine()
         {
             m_movement.Stop();
+            m_targetLastPos = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
             m_animation.SetAnimation(0, m_info.spitAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.m_autoFlinch = true;
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;

@@ -611,9 +611,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.appearAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.appearAnimation);
             m_hitbox.gameObject.SetActive(true);
+            m_animation.SetAnimation(0, m_info.skeletalArmAttack.animation, false);
+            yield return new WaitForSeconds(.5f);
             StartCoroutine(SummonPossedFemalesRoutine(3));
-            m_animation.SetAnimation(0, m_info.idle2Animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idle2Animation);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.skeletalArmAttack.animation);
             m_animation.SetAnimation(0, m_info.vanishAnimation, false);
             m_hitbox.gameObject.SetActive(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vanishAnimation);
@@ -652,7 +653,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             for (int i = 0; i < minionCount; i++)
             {
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(.5f);
                 var minion = this.InstantiateToScene(m_info.summonedMinion, RandomTeleportPoint(m_minionLastPos), Quaternion.identity);
                 minion.GetComponent<PosessedFemaleAI>().SetAI(m_targetInfo);
                 m_minionLastPos = minion.transform.position;

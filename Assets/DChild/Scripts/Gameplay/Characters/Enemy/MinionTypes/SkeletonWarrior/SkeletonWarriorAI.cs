@@ -171,6 +171,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
+            m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -262,8 +263,9 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopAllCoroutines();
                 m_animation.animationState.TimeScale = .5f;
+                m_currentCD += m_currentCD + 0.5f;
                 m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                m_stateHandle.Wait(State.Cooldown);
             }
         }
 
@@ -275,7 +277,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
                     m_animation.SetEmptyAnimation(0, 0);
                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                m_stateHandle.ApplyQueuedState();
             }
         }
 
@@ -332,6 +334,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForSeconds(m_info.runAttackDuration);
             //m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0.25f;
+            m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -429,6 +432,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -470,7 +474,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                            m_flinchHandle.m_autoFlinch = false;
 
                             switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
                             {
@@ -536,9 +539,17 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            m_animation.EnableRootMotion(false, false);
-                            m_animation.SetAnimation(0, m_info.backMove.animation, true);
-                            m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                            if (m_groundSensor.allRaysDetecting)
+                            {
+                                m_animation.EnableRootMotion(false, false);
+                                m_animation.SetAnimation(0, m_info.backMove.animation, true);
+                                m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                            }
+                            else
+                            {
+                                m_movement.Stop();
+                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                            }
                         }
                     }
                     else
@@ -548,11 +559,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (m_currentCD <= m_info.attackCD && !m_wallSensor.isDetecting)
                     {
+                        m_selfCollider.SetActive(false);
                         m_currentCD += Time.deltaTime;
                     }
                     else
                     {
                         m_currentCD = 0;
+                        m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -565,6 +578,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                         {
                             m_movement.Stop();
+                            m_flinchHandle.m_autoFlinch = false;
                             m_stateHandle.SetState(State.Attacking);
                         }
                         //else
@@ -622,12 +636,14 @@ namespace DChild.Gameplay.Characters.Enemies
         public void SwitchToBattleZoneAI()
         {
             m_battlezonemode = true;
+            m_flinchHandle.m_autoFlinch = false;
             m_stateHandle.SetState(State.Chasing);
         }
 
         public void SwitchToBaseAI()
         {
             m_battlezonemode = false;
+            m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
