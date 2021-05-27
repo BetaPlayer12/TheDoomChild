@@ -64,14 +64,14 @@ namespace DChildDebug.Window
                     position.y--;
                     m_detachable.transform.position = position;
                 }
-                if (Input.GetKey(KeyCode.Z))
+                if (Input.GetKey(KeyCode.Mouse0))
                 {
                     Vector3 position = m_detachable.transform.position;
                     position.z++;
                     m_detachable.transform.position = position;
                 }
 
-                if (Input.GetKey(KeyCode.X))
+                if (Input.GetKey(KeyCode.Mouse1))
                 {
                     Vector3 position = m_detachable.transform.position;
                     position.z--;
