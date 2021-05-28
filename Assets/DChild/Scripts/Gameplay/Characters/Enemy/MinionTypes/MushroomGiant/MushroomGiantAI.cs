@@ -204,6 +204,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_breathFX.gameObject.GetComponent<ParticleSystem>().Stop();
             m_flinchHandle.m_autoFlinch = true;
+            m_selfCollider.SetActive(false);
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
@@ -299,7 +300,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopAllCoroutines();
                 //m_hitbox.SetInvulnerability(false);
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                m_stateHandle.Wait(State.Cooldown);
             }
         }
 
@@ -309,7 +310,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
                     m_animation.SetEmptyAnimation(0, 0);
-                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                m_stateHandle.ApplyQueuedState();
             }
         }
 
@@ -343,7 +344,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator Attack2Routine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_stateHandle.Wait(State.ReevaluateSituation);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
@@ -367,6 +368,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             }
             m_flinchHandle.gameObject.SetActive(true);
+            m_flinchHandle.m_autoFlinch = true;
+            m_selfCollider.SetActive(false);
             //m_hitbox.SetInvulnerability(false);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -416,6 +419,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
                         //m_stateHandle.Wait(State.ReevaluateSituation);
@@ -452,7 +456,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_flinchHandle.m_autoFlinch = false;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -483,6 +486,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_turnState = State.Cooldown;
                         m_stateHandle.SetState(State.Turning);
                     }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
 
                     if (m_currentCD <= m_info.attackCD)
                     {
@@ -491,12 +498,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
+                        m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
                     break;
                 case State.Chasing:
                     {
+                        m_flinchHandle.m_autoFlinch = false;
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();

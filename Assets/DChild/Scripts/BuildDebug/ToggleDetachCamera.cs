@@ -1,48 +1,34 @@
-﻿using DChild.Gameplay;
+﻿using Cinemachine;
+using DChild.Gameplay;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChildDebug.Window
 {
 
-    public class ToggleDetachCamera : MonoBehaviour, IToggleDebugBehaviour
+    public class ToggleDetachCamera : MonoBehaviour
     {
         [SerializeField]
-        public Camera m_detachable;
-        private bool detached = false;
-        private float speed = 30.0f;
-        public bool value => detached;
+        private DetachCameraControls m_controller;
+        private Camera m_detachable;
 
         [Button]
         public void ToggleOn()
         {
             m_detachable = GameplaySystem.cinema.mainCamera;
+            m_detachable.GetComponent<CinemachineBrain>().enabled = false;
             GameplaySystem.playerManager.OverrideCharacterControls();
-            detached = true;
+            m_controller.enabled = true;
         }
 
         [Button]
         public void ToggleOff()
         {
             m_detachable = GameplaySystem.cinema.mainCamera;
+            m_detachable.GetComponent<CinemachineBrain>().enabled = true;
             GameplaySystem.playerManager.StopCharacterControlOverride();
-            detached = false;
+            m_controller.enabled = false;
         }
-        void Update()
-        {
-            if (detached == true)
-            {
-                if (Input.GetKey(KeyCode.A))
-                    m_detachable.transform.position += Vector3.left * speed * Time.deltaTime;
-                if (Input.GetKey(KeyCode.D))
-                    m_detachable.transform.position += Vector3.right * speed * Time.deltaTime;
-                if (Input.GetKey(KeyCode.W))
-                    m_detachable.transform.position += Vector3.up * speed * Time.deltaTime;
-                if (Input.GetKey(KeyCode.S))
-                    m_detachable.transform.position += Vector3.down * speed * Time.deltaTime;
-            }
-        }
+       
     }
 }

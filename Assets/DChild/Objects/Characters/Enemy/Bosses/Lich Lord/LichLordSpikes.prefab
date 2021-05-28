@@ -163,6 +163,7 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
+  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 1
 --- !u!1 &1698464101735713123
@@ -338,7 +339,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5a1caec91eb4c2545a2434e1f82e54ff, type: 2}
+  - {fileID: 2100000, guid: d089336de95cc194c9f2c93212c6e82f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -371,7 +372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 259f6b5e271760e41b66e5a10efeaa38, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: a2cf3c8956eb3094fa79afdae9d58d29, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -388,9 +389,11 @@ MonoBehaviour:
   calculateTangents: 0
   maskInteraction: 2
   maskMaterials:
-    materialsMaskDisabled: []
+    materialsMaskDisabled:
+    - {fileID: 2100000, guid: a50e3e4554d67e34b8c4fd270a460bee, type: 2}
     materialsInsideMask: []
-    materialsOutsideMask: []
+    materialsOutsideMask:
+    - {fileID: 2100000, guid: d089336de95cc194c9f2c93212c6e82f, type: 2}
   disableRenderingOnOverride: 1
   _animationName: 
   loop: 0

@@ -67,7 +67,6 @@ namespace DChild.Gameplay.Characters
             }
         }
 
-
         private void StartFlinch()
         {
             m_physics?.SetVelocity(Vector2.zero);
@@ -106,7 +105,5 @@ namespace DChild.Gameplay.Characters
         {
             m_isFlinching = false;
         }
-
-
     }
 }

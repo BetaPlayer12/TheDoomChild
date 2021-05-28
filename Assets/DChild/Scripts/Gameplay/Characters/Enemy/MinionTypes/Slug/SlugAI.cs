@@ -146,6 +146,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleSystem m_muzzleFX;
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_spikeFX;
+        [SerializeField, TabGroup("FX")]
+        private GameObject m_glow;
 
         [SerializeField, TabGroup("Cannon Values")]
         private float m_speed;
@@ -176,6 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool m_isDetecting;
         private float m_currentCD;
+        private Vector2 m_targetLastPos;
 
         protected override void Start()
         {
@@ -189,7 +192,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 BallisticVel()
         {
-            Vector2 targetCenterMass = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
+            Vector2 targetCenterMass = m_targetLastPos;
             m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
 
             m_targetDistance = Vector2.Distance(targetCenterMass, m_throwPoint.position);
@@ -217,41 +220,44 @@ namespace DChild.Gameplay.Characters.Enemies
             return 0;
         }
 
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
         private void SpitProjectile()
         {
             if (m_targetInfo.isValid)
             {
-                if (IsFacingTarget())
-                {
-                    //Dirt FX
-                    //GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
-                    //obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
-                    //obj.transform.parent = m_seedSpitTF;
-                    //obj.transform.localPosition = new Vector2(4, -1.5f);
-                    //
+                //if (!IsFacingTarget())
+                //{
+                //    CustomTurn();
+                //}
+                //Dirt FX
+                //GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
+                //obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
+                //obj.transform.parent = m_seedSpitTF;
+                //obj.transform.localPosition = new Vector2(4, -1.5f);
+                //
 
 
-                    //Shoot Spit
-                    m_muzzleFX.Play();
-                    Vector2 target = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
-                    target = new Vector2(target.x, target.y - 2);
-                    Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
-                    Vector3 v_diff = (target - spitPos);
-                    float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-                    
-                    GameObject projectile = m_info.projectile.projectileInfo.projectile;
-                    var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
-                    instance.transform.position = m_throwPoint.position;
-                    var component = instance.GetComponent<Projectile>();
-                    component.ResetState();
-                    //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
-                    component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
-                    //return instance.gameObject;
-                }
-                else
-                {
-                    m_stateHandle.OverrideState(State.Turning);
-                }
+                //Shoot Spit
+                m_muzzleFX.Play();
+                Vector2 target = m_targetLastPos;
+                target = new Vector2(target.x, target.y - 2);
+                Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
+                Vector3 v_diff = (target - spitPos);
+                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+
+                GameObject projectile = m_info.projectile.projectileInfo.projectile;
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+                instance.transform.position = m_throwPoint.position;
+                var component = instance.GetComponent<Projectile>();
+                component.ResetState();
+                //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
+                //return instance.gameObject;
             }
         }
 
@@ -344,12 +350,13 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            m_glow.SetActive(false);
             m_movement.Stop();
         }
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -358,9 +365,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SlugProjectileRoutine()
         {
             m_movement.Stop();
+            m_targetLastPos = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
             m_animation.SetAnimation(0, m_info.spitAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.m_autoFlinch = true;
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -580,6 +589,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
+            m_glow.SetActive(true);
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);

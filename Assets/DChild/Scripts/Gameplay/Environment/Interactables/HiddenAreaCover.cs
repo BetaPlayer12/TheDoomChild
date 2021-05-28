@@ -118,10 +118,12 @@ namespace DChild.Gameplay.Environment
         private IEnumerator LerpTo(bool isVisible)
         {
             int destination = isVisible ? 0 : 1;
-            if (isVisible)
+
+            if (isVisible == false)
             {
                 SetRenderersActive(true);
             }
+
             int signModifier = isVisible ? -1 : 1;
             do
             {
@@ -129,7 +131,8 @@ namespace DChild.Gameplay.Environment
                 LerpColors(m_lerpDuration.lerpValue);
                 yield return null;
             } while (m_lerpDuration.lerpValue != destination);
-            if (isVisible == false)
+
+            if (isVisible)
             {
                 SetRenderersActive(false);
             }

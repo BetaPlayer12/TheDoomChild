@@ -146,6 +146,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            m_selfCollider.SetActive(false);
             //m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
@@ -309,6 +310,7 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -419,6 +421,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
+                        m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
