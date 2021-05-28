@@ -37,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_skullThrowVariantParameter;
         private bool m_updateProjectileInfo;
         private Projectile m_spawnedProjectile;
+        private bool m_reachedVerticalThreshold = false;
 
         public event EventAction<EventActionArgs> ExecutionRequested;
         public event EventAction<EventActionArgs> ProjectileThrown;
@@ -86,10 +87,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (newAim.y < m_verticalThreshold * -1)
             {
                 newAim.y = m_verticalThreshold * -1;
+                m_reachedVerticalThreshold = false;
             }
             else if (newAim.y > m_verticalThreshold)
             {
                 newAim.y = m_verticalThreshold;
+                m_reachedVerticalThreshold = true;
             }
             m_currentAim = newAim;
             UpdateTrajectorySimulation();
@@ -261,6 +264,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public override void AttackOver()
         {
             base.AttackOver();
+            m_reachedVerticalThreshold = false;
             m_animator.SetBool(m_skullThrowAnimationParameter, false);
         }
 
@@ -278,9 +282,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.waitForBehaviour = true;
         }
 
+        public bool HasReachedVerticalThreshold()
+        {
+            return m_reachedVerticalThreshold;
+        }
+
         public override void Cancel()
         {
             base.Cancel();
+            m_reachedVerticalThreshold = false;
             EndAim();
             m_animator.SetBool(m_skullThrowAnimationParameter, false);
 
