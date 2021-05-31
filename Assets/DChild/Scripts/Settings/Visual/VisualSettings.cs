@@ -44,6 +44,7 @@ namespace DChild.Configurations
             {
                 m_screenResolution.SetResolution(value);
                 m_screenResolution.Apply();
+                GameSystem.settings.configuration.visualConfiguration.resolutionIndex = value;
             }
         }
 
@@ -58,6 +59,7 @@ namespace DChild.Configurations
             {
                 m_screenResolution.SetFullscreen(value);
                 m_screenResolution.Apply();
+                GameSystem.settings.configuration.visualConfiguration.fullscreen = value;
             }
         }
 
@@ -71,6 +73,7 @@ namespace DChild.Configurations
             set
             {
                 m_screenLighting.brightness = value;
+                GameSystem.settings.configuration.visualConfiguration.brightness = value;
             }
         }
 
@@ -84,6 +87,7 @@ namespace DChild.Configurations
             set
             {
                 m_screenLighting.contrast = value;
+                GameSystem.settings.configuration.visualConfiguration.contrast = value;
             }
         }
 
@@ -96,6 +100,7 @@ namespace DChild.Configurations
             set
             {
                 QualitySettings.vSyncCount = value ? 1 : 0;
+                GameSystem.settings.configuration.visualConfiguration.vsync = value;
             }
         }
     }

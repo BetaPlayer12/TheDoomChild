@@ -15,19 +15,31 @@ namespace DChild.Configurations
         public float masterVolume
         {
             get => m_masterVolume;
-            set => m_masterVolume = value;
+            set
+            {
+                m_masterVolume = value;
+                GameSystem.settings.configuration.audioConfiguration.masterVolume = value;
+            }
         }
 
         public float soundVolume
         {
             get => m_soundVolume;
-            set => m_soundVolume = value;
+            set
+            {
+                m_soundVolume = value;
+                GameSystem.settings.configuration.audioConfiguration.soundVolume = value;
+            }
         }
 
         public float musicVolume
         {
             get => m_musicVolume;
-            set => m_musicVolume = value;
+            set
+            {
+                m_musicVolume = value;
+                GameSystem.settings.configuration.audioConfiguration.musicVolume = value;
+            }
         }
 
 
