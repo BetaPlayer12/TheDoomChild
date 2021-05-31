@@ -1,7 +1,10 @@
 ﻿using DChild.Configurations.Visuals;
+using DChild.Serialization;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace DChild.Configurations
@@ -27,6 +30,24 @@ namespace DChild.Configurations
         public new AudioSettings audio => m_audio;
         public GameplaySettings gameplay => m_gameplay;
 
+        public void SaveSettings()
+        {
+            SerializationHandle.SaveConfiguration(m_configuration);
+        }
+
+        public void LoadDefaultSettings()
+        {
+            
+        }
+
+        public void Initialize()
+        {
+            SerializationHandle.LoadConfiguration(ref m_configuration);
+            if(m_configuration == null)
+            {
+                m_configuration = new GameSettingsConfiguration();
+            }
+        }
 
 #if UNITY_EDITOR
         public void Initialize(SupportedResolutions supportedResolutions)
