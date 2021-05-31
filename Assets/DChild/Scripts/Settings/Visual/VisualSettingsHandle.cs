@@ -7,23 +7,27 @@ using UnityEngine;
 namespace DChild.Configurations
 {
     [System.Serializable]
-    public class VisualSettings
+    public class VisualSettingsHandle
     {
-        public struct Info
-        {
-            public int resolutionIndex { get; }
-            public bool fullscreen { get; }
-            public float brightness { get; }
-            public float contrast { get; }
-            public bool vsync { get; }
-        }
-
         [BoxGroup("Configurators")]
         [SerializeField]
         private ScreenResolution m_screenResolution;
         [BoxGroup("Configurators")]
         [SerializeField]
         private ScreenLighting m_screenLighting;
+
+        private GameSettingsConfiguration m_configuration;
+
+        public void Initialize(GameSettingsConfiguration configuration)
+        {
+            m_configuration = configuration;
+            var visualConfiguration = m_configuration.visualConfiguration;
+            m_screenResolution.SetResolution(visualConfiguration.resolutionIndex);
+            m_screenResolution.SetFullscreen(visualConfiguration.fullscreen);
+            m_screenLighting.brightness = visualConfiguration.brightness;
+            m_screenLighting.contrast = visualConfiguration.contrast;
+            QualitySettings.vSyncCount = visualConfiguration.vsync ? 1 : 0;
+        }
 
 #if UNITY_EDITOR
         public void Initialize(ScreenResolution screenResolution, ScreenLighting screenLighting)
@@ -44,7 +48,7 @@ namespace DChild.Configurations
             {
                 m_screenResolution.SetResolution(value);
                 m_screenResolution.Apply();
-                GameSystem.settings.configuration.visualConfiguration.resolutionIndex = value;
+                m_configuration.visualConfiguration.resolutionIndex = value;
             }
         }
 
@@ -59,7 +63,7 @@ namespace DChild.Configurations
             {
                 m_screenResolution.SetFullscreen(value);
                 m_screenResolution.Apply();
-                GameSystem.settings.configuration.visualConfiguration.fullscreen = value;
+                m_configuration.visualConfiguration.fullscreen = value;
             }
         }
 
@@ -73,7 +77,7 @@ namespace DChild.Configurations
             set
             {
                 m_screenLighting.brightness = value;
-                GameSystem.settings.configuration.visualConfiguration.brightness = value;
+                m_configuration.visualConfiguration.brightness = value;
             }
         }
 
@@ -87,7 +91,7 @@ namespace DChild.Configurations
             set
             {
                 m_screenLighting.contrast = value;
-                GameSystem.settings.configuration.visualConfiguration.contrast = value;
+                m_configuration.visualConfiguration.contrast = value;
             }
         }
 
@@ -100,7 +104,7 @@ namespace DChild.Configurations
             set
             {
                 QualitySettings.vSyncCount = value ? 1 : 0;
-                GameSystem.settings.configuration.visualConfiguration.vsync = value;
+                m_configuration.visualConfiguration.vsync = value;
             }
         }
     }

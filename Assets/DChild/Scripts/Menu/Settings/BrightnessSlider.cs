@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace DChild.Menu.UI
 {
-    public class BrightnessSlider : ReferenceSlider, IValueUI, IReferenceUI<VisualSettings>
+    public class BrightnessSlider : ReferenceSlider, IValueUI, IReferenceUI<VisualSettingsHandle>
     {
         [SerializeField]
         private IndexSliderInterpreter m_interpreter;
-        private VisualSettings m_settings;
+        private VisualSettingsHandle m_settings;
 
         protected override float value
         {
@@ -23,7 +23,7 @@ namespace DChild.Menu.UI
             }
         }
 
-        public void SetReference(VisualSettings reference)
+        public void SetReference(VisualSettingsHandle reference)
         {
             m_settings = reference;
         }

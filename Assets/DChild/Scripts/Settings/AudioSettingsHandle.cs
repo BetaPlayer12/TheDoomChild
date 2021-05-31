@@ -3,7 +3,7 @@
 namespace DChild.Configurations
 {
     [System.Serializable]
-    public class AudioSettings
+    public class AudioSettingsHandle
     {
         [SerializeField]
         private float m_masterVolume = 1;
@@ -12,13 +12,24 @@ namespace DChild.Configurations
         [SerializeField]
         private float m_musicVolume = 1;
 
+        private GameSettingsConfiguration m_configuration;
+
+        public void Initialize(GameSettingsConfiguration configuration)
+        {
+            m_configuration = configuration;
+            var audioConfiguration = m_configuration.audioConfiguration;
+            m_masterVolume = audioConfiguration.masterVolume;
+            m_soundVolume = audioConfiguration.soundVolume;
+            m_musicVolume = audioConfiguration.musicVolume;
+        }
+
         public float masterVolume
         {
             get => m_masterVolume;
             set
             {
                 m_masterVolume = value;
-                GameSystem.settings.configuration.audioConfiguration.masterVolume = value;
+                m_configuration.audioConfiguration.masterVolume = value;
             }
         }
 
@@ -28,7 +39,7 @@ namespace DChild.Configurations
             set
             {
                 m_soundVolume = value;
-                GameSystem.settings.configuration.audioConfiguration.soundVolume = value;
+                m_configuration.audioConfiguration.soundVolume = value;
             }
         }
 
@@ -38,7 +49,7 @@ namespace DChild.Configurations
             set
             {
                 m_musicVolume = value;
-                GameSystem.settings.configuration.audioConfiguration.musicVolume = value;
+                m_configuration.audioConfiguration.musicVolume = value;
             }
         }
 

@@ -11,9 +11,9 @@ using UnityEngine;
 namespace DChild.Menu.UI
 {
     [RequireComponent(typeof(TMP_Dropdown))]
-    public class ResolutionDropdown : MonoBehaviour, IValueUI, IReferenceUI<VisualSettings>
+    public class ResolutionDropdown : MonoBehaviour, IValueUI, IReferenceUI<VisualSettingsHandle>
     {
-        private VisualSettings m_settings;
+        private VisualSettingsHandle m_settings;
         private TMP_Dropdown m_dropDown;
 
         public void UpdateUI()
@@ -21,7 +21,7 @@ namespace DChild.Menu.UI
             m_dropDown.value = m_settings.resolution;
         }
 
-        public void SetReference(VisualSettings reference)
+        public void SetReference(VisualSettingsHandle reference)
         {
             m_settings = reference;
         }
