@@ -8,6 +8,8 @@ namespace DChild.Configurations
 {
     public class GameSettings : MonoBehaviour
     {
+        [SerializeField]
+        private GameSettingsConfiguration m_configuration;
 
         [SerializeField, Title("Visual Settings"), HideLabel]
         private VisualSettings m_visual;
@@ -17,6 +19,8 @@ namespace DChild.Configurations
         private AudioSettings m_audio;
         [SerializeField, Title("Gameplay Settings"), HideLabel]
         private GameplaySettings m_gameplay;
+
+        public GameSettingsConfiguration configuration => m_configuration;
 
         public VisualSettings visual => m_visual;
         public SupportedResolutions supportedResolutions => m_supportedResolutions;
