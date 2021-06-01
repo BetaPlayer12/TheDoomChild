@@ -3,9 +3,9 @@ using DChild.UI;
 
 namespace DChild.Menu.UI
 {
-    public class FullScreenField : ToggleField, IReferenceUI<VisualSettings>
+    public class FullScreenField : ToggleField, IReferenceUI<VisualSettingsHandle>
     {
-        private VisualSettings m_settings;
+        private VisualSettingsHandle m_settings;
 
 
         protected override bool value
@@ -21,7 +21,7 @@ namespace DChild.Menu.UI
             }
         }
 
-        public void SetReference(VisualSettings reference)
+        public void SetReference(VisualSettingsHandle reference)
         {
             m_settings = reference;
         }

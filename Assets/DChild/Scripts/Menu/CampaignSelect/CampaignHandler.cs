@@ -40,7 +40,7 @@ namespace DChild.Menu
             //m_campaignSelect.selectedSlot.Reset();
             m_campaignSelect.SendCampaignSelectedEvent();
             //SerializationHandle.Delete(m_selectedSlotID);
-            SerializationHandle.Save(m_defaultSave.slot.id, m_defaultSave.slot); // For the Demos
+            SerializationHandle.SaveCampaignSlot(m_defaultSave.slot.id, m_defaultSave.slot); // For the Demos
         }
 
         protected override void Awake()
