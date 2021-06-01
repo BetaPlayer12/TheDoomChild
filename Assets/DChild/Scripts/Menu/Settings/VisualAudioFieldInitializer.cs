@@ -16,13 +16,13 @@ namespace DChild.Menu.Settings
             m_fields = GetComponentsInChildren<IValueUI>();
 
             var visualSettings = GameSystem.settings.visual;
-            var visualRefrences = GetComponentsInChildren<IReferenceUI<VisualSettings>>();
+            var visualRefrences = GetComponentsInChildren<IReferenceUI<VisualSettingsHandle>>();
             for (int i = 0; i < visualRefrences.Length; i++)
             {
                 visualRefrences[i].SetReference(visualSettings);
             }
             var audioSettings = GameSystem.settings.audio;
-            var audioRefrences = GetComponentsInChildren<IReferenceUI<Configurations.AudioSettings>>();
+            var audioRefrences = GetComponentsInChildren<IReferenceUI<Configurations.AudioSettingsHandle>>();
             for (int i = 0; i < audioRefrences.Length; i++)
             {
                 audioRefrences[i].SetReference(audioSettings);
