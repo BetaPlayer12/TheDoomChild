@@ -30,8 +30,9 @@ namespace DChild.Configurations
             set
             {
                 m_masterVolume = value;
-                MasterAudio.MasterVolumeLevel = value;
                 m_configuration.audioConfiguration.masterVolume = value;
+                MasterAudio.MasterVolumeLevel = value * m_soundVolume;
+                MasterAudio.PlaylistMasterVolume = value * m_musicVolume;
             }
         }
 
@@ -41,6 +42,7 @@ namespace DChild.Configurations
             set
             {
                 m_soundVolume = value;
+                MasterAudio.MasterVolumeLevel = value * m_masterVolume;
                 m_configuration.audioConfiguration.soundVolume = value;
             }
         }
@@ -51,7 +53,7 @@ namespace DChild.Configurations
             set
             {
                 m_musicVolume = value;
-                MasterAudio.PlaylistMasterVolume = value;
+                MasterAudio.PlaylistMasterVolume = value * m_masterVolume;
                 m_configuration.audioConfiguration.musicVolume = value;
             }
         }

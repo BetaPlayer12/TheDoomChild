@@ -30,7 +30,7 @@ namespace DChild.Menu.UI
 
         public void UpdateUI()
         {
-            m_slider.value = m_interpreter.InterpretOutput(m_settings.brightness);
+            m_slider.value = value;
         }
     }
 }

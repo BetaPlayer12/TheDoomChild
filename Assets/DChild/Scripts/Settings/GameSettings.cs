@@ -26,7 +26,7 @@ namespace DChild.Configurations
 
         public VisualSettingsHandle visual => m_visual;
 
-        public new AudioSettingsHandle audio => m_audio;
+        public  AudioSettingsHandle audio => m_audio;
         public GameplaySettings gameplay => m_gameplay;
 
         public void SaveSettings()

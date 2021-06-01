@@ -222,7 +222,7 @@ namespace DChild.Gameplay
                     m_campaignSerializer.Load(true);
                 }
 
-                if (m_doNotTeleportPlayerOnAwake == false)
+                if (m_doNotTeleportPlayerOnAwake == false && m_campaignToLoad != null)
                 {
                     m_playerManager.player.transform.position = m_campaignToLoad.spawnPosition;
                 }
