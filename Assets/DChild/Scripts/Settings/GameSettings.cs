@@ -16,8 +16,7 @@ namespace DChild.Configurations
 
         [SerializeField, Title("Visual Settings"), HideLabel]
         private VisualSettingsHandle m_visual;
-        [SerializeField]
-        private SupportedResolutions m_supportedResolutions;
+
         [SerializeField, Title("Audio Settings"), HideLabel]
         private AudioSettingsHandle m_audio;
         [SerializeField, Title("Gameplay Settings"), HideLabel]
@@ -26,7 +25,7 @@ namespace DChild.Configurations
         public GameSettingsConfiguration configuration => m_configuration;
 
         public VisualSettingsHandle visual => m_visual;
-        public SupportedResolutions supportedResolutions => m_supportedResolutions;
+
         public new AudioSettingsHandle audio => m_audio;
         public GameplaySettings gameplay => m_gameplay;
 
@@ -52,13 +51,6 @@ namespace DChild.Configurations
             m_visual.Initialize(m_configuration);
             m_audio.Initialize(m_configuration);
         }
-
-#if UNITY_EDITOR
-        public void Initialize(SupportedResolutions supportedResolutions)
-        {
-            m_supportedResolutions = supportedResolutions;
-        }
-#endif
     }
 
 }

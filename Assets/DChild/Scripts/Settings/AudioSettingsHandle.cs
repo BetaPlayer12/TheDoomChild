@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkTonic.MasterAudio;
+using UnityEngine;
 
 namespace DChild.Configurations
 {
@@ -29,6 +30,7 @@ namespace DChild.Configurations
             set
             {
                 m_masterVolume = value;
+                MasterAudio.MasterVolumeLevel = value;
                 m_configuration.audioConfiguration.masterVolume = value;
             }
         }
@@ -49,6 +51,7 @@ namespace DChild.Configurations
             set
             {
                 m_musicVolume = value;
+                MasterAudio.PlaylistMasterVolume = value;
                 m_configuration.audioConfiguration.musicVolume = value;
             }
         }

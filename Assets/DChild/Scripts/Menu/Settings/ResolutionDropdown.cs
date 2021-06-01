@@ -48,7 +48,7 @@ namespace DChild.Menu.UI
             var settings = GameSystem.settings;
             if (settings)
             {
-                var resolutions = settings.supportedResolutions.GetResolutions();
+                var resolutions = settings.visual.supportedResolutions.GetResolutions();
                 List<string> options = new List<string>();
                 for (int i = 0; i < resolutions.Length; i++)
                 {
