@@ -280,7 +280,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            m_animation.DisableRootMotion();
+            //m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
         }
@@ -356,7 +356,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.MixDuration = 0*/;
             yield return new WaitForSeconds(2f);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -449,6 +449,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Patrol:
+                    m_animation.animationState.GetCurrent(0).MixDuration = 0;
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
@@ -481,7 +482,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackHandle.ExecuteAttack(m_info.spikeAttack.animation, m_info.idleAnimation);
                             break;
                         case Attack.Spit:
-                            m_animation.EnableRootMotion(false, false);
+                            m_animation.EnableRootMotion(true, false);
                             //m_attackHandle.ExecuteAttack(m_info.spitAttack.animation, m_info.idleAnimation);
                             StartCoroutine(SlugProjectileRoutine());
                             break;

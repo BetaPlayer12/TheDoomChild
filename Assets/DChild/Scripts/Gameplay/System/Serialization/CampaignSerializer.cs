@@ -63,14 +63,14 @@ namespace DChild.Gameplay
         {
             GameEventMessage.SendEvent("Game Save Start");
             CallPreSerialization();
-            SerializationHandle.Save(m_slot.id, m_slot);
+            SerializationHandle.SaveCampaignSlot(m_slot.id, m_slot);
         }
 
         public async Task<bool> SaveAsync()
         {
             GameEventMessage.SendEvent("Game Save Start");
             CallPreSerialization();
-            await SerializationHandle.SaveAsync(m_slot.id, m_slot);
+            await SerializationHandle.SaveCampaignSlotAsync(m_slot.id, m_slot);
             GameEventMessage.SendEvent("Game Save End");
             return true;
         }
@@ -80,7 +80,7 @@ namespace DChild.Gameplay
         {
             if (bypassLoadingFromFile == false)
             {
-                SerializationHandle.Load(m_slot.id, ref m_slot);
+                SerializationHandle.LoadCampaignSlot(m_slot.id, ref m_slot);
             }
             CallPostDeserialization();
         }
@@ -93,7 +93,7 @@ namespace DChild.Gameplay
         public async Task<bool> LoadAsync()
         {
             GameEventMessage.SendEvent("Game Load Start");
-            await SerializationHandle.LoadAsync(m_slot.id,m_slot);
+            await SerializationHandle.LoadCampaignSlotAsync(m_slot.id,m_slot);
             CallPostDeserialization();
             GameEventMessage.SendEvent("Game Load End");
             return true;

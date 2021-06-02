@@ -39,7 +39,7 @@ namespace DChildDebug
         [Button]
         public void SaveToFile()
         {
-            SerializationHandle.Save(m_slot.id, m_slot);
+            SerializationHandle.SaveCampaignSlot(m_slot.id, m_slot);
         }
     }
 }

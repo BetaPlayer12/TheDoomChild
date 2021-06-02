@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Serialization;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,6 +35,24 @@ namespace DChild.Configurations
 
         public VisualConfiguration visualConfiguration;
         public AudioConfiguration audioConfiguration;
-    }
 
+        public GameSettingsConfiguration()
+        {
+            visualConfiguration = new VisualConfiguration
+            {
+                resolutionIndex = 0,
+                fullscreen = true,
+                vsync = true,
+                brightness = 0.5f,
+                contrast = 0.5f
+            };
+
+            audioConfiguration = new AudioConfiguration
+            {
+                masterVolume = 1,
+                soundVolume = 1,
+                musicVolume = 1,
+            };
+        }
+    }
 }
