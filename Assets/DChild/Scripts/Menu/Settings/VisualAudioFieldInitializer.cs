@@ -11,29 +11,30 @@ namespace DChild.Menu.Settings
     {
         private IValueUI[] m_fields;
 
-        private void Awake()
+        private void AssignReferencesToFields<T>(T reference) where T: class
         {
+            var UIs = GetComponentsInChildren<IReferenceUI<T>>();
+            foreach (var ui in UIs)
+            {
+                ui.SetReference(reference);
+            }
+        }
+
+        private void UpdateFields()
+        {
+            foreach (var field in m_fields)
+            {
+                field.UpdateUI();
+            }
+        }
+
+        private void Start()
+        {
+            AssignReferencesToFields(GameSystem.settings.visual);
+            AssignReferencesToFields(GameSystem.settings.audio);
+            AssignReferencesToFields(GameSystem.settings.gameplay);
             m_fields = GetComponentsInChildren<IValueUI>();
-
-            var visualSettings = GameSystem.settings.visual;
-            var visualRefrences = GetComponentsInChildren<IReferenceUI<VisualSettingsHandle>>();
-            for (int i = 0; i < visualRefrences.Length; i++)
-            {
-                visualRefrences[i].SetReference(visualSettings);
-            }
-            var audioSettings = GameSystem.settings.audio;
-            var audioRefrences = GetComponentsInChildren<IReferenceUI<Configurations.AudioSettingsHandle>>();
-            for (int i = 0; i < audioRefrences.Length; i++)
-            {
-                audioRefrences[i].SetReference(audioSettings);
-            }
-
-            var gameplaySettings = GameSystem.settings.gameplay;
-            var gameplaySeRefrences = GetComponentsInChildren<IReferenceUI<GameplaySettings>>();
-            for (int i = 0; i < gameplaySeRefrences.Length; i++)
-            {
-                gameplaySeRefrences[i].SetReference(gameplaySettings);
-            }
+            UpdateFields();
         }
     }
 }

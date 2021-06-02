@@ -10,7 +10,7 @@ public class ToggleFlyMode : MonoBehaviour, IToggleDebugBehaviour
     public GameObject m_player;
     [SerializeField]
     private FlyControls m_controller;
-    public bool value => m_player.GetComponentInChildren<Rigidbody2D>().gravityScale == 0;
+    public bool value => m_controller.enabled;
 
     [Button]
     public void ToggleOn()

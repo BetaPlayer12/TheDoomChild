@@ -6,11 +6,13 @@ using UnityEngine;
 namespace DChildDebug.Window
 {
 
-    public class ToggleDetachCamera : MonoBehaviour
+    public class ToggleDetachCamera : MonoBehaviour, IToggleDebugBehaviour
     {
         [SerializeField]
         private DetachCameraControls m_controller;
         private Camera m_detachable;
+
+        public bool value => m_controller.enabled;
 
         [Button]
         public void ToggleOn()
