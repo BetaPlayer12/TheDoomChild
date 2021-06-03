@@ -31,6 +31,8 @@ namespace DChild.Gameplay.Environment
         }
 
         [SerializeField]
+        private Transform m_source;
+        [SerializeField]
         private bool m_isHeavy;
         [SerializeField]
         private bool m_canBeMoved;
@@ -50,7 +52,7 @@ namespace DChild.Gameplay.Environment
         public void Load(ISaveData data)
         {
             var saveData = ((SaveData)data);
-            transform.position = saveData.position;
+            m_source.position = saveData.position;
             m_canBeMoved = saveData.canBeMoved;
         }
 
@@ -95,6 +97,13 @@ namespace DChild.Gameplay.Environment
         {
             m_rigidbody.velocity = new Vector2(0, m_rigidbody.velocity.y);
         }
+
+        private void Awake()
+        {
+            m_rigidbody = m_source.GetComponent<Rigidbody2D>();
+        }
+
+
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
@@ -142,9 +151,12 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-        private void Awake()
+        private void OnValidate()
         {
-            m_rigidbody = GetComponent<Rigidbody2D>();
+            if (m_source == null)
+            {
+                m_source = transform;
+            }
         }
     }
 }
