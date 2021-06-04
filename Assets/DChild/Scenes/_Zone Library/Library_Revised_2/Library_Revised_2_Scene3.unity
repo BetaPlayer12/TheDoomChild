@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -5598,12 +5598,12 @@ PrefabInstance:
     - target: {fileID: -850137239671606081, guid: ee1ab9017adc36242b356369e823a9e9,
         type: 3}
       propertyPath: m_Offset.y
-      value: 7.7164707
+      value: 12.11326
       objectReference: {fileID: 0}
     - target: {fileID: -850137239671606081, guid: ee1ab9017adc36242b356369e823a9e9,
         type: 3}
       propertyPath: m_Size.y
-      value: 5.57378
+      value: 5.848591
       objectReference: {fileID: 0}
     - target: {fileID: 1584667177457928098, guid: ee1ab9017adc36242b356369e823a9e9,
         type: 3}
@@ -5613,7 +5613,7 @@ PrefabInstance:
     - target: {fileID: 1584667177457928098, guid: ee1ab9017adc36242b356369e823a9e9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 44.53
+      value: 39.9
       objectReference: {fileID: 0}
     - target: {fileID: 1584667177457928098, guid: ee1ab9017adc36242b356369e823a9e9,
         type: 3}
@@ -5693,6 +5693,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6203732869225217946, guid: ee1ab9017adc36242b356369e823a9e9,
         type: 3}
+      propertyPath: m_destination
+      value: 
+      objectReference: {fileID: 11400000, guid: b699e5c764625554fa6ab7693b949349,
+        type: 2}
+    - target: {fileID: 6203732869225217946, guid: ee1ab9017adc36242b356369e823a9e9,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 6203732869225217946, guid: ee1ab9017adc36242b356369e823a9e9,
@@ -5702,7 +5708,7 @@ PrefabInstance:
       propertyPath: serializationData.PrefabModifications.Array.data[0]
       value: '"path":"m_handle","value":{"$id":0,"$type":"DChild.Gameplay.Environment.VerticalPassageWayHandle,
         Assembly-CSharp","m_entranceDirection":0,"m_exitDirection":1,"m_upVelocity":{"$type":"UnityEngine.Vector2,
-        UnityEngine.CoreModule",5,50},"m_forceExitFacing":true,"m_exitFacing":1,"m_transitionDelay":0,"m_customTravelDirections":false}'
+        UnityEngine.CoreModule",0,50},"m_forceExitFacing":true,"m_exitFacing":1,"m_transitionDelay":0,"m_customTravelDirections":false}'
       objectReference: {fileID: 0}
     - target: {fileID: 6203732869225217946, guid: ee1ab9017adc36242b356369e823a9e9,
         type: 3}
@@ -5728,12 +5734,6 @@ PrefabInstance:
       value: '"path":"m_handle.m_upVelocity.x","value":{"$id":0,"$type":"System.Single,
         mscorlib",0}'
       objectReference: {fileID: 0}
-    - target: {fileID: 6203732869225217946, guid: ee1ab9017adc36242b356369e823a9e9,
-        type: 3}
-      propertyPath: m_destination
-      value: 
-      objectReference: {fileID: 11400000, guid: b699e5c764625554fa6ab7693b949349,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee1ab9017adc36242b356369e823a9e9, type: 3}
 --- !u!4 &528895402 stripped
@@ -20059,22 +20059,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1344bdc1e53bf2b4b86f92e00075aba6, type: 2}
+      objectReference: {fileID: 2100000, guid: a941c4ace1327bc4c80dd94e9243fcc5, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 64120b5317992c34189dc9cf98adfd53, type: 2}
+      objectReference: {fileID: 2100000, guid: acc109fdf2335b548923504465f0269a, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 1344bdc1e53bf2b4b86f92e00075aba6, type: 2}
+      objectReference: {fileID: 2100000, guid: a941c4ace1327bc4c80dd94e9243fcc5, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: 64120b5317992c34189dc9cf98adfd53, type: 2}
+      objectReference: {fileID: 2100000, guid: acc109fdf2335b548923504465f0269a, type: 2}
     - target: {fileID: 7090695359494195661, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Mesh
@@ -23408,6 +23408,7 @@ MonoBehaviour:
   - {fileID: 1241839555}
   - {fileID: 873729045}
   m_dynamicSerializers: []
+  m_questsListener: []
   m_useEditorData: 0
 --- !u!4 &1857580182
 Transform:
