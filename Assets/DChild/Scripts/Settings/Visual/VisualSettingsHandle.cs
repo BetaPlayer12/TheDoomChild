@@ -55,6 +55,7 @@ namespace DChild.Configurations
 
             set
             {
+                Debug.LogError($"Set Fullscreen: {value}");
                 m_configuration.visualConfiguration.fullscreen = value;
                 m_screenResolution.SetFullscreen(value);
                 m_screenResolution.Apply();
