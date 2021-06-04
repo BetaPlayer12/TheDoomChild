@@ -111,9 +111,26 @@ namespace DChild.Configurations
             m_screenResolution.SetResolution(visualConfiguration.resolutionIndex);
             m_screenResolution.SetFullscreen(visualConfiguration.fullscreen);
             m_screenResolution.Apply();
+
+
             m_screenLighting.brightness = visualConfiguration.brightness;
             m_screenLighting.contrast = visualConfiguration.contrast;
             QualitySettings.vSyncCount = visualConfiguration.vsync ? 1 : 0;
+        }
+
+        public IEnumerator ForceAssignFullScreenRoutine(bool isFullscreen)
+        {
+            var endOfFrame = new WaitForEndOfFrame();
+            yield return endOfFrame;
+
+            m_screenResolution.SetFullscreen(!isFullscreen);
+            m_screenResolution.Apply();
+
+            yield return endOfFrame;
+
+            m_screenResolution.SetFullscreen(isFullscreen);
+            m_screenResolution.Apply();
+            yield return endOfFrame;
         }
     }
 }

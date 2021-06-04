@@ -342,7 +342,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_ledgeGrab?.IsDoable() ?? false)
                     {
-                        m_ledgeGrab?.Execute();
+                        if (m_state.isAttacking == false)
+                        {
+                            m_ledgeGrab?.Execute();
+                        }
                     }
                 }
 
@@ -823,6 +826,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_movement?.SwitchConfigTo(Movement.Type.MidAir);
                     m_groundedness?.ChangeValue(false);
                     m_groundJump?.Execute();
+                }
+
+                if (m_state.canAttack)
+                {
+                    if (m_input.slashPressed)
+                    {
+                        m_activeDash?.Cancel();
+
+                        if (m_input.verticalInput > 0)
+                        {
+                            PrepareForGroundAttack();
+                            m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
+                            return;
+                        }
+                        else
+                        {
+                            PrepareForGroundAttack();
+                            m_slashCombo.Execute();
+                            return;
+                        }
+                    }
                 }
             }
             else if (m_state.isGrabbing)
