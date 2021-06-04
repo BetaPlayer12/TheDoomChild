@@ -8,6 +8,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public Vector2 m_mousePosition;
         public Vector2 m_mouseDelta;
 
+        //Test
+        public float controllerCursorHorizontalInput;
+        public float controllerCursorVerticalInput;
+
         public float horizontalInput;
         public float verticalInput;
         public bool crouchHeld;
@@ -32,6 +36,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private PlayerInput m_input;
 
+        public bool test;
+
         public void Disable()
         {
             if (this.enabled)
@@ -52,11 +58,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
             this.enabled = true;
         }
 
+        private void OnControllerCursorHorizontalInput(InputValue value)
+        {
+            if (enabled == true)
+            {
+                controllerCursorHorizontalInput = value.Get<float>();
+            }
+        }
+
+        private void OnControllerCursorVerticalInput(InputValue value)
+        {
+            if (enabled == true)
+            {
+                controllerCursorVerticalInput = value.Get<float>();
+            }
+        }
+
         private void OnHorizontalInput(InputValue value)
         {
             if (enabled == true)
             {
                 horizontalInput = value.Get<float>();
+
+                if (horizontalInput < 1 && horizontalInput > -1)
+                {
+                    horizontalInput = 0;
+                }
             }
         }
 
@@ -65,6 +92,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 verticalInput = value.Get<float>();
+
+                if (verticalInput < 1 && verticalInput > -1)
+                {
+                    verticalInput = 0;
+                }
             }
         }
 
@@ -117,6 +149,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (enabled == true)
             {
                 slashPressed = value.Get<float>() == 1;
+                test = true;
             }
         }
 
@@ -205,10 +238,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_mouseDelta = (Vector2)Input.mousePosition - m_mousePosition;
             m_mousePosition = Input.mousePosition;
+            m_mousePosition += new Vector2(controllerCursorHorizontalInput, controllerCursorVerticalInput).normalized;
         }
 
         private void LateUpdate()
         {
+            controllerCursorHorizontalInput = 0;
+            controllerCursorVerticalInput = 0;
+
             dashPressed = false;
             jumpPressed = false;
             levitatePressed = false;
