@@ -49,8 +49,6 @@ namespace DChild.Configurations
             }
 
             m_visual.Initialize(m_configuration);
-            //Fullscreen Toggle
-            StartCoroutine(m_visual.ForceAssignFullScreenRoutine(m_configuration.visualConfiguration.fullscreen));
             m_audio.Initialize(m_configuration);
         }
     }

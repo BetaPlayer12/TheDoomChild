@@ -117,20 +117,5 @@ namespace DChild.Configurations
             m_screenLighting.contrast = visualConfiguration.contrast;
             QualitySettings.vSyncCount = visualConfiguration.vsync ? 1 : 0;
         }
-
-        public IEnumerator ForceAssignFullScreenRoutine(bool isFullscreen)
-        {
-            var endOfFrame = new WaitForEndOfFrame();
-            yield return endOfFrame;
-
-            m_screenResolution.SetFullscreen(!isFullscreen);
-            m_screenResolution.Apply();
-
-            yield return endOfFrame;
-
-            m_screenResolution.SetFullscreen(isFullscreen);
-            m_screenResolution.Apply();
-            yield return endOfFrame;
-        }
     }
 }
