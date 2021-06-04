@@ -111,6 +111,8 @@ namespace DChild.Configurations
             m_screenResolution.SetResolution(visualConfiguration.resolutionIndex);
             m_screenResolution.SetFullscreen(visualConfiguration.fullscreen);
             m_screenResolution.Apply();
+
+
             m_screenLighting.brightness = visualConfiguration.brightness;
             m_screenLighting.contrast = visualConfiguration.contrast;
             QualitySettings.vSyncCount = visualConfiguration.vsync ? 1 : 0;
