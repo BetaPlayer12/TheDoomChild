@@ -34,6 +34,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
             [SerializeField, MinValue(0)]
+            private Vector2 m_leapVelocity;
+            public Vector2 leapVelocity => m_leapVelocity;
+            [SerializeField, MinValue(0)]
             private float m_attackCD;
             public float attackCD => m_attackCD;
             //
@@ -302,7 +305,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            yield return new WaitForSeconds(1f);
             m_hitbox.Enable();
             m_animation.animationState.TimeScale = 1;
             m_animation.SetEmptyAnimation(0, 0);
@@ -320,7 +322,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             yield return new WaitForSeconds(.25f);
-            m_character.physics.SetVelocity(25 * transform.localScale.x, 5);
+            m_character.physics.SetVelocity(m_info.leapVelocity.x * transform.localScale.x, m_info.leapVelocity.y);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
@@ -456,7 +458,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
-                                    m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
+                                    var moveSpeed = m_info.run.speed * .1f;
+                                    m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true).TimeScale = moveSpeed;
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.run.speed : m_info.walk.speed);
                                 }
                                 else
