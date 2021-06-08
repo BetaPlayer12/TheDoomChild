@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/HeavyMinion")]
-    public class HeavyMinionAI : CombatAIBrain<HeavyMinionAI.Info>, IResetableAIBrain, IBattleZoneAIBrain
+    public class HeavyMinionAI : CombatAIBrain<HeavyMinionAI.Info>, IResetableAIBrain, IBattleZoneAIBrain, IKnockbackableAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -598,6 +598,13 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnBecomePassive()
         {
             ResetAI();
+        }
+
+        public void HandleKnockback(float resumeAIDelay)
+        {
+            m_animation.EnableRootMotion(false, false);
+            StopAllCoroutines();
+            enabled = false;
         }
     }
 }
