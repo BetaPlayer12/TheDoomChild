@@ -234,6 +234,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_shadowMorph?.Cancel();
                 }
+
+                m_devilWings?.Cancel();
             }
         }
 
@@ -678,13 +680,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         {
                             if (m_state.isInShadowMode == false)
                             {
-                                if (m_wallStick?.IsHeightRequirementAchieved() ?? false)
+                                if (m_skills.IsModuleActive(PrimarySkill.WallMovement))
                                 {
-                                    if (m_wallStick?.IsThereAWall() ?? false)
+                                    if (m_wallStick?.IsHeightRequirementAchieved() ?? false)
                                     {
-                                        m_dash?.Reset();
-                                        m_extraJump?.Reset();
-                                        m_wallStick?.Execute();
+                                        if (m_wallStick?.IsThereAWall() ?? false)
+                                        {
+                                            m_dash?.Reset();
+                                            m_extraJump?.Reset();
+                                            m_wallStick?.Execute();
+                                        }
                                     }
                                 }
                             }
