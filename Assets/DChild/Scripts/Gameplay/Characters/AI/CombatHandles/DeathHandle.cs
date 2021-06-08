@@ -86,6 +86,12 @@ namespace DChild.Gameplay.Characters
             enabled = false;
         }
 
+        private void OnDisable()
+        {
+            m_bodyDuration.Reset();
+            enabled = false;
+        }
+
         private void Update()
         {
             m_bodyDuration.Tick(Time.deltaTime);

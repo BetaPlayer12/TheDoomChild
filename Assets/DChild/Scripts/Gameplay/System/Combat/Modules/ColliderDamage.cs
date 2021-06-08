@@ -111,6 +111,8 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        protected bool CanBypassHitboxInvulnerability(Hitbox hitbox) => hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability;
+
         protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
             SpawnHitFX(collision);
@@ -222,7 +224,7 @@ namespace DChild.Gameplay.Combat
             if (colliderGameObject.CompareTag("DamageCollider") || colliderGameObject.CompareTag("Sensor"))
                 return;
 
-            if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability)
+            if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && CanBypassHitboxInvulnerability(hitbox))
             {
                 m_triggeredCollider = collision.otherCollider;
                 using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
