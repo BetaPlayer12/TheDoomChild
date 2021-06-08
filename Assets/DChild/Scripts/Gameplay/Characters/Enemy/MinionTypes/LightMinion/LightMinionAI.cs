@@ -139,6 +139,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_trailFX;
 
+        [SerializeField, TabGroup("FX")]
+        private List<ParticleSystem> m_fxSystem;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -156,6 +159,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_flinchHandle.m_autoFlinch = true;
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
@@ -207,6 +211,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_selfCollider.SetActive(false);
                 m_targetInfo.Set(null, null);
+                m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
                 m_enablePatience = false;
                 m_stateHandle.SetState(State.Patrol);
@@ -243,19 +248,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            m_animation.animationState.TimeScale = .5f;
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                StopAllCoroutines();
+                m_animation.animationState.TimeScale = .5f;
+                m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.animationState.TimeScale = 1f;
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetEmptyAnimation(0, 0);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                m_animation.animationState.TimeScale = 1f;
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetEmptyAnimation(0, 0);
+                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
         }
 
         public override void ApplyData()
@@ -271,6 +282,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
+            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.Patrol);
@@ -293,13 +305,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
+            for (int i = 0; i < m_fxSystem.Count; i++)
+            {
+                m_fxSystem[i].gameObject.SetActive(true);
+            }
             m_animation.SetAnimation(0, m_info.attackStart.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStart.animation);
             //m_trailFX.gameObject.SetActive(true);
-            m_trailFX.Play();
-            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
+            //m_hitbox.SetInvulnerability(Invulnerability.Level_1);
             m_animation.SetAnimation(0, m_info.attackLoop, true);
-            //yield return new WaitForSeconds(.4f);
+            m_trailFX.Play();
+            yield return new WaitForSeconds(1.4f);
             float countdown = 0;
             while (countdown < 1.5f /*|| !m_wallSensor.isDetecting*/)
             {
@@ -308,8 +324,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_trailFX.Stop();
+            for (int i = 0; i < m_fxSystem.Count; i++)
+            {
+                m_fxSystem[i].gameObject.SetActive(false);
+            }
             //m_trailFX.gameObject.SetActive(false);
-            m_hitbox.SetInvulnerability(Invulnerability.None);
+            //m_hitbox.SetInvulnerability(Invulnerability.None);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attackEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEnd);
@@ -347,6 +367,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -446,6 +467,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_movement.Stop();
+                            m_flinchHandle.m_autoFlinch = false;
                             m_stateHandle.SetState(State.Attacking);
                         }
                     }

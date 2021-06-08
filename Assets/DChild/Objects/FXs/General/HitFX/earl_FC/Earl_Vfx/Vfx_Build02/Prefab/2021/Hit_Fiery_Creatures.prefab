@@ -42,7 +42,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 5
   simulationSpeed: 1.5
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4841,6 +4841,7 @@ GameObject:
   - component: {fileID: 2636121095701561048}
   - component: {fileID: 2636121095701561049}
   - component: {fileID: 2636121095701561050}
+  - component: {fileID: 5214225872561790524}
   m_Layer: 0
   m_Name: Hit_Fiery_Creatures
   m_TagString: Untagged
@@ -4874,7 +4875,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 2
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -9653,6 +9654,26 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &5214225872561790524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636121095701561051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: ca1e2c97b7ff021478a0b0ba768f0603, type: 2}
+  m_particleSystems:
+  - {fileID: 2636121095701561049}
+  - {fileID: 2636121094495128146}
+  - {fileID: 3752793635198439241}
+  m_playOnAwake: 1
+  m_baseFlipped: 0
+  m_poolOnStop: 1
 --- !u!1 &3752793635198439242
 GameObject:
   m_ObjectHideFlags: 0
@@ -9695,7 +9716,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 1.5
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
