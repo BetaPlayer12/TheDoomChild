@@ -602,7 +602,20 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void HandleKnockback(float resumeAIDelay)
         {
+            StopAllCoroutines();
+            StartCoroutine(KnockbackRoutine(resumeAIDelay));
+        }
+
+        private IEnumerator KnockbackRoutine(float timer)
+        {
             enabled = false;
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(timer);
+            enabled = true;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
         }
     }
 }
