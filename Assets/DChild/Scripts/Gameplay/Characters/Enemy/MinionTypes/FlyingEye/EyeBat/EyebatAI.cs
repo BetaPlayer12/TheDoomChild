@@ -140,13 +140,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Lazer")]
         private EdgeCollider2D m_edgeCollider;
         [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleFX;
+        private GameObject m_muzzleFXGO;
         [SerializeField, TabGroup("Lazer")]
         private ParticleFX m_muzzleLoopFX;
-        [SerializeField, TabGroup("Lazer")]
-        private Color m_telegraphColor;
-        [SerializeField, TabGroup("Lazer")]
-        private Color m_lazerColor;
+        //[SerializeField, TabGroup("Lazer")]
+        //private Gradient m_telegraphGradient;
+        //[SerializeField, TabGroup("Lazer")]
+        //private Color m_lazerColor;
 
         private List<Vector2> m_Points;
         private IEnumerator m_aimRoutine;
@@ -406,32 +406,36 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_lineRenderer.endColor = m_telegraphColor;
             m_lineRenderer.useWorldSpace = true;
             m_lineRenderer.SetPosition(1, ShotPosition());
+            var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, ShotPosition(), Quaternion.identity);
+            hitPointFX.GetComponent<ParticleFX>().Play();
             StartCoroutine(m_aimRoutine);
             yield return new WaitForSeconds(1f);
             StopCoroutine(m_aimRoutine);
-            LaunchProjectile();
+            //LaunchProjectile();
             //m_lineRenderer.startWidth = .5f;
             //m_lineRenderer.startColor = m_lazerColor;
             //m_lineRenderer.endColor = m_lazerColor;
-            m_muzzleFX.Play();
+            var muzzleFX = this.InstantiateToScene(m_muzzleFXGO, m_muzzleLoopFX.transform.position, Quaternion.identity);
             m_muzzleLoopFX.Stop();
-            //for (int i = 0; i < m_lineRenderer.positionCount; i++)
-            //{
-            //    var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
-            //    pos = new Vector2(m_character.facing == HorizontalDirection.Right  ? pos.x : - pos.x, pos.y);
-            //    m_Points.Add(pos);
-            //}
-            //m_edgeCollider.points = m_Points.ToArray();
-            //yield return new WaitForSeconds(.2f);
+            for (int i = 0; i < m_lineRenderer.positionCount; i++)
+            {
+                var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
+                pos = new Vector2(m_character.facing == HorizontalDirection.Right ? pos.x : -pos.x, pos.y);
+                m_Points.Add(pos);
+            }
+            m_edgeCollider.points = m_Points.ToArray();
+            yield return new WaitForSeconds(.2f);
+            hitPointFX.GetComponent<ParticleFX>().Stop();
+            Destroy(hitPointFX.gameObject);
             m_lineRenderer.useWorldSpace = false;
             m_lineRenderer.SetPosition(0, Vector3.zero);
             m_lineRenderer.SetPosition(1, Vector3.zero);
-            //m_Points.Clear();
-            //for (int i = 0; i < m_lineRenderer.positionCount; i++)
-            //{
-            //    m_Points.Add(Vector2.zero);
-            //}
-            //m_edgeCollider.points = m_Points.ToArray();
+            m_Points.Clear();
+            for (int i = 0; i < m_lineRenderer.positionCount; i++)
+            {
+                m_Points.Add(Vector2.zero);
+            }
+            m_edgeCollider.points = m_Points.ToArray();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
             m_bodycollider.enabled = false;
