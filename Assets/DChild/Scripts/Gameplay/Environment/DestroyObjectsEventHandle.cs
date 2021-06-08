@@ -8,12 +8,21 @@ namespace DChild.Gameplay.Environment
 {
     public class DestroyObjectsEventHandle : MonoBehaviour
     {
+        private enum TrackingType
+        {
+            AllDamageableDestroyed,
+            OneOfDamageableDestroyed,
+        }
+
+        [SerializeField]
+        private TrackingType m_trackingType;
         [SerializeField]
         private Damageable[] m_toTrack;
         [SerializeField]
         private UnityEvent m_onAllObjectsDestroyed;
 
         private int m_destroyedObject;
+        private bool m_eventCalled;
 
         public void RestoreObjects()
         {
@@ -21,14 +30,27 @@ namespace DChild.Gameplay.Environment
             {
                 m_toTrack[i].health.ResetValueToMax();
             }
+            m_eventCalled = false;
         }
 
         private void OnObjectDestroyed(object sender, EventActionArgs eventArgs)
         {
-            m_destroyedObject++;
-            if (m_destroyedObject == m_toTrack.Length)
+            switch (m_trackingType)
             {
-                m_onAllObjectsDestroyed?.Invoke();
+                case TrackingType.AllDamageableDestroyed:
+                    m_destroyedObject++;
+                    if (m_destroyedObject == m_toTrack.Length)
+                    {
+                        m_onAllObjectsDestroyed?.Invoke();
+                    }
+                    break;
+                case TrackingType.OneOfDamageableDestroyed:
+                    if (m_eventCalled == false)
+                    {
+                        m_onAllObjectsDestroyed?.Invoke();
+                        m_eventCalled = true;
+                    }
+                    break;
             }
         }
         private void Start()
