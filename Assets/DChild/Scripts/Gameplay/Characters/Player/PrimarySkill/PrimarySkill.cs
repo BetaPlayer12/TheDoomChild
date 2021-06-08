@@ -17,6 +17,7 @@ namespace DChild.Gameplay.Characters.Players
         ShadowSlide,
         SkullThrow,
         ShadowMorph,
+        WallMovement,
         [HideInInspector]
         _COUNT
     }

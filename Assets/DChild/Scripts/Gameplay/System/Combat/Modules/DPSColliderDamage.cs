@@ -79,14 +79,19 @@ namespace DChild.Gameplay.Combat
                     }
                     else
                     {
-                        info.damageTimer = 0;
-                        var collision = m_affectedColliders[i];
-                        DealDamage(collision, m_toDamage[i]);
-                        SpawnHitFX(collision);
-                        if(m_toDamage[i].damageable.isAlive == false)
+                        info.damageTimer = m_damageInterval;
+                        var toDamage = m_toDamage[i];
+                        if (CanBypassHitboxInvulnerability(toDamage))
                         {
-                            RemoveAffectedIndex(i);
+                            var collision = m_affectedColliders[i];
+                            DealDamage(collision, toDamage);
+                            SpawnHitFX(collision);
+                            if (toDamage.damageable.isAlive == false)
+                            {
+                                RemoveAffectedIndex(i);
+                            }
                         }
+                        m_infos[i] = info;
                     }
                 }
                 else
