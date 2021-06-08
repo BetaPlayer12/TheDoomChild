@@ -87,7 +87,7 @@ namespace DChild.Gameplay.Combat
                     {
                         direction.y = 0;
                     }
-                    physics.AddForce(direction.normalized * m_force);
+                    physics.AddForce(direction.normalized * m_force, ForceMode2D.Impulse);
                     break;
                 case Type.ToOneDirection:
                     physics.AddForce(relativeDirection * m_force, ForceMode2D.Impulse);

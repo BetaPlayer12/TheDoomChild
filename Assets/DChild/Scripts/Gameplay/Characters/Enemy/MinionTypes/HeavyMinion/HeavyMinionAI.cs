@@ -602,6 +602,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void HandleKnockback(float resumeAIDelay)
         {
+            m_animation.EnableRootMotion(false, false);
+            StopAllCoroutines();
             enabled = false;
         }
     }
