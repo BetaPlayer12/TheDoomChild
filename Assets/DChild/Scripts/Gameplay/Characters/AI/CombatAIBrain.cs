@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Characters.AI
         }
     }
 
-    public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain where T : IAIInfo
+    public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain, IController where T : IAIInfo
     {
         [SerializeField, TabGroup("Reference")]
         protected Damageable m_damageable;
@@ -71,7 +71,17 @@ namespace DChild.Gameplay.Characters.AI
             m_targetInfo.Set(damageable, m_target);
         }
 
-        protected bool IsFacingTarget() => IsFacing(m_targetInfo.position);
+
+
+        public virtual void Enable()
+        {
+            enabled = true;
+        }
+
+        public virtual void Disable()
+        {
+            enabled = false;
+        }
 
         public bool IsFacing(Vector2 position)
         {
@@ -100,6 +110,7 @@ namespace DChild.Gameplay.Characters.AI
 
         protected abstract void OnBecomePassive();
 
+        protected bool IsFacingTarget() => IsFacing(m_targetInfo.position);
         protected bool IsTargetInRange(float distance) => Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distance;
         protected Vector2 DirectionToTarget() => (m_targetInfo.position - (Vector2)m_character.transform.position).normalized;
 
@@ -112,6 +123,8 @@ namespace DChild.Gameplay.Characters.AI
             m_statusInflictor?.SetData(statData.statusInfliction);
             m_statusResistance?.SetData(statData.statusResistanceData);
         }
+
+
 
         protected override void Awake()
         {
