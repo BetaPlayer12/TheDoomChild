@@ -11,9 +11,11 @@ namespace DChild.Gameplay.Combat
         bool isAlive { get; }
         IAttackResistance attackResistance { get; }
         void TakeDamage(int totalDamage, AttackType type);
+        void BlockDamage(int totalDamage, AttackType type);
         void SetHitboxActive(bool enable);
         void SetInvulnerability(Invulnerability level);
         event EventAction<DamageEventArgs> DamageTaken;
+        event EventAction<DamageEventArgs> DamageBlock;
         event EventAction<EventActionArgs> Destroyed;
         int GetInstanceID();
         bool CompareTag(string tag);

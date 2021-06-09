@@ -60,11 +60,11 @@ namespace DChild.Gameplay.Combat
             if (hitbox.damageable.CompareTag(Character.objectTag))
             {
                 var character = hitbox.GetComponentInParent<Character>();
-                cache.Value.Initialize(hitbox.damageable, character, character.GetComponentInChildren<IFlinch>());
+                cache.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, character, character.GetComponentInChildren<IFlinch>());
             }
             else
             {
-                cache.Value.Initialize(hitbox.damageable, hitbox.GetComponentInParent<BreakableObject>());
+                cache.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, hitbox.GetComponentInParent<BreakableObject>());
             }
         }
 

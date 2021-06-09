@@ -26,11 +26,11 @@ namespace DChild.Gameplay.Environment
             if (damageable.CompareTag(Character.objectTag))
             {
                 var character = damageable.GetComponent<Character>();
-                cache.Value.Initialize(damageable, character, character.GetComponentInChildren<IFlinch>());
+                cache.Value.Initialize(damageable, false, character, character.GetComponentInChildren<IFlinch>());
             }
             else
             {
-                cache.Value.Initialize(damageable, damageable.GetComponent<BreakableObject>());
+                cache.Value.Initialize(damageable, false, damageable.GetComponent<BreakableObject>());
             }
         }
 
