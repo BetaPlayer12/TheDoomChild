@@ -557,14 +557,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region MidAir Attacks
                     if (m_input.earthShakerPressed)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.EarthShaker))
+                        if (m_state.isInShadowMode == false)
                         {
-                            PrepareForMidairAttack();
+                            if (m_skills.IsModuleActive(PrimarySkill.EarthShaker))
+                            {
+                                PrepareForMidairAttack();
 
-                            m_earthShaker?.StartExecution();
+                                m_earthShaker?.StartExecution();
+                            }
+
+                            return;
                         }
-
-                        return;
                     }
                     else if (m_input.slashPressed)
                     {
@@ -673,7 +676,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    m_movement.Move(m_input.horizontalInput, true);
+                    if (m_state.isInShadowMode == false)
+                    {
+                        m_movement.Move(m_input.horizontalInput, true);
+                    }
+
                     if (m_input.horizontalInput != 0)
                     {
                         if (m_state.isHighJumping == false && m_state.isLevitating == false)
@@ -923,16 +930,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.slashHeld)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
+                        if (m_state.isInShadowMode == false)
                         {
-                            PrepareForGroundAttack();
-                            m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
+                            if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
+                            {
+                                PrepareForGroundAttack();
+                                m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
 
-                            //Start SwordThrust
-                            m_swordThrust?.StartCharge();
+                                //Start SwordThrust
+                                m_swordThrust?.StartCharge();
+                            }
+
+                            return;
                         }
-
-                        return;
                     }
                     else if (m_input.whipPressed)
                     {

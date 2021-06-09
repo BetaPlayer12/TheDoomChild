@@ -138,11 +138,15 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Lazer")]
         private LineRenderer m_lineRenderer;
         [SerializeField, TabGroup("Lazer")]
+        private LineRenderer m_telegraphLineRenderer;
+        [SerializeField, TabGroup("Lazer")]
         private EdgeCollider2D m_edgeCollider;
         [SerializeField, TabGroup("Lazer")]
         private GameObject m_muzzleFXGO;
         [SerializeField, TabGroup("Lazer")]
         private ParticleFX m_muzzleLoopFX;
+        [SerializeField, TabGroup("Lazer")]
+        private ParticleFX m_muzzleTelegraphFX;
         //[SerializeField, TabGroup("Lazer")]
         //private Gradient m_telegraphGradient;
         //[SerializeField, TabGroup("Lazer")]
@@ -392,29 +396,41 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             while (true)
             {
+                m_telegraphLineRenderer.SetPosition(0, m_telegraphLineRenderer.transform.position);
                 m_lineRenderer.SetPosition(0, m_lineRenderer.transform.position);
+                m_lineRenderer.SetPosition(1, m_lineRenderer.transform.position);
                 yield return null;
             }
         }
 
+        private IEnumerator TelegraphLineRoutine()
+        {
+            //float timer = 0;
+            m_muzzleTelegraphFX.Play();
+            m_telegraphLineRenderer.useWorldSpace = true;
+            m_lineRenderer.useWorldSpace = true;
+            m_telegraphLineRenderer.SetPosition(1, ShotPosition());
+            var timerOffset = m_telegraphLineRenderer.startWidth;
+            while (m_telegraphLineRenderer.startWidth > 0)
+            {
+                m_telegraphLineRenderer.startWidth -= Time.deltaTime * timerOffset;
+                yield return null;
+            }
+            yield return null;
+        }
+
         private IEnumerator LazerRoutine()
         {
-            m_muzzleLoopFX.Play();
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            //m_lineRenderer.startWidth = .1f;
-            //m_lineRenderer.startColor = m_telegraphColor;
-            //m_lineRenderer.endColor = m_telegraphColor;
-            m_lineRenderer.useWorldSpace = true;
-            m_lineRenderer.SetPosition(1, ShotPosition());
-            var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, ShotPosition(), Quaternion.identity);
-            hitPointFX.GetComponent<ParticleFX>().Play();
+            StartCoroutine(TelegraphLineRoutine());
             StartCoroutine(m_aimRoutine);
             yield return new WaitForSeconds(1f);
             StopCoroutine(m_aimRoutine);
+            m_muzzleLoopFX.Play();
+            m_lineRenderer.SetPosition(1, m_telegraphLineRenderer.GetPosition(1));
+            var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, m_telegraphLineRenderer.GetPosition(1), Quaternion.identity);
+            hitPointFX.GetComponent<ParticleFX>().Play();
             //LaunchProjectile();
-            //m_lineRenderer.startWidth = .5f;
-            //m_lineRenderer.startColor = m_lazerColor;
-            //m_lineRenderer.endColor = m_lazerColor;
             var muzzleFX = this.InstantiateToScene(m_muzzleFXGO, m_muzzleLoopFX.transform.position, Quaternion.identity);
             m_muzzleLoopFX.Stop();
             for (int i = 0; i < m_lineRenderer.positionCount; i++)
@@ -430,6 +446,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_lineRenderer.useWorldSpace = false;
             m_lineRenderer.SetPosition(0, Vector3.zero);
             m_lineRenderer.SetPosition(1, Vector3.zero);
+            m_telegraphLineRenderer.SetPosition(0, Vector3.zero);
+            m_telegraphLineRenderer.SetPosition(1, Vector3.zero);
+            m_telegraphLineRenderer.startWidth = 1;
             m_Points.Clear();
             for (int i = 0; i < m_lineRenderer.positionCount; i++)
             {
