@@ -72,7 +72,11 @@ namespace DChild.Gameplay.Characters.Enemies
             public string swoopAnimation => m_swoopAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_swoopStartAnimation;
-            public string swoopStartAnimation => m_swoopStartAnimation; 
+            public string swoopStartAnimation => m_swoopStartAnimation;
+
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_projectile;
+            public SimpleProjectileAttackInfo projectile => m_projectile;
 
             public override void Initialize()
             {
@@ -82,6 +86,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attack.SetData(m_skeletonDataAsset);
                 m_attackMove.SetData(m_skeletonDataAsset);
                 m_attackLazer.SetData(m_skeletonDataAsset);
+                m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -100,7 +105,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum Attack
         {
-            Attack,
+            //Attack,
             Lazer,
             [HideInInspector]
             _COUNT
@@ -133,13 +138,19 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Lazer")]
         private LineRenderer m_lineRenderer;
         [SerializeField, TabGroup("Lazer")]
+        private LineRenderer m_telegraphLineRenderer;
+        [SerializeField, TabGroup("Lazer")]
         private EdgeCollider2D m_edgeCollider;
         [SerializeField, TabGroup("Lazer")]
-        private ParticleFX m_muzzleFX;
+        private GameObject m_muzzleFXGO;
         [SerializeField, TabGroup("Lazer")]
-        private Color m_telegraphColor;
+        private ParticleFX m_muzzleLoopFX;
         [SerializeField, TabGroup("Lazer")]
-        private Color m_lazerColor;
+        private ParticleFX m_muzzleTelegraphFX;
+        //[SerializeField, TabGroup("Lazer")]
+        //private Gradient m_telegraphGradient;
+        //[SerializeField, TabGroup("Lazer")]
+        //private Color m_lazerColor;
 
         private List<Vector2> m_Points;
         private IEnumerator m_aimRoutine;
@@ -152,6 +163,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Attack m_currentAttack;
         private float m_currentAttackRange;
 
+        private ProjectileLauncher m_projectileLauncher;
+
         private bool[] m_attackUsed;
         private List<Attack> m_attackCache;
         private List<float> m_attackRangeCache;
@@ -160,10 +173,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentPatience;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private Vector2 m_lastTargetPos;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            m_currentAttack = Attack.Attack;
+            //m_currentAttack = Attack.Attack;
             m_flinchHandle.m_autoFlinch = true;
             m_flinchHandle.gameObject.SetActive(true);
             m_stateHandle.ApplyQueuedState();
@@ -298,7 +312,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack, m_info.attack.range),
+            m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack, m_info.attack.range),*/
                                     new AttackInfo<Attack>(Attack.Lazer, m_info.attackLazer.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
@@ -351,10 +365,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodycollider.enabled = true;
             switch (/*m_attack*/ m_currentAttack)
             {
-                case Attack.Attack:
-                    StartCoroutine(AttackRoutine());
-                    break;
+                //case Attack.Attack:
+                //    StartCoroutine(AttackRoutine());
+                //    break;
                 case Attack.Lazer:
+                    m_lastTargetPos = m_targetInfo.position;
                     StartCoroutine(LazerRoutine());
                     break;
             }
@@ -381,37 +396,59 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             while (true)
             {
+                m_telegraphLineRenderer.SetPosition(0, m_telegraphLineRenderer.transform.position);
                 m_lineRenderer.SetPosition(0, m_lineRenderer.transform.position);
+                m_lineRenderer.SetPosition(1, m_lineRenderer.transform.position);
                 yield return null;
             }
+        }
+
+        private IEnumerator TelegraphLineRoutine()
+        {
+            //float timer = 0;
+            m_muzzleTelegraphFX.Play();
+            m_telegraphLineRenderer.useWorldSpace = true;
+            m_lineRenderer.useWorldSpace = true;
+            m_telegraphLineRenderer.SetPosition(1, ShotPosition());
+            var timerOffset = m_telegraphLineRenderer.startWidth;
+            while (m_telegraphLineRenderer.startWidth > 0)
+            {
+                m_telegraphLineRenderer.startWidth -= Time.deltaTime * timerOffset;
+                yield return null;
+            }
+            yield return null;
         }
 
         private IEnumerator LazerRoutine()
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            m_lineRenderer.startWidth = .1f;
-            m_lineRenderer.startColor = m_telegraphColor;
-            m_lineRenderer.endColor = m_telegraphColor;
-            m_lineRenderer.useWorldSpace = true;
-            m_lineRenderer.SetPosition(1, ShotPosition());
+            StartCoroutine(TelegraphLineRoutine());
             StartCoroutine(m_aimRoutine);
             yield return new WaitForSeconds(1f);
             StopCoroutine(m_aimRoutine);
-            m_lineRenderer.startWidth = .5f;
-            m_lineRenderer.startColor = m_lazerColor;
-            m_lineRenderer.endColor = m_lazerColor;
-            m_muzzleFX.Play();
+            m_muzzleLoopFX.Play();
+            m_lineRenderer.SetPosition(1, m_telegraphLineRenderer.GetPosition(1));
+            var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, m_telegraphLineRenderer.GetPosition(1), Quaternion.identity);
+            hitPointFX.GetComponent<ParticleFX>().Play();
+            //LaunchProjectile();
+            var muzzleFX = this.InstantiateToScene(m_muzzleFXGO, m_muzzleLoopFX.transform.position, Quaternion.identity);
+            m_muzzleLoopFX.Stop();
             for (int i = 0; i < m_lineRenderer.positionCount; i++)
             {
                 var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
-                pos = new Vector2(m_character.facing == HorizontalDirection.Right  ? pos.x : - pos.x, pos.y);
+                pos = new Vector2(m_character.facing == HorizontalDirection.Right ? pos.x : -pos.x, pos.y);
                 m_Points.Add(pos);
             }
             m_edgeCollider.points = m_Points.ToArray();
             yield return new WaitForSeconds(.2f);
+            hitPointFX.GetComponent<ParticleFX>().Stop();
+            Destroy(hitPointFX.gameObject);
             m_lineRenderer.useWorldSpace = false;
             m_lineRenderer.SetPosition(0, Vector3.zero);
             m_lineRenderer.SetPosition(1, Vector3.zero);
+            m_telegraphLineRenderer.SetPosition(0, Vector3.zero);
+            m_telegraphLineRenderer.SetPosition(1, Vector3.zero);
+            m_telegraphLineRenderer.startWidth = 1;
             m_Points.Clear();
             for (int i = 0; i < m_lineRenderer.positionCount; i++)
             {
@@ -423,6 +460,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodycollider.enabled = false;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        private void LaunchProjectile()
+        {
+            if (m_targetInfo.isValid)
+            {
+                //m_targetPointIK.transform.position = m_lastTargetPos;
+                m_projectileLauncher.AimAt(m_lastTargetPos);
+                m_projectileLauncher.LaunchProjectile();
+            }
         }
         #endregion
 
@@ -626,6 +673,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
+            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_muzzleLoopFX.transform);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
@@ -633,7 +681,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_Points = new List<Vector2>();
 
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.Attack, Attack.Lazer);
+            AddToAttackCache(/*Attack.Attack,*/ Attack.Lazer);
             m_attackRangeCache = new List<float>();
             AddToRangeCache(m_info.attack.range, m_info.attackLazer.range);
             m_attackUsed = new bool[m_attackCache.Count];
@@ -732,6 +780,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     //m_attackDecider.DecideOnAttack();
                     m_attackDecider.hasDecidedOnAttack = false;
                     ChooseAttack();
+                    m_currentAttack = Attack.Lazer;
+                    m_currentAttackRange = m_info.attackLazer.range;
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                     {
                         m_agent.Stop();

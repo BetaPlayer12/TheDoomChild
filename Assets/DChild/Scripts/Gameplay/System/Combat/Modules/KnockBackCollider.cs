@@ -67,18 +67,18 @@ namespace DChild.Gameplay.Combat
 
                 if (target.TryGetComponent(out IsolatedPhysics2D physics))
                 {
-                    Execute(physics);
+                    Execute(physics, arg1.instance.position);
                 }
             }
         }
 
-        private void Execute(IsolatedPhysics2D physics)
+        private void Execute(IsolatedPhysics2D physics, Vector3 physicsCenter)
         {
             physics.SetVelocity(Vector2.zero);
             switch (m_type)
             {
                 case Type.AwayFromCenter:
-                    var direction = (Vector2)physics.transform.position - center;
+                    var direction = (Vector2)physicsCenter - center;
                     if (m_affectX == false)
                     {
                         direction.x = 0;
@@ -87,7 +87,8 @@ namespace DChild.Gameplay.Combat
                     {
                         direction.y = 0;
                     }
-                    physics.AddForce(direction.normalized * m_force);
+                    
+                    physics.AddForce(direction.normalized * m_force, ForceMode2D.Impulse);
                     break;
                 case Type.ToOneDirection:
                     physics.AddForce(relativeDirection * m_force, ForceMode2D.Impulse);

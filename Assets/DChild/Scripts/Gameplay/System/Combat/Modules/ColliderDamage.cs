@@ -105,8 +105,8 @@ namespace DChild.Gameplay.Combat
             using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
             {
                 InitializeTargetInfo(cacheTargetInfo, hitbox);
-                DamageableDetected?.Invoke(cacheTargetInfo.Value, collision);
                 m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                DamageableDetected?.Invoke(cacheTargetInfo.Value, collision);
                 cacheTargetInfo?.Release();
             }
         }
@@ -117,7 +117,9 @@ namespace DChild.Gameplay.Combat
         {
             SpawnHitFX(collision);
             DealDamage(collision, hitbox);
-            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}");
+#if UNITY_EDITOR
+            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}",this); 
+#endif
         }
 
         private void InterractWith(Collider2D collision)
