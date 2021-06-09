@@ -4933,6 +4933,7 @@ GameObject:
   - component: {fileID: 2073044433320843664}
   - component: {fileID: 6387869103855430502}
   - component: {fileID: 4428972277127036149}
+  - component: {fileID: 1375221603647926129}
   m_Layer: 11
   m_Name: RespawningBlackBloodWall
   m_TagString: Untagged
@@ -4972,13 +4973,13 @@ MonoBehaviour:
   m_event:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6387869103855430502}
-        m_MethodName: RestoreObjects
-        m_Mode: 1
+      - m_Target: {fileID: 1375221603647926129}
+        m_MethodName: Heal
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 99999999
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5016,25 +5017,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 6659137045173417604}
-        m_MethodName: SetActive
+      - m_Target: {fileID: 4035734528974229767}
+        m_MethodName: ToggleOnTransition
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 6218921528505869470}
-        m_MethodName: SetAnimation
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 16f2d2749721f7444bf120b00ae1c4b9,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: Spine.Unity.AnimationReferenceAsset,
-            spine-unity
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5054,7 +5042,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_trackingType: 1
   m_toTrack:
-  - {fileID: 3119660808066652038}
+  - {fileID: 1375221603647926129}
   m_onAllObjectsDestroyed:
     m_PersistentCalls:
       m_Calls:
@@ -5135,9 +5123,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 6218921528505869470}
-        m_MethodName: SetTrackIndex
-        m_Mode: 3
+      - m_Target: {fileID: 4035734528974229767}
+        m_MethodName: ToggleOnTransition
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5145,17 +5133,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6218921528505869470}
-        m_MethodName: SetLoop
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &4428972277127036149
 MonoBehaviour:
@@ -5169,7 +5146,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d65502d98619e438c6388e3da86e37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 0
+  m_maxHealth: 100
+--- !u!114 &1375221603647926129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4298632809706796866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 8845956714623202250}
+  m_health: {fileID: 4428972277127036149}
+  m_resistance: {fileID: 0}
 --- !u!1 &6659137045173417604
 GameObject:
   m_ObjectHideFlags: 0
@@ -5183,9 +5175,9 @@ GameObject:
   - component: {fileID: 8053612640326669738}
   - component: {fileID: 2835211130555953567}
   - component: {fileID: 2521969645292699383}
-  - component: {fileID: 3119660808066652038}
   - component: {fileID: 3465216444029755788}
   - component: {fileID: 6218921528505869470}
+  - component: {fileID: 4035734528974229767}
   m_Layer: 13
   m_Name: Eye
   m_TagString: Untagged
@@ -5306,21 +5298,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_animationTracks: []
   m_skeletonAnimation: {fileID: 2835211130555953567}
---- !u!114 &3119660808066652038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6659137045173417604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 8946658540708589572}
-  m_health: {fileID: 4428972277127036149}
-  m_resistance: {fileID: 0}
 --- !u!114 &3465216444029755788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5333,7 +5310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5830f2bbb3b8ac149905b0850dbf3c4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_source: {fileID: 3119660808066652038}
+  m_source: {fileID: 1375221603647926129}
   m_animator: {fileID: 2521969645292699383}
   m_animation: Death
   m_bodyDuration:
@@ -5351,6 +5328,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 561d1f19bc239fb4a9bd0d0764b668cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4035734528974229767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6659137045173417604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0278221e1c8e4543ae8076cbb2c4099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OnStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OffStartEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnTransitionEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6659137045173417604}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 6218921528505869470}
+        m_MethodName: SetAnimation
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 16f2d2749721f7444bf120b00ae1c4b9,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: Spine.Unity.AnimationReferenceAsset,
+            spine-unity
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  m_OffTransitionEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6218921528505869470}
+        m_MethodName: SetTrackIndex
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6218921528505869470}
+        m_MethodName: SetLoop
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &7030600570720155435
 GameObject:
   m_ObjectHideFlags: 0

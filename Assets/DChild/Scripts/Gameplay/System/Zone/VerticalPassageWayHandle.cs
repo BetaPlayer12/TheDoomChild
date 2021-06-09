@@ -63,6 +63,7 @@ namespace DChild.Gameplay.Environment
 
                     if (forceFloatCoroutine != null)
                     {
+                        characterPhysics.simulated = true;
                         character.StopCoroutine(forceFloatCoroutine);
                         forceFloatCoroutine = null;
                     }
@@ -83,11 +84,13 @@ namespace DChild.Gameplay.Environment
                 case TransitionType.PostEnter:
                     characterPhysics.velocity = Vector2.zero;
                     characterPhysics.constraints = RigidbodyConstraints2D.FreezeRotation;
-
+                    characterPhysics.simulated = false;
                     forceFloatCoroutine = character.StartCoroutine(ForceMidAirFloatRoutine(characterPhysics));
                     break;
                 case TransitionType.PostExit:
+                    var velocity = characterPhysics.velocity;
                     GameplaySystem.playerManager.StopCharacterControlOverride();
+                    characterPhysics.velocity = velocity;
                     break;
             }
         }
@@ -96,7 +99,6 @@ namespace DChild.Gameplay.Environment
         {
             while (true)
             {
-                Debug.Log("test");
                 physics.velocity = Vector2.zero;
                 yield return null;
             }
