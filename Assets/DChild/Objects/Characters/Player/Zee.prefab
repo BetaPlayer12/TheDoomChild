@@ -5014,10 +5014,10 @@ MonoBehaviour:
   m_projectile:
     m_projectile: {fileID: 2508720340444514364, guid: c76eb3ef8328d76459bb525e8f005672,
       type: 3}
-    m_speed: 120
+    m_speed: 60
   m_spawnPoint: {fileID: 1702511588}
   m_skullThrowCooldown: 0.5
-  m_defaultAim: {x: 10, y: 5}
+  m_defaultAim: {x: 5, y: 5}
   m_horizontalThreshold:
     m_min: 0
     m_max: 10
@@ -16243,9 +16243,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c875dce19d66b4bbe1c1ef8ea9eba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_velocity: 90
+  m_velocity: 160
   m_cooldown: 0.5
-  m_duration: 0.4
+  m_duration: 0.2
 --- !u!114 &4671146485413262800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21215,7 +21215,7 @@ MonoBehaviour:
   m_jogSpeed: 40
   m_crouchSpeed: 10
   m_midAirSpeed: 28
-  m_grabSpeed: 15
+  m_grabSpeed: 25
 --- !u!114 &3621822070288912009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21258,8 +21258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_grabRangeSensor: {fileID: 3608228855213573075}
-  m_pushForce: 14
-  m_pullForce: 15
+  m_pushForce: 21
+  m_pullForce: 24
 --- !u!114 &381123879465033726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35794,7 +35794,7 @@ GameObject:
   - component: {fileID: 8337154786623390069}
   - component: {fileID: 600301476849677151}
   - component: {fileID: 5956197024484537259}
-  - component: {fileID: 6720155797394949227}
+  - component: {fileID: 4449329229077842399}
   m_Layer: 8
   m_Name: EarthShakerImpactCollider
   m_TagString: GroundBreaker
@@ -35875,7 +35875,7 @@ PolygonCollider2D:
       - {x: -12.376526, y: -0.05357361}
       - {x: -0.010284424, y: -0.14801025}
       - {x: 10.726334, y: -0.13166046}
---- !u!114 &6720155797394949227
+--- !u!114 &4449329229077842399
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -35884,11 +35884,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 7686109983682913442}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e7c433a4b9949b4cb3843909cbba60e, type: 3}
+  m_Script: {fileID: 11500000, guid: b301dcc8718fb174ba1d9c31ed84bcb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_pushAwayForce: 420
-  m_interactOnceOnEveryEnable: 0
+  m_isEnabled: 1
+  m_force: 1000
+  m_duration: 1000
+  m_type: 0
+  m_centerOffset: {x: 0, y: 0}
+  m_affectX: 1
+  m_affectY: 1
+  m_direction: {x: 0, y: 0}
 --- !u!1 &7883414555676030176
 GameObject:
   m_ObjectHideFlags: 0

@@ -58,13 +58,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_skeletonData.Skeleton.SetSkin(m_shadowMorphSkinName);
             m_state.isInShadowMode = true;
             m_state.waitForBehaviour = false;
-
+            GameplaySystem.world.SetShadowColliders(true);
             //End?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Execute()
         {
-            GameplaySystem.world.SetShadowColliders(true);
             m_damageable.SetInvulnerability(Invulnerability.MAX);
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);

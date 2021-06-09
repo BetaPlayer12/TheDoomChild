@@ -680,9 +680,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0411620e74442de4baefab1ba1565f1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hitFX: {fileID: 0}
+  m_hitFX: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
   m_cameraShakeDuration: 0
-  m_invulnerabilityDuration: 1.5
+  m_invulnerabilityDuration: 1
   m_inputDisableDuration: 0.5
 --- !u!114 &1857289648
 MonoBehaviour:
@@ -895,11 +895,11 @@ MonoBehaviour:
     SerializationNodes:
     - Name: m_noiseSettings
       Entry: 7
-      Data: 0|UnityEngine.Rendering.SerializedDictionary`2[[DChild.Gameplay.Cinematics.Cinema+ShakeType,
-        Assembly-CSharp],[Cinemachine.NoiseSettings, Cinemachine]], Unity.RenderPipelines.Core.Runtime
+      Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Cinematics.CameraShakeType,
+        Assembly-CSharp],[Cinemachine.NoiseSettings, Cinemachine]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Cinematics.Cinema+ShakeType,
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Cinematics.CameraShakeType,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
@@ -1189,56 +1189,35 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_duration: 0.5
   m_shakeOnAttackHit: 1
-  m_onAttackHitShake:
+  m_onAttackHitShakeStart:
     m_amplitude:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0.0029296875
-        value: 0.5008545
-        inSlope: 3.3787482
-        outSlope: 3.3787482
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.048070524
-      - serializedVersion: 3
-        time: 1.002483
-        value: -0.00015299022
-        inSlope: -6.637483
-        outSlope: -6.637483
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.018631078
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_frequency:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: -0.0056762695
-        value: 0.50177
-        inSlope: 3.8081799
-        outSlope: 3.8081799
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.036703035
-      - serializedVersion: 3
-        time: 0.99432373
-        value: -0.0010223389
-        inSlope: -6.1892915
-        outSlope: -6.1892915
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.025961518
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_duration: 0.5
+    m_duration: 0
+  m_onAttackHitShakeLoop:
+    m_amplitude:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_frequency:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_duration: 0
+  m_onAttackHitShakeLoopResetDuration: 0
   m_shakePause: 0.2
 --- !u!1 &5608145492047156799
 GameObject:

@@ -105,17 +105,21 @@ namespace DChild.Gameplay.Combat
             using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
             {
                 InitializeTargetInfo(cacheTargetInfo, hitbox);
-                DamageableDetected?.Invoke(cacheTargetInfo.Value, collision);
                 m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                DamageableDetected?.Invoke(cacheTargetInfo.Value, collision);
                 cacheTargetInfo?.Release();
             }
         }
+
+        protected bool CanBypassHitboxInvulnerability(Hitbox hitbox) => hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability;
 
         protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
             SpawnHitFX(collision);
             DealDamage(collision, hitbox);
-            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}");
+#if UNITY_EDITOR
+            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}",this); 
+#endif
         }
 
         private void InterractWith(Collider2D collision)
@@ -222,7 +226,7 @@ namespace DChild.Gameplay.Combat
             if (colliderGameObject.CompareTag("DamageCollider") || colliderGameObject.CompareTag("Sensor"))
                 return;
 
-            if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability)
+            if (colliderGameObject.TryGetComponent(out Hitbox hitbox) && CanBypassHitboxInvulnerability(hitbox))
             {
                 m_triggeredCollider = collision.otherCollider;
                 using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
