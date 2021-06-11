@@ -5,6 +5,9 @@ namespace DChild.Gameplay.Combat
     public class AttackInfo
     {
         public bool isCrit { get; set; }
+
+        public bool wasBlocked { get; set; }
+
         public List<DamageInfo> damageList { get; private set; }
         public int totalDamageDealt { get; private set; }
 

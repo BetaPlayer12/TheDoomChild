@@ -23,6 +23,8 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
 
     public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
 
+    public bool ignoresBlock => throw new System.NotImplementedException();
+
     public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
     public void SpawnAt(Vector2 position, HorizontalDirection facing)
