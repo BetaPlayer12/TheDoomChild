@@ -33,6 +33,8 @@ namespace DChild.Gameplay.Combat
 
         public Invulnerability ignoreInvulnerability => m_info.ignoreInvulnerability;
 
+        public bool ignoresBlock => m_info.ignoresBlock;
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 

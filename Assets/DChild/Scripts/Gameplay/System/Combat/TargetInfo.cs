@@ -40,7 +40,7 @@ namespace DChild.Gameplay.Combat
                 characterID = character.ID;
             }
             this.flinchHandler = flinchHandler;
-
+            this.canBlockDamage = canBlockDamage;
             isBreakableObject = false;
             breakableObject = null;
         }
@@ -60,6 +60,7 @@ namespace DChild.Gameplay.Combat
             owner = null;
             hasID = false;
             flinchHandler = null;
+            this.canBlockDamage = canBlockDamage;
         }
 
         public void Initialize(IDamageable target, bool canBlockDamage, float damageReduction)
@@ -73,7 +74,7 @@ namespace DChild.Gameplay.Combat
             owner = null;
             hasID = false;
             flinchHandler = null;
-
+            this.canBlockDamage = canBlockDamage;
             isBreakableObject = false;
             breakableObject = null;
         }

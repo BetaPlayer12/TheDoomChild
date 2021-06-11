@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Combat
         void TakeDamage(int totalDamage, AttackType type);
         void BlockDamage(int totalDamage, AttackType type);
         void SetHitboxActive(bool enable);
+        Hitbox[] GetHitboxes();
         void SetInvulnerability(Invulnerability level);
         event EventAction<DamageEventArgs> DamageTaken;
         event EventAction<DamageEventArgs> DamageBlock;

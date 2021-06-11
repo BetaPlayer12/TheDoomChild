@@ -6,6 +6,7 @@ using UnityEngine;
 using Holysoft.Event;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
+using PixelCrushers;
 
 namespace DChild.Gameplay.Characters
 {
@@ -88,6 +89,11 @@ namespace DChild.Gameplay.Characters
         }
 
         public void BlockDamage(int totalDamage, AttackType type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Hitbox[] GetHitboxes()
         {
             throw new System.NotImplementedException();
         }

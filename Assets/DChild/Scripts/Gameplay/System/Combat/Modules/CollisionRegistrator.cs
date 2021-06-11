@@ -10,25 +10,27 @@ using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay.Combat
 {
+    //Check for Damageable instead
+
     public class CollisionRegistrator : MonoBehaviour
     {
         [ShowInInspector, ReadOnly]
-        private Dictionary<Hitbox, bool> m_hasHitPair;
+        private Dictionary<IDamageable, bool> m_hasHitPair;
         [ShowInInspector, ReadOnly]
         private Dictionary<Collider2D, Hitbox> m_colliderPair;
-        private Dictionary<IDamageable, Hitbox> m_damageablePair;
         private Dictionary<Hitbox, List<Collider2D>> m_hitboxToColliderPair;
 
-        public bool HasDamagedHitbox(Hitbox hitbox) => m_hasHitPair.ContainsKey(hitbox) ? m_hasHitPair[hitbox] : false;
+        public bool HasDamagedDamageable(IDamageable damageable) => m_hasHitPair.ContainsKey(damageable) ? m_hasHitPair[damageable] : false;
         public void RegisterHitboxAs(Hitbox hitbox, bool hasHit)
         {
-            if (m_hasHitPair.ContainsKey(hitbox))
+            var damageable = hitbox.damageable;
+            if (m_hasHitPair.ContainsKey(damageable))
             {
-                m_hasHitPair[hitbox] = hasHit;
+                m_hasHitPair[damageable] = hasHit;
             }
             else
             {
-                m_hasHitPair.Add(hitbox, hasHit);
+                m_hasHitPair.Add(damageable, hasHit);
             }
         }
 
@@ -47,7 +49,6 @@ namespace DChild.Gameplay.Combat
                     if (m_hitboxToColliderPair.ContainsKey(hitbox) == false)
                     {
                         m_hitboxToColliderPair.Add(hitbox, new List<Collider2D>());
-                        m_damageablePair.Add(hitbox.damageable, hitbox);
                         hitbox.damageable.Destroyed += OnHitboxDestroyed;
                     }
                     m_hitboxToColliderPair[hitbox].Add(collider);
@@ -60,15 +61,18 @@ namespace DChild.Gameplay.Combat
         {
             var damageable = (IDamageable)sender;
             damageable.Destroyed -= OnHitboxDestroyed;
-            var hitbox = m_damageablePair[damageable];
-            var colliderList = m_hitboxToColliderPair[hitbox];
-            for (int i = 0; i < colliderList.Count; i++)
+
+            var hitboxList = damageable.GetHitboxes();
+            foreach (var hitbox in hitboxList)
             {
-                m_colliderPair.Remove(colliderList[i]);
+                var colliderList = m_hitboxToColliderPair[hitbox];
+                for (int i = 0; i < colliderList.Count; i++)
+                {
+                    m_colliderPair.Remove(colliderList[i]);
+                }
+                m_hitboxToColliderPair.Remove(hitbox);
             }
-            m_hasHitPair.Remove(hitbox);
-            m_hitboxToColliderPair.Remove(hitbox);
-            m_damageablePair.Remove(damageable);
+            m_hasHitPair.Remove(damageable);
         }
 
         public void ResetHitCache() => m_hasHitPair.Clear();
@@ -77,15 +81,13 @@ namespace DChild.Gameplay.Combat
         {
             m_hasHitPair.Clear();
             m_colliderPair.Clear();
-            m_damageablePair.Clear();
             m_hitboxToColliderPair.Clear();
         }
 
         private void Awake()
         {
-            m_hasHitPair = new Dictionary<Hitbox, bool>();
+            m_hasHitPair = new Dictionary<IDamageable, bool>();
             m_colliderPair = new Dictionary<Collider2D, Hitbox>();
-            m_damageablePair = new Dictionary<IDamageable, Hitbox>();
             m_hitboxToColliderPair = new Dictionary<Hitbox, List<Collider2D>>();
         }
     }

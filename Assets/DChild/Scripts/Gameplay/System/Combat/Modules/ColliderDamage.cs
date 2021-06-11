@@ -10,6 +10,7 @@ using DChild.Gameplay.Environment;
 using Sirenix.Utilities;
 using DChild.Gameplay.Characters;
 using Sirenix.OdinInspector;
+using UnityEngine.Profiling;
 
 namespace DChild.Gameplay.Combat
 {
@@ -51,9 +52,10 @@ namespace DChild.Gameplay.Combat
         private Collider2D m_triggeredCollider;
         private ColliderDistance2D m_triggeredColliderDistance2D;
         private IDamageDealer m_damageDealer;
+        private static RaycastHit2D[] m_blockHitBuffer;
         public event Action<TargetInfo, Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
-        protected abstract bool IsValidToHit(Collider2D collision);
+        protected abstract bool IsValidColliderToHit(Collider2D collision);
 
         protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
@@ -113,12 +115,48 @@ namespace DChild.Gameplay.Combat
 
         protected bool CanBypassHitboxInvulnerability(Hitbox hitbox) => hitbox.invulnerabilityLevel <= m_damageDealer.ignoreInvulnerability;
 
+        protected bool IsTargetBlocked(Collider2D target)
+        {
+            var toTarget = target.bounds.center - transform.position;
+            Raycaster.SetLayerCollisionMask(gameObject.layer);
+            m_blockHitBuffer = Raycaster.CastAll(transform.position, toTarget.normalized, toTarget.magnitude);
+            foreach (var hitBuffer in m_blockHitBuffer)
+            {
+                if (target != hitBuffer.collider && hitBuffer.collider.TryGetComponent(out Hitbox hitbox))
+                {
+                    if (hitbox.canBlockDamage)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        protected bool IsBlockPreceededByTarget(Collider2D block, IDamageable damageable)
+        {
+            var toTarget = block.bounds.center - transform.position;
+            Raycaster.SetLayerCollisionMask(gameObject.layer);
+            m_blockHitBuffer = Raycaster.CastAll(transform.position, toTarget.normalized, toTarget.magnitude);
+            foreach (var hitBuffer in m_blockHitBuffer)
+            {
+                if (block != hitBuffer.collider && hitBuffer.collider.TryGetComponent(out Hitbox hitbox))
+                {
+                    if (hitbox.canBlockDamage == false && hitbox.damageable == damageable)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
             SpawnHitFX(collision);
             DealDamage(collision, hitbox);
 #if UNITY_EDITOR
-            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}",this); 
+            Debug.Log($"Deal Damage to: {hitbox} via {collision.name}", this);
 #endif
         }
 
@@ -132,6 +170,34 @@ namespace DChild.Gameplay.Combat
                 }
             }
         }
+
+        private void HandleDamageUniqueHitboxes(Collider2D collider2D)
+        {
+            var hitbox = m_collisionRegistrator.GetHitbox(collider2D);
+            if (hitbox != null && m_collisionRegistrator.HasDamagedDamageable(hitbox.damageable) == false)
+            {
+                if (IsValidHitboxToHit(collider2D, hitbox))
+                {
+                    OnValidCollider(collider2D, hitbox);
+                    m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
+                }
+            }
+        }
+
+        private bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox)
+        {
+            if (hitbox.canBlockDamage ? (IsBlockPreceededByTarget(collider2D, hitbox.damageable) == false) : (IsBlockedByOtherBlockingHitboxes(collider2D) == false))
+            {
+                m_triggeredCollider = GetTriggeredCollider(collider2D);
+                if (hitbox.CanBeDamageBy(m_colliders))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsBlockedByOtherBlockingHitboxes(Collider2D collider2D) { return m_damageDealer.ignoresBlock == false && IsTargetBlocked(collider2D); }
 
         private Collider2D GetTriggeredCollider(Collider2D collider2D)
         {
@@ -178,47 +244,36 @@ namespace DChild.Gameplay.Combat
             if (collider2D.CompareTag("DamageCollider") || collider2D.CompareTag("Sensor"))
                 return;
 
-            var validToHit = IsValidToHit(collider2D);
-
-            if (m_damageUniqueHitboxesOnly)
+#if UNITY_EDITOR
+            Profiler.BeginSample("Collider Damage: Validation For Damage",this); 
+#endif
+            if (IsValidColliderToHit(collider2D))
             {
-                var hitbox = m_collisionRegistrator.GetHitbox(collider2D);
-                if (hitbox != null && m_collisionRegistrator.HasDamagedHitbox(hitbox) == false)
+                if (m_damageUniqueHitboxesOnly)
                 {
-                    m_triggeredCollider = GetTriggeredCollider(collider2D);
-                    if (hitbox.CanBeDamageBy(m_colliders))
-                    {
-                        if (validToHit)
-                        {
-                            OnValidCollider(collider2D, hitbox);
-                        }
-                    }
-                    m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
+                    HandleDamageUniqueHitboxes(collider2D);
                 }
-            }
-            else
-            {
-                if (collider2D.TryGetComponentInParent(out Hitbox hitbox))
+                else
                 {
-                    m_triggeredCollider = GetTriggeredCollider(collider2D);
-                    if (hitbox.CanBeDamageBy(m_colliders))
+                    if (collider2D.TryGetComponentInParent(out Hitbox hitbox))
                     {
-                        if (validToHit)
+                        if (IsValidHitboxToHit(collider2D, hitbox))
                         {
                             OnValidCollider(collider2D, hitbox);
                         }
                     }
                 }
-            }
 
-            if (m_canDetectInteractables && validToHit)
-            {
-                m_triggeredCollider = GetTriggeredCollider(collider2D);
-                InterractWith(collider2D);
+                if (m_canDetectInteractables && IsBlockedByOtherBlockingHitboxes(collider2D) == false)
+                {
+                    m_triggeredCollider = GetTriggeredCollider(collider2D);
+                    InterractWith(collider2D);
+                }
             }
+#if UNITY_EDITOR
+            Profiler.EndSample();
+#endif
         }
-
-
 
         private void OnCollisionEnter2D(Collision2D collision)
         {

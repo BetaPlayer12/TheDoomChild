@@ -83,6 +83,8 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public Hitbox[] GetHitboxes() => m_hitboxes;
+
         public void SetInvulnerability(Invulnerability level)
         {
             for (int i = 0; i < m_hitboxes.Length; i++)
@@ -135,6 +137,8 @@ namespace DChild.Gameplay.Combat
         {
             Heal(999999999);
         }
+
+       
 #endif
     }
 }

@@ -14,6 +14,7 @@ namespace DChild.Gameplay.Combat
             critChance = 0;
             critDamageModifier = 1;
             ignoreInvulnerability = Invulnerability.None;
+            ignoresBlock = false;
         }
 
         public List<AttackDamage> damage;

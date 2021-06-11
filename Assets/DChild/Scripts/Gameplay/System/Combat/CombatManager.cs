@@ -61,7 +61,7 @@ namespace DChild.Gameplay.Combat
                 {
                     if (wasDamageBlocked)
                     {
-
+                        targetInfo.instance.transform.GetComponentInChildren<IBlock>()?.BlockAttack(attacker.instance);
                     }
                     else
                     {
