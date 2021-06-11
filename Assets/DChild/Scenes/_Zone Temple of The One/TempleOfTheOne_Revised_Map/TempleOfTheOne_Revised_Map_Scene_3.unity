@@ -13974,6 +13974,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 576184644}
     m_Modifications:
+    - target: {fileID: 2503372763258595828, guid: 7803655bea0f3db41980ad22f7e2c694,
+        type: 3}
+      propertyPath: m_id.m_showHandle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2503372763258595828, guid: 7803655bea0f3db41980ad22f7e2c694,
+        type: 3}
+      propertyPath: m_id.m_ID
+      value: 510
+      objectReference: {fileID: 0}
     - target: {fileID: 6837948057608144072, guid: 7803655bea0f3db41980ad22f7e2c694,
         type: 3}
       propertyPath: m_Name
@@ -14057,6 +14067,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1441998111}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1441998113 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2503372763258595828, guid: 7803655bea0f3db41980ad22f7e2c694,
+    type: 3}
+  m_PrefabInstance: {fileID: 1441998111}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169904169d11e8b46aaa137c9857a428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1468500568
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16092,7 +16114,8 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 1441998113}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -16132,7 +16155,25 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 5|DChild.Serialization.ZoneDataHandle+EditorData+ComponentData, Assembly-CSharp
+    - Name: m_serializer
+      Entry: 10
       Data: 0
+    - Name: m_saveData
+      Entry: 7
+      Data: 6|DChild.Gameplay.Environment.BreakableObject+SaveData, Assembly-CSharp
+    - Name: m_isDestroyed
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -16141,7 +16182,7 @@ MonoBehaviour:
       Data: 
     - Name: m_dynamicDatas
       Entry: 7
-      Data: 5|System.Collections.Generic.List`1[[DChild.Serialization.ZoneDataHandle+EditorData+DynamicData,
+      Data: 7|System.Collections.Generic.List`1[[DChild.Serialization.ZoneDataHandle+EditorData+DynamicData,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
@@ -16159,7 +16200,8 @@ MonoBehaviour:
   m_ID:
     m_ID: 0
     m_showHandle: 1
-  m_componentSerializers: []
+  m_componentSerializers:
+  - {fileID: 1441998113}
   m_dynamicSerializers: []
   m_questsListener: []
   m_useEditorData: 0
