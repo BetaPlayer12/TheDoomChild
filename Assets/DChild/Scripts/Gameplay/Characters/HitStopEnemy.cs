@@ -34,7 +34,7 @@ public class HitStopEnemy : MonoBehaviour
         {
             foreach (Collider2D collider in m_hitboxColliders)
             {
-                if (collider.IsTouchingLayers(LayerMask.GetMask("Player")))
+                if (collider?.IsTouchingLayers(LayerMask.GetMask("Player")) ?? false)
                 {
                     m_hitstop.Execute();
                     break;

@@ -51,8 +51,8 @@ namespace DChild.Gameplay.Environment
                                 var bodyDefense = hitbox.defense;
                                 if (bodyDefense.invulnerabilityLevel <= m_ignoreLevel)
                                 {
-                                    info.Value.Initialize(transform.position, 0, 1, m_damage);
-                                    targetInfo.Value.Initialize(hitbox.damageable, bodyDefense.damageReduction);
+                                    info.Value.Initialize(gameObject,transform.position, 0, 1, false, m_damage);
+                                    targetInfo.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, bodyDefense.damageReduction);
                                     using (Cache<AttackInfo> cacheAttackInfo = GameplaySystem.combatManager.ResolveConflict(info, targetInfo.Value))
                                     {
                                         cacheAttackInfo.Release();
