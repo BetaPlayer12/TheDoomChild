@@ -344,16 +344,17 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
-            m_lineRenderer.useWorldSpace = false;
-            m_lineRenderer.SetPosition(0, Vector3.zero);
-            m_lineRenderer.SetPosition(1, Vector3.zero);
-            m_Points.Clear();
-            for (int i = 0; i < m_lineRenderer.positionCount; i++)
-            {
-                m_Points.Add(Vector2.zero);
-            }
-            m_edgeCollider.points = m_Points.ToArray();
+            //m_lineRenderer.useWorldSpace = false;
+            //m_lineRenderer.SetPosition(0, Vector3.zero);
+            //m_lineRenderer.SetPosition(1, Vector3.zero);
+            //m_Points.Clear();
+            //for (int i = 0; i < m_lineRenderer.positionCount; i++)
+            //{
+            //    m_Points.Add(Vector2.zero);
+            //}
+            //m_edgeCollider.points = m_Points.ToArray();
             StopAllCoroutines();
+            ResetLaser();
             m_agent.Stop();
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
         }
@@ -443,6 +444,16 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.2f);
             hitPointFX.GetComponent<ParticleFX>().Stop();
             Destroy(hitPointFX.gameObject);
+            ResetLaser();
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            m_bodycollider.enabled = false;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private void ResetLaser()
+        {
             m_lineRenderer.useWorldSpace = false;
             m_lineRenderer.SetPosition(0, Vector3.zero);
             m_lineRenderer.SetPosition(1, Vector3.zero);
@@ -455,11 +466,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_Points.Add(Vector2.zero);
             }
             m_edgeCollider.points = m_Points.ToArray();
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_animation.animationState.GetCurrent(0).MixDuration = 0;
-            m_bodycollider.enabled = false;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
 
         private void LaunchProjectile()
