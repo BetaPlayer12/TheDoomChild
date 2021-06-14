@@ -344,16 +344,17 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
-            m_lineRenderer.useWorldSpace = false;
-            m_lineRenderer.SetPosition(0, Vector3.zero);
-            m_lineRenderer.SetPosition(1, Vector3.zero);
-            m_Points.Clear();
-            for (int i = 0; i < m_lineRenderer.positionCount; i++)
-            {
-                m_Points.Add(Vector2.zero);
-            }
-            m_edgeCollider.points = m_Points.ToArray();
+            //m_lineRenderer.useWorldSpace = false;
+            //m_lineRenderer.SetPosition(0, Vector3.zero);
+            //m_lineRenderer.SetPosition(1, Vector3.zero);
+            //m_Points.Clear();
+            //for (int i = 0; i < m_lineRenderer.positionCount; i++)
+            //{
+            //    m_Points.Add(Vector2.zero);
+            //}
+            //m_edgeCollider.points = m_Points.ToArray();
             StopAllCoroutines();
+            ResetLaser();
             m_agent.Stop();
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
         }
