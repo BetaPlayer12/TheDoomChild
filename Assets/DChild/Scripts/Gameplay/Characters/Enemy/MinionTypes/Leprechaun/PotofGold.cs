@@ -33,6 +33,8 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
 
         public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
 
+        public bool ignoresBlock => throw new System.NotImplementedException();
+
         public override void SpawnAt(Vector2 position, Quaternion rotation)
         {
             base.SpawnAt(position, rotation);

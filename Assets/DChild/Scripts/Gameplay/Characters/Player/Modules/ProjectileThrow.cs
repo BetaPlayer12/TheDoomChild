@@ -224,6 +224,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 var scale = m_spawnedProjectile.transform.localScale;
                 scale.x = 1;
                 m_spawnedProjectile.transform.localScale = scale;
+                m_spawnedProjectile = null;
             }
             else
             {
