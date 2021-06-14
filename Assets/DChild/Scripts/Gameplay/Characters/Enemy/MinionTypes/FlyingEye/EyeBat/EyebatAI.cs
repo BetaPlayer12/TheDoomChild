@@ -443,6 +443,16 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(.2f);
             hitPointFX.GetComponent<ParticleFX>().Stop();
             Destroy(hitPointFX.gameObject);
+            ResetLaser();
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            m_bodycollider.enabled = false;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private void ResetLaser()
+        {
             m_lineRenderer.useWorldSpace = false;
             m_lineRenderer.SetPosition(0, Vector3.zero);
             m_lineRenderer.SetPosition(1, Vector3.zero);
@@ -455,11 +465,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_Points.Add(Vector2.zero);
             }
             m_edgeCollider.points = m_Points.ToArray();
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_animation.animationState.GetCurrent(0).MixDuration = 0;
-            m_bodycollider.enabled = false;
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
 
         private void LaunchProjectile()
