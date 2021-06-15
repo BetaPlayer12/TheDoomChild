@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Combat;
+using DChild.Gameplay.Pooling;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,14 +11,22 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField]
         private GameObject m_minion;
-        
+
+        private int m_minionID;
+        private void Start()
+        {
+            m_minionID = m_minion.GetComponent<Character>().ID;
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
-           
-
-            if (collision.gameObject.transform.parent.gameObject.name == m_minion.name+"Model")
+            if (collision.gameObject.TryGetComponentInParent(out Character character))
             {
-                collision.gameObject.GetComponentInParent<Damageable>().TakeDamage(999999, AttackType.True);
+                if (character.ID == m_minionID)
+                {
+                    //collision.gameObject.GetComponentInParent<PoolableObject>().CallPoolRequest();
+                    collision.gameObject.GetComponentInParent<Damageable>().TakeDamage(999999, AttackType.True);
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters;
+using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
 using DChild.Gameplay.Pooling;
 using Holysoft.Collections;
@@ -6,6 +7,7 @@ using Holysoft.Event;
 using Holysoft.Pooling;
 using Sirenix.OdinInspector;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,10 +20,13 @@ namespace DChild.Gameplay
         [SerializeField, MinValue(1)]
         private int m_maxSpawns;
         [SerializeField]
+        private float m_spawnStartDelay;
+        [SerializeField]
         private RangeFloat m_spawnInterval;
         [SerializeField]
         private HorizontalDirection m_spawnDirection;
 
+        private bool m_startSpawning;
         private int m_spawnedCount;
         private List<GameObject> m_spawnList;
 
@@ -43,16 +48,37 @@ namespace DChild.Gameplay
             instance.transform.position = transform.position;
             m_spawnList.Add(instance);
             character.SetFacing(m_spawnDirection);
+
             var scale = character.transform.localScale;
             scale.x *= (int)m_spawnDirection;
             character.transform.localScale = scale;
-            instance.GetComponent<Damageable>().Destroyed += OnInstanceDestroyed;
+
+            var damageable = instance.GetComponent<Damageable>();
+            damageable.SetHitboxActive(true);
+            if (instance.TryGetComponentInChildren(out DeathHandle handle,true))
+            {
+                handle.BodyDestroyed += OnInstanceBodyDestroyed;
+            }
+            else
+            {
+                damageable.Destroyed += OnInstanceDestroyed;
+            }
+
             instance.GetComponent<PoolableObject>().PoolRequest += OnInstancePooled;
+            instance.GetComponent<ICombatAIBrain>().enabled = true;
+            instance.SetActive(true);
             m_spawnedCount++;
             if (m_spawnedCount >= m_maxSpawns)
             {
                 enabled = false;
             }
+        }
+
+        private void OnInstanceBodyDestroyed(object sender, DeathHandle.DisposingEventArgs eventArgs)
+        {
+            var deathHandle = (DeathHandle)sender;
+            deathHandle.GetComponentInParent<PoolableObject>().CallPoolRequest();
+            deathHandle.BodyDestroyed -= OnInstanceBodyDestroyed;
         }
 
         private void OnInstancePooled(object sender, PoolItemEventArgs eventArgs)
@@ -62,10 +88,9 @@ namespace DChild.Gameplay
             {
                 if (m_spawnList[i] == poolableObject.gameObject)
                 {
-
                     m_spawnList.RemoveAt(i);
                     m_spawnedCount--;
-                    Debug.Log(m_spawnedCount);
+                    poolableObject.PoolRequest -= OnInstancePooled;
                     if (enabled == false)
                     {
                         m_spawnTimer = m_spawnInterval.GenerateRandomValue();
@@ -79,21 +104,33 @@ namespace DChild.Gameplay
         {
             var damageable = (Damageable)sender;
             damageable.GetComponent<PoolableObject>().CallPoolRequest();
+            damageable.Destroyed -= OnInstanceDestroyed;
+        }
+
+        private IEnumerator DelaySpawnRoutine()
+        {
+            m_startSpawning = false;
+            yield return new WaitForSeconds(m_spawnStartDelay);
+            m_startSpawning = true;
         }
 
         private void Start()
         {
             m_spawnList = new List<GameObject>();
             m_spawnedCount = 0;
+            StartCoroutine(DelaySpawnRoutine());
         }
 
         private void LateUpdate()
         {
-            m_spawnTimer -= GameplaySystem.time.deltaTime;
-            if (m_spawnTimer <= 0)
+            if (m_startSpawning)
             {
-                SpawnCharacter();
-                m_spawnTimer = m_spawnInterval.GenerateRandomValue();
+                m_spawnTimer -= GameplaySystem.time.deltaTime;
+                if (m_spawnTimer <= 0)
+                {
+                    SpawnCharacter();
+                    m_spawnTimer = m_spawnInterval.GenerateRandomValue();
+                }
             }
         }
     }
