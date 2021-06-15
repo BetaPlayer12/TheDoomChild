@@ -12,9 +12,9 @@ public class DropCube : MonoBehaviour
     [SerializeField]
     private Transform m_cubecrusher;
     [SerializeField, HorizontalGroup("Start"), ShowIf("m_cube")]
-    public Vector2 m_startPosition;
+    private Vector2 m_startPosition;
     [SerializeField, HorizontalGroup("End"), ShowIf("m_cube")]
-    public Vector2 m_endPosition;
+    private Vector2 m_endPosition;
     // Start is called before the first frame update
     private Vector2 m_start;
     private Vector2 m_destination;
@@ -123,8 +123,6 @@ public class DropCube : MonoBehaviour
         {
             transform.position = m_currentPos + offset * m_radiusOffset;
         }
-        
-        
 
         if (m_isDropping == true)
         {
