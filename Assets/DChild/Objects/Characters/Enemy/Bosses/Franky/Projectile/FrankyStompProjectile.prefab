@@ -23,6 +23,32 @@ MonoBehaviour:
   m_playOnAwake: 1
   m_baseFlipped: 0
   m_poolOnStop: 1
+--- !u!114 &7630311932800247213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180458461799974763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70443ecacf099b2478b8834eeb630323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnCallBack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3116979285390371163}
+        m_MethodName: Stop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6306989345977880092
 GameObject:
   m_ObjectHideFlags: 0
@@ -54,7 +80,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6306989345977880092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -115, y: -175, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 1180458461799974760}
@@ -157,10 +183,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_poolableItemData: {fileID: 11400000, guid: 32d70c28a89fff84ba7737e8ad5470e8, type: 2}
-  m_waitForParticlesEnd: 0
+  m_waitForParticlesEnd: 1
   m_particleSystem: {fileID: 0}
-  m_particleCallback: {fileID: 0}
-  m_model: {fileID: 0}
+  m_particleCallback: {fileID: 7630311932800247213}
+  m_model: {fileID: 1180458461799974763}
   m_onLaunch:
     m_PersistentCalls:
       m_Calls: []
@@ -243,6 +269,41 @@ PrefabInstance:
         type: 3}
       propertyPath: stopAction
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092199888521346913, guid: 0a55b9d3ac30df64e818419f7b515106,
+        type: 3}
+      propertyPath: m_AllowRoll
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092199888521346913, guid: 0a55b9d3ac30df64e818419f7b515106,
+        type: 3}
+      propertyPath: m_RenderAlignment
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092199888521346913, guid: 0a55b9d3ac30df64e818419f7b515106,
+        type: 3}
+      propertyPath: m_Flip.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092199888521346914, guid: 0a55b9d3ac30df64e818419f7b515106,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092199888521346914, guid: 0a55b9d3ac30df64e818419f7b515106,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092199888521346914, guid: 0a55b9d3ac30df64e818419f7b515106,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092199888521346914, guid: 0a55b9d3ac30df64e818419f7b515106,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1092199888521346915, guid: 0a55b9d3ac30df64e818419f7b515106,
         type: 3}
