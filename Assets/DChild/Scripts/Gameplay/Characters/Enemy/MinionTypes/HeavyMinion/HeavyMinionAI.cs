@@ -602,9 +602,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void HandleKnockback(float resumeAIDelay)
         {
-            StopAllCoroutines();
-            m_stateHandle.Wait(State.ReevaluateSituation);
-            StartCoroutine(KnockbackRoutine(resumeAIDelay));
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            {
+                StopAllCoroutines();
+                m_stateHandle.Wait(State.ReevaluateSituation);
+                StartCoroutine(KnockbackRoutine(resumeAIDelay));
+            }
         }
 
         private IEnumerator KnockbackRoutine(float timer)

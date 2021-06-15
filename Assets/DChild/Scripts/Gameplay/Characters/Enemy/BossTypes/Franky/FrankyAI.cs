@@ -895,7 +895,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Intro:
                     if (IsFacingTarget())

@@ -36,6 +36,7 @@ public class DropCube : MonoBehaviour
     private float m_currentReturnSpeed;
     public bool m_isDropping;
     public bool dropped;
+    public bool m_istriggered = false;
     [SerializeField]
     public float m_FallDelay;
     [SerializeField]
@@ -45,11 +46,15 @@ public class DropCube : MonoBehaviour
     [Button]
     public void Drop()
     {
-        m_fallTime = 0;
-        m_returnTime = 0;
-        m_shake = true;
-        StartCoroutine(FallDelayCoroutine());
-        transform.position = m_currentPos;
+        if (m_istriggered == false)
+        {
+            m_fallTime = 0;
+            m_returnTime = 0;
+            m_shake = true;
+            StartCoroutine(FallDelayCoroutine());
+            transform.position = m_currentPos;
+            m_istriggered = true;
+        }
 
     }
 
@@ -73,6 +78,7 @@ public class DropCube : MonoBehaviour
         yield return new WaitForSeconds(m_FallDelay);
         m_shake = false;
         m_isDropping = true;
+        
     }
     IEnumerator ReturnDelayCoroutine()
     {
@@ -117,8 +123,6 @@ public class DropCube : MonoBehaviour
         {
             transform.position = m_currentPos + offset * m_radiusOffset;
         }
-        
-        
 
         if (m_isDropping == true)
         {
@@ -144,6 +148,7 @@ public class DropCube : MonoBehaviour
                 {
                     m_isDropping = false;
                     dropped = false;
+                    m_istriggered = false;
                     m_cubecrusher.GetComponent<Collider2D>().enabled = false;
                 }
             }
