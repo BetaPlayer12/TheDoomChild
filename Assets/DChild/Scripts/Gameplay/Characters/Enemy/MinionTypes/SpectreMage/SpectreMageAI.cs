@@ -165,7 +165,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_flinchHandle.m_autoFlinch = true;
+            m_flinchHandle.gameObject.SetActive(true);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -213,31 +213,31 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_flinchHandle.m_autoFlinch)
+            //if (m_flinchHandle.gameObject.activeSelf)
+            //{
+            //}
+            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            //m_flinchHandle.gameObject.SetActive(false);
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
             {
-                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-                m_flinchHandle.m_autoFlinch = false;
-                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                m_agent.Stop();
+                StopAllCoroutines();
+                m_stateHandle.Wait(State.Cooldown);
+                if (!IsFacingTarget())
                 {
-                    m_agent.Stop();
-                    StopAllCoroutines();
-                    m_stateHandle.Wait(State.Cooldown);
-                    if (!IsFacingTarget())
-                    {
-                        CustomTurn();
-                    }
-                    //if (m_animation.GetCurrentAnimation(0).ToString() == m_info.attack.animation)
-                    //{
-                    //    StartCoroutine(CounterFlinchRoutine());
-                    //}
-                    //else
-                    //{
-                    //    StartCoroutine(FlinchRoutine());
-                    //}
-                    Debug.Log("FLINCH NOW");
-                    StartCoroutine(FlinchRoutine());
+                    CustomTurn();
                 }
+                //if (m_animation.GetCurrentAnimation(0).ToString() == m_info.attack.animation)
+                //{
+                //    StartCoroutine(CounterFlinchRoutine());
+                //}
+                //else
+                //{
+                //    StartCoroutine(FlinchRoutine());
+                //}
+                Debug.Log("FLINCH NOW");
+                StartCoroutine(FlinchRoutine());
             }
         }
 
@@ -263,7 +263,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             Debug.Log("idleAnimation");
             m_hitbox.gameObject.SetActive(true);
-            m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -310,7 +309,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_targetInfo.Set(null, null);
-                m_flinchHandle.m_autoFlinch = true;
+                m_flinchHandle.gameObject.SetActive(true);
                 m_enablePatience = false;
                 m_isDetecting = false;
                 m_stateHandle.SetState(State.Patrol);
@@ -420,7 +419,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ExecuteAttack(Attack m_attack)
         {
-            m_flinchHandle.m_autoFlinch = false;
+            m_flinchHandle.gameObject.SetActive(false);
             m_agent.Stop();
             switch (m_attack)
             {
@@ -450,7 +449,7 @@ namespace DChild.Gameplay.Characters.Enemies
             LaunchProjectile();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_flinchHandle.m_autoFlinch = true;
+            m_flinchHandle.gameObject.SetActive(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -701,7 +700,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
-            m_flinchHandle.m_autoFlinch = true;
+            m_flinchHandle.gameObject.SetActive(true);
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
