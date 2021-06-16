@@ -356,6 +356,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             ResetLaser();
             m_agent.Stop();
+            m_muzzleLoopFX.Stop();
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
         }
 
