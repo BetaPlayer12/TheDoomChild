@@ -116,7 +116,7 @@ public class DropCube : MonoBehaviour
     }
 #endif
    
-    public void Update()
+    public void FixedUpdate()
     {
         var offset = Random.insideUnitCircle;
         if (m_shake == true)
@@ -126,7 +126,7 @@ public class DropCube : MonoBehaviour
 
         if (m_isDropping == true)
         {
-            var deltaTime = GameplaySystem.time.deltaTime;
+            var deltaTime = GameplaySystem.time.fixedDeltaTime;
             if (dropped == false)
             {
                 m_fallTime += deltaTime;

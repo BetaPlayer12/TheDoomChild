@@ -36,7 +36,8 @@ namespace DChild.Gameplay.Characters.Players
             ProjectileThrow,
             ProjectileThrowVariant,
             LedgeGrab,
-            FlinchState
+            FlinchState,
+            Block
         }
 
         [SerializeField]
