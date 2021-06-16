@@ -351,6 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            m_stateHandle.Wait(State.WaitBehaviourEnd);
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             //m_bodyCollider.SetActive(true);

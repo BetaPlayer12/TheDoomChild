@@ -85,6 +85,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Leap Attack Values")]
             private float m_leapVelocity;
             public float leapVelocity => m_leapVelocity;
+            [SerializeField, MinValue(0), TabGroup("Leap Attack Values")]
+            private float m_leapTime;
+            public float leapTime => m_leapTime;
             [SerializeField, TabGroup("Leap Attack Values")]
             private float m_transitionStart;
             public float transitionStart => m_transitionStart;
@@ -306,7 +309,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            m_stateHandle.OverrideState(State.Phasing);
+            m_stateHandle.Wait(State.Phasing);
             StopAllCoroutines();
             m_animation.DisableRootMotion();
             m_wallPosPoint.SetParent(m_hitbox.transform);
@@ -315,6 +318,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chainHurtBox.gameObject.SetActive(false);
             m_stickToWall = false;
             m_animation.SetEmptyAnimation(0, 0);
+            m_stateHandle.ApplyQueuedState();
             m_phaseHandle.ApplyChange();
         }
 
@@ -365,7 +369,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ChangePhaseRoutine()
         {
             m_hitbox.SetInvulnerability(Invulnerability.None);
-            m_animation.SetAnimation(0, m_info.roarAnimation, false);
+            m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
             yield return new WaitForSeconds(3.9f);
             m_hitbox.SetInvulnerability(Invulnerability.None);
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
@@ -517,23 +521,40 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             for (int i = 0; i < repeats; i++)
             {
-                m_animation.SetAnimation(0, i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation, false).AnimationStart = i == 0 ? 0 : m_info.transitionStart;
-                m_animation.animationState.GetCurrent(0).MixDuration = 0;
-                while (m_currentLeapDuration < .65f)
-                {
-                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, UnityEngine.Random.Range(m_info.leapVelocity * .1f, m_info.leapVelocity));
-                    m_currentLeapDuration += Time.deltaTime;
-                    yield return null;
-                }
-                m_currentLeapDuration = 0;
-                m_movement.Stop();
-                yield return new WaitForAnimationComplete(m_animation.animationState, i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation);
-                if (i < repeats-1)
+                if (/*i < repeats-1*/!IsFacingTarget())
                 {
                     m_animation.SetAnimation(0, m_info.leapTransitionAnimation, false).MixDuration = 0;
                     yield return new WaitForSeconds(m_info.transitionStart);
                     CustomTurn();
                 }
+                else
+                {
+                    m_animation.SetEmptyAnimation(0, 0);
+                }
+                var leapAnim = i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation;
+                m_animation.SetAnimation(0, leapAnim, false).AnimationStart = i == 0 ? 0 : m_info.transitionStart;
+                m_animation.animationState.GetCurrent(0).MixDuration = 0;
+                //while (m_currentLeapDuration < .65f)
+                //{
+                //    m_movement.MoveTowards(Vector2.one * transform.localScale.x, UnityEngine.Random.Range(m_info.leapVelocity * .1f, m_info.leapVelocity));
+                //    m_currentLeapDuration += Time.deltaTime;
+                //    yield return null;
+                //}
+                var target = new Vector2(m_targetInfo.position.x - (20 * transform.localScale.x), m_targetInfo.position.y);
+                var targetDistance = Vector2.Distance(target, transform.position);
+                var velocity = targetDistance / m_info.leapTime;
+                float time = 0;
+                float animTime = 1 / (m_info.leapTime / 0.75f);
+                m_animation.animationState.TimeScale = animTime;
+                while (time < m_info.leapTime)
+                {
+                    m_character.physics.SetVelocity(velocity * transform.localScale.x, 0);
+                    time += Time.deltaTime;
+                    yield return null;
+                }
+                m_currentLeapDuration = 0;
+                m_movement.Stop();
+                yield return new WaitForAnimationComplete(m_animation.animationState, leapAnim);
             }
             m_animation.SetAnimation(0, m_info.leapAttackEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAttackEndAnimation);
