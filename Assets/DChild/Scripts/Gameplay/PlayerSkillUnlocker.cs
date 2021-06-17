@@ -36,15 +36,10 @@ namespace DChild.Gameplay
         private Vector3 m_promptOffset;
         [SerializeField]
         private PlayableDirector m_cinematic;
-
-        //[SerializeField]
-        //private ParticleSystem m_fx;
-        //[SerializeField, MinValue(0)]
-        //private float m_callNotificationDelay;
-        [SerializeField, OnValueChanged("OnIsUsedChanged")]
-        private bool m_isUsed;
         [SerializeField]
         private Collider2D m_collider;
+        [SerializeField, OnValueChanged("OnIsUsedChanged")]
+        private bool m_isUsed;
 
         public bool showPrompt => true;
 
@@ -64,18 +59,9 @@ namespace DChild.Gameplay
         {
             if (m_isUsed == false)
             {
-                //GameplaySystem.playerManager.OverrideCharacterControls();
                 if (character)
                 {
                     character.GetComponent<PlayerControlledObject>().owner.skills.SetSkillStatus(m_toUnlock, true);
-
-                    ////Delete This. To be updated later.
-                    //switch (m_toUnlock)
-                    //{
-                    //    case PrimarySkill.BlackBloodImmunity:
-                    //        character.GetComponentInChildren<BlackBloodImmunity>().isActive = true;
-                    //        break;
-                    //}
                 }
 
                 if (m_cinematic == null)
@@ -86,18 +72,11 @@ namespace DChild.Gameplay
                 {
                     m_cinematic.Play();
                 }
-                //m_fx.Play(true);
-                //StartCoroutine(DelayedNotifySkill());
+
                 m_isUsed = true;
                 m_collider.enabled = false;
             }
         }
-
-        //private IEnumerator DelayedNotifySkill()
-        //{
-        //    yield return new WaitForSeconds(m_callNotificationDelay);
-        //    NotifySkill(m_toUnlock);
-        //}
 
         private void OnCutsceneDone(PlayableDirector obj)
         {
