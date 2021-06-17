@@ -13,7 +13,6 @@ namespace DChildEditor.Gameplay.Environment
         public override void SetObjectsToLabel(params IllusionPlatform[] objects)
         {
             m_labelPair.Clear();
-            int index = 0;
             for (int i = 0; i < objects.Length; i++)
             {
                 var platform = objects[i];
@@ -21,11 +20,11 @@ namespace DChildEditor.Gameplay.Environment
                 {
                     if (platform is CompositeIllusionPlatform)
                     {
-                        LabelCompositeIllusionPlatform((CompositeIllusionPlatform)platform,ref index);
+                        LabelCompositeIllusionPlatform((CompositeIllusionPlatform)platform,i);
                     }
                     else
                     {
-                        UpdateLabel(platform, index);
+                        UpdateLabel(platform, i);
                     }
                 }
                 index++;
@@ -44,12 +43,11 @@ namespace DChildEditor.Gameplay.Environment
             }
         }
 
-        private void LabelCompositeIllusionPlatform(CompositeIllusionPlatform compositeIllusionPlatform, ref int index)
+        private void LabelCompositeIllusionPlatform(CompositeIllusionPlatform compositeIllusionPlatform, int index)
         {
             foreach (var platform in compositeIllusionPlatform.list)
             {
                 UpdateLabel(platform, index);
-                index++;
             }
         }
     }
