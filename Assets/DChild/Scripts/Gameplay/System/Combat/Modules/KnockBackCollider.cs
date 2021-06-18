@@ -63,12 +63,12 @@ namespace DChild.Gameplay.Combat
                 if (target.TryGetComponent(out IKnockbackableAI ai))
                 {
                     ai.HandleKnockback(m_duration);
+                    if (target.TryGetComponent(out IsolatedPhysics2D physics))
+                    {
+                        Execute(physics, arg1.instance.position);
+                    }
                 }
 
-                if (target.TryGetComponent(out IsolatedPhysics2D physics))
-                {
-                    Execute(physics, arg1.instance.position);
-                }
             }
         }
 
@@ -87,7 +87,7 @@ namespace DChild.Gameplay.Combat
                     {
                         direction.y = 0;
                     }
-                    
+
                     physics.AddForce(direction.normalized * m_force, ForceMode2D.Impulse);
                     break;
                 case Type.ToOneDirection:
