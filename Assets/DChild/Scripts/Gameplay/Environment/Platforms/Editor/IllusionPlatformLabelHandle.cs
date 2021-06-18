@@ -27,7 +27,6 @@ namespace DChildEditor.Gameplay.Environment
                         UpdateLabel(platform, i);
                     }
                 }
-                index++;
             }
         }
 
