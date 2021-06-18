@@ -20,12 +20,15 @@ namespace DChild.Gameplay.Environment
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.TryGetComponentInParent(out Character character))
+            if (collision.CompareTag("Hitbox"))
             {
-                if (character.ID == m_minionID)
+                if (collision.gameObject.TryGetComponentInParent(out Character character))
                 {
-                    //collision.gameObject.GetComponentInParent<PoolableObject>().CallPoolRequest();
-                    collision.gameObject.GetComponentInParent<Damageable>().TakeDamage(999999, AttackType.True);
+                    if (character.ID == m_minionID)
+                    {
+                        //collision.gameObject.GetComponentInParent<PoolableObject>().CallPoolRequest();
+                        collision.gameObject.GetComponentInParent<Damageable>().TakeDamage(999999, AttackType.True);
+                    }
                 }
             }
         }
