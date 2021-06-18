@@ -10,8 +10,16 @@ namespace DChild.Gameplay.Environment
 
         private void OnCollisionStay2D(Collision2D collision)
         {
-            Debug.Log($"Sensors {collision.collider.name}");
             var playerObject = collision.collider.GetComponentInParent<PlayerControlledObject>();
+            if (playerObject != null)
+            {
+                CollisionDetected?.Invoke(this, EventActionArgs.Empty);
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            var playerObject = collision.GetComponentInParent<PlayerControlledObject>();
             if (playerObject != null)
             {
                 CollisionDetected?.Invoke(this, EventActionArgs.Empty);

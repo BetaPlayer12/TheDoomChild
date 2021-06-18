@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Cinematics.Cutscenes
 
         //private const string TRACKNAME_CUTSCENE = "SceneCamera";
 
-        private void Start()
+        private void Awake()
         {
             var timelineAsset = m_cutscene.playableAsset as TimelineAsset;
 
