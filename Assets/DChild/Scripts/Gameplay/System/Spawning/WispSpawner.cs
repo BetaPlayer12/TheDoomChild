@@ -31,6 +31,7 @@ namespace DChild.Gameplay
         private List<GameObject> m_spawnList;
 
         private float m_spawnTimer;
+
         public void ResetSpawner()
         {
             for (int i = m_spawnList.Count - 1; i >= 0; i--)

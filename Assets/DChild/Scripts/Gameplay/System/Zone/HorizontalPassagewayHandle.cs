@@ -72,7 +72,6 @@ namespace DChild.Gameplay.Environment
             rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
             CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
             collisionState.forcedCurrentGroundedness = false;
-            Debug.LogError("Exit Over");
         }
 
         private void OnPassagewayPostExit()
