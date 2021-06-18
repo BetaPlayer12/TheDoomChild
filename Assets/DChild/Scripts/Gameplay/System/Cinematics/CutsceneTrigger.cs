@@ -130,7 +130,6 @@ namespace DChild.Gameplay.Cinematics
                 {
                     if (binding.sourceObject is SpineAnimationStateTrack)
                     {
-                        var track = (TrackAsset)binding.sourceObject;
                         m_cutscene.SetGenericBinding(binding.sourceObject, animation);
                     }
                 }
