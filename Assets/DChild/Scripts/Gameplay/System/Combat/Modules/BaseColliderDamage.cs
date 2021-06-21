@@ -10,6 +10,6 @@ namespace DChild.Gameplay.Combat
     [AddComponentMenu("DChild/Gameplay/Combat/Base Collider Damage")]
     public class BaseColliderDamage : ColliderDamage
     {
-        protected override bool IsValidToHit(Collider2D collision) => true;
+        protected override bool IsValidColliderToHit(Collider2D collision) => true;
     }
 }

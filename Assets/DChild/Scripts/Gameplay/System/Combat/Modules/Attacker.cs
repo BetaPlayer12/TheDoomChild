@@ -33,6 +33,8 @@ namespace DChild.Gameplay.Combat
 
         public Invulnerability ignoreInvulnerability => m_info.ignoreInvulnerability;
 
+        public bool ignoresBlock => m_info.ignoresBlock;
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
@@ -52,7 +54,7 @@ namespace DChild.Gameplay.Combat
                 var position = transform.position;
                 using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
                 {
-                    cacheInfo.Value.Initialize(position, 0, 1, m_currentDamage.ToArray());
+                    cacheInfo.Value.Initialize(gameObject,position, 0, 1, m_info.ignoresBlock, m_currentDamage.ToArray());
                     using (Cache<AttackInfo> cacheResult = GameplaySystem.combatManager.ResolveConflict(cacheInfo.Value, targetInfo))
                     {
                         using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
@@ -114,6 +116,11 @@ namespace DChild.Gameplay.Combat
                 m_damageModifier = Mathf.Max(0, value);
                 ApplyDamageModification();
             }
+        }
+
+        public void SetIgnoresBlock(bool ignoresBlock)
+        {
+            m_info.ignoresBlock = ignoresBlock;
         }
 
         private void ApplyDamageModification()

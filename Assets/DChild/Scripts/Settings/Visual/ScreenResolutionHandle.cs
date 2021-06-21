@@ -37,7 +37,8 @@ namespace DChild.Configurations.Visuals
         public void Apply()
         {
             Screen.fullScreen = m_fullScreen;
-            Screen.SetResolution(m_currentResolution.width, m_currentResolution.height, Screen.fullScreen);
+            Screen.fullScreenMode = m_fullScreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
+            Screen.SetResolution(m_currentResolution.width, m_currentResolution.height, m_fullScreen);
         }
     }
 }

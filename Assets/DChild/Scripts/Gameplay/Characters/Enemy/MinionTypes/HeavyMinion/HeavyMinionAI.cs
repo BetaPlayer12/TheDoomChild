@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/HeavyMinion")]
-    public class HeavyMinionAI : CombatAIBrain<HeavyMinionAI.Info>, IResetableAIBrain, IBattleZoneAIBrain
+    public class HeavyMinionAI : CombatAIBrain<HeavyMinionAI.Info>, IResetableAIBrain, IBattleZoneAIBrain, IKnockbackableAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -598,6 +598,32 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnBecomePassive()
         {
             ResetAI();
+        }
+
+        public void HandleKnockback(float resumeAIDelay)
+        {
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            {
+                StopAllCoroutines();
+                m_stateHandle.Wait(State.ReevaluateSituation);
+                StartCoroutine(KnockbackRoutine(resumeAIDelay));
+            }
+        }
+
+        private IEnumerator KnockbackRoutine(float timer)
+        {
+            //enabled = false;
+            //m_flinchHandle.m_autoFlinch = false;
+            m_animation.DisableRootMotion();
+            //m_flinchHandle.enabled = false;
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(timer);
+            //enabled = true;
+            //m_flinchHandle.enabled = true;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
         }
     }
 }

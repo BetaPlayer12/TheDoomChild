@@ -205,6 +205,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_idle?.Cancel();
                     m_movement?.Cancel();
                 }
+
+                GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
             }
             else
             {
@@ -234,6 +236,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_shadowMorph?.Cancel();
                 }
+
+                m_devilWings?.Cancel();
             }
         }
 
@@ -342,7 +346,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_ledgeGrab?.IsDoable() ?? false)
                     {
-                        m_ledgeGrab?.Execute();
+                        if (m_state.isAttacking == false)
+                        {
+                            m_ledgeGrab?.Execute();
+                        }
                     }
                 }
 
@@ -552,14 +559,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #region MidAir Attacks
                     if (m_input.earthShakerPressed)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.EarthShaker))
+                        if (m_state.isInShadowMode == false)
                         {
-                            PrepareForMidairAttack();
+                            if (m_skills.IsModuleActive(PrimarySkill.EarthShaker))
+                            {
+                                PrepareForMidairAttack();
 
-                            m_earthShaker?.StartExecution();
+                                m_earthShaker?.StartExecution();
+                            }
+
+                            return;
                         }
-
-                        return;
                     }
                     else if (m_input.slashPressed)
                     {
@@ -668,20 +678,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 else
                 {
-                    m_movement.Move(m_input.horizontalInput, true);
+                    if (m_state.isInShadowMode == false)
+                    {
+                        m_movement.Move(m_input.horizontalInput, true);
+                    }
+
                     if (m_input.horizontalInput != 0)
                     {
                         if (m_state.isHighJumping == false && m_state.isLevitating == false)
                         {
                             if (m_state.isInShadowMode == false)
                             {
-                                if (m_wallStick?.IsHeightRequirementAchieved() ?? false)
+                                if (m_skills.IsModuleActive(PrimarySkill.WallMovement))
                                 {
-                                    if (m_wallStick?.IsThereAWall() ?? false)
+                                    if (m_wallStick?.IsHeightRequirementAchieved() ?? false)
                                     {
-                                        m_dash?.Reset();
-                                        m_extraJump?.Reset();
-                                        m_wallStick?.Execute();
+                                        if (m_wallStick?.IsThereAWall() ?? false)
+                                        {
+                                            m_dash?.Reset();
+                                            m_extraJump?.Reset();
+                                            m_wallStick?.Execute();
+                                        }
                                     }
                                 }
                             }
@@ -824,6 +841,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_groundedness?.ChangeValue(false);
                     m_groundJump?.Execute();
                 }
+
+                if (m_state.canAttack)
+                {
+                    if (m_input.slashPressed)
+                    {
+                        m_activeDash?.Cancel();
+
+                        if (m_input.verticalInput > 0)
+                        {
+                            PrepareForGroundAttack();
+                            m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
+                            return;
+                        }
+                        else
+                        {
+                            PrepareForGroundAttack();
+                            m_slashCombo.Execute();
+                            return;
+                        }
+                    }
+                }
             }
             else if (m_state.isGrabbing)
             {
@@ -894,16 +932,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_input.slashHeld)
                     {
-                        if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
+                        if (m_state.isInShadowMode == false)
                         {
-                            PrepareForGroundAttack();
-                            m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
+                            if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
+                            {
+                                PrepareForGroundAttack();
+                                m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
 
-                            //Start SwordThrust
-                            m_swordThrust?.StartCharge();
+                                //Start SwordThrust
+                                m_swordThrust?.StartCharge();
+                            }
+
+                            return;
                         }
-
-                        return;
                     }
                     else if (m_input.whipPressed)
                     {
@@ -946,22 +987,25 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_input.shadowMorphPressed)
                 {
-                    m_idle?.Cancel();
-                    m_movement?.Cancel();
-                    m_objectManipulation?.Cancel();
-
-                    if (m_state.isInShadowMode)
+                    if (m_skills.IsModuleActive(PrimarySkill.ShadowMorph))
                     {
-                        m_shadowMorph.Cancel();
-                        m_shadowGaugeRegen?.Enable(true);
-                    }
-                    else
-                    {
-                        m_shadowGaugeRegen?.Enable(false);
-                        m_shadowMorph.Execute();
-                    }
+                        m_idle?.Cancel();
+                        m_movement?.Cancel();
+                        m_objectManipulation?.Cancel();
 
-                    return;
+                        if (m_state.isInShadowMode)
+                        {
+                            m_shadowMorph.Cancel();
+                            m_shadowGaugeRegen?.Enable(true);
+                        }
+                        else
+                        {
+                            m_shadowGaugeRegen?.Enable(false);
+                            m_shadowMorph.Execute();
+                        }
+
+                        return;
+                    }
                 }
 
                 if (m_input.grabPressed || m_input.grabHeld)
@@ -985,15 +1029,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     if (m_state.isInShadowMode == false)
                     {
-                        if (m_state.isInShadowMode == false)
+                        if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
                         {
-                            if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
-                            {
-                                m_idle?.Cancel();
-                                m_movement?.Cancel();
-                                m_objectManipulation?.Cancel();
-                                ExecuteDash();
-                            }
+                            m_idle?.Cancel();
+                            m_movement?.Cancel();
+                            m_objectManipulation?.Cancel();
+                            ExecuteDash();
                         }
                     }
                 }
@@ -1108,10 +1149,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void ExecuteDash()
         {
-            if (m_shadowDash?.HaveEnoughSourceForExecution() ?? false)
+            if (m_skills.IsModuleActive(PrimarySkill.ShadowDash))
             {
-                m_activeDash = m_shadowDash;
-                m_shadowDash.ConsumeSource();
+                if (m_shadowDash?.HaveEnoughSourceForExecution() ?? false)
+                {
+                    m_activeDash = m_shadowDash;
+                    m_shadowDash.ConsumeSource();
+                }
+                else
+                {
+                    m_activeDash = m_dash;
+                }
             }
             else
             {
@@ -1124,10 +1172,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void ExecuteSlide()
         {
-            if (m_shadowSlide?.HaveEnoughSourceForExecution() ?? false)
+            if (m_skills.IsModuleActive(PrimarySkill.ShadowSlide))
             {
-                m_activeSlide = m_shadowSlide;
-                m_shadowSlide.ConsumeSource();
+                if (m_shadowSlide?.HaveEnoughSourceForExecution() ?? false)
+                {
+                    m_activeSlide = m_shadowSlide;
+                    m_shadowSlide.ConsumeSource();
+                }
+                else
+                {
+                    m_activeSlide = m_slide;
+                }
             }
             else
             {

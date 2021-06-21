@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private bool m_hasPlayerOnlyCheck;
 
-        protected override bool IsValidToHit(Collider2D collision)
+        protected override bool IsValidColliderToHit(Collider2D collision)
         {
             var mask = m_hasPlayerOnlyCheck ? LayerMask.GetMask("Environment", "PlayerOnly") : LayerMask.GetMask("Environment");
 

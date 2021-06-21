@@ -85,6 +85,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Leap Attack Values")]
             private float m_leapVelocity;
             public float leapVelocity => m_leapVelocity;
+            [SerializeField, MinValue(0), TabGroup("Leap Attack Values")]
+            private float m_leapTime;
+            public float leapTime => m_leapTime;
             [SerializeField, TabGroup("Leap Attack Values")]
             private float m_transitionStart;
             public float transitionStart => m_transitionStart;
@@ -288,6 +291,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Chain")]
         private BoxCollider2D m_chainHurtBox;
 
+        //private bool m_hasPhaseChanged;
         private int m_currentPhaseIndex;
         private float m_attackCount;
         private float[] m_patternCount;
@@ -306,16 +310,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            m_stateHandle.OverrideState(State.Phasing);
+            //if (!m_hasPhaseChanged)
+            //{
+            //}
+            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
             StopAllCoroutines();
-            m_animation.DisableRootMotion();
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_wallPosPoint.SetParent(m_hitbox.transform);
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
             m_wallPosPoint.gameObject.SetActive(false);
             m_chainHurtBox.gameObject.SetActive(false);
             m_stickToWall = false;
-            m_animation.SetEmptyAnimation(0, 0);
+            m_stateHandle.OverrideState(State.Phasing);
+            //m_hasPhaseChanged = true;
             m_phaseHandle.ApplyChange();
+            m_animation.DisableRootMotion();
+            m_animation.SetEmptyAnimation(0, 0);
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
@@ -364,9 +374,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_hitbox.SetInvulnerability(Invulnerability.None);
-            m_animation.SetAnimation(0, m_info.roarAnimation, false);
-            yield return new WaitForSeconds(3.9f);
+            //m_hitbox.SetInvulnerability(Invulnerability.None);
+            m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
+            //yield return new WaitForSeconds(3.9f);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
+            //m_hasPhaseChanged = false;
             m_hitbox.SetInvulnerability(Invulnerability.None);
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
             StartCoroutine(LeapAttackRoutine(6));
@@ -377,6 +389,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.shoulderBashAnimation, false).MixDuration = 0;
+            //yield return new WaitForSeconds(0.5f);
+            //m_character.physics.SetVelocity(m_info.shoulderBashVelocity.x * transform.localScale.x, 0);
+            //yield return new WaitForSeconds(0.15f);
+            //m_movement.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.shoulderBashAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
             DecidedOnAttack(false);
@@ -479,20 +495,34 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChainFistPunchRoutine()
         {
-            m_animation.SetAnimation(0, m_info.chainFistPunchAttack.animation, false);
+            var attackAnim = ChoosePunchAnimation(); 
+            m_animation.SetAnimation(0, attackAnim, false);
             yield return new WaitForSeconds(0.65f);
-            m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainFistPunchAttack.animation);
+            m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
+            yield return new WaitForSeconds(0.5f);
+            m_movement.Stop();
+            yield return new WaitForAnimationComplete(m_animation.animationState, attackAnim);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             if (!IsFacingTarget())
             {
                 CustomTurn();
             }
-            m_animation.SetAnimation(0, m_info.chainFistPunchUpperAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainFistPunchUpperAnimation);
+            attackAnim = ChoosePunchAnimation();
+            m_animation.SetAnimation(0, attackAnim, false);
+            yield return new WaitForSeconds(0.65f);
+            m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
+            yield return new WaitForSeconds(0.5f);
+            m_movement.Stop();
+            yield return new WaitForAnimationComplete(m_animation.animationState, attackAnim);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             DecidedOnAttack(false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        private string ChoosePunchAnimation()
+        {
+            return m_targetInfo.position.y > transform.position.y + 10 /*+ 5f*/ ? m_info.chainFistPunchUpperAnimation : m_info.chainFistPunchAttack.animation; ;
         }
 
         private IEnumerator LightningStompRoutine()
@@ -517,23 +547,40 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             for (int i = 0; i < repeats; i++)
             {
-                m_animation.SetAnimation(0, i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation, false).AnimationStart = i == 0 ? 0 : m_info.transitionStart;
-                m_animation.animationState.GetCurrent(0).MixDuration = 0;
-                while (m_currentLeapDuration < .65f)
-                {
-                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, UnityEngine.Random.Range(m_info.leapVelocity * .1f, m_info.leapVelocity));
-                    m_currentLeapDuration += Time.deltaTime;
-                    yield return null;
-                }
-                m_currentLeapDuration = 0;
-                m_movement.Stop();
-                yield return new WaitForAnimationComplete(m_animation.animationState, i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation);
-                if (i < repeats-1)
+                if (/*i < repeats-1*/!IsFacingTarget())
                 {
                     m_animation.SetAnimation(0, m_info.leapTransitionAnimation, false).MixDuration = 0;
                     yield return new WaitForSeconds(m_info.transitionStart);
                     CustomTurn();
                 }
+                else
+                {
+                    m_animation.SetEmptyAnimation(0, 0);
+                }
+                var leapAnim = i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation;
+                m_animation.SetAnimation(0, leapAnim, false).AnimationStart = i == 0 ? 0 : m_info.transitionStart;
+                m_animation.animationState.GetCurrent(0).MixDuration = 0;
+                //while (m_currentLeapDuration < .65f)
+                //{
+                //    m_movement.MoveTowards(Vector2.one * transform.localScale.x, UnityEngine.Random.Range(m_info.leapVelocity * .1f, m_info.leapVelocity));
+                //    m_currentLeapDuration += Time.deltaTime;
+                //    yield return null;
+                //}
+                var target = new Vector2(m_targetInfo.position.x - (20 * transform.localScale.x), m_targetInfo.position.y);
+                var targetDistance = Vector2.Distance(target, transform.position);
+                var velocity = targetDistance / m_info.leapTime;
+                float time = 0;
+                float animTime = 1 / (m_info.leapTime / 0.75f);
+                m_animation.animationState.TimeScale = animTime;
+                while (time < m_info.leapTime)
+                {
+                    m_character.physics.SetVelocity(velocity * transform.localScale.x, 0);
+                    time += Time.deltaTime;
+                    yield return null;
+                }
+                m_currentLeapDuration = 0;
+                m_movement.Stop();
+                yield return new WaitForAnimationComplete(m_animation.animationState, leapAnim);
             }
             m_animation.SetAnimation(0, m_info.leapAttackEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAttackEndAnimation);
@@ -891,11 +938,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
+            //if (!m_hasPhaseChanged && m_stateHandle.currentState != State.Phasing)
+            //{
+            //}
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Intro:
                     if (IsFacingTarget())

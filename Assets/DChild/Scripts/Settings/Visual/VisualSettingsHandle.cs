@@ -55,6 +55,7 @@ namespace DChild.Configurations
 
             set
             {
+                Debug.LogError($"Set Fullscreen: {value}");
                 m_configuration.visualConfiguration.fullscreen = value;
                 m_screenResolution.SetFullscreen(value);
                 m_screenResolution.Apply();
@@ -110,6 +111,8 @@ namespace DChild.Configurations
             m_screenResolution.SetResolution(visualConfiguration.resolutionIndex);
             m_screenResolution.SetFullscreen(visualConfiguration.fullscreen);
             m_screenResolution.Apply();
+
+
             m_screenLighting.brightness = visualConfiguration.brightness;
             m_screenLighting.contrast = visualConfiguration.contrast;
             QualitySettings.vSyncCount = visualConfiguration.vsync ? 1 : 0;

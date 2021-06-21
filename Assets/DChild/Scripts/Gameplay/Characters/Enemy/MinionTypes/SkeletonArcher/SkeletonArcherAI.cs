@@ -334,8 +334,10 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 wat = m_projectilePoint.transform.position;
             RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
             var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+#if UNITY_EDITOR
             Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer)); 
+#endif
             return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 

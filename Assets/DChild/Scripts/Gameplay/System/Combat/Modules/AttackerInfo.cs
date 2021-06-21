@@ -14,6 +14,7 @@ namespace DChild.Gameplay.Combat
             critChance = 0;
             critDamageModifier = 1;
             ignoreInvulnerability = Invulnerability.None;
+            ignoresBlock = false;
         }
 
         public List<AttackDamage> damage;
@@ -22,6 +23,7 @@ namespace DChild.Gameplay.Combat
         [MinValue(0), ShowIf("CanCrit")]
         public int critDamageModifier = 1;
         public Invulnerability ignoreInvulnerability;
+        public bool ignoresBlock;
 
         public void Copy(AttackerInfo source)
         {
@@ -30,6 +32,7 @@ namespace DChild.Gameplay.Combat
             critChance = source.critChance;
             critDamageModifier = source.critDamageModifier;
             ignoreInvulnerability = source.ignoreInvulnerability;
+            ignoresBlock = source.ignoresBlock;
         }
 
 #if UNITY_EDITOR

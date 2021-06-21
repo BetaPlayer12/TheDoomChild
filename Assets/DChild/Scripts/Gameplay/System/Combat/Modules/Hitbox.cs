@@ -24,10 +24,14 @@ namespace DChild.Gameplay.Combat
         private Invulnerability m_invulnerabilityLevel;
         [SerializeField, HideIf("@m_invulnerabilityLevel == Invulnerability.MAX"), Range(0, 0.99f)]
         private float m_damageReduction;
+        [SerializeField]
+        private bool m_canBlockDamage;
 
         public IDamageable damageable => m_damageable;
         public BodyDefense defense => new BodyDefense(m_invulnerabilityLevel, m_damageReduction);
         public Invulnerability invulnerabilityLevel => m_invulnerabilityLevel;
+
+        public bool canBlockDamage => m_canBlockDamage;
 
         public void Enable()
         {
@@ -48,10 +52,9 @@ namespace DChild.Gameplay.Combat
 
         public virtual bool CanBeDamageBy(params Collider2D[] colliders) => true;
 
-        public void SetInvulnerability(Invulnerability value)
-        {
-            m_invulnerabilityLevel = value;
-        }
+        public void SetInvulnerability(Invulnerability value) => m_invulnerabilityLevel = value;
+
+        public void SetCanBlockDamageState(bool canBlockDamage) => m_canBlockDamage = canBlockDamage;
 
         private void Awake()
         {

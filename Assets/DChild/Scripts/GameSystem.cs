@@ -122,7 +122,6 @@ namespace DChild
 
                 m_instance = this;
                 settings = GetComponentInChildren<GameSettings>();
-                settings.Initialize();
                 m_confirmationHander = GetComponentInChildren<ConfirmationHandler>();
                 m_zoneLoader = GetComponentInChildren<SceneLoader>();
                 dataManager = GetComponentInChildren<GameDataManager>();
@@ -133,6 +132,7 @@ namespace DChild
 
         private void Start()
         {
+            settings.Initialize();
             m_introHandler.Execute();
         }
 

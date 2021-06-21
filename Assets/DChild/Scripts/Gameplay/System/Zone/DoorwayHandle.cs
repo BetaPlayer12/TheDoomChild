@@ -41,7 +41,6 @@ namespace DChild.Gameplay.Environment
                     {
                         character.SetFacing(m_exitFacing);
                     }
-
                     OnDoorwayExit(character);
                     break;
                 case TransitionType.PostExit:
