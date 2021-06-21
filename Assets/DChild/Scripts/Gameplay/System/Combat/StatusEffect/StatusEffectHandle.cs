@@ -1,6 +1,7 @@
 ﻿using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusAilment
 {
@@ -32,15 +33,26 @@ namespace DChild.Gameplay.Combat.StatusAilment
         public float duration { get => m_duration; set => m_duration = value; }
         public event EventAction<StatusEffectReferenceEventArgs> DurationExpired;
         public StatusEffectType type => m_type;
+        private float m_baseDuration;
 
-        public StatusEffectHandle(StatusEffectType m_type, float m_duration, IStatusEffectModule[] m_modules, IStatusEffectUpdatableModule[] m_updatableModules)
+        public StatusEffectHandle(StatusEffectType m_type, float m_duration,float m_baseDuration, IStatusEffectModule[] m_modules, IStatusEffectUpdatableModule[] m_updatableModules)
         {
             this.m_type = m_type;
             this.m_duration = m_duration;
+            this.m_baseDuration = m_duration;
             this.m_modules = m_modules;
             this.m_updatableModules = m_updatableModules;
             m_hasUpdatableModules = m_updatableModules != null || m_updatableModules.Length > 0;
             m_moduleSize = m_modules?.Length ?? 0;
+        }
+
+        public void ResetDuration()
+        {
+
+            m_duration = m_baseDuration;
+           
+            Debug.Log($"{m_duration}");
+
         }
 
 
