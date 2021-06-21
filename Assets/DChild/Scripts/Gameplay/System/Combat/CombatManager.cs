@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Combat
         List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer, Invulnerability ignoresLevel);
         void Damage(IDamageable damageable, AttackDamage damage);
         void Heal(IHealable healable, int health);
-       
+        
     }
 
     public class CombatManager : SerializedMonoBehaviour, ICombatManager, IGameplaySystemModule, IGameplayInitializable
@@ -35,6 +35,7 @@ namespace DChild.Gameplay.Combat
         private AOETargetHandler m_aOETargetHandler;
         private PlayerCombatHandler m_playerCombatHandler;
         private ResistanceHandler m_resistanceHandler;
+       
 
         private List<AttackType> m_damageList;
         private IDamageable m_cacheTarget;
@@ -74,12 +75,34 @@ namespace DChild.Gameplay.Combat
 
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)
         {
-            m_statusInflictionHandle.Inflict(reciever, statusEffect);
+                       
+                m_statusInflictionHandle.Inflict(reciever, statusEffect);
+         
+            
         }
 
         public void Inflict(StatusEffectReciever reciever, params StatusEffectChance[] statusEffectChance)
         {
+
+            //for (int i = 0; i< statusEffectChance.Length; i++) 
+            //{
+                
+            //    Debug.Log("Effect reset");
+            //    if (reciever.IsInflictedWith(statusEffectChance[i].type))
+            //    {
+
+            //        reciever.ResetDuration(statusEffectChance[i].type);
+
+
+            //    }
+            //    else 
+            //    {
+            //        m_statusInflictionHandle.Inflict(reciever, statusEffectChance);
+            //    }
+            //}
             m_statusInflictionHandle.Inflict(reciever, statusEffectChance);
+            Debug.Log(statusEffectChance);
+
         }
 
         public void Damage(IDamageable damageable, AttackDamage attackDamage)
