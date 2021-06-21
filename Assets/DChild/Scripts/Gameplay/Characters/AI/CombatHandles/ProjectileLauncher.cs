@@ -14,12 +14,9 @@ namespace DChild.Gameplay.Characters
         private GameObject m_projectile;
         [SerializeField, MinValue(0.001f)]
         private float m_speed;
-        [SerializeField]
-        private bool m_isGroundProjectile;
 
         public GameObject projectile => m_projectile;
         public float speed => m_speed;
-        public bool isGroundProjectile => m_isGroundProjectile;
     }
 
     [System.Serializable]
@@ -76,44 +73,16 @@ namespace DChild.Gameplay.Characters
         {
             var spawnDirection = m_spawnPoint.right;
             m_cacheProjectile =  m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, spawnDirection, m_projectileInfo.speed);
-            if (m_projectileInfo.isGroundProjectile)
-            {
-                RealignToGround(m_cacheProjectile, spawnDirection);
-            }
         }
 
         public void LaunchProjectile(Vector2 flightDirection)
         {
             m_cacheProjectile = m_handle.Launch(m_projectileInfo.projectile, m_spawnPoint.position, flightDirection, m_projectileInfo.speed);
-            if (m_projectileInfo.isGroundProjectile)
-            {
-                RealignToGround(m_cacheProjectile, flightDirection);
-            }
         }
 
         public void LaunchProjectile(Vector2 flightDirection, GameObject projectile)
         {
             m_cacheProjectile = m_handle.Launch(projectile, flightDirection, m_projectileInfo.speed);
-            if (m_projectileInfo.isGroundProjectile)
-            {
-                RealignToGround(m_cacheProjectile, flightDirection);
-            }
-        }
-
-        private void RealignToGround(GameObject projectile, Vector2 flightDirection)
-        {
-            if(flightDirection.x < 0)
-            {
-                var projectileTransform = projectile.transform;
-                var angle = projectileTransform.rotation.eulerAngles;
-                angle.z -= 180f;
-                projectileTransform.rotation = Quaternion.Euler(angle);
-
-                var scale = projectileTransform.localScale;
-                scale.x *= -1;
-                scale.y *= -1;
-                projectileTransform.localScale = scale;
-            }
         }
     }
 }
