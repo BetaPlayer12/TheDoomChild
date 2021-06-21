@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
 {
 
     [CreateAssetMenu(fileName = "StatusEffectData", menuName = "DChild/Gameplay/Combat/Inflictions/Status Effect")]
-    public class StatusEffect : SerializedScriptableObject
+    public class StatusEffectData : SerializedScriptableObject
     {
         [SerializeField, OnValueChanged("UpdateAssetName")]
         private StatusEffectType m_type;
@@ -27,14 +27,18 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public StatusEffectHandle CreateHandle()
         {
+            var baseDuration = m_duration;
             var duration = m_hasDuration ? m_duration : -1;
+            
             IStatusEffectUpdatableModule[] list = new IStatusEffectUpdatableModule[m_updatableModule.Length];
             for (int i = 0; i < list.Length; i++)
             {
                 list[i] = m_updatableModule[i].CreateCopy();
             }
-            return new StatusEffectHandle(m_type, duration, m_modules, list);
+            return new StatusEffectHandle(m_type, duration, baseDuration ,m_modules, list);
         }
+
+      
 
 #if UNITY_EDITOR
         private void ValidateUpdatbleModules()

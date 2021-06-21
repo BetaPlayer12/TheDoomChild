@@ -34,6 +34,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public event EventAction<StatusEffectRecieverEventArgs> StatusRecieved;
         public event EventAction<StatusEffectRecieverEventArgs> StatusEnd;
+        
 
         public void RecieveStatusEffect(StatusEffectHandle statusEffect)
         {
@@ -66,6 +67,16 @@ namespace DChild.Gameplay.Combat.StatusAilment
             }
         }
 
+        public void ResetDuration(StatusEffectType type)
+        {
+            if(Contains(type, out int index))
+            {
+                m_inflictedStatusEffects[index].ResetDuration();
+            }
+        }
+
+
+
         public void StopStatusEffect(StatusEffectType type)
         {
             if (Contains(type, out int index))
@@ -97,6 +108,8 @@ namespace DChild.Gameplay.Combat.StatusAilment
             index = -1;
             return false;
         }
+
+
 
         private void OnEffectEnd(object sender, StatusEffectReferenceEventArgs eventArgs)
         {
