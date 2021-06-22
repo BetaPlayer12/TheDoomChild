@@ -291,8 +291,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Chain")]
         private BoxCollider2D m_chainHurtBox;
 
-        private bool m_hasPhaseChanged;
-        private bool m_canPerformPhaseTransistion;
         private int m_currentPhaseIndex;
         private float m_attackCount;
         private float[] m_patternCount;
@@ -313,10 +311,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            if (!m_hasPhaseChanged)
-            {
-                StartCoroutine(SmartChangePhaseRoutine());
-            }
+            StopCurrentAttackRoutine();
+            SetAIToPhasing();
+            //StartCoroutine(SmartChangePhaseRoutine());
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs)
@@ -344,7 +341,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.ApplyQueuedState();
             }
-            m_canPerformPhaseTransistion = true;
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private void CustomTurn()
@@ -370,13 +367,13 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator SmartChangePhaseRoutine()
-        {
-            yield return new WaitWhile(() => m_canPerformPhaseTransistion == false);
-            StopCurrentAttackRoutine();
-            SetAIToPhasing();
-            yield return null;
-        }
+        //private IEnumerator SmartChangePhaseRoutine()
+        //{
+        //    yield return new WaitWhile(() => m_canPerformPhaseTransistion == false);
+        //    StopCurrentAttackRoutine();
+        //    SetAIToPhasing();
+        //    yield return null;
+        //}
 
         private void SetAIToPhasing()
         {
@@ -405,7 +402,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_hasPhaseChanged = true;
+            m_stateHandle.Wait(State.ReevaluateSituation);
             //m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
             //yield return new WaitForSeconds(3.9f);
@@ -413,13 +410,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.SetInvulnerability(Invulnerability.None);
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
             yield return StartCoroutine(LeapAttackRoutine(6));
-            m_hasPhaseChanged = false;
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
         #region Attacks
         private IEnumerator ShoulderBashRoutine()
         {
-            m_canPerformPhaseTransistion = false;
+            m_phaseHandle.allowPhaseChange = false;
 
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.shoulderBashAnimation, false).MixDuration = 0;
@@ -435,12 +432,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
 
-            m_canPerformPhaseTransistion = true;
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator ChainShockRoutine()
         {
-            m_canPerformPhaseTransistion = false;
+            m_phaseHandle.allowPhaseChange = false;
 
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = true;
             m_animation.SetAnimation(0, m_info.chainShockAttack.animation, false);
@@ -486,12 +483,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-            m_canPerformPhaseTransistion = true;
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator ShoulderBashHookRoutine()
         {
-            m_canPerformPhaseTransistion = false;
+            m_phaseHandle.allowPhaseChange = false;
 
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = true;
             m_wallPosPoint.position = WallPosition();
@@ -540,12 +537,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
 
-            m_canPerformPhaseTransistion = true;
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator ChainFistPunchRoutine()
         {
-            m_canPerformPhaseTransistion = false;
+            m_phaseHandle.allowPhaseChange = false;
 
             var attackAnim = ChoosePunchAnimation();
             m_animation.SetAnimation(0, attackAnim, false);
@@ -574,7 +571,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
 
-            m_canPerformPhaseTransistion = true;
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private string ChoosePunchAnimation()
@@ -584,7 +581,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator LightningStompRoutine()
         {
-            m_canPerformPhaseTransistion = false;
+            m_phaseHandle.allowPhaseChange = false;
 
             m_animation.SetAnimation(0, m_info.lightningStompAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStompAttack.animation);
@@ -594,7 +591,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
             yield return null;
 
-            m_canPerformPhaseTransistion = true;
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private void LaunchProjectile()
@@ -607,7 +604,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator LeapAttackRoutine(int repeats)
         {
-            m_canPerformPhaseTransistion = false;
+            m_phaseHandle.allowPhaseChange = false;
             for (int i = 0; i < repeats; i++)
             {
                 m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
@@ -655,7 +652,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_leapRoutine = null;
             m_stateHandle.OverrideState(State.Chasing);
-            m_canPerformPhaseTransistion = true;
+            m_phaseHandle.allowPhaseChange = true;
             yield return null;
         }
         #endregion
@@ -972,7 +969,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackRangeCache = new List<float>();
             AddToRangeCache(m_info.chainShockAttack.range, m_info.chainFistPunchAttack.range, m_info.lightningStompAttack.range, m_info.shoulderBashAttack.range, m_info.shoulderBashHookAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
-            m_canPerformPhaseTransistion = true;
         }
 
         private void PhaseFX()
@@ -1036,13 +1032,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Phasing:
-                    if (m_hasPhaseChanged == false)
-                    {
-                        StartCoroutine(ChangePhaseRoutine());
-                    }
+                    StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
-                    m_canPerformPhaseTransistion = false;
+                    m_phaseHandle.allowPhaseChange = false;
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_movement.Stop();
