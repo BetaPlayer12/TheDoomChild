@@ -120,7 +120,14 @@ namespace DChild.Serialization
             for (int i = 0; i < m_componentSerializers.Length; i++)
             {
                 m_cacheComponentSerializer = m_componentSerializers[i];
-                m_zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
+                try
+                {
+                    m_zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError($"Serialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.Message}", m_cacheComponentSerializer);
+                }
             }
             for (int i = 0; i < m_dynamicSerializers.Length; i++)
             {
@@ -136,7 +143,14 @@ namespace DChild.Serialization
             for (int i = 0; i < m_componentSerializers.Length; i++)
             {
                 m_cacheComponentSerializer = m_componentSerializers[i];
-                m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+                try
+                {
+                    m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Deserialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.Message}", m_cacheComponentSerializer);
+                }
             }
         }
 
@@ -156,7 +170,8 @@ namespace DChild.Serialization
                 }
                 catch (Exception e)
                 {
-                    throw new Exception($"Error Occured In {m_cacheComponentSerializer.gameObject.name} \n {e.Message}");
+                    Debug.LogError($"Deserialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.ToString()}", m_cacheComponentSerializer);
+                    //throw new Exception($"Error Occured In {m_cacheComponentSerializer.gameObject.name} \n {e.Message}");
                 }
                 yield return null;
             }
