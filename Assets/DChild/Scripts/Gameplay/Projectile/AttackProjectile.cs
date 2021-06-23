@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Projectiles
         {
             Collide();
         }
-      
+
         public override void ResetState()
         {
             base.ResetState();
@@ -52,7 +52,22 @@ namespace DChild.Gameplay.Projectiles
             {
                 var velocity = m_physics.velocity;
                 float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-                Debug.Log(angle);
+                if (m_data.isGroundProjectile)
+                {
+                    var velocityXSign = Mathf.Sign(velocity.x);
+                    var localScale = transform.localScale;
+                    var localScaleXSign = Mathf.Sign(localScale.x);
+                    if (velocityXSign != localScaleXSign)
+                    {
+                        localScale.x *= -1f;
+                        transform.localScale = localScale;
+                    }
+
+                    if (velocityXSign < 0)
+                    {
+                        angle += 180f; //To Align the rotation when flip
+                    }
+                }
                 transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             }
         }

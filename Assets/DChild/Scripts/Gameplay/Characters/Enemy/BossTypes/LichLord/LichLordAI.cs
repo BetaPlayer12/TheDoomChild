@@ -275,7 +275,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs)
+        {
+            if (m_stateHandle.currentState != State.Phasing)
+            {
+                m_stateHandle.OverrideState(State.Turning);
+            }
+        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {

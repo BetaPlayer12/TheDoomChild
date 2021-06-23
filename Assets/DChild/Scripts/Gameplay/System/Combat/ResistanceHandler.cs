@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Combat
                 damage.value = Mathf.FloorToInt(damage.value - (damage.value * resistanceFactor));
                 damageInfo.damage = damage;
                 damageInfo.isHeal = damage.value < 0;
+                info.damageList[i] = damageInfo;
             }
         }
 

@@ -46,7 +46,7 @@ namespace DChildEditor.Toolkit
 
 
             List<string> statusEffectNames = new List<string>();
-            AddGenericItemList<StatusEffect>("t:StatusEffect", (statusEffect) =>
+            AddGenericItemList<StatusEffectData>("t:StatusEffect", (statusEffect) =>
             {
                 var statusEffectName = statusEffect.name;
                 string result = " ";
