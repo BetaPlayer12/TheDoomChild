@@ -43,6 +43,12 @@ namespace DChild.Gameplay.Environment
             m_delayTimer = m_delay;
         }
 
+        public void RestartTimer()
+        {
+            ResetTimer();
+            StartTimer();
+        }
+
         public void SetTimerDelay(float timerValue)
         {
             m_delayTimer = timerValue;
