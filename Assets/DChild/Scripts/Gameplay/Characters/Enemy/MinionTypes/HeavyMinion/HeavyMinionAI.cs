@@ -25,6 +25,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private MovementInfo m_walk = new MovementInfo();
             public MovementInfo walk => m_walk;
+            [SerializeField, MinValue(0)]
+            private float m_patrolIdleTime;
+            public float patrolIdleTime => m_patrolIdleTime;
 
             //Attack Behaviours
             [SerializeField, TabGroup("Tackle")]
@@ -176,6 +179,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
+        private IEnumerator PatrolTurnRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            yield return new WaitForSeconds(m_info.patrolIdleTime);
+            m_turnHandle.Execute();
+            yield return null;
+        }
+
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -201,8 +212,22 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    StartCoroutine(PatienceRoutine());
                 //}
                 m_enablePatience = true;
+                if (Mathf.Abs((m_targetInfo.position.y - 3) - transform.position.y) > 3f && ShotBlocked() || !m_edgeSensor.isDetecting)
+                {
+                    m_currentPatience = m_info.patience;
+                }
                 //StartCoroutine(PatienceRoutine());
             }
+        }
+
+        private bool ShotBlocked()
+        {
+            Vector2 wat = transform.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -453,7 +478,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Patrol:
                     if (/*!m_wallSensor.isDetecting &&*/ m_groundSensor.isDetecting)
                     {
-                        m_turnState = State.ReevaluateSituation;
+                        m_turnState = State.Patrol;
                         m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.walk.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
@@ -468,7 +493,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute();
+                    if (m_turnState == State.Patrol)
+                    {
+                        StartCoroutine(PatrolTurnRoutine());
+                    }
+                    else
+                    {
+                        m_turnHandle.Execute();
+                    }
                     break;
 
                 case State.Attacking:
