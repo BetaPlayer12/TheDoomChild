@@ -752,6 +752,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
                     }
                 }
+                else
+                {
+                    m_attackRegistrator?.ResetHitCache();
+                }
             }
             else if (m_state.isSliding)
             {
