@@ -14,15 +14,6 @@ public class StatusEffectSpreaderHandler : MonoBehaviour
 
 
 
-    private StatusEffectData m_statusEffect;
-
-    private float m_inflictEffectChance = 100f;
-
-
-
-
-
-
 
     public void SetChanceToSpreadStatus(StatusEffectData statusEffect, float chance)
     {
