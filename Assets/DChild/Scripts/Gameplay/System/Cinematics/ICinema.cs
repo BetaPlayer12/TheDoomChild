@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Cinematics
 
         void SetCameraShake(float amplitude, float frequency);
 
-        void SetCameraShakeProfile(CameraShakeType shakeType);
+        void SetCameraShakeProfile(CameraShakeType shakeType,bool onNextShakeOnly = false);
     }
 
 }
