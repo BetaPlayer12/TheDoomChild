@@ -18,6 +18,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_sourceRequiredAmount;
         [SerializeField, MinValue(0)]
         private int m_sourceConsumptionRate;
+        [SerializeField]
+        private ParticleSystem m_shadowMorphFX;
         //HACK
         [SerializeField, SpineSkin(dataField = "m_skeletonData")]
         private string m_originalSkinName;
@@ -64,6 +66,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
+            m_shadowMorphFX.Play();
             m_damageable.SetInvulnerability(Invulnerability.MAX);
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
@@ -79,7 +82,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isInShadowMode = false;
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
-
+            m_shadowMorphFX.Stop(true);
             End?.Invoke(this, EventActionArgs.Empty);
         }
 
