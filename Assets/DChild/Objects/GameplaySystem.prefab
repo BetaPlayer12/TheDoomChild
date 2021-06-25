@@ -715,8 +715,8 @@ MonoBehaviour:
     - Name: m_list
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.StatusAilment.StatusEffectType,
-        Assembly-CSharp],[DChild.Gameplay.Combat.StatusAilment.StatusEffect, Assembly-CSharp]],
-        mscorlib
+        Assembly-CSharp],[DChild.Gameplay.Combat.StatusAilment.StatusEffectData,
+        Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
       Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Combat.StatusAilment.StatusEffectType,
@@ -888,18 +888,23 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 11400000, guid: fe22f8d4a9e7dbc4aa30e8f6f6738e64, type: 2}
+    - {fileID: 11400000, guid: c1fb42a4bab731a4f9e0b8ccc861a4f0, type: 2}
+    - {fileID: 11400000, guid: dfa74ab838e3fa4478a24f633dc06c70, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: m_cameraShakeHandle
+      Entry: 7
+      Data: 0|DChild.Gameplay.Cinematics.CameraShakeHandle, Assembly-CSharp
     - Name: m_noiseSettings
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Cinematics.CameraShakeType,
-        Assembly-CSharp],[Cinemachine.NoiseSettings, Cinemachine]], mscorlib
+      Data: 1|UnityEngine.Rendering.SerializedDictionary`2[[DChild.Gameplay.Cinematics.CameraShakeType,
+        Assembly-CSharp],[Cinemachine.NoiseSettings, Cinemachine]], Unity.RenderPipelines.Core.Runtime
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Cinematics.CameraShakeType,
+      Data: 2|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Cinematics.CameraShakeType,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
@@ -933,7 +938,7 @@ MonoBehaviour:
       Data: 1
     - Name: $v
       Entry: 10
-      Data: 0
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -945,7 +950,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 10
-      Data: 0
+      Data: 2
     - Name: 
       Entry: 8
       Data: 
@@ -955,9 +960,14 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_currentShakeType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
   m_mainCamera: {fileID: 0}
   m_trackingTarget: {fileID: 0}
-  m_currentShakeType: 0
 --- !u!114 &5459732075996280386
 MonoBehaviour:
   m_ObjectHideFlags: 0

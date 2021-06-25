@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,14 @@ namespace DChild.Gameplay.Systems
             {
                 for (int j = 0; j < m_shadowColliders.Length; j++)
                 {
-                    Physics2D.IgnoreCollision(m_playerColliders[i], m_shadowColliders[j], enableCollisions);
+                    try
+                    {
+                        Physics2D.IgnoreCollision(m_playerColliders[i], m_shadowColliders[j], enableCollisions);
+                    }
+                    catch(Exception e)
+                    {
+                        Debug.LogError($"Shadow Environment Error Null Reference \n {e.Message}", this);
+                    }
                 }
             }
         }
