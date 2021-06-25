@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c39b4c90d0216f049a8fd894a5f04af3, type: 3}
-  m_Name: HeavyMinionAIData
+  m_Name: ScorchlingAIData
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 632edbf830efecb45a24a1702dcf8628, type: 2}
+    - {fileID: 11400000, guid: 8fe5675b04c956b44b306c57a597ff8f, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -24,55 +24,58 @@ MonoBehaviour:
     SerializationNodes:
     - Name: m_info
       Entry: 7
-      Data: 0|DChild.Gameplay.Characters.Enemies.HeavyMinionAI+Info, Assembly-CSharp
+      Data: 0|DChild.Gameplay.Characters.Enemies.LightMinionAI+Info, Assembly-CSharp
     - Name: m_skeletonDataAsset
       Entry: 10
       Data: 0
     - Name: m_walk
       Entry: 7
-      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.HeavyMinionAI+Info,
+      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.LightMinionAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Heavy_Walk_Animation
+      Data: WALK CYCLE ANIMATION- FINAL
     - Name: m_speed
       Entry: 4
-      Data: 7
+      Data: 5
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attackTackle
+    - Name: m_run
       Entry: 7
-      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.HeavyMinionAI+Info,
+      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.LightMinionAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Heavy_  Attack After Charge_New
-    - Name: m_range
+      Data: RUN CYCLE ANIMATION - FINAL
+    - Name: m_speed
       Entry: 4
-      Data: 50
+      Data: 15
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attackTackleAnticipationAnimation
-      Entry: 1
-      Data: Heavy_Anticipation Before Charge_Anim
-    - Name: m_attackTackleChargeAnimation
-      Entry: 1
-      Data: Heavy_Charge Loop_Animation
-    - Name: m_attackMelee
+    - Name: m_attackStart
       Entry: 7
-      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.HeavyMinionAI+Info,
+      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.LightMinionAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Heavy_Melee Attack_Animation
+      Data: BEFORE ATTACK-ANTICIPATION ANIMATION
     - Name: m_range
       Entry: 4
-      Data: 10
+      Data: 35
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_attackLoop
+      Entry: 1
+      Data: ATTACK ANIMATION - looping spin
+    - Name: m_attackEnd
+      Entry: 1
+      Data: AFTER ATTACK ANIMATION
+    - Name: m_attackAnticipation
+      Entry: 1
+      Data: BEFORE ATTACK-ANTICIPATION ANIMATION
     - Name: m_attackCD
       Entry: 4
       Data: 1
@@ -84,19 +87,19 @@ MonoBehaviour:
       Data: 10
     - Name: m_idleAnimation
       Entry: 1
-      Data: Heavy_Idle_Animation
+      Data: IDLE ANIMATION - FINAL
     - Name: m_flinchAnimation
       Entry: 1
-      Data: Heavy_Flinch_Animation
+      Data: FLINCH ANIMATION - FINAL
     - Name: m_deathAnimation
       Entry: 1
-      Data: Heavy_Death_Animation
+      Data: DEATH ANIMATION FINAL
     - Name: m_detectAnimation
       Entry: 1
-      Data: player detect animation_varation 1
-    - Name: m_detectFXEvent
-      Entry: 1
-      Data: HEAD_FIRE_FX_GROW_BIG
+      Data: PLAYER_DETECT_ANIMATION2
+    - Name: m_trailEvent
+      Entry: 6
+      Data: 
     - Name: 
       Entry: 8
       Data: 
