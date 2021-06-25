@@ -111,6 +111,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_boundBoxGO;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private CircleCollider2D m_explosionBB;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -143,6 +145,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleSystemRenderer m_renderer;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_detectionFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleSystem m_explosionFX;
 
         private MaterialPropertyBlock m_propertyBlock;
 
@@ -232,6 +236,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            m_currentAttack = Attack.AttackTackle;
+            m_currentAttackRange = m_info.attackTackle.range;
+            m_attackDecider.hasDecidedOnAttack = true;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -355,6 +362,22 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.attackTackle.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackle.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator GroundSmashRoutine()
+        {
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.attackMelee.animation, false);
+            yield return new WaitForSeconds(1.25f);
+            m_explosionBB.enabled = true;
+            m_explosionFX.Play();
+            yield return new WaitForSeconds(0.15f);
+            m_explosionBB.enabled = false;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMelee.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -519,8 +542,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                     StartCoroutine(AttackTackleRoutine());
                                     break;
                                 case Attack.AttackMelee:
-                                    m_animation.EnableRootMotion(true, false);
-                                    m_attackHandle.ExecuteAttack(m_info.attackMelee.animation, m_info.idleAnimation);
+                                    //m_animation.EnableRootMotion(true, false);
+                                    //m_attackHandle.ExecuteAttack(m_info.attackMelee.animation, m_info.idleAnimation);
+                                    StartCoroutine(GroundSmashRoutine());
                                     break;
                             }
                             m_attackDecider.hasDecidedOnAttack = false;
@@ -574,12 +598,18 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     {
                         m_flinchHandle.m_autoFlinch = false;
-                        m_attackDecider.hasDecidedOnAttack = false;
-                        ChooseAttack();
+                        //m_attackDecider.hasDecidedOnAttack = false;
+                        //ChooseAttack();
                         if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                         {
                             m_movement.Stop();
                             m_stateHandle.SetState(State.Attacking);
+                        }
+                        else
+                        {
+                            m_currentAttack = Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.attackMelee.range + 15 ? Attack.AttackMelee : Attack.AttackTackle;
+                            m_currentAttackRange = m_currentAttack == Attack.AttackMelee ? m_info.attackMelee.range : m_info.attackTackle.range;
+                            m_attackDecider.hasDecidedOnAttack = true;
                         }
                     }
                     break;
