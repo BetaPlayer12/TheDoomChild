@@ -15,7 +15,7 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
     [SerializeField, MinValue(0)]
     private int m_baseSourceRequiredAmount;
     [SerializeField]
-    private ParticleSystem m_tempFX;
+    private ParticleSystem m_shadowFX;
 
     private ICappedStat m_source;
     private IPlayerModifer m_modifier;
@@ -47,7 +47,7 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
         GameplaySystem.world.SetShadowColliders(false);
         m_damageable.SetInvulnerability(Invulnerability.None);
         m_wasUsed = false;
-        m_tempFX?.Stop(true);
+        m_shadowFX?.Stop(true);
         m_animator.SetBool(m_animationParameter, false);
         m_skeletonGhost.enabled = false;
 
@@ -75,7 +75,7 @@ public class ShadowSlide : MonoBehaviour, ISlide, IComplexCharacterModule
             GameplaySystem.world.SetShadowColliders(true);
             m_damageable.SetInvulnerability(Invulnerability.MAX);
             m_wasUsed = true;
-            m_tempFX?.Play(true);
+            m_shadowFX?.Play(true);
             m_animator.SetBool(m_animationParameter, true);
             //m_skeletonGhost.enabled = true;
             ExecuteModule?.Invoke(this, EventActionArgs.Empty);
