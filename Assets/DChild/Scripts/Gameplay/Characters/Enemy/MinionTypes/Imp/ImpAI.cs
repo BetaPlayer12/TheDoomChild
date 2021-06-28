@@ -522,14 +522,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.patrol.animation)
-                    {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.DisableRootMotion();
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
-                    }
+                    //if (m_animation.GetCurrentAnimation(0).ToString() == m_info.patrol.animation)
+                    //{
+                    //}
+                    m_turnState = State.ReevaluateSituation;
+                    m_animation.DisableRootMotion();
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;
 
                 case State.Turning:

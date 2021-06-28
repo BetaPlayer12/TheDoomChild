@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!60 &8829896865580703136
+--- !u!60 &6802942994917714652
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_bodyCollider: {fileID: 1635462451849762085}
   m_hitbox: {fileID: 1201186393789584935}
   m_turnHandle: {fileID: 3306036456206950875}
-  m_agent: {fileID: 5275482672159537203}
+  m_agent: {fileID: 13092189541356049}
   m_attackHandle:
     m_animation: {fileID: 4696892891230615139}
   m_patrolHandle: {fileID: 6966519866598012377}
@@ -355,10 +355,11 @@ GameObject:
   - component: {fileID: 5006318407293393079}
   - component: {fileID: 6336166094889012185}
   - component: {fileID: 5558192967729598246}
-  - component: {fileID: 5275482672159537203}
   - component: {fileID: 2680653171425918122}
   - component: {fileID: 8282578796243723083}
   - component: {fileID: 3306036456206950875}
+  - component: {fileID: 13092189541356049}
+  - component: {fileID: 8342051738438296821}
   m_Layer: 13
   m_Name: Behaviours
   m_TagString: Untagged
@@ -453,20 +454,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_source: {fileID: 7846663647064645689}
---- !u!114 &5275482672159537203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6966519866598012375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b91f4cccbfb14d4f90c8d2512647826, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_navigation: {fileID: 3646982438173388325}
-  m_movementHandle: {fileID: 5558192967729598246}
 --- !u!114 &2680653171425918122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,6 +520,44 @@ MonoBehaviour:
   m_animation: {fileID: 4696892891230615139}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
+--- !u!114 &13092189541356049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6966519866598012375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e87fec94a6f6a974c92063ac3c0f2e46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ai: {fileID: 8342051738438296821}
+  m_positionReference: {fileID: 5646914664092743971}
+--- !u!114 &8342051738438296821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6966519866598012375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 847a14d4dc9cc43679ab34fc78e0182f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 2
+  repathRate: 0.5
+  canSearch: 1
+  canMove: 1
+  speed: 3
+  orientation: 1
+  enableRotation: 0
+  rotationSpeed: 10
+  interpolatePathSwitches: 1
+  switchPathInterpolationSpeed: 5
+  tr: {fileID: 5646914664092743971}
+  targetCompatibility: {fileID: 0}
 --- !u!1 &7014222619835015698
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,12 +761,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &6412059594016986020 stripped
-BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 422027126595204263, guid: 597d906c727e02f4983e09e58043bd41,
-    type: 3}
-  m_PrefabInstance: {fileID: 6712440791250085635}
-  m_PrefabAsset: {fileID: 0}
 --- !u!61 &5869506134446547260 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 888279977313961535, guid: 597d906c727e02f4983e09e58043bd41,
@@ -826,6 +845,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6712440791250085635}
   m_PrefabAsset: {fileID: 0}
+--- !u!61 &1061811765731502693 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 6024463323113459046, guid: 597d906c727e02f4983e09e58043bd41,
+    type: 3}
+  m_PrefabInstance: {fileID: 6712440791250085635}
+  m_PrefabAsset: {fileID: 0}
 --- !u!61 &8085209772402203906 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 3247955314930186753, guid: 597d906c727e02f4983e09e58043bd41,
@@ -904,9 +929,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &1061811765731502693 stripped
+--- !u!61 &6412059594016986020 stripped
 BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 6024463323113459046, guid: 597d906c727e02f4983e09e58043bd41,
+  m_CorrespondingSourceObject: {fileID: 422027126595204263, guid: 597d906c727e02f4983e09e58043bd41,
     type: 3}
   m_PrefabInstance: {fileID: 6712440791250085635}
   m_PrefabAsset: {fileID: 0}
