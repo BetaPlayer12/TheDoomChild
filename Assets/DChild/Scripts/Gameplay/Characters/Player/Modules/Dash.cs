@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidbody.velocity = Vector2.zero;
             m_state.isDashing = false;
             m_animator.SetBool(m_animationParameter, false);
-            m_skeletonGhost.enabled = false;
+            //m_skeletonGhost.enabled = false;
         }
 
         public void HandleCooldown()
@@ -78,7 +78,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var direction = (float)m_character.facing;
             m_rigidbody.velocity = Vector2.zero;
             m_rigidbody.AddForce(new Vector2(direction * m_velocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
-            m_skeletonGhost.enabled = true;
+            //m_skeletonGhost.enabled = true;
         }
 
         public void Reset()
