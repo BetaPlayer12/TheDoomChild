@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c39b4c90d0216f049a8fd894a5f04af3, type: 3}
-  m_Name: RatRangeAIData
+  m_Name: InfectedRotlingAIData
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 0767836284fbcf34ab32ecfba60d36f7, type: 2}
-    - {fileID: 1417098599138512021, guid: e88238c63bcd06e478178f3ed165768f, type: 3}
+    - {fileID: 11400000, guid: a4d1991f70adfd84a923e13e5140551d, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -25,13 +24,13 @@ MonoBehaviour:
     SerializationNodes:
     - Name: m_info
       Entry: 7
-      Data: 0|DChild.Gameplay.Characters.Enemies.RatRangeAI+Info, Assembly-CSharp
+      Data: 0|DChild.Gameplay.Characters.Enemies.RatBombAI+Info, Assembly-CSharp
     - Name: m_skeletonDataAsset
       Entry: 10
       Data: 0
     - Name: m_patrol
       Entry: 7
-      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.RatRangeAI+Info,
+      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.RatBombAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -44,46 +43,43 @@ MonoBehaviour:
       Data: 
     - Name: m_move
       Entry: 7
-      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.RatRangeAI+Info,
+      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.RatBombAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Move
+      Data: Move_Stationary
     - Name: m_speed
       Entry: 4
-      Data: 0
+      Data: 30
     - Name: 
       Entry: 8
       Data: 
     - Name: m_attackMelee
       Entry: 7
-      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RatRangeAI+Info,
+      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RatBombAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
       Data: Attack
     - Name: m_range
       Entry: 4
-      Data: 6
+      Data: 7
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attackRange
+    - Name: m_attackExplode
       Entry: 7
-      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RatRangeAI+Info,
+      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.RatBombAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack_Projectile
+      Data: Attack_SuicideExplosion
     - Name: m_range
       Entry: 4
-      Data: 25
+      Data: 10
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_attackCD
-      Entry: 4
-      Data: 2
     - Name: m_patience
       Entry: 4
       Data: 10
@@ -107,38 +103,13 @@ MonoBehaviour:
       Data: Turn
     - Name: m_deathAnimation
       Entry: 1
-      Data: Death
-    - Name: m_projectile
-      Entry: 7
-      Data: 5|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleProjectileAttackInfo[[DChild.Gameplay.Characters.Enemies.RatRangeAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: Attack_Projectile
-    - Name: m_launchOnEvent
+      Data: Death_No_Red
+    - Name: m_explodeEvent
       Entry: 6
       Data: 
-    - Name: m_range
+    - Name: m_explodeDelay
       Entry: 4
-      Data: 25
-    - Name: m_projectileInfo
-      Entry: 7
-      Data: 6|DChild.Gameplay.Characters.ProjectileInfo, Assembly-CSharp
-    - Name: m_projectile
-      Entry: 10
-      Data: 1
-    - Name: m_speed
-      Entry: 4
-      Data: 25
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: m_launchDelay
-      Entry: 4
-      Data: 1.8
+      Data: 0
     - Name: 
       Entry: 8
       Data: 

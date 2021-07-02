@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!60 &4827132870947406741
+--- !u!60 &5546926719257517921
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,6 +78,7 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &3782689343035831861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,6 +124,11 @@ MonoBehaviour:
   m_wallSensor: {fileID: 1377373288324071083}
   m_groundSensor: {fileID: 6014191784930626885}
   m_edgeSensor: {fileID: 5018392210188164389}
+  m_speed: 3
+  m_gravityScale: 3
+  m_posOffset: {x: 1, y: 0.4}
+  m_velOffset: 0.4
+  m_targetOffset: {x: 1.6, y: 1}
   m_projectileStart: {fileID: 3349569227709728237}
 --- !u!114 &5637890350118284489
 MonoBehaviour:
@@ -522,7 +528,7 @@ PrefabInstance:
     - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_maxHealth
-      value: 70
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -582,7 +588,7 @@ PrefabInstance:
     - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_Name
-      value: RatRange
+      value: Blightmouth
       objectReference: {fileID: 0}
     - target: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
@@ -1150,7 +1156,7 @@ PrefabInstance:
     - target: {fileID: 6584305689605161447, guid: f810d2d1445edf242b6a2708cb5a1d83,
         type: 3}
       propertyPath: m_Name
-      value: RatRangeModel
+      value: BlightmouthModel
       objectReference: {fileID: 0}
     - target: {fileID: 6584305689605161451, guid: f810d2d1445edf242b6a2708cb5a1d83,
         type: 3}
@@ -1172,6 +1178,7 @@ PrefabInstance:
     - {fileID: 5705606354242718810, guid: f810d2d1445edf242b6a2708cb5a1d83, type: 3}
     - {fileID: 1492696515117980581, guid: f810d2d1445edf242b6a2708cb5a1d83, type: 3}
     - {fileID: 5384732072436206602, guid: f810d2d1445edf242b6a2708cb5a1d83, type: 3}
+    - {fileID: 6172331149805763518, guid: f810d2d1445edf242b6a2708cb5a1d83, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f810d2d1445edf242b6a2708cb5a1d83, type: 3}
 --- !u!114 &5018392210188164389 stripped
 MonoBehaviour:
