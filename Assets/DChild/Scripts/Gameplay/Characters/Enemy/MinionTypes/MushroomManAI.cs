@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/MushroomMan")]
-    public class MushroomManAI : CombatAIBrain<MushroomManAI.Info>
+    public class MushroomManAI : CombatAIBrain<MushroomManAI.Info>, IResetableAIBrain, IKnockbackableAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -457,6 +457,32 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             ResetAI();
             m_stateHandle.OverrideState(State.Patrol);
+        }
+
+        public void HandleKnockback(float resumeAIDelay)
+        {
+            StopAllCoroutines();
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            StartCoroutine(KnockbackRoutine(resumeAIDelay));
+        }
+
+        private IEnumerator KnockbackRoutine(float timer)
+        {
+            //enabled = false;
+            //m_flinchHandle.m_autoFlinch = false;
+            m_animation.DisableRootMotion();
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            {
+                //m_flinchHandle.enabled = false;
+                m_animation.SetAnimation(0, m_info.damageAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.damageAnimation);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            }
+            yield return new WaitForSeconds(timer);
+            //enabled = true;
+            //m_flinchHandle.enabled = true;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
         }
     }
 }
