@@ -20,6 +20,9 @@ namespace DChild.Gameplay.Systems
         IAutoReflexHandler autoReflex { get; }
         PlayerCharacterOverride OverrideCharacterControls();
 
+        bool IsPartOfPlayer(GameObject gameObject);
+        bool IsPartOfPlayer(GameObject gameObject, out IPlayer player);
+
         void StopCharacterControlOverride();
         void DisableControls();
         void EnableControls();
@@ -43,7 +46,7 @@ namespace DChild.Gameplay.Systems
         private AutoReflexHandler m_autoReflex;
 
         private CollisionRegistrator m_collisionRegistrator;
-       
+
         public Player player => m_player;
 
         public GameplayInput gameplayInput => m_gameplayInput;
@@ -70,6 +73,22 @@ namespace DChild.Gameplay.Systems
             m_overrideController.enabled = true;
             m_player.state.allowExtendedIdle = false;
             return m_overrideController;
+        }
+
+        public bool IsPartOfPlayer(GameObject gameObject)
+        {
+            if (gameObject.TryGetComponentInParent(out PlayerControlledObject playerObject))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool IsPartOfPlayer(GameObject gameObject, out IPlayer player)
+        {
+            var isPartOfPlayer = IsPartOfPlayer(gameObject);
+            player = isPartOfPlayer ? m_player : null;
+            return isPartOfPlayer;
         }
 
         public void DisableControls()
@@ -159,5 +178,7 @@ namespace DChild.Gameplay.Systems
                 m_respawnDelay.Tick(Time.deltaTime);
             }
         }
+
+
     }
 }

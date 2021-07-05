@@ -36,12 +36,8 @@ namespace DChild.Gameplay.Cinematics.Cameras
         public void Initialize()
         {
             m_cinema = GameplaySystem.cinema;
-            var player = GameplaySystem.playerManager.player;
-            player.attackModule.TargetDamaged += OnAttackHit;
-            player.damageableModule.DamageTaken += OnDamageTaken;
         }
-
-        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
+        public void HandleOnDamageRecieveShake()
         {
             if (m_shakeOnDamage)
             {
@@ -52,7 +48,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             }
         }
 
-        private void OnAttackHit(object sender, CombatConclusionEventArgs eventArgs)
+        public void HandleOnAttackHit(CombatConclusionEventArgs eventArgs)
         {
             if (m_shakeOnAttackHit)
             {
@@ -96,11 +92,6 @@ namespace DChild.Gameplay.Cinematics.Cameras
         {
             var timer = 0f;
 
-            //if (m_shakeRoutine != null)
-            //{
-            //    m_cinema.EnableCameraShake(false);
-            //    yield return new WaitForSeconds(m_shakePause);
-            //}
             m_cameraShake.SetShakeTo(shakeInfo);
             m_cinema.EnableCameraShake(true);
             do

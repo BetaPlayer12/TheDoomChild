@@ -615,7 +615,7 @@ GameObject:
   - component: {fileID: 1079731738031751150}
   - component: {fileID: 1282068314815717093}
   - component: {fileID: 1857289648}
-  - component: {fileID: 3636118583611595015}
+  - component: {fileID: 6912939528574181348}
   m_Layer: 0
   m_Name: CombatManager
   m_TagString: Untagged
@@ -680,10 +680,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0411620e74442de4baefab1ba1565f1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hitFX: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
-  m_cameraShakeDuration: 0
-  m_invulnerabilityDuration: 1
-  m_inputDisableDuration: 0.5
+  m_iFrameHandle:
+    m_invulnerabilityDuration: 1
+    m_inputDisableDuration: 0.5
+  m_reactiveCamera: {fileID: 4538709575358643873}
+  m_hitStopHandle: {fileID: 6912939528574181348}
 --- !u!114 &1857289648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -823,7 +824,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
---- !u!114 &3636118583611595015
+--- !u!114 &6912939528574181348
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -832,11 +833,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4824955416592166037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3f4b5be4fef55349baf2131acf38ed9, type: 3}
+  m_Script: {fileID: 11500000, guid: ccb76a3f8f6689a43a67b0dfc5b5febd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_duration:
-    m_startTime: 0.2
+  m_executeOnDamage: 1
+  m_onDamageHitStopDuration: 0.35
+  m_onDamageHitStopTimeScale: 0
+  m_executeOnAttackHit: 1
+  m_onAttackHitStopDuration: 0.1
+  m_onAttackHitStopTimeScale: 0
 --- !u!1 &4914704124739206884
 GameObject:
   m_ObjectHideFlags: 0
