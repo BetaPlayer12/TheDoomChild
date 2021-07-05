@@ -4,7 +4,6 @@ using Sirenix.OdinInspector;
 using Spine;
 using Spine.Unity;
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 

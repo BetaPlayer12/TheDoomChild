@@ -6,6 +6,7 @@ using UnityEngine;
 using Holysoft.Event;
 using DChild.Gameplay.Characters;
 using DChild.Gameplay.Combat;
+using PixelCrushers;
 
 namespace DChild.Gameplay.Characters
 {
@@ -24,6 +25,7 @@ namespace DChild.Gameplay.Characters
         public event EventAction<EventActionArgs> Damaged;
         public event EventAction<Damageable.DamageEventArgs> DamageTaken;
         public event EventAction<EventActionArgs> Destroyed;
+        public event EventAction<Damageable.DamageEventArgs> DamageBlock;
 
         public Vector2 position => m_model.position;
         public HorizontalDirection currentFacingDirection => m_facing;
@@ -82,6 +84,16 @@ namespace DChild.Gameplay.Characters
         }
 
         public void SetInvulnerability(Invulnerability level)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void BlockDamage(int totalDamage, AttackType type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Hitbox[] GetHitboxes()
         {
             throw new System.NotImplementedException();
         }

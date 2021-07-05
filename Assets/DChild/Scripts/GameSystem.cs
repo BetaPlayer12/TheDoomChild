@@ -132,6 +132,7 @@ namespace DChild
 
         private void Start()
         {
+            settings.Initialize();
             m_introHandler.Execute();
         }
 

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using DChild.Gameplay.Characters.AI;
 using System;
 using DChild.Menu.Bestiary;
+using DChild.Gameplay.Combat.StatusAilment;
 
 namespace DChildEditor.Toolkit
 {
@@ -41,6 +42,32 @@ namespace DChildEditor.Toolkit
             AddGenericItemList<NPCProfile>("t:NPCProfile", (npc) =>
             {
                 tree.Add($"Characters/NPC/{npc.name.Replace("Data", "")}", npc, npc.baseIcon);
+            });
+
+
+            List<string> statusEffectNames = new List<string>();
+            AddGenericItemList<StatusEffectData>("t:StatusEffect", (statusEffect) =>
+            {
+                var statusEffectName = statusEffect.name;
+                string result = " ";
+
+                if (statusEffectNames.Contains(statusEffectName) == true)
+                {
+                    if (statusEffectName == statusEffect.name)
+                    {
+                        result = $"{statusEffect.name + (1)}";
+                        statusEffectNames.Add(result);
+                    }
+                }
+
+                if (statusEffectNames.Contains(statusEffectName)== false)
+                {
+                    statusEffectNames.Add(statusEffectName);
+                }
+
+           
+                
+                tree.Add($"StatusEffect/{statusEffect.type}/{result}", statusEffect);
             });
 
             //Enemies
@@ -95,8 +122,34 @@ namespace DChildEditor.Toolkit
                 {
                     tree.Add($"Characters/Boss/{result}/{data.name.Replace("Data", "").Replace("Info", "")}", data, data.infoImage);
                 }
-            }); 
+            });
             #endregion
+
+
+            //loot
+            var loots = new TrialLootKit();
+            loots.PopulateList();
+            tree.Add($"Loot Data Editor/Minion Loot", loots);
+
+            var breakableLoots = new TrialLootKit();
+            breakableLoots.PopulateBreakableList();
+            tree.Add("Loot Data Editor/Breakable Objects Loot", breakableLoots);
+
+            var bossLoot = new TrialLootKit();
+           bossLoot.PopulateBossLootList();
+            tree.Add("Loot Data Editor/Boss Loot", bossLoot);
+
+            //Character Stats
+            var characterStats = new TrialStatsKit();
+            characterStats.PopulateList();
+            tree.Add($"Enemy Stats Data Editor/Minion Stats", characterStats);
+
+            //Character Stats
+            var bossStats = new TrialBossKit();
+            bossStats.PopulateList();
+            tree.Add($"Enemy Stats Data Editor/Boss Stats", bossStats);
+
+           
 
             tree.EnumerateTree().SortMenuItemsByName(true);
 

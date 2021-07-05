@@ -5,7 +5,7 @@ namespace DChild.Gameplay.Environment
 {
     public class BlackBlood : DPSColliderDamage
     {
-        protected override bool IsValidToHit(Collider2D collision)
+        protected override bool IsValidColliderToHit(Collider2D collision)
         {
             return !(collision.GetComponentInParent<BlackBloodImmunity>()?.isActive ??false);
         }

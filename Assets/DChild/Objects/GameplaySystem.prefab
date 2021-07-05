@@ -680,9 +680,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0411620e74442de4baefab1ba1565f1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hitFX: {fileID: 0}
+  m_hitFX: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
   m_cameraShakeDuration: 0
-  m_invulnerabilityDuration: 1.5
+  m_invulnerabilityDuration: 1
   m_inputDisableDuration: 0.5
 --- !u!114 &1857289648
 MonoBehaviour:
@@ -715,8 +715,8 @@ MonoBehaviour:
     - Name: m_list
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Combat.StatusAilment.StatusEffectType,
-        Assembly-CSharp],[DChild.Gameplay.Combat.StatusAilment.StatusEffect, Assembly-CSharp]],
-        mscorlib
+        Assembly-CSharp],[DChild.Gameplay.Combat.StatusAilment.StatusEffectData,
+        Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
       Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Combat.StatusAilment.StatusEffectType,
@@ -836,7 +836,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_duration:
-    m_startTime: 1
+    m_startTime: 0.2
 --- !u!1 &4914704124739206884
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,6 +849,7 @@ GameObject:
   - component: {fileID: 2914864306993785680}
   - component: {fileID: 5459732075996280386}
   - component: {fileID: 6610132760341546613}
+  - component: {fileID: 4538709575358643873}
   m_Layer: 0
   m_Name: Cinema
   m_TagString: Untagged
@@ -885,18 +886,88 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: fe22f8d4a9e7dbc4aa30e8f6f6738e64, type: 2}
+    - {fileID: 11400000, guid: c1fb42a4bab731a4f9e0b8ccc861a4f0, type: 2}
+    - {fileID: 11400000, guid: dfa74ab838e3fa4478a24f633dc06c70, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: m_cameraShakeHandle
+      Entry: 7
+      Data: 0|DChild.Gameplay.Cinematics.CameraShakeHandle, Assembly-CSharp
     - Name: m_noiseSettings
-      Entry: 6
+      Entry: 7
+      Data: 1|UnityEngine.Rendering.SerializedDictionary`2[[DChild.Gameplay.Cinematics.CameraShakeType,
+        Assembly-CSharp],[Cinemachine.NoiseSettings, Cinemachine]], Unity.RenderPipelines.Core.Runtime
+    - Name: comparer
+      Entry: 7
+      Data: 2|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Cinematics.CameraShakeType,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_currentShakeType
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
       Data: 
   m_mainCamera: {fileID: 0}
   m_trackingTarget: {fileID: 0}
-  m_currentShakeType: 0
 --- !u!114 &5459732075996280386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,7 +980,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b22269412dc42024699a0e6fdce34c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_yOffset: 5
+  m_normalConfigurationData:
+    m_upYOffset: 15
+    m_downYOffset: 15
+  m_highConfigurationData:
+    m_upYOffset: 30
+    m_downYOffset: 0
+  m_lowConfigurationData:
+    m_upYOffset: 0
+    m_downYOffset: 30
   m_duration: 0.5
   m_interpolation:
     serializedVersion: 2
@@ -948,6 +1027,208 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_holdForPeek: 0.5
+--- !u!114 &4538709575358643873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914704124739206884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617d3c958089a014ea071a6eb1f11fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_cameraShake
+      Entry: 7
+      Data: 0|DChild.Gameplay.Cinematics.Cameras.BlendedCameraShake, Assembly-CSharp
+    - Name: m_blendCurve
+      Entry: 7
+      Data: 1|UnityEngine.AnimationCurve, UnityEngine.CoreModule
+    - Name: 
+      Entry: 7
+      Data: 2|UnityEngine.Keyframe[], UnityEngine.CoreModule
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: UnityEngine.Keyframe, UnityEngine.CoreModule
+    - Name: ver
+      Entry: 3
+      Data: 1
+    - Name: m_Time
+      Entry: 4
+      Data: 0
+    - Name: m_Value
+      Entry: 4
+      Data: 1
+    - Name: m_InTangent
+      Entry: 4
+      Data: -1
+    - Name: m_OutTangent
+      Entry: 4
+      Data: -1
+    - Name: m_TangentMode
+      Entry: 3
+      Data: 34
+    - Name: m_WeightedMode
+      Entry: 3
+      Data: 0
+    - Name: m_InWeight
+      Entry: 4
+      Data: 0
+    - Name: m_OutWeight
+      Entry: 4
+      Data: 0.333333343
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: UnityEngine.Keyframe, UnityEngine.CoreModule
+    - Name: ver
+      Entry: 3
+      Data: 1
+    - Name: m_Time
+      Entry: 4
+      Data: 1
+    - Name: m_Value
+      Entry: 4
+      Data: 0
+    - Name: m_InTangent
+      Entry: 4
+      Data: -1
+    - Name: m_OutTangent
+      Entry: 4
+      Data: -1
+    - Name: m_TangentMode
+      Entry: 3
+      Data: 34
+    - Name: m_WeightedMode
+      Entry: 3
+      Data: 0
+    - Name: m_InWeight
+      Entry: 4
+      Data: 0.333333343
+    - Name: m_OutWeight
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 3
+      Data: 8
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_duration
+      Entry: 4
+      Data: 0.1
+    - Name: 
+      Entry: 8
+      Data: 
+  m_shakeOnDamage: 1
+  m_onDamageShake:
+    m_amplitude:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: -0.0045433044
+        value: 0.49939114
+        inSlope: 4.0676284
+        outSlope: 4.0676284
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.044739235
+      - serializedVersion: 3
+        time: 0.9979488
+        value: 0.0045185946
+        inSlope: -5.826626
+        outSlope: -5.826626
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.018998185
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_frequency:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.00617218
+        value: 0.5046997
+        inSlope: 3.4998224
+        outSlope: 3.4998224
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.034378838
+      - serializedVersion: 3
+        time: 0.9984741
+        value: -0.0027008057
+        inSlope: -6.524853
+        outSlope: -6.524853
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.033262067
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_duration: 0.5
+  m_shakeOnAttackHit: 1
+  m_onAttackHitShakeStart:
+    m_amplitude:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_frequency:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_duration: 0
+  m_onAttackHitShakeLoop:
+    m_amplitude:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_frequency:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_duration: 0
+  m_onAttackHitShakeLoopResetDuration: 0
+  m_shakePause: 0.2
 --- !u!1 &5608145492047156799
 GameObject:
   m_ObjectHideFlags: 0
@@ -1534,6 +1815,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33963cdaa3a24504696531bff85673f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!114 &736789538
 MonoBehaviour:
   m_ObjectHideFlags: 0

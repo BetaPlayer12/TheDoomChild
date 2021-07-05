@@ -60,8 +60,8 @@ namespace DChild.Gameplay
                             var damage = m_data.damage;
                             for (int j = 0; j < damage.Length; j++)
                             {
-                                info.Value.Initialize(transform.position, 0, 1, damage[j]);
-                                targetInfo.Value.Initialize(m_cacheHitbox.damageable, m_cacheHitbox.defense.damageReduction);
+                                info.Value.Initialize(gameObject,transform.position, 0, 1, false,damage[j]);
+                                targetInfo.Value.Initialize(m_cacheHitbox.damageable, false, m_cacheHitbox.defense.damageReduction);
                                 using (Cache<AttackInfo> cacheAttackInfo = GameplaySystem.combatManager.ResolveConflict(info, targetInfo.Value))
                                 {
                                     cacheAttackInfo.Release();

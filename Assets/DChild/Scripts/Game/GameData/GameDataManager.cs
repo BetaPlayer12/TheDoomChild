@@ -24,7 +24,7 @@ namespace DChild
                 var ID = i + 1;
                 if (File.Exists(SerializationHandle.GetSaveFilePath(ID)))
                 {
-                    SerializationHandle.Load(ID, ref slots[i]);
+                    SerializationHandle.LoadCampaignSlot(ID, ref slots[i]);
                 }
                 else
                 {

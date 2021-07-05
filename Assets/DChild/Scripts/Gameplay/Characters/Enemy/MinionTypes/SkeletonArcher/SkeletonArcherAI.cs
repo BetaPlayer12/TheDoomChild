@@ -18,7 +18,7 @@ using DChild.Gameplay.Projectiles;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/SkeletonArcher")]
-    public class SkeletonArcherAI : CombatAIBrain<SkeletonArcherAI.Info>, IBattleZoneAIBrain
+    public class SkeletonArcherAI : CombatAIBrain<SkeletonArcherAI.Info>, IBattleZoneAIBrain, IResetableAIBrain, IKnockbackableAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -133,6 +133,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private bool m_battlezonemode;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -171,6 +172,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_flinchHandle.gameObject.SetActive(true);
+            m_selfCollider.SetActive(false);
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
             m_attackDecider.hasDecidedOnAttack = false;
@@ -332,8 +334,10 @@ namespace DChild.Gameplay.Characters.Enemies
             Vector2 wat = m_projectilePoint.transform.position;
             RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
             var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+#if UNITY_EDITOR
             Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer)); 
+#endif
             return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
@@ -446,6 +450,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
+                        m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -529,7 +534,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience)
+            if (m_enablePatience && !m_battlezonemode)
             {
                 Patience();
                 //StartCoroutine(PatienceRoutine());
@@ -547,11 +552,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SwitchToBattleZoneAI()
         {
+            m_battlezonemode = true;
             m_stateHandle.SetState(State.Chasing);
         }
 
         public void SwitchToBaseAI()
         {
+            m_battlezonemode = false;
             m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
@@ -568,6 +575,32 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnBecomePassive()
         {
             ResetAI();
+        }
+
+        public void HandleKnockback(float resumeAIDelay)
+        {
+            StopAllCoroutines();
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            StartCoroutine(KnockbackRoutine(resumeAIDelay));
+        }
+
+        private IEnumerator KnockbackRoutine(float timer)
+        {
+            //enabled = false;
+            //m_flinchHandle.m_autoFlinch = false;
+            m_animation.DisableRootMotion();
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            {
+                //m_flinchHandle.enabled = false;
+                m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            }
+            yield return new WaitForSeconds(timer);
+            //enabled = true;
+            //m_flinchHandle.enabled = true;
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            yield return null;
         }
     }
 }

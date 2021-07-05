@@ -7,6 +7,7 @@ using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -17,10 +18,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_sourceRequiredAmount;
         [SerializeField, MinValue(0)]
         private int m_sourceConsumptionRate;
+        [SerializeField]
+        private ParticleSystem m_shadowMorphFX;
         //HACK
         [SerializeField, SpineSkin(dataField = "m_skeletonData")]
         private string m_originalSkinName;
-        [SerializeField, SpineSkin(dataField ="m_skeletonData")]
+        [SerializeField, SpineSkin(dataField = "m_skeletonData")]
         private string m_shadowMorphSkinName;
         [SerializeField]
         private SkeletonAnimation m_skeletonData;
@@ -31,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Animator m_animator;
         private int m_animationParameter;
         private float m_stackedConsumptionRate;
+        private IPlayerModifer m_modifier;
 
         public event EventAction<EventActionArgs> ExecuteModule;
         public event EventAction<EventActionArgs> End;
@@ -41,7 +45,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ConsumeSource()
         {
-            m_stackedConsumptionRate += m_sourceConsumptionRate * GameplaySystem.time.deltaTime;
+            m_stackedConsumptionRate += (m_sourceConsumptionRate * GameplaySystem.time.deltaTime) * m_modifier.Get(PlayerModifier.ShadowMagic_Requirement);
 
             if (m_stackedConsumptionRate >= 1)
             {
@@ -53,17 +57,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EndExecution()
         {
+            m_skeletonData.Skeleton.SetSkin(m_shadowMorphSkinName);
+            m_state.isInShadowMode = true;
             m_state.waitForBehaviour = false;
-
+            GameplaySystem.world.SetShadowColliders(true);
             //End?.Invoke(this, EventActionArgs.Empty);
         }
 
         public void Execute()
         {
-            GameplaySystem.world.SetShadowColliders(true);
-            m_skeletonData.Skeleton.SetSkin(m_shadowMorphSkinName);
+            m_shadowMorphFX.Play();
             m_damageable.SetInvulnerability(Invulnerability.MAX);
-            m_state.isInShadowMode = true;
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
 
@@ -78,7 +82,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isInShadowMode = false;
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
-
+            m_shadowMorphFX.Stop(true);
             End?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -90,6 +94,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator = info.animator;
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ShadowMode);
             m_stackedConsumptionRate = 0;
+            m_modifier = info.modifier;
         }
 
         public void Reset()

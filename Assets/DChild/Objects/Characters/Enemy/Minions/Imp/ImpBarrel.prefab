@@ -28,6 +28,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
+  m_overrideColor: 0
+  m_colorToUse: {r: 1, g: 1, b: 1, a: 1}
+  m_overrideScale: 0
+  m_scaleToUse: {x: 1, y: 1, z: 1}
 --- !u!114 &2750530105518968752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,7 +87,8 @@ MonoBehaviour:
   m_aggroBoundary: {fileID: 0}
   m_statsData: {fileID: 0}
   m_hitbox: {fileID: 5150831323135535264}
-  m_explosionHitBox: {fileID: 1750415795263383761}
+  m_explosionDamageable: {fileID: 8528691588531366963}
+  m_explosionHitBox: {fileID: 8934072336385541566}
   m_deathHandle: {fileID: 6695126899390701295}
   m_flinchHandle: {fileID: 2786848694737395703}
   m_groundSensor: {fileID: 6489366835539587857}
@@ -109,6 +114,7 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &6695126898741687181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,12 +524,24 @@ PrefabInstance:
       objectReference: {fileID: 3112630489921599862}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d32150323a50ec4988d378f1993d54e, type: 3}
---- !u!1 &1750415795263383761 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5580302088906047505, guid: 7d32150323a50ec4988d378f1993d54e,
+--- !u!61 &8934072336385541566 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 3370871478014848382, guid: 7d32150323a50ec4988d378f1993d54e,
     type: 3}
   m_PrefabInstance: {fileID: 6141659521014409408}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8528691588531366963 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2549161751819289843, guid: 7d32150323a50ec4988d378f1993d54e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6141659521014409408}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &8068479800959985948 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 4234352775759643100, guid: 7d32150323a50ec4988d378f1993d54e,

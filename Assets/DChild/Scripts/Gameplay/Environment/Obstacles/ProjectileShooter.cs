@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Obstacles
 {
+    [SelectionBase]
     public class ProjectileShooter : MonoBehaviour
     {
         [System.Serializable]

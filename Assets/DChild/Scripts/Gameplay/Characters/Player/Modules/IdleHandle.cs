@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void GenerateRandomState()
         {
-            m_currentIdleIndex = Random.Range(1, m_maxIdleAnimCount);
+            m_currentIdleIndex = Random.Range(1, m_maxIdleAnimCount+1);
             m_animator.SetInteger(m_idleStateAnimationParameter, m_currentIdleIndex);
         }
 
@@ -41,25 +41,44 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetInteger(m_idleStateAnimationParameter, m_currentIdleIndex);
         }
 
-        public void Execute()
+        public void Execute(bool allowExtendedIdle)
         {
             m_animator.SetBool(m_idleAnimationParameter, true);
-            if (m_isInIdle && m_currentIdleIndex == 0)
+            if (allowExtendedIdle == true)
             {
-                if (m_timer > 0)
+                if (m_isInIdle && m_currentIdleIndex == 0)
                 {
-                    m_timer -= GameplaySystem.time.deltaTime;
-                    if (m_timer <= 0)
+                    if (m_timer > 0)
                     {
-                        GenerateRandomState();
+                        m_timer -= GameplaySystem.time.deltaTime;
+                        if (m_timer <= 0)
+                        {
+                            GenerateRandomState();
+                        }
                     }
+                }
+                else
+                {
+                    m_isInIdle = true;
+                    m_timer = m_playExtendedIdleAnimAfter;
                 }
             }
             else
             {
+                if (m_currentIdleIndex != 0)
+                {
+                    m_currentIdleIndex = 0;
+                    m_animator.SetInteger(m_idleStateAnimationParameter, 0);
+                }
+
                 m_isInIdle = true;
-                m_timer = m_playExtendedIdleAnimAfter;
             }
+        }
+
+        public void BackToDefaultIdle()
+        {
+            m_currentIdleIndex = 0;
+            m_animator.SetInteger(m_idleStateAnimationParameter, m_currentIdleIndex);
         }
     }
 }

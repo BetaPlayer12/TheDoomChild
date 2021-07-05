@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace DChild.Gameplay.Systems.WorldComponents
 {
+    [System.Serializable]
     public class IsolatedPhysicsHandler
     {
+        [SerializeField]
         private List<IIsolatedPhysics> m_isolatedPhysics;
 
         public IsolatedPhysicsHandler()

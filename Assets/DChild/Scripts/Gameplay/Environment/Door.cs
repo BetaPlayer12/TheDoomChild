@@ -96,26 +96,32 @@ namespace DChild.Gameplay.Environment.Interractables
         [Button, HideIf("m_isOpen"), HideInEditorMode]
         public void Open()
         {
-            m_isOpen = true;
-            enabled = false;
-            m_animator.SetTrigger("Shake");
-            for (int i = 0; i < m_panels.Length; i++)
+            if(m_isOpen == false)
             {
-                m_panels[i].SetLerpAs(true);
+                m_isOpen = true;
+                enabled = false;
+                m_animator.SetTrigger("Shake");
+                for (int i = 0; i < m_panels.Length; i++)
+                {
+                    m_panels[i].SetLerpAs(true);
+                }
             }
         }
 
         [Button, ShowIf("m_isOpen"), HideInEditorMode]
         public void Close()
         {
-            m_isOpen = false;
-            enabled = false;
-            m_animator.SetTrigger("Shake");
-            for (int i = 0; i < m_panels.Length; i++)
+            if(m_isOpen == true)
             {
-                m_panels[i].SetLerpAs(false);
+                m_isOpen = false;
+                enabled = false;
+                m_animator.SetTrigger("Shake");
+                for (int i = 0; i < m_panels.Length; i++)
+                {
+                    m_panels[i].SetLerpAs(false);
+                }
+                m_collider2DGroup.EnableColliders();
             }
-            m_collider2DGroup.EnableColliders();
         }
 
         public void ToggleState()

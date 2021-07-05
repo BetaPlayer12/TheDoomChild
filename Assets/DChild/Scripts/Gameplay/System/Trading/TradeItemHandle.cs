@@ -152,7 +152,7 @@ namespace DChild.Menu.Trading
                 {
                     var spaceLeftInPlayerInventory = m_currentItem.quantityLimit - m_player.GetCurrentAmount(m_currentItem);
                     var itemCountFromMerchant = m_merchant.GetCurrentAmount(m_currentItem);
-                    var itemCountPlayerCanAfford = m_player.soulEssence / m_currentItem.cost;
+                    var itemCountPlayerCanAfford = m_currentItem.cost <= 0 ? itemCountFromMerchant : m_player.soulEssence / m_currentItem.cost;
                     m_maxItemToTransferCount = Mathf.Min(itemCountFromMerchant, spaceLeftInPlayerInventory, itemCountPlayerCanAfford);
                 }
                 else

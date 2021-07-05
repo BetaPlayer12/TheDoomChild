@@ -111,5 +111,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_forcedCurrentGroundedness;
 
         public bool forcedCurrentGroundedness { get => m_forcedCurrentGroundedness; set => m_forcedCurrentGroundedness = value; }
+
+        [SerializeField, ReadOnly]
+        private bool m_allowExtendedIdle = true;
+        public bool allowExtendedIdle { get => m_allowExtendedIdle; set => m_allowExtendedIdle = value; }
     }
 }

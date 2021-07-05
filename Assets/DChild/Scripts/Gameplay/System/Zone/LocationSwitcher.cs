@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Systems
 
         public Vector3 promptPosition => m_handle.promptPosition;
 
-        public string promptMessage => null;
+        public string promptMessage => m_handle.prompMessage;
 
         public void Interact(Character character)
         {
@@ -100,7 +100,7 @@ namespace DChild.Gameplay.Systems
         {
             m_poster = GetComponent<LocationPoster>();
             m_poster.data.OnArrival += OnArrival;
-            Debug.Log($"{m_poster.name} is Logged");
+            Debug.Log($"{m_poster.name} is Logged", this);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

@@ -46,6 +46,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
 
+        public bool ignoresBlock => throw new System.NotImplementedException();
+
         public override void DisableController() => m_brain.Enable(false);
         public override void EnableController() => m_brain.Enable(true);
 

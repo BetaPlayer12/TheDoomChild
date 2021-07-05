@@ -81,6 +81,8 @@ namespace DChild.Serialization
         private ComponentSerializer[] m_componentSerializers;
         [SerializeField, ValueDropdown("GetDynamicSerializers", IsUniqueList = true), TabGroup("Serializer", "Dynamic"), OnValueChanged("UpdateEditorData", true)]
         private DynamicSerializableComponent[] m_dynamicSerializers;
+        [SerializeField, TabGroup("Serializer", "Quest Listeners")]
+        private QuestStateListener[] m_questsListener;
         [OdinSerialize, HideInEditorMode]
         private ZoneData m_zoneData = new ZoneData();
 
@@ -95,9 +97,16 @@ namespace DChild.Serialization
             {
                 UpdateSerializers();
             }
+
             for (int i = 0; i < m_dynamicSerializers.Length; i++)
             {
                 m_dynamicSerializers[i].Load();
+            }
+
+            PersistentDataManager.ApplySaveData(m_cacheSlot.dialogueSaveData, DatabaseResetOptions.RevertToDefault);
+            for (int i = 0; i < m_questsListener.Length; i++)
+            {
+                m_questsListener[i].UpdateIndicator();
             }
         }
 
@@ -111,13 +120,22 @@ namespace DChild.Serialization
             for (int i = 0; i < m_componentSerializers.Length; i++)
             {
                 m_cacheComponentSerializer = m_componentSerializers[i];
-                m_zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
+                try
+                {
+                    m_zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError($"Serialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.Message}", m_cacheComponentSerializer);
+                }
             }
             for (int i = 0; i < m_dynamicSerializers.Length; i++)
             {
                 m_dynamicSerializers[i].Save();
             }
-            GameplaySystem.campaignSerializer.slot.UpdateZoneData(m_ID, m_zoneData);
+            var slot = GameplaySystem.campaignSerializer.slot;
+            slot.UpdateZoneData(m_ID, m_zoneData);
+            slot.UpdateDialogueSaveData();
         }
 
         private void UpdateSerializers()
@@ -125,7 +143,14 @@ namespace DChild.Serialization
             for (int i = 0; i < m_componentSerializers.Length; i++)
             {
                 m_cacheComponentSerializer = m_componentSerializers[i];
-                m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+                try
+                {
+                    m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Deserialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.Message}", m_cacheComponentSerializer);
+                }
             }
         }
 
@@ -145,7 +170,8 @@ namespace DChild.Serialization
                 }
                 catch (Exception e)
                 {
-                    throw new Exception($"Error Occured In {m_cacheComponentSerializer.gameObject.name} \n {e.Message}");
+                    Debug.LogError($"Deserialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.ToString()}", m_cacheComponentSerializer);
+                    //throw new Exception($"Error Occured In {m_cacheComponentSerializer.gameObject.name} \n {e.Message}");
                 }
                 yield return null;
             }
@@ -395,7 +421,27 @@ namespace DChild.Serialization
             return (m_ID, zoneData);
         }
 
-        private IEnumerable GetComponents() => FindObjectsOfType<ComponentSerializer>();
+        private IEnumerable GetComponents()
+        {
+            var serializers = FindObjectsOfType<ComponentSerializer>();
+            var list = new ValueDropdownList<ComponentSerializer>();
+
+            foreach (var serializer in serializers)
+            {
+                var text = $"{serializer.gameObject.name} ({serializer.ID.ToString()})";
+                var item = new ValueDropdownItem<ComponentSerializer>(text, serializer);
+                if (list.Contains(item))
+                {
+                    int index = 1;
+                    do
+                    {
+                        item.Text = $"--{text} [{index}]";
+                    } while (list.Contains(item));
+                }
+                list.Add(item);
+            }
+            return list;
+        }
 
         private IEnumerable GetDynamicSerializers() => FindObjectsOfType<DynamicSerializableComponent>();
 

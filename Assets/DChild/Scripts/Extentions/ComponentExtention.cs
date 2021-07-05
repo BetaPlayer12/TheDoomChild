@@ -79,7 +79,7 @@ namespace DChild
             return component != null;
         }
 
-        public static bool TryGetComponentInChildren<T>(this Component mono, out T component)
+        public static bool TryGetComponentInChildren<T>(this Component mono, out T component, bool includeInactive = false)
         {
             component = mono.GetComponentInChildren<T>();
             return component != null;
@@ -91,9 +91,9 @@ namespace DChild
             return component != null;
         }
 
-        public static bool TryGetComponentInChildren<T>(this GameObject mono, out T component)
+        public static bool TryGetComponentInChildren<T>(this GameObject mono, out T component, bool includeInactive = false)
         {
-            component = mono.GetComponentInChildren<T>();
+            component = mono.GetComponentInChildren<T>(includeInactive);
             return component != null;
         }
     }

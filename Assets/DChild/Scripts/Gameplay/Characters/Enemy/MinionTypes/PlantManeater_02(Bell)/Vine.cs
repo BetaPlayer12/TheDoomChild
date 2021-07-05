@@ -23,6 +23,8 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
 
         public Invulnerability ignoreInvulnerability => throw new System.NotImplementedException();
 
+        public bool ignoresBlock => throw new System.NotImplementedException();
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)

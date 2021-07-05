@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Systems;
 using DChild.Gameplay.Systems.WorldComponents;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
-    public class World : MonoBehaviour, IGameplaySystemModule, ITime, IWorld
+    public class World : SerializedMonoBehaviour, IGameplaySystemModule, ITime, IWorld
     {
         private float m_timeScale;
         private float m_deltaTime;
@@ -23,6 +24,7 @@ namespace DChild.Gameplay.Systems
 
         private float m_prevTimeScale;
         private TimeIsolationHandler m_timeIsolationHandler;
+        [SerializeField]
         private IsolatedPhysicsHandler m_isolatedPhysicsHandler;
         private InteractiveEnvironmentHandler m_interactiveEnvironmentHandler;
         private ShadowEnvironmentHandle m_shadowEnvironmentHandler;

@@ -10,7 +10,7 @@ namespace DChild
     {
 
         [SerializeField]
-        private bool m_canUpdateGraph;
+        private bool m_canUpdatePathfindingGraph;
         [SerializeField, ValueDropdown("GetColliders", IsUniqueList = true)]
         private Collider2D[] m_colliders;
 
@@ -38,7 +38,7 @@ namespace DChild
 
         private void UpdateGraph()
         {
-            if (m_canUpdateGraph)
+            if (m_canUpdatePathfindingGraph)
             {
                 for (int i = 0; i < m_objectList.Length; i++)
                 {
@@ -49,9 +49,10 @@ namespace DChild
 
         private IEnumerable GetColliders() => GetComponentsInChildren<Collider2D>();
 
+
         private void Awake()
         {
-            if (m_canUpdateGraph)
+            if (m_canUpdatePathfindingGraph)
             {
                 m_objectList = new GraphUpdateObject[m_colliders.Length];
                 for (int i = 0; i < m_objectList.Length; i++)

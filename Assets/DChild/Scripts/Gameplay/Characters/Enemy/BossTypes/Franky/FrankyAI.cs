@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private PhaseInfo<Phase> m_phaseInfo;
             public PhaseInfo<Phase> phaseInfo => m_phaseInfo;
-            
+
             [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
@@ -85,6 +85,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Leap Attack Values")]
             private float m_leapVelocity;
             public float leapVelocity => m_leapVelocity;
+            [SerializeField, MinValue(0), TabGroup("Leap Attack Values")]
+            private float m_leapTime;
+            public float leapTime => m_leapTime;
             [SerializeField, TabGroup("Leap Attack Values")]
             private float m_transitionStart;
             public float transitionStart => m_transitionStart;
@@ -231,6 +234,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private Boss m_boss;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_aoeBB;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_punchBB;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -294,6 +301,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentLeapDuration;
         private bool m_stickToGround;
         private bool m_stickToWall;
+        //private bool m_hasPhaseChanged;
+        private Coroutine m_currentAttackCoroutine;
+        private Coroutine m_leapRoutine;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -306,19 +316,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            m_stateHandle.OverrideState(State.Phasing);
-            StopAllCoroutines();
-            m_animation.DisableRootMotion();
-            m_wallPosPoint.SetParent(m_hitbox.transform);
-            m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
-            m_wallPosPoint.gameObject.SetActive(false);
-            m_chainHurtBox.gameObject.SetActive(false);
-            m_stickToWall = false;
-            m_animation.SetEmptyAnimation(0, 0);
-            m_phaseHandle.ApplyChange();
+            //StopCurrentAttackRoutine();
+            //SetAIToPhasing();
+            StartCoroutine(SmartChangePhaseRoutine());
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs)
+        {
+            if (m_stateHandle.currentState != State.Phasing /*&& !m_hasPhaseChanged*/)
+            {
+                m_stateHandle.OverrideState(State.Turning);
+            }
+        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -332,11 +341,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            if (m_stateHandle.currentState != State.Phasing)
+            if (m_stateHandle.currentState != State.Phasing /*&& !m_hasPhaseChanged*/)
             {
                 m_animation.animationState.TimeScale = 1f;
                 m_stateHandle.ApplyQueuedState();
             }
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private void CustomTurn()
@@ -362,34 +372,87 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator SmartChangePhaseRoutine()
+        {
+            yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            StopCurrentAttackRoutine();
+            SetAIToPhasing();
+            yield return null;
+        }
+
+        private void SetAIToPhasing()
+        {
+            //m_hasPhaseChanged = true;
+            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
+            m_stateHandle.OverrideState(State.Phasing);
+            m_wallPosPoint.SetParent(m_hitbox.transform);
+            m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
+            m_wallPosPoint.gameObject.SetActive(false);
+            m_chainHurtBox.gameObject.SetActive(false);
+            m_stickToWall = false;
+            m_phaseHandle.ApplyChange();
+            m_animation.DisableRootMotion();
+            m_animation.SetEmptyAnimation(0, 0);
+        }
+
+        private void StopCurrentAttackRoutine()
+        {
+            if (m_currentAttackCoroutine != null)
+            {
+                StopCoroutine(m_currentAttackCoroutine);
+                m_currentAttackCoroutine = null;
+            }
+            if (m_leapRoutine != null)
+            {
+                m_leapRoutine = null;
+            }
+        }
+
         private IEnumerator ChangePhaseRoutine()
         {
-            m_hitbox.SetInvulnerability(Invulnerability.None);
-            m_animation.SetAnimation(0, m_info.roarAnimation, false);
-            yield return new WaitForSeconds(3.9f);
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_hitbox.SetInvulnerability(Invulnerability.None);
+            //m_hasPhaseChanged = false;
+            m_animation.SetAnimation(0, m_info.roarAnimation, false).MixDuration = 0;
+            //yield return new WaitForSeconds(3.9f);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.roarAnimation);
             m_hitbox.SetInvulnerability(Invulnerability.None);
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-            StartCoroutine(LeapAttackRoutine(6));
+            yield return StartCoroutine(LeapAttackRoutine(6));
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
         #region Attacks
         private IEnumerator ShoulderBashRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
+
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.shoulderBashAnimation, false).MixDuration = 0;
+            //yield return new WaitForSeconds(0.5f);
+            //m_character.physics.SetVelocity(m_info.shoulderBashVelocity.x * transform.localScale.x, 0);
+            //yield return new WaitForSeconds(0.15f);
+            //m_movement.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.shoulderBashAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
             DecidedOnAttack(false);
             m_animation.DisableRootMotion();
+            m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator ChainShockRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
+
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = true;
             m_animation.SetAnimation(0, m_info.chainShockAttack.animation, false);
             yield return new WaitForSeconds(.65f);
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = true;
             m_fistPoint.position = m_wristPoint.position;
             m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
             var wallPos = WallPosition();
@@ -421,22 +484,28 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_fistPoint.position = Vector2.MoveTowards(m_fistPoint.position, m_wristPoint.position, 5);
                 yield return null;
             }
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
             m_animation.SetAnimation(0, m_info.chainShockEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainShockEndAnimation);
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             DecidedOnAttack(false);
+            m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator ShoulderBashHookRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
+
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = true;
             m_wallPosPoint.position = WallPosition();
             m_wallPosPoint.SetParent(null);
             m_animation.SetAnimation(0, m_info.shoulderBashAttack.animation, false);
             yield return new WaitForSeconds(.65f);
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = true;
             m_fistPoint.position = m_wristPoint.position;
             m_animation.SetAnimation(0, m_info.hookTravelLoopAnimation, true);
             while (Vector2.Distance(m_fistPoint.position, m_wallPosPoint.position) > 3f)
@@ -467,42 +536,77 @@ namespace DChild.Gameplay.Characters.Enemies
             m_wallPosPoint.gameObject.SetActive(false);
             GetComponentInChildren<SkeletonRenderer>().maskInteraction = SpriteMaskInteraction.None;
             m_stickToWall = false;
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
             m_animation.SetAnimation(0, m_info.shoulderBashEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.shoulderBashEndAnimation);
             m_fistPoint.GetComponent<SkeletonUtilityBone>().enabled = false;
             m_wallPosPoint.SetParent(m_hitbox.transform);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             DecidedOnAttack(false);
+            m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator ChainFistPunchRoutine()
         {
-            m_animation.SetAnimation(0, m_info.chainFistPunchAttack.animation, false);
+            m_phaseHandle.allowPhaseChange = false;
+
+            var attackAnim = ChoosePunchAnimation();
+            m_animation.SetAnimation(0, attackAnim, false);
             yield return new WaitForSeconds(0.65f);
-            m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainFistPunchAttack.animation);
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = true;
+            m_punchBB.enabled = true;
+            m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
+            yield return new WaitForSeconds(0.25f);
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
+            m_punchBB.enabled = false;
+            m_movement.Stop();
+            yield return new WaitForAnimationComplete(m_animation.animationState, attackAnim);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             if (!IsFacingTarget())
             {
                 CustomTurn();
             }
-            m_animation.SetAnimation(0, m_info.chainFistPunchUpperAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chainFistPunchUpperAnimation);
+            attackAnim = ChoosePunchAnimation();
+            m_animation.SetAnimation(0, attackAnim, false);
+            yield return new WaitForSeconds(0.65f);
+            m_punchBB.enabled = true;
+            m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
+            yield return new WaitForSeconds(0.25f);
+            m_punchBB.enabled = false;
+            m_movement.Stop();
+            yield return new WaitForAnimationComplete(m_animation.animationState, attackAnim);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             DecidedOnAttack(false);
+            m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+
+            m_phaseHandle.allowPhaseChange = true;
+        }
+
+        private string ChoosePunchAnimation()
+        {
+            //return m_targetInfo.position.y > transform.position.y + 10 /*+ 5f*/ ? m_info.chainFistPunchUpperAnimation : m_info.chainFistPunchAttack.animation; ;
+            return m_info.chainFistPunchAttack.animation;
         }
 
         private IEnumerator LightningStompRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
+
             m_animation.SetAnimation(0, m_info.lightningStompAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningStompAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             DecidedOnAttack(false);
+            m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private void LaunchProjectile()
@@ -515,31 +619,55 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator LeapAttackRoutine(int repeats)
         {
+            m_phaseHandle.allowPhaseChange = false;
             for (int i = 0; i < repeats; i++)
             {
-                m_animation.SetAnimation(0, i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation, false).AnimationStart = i == 0 ? 0 : m_info.transitionStart;
-                m_animation.animationState.GetCurrent(0).MixDuration = 0;
-                while (m_currentLeapDuration < .65f)
-                {
-                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, UnityEngine.Random.Range(m_info.leapVelocity * .1f, m_info.leapVelocity));
-                    m_currentLeapDuration += Time.deltaTime;
-                    yield return null;
-                }
-                m_currentLeapDuration = 0;
-                m_movement.Stop();
-                yield return new WaitForAnimationComplete(m_animation.animationState, i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation);
-                if (i < repeats-1)
+                m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
+                if (/*i < repeats-1*/!IsFacingTarget())
                 {
                     m_animation.SetAnimation(0, m_info.leapTransitionAnimation, false).MixDuration = 0;
                     yield return new WaitForSeconds(m_info.transitionStart);
                     CustomTurn();
                 }
+                else
+                {
+                    m_animation.SetEmptyAnimation(0, 0);
+                }
+                var leapAnim = i == 0 ? m_info.leapfirstAttackAnimation : m_info.leapAttack.animation;
+                m_animation.SetAnimation(0, leapAnim, false).AnimationStart = i == 0 ? 0 : m_info.transitionStart;
+                m_animation.animationState.GetCurrent(0).MixDuration = 0;
+                //while (m_currentLeapDuration < .65f)
+                //{
+                //    m_movement.MoveTowards(Vector2.one * transform.localScale.x, UnityEngine.Random.Range(m_info.leapVelocity * .1f, m_info.leapVelocity));
+                //    m_currentLeapDuration += Time.deltaTime;
+                //    yield return null;
+                //}
+                var target = new Vector2(m_targetInfo.position.x - (20 * transform.localScale.x), m_targetInfo.position.y);
+                var targetDistance = Vector2.Distance(target, transform.position);
+                var velocity = targetDistance / m_info.leapTime;
+                float time = 0;
+                float animTime = 1 / (m_info.leapTime / 0.75f);
+                m_animation.animationState.TimeScale = animTime;
+                while (time < m_info.leapTime)
+                {
+                    m_character.physics.SetVelocity(velocity * transform.localScale.x, 0);
+                    time += Time.deltaTime;
+                    yield return null;
+                }
+                m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = true;
+                m_currentLeapDuration = 0;
+                m_movement.Stop();
+                yield return new WaitForAnimationComplete(m_animation.animationState, leapAnim);
             }
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
             m_animation.SetAnimation(0, m_info.leapAttackEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAttackEndAnimation);
             m_stickToGround = false;
             DecidedOnAttack(false);
+            m_currentAttackCoroutine = null;
+            m_leapRoutine = null;
             m_stateHandle.OverrideState(State.Chasing);
+            m_phaseHandle.allowPhaseChange = true;
             yield return null;
         }
         #endregion
@@ -576,7 +704,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_deathFX.Play();
             m_movement.Stop();
         }
-        
+
         #region Movement
         private void MoveToTarget(float targetRange)
         {
@@ -691,7 +819,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (m_currentPhaseIndex != 3)
                                 {
                                     m_attackCount++;
-                                    StartCoroutine(ShoulderBashRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(ShoulderBashRoutine());
+                                    //StartCoroutine(ShoulderBashRoutine());
                                 }
                                 else
                                 {
@@ -709,7 +838,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (patternIndex == 0 || patternIndex == 1 || patternIndex == 2 && m_currentPhaseIndex != 3)
                             {
                                 m_attackCount++;
-                                StartCoroutine(ChainFistPunchRoutine());
+                                m_currentAttackCoroutine = StartCoroutine(ChainFistPunchRoutine());
                             }
                             else
                             {
@@ -723,7 +852,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (AllowAttack(2, State.Attacking))
                                 {
                                     m_attackCount++;
-                                    StartCoroutine(ShoulderBashHookRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(ShoulderBashHookRoutine());
                                 }
                             }
                             else
@@ -736,7 +865,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (AllowAttack(3, State.Attacking))
                             {
                                 m_attackCount++;
-                                StartCoroutine(LightningStompRoutine());
+                                m_currentAttackCoroutine = StartCoroutine(LightningStompRoutine());
+
                             }
                             break;
                         case Attack.ChainShock:
@@ -745,7 +875,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (AllowAttack(3, State.Attacking))
                                 {
                                     m_attackCount++;
-                                    StartCoroutine(ChainShockRoutine());
+                                    m_currentAttackCoroutine = StartCoroutine(ChainShockRoutine());
                                 }
                             }
                             else
@@ -780,7 +910,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         m_stateHandle.Wait(State.Chasing);
                         StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                        StartCoroutine(LeapAttackRoutine(leapCount));
+                        m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(leapCount));
+                        m_leapRoutine = m_currentAttackCoroutine;
                     }
                     else
                     {
@@ -857,6 +988,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void PhaseFX()
         {
+            m_aoeBB.enabled = true;
             m_orbLightningFX.Play();
             m_bodyLightningFX.Play();
             if (m_currentPhaseIndex == 3)
@@ -865,13 +997,19 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void PhaseFXStop()
+        {
+            m_aoeBB.enabled = false;
+            m_orbLightningFX.Stop();
+        }
+
         private void LeapFX()
         {
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.leapAttackEndAnimation)
             {
                 var fxPool = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_leapFX);
                 fxPool.Play();
-                fxPool.transform.position = new Vector2(transform.position.x + (17 * transform.localScale.x), transform.position.y - 1.5f);
+                fxPool.transform.position = new Vector2(transform.position.x + (23f * transform.localScale.x), transform.position.y - 1.5f);
             }
         }
 
@@ -880,22 +1018,27 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_spineListener.Subscribe(m_info.phaseEvent, PhaseFX);
             m_spineListener.Subscribe(m_info.leapEvent, LeapFX);
-            m_spineListener.Subscribe(m_info.stopRoarEvent, m_orbLightningFX.Stop);
+            m_spineListener.Subscribe(m_info.stopRoarEvent, PhaseFXStop);
             m_spineListener.Subscribe(m_info.stompEvent, LaunchProjectile);
             m_animation.DisableRootMotion();
 
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
+
+            m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
         }
 
         private void Update()
         {
+            //if (!m_hasPhaseChanged && m_stateHandle.currentState != State.Phasing)
+            //{
+            //}
             m_phaseHandle.MonitorPhase();
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Intro:
                     if (IsFacingTarget())
@@ -911,10 +1054,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Phasing:
-                    m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(ChangePhaseRoutine());
                     break;
                 case State.Turning:
+                    m_phaseHandle.allowPhaseChange = false;
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_movement.Stop();
@@ -943,7 +1086,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     {
                                         m_stateHandle.Wait(State.Chasing);
                                         StartCoroutine(StickToGroundRoutine(GroundPosition().y));
-                                        StartCoroutine(LeapAttackRoutine(6));
+                                        m_currentAttackCoroutine = StartCoroutine(LeapAttackRoutine(6));
                                     }
                                     else
                                     {

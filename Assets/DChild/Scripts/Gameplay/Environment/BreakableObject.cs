@@ -51,6 +51,10 @@ namespace DChild.Gameplay.Environment
         private GameObject m_debris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
         private bool m_copySorting;
+        [SerializeField, ShowIf("m_createDebris"), Indent]
+        private bool m_applyDebrisColorChange;
+        [SerializeField, ShowIf("m_applyDebrisColorChange"), Indent]
+        private Color m_colorToApply = Color.white;
 
         [SerializeField, TabGroup("On Destroy")]
         private UnityEvent m_onDestroy;
@@ -114,22 +118,37 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+        [Button, HideInEditorMode, HideIf("m_isDestroyed")]
+        public void BreakObject()
+        {
+            m_isDestroyed = true;
+            m_onDestroy?.Invoke();
+            if (m_createDebris)
+            {
+                InstantiateDebris(m_debris);
+            }
+        }
+
         private void InstantiateDebris(GameObject debris)
         {
             var instance = Instantiate(debris, m_object.position, Quaternion.identity);
             m_instantiatedDebris = instance.GetComponent<Debris>();
             m_instantiatedDebris.transform.parent = transform;
-            m_instantiatedDebris.transform.localScale = transform.localScale;
+            m_instantiatedDebris.transform.localScale = Vector3.one;
             m_instantiatedDebris.transform.parent = null;
             m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
             m_leftOverDebris = m_instantiatedDebris.GetDetachables();
-            if (m_copySorting)
+            if (m_copySorting && m_sortingHandle != null)
             {
                 var renderers = instance.GetComponentsInChildren<SpriteRenderer>();
                 for (int i = 0; i < renderers.Length; i++)
                 {
                     renderers[i].sortingLayerID = m_sortingHandle.sortingLayerID;
                 }
+            }
+            if (m_applyDebrisColorChange)
+            {
+                m_instantiatedDebris.GetComponent<RendererColorChangeHandle>().ApplyColor(m_colorToApply);
             }
         }
 
@@ -184,16 +203,7 @@ namespace DChild.Gameplay.Environment
         }
 
 #if UNITY_EDITOR
-        [Button, HideInEditorMode, HideIf("m_isDestroyed")]
-        private void BreakObject()
-        {
-            m_isDestroyed = true;
-            m_onDestroy?.Invoke();
-            if (m_createDebris)
-            {
-                InstantiateDebris(m_debris);
-            }
-        }
+        
 
         [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
         private void FixObject()

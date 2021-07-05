@@ -19,10 +19,11 @@ namespace DChild.Gameplay.Combat
         public IPlayer owner { get; private set; }
         public StatusEffectReciever statusEffectReciever { get; private set; }
         public bool isBreakableObject { get; private set; }
+        public bool canBlockDamage { get; private set; }
         public BreakableObject breakableObject { get; private set; }
 
 
-        public void Initialize(IDamageable target, Character character = null, IFlinch flinchHandler = null)
+        public void Initialize(IDamageable target, bool canBlockDamage,Character character = null, IFlinch flinchHandler = null)
         {
             this.instance = target;
             isCharacter = character;
@@ -39,12 +40,12 @@ namespace DChild.Gameplay.Combat
                 characterID = character.ID;
             }
             this.flinchHandler = flinchHandler;
-
+            this.canBlockDamage = canBlockDamage;
             isBreakableObject = false;
             breakableObject = null;
         }
 
-        public void Initialize(IDamageable target, BreakableObject breakableObject = null)
+        public void Initialize(IDamageable target, bool canBlockDamage, BreakableObject breakableObject = null)
         {
             this.instance = target;
             isBreakableObject = breakableObject;
@@ -59,9 +60,10 @@ namespace DChild.Gameplay.Combat
             owner = null;
             hasID = false;
             flinchHandler = null;
+            this.canBlockDamage = canBlockDamage;
         }
 
-        public void Initialize(IDamageable target, float damageReduction)
+        public void Initialize(IDamageable target, bool canBlockDamage, float damageReduction)
         {
             this.instance = target;
             this.damageReduction = damageReduction;
@@ -72,7 +74,7 @@ namespace DChild.Gameplay.Combat
             owner = null;
             hasID = false;
             flinchHandler = null;
-
+            this.canBlockDamage = canBlockDamage;
             isBreakableObject = false;
             breakableObject = null;
         }
