@@ -105,6 +105,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Detect,
+            Idle,
             Patrol,
             Cooldown,
             Turning,
@@ -124,6 +125,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private SkeletonAnimation m_skeletomAnimation;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_spriteMask;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
@@ -318,6 +323,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_targetInfo.Set(null, null);
                 m_enablePatience = false;
                 m_isDetecting = false;
+                m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                m_spriteMask.SetActive(true);
                 m_stateHandle.SetState(State.Patrol);
             }
         }
@@ -340,9 +347,16 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.None;
+            m_spriteMask.SetActive(false);
+            var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
+            m_animation.SetAnimation(0, reappearAnim, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //m_stateHandle.OverrideState(State.ReevaluateSituation);
+            StartCoroutine(DespawnRoutine());
             yield return null;
         }
 
@@ -350,8 +364,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var disappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.disappearing1Animation : m_info.disappearing2Animation;
             m_animation.SetAnimation(0, disappearAnim, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, disappearAnim);
             m_hitbox.Disable();
+            yield return new WaitForAnimationComplete(m_animation.animationState, disappearAnim);
             var random = UnityEngine.Random.Range(0, 2);
             transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 10 : -10), GroundPosition().y + 20);
             yield return new WaitForSeconds(1f);
@@ -464,6 +478,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_spineEventListener.Subscribe(m_info.spawnBarrelEvent, SpawnBarrel);
+            m_hitbox.Disable();
             //m_selfCollider.SetActive(false);
         }
 
@@ -501,14 +516,20 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
 
+                case State.Idle:
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_agent.Stop();
+                    break;
+
                 case State.Patrol:
-                    if (m_animation.GetCurrentAnimation(0).ToString() == m_info.patrol.animation)
-                    {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
-                    }
+                    //if (m_animation.GetCurrentAnimation(0).ToString() == m_info.patrol.animation)
+                    //{
+                    //}
+                    m_turnState = State.ReevaluateSituation;
+                    m_animation.DisableRootMotion();
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;
 
                 case State.Turning:
@@ -618,6 +639,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDoingAction = false;
             m_hitbox.Enable();
+            m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+            m_spriteMask.SetActive(true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
         }

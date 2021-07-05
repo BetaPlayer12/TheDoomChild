@@ -220,6 +220,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
             m_agent.Stop();
+            m_character.physics.SetVelocity(Vector2.zero);
             StartCoroutine(KnockbackRoutine());
             if (m_flinchHandle.m_autoFlinch)
             {
@@ -242,20 +243,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_agent.enabled = true;
             m_agent.Stop();
-            //Vector3 v_diff = (new Vector3(m_targetInfo.position.x, m_targetInfo.position.y ) - transform.position);
-            //float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-            //m_knocbackDirection.rotation = Quaternion.Euler(0f, 0f, (atan2 * Mathf.Rad2Deg) + (transform.position.x > m_targetInfo.position.x ? 180 : 0));
-
-            //m_animation.DisableRootMotion();
-            //float time = 0;
-            //while (time < .25f)
-            //{
-            //    //GetComponent<Rigidbody2D>().velocity = (transform.position.x > m_targetInfo.position.x ? 50f : -50f) * m_knocbackDirection.right;
-            //    m_character.physics.SetVelocity((transform.position.x > m_targetInfo.position.x ? 50f : -50f) * m_knocbackDirection.right);
-            //    time += Time.deltaTime;
-            //    yield return null;
-            //}
-            //m_agent.Stop();
+            m_character.physics.SetVelocity(Vector2.zero);
             yield return null;
         }
 
@@ -289,6 +277,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopAllCoroutines();
                 m_agent.Stop();
+                m_character.physics.SetVelocity(Vector2.zero);
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_targetInfo.Set(null, null);
                 m_flinchHandle.m_autoFlinch = true;
@@ -343,12 +332,14 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             m_bodyCollider.SetActive(true);
             m_agent.Stop();
+            m_character.physics.SetVelocity(Vector2.zero);
             m_character.physics.simulateGravity = true;
         }
         #region Attack
         private void ExecuteAttack(Attack m_attack)
         {
             m_agent.Stop();
+            m_character.physics.SetVelocity(Vector2.zero);
             switch (/*m_attack*/ m_currentAttack)
             {
                 case Attack.Attack:
@@ -451,6 +442,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 else
                 {
                     m_agent.Stop();
+                    m_character.physics.SetVelocity(Vector2.zero);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 }
             }
@@ -501,6 +493,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_agent.Stop();
+                    m_character.physics.SetVelocity(Vector2.zero);
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -528,6 +521,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
                     m_agent.Stop();
+                    m_character.physics.SetVelocity(Vector2.zero);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idle2Animation);
                     break;
@@ -536,6 +530,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_flinchHandle.m_autoFlinch = false;
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
+                    m_character.physics.SetVelocity(Vector2.zero);
                     StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_attackDecider.chosenAttack.attack));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
@@ -559,6 +554,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_agent.Stop();
+                            m_character.physics.SetVelocity(Vector2.zero);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
                         }
                     }
@@ -579,6 +575,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                     {
                         m_agent.Stop();
+                        m_character.physics.SetVelocity(Vector2.zero);
                         m_stateHandle.SetState(State.Attacking);
                     }
                     break;

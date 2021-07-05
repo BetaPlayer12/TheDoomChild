@@ -300,6 +300,8 @@ MonoBehaviour:
   m_statsData: {fileID: 11400000, guid: 4df3c74c5be5d3541a3a67261e17429b, type: 2}
   m_boss: {fileID: 598893996725304727}
   m_hitbox: {fileID: 8621330862641687321}
+  m_aoeBB: {fileID: 6475345801531021788}
+  m_punchBB: {fileID: 7888068086651804890}
   m_turnHandle: {fileID: 2929188793810231797}
   m_movement: {fileID: 4569944036121508132}
   m_deathHandle: {fileID: 8782186230795851509}
@@ -374,6 +376,8 @@ MonoBehaviour:
     m_particleSystems:
     - {fileID: 4415514755679400633}
     - {fileID: 1296343817826152035}
+    - {fileID: 388524830836774160}
+    - {fileID: 7440407433907166815}
     - {fileID: 4014074170193078288}
     - {fileID: 6165754810603299679}
     - {fileID: 5585690748140191784}
@@ -384,6 +388,8 @@ MonoBehaviour:
     - {fileID: 7064996177696558412}
     m_originalSimulationSpeed:
     - 1
+    - 1
+    - 1.5
     - 1
     - 1.5
     - 1
@@ -732,7 +738,7 @@ PrefabInstance:
     - target: {fileID: 1064119641838916317, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.592723
+      value: 5.59272
       objectReference: {fileID: 0}
     - target: {fileID: 1294262980927427476, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
@@ -972,7 +978,7 @@ PrefabInstance:
     - target: {fileID: 2309451603404671947, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.592723
+      value: 5.59272
       objectReference: {fileID: 0}
     - target: {fileID: 2393595241924245603, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
@@ -2337,7 +2343,7 @@ PrefabInstance:
     - target: {fileID: 5541838952368488981, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.592723
+      value: 5.59272
       objectReference: {fileID: 0}
     - target: {fileID: 5541838952368488981, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
@@ -2487,12 +2493,12 @@ PrefabInstance:
     - target: {fileID: 6155742353752886228, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.32237753
+      value: -0.32238007
       objectReference: {fileID: 0}
     - target: {fileID: 6155742353752886228, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7913413
+      value: 3.7913437
       objectReference: {fileID: 0}
     - target: {fileID: 6230701744289630374, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
@@ -2563,6 +2569,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632569123960411687, guid: 6ceecd07745aac24d901fb599fefbe67,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.7559204
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632569123960411687, guid: 6ceecd07745aac24d901fb599fefbe67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.59272
       objectReference: {fileID: 0}
     - target: {fileID: 6758716586526214025, guid: 6ceecd07745aac24d901fb599fefbe67,
         type: 3}
@@ -2942,6 +2958,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &6475345801531021788 stripped
+CircleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 3252946510958432008, guid: 6ceecd07745aac24d901fb599fefbe67,
+    type: 3}
+  m_PrefabInstance: {fileID: 8428984984078178004}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &7888068086651804890 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1837971189170768398, guid: 6ceecd07745aac24d901fb599fefbe67,
+    type: 3}
+  m_PrefabInstance: {fileID: 8428984984078178004}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &4415514755679400633 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 5313907165110527085, guid: 6ceecd07745aac24d901fb599fefbe67,
@@ -2978,6 +3006,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!198 &388524830836774160 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8186862877419045828, guid: 6ceecd07745aac24d901fb599fefbe67,
+    type: 3}
+  m_PrefabInstance: {fileID: 8428984984078178004}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7440407433907166815 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1420997887703287947, guid: 6ceecd07745aac24d901fb599fefbe67,
+    type: 3}
+  m_PrefabInstance: {fileID: 8428984984078178004}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &4014074170193078288 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4849565494547136196, guid: 6ceecd07745aac24d901fb599fefbe67,
