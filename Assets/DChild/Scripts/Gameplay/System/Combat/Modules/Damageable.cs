@@ -32,6 +32,7 @@ namespace DChild.Gameplay.Combat
         protected Hitbox[] m_hitboxes;
 
         public event EventAction<DamageEventArgs> DamageTaken;
+        public event EventAction<DamageEventArgs> DamageBlock;
         public event EventAction<EventActionArgs> Destroyed;
         public event EventAction<EventActionArgs> Healed;
 
@@ -51,6 +52,11 @@ namespace DChild.Gameplay.Combat
             {
                 Destroyed?.Invoke(this, EventActionArgs.Empty);
             }
+        }
+
+        public virtual void BlockDamage(int totalDamage, AttackType type)
+        {
+            CallDamageBlock(totalDamage, type);
         }
 
         public void Heal(int health)
@@ -77,6 +83,8 @@ namespace DChild.Gameplay.Combat
             }
         }
 
+        public Hitbox[] GetHitboxes() => m_hitboxes;
+
         public void SetInvulnerability(Invulnerability level)
         {
             for (int i = 0; i < m_hitboxes.Length; i++)
@@ -84,11 +92,17 @@ namespace DChild.Gameplay.Combat
                 m_hitboxes[i].SetInvulnerability(level);
             }
         }
-        
+
         protected void CallDamageTaken(int totalDamage, AttackType type)
         {
             var eventArgs = new DamageEventArgs(totalDamage, type);
             DamageTaken?.Invoke(this, eventArgs);
+        }
+
+        protected void CallDamageBlock(int totalDamage, AttackType type)
+        {
+            var eventArgs = new DamageEventArgs(totalDamage, type);
+            DamageBlock?.Invoke(this, eventArgs);
         }
 
         private void Awake()
@@ -112,7 +126,7 @@ namespace DChild.Gameplay.Combat
             m_resistance = resistance;
         }
 
-        [Button, ShowIf("isAlive"),HideInEditorMode]
+        [Button, ShowIf("isAlive"), HideInEditorMode]
         private void KillSelf()
         {
             TakeDamage(999999999, AttackType.True);
@@ -123,6 +137,8 @@ namespace DChild.Gameplay.Combat
         {
             Heal(999999999);
         }
+
+       
 #endif
     }
 }

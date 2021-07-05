@@ -68,9 +68,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 1655709890455938632}
   m_animator: {fileID: 3515696310375615918}
-  m_animation: 
+  m_animation: Death
   m_bodyDuration:
-    m_startTime: 5
+    m_startTime: 0
   m_destroySource: 0
 --- !u!114 &5334590541247454450
 MonoBehaviour:
@@ -145,6 +145,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
+  m_overrideColor: 0
+  m_colorToUse: {r: 1, g: 1, b: 1, a: 1}
+  m_overrideScale: 0
+  m_scaleToUse: {x: 1, y: 1, z: 1}
 --- !u!114 &3515696310375615918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,7 +182,7 @@ MonoBehaviour:
   m_colliders: {fileID: 0}
   m_facing: 1
   m_bodyReference:
-    m_default: {fileID: 0}
+    m_default: {fileID: 8023666750153541015}
     m_list: []
 --- !u!114 &4280008473365528306
 MonoBehaviour:
@@ -279,7 +283,7 @@ MonoBehaviour:
   m_damageable: {fileID: 1655709890455938632}
   m_centerMass: {fileID: 8023666750153541015}
   m_aggroBoundary: {fileID: 0}
-  m_statsData: {fileID: 0}
+  m_statsData: {fileID: 11400000, guid: 876212be139d598469f07b24a491e5b2, type: 2}
   m_spineEventListener: {fileID: 5334590540300677551}
   m_bodyCollider: {fileID: 0}
   m_turnHandle: {fileID: 5334590541247454450}
@@ -287,6 +291,26 @@ MonoBehaviour:
   m_deathHandle: {fileID: 5334590541247454449}
   m_flinchHandle: {fileID: 5334590541247454448}
   m_startingDirection: 1
+--- !u!114 &7333416138596415019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268292748258946614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 8023666750153541015}
+  m_data: {fileID: 0}
+  m_info:
+    damage: []
+    critChance: 0
+    critDamageModifier: 1
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &8076379707015932634
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +380,7 @@ PrefabInstance:
     - target: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
       propertyPath: m_maxHealth
-      value: 40
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}

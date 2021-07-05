@@ -36,6 +36,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_defeatAnimation;
+            public string defeatAnimation => m_defeatAnimation;
 
             [SerializeField]
             private MovementInfo m_moveInfo = new MovementInfo();
@@ -225,7 +228,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private PhaseHandle<Phase, PhaseInfo> m_phaseHandle;
 
         private PhaseInfo m_currentPhaseInfo;
-        private bool m_goToPhaseTransistion;
 
         private float m_targetHeight;
         private bool m_hasAttacked;
@@ -253,7 +255,10 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
             //TEMP
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
+            this.enabled = false;
+            GetComponentInChildren<Hitbox>().Disable();
+            m_animation.SetAnimation(0, m_info.defeatAnimation, false);
         }
 
         private void UpdateAttackList(IReadOnlyList<Attack> availableAttacks)
@@ -284,10 +289,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnPhaseChange()
         {
-            if (m_stateHandle.currentState != State.ReevaluateSituation)
-            {
-                m_goToPhaseTransistion = true;
-            }
+            m_hasAttacked = false;
+            m_stateHandle.SetState(State.PhaseTransistion);
         }
 
         protected override void OnTargetDisappeared()
@@ -323,6 +326,7 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Atttacks
         private IEnumerator FrontalScreamRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
             var attackInfo = m_info.frontalScreamInfo;
             //Move to Player height
@@ -363,10 +367,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, attackInfo.animation);
             m_hasAttacked = true;
             m_stateHandle.ApplyQueuedState();
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator DiagonalSoundRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
             float height = 0;
             bool InRange = false;
@@ -443,10 +449,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
             m_hasAttacked = true;
             m_stateHandle.ApplyQueuedState();
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator SummonSoundBallCenterRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
 
             yield return MoveToRoutine(m_roomCenter.position);
@@ -492,10 +500,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator SummonSoundBallRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
 
             var destination = m_centerMass.position;
@@ -528,12 +538,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hasAttacked = true;
             m_stateHandle.ApplyQueuedState();
-
+            m_phaseHandle.allowPhaseChange = true;
             float GetRandomNormalizeNumber() => UnityEngine.Random.Range(-1f, 1f);
         }
 
         private IEnumerator SoundBallThrowRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
             m_stateHandle.Wait(State.ReevaluateSituation);
 
             var leftSideDistance = Vector3.Distance(m_centerMass.position, m_leftSideRoom.position);
@@ -593,6 +604,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_hasAttacked = true;
             m_stateHandle.ApplyQueuedState();
+            m_phaseHandle.allowPhaseChange = true;
 
             void OnChargeDone(object sender, EventActionArgs eventArgs)
             {
@@ -732,16 +744,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.PhaseTransistion:
                     StopAllCoroutines();
                     StartCoroutine(SummonSoundBallCenterRoutine());
-                    m_goToPhaseTransistion = false;
                     m_phaseHandle.ApplyChange();
                     break;
                 case State.ReevaluateSituation:
-                    if (m_goToPhaseTransistion)
-                    {
-                        m_hasAttacked = false;
-                        m_stateHandle.SetState(State.PhaseTransistion);
-                    }
-                    else if (m_hasAttacked)
+                    if (m_hasAttacked)
                     {
                         m_attackIntervalTimer.SetStartTime(m_info.attackInterval.GenerateRandomValue());
                         m_attackIntervalTimer.Reset();
@@ -752,8 +758,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_stateHandle.SetState(State.Attack);
                     }
-
-
                     break;
                 case State.WaitForBehaviour:
 

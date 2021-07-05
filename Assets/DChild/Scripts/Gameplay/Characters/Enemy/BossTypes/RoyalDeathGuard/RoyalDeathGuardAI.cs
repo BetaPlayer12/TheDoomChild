@@ -216,6 +216,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_scytheSpinFX;
 
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_scytheSpinBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_groundStabBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_scytheStabBB;
+
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -355,15 +362,24 @@ namespace DChild.Gameplay.Characters.Enemies
             m_scytheSpinFX.Stop();
             m_agent.Stop();
             m_hitbox.Disable();
-            this.gameObject.SetActive(false); //TEMP
+            //this.gameObject.SetActive(false); //TEMP
             if (!m_deathHandle.gameObject.activeSelf)
             {
-                m_animation.SetAnimation(0, m_info.defeatAnimation, true);
+                this.enabled = false;
+                StartCoroutine(DefeatRoutine());
+                StartCoroutine(DeathStickRoutine());
             }
             else
             {
                 StartCoroutine(DeathStickRoutine());
             }
+        }
+
+        private IEnumerator DefeatRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.defeatAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.defeatAnimation);
+            this.gameObject.SetActive(false);
         }
 
         private IEnumerator DeathStickRoutine()
@@ -396,8 +412,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attack2.animation, false);
             m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
-            yield return new WaitForSeconds(1.3f);
+            yield return new WaitForSeconds(.5f);
+            m_groundStabBB.transform.position = new Vector2(m_targetInfo.position.x, GroundPosition().y);
+            yield return new WaitForSeconds(1.75f);
             m_slashGroundFX.Play();
+            m_groundStabBB.enabled = true;
+            m_scytheStabBB.enabled = true;
+            yield return new WaitForSeconds(1f);
+            m_groundStabBB.enabled = false;
+            m_scytheStabBB.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -412,11 +435,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attack3.animation, false);
             m_animation.AddAnimation(0, m_info.idle1Animation, true, 0)/*.MixDuration = 1*/;
-            yield return new WaitForSeconds(.7f);
+            yield return new WaitForSeconds(3f);
             //m_scytheSpinFX.gameObject.SetActive(true);
             m_scytheSpinFX.Play(); //m_scytheSpinFX.GetComponent<ParticleSystem>().Play();
-            yield return new WaitForSeconds(1f);
+            m_scytheSpinBB.enabled = true;
+            yield return new WaitForSeconds(1.5f);
             m_scytheSpinFX.Stop();
+            m_scytheSpinBB.enabled = false;
             //m_scytheSpinFX.gameObject.SetActive(false); //m_scytheSpinFX.GetComponent<ParticleSystem>().Stop();
             //yield return new WaitForSeconds(1.3f);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack3.animation);

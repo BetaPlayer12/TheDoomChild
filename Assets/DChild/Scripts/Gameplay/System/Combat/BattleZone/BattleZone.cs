@@ -25,13 +25,14 @@ namespace DChild.Gameplay.Combat
         private void OnSpawn(object sender, EventActionArgs<GameObject> eventArgs)
         {
             m_entityCount++;
-            eventArgs.info.GetComponent<Damageable>().Destroyed += OnEntityDestroyed;
-            if (eventArgs.info.TryGetComponent(out ICombatAIBrain brain))
+            var isntance = eventArgs.info;
+            isntance.GetComponent<Damageable>().Destroyed += OnEntityDestroyed;
+            if (isntance.TryGetComponent(out ICombatAIBrain brain))
             {
                 var player = GameplaySystem.playerManager.player;
                 brain.SetTarget(player.damageableModule, player.character);
             }
-            if (eventArgs.info.TryGetComponent(out IBattleZoneAIBrain battleZoneBrain))
+            if (isntance.TryGetComponent(out IBattleZoneAIBrain battleZoneBrain))
             {
                 battleZoneBrain.SwitchToBattleZoneAI();
             }
@@ -93,7 +94,7 @@ namespace DChild.Gameplay.Combat
 
         public void Update()
         {
-            m_spawnHandle.Update(this,GameplaySystem.time.deltaTime);
+            m_spawnHandle.Update(this, GameplaySystem.time.deltaTime);
         }
     }
 }

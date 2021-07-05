@@ -32,9 +32,9 @@ namespace DChild.Gameplay.Combat.BattleZoneComponents
             }
         }
 
-        [SerializeField, DrawWithUnity]
+        [SerializeField, DrawWithUnity,AssetsOnly]
         private GameObject m_entity;
-        [SerializeField]
+        [SerializeField, AssetsOnly]
         private GameObject m_spawnFX;
         [SerializeField,MinValue(0)]
         private float m_fxThenInstantiateDelay;

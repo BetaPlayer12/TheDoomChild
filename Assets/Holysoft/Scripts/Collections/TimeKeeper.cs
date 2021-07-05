@@ -15,7 +15,6 @@ namespace Holysoft.Collections
         private int m_minutes;
         [SerializeField]
         private int m_seconds;
-        [SerializeField]
         [ReadOnly]
         private float m_secondsTimer;
 

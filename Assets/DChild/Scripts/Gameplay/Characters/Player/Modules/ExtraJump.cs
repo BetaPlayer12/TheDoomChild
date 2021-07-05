@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,11 +11,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_count;
         [SerializeField, MinValue(0)]
         private float m_power;
+        [SerializeField]
+        private ParticleSystem m_doubleJumpFX;
+        [SerializeField]
+        private Transform m_particleSpawnPosition;
 
         private Rigidbody2D m_rigidbody;
         private Animator m_animator;
         private int m_animationParameter;
         private int m_currentCount;
+
+        public event EventAction<EventActionArgs> ExecuteModule;
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -46,6 +53,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_currentCount--;
                 m_rigidbody.velocity = new Vector2(0, m_power);
                 m_animator.SetBool(m_animationParameter, true);
+                m_doubleJumpFX.Play();
+
+                ParticleSystem particle = Instantiate(m_doubleJumpFX);
+                particle.transform.position = m_particleSpawnPosition.position;
+
+                ExecuteModule?.Invoke(this, EventActionArgs.Empty);
             }
         }
     }

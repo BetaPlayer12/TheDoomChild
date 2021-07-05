@@ -14,6 +14,9 @@ namespace DChild.Gameplay.Systems
     {
         [SerializeField]
         private LootData m_loot;
+
+        
+
         [SerializeField]
         private bool m_dropWhenDestroyed;
         private Damageable m_damageable;
@@ -47,6 +50,8 @@ namespace DChild.Gameplay.Systems
         }
 
 #if UNITY_EDITOR
+
+        public LootData lootData { get => m_loot; set => m_loot = value; }
         [Button, ShowIf("@m_loot == null"), HideInPrefabInstances]
         private void CreateLootData()
         {

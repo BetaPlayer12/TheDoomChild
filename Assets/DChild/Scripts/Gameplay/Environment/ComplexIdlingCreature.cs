@@ -447,7 +447,6 @@ namespace DChild.Gameplay.Environment
                     }
                 }
                 m_currentBehaviour.Initialize(gameObject, m_spineAnimation, m_instruction, ref m_timer);
-                Debug.Log("Done");
             }
             else
             {

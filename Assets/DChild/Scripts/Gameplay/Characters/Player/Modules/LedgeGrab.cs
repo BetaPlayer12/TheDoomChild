@@ -72,10 +72,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
+            m_state.waitForBehaviour = true;
+            m_animator.SetTrigger(m_animation);
             m_rigidbody.position = m_destination;
             m_rigidbody.velocity = Vector2.zero;
-            m_animator.SetTrigger(m_animation);
-            m_state.waitForBehaviour = true;
             //Note: Animation Gitch is happening right now. Possible solution is to play animation first and on start teleport player.s
         }
 

@@ -1,4 +1,5 @@
-﻿using Holysoft;
+﻿using DChild.Gameplay;
+using Holysoft;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,18 +36,25 @@ public class DropCube : MonoBehaviour
     private float m_currentReturnSpeed;
     public bool m_isDropping;
     public bool dropped;
+    public bool m_istriggered = false;
     [SerializeField]
-    public int delay;
+    public float m_FallDelay;
+    [SerializeField]
+    public float m_ReturnDelay;
     [SerializeField]
     private float m_radiusOffset = 1;
     [Button]
     public void Drop()
     {
-        m_fallTime = 0;
-        m_returnTime = 0;
-        m_shake = true;
-        StartCoroutine(DelayCoroutine());
-        transform.position = m_currentPos;
+        if (m_istriggered == false)
+        {
+            m_fallTime = 0;
+            m_returnTime = 0;
+            m_shake = true;
+            StartCoroutine(FallDelayCoroutine());
+            transform.position = m_currentPos;
+            m_istriggered = true;
+        }
 
     }
 
@@ -56,22 +64,31 @@ public class DropCube : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
            
-            StartCoroutine(DelayCoroutine());
+            StartCoroutine(ReturnDelayCoroutine());
             transform.position = m_currentPos;
             m_isDropping = false;
             dropped = true;
            
         }
     }
-    IEnumerator DelayCoroutine()
+    IEnumerator FallDelayCoroutine()
     {
         m_currentPos.x = transform.position.x;
         m_currentPos.y = transform.position.y;
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(m_FallDelay);
+        m_shake = false;
+        m_isDropping = true;
+        
+    }
+    IEnumerator ReturnDelayCoroutine()
+    {
+        m_currentPos.x = transform.position.x;
+        m_currentPos.y = transform.position.y;
+        yield return new WaitForSeconds(m_ReturnDelay);
         m_shake = false;
         m_isDropping = true;
     }
-   
+
     private void SetMoveValues(Vector2 start, Vector2 destination)
     {
         m_start = start;
@@ -99,39 +116,39 @@ public class DropCube : MonoBehaviour
     }
 #endif
    
-    public void Update()
+    public void FixedUpdate()
     {
         var offset = Random.insideUnitCircle;
         if (m_shake == true)
         {
             transform.position = m_currentPos + offset * m_radiusOffset;
         }
-        
-        
 
         if (m_isDropping == true)
         {
+            var deltaTime = GameplaySystem.time.fixedDeltaTime;
             if (dropped == false)
             {
-                m_fallTime += Time.deltaTime;
+                m_fallTime += deltaTime;
                 m_fallSpeed = m_fallSpeedCurve.Evaluate(m_fallTime);
                 m_currentFallSpeed = m_maxFallSpeed * m_fallSpeed;
                 SetMoveValues(m_cube.localPosition, m_endPosition);
-               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentFallSpeed);
+               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentFallSpeed* deltaTime);
                
             }
             if (dropped == true)
             {
-                m_returnTime += Time.deltaTime;
+                m_returnTime += deltaTime;
                 m_returnSpeed = m_returnSpeedCurve.Evaluate(m_returnTime);
                 m_currentReturnSpeed = m_maxReturnSpeed * m_returnSpeed;
                 SetMoveValues(m_cube.localPosition, m_startPosition);
-                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentReturnSpeed);
+                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentReturnSpeed* deltaTime);
               
                 if(RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_startPosition))
                 {
                     m_isDropping = false;
                     dropped = false;
+                    m_istriggered = false;
                     m_cubecrusher.GetComponent<Collider2D>().enabled = false;
                 }
             }

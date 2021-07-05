@@ -68,7 +68,14 @@ namespace DChild.Gameplay.Projectiles
             if (directionNormal.x < 0)
             {
                 var scale = transform.localScale;
-                scale.y *= -1;
+                if (projectileData.isGroundProjectile)
+                {
+                    scale.x *= -1;
+                }
+                else
+                {
+                    scale.y *= -1;
+                }
                 transform.localScale = scale;
             }
             m_physics.SetVelocity(directionNormal * speed);
@@ -95,7 +102,7 @@ namespace DChild.Gameplay.Projectiles
             else
             {
                 m_model?.SetActive(false);
-                m_particleSystem?.Stop();
+                m_particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmitting);
             }
         }
 

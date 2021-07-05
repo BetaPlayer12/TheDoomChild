@@ -1,50 +1,30 @@
-﻿using System.Collections.Generic;
-using Cinemachine;
+﻿using System;
+using System.Collections.Generic;
 using DChild.Gameplay.Cinematics.Cameras;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 namespace DChild.Gameplay.Cinematics
 {
     public class Cinema : SerializedMonoBehaviour, ICinema, IGameplaySystemModule, IGameplayInitializable
     {
-        public enum ShakeType
-        {
-            AllDirection,
-            HorizontalOnly,
-            VerticalOnly
-        }
-
-        public enum LookAhead
-        {
-            None,
-            Up,
-            Down,
-        }
-
         [SerializeField]
         private Camera m_mainCamera;
         private IVirtualCamera m_currentVCam;
         private IVirtualCamera m_previousCam;
         private List<ITrackingCamera> m_trackingCameras;
-        private List<CinemachineBasicMultiChannelPerlin> m_noiseList;
         [SerializeField]
         private Transform m_trackingTarget;
-        private CameraOffsetHandle m_offsetHandle;
-        private LookAhead m_currentLookAhead;
+        private CameraPeekHandle m_offsetHandle;
+        private CameraPeekMode m_currentLookAhead;
 
         private bool m_leavePreviousCamAsNull;
-        [ShowInInspector, OnValueChanged("EnableCameraShake")]
-        private bool m_cameraShake;
-        [SerializeField]
-        private Dictionary<ShakeType, NoiseSettings> m_noiseSettings;
-        [SerializeField, ShowIf("m_cameraShake")]
-        private ShakeType m_currentShakeType;
-        [ShowInInspector, MinValue(0), ShowIf("m_cameraShake")]
-        private float m_shakeAmplitude;
-        [ShowInInspector, MinValue(0), ShowIf("m_cameraShake")]
-        private float m_shakeFrequency;
+        [OdinSerialize]
+        private CameraShakeHandle m_cameraShakeHandle;
+        private bool m_hasTemporaryShakeProfile;
+        private CameraShakeType m_temporaryShakeProfile;
 
         public Camera mainCamera => m_mainCamera;
 
@@ -97,7 +77,13 @@ namespace DChild.Gameplay.Cinematics
             }
         }
 
-        public void ApplyLookAhead(LookAhead look)
+        public void SetCameraPeekConfiguration(CameraPeekConfiguration configuration)
+        {
+            m_offsetHandle.SetConfiguration(configuration);
+            m_offsetHandle.ApplyOffset(m_currentVCam, m_currentLookAhead);
+        }
+
+        public void ApplyCameraPeekMode(CameraPeekMode look)
         {
             m_currentLookAhead = look;
             m_offsetHandle.ApplyOffset(m_currentVCam, m_currentLookAhead);
@@ -105,38 +91,30 @@ namespace DChild.Gameplay.Cinematics
 
         public void EnableCameraShake(bool enable)
         {
-            float amplitude = 0;
-            float frequency = 0;
-
-            if (enable)
+            m_cameraShakeHandle.EnableCameraShake(enable);
+            if (m_hasTemporaryShakeProfile && enable == false)
             {
-                amplitude = m_shakeAmplitude;
-                frequency = m_shakeFrequency;
+                SetCameraShakeProfile(m_temporaryShakeProfile);
             }
-
-            for (int i = 0; i < m_noiseList.Count; i++)
-            {
-                var noise = m_noiseList[i];
-                noise.m_AmplitudeGain = amplitude;
-                noise.m_FrequencyGain = frequency;
-            }
-            m_cameraShake = enable;
         }
 
         public void SetCameraShake(float amplitude, float frequency)
         {
-            m_shakeAmplitude = amplitude;
-            m_shakeFrequency = frequency;
+            m_cameraShakeHandle.SetCameraShake(amplitude, frequency);
+        }
 
-            if (m_cameraShake)
+        public void SetCameraShakeProfile(CameraShakeType shakeType, bool onNextShakeOnly = false)
+        {
+            if (onNextShakeOnly)
             {
-                for (int i = 0; i < m_noiseList.Count; i++)
-                {
-                    var noise = m_noiseList[i];
-                    noise.m_AmplitudeGain = m_shakeAmplitude;
-                    noise.m_FrequencyGain = m_shakeFrequency;
-                }
+                m_temporaryShakeProfile = m_cameraShakeHandle.currentShakeType;
+                m_hasTemporaryShakeProfile = true;
             }
+            else
+            {
+                m_hasTemporaryShakeProfile = false;
+            }
+            m_cameraShakeHandle.SetCameraShakeProfile(shakeType);
         }
 
         public void ClearLists()
@@ -144,7 +122,7 @@ namespace DChild.Gameplay.Cinematics
             m_currentVCam = null;
             m_previousCam = null;
             m_trackingCameras?.Clear();
-            m_noiseList?.Clear();
+            m_cameraShakeHandle.ClearList();
         }
 
         public void AllowTracking(ITrackingCamera trackingCamera)
@@ -162,18 +140,7 @@ namespace DChild.Gameplay.Cinematics
         {
             if (trackingCamera.noiseModule != null)
             {
-                var noise = trackingCamera.noiseModule;
-                m_noiseList.Add(noise);
-                if (m_cameraShake)
-                {
-                    noise.m_AmplitudeGain = m_shakeAmplitude;
-                    noise.m_FrequencyGain = m_shakeFrequency;
-                }
-                else
-                {
-                    noise.m_AmplitudeGain = 0;
-                    noise.m_FrequencyGain = 0;
-                }
+                m_cameraShakeHandle.RegisterNoiseModule(trackingCamera.noiseModule);
             }
         }
 
@@ -182,7 +149,7 @@ namespace DChild.Gameplay.Cinematics
             m_trackingCameras.Remove(trackingCamera);
             if (trackingCamera.noiseModule != null)
             {
-                m_noiseList.Remove(trackingCamera.noiseModule);
+                m_cameraShakeHandle.UnregisterNoiseModule(trackingCamera.noiseModule);
             }
         }
 
@@ -200,20 +167,13 @@ namespace DChild.Gameplay.Cinematics
             m_mainCamera = camera;
         }
 
-        public void SetCameraShakeProfile(ShakeType shakeType)
-        {
-            m_currentShakeType = shakeType;
-            for (int i = 0; i < m_noiseList.Count; i++)
-            {
-                m_noiseList[i].m_NoiseProfile = m_noiseSettings[shakeType];
-            }
-        }
+
 
         public void Initialize()
         {
             m_trackingCameras = new List<ITrackingCamera>();
-            m_noiseList = new List<CinemachineBasicMultiChannelPerlin>();
-            m_offsetHandle = GetComponent<CameraOffsetHandle>();
+            m_cameraShakeHandle.Initialize();
+            m_offsetHandle = GetComponent<CameraPeekHandle>();
         }
 
 

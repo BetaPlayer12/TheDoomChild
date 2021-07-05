@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Combat
             m_canPassthroughList.AddRange(list);
         }
 
-        protected override bool IsValidToHit(Collider2D collision)
+        protected override bool IsValidColliderToHit(Collider2D collision)
         {
             var position = transform.position;
             var direction = collision.bounds.center - position;
@@ -40,18 +40,7 @@ namespace DChild.Gameplay.Combat
             {
                 if (m_canDetectInteractables)
                 {
-                    for (int i = 0; i < castedAll.Length; i++)
-                    {
-                        if (castedAll[i].collider == collision)
-                        {
-                            break;
-                        }
-                        else if (m_canPassthroughList.Contains(castedAll[i].collider) == false)
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
+                    return HasNoObstruction(collision, castedAll);
                 }
                 else
                 {
@@ -66,24 +55,29 @@ namespace DChild.Gameplay.Combat
                 }
                 else
                 {
-                    for (int i = 0; i < castedAll.Length; i++)
-                    {
-                        if (castedAll[i].collider == collision)
-                        {
-                            break;
-                        }
-                        else if (m_canPassthroughList.Contains(castedAll[i].collider) == false)
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
+                    return HasNoObstruction(collision, castedAll);
                 }
             }
             else
             {
                 return Raycaster.SearchCast(transform.position, collision.bounds.center, LayerMask.GetMask(ENVIRONMENT_LAYER), out RaycastHit2D[] buffer);
             }
+        }
+
+        private bool HasNoObstruction(Collider2D collision, RaycastHit2D[] castedAll)
+        {
+            for (int i = 0; i < castedAll.Length; i++)
+            {
+                if (castedAll[i].collider == collision)
+                {
+                    break;
+                }
+                else if (m_canPassthroughList.Contains(castedAll[i].collider) == false)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

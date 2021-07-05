@@ -15,9 +15,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ShadowMorph m_shadowMorph;
         private ShadowGaugeRegen m_shadowGaugeRegen;
 
-        public void DefaultIdleStateFinished()
+        public void IdleStateFinished()
         {
-            m_idleHandle?.GenerateRandomState();
+            m_idleHandle?.BackToDefaultIdle();
         }
 
         public void SwordJumpSlashForwardFX()
@@ -95,8 +95,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whip?.AttackOver();
             m_whip?.ClearExecutedCollision();
             m_skullThrow?.AttackOver();
-
-            Debug.Log("FinishAttack");
         }
 
         public void EarthShakerPreLoop()
@@ -143,7 +141,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void EndShadowMorphCharge()
         {
             Debug.Log("DONE SHADOW MORPH CHARGE");
-            m_shadowGaugeRegen?.Enable(true);
+            //m_shadowGaugeRegen?.Enable(true);
             m_shadowMorph.EndExecution();
         }
 

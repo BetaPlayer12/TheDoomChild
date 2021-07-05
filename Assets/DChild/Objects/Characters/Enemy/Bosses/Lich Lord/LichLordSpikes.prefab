@@ -73,26 +73,12 @@ CompositeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_GeometryType: 0
+  m_GeometryType: 1
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 499354484466701003}
-    m_ColliderPaths:
-    - - X: 37499707
-        Y: 11003418
-      - X: 37499707
-        Y: 26473732
-      - X: -37500000
-        Y: 26473439
-      - X: -37499707
-        Y: 11003418
+  m_ColliderPaths: []
   m_CompositePaths:
-    m_Paths:
-    - - {x: 3.7499416, y: 1.1003418}
-      - {x: 3.7499416, y: 2.6473732}
-      - {x: -3.75, y: 2.6473145}
-      - {x: -3.7499416, y: 1.1003418}
+    m_Paths: []
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!114 &1274139935989384666
@@ -114,6 +100,7 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &3486751707605571659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +164,7 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
+  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 1
 --- !u!1 &1698464101735713123
@@ -205,7 +193,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1698464101735713123}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.339199, y: 0.6776848, z: 0}
+  m_LocalPosition: {x: 3.339203, y: 0.6776886, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5614831806141681271}
@@ -352,7 +340,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5a1caec91eb4c2545a2434e1f82e54ff, type: 2}
+  - {fileID: 2100000, guid: a50e3e4554d67e34b8c4fd270a460bee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -385,7 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 259f6b5e271760e41b66e5a10efeaa38, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: a2cf3c8956eb3094fa79afdae9d58d29, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -443,7 +431,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2192425627830514506
 Transform:
   m_ObjectHideFlags: 0

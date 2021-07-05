@@ -89,6 +89,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
                 {
                     GameplaySystem.combatManager.Inflict(eventArgs.target.statusEffectReciever, m_statusInflictions.ToArray());
                 }
+
             }
         }
 

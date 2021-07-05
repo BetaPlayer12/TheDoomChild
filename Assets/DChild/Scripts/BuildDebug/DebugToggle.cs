@@ -1,5 +1,6 @@
 ﻿using Holysoft.UI;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ using UnityEngine.Events;
 
 namespace DChildDebug.Window
 {
+
     public class DebugToggle : MonoBehaviour
     {
         [SerializeField]
@@ -16,6 +18,8 @@ namespace DChildDebug.Window
         [SerializeField, TabGroup("False")]
         private UnityEvent OnFalse;
         private bool m_isToggled;
+
+        private IToggleDebugBehaviour m_source;
 
         public void ToggleState()
         {
@@ -32,13 +36,9 @@ namespace DChildDebug.Window
             }
         }
 
-        private void Awake()
+        public void UpdateToggleHighlight()
         {
-            m_isToggled = GetComponent<IToggleDebugBehaviour>().value;
-        }
-
-        private void Start()
-        {
+            m_isToggled = m_source.value;
             if (m_isToggled)
             {
                 m_highlight.UseHighlightState();
@@ -47,7 +47,15 @@ namespace DChildDebug.Window
             {
                 m_highlight.UseNormalizeState();
             }
+
         }
+        private void Start()
+        {
+            m_source = GetComponent<IToggleDebugBehaviour>();
+            UpdateToggleHighlight();
+        }
+
+
     }
 
 }

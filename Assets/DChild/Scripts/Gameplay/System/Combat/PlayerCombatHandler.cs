@@ -39,18 +39,6 @@ namespace DChild.Gameplay.Combat
             StartCoroutine(TemporaryInvulnerability(player));
         }
 
-        //private int CalculateMagicDamageReduction(IPlayer player, System.Collections.Generic.List<AttackType> attackerDamageType)
-        //{
-        //    int magicDefense = 0;
-        //    var numberOfMagicAttackType = (attackerDamageType.Contains(AttackType.Physical) ? attackerDamageType.Count - 1 : attackerDamageType.Count);
-        //    if (numberOfMagicAttackType > 0)
-        //    {
-        //        magicDefense = (int)(player.magicDefense / numberOfMagicAttackType);
-        //    }
-
-        //    return magicDefense;
-        //}
-
         private IEnumerator TemporaryInvulnerability(IPlayer player)
         {
             player.damageableModule.SetInvulnerability(Invulnerability.MAX);

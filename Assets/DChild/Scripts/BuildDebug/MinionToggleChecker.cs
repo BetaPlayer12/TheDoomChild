@@ -14,6 +14,11 @@ namespace DChildDebug.Window
 
         private void Toggle(object sender, EventActionArgs eventArgs)
         {
+            UpdateEnemyInstanceState();
+        }
+
+        private void UpdateEnemyInstanceState()
+        {
             if (MinionToggle.toggleValue == true)
             {
                 m_minions.SetActive(true);
@@ -23,14 +28,17 @@ namespace DChildDebug.Window
                 Debug.Log("it worked");
                 m_minions.SetActive(false);
             }
-
-
         }
 
         private void Start()
         {
             MinionToggle.minionToggleInstance.OnToggle += Toggle;
+            UpdateEnemyInstanceState();
         }
 
+        private void OnDestroy()
+        {
+            MinionToggle.minionToggleInstance.OnToggle -= Toggle;
+        }
     }
 }

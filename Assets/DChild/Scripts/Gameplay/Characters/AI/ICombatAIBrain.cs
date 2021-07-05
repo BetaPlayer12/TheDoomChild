@@ -15,6 +15,8 @@ namespace DChild.Gameplay.Characters.AI
         void BecomePassive(bool value);
 
 #if UNITY_EDITOR
+
+        CharacterStatsData statsData { get; set; }
         Type aiDataType { get; }
         void SetData(AIData data);
         void InitializeField(Character character, SpineRootAnimation spineRoot, Damageable damageable, Transform centerMass);
