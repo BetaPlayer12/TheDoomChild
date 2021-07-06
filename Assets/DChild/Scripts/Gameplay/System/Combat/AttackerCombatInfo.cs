@@ -8,6 +8,7 @@ namespace DChild.Gameplay.Combat
         public void Initialize(GameObject attacker, Vector2 position, int critChance, float critDamageModifier,bool ignoresBlock,params AttackDamage[] damage)
         {
             this.instance = attacker;
+            this.isPlayer = GameplaySystem.playerManager.IsPartOfPlayer(attacker);
             this.position = position;
             this.critChance = critChance;
             this.critDamageModifier = critDamageModifier;
@@ -20,6 +21,7 @@ namespace DChild.Gameplay.Combat
         public void Initialize(GameObject attacker, Vector2 position, int critChance, float critDamageModifier,bool ignoresBlock,Vector2 forceDirection, params AttackDamage[] damage)
         {
             this.instance = attacker;
+            this.isPlayer = GameplaySystem.playerManager.IsPartOfPlayer(attacker);
             this.position = position;
             this.critChance = critChance;
             this.critDamageModifier = critDamageModifier;
@@ -29,6 +31,7 @@ namespace DChild.Gameplay.Combat
             this.forceDirection = forceDirection;
         }
 
+        public bool isPlayer { get; private set; }
         public GameObject instance { get; private set; }
         public Vector2 position { get; private set; }
         public int critChance { get; private set; }

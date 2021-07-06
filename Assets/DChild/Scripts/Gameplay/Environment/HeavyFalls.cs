@@ -81,9 +81,9 @@ namespace DChild.Gameplay.Environment
                     }
                 }
 
-                if (collision.TryGetComponentInParent(out PlayerControlledObject playerObject))
+                if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject,out IPlayer player))
                 {
-                    playerObject.owner.behaviourModule.SetModuleActive(PrimarySkill.DevilWings, false);
+                    player.behaviourModule.SetModuleActive(PrimarySkill.DevilWings, false);
                 }
             }
         }
@@ -105,9 +105,9 @@ namespace DChild.Gameplay.Environment
                     }
                 }
 
-                if (collision.TryGetComponentInParent(out PlayerControlledObject playerObject))
+                if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject, out IPlayer player))
                 {
-                    playerObject.owner.behaviourModule.SetModuleActive(PrimarySkill.DevilWings, true);
+                    player.behaviourModule.SetModuleActive(PrimarySkill.DevilWings, true);
                 }
             }
         }
