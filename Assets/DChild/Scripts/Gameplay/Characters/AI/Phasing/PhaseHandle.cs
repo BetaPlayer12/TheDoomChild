@@ -36,7 +36,9 @@ namespace DChild.Gameplay.Characters.AI
             ApplyPhaseData = ApplyPhaseDataFunction;
             m_willTransistion = false;
             allowPhaseChange = true;
+#if UNITY_EDITOR
             m_overidePhase = false;
+#endif
         }
 
         public void MonitorPhase()

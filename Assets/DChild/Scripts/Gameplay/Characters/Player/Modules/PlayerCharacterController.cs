@@ -344,6 +344,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if ((int)m_character.facing == m_input.horizontalInput)
                 {
+                    if (m_state.waitForBehaviour)
+                        return;
+
                     if (m_ledgeGrab?.IsDoable() ?? false)
                     {
                         if (m_state.isAttacking == false)
@@ -359,7 +362,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_state.forcedCurrentGroundedness == false)
                     {
                         m_groundedness?.Evaluate();
-                        //Debug.Log("Check for ground");
                     }
                     m_extraJump?.EndExecution();
                 }
