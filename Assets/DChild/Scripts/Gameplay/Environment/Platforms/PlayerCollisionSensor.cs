@@ -10,8 +10,7 @@ namespace DChild.Gameplay.Environment
 
         private void OnCollisionStay2D(Collision2D collision)
         {
-            var playerObject = collision.collider.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null)
+            if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
             {
                 CollisionDetected?.Invoke(this, EventActionArgs.Empty);
             }
@@ -19,8 +18,7 @@ namespace DChild.Gameplay.Environment
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            var playerObject = collision.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null)
+            if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
             {
                 CollisionDetected?.Invoke(this, EventActionArgs.Empty);
             }

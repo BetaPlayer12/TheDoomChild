@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.State;
+using DChild.Gameplay.Combat;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -19,6 +20,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private RaySensor m_clearingSensor;
         [SerializeField]
         private RaySensor m_footingSensor;
+        [SerializeField]
+        private GameObject m_playerShadow;
+        [SerializeField]
+        private Collider2D m_playerHitbox;
 
         private int m_animation;
         private Character m_character;
@@ -26,9 +31,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Animator m_animator;
         private ILedgeGrabState m_state;
         private Vector2 m_destination;
+        private Damageable m_damageable;
 
         public void Initialize(ComplexCharacterInfo info)
         {
+            m_damageable = info.damageable;
             m_character = info.character;
             m_rigidbody = info.rigidbody;
             m_state = info.state;
@@ -72,9 +79,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
+            //m_damageable.SetInvulnerability(Invulnerability.MAX);
+            m_playerShadow.SetActive(false);
+            m_playerHitbox.enabled = false;
+
             m_state.waitForBehaviour = true;
             m_animator.SetTrigger(m_animation);
-            m_rigidbody.position = m_destination;
             m_rigidbody.velocity = Vector2.zero;
             //Note: Animation Gitch is happening right now. Possible solution is to play animation first and on start teleport player.s
         }
@@ -82,6 +92,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void EndExecution()
         {
             m_state.waitForBehaviour = false;
+        }
+
+        public void Teleport()
+        {
+            m_rigidbody.position = m_destination;
+        }
+
+        public void EnableHitbox()
+        {
+            //m_damageable.SetInvulnerability(Invulnerability.None);
+            m_playerShadow.SetActive(true);
+            m_playerHitbox.enabled = true;
         }
     }
 }

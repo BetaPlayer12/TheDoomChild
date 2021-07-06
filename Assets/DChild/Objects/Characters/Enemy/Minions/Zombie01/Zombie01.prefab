@@ -263,10 +263,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18353210c1fef634ba85c229444944bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hitStopTime: 0
   m_whiteDecayTime: 4
   m_enableHitStop: 1
   m_animation: {fileID: 1893196469003685391}
+  m_hitboxColliders:
+  - {fileID: 3088821660472433852}
   m_flinchHandle: {fileID: 4362604021177890279}
   m_Rendererer: {fileID: 2642618364093818342}
 --- !u!114 &1893196469003685391
@@ -317,6 +318,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
+  m_overrideColor: 0
+  m_colorToUse: {r: 1, g: 1, b: 1, a: 1}
+  m_overrideScale: 0
+  m_scaleToUse: {x: 1, y: 1, z: 1}
 --- !u!114 &4306927730407324505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,6 +449,7 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &6739187568151569824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1758,6 +1764,12 @@ MonoBehaviour:
 --- !u!4 &643094810533259434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7621855524337152738, guid: d91d44bdaadae874c9c44639480b0d96,
+    type: 3}
+  m_PrefabInstance: {fileID: 7001688281449339464}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &3088821660472433852 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 5473928029513205492, guid: d91d44bdaadae874c9c44639480b0d96,
     type: 3}
   m_PrefabInstance: {fileID: 7001688281449339464}
   m_PrefabAsset: {fileID: 0}

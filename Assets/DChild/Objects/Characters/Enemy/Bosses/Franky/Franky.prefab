@@ -278,6 +278,7 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &3566552095003489988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,6 +300,8 @@ MonoBehaviour:
   m_statsData: {fileID: 11400000, guid: 4df3c74c5be5d3541a3a67261e17429b, type: 2}
   m_boss: {fileID: 598893996725304727}
   m_hitbox: {fileID: 8621330862641687321}
+  m_aoeBB: {fileID: 6475345801531021788}
+  m_punchBB: {fileID: 7888068086651804890}
   m_turnHandle: {fileID: 2929188793810231797}
   m_movement: {fileID: 4569944036121508132}
   m_deathHandle: {fileID: 8782186230795851509}
@@ -336,6 +339,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 2636121095701561051, guid: d5b55f09e1efcf543a6ff989b9340ca2, type: 3}
+  m_overrideColor: 1
+  m_colorToUse: {r: 0, g: 1, b: 0.03137255, a: 1}
+  m_overrideScale: 0
+  m_scaleToUse: {x: 3, y: 3, z: 3}
 --- !u!114 &6502214513291482023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2951,6 +2958,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &6475345801531021788 stripped
+CircleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 3252946510958432008, guid: 6ceecd07745aac24d901fb599fefbe67,
+    type: 3}
+  m_PrefabInstance: {fileID: 8428984984078178004}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &7888068086651804890 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 1837971189170768398, guid: 6ceecd07745aac24d901fb599fefbe67,
+    type: 3}
+  m_PrefabInstance: {fileID: 8428984984078178004}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &4415514755679400633 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 5313907165110527085, guid: 6ceecd07745aac24d901fb599fefbe67,

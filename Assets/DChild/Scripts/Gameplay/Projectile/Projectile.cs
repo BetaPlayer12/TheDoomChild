@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Projectiles
         [SerializeField, PropertyOrder(100), ToggleGroup("m_waitForParticlesEnd", "Destroy On Particle End")]
         private GameObject m_model;
         [SerializeField, PropertyOrder(101), TabGroup("Launch")]
-        private UnityEvent m_onLaunch; 
+        private UnityEvent m_onLaunch;
         [SerializeField, PropertyOrder(101), TabGroup("Reset")]
         private UnityEvent m_onReset;
 
@@ -65,19 +65,42 @@ namespace DChild.Gameplay.Projectiles
         public void SetVelocity(Vector2 directionNormal, float speed)
         {
             transform.right = directionNormal;
+            var scale = transform.localScale;
             if (directionNormal.x < 0)
             {
-                var scale = transform.localScale;
                 if (projectileData.isGroundProjectile)
                 {
-                    scale.x *= -1;
+                    if (Mathf.Sign(scale.x) == 1)
+                    {
+                        scale.x *= -1;
+                    }
                 }
                 else
                 {
-                    scale.y *= -1;
+                    if (Mathf.Sign(scale.y) == 1)
+                    {
+                        scale.y *= -1;
+                    }
                 }
-                transform.localScale = scale;
             }
+            else
+            {
+                if (projectileData.isGroundProjectile)
+                {
+                    if (Mathf.Sign(scale.x) == -1)
+                    {
+                        scale.x *= -1;
+                    }
+                }
+                else
+                {
+                    if (Mathf.Sign(scale.y) == -1)
+                    {
+                        scale.y *= -1;
+                    }
+                }
+            }
+            transform.localScale = scale;
             m_physics.SetVelocity(directionNormal * speed);
             //m_isolatedPhysicsTime.CalculateActualVelocity();
         }

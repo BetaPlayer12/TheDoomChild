@@ -20,30 +20,26 @@ namespace DChild.Gameplay.Systems
             enabled = true;
         }
 
-        private void ResumeTime(object sender, EventActionArgs eventArgs)
-        {
-            GameTime.UnregisterValueChange(this, GameTime.Factor.Multiplication);
-            enabled = false;
-        }
 
-        private void Awake()
-        {
-            m_duration.CountdownEnd += ResumeTime;
-            enabled = false;
-        }
 
-        private void Update()
-        {
-            if (GameplaySystem.isGamePaused == false)
-            {
-                m_duration.Tick(Time.unscaledDeltaTime);
-            }
-        }
+        //private void Awake()
+        //{
+        //    m_duration.CountdownEnd += ResumeTime;
+        //    enabled = false;
+        //}
 
-        private void OnDestroy()
-        {
-            GameTime.UnregisterValueChange(this, GameTime.Factor.Multiplication);
-        }
+        //private void Update()
+        //{
+        //    if (GameplaySystem.isGamePaused == false)
+        //    {
+        //        m_duration.Tick(Time.unscaledDeltaTime);
+        //    }
+        //}
+
+        //private void OnDestroy()
+        //{
+        //    GameTime.UnregisterValueChange(this, GameTime.Factor.Multiplication);
+        //}
     }
 
 }

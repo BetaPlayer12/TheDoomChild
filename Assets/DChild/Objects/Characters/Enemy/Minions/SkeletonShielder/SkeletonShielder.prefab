@@ -74,6 +74,7 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &5580299121904923798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,6 +88,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
+  m_overrideColor: 0
+  m_colorToUse: {r: 1, g: 1, b: 1, a: 1}
+  m_overrideScale: 0
+  m_scaleToUse: {x: 1, y: 1, z: 1}
 --- !u!114 &6420691073505047689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,10 +218,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18353210c1fef634ba85c229444944bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hitStopTime: 0
   m_whiteDecayTime: 4
   m_enableHitStop: 1
   m_animation: {fileID: 8690358866828984799}
+  m_hitboxColliders:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 4376733014185968207}
   m_flinchHandle: {fileID: 6214081617867388557}
   m_Rendererer: {fileID: 2850045778046225513}
 --- !u!114 &8690358866828984799
@@ -1128,6 +1144,12 @@ Rigidbody2D:
 --- !u!4 &4946578966836460555 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3859841323593602026, guid: eaefc9d7d8f7c7247bcb4dcff16bda87,
+    type: 3}
+  m_PrefabInstance: {fileID: 8157477322075615201}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &4376733014185968207 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 5586830905505787310, guid: eaefc9d7d8f7c7247bcb4dcff16bda87,
     type: 3}
   m_PrefabInstance: {fileID: 8157477322075615201}
   m_PrefabAsset: {fileID: 0}
