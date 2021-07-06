@@ -151,6 +151,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+        [SerializeField, TabGroup("Spawn Points")]
+        private Collider2D m_randomSpawnCollider;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -267,26 +269,28 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!m_isDoingAction)
             {
                 m_isDoingAction = true;
+                m_stateHandle.Wait(State.Cooldown);
                 StopAllCoroutines();
-                StartCoroutine(LaughRoutine());
+                //StartCoroutine(LaughRoutine());
+                StartCoroutine(ReappearRoutine());
 
             }
         }
 
-        private IEnumerator LaughRoutine()
-        {
-            if (m_stateHandle.currentState == State.Despawned)
-            {
-                m_animation.SetAnimation(0, m_info.reappearing1Animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.reappearing1Animation);
-                m_hitbox.Enable();
-            }
-            m_animation.SetAnimation(0, m_info.laughAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.laughAnimation);
-            m_isDoingAction = false;
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
-            yield return null;
-        }
+        //private IEnumerator LaughRoutine()
+        //{
+        //    if (m_stateHandle.currentState == State.Despawned)
+        //    {
+        //        m_animation.SetAnimation(0, m_info.reappearing1Animation, false);
+        //        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.reappearing1Animation);
+        //        m_hitbox.Enable();
+        //    }
+        //    m_animation.SetAnimation(0, m_info.laughAnimation, false);
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.laughAnimation);
+        //    m_isDoingAction = false;
+        //    m_stateHandle.OverrideState(State.ReevaluateSituation);
+        //    yield return null;
+        //}
 
         private Vector2 GroundPosition()
         {
@@ -345,17 +349,29 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
+        private Vector3 RandomTeleportPoint(Vector3 transformPos)
+        {
+            Vector3 randomPos = transformPos;
+            while (Vector2.Distance(transformPos, randomPos) >= UnityEngine.Random.Range(25f, 50f))
+            {
+                randomPos = m_randomSpawnCollider.bounds.center + new Vector3(
+               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.x,
+               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.y,
+               (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.z);
+            }
+            return randomPos;
+        }
+
         private IEnumerator DetectRoutine()
         {
             m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.None;
             m_spriteMask.SetActive(false);
             var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
-            m_animation.SetAnimation(0, reappearAnim, false);
+            m_animation.SetAnimation(0, reappearAnim, false).TimeScale = 1.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
             m_hitbox.Enable();
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            //m_stateHandle.OverrideState(State.ReevaluateSituation);
+            //m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             StartCoroutine(DespawnRoutine());
             yield return null;
         }
@@ -363,16 +379,50 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DespawnRoutine()
         {
             var disappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.disappearing1Animation : m_info.disappearing2Animation;
-            m_animation.SetAnimation(0, disappearAnim, false);
+            m_animation.SetAnimation(0, disappearAnim, false).TimeScale = 1.5f;
             m_hitbox.Disable();
             yield return new WaitForAnimationComplete(m_animation.animationState, disappearAnim);
+            m_spriteMask.SetActive(false);
             var random = UnityEngine.Random.Range(0, 2);
-            transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 10 : -10), GroundPosition().y + 20);
+            //transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 10 : -10), GroundPosition().y + 20);
+            transform.position = new Vector2(RandomTeleportPoint(/*transform.position*/m_targetInfo.position).x, m_targetInfo.position.y + 10);
             yield return new WaitForSeconds(1f);
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            m_spriteMask.SetActive(true);
             var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
-            m_animation.SetAnimation(0, reappearAnim, false);
+            m_animation.SetAnimation(0, reappearAnim, false).TimeScale = 1.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.Enable();
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator ReappearRoutine()
+        {
+            if (m_spriteMask.activeSelf)
+            {
+                var disappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.disappearing1Animation : m_info.disappearing2Animation;
+                m_animation.SetAnimation(0, disappearAnim, false).TimeScale = 1.5f;
+                m_hitbox.Disable();
+                yield return new WaitForAnimationComplete(m_animation.animationState, disappearAnim);
+            }
+            var random = UnityEngine.Random.Range(0, 2);
+            //transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 10 : -10), GroundPosition().y + 20);
+            transform.position = new Vector2(RandomTeleportPoint(/*transform.position*/m_targetInfo.position).x, m_targetInfo.position.y + 10);
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            //yield return new WaitForSeconds(1f);
+            var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
+            m_animation.SetAnimation(0, reappearAnim, false).TimeScale = 1.5f;
+            yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_isDoingAction = false;
             m_hitbox.Enable();
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -437,7 +487,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
-            var newPos = new Vector2(m_targetInfo.position.x, GroundPosition().y + 20);
+            var newPos = new Vector2(m_targetInfo.position.x, /*GroundPosition().y + 20*/m_targetInfo.position.y + 10);
             while (!inRange)
             {
 
@@ -479,6 +529,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_spineEventListener.Subscribe(m_info.spawnBarrelEvent, SpawnBarrel);
             m_hitbox.Disable();
+            //m_randomSpawnCollider.transform.SetParent(null);
             //m_selfCollider.SetActive(false);
         }
 

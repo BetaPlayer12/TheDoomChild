@@ -16,7 +16,9 @@ namespace DChild.Gameplay.Combat
         public IFlinch flinchHandler { get; private set; }
         public float damageReduction { get; private set; }
         public bool isPlayer { get; private set; }
-        public IPlayer owner { get; private set; }
+
+        private IPlayer m_owner;
+        public IPlayer owner => m_owner;
         public StatusEffectReciever statusEffectReciever { get; private set; }
         public bool isBreakableObject { get; private set; }
         public bool canBlockDamage { get; private set; }
@@ -31,11 +33,7 @@ namespace DChild.Gameplay.Combat
             {
                 facing = character.facing;
                 statusEffectReciever = character.GetComponent<StatusEffectReciever>();
-                isPlayer = character.gameObject.layer == LayerMask.NameToLayer("Player");
-                if (isPlayer)
-                {
-                    owner = character.GetComponent<PlayerControlledObject>().owner;
-                }
+                isPlayer = GameplaySystem.playerManager.IsPartOfPlayer(character.gameObject,out m_owner);
                 hasID = character.hasID;
                 characterID = character.ID;
             }
@@ -57,7 +55,7 @@ namespace DChild.Gameplay.Combat
             isCharacter = false;
             isPlayer = false;
             statusEffectReciever = null;
-            owner = null;
+            m_owner = null;
             hasID = false;
             flinchHandler = null;
             this.canBlockDamage = canBlockDamage;
@@ -71,7 +69,7 @@ namespace DChild.Gameplay.Combat
             isCharacter = false;
             isPlayer = false;
             statusEffectReciever = null;
-            owner = null;
+            m_owner = null;
             hasID = false;
             flinchHandler = null;
             this.canBlockDamage = canBlockDamage;

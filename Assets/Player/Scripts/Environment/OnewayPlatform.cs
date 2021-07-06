@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.Players;
+﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters.Players;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,7 +55,7 @@ public class OnewayPlatform : MonoBehaviour
         {
             if (collision.enabled)
             {
-                if (collision.collider.GetComponentInParent<PlayerControlledObject>())
+                if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
                 {
                     m_playerCollider = collision.collider;
                     m_inContact = true;
