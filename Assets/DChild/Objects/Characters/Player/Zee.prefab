@@ -4940,7 +4940,7 @@ MonoBehaviour:
   m_impactFX: {fileID: 4493369812150836547}
   m_impactCollider: {fileID: 5956197024484537259}
   m_fallDamageModifier: 0.8
-  m_impactDamageModifier: 4
+  m_impactDamageModifier: 2
 --- !u!114 &3154730596595979594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10526,8 +10526,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ghostingEnabled: 1
   spawnInterval: 0.1
-  maximumGhosts: 1
-  fadeSpeed: 5
+  maximumGhosts: 5
+  fadeSpeed: 10
   ghostShader: {fileID: 4800000, guid: 3873d4699ee8a4b4da8fa6b8c229b94d, type: 3}
   color:
     serializedVersion: 2
@@ -10535,7 +10535,7 @@ MonoBehaviour:
   additive: 1
   textureFade: 1
   sortWithDistanceOnly: 0
-  zOffset: 0
+  zOffset: 1
 --- !u!114 &1394621882105338129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10847,7 +10847,7 @@ MonoBehaviour:
     - {fileID: 6932414470649904744}
     - {fileID: 5588195080431396619}
     - {fileID: 221161450997346515}
-    - {fileID: 7809764022874118786}
+    - {fileID: 8264557864040206959}
     - {fileID: 107396060670508356}
     - {fileID: 1903753448987713085}
     - {fileID: 5040567356274180570}
@@ -21287,6 +21287,8 @@ MonoBehaviour:
   m_destinationFromWallOffset: 1.5
   m_clearingSensor: {fileID: 5193146964504964771}
   m_footingSensor: {fileID: 2801071417808159900}
+  m_playerShadow: {fileID: 1076285428610936902}
+  m_playerHitbox: {fileID: 5441382891577226940}
 --- !u!114 &4676722058015644928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21300,11 +21302,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_sourceRequiredAmount: 1
-  m_sourceConsumptionRate: 25
+  m_sourceConsumptionRate: 50
   m_shadowMorphFX: {fileID: 6932414470649904744}
   m_originalSkinName: SkinDefault
   m_shadowMorphSkinName: SkinShadow
   m_skeletonData: {fileID: 4084513133358244869}
+  m_playerShadow: {fileID: 1076285428610936902}
 --- !u!114 &8601462637692648743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40988,9 +40991,9 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 3261558680773856126}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &7809764022874118786 stripped
+--- !u!198 &8264557864040206959 stripped
 ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4693517544157843964, guid: ffbd211fba1cd7844b57228329d1451e,
+  m_CorrespondingSourceObject: {fileID: 6913862981169781009, guid: ffbd211fba1cd7844b57228329d1451e,
     type: 3}
   m_PrefabInstance: {fileID: 3261558680773856126}
   m_PrefabAsset: {fileID: 0}

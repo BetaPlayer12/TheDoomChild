@@ -7,6 +7,7 @@ using Holysoft.Event;
 using Holysoft.Gameplay;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using Spine.Unity.Examples;
 using System;
 using UnityEngine;
 
@@ -27,6 +28,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private string m_shadowMorphSkinName;
         [SerializeField]
         private SkeletonAnimation m_skeletonData;
+        [SerializeField]
+        private GameObject m_playerShadow;
 
         private Damageable m_damageable;
         private ICappedStat m_source;
@@ -35,6 +38,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_animationParameter;
         private float m_stackedConsumptionRate;
         private IPlayerModifer m_modifier;
+        private SkeletonGhost m_skeletonGhost;
 
         public event EventAction<EventActionArgs> ExecuteModule;
         public event EventAction<EventActionArgs> End;
@@ -70,7 +74,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_damageable.SetInvulnerability(Invulnerability.MAX);
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
-
+            m_skeletonGhost.enabled = true;
+            m_playerShadow.SetActive(false);
             ExecuteModule?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -83,6 +88,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_animationParameter, false);
             m_stackedConsumptionRate = 0;
             m_shadowMorphFX.Stop(true);
+            m_skeletonGhost.enabled = false;
+            m_playerShadow.SetActive(true);
             End?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -95,11 +102,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ShadowMode);
             m_stackedConsumptionRate = 0;
             m_modifier = info.modifier;
+            m_skeletonGhost = info.skeletonGhost;
         }
 
         public void Reset()
         {
             m_state.isInShadowMode = false;
+            m_playerShadow.SetActive(true);
         }
     }
 }

@@ -145,6 +145,16 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_shadowMorph.EndExecution();
         }
 
+        public void LedgeGrabTeleport()
+        {
+            m_ledgeGrab?.Teleport();
+        }
+
+        public void LedgeGrabeEnableHitbox()
+        {
+            m_ledgeGrab?.EnableHitbox();
+        }
+
         public void Initialize(ComplexCharacterInfo info)
         {
             var character = info.character;
