@@ -41,12 +41,12 @@ namespace DChild.Gameplay.Combat
 
         public Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo)
         {
-            //AttackInfo result = new AttackInfo(attacker.damage);
             Cache<AttackInfo> result = Cache<AttackInfo>.Claim();
             result.Value.Initialize(attacker.damage);
             m_criticalDamageHandle.Execute(result, attacker.critChance, attacker.critDamageModifier);
 
             m_cacheTarget = targetInfo.instance;
+
             HandleDamageBlock(attacker, targetInfo, result);
             var wasDamageBlocked = result.Value.wasBlocked;
             if (wasDamageBlocked == false)
@@ -77,6 +77,12 @@ namespace DChild.Gameplay.Combat
                     }
                 }
             }
+
+            if (attacker.isPlayer)
+            {
+
+            }
+
             return result;
         }
 

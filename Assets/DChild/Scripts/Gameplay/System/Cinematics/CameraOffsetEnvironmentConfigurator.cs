@@ -15,8 +15,7 @@ namespace DChild.Gameplay.Cinematics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null)
+            if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
             {
                 GameplaySystem.cinema.SetCameraPeekConfiguration(m_config);
 
@@ -24,8 +23,7 @@ namespace DChild.Gameplay.Cinematics
         }
         private void OnTriggerExit2D(Collider2D collision)
         {
-            var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null)
+            if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
             {
                 GameplaySystem.cinema.SetCameraPeekConfiguration(DChild.Gameplay.Cinematics.CameraPeekConfiguration.Normal);
 
