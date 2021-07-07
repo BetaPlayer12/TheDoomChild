@@ -144,6 +144,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_randomIdleRoutine;
         private Coroutine m_sneerRoutine;
         private Coroutine m_patienceRoutine;
+        private Coroutine m_randomTurnRoutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -341,6 +342,23 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(RandomIdleRoutine());
         }
 
+        private IEnumerator RandomTurnRoutine()
+        {
+            while (true)
+            {
+                var timer = UnityEngine.Random.Range(5, 10);
+                var currentTimer = 0f;
+                while (currentTimer < timer)
+                {
+                    currentTimer += Time.deltaTime;
+                    yield return null;
+                }
+                m_turnState = State.Idle;
+                m_stateHandle.SetState(State.Turning);
+                yield return null;
+            }
+        }
+
         private IEnumerator SneerRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -361,7 +379,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
-            m_randomIdleRoutine = StartCoroutine(RandomIdleRoutine());
+
+            m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
+            if (m_willPatrol)
+            {
+                StopCoroutine(m_randomTurnRoutine);
+                m_randomIdleRoutine = StartCoroutine(RandomIdleRoutine());
+            }
 
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
@@ -389,6 +413,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    StopCoroutine(m_randomTurnRoutine);
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
