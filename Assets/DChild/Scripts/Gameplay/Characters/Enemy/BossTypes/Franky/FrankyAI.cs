@@ -236,6 +236,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_aoeBB;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_punchBB;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -556,9 +558,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, attackAnim, false);
             yield return new WaitForSeconds(0.65f);
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = true;
+            m_punchBB.enabled = true;
             m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.25f);
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
+            m_punchBB.enabled = false;
             m_movement.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, attackAnim);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -569,8 +573,10 @@ namespace DChild.Gameplay.Characters.Enemies
             attackAnim = ChoosePunchAnimation();
             m_animation.SetAnimation(0, attackAnim, false);
             yield return new WaitForSeconds(0.65f);
+            m_punchBB.enabled = true;
             m_character.physics.SetVelocity(m_info.punchVelocity * transform.localScale.x, attackAnim == m_info.chainFistPunchAttack.animation ? 0 : 25);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.25f);
+            m_punchBB.enabled = false;
             m_movement.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, attackAnim);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -584,7 +590,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private string ChoosePunchAnimation()
         {
-            return m_targetInfo.position.y > transform.position.y + 10 /*+ 5f*/ ? m_info.chainFistPunchUpperAnimation : m_info.chainFistPunchAttack.animation; ;
+            //return m_targetInfo.position.y > transform.position.y + 10 /*+ 5f*/ ? m_info.chainFistPunchUpperAnimation : m_info.chainFistPunchAttack.animation; ;
+            return m_info.chainFistPunchAttack.animation;
         }
 
         private IEnumerator LightningStompRoutine()
@@ -1002,7 +1009,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 var fxPool = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_leapFX);
                 fxPool.Play();
-                fxPool.transform.position = new Vector2(transform.position.x + (28.5f * transform.localScale.x), transform.position.y - 1.5f);
+                fxPool.transform.position = new Vector2(transform.position.x + (23f * transform.localScale.x), transform.position.y - 1.5f);
             }
         }
 

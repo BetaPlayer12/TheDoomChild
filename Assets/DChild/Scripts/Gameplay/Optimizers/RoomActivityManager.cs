@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Optimizers
         {
             if (collision.CompareTag("Sensor"))
             {
-                if (collision.GetComponentInParent<Character>() == GameplaySystem.playerManager.player.character)
+                if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
                 {
                     m_activeRooms.Add(m_scene.sceneName);
                     SceneManager.LoadScene(m_scene.sceneName, LoadSceneMode.Additive);
@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Optimizers
 
             if (collision.CompareTag("Sensor"))
             {
-                if (collision.GetComponentInParent<Character>() == GameplaySystem.playerManager.player.character)
+                if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
                 {
                     m_activeRooms.Remove(m_scene.sceneName);
                     SceneManager.UnloadSceneAsync(m_scene.sceneName);

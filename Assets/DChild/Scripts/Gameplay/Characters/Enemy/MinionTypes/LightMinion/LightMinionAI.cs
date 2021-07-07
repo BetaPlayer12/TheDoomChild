@@ -157,6 +157,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private State m_turnState;
+        private Coroutine m_randomTurnRoutine;
 
 
         //[SerializeField]
@@ -333,6 +334,23 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator RandomTurnRoutine()
+        {
+            while (true)
+            {
+                var timer = UnityEngine.Random.Range(5, 10);
+                var currentTimer = 0f;
+                while (currentTimer < timer)
+                {
+                    currentTimer += Time.deltaTime;
+                    yield return null;
+                }
+                m_turnState = State.Idle;
+                m_stateHandle.SetState(State.Turning);
+                yield return null;
+            }
+        }
+
         private IEnumerator AttackStartRoutine()
         {
             for (int i = 0; i < m_fxSystem.Count; i++)
@@ -417,6 +435,12 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_selfCollider.SetActive(false);
             m_startPosition = transform.position;
+
+            m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
+            if (m_willPatrol)
+            {
+                StopCoroutine(m_randomTurnRoutine);
+            }
         }
 
         protected override void Awake()
@@ -428,7 +452,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Idle : State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
@@ -445,6 +469,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Detect:
                     m_movement.Stop();
                     m_flinchHandle.m_autoFlinch = false;
+                    StopCoroutine(m_randomTurnRoutine);
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
