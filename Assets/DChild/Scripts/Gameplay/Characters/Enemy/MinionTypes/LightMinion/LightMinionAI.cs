@@ -430,6 +430,19 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator StopAttackRoutine()
+        {
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.attackEnd, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEnd);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            StartCoroutine(ResetTrailDamageRoutine());
+            yield return new WaitForSeconds(1f);
+            StopCoroutine(m_trailDamageCoroutine);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -544,7 +557,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             else
                             {
                                 m_movement.Stop();
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                StartCoroutine(StopAttackRoutine());
+                                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
                         }
                     }
@@ -574,9 +588,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_currentCD = 0;
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(AttackStartRoutine());
+                        if (!m_wallSensor.allRaysDetecting)
+                        {
+                            m_currentCD = 0;
+                            m_stateHandle.Wait(State.ReevaluateSituation);
+                            StartCoroutine(AttackStartRoutine());
+                        }
                     }
 
                     break;
