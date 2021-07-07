@@ -11,12 +11,14 @@ namespace DChild.Gameplay.Environment
 {
     public class LightIntensityAdjuster : MonoBehaviour
     {
-        [SerializeField]
-        public Light2D[] m_light;
-        private float[] m_originalIntensity;
         [SerializeField, Range(0, 100), OnValueChanged("OnIntesityChanged")]
         private int m_intensityPercent;
+        [SerializeField]
+        public Light2D[] m_light;
+        [SerializeField, HideInInspector]
+        private float[] m_originalIntensity;
 
+        private int m_previousIntesityPercent;
 
         public void SetIntensity(int intensitypercent)
         {
@@ -32,6 +34,11 @@ namespace DChild.Gameplay.Environment
                 temp = temp * temp2;
                 m_light[i].intensity = temp;
             }
+
+#if UNITY_EDITOR
+            var sceneView = EditorWindow.GetWindow<SceneView>();
+            sceneView?.Repaint();
+#endif
         }
         private void SaveProperties()
         {
@@ -50,6 +57,17 @@ namespace DChild.Gameplay.Environment
         private void Awake()
         {
             SaveProperties();
+            SetIntensity(m_intensityPercent);
+            m_previousIntesityPercent = m_intensityPercent;
+        }
+
+        private void LateUpdate()
+        {
+            if (m_previousIntesityPercent != m_intensityPercent)
+            {
+                m_previousIntesityPercent = m_intensityPercent;
+                SetIntensity(m_intensityPercent);
+            }
         }
 
 
@@ -74,10 +92,10 @@ namespace DChild.Gameplay.Environment
             {
                 if (Selection.activeGameObject != gameObject)
                 {
+                    m_hasCopiedValue = false;
                     var intesity = m_intensityPercent;
                     SetIntensity(100);
                     m_intensityPercent = intesity;
-                    m_hasCopiedValue = false;
                 }
             }
 #endif
