@@ -15,9 +15,9 @@ namespace DChild.Gameplay.Systems
         [Button]
         public void Execute()
         {
-            GameTime.RegisterValueChange(this, 0, GameTime.Factor.Multiplication);
-            m_duration.Reset();
-            enabled = true;
+            //GameTime.RegisterValueChange(this, 0, GameTime.Factor.Multiplication);
+            //m_duration.Reset();
+            //enabled = true;
         }
 
 

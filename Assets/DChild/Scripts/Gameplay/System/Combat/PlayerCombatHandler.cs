@@ -15,15 +15,12 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private PlayerHitStopHandle m_hitStopHandle;
 
-        private HitStopHandle m_hitStop;
-
         private FXSpawnHandle<FX> m_spawnHandle;
 
         public void ResolveDamageRecieved(IPlayer player)
         {
             if (player.state?.canFlinch ?? true)
             {
-                m_hitStop.Execute();
                 m_reactiveCamera.HandleOnDamageRecieveShake();
                 m_hitStopHandle.Execute(false);
                 StartCoroutine(m_iFrameHandle.DisableInputTemporarily(player));
@@ -35,11 +32,6 @@ namespace DChild.Gameplay.Combat
         {
             m_reactiveCamera.HandleOnAttackHit(eventArgs);
             m_hitStopHandle.Execute(true);
-        }
-
-        private void Awake()
-        {
-            m_hitStop = GetComponent<HitStopHandle>();
         }
     }
 }
