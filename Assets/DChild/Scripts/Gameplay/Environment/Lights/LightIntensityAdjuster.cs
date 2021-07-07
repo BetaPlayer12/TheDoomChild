@@ -12,15 +12,15 @@ namespace DChild.Gameplay.Environment
     public class LightIntensityAdjuster : MonoBehaviour
     {
         [SerializeField, Range(0, 100), OnValueChanged("OnIntesityChanged")]
-        private int m_intensityPercent;
+        private float m_intensityPercent;
         [SerializeField]
         public Light2D[] m_light;
         [SerializeField, HideInInspector]
         private float[] m_originalIntensity;
 
-        private int m_previousIntesityPercent;
+        private float m_previousIntesityPercent;
 
-        public void SetIntensity(int intensitypercent)
+        public void SetIntensity(float intensitypercent)
         {
             m_intensityPercent = intensitypercent;
             for (int i = 0; i < m_light.Length; i++)
@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Environment
                 float temp2 = 0;
                 temp = m_originalIntensity[i];
                 Debug.Log(temp);
-                temp2 = (float)m_intensityPercent / 100;
+                temp2 = m_intensityPercent / 100f;
                 Debug.Log(temp2);
                 temp = temp * temp2;
                 m_light[i].intensity = temp;
