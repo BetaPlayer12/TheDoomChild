@@ -79,6 +79,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Detect,
+            Idle,
             Patrol,
             Standby,
             Turning,
@@ -130,6 +131,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField]
+        private bool m_willPatrol;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -140,6 +144,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_randomIdleRoutine;
         private Coroutine m_sneerRoutine;
         private Coroutine m_patienceRoutine;
+        private Coroutine m_randomTurnRoutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -337,6 +342,23 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(RandomIdleRoutine());
         }
 
+        private IEnumerator RandomTurnRoutine()
+        {
+            while (true)
+            {
+                var timer = UnityEngine.Random.Range(5, 10);
+                var currentTimer = 0f;
+                while (currentTimer < timer)
+                {
+                    currentTimer += Time.deltaTime;
+                    yield return null;
+                }
+                m_turnState = State.Idle;
+                m_stateHandle.SetState(State.Turning);
+                yield return null;
+            }
+        }
+
         private IEnumerator SneerRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
@@ -357,7 +379,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
-            m_randomIdleRoutine = StartCoroutine(RandomIdleRoutine());
+
+            m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
+            if (m_willPatrol)
+            {
+                StopCoroutine(m_randomTurnRoutine);
+                m_randomIdleRoutine = StartCoroutine(RandomIdleRoutine());
+            }
 
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
@@ -371,7 +399,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -385,6 +413,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
+                    StopCoroutine(m_randomTurnRoutine);
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -396,6 +425,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
+                    break;
+
+                case State.Idle:
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_movement.Stop();
                     break;
 
                 case State.Patrol:
