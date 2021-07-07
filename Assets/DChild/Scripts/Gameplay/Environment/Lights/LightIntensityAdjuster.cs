@@ -36,8 +36,11 @@ namespace DChild.Gameplay.Environment
             }
 
 #if UNITY_EDITOR
-            var sceneView = EditorWindow.GetWindow<SceneView>();
-            sceneView?.Repaint();
+            if (Application.isPlaying == false)
+            {
+                var sceneView = EditorWindow.GetWindow<SceneView>();
+                sceneView?.Repaint();
+            }
 #endif
         }
         private void SaveProperties()
