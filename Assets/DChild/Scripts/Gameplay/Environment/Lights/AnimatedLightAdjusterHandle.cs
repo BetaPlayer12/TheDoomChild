@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField, MinValue(0.1f)]
         private float m_duration;
         [SerializeField]
-        private LightIntensityAdjuster[] m_lightAdjusters;
+        private CompositeLightIntensityAdjuster[] m_lightAdjusters;
 
         private float m_animationTime;
 

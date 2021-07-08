@@ -30,6 +30,13 @@ namespace DChild.Gameplay
             ISaveData ISaveData.ProduceCopy() => new SaveData(m_isUsed);
         }
 
+        [SerializeField,FoldoutGroup("Has Skill Indicator")]
+        private GameObject m_platformGlow;
+        [SerializeField, FoldoutGroup("Has Skill Indicator")]
+        private GameObject m_leftStatueGlow;
+        [SerializeField, FoldoutGroup("Has Skill Indicator")]
+        private GameObject m_rightStatueGlow;
+
         [SerializeField]
         private PrimarySkill m_toUnlock;
         [SerializeField]
@@ -53,6 +60,7 @@ namespace DChild.Gameplay
         {
             m_isUsed = ((SaveData)data).isUsed;
             m_collider.enabled = !m_isUsed;
+            SetGlows(!m_isUsed);
         }
 
         public void Interact(Character character)
@@ -81,11 +89,19 @@ namespace DChild.Gameplay
         private void OnCutsceneDone(PlayableDirector obj)
         {
             NotifySkill(m_toUnlock);
+            SetGlows(false);
         }
 
         private void NotifySkill(PrimarySkill skill)
         {
             GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
+        }
+
+        private void SetGlows(bool isOn)
+        {
+            m_platformGlow.SetActive(isOn);
+            m_leftStatueGlow.SetActive(isOn);
+            m_rightStatueGlow.SetActive(isOn);
         }
 
         private void Awake()
@@ -104,6 +120,7 @@ namespace DChild.Gameplay
         private void OnIsUsedChanged()
         {
             m_collider.enabled = !m_isUsed;
+            SetGlows(!m_isUsed);
         }
 
         [Button]
