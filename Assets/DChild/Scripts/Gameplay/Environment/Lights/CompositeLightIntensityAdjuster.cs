@@ -35,13 +35,13 @@ namespace DChild.Gameplay.Environment
                 m_light[i].intensity = temp;
             }
 
-#if UNITY_EDITOR
-            if (Application.isPlaying == false)
-            {
-                var sceneView = EditorWindow.GetWindow<SceneView>();
-                sceneView?.Repaint();
-            }
-#endif
+//#if UNITY_EDITOR
+//            if (Application.isPlaying == false)
+//            {
+//                var sceneView = EditorWindow.GetWindow<SceneView>();
+//                sceneView?.Repaint();
+//            }
+//#endif
         }
         private void SaveProperties()
         {
