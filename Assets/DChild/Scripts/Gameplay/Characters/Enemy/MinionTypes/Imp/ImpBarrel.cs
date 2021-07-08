@@ -55,15 +55,23 @@ namespace DChild.Gameplay.Characters.Enemies
         private BaseColliderDamage m_explosionDamageable;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_explosionHitBox;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_playerTrigger;
+        [SerializeField, TabGroup("Reference")]
+        private SkeletonAnimation m_skeletonAnimation;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
+        //[SerializeField, TabGroup("Sensors")]
+        //private RaySensor m_playerSensor;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_explosionFX;
         //Patience Handler
+        [SerializeField]
+        private bool m_idled;
 
         private ImpAI m_imp;
 
@@ -85,14 +93,33 @@ namespace DChild.Gameplay.Characters.Enemies
             m_imp = imp;
         }
 
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            var colliderGameObject = collision.gameObject;
+            if (colliderGameObject.tag != "Sensor" && colliderGameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                if (m_idled)
+                {
+                    m_idled = false;
+                }
+                else
+                {
+                    StopAllCoroutines();
+                    m_skeletonAnimation.maskInteraction = SpriteMaskInteraction.None;
+                    m_animation.SetEmptyAnimation(0, 0);
+                    m_animation.SetAnimation(0, m_info.bombExplosionAnimation, false).TimeScale = 10;
+                    StartCoroutine(ExplodeRoutine());
+                }
+            }
+        }
+
         //Patience Handler
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            //m_Audiosource.clip = m_DeadClip;
-            //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
+            m_skeletonAnimation.maskInteraction = SpriteMaskInteraction.None;
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.bombExplosionAnimation, false).TimeScale = 10;
             StartCoroutine(ExplodeRoutine());
@@ -114,6 +141,17 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_animation.SetAnimation(0, m_info.plantBombAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.plantBombAnimation);
+            //yield return new WaitUntil(() => !m_idled);
+            m_skeletonAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+            while (m_idled)
+            {
+                //if (m_playerSensor.isDetecting)
+                //{
+                //    m_idled = false;
+                //}
+                yield return null;
+            }
+            m_skeletonAnimation.maskInteraction = SpriteMaskInteraction.None;
             m_animation.SetAnimation(0, m_info.bombExplosionAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.bombExplosionAnimation);
             m_stateHandle.ApplyQueuedState();
@@ -122,6 +160,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ExplodeRoutine()
         {
+            m_playerTrigger.enabled = false;
             m_hitbox.Disable();
             m_character.physics.SetVelocity(Vector2.zero);
             m_character.physics.simulateGravity = false;
@@ -139,7 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             //m_turnHandle.TurnDone += OnTurnDone;
             m_explosionDamageable.DamageableDetected += Laugh;
-            m_deathHandle.SetAnimation(null);
+            //m_deathHandle.SetAnimation(null);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             //m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);

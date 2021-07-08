@@ -1,5 +1,31 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!61 &1389990412364788872
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112077767296992463}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 3}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3, y: 3}
+  m_EdgeRadius: 0
 --- !u!114 &7838398846133334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,10 +115,14 @@ MonoBehaviour:
   m_hitbox: {fileID: 5150831323135535264}
   m_explosionDamageable: {fileID: 8528691588531366963}
   m_explosionHitBox: {fileID: 8934072336385541566}
+  m_playerTrigger: {fileID: 1389990412364788872}
+  m_skeletonAnimation: {fileID: 4527762328280516433}
   m_deathHandle: {fileID: 6695126899390701295}
   m_flinchHandle: {fileID: 2786848694737395703}
   m_groundSensor: {fileID: 6489366835539587857}
+  m_playerSensor: {fileID: 7779944847449878259}
   m_explosionFX: {fileID: 2747225939743488176}
+  m_idled: 0
 --- !u!114 &4334132037623936826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_source: {fileID: 7838398846133334}
   m_animator: {fileID: 2750530105518968752}
-  m_animation: Death
+  m_animation: bomb_explosion
   m_bodyDuration:
     m_startTime: 3
   m_destroySource: 0
@@ -282,10 +312,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spine: {fileID: 2750530105518968752}
   m_physics: {fileID: 6695126898741687181}
-  m_autoFlinch: 1
+  m_autoFlinch: 0
   m_skeletonAnimation: {fileID: 4527762328280516433}
-  m_animation: Flinch
-  m_idleAnimation: Idle
+  m_animation: Planting Bomb barrel drop animation
+  m_idleAnimation: bomb falling loop animation
 --- !u!1 &7418707497058658500
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,6 +554,12 @@ PrefabInstance:
       objectReference: {fileID: 3112630489921599862}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d32150323a50ec4988d378f1993d54e, type: 3}
+--- !u!198 &4259660035092628236 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7937265524150004684, guid: 7d32150323a50ec4988d378f1993d54e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6141659521014409408}
+  m_PrefabAsset: {fileID: 0}
 --- !u!61 &8934072336385541566 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 3370871478014848382, guid: 7d32150323a50ec4988d378f1993d54e,
@@ -602,6 +638,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7779944847449878259 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4525102042054968883, guid: 7d32150323a50ec4988d378f1993d54e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6141659521014409408}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &4259660035056523666 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7937265524101968210, guid: 7d32150323a50ec4988d378f1993d54e,
@@ -623,12 +671,6 @@ MonoBehaviour:
 --- !u!198 &4259660034580410083 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7937265524711507491, guid: 7d32150323a50ec4988d378f1993d54e,
-    type: 3}
-  m_PrefabInstance: {fileID: 6141659521014409408}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &4259660035092628236 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7937265524150004684, guid: 7d32150323a50ec4988d378f1993d54e,
     type: 3}
   m_PrefabInstance: {fileID: 6141659521014409408}
   m_PrefabAsset: {fileID: 0}

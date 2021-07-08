@@ -15,6 +15,12 @@ namespace DChild.Gameplay.Systems
 
         public void SetCollisions(bool enableCollisions)
         {
+            SetIgnoredInShadowModeCollisionState(enableCollisions);
+            SetEnableInShadowModeCollisionState(enableCollisions);
+        }
+
+        private void SetIgnoredInShadowModeCollisionState(bool enableCollisions)
+        {
             for (int i = 0; i < m_playerColliders.Length; i++)
             {
                 for (int j = 0; j < m_shadowColliders.Length; j++)
@@ -23,7 +29,32 @@ namespace DChild.Gameplay.Systems
                     {
                         Physics2D.IgnoreCollision(m_playerColliders[i], m_shadowColliders[j], enableCollisions);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Shadow Environment Error Null Reference \n {e.Message}", this);
+                    }
+                }
+            }
+        }
+        private void SetEnableInShadowModeCollisionState(bool enableCollisions)
+        {
+            for (int i = 0; i < m_playerColliders.Length; i++)
+            {
+                for (int j = 0; j < m_shadowColliders.Length; j++)
+                {
+                    try
+                    {
+                        if (enableCollisions == true)
+                        {
+                            Physics2D.IgnoreCollision(m_playerColliders[i], m_shadowColliders[j], false);
+                        }
+                        else
+                        {
+                            Physics2D.IgnoreCollision(m_playerColliders[i], m_shadowColliders[j], true);
+                        }
+                        
+                    }
+                    catch (Exception e)
                     {
                         Debug.LogError($"Shadow Environment Error Null Reference \n {e.Message}", this);
                     }

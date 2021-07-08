@@ -26,9 +26,15 @@ namespace DChild.Gameplay.Combat
 
         public void Execute(bool useOnAttackHit)
         {
-            GameTime.RegisterValueChange(this, 0, GameTime.Factor.Multiplication);
-            m_duration.Reset();
-            enabled = true;
+            if ((useOnAttackHit && m_executeOnAttackHit) || (useOnAttackHit == false && m_executeOnDamage))
+            {
+                var stopTimeScale = useOnAttackHit ? m_onAttackHitStopTimeScale : m_onDamageHitStopTimeScale;
+                GameTime.RegisterValueChange(this, stopTimeScale, GameTime.Factor.Multiplication);
+                var countdownDuration = useOnAttackHit ? m_onAttackHitStopDuration : m_onDamageHitStopDuration;
+                m_duration.SetStartTime(countdownDuration);
+                m_duration.Reset();
+                enabled = true;
+            }
         }
 
         private void ResumeTime(object sender, EventActionArgs eventArgs)
@@ -39,6 +45,7 @@ namespace DChild.Gameplay.Combat
 
         private void Awake()
         {
+            m_duration = new CountdownTimer(0);
             m_duration.CountdownEnd += ResumeTime;
             enabled = false;
         }
