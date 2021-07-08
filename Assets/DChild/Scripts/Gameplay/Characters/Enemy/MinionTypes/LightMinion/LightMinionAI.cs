@@ -338,6 +338,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             while (true)
             {
+                Debug.Log("SCORCHLING TURN TURN");
                 var timer = UnityEngine.Random.Range(5, 10);
                 var currentTimer = 0f;
                 while (currentTimer < timer)
@@ -457,6 +458,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
             if (m_willPatrol)
             {
+                Debug.Log("STOP RANDOM TURN");
                 StopCoroutine(m_randomTurnRoutine);
             }
         }
