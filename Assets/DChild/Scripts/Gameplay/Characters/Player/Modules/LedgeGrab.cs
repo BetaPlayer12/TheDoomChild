@@ -86,11 +86,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.waitForBehaviour = true;
             m_animator.SetTrigger(m_animation);
             m_rigidbody.velocity = Vector2.zero;
+            m_rigidbody.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             //Note: Animation Gitch is happening right now. Possible solution is to play animation first and on start teleport player.s
         }
 
         public void EndExecution()
         {
+            m_rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_state.waitForBehaviour = false;
         }
 
