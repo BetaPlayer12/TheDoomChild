@@ -3,16 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 namespace DChild.Gameplay.Environment
 {
-    public class LightIntensityAdjuster : MonoBehaviour
+    [ExecuteAlways]
+    public class CompositeLightIntensityAdjuster : MonoBehaviour
     {
         [SerializeField, Range(0, 100), OnValueChanged("OnIntesityChanged")]
-        private float m_intensityPercent;
+        private float m_intensityPercent = 100f;
         [SerializeField]
         public Light2D[] m_light;
         [SerializeField, HideInInspector]
@@ -28,9 +30,7 @@ namespace DChild.Gameplay.Environment
                 float temp = 0;
                 float temp2 = 0;
                 temp = m_originalIntensity[i];
-                Debug.Log(temp);
                 temp2 = m_intensityPercent / 100f;
-                Debug.Log(temp2);
                 temp = temp * temp2;
                 m_light[i].intensity = temp;
             }
