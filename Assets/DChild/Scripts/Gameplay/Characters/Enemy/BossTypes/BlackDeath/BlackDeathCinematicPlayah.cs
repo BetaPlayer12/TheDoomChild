@@ -14,14 +14,14 @@ public class BlackDeathCinematicPlayah : MonoBehaviour
     [SerializeField, TabGroup("Cinematic")]
     private PlayableAsset m_groundFallCinematic;
 
-    public void PlayCinematic(int sequence)
+    public void PlayCinematic(int sequence, bool willWait)
     {
-        StartCoroutine(CinematicRoutine(sequence));
+        StartCoroutine(CinematicRoutine(sequence, willWait));
     }
 
-    private IEnumerator CinematicRoutine(int sequence)
+    private IEnumerator CinematicRoutine(int sequence, bool willWait)
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(willWait ? 1.5f : 0);
         m_director.Play(m_crumbleCinematic);
         switch (sequence)
         {
