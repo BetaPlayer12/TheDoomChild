@@ -16,6 +16,7 @@ using Doozy.Engine;
 using Spine.Unity.Modules;
 using Spine.Unity.Examples;
 using DChild.Gameplay.Pooling;
+using UnityEngine.Playables;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -235,6 +236,10 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
+        private SkeletonAnimation m_skeletonAnimation;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_spriteMask;
+        [SerializeField, TabGroup("Reference")]
         private Collider2D m_aoeBB;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_punchBB;
@@ -244,6 +249,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
+        [SerializeField, TabGroup("Cinematic")]
+        private BlackDeathCinematicPlayah m_cinematic;
+        //[SerializeField, TabGroup("Cinematic")]
+        //private PlayableDirector m_director;
+        //[SerializeField, TabGroup("Cinematic")]
+        //private PlayableAsset m_bossCapsuleIdleCinematic;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Effects")]
@@ -334,7 +345,10 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable, m_target);
-                m_stateHandle.OverrideState(State.Intro);
+                if (m_spriteMask.activeSelf)
+                {
+                    m_stateHandle.OverrideState(State.Intro);
+                }
                 GameEventMessage.SendEvent("Boss Encounter");
             }
         }
@@ -357,16 +371,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator IntroRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            //gameObject.SetActive(true);
+            //m_animation.EnableRootMotion(true, true);
+            m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            yield return new WaitForSeconds(2);
-            m_animation.SetAnimation(0, m_info.move.animation, true);
-            yield return new WaitForSeconds(5);
-            GetComponentInChildren<MeshRenderer>().sortingOrder = 99;
-            m_animation.SetAnimation(0, m_info.introAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
+            //m_director.Play(m_bossCapsuleIdleCinematic);
+            m_cinematic.PlayCinematic(1, false);
+            //yield return new WaitForSeconds(2);
+            //m_animation.SetAnimation(0, m_info.move.animation, true);
+            //yield return new WaitForSeconds(5);
+            //GetComponentInChildren<MeshRenderer>().sortingOrder = 99;
+            m_animation.SetAnimation(0, m_info.introAnimation, false).MixDuration = 0;
+            yield return new WaitForSeconds(.2f);
+            m_spriteMask.SetActive(false);
+            m_skeletonAnimation.maskInteraction = SpriteMaskInteraction.None;
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
+            yield return new WaitForSeconds(1.3f);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_hitbox.Enable();
             m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -774,7 +797,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 WallPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_wristPoint.position, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
+            var wristPoint = new Vector2(m_wristPoint.position.x, m_wristPoint.position.y + 2f);
+            RaycastHit2D hit = Physics2D.Raycast(wristPoint, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
             return hit.point;
         }
 
@@ -1043,14 +1067,15 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Intro:
                     if (IsFacingTarget())
                     {
-                        //StartCoroutine(IntroRoutine());
-                        m_stateHandle.OverrideState(State.Chasing);
+                        StartCoroutine(IntroRoutine());
+                        //m_stateHandle.OverrideState(State.Chasing);
                     }
                     else
                     {
-                        m_turnState = State.Intro;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        CustomTurn();
+                        //m_turnState = State.Intro;
+                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        //    m_stateHandle.SetState(State.Turning);
                     }
                     break;
                 case State.Phasing:
