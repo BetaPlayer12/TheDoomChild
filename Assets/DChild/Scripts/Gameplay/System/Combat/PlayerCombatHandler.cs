@@ -9,6 +9,8 @@ namespace DChild.Gameplay.Combat
     public class PlayerCombatHandler : MonoBehaviour
     {
         [SerializeField]
+        private GameObject m_hitFX;
+        [SerializeField]
         private PlayerIFrameHandle m_iFrameHandle;
         [SerializeField]
         private ReactivePlayerCamera m_reactiveCamera;
@@ -21,6 +23,7 @@ namespace DChild.Gameplay.Combat
         {
             if (player.state?.canFlinch ?? true)
             {
+                m_spawnHandle.InstantiateFX(m_hitFX, player.character.centerMass.position);
                 m_reactiveCamera.HandleOnDamageRecieveShake();
                 m_hitStopHandle.Execute(false);
                 StartCoroutine(m_iFrameHandle.DisableInputTemporarily(player));
@@ -32,6 +35,11 @@ namespace DChild.Gameplay.Combat
         {
             m_reactiveCamera.HandleOnAttackHit(eventArgs);
             m_hitStopHandle.Execute(true);
+        }
+
+        private void Awake()
+        {
+            m_spawnHandle = new FXSpawnHandle<FX>();
         }
     }
 }
