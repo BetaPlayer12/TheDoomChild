@@ -797,7 +797,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 WallPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_wristPoint.position, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
+            var wristPoint = new Vector2(m_wristPoint.position.x, m_wristPoint.position.y + 2f);
+            RaycastHit2D hit = Physics2D.Raycast(wristPoint, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
             return hit.point;
         }
 
