@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
-    public class MonsterCapsule : MonoBehaviour
+    public class MonsterCapsuleVisual : MonoBehaviour
     {
 #if UNITY_EDITOR
         [SerializeField]
@@ -13,7 +13,5 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private CapsuleHighlightHandle m_highlightVisuals;
 #endif
-        [SerializeField]
-        private SpineAnimation m_spineAnimation;
     }
 }
