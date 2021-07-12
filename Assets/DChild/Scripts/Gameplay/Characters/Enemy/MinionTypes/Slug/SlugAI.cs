@@ -366,7 +366,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_movement.Stop();
             m_targetLastPos = m_targetInfo.transform.GetComponent<Character>().centerMass.position;
-            m_animation.SetAnimation(0, m_info.spitAttack.animation, false);
+            m_animation.SetAnimation(0, m_info.spitAttack.animation, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.spitAttack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_flinchHandle.m_autoFlinch = true;
@@ -449,19 +449,19 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
                 case State.Patrol:
-                    m_animation.animationState.GetCurrent(0).MixDuration = 0;
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(true, transform.localRotation.z != 0 ? true : false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true).TimeScale = 1f;
+                        m_animation.animationState.GetCurrent(0).MixDuration = 0;
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
                     }
                     else
                     {
                         m_movement.Stop();
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
                     }
                     break;
 
@@ -473,13 +473,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
                     m_flinchHandle.m_autoFlinch = false;
-                    m_animation.animationState.GetCurrent(0).MixDuration = 0;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Spike:
                             m_animation.EnableRootMotion(false, false);
                             m_attackHandle.ExecuteAttack(m_info.spikeAttack.animation, m_info.idleAnimation);
+                            m_animation.animationState.GetCurrent(0).MixDuration = 0;
                             break;
                         case Attack.Spit:
                             m_animation.EnableRootMotion(true, false);
