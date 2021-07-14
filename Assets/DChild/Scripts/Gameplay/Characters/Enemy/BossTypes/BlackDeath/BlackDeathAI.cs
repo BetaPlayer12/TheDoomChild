@@ -699,11 +699,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     if (y == lightningCount - 1)
                     {
-                        m_cinematic.PlayCinematic(2);
+                        m_cinematic.PlayCinematic(2, true);
                     }
                     else
                     {
-                        m_cinematic.PlayCinematic(1);
+                        m_cinematic.PlayCinematic(1, true);
                     }
                 }
                 yield return new WaitForSeconds(m_currentLightningSummonDuration);

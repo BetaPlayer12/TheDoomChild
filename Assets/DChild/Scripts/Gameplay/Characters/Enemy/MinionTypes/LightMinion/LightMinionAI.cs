@@ -338,6 +338,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             while (true)
             {
+                Debug.Log("SCORCHLING TURN TURN");
                 var timer = UnityEngine.Random.Range(5, 10);
                 var currentTimer = 0f;
                 while (currentTimer < timer)
@@ -432,6 +433,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator StopAttackRoutine()
         {
+            m_trailFX.Stop();
+            for (int i = 0; i < m_fxSystem.Count; i++)
+            {
+                m_fxSystem[i].gameObject.SetActive(false);
+            }
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attackEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEnd);
@@ -452,6 +458,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
             if (m_willPatrol)
             {
+                Debug.Log("STOP RANDOM TURN");
                 StopCoroutine(m_randomTurnRoutine);
             }
         }
@@ -557,6 +564,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             else
                             {
                                 m_movement.Stop();
+                                m_stateHandle.Wait(State.Cooldown);
                                 StartCoroutine(StopAttackRoutine());
                                 //m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
@@ -564,7 +572,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_turnState = State.ReevaluateSituation;
+                        m_turnState = State.Attacking;
                         m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -588,7 +596,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        if (!m_wallSensor.allRaysDetecting)
+                        if (IsFacingTarget() && !m_wallSensor.allRaysDetecting)
                         {
                             m_currentCD = 0;
                             m_stateHandle.Wait(State.ReevaluateSituation);

@@ -8,11 +8,10 @@ using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 namespace DChild.Gameplay.Environment
 {
-
-    [RequireComponent(typeof(SortingHandle))]
     [AddComponentMenu("DChild/Gameplay/Environment/Breakable Object")]
     public class BreakableObject : MonoBehaviour, ISerializableComponent
     {
@@ -67,7 +66,7 @@ namespace DChild.Gameplay.Environment
         private float m_force;
         private Debris m_instantiatedDebris;
         private Rigidbody2D[] m_leftOverDebris;
-        private SortingHandle m_sortingHandle;
+        private int m_sortingID;
 
         public Type type => m_type;
 
@@ -132,23 +131,27 @@ namespace DChild.Gameplay.Environment
         private void InstantiateDebris(GameObject debris)
         {
             var instance = Instantiate(debris, m_object.position, Quaternion.identity);
+            var instanceTransform = instance.transform;
+            instanceTransform.parent = transform;
+            instanceTransform.localScale = Vector3.one;
+            instanceTransform.parent = null;
             m_instantiatedDebris = instance.GetComponent<Debris>();
-            m_instantiatedDebris.transform.parent = transform;
-            m_instantiatedDebris.transform.localScale = Vector3.one;
-            m_instantiatedDebris.transform.parent = null;
-            m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
-            m_leftOverDebris = m_instantiatedDebris.GetDetachables();
-            if (m_copySorting && m_sortingHandle != null)
+            if (m_instantiatedDebris != null)
             {
-                var renderers = instance.GetComponentsInChildren<SpriteRenderer>();
-                for (int i = 0; i < renderers.Length; i++)
+                m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
+                m_leftOverDebris = m_instantiatedDebris.GetDetachables();
+                if (m_applyDebrisColorChange)
                 {
-                    renderers[i].sortingLayerID = m_sortingHandle.sortingLayerID;
+                    m_instantiatedDebris.GetComponent<RendererColorChangeHandle>().ApplyColor(m_colorToApply);
                 }
             }
-            if (m_applyDebrisColorChange)
+            if (m_copySorting)
             {
-                m_instantiatedDebris.GetComponent<RendererColorChangeHandle>().ApplyColor(m_colorToApply);
+                var renderers = instance.GetComponentsInChildren<Renderer>();
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    renderers[i].sortingLayerID = m_sortingID;
+                }
             }
         }
 
@@ -183,28 +186,20 @@ namespace DChild.Gameplay.Environment
             SetObjectState(true);
         }
 
-        // Start is called before the first frame update
         private void Awake()
         {
             m_object.Destroyed += OnDestroyObject;
-            m_sortingHandle = GetComponent<SortingHandle>();
-            //if (m_isDestroyed == true)
-            //{
-            //    m_onDestroy?.Invoke();
-            //}
-            //else
-            //{
-            //    m_onFix?.Invoke();
-            //    if (m_createDebris)
-            //    {
-            //        DestroyInstantiatedDebris();
-            //    }
-            //}
+            if (TryGetComponent(out SortingHandle sortingHandle))
+            {
+                m_sortingID = sortingHandle.sortingLayerID;
+            }
+            else if (TryGetComponent(out SortingGroup sortingGroup))
+            {
+                m_sortingID = sortingGroup.sortingOrder;
+            }
         }
 
 #if UNITY_EDITOR
-        
-
         [Button, HideInEditorMode, ShowIf("m_isDestroyed")]
         private void FixObject()
         {

@@ -11,9 +11,17 @@ namespace DChild.Gameplay.Systems
     {
         [SerializeField,InfoBox("These colliders will be ignored by the player when he is in SHADOW mode")]
         private Collider2D[] m_shadowColliders;
+        [SerializeField, InfoBox("These colliders will be ignored by the player when he is in SHADOW mode")]
+        private Collider2D[] m_reverseShadowColliders;
         private Collider2D[] m_playerColliders;
 
         public void SetCollisions(bool enableCollisions)
+        {
+            SetIgnoredInShadowModeCollisionState(enableCollisions);
+            SetEnableInShadowModeCollisionState(enableCollisions);
+        }
+
+        private void SetIgnoredInShadowModeCollisionState(bool enableCollisions)
         {
             for (int i = 0; i < m_playerColliders.Length; i++)
             {
@@ -23,7 +31,25 @@ namespace DChild.Gameplay.Systems
                     {
                         Physics2D.IgnoreCollision(m_playerColliders[i], m_shadowColliders[j], enableCollisions);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Shadow Environment Error Null Reference \n {e.Message}", this);
+                    }
+                }
+            }
+        }
+        private void SetEnableInShadowModeCollisionState(bool enableCollisions)
+        {
+            var ignoreCollision = !enableCollisions;
+            for (int i = 0; i < m_playerColliders.Length; i++)
+            {
+                for (int j = 0; j < m_reverseShadowColliders.Length; j++)
+                {
+                    try
+                    {
+                        Physics2D.IgnoreCollision(m_playerColliders[i], m_reverseShadowColliders[j], ignoreCollision);
+                    }
+                    catch (Exception e)
                     {
                         Debug.LogError($"Shadow Environment Error Null Reference \n {e.Message}", this);
                     }
