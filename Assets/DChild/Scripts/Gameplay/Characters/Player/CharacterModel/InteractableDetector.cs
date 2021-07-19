@@ -46,6 +46,13 @@ namespace DChild.Gameplay.Characters.Players
             m_prevCharacterPosition = m_character.centerMass.transform.position;
         }
 
+        public void ClearAllInteractableReferences()
+        {
+            m_objectsInRange.Clear();
+            m_closestObject = null;
+            CallInteractableDetectedEvent(m_closestObject);
+        }
+
         private void CallInteractableDetectedEvent(IButtonToInteract interactable)
         {
             if (interactable == null || interactable.showPrompt)

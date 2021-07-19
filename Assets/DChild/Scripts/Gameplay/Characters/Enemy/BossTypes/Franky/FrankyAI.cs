@@ -147,6 +147,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleProjectileAttackInfo m_stompProjectile;
             public SimpleProjectileAttackInfo stompProjectile => m_stompProjectile;
 
+            [Title("FX")]
+            [SerializeField]
+            private GameObject m_lightningBoltFX;
+            public GameObject lightningBoltFX => m_lightningBoltFX;
+
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_phaseEvent;
@@ -492,10 +497,24 @@ namespace DChild.Gameplay.Characters.Enemies
             wallStickLoopFX.transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.localScale.x > 0 ? 90 : 270));
             wallStickLoopFX.transform.position = fxPos;
             m_chainHurtBox.gameObject.SetActive(true);
-            m_chainHurtBox.size = new Vector2((Vector2.Distance(m_wristPoint.position, wallPos)) * .65f, m_chainHurtBox.size.y);
-            m_chainHurtBox.offset = new Vector2(m_chainHurtBox.size.x * .5f, 0);
+            m_chainHurtBox.size = new Vector2((Vector2.Distance(m_wristPoint.position, wallPos)) * .65f, /*m_chainHurtBox.size.y*/ 5f);
+            m_chainHurtBox.offset = new Vector2(m_chainHurtBox.size.x * .5f, -2f);
             m_animation.SetAnimation(0, m_info.chainShockLoopAnimation, true);
+            var spawnPoint = new Vector2(transform.position.x + (15f * transform.localScale.x), transform.position.y + 4);
+            List<GameObject> lightningBoltEffects = new List<GameObject>();
+            while (Vector2.Distance(spawnPoint, fxPos) > 10)
+            {
+                spawnPoint = new Vector2(spawnPoint.x + (5f * transform.localScale.x), spawnPoint.y);
+                lightningBoltEffects.Add(this.InstantiateToScene(m_info.lightningBoltFX, spawnPoint, Quaternion.identity));
+                //var lightningBoltFX = this.InstantiateToScene(m_info.lightningBoltFX, spawnPoint, Quaternion.identity);
+                yield return null;
+            }
             yield return new WaitForSeconds(m_info.shockTime);
+            for (int i = 0; i < lightningBoltEffects.Count; i++)
+            {
+                Destroy(lightningBoltEffects[i]);
+            }
+            lightningBoltEffects.Clear();
             wallStickLoopFX.GetComponent<FX>().Stop();
             var wallStickEndFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_wallStickEndFX);
             wallStickEndFX.transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.localScale.x > 0 ? 90 : 270));
