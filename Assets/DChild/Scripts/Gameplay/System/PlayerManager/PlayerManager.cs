@@ -46,6 +46,7 @@ namespace DChild.Gameplay.Systems
         private AutoReflexHandler m_autoReflex;
 
         private CollisionRegistrator m_collisionRegistrator;
+        private InteractableDetector m_interactableDetector;
 
         public Player player => m_player;
 
@@ -105,7 +106,11 @@ namespace DChild.Gameplay.Systems
             m_player.controller.Enable();
         }
 
-        public void ClearCache() => m_collisionRegistrator?.ClearCache();
+        public void ClearCache()
+        {
+            m_collisionRegistrator?.ClearCache();
+            m_interactableDetector?.ClearAllInteractableReferences();
+        }
 
         public void StopCharacterControlOverride()
         {
@@ -123,7 +128,9 @@ namespace DChild.Gameplay.Systems
 
         public void Initialize()
         {
-            m_collisionRegistrator = m_player.character.GetComponentInChildren<CollisionRegistrator>();
+            var character = m_player.character;
+            m_collisionRegistrator = character.GetComponentInChildren<CollisionRegistrator>();
+            m_interactableDetector = character.GetComponentInChildren<InteractableDetector>();
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             m_respawnDelay.CountdownEnd += OnRespawnPlayer;
