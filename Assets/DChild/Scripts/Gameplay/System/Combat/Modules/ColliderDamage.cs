@@ -98,7 +98,7 @@ namespace DChild.Gameplay.Combat
                 var hitDirection = GameplayUtility.GetHorizontalDirection(m_triggeredCollider.bounds.center, hitPoint);
 
                 m_damageFXHandle?.SpawnFX(hitPoint, hitDirection);
-                //onHitFX?.SpawnFX(hitPoint, hitDirection);
+                onHitFX?.SpawnFX(hitPoint, hitDirection);
             }
         }
 
