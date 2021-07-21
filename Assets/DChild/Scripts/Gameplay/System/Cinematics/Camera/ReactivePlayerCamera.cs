@@ -91,7 +91,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
                         m_useOnAttackLoop = true;
                     }
                 }
-                else
+                else if(eventArgs.target.isCharacter)
                 {
                     StopAllCoroutines();
                     m_shakeRoutine = StartCoroutine(CameraShakeRoutine(m_onEnemyKilledShakeLoopData.cameraShakeInfo));
