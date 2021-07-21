@@ -15,10 +15,16 @@ namespace DChild.Gameplay.Systems
         private Collider2D[] m_reverseShadowColliders;
         private Collider2D[] m_playerColliders;
 
+        private bool m_isInShadowEnvironment;
+
         public void SetCollisions(bool enableCollisions)
         {
-            SetIgnoredInShadowModeCollisionState(enableCollisions);
-            SetEnableInShadowModeCollisionState(enableCollisions);
+            if (m_isInShadowEnvironment != enableCollisions)
+            {
+                SetIgnoredInShadowModeCollisionState(enableCollisions);
+                SetEnableInShadowModeCollisionState(enableCollisions);
+                m_isInShadowEnvironment = enableCollisions;
+            }
         }
 
         private void SetIgnoredInShadowModeCollisionState(bool enableCollisions)
@@ -67,6 +73,10 @@ namespace DChild.Gameplay.Systems
         {
             m_playerColliders = GameplaySystem.playerManager.player.character.colliders.colliders;
             GameplaySystem.world.Register(this);
+
+            //Force Set Collision
+            m_isInShadowEnvironment = true;
+            SetCollisions(false);
         }
     }
 }
