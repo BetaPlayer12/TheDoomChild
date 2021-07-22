@@ -72,6 +72,7 @@ namespace DChild.Gameplay.Environment
         private int m_listSize;
 
         private int m_pingPongWaypoint;
+        private const int m_significantFloatingPointPlace = 2;
 
         public event EventAction<UpdateEventArgs> DestinationReached;
         public event EventAction<UpdateEventArgs> DestinationChanged;
@@ -236,10 +237,10 @@ namespace DChild.Gameplay.Environment
         private void Update()
         {
             var currentPosition = (Vector2)transform.position;
-            if (RoundVectorValuesTo(2, currentPosition) != RoundVectorValuesTo(2, m_cacheDestination))
+            if (MathfExt.RoundVectorValuesTo(m_significantFloatingPointPlace, currentPosition) != MathfExt.RoundVectorValuesTo(m_significantFloatingPointPlace, m_cacheDestination))
             {
                 transform.position = Vector2.MoveTowards(currentPosition, m_cacheCurrentWaypoint, m_speed * m_isolatedTime.deltaTime);
-                if (RoundVectorValuesTo(2, currentPosition) == RoundVectorValuesTo(2, m_cacheCurrentWaypoint))
+                if (MathfExt.RoundVectorValuesTo(m_significantFloatingPointPlace, currentPosition) == MathfExt.RoundVectorValuesTo(m_significantFloatingPointPlace, m_cacheCurrentWaypoint))
                 {
                     m_currentWayPoint += m_incrementerValue;
                     m_cacheCurrentWaypoint = m_waypoints[m_currentWayPoint];
@@ -267,11 +268,6 @@ namespace DChild.Gameplay.Environment
             {
                 gameObject.AddComponent<IsolatedObject>();
             }
-        }
-
-        private Vector2 RoundVectorValuesTo(uint decimalPlace, Vector2 vector2)
-        {
-            return new Vector2(MathfExt.RoundDecimalTo(decimalPlace, vector2.x), MathfExt.RoundDecimalTo(decimalPlace, vector2.y));
         }
     }
 }

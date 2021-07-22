@@ -17,5 +17,4 @@ namespace DChild.Gameplay.Cinematics.Cameras
         public AnimationCurve frequency => m_frequency;
         public float duration => m_duration;
     }
-
 }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8267440271996115627}
   - component: {fileID: 8267440271996115626}
   - component: {fileID: 8267440271996115625}
-  - component: {fileID: 871395566714554110}
   m_Layer: 0
   m_Name: Eye_Flying_Minion_Projectile_Muzzle_Flash
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 8267440271996115624}
   m_LocalRotation: {x: 0.01632688, y: 0.10308359, z: 0.15558025, w: 0.98229426}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8267440272325959073}
   m_Father: {fileID: 0}
@@ -44,7 +43,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 2
-  stopAction: 3
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4823,25 +4822,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &871395566714554110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8267440271996115624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: fd1ad6e6836f6674387b6b5a548ec5f6, type: 2}
-  m_particleSystems:
-  - {fileID: 8267440271996115626}
-  - {fileID: 8267440272325959075}
-  m_playOnAwake: 1
-  m_baseFlipped: 0
-  m_poolOnStop: 1
 --- !u!1 &8267440272325959072
 GameObject:
   m_ObjectHideFlags: 0
@@ -4884,7 +4864,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 3
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}

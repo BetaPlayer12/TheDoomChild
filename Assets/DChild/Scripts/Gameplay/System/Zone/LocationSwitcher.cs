@@ -71,6 +71,7 @@ namespace DChild.Gameplay.Systems
 
                 var damageable = character.GetComponent<IDamageable>();
                 damageable.SetHitboxActive(true);
+                character.GetComponent<Rigidbody2D>().WakeUp();
             }
         }
 
