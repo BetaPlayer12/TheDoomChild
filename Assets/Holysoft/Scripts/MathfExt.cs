@@ -103,5 +103,10 @@ namespace Holysoft
             }
             return Mathf.Round(value * factor) / factor;
         }
+
+        public static Vector2 RoundVectorValuesTo(uint decimalPlace, Vector2 vector2)
+        {
+            return new Vector2(MathfExt.RoundDecimalTo(decimalPlace, vector2.x), MathfExt.RoundDecimalTo(decimalPlace, vector2.y));
+        }
     }
 }
