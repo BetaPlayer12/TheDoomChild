@@ -186,14 +186,14 @@ namespace DChild.Gameplay.Combat
 
         private bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox)
         {
-            if (hitbox.canBlockDamage ? (IsBlockPreceededByTarget(collider2D, hitbox.damageable) == false) : (IsBlockedByOtherBlockingHitboxes(collider2D) == false))
+            //if (hitbox.canBlockDamage ? (IsBlockPreceededByTarget(collider2D, hitbox.damageable) == false) : (IsBlockedByOtherBlockingHitboxes(collider2D) == false))
+            //{
+            m_triggeredCollider = GetTriggeredCollider(collider2D);
+            if (hitbox.CanBeDamageBy(m_colliders))
             {
-                m_triggeredCollider = GetTriggeredCollider(collider2D);
-                if (hitbox.CanBeDamageBy(m_colliders))
-                {
-                    return true;
-                }
+                return true;
             }
+            //}
             return false;
         }
 
@@ -245,7 +245,7 @@ namespace DChild.Gameplay.Combat
                 return;
 
 #if UNITY_EDITOR
-            Profiler.BeginSample("Collider Damage: Validation For Damage",this); 
+            Profiler.BeginSample("Collider Damage: Validation For Damage", this);
 #endif
             if (IsValidColliderToHit(collider2D))
             {
