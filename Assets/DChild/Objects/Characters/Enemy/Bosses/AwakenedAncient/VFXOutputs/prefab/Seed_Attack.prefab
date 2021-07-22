@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6066831031573771143}
   - component: {fileID: 6066831031573771141}
   - component: {fileID: 6066831031573771142}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: stings2batch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4726,7 +4726,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -4773,8 +4772,7 @@ GameObject:
   - component: {fileID: 6066831031673998970}
   - component: {fileID: 6066831031673998971}
   - component: {fileID: 6066831031673998948}
-  - component: {fileID: 3915530193519418371}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Seed_Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4790,7 +4788,7 @@ Transform:
   m_GameObject: {fileID: 6066831031673998949}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6066831033474744768}
   - {fileID: 6066831032070821231}
@@ -4805,15 +4803,15 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6066831031673998949}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 5
   simulationSpeed: 1
-  stopAction: 3
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 0
+  looping: 1
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9482,7 +9480,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -9518,37 +9515,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &3915530193519418371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6066831031673998949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: 12bfab42fd1e0624c97058f8da7e9b78, type: 2}
-  m_particleSystems:
-  - {fileID: 6066831031673998971}
-  - {fileID: 6066831033474744774}
-  - {fileID: 6066831032961698468}
-  - {fileID: 6066831033120821117}
-  - {fileID: 6066831032146113806}
-  - {fileID: 6066831032164682864}
-  - {fileID: 6066831033392031135}
-  - {fileID: 6066831031573771141}
-  - {fileID: 6066831032732911500}
-  - {fileID: 6066831032534260826}
-  - {fileID: 6066831033289758983}
-  - {fileID: 6066831032070821229}
-  - {fileID: 6066831032844123835}
-  - {fileID: 6066831033536689422}
-  - {fileID: 6066831033592004472}
-  m_playOnAwake: 0
-  m_poolOnStop: 0
 --- !u!1 &6066831032070821224
 GameObject:
   m_ObjectHideFlags: 0
@@ -9560,7 +9526,7 @@ GameObject:
   - component: {fileID: 6066831032070821231}
   - component: {fileID: 6066831032070821229}
   - component: {fileID: 6066831032070821230}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Seed_impact (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9575,10 +9541,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6066831032070821224}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.01}
+  m_LocalPosition: {x: 0, y: 0, z: -0.14000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6066831032844123813}
+  - {fileID: 6066831032178781904}
   - {fileID: 6066831033536689416}
   - {fileID: 6066831033592004474}
   m_Father: {fileID: 6066831031673998970}
@@ -9600,7 +9567,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9836,7 +9803,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.5
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9994,7 +9961,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotationX:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -10047,7 +10014,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotationY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -10100,8 +10067,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startRotation:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
+      minMaxState: 3
+      scalar: 3.1415925
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -10527,7 +10494,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 1
+        scalar: 2
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -10930,8 +10897,8 @@ ParticleSystem:
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 58018
-        atime2: 65535
+        atime1: 65535
+        atime2: 0
         atime3: 0
         atime4: 0
         atime5: 0
@@ -10939,7 +10906,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_NumColorKeys: 2
-        m_NumAlphaKeys: 3
+        m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -14327,7 +14294,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -14362,7 +14328,7 @@ ParticleSystemRenderer:
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
 --- !u!1 &6066831032146113801
 GameObject:
   m_ObjectHideFlags: 0
@@ -14374,7 +14340,7 @@ GameObject:
   - component: {fileID: 6066831032146113800}
   - component: {fileID: 6066831032146113806}
   - component: {fileID: 6066831032146113807}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Rock02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14411,7 +14377,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -19156,7 +19122,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -19203,7 +19168,7 @@ GameObject:
   - component: {fileID: 6066831032164682866}
   - component: {fileID: 6066831032164682864}
   - component: {fileID: 6066831032164682865}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Awakened_Ancient_Seed_Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19240,7 +19205,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -23967,7 +23932,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -24003,6 +23967,84 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!1 &6066831032178781905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6066831032178781904}
+  - component: {fileID: 6066831032178781911}
+  m_Layer: 0
+  m_Name: New Sprite Mask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6066831032178781904
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066831032178781905}
+  m_LocalRotation: {x: -0.7016885, y: -0, z: -0, w: 0.71248376}
+  m_LocalPosition: {x: 0, y: -0.013, z: 0.545}
+  m_LocalScale: {x: 10.0135, y: 3.0864809, z: 7.0173}
+  m_Children: []
+  m_Father: {fileID: 6066831032070821231}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: -89.12501, y: 0, z: 0}
+--- !u!331 &6066831032178781911
+SpriteMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066831032178781905}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10758, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 718074e4e56a5404e824bf8e6571ea7d, type: 3}
+  m_MaskAlphaCutoff: 0.2
+  m_FrontSortingLayerID: 0
+  m_BackSortingLayerID: 0
+  m_FrontSortingLayer: 0
+  m_BackSortingLayer: 0
+  m_FrontSortingOrder: 0
+  m_BackSortingOrder: 0
+  m_IsCustomRangeActive: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &6066831032534260805
 GameObject:
   m_ObjectHideFlags: 0
@@ -24014,7 +24056,7 @@ GameObject:
   - component: {fileID: 6066831032534260804}
   - component: {fileID: 6066831032534260826}
   - component: {fileID: 6066831032534260827}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: stings1batch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24051,7 +24093,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -28729,7 +28771,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -28776,7 +28817,7 @@ GameObject:
   - component: {fileID: 6066831032732911502}
   - component: {fileID: 6066831032732911500}
   - component: {fileID: 6066831032732911501}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Spark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28813,7 +28854,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -33540,7 +33581,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -33587,7 +33627,7 @@ GameObject:
   - component: {fileID: 6066831032844123813}
   - component: {fileID: 6066831032844123835}
   - component: {fileID: 6066831032844123812}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Blast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33602,7 +33642,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6066831032844123814}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.01}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6066831032070821231}
@@ -33624,7 +33664,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -33860,7 +33900,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2.5
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -38351,7 +38391,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -38386,7 +38425,7 @@ ParticleSystemRenderer:
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
 --- !u!1 &6066831032961698471
 GameObject:
   m_ObjectHideFlags: 0
@@ -38398,7 +38437,7 @@ GameObject:
   - component: {fileID: 6066831032961698470}
   - component: {fileID: 6066831032961698468}
   - component: {fileID: 6066831032961698469}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Debris
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38428,14 +38467,14 @@ ParticleSystem:
   m_GameObject: {fileID: 6066831032961698471}
   serializedVersion: 6
   lengthInSec: 5
-  simulationSpeed: 2
+  simulationSpeed: 2.78
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -38993,7 +39032,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.4
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -43162,7 +43201,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -43209,7 +43247,7 @@ GameObject:
   - component: {fileID: 6066831033120821119}
   - component: {fileID: 6066831033120821117}
   - component: {fileID: 6066831033120821118}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Rock01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43246,7 +43284,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -47991,7 +48029,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -48038,7 +48075,7 @@ GameObject:
   - component: {fileID: 6066831033289758977}
   - component: {fileID: 6066831033289758983}
   - component: {fileID: 6066831033289758976}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Smokedust5_sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48075,7 +48112,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -52802,7 +52839,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -52849,7 +52885,7 @@ GameObject:
   - component: {fileID: 6066831033392031129}
   - component: {fileID: 6066831033392031135}
   - component: {fileID: 6066831033392031128}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Smokedust4_sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52886,7 +52922,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -57613,7 +57649,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -57660,7 +57695,7 @@ GameObject:
   - component: {fileID: 6066831033474744768}
   - component: {fileID: 6066831033474744774}
   - component: {fileID: 6066831033474744775}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Awakened_Ancient_Seed_Attack (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57706,7 +57741,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -62375,7 +62410,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -62422,7 +62456,7 @@ GameObject:
   - component: {fileID: 6066831033536689416}
   - component: {fileID: 6066831033536689422}
   - component: {fileID: 6066831033536689423}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Smokedust5_sprite (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62441,7 +62475,7 @@ Transform:
   m_LocalScale: {x: 1.4288, y: 1, z: 0.62772}
   m_Children: []
   m_Father: {fileID: 6066831032070821231}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &6066831033536689422
 ParticleSystem:
@@ -62459,7 +62493,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -67186,7 +67220,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -67233,7 +67266,7 @@ GameObject:
   - component: {fileID: 6066831033592004474}
   - component: {fileID: 6066831033592004472}
   - component: {fileID: 6066831033592004473}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: sparkle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67252,7 +67285,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6066831032070821231}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &6066831033592004472
 ParticleSystem:
@@ -67270,7 +67303,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -71939,7 +71972,6 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
