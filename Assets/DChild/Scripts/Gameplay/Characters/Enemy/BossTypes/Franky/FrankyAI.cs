@@ -241,8 +241,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
-        private SkeletonAnimation m_skeletonAnimation;
-        [SerializeField, TabGroup("Reference")]
         private GameObject m_spriteMask;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_aoeBB;
@@ -381,22 +379,27 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.Chasing);
             m_movement.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            //m_director.Play(m_bossCapsuleIdleCinematic);
             m_cinematic.PlayCinematic(1, false);
-            //yield return new WaitForSeconds(2);
-            //m_animation.SetAnimation(0, m_info.move.animation, true);
-            //yield return new WaitForSeconds(5);
-            //GetComponentInChildren<MeshRenderer>().sortingOrder = 99;
-            m_animation.SetAnimation(0, m_info.introAnimation, false).MixDuration = 0;
-            yield return new WaitForSeconds(.2f);
+            m_animation.animationState.TimeScale = 1;
+            ////m_animation.SetEmptyAnimation(0, 0);
+            ////m_animation.SetAnimation(0, m_info.introAnimation, false).AnimationStart = 0.2f;
+            //yield return new WaitForSeconds(.2f);
             m_spriteMask.SetActive(false);
-            m_skeletonAnimation.maskInteraction = SpriteMaskInteraction.None;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.introAnimation);
             yield return new WaitForSeconds(1.3f);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.Enable();
             m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator StartAnimationRoutine()
+        {
+            m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetAnimation(0, m_info.introAnimation, false).TimeScale = 1;
+            yield return new WaitForSeconds(0.2f);
+            m_animation.animationState.TimeScale = 0;
             yield return null;
         }
 
@@ -1070,6 +1073,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
 
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
+            StartCoroutine(StartAnimationRoutine());
         }
 
         private void Update()

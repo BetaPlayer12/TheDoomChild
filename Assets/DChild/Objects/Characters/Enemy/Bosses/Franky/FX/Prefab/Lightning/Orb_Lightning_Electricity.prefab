@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3794003063720523828}
   - component: {fileID: 3794003063720523827}
   - component: {fileID: 3794003063720523826}
+  - component: {fileID: -1225563784840517789}
   m_Layer: 0
   m_Name: Orb_Lightning_Electricity
   m_TagString: Untagged
@@ -48,7 +49,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4812,3 +4813,21 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &-1225563784840517789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794003063720523825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: 69e02d3feba16d04aaa71f41204037bf, type: 2}
+  m_particleSystems:
+  - {fileID: 3794003063720523827}
+  m_playOnAwake: 0
+  m_baseFlipped: 0
+  m_poolOnStop: 0
