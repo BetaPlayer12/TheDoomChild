@@ -11,6 +11,8 @@ namespace DChild.Gameplay.Environment.Obstacles
         private Rigidbody2D m_modelRigidbody;
         [SerializeField]
         private Collision2DEventSender m_smasherCollisionEvent;
+        [SerializeField]
+        private Vector2 m_shakeMaxOffset;
 
         [SerializeField, TabGroup("Drop Config")]
         private float m_maxDropSpeed;
@@ -47,14 +49,14 @@ namespace DChild.Gameplay.Environment.Obstacles
             StopAllCoroutines();
             m_isDropping = true;
             m_isReturning = false;
-            if (withDelay)
-            {
-                StartCoroutine(DelayedRoutine(m_dropDelay, DropRoutine));
-            }
-            else
-            {
+            //if (withDelay)
+            //{
+            //    StartCoroutine(DelayedRoutine(m_dropDelay, DropRoutine));
+            //}
+            //else
+            //{
                 StartCoroutine(DropRoutine());
-            }
+            //}
         }
 
         public void Return(bool withDelay)
@@ -74,6 +76,7 @@ namespace DChild.Gameplay.Environment.Obstacles
 
         private IEnumerator DropRoutine()
         {
+            yield return WarningShakeRoutine(m_dropDelay);
             m_animationCurveTimer = 0;
             while (true)
             {
@@ -99,6 +102,23 @@ namespace DChild.Gameplay.Environment.Obstacles
                 yield return m_fixedUpdateWait;
             }
             m_isReturning = false;
+        }
+
+        private IEnumerator WarningShakeRoutine(float duration)
+        {
+            var originalLocalPosition = (Vector2)m_modelTransfrom.localPosition;
+            var timer = duration;
+            do
+            {
+                var offset = UnityEngine.Random.insideUnitCircle;
+                offset.x *= m_shakeMaxOffset.x;
+                offset.y *= m_shakeMaxOffset.y;
+                m_modelTransfrom.localPosition = originalLocalPosition + offset;
+                timer -= GameplaySystem.time.deltaTime;
+                yield return null;
+            } while (timer > 0);
+            m_modelTransfrom.localPosition = originalLocalPosition;
+            yield return null;
         }
 
         private IEnumerator DelayedRoutine(float delay, Func<IEnumerator> NextRoutine)
