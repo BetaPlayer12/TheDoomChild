@@ -3,8 +3,10 @@ using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Items;
 using DChild.Menu.Trading;
 using Doozy.Engine;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +21,9 @@ namespace DChild.Gameplay.Characters.NPC
         private Vector3 m_promptOffset;
         [SerializeField]
         private MerchantInventory m_inventory;
+        [SerializeField]
+        private bool m_hasDialogue;
+
         [BoxGroup("AskingPrice")]
         [SerializeField, TabGroup("AskingPrice/Tab", "Buying"), HideLabel]
         private TradeAskingPrice m_buyAskingPrice = new TradeAskingPrice();
@@ -33,10 +38,23 @@ namespace DChild.Gameplay.Characters.NPC
 
         public void Interact(Character character)
         {
-            GameplaySystem.gamplayUIHandle.OpenTradeWindow(m_npcData,m_inventory,this);
+            if (m_hasDialogue)
+            {
+                GetComponent<NPCDialogue>().Interact(character);
+            }
+            else
+            {
+                CommenceTrade();
+            }
         }
 
         public void ResetWares() => m_inventory.ResetWares();
+
+        [Button, HideInEditorMode]
+        public void CommenceTrade()
+        {
+            GameplaySystem.gamplayUIHandle.OpenTradeWindow(m_npcData, m_inventory, this);
+        }
 
         public void AddToWares(ItemData item, int count = 1) => m_inventory.AddToWares(item, count);
 
@@ -63,12 +81,5 @@ namespace DChild.Gameplay.Characters.NPC
             Gizmos.color = Color.cyan;
             Gizmos.DrawSphere(position, 1f);
         }
-
-#if UNITY_EDITOR
-        [Button, HideInEditorMode]
-        private void CommenceTrade() => Interact(null);
-
-
-#endif
     }
 }

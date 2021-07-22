@@ -20,13 +20,31 @@ namespace DChildDebug.Window
         [Button]
         public void AddDamage()
         {
-            GameplaySystem.playerManager.player.modifiers.Add(PlayerModifier.AttackDamage, m_damage);
+            float atk= GameplaySystem.playerManager.player.modifiers.Get(PlayerModifier.AttackDamage);
+            if(atk >= 85)
+            {
+
+            }
+            else
+            {
+                GameplaySystem.playerManager.player.modifiers.Add(PlayerModifier.AttackDamage, m_damage);
+            }
+           
 
         }
         [Button]
         public void ReduceDamage()
         {
-            GameplaySystem.playerManager.player.modifiers.Add(PlayerModifier.AttackDamage, -m_damage);
+            float atk = GameplaySystem.playerManager.player.modifiers.Get(PlayerModifier.AttackDamage);
+            if (atk >= 25)
+            {
+                GameplaySystem.playerManager.player.modifiers.Add(PlayerModifier.AttackDamage, -m_damage);
+            }
+            else
+            {
+
+            }
+               
 
         }
 

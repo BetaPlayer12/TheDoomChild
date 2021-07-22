@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Environment.Interractables;
+using Holysoft.Event;
 using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -9,12 +10,13 @@ namespace DChild.Gameplay.Characters.NPC
     {
         [SerializeField]
         private bool m_hasDialogue = true;
-        [SerializeField,ShowIf("m_hasDialogue")]
+        [SerializeField, ShowIf("m_hasDialogue")]
         private bool m_hasConditionForDialogue;
         [SerializeField]
         private Vector3 m_promptOffset;
 
         private DialogueSystemTrigger m_trigger;
+        public event EventAction<EventActionArgs> OnDialogueStart;
 
         public bool hasDialogue
         {
@@ -44,6 +46,7 @@ namespace DChild.Gameplay.Characters.NPC
         public void Interact(Character character)
         {
             m_trigger.OnUse(character.transform);
+            OnDialogueStart?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void Awake()
@@ -55,7 +58,7 @@ namespace DChild.Gameplay.Characters.NPC
         private void OnDrawGizmosSelected()
         {
             var position = promptPosition;
-            Gizmos.DrawIcon(position + Vector3.up * 1.5f, "DialogueDatabase Icon.png",false);
+            Gizmos.DrawIcon(position + Vector3.up * 1.5f, "DialogueDatabase Icon.png", false);
             Gizmos.color = Color.cyan;
             Gizmos.DrawSphere(position, 1f);
         }

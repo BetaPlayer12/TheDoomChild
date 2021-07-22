@@ -63,12 +63,12 @@ public class DropCube : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
-           
+
             StartCoroutine(ReturnDelayCoroutine());
             transform.position = m_currentPos;
             m_isDropping = false;
             dropped = true;
-           
+
         }
     }
     IEnumerator FallDelayCoroutine()
@@ -78,7 +78,7 @@ public class DropCube : MonoBehaviour
         yield return new WaitForSeconds(m_FallDelay);
         m_shake = false;
         m_isDropping = true;
-        
+
     }
     IEnumerator ReturnDelayCoroutine()
     {
@@ -94,8 +94,8 @@ public class DropCube : MonoBehaviour
         m_start = start;
         m_destination = destination;
     }
-   
-   private Vector2 RoundVectorValuesTo(uint decimalPlace, Vector2 vector2)
+
+    private Vector2 RoundVectorValuesTo(uint decimalPlace, Vector2 vector2)
     {
         return new Vector2(MathfExt.RoundDecimalTo(decimalPlace, vector2.x), MathfExt.RoundDecimalTo(decimalPlace, vector2.y));
     }
@@ -115,10 +115,10 @@ public class DropCube : MonoBehaviour
         m_endPosition = m_cube.localPosition;
     }
 #endif
-   
+
     public void FixedUpdate()
     {
-        var offset = Random.insideUnitCircle;
+        var offset = UnityEngine.Random.insideUnitCircle;
         if (m_shake == true)
         {
             transform.position = m_currentPos + offset * m_radiusOffset;
@@ -133,8 +133,8 @@ public class DropCube : MonoBehaviour
                 m_fallSpeed = m_fallSpeedCurve.Evaluate(m_fallTime);
                 m_currentFallSpeed = m_maxFallSpeed * m_fallSpeed;
                 SetMoveValues(m_cube.localPosition, m_endPosition);
-               m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentFallSpeed* deltaTime);
-               
+                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentFallSpeed * deltaTime);
+
             }
             if (dropped == true)
             {
@@ -142,9 +142,9 @@ public class DropCube : MonoBehaviour
                 m_returnSpeed = m_returnSpeedCurve.Evaluate(m_returnTime);
                 m_currentReturnSpeed = m_maxReturnSpeed * m_returnSpeed;
                 SetMoveValues(m_cube.localPosition, m_startPosition);
-                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentReturnSpeed* deltaTime);
-              
-                if(RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_startPosition))
+                m_cube.localPosition = Vector3.MoveTowards(m_start, m_destination, m_currentReturnSpeed * deltaTime);
+
+                if (RoundVectorValuesTo(2, m_cube.localPosition) == RoundVectorValuesTo(2, m_startPosition))
                 {
                     m_isDropping = false;
                     dropped = false;
@@ -154,6 +154,6 @@ public class DropCube : MonoBehaviour
             }
 
         }
-       
+
     }
 }

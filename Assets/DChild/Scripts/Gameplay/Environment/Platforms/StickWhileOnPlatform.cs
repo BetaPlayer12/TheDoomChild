@@ -68,7 +68,5 @@ namespace DChild.Gameplay.Environment
                 }
             }
         }
-
-
     }
 }
