@@ -48,7 +48,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4823,6 +4823,7 @@ GameObject:
   - component: {fileID: 9216450938530617316}
   - component: {fileID: 8252007270632523840}
   - component: {fileID: 402971264102699675}
+  - component: {fileID: 1420538734990791908}
   m_Layer: 0
   m_Name: Wall_Stick_Efx_Loop
   m_TagString: Untagged
@@ -4861,7 +4862,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9625,3 +9626,22 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &1420538734990791908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4579797882854292158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: eb801f5689c30e845a41a5f9b7c14821, type: 2}
+  m_particleSystems:
+  - {fileID: 8252007270632523840}
+  - {fileID: 461881578915009043}
+  m_playOnAwake: 0
+  m_baseFlipped: 0
+  m_poolOnStop: 0
