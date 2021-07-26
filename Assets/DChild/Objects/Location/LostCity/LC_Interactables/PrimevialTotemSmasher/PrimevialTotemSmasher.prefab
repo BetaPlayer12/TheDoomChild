@@ -48,8 +48,7 @@ MonoBehaviour:
   m_modelRigidbody: {fileID: 4783893513713941664}
   m_smasherCollisionEvent: {fileID: 2122614579470726265}
   m_shakeMaxOffset: {x: 0.5, y: 0.5}
-  m_smashFX: {fileID: 6434132641167442602, guid: 002eeb149d8252441b6a325b38d9c215,
-    type: 3}
+  m_smashFX: {fileID: 0}
   m_maxDropSpeed: 100
   m_dropSpeed:
     serializedVersion: 2
@@ -114,9 +113,7 @@ GameObject:
   - component: {fileID: 8571157467503727296}
   - component: {fileID: 8571157467503727297}
   - component: {fileID: 8571157467503727298}
-  - component: {fileID: 8571157467503727299}
   - component: {fileID: 4783893513713941664}
-  - component: {fileID: 2998078377768928147}
   - component: {fileID: 2122614579470726265}
   m_Layer: 11
   m_Name: Smasher
@@ -216,78 +213,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.878122, y: 0.8694426}
   m_EdgeRadius: 0
---- !u!114 &8571157467503727299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8571157467503727308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e440dea2fe510d3458c9ca2fe8cbb796, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_cube: {fileID: 8571157467503727296}
-  m_cubecrusher: {fileID: 8571157467678407455}
-  m_startPosition: {x: 0, y: 0}
-  m_endPosition: {x: 0, y: 0}
-  m_fallSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_returnSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_maxFallSpeed: 100
-  m_maxReturnSpeed: 30
-  m_isDropping: 0
-  dropped: 0
-  m_istriggered: 0
-  m_FallDelay: 0.1
-  m_ReturnDelay: 1
-  m_radiusOffset: 0.5
 --- !u!50 &4783893513713941664
 Rigidbody2D:
   serializedVersion: 4
@@ -309,19 +234,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 5
---- !u!114 &2998078377768928147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8571157467503727308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53225741fa1374744a3334286005bac2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_toParent: {fileID: 8571157467503727296}
 --- !u!114 &2122614579470726265
 MonoBehaviour:
   m_ObjectHideFlags: 0
