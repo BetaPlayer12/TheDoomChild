@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
-    public class MonsterCapsuleBreakEvent : MonoBehaviour
+    public class MonsterCapsuleBreakEvent : SerializedMonoBehaviour
     {
         [SerializeField]
         private SpineAnimation m_monsterAnimation;
@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private GameObject m_brokenVersion;
         [SerializeField]
-        private CombatAIBrain m_monster;
+        private IAmbushingAI m_monster;
 
         private ICombatAIBrain m_brain;
 
