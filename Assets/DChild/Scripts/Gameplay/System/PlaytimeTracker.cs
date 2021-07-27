@@ -14,7 +14,10 @@ namespace DChild.Gameplay.Systems
         [SerializeField, DisplayAsString]
         private string m_time;
 #endif
-        private void OnSave(object sender, CampaignSlotUpdateEventArgs eventArgs) => eventArgs.slot.UpdateDuration(m_currentTime);
+        private void OnSave(object sender, CampaignSlotUpdateEventArgs eventArgs)
+        {
+            eventArgs.slot.UpdateDuration(m_currentTime);
+        }
 
         private void OnLoad(object sender, CampaignSlotUpdateEventArgs eventArgs) => m_currentTime = eventArgs.slot.duration;
 
