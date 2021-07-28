@@ -12,11 +12,12 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Environment;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/AlchemistBot")]
-    public class AlchemistBotAI : CombatAIBrain<AlchemistBotAI.Info>
+    public class AlchemistBotAI : CombatAIBrain<AlchemistBotAI.Info>, IResetableAIBrain, IAmbushingAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -39,6 +40,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_attackCD;
             public float attackCD => m_attackCD;
+            [SerializeField]
+            private float m_attackBodyLightningDuration;
+            public float attackBodyLightningDuration => m_attackBodyLightningDuration;
             //
             [SerializeField, MinValue(0)]
             private float m_patience;
@@ -73,6 +77,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_awakenAnimation;
+            public string awakenAnimation => m_awakenAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_dormantAnimation;
+            public string dormantAnimation => m_dormantAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_prepAnimation;
+            public string prepAnimation => m_prepAnimation;
 
             [Title("Events")]
             [SerializeField, ValueDropdown("GetEvents")]
@@ -99,6 +112,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Detect,
             Patrol,
+            Idle,
             Cooldown,
             Turning,
             Attacking,
@@ -117,6 +131,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
         [SerializeField, TabGroup("Reference")]
@@ -145,6 +161,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_selfSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_playerSensor;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_bodylightningFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_glowFX;
+        [SerializeField, TabGroup("BB")]
+        private Collider2D m_bodylightningBB;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -159,11 +181,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private Bone m_bone;
         private Vector2 m_boneDefaultPos;
 
+        [SerializeField]
+        private bool m_willPatrol;
+
         private float m_currentCD;
         private float m_currentPatience;
         private bool m_enablePatience;
         private bool m_isDetecting;
         private bool m_canAttack2;
+        private Coroutine m_bodylightningCoroutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -218,6 +244,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            if (!m_bodylightningBB.enabled)
+            {
+                m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
+            }
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -281,6 +311,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            if (!m_willPatrol)
+            {
+                m_animation.EnableRootMotion(true, true);
+                m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+                //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
+
+                m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
+                m_animation.DisableRootMotion();
+            }
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(m_info.detectionTime);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
@@ -309,6 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_chosenAttack == Attack.Attack1)
             {
                 var distance = Vector2.Distance(m_projectilePoint.position, new Vector2(GroundPosition().x, GroundPosition().y * .95f));
+                m_attackBB.enabled = true;
                 m_attackBB.offset = new Vector2(0, (-distance * 2) * .15f);
                 m_attackBB.size = new Vector2(.25f, distance);
             }
@@ -317,6 +360,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackSideBB.enabled = true;
             }
             yield return new WaitForSeconds(.75f);
+            m_attackBB.enabled = false;
             m_attackSideBB.enabled = false;
             m_attackBB.offset = Vector2.zero;
             m_attackBB.size = new Vector2(.25f, .25f);
@@ -328,6 +372,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_canAttack2 = false;
             yield return new WaitForSeconds(3);
             m_canAttack2 = true;
+            yield return null;
+        }
+
+        private IEnumerator BodyLightningRoutine()
+        {
+            yield return new WaitForSeconds(0.25f);
+            m_bodylightningFX.Play();
+            m_glowFX.Play();
+            m_bodylightningBB.enabled = true;
+            yield return new WaitForSeconds(m_info.attackBodyLightningDuration);
+            m_bodylightningFX.Stop();
+            m_glowFX.Stop();
+            m_bodylightningBB.enabled = false;
             yield return null;
         }
 
@@ -351,6 +408,14 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
+            m_hitbox.Disable();
+            m_attackBB.enabled = false;
+            m_attackSideBB.enabled = false;
+            m_attackBB.offset = Vector2.zero;
+            m_attackBB.size = new Vector2(.25f, .25f);
+            m_bodylightningBB.enabled = false;
+            m_bodylightningFX.Stop();
+            m_glowFX.Stop();
             StopAllCoroutines();
             StartCoroutine(DeathRoutine());
         }
@@ -370,6 +435,11 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+
+            if (!m_willPatrol)
+            {
+                m_hitbox.Disable();
+            }
             //m_selfCollider.SetActive(false);
             m_spineEventListener.Subscribe(m_info.spawnBlobEvent, SpawnBlob);
         }
@@ -384,7 +454,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
@@ -402,16 +472,17 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_agent.Stop();
-                    if (IsFacingTarget())
-                    {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(DetectRoutine());
-                    }
-                    else
+
+                    if (!IsFacingTarget() && m_willPatrol)
                     {
                         m_turnState = State.Detect;
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
+                    }
+                    else
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
                     }
                     break;
 
@@ -420,6 +491,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.patrol.animation, true);
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    break;
+
+                case State.Idle:
+                    m_animation.SetAnimation(0, m_info.dormantAnimation, true);
+                    m_agent.Stop();
                     break;
 
                 case State.Turning:
@@ -563,6 +639,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
+            m_hitbox.Enable();
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
@@ -571,6 +648,19 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnBecomePassive()
         {
             ResetAI();
+        }
+
+        public void LaunchAmbush(Vector2 position)
+        {
+            enabled = true;
+            m_stateHandle.OverrideState(State.Detect);
+        }
+
+        public void PrepareAmbush(Vector2 position)
+        {
+            enabled = false;
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Idle);
         }
     }
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6741787421250062946}
   - component: {fileID: 6741787421250062947}
   - component: {fileID: 6741787421250062944}
+  - component: {fileID: -2274971649874391980}
   m_Layer: 0
   m_Name: Hit_Bony_Creatures
   m_TagString: Untagged
@@ -43,7 +44,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 1
   simulationSpeed: 1.5
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4813,6 +4814,25 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &-2274971649874391980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6741787421250062945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6178cd111cba844a6e236cfbee492c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_poolableItemData: {fileID: 11400000, guid: 82bac8157d2a3a744af5b16ac0399f01, type: 2}
+  m_particleSystems:
+  - {fileID: 6741787421250062947}
+  - {fileID: 6741787422456102632}
+  m_playOnAwake: 1
+  m_baseFlipped: 0
+  m_poolOnStop: 1
 --- !u!1 &6741787422456102615
 GameObject:
   m_ObjectHideFlags: 0
@@ -4855,7 +4875,7 @@ ParticleSystem:
   serializedVersion: 6
   lengthInSec: 5
   simulationSpeed: 1.5
-  stopAction: 0
+  stopAction: 3
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
