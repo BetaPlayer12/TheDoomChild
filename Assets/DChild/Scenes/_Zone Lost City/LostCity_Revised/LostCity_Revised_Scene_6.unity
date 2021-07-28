@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -31901,6 +31901,26 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 7266541254795316370, guid: c3fcba7c290e9a3448b492377d11318b,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: 0.013549089
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266541254795316370, guid: c3fcba7c290e9a3448b492377d11318b,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.845489
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266541254795316370, guid: c3fcba7c290e9a3448b492377d11318b,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.030835807
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266541254795316370, guid: c3fcba7c290e9a3448b492377d11318b,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.817399
+      objectReference: {fileID: 0}
     - target: {fileID: 9039011819361594714, guid: c3fcba7c290e9a3448b492377d11318b,
         type: 3}
       propertyPath: m_Offset.y
@@ -31910,6 +31930,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.y
       value: 0.81296235
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039011819361594714, guid: c3fcba7c290e9a3448b492377d11318b,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: -0.4242444
+      objectReference: {fileID: 0}
+    - target: {fileID: 9039011819361594714, guid: c3fcba7c290e9a3448b492377d11318b,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.041448265
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3fcba7c290e9a3448b492377d11318b, type: 3}
@@ -34522,6 +34552,16 @@ PrefabInstance:
       propertyPath: m_collisionExceptions.Array.data[2]
       value: 
       objectReference: {fileID: 568459456}
+    - target: {fileID: 2355610818323465512, guid: 704866ca89486a94e9b781587d094922,
+        type: 3}
+      propertyPath: m_shakeMaxOffset.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355610818323465512, guid: 704866ca89486a94e9b781587d094922,
+        type: 3}
+      propertyPath: m_shakeMaxOffset.y
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 8330672059006922169, guid: 704866ca89486a94e9b781587d094922,
         type: 3}
       propertyPath: m_Offset.y
@@ -98469,6 +98509,16 @@ PrefabInstance:
       propertyPath: m_collisionExceptions.Array.data[2]
       value: 
       objectReference: {fileID: 568459456}
+    - target: {fileID: 2355610818323465512, guid: 704866ca89486a94e9b781587d094922,
+        type: 3}
+      propertyPath: m_shakeMaxOffset.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2355610818323465512, guid: 704866ca89486a94e9b781587d094922,
+        type: 3}
+      propertyPath: m_shakeMaxOffset.y
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 8330672059006922169, guid: 704866ca89486a94e9b781587d094922,
         type: 3}
       propertyPath: m_Offset.y
@@ -108103,8 +108153,8 @@ MonoBehaviour:
   m_onLandDrop:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Drop
+      - m_Target: {fileID: 2068683775}
+        m_MethodName: ExecuteSmartDrop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -135410,6 +135460,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2068683775 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2355610818323465512, guid: 704866ca89486a94e9b781587d094922,
+    type: 3}
+  m_PrefabInstance: {fileID: 312879741}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41873a8669e0acd42b3f736c9c0cc9aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2068942731
 GameObject:
   m_ObjectHideFlags: 0
