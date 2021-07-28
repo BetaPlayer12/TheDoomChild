@@ -492,7 +492,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_fistPoint.position = Vector2.MoveTowards(m_fistPoint.position, wallPos, 5);
                 yield return null;
             }
-            var fxPos = new Vector2(m_fistPoint.position.x + (2.5f * transform.localScale.x), m_fistPoint.position.y);
+            var fxPos = new Vector2(m_fistPoint.position.x + (5f * transform.localScale.x), m_fistPoint.position.y);
             var wallStickStartFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_wallStickStartFX);
             wallStickStartFX.transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.localScale.x > 0 ? 90 : 270));
             wallStickStartFX.transform.position = fxPos;
@@ -558,7 +558,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_fistPoint.position = Vector2.MoveTowards(m_fistPoint.position, m_wallPosPoint.position, 5);
                 yield return null;
             }
-            var fxPos = new Vector2(m_fistPoint.position.x + (2.5f * transform.localScale.x), m_fistPoint.position.y);
+            var fxPos = new Vector2(m_fistPoint.position.x + (5f * transform.localScale.x), m_fistPoint.position.y);
             var wallStickStartFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_wallStickStartFX);
             wallStickStartFX.transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.localScale.x > 0 ? 90 : 270));
             wallStickStartFX.transform.position = fxPos;
