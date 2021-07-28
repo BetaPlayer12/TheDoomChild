@@ -157,7 +157,6 @@ namespace DChild.Gameplay
 
         private static void LoadGameDone(object sender, EventActionArgs eventArgs)
         {
-
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_campaignSerializer.Load(true);
             m_gameplayUIHandle.ResetGameplayUI();
