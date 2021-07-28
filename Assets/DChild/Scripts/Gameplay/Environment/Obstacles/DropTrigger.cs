@@ -46,6 +46,17 @@ namespace DChild.Gameplay.Environment.Interractables
                 
             }
         }
+        private void OnCollisionStay2D(Collision2D collider)
+        {
+
+            //Check whether collider is coming from opposite side of effector
+            if (LayerMask.LayerToName(collider.gameObject.layer) == "Player")
+            {
+
+                m_onLandDrop.Invoke();
+
+            }
+        }
 
 
     }

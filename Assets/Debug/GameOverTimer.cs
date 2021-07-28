@@ -24,9 +24,9 @@ public class GameOverTimer : MonoBehaviour
     {
         m_timer.Reset();
         enabled = false;
-        GameplaySystem.campaignSerializer.Load();
+        //GameplaySystem.campaignSerializer.Load();
         GameEventMessage.SendEvent("Boss Gone");
-        GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, DChild.Menu.LoadingHandle.LoadType.Force);
+        //GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, DChild.Menu.LoadingHandle.LoadType.Force);
         //GameSystem.LoadMainMenu();
     }
 
