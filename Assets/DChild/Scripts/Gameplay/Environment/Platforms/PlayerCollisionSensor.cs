@@ -4,9 +4,18 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
-    public class PlayerCollisionSensor : MonoBehaviour
+    public class PlayerCollisionSensor : MonoBehaviour, IPlayerWallStickPlatformReaction
     {
         public event EventAction<EventActionArgs> CollisionDetected;
+
+        public void ReactToPlayerWallStick(Character player)
+        {
+            CollisionDetected?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        public void ReactToPlayerWallUnstick(Character player)
+        {
+        }
 
         private void OnCollisionStay2D(Collision2D collision)
         {

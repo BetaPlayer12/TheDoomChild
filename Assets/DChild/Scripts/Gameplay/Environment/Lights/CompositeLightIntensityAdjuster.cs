@@ -15,8 +15,8 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField, Range(0, 100), OnValueChanged("OnIntesityChanged")]
         private float m_intensityPercent = 100f;
-        [SerializeField]
-        public Light2D[] m_light;
+        [SerializeField,ListDrawerSettings( OnTitleBarGUI = "DrawListTitleBarGUI")]
+        public Light2D[] m_lights;
         [SerializeField, HideInInspector]
         private float[] m_originalIntensity;
 
@@ -25,14 +25,14 @@ namespace DChild.Gameplay.Environment
         public void SetIntensity(float intensitypercent)
         {
             m_intensityPercent = intensitypercent;
-            for (int i = 0; i < m_light.Length; i++)
+            for (int i = 0; i < m_lights.Length; i++)
             {
                 float temp = 0;
                 float temp2 = 0;
                 temp = m_originalIntensity[i];
                 temp2 = m_intensityPercent / 100f;
                 temp = temp * temp2;
-                m_light[i].intensity = temp;
+                m_lights[i].intensity = temp;
             }
 
 //#if UNITY_EDITOR
@@ -45,10 +45,10 @@ namespace DChild.Gameplay.Environment
         }
         private void SaveProperties()
         {
-            m_originalIntensity = new float[m_light.Length];
-            for (int i = 0; i < m_light.Length; i++)
+            m_originalIntensity = new float[m_lights.Length];
+            for (int i = 0; i < m_lights.Length; i++)
             {
-                m_originalIntensity[i] = m_light[i].intensity;
+                m_originalIntensity[i] = m_lights[i].intensity;
             }
         }
 
@@ -102,6 +102,11 @@ namespace DChild.Gameplay.Environment
                 }
             }
 #endif
+        }
+
+        private void DrawListTitleBarGUI()
+        {
+
         }
     }
 }
