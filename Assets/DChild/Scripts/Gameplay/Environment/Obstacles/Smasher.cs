@@ -13,6 +13,8 @@ namespace DChild.Gameplay.Environment.Obstacles
         private Collision2DEventSender m_smasherCollisionEvent;
         [SerializeField]
         private Vector2 m_shakeMaxOffset;
+        [SerializeField]
+        private GameObject m_smashFX;
 
         [SerializeField, TabGroup("Drop Config")]
         private float m_maxDropSpeed;
@@ -28,12 +30,17 @@ namespace DChild.Gameplay.Environment.Obstacles
         [SerializeField, MinValue(0), TabGroup("Return Config")]
         private float m_returnDelay;
 
+        [SerializeField]
+        private Collider2D[] m_collisionExceptions;
+
         private Transform m_modelTransfrom;
         private Vector2 m_startPosition;
         private WaitForFixedUpdate m_fixedUpdateWait;
         private float m_animationCurveTimer;
         private bool m_isDropping;
         private bool m_isReturning;
+
+        private static FXSpawnHandle<FX> m_fxSpawner = new FXSpawnHandle<FX>();
 
         [Button, HideInEditorMode]
         public void ExecuteSmartDrop()
@@ -55,7 +62,7 @@ namespace DChild.Gameplay.Environment.Obstacles
             //}
             //else
             //{
-                StartCoroutine(DropRoutine());
+            StartCoroutine(DropRoutine());
             //}
         }
 
@@ -139,12 +146,29 @@ namespace DChild.Gameplay.Environment.Obstacles
         {
             if (m_isDropping && m_isReturning == false)
             {
-                if (eventArgs.collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+                var collision = eventArgs.collision;
+                if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
                 {
-                    StopDrop();
-                    Return(true);
+                    if (ShouldIgnoreCollisionWith(collision.collider) == false)
+                    {
+                        m_fxSpawner.InstantiateFX(m_smashFX, collision.GetContact(0).point);
+                        StopDrop();
+                        Return(true);
+                    }
                 }
             }
+        }
+
+        private bool ShouldIgnoreCollisionWith(Collider2D collider2D)
+        {
+            for (int i = 0; i < m_collisionExceptions.Length; i++)
+            {
+                if (collider2D == m_collisionExceptions[i])
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
 

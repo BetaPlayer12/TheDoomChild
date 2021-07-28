@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace DChild.Gameplay.Environment
 {
+
     public class StickWhileOnPlatform : MonoBehaviour
     {
         public class ParentInfo
