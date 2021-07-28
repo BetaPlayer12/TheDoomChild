@@ -12,11 +12,12 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Environment;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/FailedExperiment")]
-    public class FailedExperimentAI : CombatAIBrain<FailedExperimentAI.Info>, IResetableAIBrain, IKnockbackableAI
+    public class FailedExperimentAI : CombatAIBrain<FailedExperimentAI.Info>, IResetableAIBrain, IKnockbackableAI, IAmbushingAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -715,6 +716,19 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
+        }
+
+        public void LaunchAmbush(Vector2 position)
+        {
+            enabled = true;
+            m_stateHandle.OverrideState(State.Detect);
+        }
+
+        public void PrepareAmbush(Vector2 position)
+        {
+            enabled = false;
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Idle);
         }
     }
 }
