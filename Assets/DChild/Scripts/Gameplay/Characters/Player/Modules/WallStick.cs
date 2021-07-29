@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
 using DChild.Gameplay.Characters.Players.State;
+using DChild.Gameplay.Environment;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
@@ -19,11 +20,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IWallStickState m_state;
         private Animator m_animator;
         private int m_animationParameter;
-
+        private Character m_character;
         private Collider2D m_cacheCollider;
+        private GameObject m_attachedPlatform;
 
         public void Initialize(ComplexCharacterInfo info)
         {
+            m_character = info.character;
             m_rigidbody = info.rigidbody;
             m_cacheGravityScale = m_rigidbody.gravityScale;
             m_state = info.state;
@@ -36,6 +39,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.isStickingToWall = false;
             m_rigidbody.gravityScale = m_cacheGravityScale;
             m_animator.SetBool(m_animationParameter, false);
+
+            if (m_attachedPlatform != null)
+            {
+                m_attachedPlatform.GetComponent<StickWhileWallStickPlatform>().ReactToPlayerWallUnstick(m_character);
+                m_rigidbody.bodyType = RigidbodyType2D.Dynamic;
+            }
         }
 
         public bool IsThereAWall()
@@ -59,6 +68,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             if (hits[i].distance < m_wallStickOffset)
                             {
                                 isValid = true;
+
+                                if (hits[i].collider.gameObject.TryGetComponent(out StickWhileWallStickPlatform platform))
+                                {
+                                    m_attachedPlatform = platform.gameObject;
+                                }
                             }
                         }
                         else
@@ -93,6 +107,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_rigidbody.gravityScale = 0;
                 m_rigidbody.velocity = Vector2.zero;
                 m_animator.SetBool(m_animationParameter, true);
+
+                if (m_attachedPlatform != null)
+                {
+                    m_attachedPlatform.GetComponent<StickWhileWallStickPlatform>().ReactToPlayerWallStick(m_character);
+                    m_rigidbody.bodyType = RigidbodyType2D.Kinematic;
+                }
             }
         }
     }
