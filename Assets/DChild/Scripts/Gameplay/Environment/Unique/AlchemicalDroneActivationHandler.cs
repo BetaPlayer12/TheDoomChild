@@ -15,14 +15,14 @@ namespace DChild.Gameplay.Environment
             {
                 for (int i = 0; i < m_alchemicalDrones.Length; i++)
                 {
-                    m_alchemicalDrones[i].gameObject.SetActive(true);
+                    m_alchemicalDrones[i].Activated(instant);
                 }
             }
             else
             {
                 for (int i = 0; i < m_alchemicalDrones.Length; i++)
                 {
-                    m_alchemicalDrones[i].gameObject.SetActive(true);
+                    m_alchemicalDrones[i].Activated(instant); ;
                 }
             }
         }
@@ -32,14 +32,14 @@ namespace DChild.Gameplay.Environment
             {
                 for (int i = 0; i < m_alchemicalDrones.Length; i++)
                 {
-                    m_alchemicalDrones[i].gameObject.SetActive(false);
+                    m_alchemicalDrones[i].Activated(instant);
                 }
             }
             else
             {
                 for (int i = 0; i < m_alchemicalDrones.Length; i++)
                 {
-                    m_alchemicalDrones[i].gameObject.SetActive(false);
+                    m_alchemicalDrones[i].Activated(instant);
                 }
             }
         }
