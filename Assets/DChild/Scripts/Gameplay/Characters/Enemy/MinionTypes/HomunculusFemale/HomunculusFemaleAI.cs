@@ -23,6 +23,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private int m_chanceToIdleDuringPatrol;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Idle During Patrol")]
             private string m_idleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Idle During Patrol")]
+            private string m_flinchAnimation;
             [SerializeField, MinValue(1), BoxGroup("Idle During Patrol")]
             private RangeFloat m_idleDuringPatrolDuration;
             [SerializeField, MinValue(1), BoxGroup("Idle During Patrol")]
@@ -39,8 +41,12 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_lightningSphereAttackInfo = new SimpleAttackInfo();
             [SerializeField, MinValue(1), BoxGroup(ATTACKNAME)]
             private int m_maxLightningSphereUse = 1;
+            [SerializeField, MinValue(1), BoxGroup(ATTACKNAME)]
+            private float m_lightningSphereDuration;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup(ATTACKNAME)]
             private string m_postLightningSphereIdleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup(ATTACKNAME)]
+            private string m_postLightningSphereFlinchAnimation;
             [SerializeField, MinValue(1), BoxGroup(ATTACKNAME)]
             private float m_postLightningSphereIdleDuration;
 
@@ -48,17 +54,28 @@ namespace DChild.Gameplay.Characters.Enemies
 
             public int chanceToIdleDuringPatrol => m_chanceToIdleDuringPatrol;
             public string idleAnimation => m_idleAnimation;
+            public string flinchAnimation => m_flinchAnimation;
             public string lightningCoreBurstAnimation => m_lightningCoreBurstAnimation;
             public SimpleAttackInfo lightningSphereAttackInfo => m_lightningSphereAttackInfo;
             public int maxLightningSphereUse => m_maxLightningSphereUse;
             public string postLightningSphereIdleAnimation => m_postLightningSphereIdleAnimation;
+            public string postLightningSphereFlinchAnimation => m_postLightningSphereFlinchAnimation;
             public float postLightningSphereIdleDuration => m_postLightningSphereIdleDuration;
+            public float lightningSphereDuration => m_lightningSphereDuration;
 
 
             public MovementInfo walkInfo => m_walkInfo;
             public MovementInfo lightningArmorWalkInfo => m_lightningArmorWalkInfo;
             public float GetRandomIdleDuringPatrolCooldown() => m_idleDuringPatrolCooldown.GenerateRandomValue();
             public float GetRandomIdleDuringPatrolDuration() => m_idleDuringPatrolDuration.GenerateRandomValue();
+
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_coreburstEvent;
+            public string coreburstEvent => m_coreburstEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_lightningsphereEvent;
+            public string lightningsphereEvent => m_lightningsphereEvent;
 
             public override void Initialize()
             {
@@ -79,6 +96,28 @@ namespace DChild.Gameplay.Characters.Enemies
             ReevaluateSituation,
             WaitForBehaviour
         }
+
+        [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
+
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinchHandle;
+
+        [SerializeField, TabGroup("BoundingBox")]
+        private Collider2D m_corebustBB;
+        [SerializeField, TabGroup("BoundingBox")]
+        private Collider2D m_lightningshieldBB;
+        [SerializeField, TabGroup("BoundingBox")]
+        private Collider2D m_lightningshieldsmallBB;
+
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_coreburstFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_lightningshieldFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_lightningshieldsmallFX;
 
         [SerializeField]
         private WayPointPatrol m_patrolHandle;
@@ -131,6 +170,42 @@ namespace DChild.Gameplay.Characters.Enemies
 
         }
 
+        protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
+        {
+            //m_Audiosource.clip = m_DeadClip;
+            //m_Audiosource.Play();
+            StopAllCoroutines();
+            base.OnDestroyed(sender, eventArgs);
+            m_hitbox.Disable();
+            m_animation.EnableRootMotion(true, false);
+            LightningShieldDeactivate();
+            LightningShieldSmallDeactivate();
+            m_coreburstFX.Stop();
+            m_corebustBB.enabled = false;
+        }
+
+        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        {
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation 
+                || m_animation.GetCurrentAnimation(0).ToString() == m_info.postLightningSphereIdleAnimation)
+            {
+                StopAllCoroutines();
+                StartCoroutine(FlinchRoutine());
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            }
+        }
+
+        private IEnumerator FlinchRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            var flinchAnim = !m_isInRageMode ? m_info.flinchAnimation : m_info.postLightningSphereFlinchAnimation;
+            m_animation.SetAnimation(0, flinchAnim, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, flinchAnim);
+            m_animation.SetAnimation(0, !m_isInRageMode ? m_info.idleAnimation : m_info.postLightningSphereIdleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         private void OnTurnRequest(object sender, EventActionArgs eventArgs)
         {
             if (m_stateHandle.currentState != State.Patrol)
@@ -163,10 +238,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator LightningCoreBurstRoutine()
         {
             m_isInRageMode = true;
+            m_availableLightningSphereUse = m_info.maxLightningSphereUse;
             m_moveHandle.Stop();
             ResetIdleChanceData();
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.lightningCoreBurstAnimation, false);
+            yield return new WaitForSeconds(.5f);
+            CoreBurstEvenTrigger();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningCoreBurstAnimation);
             m_stateHandle.ApplyQueuedState();
         }
@@ -177,6 +255,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_moveHandle.Stop();
             m_stateHandle.Wait(State.Idle);
             m_animation.SetAnimation(0, m_info.lightningSphereAttackInfo.animation, false);
+            yield return new WaitForSeconds(.75f);
+            LightningShieldActivate();
+            yield return new WaitForSeconds(1.75f);
+            LightningShieldDeactivate();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningSphereAttackInfo.animation);
 
             if (m_availableLightningSphereUse <= 0)
@@ -195,6 +277,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                LightningShieldSmallDeactivate();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(m_info.postLightningSphereIdleDuration);
@@ -204,7 +287,80 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_isInRageMode = true;
                 StartCoroutine(LightningCoreBurstRoutine());
             }
-            m_stateHandle.ApplyQueuedState();
+            else
+            {
+                m_stateHandle.ApplyQueuedState();
+            }
+        }
+
+        private void CoreBurstEvenTrigger()
+        {
+            StartCoroutine(CoreBurstRoutine());
+        }
+
+        private IEnumerator CoreBurstRoutine()
+        {
+            m_coreburstFX.Play();
+            m_corebustBB.enabled = true;
+            yield return new WaitForSeconds(.25f);
+            m_coreburstFX.Stop();
+            m_corebustBB.enabled = false;
+            LightningShieldSmallActivate();
+            yield return null;
+        }
+
+        private void LightningShieldEvent()
+        {
+            StartCoroutine(LightningShieldRoutine());
+        }
+
+        private void LightningShieldActivate()
+        {
+            m_lightningshieldFX.Play();
+            m_lightningshieldBB.enabled = true;
+        }
+
+        private void LightningShieldDeactivate()
+        {
+            m_lightningshieldFX.Stop();
+            m_lightningshieldBB.enabled = false;
+        }
+
+        private IEnumerator LightningShieldRoutine()
+        {
+            m_lightningshieldFX.Play();
+            m_lightningshieldBB.enabled = true;
+            yield return new WaitForSeconds(m_info.lightningSphereDuration);
+            m_lightningshieldFX.Stop();
+            m_lightningshieldBB.enabled = false;
+            yield return null;
+        }
+
+        private void LightningShieldSmallEvent()
+        {
+            StartCoroutine(LightningShieldSmallRoutine());
+        }
+
+        private void LightningShieldSmallActivate()
+        {
+            m_lightningshieldsmallFX.Play();
+            m_lightningshieldsmallBB.enabled = true;
+        }
+
+        private void LightningShieldSmallDeactivate()
+        {
+            m_lightningshieldsmallFX.Stop();
+            m_lightningshieldsmallBB.enabled = false;
+        }
+
+        private IEnumerator LightningShieldSmallRoutine()
+        {
+            m_lightningshieldsmallFX.Play();
+            m_lightningshieldsmallBB.enabled = true;
+            yield return new WaitForSeconds(m_info.lightningSphereDuration);
+            m_lightningshieldsmallFX.Stop();
+            m_lightningshieldsmallBB.enabled = false;
+            yield return null;
         }
 
         private void ResetIdleChanceData()
@@ -212,6 +368,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_canIdleDuringPatrol = true;
             m_idleDuringPatrolCooldownTimer = m_info.GetRandomIdleDuringPatrolCooldown();
             m_idleDuringPatrolDurationTimer = m_info.GetRandomIdleDuringPatrolDuration();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
+            //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
+            //m_spineEventListener.Subscribe(m_info.lightningsphereEvent, m_lightningshieldFX.Play);
         }
 
         protected override void Awake()
@@ -223,7 +387,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_canIdleDuringPatrol = true;
             m_idleDuringPatrolCooldownTimer = m_info.GetRandomIdleDuringPatrolCooldown();
-            m_availableLightningSphereUse = m_info.maxLightningSphereUse;
+            //m_availableLightningSphereUse = m_info.maxLightningSphereUse;
+            m_flinchHandle.FlinchStart += OnFlinchStart;
         }
 
         private void Update()
@@ -257,7 +422,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
                 case State.Attack:
                     StopAllCoroutines();
-                    StartCoroutine(LightningSphereRoutine());
+                    if (m_isInRageMode)
+                    {
+                        StartCoroutine(LightningSphereRoutine());
+                    }
+                    else
+                    {
+                        StartCoroutine(LightningCoreBurstRoutine());
+                    }
                     break;
 
                 case State.Chase:
