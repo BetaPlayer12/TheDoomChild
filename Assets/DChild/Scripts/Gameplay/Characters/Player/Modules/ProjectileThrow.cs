@@ -27,6 +27,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_aimSensitivity = 1f;
         [SerializeField]
         private bool m_adjustableXSpeed;
+        [SerializeField]
+        private SkeletonAnimation m_skeletonAnimation;
 
         private Vector2 m_currentAim; //Relative to Character Facing
 
@@ -74,6 +76,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var relativeDelta = delta.normalized * m_aimSensitivity;
             relativeDelta.x *= (int)m_character.facing;
             var newAim = m_currentAim += relativeDelta;
+
+            Debug.Log(newAim);
+
             if (newAim.x < m_horizontalThreshold.min)
             {
                 newAim.x = m_horizontalThreshold.min;
@@ -199,6 +204,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ThrowProjectile()
         {
+            m_skeletonAnimation.state.Complete += State_Complete;
+
             var direction = CalculateThrowDirection();
             direction.x *= (int)m_character.facing;
 
@@ -242,6 +249,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             ProjectileThrown?.Invoke(this, EventActionArgs.Empty);
         }
 
+        private void State_Complete(Spine.TrackEntry trackEntry)
+        {
+            m_state.waitForBehaviour = false;
+            m_skeletonAnimation.state.Complete -= State_Complete;
+        }
+
         public void SpawnIdleProjectile()
         {
             m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
@@ -264,7 +277,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void AttackOver()
         {
-            base.AttackOver();
+            m_animator.SetBool(m_animationParameter, false);
+            m_state.isAttacking = false;
+
             m_reachedVerticalThreshold = false;
             m_animator.SetBool(m_skullThrowAnimationParameter, false);
         }
@@ -294,6 +309,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_reachedVerticalThreshold = false;
             EndAim();
             m_animator.SetBool(m_skullThrowAnimationParameter, false);
+            m_skeletonAnimation.state.Complete -= State_Complete;
 
             if (m_spawnedProjectile != null)
             {
