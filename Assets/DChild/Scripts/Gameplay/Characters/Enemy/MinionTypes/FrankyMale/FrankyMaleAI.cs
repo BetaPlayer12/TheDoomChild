@@ -87,6 +87,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_attack2Event;
             public string attack2Event => m_attack2Event;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_teleportEvent;
+            public string teleportEvent => m_teleportEvent;
 
 
             public override void Initialize()
@@ -155,6 +158,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_teleportFX;
+
         [SerializeField, TabGroup("Spawn Points")]
         private List<Collider2D> m_randomSpawnColliders;
 
@@ -166,7 +172,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private GameObject m_targetPointIK;
 
-        //private Vector2 m_lastTargetPos;
+        private Vector2 m_lastTargetPos;
 
         private ProjectileLauncher m_projectileLauncher;
 
@@ -183,9 +189,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            //m_animation.DisableRootMotion();
             m_animation.animationState.TimeScale = 1;
             m_stateHandle.ApplyQueuedState();
+            //StartCoroutine(TeleportRoutine());
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
@@ -339,6 +345,10 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.disappearAnimation);
             m_hitbox.Disable();
             //var randomOffset = 50 * UnityEngine.Random.Range(0, 2) == 1 ? -1 : 1;
+            //while (Vector2.Distance(m_targetInfo.position, transform.position) < 25f)
+            //{
+            //    yield return null;
+            //}
             transform.position = new Vector2(RandomTeleportPoint(transform.position).x /*+ randomOffset*/, GroundPosition().y);
             yield return new WaitForSeconds(1f);
             m_hitbox.Enable();
@@ -377,7 +387,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_chosenSpawnBox = m_randomSpawnColliders[i];
                 }
             }
-            while (/*!m_chosenSpawnBox.IsTouching(m_selfCollider.GetComponent<Collider2D>()) &&*/ Vector2.Distance(transformPos, randomPos) <= UnityEngine.Random.Range(25f, 50f)
+            while (/*!m_chosenSpawnBox.IsTouching(m_selfCollider.GetComponent<Collider2D>()) &&*/ Vector2.Distance(transformPos, randomPos) < UnityEngine.Random.Range(25f, 50f)
                 /*&& Vector2.Distance(m_targetInfo.position, transform.position) <= UnityEngine.Random.Range(10f, 20f)*/)
             {
                 randomPos = m_chosenSpawnBox.bounds.center + new Vector3(
@@ -400,17 +410,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            {
+                m_flinchHandle.m_autoFlinch = true;
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.Wait(State.ReevaluateSituation);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                m_flinchHandle.m_autoFlinch = false;
                 m_animation.SetEmptyAnimation(0, 0);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+                //m_stateHandle.ApplyQueuedState();
+                StartCoroutine(TeleportRoutine());
+            }
         }
 
         public override void ApplyData()
@@ -455,14 +472,14 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                if (!IsFacingTarget())
-                {
-                    CustomTurn();
-                }
+                //if (!IsFacingTarget())
+                //{
+                //    CustomTurn();
+                //}
                 //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = m_attackDecider.chosenAttack.attack != Attack.Attack3 ? true : false;
                 //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = false;
-                m_targetPointIK.transform.position = m_targetInfo.position;
-                m_projectileLauncher.AimAt(m_targetInfo.position);
+                m_targetPointIK.transform.position = m_lastTargetPos;
+                m_projectileLauncher.AimAt(m_lastTargetPos);
                 m_projectileLauncher.LaunchProjectile();
                 //if (m_chosenAttack != Attack.Attack3)
                 //{
@@ -486,6 +503,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_spineEventListener.Subscribe(m_info.attack1Event, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.attack2Event, LaunchProjectile);
+            m_spineEventListener.Subscribe(m_info.teleportEvent, m_teleportFX.Play);
         }
 
         protected override void Awake()
@@ -544,7 +562,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-
+                    m_lastTargetPos = m_targetInfo.position;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -629,9 +647,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitBehaviourEnd:
                     if (m_targetInfo.isValid)
                     {
-                        if (IsFacingTarget())
+                        if (IsFacing(m_lastTargetPos))
                         {
-                            m_targetPointIK.transform.position = m_targetInfo.position;
+                            m_targetPointIK.transform.position = m_lastTargetPos;
                         }
                         else
                         {

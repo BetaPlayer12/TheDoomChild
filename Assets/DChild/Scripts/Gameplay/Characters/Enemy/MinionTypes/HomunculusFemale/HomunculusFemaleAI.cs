@@ -35,8 +35,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_lightningCoreBurstAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"),BoxGroup(ATTACKNAME)]
-            private SimpleAttackInfo m_lightningSphereAttackInfo;
+            [SerializeField, BoxGroup(ATTACKNAME)]
+            private SimpleAttackInfo m_lightningSphereAttackInfo = new SimpleAttackInfo();
             [SerializeField, MinValue(1), BoxGroup(ATTACKNAME)]
             private int m_maxLightningSphereUse = 1;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup(ATTACKNAME)]
@@ -64,6 +64,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_walkInfo.SetData(m_skeletonDataAsset);
                 m_lightningArmorWalkInfo.SetData(m_skeletonDataAsset);
+                m_lightningSphereAttackInfo.SetData(m_skeletonDataAsset);
             }
         }
 
@@ -176,11 +177,32 @@ namespace DChild.Gameplay.Characters.Enemies
             m_moveHandle.Stop();
             m_stateHandle.Wait(State.Idle);
             m_animation.SetAnimation(0, m_info.lightningSphereAttackInfo.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningCoreBurstAnimation);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningSphereAttackInfo.animation);
 
             if (m_availableLightningSphereUse <= 0)
             {
                 m_isInRageMode = false;
+            }
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator IdleRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            if (m_isInRageMode)
+            {
+                m_animation.SetAnimation(0, m_info.postLightningSphereIdleAnimation, true);
+            }
+            else
+            {
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            }
+            yield return new WaitForSeconds(m_info.postLightningSphereIdleDuration);
+
+            if(m_isInRageMode == false)
+            {
+                m_isInRageMode = true;
+                StartCoroutine(LightningCoreBurstRoutine());
             }
             m_stateHandle.ApplyQueuedState();
         }
@@ -225,11 +247,13 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_canIdleDuringPatrol = false;
                     }
                     break;
-
                 case State.Flinch:
+                    //uf animation is finish 
+                    StartCoroutine(LightningSphereRoutine());
                     break;
-
                 case State.Idle:
+                    StopAllCoroutines();
+                    StartCoroutine(IdleRoutine());
                     break;
                 case State.Attack:
                     StopAllCoroutines();
@@ -238,14 +262,21 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Chase:
                     var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
-                    if (Mathf.Sign(toTarget.x) == (int)m_character.facing)
+                    if (toTarget.magnitude > m_info.lightningSphereAttackInfo.range)
                     {
-                        m_moveHandle.MoveTowards(toTarget.normalized, m_info.lightningArmorWalkInfo.speed);
-                        m_animation.SetAnimation(0, m_info.lightningArmorWalkInfo.animation, true);
+                        if (Mathf.Sign(toTarget.x) == (int)m_character.facing)
+                        {
+                            m_moveHandle.MoveTowards(toTarget.normalized, m_info.lightningArmorWalkInfo.speed);
+                            m_animation.SetAnimation(0, m_info.lightningArmorWalkInfo.animation, true);
+                        }
+                        else
+                        {
+                            m_turnHandle.Execute();
+                        }
                     }
                     else
                     {
-                        m_turnHandle.Execute();
+                        m_stateHandle.SetState(State.Attack);
                     }
                     break;
 
