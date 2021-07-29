@@ -13,11 +13,12 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using System.Linq;
+using DChild.Gameplay.Environment;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/FrankyMale")]
-    public class FrankyMaleAI : CombatAIBrain<FrankyMaleAI.Info>, IResetableAIBrain
+    public class FrankyMaleAI : CombatAIBrain<FrankyMaleAI.Info>, IResetableAIBrain, IAmbushingAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -75,6 +76,18 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_disappearAnimation;
             public string disappearAnimation => m_disappearAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_dormantAnimation;
+            public string dormantAnimation => m_dormantAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_awakenAnimation;
+            public string awakenAnimation => m_awakenAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_fallAnimation;
+            public string fallAnimation => m_fallAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_landAnimation;
+            public string landAnimation => m_landAnimation;
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
@@ -105,8 +118,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Dormant,
             Detect,
-            Idle,
             Patrol,
             Turning,
             Attacking,
@@ -459,12 +472,20 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_animation.EnableRootMotion(true, true);
+            m_character.physics.simulateGravity = true;
+            m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+            //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+            m_animation.DisableRootMotion();
+            m_animation.SetAnimation(0, m_info.fallAnimation, true).MixDuration = 0;
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            //yield return new WaitForSeconds(0.5f);
+            m_animation.SetAnimation(0, m_info.landAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            //m_stateHandle.OverrideState(State.ReevaluateSituation);
-            m_stateHandle.Wait(State.ReevaluateSituation);
-            StartCoroutine(TeleportRoutine());
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -517,7 +538,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             //m_randomSpawnColliders = new List<Collider2D>();
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -533,8 +554,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(DetectRoutine());
                     break;
 
-                case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                case State.Dormant:
+                    m_animation.SetAnimation(0, m_info.dormantAnimation, true);
                     m_movement.Stop();
                     break;
 
@@ -686,6 +707,19 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnBecomePassive()
         {
             ResetAI();
+        }
+
+        public void LaunchAmbush(Vector2 position)
+        {
+            enabled = true;
+            m_stateHandle.OverrideState(State.Detect);
+        }
+
+        public void PrepareAmbush(Vector2 position)
+        {
+            enabled = false;
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dormant);
         }
     }
 }

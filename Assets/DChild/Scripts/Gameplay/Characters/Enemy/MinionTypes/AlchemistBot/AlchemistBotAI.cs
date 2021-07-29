@@ -110,9 +110,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Dormant,
             Detect,
             Patrol,
-            Idle,
             Cooldown,
             Turning,
             Attacking,
@@ -309,19 +309,36 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
+        //private IEnumerator DetectRoutine()
+        //{
+        //    if (!m_willPatrol)
+        //    {
+        //        m_animation.EnableRootMotion(true, true);
+        //        m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+        //        //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+        //        //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
+
+        //        m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
+        //        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
+        //        m_animation.DisableRootMotion();
+        //    }
+        //    m_hitbox.Enable();
+        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //    yield return new WaitForSeconds(m_info.detectionTime);
+        //    m_stateHandle.OverrideState(State.ReevaluateSituation);
+        //    yield return null;
+        //}
+
         private IEnumerator DetectRoutine()
         {
-            if (!m_willPatrol)
-            {
-                m_animation.EnableRootMotion(true, true);
-                m_animation.SetAnimation(0, m_info.awakenAnimation, false);
-                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
-                //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
+            m_animation.EnableRootMotion(true, true);
+            m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+            //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
 
-                m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
-                m_animation.DisableRootMotion();
-            }
+            m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
+            m_animation.DisableRootMotion();
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(m_info.detectionTime);
@@ -436,10 +453,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
 
-            if (!m_willPatrol)
-            {
-                m_hitbox.Disable();
-            }
+            //if (!m_willPatrol)
+            //{
+            //    m_hitbox.Disable();
+            //}
             //m_selfCollider.SetActive(false);
             m_spineEventListener.Subscribe(m_info.spawnBlobEvent, SpawnBlob);
         }
@@ -454,7 +471,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
+            //m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Dormant, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
@@ -473,17 +491,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Detect:
                     m_agent.Stop();
 
-                    if (!IsFacingTarget() && m_willPatrol)
-                    {
-                        m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
-                    }
-                    else
-                    {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(DetectRoutine());
-                    }
+                    //if (!IsFacingTarget() && m_willPatrol)
+                    //{
+                    //    m_turnState = State.Detect;
+                    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    //        m_stateHandle.SetState(State.Turning);
+                    //}
+                    //else
+                    //{
+                    //    m_stateHandle.Wait(State.ReevaluateSituation);
+                    //    StartCoroutine(DetectRoutine());
+                    //}
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    StartCoroutine(DetectRoutine());
                     break;
 
                 case State.Patrol:
@@ -493,7 +513,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;
 
-                case State.Idle:
+                case State.Dormant:
                     m_animation.SetAnimation(0, m_info.dormantAnimation, true);
                     m_agent.Stop();
                     break;
@@ -660,7 +680,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
             StopAllCoroutines();
-            m_stateHandle.OverrideState(State.Idle);
+            m_stateHandle.OverrideState(State.Dormant);
         }
     }
 }
