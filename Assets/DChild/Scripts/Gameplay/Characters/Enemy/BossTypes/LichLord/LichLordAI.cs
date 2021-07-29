@@ -796,7 +796,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector3 RandomTeleportPoint(Vector3 transformPos)
         {
             Vector3 randomPos = transformPos;
-            while (Vector2.Distance(transformPos, randomPos) <= UnityEngine.Random.Range(25f, 50f))
+            while (Vector2.Distance(transformPos, randomPos) <= Random.Range(25f, 50f))
             {
                 randomPos = m_randomSpawnCollider.bounds.center + new Vector3(
                (UnityEngine.Random.value - 0.5f) * m_randomSpawnCollider.bounds.size.x,

@@ -17,7 +17,7 @@ using DChild.Gameplay.Environment;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/AlchemistBot")]
-    public class AlchemistBotAI : CombatAIBrain<AlchemistBotAI.Info>, IResetableAIBrain, IAmbushingAI
+    public class AlchemistBotAI : CombatAIBrain<AlchemistBotAI.Info>, IResetableAIBrain
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -650,13 +650,13 @@ namespace DChild.Gameplay.Characters.Enemies
             ResetAI();
         }
 
-        public void LaunchAmbush(Vector2 position)
+        public void Activated(bool m_instant)
         {
             enabled = true;
-            m_stateHandle.OverrideState(State.Detect);
+            m_stateHandle.OverrideState(State.Patrol);
         }
 
-        public void PrepareAmbush(Vector2 position)
+        public void Deactivated(bool m_instant)
         {
             enabled = false;
             StopAllCoroutines();
