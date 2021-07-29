@@ -16,9 +16,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [System.Serializable]
         public class Info : BaseInfo
         {
-#if UNITY_EDITOR
             private const string ATTACKNAME = "LightningSphere";
-#endif
 
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Dormant State")]
             private string m_dormantAnimation;
@@ -308,7 +306,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             yield return new WaitForSeconds(m_info.postLightningSphereIdleDuration);
 
-            if(m_isInRageMode == false)
+            if (m_isInRageMode == false)
             {
                 m_isInRageMode = true;
                 StartCoroutine(LightningCoreBurstRoutine());
