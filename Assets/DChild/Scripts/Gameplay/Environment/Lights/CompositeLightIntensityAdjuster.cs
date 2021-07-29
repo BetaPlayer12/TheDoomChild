@@ -15,9 +15,9 @@ namespace DChild.Gameplay.Environment
     {
         [SerializeField, Range(0, 100), OnValueChanged("OnIntesityChanged")]
         private float m_intensityPercent = 100f;
-        [SerializeField,ListDrawerSettings( OnTitleBarGUI = "DrawListTitleBarGUI")]
+        [SerializeField,HorizontalGroup("Light")]
         public Light2D[] m_lights;
-        [SerializeField, HideInInspector]
+        [SerializeField, ReadOnly, HorizontalGroup("Light")]
         private float[] m_originalIntensity;
 
         private float m_previousIntesityPercent;
@@ -35,14 +35,16 @@ namespace DChild.Gameplay.Environment
                 m_lights[i].intensity = temp;
             }
 
-//#if UNITY_EDITOR
-//            if (Application.isPlaying == false)
-//            {
-//                var sceneView = EditorWindow.GetWindow<SceneView>();
-//                sceneView?.Repaint();
-//            }
-//#endif
+            //#if UNITY_EDITOR
+            //            if (Application.isPlaying == false)
+            //            {
+            //                var sceneView = EditorWindow.GetWindow<SceneView>();
+            //                sceneView?.Repaint();
+            //            }
+            //#endif
         }
+
+        [Button("Save Current As 100%"), PropertyOrder(-1)]
         private void SaveProperties()
         {
             m_originalIntensity = new float[m_lights.Length];
@@ -73,40 +75,15 @@ namespace DChild.Gameplay.Environment
             }
         }
 
-
-        private bool m_hasCopiedValue;
-
-        private void OnDrawGizmosSelected()
-        {
-#if UNITY_EDITOR
-            if (m_hasCopiedValue == false)
-            {
-                m_hasCopiedValue = true;
-                SaveProperties();
-                SetIntensity(m_intensityPercent);
-            }
-#endif
-        }
-
         private void OnDrawGizmos()
         {
 #if UNITY_EDITOR
-            if (m_hasCopiedValue)
+            if (Selection.activeGameObject != gameObject)
             {
-                if (Selection.activeGameObject != gameObject)
-                {
-                    m_hasCopiedValue = false;
-                    var intesity = m_intensityPercent;
-                    SetIntensity(100);
-                    m_intensityPercent = intesity;
-                }
+                SetIntensity(100);
+                m_intensityPercent = 100;
             }
 #endif
-        }
-
-        private void DrawListTitleBarGUI()
-        {
-
         }
     }
 }

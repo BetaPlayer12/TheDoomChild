@@ -15,6 +15,10 @@ namespace DChild.Gameplay.Characters.Enemies
         [System.Serializable]
         public class Info : BaseInfo
         {
+#if UNITY_EDITOR
+            private const string ATTACKNAME = "LightningSphere";
+#endif
+
             [SerializeField, Range(0, 100), BoxGroup("Idle During Patrol")]
             private int m_chanceToIdleDuringPatrol;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Idle During Patrol")]
@@ -24,35 +28,49 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(1), BoxGroup("Idle During Patrol")]
             private RangeFloat m_idleDuringPatrolCooldown;
 
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Transformation")]
-            private string m_enterRageModeAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Transformation")]
-            private string m_exitRageModeAnimation;
-
             [SerializeField]
             private MovementInfo m_walkInfo = new MovementInfo();
             [SerializeField]
-            private MovementInfo m_chaseInfo = new MovementInfo();
+            private MovementInfo m_lightningArmorWalkInfo = new MovementInfo();
+
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_lightningCoreBurstAnimation;
+            [SerializeField, BoxGroup(ATTACKNAME)]
+            private SimpleAttackInfo m_lightningSphereAttackInfo = new SimpleAttackInfo();
+            [SerializeField, MinValue(1), BoxGroup(ATTACKNAME)]
+            private int m_maxLightningSphereUse = 1;
+            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup(ATTACKNAME)]
+            private string m_postLightningSphereIdleAnimation;
+            [SerializeField, MinValue(1), BoxGroup(ATTACKNAME)]
+            private float m_postLightningSphereIdleDuration;
+
 
 
             public int chanceToIdleDuringPatrol => m_chanceToIdleDuringPatrol;
             public string idleAnimation => m_idleAnimation;
-            public string enterRageModeAnimation => m_enterRageModeAnimation;
-            public string exitRageModeAnimation => m_exitRageModeAnimation;
+            public string lightningCoreBurstAnimation => m_lightningCoreBurstAnimation;
+            public SimpleAttackInfo lightningSphereAttackInfo => m_lightningSphereAttackInfo;
+            public int maxLightningSphereUse => m_maxLightningSphereUse;
+            public string postLightningSphereIdleAnimation => m_postLightningSphereIdleAnimation;
+            public float postLightningSphereIdleDuration => m_postLightningSphereIdleDuration;
+
+
             public MovementInfo walkInfo => m_walkInfo;
-            public MovementInfo chaseInfo => m_chaseInfo;
-            public float GetRandomIdleDuringPatrolDuration() => m_idleDuringPatrolDuration.GenerateRandomValue();
+            public MovementInfo lightningArmorWalkInfo => m_lightningArmorWalkInfo;
             public float GetRandomIdleDuringPatrolCooldown() => m_idleDuringPatrolCooldown.GenerateRandomValue();
+            public float GetRandomIdleDuringPatrolDuration() => m_idleDuringPatrolDuration.GenerateRandomValue();
 
             public override void Initialize()
             {
                 m_walkInfo.SetData(m_skeletonDataAsset);
-                m_chaseInfo.SetData(m_skeletonDataAsset);
+                m_lightningArmorWalkInfo.SetData(m_skeletonDataAsset);
+                m_lightningSphereAttackInfo.SetData(m_skeletonDataAsset);
             }
         }
 
         private enum State
         {
+            Idle,
             PatrolIdle,
             Patrol,
             Flinch,
@@ -75,6 +93,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_idleDuringPatrolCooldownTimer;
         private float m_idleDuringPatrolDurationTimer;
         private bool m_isInRageMode;
+        private int m_availableLightningSphereUse;
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -90,7 +109,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_isInRageMode == false)
                     {
                         m_isInRageMode = true;
-                        StartCoroutine(EnterRageModeRoutine());
+                        StartCoroutine(LightningCoreBurstRoutine());
                     }
                 }
             }
@@ -141,14 +160,50 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private IEnumerator EnterRageModeRoutine()
+        private IEnumerator LightningCoreBurstRoutine()
         {
             m_isInRageMode = true;
             m_moveHandle.Stop();
             ResetIdleChanceData();
             m_stateHandle.Wait(State.ReevaluateSituation);
-            m_animation.SetAnimation(0, m_info.enterRageModeAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.enterRageModeAnimation);
+            m_animation.SetAnimation(0, m_info.lightningCoreBurstAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningCoreBurstAnimation);
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator LightningSphereRoutine()
+        {
+            m_availableLightningSphereUse--;
+            m_moveHandle.Stop();
+            m_stateHandle.Wait(State.Idle);
+            m_animation.SetAnimation(0, m_info.lightningSphereAttackInfo.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningSphereAttackInfo.animation);
+
+            if (m_availableLightningSphereUse <= 0)
+            {
+                m_isInRageMode = false;
+            }
+            m_stateHandle.ApplyQueuedState();
+        }
+
+        private IEnumerator IdleRoutine()
+        {
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            if (m_isInRageMode)
+            {
+                m_animation.SetAnimation(0, m_info.postLightningSphereIdleAnimation, true);
+            }
+            else
+            {
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            }
+            yield return new WaitForSeconds(m_info.postLightningSphereIdleDuration);
+
+            if(m_isInRageMode == false)
+            {
+                m_isInRageMode = true;
+                StartCoroutine(LightningCoreBurstRoutine());
+            }
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -168,6 +223,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_canIdleDuringPatrol = true;
             m_idleDuringPatrolCooldownTimer = m_info.GetRandomIdleDuringPatrolCooldown();
+            m_availableLightningSphereUse = m_info.maxLightningSphereUse;
         }
 
         private void Update()
@@ -191,18 +247,37 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_canIdleDuringPatrol = false;
                     }
                     break;
-
                 case State.Flinch:
+                    //uf animation is finish 
+                    StartCoroutine(LightningSphereRoutine());
                     break;
-
+                case State.Idle:
+                    StopAllCoroutines();
+                    StartCoroutine(IdleRoutine());
+                    break;
                 case State.Attack:
+                    StopAllCoroutines();
+                    StartCoroutine(LightningSphereRoutine());
                     break;
 
                 case State.Chase:
                     var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
-                    m_moveHandle.MoveTowards(toTarget.normalized, m_info.chaseInfo.speed);
-                    m_animation.SetAnimation(0, m_info.chaseInfo.animation, true);
-                    HandleChanceToIdle(m_info.chanceToIdleDuringPatrol, GameplaySystem.time.deltaTime);
+                    if (toTarget.magnitude > m_info.lightningSphereAttackInfo.range)
+                    {
+                        if (Mathf.Sign(toTarget.x) == (int)m_character.facing)
+                        {
+                            m_moveHandle.MoveTowards(toTarget.normalized, m_info.lightningArmorWalkInfo.speed);
+                            m_animation.SetAnimation(0, m_info.lightningArmorWalkInfo.animation, true);
+                        }
+                        else
+                        {
+                            m_turnHandle.Execute();
+                        }
+                    }
+                    else
+                    {
+                        m_stateHandle.SetState(State.Attack);
+                    }
                     break;
 
                 case State.ReevaluateSituation:
