@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Characters.AI;
 using DChild.Gameplay.Combat;
+using DChild.Gameplay.Environment;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
-    public class HomunculusFemaleAI : CombatAIBrain<HomunculusFemaleAI.Info>
+    public class HomunculusFemaleAI : CombatAIBrain<HomunculusFemaleAI.Info>, IAmbushingAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -18,6 +19,11 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
             private const string ATTACKNAME = "LightningSphere";
 #endif
+
+            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Dormant State")]
+            private string m_dormantAnimation;
+            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Dormant State")]
+            private string m_awakenAnimation;
 
             [SerializeField, Range(0, 100), BoxGroup("Idle During Patrol")]
             private int m_chanceToIdleDuringPatrol;
@@ -53,6 +59,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
             public int chanceToIdleDuringPatrol => m_chanceToIdleDuringPatrol;
+            public string dormantAnimation => m_dormantAnimation;
+            public string awakenAnimation => m_awakenAnimation;
             public string idleAnimation => m_idleAnimation;
             public string flinchAnimation => m_flinchAnimation;
             public string lightningCoreBurstAnimation => m_lightningCoreBurstAnimation;
@@ -88,6 +96,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Idle,
+            Dormant,
+            Detect,
             PatrolIdle,
             Patrol,
             Flinch,
@@ -145,10 +155,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable, m_target);
                 if (m_target != null)
                 {
-                    if (m_isInRageMode == false)
+                    //if (m_isInRageMode == false)
+                    //{
+                    //    StartCoroutine(LightningCoreBurstRoutine());
+                    //}
+                    if (m_stateHandle.currentState == State.Dormant)
                     {
-                        m_isInRageMode = true;
-                        StartCoroutine(LightningCoreBurstRoutine());
+                        m_stateHandle.OverrideState(State.Detect);
                     }
                 }
             }
@@ -243,8 +256,8 @@ namespace DChild.Gameplay.Characters.Enemies
             ResetIdleChanceData();
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_animation.SetAnimation(0, m_info.lightningCoreBurstAnimation, false);
-            yield return new WaitForSeconds(.5f);
-            CoreBurstEvenTrigger();
+            //yield return new WaitForSeconds(.5f);
+            //CoreBurstEvenTrigger();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningCoreBurstAnimation);
             m_stateHandle.ApplyQueuedState();
         }
@@ -255,10 +268,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_moveHandle.Stop();
             m_stateHandle.Wait(State.Idle);
             m_animation.SetAnimation(0, m_info.lightningSphereAttackInfo.animation, false);
-            yield return new WaitForSeconds(.75f);
-            LightningShieldActivate();
-            yield return new WaitForSeconds(1.75f);
-            LightningShieldDeactivate();
+            //yield return new WaitForSeconds(.75f);
+            //LightningShieldActivate();
+            //yield return new WaitForSeconds(1.75f);
+            //LightningShieldDeactivate();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningSphereAttackInfo.animation);
 
             if (m_availableLightningSphereUse <= 0)
@@ -363,6 +376,19 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator DetectRoutine()
+        {
+            m_animation.EnableRootMotion(true, true);
+            m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+            m_animation.AddAnimation(0, m_info.idleAnimation, false, 0).TimeScale = 5f;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
+            m_hitbox.Enable();
+            m_animation.DisableRootMotion();
+            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            StartCoroutine(LightningCoreBurstRoutine());
+            yield return null;
+        }
+
         private void ResetIdleChanceData()
         {
             m_canIdleDuringPatrol = true;
@@ -373,7 +399,9 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
+            m_hitbox.Disable();
+            m_spineEventListener.Subscribe(m_info.coreburstEvent, CoreBurstEvenTrigger);
+            m_spineEventListener.Subscribe(m_info.lightningsphereEvent, LightningShieldEvent);
             //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
             //m_spineEventListener.Subscribe(m_info.lightningsphereEvent, m_lightningshieldFX.Play);
         }
@@ -383,7 +411,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_patrolHandle.Initialize();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitForBehaviour);
+            m_stateHandle = new StateHandle<State>(State.Dormant, State.WaitForBehaviour);
             m_turnHandle.TurnDone += OnTurnDone;
             m_canIdleDuringPatrol = true;
             m_idleDuringPatrolCooldownTimer = m_info.GetRandomIdleDuringPatrolCooldown();
@@ -395,6 +423,15 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             switch (m_stateHandle.currentState)
             {
+                case State.Detect:
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    StartCoroutine(DetectRoutine());
+                    break;
+
+                case State.Dormant:
+                    m_animation.SetAnimation(0, m_info.dormantAnimation, true);
+                    break;
+
                 case State.Patrol:
                     var patrolCharacterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_moveHandle, m_info.walkInfo.speed, patrolCharacterInfo);
@@ -465,6 +502,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.WaitForBehaviour:
                     break;
             }
+        }
+
+        public void LaunchAmbush(Vector2 position)
+        {
+            enabled = true;
+            m_stateHandle.OverrideState(State.Detect);
+        }
+
+        public void PrepareAmbush(Vector2 position)
+        {
+            enabled = false;
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dormant);
         }
     }
 
