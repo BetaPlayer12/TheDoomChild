@@ -15,9 +15,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [System.Serializable]
         public class Info : BaseInfo
         {
-#if UNITY_EDITOR
             private const string ATTACKNAME = "LightningSphere";
-#endif
 
             [SerializeField, Range(0, 100), BoxGroup("Idle During Patrol")]
             private int m_chanceToIdleDuringPatrol;
@@ -199,7 +197,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             yield return new WaitForSeconds(m_info.postLightningSphereIdleDuration);
 
-            if(m_isInRageMode == false)
+            if (m_isInRageMode == false)
             {
                 m_isInRageMode = true;
                 StartCoroutine(LightningCoreBurstRoutine());
