@@ -351,6 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.EnableRootMotion(true, true);
                 m_animation.SetAnimation(0, m_info.awakenAnimation, false).MixDuration = 0;
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+                m_character.physics.simulateGravity = true;
                 m_hitbox.Enable();
             }
             if (!IsFacingTarget())
@@ -454,6 +455,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (!m_willPatrol)
             {
+                m_character.physics.simulateGravity = false;
                 m_hitbox.Disable();
             }
 
