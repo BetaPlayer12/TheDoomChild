@@ -24,6 +24,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_dormantAnimation;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Dormant State")]
             private string m_awakenAnimation;
+            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Dormant State")]
+            private string m_fallAnimation;
+            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Dormant State")]
+            private string m_landAnimation;
 
             [SerializeField, Range(0, 100), BoxGroup("Idle During Patrol")]
             private int m_chanceToIdleDuringPatrol;
@@ -61,6 +65,8 @@ namespace DChild.Gameplay.Characters.Enemies
             public int chanceToIdleDuringPatrol => m_chanceToIdleDuringPatrol;
             public string dormantAnimation => m_dormantAnimation;
             public string awakenAnimation => m_awakenAnimation;
+            public string landAnimation => m_landAnimation;
+            public string fallAnimation => m_fallAnimation;
             public string idleAnimation => m_idleAnimation;
             public string flinchAnimation => m_flinchAnimation;
             public string lightningCoreBurstAnimation => m_lightningCoreBurstAnimation;
@@ -114,6 +120,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
+
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_wallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_groundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_edgeSensor;
 
         [SerializeField, TabGroup("BoundingBox")]
         private Collider2D m_corebustBB;
@@ -379,12 +392,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             m_animation.EnableRootMotion(true, true);
+            m_character.physics.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.awakenAnimation, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, false, 0).TimeScale = 5f;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
-            m_hitbox.Enable();
+            //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
             m_animation.DisableRootMotion();
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetAnimation(0, m_info.fallAnimation, true).MixDuration = 0;
+            yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            //yield return new WaitForSeconds(0.5f);
+            m_animation.SetAnimation(0, m_info.landAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+            m_hitbox.Enable();
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             StartCoroutine(LightningCoreBurstRoutine());
             yield return null;
         }
@@ -400,6 +419,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_hitbox.Disable();
+            m_character.physics.simulateGravity = false;
             m_spineEventListener.Subscribe(m_info.coreburstEvent, CoreBurstEvenTrigger);
             m_spineEventListener.Subscribe(m_info.lightningsphereEvent, LightningShieldEvent);
             //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
@@ -475,8 +495,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Mathf.Sign(toTarget.x) == (int)m_character.facing)
                         {
-                            m_moveHandle.MoveTowards(toTarget.normalized, m_info.lightningArmorWalkInfo.speed);
-                            m_animation.SetAnimation(0, m_info.lightningArmorWalkInfo.animation, true);
+                            if (!m_wallSensor.isDetecting && m_edgeSensor.isDetecting && m_groundSensor.isDetecting)
+                            {
+                                m_moveHandle.MoveTowards(toTarget.normalized, m_info.lightningArmorWalkInfo.speed);
+                                m_animation.SetAnimation(0, m_info.lightningArmorWalkInfo.animation, true);
+                            }
+                            else
+                            {
+                                m_moveHandle.Stop();
+                                m_animation.SetAnimation(0, !m_isInRageMode? m_info.idleAnimation : m_info.postLightningSphereIdleAnimation, true);
+                            }
                         }
                         else
                         {
