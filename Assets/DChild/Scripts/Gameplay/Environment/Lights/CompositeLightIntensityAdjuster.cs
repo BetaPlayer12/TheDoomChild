@@ -11,7 +11,7 @@ using UnityEditor;
 namespace DChild.Gameplay.Environment
 {
     [ExecuteAlways]
-    public class CompositeLightIntensityAdjuster : MonoBehaviour
+    public class CompositeLightIntensityAdjuster : BaseLightIntensityAdjuster
     {
         [SerializeField, Range(0, 100), OnValueChanged("OnIntesityChanged")]
         private float m_intensityPercent = 100f;
@@ -22,7 +22,7 @@ namespace DChild.Gameplay.Environment
 
         private float m_previousIntesityPercent;
 
-        public void SetIntensity(float intensitypercent)
+        public override void SetIntensity(float intensitypercent)
         {
             m_intensityPercent = intensitypercent;
             for (int i = 0; i < m_lights.Length; i++)

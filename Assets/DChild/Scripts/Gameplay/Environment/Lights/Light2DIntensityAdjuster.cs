@@ -7,8 +7,9 @@ using UnityEditor;
 
 namespace DChild.Gameplay.Environment
 {
-    [RequireComponent(typeof(Light2D)),ExecuteAlways]
-    public class Light2DIntensityAdjuster : MonoBehaviour
+
+    [RequireComponent(typeof(Light2D)), ExecuteAlways]
+    public class Light2DIntensityAdjuster : BaseLightIntensityAdjuster
     {
         [SerializeField, MinValue(0), ReadOnly, HorizontalGroup("OriginalIntesity")]
         private float m_originalIntesity;
@@ -23,19 +24,24 @@ namespace DChild.Gameplay.Environment
             get => m_intensityPercent;
             set
             {
-                m_intensityPercent = value;
-                m_source.intensity = adjustedIntensity;
-#if UNITY_EDITOR
-                if (Application.isPlaying == false)
-                {
-                    var sceneView = EditorWindow.GetWindow<SceneView>();
-                    sceneView?.Repaint();
-                }
-#endif
+                SetIntensity(value);
             }
         }
 
         private float adjustedIntensity => m_originalIntesity * (m_intensityPercent / 100f);
+
+        public override void SetIntensity(float intensitypercent)
+        {
+            m_intensityPercent = intensitypercent;
+            m_source.intensity = adjustedIntensity;
+#if UNITY_EDITOR
+            if (Application.isPlaying == false)
+            {
+                var sceneView = EditorWindow.GetWindow<SceneView>();
+                sceneView?.Repaint();
+            }
+#endif
+        }
 
         private void OnIntensityChange()
         {
