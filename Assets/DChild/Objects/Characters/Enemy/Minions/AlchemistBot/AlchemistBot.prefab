@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2255151565504913594}
   - component: {fileID: 2255151565504913593}
   - component: {fileID: 2255151565504913479}
-  - component: {fileID: 2255151565504913478}
   - component: {fileID: 2255151565504913477}
   - component: {fileID: 2255151565504913476}
   - component: {fileID: 2255151565504913475}
@@ -94,24 +93,6 @@ MonoBehaviour:
   m_skeletonAnimation: {fileID: 3559291882642664374}
   m_animation: ALCHEMIST_BOT_Flinch
   m_idleAnimation: ALCHEMIST_BOT_Idle
---- !u!114 &2255151565504913478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2255151565504913472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5830f2bbb3b8ac149905b0850dbf3c4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_source: {fileID: 4880194371533314815}
-  m_animator: {fileID: 7316641410666967321}
-  m_animation: ALCHEMIST_BOT_Death_Start
-  m_bodyDuration:
-    m_startTime: 5
-  m_destroySource: 0
 --- !u!114 &2255151565504913477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,7 +459,7 @@ MonoBehaviour:
   m_patrolHandle: {fileID: 2255151565504913593}
   m_attackHandle:
     m_animation: {fileID: 7316641410666967321}
-  m_deathHandle: {fileID: 2255151565504913478}
+  m_deathHandle: {fileID: 0}
   m_flinchHandle: {fileID: 2255151565504913479}
   m_groundSensor: {fileID: 9158131434571858766}
   m_selfSensor: {fileID: 3704970971418819963}
@@ -639,6 +620,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
+--- !u!4 &6853830338351071768 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 7727796523735398490}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7015096176586722254 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
@@ -660,12 +647,6 @@ GameObject:
 --- !u!50 &567833575233387091 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 7727796523735398490}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6853830338351071768 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
     type: 3}
   m_PrefabInstance: {fileID: 7727796523735398490}
   m_PrefabAsset: {fileID: 0}
@@ -878,6 +859,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75e742d20466f2249a06a21fd23c6b70, type: 3}
+--- !u!61 &3074477472753478913 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4936138278632272222, guid: 75e742d20466f2249a06a21fd23c6b70,
+    type: 3}
+  m_PrefabInstance: {fileID: 7938178615382695007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &289160405476300740 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 7649749617151118235, guid: 75e742d20466f2249a06a21fd23c6b70,
+    type: 3}
+  m_PrefabInstance: {fileID: 7938178615382695007}
+  m_PrefabAsset: {fileID: 0}
 --- !u!58 &4217809154886169848 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 6098639637161289895, guid: 75e742d20466f2249a06a21fd23c6b70,
@@ -923,12 +916,6 @@ MonoBehaviour:
 --- !u!198 &5919348792493929728 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4327910009418557791, guid: 75e742d20466f2249a06a21fd23c6b70,
-    type: 3}
-  m_PrefabInstance: {fileID: 7938178615382695007}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2334146559952205838 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5642621696987522129, guid: 75e742d20466f2249a06a21fd23c6b70,
     type: 3}
   m_PrefabInstance: {fileID: 7938178615382695007}
   m_PrefabAsset: {fileID: 0}
@@ -1040,15 +1027,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &3074477472753478913 stripped
-BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4936138278632272222, guid: 75e742d20466f2249a06a21fd23c6b70,
-    type: 3}
-  m_PrefabInstance: {fileID: 7938178615382695007}
-  m_PrefabAsset: {fileID: 0}
---- !u!61 &289160405476300740 stripped
-BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 7649749617151118235, guid: 75e742d20466f2249a06a21fd23c6b70,
+--- !u!4 &2334146559952205838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5642621696987522129, guid: 75e742d20466f2249a06a21fd23c6b70,
     type: 3}
   m_PrefabInstance: {fileID: 7938178615382695007}
   m_PrefabAsset: {fileID: 0}

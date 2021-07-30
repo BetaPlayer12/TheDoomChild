@@ -151,8 +151,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
-        [SerializeField, TabGroup("Modules")]
-        private DeathHandle m_deathHandle;
+        //[SerializeField, TabGroup("Modules")]
+        //private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Sensors")]
@@ -367,6 +367,9 @@ namespace DChild.Gameplay.Characters.Enemies
             var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.deathFallImpact1Animation : m_info.deathFallImpact2Animation;
             m_bodyCollider.SetActive(true);
             m_animation.SetAnimation(0, animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, animation);
+            enabled = false;
+            this.gameObject.SetActive(false);
             yield return null;
         }
 
@@ -431,6 +434,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
             m_hitbox.Disable();
@@ -441,8 +445,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodylightningBB.enabled = false;
             m_bodylightningFX.Stop();
             m_glowFX.Stop();
-            StopAllCoroutines();
             StartCoroutine(DeathRoutine());
+            Debug.Log("ALCHEMIST BOT DEATHHHH");
         }
 
         private void SkeletonAnimation_UpdateLocal(ISkeletonAnimation animated)
@@ -473,12 +477,13 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
+            Debug.Log("ALCHEMIST BOT BASE AWAKE");
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
+            //m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
             //m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
             m_stateHandle = new StateHandle<State>(State.Dormant, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
@@ -681,7 +686,13 @@ namespace DChild.Gameplay.Characters.Enemies
         public void Activated(bool m_instant)
         {
             enabled = true;
-            if (m_instant)
+            StartCoroutine(ActivateRoutine(m_instant));
+        }
+
+        private IEnumerator ActivateRoutine(bool instant)
+        {
+            yield return new WaitForSeconds(3f);
+            if (instant)
             {
                 m_stateHandle.OverrideState(State.Patrol);
             }
@@ -689,6 +700,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_stateHandle.OverrideState(State.Dormant);
             }
+            yield return null;
         }
 
         public void Deactivated(bool m_instant)
