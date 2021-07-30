@@ -54,6 +54,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_detectionTime;
             public float detectionTime => m_detectionTime;
+            [SerializeField]
+            private float m_awakenTime;
+            public float awakenTime => m_awakenTime;
 
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -135,8 +138,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
-        [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
+        //[SerializeField, TabGroup("Reference")]
+        //private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
@@ -162,6 +165,10 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
         [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_wallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_roofSensor;
+        [SerializeField, TabGroup("Sensors")]
         private RaySensor m_playerSensor;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_bodylightningFX;
@@ -169,6 +176,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_glowFX;
         [SerializeField, TabGroup("BB")]
         private Collider2D m_bodylightningBB;
+        [SerializeField, TabGroup("Foreground")]
+        private AlchemistBotForeground m_foregroundController;
+        [SerializeField, TabGroup("Foreground")]
+        private GameObject m_spriteMask;
+        [SerializeField, TabGroup("Foreground")]
+        private SkeletonAnimation m_skeletomAnimation;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -207,7 +220,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                m_selfCollider.SetActive(true);
+                //m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -311,41 +324,36 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
-        //private IEnumerator DetectRoutine()
-        //{
-        //    if (!m_willPatrol)
-        //    {
-        //        m_animation.EnableRootMotion(true, true);
-        //        m_animation.SetAnimation(0, m_info.awakenAnimation, false);
-        //        //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
-        //        //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
-
-        //        m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
-        //        yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
-        //        m_animation.DisableRootMotion();
-        //    }
-        //    m_hitbox.Enable();
-        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-        //    yield return new WaitForSeconds(m_info.detectionTime);
-        //    m_stateHandle.OverrideState(State.ReevaluateSituation);
-        //    yield return null;
-        //}
-
         private IEnumerator DetectRoutine()
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation)
+            if (m_foregroundController.gameObject.activeSelf)
             {
-                m_animation.EnableRootMotion(true, true);
-                m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                m_foregroundController.Awaken();
+                //m_animation.EnableRootMotion(true, true);
+                //m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
+                m_animation.DisableRootMotion();
+                yield return new WaitForSeconds(m_info.awakenTime);
+                m_foregroundController.gameObject.SetActive(false);
+                m_spriteMask.SetActive(false);
+                m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.None;
+                //transform.position = new Vector2(transform.position.x, CielingPos().y - 5f);
+                var initialPos = transform.position;
+                transform.position = new Vector2(transform.position.x, transform.position.y + 25f);
+                var scrollSpeed = 1f;
+                while (Vector2.Distance(initialPos, transform.position) > 1f)
+                {
+                    //transform.position = new Vector2(transform.position.x, transform.position.y - scrollSpeed);
+                    transform.position = Vector2.MoveTowards(transform.position, initialPos, scrollSpeed);
+                    yield return null;
+                }
                 //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
                 //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
 
-                m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
-                m_animation.DisableRootMotion();
+                //m_animation.SetAnimation(0, m_info.prepAnimation, false);
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
                 m_hitbox.Enable();
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                yield return new WaitForSeconds(m_info.detectionTime);
+                //yield return new WaitForSeconds(m_info.detectionTime);
             }
             else
             {
@@ -416,6 +424,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_glowFX.Stop();
             m_bodylightningBB.enabled = false;
             yield return null;
+        }
+
+        private Vector2 CielingPos()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.up, 1000, LayerMask.GetMask("Environment"));
+            //if (hit.collider != null)
+            //{
+            //    return hit.point;
+            //}
+            return hit.point;
         }
 
         private void CalculateRunPath()
@@ -615,19 +633,45 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (!m_selfSensor.isDetecting)
                             {
-                                m_animation.EnableRootMotion(false, false);
-                                m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
-                                m_agent.SetDestination(targetPos);
-                                m_agent.Move(m_info.move.speed);
 
-                                //if (m_canAttack2 && m_playerSensor.isDetecting)
-                                //{
-                                //    m_chosenAttack = Attack.Attack2;
-                                //    m_animation.EnableRootMotion(true, true);
-                                //    m_agent.Stop();
-                                //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                //    m_stateHandle.SetState(State.Attacking);
-                                //}
+                                bool isCloseToGround = false;
+                                bool isCloseToRoof = false;
+
+                                if (m_targetInfo.position.y < transform.position.y && m_groundSensor.allRaysDetecting)
+                                {
+                                    isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
+                                }
+                                if (m_targetInfo.position.y > transform.position.y && m_roofSensor.allRaysDetecting)
+                                {
+                                    isCloseToRoof = Vector2.Distance(transform.position, CielingPos()) < 5f ? true : false;
+                                }
+
+                                if (!m_selfSensor.isDetecting && !isCloseToGround && !isCloseToRoof /*&& !GetComponentInChildren<NavigationTracker>().IsCurrentDestination(transform.position)*/)
+                                {
+                                    m_agent.SetDestination(targetPos);
+
+                                    m_agent.Move(m_info.move.speed);
+
+                                    if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
+                                    {
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.TimeScale = 2*/;
+                                    }
+                                    else
+                                    {
+                                        m_animation.SetAnimation(0, m_info.patrol.animation, true)/*.TimeScale = 2*/;
+                                    }
+                                }
+                                else
+                                {
+                                    m_agent.Stop();
+                                    m_character.physics.SetVelocity(Vector2.zero);
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
+
+                                //m_animation.EnableRootMotion(false, false);
+                                //m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
+                                //m_agent.SetDestination(targetPos);
+                                //m_agent.Move(m_info.move.speed);
                             }
                             else
                             {
@@ -678,7 +722,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
+            //m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_hitbox.Enable();
