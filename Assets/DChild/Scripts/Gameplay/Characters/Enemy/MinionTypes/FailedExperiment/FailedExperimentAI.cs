@@ -378,19 +378,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.EnableRootMotion(true, true);
             m_character.physics.simulateGravity = true;
-            m_animation.SetAnimation(0, m_info.awakenAnimation, false);
-            //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
-            m_animation.DisableRootMotion();
-            m_animation.SetAnimation(0, m_info.fallAnimation, true).MixDuration = 0;
-            yield return new WaitUntil(() => m_groundSensor.isDetecting);
-            //yield return new WaitForSeconds(0.5f);
-            //m_animation.SetAnimation(0, m_info.landAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
-            m_animation.SetAnimation(0, m_info.rawrAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation)
+            {
+                m_animation.EnableRootMotion(true, true);
+                m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+                m_animation.DisableRootMotion();
+                m_animation.SetAnimation(0, m_info.fallAnimation, true).MixDuration = 0;
+                yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                //yield return new WaitForSeconds(0.5f);
+                //m_animation.SetAnimation(0, m_info.landAnimation, false);
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+                m_animation.SetAnimation(0, m_info.rawrAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
+            }
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();

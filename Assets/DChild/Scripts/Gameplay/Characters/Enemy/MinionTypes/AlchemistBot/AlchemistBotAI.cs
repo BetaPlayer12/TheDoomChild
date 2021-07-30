@@ -331,17 +331,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.EnableRootMotion(true, true);
-            m_animation.SetAnimation(0, m_info.awakenAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
-            //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation)
+            {
+                m_animation.EnableRootMotion(true, true);
+                m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+                //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
 
-            m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
-            m_animation.DisableRootMotion();
-            m_hitbox.Enable();
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return new WaitForSeconds(m_info.detectionTime);
+                m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
+                m_animation.DisableRootMotion();
+                m_hitbox.Enable();
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                yield return new WaitForSeconds(m_info.detectionTime);
+            }
+            else
+            {
+                m_animation.DisableRootMotion();
+                m_hitbox.Enable();
+            }
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -673,7 +681,14 @@ namespace DChild.Gameplay.Characters.Enemies
         public void Activated(bool m_instant)
         {
             enabled = true;
-            m_stateHandle.OverrideState(State.Patrol);
+            if (m_instant)
+            {
+                m_stateHandle.OverrideState(State.Patrol);
+            }
+            else
+            {
+                m_stateHandle.OverrideState(State.Dormant);
+            }
         }
 
         public void Deactivated(bool m_instant)
