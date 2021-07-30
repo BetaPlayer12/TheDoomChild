@@ -132,6 +132,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_aggroCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -486,9 +488,10 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_selfCollider.SetActive(false);
 
+            m_character.physics.simulateGravity = m_willPatrol ? true : false;
+            //m_aggroCollider.enabled = m_willPatrol ? true : false;
             if (!m_willPatrol)
             {
-                m_character.physics.simulateGravity = false;
                 m_hitbox.Disable();
             }
 
@@ -756,7 +759,8 @@ namespace DChild.Gameplay.Characters.Enemies
         public void LaunchAmbush(Vector2 position)
         {
             enabled = true;
-            m_stateHandle.OverrideState(State.Detect);
+            m_aggroCollider.enabled = true;
+            //m_stateHandle.OverrideState(State.Detect);
         }
 
         public void PrepareAmbush(Vector2 position)

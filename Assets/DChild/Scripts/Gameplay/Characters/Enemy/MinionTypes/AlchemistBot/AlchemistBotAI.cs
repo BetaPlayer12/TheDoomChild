@@ -140,6 +140,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
+        private Collider2D m_aggroCollider;
+        [SerializeField, TabGroup("Reference")]
         private BoxCollider2D m_attackBB;
         [SerializeField, TabGroup("Reference")]
         private BoxCollider2D m_attackSideBB;
@@ -470,6 +472,13 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_hitbox.Disable();
             //}
             //m_selfCollider.SetActive(false);
+            m_character.physics.simulateGravity = m_willPatrol ? true : false;
+            //m_aggroCollider.enabled = m_willPatrol ? true : false;
+            if (m_willPatrol)
+            {
+                m_hitbox.Enable();
+                m_animation.DisableRootMotion();
+            }
             m_spineEventListener.Subscribe(m_info.spawnBlobEvent, SpawnBlob);
         }
 
@@ -686,13 +695,8 @@ namespace DChild.Gameplay.Characters.Enemies
         public void Activated(bool m_instant)
         {
             enabled = true;
-            StartCoroutine(ActivateRoutine(m_instant));
-        }
-
-        private IEnumerator ActivateRoutine(bool instant)
-        {
-            yield return new WaitForSeconds(3f);
-            if (instant)
+            m_aggroCollider.enabled = true;
+            if (m_instant)
             {
                 m_stateHandle.OverrideState(State.Patrol);
             }
@@ -700,8 +704,14 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_stateHandle.OverrideState(State.Dormant);
             }
-            yield return null;
+            //StartCoroutine(ActivateRoutine(m_instant));
         }
+
+        //private IEnumerator ActivateRoutine(bool instant)
+        //{
+        //    yield return new WaitForSeconds(3f);
+        //    yield return null;
+        //}
 
         public void Deactivated(bool m_instant)
         {
