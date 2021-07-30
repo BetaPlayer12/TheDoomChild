@@ -32,14 +32,14 @@ namespace DChild.Gameplay.Environment
             {
                 for (int i = 0; i < m_alchemicalDrones.Length; i++)
                 {
-                    m_alchemicalDrones[i].Activated(instant);
+                    m_alchemicalDrones[i].Deactivated(instant);
                 }
             }
             else
             {
                 for (int i = 0; i < m_alchemicalDrones.Length; i++)
                 {
-                    m_alchemicalDrones[i].Activated(instant);
+                    m_alchemicalDrones[i].Deactivated(instant);
                 }
             }
         }

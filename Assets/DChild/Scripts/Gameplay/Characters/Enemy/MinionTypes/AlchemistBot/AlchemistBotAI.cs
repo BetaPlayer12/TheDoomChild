@@ -54,6 +54,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private float m_detectionTime;
             public float detectionTime => m_detectionTime;
+            [SerializeField]
+            private float m_awakenTime;
+            public float awakenTime => m_awakenTime;
 
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -110,9 +113,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Dormant,
             Detect,
             Patrol,
-            Idle,
             Cooldown,
             Turning,
             Attacking,
@@ -135,10 +138,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
-        [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
+        //[SerializeField, TabGroup("Reference")]
+        //private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_aggroCollider;
         [SerializeField, TabGroup("Reference")]
         private BoxCollider2D m_attackBB;
         [SerializeField, TabGroup("Reference")]
@@ -151,14 +156,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private PatrolHandle m_patrolHandle;
         [SerializeField, TabGroup("Modules")]
         private AttackHandle m_attackHandle;
-        [SerializeField, TabGroup("Modules")]
-        private DeathHandle m_deathHandle;
+        //[SerializeField, TabGroup("Modules")]
+        //private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_wallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_roofSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_playerSensor;
         [SerializeField, TabGroup("FX")]
@@ -167,6 +176,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_glowFX;
         [SerializeField, TabGroup("BB")]
         private Collider2D m_bodylightningBB;
+        [SerializeField, TabGroup("Foreground")]
+        private AlchemistBotForeground m_foregroundController;
+        [SerializeField, TabGroup("Foreground")]
+        private GameObject m_spriteMask;
+        [SerializeField, TabGroup("Foreground")]
+        private SkeletonAnimation m_skeletomAnimation;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -205,7 +220,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                m_selfCollider.SetActive(true);
+                //m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -311,20 +326,40 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            if (!m_willPatrol)
+            if (m_foregroundController.gameObject.activeSelf)
             {
-                m_animation.EnableRootMotion(true, true);
-                m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                m_foregroundController.Awaken();
+                //m_animation.EnableRootMotion(true, true);
+                //m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
+                m_animation.DisableRootMotion();
+                yield return new WaitForSeconds(m_info.awakenTime);
+                m_foregroundController.gameObject.SetActive(false);
+                m_spriteMask.SetActive(false);
+                m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.None;
+                //transform.position = new Vector2(transform.position.x, CielingPos().y - 5f);
+                var initialPos = transform.position;
+                transform.position = new Vector2(transform.position.x, transform.position.y + 25f);
+                var scrollSpeed = 1f;
+                while (Vector2.Distance(initialPos, transform.position) > 1f)
+                {
+                    //transform.position = new Vector2(transform.position.x, transform.position.y - scrollSpeed);
+                    transform.position = Vector2.MoveTowards(transform.position, initialPos, scrollSpeed);
+                    yield return null;
+                }
                 //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
                 //m_animation.SetAnimation(0, m_info.prepAnimation, false).MixDuration = 0;
 
-                m_animation.AddAnimation(0, m_info.prepAnimation, false, 0);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
-                m_animation.DisableRootMotion();
+                //m_animation.SetAnimation(0, m_info.prepAnimation, false);
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAnimation);
+                m_hitbox.Enable();
+                //yield return new WaitForSeconds(m_info.detectionTime);
             }
-            m_hitbox.Enable();
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            yield return new WaitForSeconds(m_info.detectionTime);
+            else
+            {
+                m_animation.DisableRootMotion();
+                m_hitbox.Enable();
+            }
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
@@ -342,6 +377,9 @@ namespace DChild.Gameplay.Characters.Enemies
             var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.deathFallImpact1Animation : m_info.deathFallImpact2Animation;
             m_bodyCollider.SetActive(true);
             m_animation.SetAnimation(0, animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, animation);
+            enabled = false;
+            this.gameObject.SetActive(false);
             yield return null;
         }
 
@@ -388,6 +426,16 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private Vector2 CielingPos()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.up, 1000, LayerMask.GetMask("Environment"));
+            //if (hit.collider != null)
+            //{
+            //    return hit.point;
+            //}
+            return hit.point;
+        }
+
         private void CalculateRunPath()
         {
             bool isRight = m_targetInfo.position.x >= transform.position.x;
@@ -406,6 +454,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_agent.Stop();
             m_hitbox.Disable();
@@ -416,8 +465,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodylightningBB.enabled = false;
             m_bodylightningFX.Stop();
             m_glowFX.Stop();
-            StopAllCoroutines();
             StartCoroutine(DeathRoutine());
+            Debug.Log("ALCHEMIST BOT DEATHHHH");
         }
 
         private void SkeletonAnimation_UpdateLocal(ISkeletonAnimation animated)
@@ -436,11 +485,18 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
 
-            if (!m_willPatrol)
-            {
-                m_hitbox.Disable();
-            }
+            //if (!m_willPatrol)
+            //{
+            //    m_hitbox.Disable();
+            //}
             //m_selfCollider.SetActive(false);
+            m_character.physics.simulateGravity = m_willPatrol ? true : false;
+            //m_aggroCollider.enabled = m_willPatrol ? true : false;
+            if (m_willPatrol)
+            {
+                m_hitbox.Enable();
+                m_animation.DisableRootMotion();
+            }
             m_spineEventListener.Subscribe(m_info.spawnBlobEvent, SpawnBlob);
         }
 
@@ -448,13 +504,15 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Debug.Log(m_info);
             base.Awake();
+            Debug.Log("ALCHEMIST BOT BASE AWAKE");
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
+            //m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
+            //m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Dormant, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
@@ -473,17 +531,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Detect:
                     m_agent.Stop();
 
-                    if (!IsFacingTarget() && m_willPatrol)
-                    {
-                        m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
-                    }
-                    else
-                    {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(DetectRoutine());
-                    }
+                    //if (!IsFacingTarget() && m_willPatrol)
+                    //{
+                    //    m_turnState = State.Detect;
+                    //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    //        m_stateHandle.SetState(State.Turning);
+                    //}
+                    //else
+                    //{
+                    //    m_stateHandle.Wait(State.ReevaluateSituation);
+                    //    StartCoroutine(DetectRoutine());
+                    //}
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    StartCoroutine(DetectRoutine());
                     break;
 
                 case State.Patrol:
@@ -493,7 +553,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;
 
-                case State.Idle:
+                case State.Dormant:
                     m_animation.SetAnimation(0, m_info.dormantAnimation, true);
                     m_agent.Stop();
                     break;
@@ -573,19 +633,45 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (!m_selfSensor.isDetecting)
                             {
-                                m_animation.EnableRootMotion(false, false);
-                                m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
-                                m_agent.SetDestination(targetPos);
-                                m_agent.Move(m_info.move.speed);
 
-                                //if (m_canAttack2 && m_playerSensor.isDetecting)
-                                //{
-                                //    m_chosenAttack = Attack.Attack2;
-                                //    m_animation.EnableRootMotion(true, true);
-                                //    m_agent.Stop();
-                                //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                //    m_stateHandle.SetState(State.Attacking);
-                                //}
+                                bool isCloseToGround = false;
+                                bool isCloseToRoof = false;
+
+                                if (m_targetInfo.position.y < transform.position.y && m_groundSensor.allRaysDetecting)
+                                {
+                                    isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
+                                }
+                                if (m_targetInfo.position.y > transform.position.y && m_roofSensor.allRaysDetecting)
+                                {
+                                    isCloseToRoof = Vector2.Distance(transform.position, CielingPos()) < 5f ? true : false;
+                                }
+
+                                if (!m_selfSensor.isDetecting && !isCloseToGround && !isCloseToRoof /*&& !GetComponentInChildren<NavigationTracker>().IsCurrentDestination(transform.position)*/)
+                                {
+                                    m_agent.SetDestination(targetPos);
+
+                                    m_agent.Move(m_info.move.speed);
+
+                                    if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
+                                    {
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.TimeScale = 2*/;
+                                    }
+                                    else
+                                    {
+                                        m_animation.SetAnimation(0, m_info.patrol.animation, true)/*.TimeScale = 2*/;
+                                    }
+                                }
+                                else
+                                {
+                                    m_agent.Stop();
+                                    m_character.physics.SetVelocity(Vector2.zero);
+                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                }
+
+                                //m_animation.EnableRootMotion(false, false);
+                                //m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
+                                //m_agent.SetDestination(targetPos);
+                                //m_agent.Move(m_info.move.speed);
                             }
                             else
                             {
@@ -636,7 +722,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
+            //m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_hitbox.Enable();
@@ -653,14 +739,29 @@ namespace DChild.Gameplay.Characters.Enemies
         public void Activated(bool m_instant)
         {
             enabled = true;
-            m_stateHandle.OverrideState(State.Patrol);
+            m_aggroCollider.enabled = true;
+            if (m_instant)
+            {
+                m_stateHandle.OverrideState(State.Patrol);
+            }
+            else
+            {
+                m_stateHandle.OverrideState(State.Dormant);
+            }
+            //StartCoroutine(ActivateRoutine(m_instant));
         }
+
+        //private IEnumerator ActivateRoutine(bool instant)
+        //{
+        //    yield return new WaitForSeconds(3f);
+        //    yield return null;
+        //}
 
         public void Deactivated(bool m_instant)
         {
             enabled = false;
             StopAllCoroutines();
-            m_stateHandle.OverrideState(State.Idle);
+            m_stateHandle.OverrideState(State.Dormant);
         }
     }
 }
