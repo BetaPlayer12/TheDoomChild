@@ -56,6 +56,9 @@ namespace DChild.Gameplay.UI
             LoadingHandle.SetLoadType(LoadingHandle.LoadType.Force);
             GameplaySystem.ResumeGame();
             GameSystem.LoadZone(m_transferingTo.scene, true, OnSceneDone);
+
+            //Force Save for the Demo Delete this after proper saving is done
+            GameplaySystem.campaignSerializer.slot.UpdateLocation(m_transferingTo.sceneInfo, m_transferingTo.location, m_transferingTo.position);
         }
 
         private void OnSceneDone()
