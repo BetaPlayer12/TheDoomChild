@@ -386,15 +386,14 @@ namespace DChild.Gameplay.Characters.Enemies
             Collider2D m_chosenSpawnBox = new Collider2D();
             for (int i = 0; i < m_randomSpawnColliders.Count; i++)
             {
-                Debug.Log("randomCollider " + Vector2.Distance(m_targetInfo.position, m_randomSpawnColliders[i].bounds.center));
-                Debug.Log("targetDistance " + m_targetDistances.Min());
                 if (Mathf.Abs(Vector2.Distance(m_targetInfo.position, m_randomSpawnColliders[i].bounds.center) - m_targetDistances.Min()) < 5f)
                 {
                     m_chosenSpawnBox = m_randomSpawnColliders[i];
                 }
             }
-            while (/*!m_chosenSpawnBox.IsTouching(m_selfCollider.GetComponent<Collider2D>()) &&*/ Vector2.Distance(transformPos, randomPos) < UnityEngine.Random.Range(25f, 50f)
-                /*&& Vector2.Distance(m_targetInfo.position, transform.position) <= UnityEngine.Random.Range(10f, 20f)*/)
+            
+            var distanceTolerance = UnityEngine.Random.Range(25f, 50f);
+            while (/*!m_chosenSpawnBox.IsTouching(m_selfCollider.GetComponent<Collider2D>()) &&*/ Mathf.Abs(m_targetInfo.position.x - transform.position.x) < distanceTolerance)
             {
                 randomPos = m_chosenSpawnBox.bounds.center + new Vector3(
                (UnityEngine.Random.value - 0.5f) * m_chosenSpawnBox.bounds.size.x,
@@ -645,8 +644,27 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 m_attackDecider.hasDecidedOnAttack = false;
                                 m_movement.Stop();
+                                var yDistance = Mathf.Abs(m_targetInfo.position.y - transform.position.y);
+
                                 m_stateHandle.Wait(State.ReevaluateSituation);
                                 StartCoroutine(TeleportRoutine());
+                                //if (yDistance < 20f && m_targetInfo.position.y >= transform.position.y )
+                                //{
+                                //    m_stateHandle.Wait(State.ReevaluateSituation);
+                                //    StartCoroutine(TeleportRoutine());
+                                //}
+                                //else
+                                //{
+                                //    if (m_edgeSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                                //    {
+                                //        m_animation.EnableRootMotion(true, false);
+                                //        m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2;
+                                //    }
+                                //    else
+                                //    {
+                                //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                //    }
+                                //}
                             }
                         }
                         else
