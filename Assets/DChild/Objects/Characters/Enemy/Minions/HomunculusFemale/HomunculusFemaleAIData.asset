@@ -16,7 +16,7 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 8468943056006d6489f51f89680af014, type: 2}
+    - {fileID: 11400000, guid: 97110b70466072341aec665e95853ca6, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -28,12 +28,27 @@ MonoBehaviour:
     - Name: m_skeletonDataAsset
       Entry: 10
       Data: 0
+    - Name: m_dormantAnimation
+      Entry: 1
+      Data: Dormant
+    - Name: m_awakenAnimation
+      Entry: 1
+      Data: Awaken_OutofTank
+    - Name: m_fallAnimation
+      Entry: 1
+      Data: Awaken_FallingLoop
+    - Name: m_landAnimation
+      Entry: 1
+      Data: Awaken_Land
     - Name: m_chanceToIdleDuringPatrol
       Entry: 3
       Data: 33
     - Name: m_idleAnimation
       Entry: 1
       Data: Idle
+    - Name: m_turnAnimation
+      Entry: 1
+      Data: Turn
     - Name: m_flinchAnimation
       Entry: 1
       Data: FLinch
@@ -96,7 +111,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack_Rage_Mode_
+      Data: Attack_Rage_Mode_Start
     - Name: m_range
       Entry: 4
       Data: 10
@@ -108,22 +123,31 @@ MonoBehaviour:
       Data: 4
     - Name: m_lightningSphereDuration
       Entry: 4
-      Data: 2
+      Data: 1.75
     - Name: m_postLightningSphereIdleAnimation
       Entry: 1
       Data: Idle_Rage_Mode
+    - Name: m_postLightningSphereTurnAnimation
+      Entry: 1
+      Data: Turn_RageMode
     - Name: m_postLightningSphereFlinchAnimation
       Entry: 1
       Data: FLinch_Rage_Mode
     - Name: m_postLightningSphereIdleDuration
       Entry: 4
       Data: 2
+    - Name: m_patience
+      Entry: 4
+      Data: 10
+    - Name: m_targetDistanceTolerance
+      Entry: 4
+      Data: 100
     - Name: m_coreburstEvent
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: AttackVFX
     - Name: m_lightningsphereEvent
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: FXCharging
     - Name: 
       Entry: 8
       Data: 

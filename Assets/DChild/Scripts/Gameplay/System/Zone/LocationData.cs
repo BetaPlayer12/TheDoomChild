@@ -37,6 +37,7 @@ namespace DChild.Gameplay.Systems.Serialization
         public string scene => m_scene.sceneName;
         public Vector2 position => m_position;
 
+        public SceneInfo sceneInfo => m_scene; //Temporary Fix for saving after picking a location
 
 #if UNITY_EDITOR
         public void Set(Scene scene, Vector2 position)

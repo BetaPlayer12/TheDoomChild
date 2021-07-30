@@ -57,5 +57,16 @@ namespace DChild.Gameplay
             m_duringTrigger?.Invoke();
             m_isTriggered = true;
         }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (m_isTriggered == false)
+            {
+                if (collision.CompareTag("Sensor") == false)
+                {
+                    Execute();
+                }
+            }
+        }
     }
 }

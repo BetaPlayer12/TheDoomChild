@@ -13,11 +13,12 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using System.Linq;
+using DChild.Gameplay.Environment;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/FrankyMale")]
-    public class FrankyMaleAI : CombatAIBrain<FrankyMaleAI.Info>, IResetableAIBrain
+    public class FrankyMaleAI : CombatAIBrain<FrankyMaleAI.Info>, IResetableAIBrain, IAmbushingAI
     {
         [System.Serializable]
         public class Info : BaseInfo
@@ -75,6 +76,18 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_disappearAnimation;
             public string disappearAnimation => m_disappearAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_dormantAnimation;
+            public string dormantAnimation => m_dormantAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_awakenAnimation;
+            public string awakenAnimation => m_awakenAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_fallAnimation;
+            public string fallAnimation => m_fallAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_landAnimation;
+            public string landAnimation => m_landAnimation;
 
             [SerializeField]
             private SimpleProjectileAttackInfo m_projectile;
@@ -105,8 +118,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private enum State
         {
+            Dormant,
             Detect,
-            Idle,
             Patrol,
             Turning,
             Attacking,
@@ -130,6 +143,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_aggroCollider;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Modules")]
@@ -173,6 +188,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_targetPointIK;
 
         private Vector2 m_lastTargetPos;
+        private Vector2 m_initialPos;
 
         private ProjectileLauncher m_projectileLauncher;
 
@@ -260,45 +276,28 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_patienceRoutine = StartCoroutine(PatienceRoutine());
             }
-            if (TargetBlocked())
+
+            if (IsFacingTarget())
             {
-                if (IsFacingTarget())
+                if (m_sneerRoutine == null)
                 {
-                    if (m_sneerRoutine == null)
-                    {
-                        m_sneerRoutine = StartCoroutine(SneerRoutine());
-                    }
-                    //else if ()
-                    //{
-                    //}
+                    m_sneerRoutine = StartCoroutine(SneerRoutine());
                 }
-                else
-                {
-                    if (m_sneerRoutine != null)
-                    {
-                        StopCoroutine(m_sneerRoutine);
-                        m_sneerRoutine = null;
-                    }
-                    //m_enablePatience = false;
-                    m_turnState = State.ReevaluateSituation;
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                        m_stateHandle.SetState(State.Turning);
-                }
+                //else if ()
+                //{
+                //}
             }
-            else if (!TargetBlocked())
+            else
             {
                 if (m_sneerRoutine != null)
                 {
-                    if (m_patienceRoutine != null)
-                    {
-                        StopCoroutine(m_patienceRoutine);
-                        m_patienceRoutine = null;
-                    }
                     StopCoroutine(m_sneerRoutine);
                     m_sneerRoutine = null;
-                    m_enablePatience = false;
-                    //m_stateHandle.OverrideState(State.ReevaluateSituation);
                 }
+                //m_enablePatience = false;
+                m_turnState = State.ReevaluateSituation;
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    m_stateHandle.SetState(State.Turning);
             }
         }
         private IEnumerator PatienceRoutine()
@@ -349,7 +348,14 @@ namespace DChild.Gameplay.Characters.Enemies
             //{
             //    yield return null;
             //}
-            transform.position = new Vector2(RandomTeleportPoint(transform.position).x /*+ randomOffset*/, GroundPosition().y);
+            if (m_targetInfo.isValid)
+            {
+                transform.position = new Vector2(RandomTeleportPoint(transform.position).x /*+ randomOffset*/, GroundPosition().y);
+            }
+            else
+            {
+                transform.position = m_initialPos;
+            }
             yield return new WaitForSeconds(1f);
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.appearAnimation, false);
@@ -459,12 +465,23 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_character.physics.simulateGravity = true;
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation)
+            {
+                m_animation.EnableRootMotion(true, true);
+                m_animation.SetAnimation(0, m_info.awakenAnimation, false);
+                //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+                m_animation.DisableRootMotion();
+                m_animation.SetAnimation(0, m_info.fallAnimation, true).MixDuration = 0;
+                yield return new WaitUntil(() => m_groundSensor.isDetecting);
+                //yield return new WaitForSeconds(0.5f);
+                m_animation.SetAnimation(0, m_info.landAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
+            }
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            //m_stateHandle.OverrideState(State.ReevaluateSituation);
-            m_stateHandle.Wait(State.ReevaluateSituation);
-            StartCoroutine(TeleportRoutine());
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -504,6 +521,15 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineEventListener.Subscribe(m_info.attack1Event, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.attack2Event, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.teleportEvent, m_teleportFX.Play);
+            
+            m_character.physics.simulateGravity = m_willPatrol ? true : false;
+            //m_aggroCollider.enabled = m_willPatrol ? true : false;
+            if (m_willPatrol)
+            {
+                m_hitbox.Enable();
+                m_animation.DisableRootMotion();
+            }
+            m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
         }
 
         protected override void Awake()
@@ -517,7 +543,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             //m_randomSpawnColliders = new List<Collider2D>();
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -533,12 +559,17 @@ namespace DChild.Gameplay.Characters.Enemies
                     StartCoroutine(DetectRoutine());
                     break;
 
-                case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                case State.Dormant:
+                    m_animation.SetAnimation(0, m_info.dormantAnimation, true);
                     m_movement.Stop();
                     break;
 
                 case State.Patrol:
+                    if (Vector2.Distance(m_initialPos, transform.position) >= 100)
+                    {
+                        StartCoroutine(TeleportRoutine());
+                        return;
+                    }
                     if (m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
@@ -662,13 +693,29 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience /*&& m_stateHandle.currentState != State.Standby && m_stateHandle.currentState != State.Chasing*/ /*&& m_stateHandle.currentState != State.Cooldown && m_stateHandle.currentState != State.WaitBehaviourEnd*/)
+            if (m_targetInfo.isValid)
             {
-                //Patience();
-                if (TargetBlocked())
+                if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance)
                 {
                     Patience();
-                    //m_stateHandle.OverrideState(State.Standby);
+                }
+                else
+                {
+                    if (!TargetBlocked())
+                    {
+                        if (m_sneerRoutine != null)
+                        {
+                            if (m_patienceRoutine != null)
+                            {
+                                StopCoroutine(m_patienceRoutine);
+                                m_patienceRoutine = null;
+                            }
+                            StopCoroutine(m_sneerRoutine);
+                            m_sneerRoutine = null;
+                            m_enablePatience = false;
+                            //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        }
+                    }
                 }
             }
         }
@@ -686,6 +733,20 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnBecomePassive()
         {
             ResetAI();
+        }
+
+        public void LaunchAmbush(Vector2 position)
+        {
+            enabled = true;
+            m_aggroCollider.enabled = true;
+            //m_stateHandle.OverrideState(State.Detect);
+        }
+
+        public void PrepareAmbush(Vector2 position)
+        {
+            enabled = false;
+            StopAllCoroutines();
+            m_stateHandle.OverrideState(State.Dormant);
         }
     }
 }
