@@ -333,6 +333,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //CoreBurstEvenTrigger();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningCoreBurstAnimation);
             m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private IEnumerator LightningSphereRoutine()
@@ -524,6 +525,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    if (!m_aggroCollider.enabled)
+                    {
+                        m_aggroCollider.enabled = true;
+                    }
                     var patrolCharacterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_moveHandle, m_info.walkInfo.speed, patrolCharacterInfo);
                     m_animation.SetAnimation(0, m_info.walkInfo.animation, true);
@@ -577,7 +582,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (!m_wallSensor.isDetecting && m_edgeSensor.isDetecting && m_groundSensor.isDetecting)
                             {
                                 m_moveHandle.MoveTowards(toTarget.normalized, m_info.lightningArmorWalkInfo.speed);
-                                m_animation.SetAnimation(0, m_info.lightningArmorWalkInfo.animation, true);
+                                m_animation.SetAnimation(0, !m_isInRageMode ? m_info.walkInfo.animation : m_info.lightningArmorWalkInfo.animation, true);
                             }
                             else
                             {
