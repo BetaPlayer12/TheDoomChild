@@ -713,6 +713,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
+                if (TargetBlocked() && Vector2.Distance(m_targetInfo.position, transform.position) > m_info.attack1.range)
+                {
+                    StopAllCoroutines();
+                    m_selfCollider.SetActive(false);
+                    m_enablePatience = false;
+                    m_targetInfo.Set(null, null);
+                    m_isDetecting = false;
+                    if (m_sneerRoutine != null)
+                    {
+                        StopCoroutine(m_sneerRoutine);
+                        m_sneerRoutine = null;
+                    }
+                    if (m_patienceRoutine != null)
+                    {
+                        StopCoroutine(m_patienceRoutine);
+                        m_patienceRoutine = null;
+                    }
+                    m_stateHandle.OverrideState(State.Patrol);
+                    return;
+                }
+
                 if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance)
                 {
                     Patience();

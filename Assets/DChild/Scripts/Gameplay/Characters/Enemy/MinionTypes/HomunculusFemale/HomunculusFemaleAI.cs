@@ -200,7 +200,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool TargetBlocked()
         {
-            Vector2 wat = transform.position;
+            Vector2 wat = m_character.centerMass.position;
             RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
             var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
             Debug.DrawRay(wat, m_targetInfo.position - wat);
@@ -618,6 +618,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
+                if (TargetBlocked() && Vector2.Distance(m_targetInfo.position, transform.position) > m_info.lightningSphereAttackInfo.range)
+                {
+                    StopAllCoroutines();
+                    m_targetInfo.Set(null, null);
+                    m_animation.EnableRootMotion(true, false);
+                    LightningShieldDeactivate();
+                    LightningShieldSmallDeactivate();
+                    m_coreburstFX.Stop();
+                    m_corebustBB.enabled = false;
+                    m_isInRageMode = false;
+                    if (m_patienceRoutine != null)
+                    {
+                        StopCoroutine(m_patienceRoutine);
+                        m_patienceRoutine = null;
+                    }
+                    m_stateHandle.OverrideState(State.Patrol);
+                    return;
+                }
+
                 if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance)
                 {
                     Patience();
