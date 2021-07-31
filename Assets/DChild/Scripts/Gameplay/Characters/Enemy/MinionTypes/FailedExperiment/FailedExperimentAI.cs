@@ -455,15 +455,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
+            m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_animation.EnableRootMotion(true, false);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_animation.SetAnimation(0, m_info.crawlAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.crawlAnimation);
             //m_animation.SetAnimation(0, m_info.rawrAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
             m_animation.SetAnimation(0, m_info.evadeAnimation, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0).TimeScale = 5;
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0)/*.TimeScale = 5*/;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
             m_animation.EnableRootMotion(true, false);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -475,7 +477,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.evadeAnimation, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0).TimeScale = 5;
+            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0)/*.TimeScale = 5*/;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
             m_animation.EnableRootMotion(true, false);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);

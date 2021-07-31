@@ -87,12 +87,12 @@ namespace DChild.Gameplay.Environment.Obstacles
             m_animationCurveTimer = 0;
             while (true)
             {
-                var deltaTime = GameplaySystem.time.fixedDeltaTime;
+                var deltaTime = GameplaySystem.time.deltaTime;
                 var target = m_modelTransfrom.position + (m_modelTransfrom.right * 100f);
                 var deltaSpeed = m_dropSpeed.Evaluate(m_animationCurveTimer) * m_maxDropSpeed * deltaTime;
-                m_modelRigidbody.MovePosition(Vector2.MoveTowards(m_modelRigidbody.position, target, deltaSpeed));
-                m_animationCurveTimer += deltaTime;
-                yield return m_fixedUpdateWait;
+                //m_modelRigidbody.MovePosition(Vector2.MoveTowards(m_modelRigidbody.position, target, deltaSpeed));
+                m_modelTransfrom.position = Vector2.MoveTowards(m_modelTransfrom.position, target, deltaSpeed);
+                yield return null;
             }
         }
 
@@ -101,12 +101,13 @@ namespace DChild.Gameplay.Environment.Obstacles
             m_animationCurveTimer = 0;
             while (m_modelRigidbody.position != m_startPosition)
             {
-                var deltaTime = GameplaySystem.time.fixedDeltaTime;
+                var deltaTime = GameplaySystem.time.deltaTime;
                 var target = m_modelTransfrom.position + (m_modelTransfrom.right * 100f);
                 var deltaSpeed = m_returnSpeed.Evaluate(m_animationCurveTimer) * m_maxReturnSpeed * deltaTime;
-                m_modelRigidbody.MovePosition(Vector2.MoveTowards(m_modelRigidbody.position, m_startPosition, deltaSpeed));
+                //m_modelRigidbody.MovePosition(Vector2.MoveTowards(m_modelRigidbody.position, m_startPosition, deltaSpeed));
+                m_modelTransfrom.position = Vector2.MoveTowards(m_modelTransfrom.position, m_startPosition, deltaSpeed);
                 m_animationCurveTimer += deltaTime;
-                yield return m_fixedUpdateWait;
+                yield return null;
             }
             m_isReturning = false;
         }
@@ -137,7 +138,8 @@ namespace DChild.Gameplay.Environment.Obstacles
         private void StopDrop()
         {
             StopAllCoroutines();
-            m_modelRigidbody.velocity = Vector2.zero;
+            //m_modelRigidbody.velocity = Vector2.zero;
+            //m_modelTransfrom.position = m_modelTransfrom.localPosition;
             m_isReturning = false;
             m_isDropping = false;
         }
@@ -186,7 +188,7 @@ namespace DChild.Gameplay.Environment.Obstacles
             m_modelTransfrom = m_modelRigidbody.transform;
             m_startPosition = m_modelTransfrom.position;
             m_smasherCollisionEvent.OnEnter += OnCollision;
-            m_fixedUpdateWait = new WaitForFixedUpdate();
+            m_fixedUpdateWait = null;
         }
     }
 }

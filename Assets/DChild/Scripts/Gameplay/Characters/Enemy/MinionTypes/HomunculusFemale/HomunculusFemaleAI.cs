@@ -200,7 +200,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool TargetBlocked()
         {
-            Vector2 wat = transform.position;
+            Vector2 wat = m_character.centerMass.position;
             RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
             var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
             Debug.DrawRay(wat, m_targetInfo.position - wat);
@@ -333,6 +333,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //CoreBurstEvenTrigger();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.lightningCoreBurstAnimation);
             m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private IEnumerator LightningSphereRoutine()
@@ -524,6 +525,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    if (!m_aggroCollider.enabled)
+                    {
+                        m_aggroCollider.enabled = true;
+                    }
                     var patrolCharacterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_moveHandle, m_info.walkInfo.speed, patrolCharacterInfo);
                     m_animation.SetAnimation(0, m_info.walkInfo.animation, true);
@@ -577,7 +582,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             if (!m_wallSensor.isDetecting && m_edgeSensor.isDetecting && m_groundSensor.isDetecting)
                             {
                                 m_moveHandle.MoveTowards(toTarget.normalized, m_info.lightningArmorWalkInfo.speed);
-                                m_animation.SetAnimation(0, m_info.lightningArmorWalkInfo.animation, true);
+                                m_animation.SetAnimation(0, !m_isInRageMode ? m_info.walkInfo.animation : m_info.lightningArmorWalkInfo.animation, true);
                             }
                             else
                             {
@@ -613,6 +618,25 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
+                if (TargetBlocked() && Vector2.Distance(m_targetInfo.position, transform.position) > m_info.lightningSphereAttackInfo.range)
+                {
+                    StopAllCoroutines();
+                    m_targetInfo.Set(null, null);
+                    m_animation.EnableRootMotion(true, false);
+                    LightningShieldDeactivate();
+                    LightningShieldSmallDeactivate();
+                    m_coreburstFX.Stop();
+                    m_corebustBB.enabled = false;
+                    m_isInRageMode = false;
+                    if (m_patienceRoutine != null)
+                    {
+                        StopCoroutine(m_patienceRoutine);
+                        m_patienceRoutine = null;
+                    }
+                    m_stateHandle.OverrideState(State.Patrol);
+                    return;
+                }
+
                 if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance)
                 {
                     Patience();
