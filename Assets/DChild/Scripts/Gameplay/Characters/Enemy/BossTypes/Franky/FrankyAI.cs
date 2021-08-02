@@ -276,6 +276,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_bodyLightningFX;
         [SerializeField, TabGroup("Effects")]
         private ParticleFX m_phase3FX;
+        List<GameObject> m_lightningBoltEffects;
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -504,20 +505,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chainHurtBox.offset = new Vector2(m_chainHurtBox.size.x * .5f, -2f);
             m_animation.SetAnimation(0, m_info.chainShockLoopAnimation, true);
             var spawnPoint = new Vector2(transform.position.x + (15f * transform.localScale.x), transform.position.y + 4);
-            List<GameObject> lightningBoltEffects = new List<GameObject>();
+            //List<GameObject> m_lightningBoltEffects = new List<GameObject>();
             while (Vector2.Distance(spawnPoint, fxPos) > 10)
             {
                 spawnPoint = new Vector2(spawnPoint.x + (5f * transform.localScale.x), spawnPoint.y);
-                lightningBoltEffects.Add(this.InstantiateToScene(m_info.lightningBoltFX, spawnPoint, Quaternion.identity));
+                m_lightningBoltEffects.Add(this.InstantiateToScene(m_info.lightningBoltFX, spawnPoint, Quaternion.identity));
                 //var lightningBoltFX = this.InstantiateToScene(m_info.lightningBoltFX, spawnPoint, Quaternion.identity);
                 yield return null;
             }
             yield return new WaitForSeconds(m_info.shockTime);
-            for (int i = 0; i < lightningBoltEffects.Count; i++)
+            for (int i = 0; i < m_lightningBoltEffects.Count; i++)
             {
-                Destroy(lightningBoltEffects[i]);
+                Destroy(m_lightningBoltEffects[i]);
             }
-            lightningBoltEffects.Clear();
+            m_lightningBoltEffects.Clear();
             wallStickLoopFX.GetComponent<FX>().Stop();
             var wallStickEndFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_wallStickEndFX);
             wallStickEndFX.transform.rotation = Quaternion.Euler(new Vector3(0, 0, transform.localScale.x > 0 ? 90 : 270));
@@ -746,6 +747,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_wallStickLoopFX.GetComponent<FX>().Stop();
             m_phase3FX.Stop();
             StartCoroutine(StickToGroundRoutine(GroundPosition().y));
+            for (int i = 0; i < m_lightningBoltEffects.Count; i++)
+            {
+                Destroy(m_lightningBoltEffects[i]);
+            }
+            m_lightningBoltEffects.Clear();
+            m_chainHurtBox.gameObject.SetActive(false);
             //m_deathFX.Play();
             m_movement.Stop();
         }
@@ -1017,6 +1024,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_projectileLauncher = new ProjectileLauncher(m_info.stompProjectile.projectileInfo, m_projectilePoint);
             m_patternDecider = new RandomAttackDecider<Pattern>();
+            m_lightningBoltEffects = new List<GameObject>();
             m_attackDecider = new RandomAttackDecider<Attack>[3];
             for (int i = 0; i < 3; i++)
             {
