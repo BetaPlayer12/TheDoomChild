@@ -68,11 +68,12 @@ namespace DChild.Gameplay.Combat
         {
             for (int i = 0; i < castedAll.Length; i++)
             {
-                if (castedAll[i].collider == collision)
+                var collider = castedAll[i].collider;
+                if (collider == collision || collider.CompareTag("Sensor"))
                 {
                     break;
                 }
-                else if (m_canPassthroughList.Contains(castedAll[i].collider) == false)
+                else if (m_canPassthroughList.Contains(collider) == false)
                 {
                     return false;
                 }
