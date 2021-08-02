@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1631569862195788247}
   - component: {fileID: 7461976983724780706}
   - component: {fileID: 5568176108627145334}
+  - component: {fileID: 9163494682675870554}
   m_Layer: 11
   m_Name: FlameThrower
   m_TagString: Untagged
@@ -54,6 +55,7 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &5568176108627145334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,6 +97,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &9163494682675870554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727461927124100629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01d72dcc386e3824fb819d8347b660e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1967467803597995615
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 1
-  m_collisionRegistrator: {fileID: 0}
+  m_collisionRegistrator: {fileID: 9163494682675870554}
+  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 1
