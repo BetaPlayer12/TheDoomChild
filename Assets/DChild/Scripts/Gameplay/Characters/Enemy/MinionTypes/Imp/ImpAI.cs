@@ -471,11 +471,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ExecuteAttack(Attack m_attack)
         {
-            m_agent.Stop();
+            //m_agent.Stop();
             switch (m_attack)
             {
                 case Attack.PlantBomb:
-                    m_animation.EnableRootMotion(true, false);
+                    m_animation.EnableRootMotion(true, true);
                     m_attackHandle.ExecuteAttack(m_info.plantBomb.animation, m_info.idleAnimation);
                     break;
             }

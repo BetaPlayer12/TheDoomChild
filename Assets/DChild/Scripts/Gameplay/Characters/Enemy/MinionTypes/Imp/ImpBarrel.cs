@@ -96,7 +96,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var colliderGameObject = collision.gameObject;
-            if (colliderGameObject.tag != "Sensor" && colliderGameObject.layer == LayerMask.NameToLayer("Player"))
+            if (colliderGameObject.tag != "Sensor" && colliderGameObject.layer == LayerMask.NameToLayer("Player")
+                || colliderGameObject.tag != "Sensor" && colliderGameObject.layer == LayerMask.NameToLayer("Item"))
             {
                 if (m_idled)
                 {

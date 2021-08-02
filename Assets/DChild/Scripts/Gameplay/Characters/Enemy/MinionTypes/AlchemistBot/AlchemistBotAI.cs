@@ -259,6 +259,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             if (!m_bodylightningBB.enabled)
             {
                 m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
