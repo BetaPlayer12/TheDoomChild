@@ -78,6 +78,11 @@ namespace DChild.Gameplay.Combat
                 }
             }
 
+            if(m_cacheTarget.transform.TryGetComponent(out IDamageReaction damageReaction))
+            {
+                damageReaction.ReactToBeingAttackedBy(attacker.instance, result.Value.wasBlocked);
+            }
+
             if (attacker.isPlayer)
             {
 
