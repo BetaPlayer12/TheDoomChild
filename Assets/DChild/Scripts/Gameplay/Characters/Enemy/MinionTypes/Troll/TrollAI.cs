@@ -353,6 +353,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_selfCollider.SetActive(false);
             m_movement.Stop();
         }
 

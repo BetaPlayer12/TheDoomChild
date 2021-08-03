@@ -253,18 +253,24 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            StopAllCoroutines();
-            m_stateHandle.Wait(State.Cooldown);
+            if (!m_bodylightningBB.enabled)
+            {
+                StopAllCoroutines();
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             if (!m_bodylightningBB.enabled)
             {
-                m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                if (!m_bodylightningBB.enabled)
+                {
+                    m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
+                }
+                m_stateHandle.ApplyQueuedState();
             }
-            m_stateHandle.ApplyQueuedState();
         }
 
         private void SpawnBlob()

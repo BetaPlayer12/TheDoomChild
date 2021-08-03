@@ -256,73 +256,76 @@ namespace DChild.Gameplay.Characters.Enemies
             //if (m_stateHandle.currentState == State.Cooldown)
             //{
             //}
-            if (m_targetInfo.position.x < transform.position.x)
+            if (m_targetInfo.isValid)
             {
-                if (!m_shieldLeftDestroyed)
+                if (m_targetInfo.position.x < transform.position.x)
                 {
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
-                    //m_hitbox.SetInvulnerability(Invulnerability.Level_1);
-                    if (m_shieldLeftHitCount < 3)
+                    if (!m_shieldLeftDestroyed)
                     {
-                        m_health.SetHealthPercentage(1);
-                        m_animation.SetEmptyAnimation(1, 0);
-                        m_animation.SetAnimation(1, m_info.shieldLeftHitAnimation, false);
-                        m_shieldLeftHitCount++;
-                    }
-                    else
-                    {
-                        m_attackLeftAnimation = m_info.attackLeftSRAnimation;
-                        m_attackRightAnimation = m_info.attackRightSRAnimation;
-                        if (m_shieldRightDestroyed)
+                        //m_stateHandle.Wait(State.ReevaluateSituation);
+                        //m_hitbox.SetInvulnerability(Invulnerability.Level_1);
+                        if (m_shieldLeftHitCount < 3)
                         {
-                            //m_leftHealth = m_rightHealth;
-                            m_health.SetHealthPercentage(.001f);
+                            m_health.SetHealthPercentage(1);
+                            m_animation.SetEmptyAnimation(1, 0);
+                            m_animation.SetAnimation(1, m_info.shieldLeftHitAnimation, false);
+                            m_shieldLeftHitCount++;
                         }
-                        //m_health.SetHealthPercentage(m_leftHealth);
-                        //m_leftHealth = ((float)m_health.currentValue / m_health.maxValue);
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingLeftDestroyAnimation)
+                        else
                         {
-                            StopAllCoroutines();
-                            StartCoroutine(WingsDestroyedRoutine(1, m_info.wingLeftDestroyAnimation));
+                            m_attackLeftAnimation = m_info.attackLeftSRAnimation;
+                            m_attackRightAnimation = m_info.attackRightSRAnimation;
+                            if (m_shieldRightDestroyed)
+                            {
+                                //m_leftHealth = m_rightHealth;
+                                m_health.SetHealthPercentage(.001f);
+                            }
+                            //m_health.SetHealthPercentage(m_leftHealth);
+                            //m_leftHealth = ((float)m_health.currentValue / m_health.maxValue);
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingLeftDestroyAnimation)
+                            {
+                                StopAllCoroutines();
+                                StartCoroutine(WingsDestroyedRoutine(1, m_info.wingLeftDestroyAnimation));
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                if (!m_shieldRightDestroyed)
+                else
                 {
-                    if (m_shieldRightHitCount < 3)
+                    if (!m_shieldRightDestroyed)
                     {
-                        m_health.SetHealthPercentage(1);
-                        m_animation.SetEmptyAnimation(2, 0);
-                        m_animation.SetAnimation(2, m_info.shieldRightHitAnimation, false);
-                        m_shieldRightHitCount++;
-                    }
-                    else
-                    {
-                        m_attackLeftAnimation = m_info.attackLeftSLAnimation;
-                        m_attackRightAnimation = m_info.attackRightSLAnimation;
-                        if (m_shieldLeftDestroyed)
+                        if (m_shieldRightHitCount < 3)
                         {
-                            //m_rightHealth = m_leftHealth;
-                            m_health.SetHealthPercentage(.001f);
+                            m_health.SetHealthPercentage(1);
+                            m_animation.SetEmptyAnimation(2, 0);
+                            m_animation.SetAnimation(2, m_info.shieldRightHitAnimation, false);
+                            m_shieldRightHitCount++;
                         }
-                        //m_health.SetHealthPercentage(m_rightHealth);
-                        //m_rightHealth = ((float)m_health.currentValue / m_health.maxValue);
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingRightDestroyAnimation)
+                        else
                         {
-                            StopAllCoroutines();
-                            StartCoroutine(WingsDestroyedRoutine(2, m_info.wingRightDestroyAnimation));
+                            m_attackLeftAnimation = m_info.attackLeftSLAnimation;
+                            m_attackRightAnimation = m_info.attackRightSLAnimation;
+                            if (m_shieldLeftDestroyed)
+                            {
+                                //m_rightHealth = m_leftHealth;
+                                m_health.SetHealthPercentage(.001f);
+                            }
+                            //m_health.SetHealthPercentage(m_rightHealth);
+                            //m_rightHealth = ((float)m_health.currentValue / m_health.maxValue);
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.wingRightDestroyAnimation)
+                            {
+                                StopAllCoroutines();
+                                StartCoroutine(WingsDestroyedRoutine(2, m_info.wingRightDestroyAnimation));
+                            }
                         }
                     }
                 }
-            }
 
-            if (m_shieldLeftDestroyed && m_shieldRightDestroyed)
-            {
-                m_attackLeftAnimation = m_info.attackLeftNoShieldAnimation;
-                m_attackRightAnimation = m_info.attackRightNoShieldAnimation;
+                if (m_shieldLeftDestroyed && m_shieldRightDestroyed)
+                {
+                    m_attackLeftAnimation = m_info.attackLeftNoShieldAnimation;
+                    m_attackRightAnimation = m_info.attackRightNoShieldAnimation;
+                }
             }
         }
 
