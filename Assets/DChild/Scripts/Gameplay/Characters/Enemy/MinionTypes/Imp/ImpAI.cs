@@ -466,6 +466,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodyCollider.SetActive(true);
             m_animation.SetAnimation(0, m_info.deathHitFloorAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathHitFloorAnimation);
+            enabled = false;
+            this.gameObject.SetActive(false);
             yield return null;
         }
 
