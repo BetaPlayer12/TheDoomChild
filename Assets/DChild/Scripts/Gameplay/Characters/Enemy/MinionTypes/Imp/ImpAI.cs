@@ -473,7 +473,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ExecuteAttack(Attack m_attack)
         {
-            //m_agent.Stop();
+            m_agent.Stop();
             switch (m_attack)
             {
                 case Attack.PlantBomb:
@@ -544,7 +544,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             //m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathBeginAnimation);
+            //m_deathHandle.SetAnimation(m_info.deathBeginAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
