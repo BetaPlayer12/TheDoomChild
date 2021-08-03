@@ -171,6 +171,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isRotating;
         private float m_currentCD;
         private float m_currentScale;
+        private Coroutine m_attackRoutine;
 
         protected override void Start()
         {
@@ -183,21 +184,21 @@ namespace DChild.Gameplay.Characters.Enemies
         private void SmokeFX()
         {
             m_smokeFX.Play();
-            StartCoroutine(AttackbbRoutine());
+            m_attackRoutine = StartCoroutine(AttackbbRoutine());
 
         }
 
         private IEnumerator AttackbbRoutine()
         {
             m_attackbb.enabled = true;
-            while (m_attackbb.transform.localScale.x <= 1.5f)
+            m_attackbb.transform.localScale = Vector3.one;
+            while (m_attackbb.transform.localScale.x <= 2f)
             {
                 var offset = Time.deltaTime * .5f;
                 m_attackbb.transform.localScale += new Vector3(m_attackbb.transform.localScale.x * offset, m_attackbb.transform.localScale.y * offset);
                 yield return null;
             }
             //yield return new WaitForSeconds(1f);
-            m_attackbb.transform.localScale = Vector3.one;
             m_attackbb.enabled = false;
             yield return null;
         }
@@ -272,6 +273,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            if (m_attackRoutine != null)
+            {
+                StopCoroutine(m_attackRoutine);
+            }
             m_movement.Stop();
         }
 
@@ -351,16 +356,24 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.damageAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            {
+                m_flinchHandle.m_autoFlinch = true;
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.damageAnimation, false);
+                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                m_flinchHandle.m_autoFlinch = false;
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_stateHandle.OverrideState(State.ReevaluateSituation);
+            }
         }
 
         public override void ApplyData()

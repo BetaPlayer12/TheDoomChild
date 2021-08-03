@@ -109,6 +109,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedCharacterPhysics2D m_characterPhysics;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
@@ -186,6 +188,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_animation.SetEmptyAnimation(0, 0);
+            m_characterPhysics.UseStepClimb(true);
             m_movement.Stop();
             StartCoroutine(AttackExplodeRoutine());
         }
@@ -397,11 +400,13 @@ namespace DChild.Gameplay.Characters.Enemies
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
+            m_characterPhysics.UseStepClimb(false);
             //m_flinchHandle.enabled = false;
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             //m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(timer);
+            m_characterPhysics.UseStepClimb(true);
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);

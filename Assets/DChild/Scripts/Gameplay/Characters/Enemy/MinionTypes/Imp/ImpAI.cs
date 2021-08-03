@@ -466,6 +466,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodyCollider.SetActive(true);
             m_animation.SetAnimation(0, m_info.deathHitFloorAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathHitFloorAnimation);
+            enabled = false;
+            this.gameObject.SetActive(false);
             yield return null;
         }
 
@@ -475,7 +477,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_attack)
             {
                 case Attack.PlantBomb:
-                    m_animation.EnableRootMotion(true, false);
+                    m_animation.EnableRootMotion(true, true);
                     m_attackHandle.ExecuteAttack(m_info.plantBomb.animation, m_info.idleAnimation);
                     break;
             }
@@ -542,7 +544,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             //m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathBeginAnimation);
+            //m_deathHandle.SetAnimation(m_info.deathBeginAnimation);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();

@@ -102,6 +102,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedCharacterPhysics2D m_characterPhysics;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
@@ -281,6 +283,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_characterPhysics.UseStepClimb(true);
             m_movement.Stop();
         }
 
@@ -296,7 +299,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
             //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_animation.SetEmptyAnimation(0, 0);
-            m_stateHandle.OverrideState(State.RunAway);
+            m_stateHandle.OverrideState(m_targetInfo.isValid ? State.RunAway : State.ReevaluateSituation);
         }
 
         public override void ApplyData()
@@ -662,6 +665,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
+            m_characterPhysics.UseStepClimb(false);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
             {
                 //m_flinchHandle.enabled = false;
@@ -670,6 +674,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
+            m_characterPhysics.UseStepClimb(true);
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);

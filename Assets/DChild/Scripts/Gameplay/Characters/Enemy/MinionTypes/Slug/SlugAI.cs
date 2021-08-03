@@ -134,6 +134,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedCharacterPhysics2D m_charcterPhysics;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -381,7 +383,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopAllCoroutines();
                 //m_animation.SetAnimation(0, m_info.damageAnimation, false);
-                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                m_stateHandle.Wait(State.ReevaluateSituation);
             }
         }
 
@@ -391,7 +393,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
                     m_animation.SetEmptyAnimation(0, 0);
-                m_stateHandle.OverrideState(State.ReevaluateSituation);
+                m_stateHandle.ApplyQueuedState();
             }
         }
 
@@ -614,6 +616,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
+            m_charcterPhysics.UseStepClimb(false);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
             {
                 //m_flinchHandle.enabled = false;
@@ -622,6 +625,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
+            m_charcterPhysics.UseStepClimb(true);
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
