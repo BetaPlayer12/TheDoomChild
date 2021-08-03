@@ -276,12 +276,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //StopAllCoroutines();
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            m_stateHandle.Wait(State.ReevaluateSituation);
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.ApplyQueuedState();
         }
 
         protected override void Awake()

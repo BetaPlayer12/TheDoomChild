@@ -270,7 +270,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.animationState.TimeScale = .5f;
                 m_currentCD += m_currentCD + 0.5f;
                 m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.Wait(State.Cooldown);
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
             }
         }
 
@@ -280,8 +280,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_animation.animationState.TimeScale = 1f;
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                {
                     m_animation.SetEmptyAnimation(0, 0);
-                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                }
                 m_stateHandle.ApplyQueuedState();
             }
         }

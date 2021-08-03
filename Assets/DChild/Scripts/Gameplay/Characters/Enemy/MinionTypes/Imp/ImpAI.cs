@@ -466,16 +466,18 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodyCollider.SetActive(true);
             m_animation.SetAnimation(0, m_info.deathHitFloorAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathHitFloorAnimation);
+            enabled = false;
+            this.gameObject.SetActive(false);
             yield return null;
         }
 
         private void ExecuteAttack(Attack m_attack)
         {
-            m_agent.Stop();
+            //m_agent.Stop();
             switch (m_attack)
             {
                 case Attack.PlantBomb:
-                    m_animation.EnableRootMotion(true, false);
+                    m_animation.EnableRootMotion(true, true);
                     m_attackHandle.ExecuteAttack(m_info.plantBomb.animation, m_info.idleAnimation);
                     break;
             }

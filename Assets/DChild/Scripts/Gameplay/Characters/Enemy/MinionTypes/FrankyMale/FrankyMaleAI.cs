@@ -392,8 +392,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
             }
             
-            var distanceTolerance = UnityEngine.Random.Range(25f, 50f);
-            while (/*!m_chosenSpawnBox.IsTouching(m_selfCollider.GetComponent<Collider2D>()) &&*/ Mathf.Abs(m_targetInfo.position.x - transform.position.x) < distanceTolerance)
+            var distanceTolerance = m_chosenSpawnBox.bounds.size.x * 0.5f;
+            while (/*!m_chosenSpawnBox.IsTouching(m_selfCollider.GetComponent<Collider2D>()) &&*/ Vector2.Distance(transformPos, randomPos) < distanceTolerance)
             {
                 randomPos = m_chosenSpawnBox.bounds.center + new Vector3(
                (UnityEngine.Random.value - 0.5f) * m_chosenSpawnBox.bounds.size.x,
@@ -430,6 +430,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_flinchHandle.m_autoFlinch = false;
                 m_animation.SetEmptyAnimation(0, 0);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 //m_stateHandle.ApplyQueuedState();
                 StartCoroutine(TeleportRoutine());
             }
@@ -646,25 +647,25 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_movement.Stop();
                                 var yDistance = Mathf.Abs(m_targetInfo.position.y - transform.position.y);
 
-                                m_stateHandle.Wait(State.ReevaluateSituation);
-                                StartCoroutine(TeleportRoutine());
-                                //if (yDistance < 20f && m_targetInfo.position.y >= transform.position.y )
-                                //{
-                                //    m_stateHandle.Wait(State.ReevaluateSituation);
-                                //    StartCoroutine(TeleportRoutine());
-                                //}
-                                //else
-                                //{
-                                //    if (m_edgeSensor.isDetecting && m_groundSensor.allRaysDetecting)
-                                //    {
-                                //        m_animation.EnableRootMotion(true, false);
-                                //        m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2;
-                                //    }
-                                //    else
-                                //    {
-                                //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                //    }
-                                //}
+                                //m_stateHandle.Wait(State.ReevaluateSituation);
+                                //StartCoroutine(TeleportRoutine());
+                                if (yDistance < 20f && m_targetInfo.position.y >= transform.position.y)
+                                {
+                                    m_stateHandle.Wait(State.ReevaluateSituation);
+                                    StartCoroutine(TeleportRoutine());
+                                }
+                                else
+                                {
+                                    if (m_edgeSensor.isDetecting && m_groundSensor.allRaysDetecting)
+                                    {
+                                        m_animation.EnableRootMotion(true, false);
+                                        m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2;
+                                    }
+                                    else
+                                    {
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                    }
+                                }
                             }
                         }
                         else
@@ -713,6 +714,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
+                if (TargetBlocked() && Vector2.Distance(m_targetInfo.position, transform.position) > m_info.attack1.range)
+                {
+                    StopAllCoroutines();
+                    m_selfCollider.SetActive(false);
+                    m_enablePatience = false;
+                    m_targetInfo.Set(null, null);
+                    m_isDetecting = false;
+                    if (m_sneerRoutine != null)
+                    {
+                        StopCoroutine(m_sneerRoutine);
+                        m_sneerRoutine = null;
+                    }
+                    if (m_patienceRoutine != null)
+                    {
+                        StopCoroutine(m_patienceRoutine);
+                        m_patienceRoutine = null;
+                    }
+                    m_stateHandle.OverrideState(State.Patrol);
+                    return;
+                }
+
                 if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance)
                 {
                     Patience();
