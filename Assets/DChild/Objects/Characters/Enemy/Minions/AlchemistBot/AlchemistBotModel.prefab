@@ -5683,7 +5683,7 @@ Transform:
   m_GameObject: {fileID: 4575954201896379083}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 40, y: 40, z: 40}
+  m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children: []
   m_Father: {fileID: 6142852640044632582}
   m_RootOrder: 0
@@ -10693,7 +10693,7 @@ Transform:
   m_GameObject: {fileID: 5847826428385058481}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 16, y: 16, z: 16}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_Children: []
   m_Father: {fileID: 8729170745232550302}
   m_RootOrder: 0
@@ -15618,7 +15618,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 4
+  m_Radius: 2
 --- !u!114 &7716300436687705384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15814,7 +15814,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 84457d0e6081548468a7fbfe80b43575, type: 2}
+  - {fileID: 2100000, guid: fe3451150fe6ce14191b643450fa949d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15864,9 +15864,11 @@ MonoBehaviour:
   calculateTangents: 0
   maskInteraction: 2
   maskMaterials:
-    materialsMaskDisabled: []
+    materialsMaskDisabled:
+    - {fileID: 2100000, guid: 84457d0e6081548468a7fbfe80b43575, type: 2}
     materialsInsideMask: []
-    materialsOutsideMask: []
+    materialsOutsideMask:
+    - {fileID: 2100000, guid: fe3451150fe6ce14191b643450fa949d, type: 2}
   disableRenderingOnOverride: 1
   _animationName: ALCHEMIST_BOT_Idle
   loop: 1

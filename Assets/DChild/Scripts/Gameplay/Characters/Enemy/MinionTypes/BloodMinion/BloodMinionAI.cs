@@ -232,24 +232,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_flinchHandle.m_autoFlinch)
+            if (m_targetInfo.isValid)
             {
-                StopAllCoroutines();
-                if (!IsFacingTarget())
+                if (m_flinchHandle.m_autoFlinch)
                 {
-                    CustomTurn();
+                    StopAllCoroutines();
+                    if (!IsFacingTarget())
+                    {
+                        CustomTurn();
+                    }
+                    var flinchFX = Instantiate(m_flinchFX.gameObject, m_flinchFX.transform.position, Quaternion.identity);
+                    flinchFX.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().flip = transform.position.x > m_targetInfo.position.x ? Vector3.zero : Vector3.right;
+                    flinchFX.GetComponent<Transform>().localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+                    flinchFX.GetComponent<ParticleFX>().Play();
+
+                    //m_flinchFXRenderer.flip = transform.position.x > m_targetInfo.position.x ?  Vector3.zero : Vector3.right;
+                    //m_flinchFX.Play();
+
+                    m_animation.SetAnimation(0, IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation, false);
+                    m_animation.AddAnimation(0, m_info.idleAnimation, false, 0.2f).TimeScale = 20;
+                    m_stateHandle.OverrideState(State.WaitBehaviourEnd);
                 }
-                var flinchFX = Instantiate(m_flinchFX.gameObject, m_flinchFX.transform.position, Quaternion.identity);
-                flinchFX.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().flip = transform.position.x > m_targetInfo.position.x ? Vector3.zero : Vector3.right;
-                flinchFX.GetComponent<Transform>().localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-                flinchFX.GetComponent<ParticleFX>().Play();
-
-                //m_flinchFXRenderer.flip = transform.position.x > m_targetInfo.position.x ?  Vector3.zero : Vector3.right;
-                //m_flinchFX.Play();
-
-                m_animation.SetAnimation(0, IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation, false);
-                m_animation.AddAnimation(0, m_info.idleAnimation, false, 0.2f).TimeScale = 20;
-                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             }
         }
 

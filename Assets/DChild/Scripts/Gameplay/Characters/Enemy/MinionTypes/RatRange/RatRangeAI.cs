@@ -116,6 +116,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private IsolatedCharacterPhysics2D m_characterPhysics;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -260,7 +262,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_characterPhysics.UseStepClimb(true);
             m_movement.Stop();
         }
 
@@ -642,6 +646,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
+            m_characterPhysics.UseStepClimb(false);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
             {
                 //m_flinchHandle.enabled = false;
@@ -650,6 +655,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
+            m_characterPhysics.UseStepClimb(true);
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);

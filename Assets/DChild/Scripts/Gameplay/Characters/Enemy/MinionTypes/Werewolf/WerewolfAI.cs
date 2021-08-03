@@ -101,6 +101,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private IsolatedCharacterPhysics2D m_characterPhysics;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -234,7 +236,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopAllCoroutines();
                 m_currentCD += m_currentCD + 0.5f;
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.Wait(State.Cooldown);
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
             }
         }
 
@@ -482,6 +484,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
+            m_characterPhysics.UseStepClimb(false);
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
             {
                 //m_flinchHandle.enabled = false;
@@ -490,6 +493,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
+            m_characterPhysics.UseStepClimb(true);
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);

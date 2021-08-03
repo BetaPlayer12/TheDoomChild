@@ -158,6 +158,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private State m_turnState;
         private Coroutine m_randomTurnRoutine;
+        private Coroutine m_attackCoroutine;
 
 
         //[SerializeField]
@@ -274,6 +275,8 @@ namespace DChild.Gameplay.Characters.Enemies
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
+            StartCoroutine(StopAttackRoutine());
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_movement.Stop();
         }
 
@@ -386,19 +389,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ResetTrailDamageRoutine()
         {
-            while (m_Points[0].x >= 0)
+            if (m_Points.Count > 0)
             {
-                m_Points[0] = new Vector2(m_Points[0].x - Time.deltaTime * 40f, m_Points[0].y);
+                while (m_Points[0].x >= 0)
+                {
+                    m_Points[0] = new Vector2(m_Points[0].x - Time.deltaTime * 40f, m_Points[0].y);
+                    m_edgeCollider.points = m_Points.ToArray();
+                    yield return null;
+                }
+                for (int i = 0; i < m_Points.Count; i++)
+                {
+                    m_Points[i] = Vector2.zero;
+                }
                 m_edgeCollider.points = m_Points.ToArray();
-                yield return null;
+                m_Points.Clear();
+                m_edgeCollider.points = null;
             }
-            for (int i = 0; i < m_Points.Count; i++)
-            {
-                m_Points[i] = Vector2.zero;
-            }
-            m_edgeCollider.points = m_Points.ToArray();
-            m_Points.Clear();
-            m_edgeCollider.points = null;
             yield return null;
         }
 
@@ -426,7 +432,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             StartCoroutine(ResetTrailDamageRoutine());
             yield return new WaitForSeconds(1f);
-            StopCoroutine(m_trailDamageCoroutine);
+            if (m_trailDamageCoroutine != null)
+            {
+                StopCoroutine(m_trailDamageCoroutine);
+            }
+            m_attackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -444,7 +454,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             StartCoroutine(ResetTrailDamageRoutine());
             yield return new WaitForSeconds(1f);
-            StopCoroutine(m_trailDamageCoroutine);
+            if (m_trailDamageCoroutine != null)
+            {
+                StopCoroutine(m_trailDamageCoroutine);
+            }
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -545,8 +558,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                            
-                            StartCoroutine(AttackRoutine());
+
+                            m_attackCoroutine = StartCoroutine(AttackRoutine());
 
                             m_attackDecider.hasDecidedOnAttack = false;
                         }
@@ -668,9 +681,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void HandleKnockback(float resumeAIDelay)
         {
-            StopAllCoroutines();
-            m_stateHandle.Wait(State.ReevaluateSituation);
-            StartCoroutine(KnockbackRoutine(resumeAIDelay));
+            if (m_attackCoroutine == null)
+            {
+                StopAllCoroutines();
+                m_stateHandle.Wait(State.ReevaluateSituation);
+                StartCoroutine(KnockbackRoutine(resumeAIDelay));
+            }
         }
 
         private IEnumerator KnockbackRoutine(float timer)

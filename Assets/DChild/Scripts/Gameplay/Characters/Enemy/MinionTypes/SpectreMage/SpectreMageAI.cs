@@ -223,21 +223,17 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_agent.Stop();
                 StopAllCoroutines();
-                m_stateHandle.Wait(State.Cooldown);
-                if (!IsFacingTarget())
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+                if (m_targetInfo.isValid)
                 {
-                    CustomTurn();
+                    if (!IsFacingTarget())
+                    {
+                        CustomTurn();
+                    }
+
+                    Debug.Log("FLINCH NOW");
+                    StartCoroutine(FlinchRoutine());
                 }
-                //if (m_animation.GetCurrentAnimation(0).ToString() == m_info.attack.animation)
-                //{
-                //    StartCoroutine(CounterFlinchRoutine());
-                //}
-                //else
-                //{
-                //    StartCoroutine(FlinchRoutine());
-                //}
-                Debug.Log("FLINCH NOW");
-                StartCoroutine(FlinchRoutine());
             }
         }
 
@@ -284,7 +280,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            //m_stateHandle.ApplyQueuedState();
+            if (!m_targetInfo.isValid)
+            {
+                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+                    m_animation.SetEmptyAnimation(0, 0).MixDuration = 0;
+
+                m_stateHandle.ApplyQueuedState();
+            }
         }
         private Vector2 WallPosition()
         {
