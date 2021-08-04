@@ -25,6 +25,14 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
 
         public bool ignoresBlock => throw new System.NotImplementedException();
 
+        public IAttacker parentDamageDealer => throw new System.NotImplementedException();
+
+        public IAttacker rootParentDamageDealer => throw new System.NotImplementedException();
+
+        public IAttacker parentAttacker => throw new System.NotImplementedException();
+
+        public IAttacker rootParentAttacker => throw new System.NotImplementedException();
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
         public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
@@ -74,6 +82,26 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
             {
                 CallPoolRequest();
             }
+        }
+
+        public void SetParentDamageDealer(IDamageDealer damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetRootParentDamageDealer(IDamageDealer damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetParentAttacker(IAttacker damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetRootParentAttacker(IAttacker damageDealer)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

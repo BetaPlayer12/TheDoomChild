@@ -35,6 +35,10 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
 
         public bool ignoresBlock => throw new System.NotImplementedException();
 
+        public IAttacker parentAttacker => throw new System.NotImplementedException();
+
+        public IAttacker rootParentAttacker => throw new System.NotImplementedException();
+
         public override void SpawnAt(Vector2 position, Quaternion rotation)
         {
             base.SpawnAt(position, rotation);
@@ -125,13 +129,23 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
             }
 
         }
-//# if UNITY_EDITOR
-//        [Button("Drop")]
-//        private void Drop()
-//        {
-//            this.gameObject.SetActive(true);
-//            SpawnAt(Vector2.zero);
-//        }
-//#endif
+
+        public void SetParentAttacker(IAttacker damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetRootParentAttacker(IAttacker damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+        //# if UNITY_EDITOR
+        //        [Button("Drop")]
+        //        private void Drop()
+        //        {
+        //            this.gameObject.SetActive(true);
+        //            SpawnAt(Vector2.zero);
+        //        }
+        //#endif
     }
 }

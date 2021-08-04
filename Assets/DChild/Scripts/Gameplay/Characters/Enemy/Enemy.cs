@@ -48,6 +48,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public bool ignoresBlock => throw new System.NotImplementedException();
 
+        public IDamageDealer parentDamageDealer => throw new System.NotImplementedException();
+
+        public IDamageDealer rootParentDamageDealer => throw new System.NotImplementedException();
+
         public override void DisableController() => m_brain.Enable(false);
         public override void EnableController() => m_brain.Enable(true);
 
@@ -129,6 +133,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnValidate()
         {
             ComponentUtility.AssignNullComponent(this, ref m_health, ComponentUtility.ComponentSearchMethod.Child);
+        }
+
+        public void SetParentDamageDealer(IDamageDealer damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetRootParentDamageDealer(IDamageDealer damageDealer)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

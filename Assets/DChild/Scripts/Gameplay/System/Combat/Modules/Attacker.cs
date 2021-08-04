@@ -35,6 +35,10 @@ namespace DChild.Gameplay.Combat
 
         public bool ignoresBlock => m_info.ignoresBlock;
 
+        public IAttacker parentAttacker { get; private set; }
+
+        public IAttacker rootParentAttacker { get; private set; }
+
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
@@ -123,6 +127,16 @@ namespace DChild.Gameplay.Combat
             m_info.ignoresBlock = ignoresBlock;
         }
 
+        public void SetParentAttacker(IAttacker damageDealer)
+        {
+            parentAttacker = damageDealer;
+        }
+
+        public void SetRootParentAttacker(IAttacker damageDealer)
+        {
+            rootParentAttacker = damageDealer;
+        }
+
         private void ApplyDamageModification()
         {
             m_currentDamage.Clear();
@@ -174,6 +188,8 @@ namespace DChild.Gameplay.Combat
         {
             m_centerMass = centerMass;
         }
+
+
 #endif
     }
 }
