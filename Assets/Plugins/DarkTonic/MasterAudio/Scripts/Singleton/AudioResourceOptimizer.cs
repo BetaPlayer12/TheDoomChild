@@ -143,6 +143,9 @@ namespace DarkTonic.MasterAudio {
                     playlistName + "' has 'Preload Audio Data' turned off, which can cause audio glitches. Resource files should always Preload Audio Data. Please turn it on.");
             }
 
+            // set the name equal to the full path so Jukebox display will work.
+            resAudioClip.name = songResourceName;
+            
             FinishRecordingPlaylistClip(controller.ControllerName, resAudioClip);
 
             controller.FinishLoadingNewSong(songSetting, resAudioClip, playType);
@@ -195,7 +198,7 @@ namespace DarkTonic.MasterAudio {
             }
 
             if (!AudioUtil.AudioClipWillPreload(resAudioClip)) {
-                MasterAudio.LogWarning("Audio Clip for Resource file '" + clipName + "' of Sound Group '" + variation.ParentGroup.name + "' has 'Preload Audio Data' turned off, which can cause audio glitches. Resource files should always Preload Audio Data. Please turn it on.");
+                MasterAudio.LogWarning("Audio Clip for Resource file '" + clipName + "' of Sound Group '" + variation.ParentGroup.GameObjectName + "' has 'Preload Audio Data' turned off, which can cause audio glitches. Resource files should always Preload Audio Data. Please turn it on.");
             }
 
             var sources = AudioResourceTargetsByName[clipName];

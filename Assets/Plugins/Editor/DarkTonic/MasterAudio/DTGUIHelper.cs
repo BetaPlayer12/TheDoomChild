@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
+#if UNITY_2018_3_OR_NEWER
+using UnityEditor.SceneManagement;
+#endif
 using UnityEngine;
 #if ADDRESSABLES_ENABLED
 using UnityEngine.AddressableAssets;
@@ -760,12 +763,12 @@ namespace DarkTonic.MasterAudio.EditorScripts
             return DTFunctionButtons.None;
         }
 
-        public static DTFunctionButtons AddDynamicGroupButtons(Object obj)
+        public static DTFunctionButtons AddDynamicGroupButtons(GameObject go)
         {
             GUIContent deleteIcon = null;
             GUIContent settingsIcon;
 
-            var isProjectView = IsPrefabInProjectView(obj);
+            var isProjectView = IsPrefabInProjectView(go);
 
             if (!isProjectView)
             {
@@ -1361,6 +1364,11 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
         public static void PreviewSoundGroup(string sType)
         {
+            if (sType == MasterAudio.VideoPlayerSoundGroupName)
+            {
+                return;
+            }
+
             var previewer = MasterAudioInspector.GetPreviewer();
 
             if (Application.isPlaying)
@@ -1466,6 +1474,11 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
         public static void StopPreview(string sType)
         {
+            if (sType == MasterAudio.VideoPlayerSoundGroupName)
+            {
+                return;
+            }
+
             if (Application.isPlaying)
             {
                 MasterAudio.StopAllOfSound(sType);
@@ -1540,7 +1553,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             {
                 return DTFunctionButtons.Stop;
             }
-            if (ShowFindUsages("Sound Group '" + aGroup.name + "'"))
+            if (ShowFindUsages("Sound Group '" + aGroup.GameObjectName + "'"))
             {
                 return DTFunctionButtons.Find;
             }
@@ -1818,12 +1831,35 @@ namespace DarkTonic.MasterAudio.EditorScripts
             return shortPath;
         }
 
+        public static void MakePrefabMessage()
+        {
+            ShowRedError("Create your own prefab of this so it doesn't get overwritten the next time you update Master Audio. Do this now to be able to use this Inspector.");
+        }
+
 #if UNITY_2018_3_OR_NEWER
-    public static bool IsPrefabInProjectView(Object gObject) {
-        return false;
-        //return GetPrefabType(gObject) != PrefabAssetType.Regular && !Application.isPlaying; // this requires you to create a prefab of your Master Audio game object before being able to see the Inspector. Kind of a hassle.
-    }
+        public static bool IsLinkedToDarkTonicPrefabFolder(Object gObject)
+        {
+            var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gObject);
+            return path.Contains(MasterAudioInspectorResources.PrefabFolderPartialPath);
+        }
+
+        public static bool IsInPrefabMode(GameObject gameObject)
+        {
+            return EditorSceneManager.IsPreviewScene(gameObject.scene);
+        }
+
+        public static bool IsPrefabInProjectView(GameObject gObject) {
+            return gObject.scene.name == null;
+        }
 #else
+        public static bool IsLinkedToDarkTonicPrefabFolder(Object gObject) {
+            return false;
+        }
+        public static bool IsInPrefabMode(GameObject gameObject)
+        {
+            return false;
+        }
+
         public static bool IsPrefabInProjectView(Object gObject)
         {
             return GetPrefabType(gObject) == PrefabType.Prefab;
@@ -1831,7 +1867,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
 #endif
 
 #if UNITY_2018_2_OR_NEWER
-    public static GameObject DuplicateGameObject(GameObject gameObj, string baseName, int? optionalCountSuffix) {
+        public static GameObject DuplicateGameObject(GameObject gameObj, string baseName, int? optionalCountSuffix) {
         var prefabRoot = PrefabUtility.GetCorrespondingObjectFromSource(gameObj);
 
         GameObject dupe;
@@ -1872,6 +1908,11 @@ namespace DarkTonic.MasterAudio.EditorScripts
         private static float GetPositiveUsablePitch(AudioSource source)
         {
             return source.pitch > 0 ? source.pitch : 1;
+        }
+
+        public static bool IsVideoPlayersGroup(string groupName)
+        {
+            return groupName == MasterAudio.VideoPlayerSoundGroupName;
         }
 
         public static float AdjustAudioClipDurationForPitch(float duration, AudioSource sourceWithPitch)

@@ -6,6 +6,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
     // ReSharper disable once CheckNamespace
     public static class MasterAudioInspectorResources
     {
+        public const string PrefabFolderPartialPath = "/DarkTonic/MasterAudio/Prefabs/";
         public const string MasterAudioFolderPath = "MasterAudio";
 
         public static Texture LogoTexture = EditorGUIUtility.LoadRequired(string.Format("{0}/inspector_header_master_audio.png", MasterAudioFolderPath)) as Texture;

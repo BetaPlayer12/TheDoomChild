@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Environment
         private UnityEvent m_onReappear;
 
         private SkeletonAnimation m_animation;
+        private CallBackSounds m_audioSource;
         private Collider2D m_collider;
         private bool m_willDisappear = false;
         private bool m_hasDisappeared = false;
@@ -45,10 +46,12 @@ namespace DChild.Gameplay.Environment
             m_disappearDelayTimer = m_disappearingPlatformData.disappearDelay;
             if (m_animation != null)
             {
+                m_audioSource?.PlaySound(m_disappearingPlatformData.aboutToDisappearAudio, true);
                 m_animation.state.SetAnimation(0, m_disappearingPlatformData.steppedOnAnimation, false);
                 m_animation.state.AddAnimation(0, m_disappearingPlatformData.aboutToDisappearAnimation, true, 0);
             }
         }
+
         private void OnPlatformReaction(object sender, CollisionEventActionArgs eventArgs)
         {
             if (m_willDisappear == false)
@@ -74,6 +77,7 @@ namespace DChild.Gameplay.Environment
 
         void Start()
         {
+            m_audioSource = GetComponent<CallBackSounds>();
             m_disappearDelayTimer = m_disappearingPlatformData.disappearDelay;
             m_disappearDurationTimer = m_disappearingPlatformData.disappearDuration;
             if (m_hasReactivePlatform)
@@ -93,6 +97,7 @@ namespace DChild.Gameplay.Environment
                     if (m_animation != null)
                     {
                         m_animation.state.SetAnimation(0, m_disappearingPlatformData.disappearAnimation, false);
+                        m_audioSource?.PlaySound(m_disappearingPlatformData.disappearAudio, true);
                         if (m_disappearingPlatformData.hiddenAnimation != "")
                         {
                             m_animation.state.AddAnimation(0, m_disappearingPlatformData.hiddenAnimation, true, 0.5f);
@@ -112,6 +117,7 @@ namespace DChild.Gameplay.Environment
                 {
                     if (m_animation != null)
                     {
+                        m_audioSource?.PlaySound(m_disappearingPlatformData.reappearAudio, true);
                         m_animation.state.SetAnimation(0, m_disappearingPlatformData.reappearAnimation, false);
                         m_animation.state.AddAnimation(0, m_disappearingPlatformData.idleAnimation, true, 0.8f);
 

@@ -87,7 +87,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             {
                 case FootstepSounds.FootstepTriggerMode.OnCollision:
                 case FootstepSounds.FootstepTriggerMode.OnTriggerEnter:
-                    DTGUIHelper.ShowRedError("You cannot use Physics3D events because you do not have the Physics3D package installed. This script will not work.");
+                    DTGUIHelper.ShowRedError("You cannot use Physics3D events because you do not have the Physics3D package installed. This script will not work.  Please enable it in the Master Audio Welcome Window if it's already installed.");
                     return;
             }
 #endif
@@ -96,7 +96,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             {
                 case FootstepSounds.FootstepTriggerMode.OnCollision2D:
                 case FootstepSounds.FootstepTriggerMode.OnTriggerEnter2D:
-                    DTGUIHelper.ShowRedError("You cannot use Physics2D events because you do not have the Physics2D package installed. This script will not work.");
+                    DTGUIHelper.ShowRedError("You cannot use Physics2D events because you do not have the Physics2D package installed. This script will not work. Please enable it in the Master Audio Welcome Window if it's already installed.");
                     return;
             }
 #endif

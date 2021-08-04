@@ -126,7 +126,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 _group.groupMasterVolume = newVol;
             }
 
-            DTGUIHelper.ShowLargeBarAlert("The Spatial Blend Rule below will only be used if the Master Audio prefab allows.");
+            DTGUIHelper.ShowColorWarning("The Spatial Blend Rule below will only be used if the Master Audio prefab allows.");
 
             var newSpatialType = (MasterAudio.ItemSpatialBlendType)EditorGUILayout.EnumPopup("Spatial Blend Rule", _group.spatialBlendType);
             if (newSpatialType != _group.spatialBlendType)
@@ -135,6 +135,8 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 _group.spatialBlendType = newSpatialType;
             }
 
+#if DISABLE_3D_SOUND
+#else
             switch (_group.spatialBlendType)
             {
                 case MasterAudio.ItemSpatialBlendType.ForceToCustom:
@@ -148,8 +150,19 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     }
                     break;
             }
+#endif
 
             EditorGUI.indentLevel = 0;
+
+            DTGUIHelper.ShowColorWarning("The Group Play Rule below will only be used if the Master Audio prefab allows.");
+
+            var newPlayType = (MasterAudio.DefaultGroupPlayType)EditorGUILayout.EnumPopup("Group Play Rule", _group.groupPlayType);
+            if (newPlayType != _group.groupPlayType)
+            {
+                AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, _group, "Change Group Play Rule");
+                _group.groupPlayType = newPlayType;
+            }
+
             EditorGUILayout.BeginHorizontal();
             var newTargetGone = (MasterAudioGroup.TargetDespawnedBehavior)EditorGUILayout.EnumPopup("Caller Despawned Mode", _group.targetDespawnedBehavior);
             DTGUIHelper.AddHelpIconNoStyle("http://www.dtdevtools.com/docs/masteraudio/SoundGroups.htm#CallerDespawned");
@@ -196,6 +209,39 @@ namespace DarkTonic.MasterAudio.EditorScripts
             {
                 AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, _group, "change Comments");
                 _group.comments = newComments;
+            }
+
+            var newPausedPlay = EditorGUILayout.Toggle("Ignore Listener Pause", _group.ignoreListenerPause);
+            if (newPausedPlay != _group.ignoreListenerPause)
+            {
+                AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, _group, "toggle Ignore Listener Pause");
+                _group.ignoreListenerPause = newPausedPlay;
+            }
+
+            if (_group.busIndex >= MasterAudio.HardCodedBusOptions)
+            {
+                var newIsInterruptible = EditorGUILayout.Toggle(
+                    new GUIContent("Uninterruptible",
+                        "Making this Group Uninterruptible means it has max Importance and its Variations must play their entire duration. No other Sound Group will interrupt it when requested to play on the same Bus when Max Voices is reached."),
+                    _group.isUninterruptible);
+                if (newIsInterruptible != _group.isUninterruptible)
+                {
+                    AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, _group, "toggle Uninterruptible");
+                    _group.isUninterruptible = newIsInterruptible;
+                }
+
+                if (!_group.isUninterruptible)
+                {
+                    var newImportance = EditorGUILayout.IntSlider(
+                        new GUIContent("Importance",
+                            "In Dialog setting, only Variations of equal or higher importance may interrupt this Variation."),
+                        _group.importance, 0, 10);
+                    if (newImportance != _group.importance)
+                    {
+                        AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, _group, "change Importance");
+                        _group.importance = newImportance;
+                    }
+                }
             }
 
             var newLog = EditorGUILayout.Toggle("Log Sounds", _group.logSound);
@@ -492,7 +538,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     }
                     break;
                 case MasterAudioGroup.VariationMode.Dialog:
-                    DTGUIHelper.ShowColorWarning("In this mode, only one Variation can be played at a time.");
+                    DTGUIHelper.ShowColorWarning("In this mode, only one Variation can be played at a time. Use the 'Importance' field in each Variation to control which Variations can interrupt which.");
 
                     var newUseDialog = EditorGUILayout.Toggle("Dialog Custom Fade?", _group.useDialogFadeOut);
                     if (newUseDialog != _group.useDialogFadeOut)
@@ -1070,8 +1116,18 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
             DTGUIHelper.VerticalSpace(2);
 
-            if (!Application.isPlaying)
+            if (DTGUIHelper.IsPrefabInProjectView(_group.gameObject))
             {
+                DTGUIHelper.ShowLargeBarAlert("You are in Project View and cannot create Variations.");
+            }
+            else if (DTGUIHelper.IsInPrefabMode(_group.gameObject))
+            {
+                DTGUIHelper.ShowLargeBarAlert("You are in Prefab Mode and cannot create Variations.");
+            }
+            else if (Application.isPlaying)
+            {
+                DTGUIHelper.ShowLargeBarAlert("You are running and cannot create Variations.");
+            } else { 
                 // new variation settings
                 EditorGUILayout.BeginVertical();
                 var anEvent = Event.current;
@@ -1297,6 +1353,14 @@ namespace DarkTonic.MasterAudio.EditorScripts
                         break;
                     }
 
+                    var newAlias = EditorGUILayout.TextField("Clip Id (optional)", variation.clipAlias);
+
+                    if (newAlias != variation.clipAlias)
+                    {
+                        AudioUndoHelper.RecordObjectPropertyForUndo(ref varIsDirty, variation, "change Clip Id");
+                        variation.clipAlias = newAlias;
+                    }
+
                     var oldLocation = variation.audLocation;
                     var newLocation = (MasterAudio.AudioLocation)EditorGUILayout.EnumPopup("Audio Origin", variation.audLocation);
                     if (newLocation != variation.audLocation)
@@ -1403,6 +1467,42 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     }
 
                     EditorGUI.indentLevel = 0;
+
+                    switch (variation.ParentGroup.curVariationMode)
+                    {
+                        case MasterAudioGroup.VariationMode.Dialog:
+                            var newIsInterruptible = EditorGUILayout.Toggle(new GUIContent("Uninterruptible", "In Dialog setting, making this Variation Uninterruptible means it has max Importance and must play its entire duration. No other clip will interrupt it."), variation.isUninterruptible);
+                            if (newIsInterruptible != variation.isUninterruptible)
+                            {
+                                if (_group.copySettingsExpanded && variation.isChecked)
+                                {
+                                    CopyIsUninterruptible(newIsInterruptible);
+                                }
+                                else
+                                {
+                                    AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, variation, "toggle Uninterruptible");
+                                    variation.isUninterruptible = newIsInterruptible;
+                                }
+                            }
+
+                            if (!variation.isUninterruptible)
+                            {
+                                var newImportance = EditorGUILayout.IntSlider(new GUIContent("Importance", "In Dialog setting, only Variations of equal or higher importance may interrupt this Variation."), variation.importance, 0, 10);
+                                if (newImportance != variation.importance)
+                                {
+                                    if (_group.copySettingsExpanded && variation.isChecked)
+                                    {
+                                        CopyImportance(newImportance);
+                                    }
+                                    else
+                                    {
+                                        AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, variation, "change Importance");
+                                        variation.importance = newImportance;
+                                    }
+                                }
+                            }
+                            break;
+                    }
 
                     var newProbability = EditorGUILayout.IntSlider("Probability to Play (%)", variation.probabilityToPlay, 0, 100);
                     if (newProbability != variation.probabilityToPlay)
@@ -2090,7 +2190,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
         {
             var useLocalization = false;
 
-            var clipName = clip.name;
+            var clipName = clip.CachedName();
 
             if (group.transform.GetChildTransform(clipName) != null)
             {
@@ -2114,7 +2214,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     var resourceFileName = DTGUIHelper.GetResourcePath(clip, ref useLocalization);
                     if (string.IsNullOrEmpty(resourceFileName))
                     {
-                        resourceFileName = clip.name;
+                        resourceFileName = clip.CachedName();
                     }
 
                     variation.resourceFileName = resourceFileName;
@@ -2778,6 +2878,46 @@ namespace DarkTonic.MasterAudio.EditorScripts
             }
 
             Debug.LogWarning(changed + " Fade Out Time(s) changed.");
+        }
+
+        private void CopyImportance(int importance)
+        {
+            var changed = 0;
+
+            var changedVars = GetSelectedVariations();
+
+            if (changedVars.Count > 0)
+            {
+                AudioUndoHelper.RecordObjectsForUndo(changedVars.ToArray(), "change Importance");
+            }
+
+            foreach (var aVar in changedVars)
+            {
+                aVar.importance = importance;
+                changed++;
+            }
+
+            Debug.LogWarning(changed + " Importance(s) changed.");
+        }
+
+        private void CopyIsUninterruptible(bool isUninterruptible)
+        {
+            var changed = 0;
+
+            var changedVars = GetSelectedVariations();
+
+            if (changedVars.Count > 0)
+            {
+                AudioUndoHelper.RecordObjectsForUndo(changedVars.ToArray(), "change Uninterruptible");
+            }
+
+            foreach (var aVar in changedVars)
+            {
+                aVar.isUninterruptible = isUninterruptible;
+                changed++;
+            }
+
+            Debug.LogWarning(changed + " Uninterruptible(s) changed.");
         }
     }
 }
