@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 3987835803512164279}
   - component: {fileID: 171300560346769135}
   - component: {fileID: 3714020182786226332}
+  - component: {fileID: 5105753037193158722}
   m_Layer: 0
-  m_Name: Portal Timeline Model
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,7 +115,7 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: 
+  _animationName: Idle
   loop: 0
   timeScale: 1
   m_alwaysUpdateMesh: 1
@@ -132,6 +133,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonColor: {r: 1, g: 1, b: 1, a: 1}
   slotSettings: []
+--- !u!114 &5105753037193158722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3441578469173381781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09352e9564b46104896226477f31b5b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animationTracks: []
+  m_skeletonAnimation: {fileID: 171300560346769135}
 --- !u!1001 &2886428423552254258
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -139,10 +154,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 660808793032955349, guid: 47f1417b5b89a914c88056014c3f57e0,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4918332159271060789, guid: 47f1417b5b89a914c88056014c3f57e0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4986853526077039148, guid: 47f1417b5b89a914c88056014c3f57e0,
+        type: 3}
+      propertyPath: m_closeAnimation
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 4986853526077039148, guid: 47f1417b5b89a914c88056014c3f57e0,
+        type: 3}
+      propertyPath: m_closeIdleAnimation
+      value: Idle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4986853526077039148, guid: 47f1417b5b89a914c88056014c3f57e0,
+        type: 3}
+      propertyPath: m_openIdleAnimation
+      value: OpenIdle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4986853526077039148, guid: 47f1417b5b89a914c88056014c3f57e0,
+        type: 3}
+      propertyPath: m_openAnimation
+      value: Open
+      objectReference: {fileID: 0}
+    - target: {fileID: 4986853526077039148, guid: 47f1417b5b89a914c88056014c3f57e0,
+        type: 3}
+      propertyPath: m_fromLocation
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5091695239719067811, guid: 47f1417b5b89a914c88056014c3f57e0,
         type: 3}
       propertyPath: m_Name
       value: ShadowGate (LAB)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5091695239719067811, guid: 47f1417b5b89a914c88056014c3f57e0,
+        type: 3}
+      propertyPath: m_TagString
+      value: Sensor
       objectReference: {fileID: 0}
     - target: {fileID: 7103704478683227620, guid: 47f1417b5b89a914c88056014c3f57e0,
         type: 3}
