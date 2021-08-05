@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Systems
 
     public class ShadowEnvironmentHandle : MonoBehaviour
     {
-        [SerializeField,InfoBox("These colliders will be ignored by the player when he is in SHADOW mode"),TabGroup("ShadowColliders")]
+        [SerializeField, InfoBox("These colliders will be ignored by the player when he is in SHADOW mode"), TabGroup("ShadowColliders")]
         private Collider2D[] m_shadowColliders;
         [SerializeField, InfoBox("These colliders will be ignored by the player when he is NOT in SHADOW mode"), TabGroup("NonShadowColliders")]
         private Collider2D[] m_reverseShadowColliders;
