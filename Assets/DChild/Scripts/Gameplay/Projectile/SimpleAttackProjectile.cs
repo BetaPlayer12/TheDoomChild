@@ -1,4 +1,6 @@
-﻿namespace DChild.Gameplay.Projectiles
+﻿using DChild.Gameplay.Combat;
+
+namespace DChild.Gameplay.Projectiles
 {
     public class SimpleAttackProjectile : AttackProjectile
     {
@@ -18,9 +20,13 @@
         protected override void Collide()
         {
             var explosion = m_spawnHandle.InstantiateFX(projectileData.impactFX, transform.position);
+            var parentAttacker = GetComponent<Attacker>();
             explosion.transform.parent = null;
+            parentAttacker.PassParentAttacker(parentAttacker);
             UnloadProjectile();
             CallImpactedEvent();
         }
+
+
     }
 }

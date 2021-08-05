@@ -130,11 +130,13 @@ namespace DChild.Gameplay.Combat
         public void SetParentAttacker(IAttacker damageDealer)
         {
             parentAttacker = damageDealer;
+            Debug.Log(parentAttacker); 
         }
 
         public void SetRootParentAttacker(IAttacker damageDealer)
         {
             rootParentAttacker = damageDealer;
+            Debug.Log(rootParentAttacker);
         }
 
         private void ApplyDamageModification()
@@ -187,6 +189,22 @@ namespace DChild.Gameplay.Combat
         public void InitializeField(Transform centerMass)
         {
             m_centerMass = centerMass;
+        }
+
+        public void PassParentAttacker(IAttacker damageDealer)
+        {
+           if(damageDealer.rootParentAttacker == null)
+            {
+                SetParentAttacker(damageDealer);
+            }
+
+           else
+            {
+
+                SetParentAttacker(damageDealer);
+                SetRootParentAttacker(damageDealer.rootParentAttacker);
+            }
+           
         }
 
 
