@@ -123,6 +123,17 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 DTGUIHelper.ShowColorWarning(MasterAudio.PreviewText);
             }
 
+            if (!Application.isPlaying)
+            {
+                var newAlias = EditorGUILayout.TextField("Clip Id (optional)", _variation.clipAlias);
+
+                if (newAlias != _variation.clipAlias)
+                {
+                    AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, _variation, "change Clip Id");
+                    _variation.clipAlias = newAlias;
+                }
+            }
+
             var oldLocation = _variation.audLocation;
             EditorGUILayout.BeginHorizontal();
             var newLocation = (MasterAudio.AudioLocation)EditorGUILayout.EnumPopup("Audio Origin", _variation.audLocation);
@@ -207,7 +218,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                                     newFilename = DTGUIHelper.GetResourcePath(aClip, ref useLocalization);
                                     if (string.IsNullOrEmpty(newFilename))
                                     {
-                                        newFilename = aClip.name;
+                                        newFilename = aClip.CachedName();
                                     }
 
                                     _variation.resourceFileName = newFilename;
@@ -534,18 +545,16 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     _variation.fadeInTime = newFadeIn;
                 }
 
+                var newFadeOut = EditorGUILayout.Slider("Fade Out time (sec)", _variation.fadeOutTime, 0f, 10f);
+                if (newFadeOut != _variation.fadeOutTime)
+                {
+                    AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, _variation, "change Fade Out Time");
+                    _variation.fadeOutTime = newFadeOut;
+                }
+
                 if (_variation.VarAudio.loop)
                 {
-                    DTGUIHelper.ShowColorWarning("Looped clips cannot have a custom fade out.");
-                }
-                else
-                {
-                    var newFadeOut = EditorGUILayout.Slider("Fade Out time (sec)", _variation.fadeOutTime, 0f, 10f);
-                    if (newFadeOut != _variation.fadeOutTime)
-                    {
-                        AudioUndoHelper.RecordObjectPropertyForUndo(ref isDirty, _variation, "change Fade Out Time");
-                        _variation.fadeOutTime = newFadeOut;
-                    }
+                    DTGUIHelper.ShowColorWarning("Looped clips will not automatically use the custom fade out. You will need to call FadeOutNowAndStop() on the Variation to use the fade.");
                 }
             }
 

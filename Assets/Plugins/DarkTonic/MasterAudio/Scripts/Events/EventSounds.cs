@@ -78,7 +78,9 @@ namespace DarkTonic.MasterAudio {
             UnityCancel,
             UnityToggle,
             OnTriggerStay,
-            OnTriggerStay2D
+            OnTriggerStay2D,
+            CodeTriggeredEvent1,
+            CodeTriggeredEvent2
         }
 
         public enum GlidePitchType {
@@ -162,6 +164,8 @@ namespace DarkTonic.MasterAudio {
         public AudioEventGroup nguiMouseUpSound;
         public AudioEventGroup nguiMouseEnterSound;
         public AudioEventGroup nguiMouseExitSound;
+        public AudioEventGroup codeTriggeredEvent1Sound;
+        public AudioEventGroup codeTriggeredEvent2Sound;
 
         public AudioEventGroup unitySliderChangedSound;
         public AudioEventGroup unityButtonClickedSound;
@@ -215,6 +219,9 @@ namespace DarkTonic.MasterAudio {
         public bool useNguiMouseUpSound = false;
         public bool useNguiMouseEnterSound = false;
         public bool useNguiMouseExitSound = false;
+
+        public bool useCodeTriggeredEvent1Sound = false;
+        public bool useCodeTriggeredEvent2Sound = false;
 
         public bool useUnitySliderChangedSound = false;
         public bool useUnityButtonClickedSound = false;
@@ -986,9 +993,27 @@ namespace DarkTonic.MasterAudio {
             }
         }
 
-#endregion
+        #endregion
 
-#region public methods
+        #region Code-Triggered Events 
+        public void ActivateCodeTriggeredEvent1()
+        {
+            if (useCodeTriggeredEvent1Sound)
+            {
+                PlaySounds(codeTriggeredEvent1Sound, EventType.CodeTriggeredEvent1);
+            }
+        }
+
+        public void ActivateCodeTriggeredEvent2()
+        {
+            if (useCodeTriggeredEvent2Sound)
+            {
+                PlaySounds(codeTriggeredEvent2Sound, EventType.CodeTriggeredEvent2);
+            }
+        }
+        #endregion
+
+        #region public methods
         /*! \cond PRIVATE */
         public void CalculateRadius(AudioEvent anEvent) {
             var aud = GetNamedOrFirstAudioSource(anEvent);
@@ -1068,9 +1093,16 @@ namespace DarkTonic.MasterAudio {
 
         /*! \cond PRIVATE */
         public AudioEventGroup GetMechanimAudioEventGroup(string stateName) {
-            return _validMechanimStateChangedSounds.Find(delegate (AudioEventGroup grp) {
-                return grp.mechanimStateName == stateName;
-            });
+            for (var i = 0; i < _validMechanimStateChangedSounds.Count; i++)
+            {
+                var aSound = _validMechanimStateChangedSounds[i];
+                if (aSound.mechanimStateName == stateName)
+                {
+                    return aSound;
+                }
+            }
+
+            return null;
         }
         /*! \endcond */
 
@@ -1667,6 +1699,12 @@ namespace DarkTonic.MasterAudio {
                     break;
                 case MasterAudio.EventSoundFunctionType.GlobalControl:
                     switch (aEvent.currentGlobalCommand) {
+                        case MasterAudio.GlobalCommand.PauseAudioListener:
+                            AudioListener.pause = true;
+                            break;
+                        case MasterAudio.GlobalCommand.UnpauseAudioListener:
+                            AudioListener.pause = false;
+                            break;
                         case MasterAudio.GlobalCommand.SetMasterMixerVolume:
                             var targetVol = useSliderValue ? grp.sliderValue : aEvent.volume;
                             MasterAudio.MasterVolumeLevel = targetVol;
@@ -1705,7 +1743,10 @@ namespace DarkTonic.MasterAudio {
                     switch (aEvent.currentMixerCommand) {
                         case MasterAudio.UnityMixerCommand.TransitionToSnapshot:
                             var snapshot = aEvent.snapshotToTransitionTo;
-                            if (snapshot != null) {
+                            if (snapshot != null)
+                            {
+                                // if we add more mixer functionality, move this next line somewhere DRY.
+                                snapshot.audioMixer.updateMode = MasterAudio.Instance.mixerUpdateMode;
                                 snapshot.audioMixer.TransitionToSnapshots(
                                     new[] { snapshot },
                                     new[] { 1f },
@@ -1736,7 +1777,7 @@ namespace DarkTonic.MasterAudio {
                             }
 
                             if (snapshots.Count > 0) {
-                                Debug.Log("trans");
+                                theMixer.updateMode = MasterAudio.Instance.mixerUpdateMode;
                                 // ReSharper disable once PossibleNullReferenceException
                                 theMixer.TransitionToSnapshots(snapshots.ToArray(), weights.ToArray(), aEvent.snapshotTransitionTime);
                             }
@@ -1967,6 +2008,14 @@ namespace DarkTonic.MasterAudio {
             }
             if (useUnityCancelSound) {
                 LogIfCustomEventMissing(unityCancelSound);
+            }
+            if (useCodeTriggeredEvent1Sound)
+            {
+                LogIfCustomEventMissing(codeTriggeredEvent1Sound);
+            }
+            if (useCodeTriggeredEvent2Sound)
+            {
+                LogIfCustomEventMissing(codeTriggeredEvent2Sound);
             }
 
             // ReSharper disable once ForCanBeConvertedToForeach

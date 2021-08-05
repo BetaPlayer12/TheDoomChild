@@ -19,6 +19,16 @@ namespace DarkTonic.MasterAudio.EditorScripts
         // ReSharper disable once UnusedMember.Local
         static void Init()
         {
+            var window = GetWindow<MasterAudioManager>(false, "Manager");
+            var height = 558;
+
+#if UNITY_2018_2_OR_NEWER
+            height += -2;
+#endif
+
+            window.minSize = new Vector2(560, height);
+            window.maxSize = new Vector2(560, height);
+
             GetWindow(typeof(MasterAudioManager));
         }
 
