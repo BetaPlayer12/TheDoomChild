@@ -4511,6 +4511,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 79938112}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &79938114 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4455356540156790644, guid: a6c35c0642bc8d846a7246eb51287aa8,
+    type: 3}
+  m_PrefabInstance: {fileID: 79938112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fa2fffdef2f04543ac65d5f89e49617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &79938115 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8199909153659203725, guid: a6c35c0642bc8d846a7246eb51287aa8,
+    type: 3}
+  m_PrefabInstance: {fileID: 79938112}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &80661121
 GameObject:
   m_ObjectHideFlags: 0
@@ -11065,6 +11083,7 @@ GameObject:
   m_Component:
   - component: {fileID: 184274011}
   - component: {fileID: 184274010}
+  - component: {fileID: 184274012}
   m_Layer: 0
   m_Name: ZoneDataHandle
   m_TagString: Untagged
@@ -11252,6 +11271,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &184274012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184274009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e3a1aec2da97ab4e80673a5a6d06c0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_shadowColliders: []
+  m_reverseShadowColliders: []
+  m_eventShadowColliders:
+  - {fileID: 79938115}
+  m_OnEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 79938114}
+        m_MethodName: OpenGate
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  m_OffEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 79938114}
+        m_MethodName: CloseGate
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &185786530
 GameObject:
   m_ObjectHideFlags: 0
