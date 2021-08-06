@@ -16,11 +16,7 @@ namespace DarkTonic.MasterAudio.Examples
 
 			if (GUI.Button(new Rect(100, 150, 150, 100), "Load Game Scene"))
 			{
-#if UNITY_5_0 || UNITY_5_1 || UNITY_5_2
-				Application.LoadLevel(1);
-#else
-            UnityEngine.SceneManagement.SceneManager.LoadScene(1);
-#endif
+	            UnityEngine.SceneManagement.SceneManager.LoadScene(1);
 			}
 		}
 	}

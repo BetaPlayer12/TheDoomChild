@@ -430,6 +430,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_flinchHandle.m_autoFlinch = false;
                 m_animation.SetEmptyAnimation(0, 0);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 //m_stateHandle.ApplyQueuedState();
                 StartCoroutine(TeleportRoutine());
             }

@@ -30,7 +30,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
             var eventNames = new List<string>();
 
-            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+            var labelText = label.text;
             if (ma != null)
             {
                 eventNames.AddRange(ma.CustomEventNames);
@@ -38,6 +38,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             else
             {
                 eventNames.AddRange(MasterAudio.CustomEventHardCodedNames);
+                labelText += " (MA not in Scene)";
             }
 
             var creators = Object.FindObjectsOfType(typeof(DynamicSoundGroupCreator)) as DynamicSoundGroupCreator[];
@@ -60,7 +61,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             {
                 index = -1;
                 typeIn = false;
-                property.stringValue = EditorGUI.TextField(position, label.text, property.stringValue);
+                property.stringValue = EditorGUI.TextField(position, labelText, property.stringValue);
                 return;
             }
 
@@ -73,7 +74,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 position.height -= 16;
             }
 
-            index = EditorGUI.Popup(position, label.text, index, eventNames.ToArray());
+            index = EditorGUI.Popup(position, labelText, index, eventNames.ToArray());
             groupName = eventNames[index];
 
             switch (groupName)
@@ -83,7 +84,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     position.yMin += 16;
                     position.height += 16;
                     EditorGUI.BeginChangeCheck();
-                    property.stringValue = EditorGUI.TextField(position, label.text, property.stringValue);
+                    property.stringValue = EditorGUI.TextField(position, labelText, property.stringValue);
                     EditorGUI.EndChangeCheck();
                     break;
                 default:

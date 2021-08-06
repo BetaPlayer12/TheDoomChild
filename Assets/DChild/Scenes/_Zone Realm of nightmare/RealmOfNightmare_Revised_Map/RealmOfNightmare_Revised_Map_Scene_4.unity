@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -6497,6 +6497,7 @@ GameObject:
   m_Component:
   - component: {fileID: 539208564}
   - component: {fileID: 539208563}
+  - component: {fileID: 539208565}
   m_Layer: 0
   m_Name: ZoneDataHandle
   m_TagString: Untagged
@@ -6839,6 +6840,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &539208565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539208562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e3a1aec2da97ab4e80673a5a6d06c0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_shadowColliders: []
+  m_reverseShadowColliders: []
+  m_eventShadowColliders:
+  - {fileID: 2008095254}
+  m_OnEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2008095253}
+        m_MethodName: OpenGate
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  m_OffEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2008095253}
+        m_MethodName: CloseGate
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1001 &540927566
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19131,6 +19176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 14.491425
+      objectReference: {fileID: 0}
+    - target: {fileID: 5111083932243012824, guid: 7e9ace828767c6d4ab3ab03c8862f417,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.9395905
       objectReference: {fileID: 0}
     - target: {fileID: 5685036448263305127, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
@@ -31632,6 +31682,24 @@ PrefabInstance:
 --- !u!4 &2008095252 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4841945640334509001, guid: 34ccbca419c3c144e8daee611046e23a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2008095251}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2008095253 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7247341480381629441, guid: 34ccbca419c3c144e8daee611046e23a,
+    type: 3}
+  m_PrefabInstance: {fileID: 2008095251}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fa2fffdef2f04543ac65d5f89e49617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &2008095254 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 2921935011706778616, guid: 34ccbca419c3c144e8daee611046e23a,
     type: 3}
   m_PrefabInstance: {fileID: 2008095251}
   m_PrefabAsset: {fileID: 0}

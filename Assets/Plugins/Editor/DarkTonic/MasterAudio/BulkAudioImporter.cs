@@ -38,8 +38,10 @@ namespace DarkTonic.MasterAudio.EditorScripts
             var window = GetWindow(typeof(BulkAudioImporter));
 
 #if UNITY_2019_3_OR_NEWER
+        window.minSize = new Vector2(949, 610);
         window.maxSize = new Vector2(949, 610);
 #else
+            window.minSize= new Vector2(954, 610);
             window.maxSize = new Vector2(954, 610);
 #endif
             window.minSize = window.maxSize;

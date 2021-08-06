@@ -25,6 +25,10 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
 
     public bool ignoresBlock => throw new System.NotImplementedException();
 
+    public IAttacker parentAttacker => throw new System.NotImplementedException();
+
+    public IAttacker rootParentAttacker => throw new System.NotImplementedException();
+
     public event EventAction<CombatConclusionEventArgs> TargetDamaged;
 
     public void SpawnAt(Vector2 position, HorizontalDirection facing)
@@ -74,6 +78,16 @@ public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
             //    info.Release();
             //}
         }
+    }
+
+    public void SetParentAttacker(IAttacker damageDealer)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void SetRootParentAttacker(IAttacker damageDealer)
+    {
+        throw new System.NotImplementedException();
     }
 }
 

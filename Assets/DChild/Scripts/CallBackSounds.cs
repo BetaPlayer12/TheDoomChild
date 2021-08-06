@@ -13,7 +13,7 @@ namespace DChild
         public void Execute(CallBackSoundsData data)
         {
             string currentSoundGroup = null;
-            if(data.stopCount > 0)
+            if (data.stopCount > 0)
             {
                 for (int i = 0; i < data.stopCount; i++)
                 {
@@ -35,8 +35,13 @@ namespace DChild
             }
         }
 
-        public void PlaySound(string soundGroup)
+        public void PlaySound(string soundGroup, bool shouldStopAllSoundsBeforePlayingThis = false)
         {
+            if (shouldStopAllSoundsBeforePlayingThis)
+            {
+                StopAllSounds();
+            }
+
             switch (m_spawnLocationMode)
             {
                 case MasterAudio.SoundSpawnLocationMode.AttachToCaller:
@@ -49,6 +54,11 @@ namespace DChild
                     MasterAudio.PlaySoundAndForget(soundGroup);
                     break;
             }
+        }
+
+        public void StopAllSounds()
+        {
+            MasterAudio.StopAllSoundsOfTransform(transform);
         }
 
         public void StopSound(string soundGroup)

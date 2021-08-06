@@ -235,7 +235,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            m_animation.EnableRootMotion(true, false);
+            m_animation.EnableRootMotion(true, true);
             StopAllCoroutines();
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
             base.OnDestroyed(sender, eventArgs);
@@ -251,7 +251,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopAllCoroutines();
                 m_animation.SetAnimation(0, m_info.idleAnimation, false);
                 StartCoroutine(FlinchRoutine());
-                m_stateHandle.Wait(State.Cooldown);
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
             }
         }
 

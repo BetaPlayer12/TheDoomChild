@@ -12,14 +12,21 @@ namespace DarkTonic.MasterAudio.EditorScripts
         public int index;
         // ReSharper disable once InconsistentNaming
         public bool typeIn;
+        public bool hasError;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (!typeIn)
+            if (typeIn)
             {
-                return base.GetPropertyHeight(property, label);
+                return base.GetPropertyHeight(property, label) + 16;
             }
-            return base.GetPropertyHeight(property, label) + 16;
+
+            if (hasError)
+            {
+                return base.GetPropertyHeight(property, label) + 48;
+            }
+
+            return base.GetPropertyHeight(property, label);
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -31,6 +38,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             var groupNames = new List<string>();
 
             // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+            var labelText = label.text;
             if (ma != null)
             {
                 groupNames.AddRange(ma.GroupNames);
@@ -38,6 +46,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             else
             {
                 groupNames.AddRange(MasterAudio.SoundGroupHardCodedNames);
+                labelText += " (MA not in Scene)";
             }
 
             var creators = Object.FindObjectsOfType(typeof(DynamicSoundGroupCreator)) as DynamicSoundGroupCreator[];
@@ -65,7 +74,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             {
                 index = -1;
                 typeIn = false;
-                property.stringValue = EditorGUI.TextField(position, label.text, property.stringValue);
+                property.stringValue = EditorGUI.TextField(position, labelText, property.stringValue);
                 return;
             }
 
@@ -79,7 +88,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             }
 
             position.width -= 82;
-            index = EditorGUI.Popup(position, label.text, index, groupNames.ToArray());
+            index = EditorGUI.Popup(position, labelText, index, groupNames.ToArray());
             groupName = groupNames[index];
 
             switch (groupName)
@@ -89,10 +98,17 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     position.yMin += 16;
                     position.height += 16;
                     EditorGUI.BeginChangeCheck();
-                    property.stringValue = EditorGUI.TextField(position, label.text, property.stringValue);
+                    property.stringValue = EditorGUI.TextField(position, labelText, property.stringValue);
                     EditorGUI.EndChangeCheck();
                     break;
+                case MasterAudio.VideoPlayerSoundGroupName:
+                    property.stringValue = groupName;
+                    hasError = true;
+                    EditorGUI.HelpBox(new Rect(position.x, position.y + 20, position.xMax - position.x, 40), 
+                        MasterAudio.VideoPlayersSoundGroupSelectedError, MessageType.Error);
+                    break;
                 default:
+                    hasError = false;
                     typeIn = false;
                     property.stringValue = groupName;
                     break;

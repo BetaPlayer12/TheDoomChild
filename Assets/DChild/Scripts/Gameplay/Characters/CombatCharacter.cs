@@ -34,6 +34,15 @@ namespace DChild.Gameplay.Characters
         public virtual float critDamageModifier => 1f;
         public abstract bool isAlive { get; }
         public abstract IAttackResistance attackResistance { get; }
+
+        public IDamageDealer parentAttacker => throw new System.NotImplementedException();
+
+        public IDamageDealer rootParentAttacker => throw new System.NotImplementedException();
+
+        IAttacker IAttacker.parentAttacker => throw new System.NotImplementedException();
+
+        IAttacker IAttacker.rootParentAttacker => throw new System.NotImplementedException();
+
         public abstract void Heal(int health);
         public abstract void TakeDamage(int totalDamage, AttackType type);
         public abstract void SetFacing(HorizontalDirection facing);
@@ -94,6 +103,16 @@ namespace DChild.Gameplay.Characters
         }
 
         public Hitbox[] GetHitboxes()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetParentAttacker(IAttacker damageDealer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetRootParentAttacker(IAttacker damageDealer)
         {
             throw new System.NotImplementedException();
         }

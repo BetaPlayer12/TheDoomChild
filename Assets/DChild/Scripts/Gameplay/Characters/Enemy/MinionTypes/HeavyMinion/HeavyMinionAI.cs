@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/HeavyMinion")]
-    public class HeavyMinionAI : CombatAIBrain<HeavyMinionAI.Info>, IResetableAIBrain, IBattleZoneAIBrain, IKnockbackableAI
+    public class HeavyMinionAI : CombatAIBrain<HeavyMinionAI.Info>, IResetableAIBrain, IBattleZoneAIBrain/*, IKnockbackableAI*/
     {
         [System.Serializable]
         public class Info : BaseInfo

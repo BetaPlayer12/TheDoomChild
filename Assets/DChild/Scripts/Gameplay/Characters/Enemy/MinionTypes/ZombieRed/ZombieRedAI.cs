@@ -258,7 +258,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopAllCoroutines();
                 m_currentCD += m_currentCD + 0.5f;
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.Wait(State.Cooldown);
+                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
             }
         }
 

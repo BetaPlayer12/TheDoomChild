@@ -22,13 +22,13 @@ namespace DarkTonic.MasterAudio.Examples
             useGUILayout = false;
             _trans = transform;
 #if !PHY3D_ENABLED
-            Debug.LogError("MA_PlayerControl and this example Scene will not work properly without Physics3D package installed.");
+            Debug.LogError("MA_PlayerControl and this example Scene will not work properly without Physics3D package installed. Please enable it in the Master Audio Welcome Window if it's already installed.");
 #endif
         }
 
 #if PHY3D_ENABLED
-    // ReSharper disable once UnusedMember.Local
-    void OnCollisionEnter(Collision collision) {
+        // ReSharper disable once UnusedMember.Local
+        void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.name.StartsWith("Enemy(")) {
             gameObject.SetActive(false);
         }
