@@ -43,7 +43,7 @@ namespace DChild.Gameplay.Combat
         [SerializeField, ShowIf("m_damageUniqueHitboxesOnly")]
         private CollisionRegistrator m_collisionRegistrator;
         [SerializeField]
-        private DamageFXHandle m_damageFXHandle;
+        private DamageReactionHandle m_damageFXHandle;
         [SerializeField]
         private Collider2DInfo[] m_ignoreColliderList;
 
@@ -97,7 +97,7 @@ namespace DChild.Gameplay.Combat
                 }
                 var hitDirection = GameplayUtility.GetHorizontalDirection(m_triggeredCollider.bounds.center, hitPoint);
 
-                m_damageFXHandle?.SpawnFX(hitPoint, hitDirection);
+                m_damageFXHandle?.ReactToDamageAt(hitPoint, hitDirection);
                 onHitFX?.SpawnFX(hitPoint, hitDirection);
             }
         }
