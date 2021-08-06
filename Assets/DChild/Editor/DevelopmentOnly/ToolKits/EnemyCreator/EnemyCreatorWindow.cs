@@ -119,7 +119,7 @@ namespace DChildEditor.Toolkit
             GameObject behaviour = new GameObject("Behaviour");
             behaviour.transform.SetParent(instance.transform);
             m_behaviourField.Apply(instance, behaviour);
-            character.InitializeField(instance.transform, isolatedObject, instance.GetComponent<IsolatedPhysics2D>(), modelInstance.GetComponent<CharacterColliders>());
+            character.InitializeField(instance.transform, isolatedObject, instance.GetComponent<IsolatedCharacterPhysics2D>(), modelInstance.GetComponent<CharacterColliders>());
         }
     }
 }

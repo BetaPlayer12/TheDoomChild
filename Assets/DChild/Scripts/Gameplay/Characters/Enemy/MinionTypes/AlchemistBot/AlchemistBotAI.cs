@@ -374,7 +374,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DeathRoutine()
         {
             m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
-            m_animation.EnableRootMotion(true, false);
+            m_animation.EnableRootMotion(false, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
             yield return new WaitForSeconds(1.6f);
             //m_animation.DisableRootMotion();
@@ -463,6 +463,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_agent.Stop();
             m_hitbox.Disable();
             m_attackBB.enabled = false;
@@ -472,6 +473,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodylightningBB.enabled = false;
             m_bodylightningFX.Stop();
             m_glowFX.Stop();
+            if (m_bodylightningCoroutine != null)
+            {
+                StopCoroutine(m_bodylightningCoroutine);
+                m_bodylightningCoroutine = null;
+            }
             StartCoroutine(DeathRoutine());
             Debug.Log("ALCHEMIST BOT DEATHHHH");
         }
