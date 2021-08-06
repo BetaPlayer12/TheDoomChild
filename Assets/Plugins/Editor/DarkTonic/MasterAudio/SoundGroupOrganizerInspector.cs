@@ -37,12 +37,17 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
             _groups = ScanForGroups();
 
-            var isInProjectView = DTGUIHelper.IsPrefabInProjectView(_organizer);
+            var isInProjectView = DTGUIHelper.IsPrefabInProjectView(_organizer.gameObject);
 
             if (isInProjectView)
             {
-                DTGUIHelper.ShowLargeBarAlert("You are in Project View or have not made your own prefab and cannot use this Game Object.");
-                DTGUIHelper.ShowRedError("Create this prefab from Master Audio Manager window. Do not drag into Scene! Then make your own prefab.");
+                DTGUIHelper.ShowLargeBarAlert("You are in Project View and cannot edit this Game Object from here.");
+                return;
+            }
+
+            if (DTGUIHelper.IsLinkedToDarkTonicPrefabFolder(_organizer))
+            {
+                DTGUIHelper.MakePrefabMessage();
                 return;
             }
 
@@ -636,7 +641,14 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 if (isInProjectView)
                 {
                     DTGUIHelper.ShowLargeBarAlert("You are in Project View and cannot create or delete Groups.");
-                    DTGUIHelper.ShowRedError("Create this prefab With Master Audio Manager. Do not drag into Scene!");
+                }
+                else if (DTGUIHelper.IsInPrefabMode(_organizer.gameObject))
+                {
+                    DTGUIHelper.ShowLargeBarAlert("You are in Prefab Mode and cannot create Groups.");
+                }
+                else if (Application.isPlaying)
+                {
+                    DTGUIHelper.ShowLargeBarAlert("You are running and cannot create Groups.");
                 }
                 else
                 {
@@ -801,7 +813,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
                     GUI.contentColor = Color.white;
 
-                    var buttonPressed = DTGUIHelper.AddDynamicGroupButtons(_organizer);
+                    var buttonPressed = DTGUIHelper.AddDynamicGroupButtons(_organizer.gameObject);
                     EditorGUILayout.EndHorizontal();
 
                     switch (buttonPressed)
@@ -1629,7 +1641,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 return null;
             }
 
-            var groupName = UtilStrings.TrimSpace(aClip.name);
+            var groupName = UtilStrings.TrimSpace(aClip.CachedName());
 
             var matchingGroup = _groups.Find(delegate (DynamicSoundGroup obj)
             {
@@ -1660,7 +1672,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 return;
             }
 
-            var clipName = UtilStrings.TrimSpace(aClip.name);
+            var clipName = UtilStrings.TrimSpace(aClip.CachedName());
 
             var myGroup = aGroup.GetComponent<DynamicSoundGroup>();
 
@@ -1692,7 +1704,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     var resourceFileName = DTGUIHelper.GetResourcePath(aClip, ref useLocalization);
                     if (string.IsNullOrEmpty(resourceFileName))
                     {
-                        resourceFileName = aClip.name;
+                        resourceFileName = aClip.CachedName();
                     }
 
                     dynamicVar.resourceFileName = resourceFileName;
@@ -2009,6 +2021,11 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 variation.isExpanded = aVariation.isExpanded;
 
                 variation.probabilityToPlay = aVariation.probabilityToPlay;
+
+                variation.isUninterruptible = aVariation.isUninterruptible;
+                variation.importance = aVariation.importance;
+
+                variation.clipAlias = aVariation.clipAlias;
                 variation.useRandomPitch = aVariation.useRandomPitch;
                 variation.randomPitchMode = aVariation.randomPitchMode;
                 variation.randomPitchMin = aVariation.randomPitchMin;
@@ -2081,6 +2098,9 @@ namespace DarkTonic.MasterAudio.EditorScripts
             groupScript.useDialogFadeOut = aGroup.useDialogFadeOut;
             groupScript.dialogFadeOutTime = aGroup.dialogFadeOutTime;
 
+            groupScript.isUninterruptible = aGroup.isUninterruptible;
+            groupScript.importance = aGroup.importance;
+
             groupScript.chainLoopDelayMin = aGroup.chainLoopDelayMin;
             groupScript.chainLoopDelayMax = aGroup.chainLoopDelayMax;
             groupScript.chainLoopMode = aGroup.chainLoopMode;
@@ -2095,6 +2115,8 @@ namespace DarkTonic.MasterAudio.EditorScripts
             groupScript.spatialBlendType = aGroup.spatialBlendType;
             groupScript.spatialBlend = aGroup.spatialBlend;
 
+            groupScript.groupPlayType = aGroup.groupPlayType;
+
             groupScript.targetDespawnedBehavior = aGroup.targetDespawnedBehavior;
             groupScript.despawnFadeTime = aGroup.despawnFadeTime;
 
@@ -2102,6 +2124,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
             groupScript.logSound = aGroup.logSound;
             groupScript.comments = aGroup.comments;
+            groupScript.ignoreListenerPause = aGroup.ignoreListenerPause;
             groupScript.alwaysHighestPriority = aGroup.alwaysHighestPriority;
 #if ADDRESSABLES_ENABLED
         groupScript.addressableUnusedSecondsLifespan = aGroup.addressableUnusedSecondsLifespan;
@@ -2124,7 +2147,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
         // ReSharper disable once InconsistentNaming
         private void ImportMAGroup(MasterAudioGroup aGroup)
         {
-            var newGroup = CreateBlankGroup(aGroup.name);
+            var newGroup = CreateBlankGroup(aGroup.GameObjectName);
 
             var groupTrans = newGroup.transform;
 
@@ -2137,7 +2160,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
                 var variation = newVariation.GetComponent<DynamicGroupVariation>();
 
-                var clipName = aVariation.name;
+                var clipName = aVariation.GameObjectName;
 
                 var aVarAudio = aVariation.GetComponent<AudioSource>();
 
@@ -2190,6 +2213,11 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 variation.isExpanded = aVariation.isExpanded;
 
                 variation.probabilityToPlay = aVariation.probabilityToPlay;
+
+                variation.isUninterruptible = aVariation.isUninterruptible;
+                variation.importance = aVariation.importance;
+
+                variation.clipAlias = aVariation.clipAlias;
                 variation.useRandomPitch = aVariation.useRandomPitch;
                 variation.randomPitchMode = aVariation.randomPitchMode;
                 variation.randomPitchMin = aVariation.randomPitchMin;
@@ -2262,6 +2290,9 @@ namespace DarkTonic.MasterAudio.EditorScripts
             groupScript.useDialogFadeOut = aGroup.useDialogFadeOut;
             groupScript.dialogFadeOutTime = aGroup.dialogFadeOutTime;
 
+            groupScript.isUninterruptible = aGroup.isUninterruptible;
+            groupScript.importance = aGroup.importance;
+
             groupScript.chainLoopDelayMin = aGroup.chainLoopDelayMin;
             groupScript.chainLoopDelayMax = aGroup.chainLoopDelayMax;
             groupScript.chainLoopMode = aGroup.chainLoopMode;
@@ -2273,12 +2304,15 @@ namespace DarkTonic.MasterAudio.EditorScripts
             groupScript.spatialBlendType = aGroup.spatialBlendType;
             groupScript.spatialBlend = aGroup.spatialBlend;
 
+            groupScript.groupPlayType = aGroup.groupPlayType;
+
             groupScript.targetDespawnedBehavior = aGroup.targetDespawnedBehavior;
             groupScript.despawnFadeTime = aGroup.despawnFadeTime;
 
             groupScript.isUsingOcclusion = aGroup.isUsingOcclusion;
 
             groupScript.comments = aGroup.comments;
+            groupScript.ignoreListenerPause = aGroup.ignoreListenerPause;
             groupScript.logSound = aGroup.logSound;
             groupScript.alwaysHighestPriority = aGroup.alwaysHighestPriority;
 #if ADDRESSABLES_ENABLED
@@ -2368,6 +2402,11 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 variation.isExpanded = aVariation.isExpanded;
 
                 variation.probabilityToPlay = aVariation.probabilityToPlay;
+
+                variation.isUninterruptible = aVariation.isUninterruptible;
+                variation.importance = aVariation.importance;
+
+                variation.clipAlias = aVariation.clipAlias;
                 variation.useRandomPitch = aVariation.useRandomPitch;
                 variation.randomPitchMode = aVariation.randomPitchMode;
                 variation.randomPitchMin = aVariation.randomPitchMin;
@@ -2440,6 +2479,9 @@ namespace DarkTonic.MasterAudio.EditorScripts
             groupScript.useDialogFadeOut = aGroup.useDialogFadeOut;
             groupScript.dialogFadeOutTime = aGroup.dialogFadeOutTime;
 
+            groupScript.isUninterruptible = aGroup.isUninterruptible;
+            groupScript.importance = aGroup.importance;
+
             groupScript.chainLoopDelayMin = aGroup.chainLoopDelayMin;
             groupScript.chainLoopDelayMax = aGroup.chainLoopDelayMax;
             groupScript.chainLoopMode = aGroup.chainLoopMode;
@@ -2454,12 +2496,15 @@ namespace DarkTonic.MasterAudio.EditorScripts
             groupScript.spatialBlendType = aGroup.spatialBlendType;
             groupScript.spatialBlend = aGroup.spatialBlend;
 
+            groupScript.groupPlayType = aGroup.groupPlayType;
+
             groupScript.targetDespawnedBehavior = aGroup.targetDespawnedBehavior;
             groupScript.despawnFadeTime = aGroup.despawnFadeTime;
 
             groupScript.isUsingOcclusion = aGroup.isUsingOcclusion;
 
             groupScript.comments = aGroup.comments;
+            groupScript.ignoreListenerPause = aGroup.ignoreListenerPause;
             groupScript.logSound = aGroup.logSound;
             groupScript.alwaysHighestPriority = aGroup.alwaysHighestPriority;
 #if ADDRESSABLES_ENABLED
@@ -2590,6 +2635,11 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 variation.isExpanded = aVariation.isExpanded;
 
                 variation.probabilityToPlay = aVariation.probabilityToPlay;
+
+                variation.isUninterruptible = aVariation.isUninterruptible;
+                variation.importance = aVariation.importance;
+
+                variation.clipAlias = aVariation.clipAlias;
                 variation.useRandomPitch = aVariation.useRandomPitch;
                 variation.randomPitchMode = aVariation.randomPitchMode;
                 variation.randomPitchMin = aVariation.randomPitchMin;
@@ -2662,6 +2712,9 @@ namespace DarkTonic.MasterAudio.EditorScripts
             groupScript.useDialogFadeOut = aGroup.useDialogFadeOut;
             groupScript.dialogFadeOutTime = aGroup.dialogFadeOutTime;
 
+            groupScript.isUninterruptible = aGroup.isUninterruptible;
+            groupScript.importance = aGroup.importance;
+
             groupScript.chainLoopDelayMin = aGroup.chainLoopDelayMin;
             groupScript.chainLoopDelayMax = aGroup.chainLoopDelayMax;
             groupScript.chainLoopMode = aGroup.chainLoopMode;
@@ -2679,12 +2732,15 @@ namespace DarkTonic.MasterAudio.EditorScripts
             groupScript.spatialBlendType = aGroup.spatialBlendType;
             groupScript.spatialBlend = aGroup.spatialBlend;
 
+            groupScript.groupPlayType = aGroup.groupPlayType;
+
             groupScript.targetDespawnedBehavior = aGroup.targetDespawnedBehavior;
             groupScript.despawnFadeTime = aGroup.despawnFadeTime;
 
             groupScript.isUsingOcclusion = aGroup.isUsingOcclusion;
 
             groupScript.comments = aGroup.comments;
+            groupScript.ignoreListenerPause = aGroup.ignoreListenerPause;
             groupScript.logSound = aGroup.logSound;
             groupScript.alwaysHighestPriority = aGroup.alwaysHighestPriority;
 #if ADDRESSABLES_ENABLED

@@ -43,6 +43,10 @@ namespace DChild.Gameplay.Projectiles
 
         public bool hasConstantSpeed => projectileData.hasConstantSpeed;
 
+        public IAttacker parentAttacker { get; private set; }
+
+        public IAttacker rootParentAttacker { get; private set; }
+
         public abstract void ForceCollision();
 
         public virtual void ResetState()
@@ -104,6 +108,17 @@ namespace DChild.Gameplay.Projectiles
             m_physics.SetVelocity(directionNormal * speed);
             //m_isolatedPhysicsTime.CalculateActualVelocity();
         }
+
+        public void SetParentAttacker(IAttacker damageDealer)
+        {
+            parentAttacker = damageDealer;
+        }
+
+        public void SetRootParentAttacker(IAttacker damageDealer)
+        {
+            rootParentAttacker = damageDealer;
+        }
+
         public void AddForce(Vector2 force)
         {
             m_physics.AddForce(force, ForceMode2D.Impulse);
@@ -114,6 +129,11 @@ namespace DChild.Gameplay.Projectiles
         {
             base.SpawnAt(position, rotation);
             ResetState();
+        }
+
+        public virtual void SetOwner(GameObject gameObject)
+        {
+
         }
 
         protected void UnloadProjectile()
@@ -133,6 +153,8 @@ namespace DChild.Gameplay.Projectiles
         {
             CallPoolRequest();
         }
+
+
 
         protected void CallAttackerAttacked(CombatConclusionEventArgs eventArgs) => TargetDamaged?.Invoke(this, eventArgs);
         protected bool CollidedWithEnvironment(Collision2D collision) => collision.gameObject.layer == LayerMask.NameToLayer("Environment");

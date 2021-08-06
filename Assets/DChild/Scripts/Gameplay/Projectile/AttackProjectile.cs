@@ -13,6 +13,7 @@ namespace DChild.Gameplay.Projectiles
         private AttackProjectileData m_data;
 
         protected bool m_collidedWithEnvironment;
+        private CollisionRegistrator m_collisionRegistrator;
         private static Hitbox m_cacheToDamage;
 
         protected override ProjectileData projectileData => m_data;
@@ -25,6 +26,7 @@ namespace DChild.Gameplay.Projectiles
         {
             base.ResetState();
             m_collidedWithEnvironment = false;
+            m_collisionRegistrator?.ClearCache();
         }
 
         protected abstract void Collide();

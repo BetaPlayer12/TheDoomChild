@@ -26,8 +26,8 @@ namespace DarkTonic.MasterAudio {
 
     public static class AudioAddressableOptimizer {
         // maybe use a different Dictionary for each T you need, or a different similar class
-        private static readonly Dictionary<string, AddressableTracker<AudioClip>> AddressableTasksByAddressibleId = new Dictionary<string, AddressableTracker<AudioClip>>();
-        private static readonly object _syncRoot = new object(); // to lock below
+        private static readonly Dictionary<string, AddressableTracker<AudioClip>> AddressableTasksByAddressableId = new Dictionary<string, AddressableTracker<AudioClip>>();
+        private static readonly object SyncRoot = new object(); // to lock below
 
         /// <summary>
         /// Start Coroutine when calling this, passing in success and failure action delegates.
@@ -59,11 +59,11 @@ namespace DarkTonic.MasterAudio {
             AudioClip addressableClip;
             var shouldReleaseLoadedAssetNow = false;
 
-            if (AddressableTasksByAddressibleId.ContainsKey(addressableId)) {
-                loadHandle = AddressableTasksByAddressibleId[addressableId].AssetHandle;
+            if (AddressableTasksByAddressableId.ContainsKey(addressableId)) {
+                loadHandle = AddressableTasksByAddressableId[addressableId].AssetHandle;
                 addressableClip = loadHandle.Result;
             } else {
-                loadHandle = addressable.LoadAssetAsync<AudioClip>();
+                loadHandle = Addressables.LoadAssetAsync<AudioClip>(addressable);
 
                 while (!loadHandle.IsDone) {
                     yield return MasterAudio.EndOfFrameDelay;
@@ -76,7 +76,7 @@ namespace DarkTonic.MasterAudio {
                     if (loadHandle.OperationException != null) {
                         errorText = " Exception: " + loadHandle.OperationException.Message;
                     }
-                    MasterAudio.LogError("Addressable file for '" + variation.name + "' could not be located." + errorText);
+                    MasterAudio.LogError("Addressable file for '" + variation.GameObjectName + "' could not be located." + errorText);
 
                     if (failureAction != null) {
                         failureAction();
@@ -87,13 +87,13 @@ namespace DarkTonic.MasterAudio {
                     yield break;
                 }
 
-                lock (_syncRoot) {
-                    if (!AddressableTasksByAddressibleId.ContainsKey(addressableId)) {
-                        AddressableTasksByAddressibleId.Add(addressableId, new AddressableTracker<AudioClip>(loadHandle, unusedSecondsLifespan));
+                lock (SyncRoot) {
+                    if (!AddressableTasksByAddressableId.ContainsKey(addressableId)) {
+                        AddressableTasksByAddressableId.Add(addressableId, new AddressableTracker<AudioClip>(loadHandle, unusedSecondsLifespan));
                     } else {
                         // race condition reached. Another load finished before this one. Throw this away and use the other, to release memory.
                         shouldReleaseLoadedAssetNow = true;
-                        addressableClip = AddressableTasksByAddressibleId[addressableId].AssetHandle.Result;
+                        addressableClip = AddressableTasksByAddressableId[addressableId].AssetHandle.Result;
                     }
                 }
             }
@@ -103,7 +103,7 @@ namespace DarkTonic.MasterAudio {
             }
 
             if (!AudioUtil.AudioClipWillPreload(addressableClip)) {
-                MasterAudio.LogWarning("Audio Clip for Addressable file '" + addressableClip.name + "' of Sound Group '" + variation.ParentGroup.name + "' has 'Preload Audio Data' turned off, which can cause audio glitches. Addressables should always Preload Audio Data. Please turn it on.");
+                MasterAudio.LogWarning("Audio Clip for Addressable file '" + addressableClip.CachedName() + "' of Sound Group '" + variation.ParentGroup.GameObjectName + "' has 'Preload Audio Data' turned off, which can cause audio glitches. Addressables should always Preload Audio Data. Please turn it on.");
             }
 
             variation.LoadStatus = MasterAudio.VariationLoadStatus.Loaded;
@@ -127,14 +127,14 @@ namespace DarkTonic.MasterAudio {
 
             var addressableId = GetAddressableId(addressable);
 
-            if (!AddressableTasksByAddressibleId.ContainsKey(addressableId)) {
+            if (!AddressableTasksByAddressableId.ContainsKey(addressableId)) {
                 Debug.Log("Addressable not found in loaded map: id = '" + addressable + "'. Aborting recording play.");
                 return;
             }
 
             MasterAudio.RemoveAddressableFromDelayedRelease(addressableId);
 
-            var tracker = AddressableTasksByAddressibleId[addressableId];
+            var tracker = AddressableTasksByAddressableId[addressableId];
             if (tracker.AudiosSourcesUsingReference.Contains(holderSource)) {
                 return; // already added before somehow, don't duplicate.
             }
@@ -149,11 +149,11 @@ namespace DarkTonic.MasterAudio {
 
             var addressableId = GetAddressableId(addressable);
 
-            if (!AddressableTasksByAddressibleId.ContainsKey(addressableId)) {
+            if (!AddressableTasksByAddressableId.ContainsKey(addressableId)) {
                 return;
             }
 
-            var audioSources = AddressableTasksByAddressibleId[addressableId].AudiosSourcesUsingReference;
+            var audioSources = AddressableTasksByAddressableId[addressableId].AudiosSourcesUsingReference;
             audioSources.Remove(holderSource);
 
             // none playing, release!
@@ -161,15 +161,16 @@ namespace DarkTonic.MasterAudio {
         }
 
         public static void MaybeReleaseAddressable(string addressableId, bool forceRelease = false) {
-            if (!AddressableTasksByAddressibleId.ContainsKey(addressableId)) {
+            if (!AddressableTasksByAddressableId.ContainsKey(addressableId)) {
                 return;
             }
 
-            var tracker = AddressableTasksByAddressibleId[addressableId];
+            var tracker = AddressableTasksByAddressableId[addressableId];
 
             if (forceRelease || tracker.UnusedSecondsLifespan == 0) {
                 var deadHandle = tracker.AssetHandle;
-                AddressableTasksByAddressibleId.Remove(addressableId);
+                AddressableTasksByAddressableId.Remove(addressableId);
+
                 Addressables.Release(deadHandle);
             } else {
                 MasterAudio.AddAddressableForDelayedRelease(addressableId, tracker.UnusedSecondsLifespan);
@@ -201,11 +202,11 @@ namespace DarkTonic.MasterAudio {
             AudioClip addressableClip;
             var shouldReleaseLoadedAssetNow = false;
 
-            if (AddressableTasksByAddressibleId.ContainsKey(addressableId)) {
-                loadHandle = AddressableTasksByAddressibleId[addressableId].AssetHandle;
+            if (AddressableTasksByAddressableId.ContainsKey(addressableId)) {
+                loadHandle = AddressableTasksByAddressableId[addressableId].AssetHandle;
                 addressableClip = loadHandle.Result;
             } else {
-                loadHandle = addressable.LoadAssetAsync<AudioClip>();
+                loadHandle = Addressables.LoadAssetAsync<AudioClip>(addressable);
 
                 while (!loadHandle.IsDone) {
                     yield return MasterAudio.EndOfFrameDelay;
@@ -218,17 +219,17 @@ namespace DarkTonic.MasterAudio {
                     if (loadHandle.OperationException != null) {
                         errorText = " Exception: " + loadHandle.OperationException.Message;
                     }
-                    MasterAudio.LogError("Addressable file for PlaylistController '" + playlistController.name + "' could not be located." + errorText);
+                    MasterAudio.LogError("Addressable file for PlaylistController '" + playlistController.ControllerName + "' could not be located." + errorText);
                     yield break;
                 }
 
-                lock (_syncRoot) {
-                    if (!AddressableTasksByAddressibleId.ContainsKey(addressableId)) {
-                        AddressableTasksByAddressibleId.Add(addressableId, new AddressableTracker<AudioClip>(loadHandle, 0));
+                lock (SyncRoot) {
+                    if (!AddressableTasksByAddressableId.ContainsKey(addressableId)) {
+                        AddressableTasksByAddressableId.Add(addressableId, new AddressableTracker<AudioClip>(loadHandle, 0));
                     } else {
                         // race condition reached. Another load finished before this one. Throw this away and use the other, to release memory.
                         shouldReleaseLoadedAssetNow = true;
-                        addressableClip = AddressableTasksByAddressibleId[addressableId].AssetHandle.Result;
+                        addressableClip = AddressableTasksByAddressableId[addressableId].AssetHandle.Result;
                     }
                 }
             }
@@ -238,7 +239,7 @@ namespace DarkTonic.MasterAudio {
             }
 
             if (!AudioUtil.AudioClipWillPreload(addressableClip)) {
-                MasterAudio.LogWarning("Audio Clip for Addressable file '" + addressableClip.name + "' of Playlist Controller '" + playlistController.name + "' has 'Preload Audio Data' turned off, which can cause audio glitches. Addressables should always Preload Audio Data. Please turn it on.");
+                MasterAudio.LogWarning("Audio Clip for Addressable file '" + addressableClip.CachedName() + "' of Playlist Controller '" + playlistController.ControllerName + "' has 'Preload Audio Data' turned off, which can cause audio glitches. Addressables should always Preload Audio Data. Please turn it on.");
             }
 
             // Figure out how to detect stop before loaded, if needed
@@ -256,11 +257,11 @@ namespace DarkTonic.MasterAudio {
         private static bool IsAnyOfAddressableClipPlaying(AssetReference addressable) {
             var addressableId = GetAddressableId(addressable);
 
-            if (!AddressableTasksByAddressibleId.ContainsKey(addressableId)) {
+            if (!AddressableTasksByAddressableId.ContainsKey(addressableId)) {
                 return false;
             }
 
-            return AddressableTasksByAddressibleId[addressableId].AudiosSourcesUsingReference.Count > 0;
+            return AddressableTasksByAddressableId[addressableId].AudiosSourcesUsingReference.Count > 0;
         }
 
         private static void ReleaseAddressableIfNoUses(AssetReference addressable, bool forceRemove = false) {

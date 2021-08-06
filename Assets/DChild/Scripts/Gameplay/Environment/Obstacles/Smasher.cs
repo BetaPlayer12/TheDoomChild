@@ -2,6 +2,9 @@
 using System;
 using System.Collections;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChild.Gameplay.Environment.Obstacles
 {
@@ -190,5 +193,26 @@ namespace DChild.Gameplay.Environment.Obstacles
             m_smasherCollisionEvent.OnEnter += OnCollision;
             m_fixedUpdateWait = null;
         }
+
+#if UNITY_EDITOR
+        [SerializeField,BoxGroup("Naming Config")]
+        private GameObject m_smasher;
+        [SerializeField, BoxGroup("Naming Config")]
+        private GameObject m_trigger;
+        [SerializeField, BoxGroup("Naming Config")]
+        private string m_objectName;
+        [SerializeField, BoxGroup("Naming Config"), OnValueChanged("RenameObject"),HideInPrefabAssets]
+        private int m_objectIndex;
+
+        private void RenameObject()
+        {
+            gameObject.name = $"{m_objectName} ({m_objectIndex})";
+            m_smasher.name = $"Smasher ({m_objectIndex})";
+            m_trigger.name = $"SmasherTrigger ({m_objectIndex})";
+            EditorUtility.SetDirty(gameObject);
+            EditorUtility.SetDirty(m_smasher);
+            EditorUtility.SetDirty(m_trigger);
+        }
+#endif
     }
 }

@@ -20,7 +20,7 @@ namespace DarkTonic.MasterAudio.Examples
 			_horizSpeed = Random.Range(-3, 3) * AudioUtil.FrameTime;
 
 #if !PHY3D_ENABLED
-			Debug.LogError("MA_EnemyOne and this example Scene will not work properly without Physics3D package installed.");
+			Debug.LogError("MA_EnemyOne and this example Scene will not work properly without Physics3D package installed. Please enable it in the Master Audio Welcome Window if it's already installed.");
 #endif
 		}
 

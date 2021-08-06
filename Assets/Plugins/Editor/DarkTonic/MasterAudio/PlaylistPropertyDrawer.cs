@@ -30,10 +30,12 @@ namespace DarkTonic.MasterAudio.EditorScripts
 
             var playlistNames = new List<string>();
 
-            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+            var labelText = label.text;
             if (ma != null)
             {
                 playlistNames.AddRange(ma.PlaylistNames);
+            } else {
+                labelText += " (MA not in Scene)";
             }
 
             var creators = Object.FindObjectsOfType(typeof(DynamicSoundGroupCreator)) as DynamicSoundGroupCreator[];
@@ -56,7 +58,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             {
                 index = -1;
                 typeIn = false;
-                property.stringValue = EditorGUI.TextField(position, label.text, property.stringValue);
+                property.stringValue = EditorGUI.TextField(position, labelText, property.stringValue);
                 return;
             }
 
@@ -70,7 +72,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
             }
 
             position.width -= 30;
-            index = EditorGUI.Popup(position, label.text, index, playlistNames.ToArray());
+            index = EditorGUI.Popup(position, labelText, index, playlistNames.ToArray());
             playlistName = playlistNames[index];
 
             switch (playlistName)
@@ -80,7 +82,7 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     position.yMin += 16;
                     position.height += 16;
                     EditorGUI.BeginChangeCheck();
-                    property.stringValue = EditorGUI.TextField(position, label.text, property.stringValue);
+                    property.stringValue = EditorGUI.TextField(position, labelText, property.stringValue);
                     EditorGUI.EndChangeCheck();
                     break;
                 default:

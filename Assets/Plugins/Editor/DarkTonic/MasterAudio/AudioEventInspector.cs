@@ -205,41 +205,59 @@ namespace DarkTonic.MasterAudio.EditorScripts
             }
 
 #if PHY2D_ENABLED
-        if (!_sounds.useCollision2dSound) {
-            unusedEventTypes.Add("2D Collision Enter");
-        }
-        if (!_sounds.useCollisionExit2dSound) {
-            unusedEventTypes.Add("2D Collision Exit");
-        }
-        if (!_sounds.useTriggerEnter2dSound) {
-            unusedEventTypes.Add("2D Trigger Enter");
-        }
-        if (!_sounds.useTriggerStay2dSound)         {
-            unusedEventTypes.Add("2D Trigger Stay");
-        }
-        if (!_sounds.useTriggerExit2dSound) {
-            unusedEventTypes.Add("2D Trigger Exit");
-        }
+            if (!_sounds.useCollision2dSound)
+            {
+                unusedEventTypes.Add("2D Collision Enter");
+            }
+            if (!_sounds.useCollisionExit2dSound)
+            {
+                unusedEventTypes.Add("2D Collision Exit");
+            }
+            if (!_sounds.useTriggerEnter2dSound)
+            {
+                unusedEventTypes.Add("2D Trigger Enter");
+            }
+            if (!_sounds.useTriggerStay2dSound)
+            {
+                unusedEventTypes.Add("2D Trigger Stay");
+            }
+            if (!_sounds.useTriggerExit2dSound)
+            {
+                unusedEventTypes.Add("2D Trigger Exit");
+            }
 #endif
 
 #if PHY3D_ENABLED
-        if (!_sounds.useCollisionSound) {
-            unusedEventTypes.Add("Collision Enter");
-        }
-        if (!_sounds.useCollisionExitSound) {
-            unusedEventTypes.Add("Collision Exit");
-        }
-        if (!_sounds.useTriggerEnterSound) {
-            unusedEventTypes.Add("Trigger Enter");
-        }
-        if (!_sounds.useTriggerStaySound)         {
-            unusedEventTypes.Add("Trigger Stay");
-        }
-        if (!_sounds.useTriggerExitSound) {
-            unusedEventTypes.Add("Trigger Exit");
-        }
+            if (!_sounds.useCollisionSound)
+            {
+                unusedEventTypes.Add("Collision Enter");
+            }
+            if (!_sounds.useCollisionExitSound)
+            {
+                unusedEventTypes.Add("Collision Exit");
+            }
+            if (!_sounds.useTriggerEnterSound)
+            {
+                unusedEventTypes.Add("Trigger Enter");
+            }
+            if (!_sounds.useTriggerStaySound)
+            {
+                unusedEventTypes.Add("Trigger Stay");
+            }
+            if (!_sounds.useTriggerExitSound)
+            {
+                unusedEventTypes.Add("Trigger Exit");
+            }
 #endif
 
+            if (!_sounds.useCodeTriggeredEvent1Sound)
+            {
+                unusedEventTypes.Add("Code-Triggered Event 1");
+            }
+            if (!_sounds.useCodeTriggeredEvent2Sound)
+            {
+                unusedEventTypes.Add("Code-Triggered Event 2");
+            }
             if (!_sounds.useParticleCollisionSound)
             {
                 unusedEventTypes.Add("Particle Collision");
@@ -634,6 +652,14 @@ namespace DarkTonic.MasterAudio.EditorScripts
                             _sounds.useDespawnedSound = true;
                             AddEventIfZero(_sounds.despawnedSound);
                             break;
+                        case "Code-Triggered Event 1":
+                            _sounds.useCodeTriggeredEvent1Sound = true;
+                            AddEventIfZero(_sounds.codeTriggeredEvent1Sound);
+                            break;
+                        case "Code-Triggered Event 2":
+                            _sounds.useCodeTriggeredEvent2Sound = true;
+                            AddEventIfZero(_sounds.codeTriggeredEvent2Sound);
+                            break;
                         case "Mechanim State Entered":
                             CreateMechanimStateEntered(false);
                             break;
@@ -697,6 +723,8 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 _sounds.unitySubmitSound.isExpanded = false;
                 _sounds.unityCancelSound.isExpanded = false;
                 _sounds.unityToggleSound.isExpanded = false;
+                _sounds.codeTriggeredEvent1Sound.isExpanded = false;
+                _sounds.codeTriggeredEvent1Sound.isExpanded = false;
 
                 // ReSharper disable once ForCanBeConvertedToForeach
                 for (var i = 0; i < _sounds.userDefinedSounds.Count; i++)
@@ -841,6 +869,16 @@ namespace DarkTonic.MasterAudio.EditorScripts
             if (_sounds.useMouseUpSound)
             {
                 RenderEventWithHeader("Mouse Up (Legacy)" + DisabledText, "toggle Mouse Up (Legacy) Sound", _sounds.mouseUpSound, EventSounds.EventType.OnMouseUp);
+            }
+
+            if (_sounds.useCodeTriggeredEvent1Sound)
+            {
+                RenderEventWithHeader("Code-Triggered Event 1" + DisabledText, "toggle Code-Triggered Event 1", _sounds.codeTriggeredEvent1Sound, EventSounds.EventType.CodeTriggeredEvent1);
+            }
+
+            if (_sounds.useCodeTriggeredEvent2Sound)
+            {
+                RenderEventWithHeader("Code-Triggered Event 2" + DisabledText, "toggle Code-Triggered Event 2", _sounds.codeTriggeredEvent2Sound, EventSounds.EventType.CodeTriggeredEvent2);
             }
 
             if (showNewUIEvents)
@@ -1291,6 +1329,12 @@ namespace DarkTonic.MasterAudio.EditorScripts
                             case EventSounds.EventType.UnityToggle:
                                 _sounds.useUnityToggleSound = false;
                                 break;
+                            case EventSounds.EventType.CodeTriggeredEvent1:
+                                _sounds.useCodeTriggeredEvent1Sound = false;
+                                break;
+                            case EventSounds.EventType.CodeTriggeredEvent2:
+                                _sounds.useCodeTriggeredEvent2Sound = false;
+                                break;
                             default:
                                 Debug.LogError("Add code to delete: " + eType);
                                 break;
@@ -1475,6 +1519,12 @@ namespace DarkTonic.MasterAudio.EditorScripts
                 case EventSounds.EventType.UnityToggle:
                     _sounds.PlaySounds(_sounds.unityToggleSound, EventSounds.EventType.UnityToggle);
                     break;
+                case EventSounds.EventType.CodeTriggeredEvent1:
+                    _sounds.PlaySounds(_sounds.codeTriggeredEvent1Sound, EventSounds.EventType.CodeTriggeredEvent1);
+                    break;
+                case EventSounds.EventType.CodeTriggeredEvent2:
+                    _sounds.PlaySounds(_sounds.codeTriggeredEvent2Sound, EventSounds.EventType.CodeTriggeredEvent2);
+                    break;
                 default:
                     Debug.LogError("Add code to activate event: " + eType);
                     break;
@@ -1561,6 +1611,14 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     _sounds.useUnityToggleSound = true;
                     AddEventIfZero(_sounds.unityToggleSound);
                     break;
+                case EventSounds.EventType.CodeTriggeredEvent1:
+                    _sounds.useCodeTriggeredEvent1Sound = true;
+                    AddEventIfZero(_sounds.codeTriggeredEvent1Sound);
+                    break;
+                case EventSounds.EventType.CodeTriggeredEvent2:
+                    _sounds.useCodeTriggeredEvent2Sound = true;
+                    AddEventIfZero(_sounds.codeTriggeredEvent2Sound);
+                    break;
                 default:
                     Debug.LogError("Add code to activate: " + eType);
                     break;
@@ -1625,6 +1683,12 @@ namespace DarkTonic.MasterAudio.EditorScripts
                     break;
                 case EventSounds.EventType.UnityCancel:
                     _sounds.useUnityCancelSound = false;
+                    break;
+                case EventSounds.EventType.CodeTriggeredEvent1:
+                    _sounds.useCodeTriggeredEvent1Sound = false;
+                    break;
+                case EventSounds.EventType.CodeTriggeredEvent2:
+                    _sounds.useCodeTriggeredEvent2Sound = false;
                     break;
                 default:
                     Debug.LogError("Add code to remove: " + eType);
@@ -2016,6 +2080,13 @@ namespace DarkTonic.MasterAudio.EditorScripts
                                             noGroup = true;
                                         }
 
+                                        var isUsingVideoPlayersGroup = false;
+
+                                        if (_groupNames[groupIndex.Value] == MasterAudio.VideoPlayerSoundGroupName)
+                                        {
+                                            isUsingVideoPlayersGroup = true;
+                                        }
+
                                         if (groupIndex > MasterAudio.HardCodedBusOptions - 1)
                                         {
                                             var button = DTGUIHelper.AddSettingsButton("Sound Group");
@@ -2046,6 +2117,10 @@ namespace DarkTonic.MasterAudio.EditorScripts
                                         }
 
                                         EditorGUILayout.EndHorizontal();
+                                        if (isUsingVideoPlayersGroup)
+                                        {
+                                            DTGUIHelper.ShowRedError(MasterAudio.VideoPlayersSoundGroupSelectedError);
+                                        }
                                     }
                                     else if (existingIndex == -1 && aEvent.soundType == MasterAudio.NoGroupName)
                                     {
@@ -2178,31 +2253,58 @@ namespace DarkTonic.MasterAudio.EditorScripts
                                 }
                                 EditorGUI.indentLevel = 1;
 
-                                var newShowgiz = EditorGUILayout.Toggle("Show Range Gizmo", aEvent.showSphereGizmo);
-                                if (newShowgiz != aEvent.showSphereGizmo)
-                                {
-                                    AudioUndoHelper.RecordObjectPropertyForUndo(ref _isDirty, _sounds, "toggle Show Range Gizmo");
-                                    if (newShowgiz == true)
-                                    {
-                                        // turn rest off
-                                        TurnOffAllOtherShowRangeGizmo();
+                                var aud = _sounds.GetNamedOrFirstAudioSource(aEvent);
 
-                                        _sounds.eventToGizmo = aEvent;
+                                if (aud != null)
+                                {
+                                    var newShowgiz = EditorGUILayout.Toggle("Adjust Audio Range", aEvent.showSphereGizmo);
+                                    if (newShowgiz != aEvent.showSphereGizmo)
+                                    {
+                                        AudioUndoHelper.RecordObjectPropertyForUndo(ref _isDirty, _sounds, "toggle Adjust Audio Range");
+                                        if (newShowgiz == true)
+                                        {
+                                            // turn rest off
+                                            TurnOffAllOtherShowRangeGizmo();
+
+                                            _sounds.eventToGizmo = aEvent;
+                                        }
+
+                                        if ((_sounds.eventToGizmo == aEvent) && !newShowgiz)
+                                        {
+                                            _sounds.eventToGizmo = null;
+                                        }
+
+                                        aEvent.showSphereGizmo = newShowgiz;
                                     }
 
-                                    if ((_sounds.eventToGizmo == aEvent) && !newShowgiz)
+                                    if (aEvent.showSphereGizmo)
                                     {
-                                        _sounds.eventToGizmo = null;
-                                    }
+                                        var newMin = EditorGUILayout.Slider("Min Distance", aud.minDistance, .1f, aud.maxDistance);
+                                        if (newMin != aud.minDistance)
+                                        {
+                                            AudioUndoHelper.RecordObjectPropertyForUndo(ref _isDirty, aud, "change Min Distance");
 
-                                    aEvent.showSphereGizmo = newShowgiz;
-                                }
+                                            switch (aEvent.variationType)
+                                            {
+                                                case EventSounds.VariationType.PlayRandom:
+                                                    var sources = _sounds.GetAllVariationAudioSources(aEvent);
+                                                    if (sources != null)
+                                                    {
+                                                        for (var i = 0; i < sources.Count; i++)
+                                                        {
+                                                            var src = sources[i];
+                                                            src.minDistance = newMin;
+                                                            EditorUtility.SetDirty(src);
+                                                        }
+                                                    }
+                                                    break;
+                                                case EventSounds.VariationType.PlaySpecific:
+                                                    aud.minDistance = newMin;
+                                                    EditorUtility.SetDirty(aud);
+                                                    break;
+                                            }
+                                        }
 
-                                if (aEvent.showSphereGizmo)
-                                {
-                                    var aud = _sounds.GetNamedOrFirstAudioSource(aEvent);
-                                    if (aud != null)
-                                    {
                                         var newMax = EditorGUILayout.Slider("Max Distance", aud.maxDistance, .1f, 1000000f);
                                         if (newMax != aud.maxDistance)
                                         {
@@ -2239,7 +2341,6 @@ namespace DarkTonic.MasterAudio.EditorScripts
                                         }
                                         DTGUIHelper.ShowColorWarning("You can also bulk apply Max Distance and other Audio Source properties with Audio Source Templates using the Master Audio Mixer.");
                                     }
-
                                 }
 
                                 var newGlide = (EventSounds.GlidePitchType)EditorGUILayout.EnumPopup("Glide By Pitch Type", aEvent.glidePitchType);
@@ -3922,6 +4023,9 @@ namespace DarkTonic.MasterAudio.EditorScripts
             TurnOfAllShowGizmoInEventGroup(_sounds.triggerSound);
             TurnOfAllShowGizmoInEventGroup(_sounds.triggerExitSound);
             TurnOfAllShowGizmoInEventGroup(_sounds.triggerStaySound);
+
+            TurnOfAllShowGizmoInEventGroup(_sounds.codeTriggeredEvent1Sound);
+            TurnOfAllShowGizmoInEventGroup(_sounds.codeTriggeredEvent2Sound);
 
             TurnOfAllShowGizmoInEventGroup(_sounds.mouseEnterSound);
             TurnOfAllShowGizmoInEventGroup(_sounds.mouseExitSound);

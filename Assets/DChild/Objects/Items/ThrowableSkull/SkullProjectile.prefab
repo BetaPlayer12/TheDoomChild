@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 2508720340444514357}
   - component: {fileID: 2508720340444514362}
   - component: {fileID: 1922451266734531290}
+  - component: {fileID: -474589167623049408}
   m_Layer: 8
   m_Name: SkullProjectile
   m_TagString: Untagged
@@ -140,6 +141,12 @@ MonoBehaviour:
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
   m_model: {fileID: 0}
+  m_onLaunch:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onReset:
+    m_PersistentCalls:
+      m_Calls: []
   m_data: {fileID: 11400000, guid: b8d9c34b922b02f4784acddbd697c7bd, type: 2}
 --- !u!114 &2508720340444514357
 MonoBehaviour:
@@ -160,6 +167,7 @@ MonoBehaviour:
     critChance: 0
     critDamageModifier: 1
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &2508720340444514362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,8 +181,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
+  m_damageUniqueHitboxesOnly: 1
+  m_collisionRegistrator: {fileID: -474589167623049408}
+  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!58 &1922451266734531290
 CircleCollider2D:
@@ -192,6 +201,18 @@ CircleCollider2D:
   m_Offset: {x: -0.06, y: 0}
   serializedVersion: 2
   m_Radius: 0.86
+--- !u!114 &-474589167623049408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2508720340444514364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01d72dcc386e3824fb819d8347b660e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3803600901572794007
 GameObject:
   m_ObjectHideFlags: 0

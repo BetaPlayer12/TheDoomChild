@@ -12,6 +12,7 @@ namespace DChild.Gameplay.Combat
     {
         Vector2 position { get; }
         Invulnerability ignoreInvulnerability { get; }
+
         bool ignoresBlock { get; }
         void Damage(TargetInfo target, BodyDefense targetDefense);
     }

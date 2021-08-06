@@ -3,16 +3,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DChild.Gameplay.Systems
 {
 
     public class ShadowEnvironmentHandle : MonoBehaviour
     {
-        [SerializeField,InfoBox("These colliders will be ignored by the player when he is in SHADOW mode"),TabGroup("ShadowColliders")]
+        [SerializeField, InfoBox("These colliders will be ignored by the player when he is in SHADOW mode"), TabGroup("ShadowColliders")]
         private Collider2D[] m_shadowColliders;
         [SerializeField, InfoBox("These colliders will be ignored by the player when he is NOT in SHADOW mode"), TabGroup("NonShadowColliders")]
         private Collider2D[] m_reverseShadowColliders;
+        [SerializeField, InfoBox("These colliders will be used to trigger events by the player when he is in SHADOW mode"), TabGroup("EventShadowColliders")]
+        private Collider2D[] m_eventShadowColliders;
+        [SerializeField, TabGroup("ShadowOnEvents")]
+        private UnityEvent m_OnEvents;
+        [SerializeField, TabGroup("ShadowOffEvents")]
+        private UnityEvent m_OffEvents;
         private Collider2D[] m_playerColliders;
 
         private bool m_isInShadowEnvironment;
@@ -23,6 +30,7 @@ namespace DChild.Gameplay.Systems
             {
                 SetIgnoredInShadowModeCollisionState(enableCollisions);
                 SetEnableInShadowModeCollisionState(enableCollisions);
+                ActivateEventsInShadowModeCollisionState(enableCollisions);
                 m_isInShadowEnvironment = enableCollisions;
             }
         }
@@ -68,7 +76,20 @@ namespace DChild.Gameplay.Systems
                 }
             }
         }
+        private void ActivateEventsInShadowModeCollisionState(bool enableCollisions)
+        {
+            if (enableCollisions == true)
+            {
+                Debug.Log("On");
+                m_OnEvents?.Invoke();
 
+            }
+            else
+            {
+                Debug.Log("Off");
+                m_OffEvents.Invoke();
+            }
+        }
         private void Start()
         {
             m_playerColliders = GameplaySystem.playerManager.player.character.colliders.colliders;
