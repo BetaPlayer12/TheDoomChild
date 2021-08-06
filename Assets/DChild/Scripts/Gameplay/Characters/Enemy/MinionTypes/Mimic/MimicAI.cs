@@ -235,7 +235,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
-            m_animation.EnableRootMotion(true, false);
+            m_animation.EnableRootMotion(true, true);
             StopAllCoroutines();
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
             base.OnDestroyed(sender, eventArgs);
