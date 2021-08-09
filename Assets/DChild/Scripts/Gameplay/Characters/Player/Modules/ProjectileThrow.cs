@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Spine.Unity;
 using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Combat;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -34,6 +35,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private IProjectileThrowState m_throwState;
         private Character m_character;
+        private Attacker m_attacker;
         private ProjectileLauncher m_launcher;
         private int m_skullThrowAnimationParameter;
         private int m_skullThrowVariantParameter;
@@ -260,6 +262,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
             m_spawnedProjectile.transform.position = m_spawnPoint.position;
             m_spawnedProjectile.transform.parent = transform;
+            m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
 
             var scale = m_spawnedProjectile.transform.localScale;
             scale.y = 1;
@@ -328,6 +331,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_throwState = info.state;
             m_animator = info.animator;
             m_character = info.character;
+            m_attacker = info.attacker;
             m_launcher = new ProjectileLauncher(m_projectile, m_spawnPoint);
             m_skullThrowAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ProjectileThrow);
             m_skullThrowVariantParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ProjectileThrowVariant);

@@ -21,7 +21,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private IsolatedObject m_isolatedObject;
         [SerializeField]
-        private IsolatedPhysics2D m_physics;
+        private IsolatedCharacterPhysics2D m_physics;
         [SerializeField]
         private CharacterColliders m_colliders;
         [SerializeField]
@@ -38,7 +38,7 @@ namespace DChild.Gameplay
         public float height => m_height;
 
         public IsolatedObject isolatedObject => m_isolatedObject;
-        public IsolatedPhysics2D physics => m_physics;
+        public IsolatedCharacterPhysics2D physics => m_physics;
         public CharacterColliders colliders => m_colliders;
         public HorizontalDirection facing => m_facing;
 
@@ -81,7 +81,7 @@ namespace DChild.Gameplay
         }
 
 #if UNITY_EDITOR
-        public void InitializeField(Transform centermass, IsolatedObject isolatedObject, IsolatedPhysics2D physics, CharacterColliders colliders)
+        public void InitializeField(Transform centermass, IsolatedObject isolatedObject, IsolatedCharacterPhysics2D physics, CharacterColliders colliders)
         {
             m_centerMass = centermass;
             m_isolatedObject = isolatedObject;
