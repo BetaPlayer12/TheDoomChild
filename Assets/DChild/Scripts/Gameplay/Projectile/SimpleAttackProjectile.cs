@@ -20,11 +20,36 @@ namespace DChild.Gameplay.Projectiles
         protected override void Collide()
         {
             var explosion = m_spawnHandle.InstantiateFX(projectileData.impactFX, transform.position);
-            var parentAttacker = GetComponent<Attacker>();
+            var explosionObject = explosion.gameObject.GetComponent<Attacker>();
+            PassProjectileAttacker(explosionObject);    
             explosion.transform.parent = null;
-            parentAttacker.PassParentAttacker(parentAttacker);
+            //PassProjectileAttacker(parentAttacker);
             UnloadProjectile();
             CallImpactedEvent();
+        }
+
+        private void PassProjectileAttacker(Attacker damageDealer)
+        {
+            var parentAttacker = GetComponent<Attacker>();
+            if (projectileData.impactFX.TryGetComponent(out Attacker explosionAttacker))
+            {
+                if (parentAttacker != null)
+                {
+                    parentAttacker.SetParentAttacker(damageDealer);
+
+                }
+                else
+                {
+                    parentAttacker.SetRootParentAttacker(damageDealer);
+                }
+            }
+            else
+            {
+                parentAttacker.SetParentAttacker(damageDealer);
+            }
+           
+            
+
         }
 
 

@@ -77,7 +77,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             relativeDelta.x *= (int)m_character.facing;
             var newAim = m_currentAim += relativeDelta;
 
-            Debug.Log(newAim);
+            //Debug.Log(newAim);
 
             if (newAim.x < m_horizontalThreshold.min)
             {

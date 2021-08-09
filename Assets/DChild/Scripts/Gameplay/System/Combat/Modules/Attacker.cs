@@ -130,13 +130,13 @@ namespace DChild.Gameplay.Combat
         public void SetParentAttacker(IAttacker damageDealer)
         {
             parentAttacker = damageDealer;
-            Debug.Log(parentAttacker); 
+            Debug.Log($"parentAttacker: {parentAttacker}"); 
         }
 
         public void SetRootParentAttacker(IAttacker damageDealer)
         {
             rootParentAttacker = damageDealer;
-            Debug.Log(rootParentAttacker);
+            Debug.Log($"rootParentAttacker: {rootParentAttacker}");
         }
 
         private void ApplyDamageModification()
