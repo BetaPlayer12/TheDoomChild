@@ -420,6 +420,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_state.isGrounded)
             {
                 HandleGroundBehaviour();
+                m_basicSlashes?.ResetAerialGravityControl();
+                m_whip?.ResetAerialGravityControl();
             }
             else
             {

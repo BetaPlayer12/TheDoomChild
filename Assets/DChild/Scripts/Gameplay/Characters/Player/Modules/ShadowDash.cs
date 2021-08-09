@@ -73,7 +73,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_wasUsed == false)
             {
                 GameplaySystem.world.SetShadowColliders(true);
-                m_damageable.SetInvulnerability(Invulnerability.MAX);
+                m_damageable.SetInvulnerability(Invulnerability.Level_2);
                 m_wasUsed = true;
                 m_shadowFX?.Play(true);
                 m_animator.SetBool(m_animationParameter, true);

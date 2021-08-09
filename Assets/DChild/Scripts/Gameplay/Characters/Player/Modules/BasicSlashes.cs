@@ -26,16 +26,25 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private IPlayerModifer m_modifier;
         private List<Type> m_executedTypes;
+        private Rigidbody2D m_rigidbody;
+        private float m_cacheGravity;
+        private bool m_adjustGravity;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
+            m_rigidbody = info.rigidbody;
             m_modifier = info.modifier;
             m_executedTypes = new List<Type>();
+            m_cacheGravity = m_rigidbody.gravityScale;
+            m_adjustGravity = true;
         }
 
         public override void Cancel()
         {
+            m_rigidbody.gravityScale = m_cacheGravity;
+            m_adjustGravity = true;
+
             if (m_executedTypes.Count > 0)
             {
                 base.Cancel();
@@ -100,6 +109,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Forward:
                     m_timer = m_midAirForward.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirForward.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+
+                    if (m_adjustGravity == true)
+                    {
+                        m_cacheGravity = m_rigidbody.gravityScale;
+                        m_rigidbody.gravityScale = 1;
+                        m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
+                    }
                     break;
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
@@ -126,6 +142,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_midAirOverhead.PlayFX(play);
                     break;
             }
+        }
+
+        public override void AttackOver()
+        {
+            base.AttackOver();
+
+            m_rigidbody.gravityScale = m_cacheGravity;
+            m_adjustGravity = false;
         }
 
         public void ClearFXFor(Type type)
@@ -158,6 +182,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_state.canAttack = true;
                 }
             }
+        }
+
+        public void ResetAerialGravityControl()
+        {
+            m_adjustGravity = true;
         }
 
         public void ClearExecutedCollision()
