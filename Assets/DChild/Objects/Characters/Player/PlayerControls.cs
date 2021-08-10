@@ -185,6 +185,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Block"",
+                    ""type"": ""Button"",
+                    ""id"": ""93e311c7-a8f4-4ee7-85c5-180b21f3845f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -902,6 +910,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""ControllerCursorVerticalInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08afc6a3-5662-46d5-8599-b1357a76a4a3"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -931,6 +950,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_ShadowMorph = m_Gameplay.FindAction("ShadowMorph", throwIfNotFound: true);
         m_Gameplay_ControllerCursorHorizontalInput = m_Gameplay.FindAction("ControllerCursorHorizontalInput", throwIfNotFound: true);
         m_Gameplay_ControllerCursorVerticalInput = m_Gameplay.FindAction("ControllerCursorVerticalInput", throwIfNotFound: true);
+        m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1001,6 +1021,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_ShadowMorph;
     private readonly InputAction m_Gameplay_ControllerCursorHorizontalInput;
     private readonly InputAction m_Gameplay_ControllerCursorVerticalInput;
+    private readonly InputAction m_Gameplay_Block;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -1026,6 +1047,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @ShadowMorph => m_Wrapper.m_Gameplay_ShadowMorph;
         public InputAction @ControllerCursorHorizontalInput => m_Wrapper.m_Gameplay_ControllerCursorHorizontalInput;
         public InputAction @ControllerCursorVerticalInput => m_Wrapper.m_Gameplay_ControllerCursorVerticalInput;
+        public InputAction @Block => m_Wrapper.m_Gameplay_Block;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1098,6 +1120,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @ControllerCursorVerticalInput.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnControllerCursorVerticalInput;
                 @ControllerCursorVerticalInput.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnControllerCursorVerticalInput;
                 @ControllerCursorVerticalInput.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnControllerCursorVerticalInput;
+                @Block.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
+                @Block.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
+                @Block.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -1165,6 +1190,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @ControllerCursorVerticalInput.started += instance.OnControllerCursorVerticalInput;
                 @ControllerCursorVerticalInput.performed += instance.OnControllerCursorVerticalInput;
                 @ControllerCursorVerticalInput.canceled += instance.OnControllerCursorVerticalInput;
+                @Block.started += instance.OnBlock;
+                @Block.performed += instance.OnBlock;
+                @Block.canceled += instance.OnBlock;
             }
         }
     }
@@ -1192,5 +1220,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnShadowMorph(InputAction.CallbackContext context);
         void OnControllerCursorHorizontalInput(InputAction.CallbackContext context);
         void OnControllerCursorVerticalInput(InputAction.CallbackContext context);
+        void OnBlock(InputAction.CallbackContext context);
     }
 }

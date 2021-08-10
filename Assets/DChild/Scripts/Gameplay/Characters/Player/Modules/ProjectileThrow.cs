@@ -31,11 +31,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
 
+        ///Test Target
+        //[SerializeField]
+        //private GameObject m_target;
+
         private Vector2 m_currentAim; //Relative to Character Facing
 
         private IProjectileThrowState m_throwState;
         private Character m_character;
-        private Attacker m_attacker;
         private ProjectileLauncher m_launcher;
         private int m_skullThrowAnimationParameter;
         private int m_skullThrowVariantParameter;
@@ -54,7 +57,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
         #region Aim
         public void StartAim()
         {
-            GameSystem.ResetCursorPosition(); //FOr Quality of Life thing
+            ////////////////////
+            //Test
+            //Debug.Log(delta);
+            //GameSystem.ResetCursorPosition();
+            //var x = ((Vector3)m_target.transform.position - m_spawnPoint.position).normalized;
+            //var y = Vector2.Distance(m_target.transform.position, transform.position);
+            //var z = x * 5;
+            //Debug.Log(x);
+            //Debug.Log(y);
+            //Debug.Log(z);
+            //m_currentAim = z;
+            ////////////////////
+
+            //GameSystem.ResetCursorPosition(); //FOr Quality of Life thing
             m_currentAim = m_defaultAim;
 
             if (m_adjustableXSpeed == false)
@@ -78,8 +94,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var relativeDelta = delta.normalized * m_aimSensitivity;
             relativeDelta.x *= (int)m_character.facing;
             var newAim = m_currentAim += relativeDelta;
-
-            Debug.Log(newAim);
 
             if (newAim.x < m_horizontalThreshold.min)
             {

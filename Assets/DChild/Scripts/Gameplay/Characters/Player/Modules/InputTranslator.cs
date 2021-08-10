@@ -25,6 +25,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool interactPressed;
         public bool grabPressed;
         public bool grabHeld;
+        public bool blockHeld;
 
         public bool slashPressed;
         public bool slashHeld;
@@ -225,6 +226,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 var isTrue = value.Get<float>() == 1;
                 grabPressed = isTrue;
                 grabHeld = isTrue;
+            }
+        }
+
+        private void OnBlock(InputValue value)
+        {
+            if (enabled == true)
+            {
+                blockHeld = value.Get<float>() == 1;
             }
         }
 

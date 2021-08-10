@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
                                   IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
                                   ILevitateState, IGrabState, ISlideState, ILedgeGrabState, IProjectileThrowState, IShadowModeState,
-                                  IEnragedState
+                                  IEnragedState, IBlockingState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;
@@ -115,5 +115,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_allowExtendedIdle = true;
         public bool allowExtendedIdle { get => m_allowExtendedIdle; set => m_allowExtendedIdle = value; }
+        [SerializeField, ReadOnly]
+        private bool m_isBlocking;
+        public bool isBlocking { get => m_isBlocking; set => m_isBlocking = value; }
     }
 }
