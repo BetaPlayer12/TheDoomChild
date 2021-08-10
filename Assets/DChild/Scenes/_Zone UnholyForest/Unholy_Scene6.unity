@@ -27254,7 +27254,7 @@ GameObject:
   - component: {fileID: 483800726}
   - component: {fileID: 483800725}
   m_Layer: 11
-  m_Name: platform (283)
+  m_Name: DroppablePlatform (1)
   m_TagString: Droppable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32167,6 +32167,8 @@ PrefabInstance:
     - {fileID: 8558674313984913492, guid: 0648e786098726f41ab8492ecfcde24e, type: 3}
     - {fileID: 5070198993990900366, guid: 0648e786098726f41ab8492ecfcde24e, type: 3}
     - {fileID: 962680675281644667, guid: 0648e786098726f41ab8492ecfcde24e, type: 3}
+    - {fileID: 5400410498069092121, guid: 0648e786098726f41ab8492ecfcde24e, type: 3}
+    - {fileID: 8555963096838421961, guid: 0648e786098726f41ab8492ecfcde24e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0648e786098726f41ab8492ecfcde24e, type: 3}
 --- !u!1 &530225741 stripped
 GameObject:
@@ -37705,6 +37707,58 @@ MonoBehaviour:
     triggerStayForTime: 0
     doesTriggerStayRepeat: 1
     sliderValue: 0
+  codeTriggeredEvent1Sound:
+    isExpanded: 1
+    allPlayersShouldHear: 0
+    useLayerFilter: 0
+    useTagFilter: 0
+    matchingLayers: 00000000
+    matchingTags:
+    - Default
+    customSoundActive: 0
+    isCustomEvent: 0
+    customEventName: 
+    mechanimEventActive: 0
+    isMechanimStateCheckEvent: 0
+    mechanimStateName: 
+    mechEventPlayedForState: 0
+    SoundEvents: []
+    mouseDragStopMode: 0
+    mouseDragFadeOutTime: 1
+    retriggerLimitMode: 0
+    limitPerXFrm: 0
+    limitPerXSec: 0
+    triggeredLastFrame: -100
+    triggeredLastTime: -100
+    triggerStayForTime: 0
+    doesTriggerStayRepeat: 1
+    sliderValue: 0
+  codeTriggeredEvent2Sound:
+    isExpanded: 1
+    allPlayersShouldHear: 0
+    useLayerFilter: 0
+    useTagFilter: 0
+    matchingLayers: 00000000
+    matchingTags:
+    - Default
+    customSoundActive: 0
+    isCustomEvent: 0
+    customEventName: 
+    mechanimEventActive: 0
+    isMechanimStateCheckEvent: 0
+    mechanimStateName: 
+    mechEventPlayedForState: 0
+    SoundEvents: []
+    mouseDragStopMode: 0
+    mouseDragFadeOutTime: 1
+    retriggerLimitMode: 0
+    limitPerXFrm: 0
+    limitPerXSec: 0
+    triggeredLastFrame: -100
+    triggeredLastTime: -100
+    triggerStayForTime: 0
+    doesTriggerStayRepeat: 1
+    sliderValue: 0
   unitySliderChangedSound:
     isExpanded: 1
     allPlayersShouldHear: 0
@@ -38229,6 +38283,8 @@ MonoBehaviour:
   useNguiMouseUpSound: 0
   useNguiMouseEnterSound: 0
   useNguiMouseExitSound: 0
+  useCodeTriggeredEvent1Sound: 0
+  useCodeTriggeredEvent2Sound: 0
   useUnitySliderChangedSound: 0
   useUnityButtonClickedSound: 0
   useUnityPointerDownSound: 0
@@ -72268,6 +72324,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4786323226137406351, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
+    - target: {fileID: 5111083932243012824, guid: 7e9ace828767c6d4ab3ab03c8862f417,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.9395914
+      objectReference: {fileID: 0}
     - target: {fileID: 5228474497195137775, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Mesh
@@ -72452,22 +72513,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a941c4ace1327bc4c80dd94e9243fcc5, type: 2}
+      objectReference: {fileID: 2100000, guid: e7a22edce9bc34c49a11c542c5413e0e, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: acc109fdf2335b548923504465f0269a, type: 2}
+      objectReference: {fileID: 2100000, guid: ca80c32491949704a9df54f19d58a23d, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: a941c4ace1327bc4c80dd94e9243fcc5, type: 2}
+      objectReference: {fileID: 2100000, guid: e7a22edce9bc34c49a11c542c5413e0e, type: 2}
     - target: {fileID: 7090695359494195660, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Materials.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: acc109fdf2335b548923504465f0269a, type: 2}
+      objectReference: {fileID: 2100000, guid: ca80c32491949704a9df54f19d58a23d, type: 2}
     - target: {fileID: 7090695359494195661, guid: 7e9ace828767c6d4ab3ab03c8862f417,
         type: 3}
       propertyPath: m_Mesh
@@ -77089,7 +77150,7 @@ GameObject:
   - component: {fileID: 1272199209}
   - component: {fileID: 1272199208}
   m_Layer: 11
-  m_Name: platform3
+  m_Name: DroppablePlatform (2)
   m_TagString: Droppable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84240,6 +84301,8 @@ PrefabInstance:
     - {fileID: 8931050420476279815, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
     - {fileID: 354287762558406075, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
     - {fileID: 5806001536712223915, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
+    - {fileID: 1335867566503415321, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
+    - {fileID: 3460458231836650110, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
 --- !u!1 &1369993812 stripped
 GameObject:
@@ -87557,7 +87620,7 @@ PrefabInstance:
     - target: {fileID: 7584058799367110863, guid: 0b81193db0f2d694ca02cdd61dbb4e16,
         type: 3}
       propertyPath: m_Name
-      value: ShrinkingMushroom(V2)
+      value: MushroomPlatform (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b81193db0f2d694ca02cdd61dbb4e16, type: 3}
@@ -103610,7 +103673,7 @@ PrefabInstance:
     - target: {fileID: 7584058799367110863, guid: de491f57c016a0e409d52576b6c71697,
         type: 3}
       propertyPath: m_Name
-      value: ShrinkingMushroom(V3)
+      value: MushroomPlatform (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8167500494545410416, guid: de491f57c016a0e409d52576b6c71697,
         type: 3}
@@ -109683,6 +109746,8 @@ PrefabInstance:
     - {fileID: 8931050420476279815, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
     - {fileID: 354287762558406075, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
     - {fileID: 5806001536712223915, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
+    - {fileID: 1335867566503415321, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
+    - {fileID: 3460458231836650110, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
 --- !u!1 &1828058349 stripped
 GameObject:
@@ -118155,6 +118220,8 @@ PrefabInstance:
     - {fileID: 8931050420476279815, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
     - {fileID: 354287762558406075, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
     - {fileID: 5806001536712223915, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
+    - {fileID: 1335867566503415321, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
+    - {fileID: 3460458231836650110, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bca78cdeaf1510e499f61038adc54ce1, type: 3}
 --- !u!4 &1981440763 stripped
 Transform:
@@ -119910,7 +119977,7 @@ PrefabInstance:
     - target: {fileID: 7584058799367110863, guid: de491f57c016a0e409d52576b6c71697,
         type: 3}
       propertyPath: m_Name
-      value: ShrinkingMushroom(V3)
+      value: MushroomPlatform (3)
       objectReference: {fileID: 0}
     - target: {fileID: 7584058799367110863, guid: de491f57c016a0e409d52576b6c71697,
         type: 3}
