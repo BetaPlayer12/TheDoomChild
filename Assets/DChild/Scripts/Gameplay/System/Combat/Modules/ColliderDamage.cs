@@ -184,7 +184,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox)
+        protected virtual bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox)
         {
             //if (hitbox.canBlockDamage ? (IsBlockPreceededByTarget(collider2D, hitbox.damageable) == false) : (IsBlockedByOtherBlockingHitboxes(collider2D) == false))
             //{
@@ -274,7 +274,7 @@ namespace DChild.Gameplay.Combat
             Profiler.EndSample();
 #endif
         }
-
+      
         private void OnCollisionEnter2D(Collision2D collision)
         {
             var colliderGameObject = collision.gameObject;
