@@ -32,6 +32,18 @@ namespace DChild.Gameplay.Combat
 
         protected override bool IsValidColliderToHit(Collider2D collision) => true;
         protected override bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox) => true;
+        protected override void HandleDamageUniqueHitboxes(Collider2D collider2D)
+        {
+            var hitbox = m_collisionRegistrator.GetHitbox(collider2D);
+            if (hitbox != null)
+            {
+                if (IsValidHitboxToHit(collider2D, hitbox))
+                {
+                    OnValidCollider(collider2D, hitbox);
+                   
+                }
+            }
+        }
 
         protected override void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
@@ -49,6 +61,7 @@ namespace DChild.Gameplay.Combat
                 m_infos.Add(new Info(m_damageInterval));
             }
             base.OnValidCollider(collision, hitbox);
+            m_collisionRegistrator.RegisterHitboxAs(hitbox, true);
         }
 
         private void RemoveAffectedIndex(int i)
