@@ -18,7 +18,7 @@ using DChild.Gameplay.Projectiles;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/SkeletonArcher")]
-    public class SkeletonArcherAI : CombatAIBrain<SkeletonArcherAI.Info>, IBattleZoneAIBrain, IResetableAIBrain, IKnockbackableAI
+    public class SkeletonArcherAI : CombatAIBrain<SkeletonArcherAI.Info>, IBattleZoneAIBrain, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo

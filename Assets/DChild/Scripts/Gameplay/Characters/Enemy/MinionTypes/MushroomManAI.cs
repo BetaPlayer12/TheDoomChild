@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/MushroomMan")]
-    public class MushroomManAI : CombatAIBrain<MushroomManAI.Info>, IResetableAIBrain, IKnockbackableAI
+    public class MushroomManAI : CombatAIBrain<MushroomManAI.Info>, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo

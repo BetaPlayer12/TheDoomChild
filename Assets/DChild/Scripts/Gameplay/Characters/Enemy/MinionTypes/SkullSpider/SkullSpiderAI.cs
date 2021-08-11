@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/SkullSpider")]
-    public class SkullSpiderAI : CombatAIBrain<SkullSpiderAI.Info>, IResetableAIBrain, IKnockbackableAI
+    public class SkullSpiderAI : CombatAIBrain<SkullSpiderAI.Info>, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo

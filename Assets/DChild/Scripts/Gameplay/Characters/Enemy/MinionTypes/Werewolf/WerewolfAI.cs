@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Werewolf")]
-    public class WerewolfAI : CombatAIBrain<WerewolfAI.Info>, IResetableAIBrain, IKnockbackableAI
+    public class WerewolfAI : CombatAIBrain<WerewolfAI.Info>, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo

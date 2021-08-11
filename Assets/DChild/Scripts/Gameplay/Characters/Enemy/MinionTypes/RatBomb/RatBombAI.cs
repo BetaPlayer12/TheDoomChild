@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/RatBomb")]
-    public class RatBombAI : CombatAIBrain<RatBombAI.Info>, IKnockbackableAI
+    public class RatBombAI : CombatAIBrain<RatBombAI.Info>, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo

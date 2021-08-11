@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Zombie02")]
-    public class Zombie02AI : CombatAIBrain<Zombie02AI.Info>, IResetableAIBrain, IBattleZoneAIBrain, IKnockbackableAI
+    public class Zombie02AI : CombatAIBrain<Zombie02AI.Info>, IResetableAIBrain, IBattleZoneAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo
