@@ -18,7 +18,7 @@ using DChild.Gameplay.Projectiles;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Slug")]
-    public class SlugAI : CombatAIBrain<SlugAI.Info>, IResetableAIBrain, IKnockbackableAI
+    public class SlugAI : CombatAIBrain<SlugAI.Info>, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo

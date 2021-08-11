@@ -41,9 +41,9 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private bool m_damageUniqueHitboxesOnly;
         [SerializeField, ShowIf("m_damageUniqueHitboxesOnly")]
-        private CollisionRegistrator m_collisionRegistrator;
+        protected CollisionRegistrator m_collisionRegistrator;
         [SerializeField]
-        private DamageFXHandle m_damageFXHandle;
+        private DamageReactionHandle m_damageFXHandle;
         [SerializeField]
         private Collider2DInfo[] m_ignoreColliderList;
 
@@ -97,7 +97,7 @@ namespace DChild.Gameplay.Combat
                 }
                 var hitDirection = GameplayUtility.GetHorizontalDirection(m_triggeredCollider.bounds.center, hitPoint);
 
-                m_damageFXHandle?.SpawnFX(hitPoint, hitDirection);
+                m_damageFXHandle?.ReactToDamageAt(hitPoint, hitDirection);
                 onHitFX?.SpawnFX(hitPoint, hitDirection);
             }
         }
@@ -160,18 +160,7 @@ namespace DChild.Gameplay.Combat
 #endif
         }
 
-        private void InterractWith(Collider2D collision)
-        {
-            if (collision.TryGetComponentInParent(out IHitToInteract interactable))
-            {
-                if (interactable.CanBeInteractedWith(m_triggeredCollider))
-                {
-                    interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
-                }
-            }
-        }
-
-        private void HandleDamageUniqueHitboxes(Collider2D collider2D)
+        protected virtual void HandleDamageUniqueHitboxes(Collider2D collider2D)
         {
             var hitbox = m_collisionRegistrator.GetHitbox(collider2D);
             if (hitbox != null && m_collisionRegistrator.HasDamagedDamageable(hitbox.damageable) == false)
@@ -184,17 +173,28 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox)
+        protected virtual bool IsValidHitboxToHit(Collider2D collider2D, Hitbox hitbox)
         {
-            //if (hitbox.canBlockDamage ? (IsBlockPreceededByTarget(collider2D, hitbox.damageable) == false) : (IsBlockedByOtherBlockingHitboxes(collider2D) == false))
-            //{
-            m_triggeredCollider = GetTriggeredCollider(collider2D);
-            if (hitbox.CanBeDamageBy(m_colliders))
+            if (hitbox.canBlockDamage ? (IsBlockPreceededByTarget(collider2D, hitbox.damageable) == false) : (IsBlockedByOtherBlockingHitboxes(collider2D) == false))
             {
-                return true;
+                m_triggeredCollider = GetTriggeredCollider(collider2D);
+                if (hitbox.CanBeDamageBy(m_colliders))
+                {
+                    return true;
+                }
             }
-            //}
             return false;
+        }
+
+        private void InterractWith(Collider2D collision)
+        {
+            if (collision.TryGetComponentInParent(out IHitToInteract interactable))
+            {
+                if (interactable.CanBeInteractedWith(m_triggeredCollider))
+                {
+                    interactable.Interact(GameplayUtility.GetHorizontalDirection(interactable.position, m_damageDealer.position));
+                }
+            }
         }
 
         private bool IsBlockedByOtherBlockingHitboxes(Collider2D collider2D) { return m_damageDealer.ignoresBlock == false && IsTargetBlocked(collider2D); }

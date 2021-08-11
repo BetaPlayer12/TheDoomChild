@@ -137,6 +137,21 @@ namespace DChild.Gameplay.Combat
         {
             Heal(999999999);
         }
+        //public void RecieveParentAttacker()
+        //{
+        //    var recieveParentAttacker = GetComponent<Attacker>();
+        //    if(recieveParentAttacker.parentAttacker != null)
+        //    {
+        //        if(recieveParentAttacker.rootParentAttacker != null)
+        //        {
+        //            var rootParentAttacker = recieveParentAttacker.rootParentAttacker;
+        //        }
+        //        else
+        //        {
+        //            var parentAttacker = recieveParentAttacker.parentAttacker;
+        //        }
+        //    }
+        //}
 
        
 #endif

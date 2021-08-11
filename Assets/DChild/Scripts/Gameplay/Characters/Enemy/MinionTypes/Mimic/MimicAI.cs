@@ -16,7 +16,7 @@ using DChild.Gameplay.Characters.Enemies;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Mimic")]
-    public class MimicAI : CombatAIBrain<MimicAI.Info>, IResetableAIBrain, IKnockbackableAI
+    public class MimicAI : CombatAIBrain<MimicAI.Info>, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo

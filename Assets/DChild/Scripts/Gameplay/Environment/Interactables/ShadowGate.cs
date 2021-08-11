@@ -1,4 +1,5 @@
-﻿/**************************************
+﻿
+/**************************************
  * 
  * A Generic Button that calls an event to 
  * those that are concerned only once.
@@ -7,7 +8,10 @@
  **************************************/
 
 using DChild.Gameplay.Environment.Interractables;
+using DChild.Gameplay.Systems;
+using DChild.Gameplay.Systems.Serialization;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -15,8 +19,6 @@ namespace DChild.Gameplay.Environment
 {
     public class ShadowGate : MonoBehaviour, IButtonToInteract
     {
-        [SerializeField]
-        private Location m_fromLocation;
         [SerializeField]
         private Vector3 m_promptOffset;
 
@@ -31,6 +33,7 @@ namespace DChild.Gameplay.Environment
 
         private Collider2D m_trigger;
         private SpineAnimation m_spineAnimation;
+        private LocationPoster m_locationPoster;
 
         public bool showPrompt => true;
 
@@ -73,7 +76,7 @@ namespace DChild.Gameplay.Environment
 
         public void Interact(Character character)
         {
-            GameplaySystem.gamplayUIHandle.OpenWorldMap(m_fromLocation);
+            GameplaySystem.gamplayUIHandle.OpenShadowGateMap(m_locationPoster.data.location);
         }
 
         private IEnumerator TransistionAnimationRoutine(string startAnimation, string idleAnimation, bool isTriggerEnabled)
@@ -84,11 +87,18 @@ namespace DChild.Gameplay.Environment
             m_trigger.enabled = isTriggerEnabled;
         }
 
+        private void OnArrival(object sender, CharacterEventArgs eventArgs)
+        {
+            //Ask Sr Martin what should happen when arriving at a shadow gate
+        }
+
         private void Awake()
         {
             m_trigger = GetComponent<Collider2D>();
             m_spineAnimation = GetComponentInChildren<SpineAnimation>();
             CloseGate(true);
+            m_locationPoster = GetComponent<LocationPoster>();
+            m_locationPoster.data.OnArrival += OnArrival;
         }
 
         private void OnDrawGizmosSelected()

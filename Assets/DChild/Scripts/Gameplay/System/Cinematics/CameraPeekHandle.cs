@@ -51,6 +51,7 @@ namespace DChild.Gameplay.Cinematics
         private Vector3 m_currentOffset;
         private IVirtualCamera m_currentCamera;
         private InterpolationData m_interpolationData;
+        private ConfigurationData m_disabledPeekonfigData;
 
         public void SetConfiguration(CameraPeekConfiguration configType)
         {
@@ -65,6 +66,9 @@ namespace DChild.Gameplay.Cinematics
                     break;
                 case CameraPeekConfiguration.ExtremeLowOnly:
                     m_currentConfigData = m_lowConfigurationData;
+                    break;
+                case CameraPeekConfiguration.None:
+                    m_currentConfigData = m_disabledPeekonfigData;
                     break;
             }
         }
@@ -115,6 +119,7 @@ namespace DChild.Gameplay.Cinematics
 
         private void Awake()
         {
+            m_disabledPeekonfigData = new ConfigurationData();
             SetConfiguration(CameraPeekConfiguration.Normal);
         }
     }

@@ -71,7 +71,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Execute()
         {
             m_shadowMorphFX.Play();
-            m_damageable.SetInvulnerability(Invulnerability.MAX);
+            m_damageable.SetInvulnerability(Invulnerability.Level_2);
             m_state.waitForBehaviour = true;
             m_animator.SetBool(m_animationParameter, true);
             m_skeletonGhost.enabled = true;

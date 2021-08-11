@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Spine.Unity;
 using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Combat;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
@@ -30,6 +31,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
 
+        ///Test Target
+        //[SerializeField]
+        //private GameObject m_target;
+
         private Vector2 m_currentAim; //Relative to Character Facing
 
         private IProjectileThrowState m_throwState;
@@ -52,7 +57,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
         #region Aim
         public void StartAim()
         {
-            GameSystem.ResetCursorPosition(); //FOr Quality of Life thing
+            ////////////////////
+            //Test
+            //Debug.Log(delta);
+            //GameSystem.ResetCursorPosition();
+            //var x = ((Vector3)m_target.transform.position - m_spawnPoint.position).normalized;
+            //var y = Vector2.Distance(m_target.transform.position, transform.position);
+            //var z = x * 5;
+            //Debug.Log(x);
+            //Debug.Log(y);
+            //Debug.Log(z);
+            //m_currentAim = z;
+            ////////////////////
+
+            //GameSystem.ResetCursorPosition(); //FOr Quality of Life thing
             m_currentAim = m_defaultAim;
 
             if (m_adjustableXSpeed == false)
@@ -76,8 +94,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             var relativeDelta = delta.normalized * m_aimSensitivity;
             relativeDelta.x *= (int)m_character.facing;
             var newAim = m_currentAim += relativeDelta;
-
-            Debug.Log(newAim);
 
             if (newAim.x < m_horizontalThreshold.min)
             {
@@ -260,6 +276,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_spawnedProjectile = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_projectile.projectile);
             m_spawnedProjectile.transform.position = m_spawnPoint.position;
             m_spawnedProjectile.transform.parent = transform;
+            m_spawnedProjectile.GetComponent<Attacker>().SetParentAttacker(m_attacker);
 
             var scale = m_spawnedProjectile.transform.localScale;
             scale.y = 1;
@@ -328,6 +345,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_throwState = info.state;
             m_animator = info.animator;
             m_character = info.character;
+            m_attacker = info.attacker;
             m_launcher = new ProjectileLauncher(m_projectile, m_spawnPoint);
             m_skullThrowAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ProjectileThrow);
             m_skullThrowVariantParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ProjectileThrowVariant);

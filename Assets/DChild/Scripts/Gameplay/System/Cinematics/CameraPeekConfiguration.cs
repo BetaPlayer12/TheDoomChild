@@ -4,6 +4,7 @@
     {
         Normal,
         ExtremeHighOnly,
-        ExtremeLowOnly
+        ExtremeLowOnly,
+        None
     }
 }
