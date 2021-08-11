@@ -17,7 +17,7 @@ using DChild.Gameplay.Environment;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/FailedExperiment")]
-    public class FailedExperimentAI : CombatAIBrain<FailedExperimentAI.Info>, IResetableAIBrain, IKnockbackableAI, IAmbushingAI
+    public class FailedExperimentAI : CombatAIBrain<FailedExperimentAI.Info>, IResetableAIBrain, IKnockbackable, IAmbushingAI
     {
         [System.Serializable]
         public class Info : BaseInfo

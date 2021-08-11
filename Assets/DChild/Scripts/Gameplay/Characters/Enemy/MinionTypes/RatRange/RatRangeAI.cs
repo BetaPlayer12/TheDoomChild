@@ -18,7 +18,7 @@ using DChild.Gameplay.Projectiles;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/RatRange")]
-    public class RatRangeAI : CombatAIBrain<RatRangeAI.Info>, IResetableAIBrain, IKnockbackableAI
+    public class RatRangeAI : CombatAIBrain<RatRangeAI.Info>, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo
