@@ -60,6 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private EarthShaker m_earthShaker;
         private WhipAttack m_whip;
         private ProjectileThrow m_skullThrow;
+        private PlayerBlock m_block;
         #endregion
 
         private bool m_updateEnabled = true;
@@ -84,6 +85,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whip?.Cancel();
             m_skullThrow?.Cancel();
             m_shadowMorph.Cancel();
+            m_block?.Cancel();
             m_shadowGaugeRegen.Enable(true);
 
             if (m_state.isGrounded)
@@ -204,6 +206,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_shadowGaugeRegen?.Enable(true);
                     m_idle?.Cancel();
                     m_movement?.Cancel();
+                    m_block?.Cancel();
                 }
 
                 GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
@@ -297,6 +300,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_whip = m_character.GetComponentInChildren<WhipAttack>();
             m_skullThrow = m_character.GetComponentInChildren<ProjectileThrow>();
             m_skullThrow.ExecutionRequested += OnProjectileThrowRequest;
+            m_block = m_character.GetComponentInChildren<PlayerBlock>();
 
             m_updateEnabled = true;
         }
@@ -761,6 +765,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_attackRegistrator?.ResetHitCache();
                 }
             }
+            else if (m_state.isBlocking)
+            {
+                if (m_input.blockHeld == false)
+                {
+                    m_block.Cancel();
+                }
+            }
             else if (m_state.isSliding)
             {
                 HandleSlide();
@@ -806,6 +817,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
+                }
+
+                if (m_input.blockHeld == true)
+                {
+                    PrepareForGroundAttack();
+                    m_block.Execute();
+                    return;
                 }
 
                 if (m_input.interactPressed)
@@ -985,6 +1003,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         return;
                     }
                     #endregion
+                }
+
+                if (m_input.blockHeld == true)
+                {
+                    PrepareForGroundAttack();
+                    m_block.Execute();
+                    return;
                 }
 
                 if (m_input.interactPressed)

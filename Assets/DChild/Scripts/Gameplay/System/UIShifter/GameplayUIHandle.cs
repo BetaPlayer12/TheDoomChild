@@ -42,6 +42,11 @@ namespace DChild.Gameplay.Systems
             m_worldMap.SetFromLocation(fromLocation);
         }
 
+        public void OpenShadowGateMap(Location fromLocation)
+        {
+            GameEventMessage.SendEvent("ShadowGateMap Open");
+        }
+
         public void OpenStorePage()
 		{
 			m_storeNavigator.OpenPage();
@@ -196,7 +201,6 @@ namespace DChild.Gameplay.Systems
             yield return new WaitForSeconds(duration);
             GameEventMessage.SendEvent("Hide JournalUpdate");
         }
-
 
     }
 }

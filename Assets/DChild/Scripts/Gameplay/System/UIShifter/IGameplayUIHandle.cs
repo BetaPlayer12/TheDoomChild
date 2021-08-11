@@ -15,6 +15,7 @@ namespace DChild.Gameplay.Systems
         void OpenStorePage();
 
         void OpenWorldMap(Location fromLocation);
+        void OpenShadowGateMap(Location fromLocation);
 
         void MonitorBoss(Boss boss);
         void ResetGameplayUI();
