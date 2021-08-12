@@ -512,6 +512,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_hitbox.Disable();
             }
 
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 

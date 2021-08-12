@@ -24,16 +24,22 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //Basic Behaviours
             [SerializeField]
-            private MovementInfo m_patrol = new MovementInfo();
-            public MovementInfo patrol => m_patrol;
-            [SerializeField]
             private MovementInfo m_move = new MovementInfo();
             public MovementInfo move => m_move;
+            [SerializeField]
+            private MovementInfo m_moveSolo = new MovementInfo();
+            public MovementInfo moveSolo => m_moveSolo;
+            [SerializeField]
+            private MovementInfo m_moveBackwards = new MovementInfo();
+            public MovementInfo moveBackwards => m_moveBackwards;
 
             //Attack Behaviours
             [SerializeField, TabGroup("Attack")]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
+            [SerializeField, TabGroup("Attack")]
+            private SimpleAttackInfo m_chargeAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo chargeAttack => m_chargeAttack;
             [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_chargeAttackDuration;
             public float chargeAttackDuration => m_chargeAttackDuration;
@@ -55,35 +61,60 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_idleSoloAnimation;
+            public string idleSoloAnimation => m_idleSoloAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_cartStopAnimation;
+            public string cartStopAnimation => m_cartStopAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_getOffAnimation;
+            public string getOffAnimation => m_getOffAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_impactAnimation;
+            public string impactAnimation => m_impactAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_anticipationAnimation;
+            public string anticipationAnimation => m_anticipationAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_detectAnimation;
             public string detectAnimation => m_detectAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turnAnimation;
-            public string turnAnimation => m_turnAnimation;
+            private string m_flinchBothAnimation;
+            public string flinchBothAnimation => m_flinchBothAnimation;
+            //[SerializeField, ValueDropdown("GetAnimations")]
+            //private string m_turnAnimation;
+            //public string turnAnimation => m_turnAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathWithCartAnimation;
+            public string deathWithCartAnimation => m_deathWithCartAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_deathCartOnlyAnimation;
+            public string deathCartOnlyAnimation => m_deathCartOnlyAnimation;
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
-                m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
+                m_moveSolo.SetData(m_skeletonDataAsset);
+                m_moveBackwards.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
+                m_chargeAttack.SetData(m_skeletonDataAsset);
 #endif
             }
         }
 
-        private enum State
+        public enum State
         {
             Detect,
             Idle,
-            Patrol,
-            Standby,
-            Turning,
+            Returning,
+            //Turning,
             Attacking,
             Cooldown,
             Chasing,
@@ -95,6 +126,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             AttackMelee,
+            ChargeAttack,
             [HideInInspector]
             _COUNT
         }
@@ -104,17 +136,21 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
+        private Transform m_model;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_solidCollider;
+        [SerializeField, TabGroup("Reference")]
         private Collider2D m_aggroCollider;
-        [SerializeField, TabGroup("Modules")]
-        private AnimatedTurnHandle m_turnHandle;
+        [SerializeField, TabGroup("Reference")]
+        private List<RaySensorFaceRotator> m_rotators;
+        //[SerializeField, TabGroup("Modules")]
+        //private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
         private PatrolHandle m_patrolHandle;
-        [SerializeField, TabGroup("Modules")]
-        private AttackHandle m_attackHandle;
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
@@ -122,9 +158,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float m_currentPatience;
         private float m_currentCD;
-        private float m_currentRunAttackDuration;
+        private bool m_isCartDead;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private Vector2 m_initialPos;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_playerSensor;
@@ -134,28 +171,35 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_cartPlayerSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_cartWallSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_cartGroundSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_cartEdgeSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_cartBreakSensor;
 
-        [SerializeField]
-        private bool m_willPatrol;
+        [SerializeField, TabGroup("Adutukat")]
+        private CartZombieAI m_cartAI;
+        [SerializeField, TabGroup("Adutukat")]
+        private Transform m_cartModel;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
-        [ShowInInspector]
-        private RandomAttackDecider<Attack> m_attackDecider;
 
         private State m_turnState;
 
         private Coroutine m_attackRoutine;
         private Coroutine m_sneerRoutine;
         private Coroutine m_patienceRoutine;
+        private Coroutine m_playerStepRoutine;
 
-        private void OnAttackDone(object sender, EventActionArgs eventArgs)
-        {
-            //m_animation.DisableRootMotion();
-            m_stateHandle.ApplyQueuedState();
-        }
+        public event EventAction<EventActionArgs> IsDead;
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => /*m_stateHandle.SetState(State.Turning)*/ CustomTurn();
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -175,7 +219,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_isDetecting)
                     {
                         m_isDetecting = true;
-                        m_stateHandle.SetState(State.Detect);
+                        m_cartAI.SetAI(m_targetInfo, m_info.chargeAttackDuration);
+                        if (m_isCartDead)
+                        {
+                            m_stateHandle.SetState(State.Detect);
+                        }
                     }
                     m_currentPatience = 0;
                     //m_randomIdleRoutine = null;
@@ -190,6 +238,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        public void OverrideState(State state)
+        {
+            m_stateHandle.OverrideState(state);
+        }
+
         private bool TargetBlocked()
         {
             Vector2 wat = m_character.centerMass.position;
@@ -200,15 +253,16 @@ namespace DChild.Gameplay.Characters.Enemies
             return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
-        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
-        {
-            m_stateHandle.ApplyQueuedState();
-        }
+        //private void OnTurnDone(object sender, FacingEventArgs eventArgs)
+        //{
+        //    m_stateHandle.ApplyQueuedState();
+        //}
 
         private void CustomTurn()
         {
             transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+            m_character.SetFacing(m_character.facing == HorizontalDirection.Left ? HorizontalDirection.Right : HorizontalDirection.Left);
+            //transform.localScale = new Vector3(transform.localScale.x * m_cartAI.transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
 
         //Patience Handler
@@ -220,17 +274,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             if (TargetBlocked())
             {
-                if (IsFacingTarget())
-                {
-                    if (m_sneerRoutine == null)
-                    {
-                        m_sneerRoutine = StartCoroutine(SneerRoutine());
-                    }
-                    //else if ()
-                    //{
-                    //}
-                }
-                else
+                if (!IsFacingTarget() && m_isCartDead)
                 {
                     if (m_sneerRoutine != null)
                     {
@@ -238,9 +282,16 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_sneerRoutine = null;
                     }
                     //m_enablePatience = false;
-                    m_turnState = State.WaitBehaviourEnd;
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                        m_stateHandle.SetState(State.Turning);
+                    //m_turnState = State.WaitBehaviourEnd;
+                    //m_stateHandle.SetState(State.Turning);
+                    CustomTurn();
+                    //m_cartAI.TurnCart(CartZombieAI.State.WaitBehaviourEnd);
+                    return;
+                }
+
+                if (m_sneerRoutine == null)
+                {
+                    m_sneerRoutine = StartCoroutine(SneerRoutine());
                 }
             }
             else if (!TargetBlocked())
@@ -279,7 +330,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
                 m_sneerRoutine = null;
             }
-            m_stateHandle.SetState(State.Patrol);
+            m_stateHandle.SetState(State.Idle);
         }
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
@@ -288,6 +339,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            IsDead?.Invoke(this, new EventActionArgs());
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_attackRoutine != null)
             {
@@ -305,19 +357,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            if (m_stateHandle.currentState == State.Cooldown && m_attackRoutine == null)
             {
                 m_flinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                m_stateHandle.Wait(State.ReevaluateSituation);
+                m_stateHandle.Wait(State.Cooldown);
             }
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-            //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
             if (m_flinchHandle.m_autoFlinch)
             {
                 m_flinchHandle.m_autoFlinch = false;
@@ -326,19 +376,47 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        public override void ApplyData()
+        private void CartIsDead(object sender, EventActionArgs eventArgs)
         {
-            base.ApplyData();
-            if (m_attackDecider != null)
+            m_isCartDead = true;
+            this.transform.SetParent(null);
+            m_solidCollider.SetActive(false);
+            m_hitbox.Enable();
+            StopAllCoroutines();
+            switch (m_character.facing)
             {
-                UpdateAttackDeciderList();
+                case HorizontalDirection.Left:
+                    transform.localScale = new Vector3(-1, 1, 1);
+                    break;
+                case HorizontalDirection.Right:
+                    transform.localScale = Vector3.one;
+                    break;
             }
+            for (int i = 0; i < m_rotators.Count; i++)
+            {
+                m_rotators[i].AlignRotationToFacing(m_character.facing);
+            }
+            StartCoroutine(CartDiesRoutine());
         }
 
-        private void UpdateAttackDeciderList()
+        private IEnumerator CartDiesRoutine()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AttackMelee, m_info.attack.range)/**/);
-            m_attackDecider.hasDecidedOnAttack = false;
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            m_animation.SetAnimation(0, m_info.deathCartOnlyAnimation, false).TimeScale = 0.5f;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathCartOnlyAnimation);
+            m_animation.SetAnimation(0, m_info.idleSoloAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            //if (hit.collider != null)
+            //{
+            //    return hit.point;
+            //}
+            return hit.point;
         }
 
         private IEnumerator DetectRoutine()
@@ -347,64 +425,71 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
+            m_animation.SetAnimation(0, !m_isCartDead ? m_info.idleAnimation : m_info.idleSoloAnimation, true);
+            m_attackRoutine = StartCoroutine(AttackRoutine());
             yield return null;
         }
 
         private IEnumerator AttackRoutine()
         {
-            //m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2;
+            if (!m_isCartDead)
+            {
+                if (!IsFacing(m_cartModel.position))
+                {
+                    CustomTurn();
+                }
+                m_animation.SetAnimation(0, m_info.chargeAttack.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeAttack.animation);
+                m_playerStepRoutine = StartCoroutine(PlayerSteppedOnRoutine());
+            }
+            m_animation.SetAnimation(0, !m_isCartDead ? m_info.move.animation : m_info.attack.animation, true);
             float time = 0;
-            while (time < m_info.chargeAttackDuration)
+            while (time < (!m_isCartDead ? m_info.chargeAttackDuration : 0.65f))
             {
                 time += Time.deltaTime;
-                if (m_wallSensor.isDetecting || !m_edgeSensor.isDetecting || m_playerSensor.isDetecting)
+                if (m_isCartDead)
+                {
+                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveSolo.speed);
+                }
+                yield return new WaitForSeconds(!m_isCartDead ? 0.1f : 0);
+                if (m_isCartDead ? m_wallSensor.isDetecting || !m_edgeSensor.isDetecting : m_cartBreakSensor.isDetecting || !m_cartEdgeSensor.isDetecting)
                 {
                     time = m_info.chargeAttackDuration;
                 }
                 yield return null;
             }
-            m_animation.SetAnimation(0, m_info.attack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
-
-        private IEnumerator RandomIdleRoutine()
-        {
-            var timer = UnityEngine.Random.Range(5, 10);
-            var currentTimer = 0f;
-            while (currentTimer < timer)
+            if (!m_isCartDead)
             {
-                currentTimer += Time.deltaTime;
-                yield return null;
+                StopCoroutine(m_playerStepRoutine);
+                m_playerStepRoutine = null;
+                m_animation.SetAnimation(0, m_info.cartStopAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.cartStopAnimation);
+                m_animation.SetAnimation(0, m_info.getOffAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.getOffAnimation);
             }
-            m_stateHandle.Wait(State.Patrol);
-            m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.idleAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
-            m_stateHandle.ApplyQueuedState();
+            else
+            {
+                m_movement.Stop();
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            }
+            m_animation.SetAnimation(0, !m_isCartDead ? m_info.idleAnimation : m_info.idleSoloAnimation, true);
+            if (m_isCartDead)
+            {
+                m_stateHandle.ApplyQueuedState();
+            }
             yield return null;
-            StartCoroutine(RandomIdleRoutine());
         }
 
-        private IEnumerator RandomTurnRoutine()
+        private IEnumerator PlayerSteppedOnRoutine()
         {
             while (true)
             {
-                var timer = UnityEngine.Random.Range(5, 10);
-                var currentTimer = 0f;
-                while (currentTimer < timer)
+                if (m_cartPlayerSensor.isDetecting)
                 {
-                    currentTimer += Time.deltaTime;
-                    yield return null;
+                    m_animation.SetAnimation(0, m_info.impactAnimation, false);
+                    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.impactAnimation);
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
                 }
-                m_turnState = State.Idle;
-                m_stateHandle.SetState(State.Turning);
                 yield return null;
             }
         }
@@ -412,7 +497,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SneerRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            m_movement.Stop();
+            if (m_isCartDead)
+            {
+                m_movement.Stop();
+            }
             while (true)
             {
                 m_animation.SetAnimation(0, m_info.detectAnimation, false);
@@ -430,112 +518,81 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_selfCollider.SetActive(false);
 
-            //m_aggroCollider.enabled = m_willPatrol ? true : false;
-            if (!m_willPatrol)
-            {
-                m_hitbox.Disable();
-            }
-
-            //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
+            //m_animation.EnableRootMotion(true, false);
+            m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
         }
 
         protected override void Awake()
         {
             base.Awake();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_attackHandle.AttackDone += OnAttackDone;
-            m_turnHandle.TurnDone += OnTurnDone;
+            //m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
-            m_attackDecider = new RandomAttackDecider<Attack>();
-            UpdateAttackDeciderList();
+            m_cartAI.IsDead += CartIsDead;
+            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
         }
-
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
-            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
-                    m_movement.Stop();
-                    if (!IsFacingTarget() && m_willPatrol)
+                    if (m_isCartDead)
                     {
-                        m_turnState = State.Detect;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_movement.Stop();
                     }
-                    else
+
+                    if (!IsFacingTarget() /*&& m_isCartDead*/)
                     {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(DetectRoutine());
+                        //m_turnState = State.Detect;
+                        //m_stateHandle.SetState(State.Turning);
+                        CustomTurn();
+                        //m_cartAI.TurnCart(CartZombieAI.State.Detect);
                     }
+
+                    m_stateHandle.Wait(State.Cooldown);
+                    StartCoroutine(DetectRoutine());
                     break;
 
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    m_movement.Stop();
-                    break;
-
-                case State.Patrol:
-                    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
-                    {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true)/*.TimeScale = 0.5f*/;
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
-                    }
-                    else
+                    m_animation.SetAnimation(0, !m_isCartDead ? m_info.idleAnimation : m_info.idleSoloAnimation, true);
+                    if (m_isCartDead)
                     {
                         m_movement.Stop();
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
 
-                case State.Standby:
-                    Patience();
-                    break;
-
-                case State.Turning:
-                    m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
-                    break;
+                //case State.Turning:
+                //    m_stateHandle.Wait(m_turnState);
+                //    m_turnHandle.Execute();
+                //    break;
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
 
-
-                    m_animation.EnableRootMotion(true, false);
-                    switch (m_attackDecider.chosenAttack.attack)
+                    switch (m_isCartDead)
                     {
-                        case Attack.AttackMelee:
-                            //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                        case true:
+                            m_attackRoutine = StartCoroutine(AttackRoutine());
+                            break;
+
+                        case false:
                             m_attackRoutine = StartCoroutine(AttackRoutine());
                             break;
                     }
-                    m_attackDecider.hasDecidedOnAttack = false;
 
                     break;
 
                 case State.Cooldown:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
-                    if (!IsFacingTarget())
+                    if (!IsFacingTarget() /*&& m_isCartDead*/)
                     {
-                        m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        //m_turnState = State.Cooldown;
+                        //m_stateHandle.SetState(State.Turning);
+                        CustomTurn();
                     }
-                    else
-                    {
-                        //if (m_animation.animationState.GetCurrent(0).IsComplete)
-                        //{
-                        //}
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    }
+                    m_animation.SetAnimation(0, !m_isCartDead ? m_info.idleAnimation : m_info.idleSoloAnimation, true);
 
                     if (m_currentCD <= m_info.attackCD)
                     {
@@ -544,45 +601,59 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
-                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        if (m_isCartDead)
+                        {
+                            m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        }
+                        //else
+                        //{
+                        //    m_stateHandle.Wait(State.ReevaluateSituation);
+                        //}
                     }
 
                     break;
 
                 case State.Chasing:
                     {
-                        if (IsFacingTarget())
+                        if (!IsFacingTarget() && m_isCartDead)
                         {
-                            m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            //m_turnState = State.ReevaluateSituation;
+                            //m_stateHandle.SetState(State.Turning);
+                            CustomTurn();
+                        }
+
+                        var attackRange = m_isCartDead ? m_info.attack.range : m_info.chargeAttack.range;
+                        if (IsTargetInRange(attackRange) && m_isCartDead ? !m_wallSensor.allRaysDetecting : !m_cartWallSensor.allRaysDetecting)
+                        {
+                            if (m_isCartDead)
                             {
-                                m_movement.Stop();
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
+                                m_movement.Stop();
                             }
-                            else
-                            {
-                                m_animation.EnableRootMotion(true, false);
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
-                                {
-                                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                                    //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
-                                }
-                                else
-                                {
-                                    m_movement.Stop();
-                                    if (m_animation.animationState.GetCurrent(0).IsComplete)
-                                    {
-                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                    }
-                                }
-                            }
+                            m_animation.SetAnimation(0, !m_isCartDead ? m_info.idleAnimation : m_info.idleSoloAnimation, true);
                         }
                         else
                         {
-                            m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                                m_stateHandle.SetState(State.Turning);
+                            if (m_isCartDead ? !m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting : !m_cartWallSensor.isDetecting && m_cartGroundSensor.isDetecting && m_cartEdgeSensor.isDetecting)
+                            {
+                                m_animation.SetAnimation(0, m_isCartDead ? m_info.moveSolo.animation : m_info.move.animation, true);
+                                if (m_isCartDead)
+                                {
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveSolo.speed);
+                                }
+                                //m_model.localPosition = new Vector2(4.5f, 0);
+                            }
+                            else
+                            {
+                                if (m_isCartDead)
+                                {
+                                    m_movement.Stop();
+                                }
+                                if (m_animation.animationState.GetCurrent(0).IsComplete)
+                                {
+                                    m_animation.SetAnimation(0, !m_isCartDead ? m_info.idleAnimation : m_info.idleSoloAnimation, true);
+                                }
+                            }
                         }
                     }
                     break;
@@ -595,7 +666,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_stateHandle.SetState(State.Patrol);
+                        m_stateHandle.SetState(State.Idle);
                     }
 
                     if (m_patienceRoutine != null /*&& m_targetInfo.isValid*/)
@@ -614,12 +685,52 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience && m_stateHandle.currentState != State.Standby)
+            if (m_targetInfo.isValid)
             {
-                //Patience();
-                if (TargetBlocked())
+                if (TargetBlocked() && Vector2.Distance(m_targetInfo.position, transform.position) > m_info.chargeAttack.range)
                 {
-                    m_stateHandle.OverrideState(State.Standby);
+                    StopAllCoroutines();
+                    m_selfCollider.SetActive(false);
+                    m_enablePatience = false;
+                    m_targetInfo.Set(null, null);
+                    m_isDetecting = false;
+                    if (m_sneerRoutine != null)
+                    {
+                        StopCoroutine(m_sneerRoutine);
+                        m_sneerRoutine = null;
+                    }
+                    if (m_patienceRoutine != null)
+                    {
+                        StopCoroutine(m_patienceRoutine);
+                        m_patienceRoutine = null;
+                    }
+                    if (m_isCartDead)
+                    {
+                        m_stateHandle.OverrideState(State.Returning);
+                    }
+                    return;
+                }
+
+                if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.targetDistanceTolerance)
+                {
+                    Patience();
+                }
+                else
+                {
+                    if (!TargetBlocked())
+                    {
+                        if (m_sneerRoutine != null)
+                        {
+                            if (m_patienceRoutine != null)
+                            {
+                                StopCoroutine(m_patienceRoutine);
+                                m_patienceRoutine = null;
+                            }
+                            StopCoroutine(m_sneerRoutine);
+                            m_sneerRoutine = null;
+                            m_enablePatience = false;
+                        }
+                    }
                 }
             }
         }
@@ -631,7 +742,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
                 m_sneerRoutine = null;
             }
-            m_stateHandle.OverrideState(State.Patrol);
+            m_stateHandle.OverrideState(State.Idle);
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
@@ -649,7 +760,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
                 m_sneerRoutine = null;
             }
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.Detect);
             enabled = true;
         }
 
