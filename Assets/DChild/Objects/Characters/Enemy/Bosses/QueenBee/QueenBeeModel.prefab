@@ -613,6 +613,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 6269732207030225230}
   - {fileID: 610980663173176130}
   m_Father: {fileID: 8145866651677774129}
   m_RootOrder: 0
@@ -3102,6 +3103,7 @@ MonoBehaviour:
   - {fileID: 2720492919063829432}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
+  m_canBlockDamage: 0
 --- !u!114 &5290681609380418611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3340,11 +3342,11 @@ GameObject:
   - component: {fileID: 465880572060009902}
   - component: {fileID: 6361443382781322649}
   - component: {fileID: 5280032607097867904}
-  - component: {fileID: 7328764048952945108}
-  - component: {fileID: 2273828362111968087}
-  - component: {fileID: 6204910979053762167}
-  - component: {fileID: 8979797265754917910}
-  - component: {fileID: 8132859060212559963}
+  - component: {fileID: 1004441564510894770}
+  - component: {fileID: 2359864728833521269}
+  - component: {fileID: 5626168526374765485}
+  - component: {fileID: 1301120483175359941}
+  - component: {fileID: 9119263768453006851}
   m_Layer: 13
   m_Name: Attackbb
   m_TagString: Untagged
@@ -3418,8 +3420,9 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
+  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
---- !u!60 &7328764048952945108
+--- !u!60 &1004441564510894770
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3452,7 +3455,7 @@ PolygonCollider2D:
       - {x: 1.2729, y: -0.039}
       - {x: 5.7027, y: 4.3545}
       - {x: 6.3011, y: 4.8198}
---- !u!60 &2273828362111968087
+--- !u!60 &2359864728833521269
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3485,7 +3488,7 @@ PolygonCollider2D:
       - {x: -10.9139, y: -5.0515}
       - {x: 0.086799994, y: -7.2715}
       - {x: -0.036199994, y: 5.8905997}
---- !u!60 &6204910979053762167
+--- !u!60 &5626168526374765485
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3518,7 +3521,7 @@ PolygonCollider2D:
       - {x: -5.2205997, y: 2.238}
       - {x: -1.9489, y: 5.5568}
       - {x: -5.2205997, y: 8.8691}
---- !u!60 &8979797265754917910
+--- !u!60 &1301120483175359941
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3551,7 +3554,7 @@ PolygonCollider2D:
       - {x: 0.92199993, y: 0.40060002}
       - {x: 2.7660997, y: 3.8917}
       - {x: 2.8079, y: 12.7417}
---- !u!60 &8132859060212559963
+--- !u!60 &9119263768453006851
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3662,7 +3665,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7325508310532998701}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6860169486330716665
 BoxCollider2D:
@@ -5194,6 +5197,87 @@ MonoBehaviour:
   zPosition: 1
   overrideAlpha: 1
   hierarchy: {fileID: 5374244173095200081}
+--- !u!1 &5205221750725681371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6269732207030225230}
+  - component: {fileID: 7026118131015163685}
+  - component: {fileID: 1646029269273142219}
+  - component: {fileID: 6002265970294359650}
+  m_Layer: 16
+  m_Name: LegCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &6269732207030225230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205221750725681371}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7325508310532998701}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &7026118131015163685
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205221750725681371}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 5}
+  m_Size: {x: 0.1, y: 0.1}
+  m_Direction: 1
+--- !u!114 &1646029269273142219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205221750725681371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_collisionMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  m_collider: {fileID: 7026118131015163685}
+  m_recordsContactPoints: 1
+--- !u!114 &6002265970294359650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205221750725681371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea39aaa929f53d64b9a05becc48c1d8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_mask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!1 &5211783585960048377
 GameObject:
   m_ObjectHideFlags: 0
@@ -7824,6 +7908,7 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
+  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!114 &1475133383323072244
 MonoBehaviour:

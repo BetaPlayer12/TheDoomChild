@@ -18,7 +18,7 @@ using DChild.Gameplay.Projectiles;
 namespace DChild.Gameplay.Characters.Enemies
 {
     [AddComponentMenu("DChild/Gameplay/Enemies/Minion/Infernus")]
-    public class InfernusAI : CombatAIBrain<InfernusAI.Info>, IResetableAIBrain, IKnockbackableAI
+    public class InfernusAI : CombatAIBrain<InfernusAI.Info>, IResetableAIBrain, IKnockbackable
     {
         [System.Serializable]
         public class Info : BaseInfo
