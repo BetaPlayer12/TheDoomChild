@@ -505,6 +505,8 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_selfCollider.SetActive(false);
 
+            m_willPatrol = true;
+
             m_character.physics.simulateGravity = m_willPatrol ? true : false;
             //m_aggroCollider.enabled = m_willPatrol ? true : false;
             if (!m_willPatrol)
@@ -525,7 +527,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
