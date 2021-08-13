@@ -82,7 +82,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ContinueSlashCombo()
         {
-            m_slashCombo?.ContinueCombo();
             m_slashCombo?.PlayFX(true);
             m_slashCombo?.EnableCollision(true);
         }
@@ -98,7 +97,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ComboAttackEnd()
         {
-            m_slashCombo?.AttackOver();
+            m_slashCombo?.ComboAttackOver();
         }
 
         public void FinishProjectileThrow()

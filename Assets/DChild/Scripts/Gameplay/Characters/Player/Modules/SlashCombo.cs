@@ -48,6 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
+            m_state.isDoingCombo = true;
 
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
@@ -63,6 +64,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_currentSlashState = 0;
             }
+        }
+
+        public override void Cancel()
+        {
+            base.Cancel();
+
+            m_state.isDoingCombo = false;
         }
 
         public void PlayFX(bool value)
@@ -85,6 +93,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 m_slashComboInfo[i].ShowCollider(false);
             }
+        }
+
+        public void ComboAttackOver()
+        {
+            m_state.isDoingCombo = false;
+            m_currentSlashState = 0;
+            m_currentVisualSlashState = 0;
+            m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
+            //Reset();
         }
 
         public void AllowNextAttackDelay()
@@ -118,11 +135,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     Reset();
                 }
             }
-        }
-
-        public void ContinueCombo()
-        {
-
         }
     }
 }

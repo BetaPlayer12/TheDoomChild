@@ -425,6 +425,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, !m_isCartDead ? m_info.idleAnimation : m_info.idleSoloAnimation, true);
             m_attackRoutine = StartCoroutine(AttackRoutine());
             yield return null;
@@ -517,6 +518,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
+            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
 
             //m_animation.EnableRootMotion(true, false);
             m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
