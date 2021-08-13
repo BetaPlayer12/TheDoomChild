@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems.WorldComponents
@@ -34,13 +35,20 @@ namespace DChild.Gameplay.Systems.WorldComponents
         {
             for (int i = m_isolatedPhysics.Count - 1; i >= 0; i--)
             {
-                if(m_isolatedPhysics[i] == null)
+                if (m_isolatedPhysics[i] == null)
                 {
                     m_isolatedPhysics.RemoveAt(i);
                 }
                 else
                 {
-                    m_isolatedPhysics[i].UpdatePhysics();
+                    try
+                    {
+                        m_isolatedPhysics[i].UpdatePhysics();
+                    }
+                    catch(Exception e)
+                    {
+                        Debug.LogError(e.Message, (IsolatedPhysics2D)m_isolatedPhysics[i]);
+                    }
                 }
             }
         }

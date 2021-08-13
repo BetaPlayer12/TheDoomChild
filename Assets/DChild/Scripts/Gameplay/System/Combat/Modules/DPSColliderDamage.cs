@@ -71,6 +71,14 @@ namespace DChild.Gameplay.Combat
             m_infos.RemoveAt(i);
         }
 
+        private void ChangeHitboxRegisterationStatus(Hitbox hitbox, bool hasHit)
+        {
+            if (m_damageUniqueHitboxesOnly)
+            {
+                m_collisionRegistrator.RegisterHitboxAs(hitbox, hasHit);
+            }
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -92,7 +100,7 @@ namespace DChild.Gameplay.Combat
                     if (info.isOutOfCollider)
                     {
                         RemoveAffectedIndex(i);
-                        m_collisionRegistrator.RegisterHitboxAs(toDamage, false);
+                        ChangeHitboxRegisterationStatus(toDamage, false);
                     }
                     else
                     {
@@ -101,13 +109,13 @@ namespace DChild.Gameplay.Combat
                         if (CanBypassHitboxInvulnerability(toDamage))
                         {
                             var collision = m_affectedColliders[i];
-                            m_collisionRegistrator.RegisterHitboxAs(toDamage, false);
+                            ChangeHitboxRegisterationStatus(toDamage, false);
                             DealDamage(collision, toDamage);
                             SpawnHitFX(collision);
                             if (toDamage.damageable.isAlive == false)
                             {
                                 RemoveAffectedIndex(i);
-                                m_collisionRegistrator.RegisterHitboxAs(toDamage, false);
+                                ChangeHitboxRegisterationStatus(toDamage, false);
                             }
                         }
                         m_infos[i] = info;
