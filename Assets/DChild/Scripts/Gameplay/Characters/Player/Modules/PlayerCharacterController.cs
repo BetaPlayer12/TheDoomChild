@@ -177,6 +177,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_swordThrust?.Cancel();
                         m_basicSlashes?.Cancel();
                         m_whip?.Cancel();
+                        m_slashCombo?.Cancel();
                     }
                 }
 
@@ -399,6 +400,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_shadowMorph?.Cancel();
                     m_shadowGaugeRegen?.Enable(true);
                 }
+            }
+
+
+            if (m_state.isDoingCombo)
+            {
+                if (m_state.waitForBehaviour == false)
+                {
+                    if (m_state.canAttack == false)
+                    {
+                        m_slashCombo.HandleComboAttackDelay();
+                    }
+                }
+
+                HandleGroundBehaviour();
+                return;
             }
 
             if (m_state.waitForBehaviour)
@@ -719,6 +735,21 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void HandleGroundBehaviour()
         {
+            if (m_state.isDoingCombo == true)
+            {
+                if (m_state.canAttack)
+                {
+                    if (m_input.slashPressed)
+                    {
+                        PrepareForGroundAttack();
+                        m_slashCombo.Execute();
+                        return;
+                    }
+                }
+
+                return;
+            }
+
             if (m_state.isDashing == false && m_state.canDash == false)
             {
                 m_dash?.HandleCooldown();

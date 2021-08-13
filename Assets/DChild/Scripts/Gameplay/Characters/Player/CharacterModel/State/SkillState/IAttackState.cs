@@ -3,6 +3,7 @@
 
     public interface IAttackState
     {
+        bool isDoingCombo { get; set; }
         bool isChargingAttack { get; set; }
         bool canAttack { get; set; }
         bool isAttacking { get; set; }

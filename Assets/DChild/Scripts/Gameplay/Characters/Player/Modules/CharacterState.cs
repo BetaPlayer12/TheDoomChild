@@ -118,5 +118,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isBlocking;
         public bool isBlocking { get => m_isBlocking; set => m_isBlocking = value; }
+        [SerializeField, ReadOnly]
+        private bool m_isDoingCombo;
+        public bool isDoingCombo { get => m_isDoingCombo; set => m_isDoingCombo = value; }
     }
 }
