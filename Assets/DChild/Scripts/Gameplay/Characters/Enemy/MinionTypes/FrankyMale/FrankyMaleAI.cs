@@ -518,6 +518,8 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_selfCollider.SetActive(false);
 
+            m_willPatrol = true;
+
             m_spineEventListener.Subscribe(m_info.attack1Event, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.attack2Event, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.teleportEvent, m_teleportFX.Play);
@@ -543,7 +545,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             //m_randomSpawnColliders = new List<Collider2D>();
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }

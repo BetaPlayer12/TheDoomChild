@@ -309,6 +309,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_projectilePoint;
         [SerializeField, TabGroup("Chain")]
         private BoxCollider2D m_chainHurtBox;
+        [SerializeField, TabGroup("Chain")]
+        private BoxCollider2D m_leapHurtBox;
 
         private int m_currentPhaseIndex;
         private float m_attackCount;
@@ -666,6 +668,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator LeapAttackRoutine(int repeats)
         {
             m_phaseHandle.allowPhaseChange = false;
+            m_leapHurtBox.enabled = true;
             for (int i = 0; i < repeats; i++)
             {
                 m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
@@ -705,6 +708,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.Stop();
                 yield return new WaitForAnimationComplete(m_animation.animationState, leapAnim);
             }
+            m_leapHurtBox.enabled = false;
             m_fistRefPoint.GetComponent<CircleCollider2D>().enabled = false;
             m_animation.SetAnimation(0, m_info.leapAttackEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.leapAttackEndAnimation);
