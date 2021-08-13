@@ -255,8 +255,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (!m_bodylightningBB.enabled)
             {
+                m_flinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
-                m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+                m_stateHandle.Wait(State.ReevaluateSituation);
             }
         }
 
@@ -264,6 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!m_bodylightningBB.enabled)
             {
+                m_flinchHandle.m_autoFlinch = false;
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 if (!m_bodylightningBB.enabled)
                 {
