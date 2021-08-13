@@ -205,6 +205,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isDetecting;
         private bool m_canAttack2;
         private Coroutine m_bodylightningCoroutine;
+        private Coroutine m_deathCoroutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -253,7 +254,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-            if (!m_bodylightningBB.enabled)
+            if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
             {
                 m_attackBB.enabled = false;
                 m_attackSideBB.enabled = false;
@@ -267,7 +268,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (!m_bodylightningBB.enabled)
+            if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
             {
                 m_flinchHandle.m_autoFlinch = false;
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -470,6 +471,11 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            if (m_bodylightningCoroutine != null)
+            {
+                StopCoroutine(m_bodylightningCoroutine);
+                m_bodylightningCoroutine = null;
+            }
             m_agent.Stop();
             m_hitbox.Disable();
             m_attackBB.enabled = false;
@@ -484,7 +490,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_bodylightningCoroutine);
                 m_bodylightningCoroutine = null;
             }
-            StartCoroutine(DeathRoutine());
+            m_deathCoroutine = StartCoroutine(DeathRoutine());
             Debug.Log("ALCHEMIST BOT DEATHHHH");
         }
 
