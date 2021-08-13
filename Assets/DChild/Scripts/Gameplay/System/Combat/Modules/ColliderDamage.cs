@@ -39,7 +39,7 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         protected bool m_canDetectInteractables;
         [SerializeField]
-        private bool m_damageUniqueHitboxesOnly;
+        protected bool m_damageUniqueHitboxesOnly;
         [SerializeField, ShowIf("m_damageUniqueHitboxesOnly")]
         protected CollisionRegistrator m_collisionRegistrator;
         [SerializeField]
