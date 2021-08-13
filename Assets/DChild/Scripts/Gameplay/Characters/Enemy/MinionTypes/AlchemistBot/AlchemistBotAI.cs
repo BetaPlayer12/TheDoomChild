@@ -255,6 +255,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (!m_bodylightningBB.enabled)
             {
+                m_attackBB.enabled = false;
+                m_attackSideBB.enabled = false;
+                m_attackBB.offset = Vector2.zero;
+                m_attackBB.size = new Vector2(.25f, .25f);
                 m_flinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
                 m_stateHandle.Wait(State.ReevaluateSituation);
