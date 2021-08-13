@@ -51,6 +51,9 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_struggleAnimation;
+            public string struggleAnimation => m_struggleAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_anticipationAnimation;
             public string anticipationAnimation => m_anticipationAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -435,6 +438,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_hitbox.SetInvulnerability(Invulnerability.None);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             //m_stateHandle.ApplyQueuedState();
             m_attackRoutine = StartCoroutine(AttackRoutine());
@@ -579,6 +583,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
 
             m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
+            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
 
             m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
         }
@@ -627,8 +632,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Idle:
                     m_movement.Stop();
-                    m_chargerMovement?.Stop();
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    if (!m_isPusherDead)
+                    {
+                        m_chargerMovement?.Stop();
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.struggleAnimation, true);
+                    }
                     break;
 
                 case State.Returning:
@@ -694,7 +706,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Chasing:
                     {
-                        if (IsTargetInRange(m_info.attack.range) && !m_wallSensor.allRaysDetecting)
+                        if (IsTargetInRange(m_info.attack.range) && !m_breakSensor.allRaysDetecting)
                         {
                             m_movement.Stop();
                             m_chargerMovement?.Stop();
