@@ -251,9 +251,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_throwPoint.position.x - 1.5f : m_throwPoint.position.x + 1.5f, m_throwPoint.position.y - 0.75f);
                 Vector3 v_diff = (target - spitPos);
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-
-                GameObject projectile = m_info.projectile.projectileInfo.projectile;
-                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(projectile);
+                
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
                 instance.transform.position = m_throwPoint.position;
                 var component = instance.GetComponent<Projectile>();
                 component.ResetState();

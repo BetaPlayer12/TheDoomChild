@@ -319,6 +319,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_movement.Stop();
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -353,6 +354,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_currentRunAttackDuration += Time.deltaTime;
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
+                transform.position = new Vector2(transform.position.x, GroundPosition().y);
                 yield return null;
             }
             m_currentRunAttackDuration = 0;
@@ -362,6 +364,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
+        }
+
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            return hit.point;
         }
 
         private void ChooseAttack()
@@ -501,6 +509,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
+                    m_movement.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
@@ -547,6 +556,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.EnableRootMotion(false, false);
                                 m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
                                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
+                                transform.position = new Vector2(transform.position.x, GroundPosition().y);
                             }
                             else
                             {
@@ -581,6 +591,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.EnableRootMotion(false, false);
                                 m_animation.SetAnimation(0, m_info.backMove.animation, true);
                                 m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                                transform.position = new Vector2(transform.position.x, GroundPosition().y);
                             }
                             else
                             {
