@@ -392,7 +392,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackBBSize()
         {
-            yield return new WaitForSeconds(.35f);
+            yield return new WaitForSeconds(/*.35f*/ .5f);
             if (m_chosenAttack == Attack.Attack1)
             {
                 var distance = Vector2.Distance(m_projectilePoint.position, new Vector2(GroundPosition().x, GroundPosition().y * .95f));
