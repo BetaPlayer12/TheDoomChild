@@ -67,24 +67,33 @@ namespace DChild.Gameplay.Environment
 
         public void SetAs(bool isSuspended)
         {
+            if (m_rigidbody == null)
+            {
+                m_rigidbody = GetComponent<Rigidbody2D>();
+            }
+
+
             m_isSuspended = isSuspended;
             if (m_isSuspended)
             {
                 transform.localPosition = m_suspendedLocalPosition;
+                m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
                 m_onSuspend?.Invoke();
             }
             else
             {
                 transform.localPosition = m_unsuspendedLocalPosition;
+                m_rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
                 m_onUnsuspend?.Invoke();
             }
         }
-
+        
+       
         private void Awake()
         {
             m_rigidbody = GetComponent<Rigidbody2D>();
             m_constraints = m_rigidbody.constraints;
-           // m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+            m_rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 
 #if UNITY_EDITOR

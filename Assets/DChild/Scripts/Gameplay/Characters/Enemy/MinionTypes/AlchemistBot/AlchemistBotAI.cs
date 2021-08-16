@@ -261,6 +261,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_attackBB.offset = Vector2.zero;
                 m_attackBB.size = new Vector2(.25f, .25f);
                 m_flinchHandle.m_autoFlinch = true;
+                m_hitbox.Disable();
                 StopAllCoroutines();
                 m_stateHandle.Wait(State.ReevaluateSituation);
             }
@@ -271,6 +272,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
             {
                 m_flinchHandle.m_autoFlinch = false;
+                m_hitbox.Enable();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 if (!m_bodylightningBB.enabled)
                 {
