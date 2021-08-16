@@ -22,7 +22,7 @@ namespace DChild.Gameplay
         public void checkpoint()
         {
             GameplaySystem.campaignSerializer.slot.UpdateLocation(m_sceneInfo, m_location, m_spawnPosition);
-            GameplaySystem.campaignSerializer.Save();
+            GameplaySystem.campaignSerializer.Save(SerializationScope.Gameplay);
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
