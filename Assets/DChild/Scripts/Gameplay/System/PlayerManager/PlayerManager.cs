@@ -138,7 +138,7 @@ namespace DChild.Gameplay.Systems
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            if (m_player)
+            if (eventArgs.IsPartOfTheUpdate(SerializationScope.Player) && m_player)
             {
                 m_player.SetPosition(eventArgs.slot.spawnPosition);
                 m_player.LoadData(eventArgs.slot.characterData);
@@ -147,7 +147,7 @@ namespace DChild.Gameplay.Systems
 
         private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            if (m_player)
+            if (eventArgs.IsPartOfTheUpdate(SerializationScope.Player) && m_player)
             {
                 eventArgs.slot.UpdateCharacterData(m_player.SaveData());
             }

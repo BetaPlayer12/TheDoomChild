@@ -158,7 +158,7 @@ namespace DChild.Gameplay
         private static void LoadGameDone(object sender, EventActionArgs eventArgs)
         {
             m_campaignSerializer.SetSlot(m_campaignToLoad);
-            m_campaignSerializer.Load(true);
+            m_campaignSerializer.Load(SerializationScope.Gameplay,true);
             m_gameplayUIHandle.ResetGameplayUI();
             m_playerManager.player.healableModule.Heal(999999);
             m_playerManager.player.controller.Enable();
@@ -218,7 +218,7 @@ namespace DChild.Gameplay
 
                 if (m_doNotDeserializeOnAwake == false)
                 {
-                    m_campaignSerializer.Load(true);
+                    m_campaignSerializer.Load(SerializationScope.Gameplay,true);
                 }
 
                 if (m_doNotTeleportPlayerOnAwake == false && m_campaignToLoad != null)

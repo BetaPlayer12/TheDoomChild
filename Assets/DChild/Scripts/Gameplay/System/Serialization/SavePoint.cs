@@ -25,7 +25,7 @@ namespace DChild.Gameplay
                 return;
             //#endif
             GameplaySystem.campaignSerializer.slot.UpdateLocation(m_sceneInfo, m_location, m_spawnPosition);
-            GameplaySystem.campaignSerializer.Save();
+            GameplaySystem.campaignSerializer.Save(SerializationScope.Gameplay);
         }
 
         private void Awake()
