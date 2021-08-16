@@ -51,9 +51,9 @@ namespace DChild.Gameplay.Combat
         }
         private void Update()
         {
-            var offset = Random.insideUnitCircle;
             for (int i = 0; i < m_startingPositionList.Length; i++)
             {
+                var offset = Random.insideUnitCircle;
                 m_affectedTransforms[i].position = m_startingPositionList[i] + offset * m_radiusOffset;
             }
         }
