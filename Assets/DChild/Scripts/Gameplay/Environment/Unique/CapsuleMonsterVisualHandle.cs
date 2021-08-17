@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace DChild.Gameplay.Environment
+namespace DChild.Gameplay.Environment.VisualConfigurators
 {
     [System.Serializable]
     public class CapsuleMonsterVisualHandle

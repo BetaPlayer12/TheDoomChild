@@ -1,7 +1,7 @@
 ﻿using Spine.Unity;
 using UnityEngine;
 
-namespace DChild.Gameplay.Environment
+namespace DChild.Gameplay.Environment.VisualConfigurators
 {
     [CreateAssetMenu(fileName = "MonsterCapsuleVisualData", menuName = "DChild/Gameplay/Environment/Monster Capsule Visual Data")]
     public class MonsterCapsuleVisualData : ScriptableObject

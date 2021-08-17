@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace DChild.Gameplay.Environment
+namespace DChild.Gameplay.Environment.VisualConfigurators
 {
     [CreateAssetMenu(fileName = "ValveVisualData", menuName = "DChild/Gameplay/Environment/Valve Visual Data")]
     public class ValveVisualData : ScriptableObject

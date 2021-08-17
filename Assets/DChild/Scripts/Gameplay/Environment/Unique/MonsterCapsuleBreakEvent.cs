@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
 
-namespace DChild.Gameplay.Environment
+namespace DChild.Gameplay.Environment.VisualConfigurators
 {
     public class MonsterCapsuleBreakEvent : SerializedMonoBehaviour
     {
