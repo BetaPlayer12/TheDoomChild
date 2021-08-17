@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace DChild.Gameplay.Environment
+namespace DChild.Gameplay.Environment.VisualConfigurators
 {
     [System.Serializable]
     public class CapsuleHighlightHandle
