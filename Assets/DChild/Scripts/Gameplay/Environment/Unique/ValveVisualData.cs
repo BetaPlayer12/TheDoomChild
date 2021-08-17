@@ -1,5 +1,9 @@
 ﻿using System;
 using UnityEngine;
+using Sirenix.OdinInspector;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChild.Gameplay.Environment.VisualConfigurators
 {
@@ -27,5 +31,13 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
         public int count => m_visualList.Length;
 
         public VisualInfo GetVisual(int index) => m_visualList[index];
+
+#if UNITY_EDITOR
+        [Button]
+        private void SetThisDirty()
+        {
+            EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }

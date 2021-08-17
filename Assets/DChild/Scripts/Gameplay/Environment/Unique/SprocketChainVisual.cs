@@ -8,8 +8,9 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
     public class SprocketChainVisual : SerializedMonoBehaviour
     {
 #if UNITY_EDITOR
-        [SerializeField]
+        [SerializeField,FoldoutGroup("Dimension Configuration")]
         private ISprocketChainDimensionConfiguration m_dimensionConfiguration;
 #endif
+
     }
 }
