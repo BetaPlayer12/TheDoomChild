@@ -155,6 +155,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             base.AttackOver();
 
+            if (m_state.isDoingCombo == true)
+            {
+                m_state.isDoingCombo = false;
+            }
+
             m_rigidbody.gravityScale = m_cacheGravity;
             m_adjustGravity = false;
         }
