@@ -12,6 +12,8 @@ namespace DChild
             Width
         }
 
+        [SerializeField]
+        private bool m_runInPlayMode = true;
         [SerializeField, DisableInPlayMode]
         private Dimenision m_dimensionToTile;
         [SerializeField]
@@ -22,6 +24,11 @@ namespace DChild
         private bool m_useY;
         [SerializeField]
         private SpriteRenderer[] m_renderers;
+
+        private void Awake()
+        {
+            enabled = m_runInPlayMode;
+        }
 
         private void LateUpdate()
         {

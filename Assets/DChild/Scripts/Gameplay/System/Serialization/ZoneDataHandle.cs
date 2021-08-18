@@ -91,28 +91,34 @@ namespace DChild.Serialization
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            m_cacheSlot = GameplaySystem.campaignSerializer.slot;
-            m_zoneData = m_cacheSlot.GetZoneData<ZoneData>(m_ID);
-            if (m_zoneData != null)
+            if (eventArgs.IsPartOfTheUpdate(SerializationScope.Gameplay))
             {
-                UpdateSerializers();
-            }
+                m_cacheSlot = GameplaySystem.campaignSerializer.slot;
+                m_zoneData = m_cacheSlot.GetZoneData<ZoneData>(m_ID);
+                if (m_zoneData != null)
+                {
+                    UpdateSerializers();
+                }
 
-            for (int i = 0; i < m_dynamicSerializers.Length; i++)
-            {
-                m_dynamicSerializers[i].Load();
-            }
+                for (int i = 0; i < m_dynamicSerializers.Length; i++)
+                {
+                    m_dynamicSerializers[i].Load();
+                }
 
-            PersistentDataManager.ApplySaveData(m_cacheSlot.dialogueSaveData, DatabaseResetOptions.RevertToDefault);
-            for (int i = 0; i < m_questsListener.Length; i++)
-            {
-                m_questsListener[i].UpdateIndicator();
+                PersistentDataManager.ApplySaveData(m_cacheSlot.dialogueSaveData, DatabaseResetOptions.KeepAllLoaded);
+                for (int i = 0; i < m_questsListener.Length; i++)
+                {
+                    m_questsListener[i].UpdateIndicator();
+                }
             }
         }
 
         private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            UpdateSaveData();
+            if (eventArgs.IsPartOfTheUpdate(SerializationScope.Gameplay))
+            {
+                UpdateSaveData();
+            }
         }
 
         private void UpdateSaveData()
