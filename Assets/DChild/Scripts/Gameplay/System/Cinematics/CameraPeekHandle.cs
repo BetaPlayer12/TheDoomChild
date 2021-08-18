@@ -47,6 +47,7 @@ namespace DChild.Gameplay.Cinematics
         private AnimationCurve m_interpolation;
 
         private CameraPeekConfiguration m_currentConfigType;
+        private CameraPeekMode m_currentPeekMode;
         private ConfigurationData m_currentConfigData;
         private Vector3 m_currentOffset;
         private IVirtualCamera m_currentCamera;
@@ -71,6 +72,7 @@ namespace DChild.Gameplay.Cinematics
                     m_currentConfigData = m_disabledPeekonfigData;
                     break;
             }
+            ApplyOffset(m_currentCamera, m_currentPeekMode);
         }
 
         public void ApplyOffset(IVirtualCamera camera, CameraPeekMode lookAhead)
@@ -89,6 +91,7 @@ namespace DChild.Gameplay.Cinematics
                     break;
             }
             m_currentCamera = camera;
+            m_currentPeekMode = lookAhead;
             if (m_currentOffset != offset)
             {
                 m_currentOffset = offset;

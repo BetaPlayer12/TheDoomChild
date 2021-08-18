@@ -100,7 +100,7 @@ namespace DChild.Gameplay.Environment
 
         private void Awake()
         {
-            m_rigidbody = m_source.GetComponentInParent<Rigidbody2D>();
+            m_rigidbody = m_source.GetComponent<Rigidbody2D>();
         }
 
 
