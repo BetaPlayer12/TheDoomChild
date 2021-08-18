@@ -265,7 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idle2Animation, true);
-            m_stateHandle.OverrideState(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
         }
 

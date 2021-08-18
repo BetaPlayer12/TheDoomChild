@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
             foreach (var chain in m_chains)
             {
                 var size = chain.size;
-                size.x = m_length/chain.transform.lossyScale.x;
+                size.x = m_length / chain.transform.lossyScale.x;
                 chain.size = size;
 #if UNITY_EDITOR
                 EditorUtility.SetDirty(chain);

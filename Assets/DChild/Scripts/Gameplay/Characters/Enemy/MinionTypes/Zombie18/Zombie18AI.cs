@@ -328,10 +328,12 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_sneerRoutine);
             }
+            m_selfCollider.SetActive(false);
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_character.physics.UseStepClimb(true);
             m_movement.Stop();
+            m_selfCollider.SetActive(false);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
