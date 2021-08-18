@@ -120,6 +120,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+
+                    if (m_adjustGravity == true)
+                    {
+                        m_cacheGravity = m_rigidbody.gravityScale;
+                        m_rigidbody.gravityScale = 1;
+                        m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
+                    }
                     break;
             }
             Record(type);

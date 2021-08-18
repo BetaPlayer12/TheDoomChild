@@ -305,10 +305,12 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_hitbox.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.attack.animation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * .5f;
+            yield return new WaitForSeconds(waitTime);
             //m_hitbox.gameObject.SetActive(true);
             GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
             m_animation.EnableRootMotion(true, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();

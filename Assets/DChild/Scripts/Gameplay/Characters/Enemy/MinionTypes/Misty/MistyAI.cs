@@ -27,9 +27,6 @@ namespace DChild.Gameplay.Characters.Enemies
             public MovementInfo move => m_move;
 
             //Attack Behaviours
-            [SerializeField, TabGroup("Attack")]
-            private SimpleAttackInfo m_attack = new SimpleAttackInfo();
-            public SimpleAttackInfo attack => m_attack;
             [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -63,11 +60,16 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
 
+            [Title("Projectile")]
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_projectile;
+            public SimpleProjectileAttackInfo projectile => m_projectile;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_move.SetData(m_skeletonDataAsset);
-                m_attack.SetData(m_skeletonDataAsset);
+                m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -100,6 +102,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Transform m_projectilePoint;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -133,6 +137,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
+
+        private ProjectileLauncher m_projectileLauncher;
 
         private State m_turnState;
 
@@ -292,6 +298,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_character.physics.UseStepClimb(true);
             m_movement.Stop();
+            m_selfCollider.SetActive(false);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -322,11 +329,17 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 UpdateAttackDeciderList();
             }
+
+            if (m_projectileLauncher != null)
+            {
+                m_projectileLauncher.SetProjectile(m_info.projectile.projectileInfo);
+                m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, m_projectileLauncher.LaunchProjectile);
+            }
         }
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AcidBreath, m_info.attack.range)/**/);
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AcidBreath, m_info.projectile.range)/**/);
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -392,6 +405,18 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private void SpawnAcid()
+        {
+            if (m_targetInfo.isValid)
+            {
+                //m_stingerPos.rotation = Quaternion.Euler(0f, 0f, postAtan2 * Mathf.Rad2Deg);
+                m_projectileLauncher.AimAt(new Vector2(m_targetInfo.position.x, m_projectilePoint.position.y));
+                m_projectileLauncher.LaunchProjectile();
+                //m_Audiosource.clip = m_RangeAttackClip;
+                //m_Audiosource.Play();
+            }
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -403,7 +428,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_hitbox.Disable();
             }
 
-            //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpawnAcid);
         }
 
         protected override void Awake()
@@ -415,6 +440,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
+            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -477,7 +503,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.AcidBreath:
-                            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.projectile.animation, m_info.idleAnimation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
