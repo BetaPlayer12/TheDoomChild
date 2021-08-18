@@ -483,6 +483,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_hitbox.Disable();
+
+            m_willPatrol = true;
+
             m_character.physics.simulateGravity = false;
             m_spineEventListener.Subscribe(m_info.coreburstEvent, CoreBurstEvenTrigger);
             m_spineEventListener.Subscribe(m_info.lightningsphereEvent, LightningShieldEvent);
@@ -503,7 +506,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_patrolHandle.Initialize();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_stateHandle = new StateHandle<State>(!m_willPatrol ? State.Dormant : State.Patrol, State.WaitForBehaviour);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitForBehaviour);
             m_turnHandle.TurnDone += OnTurnDone;
             m_canIdleDuringPatrol = true;
             m_idleDuringPatrolCooldownTimer = m_info.GetRandomIdleDuringPatrolCooldown();

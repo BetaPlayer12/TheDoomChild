@@ -47,7 +47,7 @@ namespace DChild.Gameplay.Systems
 
             if (type == TransitionType.Enter)
             {
-                GameplaySystem.campaignSerializer.UpdateData();
+                GameplaySystem.campaignSerializer.UpdateData(SerializationScope.Zone);
 
                 yield return new WaitForSeconds(m_handle.transitionDelay);
 

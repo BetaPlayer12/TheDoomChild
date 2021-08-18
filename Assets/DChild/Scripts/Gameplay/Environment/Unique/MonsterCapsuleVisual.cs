@@ -1,9 +1,10 @@
-﻿using Sirenix.OdinInspector;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+#endif
 
-namespace DChild.Gameplay.Environment
+namespace DChild.Gameplay.Environment.VisualConfigurators
 {
     public class MonsterCapsuleVisual : MonoBehaviour
     {

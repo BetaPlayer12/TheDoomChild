@@ -26,11 +26,11 @@ public class AlchemistBotForeground : MonoBehaviour
 
     public void Awaken()
     {
-        m_spine.SetAnimation(0, m_awakenAnimation, false);
+        m_spine.SetAnimation(0, m_awakenAnimation, false).TimeScale = 1;
     }
 
     private void Start()
     {
-        m_spine.SetAnimation(0, m_dormantAnimation, true);
+        m_spine.SetAnimation(0, m_dormantAnimation, false).TimeScale = 0;
     }
 }

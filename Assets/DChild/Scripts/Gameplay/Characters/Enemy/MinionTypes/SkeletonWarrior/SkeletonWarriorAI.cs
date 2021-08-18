@@ -556,7 +556,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.EnableRootMotion(false, false);
                                 m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
                                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
-                                transform.position = new Vector2(transform.position.x, GroundPosition().y);
+                                transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
                             }
                             else
                             {
@@ -720,6 +720,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
+            m_movement.Stop();
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);

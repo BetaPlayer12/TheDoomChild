@@ -162,8 +162,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField]
-        private bool m_willPatrol;
+        //[SerializeField]
+        //private bool m_willPatrol;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -394,13 +394,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_character.physics.simulateGravity = true;
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation)
+            if (!m_character.physics.simulateGravity)
             {
                 m_animation.EnableRootMotion(true, true);
                 m_animation.SetAnimation(0, m_info.awakenAnimation, false);
                 //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+                m_character.physics.simulateGravity = true;
                 m_animation.DisableRootMotion();
                 m_animation.SetAnimation(0, m_info.fallAnimation, true).MixDuration = 0;
                 yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -504,14 +504,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
-
-            m_character.physics.simulateGravity = m_willPatrol ? true : false;
-            //m_aggroCollider.enabled = m_willPatrol ? true : false;
-            if (!m_willPatrol)
-            {
-                m_hitbox.Disable();
-            }
-
+            
             m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
@@ -525,7 +518,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -539,17 +532,16 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
-                    if (!IsFacingTarget() && m_willPatrol)
+                    if (!IsFacingTarget() && m_character.physics.simulateGravity)
                     {
                         m_turnState = State.Detect;
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
+                        return;
                     }
-                    else
-                    {
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(DetectRoutine());
-                    }
+
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    StartCoroutine(DetectRoutine());
                     break;
 
                 case State.Dormant:
@@ -804,6 +796,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
             StopAllCoroutines();
+
+            m_character.physics.simulateGravity = false;
+            m_hitbox.Disable();
             m_stateHandle.OverrideState(State.Dormant);
         }
     }

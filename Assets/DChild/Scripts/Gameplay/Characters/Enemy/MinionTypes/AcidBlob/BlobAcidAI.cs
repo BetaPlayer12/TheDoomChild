@@ -140,6 +140,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
         private Collider2D m_attackbb;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_aggroSensor;
@@ -273,6 +275,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            m_hitbox.Disable();
+            m_attackbb.enabled = false;
             if (m_attackRoutine != null)
             {
                 StopCoroutine(m_attackRoutine);
