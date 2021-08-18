@@ -138,8 +138,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
-        //[SerializeField, TabGroup("Reference")]
-        //private GameObject m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
@@ -221,7 +221,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                //m_selfCollider.SetActive(true);
+                m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -479,6 +479,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_bodylightningCoroutine = null;
             }
             m_agent.Stop();
+            m_selfCollider.SetActive(false);
             m_hitbox.Disable();
             m_attackBB.enabled = false;
             m_attackSideBB.enabled = false;
@@ -745,11 +746,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
+            m_selfCollider.SetActive(false);
         }
 
         public void ResetAI()
         {
-            //m_selfCollider.SetActive(false);
+            m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_hitbox.Enable();
@@ -788,6 +790,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
             StopAllCoroutines();
+            m_hitbox.Disable();
             m_stateHandle.OverrideState(State.Dormant);
         }
     }

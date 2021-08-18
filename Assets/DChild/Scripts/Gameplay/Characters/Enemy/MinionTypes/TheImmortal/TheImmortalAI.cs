@@ -63,11 +63,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_flinchAnimation;
             public string flinchAnimation => m_flinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turn1Animation;
-            public string turn1Animation => m_turn1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_turn2Animation;
-            public string turn2Animation => m_turn2Animation;
+            private string m_turnAnimation;
+            public string turnAnimation => m_turnAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
@@ -75,11 +72,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_dismantleAnimation;
             public string dismantleAnimation => m_dismantleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_resurrect1Animation;
-            public string resurrect1Animation => m_resurrect1Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_resurrect2Animation;
-            public string resurrect2Animation => m_resurrect2Animation;
+            private string m_resurrectAnimation;
+            public string resurrectAnimation => m_resurrectAnimation;
 
             public override void Initialize()
             {
@@ -111,6 +105,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Attack1,
             Attack2,
+            Attack3,
             [HideInInspector]
             _COUNT
         }
@@ -260,7 +255,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     //m_enablePatience = false;
                     m_turnState = State.WaitBehaviourEnd;
-                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation)
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                         m_stateHandle.SetState(State.Turning);
                 }
             }
@@ -327,6 +322,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator ResurrectRoutine()
         {
             m_hitbox.Disable();
+            m_selfCollider.SetActive(false);
             m_animation.SetAnimation(0, m_info.dismantleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dismantleAnimation);
             m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
@@ -370,16 +366,17 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range)
-                                  , new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
+                                  , new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range)
+                                  , new AttackInfo<Attack>(Attack.Attack3, m_info.attack1.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
         private IEnumerator DetectRoutine()
         {
-            var resurrectAnim = UnityEngine.Random.Range(0, 2) == 1 ? m_info.resurrect1Animation : m_info.resurrect2Animation;
-            m_animation.SetAnimation(0, resurrectAnim, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, resurrectAnim);
+            m_animation.SetAnimation(0, m_info.resurrectAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.resurrectAnimation);
             m_hitbox.Enable();
+            m_selfCollider.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -433,6 +430,19 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private IEnumerator ComboAttackRoutine()
+        {
+            m_animation.SetAnimation(0, m_info.attack1.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+            m_animation.SetAnimation(0, m_info.attack2.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+            m_animation.SetAnimation(0, m_info.attack1.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack1.animation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -468,6 +478,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
+                    m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
                     break;
 
                 case State.Patrol:
@@ -501,8 +512,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    var turnAnim = UnityEngine.Random.Range(0, 2) == 1 ? m_info.turn1Animation : m_info.turn2Animation;
-                    m_turnHandle.Execute(turnAnim, m_info.idleAnimation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
                 case State.Attacking:
@@ -518,6 +528,9 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.Attack2:
                             m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
                             break;
+                        case Attack.Attack3:
+                            StartCoroutine(ComboAttackRoutine());
+                            break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
 
@@ -528,7 +541,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else
@@ -577,7 +590,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turn1Animation && m_animation.GetCurrentAnimation(0).ToString() != m_info.turn2Animation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }
