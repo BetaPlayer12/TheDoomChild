@@ -196,8 +196,8 @@ namespace DChild.Gameplay.Inventories
             if (m_currentSlot != null)
             {
                 m_currentItem = (ConsumableItemData)m_currentSlot.item;
-                m_container.ItemUpdate += OnItemUpdate;
             }
+            m_container.ItemUpdate += OnItemUpdate;
             m_removeItemCountOnConsume = true;
         }
 
