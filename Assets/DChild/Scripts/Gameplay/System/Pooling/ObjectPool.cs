@@ -108,8 +108,12 @@ namespace DChild.Gameplay.Pooling
             {
                 eventArgs.StoreToPool(poolItemStorage);
             }
-            m_items.Add((T)eventArgs.item);
-            m_timers.Add(m_poolDuration);
+            var item = (T)eventArgs.item;
+            if (m_items.Contains(item) == false)
+            {
+                m_items.Add(item);
+                m_timers.Add(m_poolDuration);
+            }
         }
 
         public override void Clear()
