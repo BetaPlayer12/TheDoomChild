@@ -468,7 +468,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_wallStick?.Cancel();
                         m_wallMovement?.Cancel();
                     }
-                    else if (m_skills.IsModuleActive(PrimarySkill.WallJump))
+                    else if (m_skills.IsModuleActive(PrimarySkill.WallMovement))
                     {
                         m_wallStick?.Cancel();
                         m_wallMovement?.Cancel();
@@ -987,22 +987,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             return;
                         }
                     }
-                    else if (m_input.slashHeld)
-                    {
-                        if (m_state.isInShadowMode == false)
-                        {
-                            if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
-                            {
-                                PrepareForGroundAttack();
-                                m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
-
-                                //Start SwordThrust
-                                m_swordThrust?.StartCharge();
-                            }
-
-                            return;
-                        }
-                    }
                     else if (m_input.whipPressed)
                     {
                         if (m_skills.IsModuleActive(PrimarySkill.Whip))
@@ -1032,6 +1016,22 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_skullThrow.Execute();
                         }
                         return;
+                    }
+                    else if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
+                    {
+                        if (m_input.slashHeld)
+                        {
+                            if (m_state.isInShadowMode == false)
+                            {
+                                PrepareForGroundAttack();
+                                m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
+
+                                //Start SwordThrust
+                                m_swordThrust?.StartCharge();
+                            }
+
+                            return;
+                        }
                     }
                     #endregion
                 }
