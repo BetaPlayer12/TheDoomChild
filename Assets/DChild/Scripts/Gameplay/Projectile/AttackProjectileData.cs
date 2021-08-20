@@ -12,7 +12,6 @@ namespace DChild.Gameplay.Projectiles
         [SerializeField]
         private bool m_isPiercing;
 
-
         public bool canPassThroughDroppables => m_canPassThroughDroppables;
         public bool canPassThroughEnvironment => m_canPassThroughEnvironment;
         public bool isPiercing => m_isPiercing;

@@ -18,6 +18,8 @@ namespace DChild.Gameplay.Projectiles
         private bool m_isGroundProjectile;
         [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
         protected GameObject m_impactFX;
+        [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
+        protected GameObject m_impactCrater;
 
         public AttackDamage[] damage => m_damage;
         public Invulnerability ignoreInvulnerability => m_ignoreInvulnerability;
@@ -25,7 +27,8 @@ namespace DChild.Gameplay.Projectiles
 
         public bool willFaceVelocity => m_willFaceVelocity;
         public bool isGroundProjectile => m_isGroundProjectile;
-        public GameObject impactFX { get => m_impactFX; }
+        public GameObject impactFX => m_impactFX;
+        public GameObject impactCrater => m_impactCrater;
 
         protected virtual bool ValidateExplosion(GameObject newExplosion)
         {

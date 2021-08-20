@@ -498,7 +498,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForSeconds(m_info.blockDuration);
             m_hitbox.SetCanBlockDamageState(false);
             var parryAnim = RandomParryAttack();
-            m_animation.SetAnimation(0, parryAnim, false);
+            m_animation.SetAnimation(0, parryAnim, false).TimeScale = 2;
             yield return new WaitForAnimationComplete(m_animation.animationState, parryAnim);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
