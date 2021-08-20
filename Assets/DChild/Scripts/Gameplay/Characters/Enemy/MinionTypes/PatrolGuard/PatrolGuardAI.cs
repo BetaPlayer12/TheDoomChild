@@ -134,6 +134,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("BoundingBox")]
+        private Collider2D m_attackBB;
+
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_torchFX;
 
@@ -312,6 +315,8 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_sneerRoutine);
             }
+            m_attackBB.enabled = false;
+            m_torchFX.Stop();
             m_selfCollider.SetActive(false);
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
@@ -658,6 +663,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_enablePatience = false;
+            m_attackBB.enabled = true;
+            m_torchFX.Play();
             if (m_sneerRoutine != null)
             {
                 StopCoroutine(m_sneerRoutine);

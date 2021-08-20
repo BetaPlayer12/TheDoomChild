@@ -143,7 +143,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
 
         private State m_turnState;
-        private IEnumerator m_chargeBreakRoutine;
+        //private IEnumerator m_chargeBreakRoutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -312,9 +312,19 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAttackAnimation);
             m_animation.SetAnimation(0, m_info.attack.animation, true);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-            StartCoroutine(m_chargeBreakRoutine);
-            yield return new WaitForSeconds(3);
-            StopCoroutine(m_chargeBreakRoutine);
+            //StartCoroutine(m_chargeBreakRoutine);
+            float time = 0;
+            while (time < 3)
+            {
+                time += Time.deltaTime;
+                if (!m_edgeSensor.isDetecting)
+                {
+                    time = 3;
+                }
+                yield return null;
+            }
+            //yield return new WaitForSeconds(3);
+            //StopCoroutine(m_chargeBreakRoutine);
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attackBreakAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackBreakAnimation);
@@ -325,19 +335,19 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator ChargeBreakRoutine()
-        {
-            while (m_edgeSensor.isDetecting)
-            {
-                yield return null;
-            }
-            m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.attackBreakAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackBreakAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
-        }
+        //private IEnumerator ChargeBreakRoutine()
+        //{
+        //    while (m_edgeSensor.isDetecting)
+        //    {
+        //        yield return null;
+        //    }
+        //    m_movement.Stop();
+        //    m_animation.SetAnimation(0, m_info.attackBreakAnimation, false);
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackBreakAnimation);
+        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //    m_stateHandle.ApplyQueuedState();
+        //    yield return null;
+        //}
 
         private IEnumerator DetectWallRoutine()
         {
@@ -367,7 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
-            m_chargeBreakRoutine = ChargeBreakRoutine();
+            //m_chargeBreakRoutine = ChargeBreakRoutine();
         }
 
         protected override void Awake()
@@ -463,7 +473,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting && m_edgeSensor.allRaysDetecting)
                             {
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
