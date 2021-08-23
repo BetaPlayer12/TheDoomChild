@@ -263,7 +263,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchRoutine()
         {
-            var flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation;
+            var flinch = m_info.flinchAnimation;
+            if (m_targetInfo.isValid)
+            {
+                flinch = IsFacingTarget() ? m_info.flinchAnimation : m_info.flinch2Animation;
+            }
             m_animation.SetAnimation(0, flinch, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, flinch);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
