@@ -241,9 +241,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchRoutine()
         {
+            m_hitbox.Disable();
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_hitbox.Enable();
             m_isDoingAction = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, false).MixDuration = 0;
             StartCoroutine(DespawnRoutine());
