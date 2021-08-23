@@ -170,7 +170,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 if (!TargetBlocked() && !m_enablePatience)
                 {
                     m_selfCollider.SetActive(true);
-                    StopCoroutine(m_randomIdleRoutine);
+                    if (m_randomIdleRoutine != null)
+                    {
+                        StopCoroutine(m_randomIdleRoutine);
+                    }
 
                     if (!m_isDetecting)
                     {

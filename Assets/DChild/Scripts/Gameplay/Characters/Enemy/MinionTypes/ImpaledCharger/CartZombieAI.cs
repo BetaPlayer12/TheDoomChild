@@ -548,13 +548,16 @@ namespace DChild.Gameplay.Characters.Enemies
             var moveSpeed = m_info.move.speed;
             while (moveSpeed > 0f)
             {
-                moveSpeed = moveSpeed - (100 * Time.deltaTime);
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, moveSpeed);
-                m_chargerMovement?.MoveTowards(Vector2.one * transform.localScale.x, moveSpeed);
-                //if (m_wallSensor.isDetecting || !m_edgeSensor.isDetecting)
-                //{
-                //    moveSpeed = 0f;
-                //}
+                if (m_wallSensor.isDetecting || !m_edgeSensor.isDetecting)
+                {
+                    moveSpeed = 0f;
+                }
+                else
+                {
+                    moveSpeed = moveSpeed - (125 * Time.deltaTime);
+                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, moveSpeed);
+                    m_chargerMovement?.MoveTowards(Vector2.one * transform.localScale.x, moveSpeed);
+                }
                 yield return null;
             }
             m_movement.Stop();
