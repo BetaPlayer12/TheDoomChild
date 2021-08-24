@@ -107,7 +107,7 @@ namespace DChild.Gameplay.Environment
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            if (DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject))
             {
                 m_rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
@@ -122,7 +122,7 @@ namespace DChild.Gameplay.Environment
 
         private void OnCollisionStay2D(Collision2D collision)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            if (DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject))
             {
                 if (m_isGrabbed == false && m_isTouchingPlayer == true)
                 {
@@ -141,7 +141,7 @@ namespace DChild.Gameplay.Environment
 
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            if (DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject))
             {
                 m_rigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             }
