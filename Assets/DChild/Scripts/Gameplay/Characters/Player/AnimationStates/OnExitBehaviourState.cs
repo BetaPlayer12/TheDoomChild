@@ -15,6 +15,7 @@ namespace DChild.Gameplay.Characters.Players
             EndLedgeGrab,
             EndShadowMorphCharge,
             EndComboAttack,
+            EndCombo
         }
 
         [SerializeField]
@@ -41,6 +42,9 @@ namespace DChild.Gameplay.Characters.Players
                     break;
                 case Command.EndComboAttack:
                     player.ComboAttackEnd();
+                    break;
+                case Command.EndCombo:
+                    player.ComboEnd();
                     break;
             }
         }
