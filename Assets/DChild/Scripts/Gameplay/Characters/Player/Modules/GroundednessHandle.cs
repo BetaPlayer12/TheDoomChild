@@ -31,10 +31,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ContactFilter2D m_filter;
         private List<Collider2D> m_colliderList;
         private bool m_isUsingCoyote;
+        private bool m_enabled = true;
         
         public event EventAction<EventActionArgs> StateChange;
         public bool isUsingCoyote => m_isUsingCoyote;
         public float groundCheckOffset => m_groundCheckOffset;
+
+        public bool Enabled { get => m_enabled; set => m_enabled = value; }
 
         public void Initialize(ComplexCharacterInfo info)
         {
@@ -65,37 +68,38 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             //int groundColliderResult = Physics2D.OverlapCircle(m_origin + (Vector2)transform.position, m_collisionRadius, m_filter, m_colliderList);
             //var isGrounded = groundColliderResult > 0 ? true : false;
-
-            int groundColliderResult = Physics2D.OverlapBox(m_origin + (Vector2)transform.position, boxSize, angle, m_filter, m_colliderList);
-            var isGrounded = groundColliderResult > 0 ? true : false;
-
-            if (isGrounded)
+            if(Enabled)
             {
-                ChangeValue(true);
-            }
-            else if (m_previouslyGrounded)
-            {
-                if (m_coyoteTime > 0)
+                int groundColliderResult = Physics2D.OverlapBox(m_origin + (Vector2)transform.position, boxSize, angle, m_filter, m_colliderList);
+                var isGrounded = groundColliderResult > 0 ? true : false;
+
+                if (isGrounded)
                 {
-                    StartCoroutine(CoyoteRoutine());
+                    ChangeValue(true);
                 }
+                else if (m_previouslyGrounded)
+                {
+                    if (m_coyoteTime > 0)
+                    {
+                        StartCoroutine(CoyoteRoutine());
+                    }
+                    else
+                    {
+                        ChangeValue(false);
+                    }
+                }
+                else if (m_isUsingCoyote)
+                {
+                    //AllowCoyoteToDoThe Thing
+                    //What thing?
+                    //You know. The THING
+                }
+            
                 else
                 {
                     ChangeValue(false);
                 }
             }
-            else if (m_isUsingCoyote)
-            {
-                //AllowCoyoteToDoThe Thing
-                //What thing?
-                //You know. The THING
-            }
-            
-            else
-            {
-                ChangeValue(false);
-            }
-
         }
 
         private IEnumerator CoyoteRoutine()

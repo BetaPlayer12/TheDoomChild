@@ -258,7 +258,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
-            m_selfCollider.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
         }

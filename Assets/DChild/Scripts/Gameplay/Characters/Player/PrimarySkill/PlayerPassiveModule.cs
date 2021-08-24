@@ -10,11 +10,6 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private BlackBloodImmunity m_blackBloodImmunity;
 
-        public void SetModuleActive(Module module, bool isActive)
-        {
-
-        }
-
         public void SetModuleActive(PrimarySkill module, bool isActive)
         {
             switch (module)

@@ -90,14 +90,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_basicSlashes?.AttackOver();
             m_basicSlashes?.ClearExecutedCollision();
-            m_slashCombo?.AttackOver();
             m_whip?.AttackOver();
             m_whip?.ClearExecutedCollision();
         }
 
         public void ComboAttackEnd()
         {
-            m_slashCombo?.ComboAttackOver();
+            m_slashCombo?.AttackOver();
+        }
+
+        public void ComboEnd()
+        {
+            m_slashCombo?.ComboEnd();
         }
 
         public void FinishProjectileThrow()

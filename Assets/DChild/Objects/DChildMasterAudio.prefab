@@ -92,6 +92,7 @@ MonoBehaviour:
   persistBetweenScenes: 1
   shouldLogDestroys: 0
   showBusColors: 0
+  showGroupImportance: 0
   areGroupsExpanded: 1
   soundGroupTemplate: {fileID: 400008, guid: 877a3a4bf0a4abf43aba41125e1d3101, type: 3}
   soundGroupVariationTemplate: {fileID: 400000, guid: 08eea2d8c4572c7479da53cfbc14bde6,
@@ -104,13 +105,18 @@ MonoBehaviour:
   rangeGizmoColor: {r: 0, g: 1, b: 0, a: 1}
   selectedRangeGizmoColor: {r: 0, g: 1, b: 1, a: 1}
   showAdvancedSettings: 1
-  showLocalization: 0
+  showLocalization: 1
+  showVideoPlayerSettings: 0
+  useTextPlaylistFilter: 0
+  textPlaylistFilter: 
   playListExpanded: 1
   playlistsExpanded: 1
   musicSpatialBlendType: 3
   musicSpatialBlend: 0
   mixerSpatialBlendType: 3
   mixerSpatialBlend: 1
+  groupPlayType: 0
+  defaultGroupPlayType: 0
   newGroupSpatialType: 1
   newGroupSpatialBlend: 1
   musicPlaylists: []
@@ -122,14 +128,15 @@ MonoBehaviour:
   addResonanceAudioSources: 0
   ignoreTimeScale: 0
   useGaplessPlaylists: 0
+  useGaplessAutoReschedule: 0
   saveRuntimeChanges: 0
-  prioritizeOnDistance: 0
-  rePrioritizeEverySecIndex: 0
+  prioritizeOnDistance: 1
+  rePrioritizeEverySecIndex: 2
   useOcclusion: 1
   occlusionMaxCutoffFreq: 5500
   occlusionMinCutoffFreq: 22000
   occlusionFreqChangeSeconds: 0
-  occlusionSelectType: 0
+  occlusionSelectType: 1
   occlusionMaxRayCastsPerFrame: 4
   occlusionRayCastOffset: 0
   occlusionUseLayerMask: 1
@@ -143,10 +150,11 @@ MonoBehaviour:
   occlusionRaycastsHitTriggers: 0
   ambientAdvancedExpanded: 1
   ambientMaxRecalcsPerFrame: 4
-  visualAdvancedExpanded: 0
-  logAdvancedExpanded: 0
-  listenerAdvancedExpanded: 0
+  visualAdvancedExpanded: 1
+  logAdvancedExpanded: 1
+  listenerAdvancedExpanded: 1
   listenerFollowerHasRigidBody: 1
+  deletePreviewerAudioSourceWhenPlaying: 1
   variationFollowerType: 0
   showFadingSettings: 0
   stopZeroVolumeGroups: 0
@@ -169,8 +177,11 @@ MonoBehaviour:
   _masterPlaylistVolume: 1
   showGroupSelect: 0
   hideGroupsWithNoActiveVars: 0
+  jukeBoxDisplayMode: 0
   logPerfExpanded: 1
   willWarm: 1
+  mixerSettingsExpanded: 1
+  mixerUpdateMode: 1
   newEventName: my event
   showCustomEvents: 0
   newCustomEventCategoryName: New Category
