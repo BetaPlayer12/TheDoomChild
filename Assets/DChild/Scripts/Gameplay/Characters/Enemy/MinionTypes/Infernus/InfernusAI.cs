@@ -148,6 +148,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_backSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_backEdgeSensor;
 
         [SerializeField, TabGroup("FX")]
         private ParticleSystem m_flameFX;
@@ -344,7 +348,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float GroundDistance()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
             if (hit.collider != null)
             {
                 return hit.distance;
@@ -441,7 +445,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.AttackRange:
-                            m_lastTargetPos = m_targetInfo.position;
+                            if (m_targetInfo.isValid)
+                            {
+                                m_lastTargetPos = m_targetInfo.position;
+                            }
                             m_attackHandle.ExecuteAttack(m_info.projectile.animation, m_info.idleAnimation);
                             break;
                     }
@@ -496,15 +503,27 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                if (m_mobileAttackCoroutine == null)
-                                {
-                                    m_mobileAttackCoroutine = StartCoroutine(MobileAttackRoutine());
-                                }
                                 m_animation.DisableRootMotion();
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
+                                    if (m_mobileAttackCoroutine == null && IsTargetInRange(m_attackDecider.chosenAttack.range))
+                                    {
+                                        m_mobileAttackCoroutine = StartCoroutine(MobileAttackRoutine());
+                                    }
                                     if (Vector2.Distance(m_targetInfo.position, transform.position) < 50)
                                     {
+                                        if (m_backSensor.isDetecting || !m_backEdgeSensor.isDetecting)
+                                        {
+                                            m_movement.Stop();
+                                            if (m_mobileAttackCoroutine != null)
+                                            {
+                                                StopCoroutine(m_mobileAttackCoroutine);
+                                                m_mobileAttackCoroutine = null;
+                                            }
+                                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                            m_stateHandle.SetState(State.Attacking);
+                                            return;
+                                        }
                                         m_animation.SetAnimation(0, m_info.moveBackwards.animation, true);
                                         m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.moveBackwards.speed);
                                     }
@@ -517,6 +536,17 @@ namespace DChild.Gameplay.Characters.Enemies
                                 else
                                 {
                                     m_movement.Stop();
+                                    if (m_mobileAttackCoroutine != null)
+                                    {
+                                        StopCoroutine(m_mobileAttackCoroutine);
+                                        m_mobileAttackCoroutine = null;
+                                    }
+                                    if (m_backSensor.isDetecting || !m_backEdgeSensor.isDetecting)
+                                    {
+                                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                                        m_stateHandle.SetState(State.Attacking);
+                                        return;
+                                    }
                                     var animation = UnityEngine.Random.Range(0, 100) > 2 ? m_info.idleAnimation : m_info.idle2Animation;
                                     if (m_animation.animationState.GetCurrent(0).IsComplete)
                                     {

@@ -263,7 +263,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private Vector2 WallPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, DChildUtility.GetEnvironmentMask());
             //if (hit.collider != null)
             //{
             //    return hit.point;

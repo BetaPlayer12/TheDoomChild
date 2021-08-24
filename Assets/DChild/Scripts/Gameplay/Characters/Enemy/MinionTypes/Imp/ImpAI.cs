@@ -134,6 +134,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_legCollider;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
@@ -150,7 +152,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_floorSensor;
+        [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_roofSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Spawn Points")]
         private Collider2D m_randomSpawnCollider;
 
@@ -172,6 +180,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isDetecting;
         private bool m_isDoingAction;
         private GameObject m_barrelCache;
+
+        private Coroutine m_executeMoveCoroutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -221,6 +231,16 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private bool TargetBlocked()
+        {
+            Vector2 wat = m_character.centerMass.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+        }
+
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
@@ -241,9 +261,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchRoutine()
         {
+            m_hitbox.Disable();
+            m_bodyCollider.SetActive(false);
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_hitbox.Enable();
             m_isDoingAction = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, false).MixDuration = 0;
             StartCoroutine(DespawnRoutine());
@@ -294,7 +317,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 GroundPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
             //if (hit.collider != null)
             //{
             //    return hit.point;
@@ -304,7 +327,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 WallPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, DChildUtility.GetEnvironmentMask());
             //if (hit.collider != null)
             //{
             //    return hit.point;
@@ -381,6 +404,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var disappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.disappearing1Animation : m_info.disappearing2Animation;
             m_animation.SetAnimation(0, disappearAnim, false).TimeScale = 1.5f;
             m_hitbox.Disable();
+            m_selfCollider.SetActive(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, disappearAnim);
             m_spriteMask.SetActive(false);
             var random = UnityEngine.Random.Range(0, 2);
@@ -392,6 +416,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 CustomTurn();
             }
             m_spriteMask.SetActive(true);
+            m_selfCollider.SetActive(true);
             var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
             m_animation.SetAnimation(0, reappearAnim, false).TimeScale = 1.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
@@ -462,6 +487,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathBeginAnimation);
             m_character.physics.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
+            m_legCollider.SetActive(true);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_bodyCollider.SetActive(true);
             m_animation.SetAnimation(0, m_info.deathHitFloorAnimation, false);
@@ -489,31 +515,63 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             bool inRange = false;
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
-            var newPos = new Vector2(m_targetInfo.position.x, /*GroundPosition().y + 20*/m_targetInfo.position.y + 10);
+            var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
+            var newPos = Vector2.zero;
             while (!inRange)
             {
-
+                newPos = new Vector2(m_targetInfo.position.x, /*GroundPosition().y + 20*/m_targetInfo.position.y + 10);
                 bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < attackRange ? true : false;
                 bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < 1 ? true : false;
                 if (xTargetInRange && yTargetInRange)
                 {
                     inRange = true;
                 }
-                DynamicMovement(/*new Vector2(m_targetInfo.position.x, m_targetInfo.position.y)*/ newPos);
+                //DynamicMovement(/*new Vector2(m_targetInfo.position.x, m_targetInfo.position.y)*/ newPos);
+                DynamicMovement(newPos, moveSpeed);
                 yield return null;
             }
             ExecuteAttack(attack);
             yield return null;
         }
 
-        private void DynamicMovement(Vector2 target)
+        private void DynamicMovement(Vector2 target, float movespeed)
         {
-            if (IsFacingTarget())
+            var rb2d = GetComponent<Rigidbody2D>();
+            if (IsFacing(target))
             {
+                if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
+                {
+                    //if (m_executeMoveCoroutine != null)
+                    //{
+                    //    StopCoroutine(m_executeMoveCoroutine);
+                    //    m_executeMoveCoroutine = null;
+                    //}
+                    //StartCoroutine(DespawnRoutine());
+                    //Vector3.MoveTowards(transform.position, m_targetInfo.position, m_info.move.speed);
+                    m_bodyCollider.SetActive(false);
+                    m_agent.Stop();
+                    rb2d.isKinematic = false;
+                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
+                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
+
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                    return;
+                }
+                else if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
+                {
+                    //m_bodyCollider.SetActive(true);
+                    m_agent.Stop();
+                    rb2d.isKinematic = false;
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    return;
+                }
+
+                rb2d.isKinematic = true;
+                m_bodyCollider.SetActive(true);
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
                 m_agent.SetDestination(target);
-                m_agent.Move(m_info.move.speed);
+                m_agent.Move(movespeed);
 
                 m_animation.SetAnimation(0, m_info.move.animation, true);
             }
@@ -600,7 +658,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
-                    StartCoroutine(ExecuteMove(m_info.plantBomb.range, Attack.PlantBomb));
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_info.plantBomb.range, Attack.PlantBomb));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:
@@ -623,7 +681,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_animation.EnableRootMotion(false, false);
                             m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
-                            DynamicMovement(m_targetInfo.position);
+                            DynamicMovement(m_targetInfo.position, m_info.move.speed);
                         }
                         else if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance * 2)
                         {
@@ -687,6 +745,8 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_selfCollider.SetActive(false);
+            m_legCollider.SetActive(false);
+            m_bodyCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_enablePatience = false;

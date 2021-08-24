@@ -157,8 +157,8 @@ namespace DChild.Gameplay.Projectiles
 
 
         protected void CallAttackerAttacked(CombatConclusionEventArgs eventArgs) => TargetDamaged?.Invoke(this, eventArgs);
-        protected bool CollidedWithEnvironment(Collision2D collision) => collision.gameObject.layer == LayerMask.NameToLayer("Environment");
-        protected bool CollidedWithEnvironment(Collider2D collision) => CollidedWithSensor(collision) == false && collision.gameObject.layer == LayerMask.NameToLayer("Environment");
+        protected bool CollidedWithEnvironment(Collision2D collision) => collision.gameObject.layer == DChildUtility.GetEnvironmentMask();
+        protected bool CollidedWithEnvironment(Collider2D collision) => CollidedWithSensor(collision) == false && collision.gameObject.layer == DChildUtility.GetEnvironmentMask();
         protected bool CollidedWithTarget(Collision2D collision) => collision.gameObject.GetComponentInParent<Hitbox>();
         protected bool CollidedWithTarget(Collider2D collision) => CollidedWithSensor(collision) == false && collision.GetComponentInParent<Hitbox>();
         protected bool CollidedWithSensor(Collider2D collision) => collision.gameObject.CompareTag("Sensor");

@@ -45,7 +45,7 @@ public class LichLordSpike : MonoBehaviour
 
     //private void OnTriggerEnter2D(Collider2D collision)
     //{
-    //    if (collision.IsTouchingLayers(LayerMask.NameToLayer("Environment")))
+    //    if (collision.IsTouchingLayers(DChildUtility.GetEnvironmentMask()))
     //    {
     //        Destroy(this.gameObject);
     //    }

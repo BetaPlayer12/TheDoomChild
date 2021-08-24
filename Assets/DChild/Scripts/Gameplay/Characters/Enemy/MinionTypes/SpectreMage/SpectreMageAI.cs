@@ -290,7 +290,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         private Vector2 WallPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.right * transform.localScale.x, 1000, DChildUtility.GetEnvironmentMask());
             //if (hit.collider != null)
             //{
             //    return hit.point;
@@ -438,7 +438,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool ShotBlocked()
         {
             Vector2 wat = m_projectilePoints[0].transform.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
             var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
             Debug.DrawRay(wat, m_targetInfo.position - wat);
             Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
@@ -534,7 +534,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 GroundPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
             return hit.point;
         }
         #endregion

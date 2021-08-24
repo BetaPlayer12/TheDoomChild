@@ -237,7 +237,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float GroundDistance()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_throwPoint.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(m_throwPoint.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
             if (hit.collider != null)
             {
                 return hit.distance;

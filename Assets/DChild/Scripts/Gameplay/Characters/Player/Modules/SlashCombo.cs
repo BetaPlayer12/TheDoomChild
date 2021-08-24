@@ -86,8 +86,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void AttackOver()
         {
-            m_state.isAttacking = false;
-            m_state.waitForBehaviour = false;
+            base.AttackOver();
+            //m_state.isAttacking = false;
+            //m_state.waitForBehaviour = false;
 
             for (int i = 0; i < m_slashComboInfo.Count; i++)
             {
@@ -95,7 +96,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-        public void ComboAttackOver()
+        public void ComboEnd()
         {
             m_state.isDoingCombo = false;
             m_currentSlashState = 0;

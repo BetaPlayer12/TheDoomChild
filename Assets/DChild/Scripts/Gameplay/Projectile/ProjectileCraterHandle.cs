@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Projectiles
             m_selfCollider = selfCollider;
             m_filter = new ContactFilter2D();
             m_filter.useLayerMask = true;
-            m_filter.SetLayerMask(LayerMask.GetMask("Environment"));
+            m_filter.SetLayerMask(DChildUtility.GetEnvironmentMask());
         }
 
         public void GenerateCrater()
