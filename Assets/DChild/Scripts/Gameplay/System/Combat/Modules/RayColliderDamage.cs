@@ -16,12 +16,12 @@ namespace DChild.Gameplay.Combat
 
         protected override bool IsValidColliderToHit(Collider2D collision)
         {
-            var mask = m_hasPlayerOnlyCheck ? LayerMask.GetMask("Environment", "PlayerOnly") : LayerMask.GetMask("Environment");
+            var mask = m_hasPlayerOnlyCheck ? (DChildUtility.GetEnvironmentMask() +LayerMask.GetMask("PlayerOnly")) : (int)DChildUtility.GetEnvironmentMask();
 
             var searchCastResult = Raycaster.SearchCast(transform.position, collision.bounds.center, mask, out RaycastHit2D[] hitbuffer);
             if (searchCastResult == false)
             {
-                if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+                if (collision.gameObject.layer == DChildUtility.GetEnvironmentMask())
                 {
                     return collision == hitbuffer[0].collider;
                 }

@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay;
+﻿using DChild;
+using DChild.Gameplay;
 using Holysoft;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -61,7 +62,7 @@ public class DropCube : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+        if (DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject))
         {
 
             StartCoroutine(ReturnDelayCoroutine());

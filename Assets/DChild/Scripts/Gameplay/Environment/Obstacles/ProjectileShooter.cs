@@ -170,7 +170,7 @@ namespace DChild.Gameplay.Environment.Obstacles
             }
             else
             {
-                filter.SetLayerMask(LayerMask.GetMask("Environment"));
+                filter.SetLayerMask(DChildUtility.GetEnvironmentMask());
             }
             filter.useTriggers = false;
             RaycastHit2D[] hitbuffers = new RaycastHit2D[16];
