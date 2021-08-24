@@ -13,13 +13,11 @@ public class OnewayPlatform : MonoBehaviour
     private bool m_inContact;
     private float m_timer;
 
-    // Start is called before the first frame update
     void Awake()
     {
         m_collider = GetComponent<Collider2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (m_inContact)
@@ -30,12 +28,10 @@ public class OnewayPlatform : MonoBehaviour
             {
                 if (Input.GetButton("Jump"))
                 {
-
                     Physics2D.IgnoreCollision(m_playerCollider, m_collider, true);
                     m_inContact = false;
                     m_timer = waitTime;
                 }
-
             }
         }
 

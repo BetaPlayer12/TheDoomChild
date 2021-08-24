@@ -74,7 +74,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_rigidBody.WakeUp(); //Players rigidbody and targets rigidbody is asleep by the time of execution. When concerned rigid bodies are asleep there are no interactions even if colliders are enable. Capeesh
             m_chargeFX?.Stop(true);
             m_finishedChargeFX?.Stop(true);
-            //m_thrust.PlayFX(true);
+            m_thrust.PlayFX(true);
             m_thrust.ShowCollider(true);
             m_chargeTimer = -1;
             m_state.waitForBehaviour = true;

@@ -34,6 +34,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private ObjectInteraction m_objectInteraction;
         private ShadowGaugeRegen m_shadowGaugeRegen;
         private ObjectManipulation m_objectManipulation;
+        private PlayerOneWayPlatformDropHandle m_platformDrop;
 
         private Movement m_movement;
         private Crouch m_crouch;
@@ -275,6 +276,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_shadowGaugeRegen = m_character.GetComponentInChildren<ShadowGaugeRegen>();
             m_shadowGaugeRegen.Enable(true);
             m_objectManipulation = m_character.GetComponentInChildren<ObjectManipulation>();
+            m_platformDrop = m_character.GetComponentInChildren<PlayerOneWayPlatformDropHandle>();
 
             m_movement = m_character.GetComponentInChildren<Movement>();
             m_crouch = m_character.GetComponentInChildren<Crouch>();
@@ -373,7 +375,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
         }
 
-
         private void Update()
         {
             if (m_updateEnabled == false)
@@ -388,6 +389,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
 
             m_tracker.Execute(m_input);
+            m_platformDrop.HandleDroppablePlatformCollision();
 
             if (m_state.isInShadowMode)
             {
@@ -845,6 +847,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             m_whip.Execute(WhipAttack.Type.Crouch_Forward);
                             return;
                         }
+
+                        return;
+                    }
+                    else if (m_input.jumpPressed)
+                    {
+                        //Platform Drop
+                    }
+                }
+
+                if (m_input.jumpPressed == true)
+                {
+                    if (m_platformDrop?.IsThereADroppablePlatform() == true)
+                    {
+                        m_platformDrop.Execute();
 
                         return;
                     }
