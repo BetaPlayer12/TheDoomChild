@@ -11,6 +11,10 @@ namespace DChild
 {
     public static class DChildUtility
     {
+        public static LayerMask GetEnvironmentMask() => LayerMask.GetMask("Environment", "PassableEnvironment");
+        public static string GetSensorTag() => "Sensor";
+        public static bool IsADroppable(Component component) => component.CompareTag("Droppable");
+
         public static bool HasInterface<T>(object instance) => (typeof(T)).IsAssignableFrom(instance.GetType());
         public static bool IsSubclassOf<T>(object instance) => instance.GetType().IsSubclassOf(typeof(T));
 

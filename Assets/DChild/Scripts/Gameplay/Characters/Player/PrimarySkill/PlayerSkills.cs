@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Characters.Players
     {
         [SerializeField]
         private PlayerModuleActivator m_moduleActivator;
-        [SerializeField, EnumToggleButtons]
+        [SerializeField, EnumToggleButtons,OnValueChanged("UpdateAllSkillState")]
         private PrimarySkill m_skills;
 
         public event EventAction<PrimarySkillUpdateEventArgs> SkillUpdate;
@@ -54,6 +54,11 @@ namespace DChild.Gameplay.Characters.Players
             m_moduleActivator.Validate();
             m_moduleActivator.Reset();
             m_skills = savedData.activatedSkills;
+            UpdateAllSkillState();
+        }
+
+        private void UpdateAllSkillState()
+        {
             var enumValue = Enum.GetValues(typeof(PrimarySkill));
             foreach (PrimarySkill value in enumValue)
             {
