@@ -12,6 +12,7 @@ namespace DChild
     public static class DChildUtility
     {
         public static LayerMask GetEnvironmentMask() => LayerMask.GetMask("Environment", "PassableEnvironment");
+        public static bool IsAnEnvironmentLayerObject(GameObject gameObject) => gameObject.layer == LayerMask.NameToLayer("Environment") || gameObject.layer == LayerMask.NameToLayer("PassableEnvironment");
         public static string GetSensorTag() => "Sensor";
         public static bool IsADroppable(Component component) => component.CompareTag("Droppable");
 
