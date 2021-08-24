@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DChild.Gameplay.Inventories
+namespace DChild.Gameplay.Inventories.QuickItem
 {
     public class QuickItemUISnap : MonoBehaviour
     {
