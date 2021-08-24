@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
-using DChild.Gameplay.Systems;
-using Doozy.Engine;
 using Doozy.Engine.Nody;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DChild.Gameplay.Inventories
 {
