@@ -25,43 +25,40 @@ namespace DChild.Gameplay.Characters.Players
     {
         [SerializeField]
         private PlayerModuleActivator m_moduleActivator;
-        [SerializeField, HideReferenceObjectPicker]
-        private Dictionary<PrimarySkill, bool> m_skills = new Dictionary<PrimarySkill, bool>();
+        [SerializeField, EnumToggleButtons]
+        private PrimarySkill m_skills;
 
         public event EventAction<PrimarySkillUpdateEventArgs> SkillUpdate;
 
         public void SetSkillStatus(PrimarySkill skill, bool enableSkill)
         {
-            m_skills[skill] = enableSkill;
+            if (enableSkill)
+            {
+                m_skills |= skill;
+            }
+            else
+            {
+                m_skills &= ~skill;
+            }
             m_moduleActivator.SetModuleLock(skill, enableSkill);
             SkillUpdate?.Invoke(this, new PrimarySkillUpdateEventArgs(skill, enableSkill));
         }
 
         public PrimarySkillsData SaveData()
         {
-            var size = (int)PrimarySkill._COUNT;
-            var data = new bool[size];
-            for (int i = 0; i < size; i++)
-            {
-                data[i] = m_skills[(PrimarySkill)i];
-            }
-            return new PrimarySkillsData(data);
+            return new PrimarySkillsData(m_skills);
         }
 
         public void LoadData(PrimarySkillsData savedData)
         {
-            var data = savedData.movementSkills;
-            if (data != null)
+            m_moduleActivator.Validate();
+            m_moduleActivator.Reset();
+            m_skills = savedData.activatedSkills;
+            var enumValue = Enum.GetValues(typeof(PrimarySkill));
+            foreach (PrimarySkill value in enumValue)
             {
-                m_moduleActivator.Validate();
-                m_moduleActivator.Reset();
-                for (int i = 0; i < data.Length; i++)
-                {
-                    var skill = (PrimarySkill)i;
-                    var isUnlocked = data[i];
-                    m_skills[skill] = isUnlocked;
-                    m_moduleActivator.SetModuleLock(skill, isUnlocked);
-                }
+                var isUnlocked = m_skills.HasFlag(value);
+                m_moduleActivator.SetModuleLock(value, isUnlocked);
             }
         }
     }
