@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Environment
                 m_objectToGroundFilter = new ContactFilter2D();
                 m_objectToGroundFilter.useTriggers = false;
                 m_objectToGroundFilter.useLayerMask = true;
-                m_objectToGroundFilter.SetLayerMask(LayerMask.GetMask("Environment"));
+                m_objectToGroundFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
                 m_contactPoint2Ds = new List<ContactPoint2D>();
                 m_staticInitialized = true;
             }

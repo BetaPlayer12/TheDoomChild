@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Environment
                 {
                     if (m_damageable.Contains(damageable) == false)
                     {
-                        Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
+                        Raycaster.SetLayerMask(DChildUtility.GetEnvironmentMask());
                         var hits = Raycaster.Cast(collision.GetContact(0).point, -transform.up, character.height, true, out int hitCount);
                         if (hitCount > 0)
                         {

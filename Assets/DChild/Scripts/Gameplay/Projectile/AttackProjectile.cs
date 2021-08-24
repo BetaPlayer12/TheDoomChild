@@ -88,7 +88,7 @@ namespace DChild.Gameplay.Projectiles
         {
             if (collision.CompareTag("Sensor") == false)
             {
-                if (LayerMask.LayerToName(collision.gameObject.layer) == "Environment" || LayerMask.LayerToName(collision.gameObject.layer) == "Default") //Default is for QueenBee Quickfix
+                if (DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject) || LayerMask.LayerToName(collision.gameObject.layer) == "Default") //Default is for QueenBee Quickfix
                 {
                     if (collision.CompareTag("Droppable"))
                     {

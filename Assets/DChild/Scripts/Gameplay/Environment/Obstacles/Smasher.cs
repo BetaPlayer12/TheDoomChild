@@ -152,7 +152,7 @@ namespace DChild.Gameplay.Environment.Obstacles
             if (m_isDropping && m_isReturning == false)
             {
                 var collision = eventArgs.collision;
-                if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+                if (DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject))
                 {
                     if (ShouldIgnoreCollisionWith(collision.collider) == false)
                     {

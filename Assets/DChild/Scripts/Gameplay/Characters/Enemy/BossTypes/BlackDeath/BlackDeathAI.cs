@@ -390,7 +390,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 GroundPosition(Vector2 startPoint)
         {
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/startPoint, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
             return hit.point;
         }
 
