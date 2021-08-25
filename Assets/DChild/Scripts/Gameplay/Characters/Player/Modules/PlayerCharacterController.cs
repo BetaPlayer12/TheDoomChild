@@ -1033,20 +1033,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         return;
                     }
-                    else if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
+                    else if (m_state.isInShadowMode == false)
                     {
-                        if (m_input.slashHeld)
+                        if (m_skills.IsModuleActive(PrimarySkill.SwordThrust))
                         {
-                            if (m_state.isInShadowMode == false)
+                            if (m_input.slashHeld)
                             {
                                 PrepareForGroundAttack();
                                 m_chargeAttackHandle.Set(m_swordThrust, () => m_input.slashHeld);
 
                                 //Start SwordThrust
                                 m_swordThrust?.StartCharge();
-                            }
 
-                            return;
+                                return;
+                            }
                         }
                     }
                     #endregion
