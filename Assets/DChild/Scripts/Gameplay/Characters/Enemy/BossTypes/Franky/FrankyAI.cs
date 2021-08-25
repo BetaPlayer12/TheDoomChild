@@ -831,13 +831,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 WallPosition()
         {
             var wristPoint = new Vector2(m_wristPoint.position.x, m_wristPoint.position.y + 2f);
-            RaycastHit2D hit = Physics2D.Raycast(wristPoint, Vector2.right * transform.localScale.x, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(wristPoint, Vector2.right * transform.localScale.x, 1000, DChildUtility.GetEnvironmentMask());
             return hit.point;
         }
 
         private Vector2 GroundPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, LayerMask.GetMask("Environment"));
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
             return hit.point;
         }
 

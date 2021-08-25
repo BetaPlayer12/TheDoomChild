@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Environment
 
         private void RenderShadow()
         {
-            Raycaster.SetLayerMask(LayerMask.GetMask("Environment"));
+            Raycaster.SetLayerMask(DChildUtility.GetEnvironmentMask());
             bool showShadow = false;
             if (m_useRaycastAll)
             {

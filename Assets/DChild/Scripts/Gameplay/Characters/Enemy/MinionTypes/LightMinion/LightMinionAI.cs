@@ -213,7 +213,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool ShotBlocked()
         {
             Vector2 wat = transform.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Environment", "Player"));
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
             var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
             Debug.DrawRay(wat, m_targetInfo.position - wat);
             Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));

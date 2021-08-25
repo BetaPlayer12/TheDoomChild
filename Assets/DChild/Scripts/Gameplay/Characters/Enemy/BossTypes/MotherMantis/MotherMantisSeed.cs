@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DChild;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class MotherMantisSeed : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Environment"))
+        if (DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject))
         {
             var instance = Instantiate(m_thornVine, transform.position, Quaternion.identity);
         }
