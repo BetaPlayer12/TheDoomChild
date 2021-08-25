@@ -32,11 +32,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private List<Collider2D> m_colliderList;
         private bool m_isUsingCoyote;
         private bool m_enabled = true;
-        
+
         public event EventAction<EventActionArgs> StateChange;
         public bool isUsingCoyote => m_isUsingCoyote;
         public float groundCheckOffset => m_groundCheckOffset;
-
         public bool Enabled { get => m_enabled; set => m_enabled = value; }
 
         public void Initialize(ComplexCharacterInfo info)
@@ -68,7 +67,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             //int groundColliderResult = Physics2D.OverlapCircle(m_origin + (Vector2)transform.position, m_collisionRadius, m_filter, m_colliderList);
             //var isGrounded = groundColliderResult > 0 ? true : false;
-            if(Enabled)
+
+            if (Enabled)
             {
                 int groundColliderResult = Physics2D.OverlapBox(m_origin + (Vector2)transform.position, boxSize, angle, m_filter, m_colliderList);
                 var isGrounded = groundColliderResult > 0 ? true : false;
@@ -94,7 +94,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     //What thing?
                     //You know. The THING
                 }
-            
                 else
                 {
                     ChangeValue(false);
@@ -114,7 +113,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             Gizmos.color = Color.red;
             //Gizmos.DrawWireSphere(m_origin + (Vector2)transform.position, m_collisionRadius);
-
             Gizmos.DrawWireCube(m_origin + (Vector2)transform.position, boxSize);
         }
     }
