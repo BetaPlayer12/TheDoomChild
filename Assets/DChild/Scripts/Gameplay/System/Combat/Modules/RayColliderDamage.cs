@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Combat
             var searchCastResult = Raycaster.SearchCast(transform.position, collision.bounds.center, mask, out RaycastHit2D[] hitbuffer);
             if (searchCastResult == false)
             {
-                if (collision.gameObject.layer == DChildUtility.GetEnvironmentMask())
+                if (DChildUtility.IsAnEnvironmentLayerObject(collision.gameObject))
                 {
                     return collision == hitbuffer[0].collider;
                 }

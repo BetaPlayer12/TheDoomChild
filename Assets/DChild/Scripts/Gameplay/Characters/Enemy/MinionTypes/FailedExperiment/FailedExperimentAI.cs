@@ -175,6 +175,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_attackRoutine;
         private Coroutine m_sneerRoutine;
         private Coroutine m_patienceRoutine;
+        private Coroutine m_evadeRoutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -324,6 +325,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_sneerRoutine);
             }
+            if (m_evadeRoutine != null)
+            {
+                StopCoroutine(m_evadeRoutine);
+                m_evadeRoutine = null;
+            }
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_characterPhysics.UseStepClimb(true);
@@ -334,6 +340,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
             {
+                if (m_evadeRoutine != null)
+                {
+                    StopCoroutine(m_evadeRoutine);
+                    m_evadeRoutine = null;
+                }
                 m_flinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
@@ -350,7 +361,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_flinchHandle.m_autoFlinch = false;
                 m_animation.SetEmptyAnimation(0, 0);
                 m_stateHandle.Wait(State.ReevaluateSituation);
-                StartCoroutine(EvadeRoutine());
+                m_evadeRoutine = StartCoroutine(EvadeRoutine());
             }
         }
 
@@ -496,6 +507,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
             m_animation.EnableRootMotion(true, false);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
+            m_evadeRoutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }

@@ -187,7 +187,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Laugh(TargetInfo arg1, Collider2D arg2)
         {
-            m_imp.Laugh();
+            if (m_imp != null)
+            {
+                m_imp.Laugh();
+            }
         }
 
         private void Update()

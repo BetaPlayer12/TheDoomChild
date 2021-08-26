@@ -141,7 +141,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_bodyCollider;
+        private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_aggroCollider;
         [SerializeField, TabGroup("Reference")]
@@ -206,6 +206,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_canAttack2;
         private Coroutine m_bodylightningCoroutine;
         private Coroutine m_deathCoroutine;
+        private Coroutine m_executeMoveCoroutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -245,6 +246,16 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        private bool TargetBlocked()
+        {
+            Vector2 wat = m_character.centerMass.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+        }
+
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
@@ -272,7 +283,6 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
             {
                 m_flinchHandle.m_autoFlinch = false;
-                m_hitbox.Enable();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 if (!m_bodylightningBB.enabled)
                 {
@@ -340,6 +350,25 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
+        private void ExecuteAttack(Attack m_attack)
+        {
+            m_agent.Stop();
+            StartCoroutine(AttackBBSize());
+            m_character.physics.SetVelocity(Vector2.zero);
+            m_bodyCollider.enabled = true;
+            switch (m_attack)
+            {
+                case Attack.Attack1:
+                    m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
+                    break;
+                case Attack.Attack2:
+                    transform.localScale = new Vector3(m_targetInfo.position.x > transform.position.x ? -1 : 1, 1, 1);
+                    StartCoroutine(Attack2CooldownRoutine());
+                    m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                    break;
+            }
+        }
+
         private IEnumerator DetectRoutine()
         {
             if (m_foregroundController.gameObject.activeSelf)
@@ -389,9 +418,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
+            m_bodyCollider.enabled = true;
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             var animation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.deathFallImpact1Animation : m_info.deathFallImpact2Animation;
-            m_bodyCollider.SetActive(true);
             m_animation.SetAnimation(0, animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, animation);
             enabled = false;
@@ -432,6 +461,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator BodyLightningRoutine()
         {
             yield return new WaitForSeconds(0.25f);
+            m_hitbox.Enable();
             m_bodylightningFX.Play();
             m_glowFX.Play();
             m_bodylightningBB.enabled = true;
@@ -466,6 +496,73 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private bool IsInRange(Vector2 position, float distance) => Vector2.Distance(position, m_character.centerMass.position) <= distance;
 
+        #region Movement
+        private IEnumerator ExecuteMove(float attackRange, /*float heightOffset,*/ Attack attack)
+        {
+            m_animation.DisableRootMotion();
+            bool inRange = false;
+            /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
+            var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
+            var newPos = Vector2.zero;
+            while (!inRange || TargetBlocked())
+            {
+                newPos = new Vector2(m_targetInfo.position.x, /*GroundPosition().y + 20*/m_targetInfo.position.y + 10);
+                bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < attackRange ? true : false;
+                bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < 1 ? true : false;
+                if (xTargetInRange && yTargetInRange)
+                {
+                    inRange = true;
+                }
+                //DynamicMovement(/*new Vector2(m_targetInfo.position.x, m_targetInfo.position.y)*/ newPos);
+                DynamicMovement(newPos, moveSpeed);
+                yield return null;
+            }
+            ExecuteAttack(attack);
+            yield return null;
+        }
+
+        private void DynamicMovement(Vector2 target, float movespeed)
+        {
+            var rb2d = GetComponent<Rigidbody2D>();
+            if (IsFacing(target))
+            {
+                if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
+                {
+                    m_bodyCollider.enabled = false;
+                    m_agent.Stop();
+                    rb2d.isKinematic = false;
+                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
+                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
+
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                    return;
+                }
+                else if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
+                {
+                    //m_bodyCollider.SetActive(true);
+                    m_agent.Stop();
+                    rb2d.isKinematic = false;
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    return;
+                }
+
+                rb2d.isKinematic = true;
+                m_bodyCollider.enabled = true;
+                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
+                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
+                m_agent.SetDestination(target);
+                m_agent.Move(movespeed);
+
+                m_animation.SetAnimation(0, m_info.move.animation, true);
+            }
+            else
+            {
+                m_turnState = State.Attacking;
+                m_stateHandle.OverrideState(State.Turning);
+            }
+        }
+        #endregion
+
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             //m_Audiosource.clip = m_DeadClip;
@@ -478,6 +575,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_bodylightningCoroutine);
                 m_bodylightningCoroutine = null;
             }
+            if (m_executeMoveCoroutine != null)
+            {
+                StopCoroutine(m_executeMoveCoroutine);
+                m_executeMoveCoroutine = null;
+            }
+            var rb2d = GetComponent<Rigidbody2D>();
+            rb2d.isKinematic = false;
             m_agent.Stop();
             m_selfCollider.SetActive(false);
             m_hitbox.Disable();
@@ -588,24 +692,22 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
+                    if (m_executeMoveCoroutine != null)
+                    {
+                        StopCoroutine(m_executeMoveCoroutine);
+                        m_executeMoveCoroutine = null;
+                    }
+                    m_agent.Stop();
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
 
                     //m_animation.EnableRootMotion(true, true);
-                    StartCoroutine(AttackBBSize());
-                    switch (m_chosenAttack)
-                    {
-                        case Attack.Attack1:
-                            m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
-                            break;
-                        case Attack.Attack2:
-                            transform.localScale = new Vector3(m_targetInfo.position.x > transform.position.x ? -1 : 1, 1, 1);
-                            StartCoroutine(Attack2CooldownRoutine());
-                            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
-                            break;
-                    }
+                    m_agent.Stop();
+                    m_character.physics.SetVelocity(Vector2.zero);
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_attackDecider.chosenAttack.range, m_chosenAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
 
                     break;
@@ -645,74 +747,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     break;
                 case State.Chasing:
-                    if (IsFacingTarget())
+                    m_attackDecider.DecideOnAttack();
+                    if (m_attackDecider.hasDecidedOnAttack)
                     {
-                        var targetPos = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10);
-                        m_attackDecider.DecideOnAttack();
-                        if (m_attackDecider.hasDecidedOnAttack && IsInRange(targetPos, m_attackDecider.chosenAttack.range) /*IsTargetInRange(m_attackDecider.chosenAttack.range)*/)
-                        {
-                            m_chosenAttack = m_attackDecider.chosenAttack.attack;
-                            m_animation.EnableRootMotion(true, true);
-                            m_agent.Stop();
-                            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                            m_stateHandle.SetState(State.Attacking);
-                        }
-                        else
-                        {
-                            if (!m_selfSensor.isDetecting)
-                            {
-
-                                bool isCloseToGround = false;
-                                bool isCloseToRoof = false;
-
-                                if (m_targetInfo.position.y < transform.position.y && m_groundSensor.allRaysDetecting)
-                                {
-                                    isCloseToGround = Vector2.Distance(transform.position, GroundPosition()) < 2.5f ? true : false;
-                                }
-                                if (m_targetInfo.position.y > transform.position.y && m_roofSensor.allRaysDetecting)
-                                {
-                                    isCloseToRoof = Vector2.Distance(transform.position, CielingPos()) < 5f ? true : false;
-                                }
-
-                                if (!m_selfSensor.isDetecting && !isCloseToGround && !isCloseToRoof /*&& !GetComponentInChildren<NavigationTracker>().IsCurrentDestination(transform.position)*/)
-                                {
-                                    m_agent.SetDestination(targetPos);
-
-                                    m_agent.Move(m_info.move.speed);
-
-                                    if (m_character.physics.velocity.y > .25f || m_character.physics.velocity.y < -.25f)
-                                    {
-                                        m_animation.SetAnimation(0, m_info.idleAnimation, true)/*.TimeScale = 2*/;
-                                    }
-                                    else
-                                    {
-                                        m_animation.SetAnimation(0, m_info.patrol.animation, true)/*.TimeScale = 2*/;
-                                    }
-                                }
-                                else
-                                {
-                                    m_agent.Stop();
-                                    m_character.physics.SetVelocity(Vector2.zero);
-                                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                                }
-
-                                //m_animation.EnableRootMotion(false, false);
-                                //m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
-                                //m_agent.SetDestination(targetPos);
-                                //m_agent.Move(m_info.move.speed);
-                            }
-                            else
-                            {
-                                m_agent.Stop();
-                                m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        m_turnState = State.ReevaluateSituation;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_chosenAttack = m_attackDecider.chosenAttack.attack;
+                        m_animation.EnableRootMotion(true, true);
+                        m_agent.Stop();
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        m_stateHandle.SetState(State.Attacking);
                     }
                     break;
 

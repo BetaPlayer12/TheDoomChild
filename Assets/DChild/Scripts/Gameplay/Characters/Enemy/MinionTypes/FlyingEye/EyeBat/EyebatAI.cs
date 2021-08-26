@@ -196,7 +196,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void VelocityTurn()
         {
-            if (m_character.physics.velocity.x > 10)
+            var rb2d = GetComponent<Rigidbody2D>();
+            if (rb2d.velocity.x > 10)
             {
                 transform.localScale = new Vector3(1, 1, 1);
             }
