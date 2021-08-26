@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private RaySensor m_droppablePlatformSensor;
         [SerializeField]
-        public float m_waitTime = 0.5f;
+        private float m_waitTime = 0.5f;
 
         private CharacterColliders m_playerCollider;
         private Collider2D m_cacheCollider;
