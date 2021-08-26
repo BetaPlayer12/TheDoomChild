@@ -83,7 +83,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 9163494682675870554}
         m_MethodName: ClearCache
@@ -103,6 +103,17 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 21300000, guid: 13c03a319b0f90a449bc83a20bfc519e,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Sprite, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1967467803597995615}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -134,6 +145,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1967467803597995615}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &9163494682675870554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,7 +184,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4877,16 +4899,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1967467803597995613}
-  - component: {fileID: 1967467803597995612}
   - component: {fileID: 4546771465514373563}
   - component: {fileID: 7977765504745050391}
   m_Layer: 11
-  m_Name: Model
+  m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1967467803597995613
 Transform:
   m_ObjectHideFlags: 0
@@ -4901,56 +4922,6 @@ Transform:
   m_Father: {fileID: 1631569862195788247}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1967467803597995612
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1967467803597995615}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1483718733
-  m_SortingLayer: -12
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 86aec6ffdccdd7946a0a3af1577832c2, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.58, y: 4.8}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!61 &4546771465514373563
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5213,6 +5184,11 @@ PrefabInstance:
       propertyPath: InitialModule.startSpeed.scalar
       value: 3.11
       objectReference: {fileID: 0}
+    - target: {fileID: 198000010778961324, guid: 3123da49cb81147489b444f2749aba47,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 198000014016860652, guid: 3123da49cb81147489b444f2749aba47,
         type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.size
@@ -5388,6 +5364,11 @@ PrefabInstance:
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minCurve.m_Curve.Array.data[1].outWeight
       value: 0.33333334
       objectReference: {fileID: 0}
+    - target: {fileID: 198000014016860652, guid: 3123da49cb81147489b444f2749aba47,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 198000014052238036, guid: 3123da49cb81147489b444f2749aba47,
         type: 3}
       propertyPath: InitialModule.startSize.minScalar
@@ -5403,9 +5384,19 @@ PrefabInstance:
       propertyPath: InitialModule.startLifetime.scalar
       value: 1.11
       objectReference: {fileID: 0}
+    - target: {fileID: 198000014052238036, guid: 3123da49cb81147489b444f2749aba47,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 198081783192839074, guid: 3123da49cb81147489b444f2749aba47,
         type: 3}
       propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198081783192839074, guid: 3123da49cb81147489b444f2749aba47,
+        type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
