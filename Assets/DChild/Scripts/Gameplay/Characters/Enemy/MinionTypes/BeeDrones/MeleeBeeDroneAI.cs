@@ -87,6 +87,8 @@ namespace DChild.Gameplay.Characters.Enemies
             WaitBehaviourEnd,
         }
 
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -100,13 +102,24 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
 
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_floorSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_roofSensor;
+        [SerializeField, TabGroup("Sensors")]
+        private RaySensor m_wallSensor;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
+        private State m_turnState;
+
         private float m_currentPatience;
         private bool m_enablePatience;
         private float timeCounter;
         private bool m_chargeOnce;
         private bool m_chargeFacing;
+
+        private Coroutine m_executeMoveCoroutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -115,6 +128,20 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.OverrideState(State.Turning);
+        
+        private void VelocityTurn()
+        {
+            var rb2d = GetComponent<Rigidbody2D>();
+            if (rb2d.velocity.x > 10)
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+            else if (m_character.physics.velocity.x < -10)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -145,6 +172,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_enablePatience = true;
                 }
             }
+        }
+
+        private bool TargetBlocked()
+        {
+            Vector2 wat = m_character.centerMass.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -181,6 +218,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
+            m_agent.Stop();
             m_animation.SetAnimation(0, m_info.chargeAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.chargeAnimation);
             m_animation.SetAnimation(0, m_info.meleeAttack.animation, false);
@@ -190,11 +228,80 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        #region Movement
+        private IEnumerator ExecuteMove(float attackRange)
+        {
+            m_animation.DisableRootMotion();
+            bool inRange = false;
+            /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
+            var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
+            var newPos = Vector2.zero;
+            while (!inRange || TargetBlocked())
+            {
+                newPos = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y);
+                bool xTargetInRange = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < attackRange ? true : false;
+                bool yTargetInRange = Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 1 ? true : false;
+                if (xTargetInRange && yTargetInRange)
+                {
+                    inRange = true;
+                }
+                DynamicMovement(newPos, moveSpeed);
+                yield return null;
+            }
+            StartCoroutine(AttackRoutine());
+            yield return null;
+        }
+
+        private void DynamicMovement(Vector2 target, float movespeed)
+        {
+            if (TargetBlocked())
+            {
+                VelocityTurn();
+            }
+
+            var rb2d = GetComponent<Rigidbody2D>();
+            if (IsFacing(target))
+            {
+                if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
+                {
+                    m_bodyCollider.enabled = false;
+                    m_agent.Stop();
+                    rb2d.isKinematic = false;
+                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
+                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
+
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                    return;
+                }
+
+                rb2d.isKinematic = true;
+                m_bodyCollider.enabled = true;
+                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
+                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
+                m_agent.SetDestination(target);
+                m_agent.Move(movespeed);
+
+                m_animation.SetAnimation(0, m_info.move.animation, true);
+            }
+            else
+            {
+                m_turnState = State.Attacking;
+                m_stateHandle.OverrideState(State.Turning);
+            }
+        }
+        #endregion
+
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            if (m_executeMoveCoroutine != null)
+            {
+                StopCoroutine(m_executeMoveCoroutine);
+                m_executeMoveCoroutine = null;
+            }
+            m_bodyCollider.enabled = true;
             m_agent.Stop();
         }
 
@@ -245,6 +352,7 @@ namespace DChild.Gameplay.Characters.Enemies
                    }
                     else
                     {
+                        m_turnState = State.chargeIdle;
                         m_chargeFacing = true;
                         m_stateHandle.SetState(State.Turning);
                        
@@ -262,60 +370,26 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Turning:
-                   
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                   
+                    m_stateHandle.Wait(m_turnState);
+                    StopAllCoroutines();
                     m_agent.Stop();
+                    m_character.physics.SetVelocity(Vector2.zero);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
+
                 case State.Attacking:
-                 
+                    m_stateHandle.Wait(State.ReevaluateSituation);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
-                    m_animation.EnableRootMotion(false, false);
-                    //m_attackHandle.ExecuteAttack(m_info.meleeAttack.animation, m_info.idleAnimation);
-                    //m_stateHandle.Wait(State.WaitBehaviourEnd);
-                    StartCoroutine(AttackRoutine());
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_info.meleeAttack.range));
                     break;
+
                 case State.Chasing:
-                    if (IsFacingTarget())
-                    {
-                      
-
-                       
-
-                            var target = m_targetInfo.position;
-                            //target.y -= 0.5f;
-                            m_animation.DisableRootMotion();
-
-                            if (IsTargetInRange(m_info.meleeAttack.range))
-                            {
-                               // m_agent.Stop();
-                               
-                                m_stateHandle.SetState(State.Attacking);
-                               
-                            }
-                            else
-                            {
-                               
-                                if (m_character.physics.velocity != Vector2.zero)
-                                {
-                                    m_animation.SetAnimation(0, m_info.move.animation, true);
-                                }
-                                else
-                                {
-                                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                                }
-                                m_agent.SetDestination(target);
-                                
-                                m_agent.Move(m_info.move.speed);
-                            }
-                    }
-                    else
-                    {
-                        m_stateHandle.SetState(State.Turning);
-                       
-                    }
-
+                    //m_attackDecider.DecideOnAttack();
+                    m_agent.Stop();
+                    m_character.physics.SetVelocity(Vector2.zero);
+                    m_stateHandle.SetState(State.Attacking);
                     break;
 
                 case State.ReevaluateSituation:
@@ -368,4 +442,3 @@ namespace DChild.Gameplay.Characters.Enemies
         }
     }
 }
-

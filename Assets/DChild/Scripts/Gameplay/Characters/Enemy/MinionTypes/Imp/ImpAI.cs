@@ -132,9 +132,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_bodyCollider;
-        [SerializeField, TabGroup("Reference")]
-        private GameObject m_legCollider;
+        private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Modules")]
@@ -262,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator FlinchRoutine()
         {
             m_hitbox.Disable();
-            m_bodyCollider.SetActive(false);
+            m_bodyCollider.enabled = false;
             m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
@@ -471,10 +469,19 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
+            StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            if (m_executeMoveCoroutine != null)
+            {
+                StopCoroutine(m_executeMoveCoroutine);
+                m_executeMoveCoroutine = null;
+            }
+            m_animation.DisableRootMotion();
+            var rb2d = GetComponent<Rigidbody2D>();
+            rb2d.isKinematic = false;
+            m_bodyCollider.enabled = true;
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_hitbox.Disable();
-            StopAllCoroutines();
             m_animation.SetEmptyAnimation(0, 0);
             StartCoroutine(DeathRoutine());
         }
@@ -487,9 +494,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathBeginAnimation);
             m_character.physics.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
-            m_legCollider.SetActive(true);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
-            m_bodyCollider.SetActive(true);
             m_animation.SetAnimation(0, m_info.deathHitFloorAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathHitFloorAnimation);
             enabled = false;
@@ -548,7 +553,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     //}
                     //StartCoroutine(DespawnRoutine());
                     //Vector3.MoveTowards(transform.position, m_targetInfo.position, m_info.move.speed);
-                    m_bodyCollider.SetActive(false);
+                    m_bodyCollider.enabled = false;
                     m_agent.Stop();
                     rb2d.isKinematic = false;
                     Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
@@ -567,7 +572,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
 
                 rb2d.isKinematic = true;
-                m_bodyCollider.SetActive(true);
+                m_bodyCollider.enabled = true;
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
                 m_agent.SetDestination(target);
@@ -745,8 +750,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_selfCollider.SetActive(false);
-            m_legCollider.SetActive(false);
-            m_bodyCollider.SetActive(false);
+            m_bodyCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_enablePatience = false;
