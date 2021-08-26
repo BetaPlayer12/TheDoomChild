@@ -1,11 +1,10 @@
 ﻿using DChild.Serialization;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace DChild.Gameplay.Environment
 {
-    public class ToggableObject : MonoBehaviour, ISerializableComponent
+    public abstract class ToggableObject : MonoBehaviour, ISerializableComponent
     {
         [System.Serializable]
         public struct SaveData : ISaveData
@@ -24,16 +23,11 @@ namespace DChild.Gameplay.Environment
         }
 
         [SerializeField, HideInPlayMode]
-        private bool m_startAs;
+        protected bool m_startAs;
         [ShowInInspector, HideInEditorMode, OnValueChanged("ToggleState")]
-        private bool m_currentState;
+        protected bool m_currentState;
 
-        [SerializeField, TabGroup("True")]
-        private UnityEvent m_onTrue;
-        [SerializeField, TabGroup("False")]
-        private UnityEvent m_onFalse;
-
-        private bool m_hasBeenInitialize;
+        protected bool m_hasBeenInitialize;
 
         public void Load(ISaveData data)
         {
@@ -43,33 +37,16 @@ namespace DChild.Gameplay.Environment
 
         public ISaveData Save() => new SaveData(m_currentState);
 
-        [Button,HideInEditorMode]
+        [Button, HideInEditorMode]
         public void ToggleState()
         {
             SetToggleState(!m_currentState);
         }
 
-        public void SetToggleState(bool value)
+        public virtual void SetToggleState(bool value)
         {
             m_currentState = value;
-            if (m_currentState)
-            {
-                m_onTrue?.Invoke();
-            }
-            else
-            {
-                m_onFalse?.Invoke();
-            }
             m_hasBeenInitialize = true;
-        }
-
-        private void Start()
-        {
-            if (m_hasBeenInitialize == false)
-            {
-                SetToggleState(m_startAs);
-                m_hasBeenInitialize = true;
-            }
         }
     }
 }
