@@ -73,7 +73,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3417744409185154495}
   - component: {fileID: 8656147245041209092}
-  - component: {fileID: 7987419736015372098}
   m_Layer: 16
   m_Name: BodyCollider
   m_TagString: Untagged
@@ -89,7 +88,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1455092323997312705}
   m_LocalRotation: {x: -0, y: -0, z: -0.0016949496, w: 0.99999857}
-  m_LocalPosition: {x: 0.042343132, y: 3.62642, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4809150871044810960}
@@ -105,9 +104,9 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 1
+  m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,29 +118,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.5, y: 2.5}
+  m_Size: {x: 2.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &7987419736015372098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1455092323997312705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1fd8daaed7b64148a34acb96ba14ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skeletonRenderer: {fileID: 4281934890231291566}
-  boneName: main body
-  followXYPosition: 1
-  followZPosition: 1
-  followBoneRotation: 1
-  followSkeletonFlip: 1
-  followLocalScale: 0
-  initializeOnAwake: 1
-  m_updateOnFixedUpdate: 0
 --- !u!1 &1626929057599596827
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,7 +698,7 @@ GameObject:
   - component: {fileID: 2271356089846404865}
   - component: {fileID: 7084402005336145028}
   - component: {fileID: 8846099698472826760}
-  - component: {fileID: 6859946826841748168}
+  - component: {fileID: 715507586395805567}
   m_Layer: 13
   m_Name: Stinger
   m_TagString: Untagged
@@ -779,7 +757,7 @@ MonoBehaviour:
   slotName: sting_bouning_box
   isTrigger: 0
   clearStateOnDisable: 1
---- !u!60 &6859946826841748168
+--- !u!60 &715507586395805567
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
