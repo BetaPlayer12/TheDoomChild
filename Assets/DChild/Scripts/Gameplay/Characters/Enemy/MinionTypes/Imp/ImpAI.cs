@@ -476,6 +476,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
+            m_animation.DisableRootMotion();
             var rb2d = GetComponent<Rigidbody2D>();
             rb2d.isKinematic = false;
             m_bodyCollider.enabled = true;
@@ -555,7 +556,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
                     rb2d.isKinematic = false;
-                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
+                    Vector3 dir = (m_targetInfo.position - (Vector2)rb2d.transform.position).normalized;
                     rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
