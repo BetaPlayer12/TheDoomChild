@@ -36,7 +36,9 @@ namespace DChild.Gameplay.Characters.Players
 
         [SerializeField]
         private PlayerPassiveModule m_passiveModule;
+        [ShowInInspector,ReadOnly]
         private PrimarySkill m_unlockedSkills;
+        [ShowInInspector, ReadOnly]
         private PrimarySkill m_activatedSkills;
 
         public event EventAction<UpdateEventArgs> OnUpdate;
