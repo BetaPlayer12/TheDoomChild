@@ -7,7 +7,6 @@ namespace DChild.Gameplay.Environment
 {
     public class ToggableObject : MonoBehaviour, ISerializableComponent
     {
-
         [System.Serializable]
         public struct SaveData : ISaveData
         {
@@ -34,7 +33,13 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("False")]
         private UnityEvent m_onFalse;
 
-        public void Load(ISaveData data) => SetToggleState(((SaveData)data).currentState);
+        private bool m_hasBeenInitialize;
+
+        public void Load(ISaveData data)
+        {
+            SetToggleState(((SaveData)data).currentState);
+            m_hasBeenInitialize = true;
+        }
 
         public ISaveData Save() => new SaveData(m_currentState);
 
@@ -55,11 +60,16 @@ namespace DChild.Gameplay.Environment
             {
                 m_onFalse?.Invoke();
             }
+            m_hasBeenInitialize = true;
         }
 
         private void Start()
         {
-            SetToggleState(m_startAs);
+            if (m_hasBeenInitialize == false)
+            {
+                SetToggleState(m_startAs);
+                m_hasBeenInitialize = true;
+            }
         }
     }
 }
