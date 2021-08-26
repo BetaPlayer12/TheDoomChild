@@ -11,8 +11,6 @@ namespace DChild.Gameplay.Environment
         [SerializeField, TabGroup("False")]
         private UnityEvent m_onFalse;
 
-        private bool m_hasBeenInitialize;
-
         public override  void SetToggleState(bool value)
         {
             base.SetToggleState(value);

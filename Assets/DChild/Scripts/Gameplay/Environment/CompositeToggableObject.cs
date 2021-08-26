@@ -76,7 +76,6 @@ namespace DChild.Gameplay.Environment
                     }
                     else
                     {
-
                         Gizmos.color = color;
                         Gizmos.DrawCube(position, cubeSize);
                     }
