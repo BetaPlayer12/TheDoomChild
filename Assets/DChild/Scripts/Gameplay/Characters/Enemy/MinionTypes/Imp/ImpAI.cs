@@ -476,6 +476,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
+            m_animation.DisableRootMotion();
             var rb2d = GetComponent<Rigidbody2D>();
             rb2d.isKinematic = false;
             m_bodyCollider.enabled = true;

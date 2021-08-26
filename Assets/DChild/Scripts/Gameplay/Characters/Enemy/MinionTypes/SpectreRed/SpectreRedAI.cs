@@ -389,7 +389,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodyCollider.enabled = true;
             m_agent.Stop();
             var rb2d = GetComponent<Rigidbody2D>();
-            rb2d.isKinematic = false;
             m_character.physics.simulateGravity = true;
         }
 
@@ -500,7 +499,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
-                    rb2d.isKinematic = false;
                     Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
                     rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
@@ -511,12 +509,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     //m_bodyCollider.SetActive(true);
                     m_agent.Stop();
-                    rb2d.isKinematic = false;
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     return;
                 }
-
-                rb2d.isKinematic = true;
+                
                 m_bodyCollider.enabled = true;
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
