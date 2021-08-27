@@ -377,7 +377,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodycollider.enabled = false;
             m_selfCollider.SetActive(false);
             m_character.physics.SetVelocity(Vector2.zero);
-            m_muzzleLoopFX.Stop();
+            //m_muzzleLoopFX.Stop();
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
         }
 
@@ -451,13 +451,18 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(m_aimRoutine);
             yield return new WaitForSeconds(1f);
             StopCoroutine(m_aimRoutine);
-            m_muzzleLoopFX.Play();
+            //m_muzzleLoopFX.Play();
             m_lineRenderer.SetPosition(1, m_telegraphLineRenderer.GetPosition(1));
-            var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, m_telegraphLineRenderer.GetPosition(1), Quaternion.identity);
-            hitPointFX.GetComponent<ParticleFX>().Play();
+            //var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, m_telegraphLineRenderer.GetPosition(1), Quaternion.identity);
+            //hitPointFX.GetComponent<ParticleFX>().Play();
+
+            var muzzleLoopFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_muzzleFXGO.gameObject);
+            muzzleLoopFX.transform.position = m_telegraphLineRenderer.GetPosition(1);
             //LaunchProjectile();
-            var muzzleFX = this.InstantiateToScene(m_muzzleFXGO, m_muzzleLoopFX.transform.position, Quaternion.identity);
-            m_muzzleLoopFX.Stop();
+            //var muzzleFX = this.InstantiateToScene(m_muzzleFXGO, m_muzzleLoopFX.transform.position, Quaternion.identity);
+            var muzzleFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_muzzleFXGO.gameObject);
+            muzzleFX.transform.position = muzzleLoopFX.transform.position;
+            //m_muzzleLoopFX.Stop();
             for (int i = 0; i < m_lineRenderer.positionCount; i++)
             {
                 var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
@@ -466,8 +471,8 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_edgeCollider.points = m_Points.ToArray();
             yield return new WaitForSeconds(.2f);
-            hitPointFX.GetComponent<ParticleFX>().Stop();
-            Destroy(hitPointFX.gameObject);
+            //hitPointFX.GetComponent<ParticleFX>().Stop();
+            //Destroy(hitPointFX.gameObject);
             ResetLaser();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
