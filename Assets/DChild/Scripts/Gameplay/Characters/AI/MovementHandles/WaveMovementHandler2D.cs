@@ -22,20 +22,23 @@ namespace DChild.Gameplay
             var position = m_source.position;
             var normalizedDirection = direction.normalized;
             var deltaTime = GameplaySystem.time.deltaTime;
-            m_sineTime += deltaTime;
-            position += normalizedDirection * speed * deltaTime;
-            var waveValue = 0f;
-            if (m_useCosine)
+            if (deltaTime > 0)
             {
-                waveValue = (Mathf.Cos(m_sineTime * m_waveSpeed));
+                m_sineTime += deltaTime;
+                position += normalizedDirection * speed * deltaTime;
+                var waveValue = 0f;
+                if (m_useCosine)
+                {
+                    waveValue = (Mathf.Cos(m_sineTime * m_waveSpeed));
+                }
+                else
+                {
+                    waveValue = (Mathf.Sin(m_sineTime * m_waveSpeed));
+                }
+                var perpendicular = new Vector2(normalizedDirection.y, -normalizedDirection.x);
+                position += perpendicular * (waveValue * m_verticalAmplitude);
+                m_source.position = position;
             }
-            else
-            {
-                waveValue = (Mathf.Sin(m_sineTime * m_waveSpeed));
-            }
-            var perpendicular = new Vector2(normalizedDirection.y, -normalizedDirection.x);
-            position += perpendicular * (waveValue * m_verticalAmplitude);
-            m_source.position = position;
         }
 
         public override void Stop()
