@@ -467,6 +467,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
                 pos = new Vector2(m_character.facing == HorizontalDirection.Right ? pos.x : -pos.x, pos.y);
+                if (i > 0)
+                {
+                    pos = pos * 0.7f;
+                }
                 m_Points.Add(pos);
             }
             m_edgeCollider.points = m_Points.ToArray();
