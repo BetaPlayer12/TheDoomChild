@@ -522,6 +522,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private void DynamicMovement(Vector2 target, float movespeed)
         {
             var rb2d = GetComponent<Rigidbody2D>();
+            m_agent.SetDestination(target);
+
             if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
             {
                 if (!IsFacingTarget())
@@ -535,7 +537,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 return;
             }
 
-            if (IsFacing(m_agent.hasPath && TargetBlocked() ? m_agent.segmentDestination : target))
+            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_floorSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
                 if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
