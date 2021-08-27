@@ -56,10 +56,10 @@ namespace DChild.Gameplay.Environment
             var offColor = Color.red;
 
             var currentPosition = transform.position;
-            DrawGizmos(m_toggables, currentToggleState ? onColor : offColor);
-            DrawGizmos(m_invertedToggables, !currentToggleState ? onColor : offColor);
+            DrawGizmos(m_toggables, currentToggleState ? onColor : offColor, currentToggleState);
+            DrawGizmos(m_invertedToggables, !currentToggleState ? onColor : offColor, !currentToggleState);
 
-            void DrawGizmos(ToggableObject[] toggables, Color color)
+            void DrawGizmos(ToggableObject[] toggables, Color color, bool currentState)
             {
                 var cubeSize = new Vector3(2, 2, 1);
                 Gizmos.color = color;
@@ -70,7 +70,7 @@ namespace DChild.Gameplay.Environment
                     Gizmos.DrawLine(currentPosition, position);
                     if (toggable.GetType() == this.GetType())
                     {
-                        ((CompositeToggableObject)toggable).DrawGizmos(currentToggleState);
+                        ((CompositeToggableObject)toggable).DrawGizmos(currentState);
                         Gizmos.color = color;
                         Gizmos.DrawSphere(position, 2);
                     }
