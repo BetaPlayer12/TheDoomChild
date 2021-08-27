@@ -106,6 +106,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Detect,
             Idle,
+            ReturnToPatrol,
             Patrol,
             Cooldown,
             Turning,
@@ -178,6 +179,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isDetecting;
         private bool m_isDoingAction;
         private GameObject m_barrelCache;
+        private Vector2 m_startPos;
 
         private Coroutine m_executeMoveCoroutine;
 
@@ -343,6 +345,11 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 StopAllCoroutines();
+                if (m_executeMoveCoroutine != null)
+                {
+                    StopCoroutine(m_executeMoveCoroutine);
+                    m_executeMoveCoroutine = null;
+                }
                 m_agent.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_targetInfo.Set(null, null);
@@ -350,7 +357,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_isDetecting = false;
                 m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
                 m_spriteMask.SetActive(true);
-                m_stateHandle.SetState(State.Patrol);
+                m_stateHandle.SetState(State.ReturnToPatrol);
             }
         }
 
@@ -401,6 +408,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             var disappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.disappearing1Animation : m_info.disappearing2Animation;
             m_animation.SetAnimation(0, disappearAnim, false).TimeScale = 1.5f;
+            m_agent.Stop();
             m_hitbox.Disable();
             m_selfCollider.SetActive(false);
             yield return new WaitForAnimationComplete(m_animation.animationState, disappearAnim);
@@ -535,6 +543,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 DynamicMovement(newPos, moveSpeed);
                 yield return null;
             }
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
             ExecuteAttack(attack);
             yield return null;
         }
@@ -542,7 +554,22 @@ namespace DChild.Gameplay.Characters.Enemies
         private void DynamicMovement(Vector2 target, float movespeed)
         {
             var rb2d = GetComponent<Rigidbody2D>();
-            if (IsFacing(target))
+            m_agent.SetDestination(target);
+
+            if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
+            {
+                if (!IsFacingTarget())
+                {
+                    CustomTurn();
+                }
+                //m_bodyCollider.SetActive(true);
+                m_agent.Stop();
+                rb2d.isKinematic = false;
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                return;
+            }
+
+            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_floorSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : m_targetInfo.position))
             {
                 if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
@@ -556,18 +583,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
                     rb2d.isKinematic = false;
-                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
+                    Vector3 dir = (m_targetInfo.position - (Vector2)rb2d.transform.position).normalized;
                     rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
-                    return;
-                }
-                else if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
-                {
-                    //m_bodyCollider.SetActive(true);
-                    m_agent.Stop();
-                    rb2d.isKinematic = false;
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     return;
                 }
 
@@ -594,6 +613,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
             m_spineEventListener.Subscribe(m_info.spawnBarrelEvent, SpawnBarrel);
             m_hitbox.Disable();
+            m_startPos = transform.position;
             //m_randomSpawnCollider.transform.SetParent(null);
             //m_selfCollider.SetActive(false);
         }
@@ -637,6 +657,30 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_agent.Stop();
                     break;
 
+                case State.ReturnToPatrol:
+                    if (IsFacing(m_startPos))
+                    {
+                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
+                        {
+                            var rb2d = GetComponent<Rigidbody2D>();
+                            m_bodyCollider.enabled = false;
+                            m_agent.Stop();
+                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
+                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        }
+                        else
+                        {
+                            m_stateHandle.OverrideState(State.Patrol);
+                        }
+                    }
+                    else
+                    {
+                        m_turnState = State.ReturnToPatrol;
+                        m_stateHandle.SetState(State.Turning);
+                    }
+                    break;
+
                 case State.Patrol:
                     //if (m_animation.GetCurrentAnimation(0).ToString() == m_info.patrol.animation)
                     //{
@@ -651,6 +695,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
+                    if (m_executeMoveCoroutine != null)
+                    {
+                        StopCoroutine(m_executeMoveCoroutine);
+                        m_executeMoveCoroutine = null;
+                    }
                     m_agent.Stop();
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute();
@@ -732,7 +781,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
-                if (/*m_enablePatience*/ Vector2.Distance(transform.position, m_targetInfo.position) > 50)
+                if (/*m_enablePatience*/ Vector2.Distance(transform.position, m_targetInfo.position) > 50 && !m_selfSensor.isDetecting)
                 {
                     Patience();
                 }
@@ -741,7 +790,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
-            m_stateHandle.OverrideState(State.Patrol);
+            m_stateHandle.OverrideState(State.ReturnToPatrol);
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;

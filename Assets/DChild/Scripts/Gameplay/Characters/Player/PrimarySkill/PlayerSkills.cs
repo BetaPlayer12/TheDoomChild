@@ -62,8 +62,11 @@ namespace DChild.Gameplay.Characters.Players
             var enumValue = Enum.GetValues(typeof(PrimarySkill));
             foreach (PrimarySkill value in enumValue)
             {
-                var isUnlocked = m_skills.HasFlag(value);
-                m_moduleActivator.SetModuleLock(value, isUnlocked);
+                if (value != PrimarySkill.None && value != PrimarySkill.All)
+                {
+                    var isUnlocked = m_skills.HasFlag(value);
+                    m_moduleActivator.SetModuleLock(value, isUnlocked);
+                }
             }
         }
     }
