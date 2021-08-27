@@ -33,6 +33,8 @@ namespace DChild.Gameplay.Environment
 
         public string prompMessage => null;
 
+        public bool isDebugSwitchHandle => false;
+
         public void DoSceneTransition(Character character, TransitionType type)
         {
             Rigidbody2D rigidBody = character.GetComponent<Rigidbody2D>();
