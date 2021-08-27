@@ -141,7 +141,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
 
             switch (m_stateHandle.currentState)
