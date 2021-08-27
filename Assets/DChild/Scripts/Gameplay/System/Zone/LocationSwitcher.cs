@@ -32,10 +32,18 @@ namespace DChild.Gameplay.Systems
 
         public void Interact(Character character)
         {
-            var controller = GameplaySystem.playerManager.OverrideCharacterControls();
-            StartCoroutine(DoTransition(character, TransitionType.Enter));
+            if (m_handle.isDebugSwitchHandle)
+            {
+                m_handle.DoSceneTransition(character, TransitionType.Enter);
+            }
+            else
+            {
+                var controller = GameplaySystem.playerManager.OverrideCharacterControls();
+                StartCoroutine(DoTransition(character, TransitionType.Enter));
+            }
         }
 
+        [Button]
         public void Interact()
         {
             Interact(GameplaySystem.playerManager.player.character);
@@ -44,6 +52,7 @@ namespace DChild.Gameplay.Systems
         private IEnumerator DoTransition(Character character, TransitionType type)
         {
             m_handle.DoSceneTransition(character, type);
+
 
             if (type == TransitionType.Enter)
             {

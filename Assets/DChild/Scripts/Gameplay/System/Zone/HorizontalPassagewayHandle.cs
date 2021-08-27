@@ -27,6 +27,8 @@ namespace DChild.Gameplay.Environment
 
         public string prompMessage => null;
 
+        public bool isDebugSwitchHandle => false;
+
         public void DoSceneTransition(Character character, TransitionType type)
         {
             switch (type)

@@ -13,6 +13,8 @@ namespace DChild.Gameplay.Environment
 
     public interface ISwitchHandle
     {
+        bool isDebugSwitchHandle { get; }
+
         void DoSceneTransition(Character character, TransitionType type);
         float transitionDelay { get; }
 
