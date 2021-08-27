@@ -94,6 +94,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum State
         {
             Detect,
+            ReturnToPatrol,
             Patrol,
             Cooldown,
             Turning,
@@ -115,6 +116,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodycollider;
         [SerializeField, TabGroup("Modules")]
@@ -176,6 +179,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_isDetecting;
         private Vector2 m_lastTargetPos;
+        private Vector2 m_startPos;
+
+        private Coroutine m_executeMoveCoroutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -194,20 +200,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
         }
 
-        private void VelocityTurn()
-        {
-            var rb2d = GetComponent<Rigidbody2D>();
-            if (rb2d.velocity.x > 10)
-            {
-                transform.localScale = new Vector3(1, 1, 1);
-            }
-            else if (m_character.physics.velocity.x < -10)
-            {
-                transform.localScale = new Vector3(-1, 1, 1);
-            }
-            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
-        }
-
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -215,6 +207,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
+                    m_selfCollider.SetActive(true);
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
@@ -265,7 +258,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_agent.Stop();
                 m_character.physics.SetVelocity(Vector2.zero);
-                m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+                m_stateHandle.Wait(State.ReevaluateSituation);
                 StopAllCoroutines();
                 StartCoroutine(FlinchRoutine());
             }
@@ -276,7 +269,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idle2Animation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
@@ -305,6 +298,11 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 StopAllCoroutines();
+                if (m_executeMoveCoroutine != null)
+                {
+                    StopCoroutine(m_executeMoveCoroutine);
+                    m_executeMoveCoroutine = null;
+                }
                 m_agent.Stop();
                 m_character.physics.SetVelocity(Vector2.zero);
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -312,7 +310,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_flinchHandle.m_autoFlinch = true;
                 m_enablePatience = false;
                 m_isDetecting = false;
-                m_stateHandle.SetState(State.Patrol);
+                m_stateHandle.SetState(State.ReturnToPatrol);
             }
         }
 
@@ -369,11 +367,17 @@ namespace DChild.Gameplay.Characters.Enemies
             //}
             //m_edgeCollider.points = m_Points.ToArray();
             StopAllCoroutines();
+            if (m_executeMoveCoroutine != null)
+            {
+                StopCoroutine(m_executeMoveCoroutine);
+                m_executeMoveCoroutine = null;
+            }
             ResetLaser();
             m_agent.Stop();
             m_bodycollider.enabled = false;
+            m_selfCollider.SetActive(false);
             m_character.physics.SetVelocity(Vector2.zero);
-            m_muzzleLoopFX.Stop();
+            //m_muzzleLoopFX.Stop();
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
         }
 
@@ -447,27 +451,37 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(m_aimRoutine);
             yield return new WaitForSeconds(1f);
             StopCoroutine(m_aimRoutine);
-            m_muzzleLoopFX.Play();
+            //m_muzzleLoopFX.Play();
             m_lineRenderer.SetPosition(1, m_telegraphLineRenderer.GetPosition(1));
-            var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, m_telegraphLineRenderer.GetPosition(1), Quaternion.identity);
-            hitPointFX.GetComponent<ParticleFX>().Play();
+            //var hitPointFX = this.InstantiateToScene(m_muzzleLoopFX.gameObject, m_telegraphLineRenderer.GetPosition(1), Quaternion.identity);
+            //hitPointFX.GetComponent<ParticleFX>().Play();
+
+            var muzzleLoopFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_muzzleFXGO.gameObject);
+            muzzleLoopFX.transform.position = m_telegraphLineRenderer.GetPosition(1);
             //LaunchProjectile();
-            var muzzleFX = this.InstantiateToScene(m_muzzleFXGO, m_muzzleLoopFX.transform.position, Quaternion.identity);
-            m_muzzleLoopFX.Stop();
+            //var muzzleFX = this.InstantiateToScene(m_muzzleFXGO, m_muzzleLoopFX.transform.position, Quaternion.identity);
+            var muzzleFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_muzzleFXGO.gameObject);
+            muzzleFX.transform.position = muzzleLoopFX.transform.position;
+            //m_muzzleLoopFX.Stop();
             for (int i = 0; i < m_lineRenderer.positionCount; i++)
             {
                 var pos = m_lineRenderer.GetPosition(i) - m_edgeCollider.transform.position;
                 pos = new Vector2(m_character.facing == HorizontalDirection.Right ? pos.x : -pos.x, pos.y);
+                if (i > 0)
+                {
+                    pos = pos * 0.7f;
+                }
                 m_Points.Add(pos);
             }
             m_edgeCollider.points = m_Points.ToArray();
             yield return new WaitForSeconds(.2f);
-            hitPointFX.GetComponent<ParticleFX>().Stop();
-            Destroy(hitPointFX.gameObject);
+            //hitPointFX.GetComponent<ParticleFX>().Stop();
+            //Destroy(hitPointFX.gameObject);
             ResetLaser();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
             m_bodycollider.enabled = false;
+            m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -517,46 +531,25 @@ namespace DChild.Gameplay.Characters.Enemies
                 DynamicMovement(m_targetInfo.position, moveSpeed);
                 yield return null;
             }
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
             ExecuteAttack(attack);
             yield return null;
         }
 
         private void DynamicMovement(Vector2 target, float moveSpeed)
         {
-            if (ShotBlocked())
-            {
-                VelocityTurn();
-            }
-            else
+            var rb2d = GetComponent<Rigidbody2D>();
+            m_agent.SetDestination(target);
+
+            if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
             {
                 if (!IsFacingTarget())
                 {
                     CustomTurn();
                 }
-            }
-
-            var rb2d = GetComponent<Rigidbody2D>();
-
-            if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
-            {
-                //if (m_executeMoveCoroutine != null)
-                //{
-                //    StopCoroutine(m_executeMoveCoroutine);
-                //    m_executeMoveCoroutine = null;
-                //}
-                //StartCoroutine(DespawnRoutine());
-                //Vector3.MoveTowards(transform.position, m_targetInfo.position, m_info.move.speed);
-                m_bodycollider.enabled = false;
-                m_agent.Stop();
-                rb2d.isKinematic = false;
-                Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
-                rb2d.MovePosition(rb2d.transform.position + dir * moveSpeed * Time.fixedDeltaTime);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
-                return;
-            }
-            else if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
-            {
                 //m_bodyCollider.SetActive(true);
                 m_agent.Stop();
                 rb2d.isKinematic = false;
@@ -564,23 +557,41 @@ namespace DChild.Gameplay.Characters.Enemies
                 return;
             }
 
-            rb2d.isKinematic = true;
-            m_bodycollider.enabled = true;
-            var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-            var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-            m_agent.SetDestination(target);
-            m_agent.Move(moveSpeed);
+            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_groundSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
+            {
+                if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
+                {
+                    //if (m_executeMoveCoroutine != null)
+                    //{
+                    //    StopCoroutine(m_executeMoveCoroutine);
+                    //    m_executeMoveCoroutine = null;
+                    //}
+                    //StartCoroutine(DespawnRoutine());
+                    //Vector3.MoveTowards(transform.position, m_targetInfo.position, m_info.move.speed);
+                    m_bodycollider.enabled = false;
+                    m_agent.Stop();
+                    rb2d.isKinematic = false;
+                    Vector3 dir = (target - (Vector2)rb2d.transform.position).normalized;
+                    rb2d.MovePosition(rb2d.transform.position + dir * moveSpeed * Time.fixedDeltaTime);
 
-            m_animation.SetAnimation(0, m_info.move.animation, true);
+                    m_animation.SetAnimation(0, m_info.move.animation, true);
+                    return;
+                }
 
-            //if (IsFacing(target))
-            //{
-            //}
-            //else
-            //{
-            //    m_turnState = State.Attacking;
-            //    m_stateHandle.OverrideState(State.Turning);
-            //}
+                rb2d.isKinematic = true;
+                m_bodycollider.enabled = true;
+                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
+                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
+                m_agent.SetDestination(target);
+                m_agent.Move(moveSpeed);
+
+                m_animation.SetAnimation(0, m_info.move.animation, true);
+            }
+            else
+            {
+                m_turnState = State.Attacking;
+                m_stateHandle.OverrideState(State.Turning);
+            }
         }
 
         //private void DynamicMovement(Vector2 target, float moveSpeed)
@@ -749,6 +760,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_bodycollider.enabled = false;
             m_aimRoutine = AimRoutine();
+            m_startPos = transform.position;
             //m_selfCollider.SetActive(false);
         }
 
@@ -797,6 +809,30 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     break;
 
+                case State.ReturnToPatrol:
+                    if (IsFacing(m_startPos))
+                    {
+                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
+                        {
+                            var rb2d = GetComponent<Rigidbody2D>();
+                            m_bodycollider.enabled = false;
+                            m_agent.Stop();
+                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
+                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                            m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        }
+                        else
+                        {
+                            m_stateHandle.OverrideState(State.Patrol);
+                        }
+                    }
+                    else
+                    {
+                        m_turnState = State.ReturnToPatrol;
+                        m_stateHandle.SetState(State.Turning);
+                    }
+                    break;
+
                 case State.Patrol:
                     m_turnState = State.ReevaluateSituation;
                     if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
@@ -814,9 +850,12 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     StopAllCoroutines();
+                    if (m_executeMoveCoroutine != null)
+                    {
+                        StopCoroutine(m_executeMoveCoroutine);
+                        m_executeMoveCoroutine = null;
+                    }
                     m_agent.Stop();
-                    m_character.physics.SetVelocity(Vector2.zero);
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute();
                     break;
                 case State.Attacking:
@@ -824,7 +863,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_agent.Stop();
                     m_character.physics.SetVelocity(Vector2.zero);
-                    StartCoroutine(ExecuteMove(m_currentAttackRange, m_currentAttack));
+                    m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_currentAttackRange, m_currentAttack));
                     m_attackDecider.hasDecidedOnAttack = false;
                     break;
                 case State.Cooldown:
@@ -853,6 +892,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             m_agent.Stop();
                             m_character.physics.SetVelocity(Vector2.zero);
+                            m_selfCollider.SetActive(true);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
                         }
                     }
@@ -901,7 +941,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience)
+            if (m_enablePatience && !m_selfSensor.isDetecting)
             {
                 Patience();
             }
@@ -909,7 +949,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override void OnTargetDisappeared()
         {
-            m_stateHandle.OverrideState(State.Patrol);
+            m_stateHandle.OverrideState(State.ReturnToPatrol);
             m_currentPatience = 0;
             m_hitbox.gameObject.SetActive(true);
             m_enablePatience = false;

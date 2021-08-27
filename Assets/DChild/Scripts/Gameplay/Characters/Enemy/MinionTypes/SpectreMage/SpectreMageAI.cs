@@ -265,7 +265,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchRoutine()
         {
+            m_agent.Stop();
             m_hitbox.gameObject.SetActive(false);
+            m_selfCollider.SetActive(false);
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             Debug.Log("FLINCH ANIMATION");
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
@@ -286,6 +288,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("idleAnimation");
             m_flinchHandle.m_autoFlinch = true;
             m_hitbox.gameObject.SetActive(true);
+            m_selfCollider.SetActive(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -336,6 +339,11 @@ namespace DChild.Gameplay.Characters.Enemies
             else
             {
                 //StopAllCoroutines();
+                if (m_executeMoveCoroutine != null)
+                {
+                    StopCoroutine(m_executeMoveCoroutine);
+                    m_executeMoveCoroutine = null;
+                }
                 m_agent.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_targetInfo.Set(null, null);
@@ -389,6 +397,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
+            m_selfCollider.SetActive(false);
             //m_bodyCollider.SetActive(true);
             //m_animation.SetAnimation(0, m_info.deathAnimation, false);
             m_agent.Stop();
@@ -475,6 +484,7 @@ namespace DChild.Gameplay.Characters.Enemies
             LaunchProjectile();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_selfCollider.SetActive(false);
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -501,6 +511,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 DynamicMovement(newPos, moveSpeed);
                 yield return null;
             }
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
             ExecuteAttack(attack);
             yield return null;
         }
@@ -508,7 +522,22 @@ namespace DChild.Gameplay.Characters.Enemies
         private void DynamicMovement(Vector2 target, float movespeed)
         {
             var rb2d = GetComponent<Rigidbody2D>();
-            if (IsFacing(target))
+            m_agent.SetDestination(target);
+
+            if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
+            {
+                if (!IsFacingTarget())
+                {
+                    CustomTurn();
+                }
+                //m_bodyCollider.SetActive(true);
+                m_agent.Stop();
+                rb2d.isKinematic = false;
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                return;
+            }
+
+            if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_floorSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
                 if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
@@ -525,13 +554,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
-                    return;
-                }
-                else if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
-                {
-                    //m_bodyCollider.SetActive(true);
-                    m_agent.Stop();
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     return;
                 }
                 
@@ -612,7 +634,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             switch (m_stateHandle.currentState)
             {
-
                 case State.ReturnToPatrol:
                     if (IsFacing(m_startPos))
                     {
@@ -699,6 +720,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
+                        m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -731,7 +753,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience)
+            if (m_enablePatience && !m_selfSensor.isDetecting)
             {
                 Patience();
             }
