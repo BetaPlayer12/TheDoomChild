@@ -69,10 +69,7 @@ namespace DChild.Gameplay
 
         private void OnValidate()
         {
-            if (this.TryGetComponentInChildren<Collider2D>(out Collider2D collider))
-            {
-                collider.isTrigger = true;
-            }
+            DChildUtility.ValidateSensor(gameObject);
         }
 
 #if UNITY_EDITOR

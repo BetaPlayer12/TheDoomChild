@@ -42,6 +42,12 @@ namespace DChild.Gameplay.UI
             m_Shown = saveData.Shown;
 
         }
+        private IEnumerator DelayedFade()
+        {
+            yield return new WaitForSeconds(m_TextFadeDelay);
+            m_UI.Hide();
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (m_Shown != true)
@@ -59,10 +65,10 @@ namespace DChild.Gameplay.UI
             }
         }
 
-        private IEnumerator DelayedFade()
+
+        private void OnValidate()
         {
-            yield return new WaitForSeconds(m_TextFadeDelay);
-            m_UI.Hide();
+            DChildUtility.ValidateSensor(gameObject);
         }
     }
 
