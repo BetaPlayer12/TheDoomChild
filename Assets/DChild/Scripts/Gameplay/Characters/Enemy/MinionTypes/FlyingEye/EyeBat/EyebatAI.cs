@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Pathfinding;
+using DarkTonic.MasterAudio;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -152,6 +153,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_muzzleLoopFX;
         [SerializeField, TabGroup("Lazer")]
         private ParticleFX m_muzzleTelegraphFX;
+        [SerializeField, TabGroup("Audio")]
+        private EventSounds m_lazerAudio;
         //[SerializeField, TabGroup("Lazer")]
         //private Gradient m_telegraphGradient;
         //[SerializeField, TabGroup("Lazer")]
@@ -257,6 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_agent.Stop();
+                m_lazerAudio.enabled = false;
                 m_character.physics.SetVelocity(Vector2.zero);
                 m_stateHandle.Wait(State.ReevaluateSituation);
                 StopAllCoroutines();
@@ -374,6 +378,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             ResetLaser();
             m_agent.Stop();
+            m_lazerAudio.enabled = false;
             m_bodycollider.enabled = false;
             m_selfCollider.SetActive(false);
             m_character.physics.SetVelocity(Vector2.zero);
@@ -447,6 +452,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator LazerRoutine()
         {
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            m_lazerAudio.enabled = true;
             StartCoroutine(TelegraphLineRoutine());
             StartCoroutine(m_aimRoutine);
             yield return new WaitForSeconds(1f);
@@ -479,6 +485,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //Destroy(hitPointFX.gameObject);
             ResetLaser();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_lazerAudio.enabled = false;
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
             m_bodycollider.enabled = false;
             m_selfCollider.SetActive(false);
