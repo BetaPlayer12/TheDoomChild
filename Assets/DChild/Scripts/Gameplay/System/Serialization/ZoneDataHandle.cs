@@ -91,7 +91,7 @@ namespace DChild.Serialization
 
         private void OnPostDeserialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            if (eventArgs.IsPartOfTheUpdate(SerializationScope.Gameplay))
+            if (eventArgs.IsPartOfTheUpdate(SerializationScope.Zone))
             {
                 m_cacheSlot = GameplaySystem.campaignSerializer.slot;
                 m_zoneData = m_cacheSlot.GetZoneData<ZoneData>(m_ID);
@@ -115,7 +115,7 @@ namespace DChild.Serialization
 
         private void OnPreSerialization(object sender, CampaignSlotUpdateEventArgs eventArgs)
         {
-            if (eventArgs.IsPartOfTheUpdate(SerializationScope.Gameplay))
+            if (eventArgs.IsPartOfTheUpdate(SerializationScope.Zone))
             {
                 UpdateSaveData();
             }

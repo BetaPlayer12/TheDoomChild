@@ -62,6 +62,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_thrust.ShowCollider(false);
             m_state.isChargingAttack = false;
             m_chargeFX?.Stop(true);
+            m_thrust.PlayFX(false);
             m_finishedChargeFX?.Stop(true);
             m_animator.SetBool(m_swordThrustAnimationParameter, false);
             m_animator.SetBool(m_chargingAnimationParameter, false);
