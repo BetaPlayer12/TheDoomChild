@@ -117,7 +117,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
 
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
+        private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_boundBoxGO;
         [SerializeField, TabGroup("Modules")]
@@ -135,6 +135,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private float m_currentPatience;
         private float m_currentCD;
+        private float m_currentFullCD;
+        private float m_currentMoveSpeed;
+        private float m_currentBackMoveSpeed;
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
@@ -176,7 +179,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
-            m_selfCollider.SetActive(false);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -187,7 +189,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                m_selfCollider.SetActive(true);
+                m_selfCollider.enabled = false;
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -225,7 +227,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_selfCollider.SetActive(false);
+                m_selfCollider.enabled = false;
                 m_targetInfo.Set(null, null);
                 m_flinchHandle.m_autoFlinch = true;
                 m_isDetecting = false;
@@ -255,7 +257,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             StopAllCoroutines();
-            m_selfCollider.SetActive(false);
+            m_selfCollider.enabled = false;
             GetComponentInChildren<Hitbox>().gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             base.OnDestroyed(sender, eventArgs);
@@ -299,7 +301,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
+            m_selfCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
@@ -348,12 +350,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RunAttackRoutine()
         {
             //m_animation.EnableRootMotion(true, false);
+            m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.runAttack.animation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.runAttack.animation);
             while (m_info.runAttackDuration >= m_currentRunAttackDuration)
             {
                 m_currentRunAttackDuration += Time.deltaTime;
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                 transform.position = new Vector2(transform.position.x, GroundPosition().y);
                 yield return null;
             }
@@ -361,7 +364,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForSeconds(m_info.runAttackDuration);
             //m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0.25f;
-            m_selfCollider.SetActive(false);
+            m_selfCollider.enabled = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -433,7 +436,9 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_selfCollider.SetActive(false);
+            m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
+            m_currentBackMoveSpeed = UnityEngine.Random.Range(m_info.backMove.speed * .75f, m_info.backMove.speed * 1.25f);
+            m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
             m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
             if (m_willPatrol)
@@ -519,6 +524,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting)
                         {
                             m_stateHandle.Wait(State.Cooldown);
+                            m_selfCollider.enabled = true;
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
 
                             switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
@@ -554,13 +560,15 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                 m_animation.EnableRootMotion(false, false);
+                                m_selfCollider.enabled = false;
                                 m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
-                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
+                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.patrol.speed);
                                 transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
                             }
                             else
                             {
                                 m_movement.Stop();
+                                m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
                         }
@@ -590,12 +598,14 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 m_animation.EnableRootMotion(false, false);
                                 m_animation.SetAnimation(0, m_info.backMove.animation, true);
-                                m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.backMove.speed);
+                                m_selfCollider.enabled = false;
+                                m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_currentBackMoveSpeed);
                                 transform.position = new Vector2(transform.position.x, GroundPosition().y);
                             }
                             else
                             {
                                 m_movement.Stop();
+                                m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
                         }
@@ -607,13 +617,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (m_currentCD <= m_info.attackCD && !m_wallSensor.isDetecting)
                     {
-                        m_selfCollider.SetActive(false);
                         m_currentCD += Time.deltaTime;
                     }
                     else
                     {
                         m_currentCD = 0;
-                        m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -678,7 +686,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
-            m_selfCollider.SetActive(true);
+            m_selfCollider.enabled = false;
         }
 
         public void SwitchToBattleZoneAI()
