@@ -229,7 +229,7 @@ namespace Spine.Unity
         public override void Awake()
         {
             base.Awake();
-            if(m_alwaysUpdateMesh == false)
+            if (m_alwaysUpdateMesh == false)
             {
                 m_isVisible = false;
             }
@@ -278,6 +278,11 @@ namespace Spine.Unity
 
 
         public override void LateUpdate()
+        {
+            LateUpdateAnimation();
+        }
+
+        public void LateUpdateAnimation()
         {
             if (m_alwaysUpdateMesh || m_isVisible || m_firstUpdate == false)
             {
