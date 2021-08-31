@@ -55,13 +55,33 @@ namespace DChild.Gameplay.Cinematics
             var animation = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
             var timelineAsset = m_cutscene.playableAsset as TimelineAsset;
 
-            foreach (PlayableBinding binding in timelineAsset.GetOutputTrack(1).outputs)
+            for (int i = 0; i < timelineAsset.rootTrackCount; i++)
             {
-                if (binding.sourceObject is SpineAnimationStateTrack)
+                var rootTrack = timelineAsset.GetRootTrack(i);
+
+                if (rootTrack.name == "Player")
                 {
-                    m_cutscene.SetGenericBinding(binding.sourceObject, animation);
+                    var childtracks = rootTrack.GetChildTracks();
+
+                    foreach (var track in childtracks)
+                    {
+                        var output = track.outputs;
+                        foreach (PlayableBinding binding in output)
+                        {
+
+                            if (binding.sourceObject is SpineAnimationStateTrack)
+                            {
+                                m_cutscene.SetGenericBinding(binding.sourceObject, animation);
+                            }
+                        }
+                    }
+                    break;
                 }
+ 
+               
             }
+
+           
         }
     }
 }
