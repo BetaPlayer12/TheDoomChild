@@ -130,6 +130,10 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
 
             boxCollider.size = boxColliderSize;
             boxCollider.offset = boxColliderOffset;
+            if (Application.isPlaying)
+            {
+                Destroy(this);
+            }
         }
 
         private void ValidateObject(ref Transform GameObject, string name)

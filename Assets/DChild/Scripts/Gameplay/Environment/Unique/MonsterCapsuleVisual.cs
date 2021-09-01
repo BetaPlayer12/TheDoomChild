@@ -14,5 +14,13 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
         [SerializeField]
         private CapsuleHighlightHandle m_highlightVisuals;
 #endif
+
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                Destroy(this);
+            }
+        }
     }
 }
