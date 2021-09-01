@@ -523,7 +523,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_floorSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : m_targetInfo.position))
             {
-                if (!m_agent.hasPath && !m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
+                if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();

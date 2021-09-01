@@ -572,7 +572,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_animation.SetAnimation(0, chosenMoveAnim, true);
                 }
 
-                if (!m_agent.hasPath && !m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
+                if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
                     //if (m_executeMoveCoroutine != null)
                     //{

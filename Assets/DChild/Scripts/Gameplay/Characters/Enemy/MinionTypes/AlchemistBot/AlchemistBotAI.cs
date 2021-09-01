@@ -213,7 +213,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_selfCollider.SetActive(false);
+            m_selfCollider.SetActive(true);
             //transform.localScale = new Vector3(m_chosenAttack == Attack.Attack2 ? -transform.localScale.x : transform.localScale.x, 1, 1);
             m_stateHandle.ApplyQueuedState();
         }
@@ -370,6 +370,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(AttackBBSize());
             m_character.physics.SetVelocity(Vector2.zero);
             m_bodyCollider.enabled = true;
+            m_selfCollider.SetActive(false);
             switch (m_attack)
             {
                 case Attack.Attack1:
@@ -559,7 +560,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_groundSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
-                if (!m_agent.hasPath && !m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
+                if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
