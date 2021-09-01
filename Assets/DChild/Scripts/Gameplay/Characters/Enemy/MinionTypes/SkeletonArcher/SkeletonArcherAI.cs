@@ -270,21 +270,41 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
         }
 
-        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        //private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        //{
+        //    StopAllCoroutines();
+        //    //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+        //    m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+        //}
+
+        //private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        //{
+        //    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
+        //    {
+        //        m_animation.SetEmptyAnimation(0, 0);
+        //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //    }
+        //    m_stateHandle.ApplyQueuedState();
+        //}
+
+        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            StopAllCoroutines();
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            m_stateHandle.Wait(m_targetInfo.isValid ? State.Cooldown : State.ReevaluateSituation);
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            {
+                StopAllCoroutines();
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_stateHandle.Wait(State.ReevaluateSituation);
+                StartCoroutine(FlinchRoutine());
+            }
         }
 
-        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        private IEnumerator FlinchRoutine()
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-            {
-                m_animation.SetEmptyAnimation(0, 0);
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            }
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         public override void ApplyData()
@@ -363,8 +383,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            //m_flinchHandle.FlinchStart += OnFlinchStart;
+            //m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            m_damageable.DamageTaken += OnDamageTaken;
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
