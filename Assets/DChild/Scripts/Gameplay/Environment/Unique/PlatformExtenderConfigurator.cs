@@ -139,6 +139,7 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
                 GameObject = (new GameObject(name)).transform;
                 GameObject.gameObject.AddComponent<SpriteRenderer>();
                 GameObject.SetParent(transform);
+                GameObject.transform.localScale = Vector3.one;
             }
         }
 

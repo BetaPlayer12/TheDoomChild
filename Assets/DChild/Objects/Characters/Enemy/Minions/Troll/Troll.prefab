@@ -196,7 +196,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 1035759663297430862}
   m_data: {fileID: 11400000, guid: 4cb84afae74e39f4781b684c7a1d2a24, type: 2}
---- !u!60 &5750504345758485731
+--- !u!60 &3186721205763222623
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3259187504703809547}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.98669994, y: 2.4467998}
+      - {x: -1.0152999, y: 0.0444}
+      - {x: 4.7047, y: -0.041399997}
+      - {x: 4.5045, y: 2.3896}
+--- !u!60 &3582411336277305347
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -227,35 +256,6 @@ PolygonCollider2D:
       - {x: -4.5211587, y: 6.1377163}
       - {x: -8.6535, y: 8.534033}
       - {x: -11.541296, y: 8.386606}
---- !u!60 &8753115651854522281
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3259187504703809547}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.98669994, y: 2.4467998}
-      - {x: -1.0152999, y: 0.0444}
-      - {x: 4.7047, y: -0.041399997}
-      - {x: 4.5045, y: 2.3896}
 --- !u!114 &4677905126922753816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,7 +533,7 @@ MonoBehaviour:
   m_deathHandle: {fileID: 1694186409174244174}
   m_flinchHandle: {fileID: 366591466839148576}
   m_spineEventListener: {fileID: 9140929839467211061}
-  m_selfCollider: {fileID: 8438105015037869485}
+  m_selfCollider: {fileID: 5944102349028296730}
   m_wallSensor: {fileID: 4069766865907821962}
   m_groundSensor: {fileID: 8651816497903115876}
   m_edgeSensor: {fileID: 5210061673529411938}
@@ -1096,6 +1096,8 @@ PrefabInstance:
     - {fileID: 1464258742405699994, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
     - {fileID: 3813574691236622859, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
     - {fileID: 1613267153954395756, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
+    - {fileID: 16497417918313570, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
+    - {fileID: 6661234886285749604, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 28d0b164c8d2bf946b5b5524c16edbb9, type: 3}
 --- !u!114 &1035759663297430862 stripped
 MonoBehaviour:
@@ -1331,9 +1333,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8438105015037869485 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6016622518003351999, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
+--- !u!58 &5944102349028296730 stripped
+CircleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8365660709104088072, guid: 28d0b164c8d2bf946b5b5524c16edbb9,
     type: 3}
   m_PrefabInstance: {fileID: 2766755537548934162}
   m_PrefabAsset: {fileID: 0}

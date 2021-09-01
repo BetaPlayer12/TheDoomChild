@@ -113,8 +113,6 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
-        [SerializeField, TabGroup("Reference")]
         private Collider2D m_explodeBB;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
@@ -130,6 +128,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private FlinchHandler m_flinchHandle;
         
         private float m_currentRunAttackDuration;
+        private float m_currentTimeScale;
         private bool m_isDetecting;
 
         [SerializeField, TabGroup("Sensors")]
@@ -169,7 +168,6 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                m_selfCollider.SetActive(true);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -262,7 +260,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_selfCollider.SetActive(false);
+            m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
 
             m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
@@ -329,7 +327,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     //var distance = Vector2.Distance(m_targetLastPos, transform.position);
-                                    m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 2;
+                                    m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = m_currentTimeScale;
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
                                 }
                                 else
@@ -372,12 +370,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.OverrideState(State.Idle);
             m_isDetecting = false;
-            m_selfCollider.SetActive(false);
         }
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
