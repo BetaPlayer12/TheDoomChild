@@ -213,7 +213,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
-            m_selfCollider.SetActive(true);
             //transform.localScale = new Vector3(m_chosenAttack == Attack.Attack2 ? -transform.localScale.x : transform.localScale.x, 1, 1);
             m_stateHandle.ApplyQueuedState();
         }
@@ -553,7 +552,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
                 //m_bodyCollider.SetActive(true);
                 m_agent.Stop();
-                rb2d.isKinematic = false;
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 return;
             }
@@ -564,15 +562,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
-                    rb2d.isKinematic = false;
                     Vector3 dir = (m_targetInfo.position - (Vector2)rb2d.transform.position).normalized;
                     rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                     return;
                 }
-
-                rb2d.isKinematic = true;
+                
                 m_bodyCollider.enabled = true;
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
@@ -607,7 +603,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_executeMoveCoroutine = null;
             }
             var rb2d = GetComponent<Rigidbody2D>();
-            rb2d.isKinematic = false;
             m_agent.Stop();
             m_selfCollider.SetActive(false);
             m_hitbox.Disable();
@@ -749,6 +744,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_executeMoveCoroutine = null;
                     }
                     m_agent.Stop();
+                    m_selfCollider.SetActive(false);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
@@ -774,6 +770,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
+                            m_selfCollider.SetActive(true);
                             m_animation.EnableRootMotion(false, false);
                             m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
                             CalculateRunPath();
@@ -782,6 +779,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_agent.Stop();
+                            m_selfCollider.SetActive(false);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
                         }
                     }
