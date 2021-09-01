@@ -120,7 +120,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
+        private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -137,6 +137,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private Vector2 m_lastTargetPos;
         private float m_currentPatience;
         private float m_currentCD;
+        private float m_currentFullCD;
+        private float m_currentMoveSpeed;
+        private float m_currentBackMoveSpeed;
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
@@ -193,7 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                m_selfCollider.SetActive(true);
+                m_selfCollider.enabled = false;
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
                     m_isDetecting = true;
@@ -233,7 +236,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_selfCollider.SetActive(false);
+                m_selfCollider.enabled = false;
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
                 m_enablePatience = false;
@@ -265,6 +268,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             m_character.physics.UseStepClimb(true);
             m_movement.Stop();
+            m_selfCollider.enabled = false;
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -272,6 +276,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
             {
                 m_flinchHandle.m_autoFlinch = true;
+                m_selfCollider.enabled = false;
                 StopAllCoroutines();
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_stateHandle.Wait(State.ReevaluateSituation);
@@ -366,7 +371,9 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
-            m_selfCollider.SetActive(false);
+            m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
+            m_currentBackMoveSpeed = UnityEngine.Random.Range(m_info.moveBackwards.speed * .75f, m_info.moveBackwards.speed * 1.25f);
+            m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.flameoffEvent, m_flameFX.Stop);
@@ -474,7 +481,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                     }
 
-                    if (m_currentCD <= m_info.attackCD)
+                    if (m_currentCD <= m_currentFullCD)
                     {
                         m_currentCD += Time.deltaTime;
                     }
@@ -498,6 +505,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     StopCoroutine(m_mobileAttackCoroutine);
                                     m_mobileAttackCoroutine = null;
                                 }
+                                m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
@@ -520,17 +528,20 @@ namespace DChild.Gameplay.Characters.Enemies
                                                 StopCoroutine(m_mobileAttackCoroutine);
                                                 m_mobileAttackCoroutine = null;
                                             }
+                                            m_selfCollider.enabled = true;
                                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                             m_stateHandle.SetState(State.Attacking);
                                             return;
                                         }
+                                        m_selfCollider.enabled = false;
                                         m_animation.SetAnimation(0, m_info.moveBackwards.animation, true);
-                                        m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_info.moveBackwards.speed);
+                                        m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_currentBackMoveSpeed);
                                     }
                                     else
                                     {
+                                        m_selfCollider.enabled = false;
                                         m_animation.SetAnimation(0, m_info.move.animation, true);
-                                        m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.move.speed);
+                                        m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                                     }
                                 }
                                 else
@@ -543,6 +554,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     }
                                     if (m_backSensor.isDetecting || !m_backEdgeSensor.isDetecting)
                                     {
+                                        m_selfCollider.enabled = true;
                                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                         m_stateHandle.SetState(State.Attacking);
                                         return;
@@ -592,12 +604,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
-            m_selfCollider.SetActive(false);
+            m_selfCollider.enabled = false;
         }
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
+            m_selfCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_enablePatience = false;

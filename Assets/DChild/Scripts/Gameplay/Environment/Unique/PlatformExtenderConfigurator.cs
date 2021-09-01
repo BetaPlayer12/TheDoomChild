@@ -130,6 +130,10 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
 
             boxCollider.size = boxColliderSize;
             boxCollider.offset = boxColliderOffset;
+            if (Application.isPlaying)
+            {
+                Destroy(this);
+            }
         }
 
         private void ValidateObject(ref Transform GameObject, string name)
@@ -139,6 +143,7 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
                 GameObject = (new GameObject(name)).transform;
                 GameObject.gameObject.AddComponent<SpriteRenderer>();
                 GameObject.SetParent(transform);
+                GameObject.transform.localScale = Vector3.one;
             }
         }
 

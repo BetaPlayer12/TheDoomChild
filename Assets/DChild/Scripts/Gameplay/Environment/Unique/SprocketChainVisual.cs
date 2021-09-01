@@ -12,5 +12,12 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
         private ISprocketChainDimensionConfiguration m_dimensionConfiguration;
 #endif
 
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                Destroy(this);
+            }
+        }
     }
 }
