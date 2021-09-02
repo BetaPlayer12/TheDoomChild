@@ -647,6 +647,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //var rb2d = GetComponent<Rigidbody2D>();
             m_agent.Stop();
             m_selfCollider.SetActive(false);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_hitbox.Disable();
             m_attackBB.enabled = false;
             m_attackSideBB.enabled = false;
@@ -933,4 +934,3 @@ namespace DChild.Gameplay.Characters.Enemies
         }
     }
 }
-
