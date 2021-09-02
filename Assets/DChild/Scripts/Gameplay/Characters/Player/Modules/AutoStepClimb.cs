@@ -18,7 +18,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private Rigidbody2D m_physics;
         private Character m_character;
-
+        private Animator m_animator;
+        private int m_animation;
         private Vector2 m_climbToHere;
         private RaycastHit2D[] m_hitBuffer;
 
@@ -26,6 +27,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_character = info.character;
             m_physics = info.rigidbody;
+            m_animator = info.animator;
+            m_animation = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.StepClimb);
         }
 
         public bool CheckForStepClimbableSurface()
@@ -66,6 +69,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ClimbSurface()
         {
+            //m_animator.SetTrigger(m_animation);
             m_character.transform.position = m_climbToHere;
         }
     }

@@ -69,5 +69,13 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
                 m_mechanismMovementHandle.MoveChains(speed);
             }
         }
+
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                Destroy(this);
+            }
+        }
     }
 }

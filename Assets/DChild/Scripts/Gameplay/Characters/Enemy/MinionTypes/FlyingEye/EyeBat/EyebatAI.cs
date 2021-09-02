@@ -566,6 +566,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_groundSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : target))
             {
+                if (m_animation.animationState.GetCurrent(0).IsComplete)
+                {
+                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) > 10 ? m_info.idle2Animation : m_info.move.animation;
+                    m_animation.SetAnimation(0, chosenMoveAnim, true);
+                }
+
                 if (!m_wallSensor.allRaysDetecting && (m_groundSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
                     //if (m_executeMoveCoroutine != null)
@@ -591,8 +597,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
                 m_agent.SetDestination(target);
                 m_agent.Move(moveSpeed);
-
-                m_animation.SetAnimation(0, m_info.move.animation, true);
             }
             else
             {
@@ -842,14 +846,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Patrol:
                     m_turnState = State.ReevaluateSituation;
-                    if (m_character.physics.velocity.y > 1 || m_character.physics.velocity.y < -1)
+                    if (m_animation.animationState.GetCurrent(0).IsComplete)
                     {
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle2Animation : m_info.move.animation;
+                        m_animation.SetAnimation(0, chosenMoveAnim, true);
                     }
-                    else
-                    {
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                    }
+
                     var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
                     break;

@@ -1131,9 +1131,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 else
                 {
                     MoveCharacter(m_state.isGrabbing);
-                    if (m_stepClimb.CheckForStepClimbableSurface())
+                    if (m_input.horizontalInput != 0)
                     {
-                        if (m_input.horizontalInput != 0)
+                        if (m_stepClimb.CheckForStepClimbableSurface())
                         {
                             m_stepClimb.ClimbSurface();
                         }
