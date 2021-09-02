@@ -273,37 +273,68 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
             {
                 m_attackBB.enabled = false;
                 m_attackSideBB.enabled = false;
                 m_attackBB.offset = Vector2.zero;
                 m_attackBB.size = new Vector2(.25f, .25f);
-                m_flinchHandle.m_autoFlinch = true;
+                //m_flinchHandle.m_autoFlinch = true;
                 m_hitbox.Disable();
                 StopAllCoroutines();
                 m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-                m_stateHandle.Wait(State.ReevaluateSituation);
+                StartCoroutine(FlinchRoutine());
             }
         }
 
-        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        private IEnumerator FlinchRoutine()
         {
-            if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_flinchHandle.m_autoFlinch = false;
+            if (!m_bodylightningBB.enabled)
             {
-                m_flinchHandle.m_autoFlinch = false;
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                if (!m_bodylightningBB.enabled)
-                {
-                    m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
-                }
-                m_stateHandle.ApplyQueuedState();
+                m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
             }
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
+
+        //private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        //{
+        //    //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+        //    //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        //    if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
+        //    {
+        //        m_attackBB.enabled = false;
+        //        m_attackSideBB.enabled = false;
+        //        m_attackBB.offset = Vector2.zero;
+        //        m_attackBB.size = new Vector2(.25f, .25f);
+        //        m_flinchHandle.m_autoFlinch = true;
+        //        m_hitbox.Disable();
+        //        StopAllCoroutines();
+        //        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+        //        m_stateHandle.Wait(State.ReevaluateSituation);
+        //    }
+        //}
+
+        //private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        //{
+        //    if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
+        //    {
+        //        m_flinchHandle.m_autoFlinch = false;
+        //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //        if (!m_bodylightningBB.enabled)
+        //        {
+        //            m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
+        //        }
+        //        m_stateHandle.ApplyQueuedState();
+        //    }
+        //}
 
         private void SpawnBlob()
         {
@@ -433,8 +464,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
             m_animation.EnableRootMotion(true, false);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
             yield return new WaitForSeconds(1.6f);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             //m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
@@ -614,7 +647,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //var rb2d = GetComponent<Rigidbody2D>();
             m_agent.Stop();
             m_selfCollider.SetActive(false);
-            m_rigidbody2D.constraints = RigidbodyConstraints2D.None;
             m_hitbox.Disable();
             m_attackBB.enabled = false;
             m_attackSideBB.enabled = false;
@@ -669,8 +701,9 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             Debug.Log("ALCHEMIST BOT BASE AWAKE");
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            //m_flinchHandle.FlinchStart += OnFlinchStart;
+            //m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            m_damageable.DamageTaken += OnDamageTaken;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             //m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
