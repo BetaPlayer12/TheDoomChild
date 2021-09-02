@@ -136,6 +136,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private Rigidbody2D m_rigidbody2D;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
@@ -213,6 +215,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             //transform.localScale = new Vector3(m_chosenAttack == Attack.Attack2 ? -transform.localScale.x : transform.localScale.x, 1, 1);
             m_stateHandle.ApplyQueuedState();
         }
@@ -266,6 +269,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -282,6 +286,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_flinchHandle.m_autoFlinch = true;
                 m_hitbox.Disable();
                 StopAllCoroutines();
+                m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 m_stateHandle.Wait(State.ReevaluateSituation);
             }
         }
@@ -369,7 +374,8 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(AttackBBSize());
             m_character.physics.SetVelocity(Vector2.zero);
             m_bodyCollider.enabled = true;
-            m_selfCollider.SetActive(false);
+            //m_selfCollider.SetActive(true);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             switch (m_attack)
             {
                 case Attack.Attack1:
@@ -445,6 +451,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackBBSize()
         {
             yield return new WaitForSeconds(/*.35f*/ .5f);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             if (m_chosenAttack == Attack.Attack1)
             {
                 var distance = Vector2.Distance(m_projectilePoint.position, new Vector2(GroundPosition().x, GroundPosition().y * .95f));
@@ -518,9 +525,11 @@ namespace DChild.Gameplay.Characters.Enemies
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
             var newPos = Vector2.zero;
+            var randXPos = UnityEngine.Random.Range(-2f, 2f);
+            var randYPos = UnityEngine.Random.Range(10f, 15f); ;
             while (!inRange || TargetBlocked())
             {
-                newPos = new Vector2(m_targetInfo.position.x, /*GroundPosition().y + 20*/m_targetInfo.position.y + 10);
+                newPos = new Vector2(m_targetInfo.position.x + randXPos, /*GroundPosition().y + 20*/m_targetInfo.position.y + randYPos);
                 bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < attackRange ? true : false;
                 bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < 1 ? true : false;
                 if (xTargetInRange && yTargetInRange)
@@ -541,7 +550,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void DynamicMovement(Vector2 target, float movespeed)
         {
-            var rb2d = GetComponent<Rigidbody2D>();
+            //var rb2d = GetComponent<Rigidbody2D>();
             m_agent.SetDestination(target);
 
             if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
@@ -562,8 +571,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
-                    Vector3 dir = (m_targetInfo.position - (Vector2)rb2d.transform.position).normalized;
-                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
+                    Vector3 dir = (m_targetInfo.position - (Vector2)m_rigidbody2D.transform.position).normalized;
+                    m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                     return;
@@ -602,9 +611,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
-            var rb2d = GetComponent<Rigidbody2D>();
+            //var rb2d = GetComponent<Rigidbody2D>();
             m_agent.Stop();
             m_selfCollider.SetActive(false);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.None;
             m_hitbox.Disable();
             m_attackBB.enabled = false;
             m_attackSideBB.enabled = false;
@@ -642,7 +652,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //{
             //    m_hitbox.Disable();
             //}
-            //m_selfCollider.SetActive(false);
             m_startPos = transform.position;
             m_character.physics.simulateGravity = m_willPatrol ? true : false;
             //m_aggroCollider.enabled = m_willPatrol ? true : false;
@@ -705,11 +714,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_startPos, transform.position) > 5f)
                         {
-                            var rb2d = GetComponent<Rigidbody2D>();
+                            //var rb2d = GetComponent<Rigidbody2D>();
                             m_bodyCollider.enabled = false;
                             m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                            Vector3 dir = (m_startPos - (Vector2)m_rigidbody2D.transform.position).normalized;
+                            m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
                             m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         }
                         else
@@ -744,7 +753,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_executeMoveCoroutine = null;
                     }
                     m_agent.Stop();
-                    m_selfCollider.SetActive(false);
+                    m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                    //m_selfCollider.SetActive(false);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
@@ -770,8 +780,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
-                            m_selfCollider.SetActive(true);
+                            //m_selfCollider.SetActive(true);
                             m_animation.EnableRootMotion(false, false);
+                            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                             m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
                             CalculateRunPath();
                             m_agent.Move(m_info.move.speed);
@@ -779,7 +790,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_agent.Stop();
-                            m_selfCollider.SetActive(false);
+                            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                            //m_selfCollider.SetActive(false);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
                         }
                     }
@@ -791,7 +803,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
-                        m_selfCollider.SetActive(true);
+                        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+                        //m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
