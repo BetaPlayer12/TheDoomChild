@@ -344,13 +344,49 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 GroundPosition()
         {
-            Physics2D.queriesHitTriggers = false;
-            RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
-            //if (hit.collider != null)
-            //{
-            //    return hit.point;
-            //}
-            return hit.point;
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(m_projectilePoint.position, Vector2.down, 1000, true, out hitCount, true);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
+
+        private static ContactFilter2D m_contactFilter;
+        private static RaycastHit2D[] m_hitResults;
+        private static bool m_isInitialized;
+
+        private static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
+
+        public static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
+        {
+            Initialize();
+            m_contactFilter.useTriggers = !ignoreTriggers;
+            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
+#if UNITY_EDITOR
+            if (debugMode)
+            {
+                if (hitCount > 0)
+                {
+                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+                }
+                else
+                {
+                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+                }
+            }
+#endif
+            return m_hitResults;
         }
 
         private Vector2 WallPosition()
@@ -490,9 +526,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             if (m_chosenAttack == Attack.Attack1)
             {
-                var distance = Vector2.Distance(m_projectilePoint.position, new Vector2(GroundPosition().x, GroundPosition().y * .95f));
+                var distance = Vector2.Distance(m_projectilePoint.position, GroundPosition());
                 m_attackBB.enabled = true;
-                m_attackBB.offset = new Vector2(0, (-distance * 2) * .15f);
+                m_attackBB.offset = new Vector2(0,(-distance * 0.5f));
                 m_attackBB.size = new Vector2(.25f, distance);
             }
             else
@@ -565,7 +601,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var randYPos = UnityEngine.Random.Range(10f, 15f); ;
             while (!inRange || TargetBlocked())
             {
-                newPos = new Vector2(m_targetInfo.position.x + randXPos, /*GroundPosition().y + 20*/m_targetInfo.position.y + randYPos);
+                newPos = new Vector2(m_targetInfo.position.x + randXPos, m_targetInfo.position.y + randYPos);
                 bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < attackRange ? true : false;
                 bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < 1 ? true : false;
                 if (xTargetInRange && yTargetInRange)
@@ -673,7 +709,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("FKING AIM");
             if (m_targetInfo.isValid)
             {
-                var targetPos = new Vector2(GroundPosition().x, GroundPosition().y * .925f);
+                var targetPos = GroundPosition();
                 var localPositon = transform.InverseTransformPoint(targetPos);
                 localPositon = new Vector2(-localPositon.x, localPositon.y);
                 m_bone.SetLocalPosition(localPositon);
