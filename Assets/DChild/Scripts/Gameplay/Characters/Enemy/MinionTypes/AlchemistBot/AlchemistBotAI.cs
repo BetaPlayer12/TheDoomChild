@@ -344,7 +344,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 GroundPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+            Physics2D.queriesHitTriggers = false;
+            RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
             //if (hit.collider != null)
             //{
             //    return hit.point;
@@ -430,7 +431,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
                 m_animation.DisableRootMotion();
                 yield return new WaitForSeconds(m_info.awakenTime);
-                m_foregroundController.gameObject.SetActive(false);
+                //m_foregroundController.gameObject.SetActive(false);
+                m_foregroundController.transform.SetParent(null);
                 m_spriteMask.SetActive(false);
                 m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.None;
                 //transform.position = new Vector2(transform.position.x, CielingPos().y - 5f);
@@ -484,6 +486,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackBBSize()
         {
             yield return new WaitForSeconds(/*.35f*/ .5f);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             if (m_chosenAttack == Attack.Attack1)
             {
