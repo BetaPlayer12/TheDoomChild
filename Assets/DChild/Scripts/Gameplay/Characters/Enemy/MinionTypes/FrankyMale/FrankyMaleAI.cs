@@ -181,8 +181,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private List<Collider2D> m_randomSpawnColliders;
 
-        [SerializeField]
-        private bool m_willPatrol;
+        //[SerializeField]
+        //private bool m_willPatrol;
 
         [SerializeField]
         private GameObject m_projectilePoint;
@@ -467,13 +467,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_character.physics.simulateGravity = true;
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation)
+            if (!m_character.physics.simulateGravity)
             {
                 m_animation.EnableRootMotion(true, true);
                 m_animation.SetAnimation(0, m_info.awakenAnimation, false);
                 //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+                m_character.physics.simulateGravity = true;
                 m_animation.DisableRootMotion();
                 m_animation.SetAnimation(0, m_info.fallAnimation, true).MixDuration = 0;
                 yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -491,12 +491,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
-                //if (!IsFacingTarget())
-                //{
-                //    CustomTurn();
-                //}
-                //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = m_attackDecider.chosenAttack.attack != Attack.Attack3 ? true : false;
-                //m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().simulateGravity = false;
                 m_targetPointIK.transform.position = m_lastTargetPos;
                 m_projectileLauncher.AimAt(m_lastTargetPos);
                 m_projectileLauncher.LaunchProjectile();
@@ -521,19 +515,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
-            m_willPatrol = true;
-
             m_spineEventListener.Subscribe(m_info.attack1Event, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.attack2Event, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.teleportEvent, m_teleportFX.Play);
-            
-            m_character.physics.simulateGravity = m_willPatrol ? true : false;
-            //m_aggroCollider.enabled = m_willPatrol ? true : false;
-            if (m_willPatrol)
-            {
-                m_hitbox.Enable();
-                m_animation.DisableRootMotion();
-            }
+
             m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
         }
 
@@ -575,25 +560,20 @@ namespace DChild.Gameplay.Characters.Enemies
                         StartCoroutine(TeleportRoutine());
                         return;
                     }
-                    if (m_groundSensor.isDetecting)
-                    {
-                        m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
-                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                        m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
-                    }
-                    else
-                    {
-                        m_movement.Stop();
-                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    }
+                    m_turnState = State.ReevaluateSituation;
+                    m_animation.EnableRootMotion(true, false);
+                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                    m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
                     break;
 
                 case State.Turning:
-                    m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
-                    m_animation.animationState.GetCurrent(0).MixDuration = 0;
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.dormantAnimation)
+                    {
+                        m_stateHandle.Wait(m_turnState);
+                        m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
+                        m_animation.animationState.GetCurrent(0).MixDuration = 0;
+                    }
                     break;
 
                 case State.Attacking:
@@ -794,6 +774,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
             StopAllCoroutines();
+
+            m_character.physics.simulateGravity = false;
+            m_hitbox.Disable();
             m_stateHandle.OverrideState(State.Dormant);
         }
     }

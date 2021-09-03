@@ -157,9 +157,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_lightningshieldsmallFX;
 
         [SerializeField]
-        private bool m_willPatrol;
-
-        [SerializeField]
         private WayPointPatrol m_patrolHandle;
         [SerializeField]
         private MovementHandle2D m_moveHandle;
@@ -452,13 +449,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_character.physics.simulateGravity = true;
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation)
+            if (!m_character.physics.simulateGravity)
             {
                 m_animation.EnableRootMotion(true, true);
                 m_animation.SetAnimation(0, m_info.awakenAnimation, false);
                 //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.awakenAnimation);
+                m_character.physics.simulateGravity = true;
                 m_animation.DisableRootMotion();
                 m_animation.SetAnimation(0, m_info.fallAnimation, true).MixDuration = 0;
                 yield return new WaitUntil(() => m_groundSensor.isDetecting);
@@ -484,21 +481,11 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_hitbox.Disable();
 
-            m_willPatrol = true;
-
             m_character.physics.simulateGravity = false;
             m_spineEventListener.Subscribe(m_info.coreburstEvent, CoreBurstEvenTrigger);
             m_spineEventListener.Subscribe(m_info.lightningsphereEvent, LightningShieldEvent);
             //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
             //m_spineEventListener.Subscribe(m_info.lightningsphereEvent, m_lightningshieldFX.Play);
-            
-            m_character.physics.simulateGravity = m_willPatrol ? true : false;
-            //m_aggroCollider.enabled = m_willPatrol ? true : false;
-            if (m_willPatrol)
-            {
-                m_hitbox.Enable();
-                m_animation.DisableRootMotion();
-            }
         }
 
         protected override void Awake()
@@ -666,6 +653,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = false;
             StopAllCoroutines();
+
+            m_character.physics.simulateGravity = false;
+            m_hitbox.Disable();
             m_stateHandle.OverrideState(State.Dormant);
         }
     }
