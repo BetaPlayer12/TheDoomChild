@@ -30,6 +30,8 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
         [SerializeField]
         private Sprite m_sideSprite;
         [SerializeField]
+        private bool m_overrideSortingOrder = true;
+        [SerializeField]
         private SideConfiguration m_sideConfiguration;
         [SerializeField, ShowIf(HASSIDECONFIGURATION_CONDITION), Indent]
         private bool m_doesSideSpriteFacesRight = true;
@@ -65,7 +67,10 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
             size.x = m_platformLength;
             selfSprite.size = size;
             selfSprite.sortingLayerName = "PlayableGround";
-            selfSprite.sortingOrder = 1;
+            if (m_overrideSortingOrder)
+            {
+                selfSprite.sortingOrder = 1; 
+            }
 
 
             var sidePositionOffset = m_sideOffset;
