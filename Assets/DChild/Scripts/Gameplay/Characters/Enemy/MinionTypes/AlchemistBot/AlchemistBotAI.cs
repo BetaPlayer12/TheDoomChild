@@ -136,6 +136,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private Rigidbody2D m_rigidbody2D;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
@@ -213,6 +215,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             //transform.localScale = new Vector3(m_chosenAttack == Attack.Attack2 ? -transform.localScale.x : transform.localScale.x, 1, 1);
             m_stateHandle.ApplyQueuedState();
         }
@@ -266,39 +269,72 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
             {
                 m_attackBB.enabled = false;
                 m_attackSideBB.enabled = false;
                 m_attackBB.offset = Vector2.zero;
                 m_attackBB.size = new Vector2(.25f, .25f);
-                m_flinchHandle.m_autoFlinch = true;
+                //m_flinchHandle.m_autoFlinch = true;
                 m_hitbox.Disable();
                 StopAllCoroutines();
-                m_stateHandle.Wait(State.ReevaluateSituation);
+                m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+                StartCoroutine(FlinchRoutine());
             }
         }
 
-        private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        private IEnumerator FlinchRoutine()
         {
-            if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
+            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_flinchHandle.m_autoFlinch = false;
+            if (!m_bodylightningBB.enabled)
             {
-                m_flinchHandle.m_autoFlinch = false;
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                if (!m_bodylightningBB.enabled)
-                {
-                    m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
-                }
-                m_stateHandle.ApplyQueuedState();
+                m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
             }
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
+
+        //private void OnFlinchStart(object sender, EventActionArgs eventArgs)
+        //{
+        //    //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+        //    //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+        //    if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
+        //    {
+        //        m_attackBB.enabled = false;
+        //        m_attackSideBB.enabled = false;
+        //        m_attackBB.offset = Vector2.zero;
+        //        m_attackBB.size = new Vector2(.25f, .25f);
+        //        m_flinchHandle.m_autoFlinch = true;
+        //        m_hitbox.Disable();
+        //        StopAllCoroutines();
+        //        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+        //        m_stateHandle.Wait(State.ReevaluateSituation);
+        //    }
+        //}
+
+        //private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
+        //{
+        //    if (!m_bodylightningBB.enabled && m_deathCoroutine == null)
+        //    {
+        //        m_flinchHandle.m_autoFlinch = false;
+        //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //        if (!m_bodylightningBB.enabled)
+        //        {
+        //            m_bodylightningCoroutine = StartCoroutine(BodyLightningRoutine());
+        //        }
+        //        m_stateHandle.ApplyQueuedState();
+        //    }
+        //}
 
         private void SpawnBlob()
         {
@@ -308,12 +344,49 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 GroundPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
-            //if (hit.collider != null)
-            //{
-            //    return hit.point;
-            //}
-            return hit.point;
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(m_projectilePoint.position, Vector2.down, 1000, true, out hitCount, true);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
+
+        private static ContactFilter2D m_contactFilter;
+        private static RaycastHit2D[] m_hitResults;
+        private static bool m_isInitialized;
+
+        private static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
+
+        public static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
+        {
+            Initialize();
+            m_contactFilter.useTriggers = !ignoreTriggers;
+            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
+#if UNITY_EDITOR
+            if (debugMode)
+            {
+                if (hitCount > 0)
+                {
+                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+                }
+                else
+                {
+                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+                }
+            }
+#endif
+            return m_hitResults;
         }
 
         private Vector2 WallPosition()
@@ -369,7 +442,8 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(AttackBBSize());
             m_character.physics.SetVelocity(Vector2.zero);
             m_bodyCollider.enabled = true;
-            m_selfCollider.SetActive(false);
+            //m_selfCollider.SetActive(true);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             switch (m_attack)
             {
                 case Attack.Attack1:
@@ -393,7 +467,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
                 m_animation.DisableRootMotion();
                 yield return new WaitForSeconds(m_info.awakenTime);
-                m_foregroundController.gameObject.SetActive(false);
+                //m_foregroundController.gameObject.SetActive(false);
+                m_foregroundController.transform.SetParent(null);
                 m_spriteMask.SetActive(false);
                 m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.None;
                 //transform.position = new Vector2(transform.position.x, CielingPos().y - 5f);
@@ -427,8 +502,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
             m_animation.EnableRootMotion(true, false);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
             yield return new WaitForSeconds(1.6f);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             //m_animation.DisableRootMotion();
             m_character.physics.simulateGravity = true;
             m_animation.SetAnimation(0, m_info.deathFallLoopAnimation, true);
@@ -445,11 +522,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackBBSize()
         {
             yield return new WaitForSeconds(/*.35f*/ .5f);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             if (m_chosenAttack == Attack.Attack1)
             {
-                var distance = Vector2.Distance(m_projectilePoint.position, new Vector2(GroundPosition().x, GroundPosition().y * .95f));
+                var distance = Vector2.Distance(m_projectilePoint.position, GroundPosition());
                 m_attackBB.enabled = true;
-                m_attackBB.offset = new Vector2(0, (-distance * 2) * .15f);
+                m_attackBB.offset = new Vector2(0,(-distance * 0.5f));
                 m_attackBB.size = new Vector2(.25f, distance);
             }
             else
@@ -518,9 +597,11 @@ namespace DChild.Gameplay.Characters.Enemies
             /*Vector2.Distance(transform.position, target) > m_info.spearMeleeAttack.range*/ //old target in range condition
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
             var newPos = Vector2.zero;
+            var randXPos = UnityEngine.Random.Range(-2f, 2f);
+            var randYPos = UnityEngine.Random.Range(10f, 15f); ;
             while (!inRange || TargetBlocked())
             {
-                newPos = new Vector2(m_targetInfo.position.x, /*GroundPosition().y + 20*/m_targetInfo.position.y + 10);
+                newPos = new Vector2(m_targetInfo.position.x + randXPos, m_targetInfo.position.y + randYPos);
                 bool xTargetInRange = Mathf.Abs(/*m_targetInfo.position.x*/newPos.x - transform.position.x) < attackRange ? true : false;
                 bool yTargetInRange = Mathf.Abs(/*m_targetInfo.position.y*/newPos.y - transform.position.y) < 1 ? true : false;
                 if (xTargetInRange && yTargetInRange)
@@ -541,7 +622,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void DynamicMovement(Vector2 target, float movespeed)
         {
-            var rb2d = GetComponent<Rigidbody2D>();
+            //var rb2d = GetComponent<Rigidbody2D>();
             m_agent.SetDestination(target);
 
             if (/*m_wallSensor.allRaysDetecting ||*/ m_selfSensor.isDetecting)
@@ -562,8 +643,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 {
                     m_bodyCollider.enabled = false;
                     m_agent.Stop();
-                    Vector3 dir = (m_targetInfo.position - (Vector2)rb2d.transform.position).normalized;
-                    rb2d.MovePosition(rb2d.transform.position + dir * movespeed * Time.fixedDeltaTime);
+                    Vector3 dir = (m_targetInfo.position - (Vector2)m_rigidbody2D.transform.position).normalized;
+                    m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * movespeed * Time.fixedDeltaTime);
 
                     m_animation.SetAnimation(0, m_info.move.animation, true);
                     return;
@@ -602,9 +683,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
-            var rb2d = GetComponent<Rigidbody2D>();
+            //var rb2d = GetComponent<Rigidbody2D>();
             m_agent.Stop();
             m_selfCollider.SetActive(false);
+            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_hitbox.Disable();
             m_attackBB.enabled = false;
             m_attackSideBB.enabled = false;
@@ -627,7 +709,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //Debug.Log("FKING AIM");
             if (m_targetInfo.isValid)
             {
-                var targetPos = new Vector2(GroundPosition().x, GroundPosition().y * .925f);
+                var targetPos = GroundPosition();
                 var localPositon = transform.InverseTransformPoint(targetPos);
                 localPositon = new Vector2(-localPositon.x, localPositon.y);
                 m_bone.SetLocalPosition(localPositon);
@@ -642,7 +724,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //{
             //    m_hitbox.Disable();
             //}
-            //m_selfCollider.SetActive(false);
             m_startPos = transform.position;
             m_character.physics.simulateGravity = m_willPatrol ? true : false;
             //m_aggroCollider.enabled = m_willPatrol ? true : false;
@@ -660,8 +741,9 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             Debug.Log("ALCHEMIST BOT BASE AWAKE");
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            //m_flinchHandle.FlinchStart += OnFlinchStart;
+            //m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            m_damageable.DamageTaken += OnDamageTaken;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             //m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
@@ -705,11 +787,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_startPos, transform.position) > 5f)
                         {
-                            var rb2d = GetComponent<Rigidbody2D>();
+                            //var rb2d = GetComponent<Rigidbody2D>();
                             m_bodyCollider.enabled = false;
                             m_agent.Stop();
-                            Vector3 dir = (m_startPos - (Vector2)rb2d.transform.position).normalized;
-                            rb2d.MovePosition(rb2d.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
+                            Vector3 dir = (m_startPos - (Vector2)m_rigidbody2D.transform.position).normalized;
+                            m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * m_info.move.speed * Time.fixedDeltaTime);
                             m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         }
                         else
@@ -744,7 +826,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_executeMoveCoroutine = null;
                     }
                     m_agent.Stop();
-                    m_selfCollider.SetActive(false);
+                    m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                    //m_selfCollider.SetActive(false);
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
@@ -770,8 +853,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance)
                         {
-                            m_selfCollider.SetActive(true);
+                            //m_selfCollider.SetActive(true);
                             m_animation.EnableRootMotion(false, false);
+                            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                             m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 1f;
                             CalculateRunPath();
                             m_agent.Move(m_info.move.speed);
@@ -779,7 +863,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_agent.Stop();
-                            m_selfCollider.SetActive(false);
+                            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                            //m_selfCollider.SetActive(false);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
                         }
                     }
@@ -791,7 +876,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
-                        m_selfCollider.SetActive(true);
+                        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+                        //m_selfCollider.SetActive(true);
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
 
@@ -887,4 +973,3 @@ namespace DChild.Gameplay.Characters.Enemies
         }
     }
 }
-
