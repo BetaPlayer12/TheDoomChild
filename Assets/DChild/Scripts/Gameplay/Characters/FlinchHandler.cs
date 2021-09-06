@@ -42,6 +42,8 @@ namespace DChild.Gameplay.Characters
         public bool autoFlinching => m_autoFlinch;
         public bool isFlinching => m_isFlinching;
 
+        private Coroutine m_flinchRoutine;
+
         public void SetAnimation(string animation) => m_animation = animation;
 
         public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
@@ -52,25 +54,25 @@ namespace DChild.Gameplay.Characters
 
         public void Flinch()
         {
-            HitStopStart?.Invoke(this, new EventActionArgs());
-            if (m_autoFlinch)
+            //if (m_autoFlinch)
+            //{
+            if (m_isFlinching == false)
             {
-                if (m_isFlinching == false)
-                {
-                    //StopAllCoroutines(); //Gian Editz
-                    StartFlinch();
-                }
-            }
-            else
-            {
+                //StopAllCoroutines(); //Gian Editz
                 StartFlinch();
             }
+            //}
+            //else
+            //{
+            //    StartFlinch();
+            //}
+            HitStopStart?.Invoke(this, new EventActionArgs());
         }
 
         private void StartFlinch()
         {
             m_physics?.SetVelocity(Vector2.zero);
-            StartCoroutine(FlinchRoutine());
+            m_flinchRoutine = StartCoroutine(FlinchRoutine());
         }
 
         private IEnumerator FlinchRoutine()
@@ -83,16 +85,16 @@ namespace DChild.Gameplay.Characters
                 m_spine.AddAnimation(0, m_idleAnimation, false, 0.2f).TimeScale = 20;
 
                 //m_spine.AddEmptyAnimation(0, 0.2f, 0);
+                m_isFlinching = true;
+                m_spine.AnimationSet += OnAnimationSet;
+                m_spine.animationState.Complete += OnAnimationComplete;
+                while (m_isFlinching)
+                {
+                    yield return null;
+                }
+                m_spine.AnimationSet -= OnAnimationSet;
+                m_spine.animationState.Complete -= OnAnimationComplete;
             }
-            m_isFlinching = true;
-            m_spine.AnimationSet += OnAnimationSet;
-            m_spine.animationState.Complete += OnAnimationComplete;
-            while (m_isFlinching)
-            {
-                yield return null;
-            }
-            m_spine.AnimationSet -= OnAnimationSet;
-            m_spine.animationState.Complete -= OnAnimationComplete;
             FlinchEnd?.Invoke(this, new EventActionArgs());
         }
 
