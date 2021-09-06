@@ -142,7 +142,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Transform m_projectilePoint;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
+        private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
@@ -235,7 +235,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 base.SetTarget(damageable);
                 if (m_stateHandle.currentState != State.Chasing && !m_isDetecting)
                 {
-                    m_selfCollider.SetActive(true);
+                    m_selfCollider.enabled = true;
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
@@ -685,7 +685,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             //var rb2d = GetComponent<Rigidbody2D>();
             m_agent.Stop();
-            m_selfCollider.SetActive(false);
+            m_selfCollider.enabled = false;
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_hitbox.Disable();
             m_attackBB.enabled = false;
@@ -924,12 +924,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPatience = 0;
             m_enablePatience = false;
             m_isDetecting = false;
-            m_selfCollider.SetActive(false);
+            m_selfCollider.enabled = false;
         }
 
         public void ResetAI()
         {
-            m_selfCollider.SetActive(false);
+            m_selfCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_hitbox.Enable();
@@ -969,6 +969,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = false;
             StopAllCoroutines();
             m_hitbox.Disable();
+            m_agent.Stop();
             m_stateHandle.OverrideState(State.Dormant);
         }
     }
