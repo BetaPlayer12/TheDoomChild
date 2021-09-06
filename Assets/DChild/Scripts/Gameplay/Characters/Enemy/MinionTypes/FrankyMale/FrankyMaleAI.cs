@@ -533,7 +533,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             //m_randomSpawnColliders = new List<Collider2D>();
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }

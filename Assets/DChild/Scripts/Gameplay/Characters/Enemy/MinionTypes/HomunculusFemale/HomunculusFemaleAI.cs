@@ -171,6 +171,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isInRageMode;
         private int m_availableLightningSphereUse;
         private Coroutine m_patienceRoutine;
+        private Coroutine m_detectCoroutine;
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -464,6 +465,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
             }
             m_hitbox.Enable();
+            m_detectCoroutine = null;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             StartCoroutine(LightningCoreBurstRoutine());
             yield return null;
@@ -481,7 +483,6 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_hitbox.Disable();
 
-            m_character.physics.simulateGravity = false;
             m_spineEventListener.Subscribe(m_info.coreburstEvent, CoreBurstEvenTrigger);
             m_spineEventListener.Subscribe(m_info.lightningsphereEvent, LightningShieldEvent);
             //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
@@ -493,7 +494,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_patrolHandle.Initialize();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitForBehaviour);
+            m_stateHandle = new StateHandle<State>(m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation ? State.Dormant : State.Patrol, State.WaitForBehaviour);
             m_turnHandle.TurnDone += OnTurnDone;
             m_canIdleDuringPatrol = true;
             m_idleDuringPatrolCooldownTimer = m_info.GetRandomIdleDuringPatrolCooldown();
@@ -507,7 +508,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    StartCoroutine(DetectRoutine());
+                    m_detectCoroutine = StartCoroutine(DetectRoutine());
                     break;
 
                 case State.Dormant:
@@ -519,6 +520,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_aggroCollider.enabled = true;
                     }
+                    //m_character.physics.simulateGravity = true;
                     var patrolCharacterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_moveHandle, m_info.walkInfo.speed, patrolCharacterInfo);
                     m_animation.SetAnimation(0, m_info.walkInfo.animation, true);
@@ -606,7 +608,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
             }
 
-            if (m_targetInfo.isValid)
+            if (m_targetInfo.isValid && m_detectCoroutine == null)
             {
                 if (TargetBlocked() && Vector2.Distance(m_targetInfo.position, transform.position) > m_info.lightningSphereAttackInfo.range)
                 {
