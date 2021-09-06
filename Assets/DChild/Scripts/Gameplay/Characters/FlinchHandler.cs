@@ -54,7 +54,6 @@ namespace DChild.Gameplay.Characters
 
         public void Flinch()
         {
-            HitStopStart?.Invoke(this, new EventActionArgs());
             //if (m_autoFlinch)
             //{
             if (m_isFlinching == false)
@@ -67,6 +66,7 @@ namespace DChild.Gameplay.Characters
             //{
             //    StartFlinch();
             //}
+            HitStopStart?.Invoke(this, new EventActionArgs());
         }
 
         private void StartFlinch()
