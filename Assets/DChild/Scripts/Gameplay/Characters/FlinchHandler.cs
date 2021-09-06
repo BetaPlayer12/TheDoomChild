@@ -36,7 +36,7 @@ namespace DChild.Gameplay.Characters
 
         private bool m_isFlinching;
 
-        public event EventAction<EventActionArgs> HitStopStart;
+        //public event EventAction<EventActionArgs> HitStopStart;
         public event EventAction<EventActionArgs> FlinchStart;
         public event EventAction<EventActionArgs> FlinchEnd;
         public bool autoFlinching => m_autoFlinch;
@@ -66,7 +66,7 @@ namespace DChild.Gameplay.Characters
             //{
             //    StartFlinch();
             //}
-            HitStopStart?.Invoke(this, new EventActionArgs());
+            //HitStopStart?.Invoke(this, new EventActionArgs());
         }
 
         private void StartFlinch()
@@ -85,16 +85,16 @@ namespace DChild.Gameplay.Characters
                 m_spine.AddAnimation(0, m_idleAnimation, false, 0.2f).TimeScale = 20;
 
                 //m_spine.AddEmptyAnimation(0, 0.2f, 0);
-                m_isFlinching = true;
-                m_spine.AnimationSet += OnAnimationSet;
-                m_spine.animationState.Complete += OnAnimationComplete;
-                while (m_isFlinching)
-                {
-                    yield return null;
-                }
-                m_spine.AnimationSet -= OnAnimationSet;
-                m_spine.animationState.Complete -= OnAnimationComplete;
             }
+            m_isFlinching = true;
+            m_spine.AnimationSet += OnAnimationSet;
+            m_spine.animationState.Complete += OnAnimationComplete;
+            while (m_isFlinching)
+            {
+                yield return null;
+            }
+            m_spine.AnimationSet -= OnAnimationSet;
+            m_spine.animationState.Complete -= OnAnimationComplete;
             FlinchEnd?.Invoke(this, new EventActionArgs());
         }
 
