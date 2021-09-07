@@ -106,7 +106,7 @@ namespace DChild.Menu.Trading
         }
         private void Awake()
         {
-            m_instantiatedSlots = new List<TradableItemUI>();
+            m_instantiatedSlots = new List<TradableItemUI>(GetComponentsInChildren<TradableItemUI>());
         }
     }
 
