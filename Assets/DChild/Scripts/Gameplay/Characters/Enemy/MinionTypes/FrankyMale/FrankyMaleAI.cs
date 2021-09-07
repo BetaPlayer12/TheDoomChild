@@ -767,7 +767,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             enabled = true;
             m_aggroCollider.enabled = true;
-            //m_stateHandle.OverrideState(State.Detect);
+            m_stateHandle.OverrideState(State.Detect);
         }
 
         public void PrepareAmbush(Vector2 position)
