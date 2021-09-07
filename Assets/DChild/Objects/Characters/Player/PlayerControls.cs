@@ -155,14 +155,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Pause"",
-                    ""type"": ""Button"",
-                    ""id"": ""f8c8d89d-c5c6-4e1a-8f9a-211db00633d5"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""ShadowMorph"",
                     ""type"": ""Button"",
                     ""id"": ""407d129f-98d0-432f-90b4-022e5f7eb20c"",
@@ -190,6 +182,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""name"": ""Block"",
                     ""type"": ""Button"",
                     ""id"": ""93e311c7-a8f4-4ee7-85c5-180b21f3845f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8c8d89d-c5c6-4e1a-8f9a-211db00633d5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Store"",
+                    ""type"": ""Button"",
+                    ""id"": ""e058a4d8-59f4-4a82-b0a2-85e8900bf141"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -814,17 +822,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5ed84032-9951-419d-86f4-4d435f95e1e3"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""bf276c84-55d4-4d9f-8dcd-d16bbb948c4f"",
                     ""path"": ""<Keyboard>/c"",
                     ""interactions"": ""Press(behavior=2)"",
@@ -919,6 +916,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5ed84032-9951-419d-86f4-4d435f95e1e3"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6def886f-81a0-490b-9b83-a87dd998285d"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Store"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1474,11 +1493,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_QuickItemUse = m_Gameplay.FindAction("QuickItemUse", throwIfNotFound: true);
         m_Gameplay_QuickItemCycle = m_Gameplay.FindAction("QuickItemCycle", throwIfNotFound: true);
         m_Gameplay_StoreOpen = m_Gameplay.FindAction("StoreOpen", throwIfNotFound: true);
-        m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_ShadowMorph = m_Gameplay.FindAction("ShadowMorph", throwIfNotFound: true);
         m_Gameplay_ControllerCursorHorizontalInput = m_Gameplay.FindAction("ControllerCursorHorizontalInput", throwIfNotFound: true);
         m_Gameplay_ControllerCursorVerticalInput = m_Gameplay.FindAction("ControllerCursorVerticalInput", throwIfNotFound: true);
         m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
+        m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_Store = m_Gameplay.FindAction("Store", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1557,11 +1577,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_QuickItemUse;
     private readonly InputAction m_Gameplay_QuickItemCycle;
     private readonly InputAction m_Gameplay_StoreOpen;
-    private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_ShadowMorph;
     private readonly InputAction m_Gameplay_ControllerCursorHorizontalInput;
     private readonly InputAction m_Gameplay_ControllerCursorVerticalInput;
     private readonly InputAction m_Gameplay_Block;
+    private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_Store;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -1583,11 +1604,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @QuickItemUse => m_Wrapper.m_Gameplay_QuickItemUse;
         public InputAction @QuickItemCycle => m_Wrapper.m_Gameplay_QuickItemCycle;
         public InputAction @StoreOpen => m_Wrapper.m_Gameplay_StoreOpen;
-        public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @ShadowMorph => m_Wrapper.m_Gameplay_ShadowMorph;
         public InputAction @ControllerCursorHorizontalInput => m_Wrapper.m_Gameplay_ControllerCursorHorizontalInput;
         public InputAction @ControllerCursorVerticalInput => m_Wrapper.m_Gameplay_ControllerCursorVerticalInput;
         public InputAction @Block => m_Wrapper.m_Gameplay_Block;
+        public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @Store => m_Wrapper.m_Gameplay_Store;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1648,9 +1670,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @StoreOpen.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStoreOpen;
                 @StoreOpen.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStoreOpen;
                 @StoreOpen.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStoreOpen;
-                @Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
-                @Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
-                @Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @ShadowMorph.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
                 @ShadowMorph.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
                 @ShadowMorph.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnShadowMorph;
@@ -1663,6 +1682,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Block.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
                 @Block.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
                 @Block.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
+                @Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Store.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
+                @Store.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
+                @Store.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnStore;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -1718,9 +1743,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @StoreOpen.started += instance.OnStoreOpen;
                 @StoreOpen.performed += instance.OnStoreOpen;
                 @StoreOpen.canceled += instance.OnStoreOpen;
-                @Pause.started += instance.OnPause;
-                @Pause.performed += instance.OnPause;
-                @Pause.canceled += instance.OnPause;
                 @ShadowMorph.started += instance.OnShadowMorph;
                 @ShadowMorph.performed += instance.OnShadowMorph;
                 @ShadowMorph.canceled += instance.OnShadowMorph;
@@ -1733,6 +1755,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Block.started += instance.OnBlock;
                 @Block.performed += instance.OnBlock;
                 @Block.canceled += instance.OnBlock;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+                @Store.started += instance.OnStore;
+                @Store.performed += instance.OnStore;
+                @Store.canceled += instance.OnStore;
             }
         }
     }
@@ -1861,11 +1889,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnQuickItemUse(InputAction.CallbackContext context);
         void OnQuickItemCycle(InputAction.CallbackContext context);
         void OnStoreOpen(InputAction.CallbackContext context);
-        void OnPause(InputAction.CallbackContext context);
         void OnShadowMorph(InputAction.CallbackContext context);
         void OnControllerCursorHorizontalInput(InputAction.CallbackContext context);
         void OnControllerCursorVerticalInput(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnStore(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
