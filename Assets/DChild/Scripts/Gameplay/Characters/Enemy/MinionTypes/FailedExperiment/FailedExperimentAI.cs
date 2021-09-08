@@ -268,7 +268,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_sneerRoutine = null;
                     }
                     //m_enablePatience = false;
-                    m_turnState = State.WaitBehaviourEnd;
+                    m_turnState = State.Standby;
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                         m_stateHandle.SetState(State.Turning);
                 }
@@ -467,12 +467,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SneerRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_stateHandle.Wait(State.ReevaluateSituation);
             m_movement.Stop();
             while (true)
             {
                 m_animation.SetAnimation(0, m_info.rawrAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
+                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                yield return new WaitForSeconds(UnityEngine.Random.Range(1f, 3f));
                 //m_animation.SetAnimation(0, m_info.rawrAnimation, false);
                 //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
 
@@ -718,7 +720,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     return;
             }
 
-            if (m_enablePatience && m_stateHandle.currentState != State.Standby)
+            if (m_enablePatience && m_stateHandle.currentState != State.Standby && m_turnState != State.Standby)
             {
                 //Patience();
                 if (TargetBlocked())
