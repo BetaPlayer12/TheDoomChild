@@ -19,14 +19,18 @@ namespace DChild.Gameplay.Combat
 
         public override void SetData(AttackResistanceData data)
         {
-            m_data = data;
             if (m_resistance != null)
             {
                 m_resistance.Clear();
-                if (m_data != null)
-                {
-                    Copy(m_data.resistance, m_resistance);
-                }
+            }
+            else
+            {
+                m_resistance = new Dictionary<AttackType, float>();
+            }
+            m_data = data;
+            if (m_data != null)
+            {
+                Copy(m_data.resistance, m_resistance);
             }
         }
 
@@ -52,7 +56,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private void Awake()
+        private void Start()
         {
             m_resistance = new Dictionary<AttackType, float>();
             if (m_data != null)
@@ -67,7 +71,7 @@ namespace DChild.Gameplay.Combat
             CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
         }
 
-      
+
 #endif
     }
 }
