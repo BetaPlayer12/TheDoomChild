@@ -748,7 +748,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             //m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
             //m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
-            m_stateHandle = new StateHandle<State>(State.Dormant, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
@@ -807,10 +807,18 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    m_turnState = State.ReevaluateSituation;
-                    m_animation.SetAnimation(0, m_info.patrol.animation, true);
-                    var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
-                    m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.dormantAnimation)
+                    {
+                        if (m_foregroundController.gameObject.activeSelf)
+                        {
+                            m_foregroundController.gameObject.SetActive(false);
+                            m_spriteMask.SetActive(false);
+                        }
+                        m_turnState = State.ReevaluateSituation;
+                        m_animation.SetAnimation(0, m_info.patrol.animation, true);
+                        var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
+                        m_patrolHandle.Patrol(m_agent, m_info.patrol.speed, characterInfo);
+                    }
                     break;
 
                 case State.Dormant:
@@ -970,6 +978,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             m_hitbox.Disable();
             m_agent.Stop();
+            m_animation.SetAnimation(0, m_info.dormantAnimation, true);
             m_stateHandle.OverrideState(State.Dormant);
         }
     }
