@@ -198,7 +198,7 @@ namespace DChildEditor.Toolkit
 
                 if (SirenixEditorGUI.ToolbarButton(new GUIContent("Create Item")))
                 {
-                    ScriptableObjectCreator.ShowDialog<ItemData>("Assets/DChlld/Objects/Misc/ItemData", obj =>
+                    ObjectCreator.ShowScriptableObjectDialog<ItemData>("Assets/DChlld/Objects/Misc/ItemData", obj =>
                     {
                         base.TrySelectMenuItemWithObject(obj); // Selects the newly created item in the editor
                     });
