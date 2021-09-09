@@ -19,10 +19,5 @@ namespace DChild.Gameplay.Combat
                 info.damageList[i] = damageInfo;
             }
         }
-
-        internal void CalculatateResistanceReduction(IAttackResistance attackResistance, ref object damageInfo)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

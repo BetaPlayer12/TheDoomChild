@@ -748,7 +748,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             //m_deathHandle.SetAnimation(m_info.deathFallImpact1Animation);
             //m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Dormant, State.WaitBehaviourEnd);
-            m_stateHandle = new StateHandle<State>(m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 

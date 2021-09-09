@@ -469,6 +469,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (!m_character.physics.simulateGravity)
             {
+                m_targetPointIK.SetActive(false);
                 m_animation.EnableRootMotion(true, true);
                 m_animation.SetAnimation(0, m_info.awakenAnimation, false);
                 //m_animation.AddAnimation(0, m_info.idleAnimation, false, 0)/*.TimeScale = 5f*/;
@@ -482,6 +483,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.landAnimation);
             }
             m_hitbox.Enable();
+            m_targetPointIK.SetActive(true);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -491,6 +493,10 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_targetInfo.isValid)
             {
+                if (!IsFacing(m_lastTargetPos))
+                {
+                    CustomTurn();
+                }
                 m_targetPointIK.transform.position = m_lastTargetPos;
                 m_projectileLauncher.AimAt(m_lastTargetPos);
                 m_projectileLauncher.LaunchProjectile();
