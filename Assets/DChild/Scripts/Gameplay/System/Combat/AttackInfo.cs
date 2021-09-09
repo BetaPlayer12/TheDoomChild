@@ -16,6 +16,7 @@ namespace DChild.Gameplay.Combat
             isCrit = false;
             damageList = new List<DamageInfo>();
             totalDamageDealt = 0;
+            wasBlocked = false;
         }
 
         public void Initialize(params AttackDamage[] attackDamage)
@@ -23,6 +24,7 @@ namespace DChild.Gameplay.Combat
             isCrit = false;
             damageList.Clear();
             totalDamageDealt = 0;
+            wasBlocked = false;
             for (int i = 0; i < attackDamage.Length; i++)
             {
                 damageList.Add(new DamageInfo(attackDamage[i]));
