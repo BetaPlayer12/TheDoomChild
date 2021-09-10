@@ -120,7 +120,7 @@ namespace DChild.Gameplay.Environment.Interractables
                 {
                     m_panels[i].SetLerpAs(false);
                 }
-                m_collider2DGroup.EnableColliders();
+                m_collider2DGroup?.EnableColliders();
             }
         }
 
@@ -149,11 +149,11 @@ namespace DChild.Gameplay.Environment.Interractables
             }
             if (open)
             {
-                m_collider2DGroup.DisableColliders();
+                m_collider2DGroup?.DisableColliders();
             }
             else
             {
-                m_collider2DGroup.EnableColliders();
+                m_collider2DGroup?.EnableColliders();
             }
             m_isOpen = open;
         }
@@ -195,7 +195,7 @@ namespace DChild.Gameplay.Environment.Interractables
             {
                 if (m_isOpen)
                 {
-                    m_collider2DGroup.DisableColliders();
+                    m_collider2DGroup?.DisableColliders();
                 }
                 enabled = false;
             }
@@ -215,11 +215,11 @@ namespace DChild.Gameplay.Environment.Interractables
             }
             if (m_isOpen)
             {
-                m_collider2DGroup.DisableColliders();
+                m_collider2DGroup?.DisableColliders();
             }
             else
             {
-                m_collider2DGroup.EnableColliders();
+                m_collider2DGroup?.EnableColliders();
             }
         }
 

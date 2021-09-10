@@ -360,7 +360,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackTackleRoutine()
         {
             m_animation.SetAnimation(0, m_info.attackTackleAnticipationAnimation, false);
-            m_flinchHandle.m_autoFlinch = true;
+            m_flinchHandle.m_autoFlinch = UnityEngine.Random.Range(0, 100) <= 30 ? true : false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackleAnticipationAnimation);
             m_animation.SetAnimation(0, m_info.attackTackleChargeAnimation, true);
             yield return new WaitForSeconds(1.5f);
