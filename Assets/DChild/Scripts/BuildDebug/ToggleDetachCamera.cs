@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace DChildDebug.Window
 {
-
     public class ToggleDetachCamera : MonoBehaviour, IToggleDebugBehaviour
     {
         [SerializeField]
@@ -31,6 +30,5 @@ namespace DChildDebug.Window
             GameplaySystem.playerManager.StopCharacterControlOverride();
             m_controller.enabled = false;
         }
-       
     }
 }

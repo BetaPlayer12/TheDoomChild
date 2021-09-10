@@ -377,7 +377,10 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_currentRunAttackDuration += Time.deltaTime;
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
-                transform.position = new Vector2(transform.position.x, GroundPosition().y);
+                if (m_groundSensor.allRaysDetecting)
+                {
+                    transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
+                }
                 yield return null;
             }
             m_currentRunAttackDuration = 0;
@@ -583,7 +586,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_selfCollider.enabled = false;
                                 m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
                                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.patrol.speed);
-                                transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
+                                if (m_groundSensor.allRaysDetecting)
+                                {
+                                    transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
+                                }
                             }
                             else
                             {
@@ -620,7 +626,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.SetAnimation(0, m_info.backMove.animation, true);
                                 m_selfCollider.enabled = false;
                                 m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_currentBackMoveSpeed);
-                                transform.position = new Vector2(transform.position.x, GroundPosition().y);
+                                transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
                             }
                             else
                             {
