@@ -113,6 +113,7 @@ namespace DChild.Gameplay.Environment
             StopAllCoroutines();
             LerpColors(isVisible ? 0 : 1);
             SetRenderersActive(isVisible);
+            m_visible = isVisible;
         }
 
         private IEnumerator LerpTo(bool isVisible)

@@ -55,6 +55,10 @@ namespace DChild.Serialization
             this.m_equippedSoulSkillData = data.equippedSoulSkillData;
         }
 
+        public void SetPrimarySkillData(PrimarySkillsData data)
+        {
+            m_skills = data;
+        }
 #if UNITY_EDITOR
         [NonSerialized, ShowInInspector, BoxGroup("Debug")]
         private BestiaryList m_bestiaryList;
@@ -85,6 +89,7 @@ namespace DChild.Serialization
             }
             acquisitionData = new AcquisitionData(data.ToArray());
         }
+
 #endif
     }
 }
