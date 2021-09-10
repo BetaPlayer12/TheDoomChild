@@ -165,13 +165,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 m_lastTargetPos;
 
-
-        //[SerializeField]
-        //private AudioSource m_Audiosource;
-        //[SerializeField]
-        //private AudioClip m_AttackClip;
-        //[SerializeField]
-        //private AudioClip m_DeadClip;
+        private Coroutine m_knockbackRoutine;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -289,7 +283,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation && m_knockbackRoutine == null)
             {
                 StopAllCoroutines();
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
@@ -614,7 +608,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             StopAllCoroutines();
             m_stateHandle.Wait(State.ReevaluateSituation);
-            StartCoroutine(KnockbackRoutine(resumeAIDelay));
+            m_knockbackRoutine = StartCoroutine(KnockbackRoutine(resumeAIDelay));
         }
 
         private IEnumerator KnockbackRoutine(float timer)
@@ -630,6 +624,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
+            m_knockbackRoutine = null;
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
