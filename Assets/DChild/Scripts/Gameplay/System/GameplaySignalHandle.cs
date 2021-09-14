@@ -13,7 +13,7 @@ namespace DChild.Gameplay
     {
         public void DoCinematicUIMode(bool value)
         {
-             GameEventMessage.SendEvent(value ? "Cinematic Start" : "Cinematic End");
+            GameEventMessage.SendEvent(value ? "Cinematic Start" : "Cinematic End");
         }
 
         public void MoveAudioListenerToPlayer()
@@ -38,7 +38,8 @@ namespace DChild.Gameplay
 
         public void MakePlayerInvulnerable(bool value)
         {
-            GameplaySystem.playerManager.player.damageableModule.SetHitboxActive(value);
+            //GameplaySystem.playerManager.player.damageableModule.SetHitboxActive(value);
+            GameplaySystem.playerManager.player.damageableModule.SetInvulnerability(value ? Combat.Invulnerability.MAX : Combat.Invulnerability.None);
         }
 
         public void ShowDialogue(bool value)
