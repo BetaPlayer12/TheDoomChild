@@ -60,9 +60,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idle2Animation;
-            public string idle2Animation => m_idle2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -276,7 +273,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_animation.SetAnimation(0, m_info.idle2Animation, true);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -567,7 +564,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 if (m_animation.animationState.GetCurrent(0).IsComplete)
                 {
-                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) > 10 ? m_info.idle2Animation : m_info.move.animation;
+                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) > 10 ? m_info.idleAnimation : m_info.move.animation;
                     m_animation.SetAnimation(0, chosenMoveAnim, true);
                 }
 
@@ -842,7 +839,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_turnState = State.ReevaluateSituation;
                     if (m_animation.animationState.GetCurrent(0).IsComplete)
                     {
-                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle2Animation : m_info.move.animation;
+                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idleAnimation : m_info.move.animation;
                         m_animation.SetAnimation(0, chosenMoveAnim, true);
                     }
 
