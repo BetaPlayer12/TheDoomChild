@@ -277,6 +277,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+            return hit.point;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -412,6 +418,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_animation.SetAnimation(0, m_info.move.animation, true);
                                     //m_movement.MoveTowards(m_targetInfo.position, m_info.move.speed * transform.localScale.x);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                                    if (m_groundSensor.allRaysDetecting)
+                                    {
+                                        transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
+                                    }
                                 }
                                 else
                                 {

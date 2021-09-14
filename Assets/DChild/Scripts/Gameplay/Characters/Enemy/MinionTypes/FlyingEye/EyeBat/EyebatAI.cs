@@ -60,9 +60,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idle2Animation;
-            public string idle2Animation => m_idle2Animation;
-            [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -191,7 +188,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             //m_currentAttack = Attack.Attack;
-            m_flinchHandle.m_autoFlinch = true;
             m_flinchHandle.gameObject.SetActive(true);
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             m_stateHandle.ApplyQueuedState();
@@ -260,31 +256,23 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_flinchHandle.m_autoFlinch)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation || m_stateHandle.currentState == State.Cooldown)
             {
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+                m_flinchHandle.m_autoFlinch = true;
                 m_agent.Stop();
                 m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 m_lazerAudio.enabled = false;
                 m_stateHandle.Wait(State.ReevaluateSituation);
                 StopAllCoroutines();
-                StartCoroutine(FlinchRoutine());
             }
-        }
-
-        private IEnumerator FlinchRoutine()
-        {
-            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-            m_animation.SetAnimation(0, m_info.idle2Animation, true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            //m_animation.SetAnimation(0, m_info.idle2Animation, true);
-            //m_stateHandle.ApplyQueuedState();
+            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.m_autoFlinch = false;
+            m_stateHandle.ApplyQueuedState();
         }
         private Vector2 WallPosition()
         {
@@ -314,7 +302,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_agent.Stop();
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_targetInfo.Set(null, null);
-                m_flinchHandle.m_autoFlinch = true;
                 m_enablePatience = false;
                 m_isDetecting = false;
                 m_stateHandle.SetState(State.ReturnToPatrol);
@@ -567,7 +554,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 if (m_animation.animationState.GetCurrent(0).IsComplete)
                 {
-                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) > 10 ? m_info.idle2Animation : m_info.move.animation;
+                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) > 10 ? m_info.idleAnimation : m_info.move.animation;
                     m_animation.SetAnimation(0, chosenMoveAnim, true);
                 }
 
@@ -801,7 +788,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_agent.Stop();
-                    m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
@@ -842,7 +828,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_turnState = State.ReevaluateSituation;
                     if (m_animation.animationState.GetCurrent(0).IsComplete)
                     {
-                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle2Animation : m_info.move.animation;
+                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idleAnimation : m_info.move.animation;
                         m_animation.SetAnimation(0, chosenMoveAnim, true);
                     }
 
@@ -907,7 +893,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_currentCD = 0;
-                        m_flinchHandle.m_autoFlinch = false;
                         m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                         m_stateHandle.OverrideState(State.ReevaluateSituation);
                     }
@@ -962,7 +947,6 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_targetInfo.Set(null, null);
-            m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
