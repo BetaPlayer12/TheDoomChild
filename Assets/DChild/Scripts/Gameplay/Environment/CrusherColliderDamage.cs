@@ -51,11 +51,11 @@ namespace DChild.Gameplay.Environment
                         if (hitCount > 0)
                         {
                             m_damageable.Add(damageable);
-                            using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+                            Crush(damageable);
+                            bool alive = damageable.isAlive;
+                            if (alive==true)
                             {
-                                InitializeTargetInfo(cacheTargetInfo, damageable);
-                                m_damageDealer?.Damage(cacheTargetInfo.Value, new BodyDefense());
-                                cacheTargetInfo?.Release();
+                                Crush(damageable);
                             }
 
                             if (colliderGameObject.TryGetComponentInParent(out HitFXHandle onHitFX))
@@ -72,6 +72,15 @@ namespace DChild.Gameplay.Environment
             }
         }
 
+        private void Crush(Damageable damageable)
+        {
+            using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+            {
+                InitializeTargetInfo(cacheTargetInfo, damageable);
+                m_damageDealer?.Damage(cacheTargetInfo.Value, new BodyDefense());
+                cacheTargetInfo?.Release();
+            }
+        }
 
         private void Reset()
         {
