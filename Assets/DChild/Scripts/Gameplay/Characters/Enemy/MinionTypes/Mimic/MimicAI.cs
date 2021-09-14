@@ -99,6 +99,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
         [SerializeField, TabGroup("Reference")]
+        private Rigidbody2D m_rb2d;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
@@ -130,6 +132,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("Material")]
+        private PhysicsMaterial2D m_pMaterial;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -147,7 +152,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
-            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            m_character.physics.UseStepClimb(true);
             //m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
         }
@@ -238,8 +243,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             m_animation.EnableRootMotion(true, false);
             StopAllCoroutines();
-            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
+            m_character.physics.UseStepClimb(false);
             base.OnDestroyed(sender, eventArgs);
+            m_rb2d.sharedMaterial = null;
             m_movement.Stop();
             m_selfCollider.enabled = false;
         }
@@ -249,7 +255,8 @@ namespace DChild.Gameplay.Characters.Enemies
             Debug.Log("DO THE RAWR");
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.attack.animation)
             {
-                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
+                m_rb2d.sharedMaterial = null;
+                m_character.physics.UseStepClimb(false);
                 StopAllCoroutines();
                 m_selfCollider.enabled = false;
                 m_animation.SetAnimation(0, m_info.idleAnimation, false);
@@ -263,7 +270,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.flinchAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, false);
-            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            m_character.physics.UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -306,15 +313,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
-            //m_hitbox.gameObject.SetActive(false);
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attack.animation, false);
             var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * .5f;
             yield return new WaitForSeconds(waitTime);
-            //m_hitbox.gameObject.SetActive(true);
-            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            m_rb2d.sharedMaterial = m_pMaterial;
+            //m_character.physics.UseStepClimb(true);
             m_animation.EnableRootMotion(true, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_rb2d.sharedMaterial = null;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_selfCollider.enabled = true;
             m_stateHandle.ApplyQueuedState();
@@ -439,7 +446,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting && m_groundSensor.isDetecting)
                             {
-                                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
+                                m_character.physics.UseStepClimb(false);
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -450,7 +457,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
-                                    GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+                                    m_character.physics.UseStepClimb(true);
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = m_currentTimeScale;
                                 }
                                 else
@@ -459,7 +466,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_selfCollider.enabled = true;
                                     if (m_animation.animationState.GetCurrent(0).IsComplete)
                                     {
-                                        GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
+                                        m_character.physics.UseStepClimb(false);
                                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                     }
                                 }
