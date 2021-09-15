@@ -411,6 +411,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.walk.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
+                        if (m_groundSensor.allRaysDetecting)
+                        {
+                            transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.35f);
+                        }
                     }
                     else
                     {
