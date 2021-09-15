@@ -6,11 +6,12 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using Sirenix.Serialization;
 using System.Collections;
-using DChildDebug.Serialization;
 using UnityEngine.SceneManagement;
-using UnityEditor;
-using Cinemachine;
 using PixelCrushers.DialogueSystem;
+#if UNITY_EDITOR
+using UnityEditor;
+using DChildDebug;
+#endif
 
 namespace DChild.Serialization
 {
@@ -68,10 +69,7 @@ namespace DChild.Serialization
             public ISaveData GetData(SerializeID ID) => m_savedDatas.ContainsKey(ID) ? m_savedDatas[ID] : null;
             ISaveData ISaveData.ProduceCopy() => new ZoneData(m_savedDatas, true);
 
-#if UNITY_EDITOR
             public Dictionary<SerializeID, ISaveData> savedDatas => m_savedDatas;
-
-#endif
         }
         public ZoneSlot Zone;
 
@@ -195,11 +193,9 @@ namespace DChild.Serialization
 
         private void Start()
         {
-            var cinemachineBrain = FindObjectOfType<CinemachineBrain>();
-            if (cinemachineBrain != null)
-            {
-                cinemachineBrain.enabled = true;
-            }
+//#if UNITY_EDITOR
+            SceneCameraIntergrityChecker.ValidateIntegrity();
+//#endif
 
             var proposedData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
 #if UNITY_EDITOR
@@ -272,6 +268,8 @@ namespace DChild.Serialization
         {
             ZoneSaveFileCreate();
         }
+
+        public ComponentSerializer[] GetComponentSerializers() => m_componentSerializers;
 
         [System.Serializable]
         private class EditorData
