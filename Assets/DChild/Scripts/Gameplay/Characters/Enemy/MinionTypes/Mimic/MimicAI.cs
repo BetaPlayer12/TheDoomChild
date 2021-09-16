@@ -202,6 +202,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
+                m_stateHandle.Wait(State.Idle);
                 m_selfCollider.enabled = false;
                 m_targetInfo.Set(null, null);
                 m_isDetecting = false;
@@ -216,7 +217,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.sinkIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sinkIdleAnimation);
             //m_animation.SetAnimation(0, m_info.si, true);
-            m_stateHandle.SetState(State.Idle);
+            m_stateHandle.ApplyQueuedState();
             yield return null;
         }
 
