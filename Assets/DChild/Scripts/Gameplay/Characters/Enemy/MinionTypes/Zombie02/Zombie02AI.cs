@@ -180,7 +180,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
-            GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(true);
+            m_character.physics.UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -347,6 +347,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private Vector2 GroundPosition()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+            return hit.point;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -405,6 +411,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.walk.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
+                        if (m_groundSensor.allRaysDetecting)
+                        {
+                            transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.35f);
+                        }
                     }
                     else
                     {
@@ -425,6 +435,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
+                    m_character.physics.UseStepClimb(false);
 
 
                     switch (m_attackDecider.chosenAttack.attack)
@@ -481,7 +492,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 m_movement.Stop();
                                 m_selfCollider.enabled = true;
-                                GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
@@ -494,6 +504,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed);
+                                    if (m_groundSensor.allRaysDetecting)
+                                    {
+                                        transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.35f);
+                                    }
                                 }
                                 else
                                 {

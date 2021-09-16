@@ -338,8 +338,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SpawnBlob()
         {
+            StartCoroutine(SpawnBlobRoutine());
+        }
+
+        private IEnumerator SpawnBlobRoutine()
+        {
+            yield return new WaitForSeconds(0.5f);
             var blob = Instantiate(m_info.blobAcid, transform.position, Quaternion.identity);
             blob.GetComponent<BlobAcidAI>().SetTargetInfo(m_targetInfo);
+            yield return null;
         }
 
         private Vector2 GroundPosition()
