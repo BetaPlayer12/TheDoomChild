@@ -255,7 +255,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.plantBomb.animation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.plantBomb.animation || m_animation.GetCurrentAnimation(0).ToString() == m_info.plantQuickBomb.animation)
             {
                 m_isDoingAction = true;
                 m_stateHandle.Wait(State.Cooldown);
@@ -268,6 +268,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchRoutine()
         {
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
             m_hitbox.Disable();
             m_bodyCollider.enabled = false;
             m_animation.EnableRootMotion(true, true);
@@ -439,6 +443,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_spriteMask.SetActive(true);
             m_selfCollider.SetActive(true);
+            m_hitbox.Enable();
             if (willAttack)
             {
                 m_animation.SetAnimation(0, m_info.plantQuickBomb.animation, false);
@@ -451,7 +456,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
             }
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
-            m_hitbox.Enable();
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
