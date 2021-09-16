@@ -48,7 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_hitBuffer = m_destinationFinder.GetValidHits();
                     var possibleDestination = m_hitBuffer[0].point;
                     Raycaster.SetLayerMask(DChildUtility.GetEnvironmentMask());
-                    Raycaster.Cast(possibleDestination, Vector2.up, m_character.height, true, out int hitcount, true);
+                    Raycaster.Cast(possibleDestination + new Vector2(0, 0.5f), Vector2.up, m_character.height, true, out int hitcount, true);
                     if (hitcount == 0)
                     {
                         destinationPosition = possibleDestination;
