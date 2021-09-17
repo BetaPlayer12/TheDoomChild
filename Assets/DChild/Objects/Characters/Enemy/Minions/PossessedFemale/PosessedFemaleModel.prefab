@@ -3607,7 +3607,7 @@ GameObject:
   - component: {fileID: 392857055216441595}
   - component: {fileID: 1845596395929351365}
   - component: {fileID: 6889118398166329580}
-  - component: {fileID: 6989887988315439745}
+  - component: {fileID: 7995884180656647357}
   m_Layer: 13
   m_Name: AttackBB
   m_TagString: Untagged
@@ -3683,7 +3683,7 @@ MonoBehaviour:
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!60 &6989887988315439745
+--- !u!60 &7995884180656647357
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4388,6 +4388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2479831660731023835}
   - component: {fileID: 1833372815303929632}
+  - component: {fileID: 2142760476634298908}
   m_Layer: 1
   m_Name: SelfCollider
   m_TagString: Untagged
@@ -4420,11 +4421,31 @@ CircleCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 10}
   serializedVersion: 2
   m_Radius: 2.5
+--- !u!250 &2142760476634298908
+PointEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7429623273511144039}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 2
+  m_ForceMagnitude: 100
+  m_ForceVariation: 0
+  m_DistanceScale: 3
+  m_ForceSource: 0
+  m_ForceTarget: 0
+  m_ForceMode: 0
+  m_Drag: 0
+  m_AngularDrag: 0
 --- !u!1 &7550517681383130069
 GameObject:
   m_ObjectHideFlags: 0

@@ -269,6 +269,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.physics.UseStepClimb(true);
             m_movement.Stop();
             m_selfCollider.enabled = false;
+            if (m_mobileAttackCoroutine != null)
+            {
+                StopCoroutine(m_mobileAttackCoroutine);
+                m_mobileAttackCoroutine = null;
+            }
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)

@@ -15,10 +15,13 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
 
             public SaveData(Transform[] transforms)
             {
-                m_positions = new SerializedVector2[transforms.Length];
-                for (int i = 0; i < m_positions.Length; i++)
+                if (transforms != null)
                 {
-                    m_positions[i] = (Vector2)transforms[i].position;
+                    m_positions = new SerializedVector2[transforms.Length];
+                    for (int i = 0; i < m_positions.Length; i++)
+                    {
+                        m_positions[i] = (Vector2)transforms[i].position;
+                    }
                 }
             }
 
