@@ -86,6 +86,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
+        private Vector2 m_startPoint;
 
         //player reference access
 
@@ -166,12 +167,6 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         */
 
-        //  protected override void Start()
-        //   {
-        //  base.Start();
-        //  m_animation.animationState.Event += handleEvent;
-        //   }
-
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
@@ -220,6 +215,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_sEventListener.Subscribe(m_info.plasmaBall.launchOnEvent, m_fireProjectile.LaunchProjectile);
+            m_startPoint = transform.position;
         }
 
 
@@ -342,7 +338,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
             m_stateHandle.OverrideState(State.Patrol);

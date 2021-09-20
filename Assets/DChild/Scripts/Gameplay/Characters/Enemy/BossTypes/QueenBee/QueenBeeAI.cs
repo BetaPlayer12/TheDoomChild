@@ -1147,8 +1147,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_colliderDamageGO.SetActive(true);
         }
 
-        protected override void OnBecomePassive()
+        protected override void OnForbidFromAttackTarget()
         {
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+            throw new NotImplementedException();
         }
     }
 }

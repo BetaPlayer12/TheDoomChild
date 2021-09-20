@@ -757,7 +757,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.OverrideState(State.Idle);
         }
 
-        protected override void OnBecomePassive()
+        protected override void OnForbidFromAttackTarget()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ReturnToSpawnPoint()
         {
             throw new NotImplementedException();
         }

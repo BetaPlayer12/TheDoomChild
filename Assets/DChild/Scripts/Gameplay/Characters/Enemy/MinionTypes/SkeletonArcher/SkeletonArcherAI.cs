@@ -164,6 +164,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_targetPointIK;
 
         private Vector2 m_lastTargetPos;
+        private Vector2 m_startPoint;
 
         private Coroutine m_knockbackRoutine;
 
@@ -368,6 +369,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
 
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
+            transform.position = m_startPoint;
         }
 
         protected override void Awake()
@@ -599,7 +601,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }
@@ -629,6 +631,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
         }
     }
 }
