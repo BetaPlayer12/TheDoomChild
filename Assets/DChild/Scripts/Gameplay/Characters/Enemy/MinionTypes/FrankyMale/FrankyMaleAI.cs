@@ -764,7 +764,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            ResetAI();
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

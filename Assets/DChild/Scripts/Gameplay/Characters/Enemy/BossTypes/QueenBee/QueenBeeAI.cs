@@ -756,7 +756,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_agent.Stop();
             m_hitbox.SetInvulnerability(Invulnerability.MAX);
             //CustomTurn();
-            var targetPos = new Vector2(transform.position.x, m_spearThrowPoint.position.y);
+            var targetPos = new Vector2(transform.position.x + UnityEngine.Random.Range(-1f, 1f), m_spearThrowPoint.position.y);
             while (Vector2.Distance(transform.position, targetPos) > 1.5f)
             {
                 var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
@@ -1147,8 +1147,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_colliderDamageGO.SetActive(true);
         }
 
-        protected override void OnBecomePassive()
+        protected override void OnForbidFromAttackTarget()
         {
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+            throw new NotImplementedException();
         }
     }
 }

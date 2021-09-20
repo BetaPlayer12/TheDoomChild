@@ -129,6 +129,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_isDetecting;
         private bool m_battlezonemode;
+        private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -326,6 +327,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_stateHandle.OverrideState(m_willPatrol ? State.Patrol : State.Idle);
             }
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -384,6 +386,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.walk.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
+                        if (m_groundSensor.allRaysDetecting)
+                        {
+                            transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
+                        }
                     }
                     else
                     {
@@ -537,7 +543,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

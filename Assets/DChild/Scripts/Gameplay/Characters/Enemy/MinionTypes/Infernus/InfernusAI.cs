@@ -143,6 +143,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private Vector2 m_startPoint;
         private Coroutine m_mobileAttackCoroutine;
 
         [SerializeField, TabGroup("Sensors")]
@@ -269,6 +270,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.physics.UseStepClimb(true);
             m_movement.Stop();
             m_selfCollider.enabled = false;
+            if (m_mobileAttackCoroutine != null)
+            {
+                StopCoroutine(m_mobileAttackCoroutine);
+                m_mobileAttackCoroutine = null;
+            }
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -377,6 +383,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
             m_spineEventListener.Subscribe(m_info.flameoffEvent, m_flameFX.Stop);
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -622,7 +629,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

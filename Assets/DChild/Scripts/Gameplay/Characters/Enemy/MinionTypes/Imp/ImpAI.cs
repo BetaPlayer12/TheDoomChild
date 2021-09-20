@@ -34,23 +34,29 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_plantBomb = new SimpleAttackInfo();
             public SimpleAttackInfo plantBomb => m_plantBomb;
             [SerializeField]
+            private SimpleAttackInfo m_plantQuickBomb = new SimpleAttackInfo();
+            public SimpleAttackInfo plantQuickBomb => m_plantQuickBomb;
+            [SerializeField]
             private float m_attackCD;
             public float attackCD => m_attackCD;
             //
-            [SerializeField, MinValue(0)]
-            private float m_patience;
-            public float patience => m_patience;
             [SerializeField]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
+            [SerializeField]
+            private float m_patienceDistanceTolerance = 50f;
+            public float patienceDistanceTolerance => m_patienceDistanceTolerance;
 
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_detectAnimation;
             public string detectAnimation => m_detectAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_idleAnimation;
-            public string idleAnimation => m_idleAnimation;
+            private string m_idle1Animation;
+            public string idle1Animation => m_idle1Animation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_idle2Animation;
+            public string idle2Animation => m_idle2Animation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathBeginAnimation;
             public string deathBeginAnimation => m_deathBeginAnimation;
@@ -97,6 +103,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_patrol.SetData(m_skeletonDataAsset);
                 m_move.SetData(m_skeletonDataAsset);
                 m_plantBomb.SetData(m_skeletonDataAsset);
+                m_plantQuickBomb.SetData(m_skeletonDataAsset);
 
 #endif
             }
@@ -174,8 +181,6 @@ namespace DChild.Gameplay.Characters.Enemies
         //private List<float> m_attackRangeCache;
 
         private float m_currentCD;
-        private float m_currentPatience;
-        private bool m_enablePatience;
         private bool m_isDetecting;
         private bool m_isDoingAction;
         private GameObject m_barrelCache;
@@ -190,7 +195,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_stateHandle.OverrideState(State.Despawned);
                 m_animation.DisableRootMotion();
                 //m_stateHandle.ApplyQueuedState();
-                StartCoroutine(DespawnRoutine());
+                StartCoroutine(DespawnRoutine(false));
             }
         }
 
@@ -213,21 +218,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
-                m_currentPatience = 0;
                 //var patienceRoutine = PatienceRoutine();
                 //StopCoroutine(patienceRoutine);
-                m_enablePatience = false;
-            }
-            else
-            {
-                //if (!m_enablePatience)
-                //{
-                //    m_enablePatience = true;
-                //    //Patience();
-                //    StartCoroutine(PatienceRoutine());
-                //}
-                m_enablePatience = true;
-                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -248,7 +240,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.plantBomb.animation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.plantBomb.animation || m_animation.GetCurrentAnimation(0).ToString() == m_info.plantQuickBomb.animation)
             {
                 m_isDoingAction = true;
                 m_stateHandle.Wait(State.Cooldown);
@@ -256,11 +248,19 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopAllCoroutines();
                 StartCoroutine(FlinchRoutine());
             }
-            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            //else
+            //{
+            //    if (m_animation.animationState.GetCurrent(1).IsComplete)
+            //        m_animation.SetAnimation(1, m_info.flinchAnimation, false);
+            //}
         }
 
         private IEnumerator FlinchRoutine()
         {
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
             m_hitbox.Disable();
             m_bodyCollider.enabled = false;
             m_animation.EnableRootMotion(true, true);
@@ -268,8 +268,12 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
             m_hitbox.Enable();
             m_isDoingAction = false;
-            m_animation.SetAnimation(0, m_info.idleAnimation, false).MixDuration = 0;
-            StartCoroutine(DespawnRoutine());
+            if (m_animation.animationState.GetCurrent(0).IsComplete)
+            {
+                var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
+                m_animation.SetAnimation(0, chosenMoveAnim, true).MixDuration = 0;
+            }
+            StartCoroutine(DespawnRoutine(true));
             yield return null;
         }
 
@@ -338,27 +342,23 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
-            if (m_currentPatience < m_info.patience)
+            StopAllCoroutines();
+            if (m_executeMoveCoroutine != null)
             {
-                m_currentPatience += m_character.isolatedObject.deltaTime;
+                StopCoroutine(m_executeMoveCoroutine);
+                m_executeMoveCoroutine = null;
             }
-            else
+            m_agent.Stop();
+            if (m_animation.animationState.GetCurrent(0).IsComplete)
             {
-                StopAllCoroutines();
-                if (m_executeMoveCoroutine != null)
-                {
-                    StopCoroutine(m_executeMoveCoroutine);
-                    m_executeMoveCoroutine = null;
-                }
-                m_agent.Stop();
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                m_targetInfo.Set(null, null);
-                m_enablePatience = false;
-                m_isDetecting = false;
-                m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-                m_spriteMask.SetActive(true);
-                m_stateHandle.SetState(State.ReturnToPatrol);
+                var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
+                m_animation.SetAnimation(0, chosenMoveAnim, true);
             }
+            m_stateHandle.SetState(State.ReturnToPatrol);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+            m_spriteMask.SetActive(true);
         }
 
         public override void ApplyData()
@@ -398,13 +398,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, reappearAnim, false).TimeScale = 1.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
             m_hitbox.Enable();
-            //m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
-            StartCoroutine(DespawnRoutine());
+            m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            StartCoroutine(DespawnRoutine(true));
             yield return null;
         }
 
-        private IEnumerator DespawnRoutine()
+        private IEnumerator DespawnRoutine(bool willAttack)
         {
             var disappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.disappearing1Animation : m_info.disappearing2Animation;
             m_animation.SetAnimation(0, disappearAnim, false).TimeScale = 1.5f;
@@ -415,19 +415,28 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spriteMask.SetActive(false);
             var random = UnityEngine.Random.Range(0, 2);
             //transform.position = new Vector2(m_targetInfo.position.x + (random == 0 ? 10 : -10), GroundPosition().y + 20);
+            yield return new WaitForSeconds(0.75f);
             transform.position = new Vector2(RandomTeleportPoint(/*transform.position*/m_targetInfo.position).x, m_targetInfo.position.y + 10);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.25f);
             if (!IsFacingTarget())
             {
                 CustomTurn();
             }
             m_spriteMask.SetActive(true);
             m_selfCollider.SetActive(true);
-            var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
-            m_animation.SetAnimation(0, reappearAnim, false).TimeScale = 1.5f;
-            yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_hitbox.Enable();
+            if (willAttack)
+            {
+                m_animation.SetAnimation(0, m_info.plantQuickBomb.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.plantQuickBomb.animation);
+            }
+            else
+            {
+                var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
+                m_animation.SetAnimation(0, reappearAnim, false).TimeScale = 1.5f;
+                yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
+            }
+            m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -452,7 +461,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var reappearAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.reappearing1Animation : m_info.reappearing2Animation;
             m_animation.SetAnimation(0, reappearAnim, false).TimeScale = 1.5f;
             yield return new WaitForAnimationComplete(m_animation.animationState, reappearAnim);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_isDoingAction = false;
             m_hitbox.Enable();
             m_stateHandle.ApplyQueuedState();
@@ -517,7 +526,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case Attack.PlantBomb:
                     m_animation.EnableRootMotion(true, true);
-                    m_attackHandle.ExecuteAttack(m_info.plantBomb.animation, m_info.idleAnimation);
+                    m_attackHandle.ExecuteAttack(m_info.plantBomb.animation, m_info.idle1Animation);
                     break;
             }
         }
@@ -565,12 +574,22 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_bodyCollider.SetActive(true);
                 m_agent.Stop();
                 rb2d.isKinematic = false;
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                if (m_animation.animationState.GetCurrent(0).IsComplete)
+                {
+                    var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
+                    m_animation.SetAnimation(0, chosenMoveAnim, true);
+                }
                 return;
             }
 
             if (IsFacing(m_agent.hasPath && TargetBlocked() && !m_floorSensor.allRaysDetecting && !m_roofSensor.allRaysDetecting ? m_agent.segmentDestination : m_targetInfo.position))
             {
+                if (m_animation.animationState.GetCurrent(0).IsComplete)
+                {
+                    var chosenMoveAnim = UnityEngine.Random.Range(0, 50) < 10 ? m_info.idle2Animation : m_info.move.animation;
+                    m_animation.SetAnimation(0, chosenMoveAnim, true);
+                }
+
                 if (!m_wallSensor.allRaysDetecting && (m_floorSensor.allRaysDetecting || m_roofSensor.allRaysDetecting))
                 {
                     //if (m_executeMoveCoroutine != null)
@@ -601,7 +620,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_turnState = State.Attacking;
+                m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -653,7 +672,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    if (m_animation.animationState.GetCurrent(0).IsComplete)
+                    {
+                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
+                        m_animation.SetAnimation(0, chosenMoveAnim, true);
+                    }
                     m_agent.Stop();
                     break;
 
@@ -701,7 +724,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_executeMoveCoroutine = null;
                     }
                     m_agent.Stop();
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    if (m_animation.animationState.GetCurrent(0).IsComplete)
+                    {
+                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
+                        m_animation.SetAnimation(0, chosenMoveAnim, true);
+                    }
                     m_turnHandle.Execute();
                     break;
 
@@ -710,7 +737,11 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    if (m_animation.animationState.GetCurrent(0).IsComplete)
+                    {
+                        var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
+                        m_animation.SetAnimation(0, chosenMoveAnim, true);
+                    }
                     m_agent.Stop();
                     m_executeMoveCoroutine = StartCoroutine(ExecuteMove(m_info.plantBomb.range, Attack.PlantBomb));
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -740,7 +771,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         else if (Vector2.Distance(m_targetInfo.position, transform.position) <= m_info.targetDistanceTolerance * 2)
                         {
                             m_agent.Stop();
-                            m_animation.SetAnimation(0, m_info.idleAnimation, true).TimeScale = 1f;
+                            if (m_animation.animationState.GetCurrent(0).IsComplete)
+                            {
+                                var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
+                                m_animation.SetAnimation(0, chosenMoveAnim, true).TimeScale = 1;
+                            }
                         }
                     }
 
@@ -781,9 +816,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
-                if (/*m_enablePatience*/ Vector2.Distance(transform.position, m_targetInfo.position) > 50 && !m_selfSensor.isDetecting)
+                if (TargetBlocked())
                 {
-                    Patience();
+                    if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.patienceDistanceTolerance)
+                    {
+                        Patience();
+                    }
                 }
             }
         }
@@ -791,8 +829,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.ReturnToPatrol);
-            m_currentPatience = 0;
-            m_enablePatience = false;
             m_isDetecting = false;
         }
 
@@ -802,16 +838,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodyCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
-            m_enablePatience = false;
             m_isDoingAction = false;
             m_hitbox.Enable();
             m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             m_spriteMask.SetActive(true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.ReturnToPatrol);
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            ResetAI();
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

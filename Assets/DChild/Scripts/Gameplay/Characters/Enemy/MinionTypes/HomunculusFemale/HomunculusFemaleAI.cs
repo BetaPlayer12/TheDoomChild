@@ -172,6 +172,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_availableLightningSphereUse;
         private Coroutine m_patienceRoutine;
         private Coroutine m_detectCoroutine;
+        private Vector2 m_startPoint;
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -206,9 +207,21 @@ namespace DChild.Gameplay.Characters.Enemies
             return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
         {
+            transform.position = m_startPoint;
+        }
 
+        protected override void OnForbidFromAttackTarget()
+        {
+            m_targetInfo.Set(null, null);
+            StopAllCoroutines();
+            m_animation.EnableRootMotion(true, false);
+            LightningShieldDeactivate();
+            LightningShieldSmallDeactivate();
+            m_coreburstFX.Stop();
+            m_corebustBB.enabled = false;
+            m_stateHandle.SetState(State.Patrol);
         }
 
         protected override void OnTargetDisappeared()
@@ -487,6 +500,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineEventListener.Subscribe(m_info.lightningsphereEvent, LightningShieldEvent);
             //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
             //m_spineEventListener.Subscribe(m_info.lightningsphereEvent, m_lightningshieldFX.Play);
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()

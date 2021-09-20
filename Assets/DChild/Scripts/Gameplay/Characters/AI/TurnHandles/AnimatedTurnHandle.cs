@@ -49,9 +49,9 @@ namespace DChild.Gameplay.Characters
             m_animation.AnimationSet -= OnAnimationSet;
             m_animation.animationState.Complete -= OnComplete;
             m_animation.animationState.Interrupt -= OnComplete;
-            var currentScale = m_character.facing == HorizontalDirection.Left ? Vector3.one : new Vector3(-1, 1, 1);
-            m_character.transform.localScale = currentScale;
             TurnCharacter();
+            Vector3 currentScale = GetFacingScale(m_character.facing);
+            m_character.transform.localScale = currentScale;
             CallTurnDone(new FacingEventArgs(m_character.facing));
         }
 
