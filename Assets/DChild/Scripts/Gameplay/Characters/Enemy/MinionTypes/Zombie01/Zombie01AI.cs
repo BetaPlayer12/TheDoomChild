@@ -145,6 +145,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAnticDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -366,6 +367,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Start();
             m_selfCollider.SetActive(false);
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -559,7 +561,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitBox.Enable();
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

@@ -130,6 +130,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentTimeScale;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private Vector2 m_startPoint;
         //private bool m_isCharging;
 
         [SerializeField, TabGroup("Sensors")]
@@ -383,6 +384,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             //m_chargeBreakRoutine = ChargeBreakRoutine();
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -539,7 +541,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

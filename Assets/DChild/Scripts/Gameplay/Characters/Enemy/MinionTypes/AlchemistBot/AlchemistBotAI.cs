@@ -933,7 +933,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            Patience();
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }
