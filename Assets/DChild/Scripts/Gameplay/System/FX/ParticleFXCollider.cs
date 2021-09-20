@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-    public class ParticleFXCollider : ParticleFXComponent
+    public class ParticleFXCollider : MonoBehaviour, ParticleFXComponent
     {
         [SerializeField, MinValue(0)]
         private float m_enableDelay;
@@ -15,14 +15,14 @@ namespace DChild.Gameplay
         private float m_timer;
         private bool m_isEnableDelayed;
 
-        public override void Initialize()
+        public void Initialize()
         {
             m_collider = GetComponent<Collider2D>();
             enabled = false;
             m_collider.enabled = false;
         }
 
-        public override void Reset()
+        public void Reset()
         {
             enabled = true;
             m_isEnableDelayed = m_enableDelay > 0;
@@ -38,12 +38,12 @@ namespace DChild.Gameplay
             }
         }
 
-        public override void SetActive(bool isActive)
+        public void SetActive(bool isActive)
         {
             enabled = isActive;
         }
 
-        public override void Stop()
+        public void Stop()
         {
             enabled = false;
             m_collider.enabled = false;
