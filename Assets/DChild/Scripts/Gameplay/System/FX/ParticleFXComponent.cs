@@ -2,11 +2,11 @@
 
 namespace DChild.Gameplay
 {
-    public abstract class ParticleFXComponent : MonoBehaviour
+    public interface ParticleFXComponent
     {
-        public abstract void Initialize();
-        public abstract void SetActive(bool isActive);
-        public abstract void Stop();
-        public abstract void Reset();
+       void Initialize();
+       void SetActive(bool isActive);
+       void Stop();
+       void Reset();
     }
 }

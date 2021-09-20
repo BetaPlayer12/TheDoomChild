@@ -103,6 +103,7 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private float m_currentPatience;
         private bool m_enablePatience;
+        private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -175,6 +176,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
             m_stateHandle.OverrideState(State.ReevaluateSituation);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -276,8 +283,14 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
         {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
+        {
+            Patience();
         }
     }
 }

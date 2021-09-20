@@ -134,6 +134,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -462,6 +463,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.walk.speed * .75f, m_info.walk.speed * 1.25f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             m_spineListener.Subscribe(m_info.detectFXEvent, IncreaseHeadFX);
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -674,7 +676,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.SetState(State.ReevaluateSituation);
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

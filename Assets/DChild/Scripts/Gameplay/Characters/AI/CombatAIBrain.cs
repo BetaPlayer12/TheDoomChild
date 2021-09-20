@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Characters.AI
             if (m_combatAI.Contains(instance) == false)
             {
                 m_combatAI.Add(instance);
-                instance.BecomePassive(m_allArePassive);
+                instance.ForbidFromAttackTarget(m_allArePassive);
             }
         }
 
@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Characters.AI
             if (m_combatAI.Contains(instance))
             {
                 m_combatAI.Remove(instance);
-                instance.BecomePassive(false);
+                instance.ForbidFromAttackTarget(false);
             }
         }
 
@@ -39,13 +39,20 @@ namespace DChild.Gameplay.Characters.AI
             m_allArePassive = value;
             for (int i = 0; i < m_combatAI.Count; i++)
             {
-                m_combatAI[i].BecomePassive(m_allArePassive);
+                m_combatAI[i].ForbidFromAttackTarget(m_allArePassive);
             }
         }
     }
 
     public abstract class CombatAIBrain<T> : AIBrain<T>, ICombatAIBrain, IController where T : IAIInfo
     {
+        [Flags]
+        protected enum Restriction
+        {
+            ForbiddenFromAttackingTarget,
+            IgnoreTarget
+        }
+
         [SerializeField, TabGroup("Reference")]
         protected Damageable m_damageable;
         [SerializeField, TabGroup("Reference")]
@@ -61,6 +68,8 @@ namespace DChild.Gameplay.Characters.AI
         private AttackResistance m_attackResistance;
         private StatusInflictor m_statusInflictor;
         private StatusEffectResistance m_statusResistance;
+
+        protected Restriction m_currentRestrictions;
 
         public virtual void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -95,20 +104,63 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-        public void BecomePassive(bool value)
+        /// <summary>
+        /// AI Essentially Resets as its Returns to Spawn Point
+        /// </summary>
+        public abstract void ReturnToSpawnPoint();
+
+        /// <summary>
+        /// Will still be Notice the Target but cannot attack it
+        /// </summary>
+        /// <param name="value"></param>
+        public void ForbidFromAttackTarget(bool value)
+        {
+            if (value)
+            {
+                m_currentRestrictions |= Restriction.IgnoreTarget;
+                OnForbidFromAttackTarget();
+            }
+            else
+            {
+                m_currentRestrictions |= Restriction.IgnoreTarget;
+               
+            }
+        }
+
+        /// <summary>
+        /// Target is null but still can accept new Targets
+        /// </summary>
+        public void IgnoreCurrentTarget()
+        {
+            SetTarget(null);
+        }
+
+        /// <summary>
+        /// Target is null and cannot accept new Targets if True
+        /// </summary>
+        /// <param name="value"></param>
+        public void IgnoreAllTargets(bool value)
         {
             if (value)
             {
                 m_aggroBoundary.gameObject.SetActive(false);
-                OnBecomePassive();
+                SetTarget(null);
+                m_currentRestrictions |= Restriction.IgnoreTarget;
             }
             else
             {
                 m_aggroBoundary.gameObject.SetActive(true);
+                m_currentRestrictions &= ~Restriction.IgnoreTarget;
             }
         }
 
-        protected abstract void OnBecomePassive();
+
+        /// <summary>
+        /// When its told that it cant attack target
+        /// </summary>
+        protected abstract void OnForbidFromAttackTarget();
+
+        protected bool HasRestriction(Restriction restriction) => m_currentRestrictions.HasFlag(restriction);
 
         protected bool IsFacingTarget() => IsFacing(m_targetInfo.position);
         protected bool IsTargetInRange(float distance) => Vector2.Distance(m_targetInfo.position, m_character.centerMass.position) <= distance;
@@ -123,8 +175,6 @@ namespace DChild.Gameplay.Characters.AI
             m_statusInflictor?.SetData(statData.statusInfliction);
             m_statusResistance?.SetData(statData.statusResistanceData);
         }
-
-
 
         protected override void Awake()
         {
@@ -174,6 +224,8 @@ namespace DChild.Gameplay.Characters.AI
             m_damageable = damageable;
             m_centerMass = centerMass;
         }
+
+
 #endif
     }
 }

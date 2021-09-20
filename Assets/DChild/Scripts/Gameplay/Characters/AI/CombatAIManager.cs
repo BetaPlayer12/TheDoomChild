@@ -14,14 +14,14 @@ namespace DChild.Gameplay.Characters.AI
     {
         [SerializeField, ValueDropdown("GetCombatAIs", IsUniqueList = true)]
         private List<ICombatAIBrain> m_combatAI = new List<ICombatAIBrain>();
-        private bool m_allArePassive;
+        private bool m_allForbiddenToAttack;
 
         public void Add(ICombatAIBrain instance)
         {
             if (m_combatAI.Contains(instance) == false)
             {
                 m_combatAI.Add(instance);
-                instance.BecomePassive(m_allArePassive);
+                instance.ForbidFromAttackTarget(m_allForbiddenToAttack);
             }
         }
 
@@ -30,18 +30,62 @@ namespace DChild.Gameplay.Characters.AI
             if (m_combatAI.Contains(instance))
             {
                 m_combatAI.Remove(instance);
-                instance.BecomePassive(false);
+                instance.ForbidFromAttackTarget(false);
             }
         }
 
-        public void MakeAllPassive(bool value)
+        public void EnableAlAI(bool value)
         {
-            m_allArePassive = value;
             for (int i = 0; i < m_combatAI.Count; i++)
             {
                 if (m_combatAI[i] != null)
                 {
-                    m_combatAI[i].BecomePassive(m_allArePassive);
+                    m_combatAI[i].enabled = value;
+                }
+            }
+        }
+
+        public void ForbidAllFromAttackTarget(bool value)
+        {
+            m_allForbiddenToAttack = value;
+            for (int i = 0; i < m_combatAI.Count; i++)
+            {
+                if (m_combatAI[i] != null)
+                {
+                    m_combatAI[i].ForbidFromAttackTarget(m_allForbiddenToAttack);
+                }
+            }
+        }
+
+        public void AllIgnoreCurrentTarget()
+        {
+            for (int i = 0; i < m_combatAI.Count; i++)
+            {
+                if (m_combatAI[i] != null)
+                {
+                    m_combatAI[i].IgnoreCurrentTarget();
+                }
+            }
+        }
+
+        public void AllIgnoreCurrentAllTargets(bool value)
+        {
+            for (int i = 0; i < m_combatAI.Count; i++)
+            {
+                if (m_combatAI[i] != null)
+                {
+                    m_combatAI[i].IgnoreAllTargets(value);
+                }
+            }
+        }
+
+        public void AllReturnToSpawnPoint()
+        {
+            for (int i = 0; i < m_combatAI.Count; i++)
+            {
+                if (m_combatAI[i] != null)
+                {
+                    m_combatAI[i].ReturnToSpawnPoint();
                 }
             }
         }

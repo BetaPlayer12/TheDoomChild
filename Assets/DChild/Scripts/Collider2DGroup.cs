@@ -1,14 +1,12 @@
 ﻿using Pathfinding;
 using Sirenix.OdinInspector;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild
 {
     public class Collider2DGroup : MonoBehaviour
     {
-
         [SerializeField]
         private bool m_canUpdatePathfindingGraph;
         [SerializeField, ValueDropdown("GetColliders", IsUniqueList = true)]

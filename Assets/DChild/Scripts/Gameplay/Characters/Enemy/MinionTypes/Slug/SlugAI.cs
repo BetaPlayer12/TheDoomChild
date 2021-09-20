@@ -183,6 +183,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentFullCD;
         private float m_currentTimeScale;
         private Vector2 m_targetLastPos;
+        private Vector2 m_startPoint;
 
         protected override void Start()
         {
@@ -193,6 +194,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_spineEventListener.Subscribe(m_info.spitAttackEvent, SpitProjectile);
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
             m_spineEventListener.Subscribe(m_info.spikesEvent, SpikeFX);
+            m_startPoint = transform.position;
         }
 
         private Vector2 BallisticVel()
@@ -606,7 +608,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

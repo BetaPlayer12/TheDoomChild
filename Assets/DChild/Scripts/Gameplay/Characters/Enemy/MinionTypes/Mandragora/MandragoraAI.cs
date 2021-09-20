@@ -136,6 +136,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentCD;
         private float m_currentFullCD;
         private float m_currentMoveSpeed;
+        private Vector2 m_startPoint;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -150,6 +151,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_spineEventListener.Subscribe(m_info.attackEvent, SpawnProjectile);
             //GameplaySystem.SetBossHealth(m_character);
+            m_startPoint = transform.position;
         }
 
         private void SpawnProjectile()
@@ -414,7 +416,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

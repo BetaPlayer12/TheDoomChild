@@ -37,12 +37,12 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_meleeAttack = new SimpleAttackInfo();
             public SimpleAttackInfo meleeAttack => m_meleeAttack;
             //
-            [SerializeField, MinValue(0)]
-            private float m_patience;
-            public float patience => m_patience;
             [SerializeField]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
+            [SerializeField]
+            private float m_patienceDistanceTolerance = 50f;
+            public float patienceDistanceTolerance => m_patienceDistanceTolerance;
 
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -113,9 +113,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         private State m_turnState;
-
-        private float m_currentPatience;
-        private bool m_enablePatience;
+        
         private float timeCounter;
         private bool m_chargeOnce;
         private bool m_chargeFacing;
@@ -144,9 +142,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 
                 base.SetTarget(damageable, m_target);
                 
-                m_currentPatience = 0;
-                m_enablePatience = false;
-
                 if(m_chargeOnce == false)
                 {
                     m_chargeOnce = true;
@@ -158,13 +153,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
 
                
-            }
-            else
-            {
-                if (!IsTargetInRange(m_info.targetDistanceTolerance))
-                {
-                    m_enablePatience = true;
-                }
             }
         }
 
@@ -197,21 +185,13 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
-            if (m_currentPatience < m_info.patience)
+            if (m_executeMoveCoroutine != null)
             {
-                m_currentPatience += m_character.isolatedObject.deltaTime;
+                StopCoroutine(m_executeMoveCoroutine);
+                m_executeMoveCoroutine = null;
             }
-            else
-            {
-                if (m_executeMoveCoroutine != null)
-                {
-                    StopCoroutine(m_executeMoveCoroutine);
-                    m_executeMoveCoroutine = null;
-                }
-                m_targetInfo.Set(null, null);
-                m_enablePatience = false;
-                m_stateHandle.SetState(State.ReturnToPatrol);
-            }
+            m_stateHandle.SetState(State.ReturnToPatrol);
+            m_targetInfo.Set(null, null);
         }
 
         private IEnumerator AttackRoutine()
@@ -285,7 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_turnState = State.Attacking;
+                m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -449,28 +429,36 @@ namespace DChild.Gameplay.Characters.Enemies
                      return;
             }
 
-            if (m_enablePatience)
+            if (m_targetInfo.isValid)
             {
-                Patience();
+                if (TargetBlocked())
+                {
+                    if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.patienceDistanceTolerance)
+                    {
+                        Patience();
+                    }
+                }
             }
         }
 
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.ReturnToPatrol);
-            m_currentPatience = 0;
-            m_enablePatience = false;
         }
 
         public void ResetAI()
         {
             m_targetInfo.Set(null, null);
-            m_enablePatience = false;
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.ReturnToPatrol);
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            Patience();
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

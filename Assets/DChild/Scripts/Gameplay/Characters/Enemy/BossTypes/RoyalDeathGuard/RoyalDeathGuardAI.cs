@@ -305,15 +305,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_agent.Stop();
-            m_hitbox.SetInvulnerability(Invulnerability.MAX);
-            CustomTurn();
-            //yield return new WaitForSeconds(2);
-            //m_animation.SetAnimation(0, m_info.move.animation, true);
-            //yield return new WaitForSeconds(5);
-            //GetComponentInChildren<MeshRenderer>().sortingOrder = 99;
-            m_animation.SetAnimation(0, m_info.playerDetectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.playerDetectAnimation);
-            m_animation.SetAnimation(0, m_info.idle1Animation, true);
+            //m_hitbox.SetInvulnerability(Invulnerability.MAX);
+            //CustomTurn();
+            //m_animation.SetAnimation(0, m_info.playerDetectAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.playerDetectAnimation);
+            //m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_hitbox.SetInvulnerability(Invulnerability.None);
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -834,7 +830,11 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_currentCD = 0;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
         }
     }

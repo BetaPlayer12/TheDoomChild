@@ -40,12 +40,12 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_attackCD;
             public float attackCD => m_attackCD;
             //
-            [SerializeField, MinValue(0)]
-            private float m_patience;
-            public float patience => m_patience;
             [SerializeField]
             private float m_targetDistanceTolerance;
             public float targetDistanceTolerance => m_targetDistanceTolerance;
+            [SerializeField]
+            private float m_patienceDistanceTolerance = 50f;
+            public float patienceDistanceTolerance => m_patienceDistanceTolerance;
 
             //Animations
             [SerializeField, ValueDropdown("GetAnimations")]
@@ -181,8 +181,6 @@ namespace DChild.Gameplay.Characters.Enemies
         //private List<float> m_attackRangeCache;
 
         private float m_currentCD;
-        private float m_currentPatience;
-        private bool m_enablePatience;
         private bool m_isDetecting;
         private bool m_isDoingAction;
         private GameObject m_barrelCache;
@@ -220,21 +218,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_isDetecting = true;
                     m_stateHandle.SetState(State.Detect);
                 }
-                m_currentPatience = 0;
                 //var patienceRoutine = PatienceRoutine();
                 //StopCoroutine(patienceRoutine);
-                m_enablePatience = false;
-            }
-            else
-            {
-                //if (!m_enablePatience)
-                //{
-                //    m_enablePatience = true;
-                //    //Patience();
-                //    StartCoroutine(PatienceRoutine());
-                //}
-                m_enablePatience = true;
-                //StartCoroutine(PatienceRoutine());
             }
         }
 
@@ -263,7 +248,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopAllCoroutines();
                 StartCoroutine(FlinchRoutine());
             }
-            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
+            //else
+            //{
+            //    if (m_animation.animationState.GetCurrent(1).IsComplete)
+            //        m_animation.SetAnimation(1, m_info.flinchAnimation, false);
+            //}
         }
 
         private IEnumerator FlinchRoutine()
@@ -353,31 +342,23 @@ namespace DChild.Gameplay.Characters.Enemies
         //Patience Handler
         private void Patience()
         {
-            if (m_currentPatience < m_info.patience)
+            StopAllCoroutines();
+            if (m_executeMoveCoroutine != null)
             {
-                m_currentPatience += m_character.isolatedObject.deltaTime;
+                StopCoroutine(m_executeMoveCoroutine);
+                m_executeMoveCoroutine = null;
             }
-            else
+            m_agent.Stop();
+            if (m_animation.animationState.GetCurrent(0).IsComplete)
             {
-                StopAllCoroutines();
-                if (m_executeMoveCoroutine != null)
-                {
-                    StopCoroutine(m_executeMoveCoroutine);
-                    m_executeMoveCoroutine = null;
-                }
-                m_agent.Stop();
-                if (m_animation.animationState.GetCurrent(0).IsComplete)
-                {
-                    var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
-                    m_animation.SetAnimation(0, chosenMoveAnim, true);
-                }
-                m_targetInfo.Set(null, null);
-                m_enablePatience = false;
-                m_isDetecting = false;
-                m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-                m_spriteMask.SetActive(true);
-                m_stateHandle.SetState(State.ReturnToPatrol);
+                var chosenMoveAnim = UnityEngine.Random.Range(0, 100) < 25 ? m_info.idle1Animation : m_info.idle2Animation;
+                m_animation.SetAnimation(0, chosenMoveAnim, true);
             }
+            m_stateHandle.SetState(State.ReturnToPatrol);
+            m_targetInfo.Set(null, null);
+            m_isDetecting = false;
+            m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+            m_spriteMask.SetActive(true);
         }
 
         public override void ApplyData()
@@ -639,7 +620,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             else
             {
-                m_turnState = State.Attacking;
+                m_turnState = State.ReevaluateSituation;
                 m_stateHandle.OverrideState(State.Turning);
             }
         }
@@ -835,9 +816,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
             if (m_targetInfo.isValid)
             {
-                if (/*m_enablePatience*/ Vector2.Distance(transform.position, m_targetInfo.position) > 50 && !m_selfSensor.isDetecting)
+                if (TargetBlocked())
                 {
-                    Patience();
+                    if (Vector2.Distance(m_targetInfo.position, transform.position) > m_info.patienceDistanceTolerance)
+                    {
+                        Patience();
+                    }
                 }
             }
         }
@@ -845,8 +829,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnTargetDisappeared()
         {
             m_stateHandle.OverrideState(State.ReturnToPatrol);
-            m_currentPatience = 0;
-            m_enablePatience = false;
             m_isDetecting = false;
         }
 
@@ -856,16 +838,20 @@ namespace DChild.Gameplay.Characters.Enemies
             m_bodyCollider.enabled = false;
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
-            m_enablePatience = false;
             m_isDoingAction = false;
             m_hitbox.Enable();
             m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             m_spriteMask.SetActive(true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.ReturnToPatrol);
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            ResetAI();
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }
