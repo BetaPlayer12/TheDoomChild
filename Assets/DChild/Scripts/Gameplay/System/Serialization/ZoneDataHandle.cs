@@ -193,9 +193,9 @@ namespace DChild.Serialization
 
         private void Start()
         {
-//#if UNITY_EDITOR
+#if UNITY_EDITOR
             SceneCameraIntergrityChecker.ValidateIntegrity();
-//#endif
+#endif
 
             var proposedData = GameplaySystem.campaignSerializer.slot.GetZoneData<ZoneData>(m_ID);
 #if UNITY_EDITOR
