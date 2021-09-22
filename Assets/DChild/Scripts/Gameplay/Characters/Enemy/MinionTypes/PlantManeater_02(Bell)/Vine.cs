@@ -14,7 +14,7 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
     public class Vine : PoolableObject, IDamageDealer, IAttacker
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private const string ANIMATION_SPAWNVINE = "Attack1_Revised";
         private SkeletonAnimation m_animation;

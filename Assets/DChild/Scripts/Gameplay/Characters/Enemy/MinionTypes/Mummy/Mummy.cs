@@ -10,8 +10,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public abstract class Mummy : Minion, IFlinch
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         [MinValue(0)]
@@ -22,7 +21,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected SpineRootMotion m_rootMotion;
         protected EnemyFacingOnStart m_enemyFacing;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         private ISensorFaceRotation[] m_sensorRotater;
@@ -68,7 +67,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));          
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));

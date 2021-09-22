@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<string> m_chargeEventName;
 
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private HorseSeaAnimation m_animation;
         private SpineRootMotion m_rootMotion;
@@ -40,12 +40,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private static WaitForWorldSeconds m_animationBlendWait;
         private static bool m_isStaticInitialized;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         private bool m_isHostile;
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));
@@ -303,7 +303,7 @@ namespace DChild.Gameplay.Characters.Enemies
             skeletonAnimation.AnimationState.Event += HandleEvent;
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

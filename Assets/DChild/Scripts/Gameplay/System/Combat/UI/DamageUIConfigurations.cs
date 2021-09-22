@@ -10,13 +10,13 @@ namespace DChild.Gameplay.Combat.UI
     public class DamageUIConfigurations : SerializedScriptableObject
     {
         [SerializeField]
-        private Dictionary<AttackType, TMP_ColorGradient> m_configurations = new Dictionary<AttackType, TMP_ColorGradient>();
+        private Dictionary<DamageType, TMP_ColorGradient> m_configurations = new Dictionary<DamageType, TMP_ColorGradient>();
         [SerializeField]
         private TMP_ColorGradient m_healConfiguration;
 
         public TMP_ColorGradient healConfiguration => m_healConfiguration;
 
-        public TMP_ColorGradient FindDamageConfiguration(AttackType type)
+        public TMP_ColorGradient FindDamageConfiguration(DamageType type)
         {
             return m_configurations[type];
         }
@@ -26,12 +26,12 @@ namespace DChild.Gameplay.Combat.UI
         private void InitializeDamageConfigurations()
         {
             m_configurations.Clear();
-            var size = (int)AttackType._COUNT - 1;
+            var size = (int)DamageType._COUNT - 1;
             for (int i = 0; i < size; i++)
             {
-                m_configurations.Add((AttackType)i, null);
+                m_configurations.Add((DamageType)i, null);
             }
-            m_configurations.Add(AttackType.True, null);
+            m_configurations.Add(DamageType.True, null);
         }
 #endif
     }

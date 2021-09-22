@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class ChildZombie : Minion
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         private Transform m_projectileSpawn;
         [SerializeField]
@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_isScratching;
 
         protected override CombatCharacterAnimation animation => null;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void Idle()
         {
@@ -90,7 +90,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(Wait()));
         }
 
-        private void Flinch(params AttackType[] damageTypeRecieved)
+        private void Flinch(params DamageType[] damageTypeRecieved)
         {
             m_movement.Stop();
             StopActiveBehaviour();

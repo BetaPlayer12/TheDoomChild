@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Characters
         IAttacker IAttacker.rootParentAttacker => throw new System.NotImplementedException();
 
         public abstract void Heal(int health);
-        public abstract void TakeDamage(int totalDamage, AttackType type);
+        public abstract void TakeDamage(int totalDamage, DamageType type);
         public abstract void SetFacing(HorizontalDirection facing);
 
         public abstract void DisableController();
@@ -97,7 +97,7 @@ namespace DChild.Gameplay.Characters
             throw new System.NotImplementedException();
         }
 
-        public void BlockDamage(int totalDamage, AttackType type)
+        public void BlockDamage(int totalDamage, DamageType type)
         {
             throw new System.NotImplementedException();
         }

@@ -13,7 +13,7 @@ using UnityEngine;
 public class SpikeProjectile : PoolableObject, IDamageDealer, IAttacker
 {
     [SerializeField]
-    private AttackDamage m_damage;
+    private Damage m_damage;
 
     private const string ANIMATION_PROJECTILE = "Spike_Projectiles";
 

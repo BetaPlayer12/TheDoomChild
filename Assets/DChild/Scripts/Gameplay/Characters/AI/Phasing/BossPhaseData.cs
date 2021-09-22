@@ -16,7 +16,7 @@ namespace DChild.Gameplay.Characters.AI
         IPhaseInfo info { get; }
     }
 
-    [CreateAssetMenu(fileName = "BossPhaseData", menuName = "DChild/Gameplay/Boss Phase Data")]
+    [CreateAssetMenu(fileName = "BossPhaseData", menuName = "DChild/Gameplay/Character/Boss Phase Data")]
     public class BossPhaseData : SerializedScriptableObject, IPhaseData
     {
         [SerializeField]

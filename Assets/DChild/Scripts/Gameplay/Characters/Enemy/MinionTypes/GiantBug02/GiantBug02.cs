@@ -9,15 +9,14 @@ namespace DChild.Gameplay.Characters.Enemies
     public class GiantBug02 : Minion, IFlinch
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private GiantBug02Animation m_animation;
         private PhysicsMovementHandler2D m_movement;
         private SpineRootMotion m_rootMotion;
         private RelativeDirection m_damageSource;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         public void Patrol(Vector2 targetPos)
@@ -91,7 +90,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
 
@@ -212,7 +211,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rootMotion.useY = true;
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

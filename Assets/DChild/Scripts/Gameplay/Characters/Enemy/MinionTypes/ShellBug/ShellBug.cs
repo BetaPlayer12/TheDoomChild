@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class ShellBug : Minion, IFlinch
     {
         [SerializeField,TitleGroup("Stat")]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField, TitleGroup("Enemy")]
         private float m_chargeSpeed;
@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private ISensorFaceRotation[] m_sensorRotator;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         public void Patrol()
@@ -100,7 +100,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(ChargeRoutine(targetPos)));
         }
 
-        public void Flinch(RelativeDirection damageSource, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));

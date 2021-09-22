@@ -21,15 +21,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_attackFinishRest;
 
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private PhysicsMovementHandler2D m_movement;
         private ITurnHandler m_turn;
         private GiantBeetleAnimation m_animation;
 
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void LookAt(Vector2 target) => m_turn.LookAt(target);
 

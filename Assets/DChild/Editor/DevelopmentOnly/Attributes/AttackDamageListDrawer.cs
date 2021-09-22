@@ -8,22 +8,22 @@ using UnityEngine;
 namespace DChildEditor.Gameplay.Combat
 {
     [OdinDrawer]
-    public sealed class AttackDamageListDrawer : OdinAttributeDrawer<AttackDamageListAttribute, AttackDamage[]>
+    public sealed class AttackDamageListDrawer : OdinAttributeDrawer<AttackDamageListAttribute, Damage[]>
     {
         private bool m_isVisible;
 
-        protected override void DrawPropertyLayout(IPropertyValueEntry<AttackDamage[]> entry, AttackDamageListAttribute attribute, GUIContent label)
+        protected override void DrawPropertyLayout(IPropertyValueEntry<Damage[]> entry, AttackDamageListAttribute attribute, GUIContent label)
         {
             var smartValue = entry.SmartValue;
             DrawList(entry, attribute, label);
 
             if (smartValue == null || smartValue.Length == 0)
             {
-                smartValue = new AttackDamage[attribute.size];
+                smartValue = new Damage[attribute.size];
             }
             else if (smartValue.Length != attribute.size)
             {
-                var newArray = new AttackDamage[attribute.size];
+                var newArray = new Damage[attribute.size];
                 var copySize = newArray.Length < smartValue.Length ? newArray.Length : smartValue.Length;
                 for (int i = 0; i < copySize; i++)
                 {
@@ -38,7 +38,7 @@ namespace DChildEditor.Gameplay.Combat
             }
             else
             {
-                var newArray = new AttackDamage[attribute.size];
+                var newArray = new Damage[attribute.size];
                 Array.Copy(smartValue, newArray, attribute.size);
                 if (attribute.forceType)
                 {
@@ -48,7 +48,7 @@ namespace DChildEditor.Gameplay.Combat
             }
         }
 
-        private void DrawList(IPropertyValueEntry<AttackDamage[]> entry, AttackDamageListAttribute attribute, GUIContent label)
+        private void DrawList(IPropertyValueEntry<Damage[]> entry, AttackDamageListAttribute attribute, GUIContent label)
         {
             if (attribute.forceType)
             {
@@ -60,7 +60,7 @@ namespace DChildEditor.Gameplay.Combat
             }
         }
 
-        private void DrawReadOnlyList(IPropertyValueEntry<AttackDamage[]> list, GUIContent label)
+        private void DrawReadOnlyList(IPropertyValueEntry<Damage[]> list, GUIContent label)
         {
             var smartValue = list.SmartValue;
             SirenixEditorGUI.BeginBox(label);
@@ -79,7 +79,7 @@ namespace DChildEditor.Gameplay.Combat
             SirenixEditorGUI.EndBox();
         }
 
-        private void Draw(AttackDamage attackDamage)
+        private void Draw(Damage attackDamage)
         {
             SirenixEditorGUI.BeginListItem();
             GUI.enabled = false;

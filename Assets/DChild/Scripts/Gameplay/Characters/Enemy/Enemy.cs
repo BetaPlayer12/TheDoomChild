@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected BehaviourHandler m_behaviour;
         protected CharacterColliders m_colliders;
         protected bool m_waitForBehaviourEnd;
-        protected AttackDamage m_currentDamage;
+        protected Damage m_currentDamage;
 
         public event EventAction<EnemyInfoEventArgs> Death;
 
@@ -60,7 +60,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_health.AddCurrentValue(health);
         }
 
-        public override void TakeDamage(int totalDamage, AttackType type)
+        public override void TakeDamage(int totalDamage, DamageType type)
         {
             m_health.ReduceCurrentValue(totalDamage);
             if (isAlive == false)
@@ -102,7 +102,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        protected void OnTakeDamage(AttackType type)
+        protected void OnTakeDamage(DamageType type)
         {
             m_behaviour.SetActiveBehaviour(null);
             animation?.DoDamage();

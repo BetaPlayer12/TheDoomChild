@@ -13,12 +13,12 @@ namespace DChild.Gameplay.Combat
 {
     public interface ICombatManager
     {
-        Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo);
+        AttackSummaryInfo ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo);
         void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect);
         void Inflict(StatusEffectReciever reciever, params StatusEffectChance[] statusEffectChance);
         List<Hitbox> GetValidTargets(Vector2 source, Invulnerability ignoresLevel, List<Hitbox> hitboxes);
         List<Hitbox> GetValidTargetsOfCircleAOE(Vector2 source, float radius, int layer, Invulnerability ignoresLevel);
-        void Damage(IDamageable damageable, AttackDamage damage);
+        void Damage(IDamageable damageable, Damage damage);
         void Heal(IHealable healable, int health);
 
     }
@@ -28,38 +28,28 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private StatusInflictionHandle m_statusInflictionHandle;
         [SerializeField, HideLabel]
-        private CriticalDamageHandle m_criticalDamageHandle;
+        private DamageCalculator m_damageCalculator;
         [SerializeField, HideLabel, Title("UI")]
         private CombatUIHandler m_uiHandler;
 
         private AOETargetHandler m_aOETargetHandler;
         private PlayerCombatHandler m_playerCombatHandler;
-        private ResistanceHandler m_resistanceHandler;
 
-        private List<AttackType> m_damageList;
         private IDamageable m_cacheTarget;
 
-        public Cache<AttackInfo> ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo)
+        private bool showCombatValues => GameSystem.settings?.gameplay.showDamageValues ?? true;
+
+        public AttackSummaryInfo ResolveConflict(AttackerCombatInfo attacker, TargetInfo targetInfo)
         {
-            Cache<AttackInfo> result = Cache<AttackInfo>.Claim();
-            result.Value.Initialize(attacker.damage);
-            m_criticalDamageHandle.Execute(result, attacker.critChance, attacker.critDamageModifier);
-
+            AttackSummaryInfo summary = m_damageCalculator.CalculateDamage(attacker.attackInfo, targetInfo.instance.attackResistance, targetInfo.canBlockDamage, DamageCalculator.Operations.All);
             m_cacheTarget = targetInfo.instance;
-
-            HandleDamageBlock(attacker, targetInfo, result);
-            var wasDamageBlocked = result.Value.wasBlocked;
-            if (wasDamageBlocked == false)
-            {
-                HandleDamageResistance(m_cacheTarget.attackResistance, result);
-            }
-            ApplyAttackResults(result, targetInfo.isCharacter);
+            ApplyAttackDamage(summary, m_cacheTarget, targetInfo.isCharacter); //reference Struct
 
             if (m_cacheTarget.isAlive)
             {
                 if (targetInfo.isCharacter)
                 {
-                    if (wasDamageBlocked)
+                    if (summary.wasBlocked)
                     {
                         targetInfo.instance.transform.GetComponentInChildren<IBlock>()?.BlockAttack(attacker.instance);
                     }
@@ -72,15 +62,14 @@ namespace DChild.Gameplay.Combat
 
                         if (targetInfo.flinchHandler != null)
                         {
-                            FlinchTarget(targetInfo.flinchHandler, targetInfo.facing, m_cacheTarget.position, attacker.position, m_damageList);
+                            FlinchTarget(targetInfo.flinchHandler, targetInfo.facing, m_cacheTarget.position, attacker.position, summary);
                         }
                     }
                 }
             }
-
-            if(m_cacheTarget.transform.TryGetComponent(out IDamageReaction damageReaction))
+            if (m_cacheTarget.transform.TryGetComponent(out IDamageReaction damageReaction))
             {
-                damageReaction.ReactToBeingAttackedBy(attacker.instance, result.Value.wasBlocked);
+                damageReaction.ReactToBeingAttackedBy(attacker.instance, summary.wasBlocked);
             }
 
             if (attacker.isPlayer)
@@ -88,8 +77,10 @@ namespace DChild.Gameplay.Combat
 
             }
 
-            return result;
+            return summary;
         }
+
+
 
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)
         {
@@ -101,36 +92,30 @@ namespace DChild.Gameplay.Combat
             m_statusInflictionHandle.Inflict(reciever, statusEffectChance);
         }
 
-        public void Damage(IDamageable damageable, AttackDamage attackDamage)
+        public void Damage(IDamageable damageable, Damage attackDamage)
         {
-            using (Cache<AttackInfo> cacheResult = Cache<AttackInfo>.Claim())
+            var result = m_damageCalculator.CalculateDamage(new AttackInfo(attackDamage), null, false, DamageCalculator.Operations.DamageResistance);
+            var damageInfo = result.damageInfo;
+            var damage = damageInfo.damage;
+            if (damageInfo.isHeal)
             {
-                cacheResult.Value.Initialize(attackDamage);
-                HandleDamageResistance(damageable.attackResistance, cacheResult);
-
-                var damageInfo = cacheResult.Value.damageList[0];
-                var damage = damageInfo.damage;
-                if (damageInfo.isHeal)
+                var healable = (IHealable)damageable;
+                Heal(healable, damage.value);
+            }
+            else
+            {
+                damageable.TakeDamage(damage.value, damage.type);
+                if (showCombatValues)
                 {
-                    var healable = (IHealable)damageable;
-                    Heal(healable, damage.value);
+                    m_uiHandler.ShowDamageValues(damageable.position, damage, false);
                 }
-                else
-                {
-                    damageable.TakeDamage(damage.value, damage.type);
-                    if (GameSystem.settings?.gameplay.showDamageValues ?? true)
-                    {
-                        m_uiHandler.ShowDamageValues(damageable.position, damage, false);
-                    }
-                }
-                cacheResult.Release();
             }
         }
 
         public void Heal(IHealable healable, int health)
         {
             healable.Heal(health);
-            if (GameSystem.settings?.gameplay.showDamageValues ?? true)
+            if (showCombatValues)
             {
                 m_uiHandler.ShowHealValues(healable.position, health, false);
             }
@@ -143,72 +128,34 @@ namespace DChild.Gameplay.Combat
         {
             m_uiHandler.Initialize(gameObject.scene);
             m_playerCombatHandler = GetComponentInChildren<PlayerCombatHandler>();
-            m_resistanceHandler = new ResistanceHandler();
             m_aOETargetHandler = new AOETargetHandler();
         }
 
-        private AttackInfo ApplyAttackResults(AttackInfo result, bool isCharacter)
+        private void ApplyAttackDamage(AttackSummaryInfo attackInfo, IDamageable target, bool isCharacter)
         {
-            m_damageList.Clear();
-            var showDamageValues = isCharacter && (GameSystem.settings?.gameplay.showDamageValues ?? true);
-            for (int i = 0; i < result.damageList.Count; i++)
+            var showDamageValues = isCharacter && showCombatValues;
+            var damageInfo = attackInfo.damageInfo;
+            if (damageInfo.isHeal == false)
             {
-                var damageInfo = result.damageList[i];
-                if (damageInfo.isHeal == false)
+                var damage = damageInfo.damage;
+                target.TakeDamage(damage.value, damage.type);
+                if (showCombatValues)
                 {
-                    var damage = damageInfo.damage;
-                    m_damageList.Add(damage.type);
-                    m_cacheTarget.TakeDamage(damage.value, damage.type);
-                    if (showDamageValues)
-                    {
-                        m_uiHandler.ShowDamageValues(m_cacheTarget.position, damage, false);
-                    }
+                    m_uiHandler.ShowDamageValues(target.position, damage, attackInfo.isCrit);
                 }
             }
-
-            return result;
         }
 
-        private void HandleDamageResistance(IAttackResistance resistance, AttackInfo info)
-        {
-            if (resistance != null)
-            {
-                m_resistanceHandler.CalculatateResistanceReduction(resistance, info);
-            }
-        }
-
-        private void HandleDamageBlock(AttackerCombatInfo attackerInfo, TargetInfo targetInfo, AttackInfo attackInfo)
-        {
-            if (targetInfo.canBlockDamage && attackerInfo.ignoresBlock == false)
-            {
-                var list = attackInfo.damageList;
-                for (int i = 0; i < list.Count; i++)
-                {
-                    var damageInfo = list[i];
-                    var damage = damageInfo.damage;
-                    damage.value = 0;
-                    damageInfo.damage = damage;
-                    list[i] = damageInfo;
-                }
-                attackInfo.wasBlocked = true;
-            }
-        }
-
-        private void FlinchTarget(IFlinch target, HorizontalDirection targetFacing, Vector2 targetPosition, Vector2 attackerPosition, IReadOnlyCollection<AttackType> attackType)
+        private void FlinchTarget(IFlinch target, HorizontalDirection targetFacing, Vector2 targetPosition, Vector2 attackerPosition, AttackSummaryInfo attackInfo)
         {
             var damageSource = GameplayUtility.GetRelativeDirection(targetFacing, targetPosition, attackerPosition);
             var directionToSource = (attackerPosition - targetPosition).normalized;
-            target.Flinch(directionToSource, damageSource, attackType);
-        }
-
-        private void Awake()
-        {
-            m_damageList = new List<AttackType>();
+            target.Flinch(directionToSource, damageSource, attackInfo);
         }
 
         private void LateUpdate()
         {
-            if (GameSystem.settings?.gameplay.showDamageValues ?? true)
+            if (showCombatValues)
             {
                 m_uiHandler.Update();
             }

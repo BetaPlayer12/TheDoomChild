@@ -62,9 +62,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void SetParent(Transform parent) => transform.parent = parent;
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
-            if (AttackDamage.IsMagicAttack(damageTypeRecieved))
+            if (Combat.Damage.IsMagicDamage(damageTypeRecieved))
             {
                 m_behaviour.SetActiveBehaviour(null);
                 OnFlinch();

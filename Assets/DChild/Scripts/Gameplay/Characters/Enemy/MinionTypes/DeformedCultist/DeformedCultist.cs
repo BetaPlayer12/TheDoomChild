@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class DeformedCultist : Minion, IFlinch
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         [MinValue(2f)]
         private float m_moveSpeed;
@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private PhysicsMovementHandler2D m_movement;
         protected override CombatCharacterAnimation animation => null;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void MoveTo(Vector2 position)
         {
@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             m_movement.Stop();
         }
@@ -60,7 +60,7 @@ namespace DChild.Gameplay.Characters.Enemies
            // m_projectileLauncher = new ProjectileLauncher();
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

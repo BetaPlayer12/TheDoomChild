@@ -16,14 +16,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_patrolSpeed;
 
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private PhysicsMovementHandler2D m_movement;
         private ButcherAnimation m_animation;
 
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void MoveTo(Vector2 position)
         {
@@ -94,7 +93,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));
@@ -174,7 +173,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation = GetComponent<ButcherAnimation>();
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

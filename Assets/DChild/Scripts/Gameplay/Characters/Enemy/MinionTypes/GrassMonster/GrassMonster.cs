@@ -13,15 +13,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_attackSpeed;
 
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private GrassMonsterAnimation m_animation;
         private PhysicsMovementHandler2D m_movement;
         protected override CombatCharacterAnimation animation => this.m_animation;
         private ITurnHandler m_turn;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void MoveTo(Vector2 position)
         {
@@ -65,7 +64,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(PlayerDetectedRoutine()));
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));

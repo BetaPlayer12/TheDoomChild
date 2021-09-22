@@ -8,8 +8,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class SnakeMan : Minion, IFlinch
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         private float m_moveSpeed;
@@ -26,7 +25,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private SnakeManAnimation m_animation;
         private PhysicsMovementHandler2D m_movement;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         public enum MinionFacing
@@ -133,7 +132,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TailAttackRoutine()));
         }
 
-        public void Flinch(RelativeDirection damageSource, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
 

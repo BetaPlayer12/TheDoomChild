@@ -9,8 +9,8 @@ namespace DChild.Gameplay.Characters.Enemies
     public class MummyGuardian : Minion, IFlinch
     {
         [SerializeField]
-        [AttackDamageList(AttackType.Physical)]
-        private AttackDamage m_damage;
+        [AttackDamageList(DamageType.Physical)]
+        private Damage m_damage;
 
         [SerializeField]
         private float m_moveSpeed;
@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private SpineRootMotion m_rootMotion;
         private EnemyFacingOnStart m_enemyFacing;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         public bool m_isCharging;
@@ -117,7 +117,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_animation.DoDamage();

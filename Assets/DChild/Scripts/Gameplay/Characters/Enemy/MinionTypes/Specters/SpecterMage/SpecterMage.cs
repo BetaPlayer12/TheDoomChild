@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class SpecterMage : Specter
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         private ProjectileInfo m_spellProjectile;
         [SerializeField]
@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override SpecterAnimation specterAnimation => null;
         protected override CombatCharacterAnimation animation => null;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void ConjurePlasma(ITarget target)
         {

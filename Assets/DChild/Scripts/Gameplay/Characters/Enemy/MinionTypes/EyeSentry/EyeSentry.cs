@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class EyeSentry : Minion, ITerrainPatroller
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         [MinValue(0.1f)]
         private float m_speed;
@@ -20,7 +20,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private EyeSentryAnimation m_animation;
         private PhysicsMovementHandler2D m_movement;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         protected override CombatCharacterAnimation animation => m_animation;
 

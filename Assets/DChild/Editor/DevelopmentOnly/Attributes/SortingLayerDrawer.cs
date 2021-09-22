@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace DChildEditor
 {
-    public sealed class SortingLayerDrawer : OdinAttributeDrawer<SortingLayerAttribute, int>
+    public sealed class SingleEnumFlag : OdinAttributeDrawer<SortingLayerAttribute, int>
     {
         protected override void DrawPropertyLayout(GUIContent label)
         {

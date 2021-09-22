@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private SpineRootMotion m_rootMotion;
         private PhysicsMovementHandler2D m_movement;
 
-        protected override AttackDamage startDamage => throw new System.NotImplementedException();
+        protected override Damage startDamage => throw new System.NotImplementedException();
 
         protected override CombatCharacterAnimation animation => m_animation;
 
@@ -79,7 +79,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));
         }
 
-        public void Flinch(RelativeDirection damageSource, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));
@@ -163,7 +163,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement = new PhysicsMovementHandler2D(GetComponent<IsolatedCharacterPhysics2D>(), transform);
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

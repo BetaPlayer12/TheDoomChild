@@ -10,8 +10,8 @@ namespace DChild.Gameplay.Characters.Enemies
     public class WhiteLady : Minion, IMovingEnemy, IFlinch
     {
         [SerializeField]
-        [AttackDamageList(AttackType.Holy)]
-        private AttackDamage m_damage;
+        [AttackDamageList(DamageType.Holy)]
+        private Damage m_damage;
 
         [SerializeField]
         private float m_moveSpeed;
@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private PhysicsMovementHandler2D m_movement;
 
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public struct SpecterSummonInfo
         {
@@ -79,7 +79,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));

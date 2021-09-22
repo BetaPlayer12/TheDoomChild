@@ -34,7 +34,7 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
-        public void EnableAlAI(bool value)
+        public void EnableAl(bool value)
         {
             for (int i = 0; i < m_combatAI.Count; i++)
             {

@@ -9,8 +9,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class SandMonster : Minion, IFlinch
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         private float m_moveSpeed;
@@ -18,7 +17,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private SandMonsterAnimation m_animation;
         private PhysicsMovementHandler2D m_movement;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         public void Patrol(Vector2 targetPos)
@@ -74,7 +73,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));
         }
 
-        public void Flinch(RelativeDirection damageSource, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_animation.DoDamage();

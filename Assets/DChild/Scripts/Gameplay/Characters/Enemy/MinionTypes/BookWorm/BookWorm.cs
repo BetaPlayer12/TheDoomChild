@@ -13,9 +13,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_patrolSpeed;
 
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
-        private AttackDamage m_devourHeadDPS;
+        private Damage m_devourHeadDPS;
         [SerializeField]
         private GameObject m_acidProjectile;
 
@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public override IAttackResistance attackResistance => null;
         protected override CombatCharacterAnimation animation => null;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void SpitAcid(ITarget target)
         {

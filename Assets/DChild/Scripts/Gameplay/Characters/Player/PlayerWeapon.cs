@@ -15,17 +15,17 @@ namespace DChild.Gameplay.Characters.Players
         [HorizontalGroup("Split")]
 
         [SerializeField, OnValueChanged("UpdateDamage", true), BoxGroup("Split/Base"), HideLabel]
-        private AttackDamage m_baseDamage;
+        private Damage m_baseDamage;
         [ShowInInspector, HideInEditorMode, OnValueChanged("UpdateDamage", true),
         BoxGroup("Split/Added"), HideLabel]
-        private AttackDamage m_addedDamage;
+        private int m_addedDamageValue;
         [ShowInInspector, HideInEditorMode, ReadOnly, BoxGroup("Total"), HideLabel]
-        private List<AttackDamage> m_combinedDamage;
+        private Damage m_totalDamage;
         private bool m_isInitialized;
         [ShowInInspector, HideInEditorMode, BoxGroup("Status Inflictions"), HideLabel]
         private List<StatusEffectChance> m_statusInflictions;
 
-        public AttackDamage[] damage { get => m_combinedDamage.ToArray(); }
+        public Damage damage => m_totalDamage;
         public List<StatusEffectChance> statusInflictions => m_statusInflictions;
 
         public event EventAction<EventActionArgs> DamageChange;
@@ -35,23 +35,22 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (m_isInitialized == false)
             {
-                m_combinedDamage = new List<AttackDamage>();
-                CalculateCombinedDamage();
+                CalculateTotalDamage();
                 m_statusInflictions = new List<StatusEffectChance>();
                 m_isInitialized = true;
             }
         }
-        public void SetAddedDamage(AttackDamage damage)
+        public void SetAddedDamage(int damage)
         {
-            m_addedDamage = damage;
-            CalculateCombinedDamage();
+            m_addedDamageValue = damage;
+            CalculateTotalDamage();
             DamageChange?.Invoke(this, EventActionArgs.Empty);
         }
 
-        public void SetBaseDamage(AttackDamage damage)
+        public void SetBaseDamage(Damage damage)
         {
             m_baseDamage = damage;
-            CalculateCombinedDamage();
+            CalculateTotalDamage();
             DamageChange?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -96,23 +95,10 @@ namespace DChild.Gameplay.Characters.Players
             return false;
         }
 
-        private void CalculateCombinedDamage()
+        private void CalculateTotalDamage()
         {
-            m_combinedDamage.Clear();
-            m_combinedDamage.Add(m_baseDamage);
-            if (m_addedDamage.value > 0)
-            {
-                if (m_addedDamage.type == m_baseDamage.type)
-                {
-                    var damage = m_combinedDamage[0];
-                    damage.value += m_addedDamage.value;
-                    m_combinedDamage[0] = damage;
-                }
-                else
-                {
-                    m_combinedDamage.Add(m_addedDamage);
-                }
-            }
+            m_totalDamage = m_baseDamage;
+            m_totalDamage.value += m_addedDamageValue;
         }
 
         private void Awake()
@@ -123,7 +109,7 @@ namespace DChild.Gameplay.Characters.Players
 #if UNITY_EDITOR
         private void UpdateDamage()
         {
-            CalculateCombinedDamage();
+            CalculateTotalDamage();
             DamageChange?.Invoke(this, EventActionArgs.Empty);
         }
 #endif

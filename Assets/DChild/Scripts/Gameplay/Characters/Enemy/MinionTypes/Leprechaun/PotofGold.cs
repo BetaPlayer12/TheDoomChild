@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         private RaySensor m_sensor;
 
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private SkeletonAnimation m_animation;
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;

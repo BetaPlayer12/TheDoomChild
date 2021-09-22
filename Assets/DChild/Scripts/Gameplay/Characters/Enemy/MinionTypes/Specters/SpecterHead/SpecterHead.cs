@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class SpecterHead : Specter
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         [MinValue(0f)]
         private float m_dashSpeed;
@@ -19,7 +19,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public float dashSpeed => m_dashSpeed;
         protected override SpecterAnimation specterAnimation => null;
         protected override CombatCharacterAnimation animation => null;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public override void SpawnAt(Vector2 position, Quaternion rotation)
         {

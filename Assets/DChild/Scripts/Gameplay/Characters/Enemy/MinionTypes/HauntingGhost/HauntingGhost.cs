@@ -27,8 +27,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_attackHitbox;
 
         [SerializeField]
-        [LockAttackType(AttackType.Ice)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         [MinValue(0f)]
         private float m_moveSpeed;
@@ -41,7 +40,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public float dashSpeed => m_dashSpeed;
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void ForcePool()
         {

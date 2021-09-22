@@ -13,15 +13,14 @@ namespace DChild.Gameplay.Characters.Enemies
     public class VenusFlytrap : Minion, IFlinch
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private VenusFlytrapAnimation m_animation;
         private PhysicsMovementHandler2D m_movement;
         private ITurnHandler m_turn;
         private EnemyFacingOnStart m_facingOnStart;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => this.m_animation;
 
         public void BiteAttack(Vector2 targetPos)
@@ -61,7 +60,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));

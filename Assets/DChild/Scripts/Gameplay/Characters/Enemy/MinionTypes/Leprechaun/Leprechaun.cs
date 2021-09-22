@@ -15,8 +15,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_potOfGold;
 
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         private float m_moveSpeed;
@@ -25,7 +24,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private PhysicsMovementHandler2D m_movement;
 
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void MoveTo(Vector2 targetPos)
         {
@@ -90,7 +89,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));

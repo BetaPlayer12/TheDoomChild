@@ -9,8 +9,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class ShadowMinion : Minion
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         [MinValue(0f)]
         private float m_chargeSpeed;
@@ -23,7 +22,7 @@ namespace DChild.Gameplay.Characters.Enemies
         public bool isCharging => m_isCharging;
 
         protected override CombatCharacterAnimation animation => null;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void EnterShadowForm()
         {

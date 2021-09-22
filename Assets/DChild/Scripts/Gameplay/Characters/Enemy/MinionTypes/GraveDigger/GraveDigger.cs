@@ -9,8 +9,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class GraveDigger : Minion, IFlinch
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         [MinValue(0f)]
@@ -19,7 +18,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private GraveDiggerAnimation m_animation;
         private PhysicsMovementHandler2D m_movement;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         public void MoveTo(Vector2 position)
@@ -64,7 +63,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(TurnRoutine()));
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));
@@ -127,7 +126,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation = GetComponent<GraveDiggerAnimation>();
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

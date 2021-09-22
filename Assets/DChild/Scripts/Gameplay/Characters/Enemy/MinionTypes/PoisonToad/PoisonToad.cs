@@ -14,8 +14,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_attackHitbox;
 
         [SerializeField]
-        [LockAttackType(AttackType.Poison)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         [MinValue(0)]
@@ -26,7 +25,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private ITurnHandler m_turn;
 
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void LookAt(Vector2 target) => m_turn.LookAt(target);
 

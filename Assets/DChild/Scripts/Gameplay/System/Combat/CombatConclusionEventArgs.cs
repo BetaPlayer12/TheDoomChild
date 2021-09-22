@@ -6,7 +6,7 @@ namespace DChild.Gameplay.Combat
 {
     public class CombatConclusionEventArgs : IEventActionArgs
     {
-        public void Initialize(AttackerCombatInfo attacker, TargetInfo target, AttackInfo result)
+        public void Initialize(AttackerCombatInfo attacker, TargetInfo target, AttackSummaryInfo result)
         {
             this.attacker = attacker;
             this.target = target;
@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Combat
 
         public AttackerCombatInfo attacker { get; private set; }
         public TargetInfo target { get; private set; }
-        public AttackInfo result { get; private set; }
+        public AttackSummaryInfo result { get; private set; }
     }
 
     public class BreakableObjectEventArgs : IEventActionArgs

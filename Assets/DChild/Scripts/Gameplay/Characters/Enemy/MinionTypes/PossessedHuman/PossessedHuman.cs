@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class PossessedHuman : Minion, IFlinch
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         [MinValue(0f)]
         private float m_moveSpeed;
@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         protected override CombatCharacterAnimation animation => null;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void Explode()
         {
@@ -55,7 +55,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
 
         }

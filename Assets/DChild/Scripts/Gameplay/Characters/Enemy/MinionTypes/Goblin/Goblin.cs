@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_attackFinishRest;
 
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private GoblinAnimation m_animation;
         private PhysicsMovementHandler2D m_movement;
@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public bool isAttacking => m_animation.isAttackingAnimationPlaying;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void LookAt(Vector2 target) => m_turn.LookAt(target);
 
@@ -63,7 +63,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             //IdleAnim
         }
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(WaitRoutine()));
@@ -123,7 +123,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation = GetComponent<GoblinAnimation>();
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

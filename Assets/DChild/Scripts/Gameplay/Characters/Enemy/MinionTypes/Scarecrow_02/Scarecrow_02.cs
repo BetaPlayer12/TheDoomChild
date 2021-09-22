@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_scoutDuration;
 
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         private GameObject m_crowGO;
         [SerializeField]
@@ -36,10 +36,10 @@ namespace DChild.Gameplay.Characters.Enemies
 
         List<GameObject> m_crows;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));
@@ -229,6 +229,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
 
             m_crows = new List<GameObject>();
+        }
+
+        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo attackInfo)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

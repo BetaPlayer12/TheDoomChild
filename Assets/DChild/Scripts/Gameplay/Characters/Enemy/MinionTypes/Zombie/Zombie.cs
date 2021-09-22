@@ -9,8 +9,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class Zombie : Minion
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         [MinValue(0f)]
@@ -26,7 +25,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IsolatedPhysics2D m_physics;
 
         protected override CombatCharacterAnimation animation => null;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void MoveTo(Vector2 position)
         {
@@ -62,7 +61,7 @@ namespace DChild.Gameplay.Characters.Enemies
             SetFacing(oppositeDirection);
         }
 
-        public void Flinch(params AttackType[] damageTypeRecieved)
+        public void Flinch(params DamageType[] damageTypeRecieved)
         {
             m_movement.Stop();
             StopActiveBehaviour();

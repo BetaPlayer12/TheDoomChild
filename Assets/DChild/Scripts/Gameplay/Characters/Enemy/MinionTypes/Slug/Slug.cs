@@ -13,8 +13,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class Slug : Minion, IFlinch, ITerrainPatroller
     {
         [SerializeField]
-        [LockAttackType(AttackType.Poison)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         private float m_scoutDuration;
@@ -46,7 +45,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private WaitForWorldSeconds m_scoutTime;
         private ISensorFaceRotation[] m_sensorRotator;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         #region "Basic Behaviors"
@@ -117,7 +116,7 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         #endregion
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));

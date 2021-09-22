@@ -17,7 +17,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private GameObject m_gemSpike;
 
         [SerializeField, TitleGroup("Stat")]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField, TitleGroup("Enemy"), Min(0)]
         private float m_scoutDuration;
 
@@ -32,7 +32,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
 
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void Turn()
         {
@@ -82,7 +82,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(ScoutRoutine()));
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));
@@ -164,7 +164,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

@@ -19,12 +19,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         [SerializeField]
 
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private VampireBlobAnimation m_animation;
         private PhysicsMovementHandler2D m_movement;
 
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         public void Patrol(Vector2 targetPos)
@@ -77,7 +77,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DoIdle();
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));

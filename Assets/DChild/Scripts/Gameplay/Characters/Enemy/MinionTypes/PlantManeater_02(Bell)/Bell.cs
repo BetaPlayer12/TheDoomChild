@@ -10,8 +10,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class Bell : Minion, IFlinch
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         [TabGroup("Reference")]
@@ -28,7 +27,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private BellAnimation m_animation;
         private EnemyFacingOnStart m_enemyFacing;
       
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
         protected override CombatCharacterAnimation animation => this. m_animation;
 
 
@@ -61,7 +60,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DoIdle();
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             if (m_waitForBehaviourEnd)
             {

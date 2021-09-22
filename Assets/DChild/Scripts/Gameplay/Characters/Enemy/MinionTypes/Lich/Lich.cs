@@ -10,7 +10,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class Lich :Minion, IFlinch
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         [SerializeField]
         private GameObject[] m_spells;
@@ -29,7 +29,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private ProjectileLauncher m_spellLauncher;
 
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public bool isHiding => m_isHiding;
 
@@ -97,7 +97,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
         }

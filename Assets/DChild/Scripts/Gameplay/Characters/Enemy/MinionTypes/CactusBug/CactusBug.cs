@@ -9,13 +9,12 @@ namespace DChild.Gameplay.Characters.Enemies
     public class CactusBug : Minion, IFlinch
     {
         [SerializeField]
-        [LockAttackType(AttackType.Physical)]
-        private AttackDamage m_attackDamage;
+        private Damage m_attackDamage;
 
         private ISensorFaceRotation[] m_sensorRotator;
         private CactusBugAnimation m_animation;
         private SpineRootMotion m_spineRoot;
-        protected override AttackDamage startDamage => m_attackDamage;
+        protected override Damage startDamage => m_attackDamage;
         protected override CombatCharacterAnimation animation => m_animation;
 
         public void Move()
@@ -92,7 +91,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_behaviour.SetActiveBehaviour(StartCoroutine(BurrowRevealRoutine()));
         }
 
-        public void Flinch(RelativeDirection damageSource, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));
@@ -190,7 +189,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineRoot = GetComponentInChildren<SpineRootMotion>();
         }
 
-        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
         {
             throw new System.NotImplementedException();
         }

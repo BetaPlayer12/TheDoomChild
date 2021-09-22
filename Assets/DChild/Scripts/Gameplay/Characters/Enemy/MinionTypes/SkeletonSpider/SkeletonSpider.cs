@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class SkeletonSpider : Minion, IFlinch
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         [MinValue(0f)]
         private float m_moveSpeed;
@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IsolatedPhysics2D m_physics;
 
         protected override CombatCharacterAnimation animation => null;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
         public void MoveTo(Vector2 position)
         {
@@ -52,7 +52,7 @@ namespace DChild.Gameplay.Characters.Enemies
             SetFacing(oppositeDirection);
         }
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             m_movement.Stop();
             StopActiveBehaviour();
