@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-
     [System.Serializable]
     public struct Damage
     {

@@ -34,6 +34,7 @@ namespace DChild.Gameplay.Combat
 
         private AOETargetHandler m_aOETargetHandler;
         private PlayerCombatHandler m_playerCombatHandler;
+        private CombatFXHandle m_combatFXHandle;
 
         private IDamageable m_cacheTarget;
 
@@ -44,6 +45,7 @@ namespace DChild.Gameplay.Combat
             AttackSummaryInfo summary = m_damageCalculator.CalculateDamage(attacker.attackInfo, targetInfo.instance.attackResistance, targetInfo.canBlockDamage, DamageCalculator.Operations.All);
             m_cacheTarget = targetInfo.instance;
             ApplyAttackDamage(summary, m_cacheTarget, targetInfo.isCharacter); //reference Struct
+            m_combatFXHandle.SpawnFX(attacker.hitCollider, attacker.damageFX, targetInfo.hitCollider, targetInfo.instance, targetInfo.damageFXInfo);
 
             if (m_cacheTarget.isAlive)
             {
@@ -67,20 +69,9 @@ namespace DChild.Gameplay.Combat
                     }
                 }
             }
-            if (m_cacheTarget.transform.TryGetComponent(out IDamageReaction damageReaction))
-            {
-                damageReaction.ReactToBeingAttackedBy(attacker.instance, summary.wasBlocked);
-            }
-
-            if (attacker.isPlayer)
-            {
-
-            }
 
             return summary;
         }
-
-
 
         public void Inflict(StatusEffectReciever reciever, StatusEffectType statusEffect)
         {
@@ -94,7 +85,7 @@ namespace DChild.Gameplay.Combat
 
         public void Damage(IDamageable damageable, Damage attackDamage)
         {
-            var result = m_damageCalculator.CalculateDamage(new AttackInfo(attackDamage), null, false, DamageCalculator.Operations.DamageResistance);
+            var result = m_damageCalculator.CalculateDamage(new AttackDamageInfo(attackDamage), null, false, DamageCalculator.Operations.DamageResistance);
             var damageInfo = result.damageInfo;
             var damage = damageInfo.damage;
             if (damageInfo.isHeal)
@@ -129,6 +120,7 @@ namespace DChild.Gameplay.Combat
             m_uiHandler.Initialize(gameObject.scene);
             m_playerCombatHandler = GetComponentInChildren<PlayerCombatHandler>();
             m_aOETargetHandler = new AOETargetHandler();
+            m_combatFXHandle = new CombatFXHandle();
         }
 
         private void ApplyAttackDamage(AttackSummaryInfo attackInfo, IDamageable target, bool isCharacter)

@@ -103,5 +103,10 @@ namespace DChild.Gameplay.Characters.Enemies.Collections
         {
             throw new System.NotImplementedException();
         }
+
+        public void Damage(TargetInfo target, Collider2D colliderThatDealtDamage)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

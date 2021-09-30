@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Combat.UI
         private void InitializeDamageConfigurations()
         {
             m_configurations.Clear();
-            var size = (int)DamageType._COUNT - 1;
+            var size = (int)DamageType.All - 1;
             for (int i = 0; i < size; i++)
             {
                 m_configurations.Add((DamageType)i, null);

@@ -16,7 +16,7 @@ namespace DChild.Gameplay
     public class PlayerSkillUnlocker : MonoBehaviour, IButtonToInteract, ISerializableComponent
     {
         [System.Serializable]
-        private struct SaveData : ISaveData
+        public struct SaveData : ISaveData
         {
             [SerializeField]
             private bool m_isUsed;
