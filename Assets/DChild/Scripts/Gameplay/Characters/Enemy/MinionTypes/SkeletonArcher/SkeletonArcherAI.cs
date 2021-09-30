@@ -369,7 +369,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.SetActive(false);
 
             m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, LaunchProjectile);
-            transform.position = m_startPoint;
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -626,7 +626,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
-            m_knockbackRoutine = null;
+            m_knockbackRoutine = null; 
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);

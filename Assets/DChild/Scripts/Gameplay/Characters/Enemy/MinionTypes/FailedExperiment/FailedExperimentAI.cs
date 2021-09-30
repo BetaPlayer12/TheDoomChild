@@ -541,7 +541,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -573,6 +573,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    if (!m_character.physics.simulateGravity)
+                    {
+                        m_character.physics.simulateGravity = true;
+                        m_hitbox.Enable();
+                    }
+
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
