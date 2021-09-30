@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Characters.AI
 {
     public interface IAIInfo { void Initialize(); }
 
-    [CreateAssetMenu(fileName = "AIData", menuName = "DChild/Gameplay/AI Data")]
+    [CreateAssetMenu(fileName = "AIData", menuName = "DChild/Gameplay/Character/AI Data")]
     public class AIData : SerializedScriptableObject
     {
         [SerializeField]

@@ -1,4 +1,4 @@
-﻿//#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using Cinemachine;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -19,17 +19,17 @@ namespace DChildDebug
                 cinemachineBrain.enabled = true;
             }
 
-            //var cinemachineCameras = GameObject.FindObjectsOfType<CinemachineVirtualCamera>();
-            //for (int i = 0; i < cinemachineCameras.Length; i++)
-            //{
-            //    cinemachineCameras[i].enabled = false;
-            //}
+            var cinemachineCameras = GameObject.FindObjectsOfType<CinemachineVirtualCamera>();
+            for (int i = 0; i < cinemachineCameras.Length; i++)
+            {
+                cinemachineCameras[i].enabled = false;
+            }
         }
 
         public void OnProcessScene(Scene scene, BuildReport report)
         {
-            //ValidateIntegrity();
+            ValidateIntegrity();
         }
     }
 }
-//#endif
+#endif

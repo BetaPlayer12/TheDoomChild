@@ -12,10 +12,10 @@ public class EnemyTesting : Minion
     [SerializeField]
     private Transform m_damagePosition;
     [SerializeField]
-    private AttackDamage m_damage;
+    private Damage m_damage;
 
     public float CurrentHealth => m_health.currentValue;
-    protected override AttackDamage startDamage => m_damage;
+    protected override Damage startDamage => m_damage;
     protected override CombatCharacterAnimation animation => null;
     public override bool isAlive => m_health.currentValue != 0;
 

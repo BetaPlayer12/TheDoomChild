@@ -2,7 +2,7 @@
 {
     public interface IAttackResistance
     {
-        float GetResistance(AttackType type);
+        float GetResistance(DamageType type);
         //void SetResistance(AttackType type, AttackResistanceType resistanceType);
     }
 }

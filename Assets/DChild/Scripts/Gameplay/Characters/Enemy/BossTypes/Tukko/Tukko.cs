@@ -11,7 +11,7 @@ namespace DChild.Gameplay.Characters.Enemies
     public class Tukko : BossTemplate, IFlinch
     {
         [SerializeField]
-        private AttackDamage m_damage;
+        private Damage m_damage;
 
         private TukkoAnimation m_animation;
         private SpineRootMotion m_rootMotion;
@@ -23,9 +23,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private static bool m_isStaticInitialized;
 
         protected override CombatCharacterAnimation animation => m_animation;
-        protected override AttackDamage startDamage => m_damage;
+        protected override Damage startDamage => m_damage;
 
-        public void Flinch(RelativeDirection direction, AttackType damageTypeRecieved)
+        public void Flinch(RelativeDirection direction, DamageType damageTypeRecieved)
         {
             StopActiveBehaviour();
             m_behaviour.SetActiveBehaviour(StartCoroutine(FlinchRoutine()));
@@ -313,7 +313,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         }
 
-        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<DamageType> damageTypeRecieved)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo attackInfo)
         {
             throw new System.NotImplementedException();
         }

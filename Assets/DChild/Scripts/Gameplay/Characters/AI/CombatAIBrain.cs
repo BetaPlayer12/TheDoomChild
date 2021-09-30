@@ -49,8 +49,8 @@ namespace DChild.Gameplay.Characters.AI
         [Flags]
         protected enum Restriction
         {
-            ForbiddenFromAttackingTarget,
-            IgnoreTarget
+            ForbiddenFromAttackingTarget = 1 <<0,
+            IgnoreTarget = 1 << 1
         }
 
         [SerializeField, TabGroup("Reference")]
@@ -123,7 +123,7 @@ namespace DChild.Gameplay.Characters.AI
             else
             {
                 m_currentRestrictions |= Restriction.IgnoreTarget;
-               
+
             }
         }
 

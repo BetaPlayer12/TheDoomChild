@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
             private void OnAttack(object sender, CombatConclusionEventArgs eventArgs)
             {
-                var heal = eventArgs.result.totalDamageDealt * m_lifeSteal;
+                var heal = eventArgs.result.damageDealt * m_lifeSteal;
                 GameplaySystem.combatManager.Heal(m_player.healableModule, Mathf.CeilToInt(heal));
             }
         }

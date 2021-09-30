@@ -256,6 +256,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private List<GameObject> m_sarcophagusCache;
         private List<GameObject> m_spikeCache;
 
+        private Coroutine m_changeLocationRoutine;
+
         private void ApplyPhaseData(PhaseInfo obj)
         {
             m_phaseInfo = obj;
@@ -263,7 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            if (!m_hasPhaseChanged)
+            if (!m_hasPhaseChanged && m_changeLocationRoutine == null)
             {
                 m_hitbox.SetInvulnerability(Invulnerability.Level_1);
                 StopAllCoroutines();
@@ -361,7 +363,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         yield return null;
                     }
-                    StartCoroutine(MapCurseRoutine());
+                    m_changeLocationRoutine = StartCoroutine(MapCurseRoutine());
                     while (m_sarcophagusCache.Count != 0)
                     {
                         for (int i = 0; i < m_sarcophagusCache.Count; i++)
@@ -735,6 +737,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.mapCurseAttack.animation);
             m_hitbox.SetInvulnerability(Invulnerability.None);
             //var randomAttack = UnityEngine.Random.Range(0, 2);
+            m_changeLocationRoutine = null;
             m_animation.SetAnimation(0, m_info.idle1Animation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;

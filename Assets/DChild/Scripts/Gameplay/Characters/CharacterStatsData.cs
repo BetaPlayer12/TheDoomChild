@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay
 {
-    [CreateAssetMenu(fileName = "CharacterStatsData", menuName = "DChild/Gameplay/Character Stats Data")]
+    [CreateAssetMenu(fileName = "CharacterStatsData", menuName = "DChild/Gameplay/Character/Stats Data")]
     public class CharacterStatsData : ScriptableObject
     {
         [SerializeField]

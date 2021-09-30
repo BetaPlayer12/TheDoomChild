@@ -7,7 +7,7 @@ namespace DChild.Gameplay.Projectiles
     public abstract class ProjectileData : ScriptableObject
     {
         [SerializeField]
-        private AttackDamage[] m_damage;
+        private Damage m_damage;
         [SerializeField]
         private Invulnerability m_ignoreInvulnerability;
         [SerializeField]
@@ -21,7 +21,7 @@ namespace DChild.Gameplay.Projectiles
         [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
         protected GameObject m_impactCrater;
 
-        public AttackDamage[] damage => m_damage;
+        public Damage damage => m_damage;
         public Invulnerability ignoreInvulnerability => m_ignoreInvulnerability;
         public bool hasConstantSpeed => m_hasConstantSpeed;
 

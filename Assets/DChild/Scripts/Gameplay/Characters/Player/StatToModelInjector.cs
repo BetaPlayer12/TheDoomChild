@@ -68,10 +68,11 @@ namespace DChild.Gameplay.Characters.Players
 
         private void UpdateAttackResistance()
         {
-            var size = (int)AttackType._COUNT;
+            // THIS WILL NOT WORK SINCE THE DAMAGETYPE IS NOW A ENUMFLAG DO SOMETHING
+            var size = (int)DamageType.All;
             for (int i = 0; i < size; i++)
             {
-                var attackType = (AttackType)i;
+                var attackType = (DamageType)i;
                 var resistance = m_attackResistance.GetResistance(attackType);
                 m_modelAttackResistance.SetResistance(attackType, resistance);
             }
@@ -88,25 +89,20 @@ namespace DChild.Gameplay.Characters.Players
             }
         }
 
-        private AttackDamage[] CalculateDamage()
+        private Damage CalculateDamage()
         {
-            var damageList = m_weapon.damage;
-            var attack = m_stats.GetStat(PlayerStat.Attack);
-            var magicAttack = m_stats.GetStat(PlayerStat.MagicAttack);
-            for (int i = 0; i < damageList.Length; i++)
+            var damage = m_weapon.damage;
+            if (Damage.IsMagicDamage(damage.type))
             {
-                var damage = damageList[i];
-                if (AttackDamage.IsMagicAttack(damageList[i].type))
-                {
-                    damage.value += magicAttack;
-                }
-                else
-                {
-                    damage.value += attack;
-                }
-                damageList[i] = damage;
+                var magicAttack = m_stats.GetStat(PlayerStat.MagicAttack);
+                damage.value += magicAttack;
             }
-            return damageList;
+            else
+            {
+                var attack = m_stats.GetStat(PlayerStat.Attack);
+                damage.value += attack;
+            }
+            return damage;
         }
 
         private void OnDamageChange(object sender, EventActionArgs eventArgs)
@@ -121,7 +117,7 @@ namespace DChild.Gameplay.Characters.Players
 
         private void OnAttackResistanceChange(object sender, AttackResistance.ResistanceEventArgs eventArgs)
         {
-            if (eventArgs.type == AttackType._COUNT)
+            if (eventArgs.type == DamageType.All)
             {
                 UpdateAttackResistance();
             }

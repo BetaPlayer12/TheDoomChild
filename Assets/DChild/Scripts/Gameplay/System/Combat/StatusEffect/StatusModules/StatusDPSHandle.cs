@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         [SerializeField, MinValue(0.1)]
         private float m_interval;
         [SerializeField]
-        private AttackDamage m_damagePerInterval;
+        private Damage m_damagePerInterval;
 
         private IDamageable m_damageable;
         private float m_currentTimer;
@@ -17,10 +17,10 @@ namespace DChild.Gameplay.Combat.StatusAilment
         public StatusDPSHandle()
         {
             m_interval = 1;
-            m_damagePerInterval = new AttackDamage(AttackType.Physical, 1);
+            m_damagePerInterval = new Damage(DamageType.Physical, 1);
         }
 
-        public StatusDPSHandle(float m_interval, AttackDamage m_damagePerInterval)
+        public StatusDPSHandle(float m_interval, Damage m_damagePerInterval)
         {
             this.m_interval = m_interval;
             this.m_damagePerInterval = m_damagePerInterval;

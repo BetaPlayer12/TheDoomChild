@@ -7,8 +7,10 @@ namespace DChild.Gameplay.Combat
     public class AttackerData : ScriptableObject
     {
         [SerializeField, HideLabel]
-        private AttackerInfo m_info;
-
-        public AttackerInfo info => m_info;
+        private AttackDamageInfo m_info;
+        [SerializeField]
+        private GameObject m_damageFX;
+        public AttackDamageInfo info => m_info;
+        public GameObject damageFX => m_damageFX;
     }
 }

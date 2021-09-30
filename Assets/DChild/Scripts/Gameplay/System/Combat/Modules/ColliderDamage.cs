@@ -43,62 +43,27 @@ namespace DChild.Gameplay.Combat
         [SerializeField, ShowIf("m_damageUniqueHitboxesOnly")]
         protected CollisionRegistrator m_collisionRegistrator;
         [SerializeField]
-        private DamageReactionHandle m_damageFXHandle;
-        [SerializeField]
         private Collider2DInfo[] m_ignoreColliderList;
 
 
         private Collider2D[] m_colliders;
         private Collider2D m_triggeredCollider;
-        private ColliderDistance2D m_triggeredColliderDistance2D;
         private IDamageDealer m_damageDealer;
         private static RaycastHit2D[] m_blockHitBuffer;
         public event Action<TargetInfo, Collider2D> DamageableDetected; //Turn this into EventActionArgs After
 
         protected abstract bool IsValidColliderToHit(Collider2D collision);
 
-        protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
+        protected void InitializeTargetInfo(Cache<TargetInfo> cache, Collider2D collider2D, Hitbox hitbox)
         {
             if (hitbox.damageable.CompareTag(Character.objectTag))
             {
                 var character = hitbox.GetComponentInParent<Character>();
-                cache.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, character, character.GetComponentInChildren<IFlinch>());
+                cache.Value.Initialize(hitbox, collider2D, character, character.GetComponentInChildren<IFlinch>());
             }
             else
             {
-                cache.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, hitbox.GetComponentInParent<BreakableObject>());
-            }
-        }
-
-        protected void SpawnHitFX(Collider2D collision)
-        {
-            var hasHitFX = collision.TryGetComponentInParent(out HitFXHandle onHitFX);
-            if (m_damageFXHandle != null || hasHitFX)
-            {
-                ColliderDistance2D colliderDistance = m_triggeredColliderDistance2D;
-                if (!colliderDistance.isValid)
-                {
-                    return;
-                }
-
-                Vector2 hitPoint;
-
-                // if its overlapped then this collider's nearest vertex is inside the other collider
-                // so the position adjustment shouldn't be necessary
-                if (colliderDistance.isOverlapped)
-                {
-                    hitPoint = colliderDistance.pointA; // point on the surface of this collider
-                }
-                else
-                {
-                    // move the hit location inside the collider a bit
-                    // this assumes the colliders are basically touching
-                    hitPoint = colliderDistance.pointB - (0.01f * colliderDistance.normal);
-                }
-                var hitDirection = GameplayUtility.GetHorizontalDirection(m_triggeredCollider.bounds.center, hitPoint);
-
-                m_damageFXHandle?.ReactToDamageAt(hitPoint, hitDirection);
-                onHitFX?.SpawnFX(hitPoint, hitDirection);
+                cache.Value.Initialize(hitbox, collider2D, hitbox.GetComponentInParent<BreakableObject>());
             }
         }
 
@@ -106,8 +71,8 @@ namespace DChild.Gameplay.Combat
         {
             using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
             {
-                InitializeTargetInfo(cacheTargetInfo, hitbox);
-                m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                InitializeTargetInfo(cacheTargetInfo, collision, hitbox);
+                m_damageDealer?.Damage(cacheTargetInfo.Value, m_triggeredCollider);
                 DamageableDetected?.Invoke(cacheTargetInfo.Value, collision);
                 cacheTargetInfo?.Release();
             }
@@ -153,7 +118,6 @@ namespace DChild.Gameplay.Combat
 
         protected virtual void OnValidCollider(Collider2D collision, Hitbox hitbox)
         {
-            SpawnHitFX(collision);
             DealDamage(collision, hitbox);
 #if UNITY_EDITOR
             Debug.Log($"Deal Damage to: {hitbox} via {collision.name}", this);
@@ -203,20 +167,17 @@ namespace DChild.Gameplay.Combat
         {
             if (m_colliders.Length == 1)
             {
-                var otherCollider = m_colliders[0];
-                m_triggeredColliderDistance2D = otherCollider.Distance(collider2D);
-                return otherCollider;
+                return m_colliders[0];
             }
             else
             {
+                var colliderBounds = collider2D.bounds;
                 foreach (var otherCollider in m_colliders)
                 {
                     if (otherCollider != null)
                     {
-                        var colliderDistance = otherCollider.Distance(collider2D);
-                        if (colliderDistance.isOverlapped)
+                        if (otherCollider.bounds.Intersects(colliderBounds))
                         {
-                            m_triggeredColliderDistance2D = colliderDistance;
                             return otherCollider;
                         }
                     }
@@ -286,8 +247,8 @@ namespace DChild.Gameplay.Combat
                 m_triggeredCollider = collision.otherCollider;
                 using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
                 {
-                    InitializeTargetInfo(cacheTargetInfo, hitbox);
-                    m_damageDealer?.Damage(cacheTargetInfo.Value, hitbox.defense);
+                    InitializeTargetInfo(cacheTargetInfo, collision.collider, hitbox);
+                    m_damageDealer?.Damage(cacheTargetInfo.Value, collision.otherCollider);
                     cacheTargetInfo?.Release();
                 }
 

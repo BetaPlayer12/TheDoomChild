@@ -9,9 +9,10 @@ namespace DChild.Gameplay.Environment
 {
     public class DamagingExplosion : MonoBehaviour
     {
+        [InfoBox("Damage is currently disabled")]
         [SerializeField]
         [BoxGroup("Damage")]
-        private AttackDamage m_damage;
+        private Damage m_damage;
         [SerializeField]
         [BoxGroup("Damage")]
         private float m_damageRadius;
@@ -36,35 +37,35 @@ namespace DChild.Gameplay.Environment
 
         private void DamageAffectObjects()
         {
-            var affectedColliders = Physics2D.OverlapCircleAll(transform.position, m_damageRadius, gameObject.layer);
-            if (affectedColliders.Length > 0)
-            {
-                using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
-                {
-                    using (Cache<TargetInfo> targetInfo = Cache<TargetInfo>.Claim())
-                    {
-                        for (int i = 0; i < affectedColliders.Length; i++)
-                        {
-                            if (affectedColliders[i].CompareTag("DamageCollider") == false)
-                            {
-                                var hitbox = affectedColliders[i].GetComponentInParent<Hitbox>();
-                                var bodyDefense = hitbox.defense;
-                                if (bodyDefense.invulnerabilityLevel <= m_ignoreLevel)
-                                {
-                                    info.Value.Initialize(gameObject,transform.position, 0, 1, false, m_damage);
-                                    targetInfo.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, bodyDefense.damageReduction);
-                                    using (Cache<AttackInfo> cacheAttackInfo = GameplaySystem.combatManager.ResolveConflict(info, targetInfo.Value))
-                                    {
-                                        cacheAttackInfo.Release();
-                                    }
-                                }
-                            }
-                            targetInfo.Release();
-                        }
-                        info.Release();
-                    }
-                }
-            }
+            //var affectedColliders = Physics2D.OverlapCircleAll(transform.position, m_damageRadius, gameObject.layer);
+            //if (affectedColliders.Length > 0)
+            //{
+            //    using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
+            //    {
+            //        using (Cache<TargetInfo> targetInfo = Cache<TargetInfo>.Claim())
+            //        {
+            //            for (int i = 0; i < affectedColliders.Length; i++)
+            //            {
+            //                if (affectedColliders[i].CompareTag("DamageCollider") == false)
+            //                {
+            //                    var hitbox = affectedColliders[i].GetComponentInParent<Hitbox>();
+            //                    var bodyDefense = hitbox.defense;
+            //                    if (bodyDefense.invulnerabilityLevel <= m_ignoreLevel)
+            //                    {
+            //                        info.Value.Initialize(gameObject,transform.position, 0, 1, false, m_damage);
+            //                        targetInfo.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, bodyDefense.damageReduction);
+            //                        using (Cache<AttackResultInfo> cacheAttackInfo = GameplaySystem.combatManager.ResolveConflict(info, targetInfo.Value))
+            //                        {
+            //                            cacheAttackInfo.Release();
+            //                        }
+            //                    }
+            //                }
+            //                targetInfo.Release();
+            //            }
+            //            info.Release();
+            //        }
+            //    }
+            //}
         }
 
         private void Awake()

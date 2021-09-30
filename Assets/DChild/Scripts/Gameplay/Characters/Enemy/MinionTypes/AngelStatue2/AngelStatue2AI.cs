@@ -311,7 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
             CustomTurn();
             m_animation.SetAnimation(0, m_info.brokeToIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.brokeToIdleAnimation);
-            m_hitbox.gameObject.SetActive(true);
+            m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;

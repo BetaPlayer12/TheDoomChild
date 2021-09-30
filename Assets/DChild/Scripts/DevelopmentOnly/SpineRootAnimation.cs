@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Characters
 
         protected virtual void Awake()
         {
-            m_rootMotion = GetComponentInChildren<SpineRootMotion>();
+            m_rootMotion = GetComponentInChildren<SpineRootMotion>(true);
         }
     }
 }

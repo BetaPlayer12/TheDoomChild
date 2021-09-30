@@ -10,8 +10,8 @@ namespace DChild.Gameplay.Combat
         Transform transform { get; } //Gian Edit
         bool isAlive { get; }
         IAttackResistance attackResistance { get; }
-        void TakeDamage(int totalDamage, AttackType type);
-        void BlockDamage(int totalDamage, AttackType type);
+        void TakeDamage(int totalDamage, DamageType type);
+        void BlockDamage(int totalDamage, DamageType type);
         void SetHitboxActive(bool enable);
         Hitbox[] GetHitboxes();
         void SetInvulnerability(Invulnerability level);

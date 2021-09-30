@@ -13,11 +13,15 @@ namespace DChild.Gameplay.Characters
     public class FlinchHandler : MonoBehaviour, IFlinch
     {
         [SerializeField]
+        private ConfigurableFlinchData m_flinchData;
+
+        [SerializeField]
         private SpineRootAnimation m_spine;
         [SerializeField]
         private IsolatedPhysics2D m_physics;
         [SerializeField]
         public bool m_autoFlinch;
+
 #if UNITY_EDITOR
         [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
@@ -46,7 +50,7 @@ namespace DChild.Gameplay.Characters
 
         public void SetAnimation(string animation) => m_animation = animation;
 
-        public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public virtual void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo attackInfo)
         {
          
             Flinch();
@@ -54,19 +58,15 @@ namespace DChild.Gameplay.Characters
 
         public void Flinch()
         {
-            //if (m_autoFlinch)
-            //{
             if (m_isFlinching == false)
             {
-                //StopAllCoroutines(); //Gian Editz
                 StartFlinch();
             }
-            //}
-            //else
-            //{
-            //    StartFlinch();
-            //}
-            //HitStopStart?.Invoke(this, new EventActionArgs());
+        }
+
+        private void UpdateFlinchRestrictions()
+        {
+
         }
 
         private void StartFlinch()

@@ -8,7 +8,7 @@ namespace DChild.Gameplay
     public class AOEExplosionData : ScriptableObject
     {
         [SerializeField]
-        private AttackDamage[] m_damage;
+        private Damage[] m_damage;
         [SerializeField]
         private Invulnerability m_ignoreInvulerability;
         [SerializeField, MinValue(1f)]
@@ -16,7 +16,7 @@ namespace DChild.Gameplay
         [SerializeField]
         private ExplosionData m_explosionData;
 
-        public AttackDamage[] damage => m_damage;
+        public Damage[] damage => m_damage;
         public Invulnerability ignoreInvulerability => m_ignoreInvulerability;
         public float damageRadius => m_damageRadius;
         public float explosiveRadius => m_explosionData.explosiveRadius;

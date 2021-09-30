@@ -20,20 +20,20 @@ namespace DChild.Gameplay.Combat
 #if UNITY_EDITOR
         [SerializeField, OnValueChanged("ApplyDamageModification", true)]
 #endif
-        private AttackerInfo m_info;
+        private AttackDamageInfo m_currentAttackInfo;
+        private Damage m_baseDamage;
+
 
         [ShowInInspector, HideInEditorMode, MinValue(0), OnValueChanged("ApplyDamageModification")]
         private float m_damageModifier;
 
         private bool m_isInstantiated;
 
-        private List<AttackDamage> m_currentDamage;
-
         public Vector2 position => m_centerMass.position;
 
-        public Invulnerability ignoreInvulnerability => m_info.ignoreInvulnerability;
+        public Invulnerability ignoreInvulnerability => m_currentAttackInfo.ignoreInvulnerability;
 
-        public bool ignoresBlock => m_info.ignoresBlock;
+        public bool ignoresBlock => m_currentAttackInfo.ignoresBlock;
 
         public IAttacker parentAttacker { get; private set; }
 
@@ -42,9 +42,9 @@ namespace DChild.Gameplay.Combat
         public event EventAction<CombatConclusionEventArgs> TargetDamaged;
         public event EventAction<BreakableObjectEventArgs> BreakableObjectDamage;
 
-        public void Damage(TargetInfo targetInfo, BodyDefense targetDefense)
+        public void Damage(TargetInfo targetInfo, Collider2D colliderThatDealtDamage)
         {
-            if (m_info.ignoreInvulnerability >= targetDefense.invulnerabilityLevel)
+            if (m_currentAttackInfo.ignoreInvulnerability >= targetInfo.bodyDefense.invulnerabilityLevel)
             {
                 if (targetInfo.isBreakableObject)
                 {
@@ -58,59 +58,36 @@ namespace DChild.Gameplay.Combat
                 var position = transform.position;
                 using (Cache<AttackerCombatInfo> cacheInfo = Cache<AttackerCombatInfo>.Claim())
                 {
-                    cacheInfo.Value.Initialize(gameObject,position, 0, 1, m_info.ignoresBlock, m_currentDamage.ToArray());
-                    using (Cache<AttackInfo> cacheResult = GameplaySystem.combatManager.ResolveConflict(cacheInfo.Value, targetInfo))
+                    cacheInfo.Value.Initialize(gameObject, position, m_currentAttackInfo, colliderThatDealtDamage, m_data?.damageFX ?? null);
+                    AttackSummaryInfo cacheResult = GameplaySystem.combatManager.ResolveConflict(cacheInfo.Value, targetInfo);
+                    using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
                     {
-                        using (Cache<CombatConclusionEventArgs> cacheEventArgs = Cache<CombatConclusionEventArgs>.Claim())
-                        {
-                            cacheEventArgs.Value.Initialize(cacheInfo, targetInfo, cacheResult);
-                            TargetDamaged?.Invoke(this, cacheEventArgs.Value);
-                            cacheEventArgs.Release();
-                        }
-                        cacheResult.Release();
+                        cacheEventArgs.Value.Initialize(cacheInfo, targetInfo, cacheResult);
+                        TargetDamaged?.Invoke(this, cacheEventArgs.Value);
+                        cacheEventArgs.Release();
                     }
                     cacheInfo.Release();
                 }
             }
         }
 
-        public void SetDamage(params AttackDamage[] damage)
+        public void SetDamage(Damage damage)
         {
-            if (m_info == null)
-            {
-                m_info = new AttackerInfo();
-            }
-            m_info.damage.Clear();
-            m_info.damage.AddRange(damage);
-            if (m_isInstantiated == false)
-            {
-                m_damageModifier = 1;
-                m_currentDamage = new List<AttackDamage>();
-                m_isInstantiated = true;
-            }
-            ApplyDamageModification();
+            m_baseDamage = damage;
+            ApplyDamageModification(damage);
         }
 
-        public void SetCrit(int critChance, int critModifier)
+        public void SetCrit(CriticalDamageInfo criticalDamageInfo)
         {
-            m_info.critChance = critChance;
-            m_info.critDamageModifier = critModifier;
+            m_currentAttackInfo.criticalDamageInfo = criticalDamageInfo;
         }
 
         public void SetData(AttackerData data)
         {
             m_data = data;
-            if (m_info != null)
-            {
-                m_info.Copy(m_data.info);
-                if (m_isInstantiated == false)
-                {
-                    m_damageModifier = 1;
-                    m_currentDamage = new List<AttackDamage>();
-                    m_isInstantiated = true;
-                }
-                ApplyDamageModification();
-            }
+            m_currentAttackInfo = data.info;
+            m_baseDamage = data.info.damage;
+            ApplyDamageModification(m_baseDamage);
         }
 
         public void SetDamageModifier(float value)
@@ -118,19 +95,19 @@ namespace DChild.Gameplay.Combat
             if (m_damageModifier != value)
             {
                 m_damageModifier = Mathf.Max(0, value);
-                ApplyDamageModification();
+                ApplyDamageModification(m_baseDamage);
             }
         }
 
         public void SetIgnoresBlock(bool ignoresBlock)
         {
-            m_info.ignoresBlock = ignoresBlock;
+            m_currentAttackInfo.ignoresBlock = ignoresBlock;
         }
 
         public void SetParentAttacker(IAttacker damageDealer)
         {
             parentAttacker = damageDealer;
-            Debug.Log($"parentAttacker: {parentAttacker}"); 
+            Debug.Log($"parentAttacker: {parentAttacker}");
         }
 
         public void SetRootParentAttacker(IAttacker damageDealer)
@@ -139,34 +116,18 @@ namespace DChild.Gameplay.Combat
             Debug.Log($"rootParentAttacker: {rootParentAttacker}");
         }
 
-        private void ApplyDamageModification()
+        private void ApplyDamageModification(Damage baseDamage)
         {
-            m_currentDamage.Clear();
-            for (int i = 0; i < m_info.damage.Count; i++)
-            {
-                var damage = m_info.damage[i];
-                damage.value = Mathf.CeilToInt(damage.value * m_damageModifier);
-                m_currentDamage.Add(damage);
-            }
+            var damage = m_currentAttackInfo.damage;
+            damage.value = Mathf.CeilToInt(baseDamage.value * m_damageModifier);
+            m_currentAttackInfo.damage = damage;
         }
 
         private void Awake()
         {
-            if (m_info == null)
-            {
-                m_info = new AttackerInfo();
-            }
             if (m_data != null)
             {
-                m_info.Copy(m_data.info);
-            }
-
-            if (m_isInstantiated == false)
-            {
-                m_damageModifier = 1;
-                m_currentDamage = new List<AttackDamage>();
-                ApplyDamageModification();
-                m_isInstantiated = true;
+                m_currentAttackInfo = m_data.info;
             }
         }
 
@@ -177,15 +138,6 @@ namespace DChild.Gameplay.Combat
             m_centerMass = transform;
         }
 
-        private void ApplyData()
-        {
-            m_info.Copy(m_data.info);
-            if (m_currentDamage != null)
-            {
-                ApplyDamageModification();
-            }
-        }
-
         public void InitializeField(Transform centerMass)
         {
             m_centerMass = centerMass;
@@ -193,21 +145,28 @@ namespace DChild.Gameplay.Combat
 
         public void PassParentAttacker(IAttacker damageDealer)
         {
-           if(damageDealer.rootParentAttacker == null)
+            if (damageDealer.rootParentAttacker == null)
             {
                 SetParentAttacker(damageDealer);
             }
 
-           else
+            else
             {
 
                 SetParentAttacker(damageDealer);
                 SetRootParentAttacker(damageDealer.rootParentAttacker);
             }
-           
         }
 
+        private void ApplyDamageModification()
+        {
+            ApplyDamageModification(m_data.info.damage);
+        }
 
+        private void ApplyData()
+        {
+            SetData(m_data);
+        }
 #endif
     }
 }

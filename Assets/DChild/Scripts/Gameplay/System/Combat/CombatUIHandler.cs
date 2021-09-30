@@ -41,7 +41,7 @@ namespace DChild.Gameplay.Combat
         private UIObjectPool m_pool;
         private Scene m_scene;
 
-        public void ShowDamageValues(Vector3 position, AttackDamage damages, bool isCrit)
+        public void ShowDamageValues(Vector3 position, Damage damages, bool isCrit)
         {
             var info = new UIInfo(OffsetPosition(position), m_damageUIConfigurations.FindDamageConfiguration(damages.type), damages.value, isCrit);
             m_uiInfoList.Insert(0, info);
