@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 3515696310375615918}
   m_physics: {fileID: 5334590540300677523}
   m_autoFlinch: 1
@@ -85,6 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 3551457272445622065}
+  m_maintainScaleValue: 1
   m_animation: {fileID: 3515696310375615918}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
@@ -178,7 +180,7 @@ MonoBehaviour:
   m_height: 0.5
   m_centerMass: {fileID: 8023666750153541015}
   m_isolatedObject: {fileID: 5334590540300677548}
-  m_physics: {fileID: 5334590540300677523}
+  m_physics: {fileID: 0}
   m_colliders: {fileID: 0}
   m_facing: 1
   m_bodyReference:
@@ -265,6 +267,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animation: {fileID: 1252086774898442858}
+--- !u!114 &7333416138596415019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268292748258946614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 8023666750153541015}
+  m_data: {fileID: 0}
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &9128977823338703875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,26 +316,6 @@ MonoBehaviour:
   m_deathHandle: {fileID: 5334590541247454449}
   m_flinchHandle: {fileID: 5334590541247454448}
   m_startingDirection: 1
---- !u!114 &7333416138596415019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1268292748258946614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 8023666750153541015}
-  m_data: {fileID: 0}
-  m_info:
-    damage: []
-    critChance: 0
-    critDamageModifier: 1
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
 --- !u!1 &8076379707015932634
 GameObject:
   m_ObjectHideFlags: 0
@@ -661,6 +666,12 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.2662442
       objectReference: {fileID: 0}
+    - target: {fileID: 7609579748224693379, guid: f3c3a197f2cd58e45971f02dcf226117,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd,
+        type: 3}
     - target: {fileID: 7647873907475106881, guid: f3c3a197f2cd58e45971f02dcf226117,
         type: 3}
       propertyPath: m_Name

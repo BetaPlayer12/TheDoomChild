@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!60 &68819212683420147
+--- !u!60 &7450963374771084123
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 3535646599274121329}
   m_physics: {fileID: 2423301103472534878}
   m_autoFlinch: 1
@@ -155,6 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 3499911954078831342}
+  m_maintainScaleValue: 1
   m_animation: {fileID: 3535646599274121329}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
@@ -239,7 +241,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   m_data: {fileID: 0}
---- !u!60 &5440524930987053304
+--- !u!60 &4030128966972245676
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -271,7 +273,7 @@ PolygonCollider2D:
       - {x: 1.8399999, y: -3.3574}
       - {x: 3.8726997, y: -3.0085998}
       - {x: 3.6313, y: -0.45009997}
---- !u!60 &6629589469975642677
+--- !u!60 &4449666270106534085
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -548,12 +550,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 954844399403753076}
   m_data: {fileID: 11400000, guid: 67b9eca77ba65ef468b964edf8df0078, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 25
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!1001 &7215566858708552582
@@ -827,6 +830,47 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011667423335929951, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 4025808106930532386, guid: 8a88a66cf00c45849ae287257e1ee932,
+        type: 3}
+    - target: {fileID: 9011667423335929951, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideColor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011667423335929951, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011667423335929951, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011667423335929951, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011667423335929951, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011667423335929951, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.r
+      value: 0.90588236
+      objectReference: {fileID: 0}
+    - target: {fileID: 9011667423335929951, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.g
+      value: 0.8784314
       objectReference: {fileID: 0}
     - target: {fileID: 9110868714148590223, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
         type: 3}

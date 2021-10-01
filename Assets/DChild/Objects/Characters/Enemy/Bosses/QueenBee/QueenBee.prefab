@@ -229,6 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 6910607179033306502}
   m_physics: {fileID: 6502214512984535489}
   m_autoFlinch: 0
@@ -361,7 +362,7 @@ MonoBehaviour:
   followLocalScale: 0
   initializeOnAwake: 1
   m_updateOnFixedUpdate: 0
---- !u!60 &7142522852059167892
+--- !u!60 &2656378256242586917
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -394,7 +395,7 @@ PolygonCollider2D:
       - {x: 1.2729, y: -0.039}
       - {x: 5.7027, y: 4.3545}
       - {x: 6.3011, y: 4.8198}
---- !u!60 &1663924464060566910
+--- !u!60 &2081701821748133264
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -427,7 +428,7 @@ PolygonCollider2D:
       - {x: -10.9139, y: -5.0515}
       - {x: 0.086799994, y: -7.2715}
       - {x: -0.036199994, y: 5.8905997}
---- !u!60 &7807816466221630134
+--- !u!60 &4884275911373994577
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -460,7 +461,7 @@ PolygonCollider2D:
       - {x: -5.2205997, y: 2.238}
       - {x: -1.9489, y: 5.5568}
       - {x: -5.2205997, y: 8.8691}
---- !u!60 &8087945917405419249
+--- !u!60 &4293426124618531471
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -493,7 +494,7 @@ PolygonCollider2D:
       - {x: 0.92199993, y: 0.40060002}
       - {x: 2.7660997, y: 3.8917}
       - {x: 2.8079, y: 12.7417}
---- !u!60 &8221654493489926260
+--- !u!60 &1438160215464856581
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5304,12 +5305,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 7581683440480403180}
   m_data: {fileID: 11400000, guid: 8ad898b74a605a64ea3ab48d3f4a6fd7, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 25
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &4588776383038338603
@@ -9680,6 +9682,52 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 7.0504665
       objectReference: {fileID: 0}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 8225293847540177783, guid: 7638310779e35a84ea0618c05fee74f1,
+        type: 3}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideColor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.r
+      value: 0.007843138
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.g
+      value: 0.3882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 6899638121105396350, guid: b6daa4a23e505a445ac15ea98149626f,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.b
+      value: 0.13333334
+      objectReference: {fileID: 0}
     - target: {fileID: 6935992844360276887, guid: b6daa4a23e505a445ac15ea98149626f,
         type: 3}
       propertyPath: m_LocalRotation.z
@@ -10389,7 +10437,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 6200000, guid: 210ff88c10a3d4413b3cae51bf183144, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
 --- !u!1 &3627137504174333379 stripped

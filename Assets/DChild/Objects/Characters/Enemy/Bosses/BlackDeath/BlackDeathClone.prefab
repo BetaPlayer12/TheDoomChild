@@ -1,64 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5633048917534634395
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5993421508795334970}
-  - component: {fileID: 1524941885102884961}
-  - component: {fileID: 8788457875547294278}
-  m_Layer: 13
-  m_Name: Sounds
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5993421508795334970
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5633048917534634395}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8372694725242767287}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1524941885102884961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5633048917534634395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1330a9f521346bb48be4a7e58a30f65e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_spawnLocationMode: 2
---- !u!114 &8788457875547294278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5633048917534634395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53699c4d9e919c143a6aa1bc62b77f40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_skeletonAnimation: {fileID: 6600236486100887343}
-  m_data: {fileID: 11400000, guid: 300e00fcbee46374399dd65155202b44, type: 2}
 --- !u!114 &1077432895032809199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,7 +29,7 @@ MonoBehaviour:
   m_height: 0.5
   m_centerMass: {fileID: 1194754855793287046}
   m_isolatedObject: {fileID: 8372694723232574189}
-  m_physics: {fileID: 8372694723232574162}
+  m_physics: {fileID: 0}
   m_colliders: {fileID: 3646547998429484491}
   m_facing: 1
   m_bodyReference:
@@ -107,6 +48,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
+  m_overrideColor: 0
+  m_colorToUse: {r: 1, g: 1, b: 1, a: 1}
+  m_overrideScale: 0
+  m_scaleToUse: {x: 1, y: 1, z: 1}
 --- !u!114 &2937420045370621193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,13 +81,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 1194754855793287046}
   m_data: {fileID: 11400000, guid: 0e02fb01be5a9b64e9778f3fc0c2fd06, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 5
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &5205683598532546151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +220,65 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animation: {fileID: 6600236486100887343}
+--- !u!1 &5633048917534634395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5993421508795334970}
+  - component: {fileID: 1524941885102884961}
+  - component: {fileID: 8788457875547294278}
+  m_Layer: 13
+  m_Name: Sounds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5993421508795334970
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5633048917534634395}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8372694725242767287}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1524941885102884961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5633048917534634395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1330a9f521346bb48be4a7e58a30f65e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_spawnLocationMode: 2
+--- !u!114 &8788457875547294278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5633048917534634395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53699c4d9e919c143a6aa1bc62b77f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_skeletonAnimation: {fileID: 6600236486100887343}
+  m_data: {fileID: 11400000, guid: 300e00fcbee46374399dd65155202b44, type: 2}
 --- !u!1 &8372694725242767286
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,6 +861,32 @@ PrefabInstance:
     - target: {fileID: 2948978632788942028, guid: 14688c9d661e6be40bf02d6e5f715e9e,
         type: 3}
       propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3151156219775240725, guid: 14688c9d661e6be40bf02d6e5f715e9e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd,
+        type: 3}
+    - target: {fileID: 3151156219775240725, guid: 14688c9d661e6be40bf02d6e5f715e9e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3151156219775240725, guid: 14688c9d661e6be40bf02d6e5f715e9e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3151156219775240725, guid: 14688c9d661e6be40bf02d6e5f715e9e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3151156219775240725, guid: 14688c9d661e6be40bf02d6e5f715e9e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3258343595485468585, guid: 14688c9d661e6be40bf02d6e5f715e9e,

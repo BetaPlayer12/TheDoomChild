@@ -1629,10 +1629,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 5558928837003174697}
   m_data: {fileID: 11400000, guid: 1b9df22541c64aa4597d78ee3cc73572, type: 2}
-  m_info:
-    damage: []
-    critChance: 0
-    critDamageModifier: 1
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!1 &2421187405315898964
@@ -3660,7 +3663,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!114 &6889118398166329580
 MonoBehaviour:
@@ -5179,7 +5181,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!1 &8791833341042091663
 GameObject:
@@ -5323,6 +5324,12 @@ MonoBehaviour:
   - {fileID: 6797667962846124788}
   - {fileID: 8893087621342479606}
   - {fileID: 2153857011301091448}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
   m_canBlockDamage: 0
@@ -5341,7 +5348,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!50 &3883276849630512709
 Rigidbody2D:

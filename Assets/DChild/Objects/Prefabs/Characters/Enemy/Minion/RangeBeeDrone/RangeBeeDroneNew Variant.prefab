@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 2325617047411989877}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
   m_canBlockDamage: 0
@@ -149,12 +155,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 7495499852451351359}
   m_data: {fileID: 11400000, guid: ee0d173c09a6c8640906fc87b71a02e5, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 1
+      m_type: 0
       m_value: 0
-    critChance: 0
-    critDamageModifier: 1
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &4932144229262218055
@@ -170,7 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
