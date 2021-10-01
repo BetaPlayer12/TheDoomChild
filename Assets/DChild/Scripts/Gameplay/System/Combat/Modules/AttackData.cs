@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Combat
 {
-    [CreateAssetMenu(fileName = "AttackerData", menuName = "DChild/Gameplay/Combat/Attacker Data")]
-    public class AttackerData : ScriptableObject
+    [CreateAssetMenu(fileName = "AttackData", menuName = "DChild/Gameplay/Combat/Attack Data")]
+    public class AttackData : ScriptableObject
     {
         [SerializeField, HideLabel]
         private AttackDamageInfo m_info;

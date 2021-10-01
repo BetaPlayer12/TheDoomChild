@@ -9,7 +9,7 @@ using UnityEngine;
 namespace DChildEditor.Toolkit.EnemyCreation
 {
     [System.Serializable]
-    public class AttackerField : DataField<AttackerData>
+    public class AttackerField : DataField<AttackData>
     {
         public void Apply(GameObject instance, string path)
         {

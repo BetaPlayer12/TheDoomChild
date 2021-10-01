@@ -15,7 +15,7 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private Transform m_centerMass;
         [SerializeField, OnValueChanged("ApplyData")]
-        private AttackerData m_data;
+        private AttackData m_data;
 
 #if UNITY_EDITOR
         [SerializeField, OnValueChanged("ApplyDamageModification", true)]
@@ -82,7 +82,7 @@ namespace DChild.Gameplay.Combat
             m_currentAttackInfo.criticalDamageInfo = criticalDamageInfo;
         }
 
-        public void SetData(AttackerData data)
+        public void SetData(AttackData data)
         {
             m_data = data;
             m_currentAttackInfo = data.info;
