@@ -4,11 +4,13 @@ using DChild.Gameplay.Pooling;
 using DChild.Gameplay.Combat;
 using Holysoft.Event;
 using Sirenix.Utilities;
+using Sirenix.OdinInspector;
 
 namespace DChild.Gameplay
 {
     public class AOEExplosion : PoolableObject
     {
+        [InfoBox("Damage is currently disabled")]
         [SerializeField]
         private AOEExplosionData m_data;
         [SerializeField]
@@ -48,31 +50,31 @@ namespace DChild.Gameplay
 
         private void DamageTargets()
         {
-            if (m_cacheHitboxList.Count > 0)
-            {
-                using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
-                {
-                    using (Cache<TargetInfo> targetInfo = Cache<TargetInfo>.Claim())
-                    {
-                        for (int i = 0; i < m_cacheHitboxList.Count; i++)
-                        {
-                            m_cacheHitbox = m_cacheHitboxList[i];
-                            var damage = m_data.damage;
-                            for (int j = 0; j < damage.Length; j++)
-                            {
-                                info.Value.Initialize(gameObject,transform.position, 0, 1, false,damage[j]);
-                                targetInfo.Value.Initialize(m_cacheHitbox.damageable, false, m_cacheHitbox.defense.damageReduction);
-                                using (Cache<AttackInfo> cacheAttackInfo = GameplaySystem.combatManager.ResolveConflict(info, targetInfo.Value))
-                                {
-                                    cacheAttackInfo.Release();
-                                }
-                            }
-                        }
-                        targetInfo.Release();
-                    }
-                    info.Release();
-                }
-            }
+            //if (m_cacheHitboxList.Count > 0)
+            //{
+            //    using (Cache<AttackerCombatInfo> info = Cache<AttackerCombatInfo>.Claim())
+            //    {
+            //        using (Cache<TargetInfo> targetInfo = Cache<TargetInfo>.Claim())
+            //        {
+            //            for (int i = 0; i < m_cacheHitboxList.Count; i++)
+            //            {
+            //                m_cacheHitbox = m_cacheHitboxList[i];
+            //                var damage = m_data.damage;
+            //                for (int j = 0; j < damage.Length; j++)
+            //                {
+            //                    info.Value.Initialize(gameObject,transform.position, 0, 1, false,damage[j]);
+            //                    targetInfo.Value.Initialize(m_cacheHitbox.damageable, false, m_cacheHitbox.defense.damageReduction);
+            //                    using (Cache<AttackResultInfo> cacheAttackInfo = GameplaySystem.combatManager.ResolveConflict(info, targetInfo.Value))
+            //                    {
+            //                        cacheAttackInfo.Release();
+            //                    }
+            //                }
+            //            }
+            //            targetInfo.Release();
+            //        }
+            //        info.Release();
+            //    }
+            //}
         }
 
         protected virtual bool IsValidToDamage(Hitbox hitbox)

@@ -12,14 +12,14 @@ namespace DChild.Gameplay.Combat
     {
         public struct DamageEventArgs : IEventActionArgs
         {
-            public DamageEventArgs(int damage, AttackType type) : this()
+            public DamageEventArgs(int damage, DamageType type) : this()
             {
                 this.damage = damage;
                 this.type = type;
             }
 
             public int damage { get; }
-            public AttackType type { get; }
+            public DamageType type { get; }
         }
 
         [SerializeField]
@@ -44,7 +44,7 @@ namespace DChild.Gameplay.Combat
 
         public Health health => m_health;
 
-        public virtual void TakeDamage(int totalDamage, AttackType type)
+        public virtual void TakeDamage(int totalDamage, DamageType type)
         {
             m_health?.ReduceCurrentValue(totalDamage);
             CallDamageTaken(totalDamage, type);
@@ -54,7 +54,7 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        public virtual void BlockDamage(int totalDamage, AttackType type)
+        public virtual void BlockDamage(int totalDamage, DamageType type)
         {
             CallDamageBlock(totalDamage, type);
         }
@@ -93,13 +93,13 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        protected void CallDamageTaken(int totalDamage, AttackType type)
+        protected void CallDamageTaken(int totalDamage, DamageType type)
         {
             var eventArgs = new DamageEventArgs(totalDamage, type);
             DamageTaken?.Invoke(this, eventArgs);
         }
 
-        protected void CallDamageBlock(int totalDamage, AttackType type)
+        protected void CallDamageBlock(int totalDamage, DamageType type)
         {
             var eventArgs = new DamageEventArgs(totalDamage, type);
             DamageBlock?.Invoke(this, eventArgs);
@@ -129,7 +129,7 @@ namespace DChild.Gameplay.Combat
         [Button, ShowIf("isAlive"), HideInEditorMode]
         private void KillSelf()
         {
-            TakeDamage(999999999, AttackType.True);
+            TakeDamage(999999999, DamageType.True);
         }
 
         [Button, HideIf("isAlive"), HideInEditorMode]

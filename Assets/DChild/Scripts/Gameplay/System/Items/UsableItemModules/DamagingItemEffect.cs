@@ -19,7 +19,7 @@ namespace DChild.Gameplay.Items
         [SerializeField, MinValue(0)]
         private int m_value;
         [SerializeField,ShowIf("@m_toDamage == Stat.Health")]
-        private AttackType m_damageType;
+        private DamageType m_damageType;
         [SerializeField, MinValue(0)]
         private float m_interval;
         [SerializeField]
@@ -71,7 +71,7 @@ namespace DChild.Gameplay.Items
             {
                 if (m_toDamage == Stat.Health)
                 {
-                    GameplaySystem.combatManager.Damage(player.damageableModule, new AttackDamage(m_damageType, valueToApply));
+                    GameplaySystem.combatManager.Damage(player.damageableModule, new Damage(m_damageType, valueToApply));
                 }
                 else
                 {

@@ -11,26 +11,26 @@ namespace DChild.Gameplay.Combat
     {
         public struct ResistanceEventArgs : IEventActionArgs
         {
-            public ResistanceEventArgs(AttackType type, float resistanceValue) : this()
+            public ResistanceEventArgs(DamageType type, float resistanceValue) : this()
             {
                 this.type = type;
                 this.resistanceValue = resistanceValue;
             }
 
-            public AttackType type { get; }
+            public DamageType type { get; }
             public float resistanceValue { get; }
         }
-        protected abstract Dictionary<AttackType, float> resistance { get; }
+        protected abstract Dictionary<DamageType, float> resistance { get; }
         public event EventAction<ResistanceEventArgs> ResistanceChange;
 
         public abstract void SetData(AttackResistanceData data);
         public abstract void ClearResistance();
-        public abstract void SetResistance(AttackType type, float resistanceValue);
-        public float GetResistance(AttackType type) => resistance.ContainsKey(type) ? resistance[type] : 0;
+        public abstract void SetResistance(DamageType type, float resistanceValue);
+        public float GetResistance(DamageType type) => resistance.ContainsKey(type) ? resistance[type] : 0;
 
         protected void CallResistanceChange(ResistanceEventArgs eventArgs) => ResistanceChange?.Invoke(this, eventArgs);
 
-        protected void SetResistance(Dictionary<AttackType, float> list, AttackType type, float resistanceValue)
+        protected void SetResistance(Dictionary<DamageType, float> list, DamageType type, float resistanceValue)
         {
             if (resistanceValue == 0)
             {

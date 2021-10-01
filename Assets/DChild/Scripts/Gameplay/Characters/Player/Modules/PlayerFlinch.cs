@@ -50,7 +50,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_defaultLinearDrag = m_rigidBody.drag;
         }
 
-        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, IReadOnlyCollection<AttackType> damageTypeRecieved)
+        public void Flinch(Vector2 directionToSource, RelativeDirection damageSource, AttackSummaryInfo damageTypeRecieved)
         {
             bool isAerialKnockback = false;
             OnExecute?.Invoke(this, EventActionArgs.Empty);

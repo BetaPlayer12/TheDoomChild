@@ -45,7 +45,7 @@ namespace DChildEditor.Toolkit
 
             [SerializeField]
             [TableColumnWidth(180,false), PropertyOrder(100), HideLabel,HideInInspector, HideIf("@m_attackerData == null")]
-            private AttackerData m_attackerData;
+            private AttackData m_attackerData;
 
             private bool hasNoCharacterStatData => m_statData == null;
 
@@ -99,7 +99,7 @@ namespace DChildEditor.Toolkit
 
             public GameObject theGameObject { get { return m_minionPrefab; } set { m_minionPrefab = value; } }
             public CharacterStatsData theStatData { get { return m_statData; } set { m_statData = value; } }
-            public AttackerData theAttackerData { get { return m_attackerData; } set { m_attackerData = value; } }
+            public AttackData theAttackerData { get { return m_attackerData; } set { m_attackerData = value; } }
 
 
             private Color HealthColor = new Color32(24, 231, 119, 255);

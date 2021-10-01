@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     public struct ResistanceModifier : ISoulSkillModule
     {
         [SerializeField]
-        private AttackType m_type;
+        private DamageType m_type;
         [SerializeField, SuffixLabel("%", overlay: true)]
         private int m_addedResistance;
 

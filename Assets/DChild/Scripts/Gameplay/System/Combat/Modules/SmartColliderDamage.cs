@@ -27,49 +27,50 @@ namespace DChild.Gameplay.Combat
 
         private void Update()
         {
-            if (m_processTargets)
-            {
-                if (m_processingHitbox.Count > 1)
-                {
-                    using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
-                    {
-                        m_cacheResults = GameplaySystem.combatManager.GetValidTargets(transform.position, m_damageDealer.ignoreInvulnerability, m_processingHitbox);
-                        for (int i = 0; i < m_cacheResults.Count; i++)
-                        {
-                            m_cacheHitbox = m_cacheResults[i];
-                            InitializeTargetInfo(cacheTargetInfo, m_cacheHitbox);
-                            m_damageDealer.Damage(cacheTargetInfo.Value, m_cacheHitbox.defense);
-                        }
-                        cacheTargetInfo.Release();
-                    }
-                }
-                else if (m_processingHitbox.Count == 1)
-                {
-                    using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
-                    {
-                        InitializeTargetInfo(cacheTargetInfo, m_cacheHitbox);
-                        m_damageDealer.Damage(cacheTargetInfo.Value, m_cacheHitbox.defense);
-                        cacheTargetInfo.Release();
-                    }
+            //if (m_processTargets)
+            //{
+            //    if (m_processingHitbox.Count > 1)
+            //    {
+            //        using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+            //        {
+            //            m_cacheResults = GameplaySystem.combatManager.GetValidTargets(transform.position, m_damageDealer.ignoreInvulnerability, m_processingHitbox);
+            //            for (int i = 0; i < m_cacheResults.Count; i++)
+            //            {
+            //                m_cacheHitbox = m_cacheResults[i];
+            //                InitializeTargetInfo(cacheTargetInfo, m_cacheHitbox);
+            //                m_damageDealer.Damage(cacheTargetInfo.Value, m_cacheHitbox.defense);
+            //            }
+            //            cacheTargetInfo.Release();
+            //        }
+            //    }
+            //    else if (m_processingHitbox.Count == 1)
+            //    {
+            //        using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
+            //        {
+            //            InitializeTargetInfo(cacheTargetInfo, m_cacheHitbox);
+            //            m_damageDealer.Damage(cacheTargetInfo.Value, m_cacheHitbox.defense);
+            //            cacheTargetInfo.Release();
+            //        }
 
-                    m_processingHitbox.Clear();
-                    m_cacheHitbox = null;
-                    m_processTargets = false;
-                }
-            }
+            //        m_processingHitbox.Clear();
+            //        m_cacheHitbox = null;
+            //        m_processTargets = false;
+            //    }
+            //}
         }
 
         protected void InitializeTargetInfo(Cache<TargetInfo> cache, Hitbox hitbox)
         {
-            if (hitbox.damageable.CompareTag(Character.objectTag))
-            {
-                var character = hitbox.GetComponentInParent<Character>();
-                cache.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, character, character.GetComponentInChildren<IFlinch>());
-            }
-            else
-            {
-                cache.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, hitbox.GetComponentInParent<BreakableObject>());
-            }
+            Debug.LogError("Disabled Smart Collider Functionality");
+            //if (hitbox.damageable.CompareTag(Character.objectTag))
+            //{
+            //    var character = hitbox.GetComponentInParent<Character>();
+            //    cache.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, character, character.GetComponentInChildren<IFlinch>());
+            //}
+            //else
+            //{
+            //    cache.Value.Initialize(hitbox.damageable, hitbox.canBlockDamage, hitbox.GetComponentInParent<BreakableObject>());
+            //}
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

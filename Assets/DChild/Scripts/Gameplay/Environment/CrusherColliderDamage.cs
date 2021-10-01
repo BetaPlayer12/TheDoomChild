@@ -26,11 +26,11 @@ namespace DChild.Gameplay.Environment
             if (damageable.CompareTag(Character.objectTag))
             {
                 var character = damageable.GetComponent<Character>();
-                cache.Value.Initialize(damageable, false, character, character.GetComponentInChildren<IFlinch>());
+                cache.Value.Initialize(damageable, false,new BodyDefense(), m_collider, character, character.GetComponentInChildren<IFlinch>());
             }
             else
             {
-                cache.Value.Initialize(damageable, false, damageable.GetComponent<BreakableObject>());
+                cache.Value.Initialize(damageable, false, new BodyDefense(), m_collider, damageable.GetComponent<BreakableObject>());
             }
         }
 
@@ -57,15 +57,6 @@ namespace DChild.Gameplay.Environment
                             {
                                 Crush(damageable);
                             }
-
-                            if (colliderGameObject.TryGetComponentInParent(out HitFXHandle onHitFX))
-                            {
-                                if (collision.contactCount > 0)
-                                {
-                                    var hitPoint = collision.GetContact(0).point;
-                                    onHitFX.SpawnFX(hitPoint, GameplayUtility.GetHorizontalDirection(m_collider.bounds.center, hitPoint));
-                                }
-                            }
                         }
                     }
                 }
@@ -77,7 +68,7 @@ namespace DChild.Gameplay.Environment
             using (Cache<TargetInfo> cacheTargetInfo = Cache<TargetInfo>.Claim())
             {
                 InitializeTargetInfo(cacheTargetInfo, damageable);
-                m_damageDealer?.Damage(cacheTargetInfo.Value, new BodyDefense());
+                m_damageDealer?.Damage(cacheTargetInfo.Value, m_collider);
                 cacheTargetInfo?.Release();
             }
         }

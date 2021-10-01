@@ -27,7 +27,7 @@ namespace DChild.Gameplay.Environment
                     if (character.ID == m_minionID)
                     {
                         //collision.gameObject.GetComponentInParent<PoolableObject>().CallPoolRequest();
-                        collision.gameObject.GetComponentInParent<Damageable>().TakeDamage(999999, AttackType.True);
+                        collision.gameObject.GetComponentInParent<Damageable>().TakeDamage(999999, DamageType.True);
                     }
                 }
             }
