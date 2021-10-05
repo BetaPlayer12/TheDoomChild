@@ -69,18 +69,18 @@ namespace DChild.Gameplay.Environment
                     {
                         if (m_rigidbody2D.IsSleeping())
                         {
-                            Debug.Log("Is Sleeping");
+                            //Debug.Log("Is Sleeping");
                         }
                         else
                         {
-                            Debug.Log("IsClamping");
+                            //Debug.Log("IsClamping");
                             return Mathf.Clamp(value, handle.min, handle.max);
                         }
                     }
                     else
                     {
 
-                        Debug.Log("Went In");
+                        //Debug.Log("Went In");
                         return Mathf.Clamp(value, handle.min, handle.max);
                     }
 
@@ -88,7 +88,7 @@ namespace DChild.Gameplay.Environment
                 }
                 if (handle.clampOptions == Options.useRelativeDistance)
                 {
-                    Debug.Log("Relative went in");
+                    //Debug.Log("Relative went in");
                     var startPos = value;
                     var tempClamp = Mathf.Clamp(value, handle.minRelativeDistance, handle.maxRelativeDistance);
                     return Mathf.Clamp(value, startPos, tempClamp);

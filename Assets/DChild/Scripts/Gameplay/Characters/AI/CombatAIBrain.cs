@@ -170,6 +170,7 @@ namespace DChild.Gameplay.Characters.AI
         {
             m_damageable.health.SetMaxValue(statData.maxHealth);
             m_attacker?.SetData(statData.damage);
+            m_attacker?.SetDamageModifier(1);
             m_attackResistance?.SetData(statData.attackResistance);
             m_attackResistance?.SetData(statData.attackResistance);
             m_statusInflictor?.SetData(statData.statusInfliction);
