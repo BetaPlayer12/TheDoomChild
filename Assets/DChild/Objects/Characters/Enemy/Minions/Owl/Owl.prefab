@@ -59,10 +59,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 0}
   m_data: {fileID: 11400000, guid: 324a47488b6d26148a8c70a65b820bd4, type: 2}
-  m_info:
-    damage: []
-    critChance: 0
-    critDamageModifier: 1
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &3423455632081051346
@@ -162,7 +165,7 @@ MonoBehaviour:
   m_height: 0
   m_centerMass: {fileID: 0}
   m_isolatedObject: {fileID: 3423455632081051373}
-  m_physics: {fileID: 3423455632081051346}
+  m_physics: {fileID: 0}
   m_colliders: {fileID: 8321434082190145817}
   m_facing: 1
   m_bodyReference:
@@ -202,7 +205,9 @@ MonoBehaviour:
   m_aggroBoundary: {fileID: 0}
   m_statsData: {fileID: 0}
   m_spineEventListener: {fileID: 0}
+  m_rigidbody2D: {fileID: 0}
   m_hitbox: {fileID: 0}
+  m_selfCollider: {fileID: 0}
   m_bodycollider: {fileID: 0}
   m_turnHandle: {fileID: 3476115680190538869}
   m_agent: {fileID: 3423455631425745842}
@@ -212,6 +217,7 @@ MonoBehaviour:
   m_deathHandle: {fileID: 3423455631425745840}
   m_flinchHandle: {fileID: 3423455631425745841}
   m_groundSensor: {fileID: 0}
+  m_wallSensor: {fileID: 0}
   m_roofSensor: {fileID: 0}
   m_selfSensor: {fileID: 0}
   m_lineRenderer: {fileID: 0}
@@ -220,6 +226,7 @@ MonoBehaviour:
   m_muzzleFXGO: {fileID: 0}
   m_muzzleLoopFX: {fileID: 0}
   m_muzzleTelegraphFX: {fileID: 0}
+  m_lazerAudio: {fileID: 0}
 --- !u!114 &8318298354739939593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,6 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 6143059689997378287}
   m_physics: {fileID: 3423455632081051346}
   m_autoFlinch: 0
@@ -414,6 +422,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 6107871229922703472}
+  m_maintainScaleValue: 1
+  m_maintainScaleValue: 0
 --- !u!1 &3423455631589894326
 GameObject:
   m_ObjectHideFlags: 0

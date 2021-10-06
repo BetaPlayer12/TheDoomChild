@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 2332326116859868241}
   m_physics: {fileID: 3525894527288859006}
   m_autoFlinch: 0
@@ -180,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 2440135738327707342}
+  m_maintainScaleValue: 1
   m_animation: {fileID: 2332326116859868241}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
@@ -484,13 +486,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 2966217473984581271}
   m_data: {fileID: 11400000, guid: 497bb46b4e97bbf42b3a82a2156588a7, type: 2}
-  m_info:
-    damage: []
-    critChance: 0
-    critDamageModifier: 1
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
---- !u!60 &2523720648164838278
+--- !u!60 &3129045701118978104
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -519,7 +524,7 @@ PolygonCollider2D:
       - {x: -1.0152999, y: 0.0444}
       - {x: 4.7047, y: -0.041399997}
       - {x: 4.5045, y: 2.3896}
---- !u!60 &6200906802100880809
+--- !u!60 &3929537766504036988
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -847,6 +852,12 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.99999994
       objectReference: {fileID: 0}
+    - target: {fileID: 6155096651792830870, guid: 77af63f510931ae49a7fade56d671d2e,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd,
+        type: 3}
     - target: {fileID: 6254083889186869659, guid: 77af63f510931ae49a7fade56d671d2e,
         type: 3}
       propertyPath: m_LocalRotation.z
