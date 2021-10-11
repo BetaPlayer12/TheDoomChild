@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 1893196469003685391}
   m_physics: {fileID: 789700530002371360}
   m_autoFlinch: 1
@@ -209,6 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 2001551585711445136}
+  m_maintainScaleValue: 1
   m_animation: {fileID: 1893196469003685391}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
@@ -441,12 +443,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 643094810533259434}
   m_data: {fileID: 11400000, guid: 7c97655e29e7d4745aeabbe33c056c20, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 15
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &6739187568151569824
@@ -617,6 +620,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4604139196191502351}
     m_Modifications:
+    - target: {fileID: 16158489157207363, guid: d91d44bdaadae874c9c44639480b0d96,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd,
+        type: 3}
     - target: {fileID: 500828032810040046, guid: d91d44bdaadae874c9c44639480b0d96,
         type: 3}
       propertyPath: m_LocalRotation.z
@@ -1652,6 +1661,16 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 7429210907350599748}
+    - target: {fileID: 7127455868151529106, guid: d91d44bdaadae874c9c44639480b0d96,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.0956182
+      objectReference: {fileID: 0}
+    - target: {fileID: 7127455868151529106, guid: d91d44bdaadae874c9c44639480b0d96,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.78401995
+      objectReference: {fileID: 0}
     - target: {fileID: 8076955596303046264, guid: d91d44bdaadae874c9c44639480b0d96,
         type: 3}
       propertyPath: m_LocalRotation.z

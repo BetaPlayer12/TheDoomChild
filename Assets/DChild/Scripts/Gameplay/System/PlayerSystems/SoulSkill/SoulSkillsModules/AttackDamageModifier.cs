@@ -9,18 +9,16 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
     public struct AttackDamageModifier : ISoulSkillModule
     {
         [SerializeField, HideLabel]
-        private AttackDamage m_damage;
+        private int m_damageValue;
 
         public void AttachTo(int soulSkillInstanceID, IPlayer player)
         {
-            player.weapon.SetAddedDamage(m_damage);
+            player.weapon.SetAddedDamage(m_damageValue);
         }
 
         public void DetachFrom(int soulSkillInstanceID, IPlayer player)
         {
-            var negativeDamage = m_damage;
-            negativeDamage.value *= -1;
-            player.weapon.SetAddedDamage(negativeDamage);
+            player.weapon.SetAddedDamage(-m_damageValue);
         }
     }
 }

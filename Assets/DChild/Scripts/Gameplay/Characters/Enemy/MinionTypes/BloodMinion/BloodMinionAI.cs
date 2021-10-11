@@ -131,6 +131,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool m_enablePatience;
         private bool m_isDetecting;
         private bool m_isSubmerged;
+        private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -365,6 +366,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             m_hitbox.enabled = false;
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -553,7 +555,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
             m_stateHandle.OverrideState(State.Patrol);

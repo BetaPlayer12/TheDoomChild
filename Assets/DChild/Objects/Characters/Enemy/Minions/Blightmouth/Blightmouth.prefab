@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!60 &306207266582279824
+--- !u!60 &5691197634908158989
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -66,12 +66,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 5689847384205357244}
   m_data: {fileID: 11400000, guid: a69c434b8493ef346ad6b18f97585e29, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 10
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &3782689343035831861
@@ -475,6 +476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 6813285695208063462}
   m_physics: {fileID: 5637890350118284489}
   m_autoFlinch: 1
@@ -512,6 +514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 6849600673700305785}
+  m_maintainScaleValue: 0
   m_animation: {fileID: 6813285695208063462}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
@@ -694,6 +697,46 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.03457568
+      objectReference: {fileID: 0}
+    - target: {fileID: 2224714647324113671, guid: f810d2d1445edf242b6a2708cb5a1d83,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideColor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2224714647324113671, guid: f810d2d1445edf242b6a2708cb5a1d83,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.r
+      value: 0.26666668
+      objectReference: {fileID: 0}
+    - target: {fileID: 2224714647324113671, guid: f810d2d1445edf242b6a2708cb5a1d83,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.g
+      value: 0.54901963
+      objectReference: {fileID: 0}
+    - target: {fileID: 2224714647324113671, guid: f810d2d1445edf242b6a2708cb5a1d83,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2224714647324113671, guid: f810d2d1445edf242b6a2708cb5a1d83,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2224714647324113671, guid: f810d2d1445edf242b6a2708cb5a1d83,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2224714647324113671, guid: f810d2d1445edf242b6a2708cb5a1d83,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2224714647324113671, guid: f810d2d1445edf242b6a2708cb5a1d83,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.a
+      value: 0.5882353
       objectReference: {fileID: 0}
     - target: {fileID: 4057860713015840044, guid: f810d2d1445edf242b6a2708cb5a1d83,
         type: 3}

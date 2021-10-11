@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace DChild.Gameplay.Audio
 {
-    [CreateAssetMenu(fileName = "CompositeAmbientSoundData", menuName = "DChild/Gameplay/Composite Ambient Data")]
+    [CreateAssetMenu(fileName = "CompositeAmbientSoundData", menuName = "DChild/Audio/Composite Ambient Data")]
     public class CompositeAmbientSoundData : ScriptableObject
     {
         [System.Serializable]

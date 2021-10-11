@@ -193,6 +193,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField]
         private Transform m_throwPoint;
 
+        private Vector2 m_startPoint;
+
         protected override void Start()
         {
             base.Start();
@@ -202,6 +204,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineEventListener.Subscribe(m_info.poundEvent, MeleeAttack/*m_poundFX.Play*/);
             m_spineEventListener.Subscribe(m_info.oraOraEvent, MeleeAttack/*m_oraFX.Play*/);
             //GameplaySystem.SetBossHealth(m_character);
+            m_startPoint = transform.position;
         }
 
         private void MeleeAttack()
@@ -591,7 +594,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
             m_stateHandle.OverrideState(State.Patrol);

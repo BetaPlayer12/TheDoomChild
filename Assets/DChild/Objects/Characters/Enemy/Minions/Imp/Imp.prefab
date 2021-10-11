@@ -36,12 +36,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 8461715952530920452}
   m_data: {fileID: 11400000, guid: 7757111908a80d54b878da2ed292d734, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 15
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &5182310233788538750
@@ -403,6 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 7647401902183778596}
   m_physics: {fileID: 5182310233788538750}
   m_autoFlinch: 0
@@ -485,6 +487,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 7755773857847432123}
+  m_maintainScaleValue: 0
+  m_maintainScaleValue: 0
 --- !u!114 &9134754622065271645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,12 +638,12 @@ PrefabInstance:
     - target: {fileID: 3139251059119267557, guid: 5d16e1459587f664491316890f9397d3,
         type: 3}
       propertyPath: maskMaterials.materialsMaskDisabled.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3139251059119267557, guid: 5d16e1459587f664491316890f9397d3,
         type: 3}
       propertyPath: maskMaterials.materialsOutsideMask.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3139251059119267559, guid: 5d16e1459587f664491316890f9397d3,
         type: 3}
@@ -650,7 +654,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2100000, guid: 2694559a6b637584da4a1a0021aa5b1a, type: 2}
     - target: {fileID: 3139251059119267563, guid: 5d16e1459587f664491316890f9397d3,
         type: 3}
       propertyPath: m_Mesh
@@ -670,6 +674,32 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 2.5117562
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939631980393653255, guid: 5d16e1459587f664491316890f9397d3,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd,
+        type: 3}
+    - target: {fileID: 7939631980393653255, guid: 5d16e1459587f664491316890f9397d3,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939631980393653255, guid: 5d16e1459587f664491316890f9397d3,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939631980393653255, guid: 5d16e1459587f664491316890f9397d3,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7939631980393653255, guid: 5d16e1459587f664491316890f9397d3,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d16e1459587f664491316890f9397d3, type: 3}

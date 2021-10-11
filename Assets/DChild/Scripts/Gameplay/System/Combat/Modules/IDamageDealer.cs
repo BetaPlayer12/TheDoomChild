@@ -14,6 +14,6 @@ namespace DChild.Gameplay.Combat
         Invulnerability ignoreInvulnerability { get; }
 
         bool ignoresBlock { get; }
-        void Damage(TargetInfo target, BodyDefense targetDefense);
+        void Damage(TargetInfo target, Collider2D colliderThatDealtDamage);
     }
 }

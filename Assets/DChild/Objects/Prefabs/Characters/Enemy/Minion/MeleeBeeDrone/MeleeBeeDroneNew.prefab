@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 3456071863341190403}
   m_data: {fileID: 11400000, guid: e8d099a7497a4fa4680dcfba65248059, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 1
+      m_type: 0
       m_value: 0
-    critChance: 0
-    critDamageModifier: 1
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &4470229451716400854
@@ -41,6 +42,7 @@ MonoBehaviour:
   m_centerMass: {fileID: 0}
   m_aggroBoundary: {fileID: 0}
   m_statsData: {fileID: 0}
+  m_bodyCollider: {fileID: 0}
   m_turnHandle: {fileID: 0}
   m_agent: {fileID: 0}
   m_patrolHandle: {fileID: 0}
@@ -48,6 +50,9 @@ MonoBehaviour:
     m_animation: {fileID: 8845640313807356449}
   m_deathHandle: {fileID: 0}
   m_flinchHandle: {fileID: 0}
+  m_floorSensor: {fileID: 0}
+  m_roofSensor: {fileID: 0}
+  m_wallSensor: {fileID: 0}
 --- !u!114 &6697422787288623559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 

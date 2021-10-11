@@ -449,11 +449,16 @@ namespace DChild.Gameplay.Characters.Enemies
         public void ResetAI()
         {
             m_targetInfo.Set(null, null);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.ReturnToPatrol);
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            Patience();
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

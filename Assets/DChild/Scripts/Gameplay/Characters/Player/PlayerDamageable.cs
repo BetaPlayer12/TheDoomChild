@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private Health m_armor;
 
-        public override void TakeDamage(int totalDamage, AttackType type)
+        public override void TakeDamage(int totalDamage, DamageType type)
         {
             if (m_armor?.isEmpty ?? true)
             {

@@ -842,11 +842,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_skeletomAnimation.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
             m_spriteMask.SetActive(true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.ReturnToPatrol);
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            ResetAI();
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 6801671450421035112}
+  m_maintainScaleValue: 1
   m_animation: {fileID: 6910607180102982391}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
@@ -96,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_source: {fileID: 659152707145689296}
---- !u!60 &2090636698444600029
+--- !u!60 &4458331099854308215
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,7 +126,7 @@ PolygonCollider2D:
       - {x: 6.403, y: 12.6106}
       - {x: 17.8341, y: 12.6015}
       - {x: 17.810999, y: 6.3221}
---- !u!60 &8943189362039166561
+--- !u!60 &1582483108993663638
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,7 +155,7 @@ PolygonCollider2D:
       - {x: 0.9356, y: 0.4229}
       - {x: -0.39409998, y: 0.2785}
       - {x: -0.2954, y: -0.3359}
---- !u!60 &9050138906006671734
+--- !u!60 &1360113418562097634
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +184,7 @@ PolygonCollider2D:
       - {x: 0.44669998, y: -0.90989995}
       - {x: 1.5861, y: 0.0705}
       - {x: 0.92019993, y: 0.883}
---- !u!60 &4379412546034570214
+--- !u!60 &725587557876791020
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -212,7 +213,7 @@ PolygonCollider2D:
       - {x: 0.3396, y: 0.43259996}
       - {x: -0.2534, y: 0.0922}
       - {x: -0.0037999998, y: -0.3604}
---- !u!60 &5948657461783750839
+--- !u!60 &3674280404500168947
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -284,6 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 6910607180102982391}
   m_physics: {fileID: 659152707145689296}
   m_autoFlinch: 0
@@ -414,10 +416,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18353210c1fef634ba85c229444944bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hitStopTime: 0.15
   m_whiteDecayTime: 4
   m_enableHitStop: 0
   m_animation: {fileID: 6910607180102982391}
+  m_hitboxColliders: []
   m_flinchHandle: {fileID: 4907853186765259558}
   m_Rendererer: {fileID: 3274267352570170711}
 --- !u!114 &1349142228455873639
@@ -434,13 +436,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 2594298240218184558}
   m_data: {fileID: 11400000, guid: 8ad898b74a605a64ea3ab48d3f4a6fd7, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 25
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &4794106783815378656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,6 +458,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
+  m_overrideColor: 0
+  m_colorToUse: {r: 1, g: 1, b: 1, a: 1}
+  m_overrideScale: 0
+  m_scaleToUse: {x: 1, y: 1, z: 1}
 --- !u!114 &6502214513480938905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2551,6 +2559,52 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.02887344
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd,
+        type: 3}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.r
+      value: 0.9716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.g
+      value: 0.9716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.b
+      value: 0.9716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715970165794423734, guid: 7666a85bb0984db40bf3210994e550f4,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8882653447556720697, guid: 7666a85bb0984db40bf3210994e550f4,
         type: 3}

@@ -13,9 +13,9 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private AttackResistanceData m_data;
         [ShowInInspector, HideInEditorMode, HideReferenceObjectPicker, PropertyOrder(2), OnValueChanged("SendEvent", true)]
-        protected Dictionary<AttackType, float> m_resistance;
+        protected Dictionary<DamageType, float> m_resistance;
 
-        protected override Dictionary<AttackType, float> resistance => m_resistance;
+        protected override Dictionary<DamageType, float> resistance => m_resistance;
 
         public override void SetData(AttackResistanceData data)
         {
@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Combat
             }
             else
             {
-                m_resistance = new Dictionary<AttackType, float>();
+                m_resistance = new Dictionary<DamageType, float>();
             }
             m_data = data;
             if (m_data != null)
@@ -39,15 +39,15 @@ namespace DChild.Gameplay.Combat
             m_resistance.Clear();
         }
 
-        public void SetResistance(AttackType type, AttackResistanceType resistanceType) => SetResistance(type, ConvertToFloat(resistanceType));
+        public void SetResistance(DamageType type, AttackResistanceType resistanceType) => SetResistance(type, ConvertToFloat(resistanceType));
 
-        public override void SetResistance(AttackType type, float resistanceValue)
+        public override void SetResistance(DamageType type, float resistanceValue)
         {
             SetResistance(m_resistance, type, resistanceValue);
             CallResistanceChange(new ResistanceEventArgs(type, resistanceValue));
         }
 
-        private void Copy(Dictionary<AttackType, float> source, Dictionary<AttackType, float> destination)
+        private void Copy(Dictionary<DamageType, float> source, Dictionary<DamageType, float> destination)
         {
             destination.Clear();
             foreach (var key in source.Keys)
@@ -58,7 +58,7 @@ namespace DChild.Gameplay.Combat
 
         private void Start()
         {
-            m_resistance = new Dictionary<AttackType, float>();
+            m_resistance = new Dictionary<DamageType, float>();
             if (m_data != null)
             {
                 Copy(m_data.resistance, m_resistance);
@@ -68,7 +68,7 @@ namespace DChild.Gameplay.Combat
 #if UNITY_EDITOR
         private void SendEvent()
         {
-            CallResistanceChange(new ResistanceEventArgs(AttackType._COUNT, 0));
+            CallResistanceChange(new ResistanceEventArgs(DamageType.All, 0));
         }
 
 

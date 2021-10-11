@@ -111,7 +111,6 @@ namespace DChild.Gameplay.Combat
                             var collision = m_affectedColliders[i];
                             ChangeHitboxRegisterationStatus(toDamage, false);
                             DealDamage(collision, toDamage);
-                            SpawnHitFX(collision);
                             if (toDamage.damageable.isAlive == false)
                             {
                                 RemoveAffectedIndex(i);

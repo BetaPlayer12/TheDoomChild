@@ -156,6 +156,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -527,6 +528,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
 
             m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+            m_startPoint = transform.position;
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 
@@ -539,7 +541,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -571,6 +573,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    if (!m_character.physics.simulateGravity)
+                    {
+                        m_character.physics.simulateGravity = true;
+                        m_hitbox.Enable();
+                    }
+
                     if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
@@ -759,7 +767,7 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }
@@ -824,6 +832,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.physics.simulateGravity = false;
             m_hitbox.Disable();
             m_stateHandle.OverrideState(State.Dormant);
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
         }
     }
 }

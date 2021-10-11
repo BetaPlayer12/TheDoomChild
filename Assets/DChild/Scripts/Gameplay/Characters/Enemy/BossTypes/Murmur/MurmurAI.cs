@@ -765,7 +765,11 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
         }
     }

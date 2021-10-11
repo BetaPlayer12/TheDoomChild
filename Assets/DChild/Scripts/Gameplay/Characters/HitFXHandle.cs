@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Characters
 {
+
     public class HitFXHandle : MonoBehaviour
     {
         [SerializeField]
@@ -18,6 +19,12 @@ namespace DChild.Gameplay.Characters
         private Vector3 m_scaleToUse = Vector3.one;
 
         private FXSpawnHandle<FX> m_spawnHandle;
+
+        public GameObject fxObject { get { return m_fx; } set { m_fx = value; } }
+        public bool overrideColor {get{ return m_overrideColor; } set { m_overrideColor = value; } }
+        public Color colorToUse { get { return m_colorToUse; } set { m_colorToUse = value; } }
+        public bool overideScale { get { return m_overrideScale; } set { overideScale = value; } }
+        public Vector3 scaleOverride { get { return m_scaleToUse; } set { m_scaleToUse = value; } }
 
         public void SetFX(GameObject fx) => m_fx = fx;
 

@@ -64,7 +64,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 1
 --- !u!114 &6857524666837353624
@@ -250,6 +249,12 @@ MonoBehaviour:
   - {fileID: 6974580384332459933}
   - {fileID: 3483256414003124976}
   - {fileID: 4738682869245024328}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
   m_canBlockDamage: 0
@@ -424,7 +429,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 1
 --- !u!1 &1116032200675969994
@@ -473,12 +477,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 7894018005465788596}
   m_data: {fileID: 11400000, guid: 6d2fd35154539c146965a232e284047c, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 2
-      m_value: 10
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!1 &1340886564166212074
@@ -1061,7 +1066,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 1
 --- !u!1 &3608066512048348186
@@ -1741,12 +1745,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 7894018005465788596}
   m_data: {fileID: 11400000, guid: 0cccd9479ddf843498de47ab68aec066, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 2
-      m_value: 20
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!1 &7691466413927517334
@@ -1795,12 +1800,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 7894018005465788596}
   m_data: {fileID: 11400000, guid: 56438c9660249d04e8e68c5294a04f24, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 2
-      m_value: 20
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!1 &7804341915131139062

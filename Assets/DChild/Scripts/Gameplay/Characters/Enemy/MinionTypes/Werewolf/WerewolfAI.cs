@@ -122,6 +122,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentCD;
         private float m_currentFullCD;
         private float m_currentMoveSpeed;
+        private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -525,7 +526,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

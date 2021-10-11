@@ -88,18 +88,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         private State m_turnState;
 
-        //[SerializeField]
-        //private AudioSource m_Audiosource;
-        //[SerializeField]
-        //private AudioClip m_Minion_Sound_Q_Clip;
-        //[SerializeField]
-        //private AudioClip m_Minion_Hit_Sound_Clip;
-        //[SerializeField]
-        //private AudioClip m_Minion_Death_Sound_Clip;
-        //[SerializeField]
-        //private CircleCollider2D m_sound_Q_trigerCollider;
-        //private bool m_sound_q_played = false;
-
+        private Vector2 m_startPoint;
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
@@ -182,6 +171,11 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 yield return null;
             }
+        }
+        protected override void Start()
+        {
+            base.Start();
+            m_startPoint = transform.position;
         }
 
         protected override void Awake()
@@ -268,7 +262,12 @@ namespace DChild.Gameplay.Characters.Enemies
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        public override void ReturnToSpawnPoint()
+        {
+            transform.position = m_startPoint;
+        }
+
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
         }

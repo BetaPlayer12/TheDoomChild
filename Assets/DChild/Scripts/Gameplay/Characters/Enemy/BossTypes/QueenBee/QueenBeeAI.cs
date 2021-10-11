@@ -254,6 +254,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Boss m_boss;
         [SerializeField, TabGroup("Reference")]
+        private Rigidbody2D m_rigidbody2D;
+        [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_bodyCollider;
@@ -759,17 +761,11 @@ namespace DChild.Gameplay.Characters.Enemies
             var targetPos = new Vector2(transform.position.x, m_spearThrowPoint.position.y);
             while (Vector2.Distance(transform.position, targetPos) > 1.5f)
             {
-                var velocityX = GetComponent<IsolatedPhysics2D>().velocity.x;
-                var velocityY = GetComponent<IsolatedPhysics2D>().velocity.y;
-                //Debug.Log("Read Dynamic Movements " + velocityX + " " + velocityY);
-                m_agent.SetDestination(targetPos);
-                m_agent.Move(m_info.moveForward.speed);
-
-                if (velocityX != 0 && velocityY > 5f)
-                {
-                    //Debug.Log("Move Upward");
-                    m_animation.SetAnimation(0, m_info.moveAscend.animation, true);
-                }
+                m_agent.Stop();
+                Vector3 dir = (targetPos - (Vector2)m_rigidbody2D.transform.position).normalized;
+                m_rigidbody2D.MovePosition(m_rigidbody2D.transform.position + dir * m_info.moveForward.speed * Time.fixedDeltaTime);
+                
+                m_animation.SetAnimation(0, m_info.moveAscend.animation, true);
                 yield return null;
             }
             CustomTurn();
@@ -1147,8 +1143,13 @@ namespace DChild.Gameplay.Characters.Enemies
             m_colliderDamageGO.SetActive(true);
         }
 
-        protected override void OnBecomePassive()
+        protected override void OnForbidFromAttackTarget()
         {
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+            throw new NotImplementedException();
         }
     }
 }

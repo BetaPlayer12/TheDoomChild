@@ -83,6 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 3533155725597009063}
   m_physics: {fileID: 2429729603437152648}
   m_autoFlinch: 1
@@ -120,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 3497967402423336504}
+  m_maintainScaleValue: 0
   m_animation: {fileID: 3533155725597009063}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
@@ -458,12 +460,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 4351669450226007143}
   m_data: {fileID: 11400000, guid: a69c434b8493ef346ad6b18f97585e29, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 10
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &8116010278898701643
@@ -639,6 +642,32 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.6924949
+      objectReference: {fileID: 0}
+    - target: {fileID: 1935639816657982368, guid: 70bf8f435d688f048bd0e162ab42fa52,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 2636121095701561051, guid: d5b55f09e1efcf543a6ff989b9340ca2,
+        type: 3}
+    - target: {fileID: 1935639816657982368, guid: 70bf8f435d688f048bd0e162ab42fa52,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1935639816657982368, guid: 70bf8f435d688f048bd0e162ab42fa52,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1935639816657982368, guid: 70bf8f435d688f048bd0e162ab42fa52,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1935639816657982368, guid: 70bf8f435d688f048bd0e162ab42fa52,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2428948414987636549, guid: 70bf8f435d688f048bd0e162ab42fa52,
         type: 3}

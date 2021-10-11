@@ -2,14 +2,14 @@
 {
     public struct DamageInfo
     {
-        public AttackDamage damage { get; set; }
-        public bool isMagicalDamage { get; }
+        public Damage damage { get; set; }
         public bool isHeal { get; set; }
+        public bool isMagicalDamage { get; }
 
-        public DamageInfo(AttackDamage attackDamage)
+        public DamageInfo(Damage attackDamage)
         {
             damage = attackDamage;
-            isMagicalDamage = AttackDamage.IsMagicAttack(damage.type);
+            isMagicalDamage = Damage.IsMagicDamage(damage.type);
             isHeal = false;
             //Content
         }

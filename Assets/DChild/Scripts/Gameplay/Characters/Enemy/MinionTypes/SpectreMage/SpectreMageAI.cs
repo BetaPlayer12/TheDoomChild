@@ -753,13 +753,18 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
+            m_stateHandle.OverrideState(State.ReturnToPatrol);
             enabled = true;
         }
 
-        protected override void OnBecomePassive()
+        protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
+        }
+
+        public override void ReturnToSpawnPoint()
+        {
+            Patience();
         }
     }
 }
