@@ -161,6 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_character: {fileID: 2686513596450624959}
   m_maintainScaleValue: 0
+  m_maintainScaleValue: 0
 --- !u!1 &1364793333594955721
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 2651324241411837728}
   m_physics: {fileID: 3781630620405047823}
   m_autoFlinch: 1
@@ -455,12 +457,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 5814612300815178306}
   m_data: {fileID: 11400000, guid: 3283dfc7165dbf149ab5192f3e7a8988, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 15
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &7305669178697580236
