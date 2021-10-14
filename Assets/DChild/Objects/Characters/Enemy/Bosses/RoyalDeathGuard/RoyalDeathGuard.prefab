@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 5579116673868545996}
+  m_maintainScaleValue: 1
   m_animation: {fileID: 5543383267805947219}
   m_useRootMotionX: 0
   m_useRootMotionY: 0
@@ -206,12 +207,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 239706582261338279}
   m_data: {fileID: 11400000, guid: df82a1eeb0cd662459f4a95d367a8969, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 10
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &1886061352175294324
@@ -534,6 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 5543383267805947219}
   m_physics: {fileID: 1886061352175294324}
   m_autoFlinch: 0
@@ -618,7 +621,7 @@ PolygonCollider2D:
       - {x: -3.4166, y: 3.6835}
       - {x: 3.6832998, y: 3.617}
       - {x: 3.5577, y: -3.7127998}
---- !u!60 &8056505469201751920
+--- !u!60 &3756440825058647257
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -807,6 +810,52 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 10.738312
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 6741787421250062945, guid: c6f2a4d9789a0ac488180726f8edd914,
+        type: 3}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866303921886260081, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3023344360792862305, guid: 18a853f314a7baf45a9ae8dfdb87fc98,
         type: 3}

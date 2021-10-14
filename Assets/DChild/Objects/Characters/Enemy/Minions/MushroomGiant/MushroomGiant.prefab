@@ -32,12 +32,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 7209758001285054364}
   m_data: {fileID: 11400000, guid: cc7448d7973a40a429577a00119abd80, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 25
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &2500468060826127820
@@ -446,6 +447,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_character: {fileID: 5620469632582263721}
+  m_maintainScaleValue: 1
+  m_maintainScaleValue: 1
 --- !u!114 &3189798917401443594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,6 +505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
   m_spine: {fileID: 5511535002948598070}
   m_physics: {fileID: 6686877569333482521}
   m_autoFlinch: 1
@@ -766,6 +770,57 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.96688527
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_fx
+      value: 
+      objectReference: {fileID: 4025808106930532386, guid: 8a88a66cf00c45849ae287257e1ee932,
+        type: 3}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideColor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_overrideScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_scaleToUse.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.g
+      value: 0.88235295
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.b
+      value: 0.30980393
+      objectReference: {fileID: 0}
+    - target: {fileID: 5017657157045229031, guid: 41eaf73bedce39e4fb65ce5aaf128023,
+        type: 3}
+      propertyPath: m_damageFXInfo.m_colorToUse.a
+      value: 0.5882353
       objectReference: {fileID: 0}
     - target: {fileID: 5848620785402738834, guid: 41eaf73bedce39e4fb65ce5aaf128023,
         type: 3}

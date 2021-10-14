@@ -44,10 +44,10 @@ namespace DChild.Gameplay.VFX
             m_scaleToUse = Vector3.zero;
         }
 
-        public GameObject fx => m_fx;
-        public bool overrideColor => m_overrideColor;
-        public Color colorToUse => m_colorToUse;
-        public bool overrideScale => m_overrideScale;
-        public Vector3 scaleToUse => m_scaleToUse;
+        public GameObject fx { get { return m_fx; } set { m_fx = value; } }
+        public bool overrideColor { get { return m_overrideColor; } set { m_overrideColor = value; } }
+        public Color colorToUse { get { return m_colorToUse; } set { m_colorToUse = value; } }
+        public bool overrideScale { get { return m_overrideScale; } set { m_overrideScale = value; } }
+        public Vector3 scaleToUse { get { return m_scaleToUse; } set { m_scaleToUse = value; } }
     }
 }
