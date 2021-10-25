@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 2508720340444514366}
   - component: {fileID: 2508720340444514367}
   - component: {fileID: 2508720340444514356}
-  - component: {fileID: 2508720340444514357}
   - component: {fileID: 2508720340444514362}
   - component: {fileID: 1922451266734531290}
   - component: {fileID: -474589167623049408}
+  - component: {fileID: 6686928791654634884}
   m_Layer: 8
   m_Name: SkullProjectile
   m_TagString: Untagged
@@ -148,26 +148,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_data: {fileID: 11400000, guid: b8d9c34b922b02f4784acddbd697c7bd, type: 2}
---- !u!114 &2508720340444514357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2508720340444514364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_centerMass: {fileID: 2508720340444514363}
-  m_data: {fileID: 0}
-  m_info:
-    damage: []
-    critChance: 0
-    critDamageModifier: 1
-    ignoreInvulnerability: 0
-    ignoresBlock: 0
 --- !u!114 &2508720340444514362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,7 +163,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 1
   m_collisionRegistrator: {fileID: -474589167623049408}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
 --- !u!58 &1922451266734531290
 CircleCollider2D:
@@ -213,6 +192,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d72dcc386e3824fb819d8347b660e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6686928791654634884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2508720340444514364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10454193b54c9a4eb8bfb67b80c746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 2508720340444514363}
+  m_data: {fileID: 11400000, guid: cbf3774fadbacf84aa267db1702f4785, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 1
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &3803600901572794007
 GameObject:
   m_ObjectHideFlags: 0
