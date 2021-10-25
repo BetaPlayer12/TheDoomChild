@@ -24,35 +24,30 @@ namespace DChild.Gameplay.Environment.Obstacles
         private Vector2 m_destination;
         [SerializeField]
         private bool m_resurface = false;
+        [SerializeField]
+        private bool m_fall = false;
         private float m_surfacespeed = 3f;
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null)
+            if (playerObject != null && collision.tag != "Sensor")
             {
                 playerObject.owner.modifiers.Add(PlayerModifier.MoveSpeed, -m_SlowValue);
+                m_fall = true;
+                m_resurface = false;
             }
         }
-        private void OnCollisionStay2D(Collision2D collision)
-        {
-            var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null)
-            {
-                SetMoveValues(m_surface.localPosition, m_EndPosition);
-                m_surface.localPosition = Vector3.MoveTowards(m_start, m_destination, m_Sinkspeed);
-
-            }
-        }
+       
         private void OnTriggerExit2D(Collider2D collision)
         {
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
-            if (playerObject != null)
+            if (playerObject != null && collision.tag != "Sensor")
             {
                 m_resurface = true;
-
+                m_fall = false;
                 playerObject.owner.modifiers.Add(PlayerModifier.MoveSpeed, m_SlowValue);
             }
         }
@@ -89,8 +84,13 @@ namespace DChild.Gameplay.Environment.Obstacles
                     m_resurface = false;
                 }
             }
+            if (m_fall == true)
+            {
+                SetMoveValues(m_surface.localPosition, m_EndPosition);
+                m_surface.localPosition = Vector3.MoveTowards(m_start, m_destination, m_Sinkspeed);
+            }
 
-        }
+            }
     }
 }
 
