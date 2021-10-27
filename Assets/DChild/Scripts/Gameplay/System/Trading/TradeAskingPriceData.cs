@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace DChild.Menu.Trading
 {
-    [CreateAssetMenu(fileName = "TradeAskingPriceData", menuName = "DChild/Database/Trade Asking Price Data")]
+    [CreateAssetMenu(fileName = "TradeAskingPriceData", menuName = "DChild/Gameplay/Trade/Trade Asking Price Data")]
     public class TradeAskingPriceData : SerializedScriptableObject
     {
         [OdinSerialize, HideReferenceObjectPicker, OnValueChanged("UpdatePrice", true)]
