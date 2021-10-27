@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &481063475634205290
+--- !u!1 &41984846513846304
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3649675308032597045}
-  - component: {fileID: 8514745481039858539}
-  - component: {fileID: 7393339865432059453}
+  - component: {fileID: 8947007408930692654}
+  - component: {fileID: 7305134965289619519}
+  - component: {fileID: 6874205171821415298}
   m_Layer: 0
-  m_Name: RatBomb - Turn
+  m_Name: Rat_Exploding - Damage_No_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3649675308032597045
+--- !u!4 &8947007408930692654
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 481063475634205290}
+  m_GameObject: {fileID: 41984846513846304}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6021016790528483696}
+  m_Father: {fileID: 1076688697467110391}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &8514745481039858539
+--- !u!82 &7305134965289619519
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 481063475634205290}
+  m_GameObject: {fileID: 41984846513846304}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 062ce13a6bc717e4bbb1c2912b65eb25, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 48091c6f97de0274faef48c87c0f4dd6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -146,19 +146,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &7393339865432059453
+--- !u!114 &6874205171821415298
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 481063475634205290}
+  m_GameObject: {fileID: 41984846513846304}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -168,7 +170,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 1
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -186,7 +189,7 @@ MonoBehaviour:
   randomStartMinPercent: 0
   randomStartMaxPercent: 0
   randomEndPercent: 100
---- !u!1 &592778334708547231
+--- !u!1 &89458883540172369
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -194,37 +197,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1565060827582689053}
-  - component: {fileID: 1209773758720480018}
+  - component: {fileID: 910350102299706364}
+  - component: {fileID: 3103542943252206680}
   m_Layer: 0
-  m_Name: RatBomb - Flinch
+  m_Name: Rat_Exploding - Turn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1565060827582689053
+--- !u!4 &910350102299706364
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 592778334708547231}
+  m_GameObject: {fileID: 89458883540172369}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4095597528400457547}
-  m_Father: {fileID: 8534375119808051510}
-  m_RootOrder: 2
+  - {fileID: 7816132205457335831}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1209773758720480018
+--- !u!114 &3103542943252206680
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 592778334708547231}
+  m_GameObject: {fileID: 89458883540172369}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
@@ -251,8 +254,12 @@ MonoBehaviour:
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
   busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -276,8 +283,8 @@ MonoBehaviour:
   linkedStartGroupSelectionType: 0
   linkedStopGroupSelectionType: 0
   groupVariations:
-  - {fileID: 8121027559918348899}
---- !u!1 &1186864672849452755
+  - {fileID: 6132106724550356217}
+--- !u!1 &116373084106235850
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -285,37 +292,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3852224838846336036}
-  - component: {fileID: 7983199686504287901}
+  - component: {fileID: 1076688697467110391}
+  - component: {fileID: 1785191083550373576}
   m_Layer: 0
-  m_Name: Werewolf-Idle
+  m_Name: Rat_Exploding - Damage_No_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3852224838846336036
+--- !u!4 &1076688697467110391
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1186864672849452755}
+  m_GameObject: {fileID: 116373084106235850}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 613597080414024992}
-  m_Father: {fileID: 8534375119808051510}
-  m_RootOrder: 7
+  - {fileID: 8947007408930692654}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7983199686504287901
+--- !u!114 &1785191083550373576
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1186864672849452755}
+  m_GameObject: {fileID: 116373084106235850}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
@@ -341,9 +348,13 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -367,8 +378,8 @@ MonoBehaviour:
   linkedStartGroupSelectionType: 0
   linkedStopGroupSelectionType: 0
   groupVariations:
-  - {fileID: 580127698720493893}
---- !u!1 &2929922428342473277
+  - {fileID: 6874205171821415298}
+--- !u!1 &392415665356608141
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -376,132 +387,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1842416865700669922}
-  - component: {fileID: 6442817403184304416}
+  - component: {fileID: 6785523602116648257}
+  - component: {fileID: 6577774210050221653}
+  - component: {fileID: 2650362691542790175}
   m_Layer: 0
-  m_Name: RatBomb - Death
+  m_Name: Rat_Exploding - Death_No_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1842416865700669922
+--- !u!4 &6785523602116648257
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2929922428342473277}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 7294051188278225215}
-  m_Father: {fileID: 8534375119808051510}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6442817403184304416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2929922428342473277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
-  alwaysHighestPriority: 0
-  groupMasterVolume: 1
-  retriggerPercentage: 100
-  curVariationSequence: 0
-  useNoRepeatRefill: 1
-  useInactivePeriodPoolRefill: 0
-  inactivePeriodSeconds: 5
-  curVariationMode: 0
-  bulkVariationMode: 0
-  chainLoopDelayMin: 0
-  chainLoopDelayMax: 0
-  chainLoopMode: 0
-  chainLoopNumLoops: 0
-  useDialogFadeOut: 0
-  dialogFadeOutTime: 0.5
-  comments: 
-  logSound: 0
-  soundPlayedEventActive: 0
-  soundPlayedCustomEvent: 
-  busIndex: 4
-  spatialBlendType: 1
-  spatialBlend: 1
-  busName: 
-  isExistingBus: 0
-  isCopiedFromDGSC: 0
-  limitMode: 0
-  limitPerXFrames: 1
-  minimumTimeBetween: 0.1
-  limitPolyphony: 0
-  voiceLimitCount: 1
-  targetDespawnedBehavior: 0
-  despawnFadeTime: 1
-  isUsingOcclusion: 0
-  willOcclusionOverrideRaycastOffset: 0
-  occlusionRayCastOffset: 0
-  willOcclusionOverrideFrequencies: 0
-  occlusionMaxCutoffFreq: 0
-  occlusionMinCutoffFreq: 22000
-  copySettingsExpanded: 0
-  expandLinkedGroups: 0
-  childSoundGroups: []
-  endLinkedGroups: []
-  linkedStartGroupSelectionType: 0
-  linkedStopGroupSelectionType: 0
-  groupVariations:
-  - {fileID: 1325804929751492845}
---- !u!1 &4559768148401067274
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4095597528400457547}
-  - component: {fileID: 3235156934936815812}
-  - component: {fileID: 8121027559918348899}
-  m_Layer: 0
-  m_Name: RatBomb - Flinch
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4095597528400457547
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4559768148401067274}
+  m_GameObject: {fileID: 392415665356608141}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1565060827582689053}
+  m_Father: {fileID: 5775291090141140498}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &3235156934936815812
+--- !u!82 &6577774210050221653
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4559768148401067274}
+  m_GameObject: {fileID: 392415665356608141}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8610b989b911f4b4c9577d8fcdfe4e2c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: e82c628f06ed93243910349a6d2d00ca, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -605,19 +525,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8121027559918348899
+--- !u!114 &2650362691542790175
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4559768148401067274}
+  m_GameObject: {fileID: 392415665356608141}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -627,7 +549,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 1
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -645,7 +568,7 @@ MonoBehaviour:
   randomStartMinPercent: 0
   randomStartMaxPercent: 0
   randomEndPercent: 100
---- !u!1 &5625273999868426443
+--- !u!1 &593409175501114136
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -653,41 +576,325 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7046910268365035829}
-  - component: {fileID: 4957745902100904019}
-  - component: {fileID: 5301949223682018380}
+  - component: {fileID: 7816132205457335831}
+  - component: {fileID: 3325855934711395790}
+  - component: {fileID: 6132106724550356217}
   m_Layer: 0
-  m_Name: RatBomb - Idle2 [Loop]
+  m_Name: Rat_Exploding - Turn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7046910268365035829
+--- !u!4 &7816132205457335831
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5625273999868426443}
+  m_GameObject: {fileID: 593409175501114136}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1852780035797356743}
+  m_Father: {fileID: 910350102299706364}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &4957745902100904019
+--- !u!82 &3325855934711395790
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5625273999868426443}
+  m_GameObject: {fileID: 593409175501114136}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 110e4eb230cc98b458202865cee3c291, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b8b35803c58704046b83479e2013ba0e, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 10
+  MaxDistance: 100
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.1
+      value: 1
+      inSlope: -10.0039835
+      outSlope: -10.0039835
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2
+      value: 0.5
+      inSlope: -2.5009959
+      outSlope: -2.5009959
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4
+      value: 0.25
+      inSlope: -0.62524897
+      outSlope: -0.62524897
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.10003992
+      outSlope: -0.10003992
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &6132106724550356217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593409175501114136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
+  useLocalization: 0
+  useRandomPitch: 0
+  randomPitchMode: 0
+  randomPitchMin: 0
+  randomPitchMax: 0
+  useRandomVolume: 0
+  randomVolumeMode: 0
+  randomVolumeMin: 0
+  randomVolumeMax: 0
+  weight: 1
+  clipAlias: 
+  audLocation: 0
+  resourceFileName: 
+  isExpanded: 1
+  isChecked: 1
+  useFades: 0
+  fadeInTime: 0
+  fadeOutTime: 0
+  useCustomLooping: 0
+  minCustomLoops: 1
+  maxCustomLoops: 5
+  useIntroSilence: 0
+  introSilenceMin: 0
+  introSilenceMax: 0
+  useRandomStartTime: 0
+  randomStartMinPercent: 0
+  randomStartMaxPercent: 0
+  randomEndPercent: 100
+--- !u!1 &1547862279160659244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5775291090141140498}
+  - component: {fileID: 253780610882822367}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Death_No_Red
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5775291090141140498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1547862279160659244}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 6785523602116648257}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &253780610882822367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1547862279160659244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
+  alwaysHighestPriority: 0
+  groupMasterVolume: 1
+  retriggerPercentage: 100
+  curVariationSequence: 0
+  useNoRepeatRefill: 1
+  useInactivePeriodPoolRefill: 0
+  inactivePeriodSeconds: 5
+  curVariationMode: 0
+  bulkVariationMode: 0
+  chainLoopDelayMin: 0
+  chainLoopDelayMax: 0
+  chainLoopMode: 0
+  chainLoopNumLoops: 0
+  useDialogFadeOut: 0
+  dialogFadeOutTime: 0.5
+  comments: 
+  logSound: 0
+  soundPlayedEventActive: 0
+  soundPlayedCustomEvent: 
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
+  spatialBlendType: 1
+  spatialBlend: 1
+  groupPlayType: 0
+  busName: 
+  isExistingBus: 0
+  isCopiedFromDGSC: 0
+  limitMode: 0
+  limitPerXFrames: 1
+  minimumTimeBetween: 0.1
+  limitPolyphony: 0
+  voiceLimitCount: 1
+  targetDespawnedBehavior: 0
+  despawnFadeTime: 1
+  isUsingOcclusion: 0
+  willOcclusionOverrideRaycastOffset: 0
+  occlusionRayCastOffset: 0
+  willOcclusionOverrideFrequencies: 0
+  occlusionMaxCutoffFreq: 0
+  occlusionMinCutoffFreq: 22000
+  copySettingsExpanded: 0
+  expandLinkedGroups: 0
+  childSoundGroups: []
+  endLinkedGroups: []
+  linkedStartGroupSelectionType: 0
+  linkedStopGroupSelectionType: 0
+  groupVariations:
+  - {fileID: 2650362691542790175}
+--- !u!1 &2354144466281339428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1615628430720545381}
+  - component: {fileID: 1298754733021058386}
+  - component: {fileID: 4097006870186520302}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Move_Stationary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1615628430720545381
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2354144466281339428}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1738613475285814438}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1298754733021058386
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2354144466281339428}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: a9129d2bc71859742b144357c258207e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -791,19 +998,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5301949223682018380
+--- !u!114 &4097006870186520302
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5625273999868426443}
+  m_GameObject: {fileID: 2354144466281339428}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -813,7 +1022,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 1
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -831,7 +1041,7 @@ MonoBehaviour:
   randomStartMinPercent: 0
   randomStartMaxPercent: 0
   randomEndPercent: 100
---- !u!1 &5734661184399744810
+--- !u!1 &2794565106346325191
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -839,45 +1049,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6914065483045147149}
-  - component: {fileID: 5556146741499103168}
-  - component: {fileID: 5530749244343679693}
+  - component: {fileID: 8529855907047216692}
+  - component: {fileID: 8659444122639735298}
+  - component: {fileID: 3839422724187135627}
   m_Layer: 0
-  m_Name: RatBomb - SuicideExplosion
+  m_Name: Rat_Exploding - Idle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6914065483045147149
+--- !u!4 &8529855907047216692
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5734661184399744810}
+  m_GameObject: {fileID: 2794565106346325191}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 3586500796413581972}
+  m_Father: {fileID: 7052781058315619562}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &5556146741499103168
+--- !u!82 &8659444122639735298
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5734661184399744810}
+  m_GameObject: {fileID: 2794565106346325191}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 255085a3b520b384ab09df2063b6a93b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b77b5583b3f8a6b428fb083028a78f01, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -977,19 +1187,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5530749244343679693
+--- !u!114 &3839422724187135627
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5734661184399744810}
+  m_GameObject: {fileID: 2794565106346325191}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -999,7 +1211,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 1
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -1017,7 +1230,7 @@ MonoBehaviour:
   randomStartMinPercent: 0
   randomStartMaxPercent: 0
   randomEndPercent: 100
---- !u!1 &7232791747939750669
+--- !u!1 &3382708196247431335
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1025,310 +1238,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6021016790528483696}
-  - component: {fileID: 3375148632940550688}
+  - component: {fileID: 5693067695902394641}
+  - component: {fileID: 2309109196748270178}
   m_Layer: 0
-  m_Name: RatBomb - Turn
+  m_Name: Rat_Exploding - Death
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6021016790528483696
+--- !u!4 &5693067695902394641
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7232791747939750669}
+  m_GameObject: {fileID: 3382708196247431335}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3649675308032597045}
-  m_Father: {fileID: 8534375119808051510}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3375148632940550688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7232791747939750669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
-  alwaysHighestPriority: 0
-  groupMasterVolume: 1
-  retriggerPercentage: 100
-  curVariationSequence: 0
-  useNoRepeatRefill: 1
-  useInactivePeriodPoolRefill: 0
-  inactivePeriodSeconds: 5
-  curVariationMode: 0
-  bulkVariationMode: 0
-  chainLoopDelayMin: 0
-  chainLoopDelayMax: 0
-  chainLoopMode: 0
-  chainLoopNumLoops: 0
-  useDialogFadeOut: 0
-  dialogFadeOutTime: 0.5
-  comments: 
-  logSound: 0
-  soundPlayedEventActive: 0
-  soundPlayedCustomEvent: 
-  busIndex: 4
-  spatialBlendType: 1
-  spatialBlend: 1
-  busName: 
-  isExistingBus: 0
-  isCopiedFromDGSC: 0
-  limitMode: 0
-  limitPerXFrames: 1
-  minimumTimeBetween: 0.1
-  limitPolyphony: 0
-  voiceLimitCount: 1
-  targetDespawnedBehavior: 0
-  despawnFadeTime: 1
-  isUsingOcclusion: 0
-  willOcclusionOverrideRaycastOffset: 0
-  occlusionRayCastOffset: 0
-  willOcclusionOverrideFrequencies: 0
-  occlusionMaxCutoffFreq: 0
-  occlusionMinCutoffFreq: 22000
-  copySettingsExpanded: 0
-  expandLinkedGroups: 0
-  childSoundGroups: []
-  endLinkedGroups: []
-  linkedStartGroupSelectionType: 0
-  linkedStopGroupSelectionType: 0
-  groupVariations:
-  - {fileID: 7393339865432059453}
---- !u!1 &7381977143106671248
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3586500796413581972}
-  - component: {fileID: 1301498325391126679}
-  m_Layer: 0
-  m_Name: RatBomb - SuicideExplosion
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3586500796413581972
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7381977143106671248}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 6914065483045147149}
-  m_Father: {fileID: 8534375119808051510}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1301498325391126679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7381977143106671248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
-  alwaysHighestPriority: 0
-  groupMasterVolume: 1
-  retriggerPercentage: 100
-  curVariationSequence: 0
-  useNoRepeatRefill: 1
-  useInactivePeriodPoolRefill: 0
-  inactivePeriodSeconds: 5
-  curVariationMode: 0
-  bulkVariationMode: 0
-  chainLoopDelayMin: 0
-  chainLoopDelayMax: 0
-  chainLoopMode: 0
-  chainLoopNumLoops: 0
-  useDialogFadeOut: 0
-  dialogFadeOutTime: 0.5
-  comments: 
-  logSound: 0
-  soundPlayedEventActive: 0
-  soundPlayedCustomEvent: 
-  busIndex: 4
-  spatialBlendType: 1
-  spatialBlend: 1
-  busName: 
-  isExistingBus: 0
-  isCopiedFromDGSC: 0
-  limitMode: 0
-  limitPerXFrames: 1
-  minimumTimeBetween: 0.1
-  limitPolyphony: 0
-  voiceLimitCount: 1
-  targetDespawnedBehavior: 0
-  despawnFadeTime: 1
-  isUsingOcclusion: 0
-  willOcclusionOverrideRaycastOffset: 0
-  occlusionRayCastOffset: 0
-  willOcclusionOverrideFrequencies: 0
-  occlusionMaxCutoffFreq: 0
-  occlusionMinCutoffFreq: 22000
-  copySettingsExpanded: 0
-  expandLinkedGroups: 0
-  childSoundGroups: []
-  endLinkedGroups: []
-  linkedStartGroupSelectionType: 0
-  linkedStopGroupSelectionType: 0
-  groupVariations:
-  - {fileID: 5530749244343679693}
---- !u!1 &7512651073351603036
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1852780035797356743}
-  - component: {fileID: 3637137219575160487}
-  m_Layer: 0
-  m_Name: RatBomb - Idle2 [Loop]
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1852780035797356743
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7512651073351603036}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 7046910268365035829}
-  m_Father: {fileID: 8534375119808051510}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3637137219575160487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7512651073351603036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
-  alwaysHighestPriority: 0
-  groupMasterVolume: 1
-  retriggerPercentage: 100
-  curVariationSequence: 0
-  useNoRepeatRefill: 1
-  useInactivePeriodPoolRefill: 0
-  inactivePeriodSeconds: 5
-  curVariationMode: 0
-  bulkVariationMode: 0
-  chainLoopDelayMin: 0
-  chainLoopDelayMax: 0
-  chainLoopMode: 0
-  chainLoopNumLoops: 0
-  useDialogFadeOut: 0
-  dialogFadeOutTime: 0.5
-  comments: 
-  logSound: 0
-  soundPlayedEventActive: 0
-  soundPlayedCustomEvent: 
-  busIndex: 4
-  spatialBlendType: 1
-  spatialBlend: 1
-  busName: 
-  isExistingBus: 0
-  isCopiedFromDGSC: 0
-  limitMode: 0
-  limitPerXFrames: 1
-  minimumTimeBetween: 0.1
-  limitPolyphony: 0
-  voiceLimitCount: 1
-  targetDespawnedBehavior: 0
-  despawnFadeTime: 1
-  isUsingOcclusion: 0
-  willOcclusionOverrideRaycastOffset: 0
-  occlusionRayCastOffset: 0
-  willOcclusionOverrideFrequencies: 0
-  occlusionMaxCutoffFreq: 0
-  occlusionMinCutoffFreq: 22000
-  copySettingsExpanded: 0
-  expandLinkedGroups: 0
-  childSoundGroups: []
-  endLinkedGroups: []
-  linkedStartGroupSelectionType: 0
-  linkedStopGroupSelectionType: 0
-  groupVariations:
-  - {fileID: 5301949223682018380}
---- !u!1 &8198429571139624906
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1504130895443298863}
-  - component: {fileID: 4789184684092040723}
-  m_Layer: 0
-  m_Name: RatBomb - Run [Loop]
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1504130895443298863
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8198429571139624906}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4532806748438349513}
-  m_Father: {fileID: 8534375119808051510}
+  - {fileID: 3046605158520623056}
+  m_Father: {fileID: 4049730768993036725}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4789184684092040723
+--- !u!114 &2309109196748270178
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8198429571139624906}
+  m_GameObject: {fileID: 3382708196247431335}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
@@ -1354,9 +1294,13 @@ MonoBehaviour:
   logSound: 0
   soundPlayedEventActive: 0
   soundPlayedCustomEvent: 
-  busIndex: 4
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
   spatialBlendType: 1
   spatialBlend: 1
+  groupPlayType: 0
   busName: 
   isExistingBus: 0
   isCopiedFromDGSC: 0
@@ -1380,8 +1324,8 @@ MonoBehaviour:
   linkedStartGroupSelectionType: 0
   linkedStopGroupSelectionType: 0
   groupVariations:
-  - {fileID: 6298718724500263012}
---- !u!1 &8362204877001101464
+  - {fileID: 3601741809384684791}
+--- !u!1 &4049730768992941461
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1389,321 +1333,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7155830303738271759}
-  - component: {fileID: 8034156048739690363}
-  - component: {fileID: 2061418019186526392}
+  - component: {fileID: 4049730768993036725}
+  - component: {fileID: 4049730768986390645}
   m_Layer: 0
-  m_Name: RatBomb - Attack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7155830303738271759
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8362204877001101464}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4252850044055673645}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &8034156048739690363
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8362204877001101464}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c430e7d1bd3c42142a2b4b0cf6124be2, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
-  Pan2D: 0
-  rolloffMode: 2
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.1
-      value: 1
-      inSlope: -10.0039835
-      outSlope: -10.0039835
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.2
-      value: 0.5
-      inSlope: -2.5009959
-      outSlope: -2.5009959
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.4
-      value: 0.25
-      inSlope: -0.62524897
-      outSlope: -0.62524897
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -0.10003992
-      outSlope: -0.10003992
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &2061418019186526392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8362204877001101464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  probabilityToPlay: 100
-  useLocalization: 0
-  useRandomPitch: 0
-  randomPitchMode: 0
-  randomPitchMin: 0
-  randomPitchMax: 0
-  useRandomVolume: 0
-  randomVolumeMode: 0
-  randomVolumeMin: 0
-  randomVolumeMax: 0
-  weight: 5
-  audLocation: 0
-  resourceFileName: 
-  isExpanded: 1
-  isChecked: 1
-  useFades: 0
-  fadeInTime: 0
-  fadeOutTime: 0
-  useCustomLooping: 0
-  minCustomLoops: 1
-  maxCustomLoops: 5
-  useIntroSilence: 0
-  introSilenceMin: 0
-  introSilenceMax: 0
-  useRandomStartTime: 0
-  randomStartMinPercent: 0
-  randomStartMaxPercent: 0
-  randomEndPercent: 100
---- !u!1 &8508139439418794677
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4252850044055673645}
-  - component: {fileID: 9178200104444582089}
-  m_Layer: 0
-  m_Name: RatBomb - Attack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4252850044055673645
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8508139439418794677}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 7155830303738271759}
-  m_Father: {fileID: 8534375119808051510}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9178200104444582089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8508139439418794677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
-  alwaysHighestPriority: 0
-  groupMasterVolume: 1
-  retriggerPercentage: 100
-  curVariationSequence: 0
-  useNoRepeatRefill: 1
-  useInactivePeriodPoolRefill: 0
-  inactivePeriodSeconds: 5
-  curVariationMode: 0
-  bulkVariationMode: 0
-  chainLoopDelayMin: 0
-  chainLoopDelayMax: 0
-  chainLoopMode: 0
-  chainLoopNumLoops: 0
-  useDialogFadeOut: 0
-  dialogFadeOutTime: 0.5
-  comments: 
-  logSound: 0
-  soundPlayedEventActive: 0
-  soundPlayedCustomEvent: 
-  busIndex: 3
-  spatialBlendType: 1
-  spatialBlend: 1
-  busName: 
-  isExistingBus: 0
-  isCopiedFromDGSC: 0
-  limitMode: 0
-  limitPerXFrames: 1
-  minimumTimeBetween: 0.1
-  limitPolyphony: 0
-  voiceLimitCount: 1
-  targetDespawnedBehavior: 0
-  despawnFadeTime: 1
-  isUsingOcclusion: 0
-  willOcclusionOverrideRaycastOffset: 0
-  occlusionRayCastOffset: 0
-  willOcclusionOverrideFrequencies: 0
-  occlusionMaxCutoffFreq: 0
-  occlusionMinCutoffFreq: 22000
-  copySettingsExpanded: 0
-  expandLinkedGroups: 0
-  childSoundGroups: []
-  endLinkedGroups: []
-  linkedStartGroupSelectionType: 0
-  linkedStopGroupSelectionType: 0
-  groupVariations:
-  - {fileID: 2061418019186526392}
---- !u!1 &8534375119807620374
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8534375119808051510}
-  - component: {fileID: 8534375119818903798}
-  m_Layer: 0
-  m_Name: RatBomb_DSGC
+  m_Name: InfectedRotling_DSGC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
---- !u!4 &8534375119808051510
+--- !u!4 &4049730768993036725
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8534375119807620374}
+  m_GameObject: {fileID: 4049730768992941461}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4252850044055673645}
-  - {fileID: 1842416865700669922}
-  - {fileID: 1565060827582689053}
-  - {fileID: 1852780035797356743}
-  - {fileID: 1504130895443298863}
-  - {fileID: 3586500796413581972}
-  - {fileID: 6021016790528483696}
-  - {fileID: 3852224838846336036}
+  - {fileID: 5307571515936089949}
+  - {fileID: 4640610446959303240}
+  - {fileID: 5029583281100099638}
+  - {fileID: 1076688697467110391}
+  - {fileID: 5693067695902394641}
+  - {fileID: 5775291090141140498}
+  - {fileID: 7052781058315619562}
+  - {fileID: 4675023808890700595}
+  - {fileID: 1738613475285814438}
+  - {fileID: 910350102299706364}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8534375119818903798
+--- !u!114 &4049730768986390645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8534375119807620374}
+  m_GameObject: {fileID: 4049730768992941461}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 731d0f46f16d9b44bb35cd6816854083, type: 3}
@@ -1738,10 +1407,10 @@ MonoBehaviour:
     isSoloed: 0
     isMuted: 0
     voiceLimit: -1
-    stopOldest: 0
     isExisting: 0
     isTemporary: 0
     isUsingOcclusion: 0
+    busVoiceLimitExceededMode: 0
     busColor: {r: 1, g: 1, b: 1, a: 1}
     mixerChannel: {fileID: 0}
     forceTo2D: 0
@@ -1750,10 +1419,10 @@ MonoBehaviour:
     isSoloed: 0
     isMuted: 0
     voiceLimit: 1
-    stopOldest: 1
     isExisting: 0
     isTemporary: 0
     isUsingOcclusion: 0
+    busVoiceLimitExceededMode: 0
     busColor: {r: 1, g: 1, b: 1, a: 1}
     mixerChannel: {fileID: 0}
     forceTo2D: 0
@@ -1773,7 +1442,7 @@ MonoBehaviour:
   itemsCreatedEventExpanded: 0
   itemsCreatedCustomEvent: 
   showUnityMixerGroupAssignment: 1
---- !u!1 &8550044654661894348
+--- !u!1 &4113308929661845533
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1781,227 +1450,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 613597080414024992}
-  - component: {fileID: 7297636268826122753}
-  - component: {fileID: 580127698720493893}
+  - component: {fileID: 5630702609332686868}
+  - component: {fileID: 6044279977381418452}
+  - component: {fileID: 7109662054202890441}
   m_Layer: 0
-  m_Name: Werewolf-Idle
+  m_Name: Rat_Exploding - Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &613597080414024992
+--- !u!4 &5630702609332686868
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8550044654661894348}
+  m_GameObject: {fileID: 4113308929661845533}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 3852224838846336036}
+  m_Father: {fileID: 5307571515936089949}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &7297636268826122753
+--- !u!82 &6044279977381418452
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8550044654661894348}
+  m_GameObject: {fileID: 4113308929661845533}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ec2f04192bc7d994b9fa208199c85262, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 10
-  MaxDistance: 100
-  Pan2D: 0
-  rolloffMode: 2
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.1
-      value: 1
-      inSlope: -10.0039835
-      outSlope: -10.0039835
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.2
-      value: 0.5
-      inSlope: -2.5009959
-      outSlope: -2.5009959
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.4
-      value: 0.25
-      inSlope: -0.62524897
-      outSlope: -0.62524897
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -0.10003992
-      outSlope: -0.10003992
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &580127698720493893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8550044654661894348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  probabilityToPlay: 100
-  useLocalization: 0
-  useRandomPitch: 0
-  randomPitchMode: 0
-  randomPitchMin: 0
-  randomPitchMax: 0
-  useRandomVolume: 0
-  randomVolumeMode: 0
-  randomVolumeMin: 0
-  randomVolumeMax: 0
-  weight: 5
-  audLocation: 0
-  resourceFileName: 
-  isExpanded: 1
-  isChecked: 1
-  useFades: 0
-  fadeInTime: 0
-  fadeOutTime: 0
-  useCustomLooping: 0
-  minCustomLoops: 1
-  maxCustomLoops: 5
-  useIntroSilence: 0
-  introSilenceMin: 0
-  introSilenceMax: 0
-  useRandomStartTime: 0
-  randomStartMinPercent: 0
-  randomStartMaxPercent: 0
-  randomEndPercent: 100
---- !u!1 &8657865053038450043
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7294051188278225215}
-  - component: {fileID: 5614958268424165824}
-  - component: {fileID: 1325804929751492845}
-  m_Layer: 0
-  m_Name: RatBomb - Death
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7294051188278225215
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8657865053038450043}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1842416865700669922}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &5614958268424165824
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8657865053038450043}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c9703478fa1954746944e091e74d497f, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8dbbd70eb1df91446a0070945abd8301, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2105,19 +1588,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1325804929751492845
+--- !u!114 &7109662054202890441
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8657865053038450043}
+  m_GameObject: {fileID: 4113308929661845533}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -2127,7 +1612,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 1
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -2145,7 +1631,7 @@ MonoBehaviour:
   randomStartMinPercent: 0
   randomStartMaxPercent: 0
   randomEndPercent: 100
---- !u!1 &8845646333151229692
+--- !u!1 &4447415505395642473
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2153,45 +1639,140 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4532806748438349513}
-  - component: {fileID: 2801866726408681479}
-  - component: {fileID: 6298718724500263012}
+  - component: {fileID: 4675023808890700595}
+  - component: {fileID: 8866701032903427628}
   m_Layer: 0
-  m_Name: RatBomb - Run [Loop]
+  m_Name: Rat_Exploding - Move
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4532806748438349513
+--- !u!4 &4675023808890700595
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8845646333151229692}
+  m_GameObject: {fileID: 4447415505395642473}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2812217170217131895}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8866701032903427628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4447415505395642473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
+  alwaysHighestPriority: 0
+  groupMasterVolume: 1
+  retriggerPercentage: 100
+  curVariationSequence: 0
+  useNoRepeatRefill: 1
+  useInactivePeriodPoolRefill: 0
+  inactivePeriodSeconds: 5
+  curVariationMode: 0
+  bulkVariationMode: 0
+  chainLoopDelayMin: 0
+  chainLoopDelayMax: 0
+  chainLoopMode: 0
+  chainLoopNumLoops: 0
+  useDialogFadeOut: 0
+  dialogFadeOutTime: 0.5
+  comments: 
+  logSound: 0
+  soundPlayedEventActive: 0
+  soundPlayedCustomEvent: 
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
+  spatialBlendType: 1
+  spatialBlend: 1
+  groupPlayType: 0
+  busName: 
+  isExistingBus: 0
+  isCopiedFromDGSC: 0
+  limitMode: 0
+  limitPerXFrames: 1
+  minimumTimeBetween: 0.1
+  limitPolyphony: 0
+  voiceLimitCount: 1
+  targetDespawnedBehavior: 0
+  despawnFadeTime: 1
+  isUsingOcclusion: 0
+  willOcclusionOverrideRaycastOffset: 0
+  occlusionRayCastOffset: 0
+  willOcclusionOverrideFrequencies: 0
+  occlusionMaxCutoffFreq: 0
+  occlusionMinCutoffFreq: 22000
+  copySettingsExpanded: 0
+  expandLinkedGroups: 0
+  childSoundGroups: []
+  endLinkedGroups: []
+  linkedStartGroupSelectionType: 0
+  linkedStopGroupSelectionType: 0
+  groupVariations:
+  - {fileID: 822874807221876282}
+--- !u!1 &5346788040023230514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3046605158520623056}
+  - component: {fileID: 5963008351747025714}
+  - component: {fileID: 3601741809384684791}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Death
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3046605158520623056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5346788040023230514}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1504130895443298863}
+  m_Father: {fileID: 5693067695902394641}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &2801866726408681479
+--- !u!82 &5963008351747025714
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8845646333151229692}
+  m_GameObject: {fileID: 5346788040023230514}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e079f062131cc804e90e11801e540502, type: 3}
+  m_audioClip: {fileID: 8300000, guid: fdf7d7c2800efd245b2cb7945137f7bc, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -2291,19 +1872,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6298718724500263012
+--- !u!114 &3601741809384684791
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8845646333151229692}
+  m_GameObject: {fileID: 5346788040023230514}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
   useLocalization: 0
   useRandomPitch: 0
   randomPitchMode: 0
@@ -2313,7 +1896,8 @@ MonoBehaviour:
   randomVolumeMode: 0
   randomVolumeMin: 0
   randomVolumeMax: 0
-  weight: 5
+  weight: 1
+  clipAlias: 
   audLocation: 0
   resourceFileName: 
   isExpanded: 1
@@ -2331,3 +1915,1045 @@ MonoBehaviour:
   randomStartMinPercent: 0
   randomStartMaxPercent: 0
   randomEndPercent: 100
+--- !u!1 &5764713601004205315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5029583281100099638}
+  - component: {fileID: 8495960685978864488}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Damage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5029583281100099638
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5764713601004205315}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1115913505846374631}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8495960685978864488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5764713601004205315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
+  alwaysHighestPriority: 0
+  groupMasterVolume: 1
+  retriggerPercentage: 100
+  curVariationSequence: 0
+  useNoRepeatRefill: 1
+  useInactivePeriodPoolRefill: 0
+  inactivePeriodSeconds: 5
+  curVariationMode: 0
+  bulkVariationMode: 0
+  chainLoopDelayMin: 0
+  chainLoopDelayMax: 0
+  chainLoopMode: 0
+  chainLoopNumLoops: 0
+  useDialogFadeOut: 0
+  dialogFadeOutTime: 0.5
+  comments: 
+  logSound: 0
+  soundPlayedEventActive: 0
+  soundPlayedCustomEvent: 
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
+  spatialBlendType: 1
+  spatialBlend: 1
+  groupPlayType: 0
+  busName: 
+  isExistingBus: 0
+  isCopiedFromDGSC: 0
+  limitMode: 0
+  limitPerXFrames: 1
+  minimumTimeBetween: 0.1
+  limitPolyphony: 0
+  voiceLimitCount: 1
+  targetDespawnedBehavior: 0
+  despawnFadeTime: 1
+  isUsingOcclusion: 0
+  willOcclusionOverrideRaycastOffset: 0
+  occlusionRayCastOffset: 0
+  willOcclusionOverrideFrequencies: 0
+  occlusionMaxCutoffFreq: 0
+  occlusionMinCutoffFreq: 22000
+  copySettingsExpanded: 0
+  expandLinkedGroups: 0
+  childSoundGroups: []
+  endLinkedGroups: []
+  linkedStartGroupSelectionType: 0
+  linkedStopGroupSelectionType: 0
+  groupVariations:
+  - {fileID: 7038996855055814914}
+--- !u!1 &6467918338179376347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1115913505846374631}
+  - component: {fileID: 1751093293146640828}
+  - component: {fileID: 7038996855055814914}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Damage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1115913505846374631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6467918338179376347}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5029583281100099638}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1751093293146640828
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6467918338179376347}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 5a1c6c64b9520cd46884556b832e6dd2, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 10
+  MaxDistance: 100
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.1
+      value: 1
+      inSlope: -10.0039835
+      outSlope: -10.0039835
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2
+      value: 0.5
+      inSlope: -2.5009959
+      outSlope: -2.5009959
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4
+      value: 0.25
+      inSlope: -0.62524897
+      outSlope: -0.62524897
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.10003992
+      outSlope: -0.10003992
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &7038996855055814914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6467918338179376347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
+  useLocalization: 0
+  useRandomPitch: 0
+  randomPitchMode: 0
+  randomPitchMin: 0
+  randomPitchMax: 0
+  useRandomVolume: 0
+  randomVolumeMode: 0
+  randomVolumeMin: 0
+  randomVolumeMax: 0
+  weight: 1
+  clipAlias: 
+  audLocation: 0
+  resourceFileName: 
+  isExpanded: 1
+  isChecked: 1
+  useFades: 0
+  fadeInTime: 0
+  fadeOutTime: 0
+  useCustomLooping: 0
+  minCustomLoops: 1
+  maxCustomLoops: 5
+  useIntroSilence: 0
+  introSilenceMin: 0
+  introSilenceMax: 0
+  useRandomStartTime: 0
+  randomStartMinPercent: 0
+  randomStartMaxPercent: 0
+  randomEndPercent: 100
+--- !u!1 &6579349084767452771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2812217170217131895}
+  - component: {fileID: 8769433230684686780}
+  - component: {fileID: 822874807221876282}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Move
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2812217170217131895
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6579349084767452771}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4675023808890700595}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &8769433230684686780
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6579349084767452771}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 9230ab7ac80909f4cbe486923fa208e5, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 10
+  MaxDistance: 100
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.1
+      value: 1
+      inSlope: -10.0039835
+      outSlope: -10.0039835
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2
+      value: 0.5
+      inSlope: -2.5009959
+      outSlope: -2.5009959
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4
+      value: 0.25
+      inSlope: -0.62524897
+      outSlope: -0.62524897
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.10003992
+      outSlope: -0.10003992
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &822874807221876282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6579349084767452771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
+  useLocalization: 0
+  useRandomPitch: 0
+  randomPitchMode: 0
+  randomPitchMin: 0
+  randomPitchMax: 0
+  useRandomVolume: 0
+  randomVolumeMode: 0
+  randomVolumeMin: 0
+  randomVolumeMax: 0
+  weight: 1
+  clipAlias: 
+  audLocation: 0
+  resourceFileName: 
+  isExpanded: 1
+  isChecked: 1
+  useFades: 0
+  fadeInTime: 0
+  fadeOutTime: 0
+  useCustomLooping: 0
+  minCustomLoops: 1
+  maxCustomLoops: 5
+  useIntroSilence: 0
+  introSilenceMin: 0
+  introSilenceMax: 0
+  useRandomStartTime: 0
+  randomStartMinPercent: 0
+  randomStartMaxPercent: 0
+  randomEndPercent: 100
+--- !u!1 &6920691664526341042
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1738613475285814438}
+  - component: {fileID: 4417952409969023159}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Move_Stationary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1738613475285814438
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6920691664526341042}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1615628430720545381}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4417952409969023159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6920691664526341042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
+  alwaysHighestPriority: 0
+  groupMasterVolume: 1
+  retriggerPercentage: 100
+  curVariationSequence: 0
+  useNoRepeatRefill: 1
+  useInactivePeriodPoolRefill: 0
+  inactivePeriodSeconds: 5
+  curVariationMode: 0
+  bulkVariationMode: 0
+  chainLoopDelayMin: 0
+  chainLoopDelayMax: 0
+  chainLoopMode: 0
+  chainLoopNumLoops: 0
+  useDialogFadeOut: 0
+  dialogFadeOutTime: 0.5
+  comments: 
+  logSound: 0
+  soundPlayedEventActive: 0
+  soundPlayedCustomEvent: 
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
+  spatialBlendType: 1
+  spatialBlend: 1
+  groupPlayType: 0
+  busName: 
+  isExistingBus: 0
+  isCopiedFromDGSC: 0
+  limitMode: 0
+  limitPerXFrames: 1
+  minimumTimeBetween: 0.1
+  limitPolyphony: 0
+  voiceLimitCount: 1
+  targetDespawnedBehavior: 0
+  despawnFadeTime: 1
+  isUsingOcclusion: 0
+  willOcclusionOverrideRaycastOffset: 0
+  occlusionRayCastOffset: 0
+  willOcclusionOverrideFrequencies: 0
+  occlusionMaxCutoffFreq: 0
+  occlusionMinCutoffFreq: 22000
+  copySettingsExpanded: 0
+  expandLinkedGroups: 0
+  childSoundGroups: []
+  endLinkedGroups: []
+  linkedStartGroupSelectionType: 0
+  linkedStopGroupSelectionType: 0
+  groupVariations:
+  - {fileID: 4097006870186520302}
+--- !u!1 &7021092085319418866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3682690435489745112}
+  - component: {fileID: 7465242432864111522}
+  - component: {fileID: 4802690399447763836}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Attack_SuicideExplosion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3682690435489745112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7021092085319418866}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4640610446959303240}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &7465242432864111522
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7021092085319418866}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: ca5363dbe6f83ff4eb277d8575f1b484, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 10
+  MaxDistance: 100
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.1
+      value: 1
+      inSlope: -10.0039835
+      outSlope: -10.0039835
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2
+      value: 0.5
+      inSlope: -2.5009959
+      outSlope: -2.5009959
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4
+      value: 0.25
+      inSlope: -0.62524897
+      outSlope: -0.62524897
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.10003992
+      outSlope: -0.10003992
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &4802690399447763836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7021092085319418866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe737f362f2da5d4ebabefe8c9165162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  probabilityToPlay: 100
+  importance: 5
+  isUninterruptible: 0
+  useLocalization: 0
+  useRandomPitch: 0
+  randomPitchMode: 0
+  randomPitchMin: 0
+  randomPitchMax: 0
+  useRandomVolume: 0
+  randomVolumeMode: 0
+  randomVolumeMin: 0
+  randomVolumeMax: 0
+  weight: 1
+  clipAlias: 
+  audLocation: 0
+  resourceFileName: 
+  isExpanded: 1
+  isChecked: 1
+  useFades: 0
+  fadeInTime: 0
+  fadeOutTime: 0
+  useCustomLooping: 0
+  minCustomLoops: 1
+  maxCustomLoops: 5
+  useIntroSilence: 0
+  introSilenceMin: 0
+  introSilenceMax: 0
+  useRandomStartTime: 0
+  randomStartMinPercent: 0
+  randomStartMaxPercent: 0
+  randomEndPercent: 100
+--- !u!1 &7091202495656004257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5307571515936089949}
+  - component: {fileID: 7026060601503231991}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Attack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5307571515936089949
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091202495656004257}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5630702609332686868}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7026060601503231991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7091202495656004257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
+  alwaysHighestPriority: 0
+  groupMasterVolume: 1
+  retriggerPercentage: 100
+  curVariationSequence: 0
+  useNoRepeatRefill: 1
+  useInactivePeriodPoolRefill: 0
+  inactivePeriodSeconds: 5
+  curVariationMode: 0
+  bulkVariationMode: 0
+  chainLoopDelayMin: 0
+  chainLoopDelayMax: 0
+  chainLoopMode: 0
+  chainLoopNumLoops: 0
+  useDialogFadeOut: 0
+  dialogFadeOutTime: 0.5
+  comments: 
+  logSound: 0
+  soundPlayedEventActive: 0
+  soundPlayedCustomEvent: 
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
+  spatialBlendType: 1
+  spatialBlend: 1
+  groupPlayType: 0
+  busName: 
+  isExistingBus: 0
+  isCopiedFromDGSC: 0
+  limitMode: 0
+  limitPerXFrames: 1
+  minimumTimeBetween: 0.1
+  limitPolyphony: 0
+  voiceLimitCount: 1
+  targetDespawnedBehavior: 0
+  despawnFadeTime: 1
+  isUsingOcclusion: 0
+  willOcclusionOverrideRaycastOffset: 0
+  occlusionRayCastOffset: 0
+  willOcclusionOverrideFrequencies: 0
+  occlusionMaxCutoffFreq: 0
+  occlusionMinCutoffFreq: 22000
+  copySettingsExpanded: 0
+  expandLinkedGroups: 0
+  childSoundGroups: []
+  endLinkedGroups: []
+  linkedStartGroupSelectionType: 0
+  linkedStopGroupSelectionType: 0
+  groupVariations:
+  - {fileID: 7109662054202890441}
+--- !u!1 &7110069587424939754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4640610446959303240}
+  - component: {fileID: 5549509870420210759}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Attack_SuicideExplosion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4640610446959303240
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7110069587424939754}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3682690435489745112}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5549509870420210759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7110069587424939754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
+  alwaysHighestPriority: 0
+  groupMasterVolume: 1
+  retriggerPercentage: 100
+  curVariationSequence: 0
+  useNoRepeatRefill: 1
+  useInactivePeriodPoolRefill: 0
+  inactivePeriodSeconds: 5
+  curVariationMode: 0
+  bulkVariationMode: 0
+  chainLoopDelayMin: 0
+  chainLoopDelayMax: 0
+  chainLoopMode: 0
+  chainLoopNumLoops: 0
+  useDialogFadeOut: 0
+  dialogFadeOutTime: 0.5
+  comments: 
+  logSound: 0
+  soundPlayedEventActive: 0
+  soundPlayedCustomEvent: 
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
+  spatialBlendType: 1
+  spatialBlend: 1
+  groupPlayType: 0
+  busName: 
+  isExistingBus: 0
+  isCopiedFromDGSC: 0
+  limitMode: 0
+  limitPerXFrames: 1
+  minimumTimeBetween: 0.1
+  limitPolyphony: 0
+  voiceLimitCount: 1
+  targetDespawnedBehavior: 0
+  despawnFadeTime: 1
+  isUsingOcclusion: 0
+  willOcclusionOverrideRaycastOffset: 0
+  occlusionRayCastOffset: 0
+  willOcclusionOverrideFrequencies: 0
+  occlusionMaxCutoffFreq: 0
+  occlusionMinCutoffFreq: 22000
+  copySettingsExpanded: 0
+  expandLinkedGroups: 0
+  childSoundGroups: []
+  endLinkedGroups: []
+  linkedStartGroupSelectionType: 0
+  linkedStopGroupSelectionType: 0
+  groupVariations:
+  - {fileID: 4802690399447763836}
+--- !u!1 &9158430576475828205
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7052781058315619562}
+  - component: {fileID: 7993113563400315352}
+  m_Layer: 0
+  m_Name: Rat_Exploding - Idle2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7052781058315619562
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9158430576475828205}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8529855907047216692}
+  m_Father: {fileID: 4049730768993036725}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7993113563400315352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9158430576475828205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e926080ea711027418e38c39ddea7741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variationTemplate: {fileID: 100000, guid: c00c191bd9edebb4aabab20dce59c26a, type: 3}
+  alwaysHighestPriority: 0
+  groupMasterVolume: 1
+  retriggerPercentage: 100
+  curVariationSequence: 0
+  useNoRepeatRefill: 1
+  useInactivePeriodPoolRefill: 0
+  inactivePeriodSeconds: 5
+  curVariationMode: 0
+  bulkVariationMode: 0
+  chainLoopDelayMin: 0
+  chainLoopDelayMax: 0
+  chainLoopMode: 0
+  chainLoopNumLoops: 0
+  useDialogFadeOut: 0
+  dialogFadeOutTime: 0.5
+  comments: 
+  logSound: 0
+  soundPlayedEventActive: 0
+  soundPlayedCustomEvent: 
+  busIndex: 0
+  ignoreListenerPause: 0
+  importance: 5
+  isUninterruptible: 0
+  spatialBlendType: 1
+  spatialBlend: 1
+  groupPlayType: 0
+  busName: 
+  isExistingBus: 0
+  isCopiedFromDGSC: 0
+  limitMode: 0
+  limitPerXFrames: 1
+  minimumTimeBetween: 0.1
+  limitPolyphony: 0
+  voiceLimitCount: 1
+  targetDespawnedBehavior: 0
+  despawnFadeTime: 1
+  isUsingOcclusion: 0
+  willOcclusionOverrideRaycastOffset: 0
+  occlusionRayCastOffset: 0
+  willOcclusionOverrideFrequencies: 0
+  occlusionMaxCutoffFreq: 0
+  occlusionMinCutoffFreq: 22000
+  copySettingsExpanded: 0
+  expandLinkedGroups: 0
+  childSoundGroups: []
+  endLinkedGroups: []
+  linkedStartGroupSelectionType: 0
+  linkedStopGroupSelectionType: 0
+  groupVariations:
+  - {fileID: 3839422724187135627}

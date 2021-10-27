@@ -40,8 +40,8 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_chargeDuration;
             public float chargeDuration => m_chargeDuration;
             [SerializeField, MinValue(0), TitleGroup("Attack")]
-            private float m_attackDuration;
-            public float attackDuration => m_attackDuration;
+            private int m_attackRepeats;
+            public int attackRepeats => m_attackRepeats;
             [SerializeField, MinValue(0), TitleGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -426,18 +426,16 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.attackChargeLoopAnimation, true);
             yield return new WaitForSeconds(m_info.chargeDuration);
-            m_animation.SetAnimation(0, m_info.attackLoopAnimation, true);
-            float time = 0;
-            while (time < m_info.attackDuration)
+            for (int i = 0; i < m_info.attackRepeats; i++)
             {
                 if (!IsFacingTarget())
                 {
                     CustomTurn();
                 }
-                time += Time.deltaTime;
-                yield return null;
+                m_animation.SetAnimation(0, m_info.attackLoopAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackLoopAnimation);
+                m_animation.SetEmptyAnimation(0, 0);
             }
-            //yield return new WaitForSeconds(m_info.attackDuration);
             m_attackBB.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();

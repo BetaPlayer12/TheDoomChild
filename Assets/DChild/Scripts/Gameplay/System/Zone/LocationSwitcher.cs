@@ -30,6 +30,9 @@ namespace DChild.Gameplay.Systems
 
         public string promptMessage => m_handle.prompMessage;
 
+        // for testing
+        public LocationData locationData => m_destination;
+
         public void Interact(Character character)
         {
             if (m_handle.isDebugSwitchHandle)
