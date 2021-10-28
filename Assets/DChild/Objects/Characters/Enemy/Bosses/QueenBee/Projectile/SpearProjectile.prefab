@@ -136,6 +136,12 @@ MonoBehaviour:
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
   m_model: {fileID: 0}
+  m_onLaunch:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onReset:
+    m_PersistentCalls:
+      m_Calls: []
   m_data: {fileID: 11400000, guid: 83d57085266809c4282417e799402fbf, type: 2}
 --- !u!114 &4702182387343241938
 MonoBehaviour:
@@ -150,12 +156,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 4604033295270012058}
-  m_data: {fileID: 0}
-  m_info:
-    damage: []
-    critChance: 0
-    critDamageModifier: 1
+  m_data: {fileID: 11400000, guid: b3ce50f5e70548b48b0e8b5cad916c05, type: 2}
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &7248809344154123653
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,8 +257,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 4534516295352479683}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
+  m_canBlockDamage: 0
 --- !u!212 &8773677329748812316
 SpriteRenderer:
   m_ObjectHideFlags: 0

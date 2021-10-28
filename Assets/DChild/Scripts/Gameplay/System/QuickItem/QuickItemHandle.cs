@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
 using Doozy.Engine.Nody;
@@ -25,6 +25,7 @@ namespace DChild.Gameplay.Inventories
             public int currentIndex { get; private set; }
             public ItemSlot currentSlot { get; private set; }
             public SelectionType selectionType { get; private set; }
+            
 
             public void Initialize(int currentIndex, ItemSlot currentSlot, SelectionType selectionType)
             {
@@ -40,6 +41,9 @@ namespace DChild.Gameplay.Inventories
         private IItemContainer m_container;
         [SerializeField]
         private bool m_wrapped;
+        [SerializeField]
+        private float m_itemcooldown=5;
+        private bool CooldownStatus=false;
 
         [ShowInInspector, ReadOnly]
         private int m_currentIndex;
@@ -65,11 +69,15 @@ namespace DChild.Gameplay.Inventories
 
         public void UseCurrentItem()
         {
-            if (CanUseCurrentItem())
+            if (CanUseCurrentItem()&& CooldownStatus == false)
             {
                 if (m_player != null)
                 {
                     m_currentItem.Use(m_player);
+                    CooldownStatus = true;
+                    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
+
+                    StartCoroutine(DelayCoroutine());
                 }
                 if (m_removeItemCountOnConsume)
                 {
@@ -77,7 +85,14 @@ namespace DChild.Gameplay.Inventories
                 }
             }
         }
+        IEnumerator DelayCoroutine()
+        {
+          
+            yield return new WaitForSeconds(m_itemcooldown);
+            CooldownStatus = false;
+            GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
 
+        }
         [Button, HorizontalGroup("Split"), HideInEditorMode]
         public void Previous()
         {
