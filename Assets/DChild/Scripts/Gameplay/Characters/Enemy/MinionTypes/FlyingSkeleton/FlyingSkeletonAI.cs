@@ -215,9 +215,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_flinchHandle.m_autoFlinch = false;
-            m_stateHandle.ApplyQueuedState();
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_flinchHandle.m_autoFlinch = false;
+                m_stateHandle.ApplyQueuedState();
+            }
         }
 
         private Vector2 WallPosition()
