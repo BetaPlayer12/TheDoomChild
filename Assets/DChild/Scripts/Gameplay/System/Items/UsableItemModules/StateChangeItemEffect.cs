@@ -28,7 +28,7 @@ namespace DChild.Gameplay.Items
             switch (m_stateToChange)
             {
                 case State.Rage:
-                    player.state.isEnraged = true;
+                    player.state.isEnraged = false;
                     break;
             }
         }
