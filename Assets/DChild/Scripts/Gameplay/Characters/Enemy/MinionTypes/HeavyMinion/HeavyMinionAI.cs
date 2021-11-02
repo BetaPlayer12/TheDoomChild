@@ -376,6 +376,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator GroundSmashRoutine()
         {
+            m_flinchHandle.gameObject.SetActive(false);
+            m_animation.SetEmptyAnimation(1, 0).Alpha = 0;
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.attackMelee.animation, false);
             yield return new WaitForSeconds(1.25f);
@@ -385,6 +387,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_explosionBB.enabled = false;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMelee.animation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_flinchHandle.gameObject.SetActive(true);
             m_animation.DisableRootMotion();
             m_stateHandle.ApplyQueuedState();
             yield return null;
