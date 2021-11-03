@@ -42,7 +42,7 @@ namespace DChild.Gameplay.Inventories
         [SerializeField]
         private bool m_wrapped;
         [SerializeField]
-        private float m_itemcooldown=5;
+        private float m_itemcooldown=3;
         private bool CooldownStatus=false;
 
         [ShowInInspector, ReadOnly]
