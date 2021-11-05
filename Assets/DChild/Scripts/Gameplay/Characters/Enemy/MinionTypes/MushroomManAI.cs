@@ -142,6 +142,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_animation.DisableRootMotion();
+            m_flinchHandle.gameObject.SetActive(true);
             m_attackBB.SetActive(false);
             m_stateHandle.ApplyQueuedState();
         }
@@ -355,6 +356,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.Attack:
                             m_attackBB.SetActive(true);
+                            m_animation.SetEmptyAnimation(1, 0).Alpha = 0;
+                            m_flinchHandle.gameObject.SetActive(false);
                             m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
                             break;

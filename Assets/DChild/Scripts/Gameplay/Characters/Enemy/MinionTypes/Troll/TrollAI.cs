@@ -363,12 +363,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            //StopAllCoroutines();
-            //m_animation.DisableRootMotion();
-            //m_stateHandle.OverrideState(State.WaitBehaviourEnd);
-
-            StartCoroutine(FlinchShakeRoutine());
-            //m_animation.SetAnimation(1, m_info.flinchAnimation, false);
+            //StartCoroutine(FlinchShakeRoutine());
         }
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
@@ -378,13 +373,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator FlinchShakeRoutine()
         {
-            m_animation.SetEmptyAnimation(1, 0);
-            m_animation.AddAnimation(1, m_info.rootShakeAnimation, true, 0);
+            m_animation.SetEmptyAnimation(2, 0);
+            m_animation.AddAnimation(2, m_info.rootShakeAnimation, true, 0);
             //m_animation.AddAnimation(1, m_info.flinchAnimation, true, 0);
-            m_animation.animationState.GetCurrent(1).TimeScale = 3;
+            m_animation.animationState.GetCurrent(2).TimeScale = 3;
             //m_animation.AddEmptyAnimation(1, 2.5f, 3);
             yield return new WaitForSeconds(.25f);
-            m_animation.SetEmptyAnimation(1, 0);
+            m_animation.SetEmptyAnimation(2, 0);
             yield return null;
         }
 
