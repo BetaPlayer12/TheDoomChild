@@ -1,4 +1,4 @@
-﻿ using System.Collections;
+﻿using System.Collections;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
 using Doozy.Engine.Nody;
@@ -25,7 +25,7 @@ namespace DChild.Gameplay.Inventories
             public int currentIndex { get; private set; }
             public ItemSlot currentSlot { get; private set; }
             public SelectionType selectionType { get; private set; }
-            
+
 
             public void Initialize(int currentIndex, ItemSlot currentSlot, SelectionType selectionType)
             {
@@ -41,14 +41,15 @@ namespace DChild.Gameplay.Inventories
         private IItemContainer m_container;
         [SerializeField]
         private bool m_wrapped;
-        [SerializeField]
-        private float m_itemcooldown=5;
-        private bool CooldownStatus=false;
+
 
         [ShowInInspector, ReadOnly]
         private int m_currentIndex;
         [SerializeField]
         private GraphController m_graph;
+        [SerializeField]
+        private QuickItemCooldown m_cooldown;
+
         private bool m_removeItemCountOnConsume;
         private ItemSlot m_currentSlot;
         private ConsumableItemData m_currentItem;
@@ -69,15 +70,13 @@ namespace DChild.Gameplay.Inventories
 
         public void UseCurrentItem()
         {
-            if (CanUseCurrentItem()&& CooldownStatus == false)
+            if (m_cooldown.isOver && CanUseCurrentItem())
             {
                 if (m_player != null)
                 {
                     m_currentItem.Use(m_player);
-                    CooldownStatus = true;
-                    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
+                    m_cooldown.StartCooldown();
 
-                    StartCoroutine(DelayCoroutine());
                 }
                 if (m_removeItemCountOnConsume)
                 {
@@ -85,14 +84,7 @@ namespace DChild.Gameplay.Inventories
                 }
             }
         }
-        IEnumerator DelayCoroutine()
-        {
-          
-            yield return new WaitForSeconds(m_itemcooldown);
-            CooldownStatus = false;
-            GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
 
-        }
         [Button, HorizontalGroup("Split"), HideInEditorMode]
         public void Previous()
         {
@@ -220,6 +212,7 @@ namespace DChild.Gameplay.Inventories
             //This waits for the Nody Graph to initialize itself
             StartCoroutine(DelayedInitialiationRoutine());
             m_itemCountRemover = new QuickItemCountRemover(m_player, m_container);
+            m_cooldown.ResetCooldown();
         }
     }
 }
