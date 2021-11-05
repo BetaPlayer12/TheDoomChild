@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!60 &5412421901281918488
+--- !u!60 &5635721474796011770
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,6 +122,8 @@ MonoBehaviour:
   m_spine: {fileID: 3535646599274121329}
   m_physics: {fileID: 2423301103472534878}
   m_autoFlinch: 1
+  m_alphaBlendStrength: 0.5
+  m_mixDuration: 1
   m_skeletonAnimation: {fileID: 5424734295331742754}
   m_animation: damage no red
   m_idleAnimation: idle
@@ -241,7 +243,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   m_data: {fileID: 0}
---- !u!60 &1628109553856863009
+--- !u!60 &1406368869392666962
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -273,7 +275,7 @@ PolygonCollider2D:
       - {x: 1.8399999, y: -3.3574}
       - {x: 3.8726997, y: -3.0085998}
       - {x: 3.6313, y: -0.45009997}
---- !u!60 &8103969259906639410
+--- !u!60 &7912606155026293299
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -307,23 +309,6 @@ PolygonCollider2D:
       - {x: 1.7933, y: -5.9119}
       - {x: 3.3123999, y: -4.6095}
       - {x: 2.7496, y: -2.6872}
---- !u!114 &358683772668771640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4503873337279427638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09224c16f78e2f34eacc2f5e9ee9ba2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_fx: {fileID: 4025808106930532386, guid: 8a88a66cf00c45849ae287257e1ee932, type: 3}
-  m_overrideColor: 1
-  m_colorToUse: {r: 0.9056604, g: 0.87704617, b: 0, a: 0.5882353}
-  m_overrideScale: 1
-  m_scaleToUse: {x: 3.5, y: 3.5, z: 3.5}
 --- !u!114 &1193902513086010559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -648,6 +633,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 581273cea94d1294a9c56f1ba54042dc, type: 3}
+--- !u!4 &5765100428579484100 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 7215566858708552582}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7946270472348350482 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
@@ -675,12 +666,6 @@ GameObject:
 --- !u!50 &647721794736474511 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 7215566858708552582}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &5765100428579484100 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3756872488131836482, guid: 581273cea94d1294a9c56f1ba54042dc,
     type: 3}
   m_PrefabInstance: {fileID: 7215566858708552582}
   m_PrefabAsset: {fileID: 0}
@@ -946,39 +931,15 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8356633427745048223}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9038145638058036454 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1050825534660151929, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8356633427745048223}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &4429073644400325919 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5660887089317720960, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8356633427745048223}
-  m_PrefabAsset: {fileID: 0}
 --- !u!58 &8606441328366786018 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 326652920838558589, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
     type: 3}
   m_PrefabInstance: {fileID: 8356633427745048223}
   m_PrefabAsset: {fileID: 0}
---- !u!50 &3129924005026635658 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 6383571681590548757, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8356633427745048223}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &954844399403753076 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9131312401505671403, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+--- !u!1 &4429073644400325919 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5660887089317720960, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
     type: 3}
   m_PrefabInstance: {fileID: 8356633427745048223}
   m_PrefabAsset: {fileID: 0}
@@ -994,6 +955,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b97b91669afc14aa205ed93d651be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &3129924005026635658 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 6383571681590548757, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 8356633427745048223}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &954844399403753076 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9131312401505671403, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 8356633427745048223}
+  m_PrefabAsset: {fileID: 0}
 --- !u!70 &5424734296192166137 stripped
 CapsuleCollider2D:
   m_CorrespondingSourceObject: {fileID: 4084833899724648038, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
@@ -1022,5 +995,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9038145638058036454 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1050825534660151929, guid: 9ae2068f3fa2de842b091e6ea47ded7e,
+    type: 3}
+  m_PrefabInstance: {fileID: 8356633427745048223}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -47,6 +47,8 @@ MonoBehaviour:
   m_spine: {fileID: 7345465555750445437}
   m_physics: {fileID: 8448821463810100306}
   m_autoFlinch: 0
+  m_alphaBlendStrength: 0.5
+  m_mixDuration: 1
   m_skeletonAnimation: {fileID: 2668773170615070979}
   m_animation: flinch_animation_final
   m_idleAnimation: idle animation final
@@ -347,23 +349,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_loot: {fileID: 11400000, guid: 55597a7ec34167046a7652ae8f462c5b, type: 2}
   m_dropWhenDestroyed: 1
---- !u!114 &5772270180928082996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5818963970850988311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09224c16f78e2f34eacc2f5e9ee9ba2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_fx: {fileID: 4025808106930532386, guid: 8a88a66cf00c45849ae287257e1ee932, type: 3}
-  m_overrideColor: 1
-  m_colorToUse: {r: 0.28283492, g: 0.5283019, b: 0.23175506, a: 0.5882353}
-  m_overrideScale: 1
-  m_scaleToUse: {x: 3.5, y: 3.5, z: 3.5}
 --- !u!114 &7093640670707916147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1016,7 +1001,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2100000, guid: 0337a59d6af940749a1c1214af92f367, type: 2}
     - target: {fileID: 7595047275596273039, guid: 8a9cf70c24dbc0743b76329acd400e7a,
         type: 3}
       propertyPath: m_Mesh
@@ -1169,18 +1154,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a9cf70c24dbc0743b76329acd400e7a, type: 3}
---- !u!114 &1381502846369274311 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6864173895413693765, guid: 8a9cf70c24dbc0743b76329acd400e7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 5507449684092544130}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5014077663824362057 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 719433956270071499, guid: 8a9cf70c24dbc0743b76329acd400e7a,
@@ -1235,6 +1208,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5507449684092544130}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6000993323127286313 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2245514932924862123, guid: 8a9cf70c24dbc0743b76329acd400e7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 5507449684092544130}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!58 &3768361852378306021 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 8657481359231037799, guid: 8a9cf70c24dbc0743b76329acd400e7a,
@@ -1283,9 +1268,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6000993323127286313 stripped
+--- !u!114 &1381502846369274311 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2245514932924862123, guid: 8a9cf70c24dbc0743b76329acd400e7a,
+  m_CorrespondingSourceObject: {fileID: 6864173895413693765, guid: 8a9cf70c24dbc0743b76329acd400e7a,
     type: 3}
   m_PrefabInstance: {fileID: 5507449684092544130}
   m_PrefabAsset: {fileID: 0}

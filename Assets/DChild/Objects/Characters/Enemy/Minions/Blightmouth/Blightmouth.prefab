@@ -1,5 +1,39 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!60 &2038825178802425234
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3613031886626678068}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.9008999, y: 0.2358}
+      - {x: 2.2938, y: -0.309}
+      - {x: 2.8334, y: -0.4683}
+      - {x: 3.2477999, y: -0.4182}
+      - {x: 3.4579, y: 0.1944}
+      - {x: 3.3293, y: 0.6906}
+      - {x: 2.9014, y: 1.0294999}
+      - {x: 2.3905, y: 0.9383}
+      - {x: 2.095, y: 0.66989994}
 --- !u!114 &1408119565877613818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,23 +202,6 @@ MonoBehaviour:
   m_bodyReference:
     m_default: {fileID: 0}
     m_list: []
---- !u!114 &7739093019545285807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5832267994263996027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09224c16f78e2f34eacc2f5e9ee9ba2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_fx: {fileID: 4025808106930532386, guid: 8a88a66cf00c45849ae287257e1ee932, type: 3}
-  m_overrideColor: 1
-  m_colorToUse: {r: 0.26612097, g: 0.5471698, b: 0, a: 0.5882353}
-  m_overrideScale: 1
-  m_scaleToUse: {x: 3.5, y: 3.5, z: 3.5}
 --- !u!114 &8700293984868477440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,40 +317,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   m_data: {fileID: 0}
---- !u!60 &7742552619181686771
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3613031886626678068}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 1.9008999, y: 0.2358}
-      - {x: 2.2938, y: -0.309}
-      - {x: 2.8334, y: -0.4683}
-      - {x: 3.2477999, y: -0.4182}
-      - {x: 3.4579, y: 0.1944}
-      - {x: 3.3293, y: 0.6906}
-      - {x: 2.9014, y: 1.0294999}
-      - {x: 2.3905, y: 0.9383}
-      - {x: 2.095, y: 0.66989994}
 --- !u!1 &9148101951550756247
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,6 +463,8 @@ MonoBehaviour:
   m_spine: {fileID: 6813285695208063462}
   m_physics: {fileID: 5637890350118284489}
   m_autoFlinch: 1
+  m_alphaBlendStrength: 0.5
+  m_mixDuration: 1
   m_skeletonAnimation: {fileID: 2681927932455704175}
   m_animation: Damage_No_Red
   m_idleAnimation: Idle1

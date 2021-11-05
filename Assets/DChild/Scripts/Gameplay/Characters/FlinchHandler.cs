@@ -21,6 +21,10 @@ namespace DChild.Gameplay.Characters
         private IsolatedPhysics2D m_physics;
         [SerializeField]
         public bool m_autoFlinch;
+        [SerializeField, Range(0f, 1f)]
+        private float m_alphaBlendStrength = 0.5f;
+        [SerializeField, Range(0f, 1f)]
+        private float m_mixDuration = 1f;
 
 #if UNITY_EDITOR
         [SerializeField]
@@ -73,6 +77,10 @@ namespace DChild.Gameplay.Characters
         {
             m_physics?.SetVelocity(Vector2.zero);
             m_flinchRoutine = StartCoroutine(FlinchRoutine());
+            if (!m_autoFlinch)
+            {
+                StartCoroutine(FlinchMixRoutine());
+            }
         }
 
         private IEnumerator FlinchRoutine()
@@ -96,6 +104,16 @@ namespace DChild.Gameplay.Characters
             m_spine.AnimationSet -= OnAnimationSet;
             m_spine.animationState.Complete -= OnAnimationComplete;
             FlinchEnd?.Invoke(this, new EventActionArgs());
+        }
+
+        private IEnumerator FlinchMixRoutine()
+        {
+            m_spine.SetAnimation(1, m_animation, false, 0).MixBlend = MixBlend.First;
+            m_spine.AddEmptyAnimation(1, m_mixDuration, 0).Alpha = 0f;
+            m_spine.animationState.GetCurrent(1).Alpha = m_alphaBlendStrength;
+            m_spine.animationState.GetCurrent(1).MixDuration = 1;
+            m_spine.animationState.GetCurrent(1).MixTime = 1;
+            yield return null;
         }
 
         private void OnAnimationComplete(TrackEntry trackEntry)

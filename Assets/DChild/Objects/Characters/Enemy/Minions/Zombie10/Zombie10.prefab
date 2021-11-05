@@ -47,6 +47,8 @@ MonoBehaviour:
   m_spine: {fileID: 8059137412943880904}
   m_physics: {fileID: 9180489562547490791}
   m_autoFlinch: 1
+  m_alphaBlendStrength: 0.5
+  m_mixDuration: 1
   m_skeletonAnimation: {fileID: 1735828956739954438}
   m_animation: Flinch
   m_idleAnimation: Idle
@@ -394,23 +396,6 @@ MonoBehaviour:
     - m_mass: 1
       m_actualVelocity: {x: 0, y: 0}
   m_materials: []
---- !u!114 &6502249962624489345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7916933235200128786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09224c16f78e2f34eacc2f5e9ee9ba2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_fx: {fileID: 4025808106930532386, guid: 8a88a66cf00c45849ae287257e1ee932, type: 3}
-  m_overrideColor: 1
-  m_colorToUse: {r: 0.3137255, g: 0.09411766, b: 0.121568635, a: 1}
-  m_overrideScale: 1
-  m_scaleToUse: {x: 5, y: 5, z: 5}
 --- !u!114 &7518254203505270470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1146,6 +1131,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3998272814595786914}
   m_PrefabAsset: {fileID: 0}
+--- !u!50 &6603204691632917163 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 3998272814595786914}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4402465175036066614 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
@@ -1167,12 +1158,6 @@ GameObject:
 --- !u!1 &7916933235200128786 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 3998272814595786914}
-  m_PrefabAsset: {fileID: 0}
---- !u!50 &6603204691632917163 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
     type: 3}
   m_PrefabInstance: {fileID: 3998272814595786914}
   m_PrefabAsset: {fileID: 0}
