@@ -772,13 +772,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
-            {
-                //m_flinchHandle.enabled = false;
-                m_animation.SetAnimation(0, m_info.flinchAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
-                m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            }
+            //m_flinchHandle.enabled = false;
+            m_animation.SetAnimation(0, m_info.flinchAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             yield return new WaitForSeconds(timer);
             m_movement.Stop();
             //enabled = true;

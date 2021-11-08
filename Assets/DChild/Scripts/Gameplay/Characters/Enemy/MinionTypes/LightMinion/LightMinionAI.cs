@@ -365,6 +365,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_fxSystem[i].gameObject.SetActive(true);
             }
+            m_flinchHandle.gameObject.SetActive(false);
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.attackStart.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStart.animation);
@@ -435,6 +436,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.attackEnd, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEnd);
+            m_flinchHandle.gameObject.SetActive(true);
             m_selfCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             StartCoroutine(ResetTrailDamageRoutine());

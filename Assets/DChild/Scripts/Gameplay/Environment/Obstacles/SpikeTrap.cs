@@ -18,9 +18,10 @@ namespace DChild.Gameplay.Environment.Interractables
         public float m_SpikeDelay;
         [SerializeField]
         private Transform m_trapSensor;
+        private bool Surfacing = false;
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.tag != "Sensor")
+            if (collision.tag != "Sensor"&& Surfacing==false)
             {
                 StartCoroutine(DelayCoroutineStick());
 
@@ -31,6 +32,7 @@ namespace DChild.Gameplay.Environment.Interractables
 
         IEnumerator DelayCoroutineStick()
         {
+            Surfacing = true;
             m_trapSensor.GetComponent<Collider2D>().enabled = false;
             yield return new WaitForSeconds(m_SpikeDelay);
             m_onStick?.Invoke();
@@ -43,7 +45,7 @@ namespace DChild.Gameplay.Environment.Interractables
             yield return new WaitForSeconds(m_SpikeDelay);
             m_onLeave?.Invoke();
             m_trapSensor.GetComponent<Collider2D>().enabled = true;
-
+            Surfacing = false;
         }
 
     }

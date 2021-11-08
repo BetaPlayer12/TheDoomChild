@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 108138520}
   - component: {fileID: 108138522}
   - component: {fileID: 108138521}
-  - component: {fileID: 2725813542355500407}
   - component: {fileID: 3981350943283179033}
   - component: {fileID: 1076785810}
   m_Layer: 13
@@ -33,6 +32,7 @@ Transform:
   m_LocalScale: {x: -0.325, y: 0.325, z: 0.325}
   m_Children:
   - {fileID: 1389918965858215079}
+  - {fileID: 6182466270483940724}
   m_Father: {fileID: 7534888890021677925}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -71,25 +71,6 @@ MonoBehaviour:
   - {x: 79.9, y: -52.465874}
   m_useCurrentPosition: 0
   m_overridePatrolIndex: 0
---- !u!114 &2725813542355500407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 108138519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_flinchData: {fileID: 0}
-  m_spine: {fileID: 2414135952209286051}
-  m_physics: {fileID: 3544565459349716620}
-  m_autoFlinch: 0
-  m_skeletonAnimation: {fileID: 1786078561798018843}
-  m_animation: Flinch
-  m_idleAnimation: idle
 --- !u!114 &3981350943283179033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,7 +357,7 @@ MonoBehaviour:
   m_attackHandle:
     m_animation: {fileID: 2414135952209286051}
   m_deathHandle: {fileID: 3981350943283179033}
-  m_flinchHandle: {fileID: 2725813542355500407}
+  m_flinchHandle: {fileID: 2572947294072869585}
   m_wallSensor: {fileID: 3381106517888204767}
   m_groundSensor: {fileID: 7964545931964959793}
   m_edgeSensor: {fileID: 6556851141924211994}
@@ -433,6 +414,58 @@ PolygonCollider2D:
       - {x: 0.118999995, y: -0.8201}
       - {x: 4.7923, y: -0.5555}
       - {x: 4.6651, y: 0.6188}
+--- !u!1 &1383186017748485548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6182466270483940724}
+  - component: {fileID: 2572947294072869585}
+  m_Layer: 13
+  m_Name: Flinch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6182466270483940724
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383186017748485548}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 108138520}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2572947294072869585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383186017748485548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_flinchData: {fileID: 0}
+  m_spine: {fileID: 2414135952209286051}
+  m_physics: {fileID: 3544565459349716620}
+  m_autoFlinch: 0
+  m_alphaBlendStrength: 0.8
+  m_mixDuration: 1
+  m_skeletonAnimation: {fileID: 1786078561798018843}
+  m_animation: Flinch
+  m_idleAnimation: idle
 --- !u!114 &6929119989120819791
 MonoBehaviour:
   m_ObjectHideFlags: 0
