@@ -9531,12 +9531,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 1397857370112403442}
   m_data: {fileID: 11400000, guid: ac7d406a8d6d91543bbaa6f866da9b21, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 6
-      m_value: 20
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!50 &2123226032208952765
@@ -9655,7 +9656,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 1
 --- !u!114 &539801345484957715
@@ -9686,10 +9686,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8333105265767861173}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d63912cd8a0ec5d4db9b8625add1e655, type: 3}
+  m_Script: {fileID: 11500000, guid: 623e104f4ff08ec40895458e1d3ff0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_poolableItemData: {fileID: 11400000, guid: f1840c577667dc640a3c63bace622741, type: 2}
+  m_poolableItemData: {fileID: 11400000, guid: 07c113c57c28da345b131c45c52dea14, type: 2}
   m_waitForParticlesEnd: 0
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
@@ -9701,3 +9701,22 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_data: {fileID: 11400000, guid: 082ad3cb64ee2454a939a8068311a69d, type: 2}
+  m_damageSource: 4
+  m_attackDamageInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
+  m_projectileFXDamage:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
