@@ -4897,7 +4897,32 @@ MonoBehaviour:
   m_particleSystem: {fileID: 0}
   m_particleCallback: {fileID: 0}
   m_model: {fileID: 0}
+  m_onLaunch:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onReset:
+    m_PersistentCalls:
+      m_Calls: []
   m_data: {fileID: 11400000, guid: b9481f7f006a1d04c9d217a808d5ff3b, type: 2}
+  m_damageSource: 4
+  m_attackDamageInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
+  m_projectileFXDamage:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &2362674429783577668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4912,13 +4937,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 6804000004151493132}
   m_data: {fileID: 11400000, guid: a114423f5348d2344b863450b7de0c91, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 5
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &3141098848231150435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9740,6 +9767,7 @@ MonoBehaviour:
   - {fileID: 4440453343587419579}
   - {fileID: 2029281881613830025}
   m_playOnAwake: 0
+  m_baseFlipped: 0
   m_poolOnStop: 0
 --- !u!1 &7286732807724175548
 GameObject:
