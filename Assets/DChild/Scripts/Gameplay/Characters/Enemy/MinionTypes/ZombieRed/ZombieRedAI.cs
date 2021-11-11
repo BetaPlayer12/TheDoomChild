@@ -33,6 +33,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
+            [SerializeField]
+            private SimpleAttackInfo m_attackCombo = new SimpleAttackInfo();
+            public SimpleAttackInfo attackCombo => m_attackCombo;
 
             [SerializeField, MinValue(0)]
             private float m_attackCD;
@@ -77,6 +80,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_walk.SetData(m_skeletonDataAsset);
                 m_run.SetData(m_skeletonDataAsset);
                 m_attack.SetData(m_skeletonDataAsset);
+                m_attackCombo.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -270,7 +274,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_flinchHandle.m_autoFlinch)
             {
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                    m_animation.SetAnimation(0, m_info.run.animation, false);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                 m_stateHandle.ApplyQueuedState();
             }
         }
@@ -286,7 +290,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack.range));
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack.range),
+                                    new AttackInfo<Attack>(Attack.Attack2, m_info.attackCombo.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -400,19 +405,21 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute(m_info.turnAnimation, m_info.run.animation);
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     m_animation.animationState.GetCurrent(0).MixDuration = 0;
                     break;
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
-
-
+                    
+                    m_animation.EnableRootMotion(true, false);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack1:
-                            m_animation.EnableRootMotion(true, false);
                             m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+                            break;
+                        case Attack.Attack2:
+                            m_attackHandle.ExecuteAttack(m_info.attackCombo.animation, m_info.idleAnimation);
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -459,6 +466,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
+
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
