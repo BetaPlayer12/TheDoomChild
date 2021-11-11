@@ -547,7 +547,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     if (IsFacingTarget())
                     {
-                        if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting)
+                        if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting && m_edgeSensor.isDetecting)
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
