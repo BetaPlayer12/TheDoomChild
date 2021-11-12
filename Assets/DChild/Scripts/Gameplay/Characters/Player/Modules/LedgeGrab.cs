@@ -48,27 +48,41 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_grabbableWallSensor.Cast();
             if (m_grabbableWallSensor.allRaysDetecting)
             {
-                m_overheadSensor.Cast();
-                if (m_overheadSensor.isDetecting == false)
+                var hits = m_grabbableWallSensor.GetUniqueHits();
+
+                for (int i = 0; i < hits.Length; i++)
                 {
-                    var wallPoint = m_grabbableWallSensor.GetValidHits()[0].point;
-                    var destinationPosition = m_destinationSensor.transform.position;
-                    destinationPosition.x = wallPoint.x + (m_destinationFromWallOffset * (int)m_character.facing);
-                    m_destinationSensor.transform.position = destinationPosition;
-                    m_destinationSensor.Cast();
-                    if (m_destinationSensor.isDetecting)
+                    if (hits[i].collider.isTrigger)
                     {
-                        m_destination = m_destinationSensor.GetValidHits()[0].point;
-                        var clearingPos = m_clearingSensor.transform.position;
-                        clearingPos.x = destinationPosition.x;
-                        m_clearingSensor.transform.position = clearingPos;
-                        m_clearingSensor.Cast();
-                        if (m_clearingSensor.isDetecting == false)
+                        return false;
+                    }
+                    else if (hits[i].collider.CompareTag("InvisibleWall") == true)
+                    {
+                        return false;
+                    }
+
+                    m_overheadSensor.Cast();
+                    if (m_overheadSensor.isDetecting == false)
+                    {
+                        var wallPoint = m_grabbableWallSensor.GetValidHits()[0].point;
+                        var destinationPosition = m_destinationSensor.transform.position;
+                        destinationPosition.x = wallPoint.x + (m_destinationFromWallOffset * (int)m_character.facing);
+                        m_destinationSensor.transform.position = destinationPosition;
+                        m_destinationSensor.Cast();
+                        if (m_destinationSensor.isDetecting)
                         {
-                            m_footingSensor.Cast();
-                            if (m_footingSensor.isDetecting == false)
+                            m_destination = m_destinationSensor.GetValidHits()[0].point;
+                            var clearingPos = m_clearingSensor.transform.position;
+                            clearingPos.x = destinationPosition.x;
+                            m_clearingSensor.transform.position = clearingPos;
+                            m_clearingSensor.Cast();
+                            if (m_clearingSensor.isDetecting == false)
                             {
-                                return true;
+                                m_footingSensor.Cast();
+                                if (m_footingSensor.isDetecting == false)
+                                {
+                                    return true;
+                                }
                             }
                         }
                     }

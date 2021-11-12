@@ -119,6 +119,7 @@ namespace DChild.Gameplay.Combat
         private void ApplyDamageModification(Damage baseDamage)
         {
             var damage = m_currentAttackInfo.damage;
+            damage.type = baseDamage.type;
             damage.value = Mathf.CeilToInt(baseDamage.value * m_damageModifier);
             m_currentAttackInfo.damage = damage;
         }

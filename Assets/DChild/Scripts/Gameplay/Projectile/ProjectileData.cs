@@ -18,10 +18,13 @@ namespace DChild.Gameplay.Projectiles
         private bool m_isGroundProjectile;
         [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
         protected GameObject m_impactFX;
+        [SerializeField]
+        private Damage m_fxDamage;
         [SerializeField, ValidateInput("ValidateExplosion"), PreviewField]
         protected GameObject m_impactCrater;
 
         public Damage damage => m_damage;
+        public Damage fxDamage => m_fxDamage;
         public Invulnerability ignoreInvulnerability => m_ignoreInvulnerability;
         public bool hasConstantSpeed => m_hasConstantSpeed;
 

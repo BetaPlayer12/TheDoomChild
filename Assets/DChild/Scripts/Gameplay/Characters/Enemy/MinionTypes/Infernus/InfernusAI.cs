@@ -296,7 +296,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_flinchHandle.m_autoFlinch = false;
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                m_stateHandle.OverrideState(State.Attacking);
+                m_stateHandle.OverrideState(m_targetInfo.isValid ? State.Attacking : State.Patrol);
+                if (m_targetInfo.isValid && !IsFacingTarget())
+                    CustomTurn();
             }
         }
 
