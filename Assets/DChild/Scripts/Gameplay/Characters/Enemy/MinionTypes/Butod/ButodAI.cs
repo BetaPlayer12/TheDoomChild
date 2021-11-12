@@ -57,17 +57,20 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
 
-            [Title("Projectile")]
             [SerializeField]
-            private SimpleProjectileAttackInfo m_projectile;
-            public SimpleProjectileAttackInfo projectile => m_projectile;
+            private GameObject m_acidPool;
+            public GameObject acidPool => m_acidPool;
+            //[Title("Projectile")]
+            //[SerializeField]
+            //private SimpleProjectileAttackInfo m_projectile;
+            //public SimpleProjectileAttackInfo projectile => m_projectile;
 
             public override void Initialize()
             {
 #if UNITY_EDITOR
                 m_move.SetData(m_skeletonDataAsset);
                 m_vomitAttack.SetData(m_skeletonDataAsset);
-                m_projectile.SetData(m_skeletonDataAsset);
+                //m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -348,7 +351,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AcidBreath, m_info.projectile.range)/**/);
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AcidBreath, m_info.vomitAttack.range)/**/);
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
@@ -402,8 +405,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator VomitRoutine()
         {
             m_utilityBone.mode = SkeletonUtilityBone.Mode.Override;
-            m_utilityBone.transform.position = GroundPosition(m_targetInfo.position);
+            m_utilityBone.transform.position = GroundPosition(m_targetLastPos);
             m_animation.SetAnimation(0, m_info.vomitAttack.animation, false);
+            yield return new WaitForSeconds(0.5f);
+            var acidPool = Instantiate(m_info.acidPool, m_utilityBone.transform.position, Quaternion.identity);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vomitAttack.animation);
             m_utilityBone.mode = SkeletonUtilityBone.Mode.Follow;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -588,7 +593,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && Vector2.Distance(m_targetInfo.position, transform.position) > 10f && !m_wallSensor.allRaysDetecting)
                             {
                                 m_movement.Stop();
                                 m_selfCollider.enabled = true;
