@@ -13,8 +13,6 @@ using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Environment;
-using DChild.Gameplay.Pooling;
-using DChild.Gameplay.Projectiles;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -29,6 +27,9 @@ namespace DChild.Gameplay.Characters.Enemies
             public MovementInfo move => m_move;
 
             //Attack Behaviours
+            [SerializeField]
+            private SimpleAttackInfo m_vomitAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo vomitAttack => m_vomitAttack;
             [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -65,6 +66,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
 #if UNITY_EDITOR
                 m_move.SetData(m_skeletonDataAsset);
+                m_vomitAttack.SetData(m_skeletonDataAsset);
                 m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
@@ -98,8 +100,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
-        [SerializeField, TabGroup("Reference")]
-        private Transform m_projectilePoint;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -140,6 +140,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Cannon Values")]
         private Vector2 m_targetOffset;
 
+        [SerializeField, TabGroup("Bone")]
+        private SkeletonUtilityBone m_utilityBone;
+
         private float m_targetDistance;
 
         [SerializeField]
@@ -149,8 +152,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
         private RandomAttackDecider<Attack> m_attackDecider;
-
-        private ProjectileLauncher m_projectileLauncher;
 
         private State m_turnState;
 
@@ -204,7 +205,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private bool TargetBlocked()
         {
             Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player")+ DChildUtility.GetEnvironmentMask());
+            RaycastHit2D hit = Physics2D.Raycast(wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player")+ DChildUtility.GetEnvironmentMask());
             var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
             Debug.DrawRay(wat, m_targetInfo.position - wat);
             Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
@@ -343,18 +344,71 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 UpdateAttackDeciderList();
             }
-
-            if (m_projectileLauncher != null)
-            {
-                m_projectileLauncher.SetProjectile(m_info.projectile.projectileInfo);
-                m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, m_projectileLauncher.LaunchProjectile);
-            }
         }
 
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.AcidBreath, m_info.projectile.range)/**/);
             m_attackDecider.hasDecidedOnAttack = false;
+        }
+
+        private Vector2 GroundPosition(Vector2 startPoint)
+        {
+            int hitCount = 0;
+            //RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down,  1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D[] hit = Cast(startPoint, Vector2.down, 1000, true, out hitCount, true);
+            //var hitPos = (new Vector2(m_projectilePoint.position.x, Vector2.down.y) * hit[0].distance);
+            //return hitPos;
+            return hit[0].point;
+        }
+
+        private static ContactFilter2D m_contactFilter;
+        private static RaycastHit2D[] m_hitResults;
+        private static bool m_isInitialized;
+
+        private static void Initialize()
+        {
+            if (m_isInitialized == false)
+            {
+                m_contactFilter.useLayerMask = true;
+                m_contactFilter.SetLayerMask(DChildUtility.GetEnvironmentMask());
+                //m_contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(DChildUtility.GetEnvironmentMask()));
+                m_hitResults = new RaycastHit2D[16];
+                m_isInitialized = true;
+            }
+        }
+
+        public static RaycastHit2D[] Cast(Vector2 origin, Vector2 direction, float distance, bool ignoreTriggers, out int hitCount, bool debugMode = false)
+        {
+            Initialize();
+            m_contactFilter.useTriggers = !ignoreTriggers;
+            hitCount = Physics2D.Raycast(origin, direction, m_contactFilter, m_hitResults, distance);
+#if UNITY_EDITOR
+            if (debugMode)
+            {
+                if (hitCount > 0)
+                {
+                    Debug.DrawRay(origin, direction * m_hitResults[0].distance, Color.cyan, 1f);
+                }
+                else
+                {
+                    Debug.DrawRay(origin, direction * distance, Color.cyan, 1f);
+                }
+            }
+#endif
+            return m_hitResults;
+        }
+
+        private IEnumerator VomitRoutine()
+        {
+            m_utilityBone.mode = SkeletonUtilityBone.Mode.Override;
+            m_utilityBone.transform.position = GroundPosition(m_targetInfo.position);
+            m_animation.SetAnimation(0, m_info.vomitAttack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vomitAttack.animation);
+            m_utilityBone.mode = SkeletonUtilityBone.Mode.Follow;
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
         }
 
         private IEnumerator RandomIdleRoutine()
@@ -407,59 +461,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private Vector2 BallisticVel()
-        {
-            Vector2 targetCenterMass = m_targetLastPos;
-            m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
-
-            m_targetDistance = Vector2.Distance(targetCenterMass, m_projectilePoint.position);
-            var dir = (targetCenterMass - new Vector2(m_projectilePoint.position.x, m_projectilePoint.position.y));
-            var h = dir.y;
-            dir.y = 0;
-            var dist = dir.magnitude;
-            dir.y = dist;
-            dist += h;
-
-            var currentSpeed = m_speed;
-
-            var vel = Mathf.Sqrt(dist * m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale);
-            return (vel * new Vector3(dir.x * m_posOffset.x, dir.y * m_posOffset.y).normalized) * m_targetOffset.sqrMagnitude; //closest to accurate
-        }
-
-        private void SpawnAcid()
-        {
-            if (m_targetInfo.isValid)
-            {
-                //if (!IsFacingTarget())
-                //{
-                //    CustomTurn();
-                //}
-                //Dirt FX
-                //GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
-                //obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
-                //obj.transform.parent = m_seedSpitTF;
-                //obj.transform.localPosition = new Vector2(4, -1.5f);
-                //
-
-
-                //Shoot Spit
-                //m_muzzleFX.Play();
-                Vector2 target = m_targetLastPos;
-                target = new Vector2(target.x, target.y - 2);
-                Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_projectilePoint.position.x - 1.5f : m_projectilePoint.position.x + 1.5f, m_projectilePoint.position.y - 0.75f);
-                Vector3 v_diff = (target - spitPos);
-                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
-
-                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
-                instance.transform.position = m_projectilePoint.position;
-                var component = instance.GetComponent<Projectile>();
-                component.ResetState();
-                //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
-                component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
-                //return instance.gameObject;
-            }
-        }
-
         protected override void Start()
         {
             base.Start();
@@ -471,8 +472,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_hitbox.Disable();
             }
-
-            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpawnAcid);
             m_startPoint = transform.position;
         }
 
@@ -485,7 +484,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_stateHandle = new StateHandle<State>(m_willPatrol ? State.Patrol : State.Idle, State.WaitBehaviourEnd);
-            m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -549,7 +547,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.AcidBreath:
-                            m_attackHandle.ExecuteAttack(m_info.projectile.animation, m_info.idleAnimation);
+                            //m_attackHandle.ExecuteAttack(m_info.projectile.animation, m_info.idleAnimation);
+                            m_attackRoutine = StartCoroutine(VomitRoutine());
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
