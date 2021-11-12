@@ -58,6 +58,12 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
 
         private void OnValidate()
         {
+            if (Application.isPlaying)
+            {
+                Destroy(this);
+                return;
+            }
+
             if (PrefabUtility.IsPartOfPrefabAsset(this))
                 return;
 
@@ -135,10 +141,7 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
 
             boxCollider.size = boxColliderSize;
             boxCollider.offset = boxColliderOffset;
-            if (Application.isPlaying)
-            {
-                Destroy(this);
-            }
+
         }
 
         private void ValidateObject(ref Transform GameObject, string name)

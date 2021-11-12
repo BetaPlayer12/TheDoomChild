@@ -73,6 +73,7 @@ namespace DChild.Gameplay.Items
 
         private void OnEffectEnd(object sender, EventActionArgs eventArgs)
         {
+
             m_activeList.Remove(((DurationItemHandle)sender).player);
         }
 

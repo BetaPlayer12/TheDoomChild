@@ -6,7 +6,6 @@ namespace DChild.Gameplay.Items
     [System.Serializable]
     public struct PlayerModificationItemEffect : IDurationItemEffect
     {
-
         [SerializeField]
         private PlayerModifier m_toModify;
 
