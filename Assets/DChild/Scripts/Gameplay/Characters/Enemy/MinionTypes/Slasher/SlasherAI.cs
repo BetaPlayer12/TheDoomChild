@@ -411,7 +411,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void EnableAttackBB()
         {
-            m_attackBB.enabled = !m_attackBB.enabled;
+            StartCoroutine(AttackBBRoutine());
+        }
+
+        private IEnumerator AttackBBRoutine()
+        {
+            m_attackBB.enabled = true;
+            yield return new WaitForSeconds(0.1f);
+            m_attackBB.enabled = false;
         }
 
         protected override void Start()
