@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Inventories.QuickItem
 {
+
     public class QuickItemUISnap : MonoBehaviour
     {
         [SerializeField]
