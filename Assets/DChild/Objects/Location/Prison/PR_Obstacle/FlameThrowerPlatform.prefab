@@ -14248,12 +14248,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 8993487256308002881}
   m_data: {fileID: 11400000, guid: ed11606a9cc72ce41bb1756e39d2bd45, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 1
-      m_value: 10
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &6362571507641246047
@@ -14456,7 +14457,7 @@ GameObject:
   - component: {fileID: 8358696811141667899}
   m_Layer: 11
   m_Name: Stand
-  m_TagString: Untagged
+  m_TagString: InvisibleWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14690,7 +14691,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 1
   m_collisionRegistrator: {fileID: 1175431526593245940}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 0
 --- !u!114 &1175431526593245940

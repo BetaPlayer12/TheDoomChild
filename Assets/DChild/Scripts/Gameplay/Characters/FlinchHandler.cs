@@ -6,6 +6,7 @@ using System.Collections;
 using Spine;
 using DChild.Gameplay.Combat;
 using Spine.Unity;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 
 namespace DChild.Gameplay.Characters
@@ -41,6 +42,10 @@ namespace DChild.Gameplay.Characters
         private string m_animation;
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_idleAnimation;
+        [SerializeField]
+        public bool m_enableFlinchColor = false;
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation"), ShowIf("m_enableFlinchColor")]
+        private string m_flinchColorAnimation;
 
         private bool m_isFlinching;
 
@@ -78,8 +83,11 @@ namespace DChild.Gameplay.Characters
             m_physics?.SetVelocity(Vector2.zero);
             m_flinchRoutine = StartCoroutine(FlinchRoutine());
             if (!m_autoFlinch)
-            {
                 StartCoroutine(FlinchMixRoutine());
+            if (m_enableFlinchColor)
+            {
+                m_spine.SetEmptyAnimation(2, 0);
+                m_spine.AddAnimation(2, m_flinchColorAnimation, false, 0);
             }
         }
 
