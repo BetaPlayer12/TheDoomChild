@@ -56,7 +56,7 @@ namespace DChild.Gameplay.Environment
             m_canBeMoved = saveData.canBeMoved;
         }
 
-        public ISaveData Save() => new SaveData(transform.position, m_canBeMoved);
+        public ISaveData Save() => new SaveData(m_source.position, m_canBeMoved);
 
         public void SetMovable(bool value)
         {
