@@ -36,9 +36,13 @@ namespace DChild.Gameplay.Environment
         private bool m_isHeavy;
         [SerializeField]
         private bool m_canBeMoved;
-        [SerializeField, TabGroup("Grabbed")]
+        [SerializeField, TabGroup("Grabbed"), LabelText("Constraints")]
+        private RigidbodyConstraints2D m_onGrabbedConstraints = RigidbodyConstraints2D.FreezeRotation;
+        [SerializeField, TabGroup("Let Go"), LabelText("Constraints")]
+        private RigidbodyConstraints2D m_onLetGoConstraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        [SerializeField, TabGroup("Grabbed"), LabelText("Callback")]
         private UnityEvent m_onGrabbed;
-        [SerializeField, TabGroup("Let Go")]
+        [SerializeField, TabGroup("Let Go"), LabelText("Callback")]
         private UnityEvent m_onLetGo;
 
         private Rigidbody2D m_rigidbody;
@@ -74,14 +78,14 @@ namespace DChild.Gameplay.Environment
             {
                 m_isGrabbed = true;
                 m_onGrabbed?.Invoke();
-                m_rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+                m_rigidbody.constraints = m_onGrabbedConstraints;
             }
             else
             {
                 StopMovement();
                 m_isGrabbed = false;
                 m_onLetGo?.Invoke();
-                m_rigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                m_rigidbody.constraints = m_onLetGoConstraints;
             }
         }
 
