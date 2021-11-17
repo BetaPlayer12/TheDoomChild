@@ -367,6 +367,13 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(1.5f);
             m_flinchHandle.m_autoFlinch = false;
             m_animation.SetAnimation(0, m_info.attackTackle.animation, false);
+            while (!m_animation.animationState.GetCurrent(0).IsComplete)
+            {
+                if (!m_edgeSensor.isDetecting)
+                {
+                    m_animation.DisableRootMotion();
+                }
+            }
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackTackle.animation);
             m_selfCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
