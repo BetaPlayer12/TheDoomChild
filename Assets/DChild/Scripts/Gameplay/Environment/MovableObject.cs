@@ -32,8 +32,8 @@ namespace DChild.Gameplay.Environment
 
         [SerializeField]
         private Transform m_source;
-        [ShowInInspector,ReadOnly]
-        private bool m_canBeMoved;
+        [SerializeField, ReadOnly]
+        private bool m_canBeMoved = true;
         [SerializeField, TabGroup("Grabbed"), LabelText("Constraints")]
         private RigidbodyConstraints2D m_onGrabbedConstraints = RigidbodyConstraints2D.FreezeRotation;
         [SerializeField, TabGroup("Let Go"), LabelText("Constraints")]
