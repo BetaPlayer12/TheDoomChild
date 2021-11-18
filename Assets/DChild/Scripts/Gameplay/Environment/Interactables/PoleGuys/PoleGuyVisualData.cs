@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Interractables
 {
-    [CreateAssetMenu(fileName = "MonsterCapsuleVisualData", menuName = "DChild/Gameplay/Environment/Pole Guy Visual Data")]
+    [CreateAssetMenu(fileName = "PoleGuyVisualData", menuName = "DChild/Gameplay/Environment/Pole Guy Visual Data")]
     public class PoleGuyVisualData : ScriptableObject
     {
         [System.Serializable]
