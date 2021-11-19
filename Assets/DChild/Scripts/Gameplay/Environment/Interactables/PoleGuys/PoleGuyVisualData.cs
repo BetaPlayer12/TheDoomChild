@@ -1,4 +1,5 @@
-﻿using Spine.Unity;
+﻿using Sirenix.OdinInspector;
+using Spine.Unity;
 using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Interractables
@@ -26,7 +27,7 @@ namespace DChild.Gameplay.Environment.Interractables
             }
         }
 
-        [SerializeField]
+        [SerializeField, ListDrawerSettings(ShowIndexLabels = true,IsReadOnly = true)]
         private VisualInfo[] m_visualList;
 
         public int count => m_visualList.Length;
