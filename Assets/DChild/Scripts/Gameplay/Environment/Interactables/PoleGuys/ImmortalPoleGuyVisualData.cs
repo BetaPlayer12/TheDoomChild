@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Interractables
 {
-    [CreateAssetMenu(fileName = "ImmortalPoleGuyVisualData", menuName = "DChild/Gameplay/Environment/Immortal Pole Guy Visual Data")]
+    [CreateAssetMenu(fileName = "ImmortalPoleGuyVisualData", menuName = "DChild/Gameplay/Environment/Visual Data/Immortal Pole Guy")]
     public class ImmortalPoleGuyVisualData : ScriptableObject, IVisualData
     {
         [System.Serializable]
