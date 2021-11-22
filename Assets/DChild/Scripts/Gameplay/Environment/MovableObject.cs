@@ -32,10 +32,8 @@ namespace DChild.Gameplay.Environment
 
         [SerializeField]
         private Transform m_source;
-        [SerializeField]
-        private bool m_isHeavy;
-        [SerializeField]
-        private bool m_canBeMoved;
+        [SerializeField, ReadOnly]
+        private bool m_canBeMoved = true;
         [SerializeField, TabGroup("Grabbed"), LabelText("Constraints")]
         private RigidbodyConstraints2D m_onGrabbedConstraints = RigidbodyConstraints2D.FreezeRotation;
         [SerializeField, TabGroup("Let Go"), LabelText("Constraints")]
@@ -50,7 +48,6 @@ namespace DChild.Gameplay.Environment
         private bool m_isTouchingPlayer = false;
         public event EventAction<EventActionArgs> BecameUnmovable;
 
-        public bool isHeavy => m_isHeavy;
         public bool canBeMoved => m_canBeMoved;
 
         public Transform source => m_source;

@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 536099334770781940}
   - component: {fileID: 834856835337787244}
   - component: {fileID: 7128876380534071449}
+  - component: {fileID: 8354366707585115227}
   m_Layer: 11
-  m_Name: BlackBlood
+  m_Name: BlackBlood_Collision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,13 +48,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 2429058163102622006}
   m_data: {fileID: 11400000, guid: 7ab9aafdacc190a4f965193a8b2c82a9, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 50
-    critChance: 0
-    critDamageModifier: 999999
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!61 &834856835337787244
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -97,3 +100,16 @@ MonoBehaviour:
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 0.25
+--- !u!114 &8354366707585115227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2297345776819925729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4914fa10fe1f74fbac7bbe8b95c9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_data: {fileID: 11400000, guid: d3ca5a76d546fc1419de8f63b5bcd673, type: 2}
