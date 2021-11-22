@@ -12,7 +12,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             Crouch,
             Jog,
             MidAir,
-            Grab
+            Pull,
+            Push
         }
 
         [SerializeField]
@@ -22,7 +23,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private float m_midAirSpeed;
         [SerializeField]
-        private float m_grabSpeed;
+        private float m_pullSpeed;
+        [SerializeField]
+        private float m_pushSpeed;
 
         private float m_currentSpeed;
         private IPlayerModifer m_modifier;
@@ -63,8 +66,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir:
                     m_currentSpeed = m_midAirSpeed;
                     break;
-                case Type.Grab:
-                    m_currentSpeed = m_grabSpeed;
+                case Type.Pull:
+                    m_currentSpeed = m_pullSpeed;
+                    break;
+                case Type.Push:
+                    m_currentSpeed = m_pushSpeed;
                     break;
             }
         }
