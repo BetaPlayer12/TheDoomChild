@@ -61,6 +61,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
+            Debug.Log("Jump");
             m_state.isHighJumping = true;
             m_animator.SetBool(m_animationParameter, true);
             m_rigidbody.velocity = new Vector2(m_rigidbody.velocity.x, m_power);

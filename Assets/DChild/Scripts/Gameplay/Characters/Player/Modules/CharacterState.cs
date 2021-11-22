@@ -8,7 +8,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
     public class CharacterState : MonoBehaviour, ICrouchState, IGroundednessState, IDashState, IHighJumpState,
                                   IWallStickState, IWallJumpState, IAttackState, ICombatReadinessState, IDeathState,
                                   ILevitateState, IGrabState, ISlideState, ILedgeGrabState, IProjectileThrowState, IShadowModeState,
-                                  IEnragedState, IBlockingState
+                                  IEnragedState, IBlockingState, ISwordThrustState
     {
         [SerializeField, ReadOnly]
         private bool m_isCombatReady;
@@ -65,6 +65,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isGrabbing;
         public bool isGrabbing { get => m_isGrabbing; set => m_isGrabbing = value; }
+        [SerializeField, ReadOnly]
+        private bool m_isPulling;
+        public bool isPulling { get => m_isPulling; set => m_isPulling = value; }
+        [SerializeField, ReadOnly]
+        private bool m_isPushing;
+        public bool isPushing { get => m_isPushing; set => m_isPushing = value; }
 
         [SerializeField, ReadOnly]
         private bool m_isAimingProjectile;
@@ -121,5 +127,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField, ReadOnly]
         private bool m_isDoingCombo;
         public bool isDoingCombo { get => m_isDoingCombo; set => m_isDoingCombo = value; }
+        [SerializeField, ReadOnly]
+        private bool m_isDoingSwordThrust;
+        public bool isDoingSwordThrust { get => m_isDoingSwordThrust; set => m_isDoingSwordThrust = value; }
     }
 }

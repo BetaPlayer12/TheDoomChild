@@ -50,6 +50,8 @@ namespace DChild.Gameplay.Environment
 
         public bool canBeMoved => m_canBeMoved;
 
+        public Transform source => m_source;
+
         public void Load(ISaveData data)
         {
             var saveData = ((SaveData)data);
@@ -90,13 +92,20 @@ namespace DChild.Gameplay.Environment
         {
             if (m_canBeMoved == true)
             {
-                m_rigidbody.velocity = new Vector2(direction * moveForce, m_rigidbody.velocity.y);
+                m_rigidbody.velocity = Vector2.zero;
+                m_rigidbody.velocity += new Vector2(direction * (moveForce * GameplaySystem.time.fixedDeltaTime), m_rigidbody.velocity.y);
+
+                //////
+                //GetComponent<TestBox>().Move();
             }
         }
 
         public void StopMovement()
         {
             m_rigidbody.velocity = new Vector2(0, m_rigidbody.velocity.y);
+
+            //////
+            //GetComponent<TestBox>().Idle();
         }
 
         private void Awake()

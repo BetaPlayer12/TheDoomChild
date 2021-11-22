@@ -15,7 +15,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Info m_thrust;
         [SerializeField]
         private float m_thrustForce;
+        [SerializeField, MinValue(0)]
+        private float m_thrustVelocity;
+        [SerializeField, MinValue(0)]
+        private float m_duration;
+        [SerializeField, MinValue(0)]
+        private float m_cooldown;
 
+        private float m_cooldownTimer;
+        private float m_durationTimer;
         private Character m_character;
         private IPlayerModifer m_modifier;
         private float m_chargeTimer;
@@ -31,6 +39,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrustAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SwordTrust);
             m_chargingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsCharging);
         }
+
+        public void ResetCooldownTimer() => m_cooldownTimer = m_cooldown * m_modifier.Get(PlayerModifier.Cooldown_Dash);
+
+        public void HandleDurationTimer() => m_durationTimer -= GameplaySystem.time.deltaTime;
+
+        public void ResetDurationTimer() => m_durationTimer = m_duration;
+
+        public bool IsSwordThrustDurationOver() => m_durationTimer <= 0;
 
         public void StartCharge()
         {
@@ -59,8 +75,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public override void Cancel()
         {
             base.Cancel();
+            m_rigidBody.velocity = Vector2.zero;
             m_thrust.ShowCollider(false);
             m_state.isChargingAttack = false;
+            m_state.isDoingSwordThrust = false;
             m_chargeFX?.Stop(true);
             m_thrust.PlayFX(false);
             m_finishedChargeFX?.Stop(true);
@@ -72,15 +90,32 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
-            m_rigidBody.WakeUp(); //Players rigidbody and targets rigidbody is asleep by the time of execution. When concerned rigid bodies are asleep there are no interactions even if colliders are enable. Capeesh
-            m_chargeFX?.Stop(true);
-            m_finishedChargeFX?.Stop(true);
-            m_thrust.PlayFX(true);
-            m_thrust.ShowCollider(true);
-            m_chargeTimer = -1;
-            m_state.waitForBehaviour = true;
-            m_rigidBody.AddForce(new Vector2((float)m_character.facing * m_thrustForce * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
-            m_animator.SetBool(m_chargingAnimationParameter, false);
+            if (m_state.isDoingSwordThrust == false)
+            {
+                m_state.isDoingSwordThrust = true;
+                m_rigidBody.WakeUp();
+                m_chargeFX?.Stop(true);
+                m_finishedChargeFX?.Stop(true);
+                m_thrust.PlayFX(true);
+                m_thrust.ShowCollider(true);
+                m_chargeTimer = -1;
+                //m_state.waitForBehaviour = true;
+                m_animator.SetBool(m_chargingAnimationParameter, false);
+            }
+
+            var direction = (float)m_character.facing;
+            m_rigidBody.velocity = Vector2.zero;
+            m_rigidBody.AddForce(new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
+
+            //m_rigidBody.WakeUp(); //Players rigidbody and targets rigidbody is asleep by the time of execution. When concerned rigid bodies are asleep there are no interactions even if colliders are enable. Capeesh
+            //m_chargeFX?.Stop(true);
+            //m_finishedChargeFX?.Stop(true);
+            //m_thrust.PlayFX(true);
+            //m_thrust.ShowCollider(true);
+            //m_chargeTimer = -1;
+            //m_state.waitForBehaviour = true;
+            //m_rigidBody.AddForce(new Vector2((float)m_character.facing * m_thrustForce * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
+            //m_animator.SetBool(m_chargingAnimationParameter, false);
         }
 
         public void EndExecution()
@@ -89,6 +124,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_thrust.ShowCollider(false);
             m_state.isChargingAttack = false;
             m_state.waitForBehaviour = false;
+            m_state.isDoingSwordThrust = false;
             m_animator.SetBool(m_swordThrustAnimationParameter, false);
         }
     }
