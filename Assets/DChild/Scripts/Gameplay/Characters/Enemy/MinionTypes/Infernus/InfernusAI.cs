@@ -279,7 +279,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleAnimation && m_targetInfo.isValid)
             {
                 m_flinchHandle.m_autoFlinch = true;
                 m_selfCollider.enabled = false;
