@@ -455,6 +455,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_state.isAttacking)
             {
+                if (m_state.isDoingSwordThrust)
+                {
+                    HandleSwordThrust();
+                }
                 if (m_rigidbody.velocity.y < 0)
                 {
                     m_groundedness?.Evaluate();
@@ -775,7 +779,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_movement.UpdateFaceDirection(m_input.horizontalInput);
                     }
 
-                    m_skullThrow.MoveAim(m_input.m_mouseDelta.normalized);
+                    m_skullThrow.MoveAim(m_input.m_mouseDelta.normalized, Camera.main.ScreenToWorldPoint(m_input.m_mousePosition));
+                    //Debug.Log(m_input.m_mousePosition);
 
                     if (m_skullThrow?.HasReachedVerticalThreshold() == true)
                     {
@@ -792,6 +797,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_skullThrow.StartThrow();
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
                     }
+                }
+                else if (m_state.isDoingSwordThrust)
+                {
+                    HandleSwordThrust();
                 }
                 else
                 {
@@ -966,6 +975,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         if (m_input.horizontalInput != 0)
                         {
+                            if (m_state.isPushing)
+                            {
+                                m_movement?.SwitchConfigTo(Movement.Type.Push);
+                            }
+                            else
+                            {
+                                m_movement?.SwitchConfigTo(Movement.Type.Pull);
+                            }
+
                             m_objectManipulation?.MoveObject(m_input.horizontalInput, m_character.facing);
                         }
                         else
@@ -1093,7 +1111,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_objectManipulation?.IsThereAMovableObject() ?? false)
                     {
                         m_idle?.Cancel();
-                        m_movement?.SwitchConfigTo(Movement.Type.Grab);
                         m_objectManipulation?.Execute();
                     }
                 }
@@ -1153,6 +1170,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 {
                     m_extraJump?.Execute();
                 }
+            }
+        }
+
+        private void HandleSwordThrust()
+        {
+            m_swordThrust?.HandleDurationTimer();
+            if (m_swordThrust?.IsSwordThrustDurationOver() ?? true)
+            {
+                m_swordThrust?.Cancel();
+                m_swordThrust?.ResetCooldownTimer();
+            }
+            else
+            {
+                m_swordThrust?.Execute();
             }
         }
 

@@ -53,7 +53,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     var type = m_executedTypes[i];
                     EnableCollision(type, false);
                     PlayFXFor(type, false);
-                    ClearFXFor(type);
+                    //ClearFXFor(type);
                 }
                 m_executedTypes.Clear();
             }

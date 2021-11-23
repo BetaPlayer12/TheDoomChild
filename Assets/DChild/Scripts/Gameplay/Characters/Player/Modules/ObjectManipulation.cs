@@ -16,11 +16,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_pushForce;
         [SerializeField]
         private float m_pullForce;
+        [SerializeField]
+        private float m_distanceCheck;
 
         private Animator m_animator;
         private IGrabState m_state;
         private IPlayerModifer m_modifier;
         private Collider2D m_movableObject;
+        private Rigidbody2D m_rigidbody;
         private int m_isGrabbingAnimationParameter;
         private int m_isPullingAnimationParameter;
         private int m_isPushingAnimationParameter;
@@ -102,12 +105,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void Cancel()
         {
             m_state.isGrabbing = false;
+            m_state.isPushing = false;
+            m_state.isPulling = false;
             m_animator.SetBool(m_isGrabbingAnimationParameter, false);
             m_animator.SetBool(m_isPullingAnimationParameter, false);
             m_animator.SetBool(m_isPushingAnimationParameter, false);
 
             if (m_movableObject != null)
             {
+                MovableObject x = m_movableObject.GetComponentInParent<MovableObject>();
+                x.source.SetParent(null);
+
                 m_movableObject.gameObject?.GetComponentInParent<MovableObject>().SetGrabState(false);
             }
         }
@@ -115,6 +123,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void MoveObject(float direction, HorizontalDirection facing)
         {
             bool isPulling;
+            Vector3 distance = transform.position - m_movableObject.transform.position;
+            float dist = distance.magnitude;
 
             if (facing == HorizontalDirection.Left)
             {
@@ -149,11 +159,33 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (isPulling == true)
             {
-                m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce);
+                m_state.isPushing = false;
+                m_state.isPulling = true;
+
+                if (dist > m_distanceCheck)
+                {
+                    m_rigidbody.velocity = Vector2.zero;
+                    m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce + (m_pullForce / 2));
+                }
+                else
+                {
+                    m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pullForce);
+                }
             }
             else
             {
-                m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce);
+                m_state.isPushing = true;
+                m_state.isPulling = false;
+
+                if (dist > m_distanceCheck)
+                {
+                    m_rigidbody.velocity = Vector2.zero;
+                    m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce / 2);
+                }
+                else
+                {
+                    m_movableObject.GetComponentInParent<MovableObject>().MoveObject(direction, m_modifier.Get(PlayerModifier.MoveSpeed) * m_pushForce);
+                }
             }
         }
 
@@ -162,6 +194,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state = info.state;
             m_modifier = info.modifier;
             m_animator = info.animator;
+            m_rigidbody = info.rigidbody;
             m_isGrabbingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsGrabbing);
             m_isPullingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsPulling);
             m_isPushingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsPushing);
