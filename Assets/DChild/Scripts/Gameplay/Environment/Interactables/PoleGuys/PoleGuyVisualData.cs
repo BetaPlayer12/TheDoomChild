@@ -23,6 +23,7 @@ namespace DChild.Gameplay.Environment.Interractables
                skeletonAnimation.Initialize(true);
 
                 collider.offset = m_colliderOffset;
+                //collider.transform.rotation = skeletonAnimation.transform.rotation;
                 collider.size = m_colliderSize;
             }
         }
