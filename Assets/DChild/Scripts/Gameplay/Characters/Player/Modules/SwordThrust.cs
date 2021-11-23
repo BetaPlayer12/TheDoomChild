@@ -103,9 +103,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_animator.SetBool(m_chargingAnimationParameter, false);
             }
 
-            var direction = (float)m_character.facing;
-            m_rigidBody.velocity = Vector2.zero;
-            m_rigidBody.AddForce(new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
+            //var direction = (float)m_character.facing;
+            //m_rigidBody.velocity = Vector2.zero;
+            //m_rigidBody.AddForce(new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
 
             //m_rigidBody.WakeUp(); //Players rigidbody and targets rigidbody is asleep by the time of execution. When concerned rigid bodies are asleep there are no interactions even if colliders are enable. Capeesh
             //m_chargeFX?.Stop(true);
@@ -126,6 +126,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.waitForBehaviour = false;
             m_state.isDoingSwordThrust = false;
             m_animator.SetBool(m_swordThrustAnimationParameter, false);
+        }
+
+        public void Push()
+        {
+            var direction = (float)m_character.facing;
+            m_rigidBody.velocity = Vector2.zero;
+            m_rigidBody.AddForce(new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
         }
     }
 }
