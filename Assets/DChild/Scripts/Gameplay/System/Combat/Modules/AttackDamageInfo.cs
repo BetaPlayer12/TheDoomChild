@@ -26,7 +26,7 @@ namespace DChild.Gameplay.Combat
 
         [HideLabel]
         public Damage damage;
-        [HideLabel]
+        [HideLabel,BoxGroup("Critical Damage Configuration")]
         public CriticalDamageInfo criticalDamageInfo;
         public Invulnerability ignoreInvulnerability;
         public bool ignoresBlock;
