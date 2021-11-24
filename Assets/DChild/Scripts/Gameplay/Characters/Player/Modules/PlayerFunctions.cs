@@ -135,6 +135,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust.EndExecution();
         }
 
+        public void SwordThrustPush()
+        {
+            m_swordThrust?.Push();
+            Debug.Log("Sword Thrust Push!");
+        }
+
         public void SkullThrowSpawnProjectile()
         {
             m_projectileThrow?.ThrowProjectile();

@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Interractables
 {
+
     public class PoleGuy : MonoBehaviour
     {
         private const string ANIMATION_IDLE = "Idle";
