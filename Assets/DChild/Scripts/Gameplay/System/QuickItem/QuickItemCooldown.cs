@@ -38,5 +38,13 @@ namespace DChild.Gameplay.Inventories
                 enabled = false;
             }
         }
+
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                ResetCooldown();
+            }
+        }
     }
 }
