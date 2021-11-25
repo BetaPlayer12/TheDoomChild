@@ -131,6 +131,10 @@ GameObject:
   m_Component:
   - component: {fileID: 36157721}
   - component: {fileID: 36157720}
+  - component: {fileID: 36157725}
+  - component: {fileID: 36157724}
+  - component: {fileID: 36157723}
+  - component: {fileID: 36157722}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -177,7 +181,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e5c71fb6670e6ce4e9998b805709bc03, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 110afd662a2255843af3cf0f3cd85589, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -196,12 +200,126 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 36157719}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -547, y: -357, z: -1056.3162}
-  m_LocalScale: {x: 1.7874999, y: 1.6301999, z: 1}
+  m_LocalPosition: {x: -443.822, y: -190.9, z: -1056.3162}
+  m_LocalScale: {x: 11.468194, y: 9.714553, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &36157722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36157719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08075061a994857498b09cdda9c3f7db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_mousePosition: {x: 0, y: 0}
+  m_mouseDelta: {x: 0, y: 0}
+  controllerCursorHorizontalInput: 0
+  controllerCursorVerticalInput: 0
+  horizontalInput: 0
+  verticalInput: 0
+  crouchHeld: 0
+  dashPressed: 0
+  jumpPressed: 0
+  jumpHeld: 0
+  levitatePressed: 0
+  levitateHeld: 0
+  shadowMorphPressed: 0
+  interactPressed: 0
+  grabPressed: 0
+  grabHeld: 0
+  blockHeld: 0
+  slashPressed: 0
+  slashHeld: 0
+  earthShakerPressed: 0
+  whipPressed: 0
+  skullThrowPressed: 0
+  skullThrowReleased: 0
+  skullThrowHeld: 0
+  test: 0
+--- !u!114 &36157723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36157719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: 0}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: 
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!50 &36157724
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36157719}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!61 &36157725
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36157719}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0013141036, y: -0.019264162}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.96, y: 1.46}
+    newSize: {x: 12.13, y: 9.02}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.9741881, y: 1.4804393}
+  m_EdgeRadius: 0
 --- !u!1 &114249108
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,7 +376,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d6631f5c54bdf7a499485e4614d3102b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fa2481468c58646489836bca72628544, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
