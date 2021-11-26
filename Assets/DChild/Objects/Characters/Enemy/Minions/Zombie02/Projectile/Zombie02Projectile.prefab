@@ -221,8 +221,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.2352162, g: 0.46226418, b: 0.0152634485, a: 0.39215687}
-      maxColor: {r: 0.12156863, g: 0.24705882, b: 0, a: 0.39215687}
+      minColor: {r: 0.49056602, g: 0, b: 0.04229018, a: 0.39215687}
+      maxColor: {r: 0.22745098, g: 0, b: 0.019607844, a: 0.39215687}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4980,7 +4980,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.7717165, g: 0.8584906, b: 0, a: 0.78431374}
+      maxColor: {r: 0.2264151, g: 0, b: 0.020825224, a: 0.78431374}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -10006,7 +10006,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 0.09018554, g: 0.5566038, b: 0.007876454, a: 1}
-      maxColor: {r: 0.12167369, g: 0.24528301, b: 0, a: 1}
+      maxColor: {r: 0.047169805, g: 0.00022249961, b: 0.004269682, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -14616,7 +14616,7 @@ GameObject:
   - component: {fileID: 7790584822064874498}
   - component: {fileID: 3848224627411940002}
   m_Layer: 14
-  m_Name: ButodProjectile
+  m_Name: Zombie02Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19490,6 +19490,25 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_data: {fileID: 11400000, guid: 763a29ae9c9368d48b122bcef5cd85fb, type: 2}
+  m_damageSource: 0
+  m_attackDamageInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
+  m_projectileFXDamage:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
+    ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!114 &7790584822064874498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19504,10 +19523,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 2167983391460769284}
   m_data: {fileID: 0}
-  m_info:
-    damage: []
-    critChance: 0
-    critDamageModifier: 1
+  m_currentAttackInfo:
+    damage:
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &3848224627411940002
@@ -19525,5 +19547,4 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
