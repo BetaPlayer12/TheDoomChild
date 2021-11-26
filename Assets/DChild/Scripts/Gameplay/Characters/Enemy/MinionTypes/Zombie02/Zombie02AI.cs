@@ -12,6 +12,8 @@ using System.Collections;
 using System.Collections.Generic;
 using DChild;
 using DChild.Gameplay.Characters.Enemies;
+using DChild.Gameplay.Pooling;
+using DChild.Gameplay.Projectiles;
 
 namespace DChild.Gameplay.Characters.Enemies
 {
@@ -36,9 +38,6 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_attack2 = new SimpleAttackInfo();
             public SimpleAttackInfo attack2 => m_attack2;
-            [SerializeField]
-            private SimpleAttackInfo m_headAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo headAttack => m_headAttack;
 
             [SerializeField, MinValue(0)]
             private float m_attackCD;
@@ -66,9 +65,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_counterFlinchAnimation;
             public string counterFlinchAnimation => m_counterFlinchAnimation;
-            //[SerializeField, ValueDropdown("GetAnimations")]
-            //private string m_turnAnimation;
-            //public string turnAnimation => m_turnAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_turnAnimation;
+            public string turnAnimation => m_turnAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
@@ -85,6 +84,10 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_vomitAnimation;
             public string vomitAnimation => m_vomitAnimation;
 
+            [SerializeField]
+            private SimpleProjectileAttackInfo m_projectile;
+            public SimpleProjectileAttackInfo projectile => m_projectile;
+
 
             public override void Initialize()
             {
@@ -93,7 +96,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_run.SetData(m_skeletonDataAsset);
                 m_attack1.SetData(m_skeletonDataAsset);
                 m_attack2.SetData(m_skeletonDataAsset);
-                m_headAttack.SetData(m_skeletonDataAsset);
+                m_projectile.SetData(m_skeletonDataAsset);
 #endif
             }
         }
@@ -117,17 +120,20 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Attack1,
             Attack2,
-            HeadAttack,
             [HideInInspector]
             _COUNT
         }
 
         [SerializeField, TabGroup("Reference")]
+        private SpineEventListener m_spineEventListener;
+        [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_legCollider;
         [SerializeField, TabGroup("Modules")]
-        private TransformTurnHandle m_turnHandle;
+        private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
         [SerializeField, TabGroup("Modules")]
@@ -156,8 +162,25 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
-        [SerializeField, TabGroup("BoundingBox")]
-        private GameObject m_spitBB;
+
+        [SerializeField, TabGroup("Cannon Values")]
+        private Transform m_projectilePoint;
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_speed;
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_gravityScale;
+        [SerializeField, TabGroup("Cannon Values")]
+        private Vector2 m_posOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private float m_velOffset;
+        [SerializeField, TabGroup("Cannon Values")]
+        private Vector2 m_targetOffset;
+
+        private float m_targetDistance;
+        private Vector2 m_targetLastPos;
+
+        [SerializeField]
+        private SkeletonUtilityBone m_targetPointIK;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -179,6 +202,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_character.physics.UseStepClimb(true);
@@ -267,9 +291,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
             m_selfCollider.enabled = false;
             m_hitbox.Disable();
-            m_spitBB.SetActive(false);
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();
@@ -336,16 +360,85 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator Attack2Routine()
+        //private IEnumerator Attack2Routine()
+        //{
+        //    m_targetLastPos = m_targetInfo.position;
+        //    m_animation.SetAnimation(0, m_info.attack2.animation, false);
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
+        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //    m_stateHandle.ApplyQueuedState();
+        //    yield return null;
+        //}
+
+        private Vector2 BallisticVel()
         {
-            m_animation.SetAnimation(0, m_info.attack2.animation, false);
-            yield return new WaitForSeconds(.25f);
-            m_spitBB.SetActive(true);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2.animation);
-            m_spitBB.SetActive(false);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.ApplyQueuedState();
-            yield return null;
+            Vector2 targetCenterMass = m_targetLastPos;
+            m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale = m_gravityScale;
+
+            m_targetDistance = Vector2.Distance(targetCenterMass, m_projectilePoint.position);
+            var dir = (targetCenterMass - new Vector2(m_projectilePoint.position.x, m_projectilePoint.position.y));
+            var h = dir.y;
+            dir.y = 0;
+            var dist = dir.magnitude;
+            dir.y = dist;
+            dist += h;
+
+            var currentSpeed = m_speed;
+
+            var vel = Mathf.Sqrt(dist * m_info.projectile.projectileInfo.projectile.GetComponent<IsolatedObjectPhysics2D>().gravity.gravityScale);
+            return (vel * new Vector3(dir.x * m_posOffset.x, dir.y * m_posOffset.y).normalized) * m_targetOffset.sqrMagnitude; //closest to accurate
+        }
+
+        private float GroundDistance()
+        {
+            RaycastHit2D hit = Physics2D.Raycast(m_projectilePoint.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+            if (hit.collider != null)
+            {
+                return hit.distance;
+            }
+
+            return 0;
+        }
+
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
+        private void SpitProjectile()
+        {
+            if (m_targetInfo.isValid)
+            {
+                //if (!IsFacingTarget())
+                //{
+                //    CustomTurn();
+                //}
+                //Dirt FX
+                //GameObject obj = Instantiate(m_info.mouthSpitFX, m_seedSpitTF.position, Quaternion.identity);
+                //obj.transform.localScale = new Vector3(obj.transform.localScale.x * transform.localScale.x, obj.transform.localScale.y, obj.transform.localScale.z);
+                //obj.transform.parent = m_seedSpitTF;
+                //obj.transform.localPosition = new Vector2(4, -1.5f);
+                //
+
+
+                //Shoot Spit
+                //m_muzzleFX.Play();
+                m_targetPointIK.transform.position = new Vector2(m_targetLastPos.x, m_targetLastPos.y + (Vector2.Distance(transform.position, m_targetInfo.position) / 5f));
+                Vector2 target = m_targetLastPos;
+                target = new Vector2(target.x, target.y - 2);
+                Vector2 spitPos = new Vector2(transform.localScale.x < 0 ? m_projectilePoint.position.x - 1.5f : m_projectilePoint.position.x + 1.5f, m_projectilePoint.position.y - 0.75f);
+                Vector3 v_diff = (target - spitPos);
+                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+
+                var instance = GameSystem.poolManager.GetPool<ProjectilePool>().GetOrCreateItem(m_info.projectile.projectileInfo.projectile);
+                instance.transform.position = m_projectilePoint.position;
+                var component = instance.GetComponent<Projectile>();
+                component.ResetState();
+                //component.GetComponent<IsolatedObjectPhysics2D>().AddForce(BallisticVel(), ForceMode2D.Impulse);
+                component.GetComponent<IsolatedObjectPhysics2D>().SetVelocity(BallisticVel());
+                //return instance.gameObject;
+            }
         }
 
         private Vector2 GroundPosition()
@@ -357,6 +450,7 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void Start()
         {
             base.Start();
+            m_spineEventListener.Subscribe(m_info.projectile.launchOnEvent, SpitProjectile);
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.run.speed * .75f, m_info.run.speed * 1.25f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             m_startPoint = transform.position;
@@ -400,7 +494,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Detect;
-                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -413,10 +507,10 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.walk.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
-                        if (m_groundSensor.allRaysDetecting)
-                        {
-                            transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.35f);
-                        }
+                        //if (m_groundSensor.allRaysDetecting)
+                        //{
+                        //    transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.35f);
+                        //}
                     }
                     else
                     {
@@ -432,7 +526,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
-                    m_turnHandle.Execute();
+                    m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
                 case State.Attacking:
@@ -447,13 +541,11 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
                             break;
                         case Attack.Attack2:
+                            m_targetLastPos = m_targetInfo.position;
+                            m_targetPointIK.mode = SkeletonUtilityBone.Mode.Override;
                             m_animation.EnableRootMotion(true, false);
-                            //m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
-                            StartCoroutine(Attack2Routine());
-                            break;
-                        case Attack.HeadAttack:
-                            m_animation.EnableRootMotion(true, false);
-                            m_attackHandle.ExecuteAttack(m_info.headAttack.animation, m_info.idleAnimation);
+                            m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
+                            //StartCoroutine(Attack2Routine());
                             break;
                     }
                     m_attackDecider.hasDecidedOnAttack = false;
@@ -461,12 +553,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Cooldown:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
-                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
 
@@ -506,10 +596,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed);
-                                    if (m_groundSensor.allRaysDetecting)
-                                    {
-                                        transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.35f);
-                                    }
+                                    //if (m_groundSensor.allRaysDetecting)
+                                    //{
+                                    //    transform.position = new Vector2(transform.position.x, (GroundPosition().y + 0.35f) - m_legCollider.offset.y);
+                                    //}
                                 }
                                 else
                                 {
@@ -522,7 +612,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         else
                         {
                             m_turnState = State.ReevaluateSituation;
-                            //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                                 m_stateHandle.SetState(State.Turning);
                         }
                     }
