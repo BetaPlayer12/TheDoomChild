@@ -4853,8 +4853,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3826204951545836994}
-  - component: {fileID: 272950252353155224}
-  - component: {fileID: 7635747629186469423}
+  - component: {fileID: 6776693990046294281}
   - component: {fileID: 1571158073793316675}
   m_Layer: 8
   m_Name: CrouchSlashCollider
@@ -4877,27 +4876,8 @@ Transform:
   m_Father: {fileID: 183360101846150717}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &272950252353155224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6131056297586594010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 1
-  m_damageUniqueHitboxesOnly: 0
-  m_collisionRegistrator: {fileID: 0}
-  m_ignoreColliderList:
-  - m_target: {fileID: 0}
-    m_ignoreList:
-    - {fileID: 7635747629186469423}
---- !u!60 &7635747629186469423
-PolygonCollider2D:
+--- !u!61 &6776693990046294281
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4909,7 +4889,7 @@ PolygonCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -5.148262, y: -0.3179779}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4919,26 +4899,9 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 3.8430634, y: 5.02829}
-      - {x: 2.5952454, y: 5.5168457}
-      - {x: 0.66148376, y: 5.591156}
-      - {x: -0.6034546, y: 5.4964294}
-      - {x: -2.9120178, y: 4.4107666}
-      - {x: -4.786972, y: 2.8365784}
-      - {x: -5.6984863, y: 1.4559021}
-      - {x: -6.0338135, y: -0.27911377}
-      - {x: -6.265381, y: -1.7806702}
-      - {x: -6.0936584, y: -3.6879883}
-      - {x: -5.72876, y: -5.2651367}
-      - {x: -4.2311707, y: -5.191864}
-      - {x: -2.380539, y: -4.799713}
-      - {x: -0.7535095, y: -4.348816}
-      - {x: 0.91619873, y: -3.9080505}
-      - {x: 2.3327026, y: -3.8337097}
-      - {x: 5.8728333, y: -3.8873596}
-      - {x: 5.6987, y: 3.2888792}
+  serializedVersion: 2
+  m_Size: {x: 22.577377, y: 7.7081604}
+  m_EdgeRadius: 0
 --- !u!114 &1571158073793316675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4957,3 +4920,4 @@ MonoBehaviour:
   m_ignoreColliderList:
   - m_target: {fileID: 0}
     m_ignoreList: []
+  m_hasPlayerOnlyCheck: 0
