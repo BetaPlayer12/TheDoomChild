@@ -405,10 +405,15 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator VomitRoutine()
         {
             m_utilityBone.mode = SkeletonUtilityBone.Mode.Override;
-            m_utilityBone.transform.position = GroundPosition(m_targetLastPos);
+            m_utilityBone.transform.position = GroundPosition(new Vector2(m_targetLastPos.x, transform.position.y + 5f));
             m_animation.SetAnimation(0, m_info.vomitAttack.animation, false);
             yield return new WaitForSeconds(0.5f);
-            var acidPool = Instantiate(m_info.acidPool, m_utilityBone.transform.position, Quaternion.identity);
+            var instance = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_info.acidPool);
+            instance.transform.position = m_utilityBone.transform.position;
+            var component = instance.GetComponent<FX>();
+            //component.DestroyInstance();
+
+            //var acidPool = Instantiate(m_info.acidPool, m_utilityBone.transform.position, Quaternion.identity);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vomitAttack.animation);
             m_utilityBone.mode = SkeletonUtilityBone.Mode.Follow;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);

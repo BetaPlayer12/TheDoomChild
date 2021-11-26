@@ -12,8 +12,6 @@ namespace DChild.Gameplay.Inventories
         private QuickItemController m_controller;
         [SerializeField]
         private ShadowMorph m_shadowMorph;
-        [SerializeField]
-        private Image m_disabledQuickItemImage;
 
         private void OnShadowMorphEnd(object sender, EventActionArgs eventArgs)
         {
@@ -28,7 +26,6 @@ namespace DChild.Gameplay.Inventories
         private void SetQuickItemEnability(bool isEnable)
         {
             m_controller.SetEnable(isEnable);
-            m_disabledQuickItemImage.enabled = !isEnable;
         }
 
         private void OnEnable()
