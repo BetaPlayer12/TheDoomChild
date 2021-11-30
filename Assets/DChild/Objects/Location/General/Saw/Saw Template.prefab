@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7593355178571120608}
   - component: {fileID: 1434861004184220647}
   - component: {fileID: 6559298472873670631}
-  - component: {fileID: 4899521764375235306}
+  - component: {fileID: 5990232392370108551}
   m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
@@ -113,7 +113,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 3.05
---- !u!114 &4899521764375235306
+--- !u!114 &5990232392370108551
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,13 +122,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1792733272030275713}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
+  m_Script: {fileID: 11500000, guid: 38f1c154d0bdfe644b279d0b4b6b7d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 0
   m_collisionRegistrator: {fileID: 0}
   m_ignoreColliderList: []
+  m_damageInterval: 1
 --- !u!1 &6740668279224154534
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,10 +176,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 5092307854788101433}
   m_data: {fileID: 11400000, guid: 996aa120a83143748970da3427aed35a, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 10
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
+    ignoresBlock: 0
