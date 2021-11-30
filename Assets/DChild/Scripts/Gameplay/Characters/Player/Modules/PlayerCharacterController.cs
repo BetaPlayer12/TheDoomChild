@@ -1072,8 +1072,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_input.blockHeld == true)
                 {
-                    PrepareForGroundAttack();
-                    m_block.Execute();
+                    //PrepareForGroundAttack();
+                    //m_block.Execute();
                     return;
                 }
 
