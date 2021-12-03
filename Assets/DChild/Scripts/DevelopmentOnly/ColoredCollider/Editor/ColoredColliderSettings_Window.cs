@@ -22,5 +22,7 @@ namespace DChild.Configurations.Editor
         {
             m_settings = ColoredColliderSettings.instance;
         }
+
+
     }
 }

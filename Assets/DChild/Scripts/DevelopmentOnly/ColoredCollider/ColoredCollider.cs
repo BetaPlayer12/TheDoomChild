@@ -7,16 +7,16 @@ namespace DChild.Configurations
 {
     public class ColoredCollider : MonoBehaviour
     {
+#if UNITY_EDITOR
         [Flags]
         private enum ColliderType
         {
-            Box,
-            Circle,
-            Edge,
-            Polygon
+            Box = 1 << 0,
+            Circle = 1 << 1,
+            Edge = 1 << 2,
+            Polygon = 1 << 3
         }
 
-#if UNITY_EDITOR
         [SerializeField, HideLabel]
         public ColliderColor gizmoColor;
         [SerializeField]
@@ -86,6 +86,7 @@ namespace DChild.Configurations
             {
                 Gizmos.DrawLine(points[i - 1], points[i]);
             }
+            Gizmos.DrawLine(points[points.Length - 1], points[0]);
         }
 
         private void OnDrawGizmos()
