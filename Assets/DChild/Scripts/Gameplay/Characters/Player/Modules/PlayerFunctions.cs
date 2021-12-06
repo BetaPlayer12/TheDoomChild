@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SlashCombo()
         {
-            m_slashCombo?.PlayFX(true);
+            //m_slashCombo?.PlayFX(true);
             m_slashCombo?.EnableCollision(true);
         }
 
