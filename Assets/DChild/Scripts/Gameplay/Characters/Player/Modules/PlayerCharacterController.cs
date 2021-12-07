@@ -752,6 +752,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         return;
                     }
                 }
+                //if (m_state.isAttacking == false)
+                //{
+                //    MoveCharacter(m_state.isGrabbing);
+                //}
 
                 return;
             }
@@ -952,23 +956,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_movement?.SwitchConfigTo(Movement.Type.Jog);
                     m_objectManipulation?.Cancel();
                 }
-                else if (m_input.dashPressed)
-                {
-                    if (m_state.isInShadowMode == false)
-                    {
-                        if (m_state.isInShadowMode == false)
-                        {
-                            if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
-                            {
-                                m_idle?.Cancel();
-                                m_movement?.Cancel();
-                                m_objectManipulation?.Cancel();
-                                m_movement?.SwitchConfigTo(Movement.Type.Jog);
-                                ExecuteDash();
-                            }
-                        }
-                    }
-                }
+                //else if (m_input.dashPressed)
+                //{
+                //    if (m_state.isInShadowMode == false)
+                //    {
+                //        if (m_state.isInShadowMode == false)
+                //        {
+                //            if (m_skills.IsModuleActive(PrimarySkill.Dash) && m_state.canDash)
+                //            {
+                //                m_idle?.Cancel();
+                //                m_movement?.Cancel();
+                //                m_objectManipulation?.Cancel();
+                //                m_movement?.SwitchConfigTo(Movement.Type.Jog);
+                //                ExecuteDash();
+                //            }
+                //        }
+                //    }
+                //}
                 else
                 {
                     if (m_objectManipulation.IsThereAMovableObject())
