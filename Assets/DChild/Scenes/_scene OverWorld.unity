@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -135,6 +135,8 @@ GameObject:
   - component: {fileID: 36157724}
   - component: {fileID: 36157723}
   - component: {fileID: 36157722}
+  - component: {fileID: 36157727}
+  - component: {fileID: 36157726}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -255,7 +257,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: 0}
+  m_Actions: {fileID: -944628639613478452, guid: 2e0d81e8951c3384cba5207fae67c9a4,
+    type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -270,7 +273,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 
+  m_DefaultActionMap: Minimap
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!50 &36157724
@@ -288,7 +291,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -320,6 +323,40 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9741881, y: 1.4804393}
   m_EdgeRadius: 0
+--- !u!114 &36157726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36157719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7904a9ee154894a9d1e01e72737afd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_input: {fileID: 0}
+  m_skills: {fileID: 0}
+  m_state: {fileID: 0}
+  m_character: {fileID: 0}
+  m_rigidbody: {fileID: 0}
+--- !u!114 &36157727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36157719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5bbd6c14745b1f4e88c79ee442c1706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_jogSpeed: 0
+  m_crouchSpeed: 0
+  m_midAirSpeed: 0
+  m_pullSpeed: 0
+  m_pushSpeed: 0
 --- !u!1 &114249108
 GameObject:
   m_ObjectHideFlags: 0

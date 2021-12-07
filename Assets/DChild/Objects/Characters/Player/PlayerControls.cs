@@ -1470,6 +1470,247 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Minimap"",
+            ""id"": ""d608406e-b19f-4076-8bb4-d1c347f848f5"",
+            ""actions"": [
+                {
+                    ""name"": ""HorizontalInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""14ca7357-0bb4-466b-92a4-6b0f18fb6755"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""VerticalInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""9036a914-78ce-4922-8fe5-4a134abc4da8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""fc6ba452-5eec-43b4-975c-57ec38b51caa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""741ac221-d7db-411b-964c-3ed76a18352e"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""457a1524-1736-44a7-9c39-ccc837863e39"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""246f9b07-adbc-430d-881c-7f6c99f49b58"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PS4"",
+                    ""id"": ""47b809f8-ac62-4906-baf1-2f3381efdecf"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""88df554d-9d4f-42b7-b6d6-b86f5bb56713"",
+                    ""path"": ""<DualShockGamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3c0dc175-5a53-433e-9c80-9f92a23c0822"",
+                    ""path"": ""<DualShockGamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""e86267e0-0808-4b1e-9086-f8e53401723e"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""df8c2e49-bdb6-4c03-afb2-e7674a5b66e4"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""9934196b-99a5-41ae-abfe-346c73a0e310"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HorizontalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PC"",
+                    ""id"": ""f9b94557-2573-472c-920e-1944ca987c68"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d9c67345-6a35-40c7-826f-21fad58ccd76"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""0cfd0507-84be-42e5-b470-1b982a97953a"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""PS4"",
+                    ""id"": ""616ce9f3-3dab-4276-9f9c-3a5aff3da72f"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""3f81c7df-8d6b-44fa-96f4-77d358003651"",
+                    ""path"": ""<DualShockGamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""ebec30c8-a18a-4085-a079-f13868453eec"",
+                    ""path"": ""<DualShockGamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""7ecff44b-f3a1-435a-afff-3c1f6f5ed6dd"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ef59dde7-4ced-41c7-8f20-5d8998d6b9e1"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""91a196b7-3602-4d82-99a7-869fd67ddf60"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VerticalInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d3d68158-bae8-4e62-a65d-27cdbfe86864"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1511,6 +1752,11 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // Minimap
+        m_Minimap = asset.FindActionMap("Minimap", throwIfNotFound: true);
+        m_Minimap_HorizontalInput = m_Minimap.FindAction("HorizontalInput", throwIfNotFound: true);
+        m_Minimap_VerticalInput = m_Minimap.FindAction("VerticalInput", throwIfNotFound: true);
+        m_Minimap_Interact = m_Minimap.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1870,6 +2116,55 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Minimap
+    private readonly InputActionMap m_Minimap;
+    private IMinimapActions m_MinimapActionsCallbackInterface;
+    private readonly InputAction m_Minimap_HorizontalInput;
+    private readonly InputAction m_Minimap_VerticalInput;
+    private readonly InputAction m_Minimap_Interact;
+    public struct MinimapActions
+    {
+        private @PlayerControls m_Wrapper;
+        public MinimapActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @HorizontalInput => m_Wrapper.m_Minimap_HorizontalInput;
+        public InputAction @VerticalInput => m_Wrapper.m_Minimap_VerticalInput;
+        public InputAction @Interact => m_Wrapper.m_Minimap_Interact;
+        public InputActionMap Get() { return m_Wrapper.m_Minimap; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MinimapActions set) { return set.Get(); }
+        public void SetCallbacks(IMinimapActions instance)
+        {
+            if (m_Wrapper.m_MinimapActionsCallbackInterface != null)
+            {
+                @HorizontalInput.started -= m_Wrapper.m_MinimapActionsCallbackInterface.OnHorizontalInput;
+                @HorizontalInput.performed -= m_Wrapper.m_MinimapActionsCallbackInterface.OnHorizontalInput;
+                @HorizontalInput.canceled -= m_Wrapper.m_MinimapActionsCallbackInterface.OnHorizontalInput;
+                @VerticalInput.started -= m_Wrapper.m_MinimapActionsCallbackInterface.OnVerticalInput;
+                @VerticalInput.performed -= m_Wrapper.m_MinimapActionsCallbackInterface.OnVerticalInput;
+                @VerticalInput.canceled -= m_Wrapper.m_MinimapActionsCallbackInterface.OnVerticalInput;
+                @Interact.started -= m_Wrapper.m_MinimapActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_MinimapActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_MinimapActionsCallbackInterface.OnInteract;
+            }
+            m_Wrapper.m_MinimapActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @HorizontalInput.started += instance.OnHorizontalInput;
+                @HorizontalInput.performed += instance.OnHorizontalInput;
+                @HorizontalInput.canceled += instance.OnHorizontalInput;
+                @VerticalInput.started += instance.OnVerticalInput;
+                @VerticalInput.performed += instance.OnVerticalInput;
+                @VerticalInput.canceled += instance.OnVerticalInput;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
+            }
+        }
+    }
+    public MinimapActions @Minimap => new MinimapActions(this);
     public interface IGameplayActions
     {
         void OnHorizontalInput(InputAction.CallbackContext context);
@@ -1908,5 +2203,11 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface IMinimapActions
+    {
+        void OnHorizontalInput(InputAction.CallbackContext context);
+        void OnVerticalInput(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
