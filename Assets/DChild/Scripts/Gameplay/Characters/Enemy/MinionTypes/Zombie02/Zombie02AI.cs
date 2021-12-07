@@ -316,7 +316,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_flinchHandle.m_autoFlinch)
             {
                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
-                    m_animation.SetAnimation(0, m_info.run.animation, false);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, false);
                 m_stateHandle.ApplyQueuedState();
             }
         }
