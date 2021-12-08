@@ -135,8 +135,6 @@ GameObject:
   - component: {fileID: 36157724}
   - component: {fileID: 36157723}
   - component: {fileID: 36157722}
-  - component: {fileID: 36157727}
-  - component: {fileID: 36157726}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -217,34 +215,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 36157719}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08075061a994857498b09cdda9c3f7db, type: 3}
+  m_Script: {fileID: 11500000, guid: 3796eae92aa31f143bb4941f27eaa2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_mousePosition: {x: 0, y: 0}
-  m_mouseDelta: {x: 0, y: 0}
-  controllerCursorHorizontalInput: 0
-  controllerCursorVerticalInput: 0
-  horizontalInput: 0
-  verticalInput: 0
-  crouchHeld: 0
-  dashPressed: 0
-  jumpPressed: 0
-  jumpHeld: 0
-  levitatePressed: 0
-  levitateHeld: 0
-  shadowMorphPressed: 0
-  interactPressed: 0
-  grabPressed: 0
-  grabHeld: 0
-  blockHeld: 0
-  slashPressed: 0
-  slashHeld: 0
-  earthShakerPressed: 0
-  whipPressed: 0
-  skullThrowPressed: 0
-  skullThrowReleased: 0
-  skullThrowHeld: 0
-  test: 0
+  m_input: {fileID: 0}
+  m_moveSpeed: 10
+  horizontalInput: 10
+  verticalInput: 10
 --- !u!114 &36157723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,40 +300,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9741881, y: 1.4804393}
   m_EdgeRadius: 0
---- !u!114 &36157726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 36157719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d7904a9ee154894a9d1e01e72737afd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_input: {fileID: 0}
-  m_skills: {fileID: 0}
-  m_state: {fileID: 0}
-  m_character: {fileID: 0}
-  m_rigidbody: {fileID: 0}
---- !u!114 &36157727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 36157719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5bbd6c14745b1f4e88c79ee442c1706, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_jogSpeed: 0
-  m_crouchSpeed: 0
-  m_midAirSpeed: 0
-  m_pullSpeed: 0
-  m_pushSpeed: 0
 --- !u!1 &114249108
 GameObject:
   m_ObjectHideFlags: 0
