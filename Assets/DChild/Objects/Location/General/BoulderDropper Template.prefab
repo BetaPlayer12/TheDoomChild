@@ -164,9 +164,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_object: {fileID: 8324402240808844085}
+  m_type: 0
   m_createDebris: 0
   m_debris: {fileID: 0}
   m_copySorting: 0
+  m_applyDebrisColorChange: 0
+  m_colorToApply: {r: 1, g: 1, b: 1, a: 1}
   m_onDestroy:
     m_PersistentCalls:
       m_Calls:
@@ -215,6 +218,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_fx: {fileID: 3314828295703018961, guid: 517531074ae654d46b7f262304f1fbdd, type: 3}
+  m_overrideColor: 0
+  m_colorToUse: {r: 1, g: 1, b: 1, a: 1}
+  m_overrideScale: 0
+  m_scaleToUse: {x: 1, y: 1, z: 1}
 --- !u!1 &2841441424389993578
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,8 +776,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 670198744412169704}
-  m_isInvulnerable: 0
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
+  m_canBlockDamage: 0
 --- !u!1 &5838732512917688172
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +798,7 @@ GameObject:
   - component: {fileID: 3721492303151305852}
   m_Layer: 9
   m_Name: Trigger
-  m_TagString: Untagged
+  m_TagString: Sensor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
