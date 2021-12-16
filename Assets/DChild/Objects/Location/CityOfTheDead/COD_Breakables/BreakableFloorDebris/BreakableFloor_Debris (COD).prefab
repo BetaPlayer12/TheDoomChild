@@ -98,7 +98,7 @@ Rigidbody2D:
   m_Mass: 4.888992
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -306,7 +306,7 @@ Rigidbody2D:
   m_Mass: 3.5944703
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -499,7 +499,7 @@ Rigidbody2D:
   m_Mass: 3.6453314
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -704,7 +704,7 @@ Rigidbody2D:
   m_Mass: 4.6091657
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -922,7 +922,7 @@ Rigidbody2D:
   m_Mass: 4.047245
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1125,7 +1125,7 @@ Rigidbody2D:
   m_Mass: 5.2588644
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1332,7 +1332,7 @@ Rigidbody2D:
   m_Mass: 5.4290037
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1554,7 +1554,7 @@ Rigidbody2D:
   m_Mass: 3.929592
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1748,7 +1748,7 @@ Rigidbody2D:
   m_Mass: 3.264023
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1840,6 +1840,17 @@ PolygonCollider2D:
       - {x: -0.75, y: -1.61}
       - {x: -0.65, y: -1.52}
       - {x: -0.57, y: -1.38}
+--- !u!210 &9009629531778925750
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4175600712046474017}
+  m_Enabled: 1
+  m_SortingLayerID: -1150295711
+  m_SortingLayer: -1
+  m_SortingOrder: 30
 --- !u!1 &7247991772256463751
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,7 +1949,7 @@ Rigidbody2D:
   m_Mass: 6.54508
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -2139,16 +2150,47 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_toDetach.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_toDetach.Array.data[0]
+      value: 
+      objectReference: {fileID: 8420260456745720638}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_toDetach.Array.data[1]
+      value: 
+      objectReference: {fileID: 1482110941879847141}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_toDetach.Array.data[2]
+      value: 
+      objectReference: {fileID: 8231603996103758951}
+    - target: {fileID: 2452604886134795987, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+        type: 3}
+      propertyPath: m_duration
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7472415926648306021, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
         type: 3}
       propertyPath: m_Name
-      value: Debris Template
+      value: BreakableFloor_Debris (COD)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2bcba93ef25dbc440b86c5f12e33a61e, type: 3}
 --- !u!4 &6253352595996332771 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 615219659764062375, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6791969235186879044}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4175600712046474017 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7472415926648306021, guid: 2bcba93ef25dbc440b86c5f12e33a61e,
     type: 3}
   m_PrefabInstance: {fileID: 6791969235186879044}
   m_PrefabAsset: {fileID: 0}
