@@ -54,7 +54,7 @@ MonoBehaviour:
   m_idleAnimation: Idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
---- !u!60 &4554255445088170643
+--- !u!60 &4428965133036750766
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,10 +184,8 @@ MonoBehaviour:
   m_slowFactor: 0
   m_fastFactor: 0
   m_fXObjects:
-    m_particleSystems:
-    - {fileID: 6819498397322290891}
-    m_originalSimulationSpeed:
-    - 1
+    m_particleSystems: []
+    m_originalSimulationSpeed: []
   m_spineObjects:
     m_skeletonAnimations:
     - {fileID: 3612089380587789596}
@@ -230,7 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_simulateGravity: 1
   m_gravity:
-    m_gravityScale: 10
+    m_gravityScale: 25
     m_direction: {x: 0, y: -1}
     m_angle: -90
     m_drawDirection: 0
@@ -575,11 +573,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}
-      propertyPath: m_BodyType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
       propertyPath: m_UseFullKinematicContacts
       value: 1
       objectReference: {fileID: 0}
@@ -864,10 +857,21 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 0.7316903
       objectReference: {fileID: 0}
+    - target: {fileID: 8897896215499404308, guid: df7d015f7a0a25e468721d77079957bb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.056078
+      objectReference: {fileID: 0}
+    - target: {fileID: 8897896215499404308, guid: df7d015f7a0a25e468721d77079957bb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.153984
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3933494036698588305, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
     - {fileID: 5075582606587438443, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
     - {fileID: 8456880490974529548, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
+    - {fileID: 4637970404901390701, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: df7d015f7a0a25e468721d77079957bb, type: 3}
 --- !u!114 &6258455386813095176 stripped
 MonoBehaviour:
@@ -887,9 +891,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4116703414830672438}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &289864991588742616 stripped
+--- !u!114 &4930901222841501238 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4405850146150637550, guid: df7d015f7a0a25e468721d77079957bb,
+  m_CorrespondingSourceObject: {fileID: 9029545146233875456, guid: df7d015f7a0a25e468721d77079957bb,
     type: 3}
   m_PrefabInstance: {fileID: 4116703414830672438}
   m_PrefabAsset: {fileID: 0}
@@ -923,24 +927,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4116703414830672438}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &6819498397322290891 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7458750814260235517, guid: df7d015f7a0a25e468721d77079957bb,
-    type: 3}
-  m_PrefabInstance: {fileID: 4116703414830672438}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4930901222841501238 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9029545146233875456, guid: df7d015f7a0a25e468721d77079957bb,
-    type: 3}
-  m_PrefabInstance: {fileID: 4116703414830672438}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &2549655365668813306 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 1892433209220993996, guid: df7d015f7a0a25e468721d77079957bb,
@@ -987,6 +973,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &289864991588742616 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4405850146150637550, guid: df7d015f7a0a25e468721d77079957bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 4116703414830672438}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5961726016438621782 stripped

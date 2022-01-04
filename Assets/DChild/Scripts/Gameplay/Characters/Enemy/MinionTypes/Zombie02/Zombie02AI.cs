@@ -443,7 +443,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private Vector2 GroundPosition()
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
+            RaycastHit2D hit = Physics2D.Raycast(m_character.centerMass.position, Vector2.down, 1000, DChildUtility.GetEnvironmentMask());
             return hit.point;
         }
 
@@ -514,7 +514,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_movement.Stop();
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        {
+                            m_movement.Stop();
+                        }
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
@@ -577,6 +580,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     {
                         m_flinchHandle.m_autoFlinch = false;
+                        var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
@@ -589,13 +593,13 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting && Mathf.Abs(m_targetInfo.position.x - transform.position.x) > m_info.attack1.range)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                     m_animation.EnableRootMotion(false, false);
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
-                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed);
+                                    m_movement.MoveTowards(toTarget.normalized, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed);
                                     //if (m_groundSensor.allRaysDetecting)
                                     //{
                                     //    transform.position = new Vector2(transform.position.x, (GroundPosition().y + 0.35f) - m_legCollider.offset.y);
@@ -603,7 +607,10 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    m_movement.Stop();
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    {
+                                        m_movement.Stop();
+                                    }
                                     m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
