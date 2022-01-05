@@ -135,9 +135,9 @@ GameObject:
   - component: {fileID: 36157724}
   - component: {fileID: 36157723}
   - component: {fileID: 36157722}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -218,10 +218,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3796eae92aa31f143bb4941f27eaa2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_input: {fileID: 0}
   m_moveSpeed: 10
-  horizontalInput: 10
-  verticalInput: 10
+  horizontalInput: 0
+  verticalInput: 0
 --- !u!114 &36157723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,8 +352,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1883073945
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fa2481468c58646489836bca72628544, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -464,6 +463,94 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &699951306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 699951309}
+  - component: {fileID: 699951308}
+  - component: {fileID: 699951307}
+  - component: {fileID: 699951310}
+  m_Layer: 11
+  m_Name: EnterPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!61 &699951307
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699951306}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 8.3207245, y: 0.27735138}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 25.962189, y: 12.648788}
+  m_EdgeRadius: 0
+--- !u!114 &699951308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699951306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 275851cf650b4e341901cd773f6a9f31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_promptMessage: Interact
+  m_promptOffset: {x: -1.31, y: 17.8, z: 0}
+  m_oneTimeInteraction: 0
+  m_onInteraction:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &699951309
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699951306}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -446.95175, y: -166.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &699951310
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699951306}
+  m_Enabled: 1
+  m_SortingLayerID: 2073808055
+  m_SortingLayer: 2
+  m_SortingOrder: 1
 --- !u!1 &1639960130
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,7 +586,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_LightVolumeOpacity: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: b33f90a737f886c6810c5db6992c0af88f983acc37d418df67458b398fc9527c91f501836792c28fa3db07fb61e16fbb00000000d302940ab7cc9b7b5bc33d7c13b52271d55112a6794a55d89303f55b5f241b6f0f4feed0
   m_LightCookieSprite: {fileID: 0}
   m_UseNormalMap: 0
   m_LightOrder: 0
@@ -563,7 +650,7 @@ EdgeCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
