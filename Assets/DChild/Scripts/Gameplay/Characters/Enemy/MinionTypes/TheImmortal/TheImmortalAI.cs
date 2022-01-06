@@ -320,7 +320,10 @@ namespace DChild.Gameplay.Characters.Enemies
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                 m_movement.Stop();
 
+            m_flinchHandle.gameObject.SetActive(false);
             m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(1, 0);
+            m_animation.SetEmptyAnimation(2, 0);
             StartCoroutine(ResurrectRoutine());
         }
 
@@ -332,6 +335,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dismantleAnimation);
             m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
             yield return new WaitForSeconds(m_info.dismantledDuration);
+            m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
             enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
