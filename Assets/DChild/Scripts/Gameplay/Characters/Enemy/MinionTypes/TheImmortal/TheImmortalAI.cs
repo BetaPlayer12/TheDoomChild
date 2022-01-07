@@ -90,6 +90,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Detect,
             Idle,
+            DisassembledIdle,
             Patrol,
             Standby,
             Turning,
@@ -183,6 +184,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (!m_isDetecting)
                     {
+                        m_hitbox.Enable();
                         if (m_randomIdleRoutine != null)
                         {
                             StopCoroutine(m_randomIdleRoutine);
@@ -194,7 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_randomTurnRoutine = null;
                         }
                         m_isDetecting = true;
-                        m_stateHandle.SetState(State.Detect);
+                        m_stateHandle.SetState(m_animation.GetCurrentAnimation(0).ToString() == m_info.disassembledIdleAnimation ? State.Detect : State.Chasing);
                     }
                     m_currentPatience = 0;
                     //m_randomIdleRoutine = null;
@@ -339,7 +341,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_health.SetHealthPercentage(1f);
             enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(m_targetInfo.isValid ? State.Detect : State.Idle);
+            m_stateHandle.OverrideState(m_targetInfo.isValid ? State.Detect : State.DisassembledIdle);
             yield return null;
         }
 
@@ -385,7 +387,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.resurrectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.resurrectAnimation);
-            m_hitbox.Enable();
             m_selfCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -473,7 +474,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.DisassembledIdle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -494,6 +495,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    break;
+
+                case State.DisassembledIdle:
                     m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
                     break;
 
