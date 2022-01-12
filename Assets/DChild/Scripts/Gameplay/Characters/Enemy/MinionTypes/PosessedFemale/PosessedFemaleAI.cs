@@ -311,6 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ExplodeRoutine()
         {
+            m_hitbox.Disable();
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
             m_animation.SetAnimation(0, m_info.explodeAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.explodeAttack.animation);
@@ -345,7 +346,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var moveSpeed = m_info.move.speed - UnityEngine.Random.Range(0, 3);
             var newPos = Vector2.zero;
             var randXPos = UnityEngine.Random.Range(-2f, 2f);
-            var randYPos = UnityEngine.Random.Range(10f, 15f); ;
+            var randYPos = UnityEngine.Random.Range(3f, 7f); ;
             while (!inRange || TargetBlocked())
             {
                 newPos = new Vector2(m_targetInfo.position.x + randXPos, m_targetInfo.position.y + randYPos);
