@@ -254,7 +254,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_selfCollider.enabled = false;
             m_hitBox.Disable();
             StopAllCoroutines();
-            m_movement.Stop();
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+            {
+                m_movement.Stop();
+            }
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -357,13 +360,19 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Spawning:
-                    m_movement.Stop();
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    {
+                        m_movement.Stop();
+                    }
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(SpawnRoutine());
                     break;
 
                 case State.Detect:
-                    m_movement.Stop();
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    {
+                        m_movement.Stop();
+                    }
                     m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
@@ -391,14 +400,13 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_animation.SetAnimation(0, m_info.walk.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
-                        if (m_groundSensor.allRaysDetecting)
-                        {
-                            transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
-                        }
                     }
                     else
                     {
-                        m_movement.Stop();
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        {
+                            m_movement.Stop();
+                        }
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
@@ -458,7 +466,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
-                                m_movement.Stop();
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                {
+                                    m_movement.Stop();
+                                }
                                 m_selfCollider.enabled = true;
                                 GetComponent<IsolatedCharacterPhysics2D>().UseStepClimb(false);
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -467,21 +478,20 @@ namespace DChild.Gameplay.Characters.Enemies
                             else
                             {
 
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting && Mathf.Abs(m_targetInfo.position.x - transform.position.x) > m_info.attack.range - 1)
                                 {
                                     var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                     m_animation.EnableRootMotion(false, false);
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed);
-                                    if (m_groundSensor.allRaysDetecting)
-                                    {
-                                        transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
-                                    }
                                 }
                                 else
                                 {
-                                    m_movement.Stop();
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    {
+                                        m_movement.Stop();
+                                    }
                                     m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }

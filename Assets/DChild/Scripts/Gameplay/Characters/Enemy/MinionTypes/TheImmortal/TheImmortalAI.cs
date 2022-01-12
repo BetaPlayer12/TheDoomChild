@@ -90,6 +90,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             Detect,
             Idle,
+            DisassembledIdle,
             Patrol,
             Standby,
             Turning,
@@ -194,7 +195,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_randomTurnRoutine = null;
                         }
                         m_isDetecting = true;
-                        m_stateHandle.SetState(State.Detect);
+                        m_stateHandle.SetState(m_animation.GetCurrentAnimation(0).ToString() == m_info.disassembledIdleAnimation ? State.Detect : State.Chasing);
                     }
                     m_currentPatience = 0;
                     //m_randomIdleRoutine = null;
@@ -317,8 +318,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_sneerRoutine);
             }
             m_character.physics.UseStepClimb(true);
-            m_movement.Stop();
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                m_movement.Stop();
+
+            m_flinchHandle.gameObject.SetActive(false);
             m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(1, 0);
+            m_animation.SetEmptyAnimation(2, 0);
             StartCoroutine(ResurrectRoutine());
         }
 
@@ -330,10 +336,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dismantleAnimation);
             m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
             yield return new WaitForSeconds(m_info.dismantledDuration);
+            m_flinchHandle.gameObject.SetActive(true);
             m_health.SetHealthPercentage(1f);
             enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(m_targetInfo.isValid ? State.Detect : State.Idle);
+            m_stateHandle.OverrideState(m_targetInfo.isValid ? State.Detect : State.DisassembledIdle);
             yield return null;
         }
 
@@ -422,7 +429,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator SneerRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            m_movement.Stop();
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                m_movement.Stop();
+
             while (true)
             {
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -465,7 +474,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(State.DisassembledIdle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -478,12 +487,18 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
-                    m_movement.Stop();
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        m_movement.Stop();
+
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     StartCoroutine(DetectRoutine());
                     break;
 
                 case State.Idle:
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    break;
+
+                case State.DisassembledIdle:
                     m_animation.SetAnimation(0, m_info.disassembledIdleAnimation, true);
                     break;
 
@@ -572,10 +587,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
+                            m_hitbox.Enable();
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
-                                m_movement.Stop();
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    m_movement.Stop();
+
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -591,7 +609,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
-                                    m_movement.Stop();
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                        m_movement.Stop();
+
                                     m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
@@ -703,7 +723,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
             }
             yield return new WaitForSeconds(timer);
-            m_movement.Stop();
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                m_movement.Stop();
+
             //enabled = true;
             //m_flinchHandle.enabled = true;
             m_stateHandle.OverrideState(State.ReevaluateSituation);

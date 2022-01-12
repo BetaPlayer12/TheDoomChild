@@ -378,10 +378,6 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 m_currentRunAttackDuration += Time.deltaTime;
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
-                if (m_groundSensor.allRaysDetecting)
-                {
-                    transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
-                }
                 yield return null;
             }
             m_currentRunAttackDuration = 0;
@@ -588,14 +584,12 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_selfCollider.enabled = false;
                                 m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
                                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.patrol.speed);
-                                if (m_groundSensor.allRaysDetecting)
-                                {
-                                    transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
-                                }
                             }
                             else
                             {
-                                m_movement.Stop();
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    m_movement.Stop();
+
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
@@ -632,7 +626,10 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_movement.Stop();
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                {
+                                    m_movement.Stop();
+                                }
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                             }
