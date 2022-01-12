@@ -22,16 +22,16 @@ namespace DChild.Menu.SoulSkills
 
         private void OnSlotInsertion(object sender, SoulSkillSlot.SoulSkillSlotEventArgs eventArgs)
         {
-            if (eventArgs.instance.slotType == m_selectedUI.data.type)
-            {
-                eventArgs.instance.SetContainedUI(m_selectedUI);
-                m_soulSkillHandle.AttachSkill(m_selectedUI.data, eventArgs.instance.index);
-                m_selectedUI = null;
-            }
-            else
-            {
-                m_selectedUI = null;
-            }
+            //if (eventArgs.instance.slotType == m_selectedUI.data.type)
+            //{
+            //    eventArgs.instance.SetContainedUI(m_selectedUI);
+            //    m_soulSkillHandle.AttachSkill(m_selectedUI.data, eventArgs.instance.index);
+            //    m_selectedUI = null;
+            //}
+            //else
+            //{
+            //    m_selectedUI = null;
+            //}
         }
 
         private void OnSlotRemoval(object sender, SoulSkillSlot.SoulSkillSlotEventArgs eventArgs)

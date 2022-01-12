@@ -14,9 +14,6 @@ namespace DChild.Gameplay.Characters
     public class FlinchHandler : MonoBehaviour, IFlinch
     {
         [SerializeField]
-        private ConfigurableFlinchData m_flinchData;
-
-        [SerializeField]
         private SpineRootAnimation m_spine;
         [SerializeField]
         private IsolatedPhysics2D m_physics;
@@ -71,11 +68,6 @@ namespace DChild.Gameplay.Characters
             {
                 StartFlinch();
             }
-        }
-
-        private void UpdateFlinchRestrictions()
-        {
-
         }
 
         private void StartFlinch()
