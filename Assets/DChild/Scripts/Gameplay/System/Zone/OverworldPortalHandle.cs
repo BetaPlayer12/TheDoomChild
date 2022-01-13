@@ -22,6 +22,8 @@ namespace DChild.Gameplay.Environment
         private bool m_fromOverworld;
         [SerializeField]
         private Transform m_miniplayer;
+        [SerializeField]
+        private Transform m_destination;
 
         public float transitionDelay => 0;
 
@@ -90,7 +92,7 @@ namespace DChild.Gameplay.Environment
             rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
             CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
             collisionState.forcedCurrentGroundedness = false;
-            m_miniplayer = m_promptSource;
+            m_miniplayer.position = m_destination.position;
         }
 
        
