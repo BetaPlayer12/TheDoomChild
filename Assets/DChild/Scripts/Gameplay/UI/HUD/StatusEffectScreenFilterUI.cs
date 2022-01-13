@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,10 +10,16 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
     {
         [SerializeField]
         private Image m_filter;
+        [SerializeField, MinValue(0)]
+        private float m_fadeInDuration;
+        [SerializeField, MinValue(0)]
+        private float m_fadeOutDuration;
         [SerializeField]
         private Dictionary<StatusEffectType, Material> m_filterPair;
 
         private StatusEffectType m_currentFilter = StatusEffectType._COUNT;
+        private bool m_isFilterShown;
+        private float m_currentFilterFadeLerp = 0;
 
         public void ShowFilter(StatusEffectType type)
         {
@@ -21,6 +28,23 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
                 m_filter.enabled = true;
                 m_filter.material = material;
                 m_currentFilter = type;
+
+                if (m_isFilterShown == false)
+                {
+                    if (m_currentFilterFadeLerp > 0)
+                    {
+                        m_currentFilterFadeLerp = Mathf.Abs(m_currentFilterFadeLerp - 1);
+                    }
+
+                    StopAllCoroutines();
+                    StartCoroutine(FadeRoutine(0, 1, m_fadeInDuration));
+                    m_isFilterShown = true;
+                }
+                else
+                {
+                    var fadeValue = Mathf.Lerp(0, 1, m_currentFilterFadeLerp);
+                    SetFadeValue(m_filter.material, fadeValue);
+                }
             }
         }
 
@@ -28,9 +52,38 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
         {
             if (m_currentFilter == type)
             {
-                m_filter.enabled = false;
-                m_filter.material = null;
+                //m_filter.enabled = false;
+                //m_filter.material = null;
+
+                if (m_isFilterShown)
+                {
+                    if (m_currentFilterFadeLerp > 0)
+                    {
+                        m_currentFilterFadeLerp = Mathf.Abs(m_currentFilterFadeLerp - 1);
+                    }
+
+                    StopAllCoroutines();
+                    StartCoroutine(FadeRoutine(1, 0, m_fadeOutDuration));
+                    m_isFilterShown = false;
+                }
             }
+        }
+
+        private IEnumerator FadeRoutine(float from, float to, float duration)
+        {
+            var speed = Mathf.Abs(to - from) / duration;
+            do
+            {
+                var fadeValue = Mathf.Lerp(from, to, m_currentFilterFadeLerp);
+                SetFadeValue(m_filter.material, fadeValue);
+                m_currentFilterFadeLerp += speed;
+                yield return null;
+            } while (m_currentFilterFadeLerp < 1);
+        }
+
+        private void SetFadeValue(Material material, float value)
+        {
+            material.SetFloat("_RadialFade", value);
         }
     }
 }
