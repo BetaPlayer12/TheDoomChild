@@ -5,6 +5,7 @@
         Throwable,
         Consumable,
         Quest,
-        Key
+        Key,
+        SoulSkill
     }
 }
