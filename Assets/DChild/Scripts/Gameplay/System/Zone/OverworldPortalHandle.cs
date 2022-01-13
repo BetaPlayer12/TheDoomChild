@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private Transform m_miniplayer;
         [SerializeField]
-        private Transform m_destination;
+        private Vector2 m_destination;
 
         public float transitionDelay => 0;
 
@@ -92,7 +92,7 @@ namespace DChild.Gameplay.Environment
             rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
             CharacterState collisionState = character.GetComponentInChildren<CharacterState>();
             collisionState.forcedCurrentGroundedness = false;
-            m_miniplayer.position = m_destination.position;
+            m_miniplayer.position = m_destination;
         }
 
        
