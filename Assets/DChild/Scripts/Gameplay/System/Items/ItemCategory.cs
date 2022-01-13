@@ -6,6 +6,5 @@
         Consumable,
         Quest,
         Key,
-        SoulSkill
     }
 }
