@@ -39,7 +39,8 @@ namespace DChild.Gameplay.Characters.Players
             FlinchState,
             IsBlocking,
             IsCharging,
-            StepClimb
+            StepClimb,
+            AimingProjectile
         }
 
         [SerializeField]
