@@ -12,7 +12,9 @@ namespace DChild.Gameplay.Cinematics
     {
         [SerializeField]
         private Camera m_mainCamera;
+        [ShowInInspectorAttribute,ReadOnly]
         private IVirtualCamera m_currentVCam;
+        [ShowInInspectorAttribute, ReadOnly]
         private IVirtualCamera m_previousCam;
         private List<ITrackingCamera> m_trackingCameras;
         [SerializeField]
