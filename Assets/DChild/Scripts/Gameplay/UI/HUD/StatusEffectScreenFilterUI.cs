@@ -37,13 +37,14 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
                     }
 
                     StopAllCoroutines();
+                    m_currentFilterFadeLerp = 0;
                     StartCoroutine(FadeRoutine(0, 1, m_fadeInDuration));
                     m_isFilterShown = true;
                 }
                 else
                 {
                     var fadeValue = Mathf.Lerp(0, 1, m_currentFilterFadeLerp);
-                    SetFadeValue(m_filter.material, fadeValue);
+                    SetFadeValue(m_filter, fadeValue);
                 }
             }
         }
@@ -63,6 +64,7 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
                     }
 
                     StopAllCoroutines();
+                    m_currentFilterFadeLerp = 0;
                     StartCoroutine(FadeRoutine(1, 0, m_fadeOutDuration));
                     m_isFilterShown = false;
                 }
@@ -72,18 +74,31 @@ namespace DChild.Gameplay.Combat.StatusAilment.UI
         private IEnumerator FadeRoutine(float from, float to, float duration)
         {
             var speed = Mathf.Abs(to - from) / duration;
+            var fadeValue = Mathf.Lerp(from, to, m_currentFilterFadeLerp);
+            SetFadeValue(m_filter, fadeValue);
+            yield return null;
             do
             {
-                var fadeValue = Mathf.Lerp(from, to, m_currentFilterFadeLerp);
-                SetFadeValue(m_filter.material, fadeValue);
-                m_currentFilterFadeLerp += speed;
+                m_currentFilterFadeLerp += speed * Time.deltaTime;
+                fadeValue = Mathf.Lerp(from, to, m_currentFilterFadeLerp);
+                SetFadeValue(m_filter, fadeValue);
                 yield return null;
             } while (m_currentFilterFadeLerp < 1);
+
+            m_filter.enabled = to == 1;
         }
 
-        private void SetFadeValue(Material material, float value)
+        private void SetFadeValue(Image image, float value)
         {
-            material.SetFloat("_RadialFade", value);
+            image.material.SetFloat("_RadialFade", value);
+        }
+
+        private void Awake()
+        {
+            if (m_filter.material)
+            {
+                SetFadeValue(m_filter, 0);
+            }
         }
     }
 }
