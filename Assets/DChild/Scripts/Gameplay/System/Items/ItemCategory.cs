@@ -5,6 +5,6 @@
         Throwable,
         Consumable,
         Quest,
-        Key
+        Key,
     }
 }

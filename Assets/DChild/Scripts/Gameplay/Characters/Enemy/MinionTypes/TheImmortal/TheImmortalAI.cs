@@ -184,7 +184,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
                     if (!m_isDetecting)
                     {
-                        m_hitbox.Enable();
                         if (m_randomIdleRoutine != null)
                         {
                             StopCoroutine(m_randomIdleRoutine);
@@ -387,6 +386,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.SetAnimation(0, m_info.resurrectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.resurrectAnimation);
+            m_hitbox.Enable();
             m_selfCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -587,6 +587,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacingTarget())
                         {
+                            m_hitbox.Enable();
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {

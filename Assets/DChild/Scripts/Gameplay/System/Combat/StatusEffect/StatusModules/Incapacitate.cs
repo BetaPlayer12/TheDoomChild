@@ -1,10 +1,5 @@
-﻿
-
-using UnityEngine;
-
-namespace DChild.Gameplay.Combat.StatusAilment
+﻿namespace DChild.Gameplay.Combat.StatusAilment
 {
-
     public struct Incapacitate : IStatusEffectModule
     {
         public void Start(Character character)
@@ -14,7 +9,6 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public void Stop(Character character)
         {
-            Debug.Log("Frozen");
             character.GetComponent<IController>()?.Enable();
         }
     }
