@@ -60,7 +60,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SwordThrust m_swordThrust;
         private EarthShaker m_earthShaker;
         private WhipAttack m_whip;
-        private ProjectileThrow m_skullThrow;
+        private ProjectileThrow m_projectileThrow;
         private PlayerBlock m_block;
         #endregion
 
@@ -84,7 +84,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust?.Cancel();
             m_earthShaker?.Cancel();
             m_whip?.Cancel();
-            m_skullThrow?.Cancel();
+            m_projectileThrow?.Cancel();
             m_shadowMorph.Cancel();
             m_block?.Cancel();
             m_shadowGaugeRegen.Enable(true);
@@ -145,8 +145,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     }
                     else if (m_state.isAimingProjectile)
                     {
-                        m_skullThrow.EndAim();
-                        m_skullThrow.Cancel();
+                        m_projectileThrow.EndAim();
+                        m_projectileThrow.Cancel();
                     }
                     m_idle?.Cancel();
                     m_movement?.SwitchConfigTo(Movement.Type.MidAir);
@@ -220,7 +220,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_basicSlashes?.Cancel();
                     m_earthShaker?.Cancel();
                     m_whip?.Cancel();
-                    m_skullThrow?.Cancel();
+                    m_projectileThrow?.Cancel();
                 }
 
                 if (m_state.isStickingToWall)
@@ -248,7 +248,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void OnProjectileThrowRequest(object sender, EventActionArgs eventArgs)
         {
-            m_input.skullThrowPressed = true;
+            m_input.projectileThrowPressed = true;
         }
 
         private void FlipCharacter()
@@ -301,8 +301,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust = m_character.GetComponentInChildren<SwordThrust>();
             m_earthShaker = m_character.GetComponentInChildren<EarthShaker>();
             m_whip = m_character.GetComponentInChildren<WhipAttack>();
-            m_skullThrow = m_character.GetComponentInChildren<ProjectileThrow>();
-            m_skullThrow.ExecutionRequested += OnProjectileThrowRequest;
+            m_projectileThrow = m_character.GetComponentInChildren<ProjectileThrow>();
+            m_projectileThrow.ExecutionRequested += OnProjectileThrowRequest;
             m_block = m_character.GetComponentInChildren<PlayerBlock>();
 
             m_updateEnabled = true;
@@ -436,7 +436,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_basicSlashes.HandleNextAttackDelay();
                 m_slashCombo.HandleComboAttackDelay();
                 m_whip.HandleNextAttackDelay();
-                m_skullThrow.HandleNextAttackDelay();
+                m_projectileThrow.HandleNextAttackDelay();
             }
 
             if (m_state.isGrounded)
@@ -783,10 +783,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         m_movement.UpdateFaceDirection(m_input.horizontalInput);
                     }
 
-                    m_skullThrow.MoveAim(m_input.m_mouseDelta.normalized, Camera.main.ScreenToWorldPoint(m_input.m_mousePosition));
+                    m_projectileThrow.MoveAim(m_input.m_mouseDelta.normalized, Camera.main.ScreenToWorldPoint(m_input.m_mousePosition));
                     //Debug.Log(m_input.m_mousePosition);
 
-                    if (m_skullThrow?.HasReachedVerticalThreshold() == true)
+                    if (m_projectileThrow?.HasReachedVerticalThreshold() == true)
                     {
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.Up);
                     }
@@ -795,16 +795,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
                     }
 
-                    if (m_input.skullThrowReleased || m_input.skullThrowHeld == false)
+                    if (m_input.projectileThrowReleased || m_input.projectileThrowHeld == false)
                     {
-                        m_skullThrow.EndAim();
-                        m_skullThrow.StartThrow();
+                        m_projectileThrow.EndAim();
+                        m_projectileThrow.StartThrow();
                         GameplaySystem.cinema.ApplyCameraPeekMode(Cinematics.CameraPeekMode.None);
                     }
                 }
                 else if (m_state.isDoingSwordThrust)
                 {
+                    Debug.Log("Sword Thrusting!");
                     HandleSwordThrust();
+                    return;
                 }
                 else
                 {
@@ -1045,13 +1047,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.skullThrowPressed)
+                    else if (m_input.projectileThrowPressed)
                     {
                         if (m_skills.IsModuleActive(PrimarySkill.SkullThrow))
                         {
                             PrepareForGroundAttack();
-                            m_skullThrow.StartAim();
-                            m_skullThrow.Execute();
+                            m_projectileThrow.StartAim();
+                            m_projectileThrow.Execute();
                         }
                         return;
                     }
@@ -1182,8 +1184,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_swordThrust?.HandleDurationTimer();
             if (m_swordThrust?.IsSwordThrustDurationOver() ?? true)
             {
-                m_swordThrust?.Cancel();
+                m_swordThrust?.EndSwordThrust();
                 m_swordThrust?.ResetCooldownTimer();
+                m_swordThrust?.ResetDurationTimer();
             }
             else
             {

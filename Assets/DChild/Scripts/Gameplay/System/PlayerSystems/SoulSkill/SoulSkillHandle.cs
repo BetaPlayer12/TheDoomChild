@@ -56,91 +56,91 @@ namespace DChild.Gameplay.Characters.Players
             if (skill == null)
                 return;
 
-            // We need to make this better
-            switch (skill.type)
-            {
-                case SoulSkillType.Armor:
-                    if (slotIndex > 0)
-                    {
-                        throw new System.Exception($"Armor Skills does not have index {slotIndex}");
-                    }
-                    else
-                    {
-                        AttachSkill(ref m_armorSkill, skill);
-#if UNITY_EDITOR
-                        m_prevArmorSkill = m_armorSkill;
-#endif
-                    }
-                    break;
+//            // We need to make this better
+//            switch (skill.type)
+//            {
+//                case SoulSkillType.Armor:
+//                    if (slotIndex > 0)
+//                    {
+//                        throw new System.Exception($"Armor Skills does not have index {slotIndex}");
+//                    }
+//                    else
+//                    {
+//                        AttachSkill(ref m_armorSkill, skill);
+//#if UNITY_EDITOR
+//                        m_prevArmorSkill = m_armorSkill;
+//#endif
+//                    }
+//                    break;
 
-                case SoulSkillType.Support:
-                    if (slotIndex > 0)
-                    {
-                        throw new System.Exception($"Support Skills does not have index {slotIndex}");
-                    }
-                    else
-                    {
-                        AttachSkill(ref m_supportSkill, skill);
-#if UNITY_EDITOR
-                        m_prevSupportSkill = m_supportSkill;
-#endif
-                    }
-                    break;
+//                case SoulSkillType.Support:
+//                    if (slotIndex > 0)
+//                    {
+//                        throw new System.Exception($"Support Skills does not have index {slotIndex}");
+//                    }
+//                    else
+//                    {
+//                        AttachSkill(ref m_supportSkill, skill);
+//#if UNITY_EDITOR
+//                        m_prevSupportSkill = m_supportSkill;
+//#endif
+//                    }
+//                    break;
 
-                case SoulSkillType.Weapon:
-                    if (slotIndex > m_weaponSkills.Length - 1)
-                    {
-                        throw new System.Exception($"Weapon Skills does not have index {slotIndex}");
-                    }
-                    else
-                    {
-                        AttachSkill(ref m_weaponSkills[slotIndex], skill);
-#if UNITY_EDITOR
-                        m_prevWeaponSkills[slotIndex] = m_weaponSkills[slotIndex];
-#endif
-                    }
-                    break;
-            }
+//                case SoulSkillType.Weapon:
+//                    if (slotIndex > m_weaponSkills.Length - 1)
+//                    {
+//                        throw new System.Exception($"Weapon Skills does not have index {slotIndex}");
+//                    }
+//                    else
+//                    {
+//                        AttachSkill(ref m_weaponSkills[slotIndex], skill);
+//#if UNITY_EDITOR
+//                        m_prevWeaponSkills[slotIndex] = m_weaponSkills[slotIndex];
+//#endif
+//                    }
+//                    break;
+//            }
         }
 
         public void DetachSkill(SoulSkill skill)
         {
-            switch (skill.type)
-            {
-                case SoulSkillType.Armor:
-                    if (m_armorSkill == skill)
-                    {
-                        ClearSlot(ref m_armorSkill);
-#if UNITY_EDITOR
-                        m_prevArmorSkill = null;
-#endif
-                    }
-                    break;
+//            switch (skill.type)
+//            {
+//                case SoulSkillType.Armor:
+//                    if (m_armorSkill == skill)
+//                    {
+//                        ClearSlot(ref m_armorSkill);
+//#if UNITY_EDITOR
+//                        m_prevArmorSkill = null;
+//#endif
+//                    }
+//                    break;
 
-                case SoulSkillType.Support:
-                    if (m_supportSkill == skill)
-                    {
-                        ClearSlot(ref m_supportSkill);
-#if UNITY_EDITOR
-                        m_prevSupportSkill = null;
-#endif
-                    }
-                    break;
+//                case SoulSkillType.Support:
+//                    if (m_supportSkill == skill)
+//                    {
+//                        ClearSlot(ref m_supportSkill);
+//#if UNITY_EDITOR
+//                        m_prevSupportSkill = null;
+//#endif
+//                    }
+//                    break;
 
-                case SoulSkillType.Weapon:
-                    for (int i = 0; i < m_weaponSkills.Length; i++)
-                    {
-                        if (m_weaponSkills[i] == skill)
-                        {
-                            ClearSlot(ref m_weaponSkills[i]);
-#if UNITY_EDITOR
-                            m_prevWeaponSkills[i] = null;
-#endif
-                            break;
-                        }
-                    }
-                    break;
-            }
+//                case SoulSkillType.Weapon:
+//                    for (int i = 0; i < m_weaponSkills.Length; i++)
+//                    {
+//                        if (m_weaponSkills[i] == skill)
+//                        {
+//                            ClearSlot(ref m_weaponSkills[i]);
+//#if UNITY_EDITOR
+//                            m_prevWeaponSkills[i] = null;
+//#endif
+//                            break;
+//                        }
+//                    }
+//                    break;
+//            }
         }
 
         private void AttachSkill(ref SoulSkill slot, SoulSkill skill)

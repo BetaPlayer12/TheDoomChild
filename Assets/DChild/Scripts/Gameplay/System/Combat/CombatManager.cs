@@ -6,6 +6,7 @@ using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using Sirenix.Utilities;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -121,6 +122,12 @@ namespace DChild.Gameplay.Combat
             m_playerCombatHandler = GetComponentInChildren<PlayerCombatHandler>();
             m_aOETargetHandler = new AOETargetHandler();
             m_combatFXHandle = new CombatFXHandle();
+            GameplaySystem.playerManager.player.attackModule.TargetDamaged += OnPlayerAttackSuccessfully;
+        }
+
+        private void OnPlayerAttackSuccessfully(object sender, CombatConclusionEventArgs eventArgs)
+        {
+            m_playerCombatHandler.ResolveDamageDealt(eventArgs);
         }
 
         private void ApplyAttackDamage(AttackSummaryInfo attackInfo, IDamageable target, bool isCharacter)
