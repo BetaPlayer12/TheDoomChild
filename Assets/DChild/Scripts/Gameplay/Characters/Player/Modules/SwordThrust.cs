@@ -13,8 +13,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_chargeDuration;
         [SerializeField]
         private Info m_thrust;
-        [SerializeField]
-        private float m_thrustForce;
         [SerializeField, MinValue(0)]
         private float m_thrustVelocity;
         [SerializeField, MinValue(0)]
@@ -38,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_modifier = info.modifier;
             m_swordThrustAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.SwordTrust);
             m_chargingAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.IsCharging);
+            m_durationTimer = m_duration;
         }
 
         public void ResetCooldownTimer() => m_cooldownTimer = m_cooldown * m_modifier.Get(PlayerModifier.Cooldown_Dash);
@@ -74,16 +73,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void Cancel()
         {
-            base.Cancel();
+            if (m_state.isAttacking)
+            {
+                m_animator.SetBool(m_animationParameter, false);
+                m_state.isAttacking = false;
+                m_state.canAttack = true;
+            }
+
             m_rigidBody.velocity = Vector2.zero;
             m_thrust.ShowCollider(false);
             m_state.isChargingAttack = false;
-            m_state.isDoingSwordThrust = false;
             m_chargeFX?.Stop(true);
             m_thrust.PlayFX(false);
             m_finishedChargeFX?.Stop(true);
             m_animator.SetBool(m_swordThrustAnimationParameter, false);
             m_animator.SetBool(m_chargingAnimationParameter, false);
+
+            ResetDurationTimer();
         }
 
         public bool IsChargeComplete() => m_chargeTimer <= 0;
@@ -92,6 +98,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (m_state.isDoingSwordThrust == false)
             {
+                m_state.isChargingAttack = false;
                 m_state.isDoingSwordThrust = true;
                 m_rigidBody.WakeUp();
                 m_chargeFX?.Stop(true);
@@ -99,23 +106,34 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_thrust.PlayFX(true);
                 m_thrust.ShowCollider(true);
                 m_chargeTimer = -1;
-                //m_state.waitForBehaviour = true;
                 m_animator.SetBool(m_chargingAnimationParameter, false);
             }
 
-            //var direction = (float)m_character.facing;
-            //m_rigidBody.velocity = Vector2.zero;
-            //m_rigidBody.AddForce(new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
+            var direction = (float)m_character.facing;
+            m_rigidBody.velocity = Vector2.zero;
+            m_rigidBody.velocity = new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0);
+        }
 
-            //m_rigidBody.WakeUp(); //Players rigidbody and targets rigidbody is asleep by the time of execution. When concerned rigid bodies are asleep there are no interactions even if colliders are enable. Capeesh
-            //m_chargeFX?.Stop(true);
-            //m_finishedChargeFX?.Stop(true);
-            //m_thrust.PlayFX(true);
-            //m_thrust.ShowCollider(true);
-            //m_chargeTimer = -1;
-            //m_state.waitForBehaviour = true;
-            //m_rigidBody.AddForce(new Vector2((float)m_character.facing * m_thrustForce * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
-            //m_animator.SetBool(m_chargingAnimationParameter, false);
+        public void EndSwordThrust()
+        {
+            if (m_state.isAttacking)
+            {
+                m_animator.SetBool(m_animationParameter, false);
+                m_state.isAttacking = false;
+                m_state.canAttack = true;
+                m_state.waitForBehaviour = true;
+            }
+
+            m_rigidBody.velocity = Vector2.zero;
+            m_thrust.ShowCollider(false);
+            m_state.isChargingAttack = false;
+            m_chargeFX?.Stop(true);
+            m_thrust.PlayFX(false);
+            m_finishedChargeFX?.Stop(true);
+            m_animator.SetBool(m_swordThrustAnimationParameter, false);
+            m_animator.SetBool(m_chargingAnimationParameter, false);
+
+            ResetDurationTimer();
         }
 
         public void EndExecution()
@@ -132,7 +150,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var direction = (float)m_character.facing;
             m_rigidBody.velocity = Vector2.zero;
-            m_rigidBody.AddForce(new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0), ForceMode2D.Impulse);
+            m_rigidBody.velocity = new Vector2(direction * m_thrustVelocity * m_modifier.Get(PlayerModifier.Dash_Distance), 0);
         }
     }
 }
