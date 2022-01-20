@@ -24,9 +24,7 @@ namespace DChild.Gameplay.Inventories
         [SerializeField, BoxGroup("Inventory")]
         private IItemContainer m_questItems;
 
-        //MiguelTest
-        [SerializeField, BoxGroup("Inventory")]
-        private IItemContainer m_soulSkills;
+        
 
         public int soulEssence => m_soulEssence;
 
@@ -39,7 +37,7 @@ namespace DChild.Gameplay.Inventories
         public PlayerInventoryData Save()
         {
             return new PlayerInventoryData(m_soulEssence,
-                                            m_items.Save(), m_soulCrystals.Save(), m_questItems.Save(), m_soulSkills.Save());
+                                            m_items.Save(), m_soulCrystals.Save(), m_questItems.Save());
         }
 
         public void Load(PlayerInventoryData data)
