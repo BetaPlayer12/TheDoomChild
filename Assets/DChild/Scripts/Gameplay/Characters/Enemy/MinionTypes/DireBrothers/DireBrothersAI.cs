@@ -267,9 +267,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_flinchHandle.gameObject.SetActive(false);
             m_attackCache.Clear();
-            AddToAttackCache(Attack.ShieldDash, Attack.ShieldBash);
+            AddToAttackCache(Attack.ShieldDash/*, Attack.ShieldBash*/);
             m_attackRangeCache.Clear();
-            AddToRangeCache(m_info.shieldDashAttack.range, m_info.shieldBashAttack.range);
+            AddToRangeCache(m_info.shieldDashAttack.range/*, m_info.shieldBashAttack.range*/);
             m_phaseHandle.ApplyChange();
             m_hitbox.Disable();
             m_movement.Stop();
@@ -411,8 +411,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.HeavyGroundAttack, m_info.heavyGroundStabAttack.range),
                                     new AttackInfo<Attack>(Attack.SpearAttack, m_info.spearAttack.range),
-                                    new AttackInfo<Attack>(Attack.ShieldDash, m_info.shieldDashAttack.range),
-                                    new AttackInfo<Attack>(Attack.ShieldBash, m_info.shieldBashAttack.range));
+                                    new AttackInfo<Attack>(Attack.ShieldDash, m_info.shieldDashAttack.range)/*,
+                                    new AttackInfo<Attack>(Attack.ShieldBash, m_info.shieldBashAttack.range)*/);
             m_attackDecider.hasDecidedOnAttack = false;
         }
 
