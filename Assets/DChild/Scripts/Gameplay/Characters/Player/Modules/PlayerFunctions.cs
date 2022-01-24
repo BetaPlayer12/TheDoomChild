@@ -131,6 +131,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void SwordThrustEnd()
         {
+            Debug.Log("END");
             m_swordThrust?.AttackOver();
             m_swordThrust.EndExecution();
         }
