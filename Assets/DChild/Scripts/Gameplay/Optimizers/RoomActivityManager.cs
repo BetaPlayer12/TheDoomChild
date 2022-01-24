@@ -55,9 +55,9 @@ namespace DChild.Gameplay.Optimizers
         [Button]
         private void LoadRoom()
         {
-            //m_activeRooms.Add(m_scene.sceneName);
+            m_activeRooms.Add(m_scene.sceneName);
             SceneManager.LoadScene(m_scene.sceneName, LoadSceneMode.Additive);
-            //m_roomLoaded = true;
+            m_roomLoaded = true;
         }
 
         private void OnTriggerExit2D(Collider2D collision)

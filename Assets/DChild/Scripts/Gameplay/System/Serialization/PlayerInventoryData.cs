@@ -19,9 +19,7 @@ namespace DChild.Serialization
         [SerializeField]
         private ItemContainerSaveData m_questItems;
 
-        //MiguelTest
-        [SerializeField]
-        private ItemContainerSaveData m_soulSkills;
+       
 
         public PlayerInventoryData()
         {
@@ -38,6 +36,7 @@ namespace DChild.Serialization
             this.m_items = m_items;
             this.m_soulCrystals = m_soulCrystals;
             this.m_questItems = m_questItems;
+
            
         }
 
@@ -55,6 +54,7 @@ namespace DChild.Serialization
         public ItemContainerSaveData items { get => m_items;  }
         public ItemContainerSaveData soulCrystals { get => m_soulCrystals;}
         public ItemContainerSaveData questItems { get => m_questItems; }
+
 
     }
 }
