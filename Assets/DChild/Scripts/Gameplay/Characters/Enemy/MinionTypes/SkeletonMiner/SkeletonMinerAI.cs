@@ -400,9 +400,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
+            m_flinchHandle.m_enableMixFlinch = false;
             m_animation.SetAnimation(0, m_info.idleToAttackAnimation, false);
+            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.85f;
+            yield return new WaitForSeconds(waitTime);
+            m_flinchHandle.m_enableMixFlinch = true;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleToAttackAnimation);
-            m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_stateHandle.ApplyQueuedState();
+            //m_attackHandle.ExecuteAttack(m_info.attack.animation, m_info.idleAnimation);
             yield return null;
         }
 
