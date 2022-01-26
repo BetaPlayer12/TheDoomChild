@@ -8,6 +8,8 @@ namespace DChild.Gameplay.NavigationMap
         [SerializeField]
         private NavMapInstantiator m_instantiator;
         [SerializeField]
+        private NavMapFogOfWarUI m_fogOfWarUI;
+        [SerializeField]
         private NavMapTracker m_tracker;
 
         public void UpdateConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
