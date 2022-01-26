@@ -20,8 +20,6 @@ namespace DChild.Gameplay.Inventories
         [SerializeField, BoxGroup("Inventory")]
         private IItemContainer m_items;
         [SerializeField, BoxGroup("Inventory")]
-        private IItemContainer m_soulCrystals;
-        [SerializeField, BoxGroup("Inventory")]
         private IItemContainer m_questItems;
 
         [SerializeField, BoxGroup("Inventory")]
@@ -39,14 +37,13 @@ namespace DChild.Gameplay.Inventories
         public PlayerInventoryData Save()
         {
             return new PlayerInventoryData(m_soulEssence,
-                                            m_items.Save(), m_soulCrystals.Save(), m_questItems.Save()      );
+                                            m_items.Save(),m_questItems.Save());
         }
 
         public void Load(PlayerInventoryData data)
         {
             m_soulEssence = data.soulEssence;
             Load(m_items, data.items);
-            Load(m_soulCrystals, data.soulCrystals);
             Load(m_questItems, data.questItems);
             //MiguelTest
             //Load(m_soulSkills, data.soulSkills);
@@ -68,12 +65,7 @@ namespace DChild.Gameplay.Inventories
         {
             var intCount = (int)count;
             //TODO: Items are not yet categorized
-            if (item is SoulCrystal)
-            {
-                m_soulCrystals.AddItem(item, intCount);
-            }
-            else
-            {
+         
                 switch (item.category)
                 {
                     case ItemCategory.Consumable:
@@ -90,19 +82,13 @@ namespace DChild.Gameplay.Inventories
                     default:
                         break;
                 }
-            }
         }
 
         public void RemoveItem(ItemData item, uint count = 1)
         {
             var intCount = (int)count * -1;
             //TODO: Items are not yet categorized
-            if (item is SoulCrystal)
-            {
-                m_soulCrystals.AddItem(item, intCount);
-            }
-            else
-            {
+           
                 switch (item.category)
                 {
                     case ItemCategory.Consumable:
@@ -120,7 +106,6 @@ namespace DChild.Gameplay.Inventories
                     default:
                         break;
                 }
-            }
         }
 
         public int GetCurrentAmount(ItemData item)
