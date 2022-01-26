@@ -53,6 +53,20 @@ public class CrystalCrawlerSpike : FX
     [SerializeField, PreviewField, OnValueChanged("Initialize")]
     private SkeletonDataAsset m_skeletonDataAsset;
 
+    //[SerializeField]
+    //private string[] m_viableTags;
+
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    for (int j = 0; j < m_viableTags.Length; j++)
+    //    {
+    //        if (collision.CompareTag(m_viableTags[j]))
+    //        {
+    //            Stop();
+    //        }
+    //    }
+    //}
+
     //#if UNITY_EDITOR
     private IEnumerable GetEvents()
     {
