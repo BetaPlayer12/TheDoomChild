@@ -50466,9 +50466,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8337154786623390069}
-  - component: {fileID: 600301476849677151}
   - component: {fileID: 5956197024484537259}
   - component: {fileID: 4449329229077842399}
+  - component: {fileID: 3931648549953362229}
   m_Layer: 8
   m_Name: EarthShakerImpactCollider
   m_TagString: GroundBreaker
@@ -50490,24 +50490,6 @@ Transform:
   m_Father: {fileID: 286210159975263616}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &600301476849677151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7686109983682913442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d74578be2c646f438409c91e5fd4ee4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_canDetectInteractables: 1
-  m_damageUniqueHitboxesOnly: 1
-  m_collisionRegistrator: {fileID: 4758750335836346757}
-  m_ignoreColliderList:
-  - m_target: {fileID: 5441382891577226940}
-    m_ignoreList: []
 --- !u!60 &5956197024484537259
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -50568,6 +50550,25 @@ MonoBehaviour:
   m_affectX: 1
   m_affectY: 1
   m_direction: {x: 0, y: 0}
+--- !u!114 &3931648549953362229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7686109983682913442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59adafb57d3f471409348179f9e0c77f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_canDetectInteractables: 1
+  m_damageUniqueHitboxesOnly: 1
+  m_collisionRegistrator: {fileID: 4758750335836346757}
+  m_ignoreColliderList:
+  - m_target: {fileID: 5441382891577226940}
+    m_ignoreList: []
+  m_hasPlayerOnlyCheck: 1
 --- !u!1 &7754707215460493468
 GameObject:
   m_ObjectHideFlags: 0
@@ -65926,6 +65927,11 @@ PrefabInstance:
       propertyPath: m_collisionRegistrator
       value: 
       objectReference: {fileID: 4758750335836346757}
+    - target: {fileID: 3826204952991261957, guid: f12efcbc77240e7449cca360a383e925,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.54
+      objectReference: {fileID: 0}
     - target: {fileID: 4440266980551682767, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
       propertyPath: m_Offset.x
@@ -66685,6 +66691,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.6542881
+      objectReference: {fileID: 0}
+    - target: {fileID: 6776693991558836686, guid: f12efcbc77240e7449cca360a383e925,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: -9.920198
+      objectReference: {fileID: 0}
+    - target: {fileID: 6776693991558836686, guid: f12efcbc77240e7449cca360a383e925,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 20.112408
       objectReference: {fileID: 0}
     - target: {fileID: 6955990842041271830, guid: f12efcbc77240e7449cca360a383e925,
         type: 3}
