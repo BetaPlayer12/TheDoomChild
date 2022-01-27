@@ -43,6 +43,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TitleGroup("Attacks")]
             private SimpleAttackInfo m_heavyGroundStabAttack = new SimpleAttackInfo();
             public SimpleAttackInfo heavyGroundStabAttack => m_heavyGroundStabAttack;
+            [SerializeField, TitleGroup("Attacks")]
+            private SimpleAttackInfo m_heavyGroundBashAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo heavyGroundBashAttack => m_heavyGroundBashAttack;
             //[SerializeField, TitleGroup("Attacks"), ValueDropdown("GetAnimations")]
             //private string m_heavyGroundStabStuckAnimation;
             //public string heavyGroundStabStuckAnimation => m_heavyGroundStabStuckAnimation;
@@ -123,6 +126,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_sh_run.SetData(m_skeletonDataAsset);
                 m_run.SetData(m_skeletonDataAsset);
                 m_heavyGroundStabAttack.SetData(m_skeletonDataAsset);
+                m_heavyGroundBashAttack.SetData(m_skeletonDataAsset);
                 m_spearAttack.SetData(m_skeletonDataAsset);
                 m_shieldDashAttack.SetData(m_skeletonDataAsset);
                 m_shieldBashAttack.SetData(m_skeletonDataAsset);
@@ -178,6 +182,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             HeavyGroundAttack,
+            HeavyGroundBashAttack,
             SpearAttack,
             ShieldDash,
             ShieldBash,
@@ -415,6 +420,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.HeavyGroundAttack, m_info.heavyGroundStabAttack.range),
+                                    new AttackInfo<Attack>(Attack.HeavyGroundBashAttack, m_info.heavyGroundBashAttack.range),
                                     new AttackInfo<Attack>(Attack.SpearAttack, m_info.spearAttack.range),
                                     new AttackInfo<Attack>(Attack.ShieldDash, m_info.shieldDashAttack.range)/*,
                                     new AttackInfo<Attack>(Attack.ShieldBash, m_info.shieldBashAttack.range)*/);
@@ -453,6 +459,29 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private IEnumerator HeavyGroundBashAttackRoutine()
+        {
+            m_flinchHandle.m_enableMixFlinch = false;
+            m_animation.SetAnimation(0, m_info.heavyGroundBashAttack.animation, false);
+            yield return new WaitForSeconds(1.5f);
+            m_character.physics.SetVelocity(50 * transform.localScale.x, 0);
+            yield return new WaitForSeconds(.6f);
+            m_animation.SetEmptyAnimation(1, 0);
+            m_flinchHandle.m_enableMixFlinch = true;
+            m_movement.Stop();
+            //m_character.physics.SetVelocity(Vector2.zero);
+            //m_animation.EnableRootMotion(true, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundBashAttack.animation);
+            //m_animation.SetAnimation(0, m_info.heavyGroundStabStuckAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabStuckAnimation);
+            //m_animation.SetAnimation(0, m_info.heavyGroundStabRecoverAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabRecoverAnimation);
+            m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
         private IEnumerator ShieldDashAttackRoutine(Vector2 targetPos)
         {
             //m_animation.EnableRootMotion(true, false);
@@ -467,12 +496,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_currentShieldDashAttackDuration = 0;
             m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.shieldBashAttack.animation, false);
-            //m_character.physics.SetVelocity(Vector2.zero);
-            //m_animation.EnableRootMotion(true, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.shieldBashAttack.animation);
             m_animation.SetAnimation(0, m_info.sh_stopAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sh_stopAnimation);
+            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.5f;
+            yield return new WaitForSeconds(waitTime);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sh_stopAnimation);
             m_animation.SetAnimation(0, m_currentIdleAnimation, true).MixDuration = 0.25f;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -574,7 +601,7 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
 
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.HeavyGroundAttack, Attack.SpearAttack);
+            AddToAttackCache(Attack.HeavyGroundAttack, Attack.HeavyGroundBashAttack, Attack.SpearAttack);
             m_attackRangeCache = new List<float>();
             AddToRangeCache(m_info.heavyGroundStabAttack.range, m_info.spearAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
@@ -636,6 +663,9 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 case Attack.HeavyGroundAttack:
                                     m_currentAttackCoroutine = StartCoroutine(HeavyGroundAttackRoutine());
+                                    break;
+                                case Attack.HeavyGroundBashAttack:
+                                    m_currentAttackCoroutine = StartCoroutine(HeavyGroundBashAttackRoutine());
                                     break;
                                 case Attack.SpearAttack:
                                     m_animation.EnableRootMotion(true, false);
