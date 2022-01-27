@@ -1,9 +1,11 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DChild.Gameplay.NavigationMap
 {
+
     public class NavMapTracker : MonoBehaviour
     {
         [SerializeField]
