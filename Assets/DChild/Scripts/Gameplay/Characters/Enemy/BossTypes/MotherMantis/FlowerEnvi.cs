@@ -76,14 +76,14 @@ public class FlowerEnvi : MonoBehaviour
 
     public void OpenFlower()
     {
-        StartCoroutine(OpenFRoutine());
-        StartCoroutine(OpenBRoutine());
+        //StartCoroutine(OpenFRoutine());
+        //StartCoroutine(OpenBRoutine());
     }
 
     public void CloseFlower()
     {
-        StartCoroutine(CloseFRoutine());
-        StartCoroutine(CloseBRoutine());
+        //StartCoroutine(CloseFRoutine());
+        //StartCoroutine(CloseBRoutine());
     }
 
     private void Start()
