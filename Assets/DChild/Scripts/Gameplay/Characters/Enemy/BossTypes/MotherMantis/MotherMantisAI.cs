@@ -286,6 +286,9 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Spawn Points")]
         private Transform m_seedSpawnPoint;
 
+        [SerializeField, TabGroup("Timeline")]
+        private Transform m_timelineModel;
+
         private float m_groundPosition;
         private List<Vector2> m_targetPositions;
 
@@ -327,6 +330,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentPhaseIndex = obj.phaseIndex;
             m_currentPetalAmount = obj.petalAmount;
             m_currentCooldownSpeed = obj.cooldownSpeed;
+        }
+
+        public void SyncWithTimelineModel()
+        {
+            transform.position = m_timelineModel.position;
         }
 
         private void ChangeState()
@@ -733,7 +741,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Intro:
                     if (IsFacingTarget())
                     {
-                        StartCoroutine(IntroRoutine());
+                        //StartCoroutine(IntroRoutine());
+                        m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                        m_hitbox.SetInvulnerability(Invulnerability.None);
+                        m_animation.DisableRootMotion();
+                        m_stateHandle.ApplyQueuedState();
                     }
                     else
                     {
