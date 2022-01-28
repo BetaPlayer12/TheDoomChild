@@ -266,6 +266,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
             m_movement.Stop();
+
+            m_flinchHandle.gameObject.SetActive(false);
+            m_animation.SetEmptyAnimation(1, 0);
+            m_animation.SetEmptyAnimation(2, 0);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -607,6 +611,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isDetecting = false;
             m_enablePatience = false;
             m_stateHandle.OverrideState(State.Patrol);
+            m_flinchHandle.gameObject.SetActive(true);
             enabled = true;
         }
 
