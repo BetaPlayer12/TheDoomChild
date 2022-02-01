@@ -232,6 +232,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
+            m_animation.EnableRootMotion(true, false);
             m_movement.Stop();
             m_characterPhysics.UseStepClimb(false);
             m_selfCollider.enabled = false;
@@ -445,11 +446,11 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             //enabled = false;
             //m_flinchHandle.m_autoFlinch = false;
-            m_animation.DisableRootMotion();
             m_characterPhysics.UseStepClimb(false);
             if (!IsFacingTarget()) CustomTurn();
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
             {
+                m_animation.DisableRootMotion();
                 //m_flinchHandle.enabled = false;
                 m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchAnimation);
