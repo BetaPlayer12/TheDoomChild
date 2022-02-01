@@ -168,6 +168,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
 
+        private void CustomTurn()
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
+        }
+
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
             if (damageable != null)
@@ -227,6 +233,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
             m_movement.Stop();
+            m_characterPhysics.UseStepClimb(false);
             m_selfCollider.enabled = false;
         }
 
@@ -412,6 +419,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo.Set(null, null);
             m_flinchHandle.m_autoFlinch = true;
             m_enablePatience = false;
+            m_characterPhysics.UseStepClimb(true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             enabled = true;
         }
@@ -439,6 +447,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.m_autoFlinch = false;
             m_animation.DisableRootMotion();
             m_characterPhysics.UseStepClimb(false);
+            if (!IsFacingTarget()) CustomTurn();
             if (m_animation.GetCurrentAnimation(0).ToString() != m_info.deathAnimation)
             {
                 //m_flinchHandle.enabled = false;
