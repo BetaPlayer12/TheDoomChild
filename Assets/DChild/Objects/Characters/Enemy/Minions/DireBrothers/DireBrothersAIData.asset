@@ -16,7 +16,9 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 66f5c6114fa2e134889f1547676dd2b5, type: 2}
+    - {fileID: 11400000, guid: b61be35b4b84a91468da45039e645551, type: 2}
+    - {fileID: 11400000, guid: fb5872f7cb2e221448bd569d4d818d33, type: 2}
+    - {fileID: 11400000, guid: 5e939eefad2aa8f4da52574a596a3380, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -28,70 +30,252 @@ MonoBehaviour:
     - Name: m_skeletonDataAsset
       Entry: 10
       Data: 0
-    - Name: m_patrol
+    - Name: m_phaseInfo
       Entry: 7
-      Data: 1|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+      Data: 1|DChild.Gameplay.Characters.AI.PhaseInfo`1[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Phase,
         Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: 7 walk final
-    - Name: m_speed
-      Entry: 4
-      Data: 10
+    - Name: m_phaseDataList
+      Entry: 7
+      Data: 2|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Phase,
+        Assembly-CSharp],[DChild.Gameplay.Characters.AI.BossPhaseData, Assembly-CSharp]],
+        mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 3|System.Collections.Generic.EnumEqualityComparer`1[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Phase,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_move
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
       Entry: 7
-      Data: 2|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
-        Assembly-CSharp]], Assembly-CSharp
-    - Name: m_animation
-      Entry: 1
-      Data: 7 walk final
-    - Name: m_speed
-      Entry: 4
-      Data: 10
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 10
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_heavyGroundAttack
+    - Name: 
       Entry: 7
-      Data: 3|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_conditionTemplate
+      Entry: 7
+      Data: 4|DChild.Gameplay.Characters.AI.PercentHealthPhaseConditionTemplate`1[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Phase,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_info
+      Entry: 7
+      Data: 5|System.Collections.Generic.Dictionary`2[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Phase,
+        Assembly-CSharp],[System.Int32, mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 3
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 3
+      Data: 100
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 3
+      Data: 60
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_sh_walk1
+      Entry: 7
+      Data: 6|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: dead_spear_bro_walk_animation
+    - Name: m_speed
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_sh_walk2
+      Entry: 7
+      Data: 7|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: dead_spear_bro_walk_animation2
+    - Name: m_speed
+      Entry: 4
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_sh_run
+      Entry: 7
+      Data: 8|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: dead_spear_bro_run_animation
+    - Name: m_speed
+      Entry: 4
+      Data: 50
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_run
+      Entry: 7
+      Data: 9|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+MovementInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Alive_spear_bro_run_animation_new
+    - Name: m_speed
+      Entry: 4
+      Data: 50
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_heavyGroundStabAttack
+      Entry: 7
+      Data: 10|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
       Data: 1 Heavy Attack Ground Stab_final_combined
     - Name: m_range
       Entry: 4
-      Data: 25
+      Data: 50
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_heavyGroundBashAttack
+      Entry: 7
+      Data: 11|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: 2 Shield Smash Ground
+    - Name: m_range
+      Entry: 4
+      Data: 50
     - Name: 
       Entry: 8
       Data: 
     - Name: m_spearAttack
       Entry: 7
-      Data: 4|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+      Data: 12|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
       Data: 5 Attack Spear Strike Final
     - Name: m_range
       Entry: 4
-      Data: 25
+      Data: 15
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_shieldDashAttack
+      Entry: 7
+      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: dead_spear_bro_shield dash_run_animation
+    - Name: m_range
+      Entry: 4
+      Data: 50
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_shieldBashAttack
+      Entry: 7
+      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.DireBrothersAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: dead_spear_bro_shield bash_animation
+    - Name: m_range
+      Entry: 4
+      Data: 5
     - Name: 
       Entry: 8
       Data: 
     - Name: m_attackCD
       Entry: 4
       Data: 1
+    - Name: m_shieldDashDuration
+      Entry: 4
+      Data: 1.5
     - Name: m_patience
       Entry: 4
-      Data: 10
+      Data: 0
     - Name: m_targetDistanceTolerance
       Entry: 4
       Data: 10
-    - Name: m_idleAnimation
+    - Name: m_sh_death1Animation
       Entry: 1
-      Data: 6 idle final
+      Data: dead_spear_bro_death_animation
+    - Name: m_sh_death2Animation
+      Entry: 1
+      Data: dead_spear_bro_death_animation2
+    - Name: m_sh_stopAnimation
+      Entry: 1
+      Data: dead_spear_bro_run_stopanimation
+    - Name: m_sh_shieldBashAnimation
+      Entry: 1
+      Data: dead_spear_bro_shield bash_animation
     - Name: m_detectAnimation
       Entry: 1
       Data: 12 Defence Stance2
@@ -118,7 +302,7 @@ MonoBehaviour:
       Data: 13 Exhausted (stun like)
     - Name: m_deathAnimation
       Entry: 1
-      Data: 16DEATH ANIMATION
+      Data: 16DEATH ANIMATION_both_version_2
     - Name: 
       Entry: 8
       Data: 

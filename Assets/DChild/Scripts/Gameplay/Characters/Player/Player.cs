@@ -62,8 +62,7 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerCharacterController m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
-        [SerializeField]
-        private SoulCrystalHandle m_soulCrystalHandle;
+
 
         [Title("Serialzables")]
         [SerializeField]
@@ -121,7 +120,6 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PlayerCharacterData data)
         {
             m_serializer.LoadData(data);
-            m_soulCrystalHandle?.InitializeHandles();
         }
 
         public void SetPosition(Vector2 position)

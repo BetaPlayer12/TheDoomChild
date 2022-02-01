@@ -246,6 +246,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.flinchAnimation, false);
                 m_flinchHandle.m_autoFlinch = true;
                 m_agent.Stop();
+                ResetLaser();
                 m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 m_lazerAudio.enabled = false;
                 m_stateHandle.Wait(State.ReevaluateSituation);
@@ -255,9 +256,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_flinchHandle.m_autoFlinch = false;
-            m_stateHandle.ApplyQueuedState();
+            if (m_flinchHandle.m_autoFlinch)
+            {
+                //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                m_flinchHandle.m_autoFlinch = false;
+                m_stateHandle.ApplyQueuedState();
+            }
         }
         private Vector2 WallPosition()
         {
@@ -278,6 +282,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
+            ResetLaser();
             m_agent.Stop();
             m_stateHandle.SetState(State.ReturnToPatrol);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
