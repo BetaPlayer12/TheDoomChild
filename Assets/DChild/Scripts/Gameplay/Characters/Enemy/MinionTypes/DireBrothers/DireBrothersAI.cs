@@ -35,17 +35,23 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TitleGroup("Movement")]
             private MovementInfo m_sh_run = new MovementInfo();
             public MovementInfo sh_run => m_sh_run;
+            [SerializeField, TitleGroup("Movement")]
+            private MovementInfo m_run = new MovementInfo();
+            public MovementInfo run => m_run;
 
             //Attack Behaviours
             [SerializeField, TitleGroup("Attacks")]
             private SimpleAttackInfo m_heavyGroundStabAttack = new SimpleAttackInfo();
             public SimpleAttackInfo heavyGroundStabAttack => m_heavyGroundStabAttack;
-            [SerializeField, TitleGroup("Attacks"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabStuckAnimation;
-            public string heavyGroundStabStuckAnimation => m_heavyGroundStabStuckAnimation;
-            [SerializeField, TitleGroup("Attacks"), ValueDropdown("GetAnimations")]
-            private string m_heavyGroundStabRecoverAnimation;
-            public string heavyGroundStabRecoverAnimation => m_heavyGroundStabRecoverAnimation;
+            [SerializeField, TitleGroup("Attacks")]
+            private SimpleAttackInfo m_heavyGroundBashAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo heavyGroundBashAttack => m_heavyGroundBashAttack;
+            //[SerializeField, TitleGroup("Attacks"), ValueDropdown("GetAnimations")]
+            //private string m_heavyGroundStabStuckAnimation;
+            //public string heavyGroundStabStuckAnimation => m_heavyGroundStabStuckAnimation;
+            //[SerializeField, TitleGroup("Attacks"), ValueDropdown("GetAnimations")]
+            //private string m_heavyGroundStabRecoverAnimation;
+            //public string heavyGroundStabRecoverAnimation => m_heavyGroundStabRecoverAnimation;
             [SerializeField, TitleGroup("Attacks")]
             private SimpleAttackInfo m_spearAttack = new SimpleAttackInfo();
             public SimpleAttackInfo spearAttack => m_spearAttack;
@@ -117,7 +123,10 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
                 m_sh_walk1.SetData(m_skeletonDataAsset);
                 m_sh_walk2.SetData(m_skeletonDataAsset);
+                m_sh_run.SetData(m_skeletonDataAsset);
+                m_run.SetData(m_skeletonDataAsset);
                 m_heavyGroundStabAttack.SetData(m_skeletonDataAsset);
+                m_heavyGroundBashAttack.SetData(m_skeletonDataAsset);
                 m_spearAttack.SetData(m_skeletonDataAsset);
                 m_shieldDashAttack.SetData(m_skeletonDataAsset);
                 m_shieldBashAttack.SetData(m_skeletonDataAsset);
@@ -173,6 +182,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             HeavyGroundAttack,
+            HeavyGroundBashAttack,
             SpearAttack,
             ShieldDash,
             ShieldBash,
@@ -204,7 +214,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Modules")]
         private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Modules")]
-        private FlinchHandler m_flinchHandle;
+        private FlinchHandler m_flinch1Handle;
+        [SerializeField, TabGroup("Modules")]
+        private FlinchHandler m_flinch2Handle;
+
+        private FlinchHandler m_currentFlinchHandle;
 
         private float m_currentPatience;
         private float m_currentCD;
@@ -241,6 +255,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_currentTurnAnimation;
 
         private Coroutine m_currentAttackCoroutine;
+        private Coroutine m_changePhaseCoroutine;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -248,37 +263,55 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentWalkAnimation = m_phaseHandle.currentPhase == Phase.BothAlive ? obj.walkAnimation : (UnityEngine.Random.Range(0, 2) == 0 ? m_info.sh_walk1.animation : m_info.sh_walk2.animation);
             m_currentRunAnimation = obj.runAnimation;
             m_currentTurnAnimation = obj.turnAnimation;
+            m_currentFlinchHandle = m_phaseHandle.currentPhase == Phase.BothAlive ? m_flinch1Handle : m_flinch2Handle;
+
+            switch (m_phaseHandle.currentPhase)
+            {
+                case Phase.BothAlive:
+                    m_flinch1Handle.gameObject.SetActive(true);
+                    m_flinch2Handle.gameObject.SetActive(false);
+                    break;
+                case Phase.SpearDead:
+                    m_flinch1Handle.gameObject.SetActive(false);
+                    m_flinch2Handle.gameObject.SetActive(true);
+                    break;
+            }
         }
 
         private void ChangeState()
         {
-            Debug.Log("DireBrothers Change State");
-            if (m_currentAttackCoroutine != null)
+            if (m_changePhaseCoroutine == null)
             {
-                StopCoroutine(m_currentAttackCoroutine);
-                m_currentAttackCoroutine = null;
+                Debug.Log("DireBrothers Change State");
+                if (m_currentAttackCoroutine != null)
+                {
+                    StopCoroutine(m_currentAttackCoroutine);
+                    m_currentAttackCoroutine = null;
+                }
+                //SetAIToPhasing();
+                m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
             }
-            //SetAIToPhasing();
-            StartCoroutine(ChangePhaseRoutine());
         }
 
         private IEnumerator ChangePhaseRoutine()
         {
             m_stateHandle.Wait(State.ReevaluateSituation);
-            m_flinchHandle.gameObject.SetActive(false);
+            m_currentFlinchHandle.gameObject.SetActive(false);
             m_attackCache.Clear();
             AddToAttackCache(Attack.ShieldDash/*, Attack.ShieldBash*/);
             m_attackRangeCache.Clear();
             AddToRangeCache(m_info.shieldDashAttack.range/*, m_info.shieldBashAttack.range*/);
+            m_attackUsed = new bool[m_attackCache.Count];
             m_phaseHandle.ApplyChange();
             m_hitbox.Disable();
             m_movement.Stop();
             var sp_deathAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.sh_death1Animation : m_info.sh_death2Animation;
             m_animation.SetAnimation(0, sp_deathAnim, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, sp_deathAnim);
-            m_flinchHandle.gameObject.SetActive(true);
+            m_currentFlinchHandle.gameObject.SetActive(true);
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+            m_changePhaseCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -373,7 +406,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_animation.GetCurrentAnimation(0).ToString() == m_currentIdleAnimation)
             {
-                m_flinchHandle.m_autoFlinch = true;
+                m_currentFlinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
                 m_stateHandle.Wait(State.ReevaluateSituation);
             }
@@ -381,9 +414,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchEnd(object sender, EventActionArgs eventArgs)
         {
-            if (m_flinchHandle.m_autoFlinch)
+            if (m_currentFlinchHandle.m_autoFlinch)
             {
-                m_flinchHandle.m_autoFlinch = false;
+                m_currentFlinchHandle.m_autoFlinch = false;
                 m_stateHandle.ApplyQueuedState();
             }
         }
@@ -410,6 +443,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void UpdateAttackDeciderList()
         {
             m_attackDecider.SetList(new AttackInfo<Attack>(Attack.HeavyGroundAttack, m_info.heavyGroundStabAttack.range),
+                                    new AttackInfo<Attack>(Attack.HeavyGroundBashAttack, m_info.heavyGroundBashAttack.range),
                                     new AttackInfo<Attack>(Attack.SpearAttack, m_info.spearAttack.range),
                                     new AttackInfo<Attack>(Attack.ShieldDash, m_info.shieldDashAttack.range)/*,
                                     new AttackInfo<Attack>(Attack.ShieldBash, m_info.shieldBashAttack.range)*/);
@@ -427,18 +461,44 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HeavyGroundAttackRoutine()
         {
+            m_currentFlinchHandle.m_enableMixFlinch = false;
             m_animation.SetAnimation(0, m_info.heavyGroundStabAttack.animation, false);
             yield return new WaitForSeconds(1.5f); 
             m_character.physics.SetVelocity(50 * transform.localScale.x, 0);
             yield return new WaitForSeconds(.6f);
+            m_animation.SetEmptyAnimation(1, 0);
+            m_currentFlinchHandle.m_enableMixFlinch = true;
             m_movement.Stop();
             //m_character.physics.SetVelocity(Vector2.zero);
             //m_animation.EnableRootMotion(true, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabAttack.animation);
-            m_animation.SetAnimation(0, m_info.heavyGroundStabStuckAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabStuckAnimation);
-            m_animation.SetAnimation(0, m_info.heavyGroundStabRecoverAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabRecoverAnimation);
+            //m_animation.SetAnimation(0, m_info.heavyGroundStabStuckAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabStuckAnimation);
+            //m_animation.SetAnimation(0, m_info.heavyGroundStabRecoverAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabRecoverAnimation);
+            m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+        }
+
+        private IEnumerator HeavyGroundBashAttackRoutine()
+        {
+            m_currentFlinchHandle.m_enableMixFlinch = false;
+            m_animation.SetAnimation(0, m_info.heavyGroundBashAttack.animation, false);
+            yield return new WaitForSeconds(1.5f);
+            m_character.physics.SetVelocity(50 * transform.localScale.x, 0);
+            yield return new WaitForSeconds(.6f);
+            m_animation.SetEmptyAnimation(1, 0);
+            m_currentFlinchHandle.m_enableMixFlinch = true;
+            m_movement.Stop();
+            //m_character.physics.SetVelocity(Vector2.zero);
+            //m_animation.EnableRootMotion(true, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundBashAttack.animation);
+            //m_animation.SetAnimation(0, m_info.heavyGroundStabStuckAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabStuckAnimation);
+            //m_animation.SetAnimation(0, m_info.heavyGroundStabRecoverAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavyGroundStabRecoverAnimation);
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -459,12 +519,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_currentShieldDashAttackDuration = 0;
             m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.shieldBashAttack.animation, false);
-            //m_character.physics.SetVelocity(Vector2.zero);
-            //m_animation.EnableRootMotion(true, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.shieldBashAttack.animation);
             m_animation.SetAnimation(0, m_info.sh_stopAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sh_stopAnimation);
+            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.5f;
+            yield return new WaitForSeconds(waitTime);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sh_stopAnimation);
             m_animation.SetAnimation(0, m_currentIdleAnimation, true).MixDuration = 0.25f;
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -546,29 +604,28 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             m_selfCollider.SetActive(false);
             m_startPoint = transform.position;
-
-            m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
-            m_phaseHandle.Initialize(Phase.BothAlive, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
-            m_phaseHandle.ApplyChange();
         }
 
         protected override void Awake()
         {
             base.Awake();
+            m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
+            m_phaseHandle.Initialize(Phase.BothAlive, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
+            m_phaseHandle.ApplyChange();
             m_patrolHandle.TurnRequest += OnTurnRequest;
             m_attackHandle.AttackDone += OnAttackDone;
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.deathAnimation);
-            m_flinchHandle.FlinchStart += OnFlinchStart;
-            m_flinchHandle.FlinchEnd += OnFlinchEnd;
+            m_currentFlinchHandle.FlinchStart += OnFlinchStart;
+            m_currentFlinchHandle.FlinchEnd += OnFlinchEnd;
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
 
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.HeavyGroundAttack, Attack.SpearAttack);
+            AddToAttackCache(/*Attack.HeavyGroundAttack,*/ Attack.HeavyGroundBashAttack, Attack.SpearAttack);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.heavyGroundStabAttack.range, m_info.spearAttack.range);
+            AddToRangeCache(/*m_info.heavyGroundStabAttack.range,*/ m_info.heavyGroundBashAttack.range, m_info.spearAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
         }
 
@@ -629,6 +686,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                 case Attack.HeavyGroundAttack:
                                     m_currentAttackCoroutine = StartCoroutine(HeavyGroundAttackRoutine());
                                     break;
+                                case Attack.HeavyGroundBashAttack:
+                                    m_currentAttackCoroutine = StartCoroutine(HeavyGroundBashAttackRoutine());
+                                    break;
                                 case Attack.SpearAttack:
                                     m_animation.EnableRootMotion(true, false);
                                     m_attackHandle.ExecuteAttack(m_info.spearAttack.animation, m_currentIdleAnimation);
@@ -651,7 +711,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             {
                                 m_animation.EnableRootMotion(false, false);
                                 m_animation.SetAnimation(0, m_currentRunAnimation, true);
-                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.sh_run.speed);
+                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_phaseHandle.currentPhase == Phase.BothAlive ? m_info.run.speed : m_info.sh_run.speed);
                             }
                             else
                             {
