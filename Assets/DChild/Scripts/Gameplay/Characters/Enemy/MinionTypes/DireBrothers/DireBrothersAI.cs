@@ -255,6 +255,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private string m_currentTurnAnimation;
 
         private Coroutine m_currentAttackCoroutine;
+        private Coroutine m_changePhaseCoroutine;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
@@ -279,14 +280,17 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            Debug.Log("DireBrothers Change State");
-            if (m_currentAttackCoroutine != null)
+            if (m_changePhaseCoroutine == null)
             {
-                StopCoroutine(m_currentAttackCoroutine);
-                m_currentAttackCoroutine = null;
+                Debug.Log("DireBrothers Change State");
+                if (m_currentAttackCoroutine != null)
+                {
+                    StopCoroutine(m_currentAttackCoroutine);
+                    m_currentAttackCoroutine = null;
+                }
+                //SetAIToPhasing();
+                m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
             }
-            //SetAIToPhasing();
-            StartCoroutine(ChangePhaseRoutine());
         }
 
         private IEnumerator ChangePhaseRoutine()
@@ -307,6 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentFlinchHandle.gameObject.SetActive(true);
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+            m_changePhaseCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }
@@ -618,9 +623,9 @@ namespace DChild.Gameplay.Characters.Enemies
             UpdateAttackDeciderList();
 
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.HeavyGroundAttack, Attack.HeavyGroundBashAttack, Attack.SpearAttack);
+            AddToAttackCache(/*Attack.HeavyGroundAttack,*/ Attack.HeavyGroundBashAttack, Attack.SpearAttack);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.heavyGroundStabAttack.range, m_info.heavyGroundBashAttack.range, m_info.spearAttack.range);
+            AddToRangeCache(/*m_info.heavyGroundStabAttack.range,*/ m_info.heavyGroundBashAttack.range, m_info.spearAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
         }
 
