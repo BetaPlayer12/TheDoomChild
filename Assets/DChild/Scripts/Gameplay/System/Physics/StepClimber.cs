@@ -90,7 +90,7 @@ namespace DChild.Gameplay
             stepUpOffset = default(Vector2);
 
             //( 1 ) Check if the contact point normal matches that of a step (y close to 0)
-            if (Mathf.Abs(stepTestCP.normal.y) >= 0.01f)
+            if (Mathf.Abs(stepTestCP.normal.y) >= 0.03f)
             {
                 return false;
             }

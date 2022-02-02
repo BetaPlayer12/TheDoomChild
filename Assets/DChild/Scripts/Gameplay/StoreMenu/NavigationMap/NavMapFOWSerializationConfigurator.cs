@@ -8,7 +8,7 @@ namespace DChild.Gameplay.NavigationMap
     public class NavMapFOWSerializationConfigurator : MonoBehaviour
     {
         [System.Serializable]
-        private struct SceneFOWInfo
+        public struct SceneFOWInfo
         {
             [SerializeField, MinValue(0)]
             public int m_sceneIndex;
@@ -23,8 +23,14 @@ namespace DChild.Gameplay.NavigationMap
         [SerializeField,TableList(AlwaysExpanded = true)]
         private SceneFOWInfo[] m_info;
 
+        public SceneFOWInfo[] sceneInfo => m_info;
+        public Environment.Location location => m_sceneLocation;
+        public DialogueDatabase database => m_database;
+
+
+
         [Button]
-        private void SerializeToDatabase()
+        public void SerializeToDatabase()
         {
             m_database.variables.Clear();
             var template = Template.FromDefault();
@@ -41,5 +47,6 @@ namespace DChild.Gameplay.NavigationMap
         }
 
         private string CreateVariableName(int sceneIndex, int index) => $"{m_sceneLocation}_{sceneIndex}_FOW_{index}";
-    }
+
 }
+    }
