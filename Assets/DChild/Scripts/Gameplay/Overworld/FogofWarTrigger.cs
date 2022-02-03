@@ -8,8 +8,25 @@ using UnityEngine;
 
 public class FogofWarTrigger : MonoBehaviour
 {
-    [SerializeField]
-    private bool m_reveal=false;
+    //public static RevealToggle revealToggleInstance;
+    //public event EventAction<EventActionArgs> OnReveal;
+    public static bool revealValue = false;
+
+    public bool value => revealValue;
+
+        [Button]
+        public void Reveal()
+        {
+            revealValue = true;
+            //OnReveal?.Invoke(this, EventActionArgs.Empty);
+        }
+
+        [Button]
+        public void Hide()
+        {
+            revealValue = false;
+            //OnReveal?.Invoke(this, EventActionArgs.Empty);
+        }
 
     private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -17,10 +34,8 @@ public class FogofWarTrigger : MonoBehaviour
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
             if (playerObject != null && collision.tag != "Sensor")
             {
-                reveal();
+                Reveal();
             }
         }
-        private void reveal(){
-                m_reveal=true;
-        }
+       
 }
