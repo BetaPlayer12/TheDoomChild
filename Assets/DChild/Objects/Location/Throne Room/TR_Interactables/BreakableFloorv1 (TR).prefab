@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 1169678863626435875}
   m_Layer: 9
   m_Name: Hitbox
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,8 +148,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 9046023402337327289}
-  m_isInvulnerable: 0
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
+  m_invulnerabilityLevel: 0
   m_damageReduction: 0
+  m_canBlockDamage: 0
   m_viableTags:
   - GroundBreaker
 --- !u!1001 &5007713385794388190
@@ -265,6 +272,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3053242634701917084, guid: 7a51cdb5a9edc65438a1ad4b61fd4b9c,
         type: 3}
+    - target: {fileID: 7003674765399219517, guid: 8302337d0dac39146b4f6aaaf90bbe60,
+        type: 3}
+      propertyPath: m_debris.m_AssetGUID
+      value: d206fb43f42dd594dbd8435da19829b0
+      objectReference: {fileID: 0}
     - target: {fileID: 7283805512970246494, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
       propertyPath: m_id.m_ID
