@@ -169,6 +169,18 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_swordSlash3Event;
             public string swordSlash3Event => m_swordSlash3Event;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_swordStabEvent;
+            public string swordStabEvent => m_swordStabEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_heavySlashEvent;
+            public string heavySlashEvent => m_heavySlashEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_earthShakerEvent;
+            public string earthShakerEvent => m_earthShakerEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_specialThrustEvent;
+            public string specialThrustEvent => m_specialThrustEvent;
 
             public override void Initialize()
             {
@@ -263,7 +275,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Effects")]
-        private GameObject m_fx;
+        private ParticleSystem m_earthShakerFX;
         [SerializeField, TabGroup("Hurtbox")]
         private Collider2D m_swordSlash1BB;
         [SerializeField, TabGroup("Hurtbox")]
@@ -457,7 +469,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.flinchKnockbackAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.flinchKnockbackAnimation);
+            m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
+            m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
             m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
             m_animation.DisableRootMotion();
             m_hitbox.Enable();
@@ -478,6 +492,12 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_character.physics.SetVelocity(m_info.shoulderBashVelocity.x * transform.localScale.x, 0);
             //yield return new WaitForSeconds(0.15f);
             //m_movement.Stop();
+            //while (m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd)
+            //{
+            //    if (!IsFacingTarget()) CustomTurn();
+            //    yield return new WaitForSeconds(m_animation.animationState.GetCurrent(0).AnimationTime > 0.85f ? 0 : 1f);
+            //    yield return null;
+            //}
             m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
@@ -496,20 +516,21 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_phaseHandle.allowPhaseChange = false;
 
-            while (Vector2.Distance(target, transform.position) >= 15f)
+            while (Vector2.Distance(target, transform.position) >= 30f)
             {
                 m_animation.EnableRootMotion(true, false);
                 m_animation.SetAnimation(0, m_info.moveMedium.animation, true);
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveMedium.speed);
                 yield return null;
             }
-            m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.heavySlashAttack.animation, false);
+            m_animation.DisableRootMotion();
+            m_character.physics.AddForce(transform.right * 1f, ForceMode2D.Impulse);
+            m_animation.SetAnimation(0, m_info.heavySlashAttack.animation, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavySlashAttack.animation);
+            m_movement.Stop();
             m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
             //yield return new WaitForSeconds(3f);
             m_attackDecider.hasDecidedOnAttack = false;
-            m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -525,6 +546,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.dodgeHop.animation, false);
             m_animation.AddAnimation(0, m_info.normalAttack.animation, false, 0);
+            //if (!IsFacingTarget()) CustomTurn();
+            //yield return new WaitForSeconds(.5f);
+            //if (!IsFacingTarget()) CustomTurn();
+            //yield return new WaitForSeconds(1.5f);
+            //if (!IsFacingTarget()) CustomTurn();
+            //while (m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd)
+            //{
+            //    if (!IsFacingTarget()) CustomTurn();
+            //    yield return new WaitForSeconds(m_animation.animationState.GetCurrent(0).AnimationTime > 0.85f ? 0 :1f);
+            //    yield return null;
+            //}
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.normalAttack.animation);
             m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
@@ -767,6 +799,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void EarthShaker()
         {
+            m_earthShakerFX.Play();
             m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_earthShakerBB, 0.25f));
         }
 
@@ -795,6 +828,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineListener.Subscribe(m_info.swordSlash1Event, SwordSlash1);
             m_spineListener.Subscribe(m_info.swordSlash2Event, SwordSlash2);
             m_spineListener.Subscribe(m_info.swordSlash3Event, SwordSlash3);
+            m_spineListener.Subscribe(m_info.swordStabEvent, SwordStab);
+            m_spineListener.Subscribe(m_info.heavySlashEvent, HeavySlash);
+            m_spineListener.Subscribe(m_info.earthShakerEvent, EarthShaker);
+            m_spineListener.Subscribe(m_info.specialThrustEvent, SpecialThrust);
         }
 
         private void Update()
