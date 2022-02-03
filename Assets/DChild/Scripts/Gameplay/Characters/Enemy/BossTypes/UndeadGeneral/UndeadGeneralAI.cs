@@ -310,6 +310,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private int m_currentPhaseIndex;
         private Coroutine m_currentAttackCoroutine;
         private Coroutine m_hurtboxCoroutine;
+        private Coroutine m_changePhaseCoroutine;
 
         private string m_currentMovementAnimation;
         private float m_currentMovementSpeed;
@@ -448,7 +449,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
             m_animation.DisableRootMotion();
             m_animation.SetEmptyAnimation(0, 0);
-            StartCoroutine(ChangePhaseRoutine());
+            if (m_changePhaseCoroutine == null)
+            {
+                m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
+            }
         }
 
         private void StopCurrentAttackRoutine()
@@ -475,6 +479,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
             m_animation.DisableRootMotion();
             m_hitbox.Enable();
+            m_changePhaseCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
 
