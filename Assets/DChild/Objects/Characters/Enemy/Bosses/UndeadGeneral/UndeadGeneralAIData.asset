@@ -16,10 +16,11 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: 80402c3b81258ca4386b568a4c0e4fbf, type: 2}
+    - {fileID: 11400000, guid: 8ed9182715e55044a806d02bdaec2e57, type: 2}
     - {fileID: 11400000, guid: 7749ef2c6beec3e49b5b1f45583b4427, type: 2}
     - {fileID: 11400000, guid: 18470d791bf43e345bf3e606bbe1a777, type: 2}
     - {fileID: 11400000, guid: 76fbc9f27c6939d4390a583c17ed230a, type: 2}
+    - {fileID: 11400000, guid: 41d1ee1f573b1e9478ce9b91ec0443c4, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -55,7 +56,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 3
+      Data: 4
     - Name: 
       Entry: 7
       Data: 
@@ -89,6 +90,18 @@ MonoBehaviour:
     - Name: $v
       Entry: 10
       Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 10
+      Data: 4
     - Name: 
       Entry: 8
       Data: 
@@ -247,13 +260,26 @@ MonoBehaviour:
       Data: Attack1
     - Name: m_range
       Entry: 4
-      Data: 15
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_heavySlashAttack
+      Entry: 7
+      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: Attack_AfterRun
+    - Name: m_range
+      Entry: 4
+      Data: 50
     - Name: 
       Entry: 8
       Data: 
     - Name: m_earthShakerAttack
       Entry: 7
-      Data: 13|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
+      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -275,14 +301,14 @@ MonoBehaviour:
       Data: EarthshakerStunnedRecover
     - Name: m_specialThrustAttack
       Entry: 7
-      Data: 14|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
+      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
       Data: Attack_SpecialThrust
     - Name: m_range
       Entry: 4
-      Data: 50
+      Data: 75
     - Name: 
       Entry: 8
       Data: 
@@ -294,7 +320,7 @@ MonoBehaviour:
       Data: Attack_SpecialThrust_Hit
     - Name: m_dodgeAttack
       Entry: 7
-      Data: 15|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
+      Data: 16|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
@@ -305,6 +331,22 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_guardAttack
+      Entry: 7
+      Data: 17|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
+        Assembly-CSharp]], Assembly-CSharp
+    - Name: m_animation
+      Entry: 1
+      Data: GuardCounter
+    - Name: m_range
+      Entry: 4
+      Data: 20
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: m_guardTriggerAnimation
+      Entry: 1
+      Data: GuardTrigger
     - Name: m_targetDistanceTolerance
       Entry: 4
       Data: 100
@@ -329,6 +371,12 @@ MonoBehaviour:
     - Name: m_idleToCombatTransitionAnimation
       Entry: 1
       Data: IdletoCombat_Transition
+    - Name: m_flinchInplaceAnimation
+      Entry: 1
+      Data: FlinchKnockBack_inPlace
+    - Name: m_flinchKnockbackAnimation
+      Entry: 1
+      Data: FlinchKnockBack
     - Name: m_defeatStartAnimation
       Entry: 1
       Data: DefeatStart
@@ -364,13 +412,25 @@ MonoBehaviour:
       Data: RootMoveStart
     - Name: m_swordSlash1Event
       Entry: 1
-      Data: SwordSoundFX1
+      Data: Hit_Attack1_FirstStrike
     - Name: m_swordSlash2Event
       Entry: 1
-      Data: SwordSoundFX2
+      Data: Hit_Attack1_SecondStrike
     - Name: m_swordSlash3Event
       Entry: 1
-      Data: SwordSoundFX3
+      Data: Hit_Attack1_ThirdStrike
+    - Name: m_swordStabEvent
+      Entry: 1
+      Data: Hit_GuardCounter
+    - Name: m_heavySlashEvent
+      Entry: 1
+      Data: Hit_AfterRun
+    - Name: m_earthShakerEvent
+      Entry: 1
+      Data: Hit_Earthshaker
+    - Name: m_specialThrustEvent
+      Entry: 1
+      Data: Hit_SpecialThrust
     - Name: 
       Entry: 8
       Data: 

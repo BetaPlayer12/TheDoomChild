@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace DChild.Gameplay.Environment
 {
@@ -29,9 +30,9 @@ namespace DChild.Gameplay.Environment
 
         private static Rigidbody2D m_cacheRigidbody;
 
-        [ShowInInspector,HideInPrefabAssets]
+        [ShowInInspector, HideInPrefabAssets]
         private float m_force;
-        [SerializeField,HideInPrefabAssets]
+        [SerializeField, HideInPrefabAssets]
         private float m_angle;
         private float m_fadeSpeed;
 
@@ -95,27 +96,27 @@ namespace DChild.Gameplay.Environment
                 m_cacheRigidbody = m_rigidbodies[i];
                 //if (m_cacheRigidbody.IsSleeping())
                 //{
-                    m_durationTimer[i] -= DeltaTime;
-                    if (m_durationTimer[i] <= 0)
-                    {
-                        m_renderers.Add(m_cacheRigidbody.GetComponentInChildren<SpriteRenderer>());
-                        m_durationTimer.RemoveAt(i);
-                        m_rigidbodies.RemoveAt(i);
-                    }
+                m_durationTimer[i] -= DeltaTime;
+                if (m_durationTimer[i] <= 0)
+                {
+                    m_renderers.Add(m_cacheRigidbody.GetComponentInChildren<SpriteRenderer>());
+                    m_durationTimer.RemoveAt(i);
+                    m_rigidbodies.RemoveAt(i);
+                }
                 //}
             }
             for (int i = m_renderers.Count - 1; i >= 0; i--)
             {
                 var color = m_renderers[i].color;
                 color.a -= m_fadeSpeed * DeltaTime;
-               m_renderers[i].color = color;
+                m_renderers[i].color = color;
                 if (color.a <= 0)
                 {
                     m_renderers.RemoveAt(i);
                     m_trackedObjectCount--;
                     if (m_trackedObjectCount <= 0)
                     {
-                        Destroy(gameObject);
+                        Addressables.ReleaseInstance(gameObject);
                     }
                 }
             }
