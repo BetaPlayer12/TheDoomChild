@@ -102,7 +102,7 @@ namespace DChild.Gameplay
                 Debug.LogError(e.Message);
             }
 
-            PostProcess.SetActiveToAll(true);
+            //PostProcess.SetActiveToAll(true);
         }
 
         public static void PauseGame()
@@ -113,7 +113,7 @@ namespace DChild.Gameplay
             GameSystem.SetCursorVisibility(true);
 
             MasterAudio.PauseEverything();
-            PostProcess.SetActiveToAll(false);
+            //PostProcess.SetActiveToAll(false);
         }
 
         public static void ClearCaches()
