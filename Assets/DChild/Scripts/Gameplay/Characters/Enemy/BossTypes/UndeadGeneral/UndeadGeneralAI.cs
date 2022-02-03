@@ -312,6 +312,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private Coroutine m_hurtboxCoroutine;
         private Coroutine m_changePhaseCoroutine;
 
+        private Vector2 m_lastTargetPos;
         private string m_currentMovementAnimation;
         private float m_currentMovementSpeed;
         private float m_currentCD;
@@ -517,11 +518,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = true;
         }
 
-        private IEnumerator HeavySlashRoutine(Vector2 target)
+        private IEnumerator HeavySlashRoutine()
         {
             m_phaseHandle.allowPhaseChange = false;
 
-            while (Vector2.Distance(target, transform.position) >= 30f)
+            while (Mathf.Abs(m_lastTargetPos.x - transform.position.x) >= 30f)
             {
                 m_animation.EnableRootMotion(true, false);
                 m_animation.SetAnimation(0, m_info.moveMedium.animation, true);
@@ -882,7 +883,8 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCD = m_currentFullCD[0];
                             break;
                         case Attack.HeavySlash:
-                            m_currentAttackCoroutine = StartCoroutine(HeavySlashRoutine(m_targetInfo.position));
+                            m_lastTargetPos = m_targetInfo.position;
+                            m_currentAttackCoroutine = StartCoroutine(HeavySlashRoutine());
                             m_pickedCD = m_currentFullCD[1];
                             break;
                         case Attack.EarthShaker:
