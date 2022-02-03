@@ -32,7 +32,33 @@ namespace DChild.Gameplay.NavigationMap
         [Button]
         public void SerializeToDatabase()
         {
-            m_database.variables.Clear();
+            if(m_database.variables == null)
+            {
+               
+            }
+            else
+            {
+                for (int y = 0; y < m_database.variables.Count; y++)
+                {
+
+                    var currentVariable = m_database.variables[y];
+                    for (int x = 0; x < currentVariable.fields.Count; x++)
+                    {
+                        if (currentVariable.fields[x].value.Contains("POI"))
+                        {
+                            currentVariable.id = 0;
+                            m_database.variables.Remove(currentVariable);
+                        }
+                        else
+                        {
+
+                        }
+                    }
+
+                }
+            }
+           
+
             var template = Template.FromDefault();
             for(int count = 0; count < m_info.Length; count++)
             {
