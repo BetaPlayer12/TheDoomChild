@@ -5,14 +5,15 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class FogofWarTrigger : MonoBehaviour
+namespace DChild.Gameplay.NavigationMap
 {
-    //public static RevealToggle revealToggleInstance;
-    //public event EventAction<EventActionArgs> OnReveal;
-    public static bool revealValue = false;
+    public class FogofWarTrigger : MonoBehaviour
+    {   
+        //public static RevealToggle revealToggleInstance;
+        //public event EventAction<EventActionArgs> OnReveal;
+        public static bool revealValue = false;
 
-    public bool value => revealValue;
+        public bool value => revealValue;
 
         [Button]
         public void Reveal()
@@ -28,7 +29,7 @@ public class FogofWarTrigger : MonoBehaviour
             //OnReveal?.Invoke(this, EventActionArgs.Empty);
         }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
 
             var playerObject = collision.gameObject.GetComponentInParent<PlayerControlledObject>();
@@ -38,4 +39,5 @@ public class FogofWarTrigger : MonoBehaviour
             }
         }
        
+    }
 }
