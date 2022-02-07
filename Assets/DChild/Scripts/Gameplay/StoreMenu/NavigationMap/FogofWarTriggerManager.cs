@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FogofWarManager : MonoBehaviour
+namespace DChild.Gameplay.NavigationMap
 {
-    [SerializeField]
-    private GameObject[] m_fogofwar;
+    public class FogofWarTriggerManager : MonoBehaviour
+    {
+        [SerializeField]
+        private FogofWarTrigger[] m_fogofwar;
 
         //private void Reveal(object sender, EventActionArgs eventArgs)
         //{
@@ -19,5 +21,5 @@ public class FogofWarManager : MonoBehaviour
 
        // }
 
-   
+    }
 }
