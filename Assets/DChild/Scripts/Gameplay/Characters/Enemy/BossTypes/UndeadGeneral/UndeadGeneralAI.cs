@@ -530,7 +530,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_animation.DisableRootMotion();
-            m_character.physics.AddForce(transform.right * 1f, ForceMode2D.Impulse);
+            //m_character.physics.AddForce(transform.right * 1f, ForceMode2D.Impulse);
+            m_character.physics.SetVelocity(transform.localScale.x * 75f);
             m_animation.SetAnimation(0, m_info.heavySlashAttack.animation, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavySlashAttack.animation);
             m_movement.Stop();
@@ -591,6 +592,7 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!willDodge)
             {
                 if (!IsFacingTarget()) CustomTurn();
+                m_animation.EnableRootMotion(true, false);
                 m_animation.SetAnimation(0, m_info.guardTriggerAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.guardTriggerAnimation);
                 m_animation.SetAnimation(0, m_info.guardAttack.animation, false);
@@ -778,6 +780,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentFullCD = new List<float>();
         }
 
+        private void SwordThrustRootMoveEnd()
+        {
+            m_movement.Stop();
+        }
+
+        private void SwordThrustRootMoveStart()
+        {
+            m_character.physics.SetVelocity(transform.right * 5f);
+        }
+
         private void SwordSlash1()
         {
             m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordSlash1BB, 0.25f));
@@ -837,6 +849,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineListener.Subscribe(m_info.swordStabEvent, SwordStab);
             m_spineListener.Subscribe(m_info.heavySlashEvent, HeavySlash);
             m_spineListener.Subscribe(m_info.earthShakerEvent, EarthShaker);
+            m_spineListener.Subscribe(m_info.specialThrustEvent, SpecialThrust);
+            m_spineListener.Subscribe(m_info.rootMoveEndEvent, SwordThrustRootMoveEnd);
+            m_spineListener.Subscribe(m_info.rootMoveStartEvent, SwordThrustRootMoveStart);
             m_spineListener.Subscribe(m_info.specialThrustEvent, SpecialThrust);
         }
 
