@@ -276,12 +276,14 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_flinch2Handle.gameObject.SetActive(true);
                     break;
             }
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private void ChangeState()
         {
-            if (m_changePhaseCoroutine == null)
+            if (m_changePhaseCoroutine == null && m_phaseHandle.allowPhaseChange)
             {
+                m_phaseHandle.allowPhaseChange = false;
                 Debug.Log("DireBrothers Change State");
                 if (m_currentAttackCoroutine != null)
                 {
@@ -302,7 +304,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackRangeCache.Clear();
             AddToRangeCache(m_info.shieldDashAttack.range/*, m_info.shieldBashAttack.range*/);
             m_attackUsed = new bool[m_attackCache.Count];
-            m_phaseHandle.ApplyChange();
             m_hitbox.Disable();
             m_movement.Stop();
             var sp_deathAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.sh_death1Animation : m_info.sh_death2Animation;
@@ -312,6 +313,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
             m_changePhaseCoroutine = null;
+            m_phaseHandle.ApplyChange();
             m_stateHandle.ApplyQueuedState();
             yield return null;
         }

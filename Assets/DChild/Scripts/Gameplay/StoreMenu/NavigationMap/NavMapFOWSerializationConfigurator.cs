@@ -59,7 +59,7 @@ namespace DChild.Gameplay.NavigationMap
             }
         }
 
-        private string CreateVariableName(int sceneIndex, int index) => $"{m_sceneLocation}_{sceneIndex}_FOW_{index}";
+        private string CreateVariableName(int sceneIndex, int index) => NavMapUtility.CreateFogOfWarVariableName(m_sceneLocation, sceneIndex,index);
 
     }
 }

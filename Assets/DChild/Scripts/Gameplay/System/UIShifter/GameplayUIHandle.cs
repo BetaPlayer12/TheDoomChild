@@ -24,7 +24,7 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private WorldMapHandler m_worldMap;
         [SerializeField]
-        private NavMapManager m_navMap;
+        private NavigationMapManager m_navMap;
 
         public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {

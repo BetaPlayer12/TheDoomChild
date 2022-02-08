@@ -178,6 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_flinchHandle.m_enableMixFlinch = true;
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
@@ -381,6 +382,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_currentRunAttackDuration = 0;
+            m_flinchHandle.m_enableMixFlinch = true;
             //yield return new WaitForSeconds(m_info.runAttackDuration);
             //m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0.25f;
@@ -548,6 +550,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_selfCollider.enabled = true;
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
 
+                            m_flinchHandle.m_enableMixFlinch = false;
                             switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
                             {
                                 case Attack.Attack1:
