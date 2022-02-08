@@ -14,7 +14,7 @@ namespace DChild.Gameplay.NavigationMap
             //UpdateFogofWarInstanceState();
         //}
 
-        // private void UpdateEnemyInstanceState()
+        // private void UpdateFogofWarInstanceState()
         //{
 
 
