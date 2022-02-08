@@ -36,7 +36,6 @@ namespace DChild.Gameplay.NavigationMap
 #if UNITY_EDITOR
             if (m_includePOI)
             {
-
                 m_poiSerializationConfig.SerializeToDatabase();
             }
             if (m_includeFOW)
@@ -51,6 +50,21 @@ namespace DChild.Gameplay.NavigationMap
 
 #endif
         }
+
+        //[Button]
+        //private void RemoveVariable()
+        //{
+        //    if (m_includePOI)
+        //    {
+        //        m_poiSerializationConfig.RemoveVariable();
+        //    }
+            
+
+        //    if (m_includeFOW)
+        //    {
+        //        m_fowSerializationConfig.RemoveVariable();
+        //    }
+        //}
 
 
         private void Start()

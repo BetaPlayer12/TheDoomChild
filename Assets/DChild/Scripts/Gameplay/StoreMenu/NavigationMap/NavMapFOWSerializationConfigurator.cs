@@ -20,7 +20,7 @@ namespace DChild.Gameplay.NavigationMap
         private DialogueDatabase m_database;
         [SerializeField, HorizontalGroup("NamePrefix")]
         private Environment.Location m_sceneLocation;
-        [SerializeField,TableList(AlwaysExpanded = true)]
+        [SerializeField, TableList(AlwaysExpanded = true)]
         private SceneFOWInfo[] m_info;
 
         public SceneFOWInfo[] sceneInfo => m_info;
@@ -34,19 +34,17 @@ namespace DChild.Gameplay.NavigationMap
         {
             for (int y = 0; y < m_database.variables.Count; y++)
             {
-                var currentVariable = m_database.variables[y];
-                for (int x = 0; x < currentVariable.fields.Count; x++)
+
+                if (m_database.variables[y].fields[0].value.Contains("FOW"))
                 {
-                    if (currentVariable.fields[x].value.Contains("FOW"))
-                    {
-                        m_database.variables.Remove(currentVariable);
-                    }
-                    else
-                    {
-
-                    }
+                    m_database.variables.Remove(m_database.variables[y]);
+                    y--;
+                    m_database.SyncVariables();
                 }
+                else
+                {
 
+                }
             }
             var template = Template.FromDefault();
             for (int k = 0; k < m_info.Length; k++)
@@ -55,7 +53,7 @@ namespace DChild.Gameplay.NavigationMap
                 for (int i = 0; i < info.m_itemCount; i++)
                 {
                     var varID = template.GetNextVariableID(m_database);
-                    var variable = template.CreateVariable(varID, CreateVariableName(info.m_sceneIndex,i), "false", FieldType.Boolean);
+                    var variable = template.CreateVariable(varID, CreateVariableName(info.m_sceneIndex, i), "false", FieldType.Boolean);
                     m_database.variables.Add(variable);
                 }
             }
@@ -63,5 +61,5 @@ namespace DChild.Gameplay.NavigationMap
 
         private string CreateVariableName(int sceneIndex, int index) => $"{m_sceneLocation}_{sceneIndex}_FOW_{index}";
 
-}
     }
+}

@@ -32,45 +32,36 @@ namespace DChild.Gameplay.NavigationMap
         [Button]
         public void SerializeToDatabase()
         {
-            if(m_database.variables == null)
+            for (int y = 0; y < m_database.variables.Count; y++)
             {
-               
-            }
-            else
-            {
-                for (int y = 0; y < m_database.variables.Count; y++)
+                if (m_database.variables[y].fields[0].value.Contains("POI"))
                 {
+                    
+                    m_database.variables.Remove(m_database.variables[y]);
+                    y--;
 
-                    var currentVariable = m_database.variables[y];
-                    for (int x = 0; x < currentVariable.fields.Count; x++)
-                    {
-                        if (currentVariable.fields[x].value.Contains("POI"))
-                        {
-                            currentVariable.id = 0;
-                            m_database.variables.Remove(currentVariable);
-                        }
-                        else
-                        {
-
-                        }
-                    }
+                }
+                else
+                {
 
                 }
             }
-           
+
 
             var template = Template.FromDefault();
-            for(int count = 0; count < m_info.Length; count++)
+            for (int k = 0; k < m_info.Length; k++)
             {
-                var info = m_info[count];
-                for(int i = 0; i < info.m_itemCount; i++)
+                var info = m_info[k];
+                for (int i = 0; i < info.m_itemCount; i++)
                 {
                     var varID = template.GetNextVariableID(m_database);
                     var variable = template.CreateVariable(varID, CreateVariableName(info.m_sceneIndex, i), "false", FieldType.Boolean);
                     m_database.variables.Add(variable);
                 }
             }
+
         }
+
 
         private string CreateVariableName(int sceneIndex, int index) => $"{m_location}_{sceneIndex}_POI_{index}";
 
