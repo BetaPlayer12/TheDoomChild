@@ -10,18 +10,23 @@ namespace DChild.Gameplay.NavigationMap
     {
 #if UNITY_EDITOR
         [SerializeField, HideInPlayMode]
-        private VariableToObjectEditorList<Image> m_editorList; 
+        private VariableToObjectEditorList<Image> m_editorList;
 #endif
         [SerializeField, HideInEditorMode]
-        private Dictionary<string,Image> m_list;
+        private Dictionary<string, Image> m_list;
 
-        public void UpdateFogOfWarUI()
+        public void UpdateUI()
         {
             foreach (var varName in m_list.Keys)
             {
                 var isHidden = DialogueLua.GetVariable(varName).asBool;
-                m_list[varName].enabled = isHidden;
+                SetUIState(varName, isHidden);
             }
+        }
+
+        public void SetUIState(string varName, bool isHidden)
+        {
+            m_list[varName].enabled = isHidden;
         }
 
         private void OnValidate()
@@ -29,6 +34,6 @@ namespace DChild.Gameplay.NavigationMap
 #if UNITY_EDITOR
             m_list = m_editorList.ToDictionary();
 #endif
+        }
     }
-}
 }
