@@ -315,7 +315,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         if (IsFacing(m_targetLastPos))
                         {
-                            if (IsTargetLastPosInRange(m_info.attackExplode.range) 
+                            if (IsTargetInRange(m_info.attackExplode.range) 
                                 || m_wallSensor.allRaysDetecting 
                                 || IsTargetInRange(m_info.attackExplode.range))
                             {
