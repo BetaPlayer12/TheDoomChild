@@ -51,22 +51,6 @@ namespace DChild.Gameplay.NavigationMap
 #endif
         }
 
-        //[Button]
-        //private void RemoveVariable()
-        //{
-        //    if (m_includePOI)
-        //    {
-        //        m_poiSerializationConfig.RemoveVariable();
-        //    }
-            
-
-        //    if (m_includeFOW)
-        //    {
-        //        m_fowSerializationConfig.RemoveVariable();
-        //    }
-        //}
-
-
         private void Start()
         {
             m_poiLocation = m_poiSerializationConfig.location;

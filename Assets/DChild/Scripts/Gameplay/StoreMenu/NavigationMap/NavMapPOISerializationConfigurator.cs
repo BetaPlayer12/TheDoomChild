@@ -36,7 +36,7 @@ namespace DChild.Gameplay.NavigationMap
             {
                 if (m_database.variables[y].fields[0].value.Contains("POI"))
                 {
-                    
+
                     m_database.variables.Remove(m_database.variables[y]);
                     y--;
 
