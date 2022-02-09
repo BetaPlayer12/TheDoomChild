@@ -19,6 +19,7 @@ namespace DChild.Gameplay.NavigationMap
             {
                 m_tracker.RemoveUIReferencesFromCurrentMap();
                 var map = m_instantiator.LoadMapFor(location);
+                m_tracker.SetInGameTrackReferencePoint(inGameReference);
                 m_tracker.SetReferencePointPosition(map, mapReferencePoint);
                 m_fogOfWarUI = GetComponentInChildren<NavMapFogOfWarUI>();
                 m_mapNeedsCompleteUpdate = true;

@@ -10,10 +10,10 @@ namespace DChild.Gameplay.NavigationMap
         [SerializeField]
         private Vector3 m_mapReferencePoint;
         [SerializeField]
-        private Vector2 m_offset;
+        private Vector2 m_scaleOffset;
 
         public Transform inGameReferencePoint => m_inGameReferencePoint;
         public Vector3 mapReferencePoint => m_mapReferencePoint;
-        public Vector2 offset => m_offset;
+        public Vector2 offset => m_scaleOffset;
     } 
 }
