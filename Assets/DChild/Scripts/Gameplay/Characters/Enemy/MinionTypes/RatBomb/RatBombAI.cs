@@ -288,7 +288,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Detect:
                     m_movement.Stop();
                     StopCoroutine(m_randomTurnRoutine);
-                    if (IsFacing(m_targetLastPos))
+                    if (/*IsFacing(m_targetLastPos)*/IsFacingTarget())
                     {
                         m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(DetectRoutine());
@@ -313,7 +313,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Chasing:
                     {
-                        if (IsFacing(m_targetLastPos))
+                        if (/*IsFacing(m_targetLastPos)*/IsFacingTarget())
                         {
                             if (IsTargetInRange(m_info.attackExplode.range) 
                                 || m_wallSensor.allRaysDetecting 
