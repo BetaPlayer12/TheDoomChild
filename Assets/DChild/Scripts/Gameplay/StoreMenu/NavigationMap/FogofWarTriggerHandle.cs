@@ -13,15 +13,10 @@ namespace DChild.Gameplay.NavigationMap
         [SerializeField]
         private FogofWarTrigger[] m_fogOfWarList;
 
-        private Environment.Location m_sceneLocation;
-        private int m_sceneIndex = 1;
-
         public event EventAction<FogOfWarStateChangeEvent> TriggerValueChanged;
 
-        public void Initialize(Environment.Location location, int sceneIndex)
+        public void Initialize()
         {
-            m_sceneLocation = location;
-            m_sceneIndex = sceneIndex;
 
             for (int i = 0; i < m_fogOfWarList.Length; i++)
             {
