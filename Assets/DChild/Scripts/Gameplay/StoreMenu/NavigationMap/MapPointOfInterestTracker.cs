@@ -1,32 +1,31 @@
-﻿using DChild.Gameplay;
-using DChild.Gameplay.Characters.Players;
-using Holysoft;
+﻿using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 namespace DChild.Gameplay.NavigationMap
 {
     public class MapPointOfInterestTracker : MonoBehaviour
     {
-    //public static TrackToggle trackToggleInstance;
-        //public event EventAction<EventActionArgs> OnTrack;
-        public static bool isTracked = false;
+        [SerializeField, VariablePopup(true)]
+        private string m_varName;
+        [ShowInInspector, HideInPrefabAssets]
+        private bool m_isTracked = true;
+        private Collider2D m_trigger;
 
-        public bool value => isTracked;
+        //public event EventAction<FogOfWarStateChangeEvent> RevealValueChange;
 
-        [Button]
-        public void Track()
+        public string varName => m_varName;
+        public bool isTracked => m_isTracked;
+
+        public void SetState(bool isRevealed)
         {
-            isTracked = true;
-            //OnTrack?.Invoke(this, EventActionArgs.Empty);
+            SetStateAs(isRevealed);
+            //RevealValueChange?.Invoke(this, new FogOfWarStateChangeEvent(m_varName, m_isRevealed));
         }
 
-        [Button]
-        public void Untrack()
+        public void SetStateAs(bool isRevealed)
         {
-            isTracked = false;
-            //OnTrack?.Invoke(this, EventActionArgs.Empty);
+            m_isTracked = isRevealed;
         }
     }
 }

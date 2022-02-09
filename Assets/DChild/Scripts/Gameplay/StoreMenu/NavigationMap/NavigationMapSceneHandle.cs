@@ -47,6 +47,8 @@ namespace DChild.Gameplay.NavigationMap
         private NavMapConfigurator m_configurator;
         [SerializeField, TabGroup("Fog Of War")]
         private FogofWarTriggerHandle m_fogOfWarHandle;
+        [SerializeField, TabGroup("Point Of Interest")]
+        private MapPointOfInterestHandle m_pointOfInterest;
 
         private void OnFogOfWarChange(object sender, FogOfWarStateChangeEvent eventArgs)
         {
@@ -55,9 +57,13 @@ namespace DChild.Gameplay.NavigationMap
 
         private void Start()
         {
-            m_fogOfWarHandle.Initialize(m_sceneLocation, m_sceneIndex);
+            m_fogOfWarHandle.Initialize();
             m_fogOfWarHandle.TriggerValueChanged += OnFogOfWarChange;
             m_fogOfWarHandle.LoadStates();
+
+            m_pointOfInterest.Initialize();
+             
+            m_pointOfInterest.LoadStates();
 
             GameplaySystem.gamplayUIHandle.UpdateNavMapConfiguration(m_sceneLocation, m_configurator.inGameReferencePoint, m_configurator.mapReferencePoint, m_configurator.offset);
         }
