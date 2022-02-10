@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3211324019535043903
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595894916419236945}
+  - component: {fileID: 3706318344666982034}
+  m_Layer: 8
+  m_Name: SoulSkills
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1595894916419236945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3211324019535043903}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7518031641455754585}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3706318344666982034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3211324019535043903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d00384dce252e274c9a425412ea56ad4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_restrictSize: 0
+  m_maxSize: 0
+  m_list: []
+  m_restrictions: []
 --- !u!1 &5573233925074938722
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,9 +145,9 @@ MonoBehaviour:
   slashHeld: 0
   earthShakerPressed: 0
   whipPressed: 0
-  skullThrowPressed: 0
-  skullThrowReleased: 0
-  skullThrowHeld: 0
+  projectileThrowPressed: 0
+  projectileThrowReleased: 0
+  projectileThrowHeld: 0
   test: 0
 --- !u!114 &4095532479931446342
 MonoBehaviour:
@@ -258,6 +305,7 @@ Transform:
   - {fileID: 7518031641928622206}
   - {fileID: 7518031641434086439}
   - {fileID: 7518031641241396616}
+  - {fileID: 1595894916419236945}
   m_Father: {fileID: 7518031643020262915}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -285,10 +333,10 @@ MonoBehaviour:
     - Name: m_items
       Entry: 6
       Data: 
-    - Name: m_soulCrystals
+    - Name: m_questItems
       Entry: 6
       Data: 
-    - Name: m_questItems
+    - Name: m_soulSkills
       Entry: 6
       Data: 
   m_itemList: {fileID: 0}
@@ -534,7 +582,7 @@ GameObject:
   - component: {fileID: 7518031642767482063}
   - component: {fileID: 7518031642767482065}
   - component: {fileID: 7518031642767482064}
-  - component: {fileID: 1443897137544335642}
+  - component: {fileID: 8220555002936477383}
   m_Layer: 8
   m_Name: Progression
   m_TagString: Untagged
@@ -619,7 +667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_progress: {fileID: 7518031642767482065}
   m_attacker: {fileID: 0}
---- !u!114 &1443897137544335642
+--- !u!114 &8220555002936477383
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -628,23 +676,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7518031642767482060}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f733fb07d87ac3f4a8b7b72c603d6b37, type: 3}
+  m_Script: {fileID: 11500000, guid: c67f30565484b2a4b84512451f737093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 7518031641434086440}
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: m_crystalContainer
-      Entry: 10
-      Data: 0
-  m_soulAcquisitionList: {fileID: 7518031642767482063}
+  m_notification: {fileID: 0}
 --- !u!1 &7518031643020262914
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,7 +738,6 @@ MonoBehaviour:
   m_skills: {fileID: 0}
   m_controller: {fileID: 4095532479931446342}
   m_inventory: {fileID: 7518031641455754584}
-  m_soulCrystalHandle: {fileID: 0}
   m_serializer:
     m_inventory: {fileID: 7518031641455754584}
     m_bestiaryProgress: {fileID: 7518031642767482065}

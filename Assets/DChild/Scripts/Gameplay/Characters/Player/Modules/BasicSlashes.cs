@@ -23,6 +23,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Info m_midAirForward;
         [SerializeField]
         private Info m_midAirOverhead;
+        [SerializeField]
+        private float m_aerialGravity;
 
         private IPlayerModifer m_modifier;
         private List<Type> m_executedTypes;
@@ -113,7 +115,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = 1;
+                        m_rigidbody.gravityScale = m_aerialGravity;
                         m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
                     }
                     break;
@@ -124,7 +126,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = 1;
+                        m_rigidbody.gravityScale = m_aerialGravity;
                         m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
                     }
                     break;
