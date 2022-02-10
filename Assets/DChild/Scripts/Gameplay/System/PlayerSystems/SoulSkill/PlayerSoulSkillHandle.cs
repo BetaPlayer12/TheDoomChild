@@ -31,12 +31,12 @@ namespace DChild.Gameplay.SoulSkills
         public event EventAction<EventActionArgs> MaxCapacityChanged;
 
 
-        public PlayerSoulSkillData Save()
+        public PlayerSoulSkillData SaveData()
         {
             return new PlayerSoulSkillData(m_maxSoulCapacity, m_acquiredSkills.ToArray(), m_activatedSkillsID.ToArray());
         }
 
-        public void Load(PlayerSoulSkillData data)
+        public void LoadData(PlayerSoulSkillData data)
         {
             m_acquiredSkills.Clear();
             for (int i = 0; i < data.acquiredSoulSkills.Length; i++)
