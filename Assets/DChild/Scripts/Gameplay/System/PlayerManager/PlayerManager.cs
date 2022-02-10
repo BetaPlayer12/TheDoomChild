@@ -131,6 +131,8 @@ namespace DChild.Gameplay.Systems
             var character = m_player.character;
             m_collisionRegistrator = character.GetComponentInChildren<CollisionRegistrator>();
             m_interactableDetector = character.GetComponentInChildren<InteractableDetector>();
+
+            m_player.Initialize();
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             m_respawnDelay.CountdownEnd += OnRespawnPlayer;

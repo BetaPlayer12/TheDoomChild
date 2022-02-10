@@ -18,8 +18,6 @@ namespace DChild.Gameplay.Characters.Players
         private BestiaryProgress m_bestiaryProgress;
         [SerializeField, TabGroup("Skill")]
         private PlayerSkills m_playerSkills;
-        [SerializeField, TabGroup("Soul Skill")]
-        private SoulSkillAcquisitionList m_soulSkillAcquisitionList;
         [SerializeField, TabGroup("Equipped Soul Skill")]
         private PlayerSoulSkillHandle m_soulSkillHandle;
 
@@ -28,7 +26,6 @@ namespace DChild.Gameplay.Characters.Players
             return new PlayerCharacterData(m_inventory.Save(),
                                         m_bestiaryProgress.SaveData(),
                                         m_playerSkills.SaveData(),
-                                        m_soulSkillAcquisitionList.SaveData(),
                                         m_soulSkillHandle.SaveData());
         }
 
@@ -37,14 +34,7 @@ namespace DChild.Gameplay.Characters.Players
             m_inventory.Load(data.inventoryData);
             m_bestiaryProgress.LoadData(data.bestiaryProgressData);
             m_playerSkills.LoadData(data.skills);
-            m_soulSkillAcquisitionList.LoadData(data.soulSkillAcquisitionData);
-
             m_soulSkillHandle.LoadData(data.soulSkillData);
-        }
-
-        private SoulSkill GetSoulSkillFromList(int ID)
-        {
-            return m_soulSkillAcquisitionList.list.GetInfo(ID);
         }
     }
 }

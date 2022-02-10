@@ -19,14 +19,11 @@ namespace DChild.Serialization
         [SerializeField, TabGroup("Skills")]
         private PrimarySkillsData m_skills;
         [SerializeField, TabGroup("Soul Skill")]
-        private AcquisitionData m_soulSkillAcquisitionData;
-        [SerializeField, TabGroup("Soul Skill")]
         private PlayerSoulSkillData m_soulSkillData;
 
         public PlayerInventoryData inventoryData => m_inventoryData;
         public AcquisitionData bestiaryProgressData { get => m_bestiaryProgressData; }
         public PrimarySkillsData skills { get => m_skills; }
-        public AcquisitionData soulSkillAcquisitionData { get => m_soulSkillAcquisitionData; }
         public PlayerSoulSkillData soulSkillData { get => m_soulSkillData; }
 
         public PlayerCharacterData()
@@ -34,16 +31,14 @@ namespace DChild.Serialization
             m_inventoryData = new PlayerInventoryData();
             m_bestiaryProgressData = new AcquisitionData();
             m_skills = new PrimarySkillsData();
-            m_soulSkillAcquisitionData = new AcquisitionData();
             m_soulSkillData = new PlayerSoulSkillData();
         }
 
-        public PlayerCharacterData(PlayerInventoryData m_inventoryData, AcquisitionData m_bestiaryProgressData, PrimarySkillsData m_skills,  AcquisitionData m_soulSkillAcquisitionData, PlayerSoulSkillData m_soulSkillData)
+        public PlayerCharacterData(PlayerInventoryData m_inventoryData, AcquisitionData m_bestiaryProgressData, PrimarySkillsData m_skills, PlayerSoulSkillData m_soulSkillData)
         {
             this.m_inventoryData = m_inventoryData;
             this.m_bestiaryProgressData = m_bestiaryProgressData;
             this.m_skills = m_skills;
-            this.m_soulSkillAcquisitionData = m_soulSkillAcquisitionData;
             this.m_soulSkillData = m_soulSkillData;
         }
 
@@ -52,7 +47,6 @@ namespace DChild.Serialization
             this.m_inventoryData = new PlayerInventoryData(data.inventoryData);
             this.m_bestiaryProgressData = new AcquisitionData(data.bestiaryProgressData);
             this.m_skills = data.skills;
-            this.m_soulSkillAcquisitionData = new AcquisitionData(data.soulSkillAcquisitionData);
             this.m_soulSkillData = data.soulSkillData;
         }
 
@@ -63,9 +57,6 @@ namespace DChild.Serialization
 #if UNITY_EDITOR
         [NonSerialized, ShowInInspector, BoxGroup("Debug")]
         private BestiaryList m_bestiaryList;
-        [NonSerialized, ShowInInspector, BoxGroup("Debug")]
-        private SoulSkillList m_soulSkillList;
-
 
         [Button, BoxGroup("Debug")]
         private void Initialize()
@@ -73,10 +64,6 @@ namespace DChild.Serialization
             if (m_bestiaryList)
             {
                 InitializeAcquisitionData(ref m_bestiaryProgressData, m_bestiaryList.GetIDs());
-            }
-            if (m_soulSkillList)
-            {
-                InitializeAcquisitionData(ref m_soulSkillAcquisitionData, m_soulSkillList.GetIDs());
             }
         }
 

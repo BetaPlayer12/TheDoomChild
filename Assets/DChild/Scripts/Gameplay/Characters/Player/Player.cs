@@ -132,6 +132,15 @@ namespace DChild.Gameplay.Characters.Players
             m_controlledCharacter.transform.position = position;
         }
 
+        public void Initialize()
+        {
+            m_weapon.Initialize();
+            m_attackResistance.Initialize();
+            m_statusResistance.Initialize();
+            m_modifiers.Initialize();
+            m_soulSkills.Initialize();
+        }
+
         private void Awake()
         {
             var controlledObject = m_controlledCharacter.gameObject.AddComponent<PlayerControlledObject>();

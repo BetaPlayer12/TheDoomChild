@@ -2,20 +2,23 @@
 using DChild.Gameplay.Characters.Players.SoulSkills;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace DChild.Gameplay.SoulSkills
 {
-    public class PlayerSoulSkillHandle : MonoBehaviour, IComplexCharacterModule
+
+    public class PlayerSoulSkillHandle : SerializedMonoBehaviour
     {
+        [SerializeField]
+        private IPlayer m_player;
         [SerializeField, MinValue(1)]
         private int m_maxActivatedSoulSkill = 9;
         [SerializeField, MinValue(1)]
         private int m_maxSoulCapacity = 1;
 
-        private IPlayer m_player;
         private int m_currentSoulCapacity;
         private HashSet<int> m_acquiredSkills;
         private HashSet<int> m_activatedSkillsID;
@@ -39,19 +42,24 @@ namespace DChild.Gameplay.SoulSkills
         public void LoadData(PlayerSoulSkillData data)
         {
             m_acquiredSkills.Clear();
-            for (int i = 0; i < data.acquiredSoulSkills.Length; i++)
+            RemoveAllActiveSoulSkills();
+
+            if (data != null)
             {
-                m_acquiredSkills.Add(data.acquiredSoulSkills[i]);
+                for (int i = 0; i < data.acquiredSoulSkills.Length; i++)
+                {
+                    m_acquiredSkills.Add(data.acquiredSoulSkills[i]);
+                }
+
+                for (int i = 0; i < data.activatedSoulSkills.Length; i++)
+                {
+                    m_activatedSkillsID.Add(data.activatedSoulSkills[i]);
+                }
+
+                m_maxSoulCapacity = data.maxSoulCapacity;
             }
 
-            //Remove Active Skill Effects
-            m_activatedSkillsID.Clear();
-            for (int i = 0; i < data.activatedSoulSkills.Length; i++)
-            {
-                m_activatedSkillsID.Add(data.activatedSoulSkills[i]);
-            }
-
-            m_maxSoulCapacity = data.maxSoulCapacity;
+            m_currentSoulCapacity = m_maxSoulCapacity;
             SaveDataLoaded?.Invoke(this, EventActionArgs.Empty);
         }
 
@@ -83,7 +91,7 @@ namespace DChild.Gameplay.SoulSkills
             {
                 m_activatedSkillsID.Add(soulSkill.id);
                 m_activatedSkills.Add(soulSkill);
-                //soulSkill.AttachTo(m_player);
+                soulSkill.AttachTo(m_player);
                 m_currentSoulCapacity -= soulSkill.capacity;
             }
         }
@@ -94,7 +102,7 @@ namespace DChild.Gameplay.SoulSkills
             {
                 m_activatedSkillsID.Remove(soulSkill.id);
                 m_activatedSkills.Remove(soulSkill);
-                //soulSkill.DetachFrom(m_player);
+                soulSkill.DetachFrom(m_player);
                 m_currentSoulCapacity += soulSkill.capacity;
             }
         }
@@ -118,16 +126,25 @@ namespace DChild.Gameplay.SoulSkills
             m_acquiredSkills = new HashSet<int>();
             m_activatedSkillsID = new HashSet<int>();
             m_activatedSkills = new HashSet<SoulSkill>();
-        }
 
-        public void Initialize(ComplexCharacterInfo info)
-        {
-            m_player = info.character.GetComponent<PlayerControlledObject>().owner;
-        }
+            m_player.inventory.SoulSkillItemAcquired += OnSoulSkillItemAcquired;
 
-        private void Awake()
-        {
             m_currentSoulCapacity = m_maxSoulCapacity;
+        }
+
+        private void OnSoulSkillItemAcquired(object sender, SoulSkillAcquiredEventArgs eventArgs)
+        {
+            AddAsAcquired(eventArgs.ID);
+        }
+
+        private void RemoveAllActiveSoulSkills()
+        {
+            for (int i = 0; i < m_activatedSkills.Count; i++)
+            {
+                RemoveAsActivated(m_activatedSkills.ElementAt(i));
+            }
+            m_activatedSkills.Clear();
+            m_activatedSkillsID.Clear();
         }
     }
 }
