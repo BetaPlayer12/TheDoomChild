@@ -98,9 +98,9 @@ MonoBehaviour:
   slashHeld: 0
   earthShakerPressed: 0
   whipPressed: 0
-  skullThrowPressed: 0
-  skullThrowReleased: 0
-  skullThrowHeld: 0
+  projectileThrowPressed: 0
+  projectileThrowReleased: 0
+  projectileThrowHeld: 0
   test: 0
 --- !u!114 &4095532479931446342
 MonoBehaviour:
@@ -285,10 +285,10 @@ MonoBehaviour:
     - Name: m_items
       Entry: 6
       Data: 
-    - Name: m_soulCrystals
+    - Name: m_questItems
       Entry: 6
       Data: 
-    - Name: m_questItems
+    - Name: m_soulSkills
       Entry: 6
       Data: 
   m_itemList: {fileID: 0}
@@ -534,7 +534,7 @@ GameObject:
   - component: {fileID: 7518031642767482063}
   - component: {fileID: 7518031642767482065}
   - component: {fileID: 7518031642767482064}
-  - component: {fileID: 1443897137544335642}
+  - component: {fileID: 1675097890442919151}
   m_Layer: 8
   m_Name: Progression
   m_TagString: Untagged
@@ -619,7 +619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_progress: {fileID: 7518031642767482065}
   m_attacker: {fileID: 0}
---- !u!114 &1443897137544335642
+--- !u!114 &1675097890442919151
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -628,23 +628,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7518031642767482060}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f733fb07d87ac3f4a8b7b72c603d6b37, type: 3}
+  m_Script: {fileID: 11500000, guid: c67f30565484b2a4b84512451f737093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 7518031641434086440}
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: m_crystalContainer
-      Entry: 10
-      Data: 0
-  m_soulAcquisitionList: {fileID: 7518031642767482063}
+  m_notification: {fileID: 0}
 --- !u!1 &7518031643020262914
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,7 +690,6 @@ MonoBehaviour:
   m_skills: {fileID: 0}
   m_controller: {fileID: 4095532479931446342}
   m_inventory: {fileID: 7518031641455754584}
-  m_soulCrystalHandle: {fileID: 0}
   m_serializer:
     m_inventory: {fileID: 7518031641455754584}
     m_bestiaryProgress: {fileID: 7518031642767482065}
