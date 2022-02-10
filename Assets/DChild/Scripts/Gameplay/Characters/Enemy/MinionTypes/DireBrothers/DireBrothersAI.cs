@@ -234,6 +234,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("Hurtbox")]
+        private Transform m_slamBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Transform m_chargeBB;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -486,6 +491,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HeavyGroundBashAttackRoutine()
         {
+            m_slamBB.gameObject.SetActive(true);
+            m_chargeBB.gameObject.SetActive(false);
             m_currentFlinchHandle.m_enableMixFlinch = false;
             m_animation.SetAnimation(0, m_info.heavyGroundBashAttack.animation, false);
             yield return new WaitForSeconds(1.5f);
@@ -509,6 +516,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ShieldDashAttackRoutine(Vector2 targetPos)
         {
+            m_slamBB.gameObject.SetActive(false);
+            m_chargeBB.gameObject.SetActive(true);
             //m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.sh_run.animation, true);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.runAttack.animation);
@@ -711,6 +720,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                             {
+                                m_slamBB.gameObject.SetActive(false);
+                                m_chargeBB.gameObject.SetActive(true);
                                 m_animation.EnableRootMotion(false, false);
                                 m_animation.SetAnimation(0, m_currentRunAnimation, true);
                                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_phaseHandle.currentPhase == Phase.BothAlive ? m_info.run.speed : m_info.sh_run.speed);
