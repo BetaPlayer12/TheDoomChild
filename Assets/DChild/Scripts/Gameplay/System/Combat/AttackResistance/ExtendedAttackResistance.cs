@@ -95,8 +95,7 @@ namespace DChild.Gameplay.Combat
         {
 
         }
-
-        private void Awake()
+        public void Initialize()
         {
             m_additionalResistance = new Dictionary<DamageType, float>();
             m_additionalResistance.Clear();
@@ -104,6 +103,7 @@ namespace DChild.Gameplay.Combat
             m_combinedResistance.Clear();
             CalculateResistance();
         }
+
 
 #if UNITY_EDITOR
         private void SendEvent()
