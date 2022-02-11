@@ -40,8 +40,7 @@ namespace DChild.Gameplay.Characters.Players
         }
 
         public float Get(PlayerModifier modifier) => m_modifiers[modifier];
-
-        private void Awake()
+        public void Initialize()
         {
             m_modifiers = new Dictionary<PlayerModifier, float>();
             var size = (int)PlayerModifier._COUNT;

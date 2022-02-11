@@ -12,6 +12,13 @@ namespace DChild.Gameplay.SoulSkills
         [SerializeField]
         private int[] m_activatedSoulSkills;
 
+        public PlayerSoulSkillData()
+        {
+            m_acquiredSoulSkills = new int[0];
+            m_activatedSoulSkills = new int[0];
+            m_maxSoulCapacity = 1;
+        }
+
         public PlayerSoulSkillData(int maxSoulCapacity, int[] acquiredSoulSkills, int[] activatedSoulSkills)
         {
             m_acquiredSoulSkills = acquiredSoulSkills;
