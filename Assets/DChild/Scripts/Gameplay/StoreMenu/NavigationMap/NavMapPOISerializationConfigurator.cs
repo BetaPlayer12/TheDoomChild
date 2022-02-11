@@ -80,7 +80,7 @@ namespace DChild.Gameplay.NavigationMap
         }
 
 
-        private string CreateVariableName(int sceneIndex, int index) => $"{m_location}_{sceneIndex}_POI_{m_poiItems}_{index}";
+        private string CreateVariableName(int sceneIndex, int index) => NavMapUtility.CreatePointOfInterestVarableName(m_location, sceneIndex,$"{m_poiItems}", index);
 
     }
 }
