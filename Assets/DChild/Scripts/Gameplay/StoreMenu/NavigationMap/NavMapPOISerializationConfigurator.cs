@@ -18,11 +18,21 @@ namespace DChild.Gameplay.NavigationMap
         }
 
         [SerializeField]
+        public enum POIItems
+        {
+            savepoint,
+            obstacle,
+            realmgate,
+        }
+
+        [SerializeField]
         private DialogueDatabase m_database;
         [SerializeField, HorizontalGroup("NamePrefix")]
         private Environment.Location m_location;
         [SerializeField, TableList(AlwaysExpanded = true)]
         private ScenePOIInfo[] m_info;
+        [SerializeField]
+        private POIItems m_poiItems;
 
 
         public ScenePOIInfo[] sceneInfo => m_info;
@@ -36,9 +46,16 @@ namespace DChild.Gameplay.NavigationMap
             {
                 if (m_database.variables[y].fields[0].value.Contains("POI"))
                 {
+                    if (m_database.variables[y].fields[0].value.Contains($"{m_poiItems}"))
+                    {
+                        m_database.variables.Remove(m_database.variables[y]);
+                        y--;
+                    }
+                    else
+                    {
 
-                    m_database.variables.Remove(m_database.variables[y]);
-                    y--;
+                    }
+
 
                 }
                 else
@@ -63,7 +80,7 @@ namespace DChild.Gameplay.NavigationMap
         }
 
 
-        private string CreateVariableName(int sceneIndex, int index) => $"{m_location}_{sceneIndex}_POI_{index}";
+        private string CreateVariableName(int sceneIndex, int index) => $"{m_location}_{sceneIndex}_POI_{m_poiItems}_{index}";
 
     }
 }
