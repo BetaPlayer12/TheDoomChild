@@ -13,7 +13,7 @@ namespace DChild.Gameplay.Combat
         [SerializeField]
         private AttackResistanceData m_data;
         [ShowInInspector, HideInEditorMode, HideReferenceObjectPicker, PropertyOrder(2), OnValueChanged("SendEvent", true)]
-        protected Dictionary<DamageType, float> m_resistance;
+        protected Dictionary<DamageType, float> m_resistance = new Dictionary<DamageType, float>();
 
         protected override Dictionary<DamageType, float> resistance => m_resistance;
 
@@ -56,9 +56,13 @@ namespace DChild.Gameplay.Combat
             }
         }
 
-        private void Start()
+        private void Awake()
         {
             m_resistance = new Dictionary<DamageType, float>();
+        }
+
+        private void Start()
+        {
             if (m_data != null)
             {
                 Copy(m_data.resistance, m_resistance);
