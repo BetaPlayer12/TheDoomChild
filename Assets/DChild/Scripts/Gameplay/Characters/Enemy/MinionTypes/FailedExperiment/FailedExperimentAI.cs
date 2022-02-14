@@ -156,7 +156,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
-        private bool m_prepAmbush;
+        //private bool m_prepAmbush;
         private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
@@ -427,7 +427,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.rawrAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
             }
-            m_prepAmbush = false;
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -534,13 +533,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void PrepareAmbush(Vector2 position)
         {
-            m_prepAmbush = true;
             StopAllCoroutines();
 
+            m_character.transform.position = position;
+            m_aggroCollider.enabled = false;
             m_character.physics.simulateGravity = false;
             m_hitbox.Disable();
-            //m_stateHandle.OverrideState(State.Dormant);
-            //enabled = false;
+            m_stateHandle.OverrideState(State.Dormant);
+            enabled = false;
         }
 
         protected override void Start()
@@ -551,7 +551,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             m_startPoint = transform.position;
-            m_aggroCollider.enabled = m_prepAmbush ? false : true;
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 
@@ -564,7 +563,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(m_prepAmbush ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(!enabled ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
