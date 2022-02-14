@@ -527,7 +527,10 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
 
             m_character.physics.simulateGravity = false;
+            m_character.physics.SetVelocity(Vector2.zero);
             m_hitbox.Disable();
+            m_animation.SetAnimation(0, m_info.dormantAnimation, true);
+            m_movement.Stop();
             m_aggroCollider.enabled = false;
             m_stateHandle.OverrideState(State.Dormant);
             enabled = false;

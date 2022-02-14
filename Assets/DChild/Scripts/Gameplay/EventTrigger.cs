@@ -58,6 +58,14 @@ namespace DChild.Gameplay
             m_isTriggered = true;
         }
 
+        private void Start()
+        {
+            if(m_isTriggered == false)
+            {
+                m_preTrigger?.Invoke();
+            }
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (m_isTriggered == false)

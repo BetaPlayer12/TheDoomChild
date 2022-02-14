@@ -538,7 +538,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_character.transform.position = position;
             m_aggroCollider.enabled = false;
             m_character.physics.simulateGravity = false;
+            m_character.physics.SetVelocity(Vector2.zero);
             m_hitbox.Disable();
+            m_animation.SetAnimation(0, m_info.idleCapsuleAnimation, true);
+            m_movement.Stop();
             m_stateHandle.OverrideState(State.Dormant);
             enabled = false;
         }
