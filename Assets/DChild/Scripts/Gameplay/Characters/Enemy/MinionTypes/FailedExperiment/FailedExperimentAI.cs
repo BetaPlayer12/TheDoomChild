@@ -156,6 +156,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
+        private bool m_prepAmbush;
         private Vector2 m_startPoint;
 
         [SerializeField, TabGroup("Sensors")]
@@ -175,6 +176,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private State m_turnState;
 
+        private Coroutine m_detectRoutine;
         private Coroutine m_attackRoutine;
         private Coroutine m_sneerRoutine;
         private Coroutine m_patienceRoutine;
@@ -425,9 +427,11 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.rawrAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.rawrAnimation);
             }
+            m_prepAmbush = false;
             m_hitbox.Enable();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
+            m_detectRoutine = null;
             yield return null;
         }
 
@@ -521,6 +525,24 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        public void LaunchAmbush(Vector2 position)
+        {
+            enabled = true;
+            m_aggroCollider.enabled = true;
+            m_stateHandle.OverrideState(State.Detect);
+        }
+
+        public void PrepareAmbush(Vector2 position)
+        {
+            m_prepAmbush = true;
+            StopAllCoroutines();
+
+            m_character.physics.simulateGravity = false;
+            m_hitbox.Disable();
+            //m_stateHandle.OverrideState(State.Dormant);
+            //enabled = false;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -529,6 +551,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_character.SetFacing(transform.localScale.x == 1 ? HorizontalDirection.Right : HorizontalDirection.Left);
             m_startPoint = transform.position;
+            m_aggroCollider.enabled = m_prepAmbush ? false : true;
             //m_spineEventListener.Subscribe(m_info.explodeEvent, m_explodeFX.Play);
         }
 
@@ -541,7 +564,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_deathHandle.SetAnimation(m_info.deathAnimation);
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(m_prepAmbush ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -555,7 +578,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 case State.Detect:
                     m_movement.Stop();
-                    if (!IsFacingTarget() && m_character.physics.simulateGravity)
+                    if (!IsFacingTarget() && m_character.physics.simulateGravity && m_targetInfo.isValid)
                     {
                         m_turnState = State.Detect;
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
@@ -563,8 +586,11 @@ namespace DChild.Gameplay.Characters.Enemies
                         return;
                     }
 
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                    StartCoroutine(DetectRoutine());
+                    if (m_detectRoutine == null)
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        m_detectRoutine = StartCoroutine(DetectRoutine());
+                    }
                     break;
 
                 case State.Dormant:
@@ -575,6 +601,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Patrol:
                     if (!m_character.physics.simulateGravity)
                     {
+                        m_animation.EnableRootMotion(true, false);
                         m_character.physics.simulateGravity = true;
                         m_hitbox.Enable();
                     }
@@ -815,23 +842,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_flinchHandle.enabled = true;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-        }
-
-        public void LaunchAmbush(Vector2 position)
-        {
-            enabled = true;
-            m_aggroCollider.enabled = true;
-            m_stateHandle.OverrideState(State.Detect);
-        }
-
-        public void PrepareAmbush(Vector2 position)
-        {
-            enabled = false;
-            StopAllCoroutines();
-
-            m_character.physics.simulateGravity = false;
-            m_hitbox.Disable();
-            m_stateHandle.OverrideState(State.Dormant);
         }
 
         public override void ReturnToSpawnPoint()
