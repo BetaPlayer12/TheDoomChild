@@ -169,7 +169,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_idleDuringPatrolCooldownTimer;
         private float m_idleDuringPatrolDurationTimer;
         private bool m_isInRageMode;
-        private bool m_prepAmbush;
         private int m_availableLightningSphereUse;
         private Coroutine m_patienceRoutine;
         private Coroutine m_detectCoroutine;
@@ -501,13 +500,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void PrepareAmbush(Vector2 position)
         {
-            m_prepAmbush = true;
-            //enabled = false;
             StopAllCoroutines();
 
             m_character.physics.simulateGravity = false;
             m_hitbox.Disable();
-            //m_stateHandle.OverrideState(State.Dormant);
+            m_aggroCollider.enabled = false;
+            m_stateHandle.OverrideState(State.Dormant);
+            enabled = false;
         }
 
         protected override void Start()
@@ -520,7 +519,6 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_spineEventListener.Subscribe(m_info.coreburstEvent, m_coreburstFX.Play);
             //m_spineEventListener.Subscribe(m_info.lightningsphereEvent, m_lightningshieldFX.Play);
             m_startPoint = transform.position;
-            m_aggroCollider.enabled = m_prepAmbush ? false : true;
         }
 
         protected override void Awake()
@@ -528,7 +526,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_patrolHandle.Initialize();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_stateHandle = new StateHandle<State>(m_prepAmbush ? State.Dormant : State.Patrol, State.WaitForBehaviour);
+            m_stateHandle = new StateHandle<State>(!enabled ? State.Dormant : State.Patrol, State.WaitForBehaviour);
             m_turnHandle.TurnDone += OnTurnDone;
             m_canIdleDuringPatrol = true;
             m_idleDuringPatrolCooldownTimer = m_info.GetRandomIdleDuringPatrolCooldown();

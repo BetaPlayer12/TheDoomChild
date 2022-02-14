@@ -167,7 +167,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentRunAttackDuration;
         private bool m_enablePatience;
         private bool m_isDetecting;
-        private bool m_prepAmbush;
 
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
@@ -525,13 +524,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         public void PrepareAmbush(Vector2 position)
         {
-            m_prepAmbush = true;
-            //enabled = false;
             StopAllCoroutines();
 
             m_character.physics.simulateGravity = false;
             m_hitbox.Disable();
-            //m_stateHandle.OverrideState(State.Dormant);
+            m_aggroCollider.enabled = false;
+            m_stateHandle.OverrideState(State.Dormant);
+            enabled = false;
         }
 
         protected override void Start()
@@ -545,7 +544,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_spineEventListener.Subscribe(m_info.teleportEvent, m_teleportFX.Play);
 
             m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
-            m_aggroCollider.enabled = m_prepAmbush ? false : true;
         }
 
         protected override void Awake()
@@ -559,7 +557,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             //m_randomSpawnColliders = new List<Collider2D>();
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
-            m_stateHandle = new StateHandle<State>(m_prepAmbush ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(!enabled ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
