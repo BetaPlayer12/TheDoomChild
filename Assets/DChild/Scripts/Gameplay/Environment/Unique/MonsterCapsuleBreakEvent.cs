@@ -81,10 +81,5 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
             Vector2 location = new Vector2(m_monsterLocation.transform.position.x, m_monsterLocation.transform.position.y);
             m_monster?.PrepareAmbush(location);
         }
-
-        private void Awake()
-        {
-            Reset();
-        }
     }
 }
