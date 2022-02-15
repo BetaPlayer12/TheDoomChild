@@ -56,12 +56,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
+            //[SerializeField, ValueDropdown("GetAnimations")]
+            //private string m_detectAnimation;
+            //public string detectAnimation => m_detectAnimation;
+            //[SerializeField, ValueDropdown("GetAnimations")]
+            //private string m_counterFlinchAnimation;
+            //public string counterFlinchAnimation => m_counterFlinchAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_detectAnimation;
-            public string detectAnimation => m_detectAnimation;
-            [SerializeField, ValueDropdown("GetAnimations")]
-            private string m_counterFlinchAnimation;
-            public string counterFlinchAnimation => m_counterFlinchAnimation;
+            private string m_fireAnimation;
+            public string fireAnimation => m_fireAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_flinch1Animation;
             public string flinch1Animation => m_flinch1Animation;
@@ -128,6 +131,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentCD;
         private float m_currentFullCD;
         private float m_currentTimeScale;
+        private float m_currentMoveSpeed;
         private bool m_enablePatience;
         private bool m_isDetecting;
         private Vector2 m_startPoint;
@@ -302,8 +306,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            //m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -311,10 +315,12 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChargeAttackRoutine()
         {
-            m_animation.EnableRootMotion(true, false);
+            m_animation.EnableRootMotion(false, false);
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.prepAttackAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAttackAnimation);
+            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.85f;
+            yield return new WaitForSeconds(waitTime);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.prepAttackAnimation);
             m_animation.SetAnimation(0, m_info.attack.animation, true);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             //StartCoroutine(m_chargeBreakRoutine);
@@ -322,6 +328,7 @@ namespace DChild.Gameplay.Characters.Enemies
             while (time < 3)
             {
                 time += Time.deltaTime;
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                 if (!m_edgeSensor.isDetecting)
                 {
                     time = 3;
@@ -361,28 +368,30 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackHandle.ExecuteAttack(m_info.attackBreakAnimation, m_info.idleAnimation);
         }
 
-        private IEnumerator CounterStrikeRoutine()
-        {
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.counterFlinchAnimation, false);
-            m_animation.animationState.TimeScale = 2;
-            yield return new WaitForSeconds(.15f);
-            m_animation.animationState.TimeScale = 1;
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.counterFlinchAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            m_stateHandle.OverrideState(State.ReevaluateSituation);
-            yield return null;
-        }
+        //private IEnumerator CounterStrikeRoutine()
+        //{
+        //    if (!IsFacingTarget())
+        //    {
+        //        CustomTurn();
+        //    }
+        //    m_animation.EnableRootMotion(true, false);
+        //    m_animation.SetAnimation(0, m_info.counterFlinchAnimation, false);
+        //    m_animation.animationState.TimeScale = 2;
+        //    yield return new WaitForSeconds(.15f);
+        //    m_animation.animationState.TimeScale = 1;
+        //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.counterFlinchAnimation);
+        //    m_animation.SetAnimation(0, m_info.idleAnimation, true);
+        //    m_stateHandle.OverrideState(State.ReevaluateSituation);
+        //    yield return null;
+        //}
 
         protected override void Start()
         {
             base.Start();
+            m_animation.SetAnimation(5, m_info.fireAnimation, true);
             m_currentTimeScale = UnityEngine.Random.Range(1.0f, 2.0f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
+            m_currentMoveSpeed = UnityEngine.Random.Range(m_info.move.speed * .75f, m_info.move.speed * 1.25f);
             //m_chargeBreakRoutine = ChargeBreakRoutine();
             m_startPoint = transform.position;
         }
@@ -426,7 +435,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (/*!m_wallSensor.isDetecting &&*/ m_groundSensor.isDetecting)
                     {
                         m_turnState = State.ReevaluateSituation;
-                        m_animation.EnableRootMotion(true, false);
+                        m_animation.EnableRootMotion(false, false);
                         m_animation.SetAnimation(0, m_info.patrol.animation, true);
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.patrol.speed, characterInfo);
@@ -442,7 +451,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(m_turnState);
                     m_movement.Stop();
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
-                    m_animation.animationState.GetCurrent(0).MixDuration = 0;
+                    m_animation.animationState.GetCurrent(0).MixDuration = 1;
                     break;
 
                 case State.Attacking:
@@ -487,11 +496,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             }
                             else
                             {
-                                m_animation.EnableRootMotion(true, false);
+                                m_animation.EnableRootMotion(false, false);
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = m_currentTimeScale;
+                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                                 }
                                 else
                                 {

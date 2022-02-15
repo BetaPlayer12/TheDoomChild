@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace DChild.Gameplay.Environment
 {
@@ -47,7 +48,7 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private bool m_createDebris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
-        private GameObject m_debris;
+        private AssetReferenceGameObject m_debris;
         [SerializeField, ShowIf("m_createDebris"), Indent]
         private bool m_copySorting;
         [SerializeField, ShowIf("m_createDebris"), Indent]
@@ -131,6 +132,21 @@ namespace DChild.Gameplay.Environment
         private void InstantiateDebris(GameObject debris)
         {
             var instance = Instantiate(debris, m_object.position, Quaternion.identity);
+            InitializeDebris(instance);
+        }
+
+        private void InstantiateDebris(AssetReferenceGameObject debris)
+        {
+            Addressables.InstantiateAsync(debris).Completed += OnDebrisSpawn;
+        }
+
+        private void OnDebrisSpawn(AsyncOperationHandle<GameObject> obj)
+        {
+            InitializeDebris(obj.Result);
+        }
+
+        private void InitializeDebris(GameObject instance)
+        {
             var instanceTransform = instance.transform;
             instanceTransform.parent = transform;
             instanceTransform.localScale = Vector3.one;
@@ -153,16 +169,6 @@ namespace DChild.Gameplay.Environment
                     renderers[i].sortingLayerID = m_sortingID;
                 }
             }
-        }
-
-        private void InstantiateDebris(AssetReferenceGameObject debris) => AddressableSpawner.Spawn(debris, m_object.position, 0, OnSpawn);
-
-        private void OnSpawn(GameObject instance, int arg2)
-        {
-            m_instantiatedDebris = instance.GetComponent<Debris>();
-            m_instantiatedDebris.transform.localScale = transform.localScale;
-            m_instantiatedDebris.SetInitialForceReference(m_forceDirection, m_force);
-            m_leftOverDebris = m_instantiatedDebris.GetDetachables();
         }
 
         private void DestroyInstantiatedDebris()

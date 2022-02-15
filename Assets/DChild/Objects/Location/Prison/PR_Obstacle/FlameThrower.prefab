@@ -50,12 +50,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 1631569862195788247}
   m_data: {fileID: 11400000, guid: ed11606a9cc72ce41bb1756e39d2bd45, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 1
-      m_value: 10
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
     ignoresBlock: 0
 --- !u!114 &5568176108627145334
@@ -4963,7 +4964,6 @@ MonoBehaviour:
   m_canDetectInteractables: 0
   m_damageUniqueHitboxesOnly: 1
   m_collisionRegistrator: {fileID: 9163494682675870554}
-  m_damageFXHandle: {fileID: 0}
   m_ignoreColliderList: []
   m_damageInterval: 1
 --- !u!1 &7695594993327834854
@@ -5377,7 +5377,7 @@ PrefabInstance:
     - target: {fileID: 198000014052238036, guid: 3123da49cb81147489b444f2749aba47,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.15
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 198000014052238036, guid: 3123da49cb81147489b444f2749aba47,
         type: 3}
@@ -5398,6 +5398,11 @@ PrefabInstance:
         type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199000012675287934, guid: 3123da49cb81147489b444f2749aba47,
+        type: 3}
+      propertyPath: m_VelocityScale
+      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3123da49cb81147489b444f2749aba47, type: 3}

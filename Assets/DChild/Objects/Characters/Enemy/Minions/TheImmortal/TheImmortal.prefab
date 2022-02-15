@@ -43,10 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_flinchData: {fileID: 0}
   m_spine: {fileID: 7532055194097375741}
   m_physics: {fileID: 8662484836529272018}
   m_autoFlinch: 0
+  m_enableMixFlinch: 1
   m_alphaBlendStrength: 0.5
   m_mixDuration: 1
   m_skeletonAnimation: {fileID: 4060171845741466481}
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skeletonAnimation: {fileID: 4060171845741466481}
-  m_data: {fileID: 11400000, guid: 167a2018a83dd084abb3e44b7aef0bcd, type: 2}
+  m_data: {fileID: 11400000, guid: f841c4b42b5820445842b62118480cdb, type: 2}
 --- !u!1 &5262323748464384585
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,6 +232,19 @@ MonoBehaviour:
   m_wallSensor: {fileID: 1044226275274980277}
   m_groundSensor: {fileID: 5626698420305709147}
   m_edgeSensor: {fileID: 6396332851797973051}
+--- !u!114 &554462414755903217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5589212473072960357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9dd53d8b72e7244391ffd86337df106, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 1
 --- !u!114 &5262323746532885811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,7 +383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_simulateGravity: 1
   m_gravity:
-    m_gravityScale: 10
+    m_gravityScale: 25
     m_direction: {x: 0, y: -1}
     m_angle: -90
     m_drawDirection: 0
@@ -417,7 +430,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   m_data: {fileID: 0}
---- !u!60 &4140476140883659530
+--- !u!60 &3423263700994038858
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -446,7 +459,7 @@ PolygonCollider2D:
       - {x: -6.4208, y: -19.1024}
       - {x: 17.3238, y: -19.211899}
       - {x: 16.9709, y: 20.148499}
---- !u!60 &8941845107648605468
+--- !u!60 &7499574418130104344
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1104,6 +1117,8 @@ PrefabInstance:
     - {fileID: 7655248977069874243, guid: 8f35637acea1c5c49953a3d258d67068, type: 3}
     - {fileID: 6730543369248082749, guid: 8f35637acea1c5c49953a3d258d67068, type: 3}
     - {fileID: 2368079858548633722, guid: 8f35637acea1c5c49953a3d258d67068, type: 3}
+    - {fileID: 6759328836409374761, guid: 8f35637acea1c5c49953a3d258d67068, type: 3}
+    - {fileID: 2797217410956563617, guid: 8f35637acea1c5c49953a3d258d67068, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8f35637acea1c5c49953a3d258d67068, type: 3}
 --- !u!114 &6675065739898835813 stripped
 MonoBehaviour:
@@ -1318,11 +1333,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Character
-      objectReference: {fileID: 0}
-    - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_BodyType
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}

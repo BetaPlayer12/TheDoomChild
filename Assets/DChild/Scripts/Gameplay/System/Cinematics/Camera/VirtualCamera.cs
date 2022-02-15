@@ -58,6 +58,7 @@ namespace DChild.Gameplay.Cinematics.Cameras
             if (m_vCam != null)
             {
                 m_vCam.enabled = false;
+
             }
         }
 

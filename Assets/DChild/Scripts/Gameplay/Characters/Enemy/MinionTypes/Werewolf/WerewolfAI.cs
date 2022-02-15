@@ -150,6 +150,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
+            m_flinchHandle.m_enableMixFlinch = true;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -393,6 +394,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
+                    m_flinchHandle.m_enableMixFlinch = false;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {

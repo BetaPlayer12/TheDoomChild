@@ -53,16 +53,6 @@ namespace DChild
             return list;
         }
 
-        public static ValueDropdownList<int> GetSoulSkillsOfType(SoulSkillType type)
-        {
-            var connection = DChildDatabase.GetSoulSkillConnection();
-            connection.Initialize();
-            var skills = connection.GetSkillsOfType(type);
-            var list = ConvertToDropdownList(skills);
-            connection.Close();
-            return list;
-        }
-
         private static ValueDropdownList<int> ConvertToDropdownList(Element[] skills)
         {
             var list = new ValueDropdownList<int>();

@@ -45,6 +45,11 @@ namespace DChild.Gameplay.Characters.Players
             m_character = info.character;
             m_prevCharacterPosition = m_character.centerMass.transform.position;
         }
+        public void remoteInitialization(Character character, Vector2 Charposition)
+        {
+            m_character = character;
+            m_prevCharacterPosition = Charposition;
+        }
 
         public void ClearAllInteractableReferences()
         {

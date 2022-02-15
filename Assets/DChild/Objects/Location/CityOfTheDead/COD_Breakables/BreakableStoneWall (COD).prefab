@@ -34,18 +34,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.27205622, y: -0.014286995}
+  m_Offset: {x: -0.25858665, y: -0.42702198}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.88, y: 9.68}
-    newSize: {x: 7.5, y: 19.31}
+    oldSize: {x: 9.4, y: 27.699568}
+    newSize: {x: 19.04, y: 5.44}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.6914728, y: 9.733213}
+  m_Size: {x: 7.290335, y: 26.124022}
   m_EdgeRadius: 0
 --- !u!212 &2484982499405291706
 SpriteRenderer:
@@ -85,13 +85,13 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: fb84bde1d705f3948a4c32ed636c8ac0, type: 3}
+  m_SortingOrder: 15
+  m_Sprite: {fileID: 21300000, guid: 6895c3b36abbf36458db01300783f505, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 7.5, y: 19.31}
+  m_Size: {x: 19.04, y: 5.44}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 5787646662291368365}
   - component: {fileID: 625512094383005187}
   - component: {fileID: 5204849338463535575}
+  - component: {fileID: 1815279596205613903}
   m_Layer: 9
   m_Name: Hitbox
   m_TagString: Hitbox
@@ -142,7 +143,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.2888415, y: -0.014286995}
+  m_Offset: {x: -0.18283749, y: -0.36806202}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -153,7 +154,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.463593, y: 9.733213}
+  m_Size: {x: 8.180382, y: 26.477781}
   m_EdgeRadius: 0
 --- !u!114 &5204849338463535575
 MonoBehaviour:
@@ -169,11 +170,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 625512094383005187}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
   m_canBlockDamage: 0
   m_viableTags:
   - WallBreaker
+--- !u!114 &1815279596205613903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8493428121626307736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87350db9aedf94d43ade4a6211af6b45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gizmoColor:
+    m_colorName: Breakable
+    m_color: {r: 0, g: 0, b: 0, a: 0}
+  m_colliderType: 1
 --- !u!1001 &2265358681611895229
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -189,7 +212,7 @@ PrefabInstance:
     - target: {fileID: 146014638091961341, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.061199
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 146014638091961341, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
@@ -199,7 +222,7 @@ PrefabInstance:
     - target: {fileID: 146014638091961341, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.9867165
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1823332508653810786, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
@@ -290,12 +313,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_debris
       value: 
-      objectReference: {fileID: 6977622155229221754, guid: 2d14762a84eb1a748a8028cfc88e0b5f,
+      objectReference: {fileID: 2089044567489106160, guid: 54f0b5318f4e0b34096a7966d7036d1c,
         type: 3}
     - target: {fileID: 7003674765399219517, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}
       propertyPath: m_debris.m_AssetGUID
-      value: 8d58ba8a9784b75488e520aca3eb43cc
+      value: 54f0b5318f4e0b34096a7966d7036d1c
       objectReference: {fileID: 0}
     - target: {fileID: 7003674765399219517, guid: 8302337d0dac39146b4f6aaaf90bbe60,
         type: 3}

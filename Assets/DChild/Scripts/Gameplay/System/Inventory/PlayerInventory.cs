@@ -1,6 +1,7 @@
 ﻿
 using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.Items;
+using DChild.Gameplay.SoulSkills;
 using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using Holysoft.Event;
@@ -20,9 +21,10 @@ namespace DChild.Gameplay.Inventories
         [SerializeField, BoxGroup("Inventory")]
         private IItemContainer m_items;
         [SerializeField, BoxGroup("Inventory")]
-        private IItemContainer m_soulCrystals;
-        [SerializeField, BoxGroup("Inventory")]
         private IItemContainer m_questItems;
+
+        [SerializeField, BoxGroup("Inventory")]
+        private IItemContainer m_soulSkills;
 
         public int soulEssence => m_soulEssence;
 
@@ -31,19 +33,21 @@ namespace DChild.Gameplay.Inventories
 
         public event EventAction<CurrencyUpdateEventArgs> OnAmountSet;
         public event EventAction<CurrencyUpdateEventArgs> OnAmountAdded;
+        public event EventAction<SoulSkillAcquiredEventArgs> SoulSkillItemAcquired;
 
         public PlayerInventoryData Save()
         {
             return new PlayerInventoryData(m_soulEssence,
-                                            m_items.Save(), m_soulCrystals.Save(), m_questItems.Save());
+                                            m_items.Save(), m_questItems.Save());
         }
 
         public void Load(PlayerInventoryData data)
         {
             m_soulEssence = data.soulEssence;
             Load(m_items, data.items);
-            Load(m_soulCrystals, data.soulCrystals);
             Load(m_questItems, data.questItems);
+            //MiguelTest
+            //Load(m_soulSkills, data.soulSkills);
         }
 
         public void AddSoulEssence(int value)
@@ -62,24 +66,24 @@ namespace DChild.Gameplay.Inventories
         {
             var intCount = (int)count;
             //TODO: Items are not yet categorized
-            if (item is SoulCrystal)
+
+            switch (item.category)
             {
-                m_soulCrystals.AddItem(item, intCount);
-            }
-            else
-            {
-                switch (item.category)
-                {
-                    case ItemCategory.Consumable:
-                        m_items.AddItem(item, intCount);
-                        break;
-                    case ItemCategory.Quest:
-                    case ItemCategory.Key:
-                        m_questItems.AddItem(item, intCount);
-                        break;
-                    default:
-                        break;
-                }
+                case ItemCategory.Consumable:
+                    m_items.AddItem(item, intCount);
+                    break;
+                case ItemCategory.Quest:
+                case ItemCategory.Key:
+                    m_questItems.AddItem(item, intCount);
+                    break;
+                //Miguel Test
+                case ItemCategory.SoulSkill:
+                    m_soulSkills.AddItem(item, intCount);
+                    var eventArgs = new SoulSkillAcquiredEventArgs(((SoulSkillItem)item).soulSkill.id);
+                    SoulSkillItemAcquired?.Invoke(this, eventArgs);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -87,24 +91,23 @@ namespace DChild.Gameplay.Inventories
         {
             var intCount = (int)count * -1;
             //TODO: Items are not yet categorized
-            if (item is SoulCrystal)
+
+            switch (item.category)
             {
-                m_soulCrystals.AddItem(item, intCount);
-            }
-            else
-            {
-                switch (item.category)
-                {
-                    case ItemCategory.Consumable:
-                        m_items.AddItem(item, intCount);
-                        break;
-                    case ItemCategory.Quest:
-                    case ItemCategory.Key:
-                        m_questItems.AddItem(item, intCount);
-                        break;
-                    default:
-                        break;
-                }
+                case ItemCategory.Consumable:
+                    m_items.AddItem(item, intCount);
+                    break;
+                case ItemCategory.Quest:
+                case ItemCategory.Key:
+                    m_questItems.AddItem(item, intCount);
+                    break;
+
+                //Miguel Test
+                case ItemCategory.SoulSkill:
+                    m_soulSkills.AddItem(item, intCount);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -117,6 +120,10 @@ namespace DChild.Gameplay.Inventories
                 case ItemCategory.Quest:
                 case ItemCategory.Key:
                     return m_questItems.GetCurrentAmount(item);
+
+                //MiguelTest
+                case ItemCategory.SoulSkill:
+                    return m_soulSkills.GetCurrentAmount(item);
                 default:
                     return 0;
             }
@@ -136,6 +143,10 @@ namespace DChild.Gameplay.Inventories
                     case ItemCategory.Quest:
                     case ItemCategory.Key:
                         m_questItems.AddItem(item, count);
+                        break;
+                    //MiguelTest
+                    case ItemCategory.SoulSkill:
+                        m_soulSkills.AddItem(item, count);
                         break;
                     default:
                         break;

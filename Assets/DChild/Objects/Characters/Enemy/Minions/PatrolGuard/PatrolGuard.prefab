@@ -43,10 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8799708272154cb4f25a7c1078627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_flinchData: {fileID: 0}
   m_spine: {fileID: 7924384269529709431}
   m_physics: {fileID: 9027880900020754008}
   m_autoFlinch: 0
+  m_enableMixFlinch: 1
   m_alphaBlendStrength: 0.5
   m_mixDuration: 1
   m_skeletonAnimation: {fileID: 6957358792894082876}
@@ -113,10 +113,8 @@ MonoBehaviour:
     - {fileID: 8181424717560839973}
     - {fileID: 8181424716509762633}
     - {fileID: 8181424717209277927}
-    - {fileID: 8824709117577572401}
     m_originalSimulationSpeed:
     - 2
-    - 1
     - 1
     - 1
     - 1
@@ -225,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_simulateGravity: 1
   m_gravity:
-    m_gravityScale: 10
+    m_gravityScale: 25
     m_direction: {x: 0, y: -1}
     m_angle: -90
     m_drawDirection: 0
@@ -630,6 +628,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8210500474315998238, guid: 44502035a531f1c4095f014a6e613c10,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.15320416
+      objectReference: {fileID: 0}
     - target: {fileID: 8793780147499265290, guid: 44502035a531f1c4095f014a6e613c10,
         type: 3}
       propertyPath: m_LocalRotation.z
@@ -758,12 +761,6 @@ ParticleSystem:
 --- !u!198 &8181424717209277927 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 7690717359721736551, guid: 44502035a531f1c4095f014a6e613c10,
-    type: 3}
-  m_PrefabInstance: {fileID: 1959251517663411328}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &8824709117577572401 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7009574574985858225, guid: 44502035a531f1c4095f014a6e613c10,
     type: 3}
   m_PrefabInstance: {fileID: 1959251517663411328}
   m_PrefabAsset: {fileID: 0}
@@ -944,11 +941,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Character
-      objectReference: {fileID: 0}
-    - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
-        type: 3}
-      propertyPath: m_BodyType
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
         type: 3}

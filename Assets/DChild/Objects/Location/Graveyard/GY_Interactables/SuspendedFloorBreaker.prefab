@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_centerMass: {fileID: 5286287032199508207}
   m_data: {fileID: 11400000, guid: 8385086666f1d344aad7e2dc009b25fe, type: 2}
-  m_info:
+  m_currentAttackInfo:
     damage:
-    - m_type: 0
-      m_value: 9999999
-    critChance: 0
-    critDamageModifier: 1
+      m_type: 0
+      m_value: 0
+    criticalDamageInfo:
+      chance: 0
+      damageModifier: 0
     ignoreInvulnerability: 0
+    ignoresBlock: 0
 --- !u!1 &9139312937762856618
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,12 +268,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 2920700492094766520, guid: d936f684ea3118747b6ba0caadea7135,
-        type: 3}
-      propertyPath: skeletonDataAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 1d6b89cda436c4546b470f10dd3b67ee,
-        type: 2}
     - target: {fileID: 3211194054044556901, guid: d936f684ea3118747b6ba0caadea7135,
         type: 3}
       propertyPath: m_onDestroy.m_PersistentCalls.m_Calls.Array.size
@@ -321,7 +317,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: d02d4f0379791214b9129af36a336db7, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8067054559900975333, guid: d936f684ea3118747b6ba0caadea7135,
         type: 3}
       propertyPath: m_LocalPosition.x

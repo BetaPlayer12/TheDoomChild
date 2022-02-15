@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private IProjectileThrowState m_throwState;
         private Character m_character;
         private ProjectileLauncher m_launcher;
+        private int m_aimingProjectileAnimationParameter;
         private int m_skullThrowAnimationParameter;
         private int m_skullThrowVariantParameter;
         private bool m_updateProjectileInfo;
@@ -70,16 +71,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             simulatorHandle.ShowSimulation(simulatorHandle.GetTrajectorySimulator());
             UpdateTrajectorySimulation();
             m_throwState.isAimingProjectile = true;
+            m_animator.SetBool(m_aimingProjectileAnimationParameter, true);
         }
 
         public void MoveAim(Vector2 delta, Vector2 mousePosition)
         {
-            //Debug.Log(delta);
-            Debug.Log(mousePosition);
-
-            Vector2 test = ((Vector3)mousePosition - transform.position);
-            //Debug.Log(test);
-
             var relativeDelta = delta.normalized * m_aimSensitivity;
             relativeDelta.x *= (int)m_character.facing;
             var newAim = m_currentAim += relativeDelta;
@@ -112,7 +108,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             var simulatorHandle = GameplaySystem.simulationHandler;
             simulatorHandle.HideSimulation(simulatorHandle.GetTrajectorySimulator());
-            m_animator.SetBool(m_skullThrowAnimationParameter, false);
+            m_animator.SetBool(m_aimingProjectileAnimationParameter, false);
             m_throwState.isAimingProjectile = false;
         }
 
@@ -283,9 +279,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public override void AttackOver()
         {
-            m_animator.SetBool(m_animationParameter, false);
             m_state.isAttacking = false;
-
             m_reachedVerticalThreshold = false;
             m_animator.SetBool(m_skullThrowAnimationParameter, false);
         }
@@ -296,7 +290,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.canAttack = false;
             m_state.isAttacking = true;
             m_animator.SetBool(m_skullThrowAnimationParameter, true);
-            m_animator.SetBool(m_animationParameter, true);
         }
 
         public void StartThrow()
@@ -336,6 +329,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_character = info.character;
             m_attacker = info.attacker;
             m_launcher = new ProjectileLauncher(m_projectile, m_spawnPoint);
+            m_aimingProjectileAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.AimingProjectile);
             m_skullThrowAnimationParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ProjectileThrow);
             m_skullThrowVariantParameter = info.animationParametersData.GetParameterLabel(AnimationParametersData.Parameter.ProjectileThrowVariant);
             m_launcher.SetProjectile(m_projectile);

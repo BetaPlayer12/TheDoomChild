@@ -246,7 +246,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.clip = m_DeadClip;
             //m_Audiosource.Play();
             base.OnDestroyed(sender, eventArgs);
-            m_movement.Stop();
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                m_movement.Stop();
+
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -364,7 +366,9 @@ namespace DChild.Gameplay.Characters.Enemies
             StartCoroutine(SpawnShockwaveRoutine());
             m_animation.animationState.TimeScale = 1;
             m_legCollider.SetActive(true);
-            m_movement.Stop();
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                m_movement.Stop();
+
             yield return null;
         }
 
@@ -414,7 +418,9 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
-                    m_movement.Stop();
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        m_movement.Stop();
+
                     m_flinchHandle.m_autoFlinch = false;
                     if (IsFacingTarget())
                     {
@@ -440,7 +446,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_movement.Stop();
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                            m_movement.Stop();
+
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
@@ -515,7 +523,9 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting)
                             {
-                                m_movement.Stop();
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    m_movement.Stop();
+
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
                             }
@@ -531,7 +541,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                 else
                                 {
                                     Debug.Log("IDLE CHASING");
-                                    m_movement.Stop();
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                        m_movement.Stop();
+
                                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
