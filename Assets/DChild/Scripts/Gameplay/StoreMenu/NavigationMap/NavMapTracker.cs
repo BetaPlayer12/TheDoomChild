@@ -5,10 +5,8 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.NavigationMap
 {
-
     public class NavMapTracker : MonoBehaviour
     {
-
         [SerializeField]
         private Transform m_toTrack;
         [SerializeField]
@@ -22,6 +20,8 @@ namespace DChild.Gameplay.NavigationMap
         private Vector2 m_scaleOffset = Vector2.one;
 
         private Transform m_inGameTrackReferencePoint;
+        public Vector2 trackerPosition => m_tracker.anchoredPosition;
+
         public void SetToTrack(Transform toTrack)
         {
             m_toTrack = toTrack;

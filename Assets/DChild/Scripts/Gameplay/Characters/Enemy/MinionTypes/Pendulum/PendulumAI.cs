@@ -27,11 +27,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
             [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
-            private string m_attackMidSequenceAnimation;
-            public string attackMidSequenceAnimation => m_attackMidSequenceAnimation;
+            private string m_attackStartAnimation;
+            public string attackStartAnimation => m_attackStartAnimation;
             [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
-            private string m_attackEndSequenceAnimation;
-            public string attackEndSequenceAnimation => m_attackEndSequenceAnimation;
+            private string m_attackEndAnimation;
+            public string attackEndAnimation => m_attackEndAnimation;
             [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_hurtboxDuration;
             public float hurtboxDuration => m_hurtboxDuration;
@@ -417,15 +417,18 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
+            m_animation.SetAnimation(0, m_info.attackStartAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackStartAnimation);
             while (IsTargetInRange(m_attackDecider.chosenAttack.range + 20))
             {
-                m_animation.SetAnimation(0, m_info.attack.animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-                m_animation.SetAnimation(0, m_info.attackMidSequenceAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMidSequenceAnimation);
+                m_animation.SetAnimation(0, m_info.attack.animation, true);
+                yield return null;
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+                //m_animation.SetAnimation(0, m_info.attackMidSequenceAnimation, false);
+                //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackMidSequenceAnimation);
             }
-            m_animation.SetAnimation(0, m_info.attackEndSequenceAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEndSequenceAnimation);
+            m_animation.SetAnimation(0, m_info.attackEndAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackEndAnimation);
             m_animation.SetAnimation(0, RandomIdleAnimation(), true);
             m_stateHandle.ApplyQueuedState();
         }

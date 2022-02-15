@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players.SoulSkills;
 using DChild.Gameplay.SoulSkills.UI;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +21,13 @@ namespace DChild.Gameplay.SoulSkills
         -Something to Show Available SoulSkills
         -Something to Activate/Deactivate SoulSkills
         */
-        [SerializeField]
+        [SerializeField, BoxGroup("UI")]
         private SoulSkillSelection m_skillSelection;
-        [SerializeField]
+        [SerializeField, BoxGroup("UI")]
         private ActivatedSoulSkillListUI m_activatorUI;
-        [SerializeField]
+        [SerializeField, BoxGroup("UI")]
         private SoulSkillListUI m_listUI;
-        [SerializeField]
+        [SerializeField, BoxGroup("UI")]
         private SoulSkillInfoUI m_infoUI;
 
         public void ActivateSoulSkill(int soulSkillID)
@@ -129,6 +130,7 @@ namespace DChild.Gameplay.SoulSkills
             {
                 var soulSkill = m_completeSoulSkillList.GetInfo(activatedSkillIDs.ElementAt(i));
                 activatedSoulSkillList.Add(soulSkill);
+                m_playerHandle.AddAsActivated(soulSkill);
             }
             m_activatorUI.SetAsActivedSoulSkills(activatedSoulSkillList);
         }

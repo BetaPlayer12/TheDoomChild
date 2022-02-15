@@ -288,6 +288,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_changePhaseCoroutine == null && m_phaseHandle.allowPhaseChange)
             {
+                StopAllCoroutines();
                 m_phaseHandle.allowPhaseChange = false;
                 Debug.Log("DireBrothers Change State");
                 if (m_currentAttackCoroutine != null)
@@ -411,7 +412,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_currentIdleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_currentIdleAnimation && m_changePhaseCoroutine == null)
             {
                 m_currentFlinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
