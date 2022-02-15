@@ -2,6 +2,7 @@
 using DChild.Menu;
 using Holysoft.Collections;
 using Holysoft.Event;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,12 +47,19 @@ namespace DChild.Gameplay.Optimizers
             {
                 if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
                 {
-                    m_activeRooms.Add(m_scene.sceneName);
-                    SceneManager.LoadScene(m_scene.sceneName, LoadSceneMode.Additive);
-                    m_roomLoaded = true;
+                    LoadRoom();
                 }
             }
         }
+
+        [Button]
+        private void LoadRoom()
+        {
+            m_activeRooms.Add(m_scene.sceneName);
+            SceneManager.LoadScene(m_scene.sceneName, LoadSceneMode.Additive);
+            m_roomLoaded = true;
+        }
+
         private void OnTriggerExit2D(Collider2D collision)
         {
 

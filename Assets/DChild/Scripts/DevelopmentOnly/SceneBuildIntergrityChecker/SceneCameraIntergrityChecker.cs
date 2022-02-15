@@ -19,10 +19,13 @@ namespace DChildDebug
                 cinemachineBrain.enabled = true;
             }
 
-            var cinemachineCameras = GameObject.FindObjectsOfType<CinemachineVirtualCamera>();
-            for (int i = 0; i < cinemachineCameras.Length; i++)
+            if (Application.isEditor && Application.isPlaying == false)
             {
-                cinemachineCameras[i].enabled = false;
+                var cinemachineCameras = GameObject.FindObjectsOfType<CinemachineVirtualCamera>();
+                for (int i = 0; i < cinemachineCameras.Length; i++)
+                {
+                    cinemachineCameras[i].enabled = false;
+                }
             }
         }
 

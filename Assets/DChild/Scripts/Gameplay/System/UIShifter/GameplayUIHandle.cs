@@ -4,6 +4,7 @@ using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Inventories;
+using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trading;
 using Doozy.Engine;
@@ -22,6 +23,13 @@ namespace DChild.Gameplay.Systems
         private BossCombatUI m_bossCombat;
         [SerializeField]
         private WorldMapHandler m_worldMap;
+        [SerializeField]
+        private NavigationMapManager m_navMap;
+
+        public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
+        {
+            m_navMap.UpdateConfiguration(location, inGameReference, mapReferencePoint, calculationOffset);
+        }
 
         public void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory,ITraderAskingPrice merchantAskingPrice)
 		{

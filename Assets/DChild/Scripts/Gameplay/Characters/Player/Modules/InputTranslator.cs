@@ -31,9 +31,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool slashHeld;
         public bool earthShakerPressed;
         public bool whipPressed;
-        public bool skullThrowPressed;
-        public bool skullThrowReleased;
-        public bool skullThrowHeld;
+        public bool projectileThrowPressed;
+        public bool projectileThrowReleased;
+        public bool projectileThrowHeld;
 
         private PlayerInput m_input;
 
@@ -193,13 +193,13 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 var inputValue = value.Get<float>() == 1;
                 if (inputValue == false)
                 {
-                    if (skullThrowHeld == true)
+                    if (projectileThrowHeld == true)
                     {
-                        skullThrowReleased = true;
+                        projectileThrowReleased = true;
                     }
                 }
-                skullThrowPressed = inputValue;
-                skullThrowHeld = inputValue;
+                projectileThrowPressed = inputValue;
+                projectileThrowHeld = inputValue;
             }
         }
 
@@ -207,7 +207,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             if (enabled == true)
             {
-                skullThrowHeld = value.Get<float>() == 1;
+                projectileThrowHeld = value.Get<float>() == 1;
             }
         }
 
@@ -266,8 +266,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             slashPressed = false;
             earthShakerPressed = false;
             whipPressed = false;
-            skullThrowPressed = false;
-            skullThrowReleased = false;
+            projectileThrowPressed = false;
+            projectileThrowReleased = false;
         }
 
         private void Reset()
@@ -290,9 +290,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             slashHeld = false;
             earthShakerPressed = false;
             whipPressed = false;
-            skullThrowPressed = false;
-            skullThrowHeld = false;
-            skullThrowReleased = false;
+            projectileThrowPressed = false;
+            projectileThrowHeld = false;
+            projectileThrowReleased = false;
         }
     }
 }

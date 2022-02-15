@@ -12,6 +12,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using DChild.Gameplay.Characters.Players.Behaviour;
 using PlayerNew;
+using DChild.Gameplay.SoulSkills;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -28,6 +29,7 @@ namespace DChild.Gameplay.Characters.Players
         IAttacker attackModule { get; }
         PlayerModuleActivator behaviourModule { get; }
         PlayerSkills skills { get; }
+        PlayerSoulSkillHandle soulSkills { get; }
         PlayerModifierHandle modifiers { get; }
         PlayerWeapon weapon { get; }
         ExtendedAttackResistance attackResistance { get; }
@@ -59,11 +61,12 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerSkills m_skills;
         [SerializeField]
+        private PlayerSoulSkillHandle m_soulSkills;
+        [SerializeField]
         private PlayerCharacterController m_controller;
         [SerializeField]
         private PlayerInventory m_inventory;
-        [SerializeField]
-        private SoulCrystalHandle m_soulCrystalHandle;
+
 
         [Title("Serialzables")]
         [SerializeField]
@@ -101,6 +104,7 @@ namespace DChild.Gameplay.Characters.Players
         public PlayerModifierHandle modifiers => m_modifiers;
         public PlayerModuleActivator behaviourModule => m_behaviourModule;
         public PlayerSkills skills => m_skills;
+        public PlayerSoulSkillHandle soulSkills => m_soulSkills;
         public PlayerWeapon weapon => m_weapon;
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
@@ -121,12 +125,20 @@ namespace DChild.Gameplay.Characters.Players
         public void LoadData(PlayerCharacterData data)
         {
             m_serializer.LoadData(data);
-            m_soulCrystalHandle?.InitializeHandles();
         }
 
         public void SetPosition(Vector2 position)
         {
             m_controlledCharacter.transform.position = position;
+        }
+
+        public void Initialize()
+        {
+            m_weapon.Initialize();
+            m_attackResistance.Initialize();
+            m_statusResistance.Initialize();
+            m_modifiers.Initialize();
+            m_soulSkills.Initialize();
         }
 
         private void Awake()

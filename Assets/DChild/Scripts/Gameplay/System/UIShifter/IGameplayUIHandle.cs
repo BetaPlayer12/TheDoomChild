@@ -5,11 +5,13 @@ using DChild.Gameplay.Inventories;
 using DChild.Menu.Trading;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DChild.Gameplay.Systems
 {
     public interface IGameplayUIHandle
     {
+        void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset);
         void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory, ITraderAskingPrice merchantAskingPrice);
         void OpenStorePage(StorePage storePage);
         void OpenStorePage();

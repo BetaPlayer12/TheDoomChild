@@ -59,7 +59,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_cacheCollider = hits[i].collider;
                     if (m_cacheCollider.isTrigger)
                     {
-                        return false;
+                        isValid = false;
                     }
                     else
                     {
@@ -77,7 +77,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         else
                         {
-                            return false;
+                            isValid = false;
                         }
                     }
                 }

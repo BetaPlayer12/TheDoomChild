@@ -101,11 +101,6 @@ namespace DChild.Gameplay.Characters.Players
             m_totalDamage.value += m_addedDamageValue;
         }
 
-        private void Awake()
-        {
-            Initialize();
-        }
-
 #if UNITY_EDITOR
         private void UpdateDamage()
         {

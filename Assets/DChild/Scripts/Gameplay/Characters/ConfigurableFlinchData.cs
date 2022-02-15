@@ -30,9 +30,4 @@ namespace DChild.Gameplay.Characters
         AmountOfDamageType = 1 << 2,
         DuringAnimation = 1 << 3
     }
-
-    public class ConfigurableFlinchHandle
-    {
-        private int m_hitsBeforeFlinch;
-    }
 }

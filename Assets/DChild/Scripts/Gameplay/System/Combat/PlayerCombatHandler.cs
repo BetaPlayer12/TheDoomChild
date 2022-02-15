@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Cinematics.Cameras;
 using DChild.Gameplay.Systems;
+using System;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat
@@ -41,5 +42,6 @@ namespace DChild.Gameplay.Combat
         {
             m_spawnHandle = new FXSpawnHandle<FX>();
         }
+
     }
 }

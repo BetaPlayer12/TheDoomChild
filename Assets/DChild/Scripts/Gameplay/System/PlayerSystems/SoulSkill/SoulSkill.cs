@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             var connection = DChildDatabase.GetSoulSkillConnection();
             connection.Initialize();
-            connection.Update(m_ID, m_type, m_description);
+            connection.Update(m_ID, m_capacity, m_description);
             connection.Close();
         }
 
@@ -67,7 +67,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
             var connection = DChildDatabase.GetSoulSkillConnection();
             connection.Initialize();
             var info = connection.GetInfoOf(m_ID);
-            m_type = info.type;
+            m_capacity = info.capacity;
             m_description = info.description;
             connection.Close();
         }
@@ -77,7 +77,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         {
             var connection = DChildDatabase.GetSoulSkillConnection();
             connection.Initialize();
-            m_ID = connection.Insert(Mathf.Abs(m_ID), m_name, m_description, m_type);
+            m_ID = connection.Insert(Mathf.Abs(m_ID), m_name, m_description, m_capacity);
             m_databaseID = m_ID;
             m_customName = m_name;
             m_connectToDatabase = true;
@@ -95,16 +95,16 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 #endif
         #endregion
         [SerializeField, ToggleGroup("m_enableEdit")]
-        private SoulSkillType m_type;
-        [SerializeField, ToggleGroup("m_enableEdit")]
         private Sprite m_icon;
+        [SerializeField, MinValue(1), ToggleGroup("m_enableEdit")]
+        private int m_capacity = 1;
         [SerializeField, TextArea, ToggleGroup("m_enableEdit")]
         private string m_description;
         [NonSerialized, OdinSerialize, ToggleGroup("m_enableEdit")]
         private ISoulSkillModule[] m_modules = new ISoulSkillModule[1];
 
-        public SoulSkillType type => m_type;
         public Sprite icon => m_icon;
+        public int capacity => m_capacity;
         public string description => m_description;
 
         public void AttachTo(IPlayer player)
