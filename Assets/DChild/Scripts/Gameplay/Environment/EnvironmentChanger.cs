@@ -46,7 +46,10 @@ namespace DChild.Gameplay.Environment
         }
 
         public ISaveData Save() => new SaveData(m_hasChanged);
-
+        public void Initialize()
+        {
+            m_default?.Invoke();
+        }
         public void SetChange(bool value)
         {
             if (m_hasChanged != value)

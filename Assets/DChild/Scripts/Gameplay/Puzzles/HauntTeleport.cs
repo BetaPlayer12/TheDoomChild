@@ -51,7 +51,12 @@ namespace DChild.Gameplay.Puzzles
             m_deathCounter=saveData.deathCounter;
             UpdateEntityPosition();
         }
+        public void Initialize()
+        {
+            m_deathCounter = 0;
+            UpdateEntityPosition();
 
+        }
         public void UseIndex(int index)
         {
             m_deathCounter = index;

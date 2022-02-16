@@ -31,6 +31,11 @@ namespace DChild.Serialization
             m_component = GetComponent<ISerializableComponent>();
         }
 
+        public void InitializeComponentData()
+        {
+            m_component.Initialize();
+        }
+
         private void ValidateInitialization()
         {
             if(m_component == null)

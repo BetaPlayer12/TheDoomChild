@@ -44,6 +44,11 @@ namespace DChild.Gameplay
         {
             return new SaveData(m_isTriggered);
         }
+        public void Initialize()
+        {
+            m_isTriggered = false;
+            m_preTrigger?.Invoke();
+        }
 
         [SerializeField, TabGroup("Pre")]
         private UnityEvent m_preTrigger;
@@ -58,13 +63,7 @@ namespace DChild.Gameplay
             m_isTriggered = true;
         }
 
-        private void Start()
-        {
-            if(m_isTriggered == false)
-            {
-                m_preTrigger?.Invoke();
-            }
-        }
+       
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
