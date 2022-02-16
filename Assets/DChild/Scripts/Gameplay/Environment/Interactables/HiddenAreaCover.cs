@@ -81,7 +81,14 @@ namespace DChild.Gameplay.Environment
                 LerpColors(lerpValue);
             }
         }
-
+        public void Initialize()
+        {
+            m_visible = true;
+            SetVisibility(m_visible);
+            var lerpValue = m_visible ? 1 : 0;
+            m_lerpDuration.SetValue(lerpValue);
+            LerpColors(lerpValue);
+        }
         public void SetVisibility(bool isVisible)
         {
             if (m_visible != isVisible)

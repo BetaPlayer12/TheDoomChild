@@ -51,7 +51,10 @@ namespace DChild.Gameplay.Environment
             }
            
         }
-
+        public void Initialize()
+        {
+            m_hasDisappeared = false;
+        }
         private void DisappearPlatform()
         {
             m_willDisappear = true;

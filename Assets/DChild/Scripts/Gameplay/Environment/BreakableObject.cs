@@ -110,12 +110,16 @@ namespace DChild.Gameplay.Environment
             }
             else
             {
-                m_onFix?.Invoke();
-                if (m_createDebris)
-                {
-                    DestroyInstantiatedDebris();
-                }
+                RevertToFixState();
             }
+        }
+
+        
+
+        public void Initialize()
+        {
+            m_isDestroyed = false;
+            RevertToFixState();
         }
 
         [Button, HideInEditorMode, HideIf("m_isDestroyed")]
@@ -126,6 +130,14 @@ namespace DChild.Gameplay.Environment
             if (m_createDebris)
             {
                 InstantiateDebris(m_debris);
+            }
+        }
+        private void RevertToFixState()
+        {
+            m_onFix?.Invoke();
+            if (m_createDebris)
+            {
+                DestroyInstantiatedDebris();
             }
         }
 

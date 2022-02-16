@@ -36,7 +36,11 @@ namespace DChild.Gameplay.Environment
         }
 
         public ISaveData Save() => new SaveData(m_currentState);
-
+        public void Initialize()
+        {
+            SetToggleState(false);
+            m_hasBeenInitialize = true;
+        }
         [Button, HideInEditorMode]
         public void ToggleState()
         {

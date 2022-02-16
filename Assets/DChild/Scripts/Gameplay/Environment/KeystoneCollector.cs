@@ -54,7 +54,14 @@ namespace DChild.Gameplay.Environment
                 m_reactions[i].SetActive(i < m_currentKeyStones);
             }
         }
-
+        public void Initialize()
+        {
+            m_currentKeyStones = 0;
+            for (int i = 0; i < m_reactions.Length; i++)
+            {
+                m_reactions[i].SetActive(i < m_currentKeyStones);
+            }
+        }
         public void Interact(Character character)
         {
             var inventory = character.GetComponent<PlayerControlledObject>().owner.inventory;

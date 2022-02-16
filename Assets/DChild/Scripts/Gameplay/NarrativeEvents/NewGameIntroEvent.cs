@@ -57,10 +57,15 @@ namespace DChild.Gameplay.Narrative
             }
 #endif
         }
+        
 
         public ISaveData Save()
         {
             return new SaveData(m_isDone);
+        }
+        public void Initialize()
+        {
+            m_isDone = false;
         }
 
         public void StartEvent()
