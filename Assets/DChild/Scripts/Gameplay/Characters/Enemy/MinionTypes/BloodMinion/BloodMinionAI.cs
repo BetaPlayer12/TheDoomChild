@@ -319,11 +319,13 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator RetreatRoutine()
         {
+            m_hitbox.gameObject.SetActive(false);
             m_animation.EnableRootMotion(true, false);
             m_flinchHandle.gameObject.SetActive(false);
             m_animation.SetAnimation(0, m_info.retreatAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.retreatAnimation);
             m_animation.SetAnimation(0, m_info.submergIdleAnimation, true);
+            m_hitbox.gameObject.SetActive(true);
             m_flinchHandle.gameObject.SetActive(true);
             m_isSubmerged = true;
             m_stateHandle.ApplyQueuedState();
@@ -386,8 +388,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void Update()
         {
-            //Debug.Log("Wall Sensor is " + m_wallSensor.isDetecting);
-            //Debug.Log("Edge Sensor is " + m_edgeSensor.isDetecting);
             switch (m_stateHandle.currentState)
             {
                 case State.Detect:
@@ -482,7 +482,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range))
                             {
                                 m_movement.Stop();
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
