@@ -22,6 +22,7 @@ namespace DChild.Gameplay.Combat
             {
                 m_isTriggered = isTriggered;
             }
+           
 
             public bool isTriggered => m_isTriggered;
 
@@ -71,6 +72,11 @@ namespace DChild.Gameplay.Combat
             {
                 m_alreadyDefeated?.Invoke();
             }
+        }
+        public void Initialize()
+        {
+            m_isTriggered = false;
+           
         }
 
         private void OnCinematicStop(PlayableDirector obj)
