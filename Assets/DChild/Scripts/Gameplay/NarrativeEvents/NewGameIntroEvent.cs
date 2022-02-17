@@ -33,7 +33,7 @@ namespace DChild.Gameplay.Narrative
         [SerializeField]
         private PlayableDirector m_introCutscene;
         [SerializeField]
-        private CutsceneTrigger m_introCutsceneTrigger;
+        private Transform m_playerStartPosition;
         [SerializeField]
         private AnimationReferenceAsset m_playerStandAnimation;
         [SerializeField]
@@ -48,12 +48,23 @@ namespace DChild.Gameplay.Narrative
 
         public void Load(ISaveData data)
         {
-
+            m_isDone = ((SaveData)data).isDone;
+            if (m_isDone == false)
+            {
+                m_introCutscene.Play();
+            }
         }
 
         public void Initialize()
         {
             m_storePickupSequence.SetActive(false);
+            m_introCutscene.Play();
+        }
+
+        public void TransferPlayerToStartPosition()
+        {
+            var player = GameplaySystem.playerManager.player.character;
+            player.transform.position = m_playerStartPosition.position;
         }
 
         public void PromptPlayerToStand()
