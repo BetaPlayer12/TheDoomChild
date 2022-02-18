@@ -52,7 +52,10 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
             }
             m_platformMovementHandle.RecordTrackedPlatformPositions();
         }
-
+        public void Initialize()
+        {
+            //editore set up initialize
+        }
         private void Awake()
         {
             m_platformMovementHandle.Initialize();

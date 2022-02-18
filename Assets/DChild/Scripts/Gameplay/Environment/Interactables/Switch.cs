@@ -120,6 +120,12 @@ namespace DChild.Gameplay.Environment
                 m_collider.enabled = true;
             }
         }
+        public void Initialize()
+        {
+            m_isOn = false;
+            m_startAsOffState?.Invoke();
+            m_collider.enabled = true;
+        }
         public void SetAs(bool value)
         {
             m_isOn = value;

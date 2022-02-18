@@ -19,6 +19,7 @@ namespace DChild.Gameplay.Environment.Obstacles
         private CountdownTimer m_spawnNewBoulderDelay;
         [SerializeField]
         private Collider2D m_ceilingColliderToIgnore;
+        
 
         [SerializeField]
         private float m_setupYOffset;
@@ -40,7 +41,17 @@ namespace DChild.Gameplay.Environment.Obstacles
                 m_spawnedBoulder = null;
             }
         }
+        public void Ondeath()
+        {
+            var rigidbody = m_spawnedBoulder.GetComponent<Rigidbody2D>();
+            rigidbody.simulated = true;
+            rigidbody.velocity = Vector2.zero;
 
+            m_spawnedBoulderCollider.enabled = true;
+            m_spawnedBoulder.transform.parent = null;
+            m_spawnedBoulder = null;
+
+        }
         public void SetDropOnSpawn(bool value) => m_dropOnSpawn = value;
 
         private void InitializeBoulder(PoolableObject boulder)

@@ -67,7 +67,11 @@ namespace DChild.Gameplay.Cinematics
         {
             return new SaveData(m_isTriggered);
         }
-
+        public void Initialize()
+        {
+            m_isTriggered = false;
+            m_collider.enabled = true;
+        }
         public void ForcePlayCutscene()
         {
             StartCutscene(GameplaySystem.playerManager.player.character.GetComponent<PlayerControlledObject>());

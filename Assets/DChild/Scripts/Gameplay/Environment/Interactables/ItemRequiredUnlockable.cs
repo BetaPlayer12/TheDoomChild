@@ -80,7 +80,11 @@ namespace DChild.Gameplay.Environment
                 m_alreadyLocked?.Invoke();
             }
         }
-
+        public void Initialize()
+        {
+            m_isUnlocked = false;
+            m_alreadyLocked?.Invoke();
+        }
         public ISaveData Save() => new SaveData(m_isUnlocked);
 
         private void OnDrawGizmosSelected()

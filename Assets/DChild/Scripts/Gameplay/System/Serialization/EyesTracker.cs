@@ -87,7 +87,19 @@ namespace DChild.Gameplay
                 }
             }
         }
-
+        public void Initialize()
+        {
+            for (int i = 0; i < m_entities.Length; i++)
+            {
+                var info = m_entities[i];
+                info.entity.gameObject.SetActive(true);
+                if (info.m_isListeningToEntity == false)
+                {
+                    info.entity.Destroyed += OnEntityDeath;
+                    info.m_isListeningToEntity = true;
+                }
+            }
+        }
         private void OnEntityDeath(object sender, EventActionArgs eventArgs)
         {
             var entity = (Damageable)sender;
