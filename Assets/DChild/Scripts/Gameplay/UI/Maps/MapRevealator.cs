@@ -69,7 +69,11 @@ namespace DChild.Gameplay.UI.Map
         }
 
         public ISaveData Save() => m_saveData;
-
+        public void Initialize()
+        {
+            m_isRevealed = false;
+            GetComponent<Collider2D>().enabled = true;
+        }
         private void Start()
         {
             if (m_saveData == null)

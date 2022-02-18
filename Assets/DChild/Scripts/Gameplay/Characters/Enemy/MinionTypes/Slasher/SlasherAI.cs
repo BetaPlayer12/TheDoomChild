@@ -487,7 +487,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(false, false);
-                        m_animation.SetAnimation(0, m_info.walk.animation, true);
+                        m_animation.SetAnimation(0, m_info.walk.animation, true).TimeScale = 2f;
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.walk.speed, characterInfo);
                     }
@@ -573,7 +573,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                 if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
-                                    m_animation.SetAnimation(0, m_info.walk.animation, true);
+                                    m_animation.SetAnimation(0, m_info.walk.animation, true).TimeScale = 2f;
                                     m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                                 }
                                 else

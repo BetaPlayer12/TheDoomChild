@@ -54,7 +54,11 @@ namespace DChild.Gameplay.Environment
         {
             return new SaveData(m_scenarioIsOver);
         }
-
+        public void Initialize()
+        {
+            m_scenarioIsOver = false;
+            ValidateCurrentState();
+        }
         private void Start()
         {
             if (m_scenarioIsOver == false && m_sceneLoaded == false)

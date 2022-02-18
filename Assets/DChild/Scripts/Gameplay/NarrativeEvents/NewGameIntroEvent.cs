@@ -1,15 +1,18 @@
 ﻿using DChild.Gameplay.Cinematics;
 using DChild.Serialization;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 
 namespace DChild.Gameplay.Narrative
 {
     public class NewGameIntroEvent : MonoBehaviour, ISerializableComponent
     {
+
         [System.Serializable]
         public struct SaveData : ISaveData
         {
@@ -30,60 +33,79 @@ namespace DChild.Gameplay.Narrative
         [SerializeField]
         private PlayableDirector m_introCutscene;
         [SerializeField]
-        private CutsceneTrigger m_introCutsceneTrigger;
+        private Transform m_playerStartPosition;
         [SerializeField]
-        private GameObject m_tutorialTriggerGroup;
+        private AnimationReferenceAsset m_playerStandAnimation;
+        [SerializeField]
+        private GameObject m_storePickupSequence;
 
         private bool m_isDone;
-
-#if UNITY_EDITOR
-        [SerializeField]
-        private bool m_skipThis;
-#endif
-
-        public void EndEvent()
-        {
-            m_isDone = true;
-            m_tutorialTriggerGroup.SetActive(false);
-        }
-
-        public void Load(ISaveData data)
-        {
-            m_isDone = ((SaveData)data).isDone;
-#if UNITY_EDITOR
-            if (m_skipThis)
-            {
-                m_isDone = true;
-            }
-#endif
-        }
 
         public ISaveData Save()
         {
             return new SaveData(m_isDone);
         }
 
-        public void StartEvent()
-       {
-#if UNITY_EDITOR
-            if (m_skipThis)
+        public void Load(ISaveData data)
+        {
+            m_isDone = ((SaveData)data).isDone;
+            if (m_isDone == false)
             {
-                return;
+                m_introCutscene.Play();
             }
-#endif
+        }
+
+        public void Initialize()
+        {
+            m_storePickupSequence.SetActive(false);
+            m_introCutscene.Play();
+        }
+
+        public void TransferPlayerToStartPosition()
+        {
+            var player = GameplaySystem.playerManager.player.character;
+            player.transform.position = m_playerStartPosition.position;
+        }
+
+        public void PromptPlayerToStand()
+        {
+            Debug.Log("Player Prompt Show");
+            StopAllCoroutines();
+            StartCoroutine(PromptPlayerToStandRoutine());
+        }
+
+        public void SetStorePickupSequence(bool startSequence)
+        {
+            m_storePickupSequence.SetActive(!startSequence);
+        }
+
+        public void EndEvent()
+        {
             m_isDone = true;
-            m_introCutsceneTrigger.ForcePlayCutscene();
         }
 
-        private void OnCutsceneEnd(PlayableDirector obj)
+        private IEnumerator PromptPlayerToStandRoutine()
         {
-            m_tutorialTriggerGroup.SetActive(true);
-        }
+            var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
 
-        private void Awake()
-        {
-            m_introCutscene.stopped += OnCutsceneEnd;
-            m_tutorialTriggerGroup.SetActive(false);
+            bool hasPressedPrompt = false;
+            while (hasPressedPrompt == false)
+            {
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    hasPressedPrompt = true;
+                }
+                yield return null;
+            }
+
+            var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);
+            while(standAnimation.IsComplete ==false)
+            {
+                yield return null;
+            }
+
+            GameplaySystem.playerManager.StopCharacterControlOverride();
+            yield return null;
         }
     }
 }

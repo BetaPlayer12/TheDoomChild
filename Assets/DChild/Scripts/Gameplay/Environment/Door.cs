@@ -177,6 +177,13 @@ namespace DChild.Gameplay.Environment.Interractables
 
         public ISaveData Save() => new SaveData(m_isOpen);
 
+        public void Initialize()
+        {
+            m_isOpen = false;
+            SetAsOpen(m_isOpen);
+
+        }
+
         private void Awake()
         {
             SetAsOpen(m_isOpen);

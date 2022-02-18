@@ -60,7 +60,11 @@ namespace DChild.Gameplay.Environment
                 gameObject.SetActive(true);
             }
         }
-
+        public void Initialize()
+        {
+            m_isLooted = false;
+            gameObject.SetActive(true);
+        }
         public ISaveData Save() => new SaveData(m_isLooted);
 
         public void Interact(Character character)
