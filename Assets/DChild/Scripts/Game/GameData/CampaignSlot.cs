@@ -102,10 +102,10 @@ namespace DChild.Serialization
         public void Reset()
         {
             m_newGame = true;
-            m_location = m_demoGame ? DLocation.Garden : DLocation.None;
+            m_location = m_demoGame ? DLocation.City_Of_The_Dead : DLocation.None;
             m_spawnPosition = new SerializedVector2();
-            m_spawnPosition.x = -1252.7f;
-            m_spawnPosition.y = 89.2f;
+            m_spawnPosition.x = -1209f;
+            m_spawnPosition.y = 90f;
             m_completion = 0;
             m_duration = 0;
             m_characterData = new PlayerCharacterData();

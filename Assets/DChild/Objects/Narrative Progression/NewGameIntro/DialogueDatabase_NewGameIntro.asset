@@ -53,11 +53,11 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
-      value: Zee
+      value: 
       type: 0
       typeString: CustomFieldType_Text
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: 56386befa9a8e4c42ad46460218563a3, type: 3}
+    spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
   - id: 2
@@ -108,7 +108,7 @@ MonoBehaviour:
   - id: 1
     fields:
     - title: Name
-      value: New Game Intro
+      value: Basic Movement Tutorial
       type: 0
       typeString: 
     - title: Pictures
@@ -116,7 +116,7 @@ MonoBehaviour:
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: When Game Just Started
+      value: Show Tutorial for Basic Movement
       type: 0
       typeString: 
     - title: Success Description
@@ -137,7 +137,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Boolean
   locations: []
   variables:
-  - id: 6
+  - id: 4
     fields:
     - title: Name
       value: HasWarnedPlayerAboutBlackBlood
@@ -151,7 +151,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 4
+  - id: 1
     fields:
     - title: Name
       value: Alert
@@ -166,7 +166,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
   conversations:
-  - id: 5
+  - id: 1
     fields:
     - title: Title
       value: Intro/Warn Player About BlackBlood
@@ -223,7 +223,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 1
+        value: 2
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -254,7 +254,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 5
+      conversationID: 1
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -262,15 +262,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 5
+      - originConversationID: 1
         originDialogueID: 0
-        destinationConversationID: 5
-        destinationDialogueID: 1
-        isConnector: 0
-        priority: 2
-      - originConversationID: 5
-        originDialogueID: 0
-        destinationConversationID: 5
+        destinationConversationID: 1
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -283,77 +277,6 @@ MonoBehaviour:
         serializedVersion: 2
         x: 391
         y: 14
-        width: 160
-        height: 30
-    - id: 1
-      fields:
-      - title: Title
-        value: Warn Player Again
-        type: 0
-        typeString: 
-      - title: Pictures
-        value: '[]'
-        type: 3
-        typeString: CustomFieldType_Files
-      - title: Description
-        value: 
-        type: 0
-        typeString: 
-      - title: Actor
-        value: 2
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: 
-        type: 0
-        typeString: 
-      - title: Dialogue Text
-        value: AGAIN!? WORDS WORDS
-        type: 0
-        typeString: 
-      - title: Parenthetical
-        value: 
-        type: 0
-        typeString: 
-      - title: Audio Files
-        value: '[]'
-        type: 3
-        typeString: CustomFieldType_Files
-      - title: Video File
-        value: 
-        type: 0
-        typeString: 
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: 
-      conversationID: 5
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 5
-        originDialogueID: 1
-        destinationConversationID: 5
-        destinationDialogueID: 4
-        isConnector: 0
-        priority: 2
-      conditionsString: Variable["HasWarnedPlayerAboutBlackBlood"] == true
-      userScript: Variable["HasWarnedPlayerAboutBlackBlood"] = true
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 552
-        y: 84
         width: 160
         height: 30
     - id: 2
@@ -383,7 +306,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Hey, Words Words
+        value: ' Hey hey hey careful with those pages big guy!'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -402,7 +325,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 5
+      conversationID: 1
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -410,9 +333,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 5
+      - originConversationID: 1
         originDialogueID: 2
-        destinationConversationID: 5
+        destinationConversationID: 1
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -423,8 +346,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 243
-        y: 79
+        x: 355
+        y: 108
         width: 160
         height: 30
     - id: 3
@@ -454,7 +377,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Pick Me up instead
+        value: 
         type: 0
         typeString: 
       - title: Parenthetical
@@ -473,7 +396,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 5
+      conversationID: 1
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -488,78 +411,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 241
-        y: 204
-        width: 160
-        height: 30
-    - id: 4
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: 
-      - title: Pictures
-        value: '[]'
-        type: 3
-        typeString: CustomFieldType_Files
-      - title: Description
-        value: 
-        type: 0
-        typeString: 
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 2
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: 
-        type: 0
-        typeString: 
-      - title: Dialogue Text
-        value: NOW COME HERE AND PICK ME UP!
-        type: 0
-        typeString: 
-      - title: Parenthetical
-        value: 
-        type: 0
-        typeString: 
-      - title: Audio Files
-        value: '[]'
-        type: 3
-        typeString: CustomFieldType_Files
-      - title: Video File
-        value: 
-        type: 0
-        typeString: 
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: 
-      conversationID: 5
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks: []
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 552
-        y: 200
+        x: 363
+        y: 217
         width: 160
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 6
+  - id: 2
     fields:
     - title: Title
       value: Intro/Player Wakes up
@@ -578,7 +436,7 @@ MonoBehaviour:
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
-      value: 2
+      value: -1
       type: 5
       typeString: CustomFieldType_Actor
     overrideSettings:
@@ -616,11 +474,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: -1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: -1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -647,17 +505,17 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 6
+      conversationID: 2
       isRoot: 0
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: 
+      falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 6
+      - originConversationID: 2
         originDialogueID: 0
-        destinationConversationID: 6
+        destinationConversationID: 2
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -699,7 +557,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: ???????
+        value: 'where am i... what is this place? '
         type: 0
         typeString: 
       - title: Parenthetical
@@ -718,7 +576,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 6
+      conversationID: 2
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -739,7 +597,7 @@ MonoBehaviour:
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 7
+  - id: 3
     fields:
     - title: Title
       value: Intro/Store Introduces itself to Player
@@ -800,7 +658,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -827,7 +685,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 7
+      conversationID: 3
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -835,10 +693,10 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 7
+      - originConversationID: 3
         originDialogueID: 0
-        destinationConversationID: 7
-        destinationDialogueID: 1
+        destinationConversationID: 3
+        destinationDialogueID: 2
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -848,8 +706,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 177
-        y: 30
+        x: 155
+        y: 72
         width: 160
         height: 30
     - id: 1
@@ -879,7 +737,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Wachu looking at?
+        value: ' Careful on your left. That water''s not safe.'
         type: 0
         typeString: 
       - title: Parenthetical
@@ -898,7 +756,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 7
+      conversationID: 3
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -913,8 +771,152 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 177
-        y: 106
+        x: 164
+        y: 320
+        width: 160
+        height: 30
+    - id: 2
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Pictures
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: ' A talking book? Why does picking you up feel like something i''ll
+          regret?'
+        type: 0
+        typeString: 
+      - title: Parenthetical
+        value: 
+        type: 0
+        typeString: 
+      - title: Audio Files
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Video File
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 3
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 3
+        originDialogueID: 2
+        destinationConversationID: 3
+        destinationDialogueID: 3
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 161
+        y: 151
+        width: 160
+        height: 30
+    - id: 3
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Pictures
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: I don't regret being lifted from that dank and wet ground that's for
+          sure.
+        type: 0
+        typeString: 
+      - title: Parenthetical
+        value: 
+        type: 0
+        typeString: 
+      - title: Audio Files
+        value: '[]'
+        type: 3
+        typeString: CustomFieldType_Files
+      - title: Video File
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 3
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 3
+        originDialogueID: 3
+        destinationConversationID: 3
+        destinationDialogueID: 1
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 162
+        y: 240
         width: 160
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
