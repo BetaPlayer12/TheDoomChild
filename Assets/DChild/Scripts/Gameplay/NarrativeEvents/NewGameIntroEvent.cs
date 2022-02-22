@@ -76,7 +76,7 @@ namespace DChild.Gameplay.Narrative
 
         public void SetStorePickupSequence(bool startSequence)
         {
-            m_storePickupSequence.SetActive(!startSequence);
+            m_storePickupSequence.SetActive(startSequence);
         }
 
         public void EndEvent()
@@ -101,11 +101,12 @@ namespace DChild.Gameplay.Narrative
             GameEventMessage.SendEvent("Prompt_Wakeup_Done");
 
             var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);
-            while(standAnimation.IsComplete ==false)
+            while (standAnimation.IsComplete == false)
             {
                 yield return null;
             }
 
+            SetStorePickupSequence(true);
             GameplaySystem.playerManager.StopCharacterControlOverride();
             yield return null;
         }
