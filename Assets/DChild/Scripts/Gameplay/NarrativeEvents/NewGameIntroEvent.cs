@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Cinematics;
 using DChild.Serialization;
+using Doozy.Engine;
 using Spine.Unity;
 using System;
 using System.Collections;
@@ -69,7 +70,6 @@ namespace DChild.Gameplay.Narrative
 
         public void PromptPlayerToStand()
         {
-            Debug.Log("Player Prompt Show");
             StopAllCoroutines();
             StartCoroutine(PromptPlayerToStandRoutine());
         }
@@ -88,6 +88,7 @@ namespace DChild.Gameplay.Narrative
         {
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
 
+            GameEventMessage.SendEvent("Prompt_Wakeup_Start");
             bool hasPressedPrompt = false;
             while (hasPressedPrompt == false)
             {
@@ -97,6 +98,7 @@ namespace DChild.Gameplay.Narrative
                 }
                 yield return null;
             }
+            GameEventMessage.SendEvent("Prompt_Wakeup_Done");
 
             var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);
             while(standAnimation.IsComplete ==false)

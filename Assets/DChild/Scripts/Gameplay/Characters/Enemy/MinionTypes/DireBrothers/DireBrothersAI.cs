@@ -310,18 +310,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackRangeCache.Clear();
             AddToRangeCache(m_info.shieldDashAttack.range/*, m_info.shieldBashAttack.range*/);
             m_attackUsed = new bool[m_attackCache.Count];
-            m_hitbox.Disable();
+            m_hitbox.gameObject.SetActive(false);
             m_movement.Stop();
             var sp_deathAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.sh_death1Animation : m_info.sh_death2Animation;
             m_animation.SetAnimation(0, sp_deathAnim, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, sp_deathAnim);
             m_currentFlinchHandle.gameObject.SetActive(true);
-            m_hitbox.Enable();
+            m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
-            m_changePhaseCoroutine = null;
             m_phaseHandle.ApplyChange();
             m_stateHandle.ApplyQueuedState();
             yield return null;
+
+            m_changePhaseCoroutine = null;
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -405,7 +406,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_currentAttackCoroutine = null;
             }
             m_selfCollider.SetActive(false);
-            m_hitbox.Disable();
+            m_hitbox.gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             m_movement.Stop();
         }

@@ -448,7 +448,9 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
-                                m_movement.Stop();
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    m_movement.Stop();
+
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -470,7 +472,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                 else
                                 {
                                     Debug.Log("IDLE CHASING");
-                                    m_movement.Stop();
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                        m_movement.Stop();
+
                                     m_selfCollider.enabled = true;
                                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
