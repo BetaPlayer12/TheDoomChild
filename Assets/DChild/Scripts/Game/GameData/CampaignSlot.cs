@@ -48,7 +48,7 @@ namespace DChild.Serialization
         }
         [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame"), TabGroup("Misc")]
         private SerializeDataList m_miscDatas;
-        [SerializeField, HideReferenceObjectPicker]
+        [SerializeField, HideReferenceObjectPicker,TextArea(5,999)]
         private string m_dialogueSaveData;
 
         public CampaignSlot(int m_id)
