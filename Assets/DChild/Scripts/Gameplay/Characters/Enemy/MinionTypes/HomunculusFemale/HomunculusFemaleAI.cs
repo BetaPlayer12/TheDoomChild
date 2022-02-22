@@ -551,12 +551,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (!m_character.physics.simulateGravity)
-                    {
-                        m_animation.EnableRootMotion(true, false);
-                        m_character.physics.simulateGravity = true;
-                        m_hitbox.Enable();
-                    }
+                    m_character.physics.simulateGravity = true;
+                    m_hitbox.Enable();
+                    m_aggroCollider.enabled = true;
 
                     //m_character.physics.simulateGravity = true;
                     var patrolCharacterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
