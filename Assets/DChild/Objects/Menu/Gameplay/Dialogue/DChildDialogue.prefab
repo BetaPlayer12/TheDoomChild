@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 7309899279171178985}
   - component: {fileID: 7309899279171178991}
   - component: {fileID: 7309899279171178984}
+  - component: {fileID: 4539383880214100848}
   m_Layer: 0
   m_Name: Message
   m_TagString: Untagged
@@ -360,6 +361,47 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4539383880214100848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7309899279171178986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1360375efe462cd4ab520d1661206035, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rightToLeft: 0
+  charactersPerSecond: 50
+  audioClip: {fileID: 0}
+  alternateAudioClips: []
+  audioSource: {fileID: 0}
+  interruptAudioClip: 0
+  usePlayOneShot: 0
+  silentCharacters: 
+  fullPauseCharacters: 
+  quarterPauseCharacters: 
+  fullPauseDuration: 1
+  quarterPauseDuration: 0.25
+  removeDuplicateTypewriterEffects: 1
+  playOnEnable: 1
+  waitOneFrameBeforeStarting: 1
+  stopOnConversationEnd: 0
+  autoScrollSettings:
+    autoScrollEnabled: 0
+    scrollRect: {fileID: 0}
+    scrollbarEnabler: {fileID: 0}
+  onBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  onCharacter:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7309899279631561475
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,6 +416,7 @@ GameObject:
   - component: {fileID: 7309899279631561472}
   - component: {fileID: 7309899279631561473}
   - component: {fileID: 8593127911568379824}
+  - component: {fileID: 5963523638044273379}
   m_Layer: 0
   m_Name: Button - Dialogue Continue
   m_TagString: Untagged
@@ -478,7 +521,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7309899279631561479}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5963523638044273379}
+        m_MethodName: OnFastForward
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7309899279631561473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2800,6 +2854,21 @@ MonoBehaviour:
   m_doozyEvent: 
   m_masterAudioEvent: 
   m_dialogueSystemMessage: ContinueDiag
+--- !u!114 &5963523638044273379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7309899279631561475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73ee3d99442035942b6dd1ede25ff7cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueUI: {fileID: 2971033621982137573}
+  typewriterEffect: {fileID: 4539383880214100848}
+  hideContinueButtonOnContinue: 0
 --- !u!1 &7309899279648242420
 GameObject:
   m_ObjectHideFlags: 0
