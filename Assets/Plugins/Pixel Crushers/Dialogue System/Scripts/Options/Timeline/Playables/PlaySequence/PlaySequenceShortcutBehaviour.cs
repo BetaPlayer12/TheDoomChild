@@ -18,7 +18,8 @@ namespace PixelCrushers.DialogueSystem
         {
             WaitForInput,
             StartDialogue,
-            EndDiagAfterInput
+            EndDiagAfterInput,
+            StopDialogue
         }
 
         public SequenceShortcut m_sequence;
@@ -64,7 +65,8 @@ namespace PixelCrushers.DialogueSystem
                     return "required SetDialogueInput(true);" +
                         $"required Timeline(speed, {m_reference},0);" +
                         $"required Timeline(speed, {m_reference},1)@Message(ContinueDiag);" +
-                        "required StopConversation()@Message(ContinueDiag);";
+                        "required StopConversation()@Message(ContinueDiag);"+
+                        "required SetDialoguePanel(false)@Message(ContinueDiag)";
             }
             return "";
         }
