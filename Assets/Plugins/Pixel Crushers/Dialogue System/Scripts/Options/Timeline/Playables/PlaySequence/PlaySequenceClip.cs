@@ -12,6 +12,7 @@ using UnityEngine.Timeline;
 
 namespace PixelCrushers.DialogueSystem
 {
+
     [Serializable]
     public class PlaySequenceClip : PlayableAsset, ITimelineClipAsset
     {

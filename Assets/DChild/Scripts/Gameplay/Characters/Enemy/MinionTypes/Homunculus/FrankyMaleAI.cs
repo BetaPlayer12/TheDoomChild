@@ -582,11 +582,9 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (!m_character.physics.simulateGravity)
-                    {
-                        m_character.physics.simulateGravity = true;
-                        m_hitbox.Enable();
-                    }
+                    m_character.physics.simulateGravity = true;
+                    m_hitbox.Enable();
+                    m_aggroCollider.enabled = true;
 
                     if (Vector2.Distance(m_initialPos, transform.position) >= 100)
                     {
