@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Cinematics;
 using DChild.Serialization;
 using Doozy.Engine;
+using PixelCrushers.DialogueSystem;
 using Spine.Unity;
 using System;
 using System.Collections;
@@ -37,6 +38,8 @@ namespace DChild.Gameplay.Narrative
         private Transform m_playerStartPosition;
         [SerializeField]
         private AnimationReferenceAsset m_playerStandAnimation;
+        [SerializeField]
+        private DialogueSystemTrigger m_afterWakeupDialogue;
         [SerializeField]
         private GameObject m_storePickupSequence;
 
@@ -86,6 +89,7 @@ namespace DChild.Gameplay.Narrative
 
         private IEnumerator PromptPlayerToStandRoutine()
         {
+            GameplaySystem.playerManager.OverrideCharacterControls();
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
 
             GameEventMessage.SendEvent("Prompt_Wakeup_Start");
@@ -105,6 +109,8 @@ namespace DChild.Gameplay.Narrative
             {
                 yield return null;
             }
+
+            m_afterWakeupDialogue.OnUse();
 
             SetStorePickupSequence(true);
             GameplaySystem.playerManager.StopCharacterControlOverride();

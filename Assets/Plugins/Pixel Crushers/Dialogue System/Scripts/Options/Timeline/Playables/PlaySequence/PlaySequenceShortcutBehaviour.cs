@@ -47,8 +47,6 @@ namespace PixelCrushers.DialogueSystem
             m_isExecuted = true;
         }
 
-
-
         private string GetSequence()
         {
             switch (m_sequence)
