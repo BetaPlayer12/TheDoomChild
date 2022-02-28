@@ -1,5 +1,7 @@
 ﻿using Doozy.Engine;
 using PixelCrushers;
+using PixelCrushers.DialogueSystem;
+using UnityEngine;
 
 namespace DChild.UI
 {
