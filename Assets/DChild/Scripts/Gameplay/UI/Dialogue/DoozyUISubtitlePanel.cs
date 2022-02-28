@@ -12,6 +12,8 @@ namespace DChild.UI
         private static List<Button> m_continueButtons = new List<Button>();
         private static bool isActive = true;
 
+        public static AbstractTypewriterEffect currentTypeWriterEffect { get; private set; }
+
         public static void SetContinueButtonInteractibility(bool value)
         {
             isActive = value;
@@ -32,6 +34,7 @@ namespace DChild.UI
             panelState = PanelState.Opening;
             onOpen.Invoke();
 
+            currentTypeWriterEffect = subtitleText.gameObject.GetComponent<AbstractTypewriterEffect>();
             //GameEventMessage.SendEvent($"Dialogue Start");
 
             // With quick panel changes, panel may not reach OnEnable/OnDisable before being reused.
