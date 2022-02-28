@@ -69,6 +69,11 @@ namespace DChild.Gameplay.Characters.Enemies
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
 
+            [Title("Events")]
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_hitboxBBEvent;
+            public string hitboxBBEvent => m_hitboxBBEvent;
+
             public override void Initialize()
             {
 #if UNITY_EDITOR
@@ -447,6 +452,19 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
+        private void AttackBB()
+        {
+            StartCoroutine(AttackBBRoutine());
+        }
+
+        private IEnumerator AttackBBRoutine()
+        {
+            m_attackBB.enabled = true;
+            yield return new WaitForSeconds(0.25f);
+            m_attackBB.enabled = false;
+            yield return null;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -463,6 +481,8 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_randomIdleRoutine = StartCoroutine(RandomIdleRoutine());
             }
             m_startPoint = transform.position;
+
+            m_spineEventListener.Subscribe(m_info.hitboxBBEvent, AttackBB);
         }
 
         protected override void Awake()
@@ -688,7 +708,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetInfo.Set(null, null);
             m_isDetecting = false;
             m_enablePatience = false;
-            m_attackBB.enabled = true;
+            m_attackBB.enabled = false;
             m_torchFX.Play();
             if (m_sneerRoutine != null)
             {
