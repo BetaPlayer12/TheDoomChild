@@ -41,10 +41,13 @@ namespace PixelCrushers.DialogueSystem
         public int entryID;
 
         public EndBehaviour endBehaviour;
+        public double waitForInput = 0.5f;
 
-        public double waitForInput;
+        [HideInInspector]
+        public string entryText;
+        [HideInInspector]
         public double end;
-
+        [HideInInspector]
         public bool m_isWaitingForInput;
 
         public string GetEndBehaviourSequence()

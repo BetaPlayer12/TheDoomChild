@@ -19,6 +19,8 @@ namespace PixelCrushers.DialogueSystem
 
         public double end;
 
+        public DialogueBehaviour template => m_template;
+
         public ClipCaps clipCaps
         {
             get { return ClipCaps.None; }

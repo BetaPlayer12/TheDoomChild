@@ -23,6 +23,10 @@ namespace PixelCrushers.DialogueSystem
                 if (myAsset)
                 {
                     myAsset.end = clip.end;
+                    var text = myAsset.template.entryText;
+                    var textLenght = Mathf.Min(text.Length, 17);
+
+                    clip.displayName = myAsset.template.entryText.Substring(0, textLenght) + (text.Length > 17 ? "..." : "");
                 }
             }
 
