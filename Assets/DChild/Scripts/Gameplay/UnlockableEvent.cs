@@ -118,7 +118,15 @@ namespace DChild.Gameplay
                 m_requirements[i].SetComplete(requirementState[i]);
             }
         }
-
+        public void Initialize()
+        {
+            m_isUnlocked = false;
+            m_onLocked?.Invoke();
+            for (int i = 0; i < m_requirements.Length; i++)
+            {
+                m_requirements[i].SetComplete(false);
+            }
+        }
         public void SetLock(bool isLocked)
         {
             m_isUnlocked = !isLocked;

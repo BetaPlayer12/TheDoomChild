@@ -40,7 +40,10 @@ namespace DChild.Gameplay
         {
             m_wasTriggered = ((SaveData)data).isTriggered;
         }
-
+        public void Initialize()
+        {
+            m_wasTriggered = false;
+        }
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Hitbox"))

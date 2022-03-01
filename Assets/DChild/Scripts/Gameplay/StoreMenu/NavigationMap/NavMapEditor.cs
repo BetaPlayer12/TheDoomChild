@@ -36,7 +36,6 @@ namespace DChild.Gameplay.NavigationMap
 #if UNITY_EDITOR
             if (m_includePOI)
             {
-
                 m_poiSerializationConfig.SerializeToDatabase();
             }
             if (m_includeFOW)
@@ -51,7 +50,6 @@ namespace DChild.Gameplay.NavigationMap
 
 #endif
         }
-
 
         private void Start()
         {

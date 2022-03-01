@@ -113,7 +113,14 @@ namespace DChild.Gameplay.Environment
         }
 
         public ISaveData Save() => new SaveData(m_slots.Select(x => x.ID), m_slots.Select(x => x.isOccupied), m_activatedSlots);
-
+        public void Initialize()
+        {
+            for (int i = 0; i < m_activationIndicators.Count; i++)
+            {
+                m_activationIndicators[i].SetState(false);
+            }
+            m_incompleteEvent?.Invoke();
+        }
         private void OnSlotStateChange(object sender, EventActionArgs eventArgs)
         {
             var slot = (CelestialSlot)sender;

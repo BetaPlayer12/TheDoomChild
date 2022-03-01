@@ -35,8 +35,13 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private Vector3 m_promptOffset;
         [SerializeField]
+        private Sprite m_closeVersion;
+        [SerializeField]
+        private Sprite m_openVersion;
+        [SerializeField]
         private ILootDataContainer m_loot;
         private bool m_isLooted;
+
 
         public bool showPrompt => m_isLooted == false;
 
@@ -51,22 +56,29 @@ namespace DChild.Gameplay.Environment
                 //Force Player Animation?
                 //Enable Cinematic Thingy?
                 //Temporary Fix, If All Chest are the same dont make UnityEvent
-                gameObject.SetActive(false);
+                GetComponent<SpriteRenderer>().sprite = m_openVersion;
+                //gameObject.SetActive(false);
                 
             }
             else
             {
                 //Temporary Fix, If All Chest are the same dont make UnityEvent
-                gameObject.SetActive(true);
+                GetComponent<SpriteRenderer>().sprite = m_closeVersion;
+                //gameObject.SetActive(true);
             }
         }
-
+        public void Initialize()
+        {
+            m_isLooted = false;
+            gameObject.SetActive(true);
+        }
         public ISaveData Save() => new SaveData(m_isLooted);
 
         public void Interact(Character character)
         {
-            m_loot.DropLoot(transform.position);
+            m_loot?.DropLoot(transform.position);
             m_isLooted = true;
+            GetComponent<SpriteRenderer>().sprite = m_openVersion;
             Debug.Log("Chest Opened");
         }
 

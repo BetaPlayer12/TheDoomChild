@@ -55,6 +55,7 @@ namespace DChild.Gameplay.Cinematics
             var animation = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
             var timelineAsset = m_cutscene.playableAsset as TimelineAsset;
 
+
             for (int i = 0; i < timelineAsset.rootTrackCount; i++)
             {
                 var rootTrack = timelineAsset.GetRootTrack(i);

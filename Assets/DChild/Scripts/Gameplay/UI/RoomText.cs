@@ -42,6 +42,10 @@ namespace DChild.Gameplay.UI
             m_Shown = saveData.Shown;
 
         }
+        public void Initialize()
+        {
+            m_Shown = false;
+        }
         private IEnumerator DelayedFade()
         {
             yield return new WaitForSeconds(m_TextFadeDelay);

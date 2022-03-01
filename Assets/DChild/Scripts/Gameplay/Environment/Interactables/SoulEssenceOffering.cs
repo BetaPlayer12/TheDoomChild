@@ -114,7 +114,11 @@ namespace DChild.Gameplay.Environment
         {
             return new SaveData(m_currentAmount);
         }
-
+        public void Initialize()
+        {
+            m_currentAmount = 0;
+            m_startAsIncomplete?.Invoke();
+        }
         private IEnumerator DelayedReenableTrigger()
         {
             m_trigger.enabled = false;

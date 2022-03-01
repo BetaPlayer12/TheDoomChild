@@ -53,7 +53,11 @@ namespace DChild.Gameplay.Environment
             m_isSuspended = ((SaveData)data).isSuspended;
             SetAs(m_isSuspended);
         }
-
+        public void Initialize()
+        {
+            m_isSuspended = true;
+            SetAs(m_isSuspended);
+        }
         public void Unsuspend()
         {
             if (m_isSuspended)

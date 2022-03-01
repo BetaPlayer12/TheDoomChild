@@ -68,7 +68,11 @@ namespace DChild.Gameplay.Items
             m_model.SetActive(!m_hasBeenPickedUp);
             m_trigger.enabled = !m_hasBeenPickedUp;
         }
-
+        public void Initialize()
+        {
+            m_model.SetActive(true);
+            m_trigger.enabled = true;
+        }
         private void OnDrawGizmosSelected()
         {
             var position = promptPosition;
