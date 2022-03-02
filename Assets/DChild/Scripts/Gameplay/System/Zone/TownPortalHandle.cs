@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment
 {
-    public struct OverworldPortalHandle : ISwitchHandle
+    public struct TownPortalHandle : ISwitchHandle
     {
         [SerializeField]
         private Transform m_promptSource;
