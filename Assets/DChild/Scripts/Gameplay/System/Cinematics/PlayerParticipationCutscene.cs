@@ -24,6 +24,14 @@ namespace DChild.Gameplay.Cinematics
         private Animator m_animator;
         private Scene m_originalScene;
 
+        public void RemovePlayerFromCutscene()
+        {
+            m_controlledObject.transform.parent = null;
+            SceneManager.MoveGameObjectToScene(m_controlledObject.gameObject, m_originalScene);
+            m_animator.enabled = true;
+            GameplaySystem.playerManager.StopCharacterControlOverride();
+        }
+
         private void OnCutscenePlay(PlayableDirector obj)
         {
             m_controlledObject = GameplaySystem.playerManager.player.character.GetComponent<PlayerControlledObject>();
@@ -40,10 +48,7 @@ namespace DChild.Gameplay.Cinematics
 
         private void OnCutsceneDone(PlayableDirector obj)
         {
-            m_controlledObject.transform.parent = null;
-            SceneManager.MoveGameObjectToScene(m_controlledObject.gameObject, m_originalScene);
-            m_animator.enabled = true;
-            GameplaySystem.playerManager.StopCharacterControlOverride();
+            RemovePlayerFromCutscene();
         }
 
         private void Awake()

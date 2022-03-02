@@ -535,7 +535,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             StopAllCoroutines();
 
-            m_character.transform.position = position;
+            m_character.transform.position = m_startPoint;
             m_aggroCollider.enabled = false;
             m_character.physics.simulateGravity = false;
             m_character.physics.SetVelocity(Vector2.zero);
@@ -604,6 +604,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!m_character.physics.simulateGravity)
                     {
                         m_animation.EnableRootMotion(true, false);
+                        m_aggroCollider.enabled = true;
                         m_character.physics.simulateGravity = true;
                         m_hitbox.Enable();
                     }

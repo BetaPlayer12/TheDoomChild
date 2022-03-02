@@ -62,6 +62,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private WhipAttack m_whip;
         private ProjectileThrow m_projectileThrow;
         private PlayerBlock m_block;
+        private PlayerIntroControlsController m_introController;
         #endregion
 
         private bool m_updateEnabled = true;
@@ -304,6 +305,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_projectileThrow = m_character.GetComponentInChildren<ProjectileThrow>();
             m_projectileThrow.ExecutionRequested += OnProjectileThrowRequest;
             m_block = m_character.GetComponentInChildren<PlayerBlock>();
+            m_introController = m_character.GetComponent<PlayerIntroControlsController>();
 
             m_updateEnabled = true;
         }
@@ -382,6 +384,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (m_state.isDead)
                 return;
+
+            if (m_introController?.IsUsingIntroControls() ?? false)
+            {
+
+            }
 
             if (m_shadowGaugeRegen?.CanRegen() ?? false)
             {
