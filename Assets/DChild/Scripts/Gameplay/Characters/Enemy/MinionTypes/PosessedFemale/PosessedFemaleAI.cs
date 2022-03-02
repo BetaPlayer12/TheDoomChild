@@ -311,6 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ExplodeRoutine()
         {
+            Explode();
             m_hitbox.Disable();
             m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
             m_animation.SetAnimation(0, m_info.explodeAttack.animation, false);
@@ -328,6 +329,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SpawnExplodeHitboxRoutine()
         {
+            yield return new WaitForSeconds(1f);
             m_explodeHitbox.SetActive(true);
             yield return new WaitForSeconds(.25f);
             m_explodeHitbox.SetActive(false);
@@ -414,7 +416,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_currentAttack = Attack.AttackEnrage;
             m_currentAttack = Attack.Attack;
             m_animation.SetAnimation(0, m_info.patrol.animation, true);
-            m_spineEventListener.Subscribe(m_info.explodeEvent, Explode);
+            //m_spineEventListener.Subscribe(m_info.explodeEvent, Explode);
             //m_selfCollider.SetActive(false);
         }
 

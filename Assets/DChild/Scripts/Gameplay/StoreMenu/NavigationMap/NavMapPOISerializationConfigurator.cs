@@ -18,11 +18,21 @@ namespace DChild.Gameplay.NavigationMap
         }
 
         [SerializeField]
+        public enum POIItems
+        {
+            savepoint,
+            obstacle,
+            realmgate,
+        }
+
+        [SerializeField]
         private DialogueDatabase m_database;
         [SerializeField, HorizontalGroup("NamePrefix")]
         private Environment.Location m_location;
         [SerializeField, TableList(AlwaysExpanded = true)]
         private ScenePOIInfo[] m_info;
+        [SerializeField]
+        private POIItems m_poiItems;
 
 
         public ScenePOIInfo[] sceneInfo => m_info;
@@ -32,21 +42,45 @@ namespace DChild.Gameplay.NavigationMap
         [Button]
         public void SerializeToDatabase()
         {
-            m_database.variables.Clear();
-            var template = Template.FromDefault();
-            for(int count = 0; count < m_info.Length; count++)
+            for (int y = 0; y < m_database.variables.Count; y++)
             {
-                var info = m_info[count];
-                for(int i = 0; i < info.m_itemCount; i++)
+                if (m_database.variables[y].fields[0].value.Contains("POI"))
+                {
+                    if (m_database.variables[y].fields[0].value.Contains($"{m_poiItems}"))
+                    {
+                        m_database.variables.Remove(m_database.variables[y]);
+                        y--;
+                    }
+                    else
+                    {
+
+                    }
+
+
+                }
+                else
+                {
+
+                }
+            }
+
+
+            var template = Template.FromDefault();
+            for (int k = 0; k < m_info.Length; k++)
+            {
+                var info = m_info[k];
+                for (int i = 0; i < info.m_itemCount; i++)
                 {
                     var varID = template.GetNextVariableID(m_database);
                     var variable = template.CreateVariable(varID, CreateVariableName(info.m_sceneIndex, i), "false", FieldType.Boolean);
                     m_database.variables.Add(variable);
                 }
             }
+
         }
 
-        private string CreateVariableName(int sceneIndex, int index) => $"{m_location}_{sceneIndex}_POI_{index}";
+
+        private string CreateVariableName(int sceneIndex, int index) => NavMapUtility.CreatePointOfInterestVarableName(m_location, sceneIndex,$"{m_poiItems}", index);
 
     }
 }

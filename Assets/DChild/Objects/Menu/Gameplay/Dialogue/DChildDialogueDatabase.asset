@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 935899b62f48ae5498594680ed17d133, type: 3}
   m_Name: DChildDialogueDatabase
   m_EditorClassIdentifier: 
-  version: 
-  author: 
-  description: 
+  version: v0.1
+  author: Ayan
+  description: Contains Actors and Locations that encompasses the entire game and
+    Quests, This is mainly used so that their data can be merged other Databases
   globalUserScript: 
   emphasisSettings:
   - color: {r: 1, g: 1, b: 1, a: 1}
@@ -45,48 +46,44 @@ MonoBehaviour:
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Do not use this not unless the player chooses a response
+      value: The Main Character of the game
       type: 0
       typeString: CustomFieldType_Text
     - title: IsPlayer
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
-      value: Zee
+      value: Z
       type: 0
       typeString: CustomFieldType_Text
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: bc389d75286c01049be8bcfceb2bee80, type: 3}
+    spritePortrait: {fileID: 21300000, guid: 56386befa9a8e4c42ad46460218563a3, type: 3}
     alternatePortraits: []
     spritePortraits: []
-  - id: 3
+  - id: 2
     fields:
     - title: Name
-      value: Skeleton
+      value: Store
       type: 0
-      typeString: CustomFieldType_Text
+      typeString: 
     - title: Pictures
       value: '[]'
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: 
+      value: The book that Player has
       type: 0
-      typeString: CustomFieldType_Text
+      typeString: 
     - title: IsPlayer
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: Display Name
-      value: 
-      type: 0
-      typeString: 
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: e02639f95ff6d6e448fb362584ee5e7e, type: 3}
+    spritePortrait: {fileID: 21300000, guid: b5fac9fdba3b9c748841b7b8358ebc8b, type: 3}
     alternatePortraits: []
     spritePortraits: []
-  - id: 2
+  - id: 3
     fields:
     - title: Name
       value: Albin
@@ -97,39 +94,51 @@ MonoBehaviour:
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: The Store Merchant
+      value: Some dude
       type: 0
       typeString: 
     - title: IsPlayer
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: Display Name
-      value: 
-      type: 0
-      typeString: 
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: dd80db3a748edcd43a45e7a9538a0f77, type: 3}
+    spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  items: []
-  locations: []
-  variables:
+  items:
   - id: 1
     fields:
     - title: Name
-      value: Alert
+      value: New Game Intro
       type: 0
       typeString: 
-    - title: Initial Value
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
     - title: Description
       value: 
       type: 0
       typeString: 
-  - id: 3
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: active
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  locations: []
+  variables:
+  - id: 5
     fields:
     - title: Name
       value: FurryWhispererEquipped
@@ -143,6 +152,20 @@ MonoBehaviour:
       value: Can talk to Furry NPCs
       type: 0
       typeString: 
+  - id: 6
+    fields:
+    - title: Name
+      value: Alert
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   conversations:
   - id: 3
     fields:

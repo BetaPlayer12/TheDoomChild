@@ -1,5 +1,7 @@
 ﻿using DChild.Gameplay.Cinematics;
 using DChild.Serialization;
+using Doozy.Engine;
+using PixelCrushers.DialogueSystem;
 using Spine.Unity;
 using System;
 using System.Collections;
@@ -37,6 +39,8 @@ namespace DChild.Gameplay.Narrative
         [SerializeField]
         private AnimationReferenceAsset m_playerStandAnimation;
         [SerializeField]
+        private DialogueSystemTrigger m_afterWakeupDialogue;
+        [SerializeField]
         private GameObject m_storePickupSequence;
 
         private bool m_isDone;
@@ -69,14 +73,13 @@ namespace DChild.Gameplay.Narrative
 
         public void PromptPlayerToStand()
         {
-            Debug.Log("Player Prompt Show");
             StopAllCoroutines();
             StartCoroutine(PromptPlayerToStandRoutine());
         }
 
         public void SetStorePickupSequence(bool startSequence)
         {
-            m_storePickupSequence.SetActive(!startSequence);
+            m_storePickupSequence.SetActive(startSequence);
         }
 
         public void EndEvent()
@@ -86,8 +89,10 @@ namespace DChild.Gameplay.Narrative
 
         private IEnumerator PromptPlayerToStandRoutine()
         {
+            GameplaySystem.playerManager.OverrideCharacterControls();
             var skeleton = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
 
+            GameEventMessage.SendEvent("Prompt_Wakeup_Start");
             bool hasPressedPrompt = false;
             while (hasPressedPrompt == false)
             {
@@ -97,13 +102,17 @@ namespace DChild.Gameplay.Narrative
                 }
                 yield return null;
             }
+            GameEventMessage.SendEvent("Prompt_Wakeup_Done");
 
             var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);
-            while(standAnimation.IsComplete ==false)
+            while (standAnimation.IsComplete == false)
             {
                 yield return null;
             }
 
+            m_afterWakeupDialogue.OnUse();
+
+            SetStorePickupSequence(true);
             GameplaySystem.playerManager.StopCharacterControlOverride();
             yield return null;
         }

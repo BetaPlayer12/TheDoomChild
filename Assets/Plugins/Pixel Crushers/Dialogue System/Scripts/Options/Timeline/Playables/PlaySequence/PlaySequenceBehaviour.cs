@@ -22,7 +22,6 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("(Optional) The other subject in the sequence.")]
         public Transform listener;
-
     }
 }
 #endif
