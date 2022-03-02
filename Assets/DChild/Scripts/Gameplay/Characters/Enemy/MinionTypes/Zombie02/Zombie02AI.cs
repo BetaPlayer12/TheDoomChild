@@ -175,6 +175,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_velOffset;
         [SerializeField, TabGroup("Cannon Values")]
         private Vector2 m_targetOffset;
+        [SerializeField, TabGroup("Skins"), SpineSkin]
+        private List<string> m_spineSkin;
+
 
         private float m_targetDistance;
         private Vector2 m_targetLastPos;
@@ -454,6 +457,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentMoveSpeed = UnityEngine.Random.Range(m_info.run.speed * .75f, m_info.run.speed * 1.25f);
             m_currentFullCD = UnityEngine.Random.Range(m_info.attackCD * .5f, m_info.attackCD * 2f);
             m_startPoint = transform.position;
+            //m_animation.skeletonAnimation.initialSkinName = m_spineSkin[UnityEngine.Random.Range(0, m_spineSkin.Count)];
+            m_animation.skeletonAnimation.skeleton.SetSkin(m_spineSkin[UnityEngine.Random.Range(0, m_spineSkin.Count)]);
         }
 
         protected override void Awake()
