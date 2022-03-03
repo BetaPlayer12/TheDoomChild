@@ -11,7 +11,8 @@ namespace DChild.Gameplay.Characters.Players
         event EventAction<StatValueEventArgs> StatsChanged;
         void AddStat(PlayerStat stat, int value);
         void SetBaseStat(PlayerStat stat, int value);
-        int GetStat(PlayerStat stat);
+        int GetTotalStat(PlayerStat stat);
+        int GetBaseStat(PlayerStat stat);
     }
 
     [AddComponentMenu("DChild/Gameplay/Player/Player Stats")]
@@ -32,10 +33,11 @@ namespace DChild.Gameplay.Characters.Players
         {
             m_addedStats.AddStat(stat, value);
             m_totalStats.SetStat(stat, m_addedStats.GetStat(stat) + m_baseStat.GetStat(stat));
-            StatsChanged?.Invoke(this, new StatValueEventArgs(stat, GetStat(stat)));
+            StatsChanged?.Invoke(this, new StatValueEventArgs(stat, GetTotalStat(stat)));
         }
 
-        public int GetStat(PlayerStat stat) => m_totalStats.GetStat(stat);
+        public int GetTotalStat(PlayerStat stat) => m_totalStats.GetStat(stat);
+        public int GetBaseStat(PlayerStat stat) => m_baseStat.GetStat(stat);
 
         public void SetBaseStat(PlayerStat stat, int value)
         {

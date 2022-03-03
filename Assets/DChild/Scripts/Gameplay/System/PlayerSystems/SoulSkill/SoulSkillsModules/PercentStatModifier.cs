@@ -65,7 +65,7 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
         }
         private void IncreaseAttack(IPlayerStats stats)
         {
-            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.MaxAttack) * value);
+            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetTotalStat(PlayerStat.MaxAttack) * value);
             stats.AddStat(PlayerStat.Attack, m_currentIncreasedValue);
         }
 
@@ -73,13 +73,13 @@ namespace DChild.Gameplay.Characters.Players.SoulSkills
 
         private void IncreaseMagic(IPlayerStats stats)
         {
-            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.Magic) * value);
+            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetTotalStat(PlayerStat.Magic) * value);
             stats.AddStat(PlayerStat.Magic, m_currentIncreasedValue);
         }
 
         private void IncreaseHealth(IPlayerStats stats)
         {
-            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetStat(PlayerStat.Health) * value);
+            m_currentIncreasedValue = Mathf.FloorToInt(stats.GetTotalStat(PlayerStat.Health) * value);
             stats.AddStat(PlayerStat.Health, m_currentIncreasedValue);
         }
 
