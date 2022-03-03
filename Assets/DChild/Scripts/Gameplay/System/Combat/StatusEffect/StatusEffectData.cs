@@ -29,16 +29,22 @@ namespace DChild.Gameplay.Combat.StatusAilment
         {
             var baseDuration = m_duration;
             var duration = m_hasDuration ? m_duration : -1;
-            
-            IStatusEffectUpdatableModule[] list = new IStatusEffectUpdatableModule[m_updatableModule.Length];
-            for (int i = 0; i < list.Length; i++)
+
+            IStatusEffectModule[] moduleList = new IStatusEffectModule[m_modules.Length];
+            for (int i = 0; i < moduleList.Length; i++)
             {
-                list[i] = m_updatableModule[i].CreateCopy();
+                moduleList[i] = m_modules[i].GetInstance();
             }
-            return new StatusEffectHandle(m_type, duration, baseDuration ,m_modules, list);
+
+            IStatusEffectUpdatableModule[] updatebleModuleList = new IStatusEffectUpdatableModule[m_updatableModule.Length];
+            for (int i = 0; i < updatebleModuleList.Length; i++)
+            {
+                updatebleModuleList[i] = m_updatableModule[i].CreateCopy();
+            }
+            return new StatusEffectHandle(m_type, duration, baseDuration, moduleList, updatebleModuleList);
         }
 
-      
+
 
 #if UNITY_EDITOR
         private void ValidateUpdatbleModules()

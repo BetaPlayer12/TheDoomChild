@@ -1,5 +1,4 @@
 ﻿using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Characters.Players;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat.StatusAilment
@@ -20,6 +19,8 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         [SerializeField]
         private Info[] m_infos;
+
+        public IStatusEffectModule GetInstance() => this;
 
         public void Start(Character character)
         {
