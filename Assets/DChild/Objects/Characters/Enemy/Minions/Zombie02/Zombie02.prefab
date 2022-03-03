@@ -218,6 +218,35 @@ MonoBehaviour:
   m_idleAnimation: idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
+--- !u!60 &8511274984297557622
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904700037335739415}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -4.3212, y: 4.9747}
+      - {x: -4.2738, y: -3.1715999}
+      - {x: 2.3344, y: -3.1557999}
+      - {x: 2.2047, y: 4.9473}
 --- !u!114 &214876646884320454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +343,21 @@ MonoBehaviour:
   m_colorToUse: {r: 0.34901962, g: 0.11764706, b: 0.039215688, a: 0.5882353}
   m_overrideScale: 1
   m_scaleToUse: {x: 3, y: 3, z: 3}
+--- !u!114 &2588257472859656141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4897826137238022958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b86047542d69154baa4237b097c65c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_skins:
+  - Skin1
+  - Skin2
 --- !u!114 &2651324241411837728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,9 +471,6 @@ MonoBehaviour:
   m_posOffset: {x: 1, y: 0.4}
   m_velOffset: 0.4
   m_targetOffset: {x: 1.6, y: 1}
-  m_spineSkin:
-  - Skin1
-  - Skin2
   m_targetPointIK: {fileID: 3917343953072416968}
   m_willPatrol: 1
 --- !u!114 &5909547384001275585
@@ -505,35 +546,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   m_data: {fileID: 0}
---- !u!60 &5699544415725339224
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1904700037335739415}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -4.3212, y: 4.9747}
-      - {x: -4.2738, y: -3.1715999}
-      - {x: 2.3344, y: -3.1557999}
-      - {x: 2.2047, y: 4.9473}
 --- !u!1001 &1826981265781363870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -952,6 +964,7 @@ PrefabInstance:
     - {fileID: 4696180413229138451, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
     - {fileID: 7696471310463999739, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
     - {fileID: 2496587601386906077, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
+    - {fileID: 4923985463854967844, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
 --- !u!114 &6245396588157743216 stripped
 MonoBehaviour:
@@ -983,6 +996,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4491238784578691020}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4647224069506375696 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9091171475860733916, guid: 5ae226b9090326b4f94a7b4fafd7af81,
+    type: 3}
+  m_PrefabInstance: {fileID: 4491238784578691020}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &6203659355125055634 stripped
 Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 7513067069806944094, guid: 5ae226b9090326b4f94a7b4fafd7af81,
@@ -1025,18 +1050,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4491238784578691020}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4647224069506375696 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9091171475860733916, guid: 5ae226b9090326b4f94a7b4fafd7af81,
-    type: 3}
-  m_PrefabInstance: {fileID: 4491238784578691020}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11a5cea4c16e7c4478a55620f5e666e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &2842447741400440796 stripped
 CircleCollider2D:
   m_CorrespondingSourceObject: {fileID: 1812262104096161808, guid: 5ae226b9090326b4f94a7b4fafd7af81,
