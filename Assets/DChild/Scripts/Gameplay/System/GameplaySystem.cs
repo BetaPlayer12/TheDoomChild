@@ -246,7 +246,6 @@ namespace DChild.Gameplay
             if (m_campaignToLoad != null)
             {
                 m_campaignSerializer.SetSlot(m_campaignToLoad);
-                PersistentDataManager.ApplySaveData(m_campaignToLoad.dialogueSaveData);
                 m_campaignToLoad = null;
             }
         }
