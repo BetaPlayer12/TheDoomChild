@@ -118,7 +118,7 @@ namespace DChild.Gameplay.Environment
         public void SetAsVisible(bool isVisible)
         {
             StopAllCoroutines();
-            LerpColors(isVisible ? 0 : 1);
+            LerpColors(isVisible ? 1 : 0);
             SetRenderersActive(isVisible);
             m_visible = isVisible;
         }
