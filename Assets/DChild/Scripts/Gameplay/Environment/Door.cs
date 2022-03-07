@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Interractables
 {
+
     public class Door : MonoBehaviour, ISerializableComponent, ILerpHandling
     {
         [System.Serializable]
@@ -66,8 +67,6 @@ namespace DChild.Gameplay.Environment.Interractables
             }
 
 #if UNITY_EDITOR
-
-
             [ResponsiveButtonGroup("Open/Button"), Button("Use Current"), ShowIf("m_doorPanel")]
             private void UseCurrentForOpenPosition()
             {
