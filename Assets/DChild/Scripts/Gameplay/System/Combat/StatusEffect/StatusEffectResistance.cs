@@ -23,7 +23,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         [SerializeField]
         private StatusEffectChanceData m_data;
         [ShowInInspector, HideInEditorMode]
-        private Dictionary<StatusEffectType, int> m_resistances;
+        private Dictionary<StatusEffectType, int> m_resistances = new Dictionary<StatusEffectType, int>();
 
         public event EventAction<ResistanceEventArgs> ResistanceChange;
 

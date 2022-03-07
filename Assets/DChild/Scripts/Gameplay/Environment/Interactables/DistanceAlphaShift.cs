@@ -6,6 +6,7 @@
  * 
  **************************************/
 
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Environment
@@ -13,7 +14,7 @@ namespace DChild.Gameplay.Environment
     public class DistanceAlphaShift : MonoBehaviour
     {
         [SerializeField, Range(0, 1), Tooltip("When Player is in minDistanceThreshold")]
-        private float m_fromAlpha =0 ;
+        private float m_fromAlpha = 0;
         [SerializeField, Range(0, 1), Tooltip("When Player is in maxDistanceThreshold")]
         private float m_toAlpha = 1f;
 
@@ -24,12 +25,16 @@ namespace DChild.Gameplay.Environment
 
         [SerializeField]
         private Transform m_spriteCenter;
+        [SerializeField, HideIf("m_distanceToReferenceIsPlayer")]
+        private Transform m_distanceToReference;
+        [SerializeField, HideInPlayMode]
+        private bool m_distanceToReferenceIsPlayer;
         [SerializeField]
         private SpriteRenderer[] m_renderers;
 
         public Vector3 spriteCenter => m_spriteCenter?.position ?? transform.position;
 
-        private void SetRendererAlpha(SpriteRenderer renderer,float value)
+        private void SetRendererAlpha(SpriteRenderer renderer, float value)
         {
             var color = renderer.color;
             color.a = value;
@@ -38,7 +43,7 @@ namespace DChild.Gameplay.Environment
 
         public void LateUpdate()
         {
-            var playerPosition = GameplaySystem.playerManager.player.character.centerMass.position;
+            var playerPosition = m_distanceToReference.position;
             var distance = Vector3.Distance(spriteCenter, playerPosition);
 
             var lerpValue = 0f;
@@ -70,6 +75,7 @@ namespace DChild.Gameplay.Environment
             m_toAlpha = 1f;
             m_minDistanceThreshold = 5;
             m_maxDistanceThreshold = 20f;
+            m_distanceToReferenceIsPlayer = true;
         }
 
         private void OnDrawGizmosSelected()
@@ -81,5 +87,13 @@ namespace DChild.Gameplay.Environment
             Gizmos.DrawSphere(spriteCenter, m_maxDistanceThreshold);
         }
 
+
+        private void Start()
+        {
+            if (m_distanceToReferenceIsPlayer)
+            {
+                m_distanceToReference = GameplaySystem.playerManager.player.character.centerMass;
+            }
+        }
     }
 }

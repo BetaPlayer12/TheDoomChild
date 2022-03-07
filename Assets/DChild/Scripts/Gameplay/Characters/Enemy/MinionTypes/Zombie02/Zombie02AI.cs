@@ -176,6 +176,7 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Cannon Values")]
         private Vector2 m_targetOffset;
 
+
         private float m_targetDistance;
         private Vector2 m_targetLastPos;
 
