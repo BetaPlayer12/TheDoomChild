@@ -21,6 +21,8 @@ namespace DChild.Gameplay.Characters
         public bool m_autoFlinch;
         [SerializeField]
         public bool m_enableMixFlinch = true;
+        [SerializeField]
+        public bool m_enableEmpytyIdle = true;
         [SerializeField, Range(0f, 1f), ShowIf("m_enableMixFlinch")]
         private float m_alphaBlendStrength = 0.5f;
         [SerializeField, Range(0f, 1f), ShowIf("m_enableMixFlinch")]
@@ -114,7 +116,14 @@ namespace DChild.Gameplay.Characters
         private IEnumerator FlinchMixRoutine()
         {
             m_spine.SetAnimation(1, m_animation, false, 0).MixBlend = MixBlend.First;
-            m_spine.AddEmptyAnimation(1, m_mixDuration, 0).Alpha = 0f;
+            if (m_enableEmpytyIdle)
+            {
+                m_spine.AddEmptyAnimation(1, m_mixDuration, 0).Alpha = 0f;
+            }
+            else
+            {
+                m_spine.AddAnimation(1, m_idleAnimation, true, 0).Alpha = 0f;
+            }
             m_spine.animationState.GetCurrent(1).Alpha = m_alphaBlendStrength;
             m_spine.animationState.GetCurrent(1).MixDuration = 1;
             m_spine.animationState.GetCurrent(1).MixTime = 1;
