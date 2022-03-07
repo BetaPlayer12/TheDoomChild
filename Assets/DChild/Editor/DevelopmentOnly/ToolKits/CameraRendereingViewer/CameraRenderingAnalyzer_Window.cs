@@ -28,10 +28,15 @@ namespace DChildEditor.Utility
         private CameraRenderAnalyzer.Info[] m_results;
         [SerializeField, DisplayAsString, ListDrawerSettings(HideAddButton = true, HideRemoveButton = true, IsReadOnly = true, Expanded = true), TabGroup("Sorting Layers")]
         private List<string> m_sortingLayers;
+        [SerializeField, TableList(AlwaysExpanded = true), TabGroup("Sprite Breakdown")]
+        private SceneSpriteBreakdown.SpriteBreakDown[] m_spriteBreakdown;
 
         [SerializeField, HideInInspector]
         private CameraRenderAnalyzer m_instance;
         private bool m_stateChange;
+
+        [SerializeField, HideInInspector]
+        private SceneSpriteBreakdown m_breakdownInstance;
 
         private PlayModeStateChange m_currentChangeState;
         private bool allowUpdate => m_currentChangeState != PlayModeStateChange.ExitingEditMode && m_currentChangeState != PlayModeStateChange.ExitingPlayMode;
@@ -41,9 +46,12 @@ namespace DChildEditor.Utility
             base.Initialize();
             m_camera = Camera.main;
             m_instance = new CameraRenderAnalyzer(Camera.main);
+            m_breakdownInstance = new SceneSpriteBreakdown(Camera.main);
             m_sortingLayers = m_instance.sortingLayers;
             m_instance.RecordRenderers();
+            m_breakdownInstance.GetSpriteRenderers();
             m_results = m_instance.AnalyzeShownSprites();
+            m_spriteBreakdown = m_breakdownInstance.AnalyzedObjectRenderers();
 
             EditorApplication.playModeStateChanged -= OnPlayModeChange;
             EditorSceneManager.sceneClosed -= OnSceneClosed;
@@ -51,7 +59,6 @@ namespace DChildEditor.Utility
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
-
             EditorApplication.playModeStateChanged += OnPlayModeChange;
             EditorSceneManager.sceneClosed += OnSceneClosed;
             EditorSceneManager.sceneOpened += OnSceneOpen;
@@ -76,6 +83,7 @@ namespace DChildEditor.Utility
                 m_camera = Camera.main;
             }
             m_instance.SetCamera(m_camera);
+            m_breakdownInstance.SetCamera(m_camera);
         }
 
         private void OnHierarchyChanged()
@@ -84,8 +92,10 @@ namespace DChildEditor.Utility
             {
                 m_camera = Camera.main;
                 m_instance.SetCamera(m_camera);
+                m_breakdownInstance.SetCamera(m_camera);
             }
             m_instance.RecordRenderers();
+            m_breakdownInstance.GetSpriteRenderers();
         }
 
         private void OnSceneOpen(Scene scene, OpenSceneMode mode)
@@ -98,6 +108,7 @@ namespace DChildEditor.Utility
             if (allowUpdate)
             {
                 m_instance.RecordRenderers();
+                m_breakdownInstance.GetSpriteRenderers();
             }
         }
 
@@ -106,6 +117,7 @@ namespace DChildEditor.Utility
             if (allowUpdate)
             {
                 m_instance.RecordRenderers();
+                m_breakdownInstance.GetSpriteRenderers();
             }
         }
 
@@ -122,10 +134,13 @@ namespace DChildEditor.Utility
                 {
                     m_camera = Camera.main;
                     m_instance.SetCamera(m_camera);
+                    m_breakdownInstance.SetCamera(m_camera);
                 }
 
                 m_instance.RecordRenderers();
+                m_breakdownInstance.GetSpriteRenderers();
                 m_results = m_instance.AnalyzeShownSprites();
+                m_spriteBreakdown = m_breakdownInstance.AnalyzedObjectRenderers();
 
             }
         }
@@ -144,6 +159,7 @@ namespace DChildEditor.Utility
         private void Update()
         {
             m_results = m_instance.AnalyzeShownSprites();
+            m_spriteBreakdown = m_breakdownInstance.AnalyzedObjectRenderers();
             Repaint();
         }
     }

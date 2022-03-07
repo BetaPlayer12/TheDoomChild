@@ -124,6 +124,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private IsolatedCharacterPhysics2D m_characterPhysics;
         [SerializeField, TabGroup("Reference")]
         private GameObject m_spriteMask;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_shadow;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_wallSensor;
         [SerializeField, TabGroup("Sensors")]
@@ -236,6 +238,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_movement.Stop();
             m_characterPhysics.UseStepClimb(false);
             m_selfCollider.enabled = false;
+            m_shadow.SetActive(false);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -262,6 +265,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_shadow.SetActive(true);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             GetComponentInChildren<SkeletonAnimation>().maskInteraction = SpriteMaskInteraction.None;
@@ -299,6 +303,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Burrowed:
                     m_animation.EnableRootMotion(false, false);
                     m_spriteMask.SetActive(true);
+                    m_shadow.SetActive(false);
                     m_animation.SetAnimation(0, m_info.burrowedAnimation, true);
                     //m_animation.SetEmptyAnimation(0, 0);
                     break;
