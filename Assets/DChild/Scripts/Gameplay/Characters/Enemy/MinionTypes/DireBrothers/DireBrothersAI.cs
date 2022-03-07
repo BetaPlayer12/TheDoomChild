@@ -288,6 +288,9 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (m_changePhaseCoroutine == null && m_phaseHandle.allowPhaseChange)
             {
+                m_animation.SetEmptyAnimation(0, 0);
+                m_animation.SetEmptyAnimation(1, 0);
+                m_animation.SetEmptyAnimation(2, 0);
                 StopAllCoroutines();
                 m_phaseHandle.allowPhaseChange = false;
                 Debug.Log("DireBrothers Change State");
