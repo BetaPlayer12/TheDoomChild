@@ -1,12 +1,10 @@
 ﻿using Doozy.Engine;
 using PixelCrushers.DialogueSystem;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace DChild.UI
 {
-
     public class DoozyUISubtitlePanel : StandardUISubtitlePanel
     {
         private static List<Button> m_continueButtons = new List<Button>();
