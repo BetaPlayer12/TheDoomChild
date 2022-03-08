@@ -415,6 +415,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_animation.EnableRootMotion(true, false);
             if (m_currentAttackCoroutine != null)
             {
                 StopCoroutine(m_currentAttackCoroutine);
