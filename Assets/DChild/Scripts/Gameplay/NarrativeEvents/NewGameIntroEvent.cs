@@ -42,6 +42,8 @@ namespace DChild.Gameplay.Narrative
         private DialogueSystemTrigger m_afterWakeupDialogue;
         [SerializeField]
         private GameObject m_storePickupSequence;
+        [SerializeField]
+        private ExtraDatabases m_database;
 
         private bool m_isDone;
 
@@ -61,6 +63,7 @@ namespace DChild.Gameplay.Narrative
 
         public void Initialize()
         {
+            m_database.OnUse();
             m_storePickupSequence.SetActive(false);
             m_introCutscene.Play();
         }

@@ -1436,13 +1436,13 @@ MonoBehaviour:
     waitForHideAnimation: 0
     allowForceImmediate: 0
   conversationUIElements:
-    mainPanel: {fileID: 0}
+    mainPanel: {fileID: 7309899279648242410}
     subtitlePanels:
     - {fileID: 7813575458030115212}
     - {fileID: 1513226618614363262}
     - {fileID: 7085184902153295658}
-    defaultNPCSubtitlePanel: {fileID: 0}
-    defaultPCSubtitlePanel: {fileID: 0}
+    defaultNPCSubtitlePanel: {fileID: 1513226618614363262}
+    defaultPCSubtitlePanel: {fileID: 7813575458030115212}
     allowOpenSubtitlePanelsOnStartConversation: 1
     menuPanels: []
     defaultMenuPanel: {fileID: 0}
@@ -1688,8 +1688,7 @@ GameObject:
   - component: {fileID: 7309899279631561479}
   - component: {fileID: 7309899279631561472}
   - component: {fileID: 7309899279631561473}
-  - component: {fileID: 8593127911568379824}
-  - component: {fileID: 5963523638044273379}
+  - component: {fileID: 7631399174731848679}
   m_Layer: 0
   m_Name: Button - Dialogue Continue
   m_TagString: Untagged
@@ -1795,7 +1794,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5963523638044273379}
+      - m_Target: {fileID: 7631399174731848679}
         m_MethodName: OnFastForward
         m_Mode: 1
         m_Arguments:
@@ -2685,19 +2684,9 @@ MonoBehaviour:
         CustomSortingLayer: Default
       Event:
         m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 8593127911568379824}
-            m_MethodName: SendSavedEvent
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: SendMessage(OnSequencerMessage,ContinueDiag,SendMessageOptions.DontRequireReceiver)
-              m_BoolArgument: 0
-            m_CallState: 2
-      GameEvents: []
+          m_Calls: []
+      GameEvents:
+      - ContinueDiag
       SoundData:
         SoundSource: 0
         DatabaseName: General
@@ -4110,7 +4099,7 @@ MonoBehaviour:
   TargetLabel: 1
   TextLabel: {fileID: 0}
   TextMeshProLabel: {fileID: 0}
---- !u!114 &8593127911568379824
+--- !u!114 &7631399174731848679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4119,27 +4108,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7309899279631561475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95ea9eff009fbb642bcdd025d86ddc90, type: 3}
+  m_Script: {fileID: 11500000, guid: 914ca06dbc347df48a5b5f36ad1832e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_event: ContinueDiag
-  m_systemToSendTo: 2
-  m_doozyEvent: 
-  m_masterAudioEvent: 
-  m_dialogueSystemMessage: ContinueDiag
---- !u!114 &5963523638044273379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7309899279631561475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ee3d99442035942b6dd1ede25ff7cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueUI: {fileID: 0}
+  dialogueUI: {fileID: 3130085212731728697}
   typewriterEffect: {fileID: 4539383880214100848}
   hideContinueButtonOnContinue: 0
 --- !u!1 &7309899279648242420
