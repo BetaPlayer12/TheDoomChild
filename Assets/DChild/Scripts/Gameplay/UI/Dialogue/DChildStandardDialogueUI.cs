@@ -51,5 +51,4 @@ namespace DChild.UI
             base.Close();
         }
     }
-
 }
