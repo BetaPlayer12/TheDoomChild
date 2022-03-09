@@ -47,8 +47,8 @@ namespace DChild.Gameplay.Characters.Players
                     m_attacker.SetDamage(CalculateDamage());
                     break;
                 case PlayerStat._COUNT:
-                    m_health.SetMaxValue(m_stats.GetStat(PlayerStat.Health));
-                    m_magic.SetMaxValue(m_stats.GetStat(PlayerStat.Magic));
+                    m_health.SetMaxValue(m_stats.GetTotalStat(PlayerStat.Health));
+                    m_magic.SetMaxValue(m_stats.GetTotalStat(PlayerStat.Magic));
                     m_attacker.SetDamage(CalculateDamage());
                     break;
             }
@@ -56,9 +56,9 @@ namespace DChild.Gameplay.Characters.Players
 
         private void InitializeValues()
         {
-            m_health.SetMaxValue(m_stats.GetStat(PlayerStat.Health));
+            m_health.SetMaxValue(m_stats.GetTotalStat(PlayerStat.Health));
             m_health.ResetValueToMax();
-            m_magic.SetMaxValue(m_stats.GetStat(PlayerStat.Magic));
+            m_magic.SetMaxValue(m_stats.GetTotalStat(PlayerStat.Magic));
             m_magic.ResetValueToMax();
             m_attacker.SetDamage(CalculateDamage());
             m_statusInflictor.SetInflictionList(m_weapon.statusInflictions);
@@ -94,12 +94,12 @@ namespace DChild.Gameplay.Characters.Players
             var damage = m_weapon.damage;
             if (Damage.IsMagicDamage(damage.type))
             {
-                var magicAttack = m_stats.GetStat(PlayerStat.MagicAttack);
+                var magicAttack = m_stats.GetTotalStat(PlayerStat.MagicAttack);
                 damage.value += magicAttack;
             }
             else
             {
-                var attack = m_stats.GetStat(PlayerStat.Attack);
+                var attack = m_stats.GetTotalStat(PlayerStat.Attack);
                 damage.value += attack;
             }
             return damage;

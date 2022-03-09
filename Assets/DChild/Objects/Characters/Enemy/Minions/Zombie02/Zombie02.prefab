@@ -211,6 +211,7 @@ MonoBehaviour:
   m_physics: {fileID: 3781630620405047823}
   m_autoFlinch: 1
   m_enableMixFlinch: 1
+  m_enableEmpytyIdle: 1
   m_alphaBlendStrength: 1
   m_mixDuration: 1
   m_skeletonAnimation: {fileID: 3904881485453605690}
@@ -218,7 +219,7 @@ MonoBehaviour:
   m_idleAnimation: idle
   m_enableFlinchColor: 0
   m_flinchColorAnimation: 
---- !u!60 &997298082209846223
+--- !u!60 &8511274984297557622
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -343,6 +344,21 @@ MonoBehaviour:
   m_colorToUse: {r: 0.34901962, g: 0.11764706, b: 0.039215688, a: 0.5882353}
   m_overrideScale: 1
   m_scaleToUse: {x: 3, y: 3, z: 3}
+--- !u!114 &2588257472859656141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4897826137238022958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b86047542d69154baa4237b097c65c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_skins:
+  - Skin1
+  - Skin2
 --- !u!114 &2651324241411837728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,6 +637,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1826981265781363870}
   m_PrefabAsset: {fileID: 0}
+--- !u!50 &8468246788533212823 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 1826981265781363870}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1386749113741682442 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 748729144771621780, guid: 581273cea94d1294a9c56f1ba54042dc,
@@ -642,12 +664,6 @@ GameObject:
 --- !u!1 &4897826137238022958 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6530834241432010672, guid: 581273cea94d1294a9c56f1ba54042dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1826981265781363870}
-  m_PrefabAsset: {fileID: 0}
---- !u!50 &8468246788533212823 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 7845266558353687049, guid: 581273cea94d1294a9c56f1ba54042dc,
     type: 3}
   m_PrefabInstance: {fileID: 1826981265781363870}
   m_PrefabAsset: {fileID: 0}
@@ -737,7 +753,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 0dddd1accbd144b45b6d02ee8dd8a44a, type: 2}
+      objectReference: {fileID: 2100000, guid: ad54f0ed2b139c54093ed63f3aabc281, type: 2}
     - target: {fileID: 928037428079877015, guid: 5ae226b9090326b4f94a7b4fafd7af81,
         type: 3}
       propertyPath: m_LocalRotation.z
@@ -948,6 +964,8 @@ PrefabInstance:
     - {fileID: 3726930425535643695, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
     - {fileID: 4696180413229138451, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
     - {fileID: 7696471310463999739, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
+    - {fileID: 2496587601386906077, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
+    - {fileID: 4923985463854967844, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5ae226b9090326b4f94a7b4fafd7af81, type: 3}
 --- !u!114 &6245396588157743216 stripped
 MonoBehaviour:

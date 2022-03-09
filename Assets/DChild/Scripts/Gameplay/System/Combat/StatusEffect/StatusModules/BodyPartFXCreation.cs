@@ -16,6 +16,8 @@ namespace DChild.Gameplay.Combat.StatusAilment
         private Dictionary<int, GameObject> m_fxTracker;
         private FXSpawnHandle<FX> m_fXSpawnHandle;
 
+        public IStatusEffectModule GetInstance() => this;
+
         public void Start(Character character)
         {
             var bodypart = character.GetBodyPart(m_attachTo);
@@ -49,5 +51,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         {
             RemoveFXForInstance(eventArgs.ID);
         }
+
+       
     }
 }

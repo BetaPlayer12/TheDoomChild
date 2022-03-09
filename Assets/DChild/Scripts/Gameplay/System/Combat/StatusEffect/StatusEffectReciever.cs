@@ -75,8 +75,6 @@ namespace DChild.Gameplay.Combat.StatusAilment
             }
         }
 
-
-
         public void StopStatusEffect(StatusEffectType type)
         {
             if (Contains(type, out int index))
@@ -108,8 +106,6 @@ namespace DChild.Gameplay.Combat.StatusAilment
             index = -1;
             return false;
         }
-
-
 
         private void OnEffectEnd(object sender, StatusEffectReferenceEventArgs eventArgs)
         {
