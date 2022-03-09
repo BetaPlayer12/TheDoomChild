@@ -5,6 +5,7 @@
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
 
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -14,8 +15,8 @@ namespace PixelCrushers.DialogueSystem
     [SerializeField]
     public class DialogueClip : PlayableAsset, ITimelineClipAsset
     {
-        [SerializeField]
-        private DialogueBehaviour m_template;
+        [SerializeField,HideLabel]
+        private DialogueBehaviour m_template = new DialogueBehaviour();
 
         public double end;
 
@@ -30,6 +31,7 @@ namespace PixelCrushers.DialogueSystem
         {
             var playable = ScriptPlayable<DialogueBehaviour>.Create(graph, m_template);
             DialogueBehaviour clone = playable.GetBehaviour();
+            clone.playableReference = owner.name;
             clone.end = end;
             return playable;
         }
