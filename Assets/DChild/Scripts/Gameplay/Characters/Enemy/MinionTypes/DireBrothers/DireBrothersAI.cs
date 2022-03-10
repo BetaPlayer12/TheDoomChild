@@ -286,19 +286,29 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void ChangeState()
         {
-            if (m_changePhaseCoroutine == null && m_phaseHandle.allowPhaseChange)
+            if (m_changePhaseCoroutine == null)
             {
-                StopAllCoroutines();
-                m_phaseHandle.allowPhaseChange = false;
-                Debug.Log("DireBrothers Change State");
-                if (m_currentAttackCoroutine != null)
-                {
-                    StopCoroutine(m_currentAttackCoroutine);
-                    m_currentAttackCoroutine = null;
-                }
-                //SetAIToPhasing();
-                m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
+                StartCoroutine(SmartChangePhaseRoutine());
             }
+        }
+
+        private IEnumerator SmartChangePhaseRoutine()
+        {
+            yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(1, 0);
+            m_animation.SetEmptyAnimation(2, 0);
+            StopAllCoroutines();
+            m_phaseHandle.allowPhaseChange = false;
+            Debug.Log("DireBrothers Change State");
+            if (m_currentAttackCoroutine != null)
+            {
+                StopCoroutine(m_currentAttackCoroutine);
+                m_currentAttackCoroutine = null;
+            }
+            //SetAIToPhasing();
+            m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
+            yield return null;
         }
 
         private IEnumerator ChangePhaseRoutine()
@@ -331,7 +341,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.SetState(State.Turning);
+            m_phaseHandle.allowPhaseChange = false;
+        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -375,6 +389,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         //Patience Handler
@@ -400,6 +415,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_animation.EnableRootMotion(true, false);
             if (m_currentAttackCoroutine != null)
             {
                 StopCoroutine(m_currentAttackCoroutine);
