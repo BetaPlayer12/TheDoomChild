@@ -24,10 +24,11 @@ namespace PixelCrushers.DialogueSystem
                 if (myAsset)
                 {
                     myAsset.end = clip.end;
+#if UNITY_EDITOR
                     var text = myAsset.template.noteEntryText;
                     var textLenght = Mathf.Min(text.Length, 17);
-
                     clip.displayName = myAsset.template.noteEntryText.Substring(0, textLenght) + (text.Length > 17 ? "..." : "");
+#endif
                 }
             }
 
