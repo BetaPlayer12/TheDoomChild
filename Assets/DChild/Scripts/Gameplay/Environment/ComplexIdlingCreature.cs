@@ -4,6 +4,7 @@ using Spine.Unity;
 using System.Collections;
 using Spine;
 using System;
+using Holysoft.Collections;
 
 namespace DChild.Gameplay.Environment
 {
@@ -102,6 +103,14 @@ namespace DChild.Gameplay.Environment
             [SerializeField]
             private Vector3 m_destination;
             [SerializeField]
+            private bool m_useSlerp;
+            [SerializeField, ShowIf("m_useSlerp"), Indent]
+            private float m_slerpCenterOffset;
+            [SerializeField]
+            private bool m_useCustomizeInterpolation;
+            [SerializeField, ShowIf("m_customizeInterpolation"), Indent]
+            private AnimationCurve m_interpolationCurve;
+            [SerializeField]
             private float m_duration;
             private Vector3 m_origin;
 
@@ -129,8 +138,36 @@ namespace DChild.Gameplay.Environment
                 else
                 {
                     timer += GameplaySystem.time.deltaTime;
-                    var lerpValue = Mathf.Clamp01(timer / m_duration);
-                    rootObject.transform.position = Vector3.Lerp(m_origin, m_destination, lerpValue);
+                    var lerpValue = GetLerpValue(timer, m_duration);
+                    rootObject.transform.position = EvaluateLerp(m_origin, m_destination, lerpValue);
+                }
+            }
+
+            private float GetLerpValue(float timer, float duration)
+            {
+                var lerp = Mathf.Clamp01(timer / duration);
+                if (m_useCustomizeInterpolation)
+                {
+                    lerp = m_interpolationCurve.Evaluate(lerp);
+                }
+                return lerp;
+            }
+
+            private Vector3 EvaluateLerp(Vector3 origin, Vector3 destination, float lerpValue)
+            {
+                if (m_useSlerp)
+                {
+                    var centerPivot = (origin + destination) * 0.5f;
+                    centerPivot -= new Vector3(0, -m_slerpCenterOffset);
+
+                    var originRelativeCenter = origin - centerPivot;
+                    var destinationRelativeCenter = destination - centerPivot;
+
+                    return Vector3.Slerp(originRelativeCenter, destinationRelativeCenter, lerpValue) + centerPivot;
+                }
+                else
+                {
+                    return Vector3.Lerp(m_origin, m_destination, lerpValue);
                 }
             }
         }
