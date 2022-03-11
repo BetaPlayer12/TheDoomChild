@@ -1,44 +1,70 @@
 ﻿using PixelCrushers.DialogueSystem;
 using UnityEditor;
 using UnityEngine;
+using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
 
 namespace DChildDebug.Cutscene
 {
     [CustomPropertyDrawer(typeof(DialogueBehaviour))]
-    public class DialogueBehaviourDrawer : PropertyDrawer
+    public class DialogueBehaviourDrawer : OdinValueDrawer<DialogueBehaviour>
     {
         private DialogueEntryPicker entryPicker = null;
+        private DialogueEntryPicker noteEntryPicker = null;
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        protected override void DrawPropertyLayout(GUIContent label)
         {
-            int fieldCount = 3;
-            return fieldCount * EditorGUIUtility.singleLineHeight;
-        }
-
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            base.OnGUI(position, property, label);
-
-            SerializedProperty conversationProp = property.FindPropertyRelative("conversation");
-            SerializedProperty entryIDProp = property.FindPropertyRelative("entryID");
-            SerializedProperty entryTextProp = property.FindPropertyRelative("entryText");
-
-            Rect singleFieldRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.PropertyField(singleFieldRect, conversationProp);
-
-            singleFieldRect.y += EditorGUIUtility.singleLineHeight;
-            if (entryPicker == null)
+            var children = ValueEntry.Property.Children;
+            for (int i = 0; i < children.Count; i++)
             {
-                entryPicker = new DialogueEntryPicker(conversationProp.stringValue);
-            }
-            if (entryPicker.isValid)
-            {
-                entryIDProp.intValue = entryPicker.Draw(singleFieldRect, "Entry ID", entryIDProp.intValue);
-                entryTextProp.stringValue = entryPicker.GetDialogue(entryIDProp.intValue);
-            }
-            else
-            {
-                EditorGUI.PropertyField(singleFieldRect, entryIDProp);
+                var child = children.Get(i);
+                if (child.Name == "entryID")
+                {
+                    var jumpToEntry = children.Get("jumpToSpecificEntry");
+                    if ((bool)jumpToEntry.ValueEntry.WeakSmartValue)
+                    {
+                        if (entryPicker == null)
+                        {
+                            var conversation = children.Get("conversation");
+                            entryPicker = new DialogueEntryPicker((string)conversation.ValueEntry.WeakSmartValue);
+                        }
+                        if (entryPicker.isValid)
+                        {
+                            child.Draw();
+                            var valueEntry = child.ValueEntry;
+                            valueEntry.WeakSmartValue = entryPicker.Draw(child.LastDrawnValueRect, "Entry ID", (int)valueEntry.WeakSmartValue);
+                        }
+                        else
+                        {
+                            child.Draw();
+                        }
+                    }
+                }
+                else if(child.Name == "noteEntryID")
+                {
+                    if (noteEntryPicker == null)
+                    {
+                        var conversation = children.Get("noteConversation");
+                        noteEntryPicker = new DialogueEntryPicker((string)conversation.ValueEntry.WeakSmartValue);
+                    }
+                    if (noteEntryPicker.isValid)
+                    {
+                        child.Draw();
+                        var valueEntry = child.ValueEntry;
+                        valueEntry.WeakSmartValue = noteEntryPicker.Draw(child.LastDrawnValueRect, "Note Entry ID", (int)valueEntry.WeakSmartValue);
+                        var entryText = children.Get("noteEntryText");
+                        entryText.ValueEntry.WeakSmartValue = noteEntryPicker.GetDialogue((int)valueEntry.WeakSmartValue);
+                    }
+                    else
+                    {
+                        child.Draw();
+                    }
+                }
+                else
+                {
+                    child.Draw();
+                }
+
             }
         }
     }

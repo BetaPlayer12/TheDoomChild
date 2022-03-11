@@ -19,6 +19,8 @@ namespace DChild.Gameplay.Cinematics
     {
         [SerializeField]
         private PlayableDirector m_cutscene;
+        [SerializeField]
+        private bool m_stopPlayerControlOverrideAfterCutscene = true;
 
         private PlayerControlledObject m_controlledObject;
         private Animator m_animator;
@@ -29,7 +31,10 @@ namespace DChild.Gameplay.Cinematics
             m_controlledObject.transform.parent = null;
             SceneManager.MoveGameObjectToScene(m_controlledObject.gameObject, m_originalScene);
             m_animator.enabled = true;
-            GameplaySystem.playerManager.StopCharacterControlOverride();
+            if (m_stopPlayerControlOverrideAfterCutscene)
+            {
+                GameplaySystem.playerManager.StopCharacterControlOverride();
+            }
         }
 
         private void OnCutscenePlay(PlayableDirector obj)
@@ -83,11 +88,11 @@ namespace DChild.Gameplay.Cinematics
                     }
                     break;
                 }
- 
-               
+
+
             }
 
-           
+
         }
     }
 }
