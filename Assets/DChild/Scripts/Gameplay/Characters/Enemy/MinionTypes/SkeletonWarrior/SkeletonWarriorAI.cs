@@ -592,17 +592,19 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
+                            m_animation.EnableRootMotion(false, m_groundSensor.isDetecting ? true : false);
+
                             if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting 
                                 && ((/*Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 50f &&*/ !TargetBlocked())))
                             {
                                 //var distance = Vector2.Distance(m_targetInfo.position, transform.position);
-                                m_animation.EnableRootMotion(false, false);
                                 m_selfCollider.enabled = false;
                                 m_animation.SetAnimation(0, m_info.move.animation, true);
                                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                             }
                             else
                             {
+
                                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                     m_movement.Stop();
 
