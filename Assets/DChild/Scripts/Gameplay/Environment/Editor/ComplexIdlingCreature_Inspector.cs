@@ -109,9 +109,10 @@ namespace DChildEditor.Gameplay.Environment
 
             for (int i = 0; i < reactBehaviours.Length; i++)
             {
-                if (reactBehaviours[i] is ComplexIdlingCreature.)
+                var reactBehaviour = reactBehaviours[i];
+                if (reactBehaviour is ComplexIdlingCreature.MovingBehaviour)
                 {
-                    var behaviour = (ComplexIdlingCreature.MovingBehaviour)reactBehaviours[i];
+                    var behaviour = (ComplexIdlingCreature.MovingBehaviour)reactBehaviour;
                     if (Event.current.shift == false)
                     {
                         behaviour.destination = behaviour.m_relativeDestination + currentPosition;
@@ -125,6 +126,10 @@ namespace DChildEditor.Gameplay.Environment
                     };
                     movementList.Add(info);
                     behaviour.m_relativeDestination = behaviour.destination - currentPosition;
+                }
+                else
+                {
+
                 }
             }
         }
