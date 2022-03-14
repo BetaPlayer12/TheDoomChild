@@ -108,7 +108,7 @@ namespace DChild.Gameplay.Environment
             private float m_slerpCenterOffset;
             [SerializeField]
             private bool m_useCustomizeInterpolation;
-            [SerializeField, ShowIf("m_customizeInterpolation"), Indent]
+            [SerializeField, ShowIf("m_useCustomizeInterpolation"), Indent]
             private AnimationCurve m_interpolationCurve;
             [SerializeField]
             private float m_duration;
@@ -120,6 +120,7 @@ namespace DChild.Gameplay.Environment
 
             public Vector3 destination { get => m_destination; set => m_destination = value; }
             public string animation { get => m_animation; }
+            public bool useSlerp { get => m_useSlerp; }
 #endif
 
             public override void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
@@ -153,7 +154,7 @@ namespace DChild.Gameplay.Environment
                 return lerp;
             }
 
-            private Vector3 EvaluateLerp(Vector3 origin, Vector3 destination, float lerpValue)
+            public Vector3 EvaluateLerp(Vector3 origin, Vector3 destination, float lerpValue)
             {
                 if (m_useSlerp)
                 {
@@ -338,6 +339,7 @@ namespace DChild.Gameplay.Environment
             private Instruction m_instruction;
             private SkeletonDataAsset m_skeletonComponent;
 
+            public IBehaviour[] behaviours => m_behaviours;
             public bool isDone => m_currentIndex == m_behaviours.Length - 1 && m_behaviours[m_currentIndex].isDone;
 
             public void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)

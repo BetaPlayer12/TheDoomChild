@@ -16,6 +16,7 @@ namespace DChildEditor.Gameplay.Environment
             public Vector3 destination;
             public int index;
             public string animation;
+            public bool drawLabel;
         }
 
         private static List<Info> movementList;
@@ -54,9 +55,17 @@ namespace DChildEditor.Gameplay.Environment
             var gameObject = (target as ComplexIdlingCreature).gameObject;
             var objectName = gameObject.name;
             var currentPosition = gameObject.transform.position;
+
             movementList.Add(new Info() { destination = currentPosition });
             AddIdlingBehaviourMovement(currentPosition);
-            DrawIdlingMovement(objectName);
+            DrawMovement($"Idle-{objectName}");
+
+            movementList.Clear();
+
+            Handles.color = Color.cyan;
+            movementList.Add(new Info() { destination = currentPosition, drawLabel = false });
+            AddReactingBehaviourMovement(currentPosition);
+            DrawMovement($"React-{objectName}");
         }
 
         private void AddIdlingBehaviourMovement(Vector3 currentPosition)
@@ -69,35 +78,8 @@ namespace DChildEditor.Gameplay.Environment
             {
                 if (idlingBehaviours[i] is ComplexIdlingCreature.MovingBehaviour)
                 {
-                    var behaviour = (ComplexIdlingCreature.MovingBehaviour)idlingBehaviours[i];
-                    if (Event.current.shift == false)
-                    {
-                        behaviour.destination = behaviour.m_relativeDestination + currentPosition;
-                    }
-                    behaviour.destination = Handles.DoPositionHandle(behaviour.destination, Quaternion.identity);
-                    var info = new Info()
-                    {
-                        destination = behaviour.destination,
-                        index = i,
-                        animation = behaviour.animation
-                    };
-                    movementList.Add(info);
-                    behaviour.m_relativeDestination = behaviour.destination - currentPosition;
+                    RecordMovementSegment(currentPosition, idlingBehaviours, i);
                 }
-            }
-        }
-
-        private static void DrawIdlingMovement(string objectName)
-        {
-            if (movementList.Count >= 2)
-            {
-                Handles.DrawAAPolyLine(10f, movementList.Select(x => x.destination).ToArray());
-                for (int i = 1; i < movementList.Count; i++)
-                {
-                    var info = movementList[i];
-                    Handles.Label(info.destination, $"{objectName}<{info.index}-{info.animation}>");
-                }
-                Handles.Label(movementList[0].destination, $"Hold Shift to move this seperately");
             }
         }
 
@@ -105,34 +87,89 @@ namespace DChildEditor.Gameplay.Environment
         {
             var reactProp = Tree.GetPropertyAtUnityPath("m_reactBehaviour");
             var reactBehaviours = (ComplexIdlingCreature.IBehaviour[])reactProp.ValueEntry.WeakSmartValue;
+            AddReactingBehaviourMovement(currentPosition, reactBehaviours);
+        }
 
-
+        private static void AddReactingBehaviourMovement(Vector3 currentPosition, ComplexIdlingCreature.IBehaviour[] reactBehaviours)
+        {
             for (int i = 0; i < reactBehaviours.Length; i++)
             {
                 var reactBehaviour = reactBehaviours[i];
                 if (reactBehaviour is ComplexIdlingCreature.MovingBehaviour)
                 {
-                    var behaviour = (ComplexIdlingCreature.MovingBehaviour)reactBehaviour;
-                    if (Event.current.shift == false)
-                    {
-                        behaviour.destination = behaviour.m_relativeDestination + currentPosition;
-                    }
-                    behaviour.destination = Handles.DoPositionHandle(behaviour.destination, Quaternion.identity);
-                    var info = new Info()
-                    {
-                        destination = behaviour.destination,
-                        index = i,
-                        animation = behaviour.animation
-                    };
-                    movementList.Add(info);
-                    behaviour.m_relativeDestination = behaviour.destination - currentPosition;
+                    RecordMovementSegment(currentPosition, reactBehaviours, i);
                 }
-                else
+                else if (reactBehaviour is ComplexIdlingCreature.BehaviourList)
                 {
-
+                    AddReactingBehaviourMovement(currentPosition, ((ComplexIdlingCreature.BehaviourList)reactBehaviour).behaviours);
                 }
             }
         }
+
+        private static void RecordMovementSegment(Vector3 currentPosition, ComplexIdlingCreature.IBehaviour[] idlingBehaviours, int i)
+        {
+            var behaviour = (ComplexIdlingCreature.MovingBehaviour)idlingBehaviours[i];
+            if (Event.current.shift == false)
+            {
+                behaviour.destination = behaviour.m_relativeDestination + currentPosition;
+            }
+            behaviour.destination = Handles.DoPositionHandle(behaviour.destination, Quaternion.identity);
+            if (behaviour.useSlerp)
+            {
+                var origin = movementList[movementList.Count - 1].destination;
+                for (float k = 0.1f; k <= 1; k += 0.1f)
+                {
+                    var segmentInfo = new Info()
+                    {
+                        destination = behaviour.EvaluateLerp(origin, behaviour.destination, k),
+                        index = i,
+                        animation = behaviour.animation,
+                        drawLabel = false
+                    };
+                    movementList.Add(segmentInfo);
+                }
+
+                var info = new Info()
+                {
+                    destination = behaviour.destination,
+                    index = i,
+                    animation = behaviour.animation,
+                    drawLabel = true
+                };
+                movementList.Add(info);
+            }
+            else
+            {
+                var info = new Info()
+                {
+                    destination = behaviour.destination,
+                    index = i,
+                    animation = behaviour.animation,
+                    drawLabel = true
+                };
+                movementList.Add(info);
+            }
+            behaviour.m_relativeDestination = behaviour.destination - currentPosition;
+        }
+
+        private static void DrawMovement(string objectName)
+        {
+            if (movementList.Count >= 2)
+            {
+                Handles.DrawAAPolyLine(10f, movementList.Select(x => x.destination).ToArray());
+                for (int i = 1; i < movementList.Count; i++)
+                {
+                    var info = movementList[i];
+                    if (info.drawLabel)
+                    {
+                        Handles.Label(info.destination, $"{objectName}<{info.index}-{info.animation}>");
+                    }
+                }
+                Handles.Label(movementList[0].destination, $"Hold Shift to move this seperately");
+            }
+        }
+
+
     }
 
 }
