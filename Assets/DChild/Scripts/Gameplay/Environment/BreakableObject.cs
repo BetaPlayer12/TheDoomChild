@@ -161,6 +161,7 @@ namespace DChild.Gameplay.Environment
         {
             var instanceTransform = instance.transform;
             instanceTransform.parent = transform;
+            instanceTransform.localPosition = Vector3.zero;
             instanceTransform.localScale = Vector3.one;
             instanceTransform.parent = null;
             m_instantiatedDebris = instance.GetComponent<Debris>();
