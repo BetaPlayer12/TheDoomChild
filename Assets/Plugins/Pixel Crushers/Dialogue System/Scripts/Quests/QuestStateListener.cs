@@ -40,7 +40,7 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestEntryStateIndicatorLevel
         {
-            [Tooltip("Quest entry number.")]
+            [Tooltip("Quest entry number."),QuestEntryPopup]
             public int entryNumber;
 
             [Tooltip("Quest entry state to listen for.")]

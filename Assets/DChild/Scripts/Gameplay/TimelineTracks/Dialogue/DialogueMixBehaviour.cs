@@ -5,6 +5,7 @@
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
 
+using DChild.UI;
 using Doozy.Engine;
 using System;
 using System.Collections.Generic;
@@ -15,23 +16,26 @@ namespace PixelCrushers.DialogueSystem
 {
     public class DialogueMixBehaviour : PlayableBehaviour
     {
-        private HashSet<int> played = new HashSet<int>();
-        private HashSet<DialogueBehaviour> behaviours = new HashSet<DialogueBehaviour>();
-        private PlayableDirector director;
+        private HashSet<int> m_played = new HashSet<int>();
+        private HashSet<DialogueBehaviour> m_behaviours = new HashSet<DialogueBehaviour>();
+        private PlayableDirector m_director;
 
-        public override void PrepareFrame(Playable playable, FrameData info)
+        private bool m_typeWriterEffectIsPlaying;
+
+        public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
             int inputCount = playable.GetInputCount();
 
             for (int i = 0; i < inputCount; i++)
             {
                 float inputWeight = playable.GetInputWeight(i);
-                if (inputWeight > 0.001f && !played.Contains(i))
+                if (inputWeight > 0.001f && !m_played.Contains(i))
                 {
-                    played.Add(i);
+                    m_played.Add(i);
                     ScriptPlayable<DialogueBehaviour> inputPlayable = (ScriptPlayable<DialogueBehaviour>)playable.GetInput(i);
                     DialogueBehaviour input = inputPlayable.GetBehaviour();
-
+                    m_behaviours.Add(input);
+                    input.isDone = false;
                     switch (input.startBehaviour)
                     {
                         case DialogueBehaviour.StartBehaviour.StartDialogue:
@@ -39,58 +43,66 @@ namespace PixelCrushers.DialogueSystem
                             break;
                     }
                 }
-                else if (inputWeight <= 0.001f && played.Contains(i))
+                else if (inputWeight <= 0.001f && m_played.Contains(i))
                 {
-                    played.Remove(i);
+                    m_played.Remove(i);
 
                     ScriptPlayable<DialogueBehaviour> inputPlayable = (ScriptPlayable<DialogueBehaviour>)playable.GetInput(i);
                     DialogueBehaviour input = inputPlayable.GetBehaviour();
-                    PlaySequence(input.GetEndBehaviourSequence());
+                    input.isDone = true;
+                    if (m_behaviours.Contains(input))
+                    {
+                        m_behaviours.Remove(input);
+                        PlaySequence(input.GetEndBehaviourSequence());
+                    }
                 }
             }
 
-            var currentTime = director.time;
-            foreach (var index in played)
+            var currentTime = m_director.time;
+            foreach (var index in m_played)
             {
                 ScriptPlayable<DialogueBehaviour> inputPlayable = (ScriptPlayable<DialogueBehaviour>)playable.GetInput(index);
                 DialogueBehaviour input = inputPlayable.GetBehaviour();
 
-                if (input.m_isWaitingForInput == false)
+                if (input.isWaitingForInput == false && input.isDone == false)
                 {
                     var waitForInputTime = input.end - input.waitForInput;
                     if (currentTime <= input.end && currentTime >= waitForInputTime)
                     {
-                        PlaySequence(GetWaitForInputSequence());
-                        input.m_isWaitingForInput = true;
+                        PlaySequence(input.GetWaitForInputSequence());
+                        input.isWaitingForInput = true;
                         break;
                     }
                 }
             }
+
+            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false ;
         }
 
-        private void OnContinueDiag()
+        private void OnContinueDiag(GameEventMessage obj)
         {
-            foreach (var input in behaviours)
+            if (obj.HasGameEvent && obj.EventName == "ContinueDiag")
             {
-                if (input.m_isWaitingForInput == false)
+                foreach (var input in m_behaviours)
                 {
-                    director.time = input.end- input.waitForInput;
-                    PlaySequence(GetWaitForInputSequence());
-                    input.m_isWaitingForInput = true;
-                    break;
-                }
-                else
-                {
-                    director.time = input.end;
-                    input.m_isWaitingForInput = false;
-                    break;
+                    if (m_typeWriterEffectIsPlaying && input.isWaitingForInput == false)
+                    {
+                        m_director.time = input.end - input.waitForInput;
+                        PlaySequence(input.GetWaitForInputSequence());
+                        input.isWaitingForInput = true;
+                        break;
+                    }
+                    else
+                    {
+                        m_director.time = input.end;
+                        input.isDone = true;
+                        m_behaviours.Remove(input);
+                        PlaySequence(input.GetEndBehaviourSequence());
+                        input.isWaitingForInput = false;
+                        break;
+                    }
                 }
             }
-        }
-
-        private string GetWaitForInputSequence()
-        {
-            return "";
         }
 
         private void PlaySequence(string sequence)
@@ -128,17 +140,22 @@ namespace PixelCrushers.DialogueSystem
         public override void OnGraphStart(Playable playable)
         {
             base.OnGraphStart(playable);
-            director = (playable.GetGraph().GetResolver() as PlayableDirector);
-            GameEventMessage.AddListener("ContinueDiag", OnContinueDiag);
-            played.Clear();
+            m_director = (playable.GetGraph().GetResolver() as PlayableDirector);
+            Message.AddListener<GameEventMessage>(OnContinueDiag);
+            m_played.Clear();
+            m_behaviours.Clear();
+            DChildStandardDialogueUI.isInCutscene = true;
         }
+
 
 
         public override void OnGraphStop(Playable playable)
         {
             base.OnGraphStop(playable);
-            GameEventMessage.RemoveListener("ContinueDiag", OnContinueDiag);
-            played.Clear();
+            Message.RemoveListener<GameEventMessage>(OnContinueDiag);
+            m_played.Clear();
+            m_behaviours.Clear();
+            DChildStandardDialogueUI.isInCutscene = false;
         }
     }
 }

@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 348441460574988831}
   - component: {fileID: 348441460574988828}
-  m_Layer: 0
+  - component: {fileID: 8519005586868570406}
+  - component: {fileID: 7857035034717089508}
+  m_Layer: 9
   m_Name: COD_SoulLamp_Head
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,6 +86,55 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8519005586868570406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348441460574988829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1819101304e6a3479b6fb001626539e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_collider2Ds:
+  - {fileID: 7857035034717089508}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
+  m_invulnerabilityLevel: 0
+  m_damageReduction: 0
+  m_canBlockDamage: 0
+--- !u!61 &7857035034717089508
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348441460574988829}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 3.0326605}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5000419, y: 0.000014208251}
+    oldSize: {x: 0.92, y: 5.1}
+    newSize: {x: 0.92, y: 10}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.92, y: 1.7288773}
+  m_EdgeRadius: 0
 --- !u!1 &348441460849596943
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 348441460849596942}
   - component: {fileID: 348441460849596945}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LampLightSpread_SL (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 348441460988858344}
   - component: {fileID: 348441460988858347}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LampLight (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,7 +297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 348441461519552297}
   - component: {fileID: 348441461519552294}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: COD_SoulLamp_Highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -326,7 +377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 348441461602360016}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LampLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,9 +413,9 @@ GameObject:
   m_Component:
   - component: {fileID: 348441461757171468}
   - component: {fileID: 348441461757171469}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: COD_SoulLamp_Back
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -443,7 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 348441462017847265}
   - component: {fileID: 348441462017847264}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LampLightSpread_FF (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6801403882571760469}
   - component: {fileID: 8496012809378966105}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: COD_SoulLamp_Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -604,8 +655,13 @@ GameObject:
   - component: {fileID: 1874796847734859538}
   - component: {fileID: 2224676180474098423}
   - component: {fileID: 6251225936785266105}
-  m_Layer: 0
-  m_Name: COD_SoulLamp
+  - component: {fileID: 1267133263171906752}
+  - component: {fileID: 2055444359980873450}
+  - component: {fileID: 7710396457972314742}
+  - component: {fileID: 957403614056074470}
+  - component: {fileID: 8273357203505745050}
+  m_Layer: 9
+  m_Name: SoulLamp (COD)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -695,6 +751,153 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1267133263171906752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6863715157356138743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 798a06706630eac4f982cedb713cc1bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_object: {fileID: 2055444359980873450}
+  m_type: 0
+  m_createDebris: 0
+  m_debris:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  m_copySorting: 0
+  m_applyDebrisColorChange: 0
+  m_colorToApply: {r: 1, g: 1, b: 1, a: 1}
+  m_onDestroy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 348441461602360017}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7460471052201302572}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_onAlreadyDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onFix:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 348441461602360017}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 7460471052201302572}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 957403614056074470}
+        m_MethodName: StopFixTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+--- !u!114 &2055444359980873450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6863715157356138743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c106d3ee04e320140b205c0d1ae65bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_centerMass: {fileID: 348441461757171468}
+  m_health: {fileID: 7710396457972314742}
+  m_resistance: {fileID: 0}
+--- !u!114 &7710396457972314742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6863715157356138743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 1
+--- !u!114 &957403614056074470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6863715157356138743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b94dfc78fe32b24a92796cc00b13062, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_breakFX: {fileID: 1293166314607459561, guid: e2a0fc50507be4a48a921835cd02413a,
+    type: 3}
+  m_fixAfterBreakDuration: 180
+  m_fixWhenOffScreen: 1
+--- !u!114 &8273357203505745050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6863715157356138743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4015289bf5a32ff44877f03a7299aa77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_alwaysRandom: 1
+  m_startTime: 0
+  m_referenceClip: {fileID: 7400000, guid: 57a0592801577b4469aac29c89926e17, type: 2}
+  m_animationDuration: 0
 --- !u!1001 &5963347500718708768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -702,10 +905,40 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 348441460574988831}
     m_Modifications:
+    - target: {fileID: 3840156585642751316, guid: feda06582f44330468cd1b5bff6826a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840156585915787985, guid: feda06582f44330468cd1b5bff6826a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840156585923121140, guid: feda06582f44330468cd1b5bff6826a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840156586216059375, guid: feda06582f44330468cd1b5bff6826a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840156586779373110, guid: feda06582f44330468cd1b5bff6826a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 3840156587084104204, guid: feda06582f44330468cd1b5bff6826a4,
         type: 3}
       propertyPath: m_Name
       value: SoulEssenceModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3840156587084104204, guid: feda06582f44330468cd1b5bff6826a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3840156587084104205, guid: feda06582f44330468cd1b5bff6826a4,
         type: 3}
@@ -777,8 +1010,19 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.19311863
       objectReference: {fileID: 0}
+    - target: {fileID: 3840156587374141504, guid: feda06582f44330468cd1b5bff6826a4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: feda06582f44330468cd1b5bff6826a4, type: 3}
+--- !u!1 &7460471052201302572 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3840156587084104204, guid: feda06582f44330468cd1b5bff6826a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 5963347500718708768}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7460471052201302573 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3840156587084104205, guid: feda06582f44330468cd1b5bff6826a4,

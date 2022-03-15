@@ -13,6 +13,7 @@ namespace PixelCrushers.DialogueSystem
 {
     [TrackColor(0.855f, 0.8623f, 0.87f)]
     [TrackClipType(typeof(DialogueClip))]
+    [TrackBindingType(typeof(PlayableDirector))]
     public class DialogueTrack : TrackAsset
     {
         public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
@@ -23,10 +24,11 @@ namespace PixelCrushers.DialogueSystem
                 if (myAsset)
                 {
                     myAsset.end = clip.end;
-                    var text = myAsset.template.entryText;
+#if UNITY_EDITOR
+                    var text = myAsset.template.noteEntryText;
                     var textLenght = Mathf.Min(text.Length, 17);
-
-                    clip.displayName = myAsset.template.entryText.Substring(0, textLenght) + (text.Length > 17 ? "..." : "");
+                    clip.displayName = myAsset.template.noteEntryText.Substring(0, textLenght) + (text.Length > 17 ? "..." : "");
+#endif
                 }
             }
 

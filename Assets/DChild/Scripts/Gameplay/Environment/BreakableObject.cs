@@ -161,6 +161,7 @@ namespace DChild.Gameplay.Environment
         {
             var instanceTransform = instance.transform;
             instanceTransform.parent = transform;
+            instanceTransform.localPosition = Vector3.zero;
             instanceTransform.localScale = Vector3.one;
             instanceTransform.parent = null;
             m_instantiatedDebris = instance.GetComponent<Debris>();
@@ -170,7 +171,7 @@ namespace DChild.Gameplay.Environment
                 m_leftOverDebris = m_instantiatedDebris.GetDetachables();
                 if (m_applyDebrisColorChange)
                 {
-                    m_instantiatedDebris.GetComponent<RendererColorChangeHandle>().ApplyColor(m_colorToApply);
+                    m_instantiatedDebris.GetComponent<RendererColorChangeHandle>()?.ApplyColor(m_colorToApply);
                 }
             }
             if (m_copySorting)

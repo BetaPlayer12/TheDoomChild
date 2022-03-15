@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Doozy.Engine;
 using System;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers;
 #if UNITY_EDITOR
 using DChildDebug;
 #endif
@@ -144,10 +145,15 @@ namespace DChild.Gameplay
                 cacheEventArgs.Release();
             }
         }
+        private void OnDialogueDatabaseAdded()
+        {
+            PersistentDataManager.ApplySaveData(m_slot.dialogueSaveData);
+        }
 
         private void Start()
         {
             PersistentDataManager.ApplySaveData(m_slot.dialogueSaveData);
+            ExtraDatabases.addedDatabases += OnDialogueDatabaseAdded;
         }
     }
 }

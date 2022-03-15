@@ -1,16 +1,19 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu;
+using DChild.Visuals;
 using Doozy.Engine;
-using Holysoft.Event;
-using Sirenix.OdinInspector;
-using System;
 using UnityEngine;
 
 namespace DChild.Gameplay
 {
     public class GameplaySignalHandle : MonoBehaviour
     {
+        public void SyncPlayerVisualsWith(SpineSyncer spineSyncer)
+        {
+            GameplaySystem.playerManager.SyncVisualsWith(spineSyncer);
+        }
+
         public void DoCinematicUIMode(bool value)
         {
             GameEventMessage.SendEvent(value ? "Cinematic Start" : "Cinematic End");
