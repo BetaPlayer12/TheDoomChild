@@ -131,7 +131,7 @@ namespace DChild.Gameplay.Environment
 
             public override void Update(GameObject rootObject, ref float timer)
             {
-                if (rootObject.transform.position == m_destination)
+                if (rootObject.transform.position == m_destination || m_duration < timer)
                 {
                     m_isActive = false;
                     m_isDone = true;

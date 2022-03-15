@@ -76,7 +76,7 @@ namespace PixelCrushers.DialogueSystem
                 }
             }
 
-            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect.isPlaying;
+            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false ;
         }
 
         private void OnContinueDiag(GameEventMessage obj)
