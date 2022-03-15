@@ -1,7 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using Spine.Unity;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Visuals

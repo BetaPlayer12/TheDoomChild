@@ -8,19 +8,22 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
     public class GemCrawlerMatConfigurator : MonoBehaviour
     {
         [SerializeField]
-        private float m_noise;
+        private Vector2 m_noiseOffset;
+        [SerializeField]
+        private float m_noiseScale;
         [SerializeField, ColorUsage(true, true)]
-        private Color m_color1;
+        private Color m_glowColor;
         [SerializeField, ColorUsage(true, true)]
-        private Color m_color2;
+        private Color m_glowOverlay;
         [SerializeField, ColorUsage(true, true)]
-        private Color m_color3;
+        private Color m_OverallTexColor;
 
 
-        private const string REFERENCE_NOISE = "";
-        private const string REFERENCE_COLOR1 = "";
-        private const string REFERENCE_COLOR2 = "";
-        private const string REFERENCE_COLOR3 = "";
+        private const string REFERENCE_NOISEOFFSET = "Vector2_GradientNoiseOffset";
+        private const string REFERENCE_NOISESCALE = "Vector1_GradientScale";
+        private const string REFERENCE_GLOWCOLOR = "Color_GlowColor";
+        private const string REFERENCE_GLOWOVERLAY = "Color_GlowOverlay";
+        private const string REFERENCE_OVERALLTEXCOLOR = "Color_OverallTexColor";
 
         private static MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 
@@ -30,10 +33,11 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
             var mesh = GetComponent<MeshRenderer>();
             mesh.GetPropertyBlock(propertyBlock);
 
-            propertyBlock.SetFloat(REFERENCE_NOISE, m_noise);
-            propertyBlock.SetColor(REFERENCE_COLOR1, m_color1);
-            propertyBlock.SetColor(REFERENCE_COLOR2, m_color2);
-            propertyBlock.SetColor(REFERENCE_COLOR3, m_color3);
+            propertyBlock.SetVector(REFERENCE_NOISEOFFSET, m_noiseOffset);
+            propertyBlock.SetFloat(REFERENCE_NOISESCALE, m_noiseScale);
+            propertyBlock.SetColor(REFERENCE_GLOWCOLOR, m_glowColor);
+            propertyBlock.SetColor(REFERENCE_GLOWOVERLAY, m_glowOverlay);
+            propertyBlock.SetColor(REFERENCE_OVERALLTEXCOLOR, m_OverallTexColor);
 
             mesh.SetPropertyBlock(propertyBlock);
         }
