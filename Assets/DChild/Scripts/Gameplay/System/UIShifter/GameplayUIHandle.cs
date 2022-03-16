@@ -5,6 +5,7 @@ using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Inventories;
 using DChild.Gameplay.NavigationMap;
+using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trading;
 using Doozy.Engine;
@@ -14,11 +15,11 @@ using UnityEngine;
 namespace DChild.Gameplay.Systems
 {
     public class GameplayUIHandle : MonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
-	{
-		[SerializeField]
-		private MerchantTradingManager m_merchantManager;
-		[SerializeField]
-		private StoreNavigator m_storeNavigator;
+    {
+        [SerializeField]
+        private MerchantTradingManager m_merchantManager;
+        [SerializeField]
+        private StoreNavigator m_storeNavigator;
         [SerializeField]
         private BossCombatUI m_bossCombat;
         [SerializeField]
@@ -31,18 +32,18 @@ namespace DChild.Gameplay.Systems
             m_navMap.UpdateConfiguration(location, inGameReference, mapReferencePoint, calculationOffset);
         }
 
-        public void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory,ITraderAskingPrice merchantAskingPrice)
-		{
-			m_merchantManager.SetProfile(merchantData);
-			m_merchantManager.SetTradingPool(merchantInventory, merchantAskingPrice,GameplaySystem.playerManager.player.inventory);
-			GameEventMessage.SendEvent("Trade Open");
-		}
+        public void OpenTradeWindow(NPCProfile merchantData, ITradableInventory merchantInventory, ITraderAskingPrice merchantAskingPrice)
+        {
+            m_merchantManager.SetProfile(merchantData);
+            m_merchantManager.SetTradingPool(merchantInventory, merchantAskingPrice, GameplaySystem.playerManager.player.inventory);
+            GameEventMessage.SendEvent("Trade Open");
+        }
 
-		public void OpenStorePage(StorePage storePage)
-		{
-			m_storeNavigator.SetPage(storePage);
-			m_storeNavigator.OpenPage();
-		}
+        public void OpenStorePage(StorePage storePage)
+        {
+            m_storeNavigator.SetPage(storePage);
+            m_storeNavigator.OpenPage();
+        }
 
         public void OpenWorldMap(Location fromLocation)
         {
@@ -56,9 +57,9 @@ namespace DChild.Gameplay.Systems
         }
 
         public void OpenStorePage()
-		{
-			m_storeNavigator.OpenPage();
-		}
+        {
+            m_storeNavigator.OpenPage();
+        }
 
         public void MonitorBoss(Boss boss)
         {
@@ -151,7 +152,7 @@ namespace DChild.Gameplay.Systems
             }
             else
             {
-             
+
             }
         }
 
@@ -177,7 +178,7 @@ namespace DChild.Gameplay.Systems
             {
                 GameEventMessage.SendEvent("Renew ItemNotify");
             }
-           
+
         }
         public void ShowGameplayUI(bool willshow)
         {
@@ -196,6 +197,11 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Hide JournalUpdate");
             StopCoroutine("PromptJournalUpdateRoutine");
             StartCoroutine(PromptJournalUpdateRoutine(duration));
+        }
+
+        public void ShowLoreNote(LoreData m_data)
+        {
+            GameEventMessage.SendEvent("Show LoreNote");
         }
 
         public void PromptJournalUpdateNotification()

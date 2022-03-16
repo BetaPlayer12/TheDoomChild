@@ -2,7 +2,7 @@
 
 namespace DChild.Gameplay.Systems.Lore
 {
-    [CreateAssetMenu(fileName = "LoreData", menuName = "DChild/Database")]
+    [CreateAssetMenu(fileName = "LoreData", menuName = "DChild/Database/Lore Data")]
     public class LoreData : ScriptableObject
     {
         [SerializeField]

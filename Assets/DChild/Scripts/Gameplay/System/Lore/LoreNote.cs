@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Environment.Interractables;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems.Lore
@@ -18,7 +19,14 @@ namespace DChild.Gameplay.Systems.Lore
 
         public void Interact(Character character)
         {
-            throw new System.NotImplementedException();
+            GameplaySystem.gamplayUIHandle.ShowLoreNote(m_data);
+            gameObject.SetActive(false);
+        }
+
+        [Button]
+        private void Pickup()
+        {
+            Interact(null);
         }
 
         private void OnDrawGizmosSelected()
