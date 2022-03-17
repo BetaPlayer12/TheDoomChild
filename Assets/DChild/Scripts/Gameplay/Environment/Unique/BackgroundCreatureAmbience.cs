@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.VisualConfigurators
 {
-    public class GemCrawlerMatConfigurator : MonoBehaviour
+    public class BackgroundCreatureAmbience : MonoBehaviour
     {
         [SerializeField]
         private Vector2 m_noiseOffset;
