@@ -85,6 +85,8 @@ namespace DChild.Gameplay.Environment.Interractables
         private DoorPanel[] m_panels;
         [SerializeField]
         private AnimationCurve m_speed;
+        [SerializeField,MinValue(0.1f)]
+        private float m_duration = 1f;
         [SerializeField, OnValueChanged("OnStateChange")]
         private bool m_isOpen;
 
@@ -192,7 +194,7 @@ namespace DChild.Gameplay.Environment.Interractables
         private void LateUpdate()
         {
             m_animationTime += GameplaySystem.time.deltaTime;
-            var lerpValue = m_speed.Evaluate(m_animationTime);
+            var lerpValue = m_speed.Evaluate(m_animationTime/ m_duration);
             for (int i = 0; i < m_panels.Length; i++)
             {
                 m_panels[i].Lerp(lerpValue);

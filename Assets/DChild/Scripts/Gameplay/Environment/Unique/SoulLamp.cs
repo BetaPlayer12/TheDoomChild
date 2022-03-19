@@ -37,6 +37,9 @@ namespace DChild.Gameplay.Environment.Interractables.Unique
 
         private void Start()
         {
+            m_breakable = GetComponent<BreakableObject>();
+            m_damageable = GetComponent<Damageable>();
+
             m_damageable.Destroyed += OnLampDestroyed;
             enabled = false;
         }

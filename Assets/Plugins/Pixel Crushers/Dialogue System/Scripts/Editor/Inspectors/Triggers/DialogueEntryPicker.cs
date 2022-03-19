@@ -26,7 +26,7 @@ namespace PixelCrushers.DialogueSystem
             for (int i = 0; i < conversation.dialogueEntries.Count; i++)
             {
                 var entry = conversation.dialogueEntries[i];
-                entryTexts[i] = "[" + entry.id + "] " + ((entry.id == 0) ? "<START>" :  entry.subtitleText).Replace("/", "\u2215");
+                entryTexts[i] = "[" + entry.id + "] " + ((entry.id == 0) ? "<START>" : entry.subtitleText).Replace("/", "\u2215");
                 idToIndex.Add(entry.id, i);
                 indexToId.Add(i, entry.id);
             }
@@ -64,6 +64,8 @@ namespace PixelCrushers.DialogueSystem
             var conversation = db.GetConversation(conversationTitle);
             if (conversation == null) return;
             entryTexts = new string[conversation.dialogueEntries.Count];
+            idToIndex.Clear();
+            indexToId.Clear();
             for (int i = 0; i < conversation.dialogueEntries.Count; i++)
             {
                 var entry = conversation.dialogueEntries[i];

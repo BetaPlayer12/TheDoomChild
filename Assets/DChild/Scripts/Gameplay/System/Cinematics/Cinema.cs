@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cinemachine;
 using DChild.Gameplay.Cinematics.Cameras;
 using DChild.Gameplay.Systems;
 using Sirenix.OdinInspector;
@@ -19,6 +20,8 @@ namespace DChild.Gameplay.Cinematics
         private List<ITrackingCamera> m_trackingCameras;
         [SerializeField]
         private Transform m_trackingTarget;
+
+        private CinemachineBrain m_currentBrain;
         private CameraPeekHandle m_offsetHandle;
         private CameraPeekMode m_currentLookAhead;
 
@@ -29,6 +32,8 @@ namespace DChild.Gameplay.Cinematics
         private CameraShakeType m_temporaryShakeProfile;
 
         public Camera mainCamera => m_mainCamera;
+
+        public CinemachineBrain currentBrain => m_currentBrain;
 
         public void TransistionTo(IVirtualCamera vCam)
         {
@@ -167,9 +172,8 @@ namespace DChild.Gameplay.Cinematics
         public void SetMainCamera(Camera camera)
         {
             m_mainCamera = camera;
+            m_currentBrain = m_mainCamera.GetComponent<CinemachineBrain>();
         }
-
-
 
         public void Initialize()
         {

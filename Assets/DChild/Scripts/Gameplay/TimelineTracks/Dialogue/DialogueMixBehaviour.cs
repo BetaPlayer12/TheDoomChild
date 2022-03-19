@@ -76,7 +76,7 @@ namespace PixelCrushers.DialogueSystem
                 }
             }
 
-            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect.isPlaying;
+            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false ;
         }
 
         private void OnContinueDiag(GameEventMessage obj)
@@ -144,6 +144,7 @@ namespace PixelCrushers.DialogueSystem
             Message.AddListener<GameEventMessage>(OnContinueDiag);
             m_played.Clear();
             m_behaviours.Clear();
+            DChildStandardDialogueUI.isInCutscene = true;
         }
 
 
@@ -154,6 +155,7 @@ namespace PixelCrushers.DialogueSystem
             Message.RemoveListener<GameEventMessage>(OnContinueDiag);
             m_played.Clear();
             m_behaviours.Clear();
+            DChildStandardDialogueUI.isInCutscene = false;
         }
     }
 }

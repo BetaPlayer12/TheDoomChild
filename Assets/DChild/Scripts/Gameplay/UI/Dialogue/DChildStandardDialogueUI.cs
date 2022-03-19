@@ -20,6 +20,8 @@ namespace DChild.UI
         [SerializeField]
         private StandardUISubtitlePanel m_banterSubtitlePanel;
 
+        public static bool isInCutscene;
+
         public override void Open()
         {
             var conversation = DialogueManager.MasterDatabase.GetConversation(DialogueManager.lastConversationStarted);
@@ -47,7 +49,10 @@ namespace DChild.UI
 
         public override void Close()
         {
-            GameplaySystem.playerManager.EnableControls();
+            if (isInCutscene == false)
+            {
+                GameplaySystem.playerManager.EnableControls();
+            }
             base.Close();
         }
     }

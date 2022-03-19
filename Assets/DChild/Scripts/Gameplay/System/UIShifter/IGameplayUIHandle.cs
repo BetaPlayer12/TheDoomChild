@@ -2,6 +2,7 @@
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Inventories;
+using DChild.Gameplay.Systems.Lore;
 using DChild.Menu.Trading;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace DChild.Gameplay.Systems
     {
         void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset);
         void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory, ITraderAskingPrice merchantAskingPrice);
+        void ShowLoreNote(LoreData m_data);
         void OpenStorePage(StorePage storePage);
         void OpenStorePage();
 

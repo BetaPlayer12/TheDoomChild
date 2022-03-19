@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Cinematics;
+﻿using Cinemachine;
+using DChild.Gameplay.Cinematics;
 using DChild.Serialization;
 using Doozy.Engine;
 using PixelCrushers.DialogueSystem;
@@ -36,6 +37,8 @@ namespace DChild.Gameplay.Narrative
         private PlayableDirector m_introCutscene;
         [SerializeField]
         private Transform m_playerStartPosition;
+        [SerializeField]
+        private CinemachineVirtualCamera m_cameraToDisable;
         [SerializeField]
         private AnimationReferenceAsset m_playerStandAnimation;
         [SerializeField]
@@ -105,6 +108,7 @@ namespace DChild.Gameplay.Narrative
                 }
                 yield return null;
             }
+            m_cameraToDisable.enabled = false;
             GameEventMessage.SendEvent("Prompt_Wakeup_Done");
 
             var standAnimation = skeleton.state.SetAnimation(0, m_playerStandAnimation, false);

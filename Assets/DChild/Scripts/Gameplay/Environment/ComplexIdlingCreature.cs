@@ -4,6 +4,7 @@ using Spine.Unity;
 using System.Collections;
 using Spine;
 using System;
+using Holysoft.Collections;
 
 namespace DChild.Gameplay.Environment
 {
@@ -102,6 +103,14 @@ namespace DChild.Gameplay.Environment
             [SerializeField]
             private Vector3 m_destination;
             [SerializeField]
+            private bool m_useSlerp;
+            [SerializeField, ShowIf("m_useSlerp"), Indent]
+            private float m_slerpCenterOffset;
+            [SerializeField]
+            private bool m_useCustomizeInterpolation;
+            [SerializeField, ShowIf("m_useCustomizeInterpolation"), Indent]
+            private AnimationCurve m_interpolationCurve;
+            [SerializeField]
             private float m_duration;
             private Vector3 m_origin;
 
@@ -111,6 +120,7 @@ namespace DChild.Gameplay.Environment
 
             public Vector3 destination { get => m_destination; set => m_destination = value; }
             public string animation { get => m_animation; }
+            public bool useSlerp { get => m_useSlerp; }
 #endif
 
             public override void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
@@ -121,7 +131,7 @@ namespace DChild.Gameplay.Environment
 
             public override void Update(GameObject rootObject, ref float timer)
             {
-                if (rootObject.transform.position == m_destination)
+                if (rootObject.transform.position == m_destination || m_duration < timer)
                 {
                     m_isActive = false;
                     m_isDone = true;
@@ -129,8 +139,36 @@ namespace DChild.Gameplay.Environment
                 else
                 {
                     timer += GameplaySystem.time.deltaTime;
-                    var lerpValue = Mathf.Clamp01(timer / m_duration);
-                    rootObject.transform.position = Vector3.Lerp(m_origin, m_destination, lerpValue);
+                    var lerpValue = GetLerpValue(timer, m_duration);
+                    rootObject.transform.position = EvaluateLerp(m_origin, m_destination, lerpValue);
+                }
+            }
+
+            private float GetLerpValue(float timer, float duration)
+            {
+                var lerp = Mathf.Clamp01(timer / duration);
+                if (m_useCustomizeInterpolation)
+                {
+                    lerp = m_interpolationCurve.Evaluate(lerp);
+                }
+                return lerp;
+            }
+
+            public Vector3 EvaluateLerp(Vector3 origin, Vector3 destination, float lerpValue)
+            {
+                if (m_useSlerp)
+                {
+                    var centerPivot = (origin + destination) * 0.5f;
+                    centerPivot -= new Vector3(0, -m_slerpCenterOffset);
+
+                    var originRelativeCenter = origin - centerPivot;
+                    var destinationRelativeCenter = destination - centerPivot;
+
+                    return Vector3.Slerp(originRelativeCenter, destinationRelativeCenter, lerpValue) + centerPivot;
+                }
+                else
+                {
+                    return Vector3.Lerp(m_origin, m_destination, lerpValue);
                 }
             }
         }
@@ -301,6 +339,7 @@ namespace DChild.Gameplay.Environment
             private Instruction m_instruction;
             private SkeletonDataAsset m_skeletonComponent;
 
+            public IBehaviour[] behaviours => m_behaviours;
             public bool isDone => m_currentIndex == m_behaviours.Length - 1 && m_behaviours[m_currentIndex].isDone;
 
             public void Initialize(GameObject rootObject, SpineAnimation animation, Instruction instruction, ref float timer, bool snap = false)
@@ -455,6 +494,7 @@ namespace DChild.Gameplay.Environment
         }
 
 #if UNITY_EDITOR
+        [Button]
         private void UpdateReference()
         {
             for (int i = 0; i < m_idlingBehaviour.Length; i++)
