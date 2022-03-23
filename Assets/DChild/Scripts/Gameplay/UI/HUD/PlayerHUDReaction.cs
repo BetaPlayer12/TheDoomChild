@@ -1,9 +1,11 @@
 ﻿using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Characters.Players.State;
 using DChild.Gameplay.Combat;
+using Doozy.Engine.UI;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Gameplay.UI
@@ -14,14 +16,32 @@ namespace DChild.Gameplay.UI
         private PlayerAvatar m_avatar;
         [SerializeField]
         private PlayerHUDReactionFX m_fx;
+        [SerializeField]
+        private UIView m_screenDamageFX;
 
         private Characters.Players.Modules.CharacterState m_state;
         private int m_shadowExecutionCount;
         private bool m_isEnrageActive;
 
+        private Coroutine m_screenDamageRoutine;
+
         private void OnPlayerDamaged(object sender, Damageable.DamageEventArgs eventArgs)
         {
             m_avatar.ExecuteFlinch();
+            StopCoroutine(m_screenDamageRoutine);
+            m_screenDamageRoutine = StartCoroutine(ScreenFXRoutine());
+        }
+
+        private IEnumerator ScreenFXRoutine()
+        {
+            m_screenDamageFX.InstantHide();
+            m_screenDamageFX.Show();
+
+            while (m_screenDamageFX.IsShowing)
+            {
+                yield return null;
+            }
+            m_screenDamageFX.Hide();
         }
 
         private void OnShadowMorphEnd(object sender, EventActionArgs eventArgs)

@@ -14,11 +14,13 @@ namespace DChild.Configurations
             Box = 1 << 0,
             Circle = 1 << 1,
             Edge = 1 << 2,
-            Polygon = 1 << 3
+            Polygon = 1 << 3,
         }
 
         [SerializeField, HideLabel]
         public ColliderColor gizmoColor;
+        [SerializeField]
+        private bool m_considerChildrenCollider;
         [SerializeField]
         private ColliderType m_colliderType;
         private static bool instancesMentioned;
@@ -39,18 +41,37 @@ namespace DChild.Configurations
             var oldGizmosMatrix = Gizmos.matrix;
             Gizmos.matrix = transform.localToWorldMatrix;
 
-            if (m_colliderType.HasFlag(ColliderType.Box))
+            if (m_considerChildrenCollider)
             {
-                var boxCol = GetComponent<BoxCollider2D>();
+                var colliders = GetComponentsInChildren<Collider2D>();
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    DrawGizmoFor(colliders[i]);
+                }
+            }
+            else
+            {
+                DrawGizmoFor(GetComponent<Collider2D>());
+            }
+
+            Gizmos.color = oldGizmosColor;
+            Gizmos.matrix = oldGizmosMatrix;
+        }
+
+        private void DrawGizmoFor(Collider2D collider)
+        {
+            if (m_colliderType.HasFlag(ColliderType.Box) && collider is BoxCollider2D)
+            {
+                var boxCol = (BoxCollider2D)collider;
                 if (boxCol)
                 {
                     Gizmos.DrawWireCube(boxCol.offset, boxCol.size);
                 }
             }
 
-            if (m_colliderType.HasFlag(ColliderType.Circle))
+            if (m_colliderType.HasFlag(ColliderType.Circle) && collider is CircleCollider2D)
             {
-                var circleCol = GetComponent<CircleCollider2D>();
+                var circleCol = (CircleCollider2D)collider; ;
                 if (circleCol)
                 {
                     Gizmos.DrawWireSphere(circleCol.offset, circleCol.radius);
@@ -58,26 +79,23 @@ namespace DChild.Configurations
             }
 
 
-            if (m_colliderType.HasFlag(ColliderType.Polygon))
+            if (m_colliderType.HasFlag(ColliderType.Polygon) && collider is PolygonCollider2D)
             {
-                var polygonCol = GetComponent<PolygonCollider2D>();
+                var polygonCol = (PolygonCollider2D)collider;
                 if (polygonCol)
                 {
                     DrawLines(polygonCol.points);
                 }
             }
 
-            if (m_colliderType.HasFlag(ColliderType.Edge))
+            if (m_colliderType.HasFlag(ColliderType.Edge) && collider is EdgeCollider2D)
             {
-                var edgeCol = GetComponent<EdgeCollider2D>();
+                var edgeCol = (EdgeCollider2D)collider;
                 if (edgeCol)
                 {
                     DrawLines(edgeCol.points);
                 }
             }
-
-            Gizmos.color = oldGizmosColor;
-            Gizmos.matrix = oldGizmosMatrix;
         }
 
         private void DrawLines(Vector2[] points)
