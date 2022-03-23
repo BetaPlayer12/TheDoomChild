@@ -26,6 +26,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private Info m_midAirOverhead;
         [SerializeField]
         private Info m_crouchForward;
+        [SerializeField]
+        private float m_aerialGravity;
 
         private IPlayerModifer m_modifier;
         private int m_whipAttackAnimationParameter;
@@ -124,8 +126,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     if (m_adjustGravity == true)
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
-                        m_rigidbody.gravityScale = 10;
-                        m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
+                        m_rigidbody.gravityScale = m_aerialGravity;
+                        m_rigidbody.velocity = Vector2.zero;
                     }
 
                     break;

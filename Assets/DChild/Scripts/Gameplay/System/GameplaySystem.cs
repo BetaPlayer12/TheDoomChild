@@ -2,17 +2,14 @@
 using DChild.Configurations;
 using DChild.Gameplay.Cinematics;
 using DChild.Gameplay.Combat;
-using DChild.Gameplay.Databases;
 using DChild.Gameplay.Systems;
-using DChild.Gameplay.Systems.Serialization;
 using DChild.Gameplay.VFX;
 using DChild.Menu;
 using DChild.Serialization;
-using Doozy.Engine;
 using Holysoft.Event;
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using PixelCrushers.DialogueSystem;
 
 namespace DChild.Gameplay
 {
@@ -101,6 +98,8 @@ namespace DChild.Gameplay
             {
                 Debug.LogError(e.Message);
             }
+
+            //PostProcess.SetActiveToAll(true);
         }
 
         public static void PauseGame()
@@ -111,6 +110,7 @@ namespace DChild.Gameplay
             GameSystem.SetCursorVisibility(true);
 
             MasterAudio.PauseEverything();
+            //PostProcess.SetActiveToAll(false);
         }
 
         public static void ClearCaches()
@@ -126,6 +126,7 @@ namespace DChild.Gameplay
         {
             m_campaignToLoad = campaignSlot;
             ClearCaches();
+            PersistentDataManager.ApplySaveData(campaignSlot.dialogueSaveData, DatabaseResetOptions.KeepAllLoaded);
             m_healthTracker?.RemoveAllTrackers();
             LoadingHandle.SetLoadType(loadType);
             GameSystem.LoadZone(m_campaignToLoad.sceneToLoad.sceneName, true);

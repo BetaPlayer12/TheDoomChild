@@ -53,6 +53,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField]
             private SimpleAttackInfo m_normalAttack = new SimpleAttackInfo();
             public SimpleAttackInfo normalAttack => m_normalAttack;
+            [SerializeField]
+            private SimpleAttackInfo m_heavySlashAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo heavySlashAttack => m_heavySlashAttack;
             [SerializeField, BoxGroup("Earth Shaker")]
             private SimpleAttackInfo m_earthShakerAttack = new SimpleAttackInfo();
             public SimpleAttackInfo earthShakerAttack => m_earthShakerAttack;
@@ -77,6 +80,15 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Dodge Attack")]
             private SimpleAttackInfo m_dodgeAttack = new SimpleAttackInfo();
             public SimpleAttackInfo dodgeAttack => m_dodgeAttack;
+            [SerializeField, BoxGroup("Guard Attack")]
+            private SimpleAttackInfo m_guardAttack = new SimpleAttackInfo();
+            public SimpleAttackInfo guardAttack => m_guardAttack;
+            [SerializeField, BoxGroup("Guard Attack"), ValueDropdown("GetAnimations")]
+            private string m_guardTriggerAnimation;
+            public string guardTriggerAnimation => m_guardTriggerAnimation;
+            //[SerializeField, MinValue(0)]
+            //private float m_attackCD;
+            //public float attackCD => m_attackCD;
 
             [Title("Misc")]
             [SerializeField]
@@ -105,6 +117,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_idleToCombatTransitionAnimation;
             public string idleToCombatTransitionAnimation => m_idleToCombatTransitionAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_flinchInplaceAnimation;
+            public string flinchInplaceAnimation => m_flinchInplaceAnimation;
+            [SerializeField, ValueDropdown("GetAnimations")]
+            private string m_flinchKnockbackAnimation;
+            public string flinchKnockbackAnimation => m_flinchKnockbackAnimation;
             [SerializeField, ValueDropdown("GetAnimations")]
             private string m_defeatStartAnimation;
             public string defeatStartAnimation => m_defeatStartAnimation;
@@ -151,6 +169,18 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, ValueDropdown("GetEvents")]
             private string m_swordSlash3Event;
             public string swordSlash3Event => m_swordSlash3Event;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_swordStabEvent;
+            public string swordStabEvent => m_swordStabEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_heavySlashEvent;
+            public string heavySlashEvent => m_heavySlashEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_earthShakerEvent;
+            public string earthShakerEvent => m_earthShakerEvent;
+            [SerializeField, ValueDropdown("GetEvents")]
+            private string m_specialThrustEvent;
+            public string specialThrustEvent => m_specialThrustEvent;
 
             public override void Initialize()
             {
@@ -161,7 +191,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_moveForwardGuardStance.SetData(m_skeletonDataAsset);
                 moveBackGuardStance.SetData(m_skeletonDataAsset);
                 m_dodgeHop.SetData(m_skeletonDataAsset);
+                m_guardAttack.SetData(m_skeletonDataAsset);
                 m_normalAttack.SetData(m_skeletonDataAsset);
+                m_heavySlashAttack.SetData(m_skeletonDataAsset);
                 m_earthShakerAttack.SetData(m_skeletonDataAsset);
                 m_earthShakerAttack.SetData(m_skeletonDataAsset);
                 m_specialThrustAttack.SetData(m_skeletonDataAsset);
@@ -174,11 +206,11 @@ namespace DChild.Gameplay.Characters.Enemies
         public class PhaseInfo : IPhaseInfo
         {
             [SerializeField]
-            private List<float> m_patternCount;
-            public List<float> patternCount => m_patternCount;
-            [SerializeField]
             private int m_phaseIndex;
             public int phaseIndex => m_phaseIndex;
+            [SerializeField]
+            private List<float> m_fullCD;
+            public List<float> fullCD => m_fullCD;
         }
 
 
@@ -189,6 +221,7 @@ namespace DChild.Gameplay.Characters.Enemies
             Idle,
             Turning,
             Attacking,
+            Cooldown,
             Chasing,
             ReevaluateSituation,
             WaitBehaviourEnd,
@@ -205,9 +238,12 @@ namespace DChild.Gameplay.Characters.Enemies
         private enum Attack
         {
             Normal,
+            HeavySlash,
             EarthShaker,
             SpecialThrust,
             Dodge,
+            Guard,
+            DodgeGuard,
             WaitAttackEnd,
         }
 
@@ -216,6 +252,7 @@ namespace DChild.Gameplay.Characters.Enemies
             PhaseOne,
             PhaseTwo,
             PhaseThree,
+            PhaseFour,
             Wait,
         }
 
@@ -238,7 +275,21 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
         [SerializeField, TabGroup("Effects")]
-        private GameObject m_fx;
+        private ParticleSystem m_earthShakerFX;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_swordSlash1BB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_swordSlash2BB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_swordSlash3BB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_swordStabBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_heavySlashBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_earthShakerBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Collider2D m_specialThrustBB;
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -250,24 +301,65 @@ namespace DChild.Gameplay.Characters.Enemies
         //[ShowInInspector]
         //private RandomAttackDecider<Pattern> m_patternDecider;
         [ShowInInspector]
-        private RandomAttackDecider<Attack>[] m_attackDecider;
+        private RandomAttackDecider<Attack> m_attackDecider;
         //private Pattern m_chosenPattern;
         //private Pattern m_previousPattern;
         private Attack m_currentAttack;
         private float m_currentAttackRange;
 
         private int m_currentPhaseIndex;
-        private float m_attackCount;
-        private float[] m_patternCount;
-        //private bool m_hasPhaseChanged;
         private Coroutine m_currentAttackCoroutine;
+        private Coroutine m_hurtboxCoroutine;
+        private Coroutine m_changePhaseCoroutine;
+
+        private Vector2 m_lastTargetPos;
+        private string m_currentMovementAnimation;
+        private float m_currentMovementSpeed;
+        private float m_currentCD;
+        private float m_pickedCD;
+        private List<float> m_currentFullCD;
+        private bool m_willDodgeGuard;
 
         private void ApplyPhaseData(PhaseInfo obj)
         {
-            m_currentPhaseIndex = obj.phaseIndex;
-            for (int i = 0; i < m_patternCount.Length; i++)
+            m_attackCache.Clear();
+            m_attackRangeCache.Clear();
+            switch (m_phaseHandle.currentPhase)
             {
-                m_patternCount[i] = obj.patternCount[i];
+                case Phase.PhaseOne:
+                    m_currentMovementAnimation = m_info.moveSlow.animation;
+                    m_currentMovementSpeed = m_info.moveSlow.speed;
+                    AddToAttackCache(Attack.Normal, Attack.HeavySlash, Attack.Dodge, Attack.Guard);
+                    AddToRangeCache(m_info.normalAttack.range, m_info.heavySlashAttack.range, m_info.dodgeAttack.range, m_info.guardAttack.range);
+                    break;
+                case Phase.PhaseTwo:
+                    m_currentMovementAnimation = m_info.moveSlow.animation;
+                    m_currentMovementSpeed = m_info.moveSlow.speed;
+                    AddToAttackCache(Attack.Normal, Attack.HeavySlash, Attack.DodgeGuard, Attack.EarthShaker);
+                    AddToRangeCache(m_info.normalAttack.range, m_info.heavySlashAttack.range, m_info.dodgeAttack.range, m_info.earthShakerAttack.range);
+                    break;
+                case Phase.PhaseThree:
+                    m_currentMovementAnimation = m_info.moveMedium.animation;
+                    m_currentMovementSpeed = m_info.moveMedium.speed;
+                    AddToAttackCache(Attack.Normal, Attack.HeavySlash, Attack.DodgeGuard, Attack.EarthShaker, Attack.Guard, Attack.SpecialThrust);
+                    AddToRangeCache(m_info.normalAttack.range, m_info.heavySlashAttack.range, m_info.dodgeAttack.range, m_info.earthShakerAttack.range, m_info.guardAttack.range, m_info.specialThrustAttack.range);
+                    break;
+                case Phase.PhaseFour:
+                    m_currentMovementAnimation = m_info.moveFast.animation;
+                    m_currentMovementSpeed = m_info.moveFast.speed;
+                    AddToAttackCache(Attack.Normal, Attack.HeavySlash, Attack.EarthShaker, Attack.SpecialThrust, Attack.Guard);
+                    AddToRangeCache(m_info.normalAttack.range, m_info.heavySlashAttack.range, m_info.earthShakerAttack.range, m_info.specialThrustAttack.range, m_info.guardAttack.range);
+                    break;
+            }
+            m_attackUsed = new bool[m_attackCache.Count];
+            m_currentPhaseIndex = obj.phaseIndex;
+            if (m_currentFullCD.Count != 0)
+            {
+                m_currentFullCD.Clear();
+            }
+            for (int i = 0; i < obj.fullCD.Count; i++)
+            {
+                m_currentFullCD.Add(obj.fullCD[i]);
             }
         }
 
@@ -334,9 +426,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //        break;
             //}
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.intro1Animation, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
+            //m_animation.SetAnimation(0, m_info.intro1Animation, false);
+            //m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_animation.DisableRootMotion();
             m_hitbox.Enable();
             m_hitbox.SetInvulnerability(Invulnerability.None);
@@ -355,10 +448,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private void SetAIToPhasing()
         {
             //m_hasPhaseChanged = true;
-            m_hitbox.SetInvulnerability(Invulnerability.Level_1);
             m_phaseHandle.ApplyChange();
             m_animation.DisableRootMotion();
             m_animation.SetEmptyAnimation(0, 0);
+            if (m_changePhaseCoroutine == null)
+            {
+                m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
+            }
         }
 
         private void StopCurrentAttackRoutine()
@@ -367,33 +463,29 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_currentAttackCoroutine);
                 m_currentAttackCoroutine = null;
+                m_attackDecider.hasDecidedOnAttack = false;
             }
         }
 
         private IEnumerator ChangePhaseRoutine()
         {
+            m_phaseHandle.allowPhaseChange = false;
+
             m_stateHandle.Wait(State.ReevaluateSituation);
-            //m_hitbox.SetInvulnerability(Invulnerability.None);
-            //m_hasPhaseChanged = false;
-            string phaseAnim = m_info.intro1Animation;
-            switch (m_phaseHandle.currentPhase)
-            {
-                case Phase.PhaseOne:
-                    phaseAnim = m_info.intro1Animation;
-                    break;
-                case Phase.PhaseTwo:
-                    phaseAnim = m_info.intro2Animation;
-                    break;
-                case Phase.PhaseThree:
-                    phaseAnim = m_info.intro3Animation;
-                    break;
-            }
-            m_animation.SetAnimation(0, phaseAnim, false).MixDuration = 0;
-            //yield return new WaitForSeconds(3.9f);
-            yield return new WaitForAnimationComplete(m_animation.animationState, phaseAnim);
-            m_hitbox.SetInvulnerability(Invulnerability.None);
+            m_hitbox.Disable();
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.flinchKnockbackAnimation, false);
+            m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
+            m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
+            m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
+            m_animation.DisableRootMotion();
+            m_hitbox.Enable();
+            m_changePhaseCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
+
+            m_phaseHandle.allowPhaseChange = true;
         }
         #region Attacks
 
@@ -402,15 +494,23 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = false;
 
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.normalAttack.animation, false).MixDuration = 0;
+            m_animation.SetAnimation(0, m_info.normalAttack.animation, false);
             //yield return new WaitForSeconds(0.5f);
             //m_character.physics.SetVelocity(m_info.shoulderBashVelocity.x * transform.localScale.x, 0);
             //yield return new WaitForSeconds(0.15f);
             //m_movement.Stop();
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
-            //m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0;
-            DecidedOnAttack(false);
+            //while (m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd)
+            //{
+            //    if (!IsFacingTarget()) CustomTurn();
+            //    yield return new WaitForSeconds(m_animation.animationState.GetCurrent(0).AnimationTime > 0.85f ? 0 : 1f);
+            //    yield return null;
+            //}
+            m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
+            m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
+            //m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
+            //yield return new WaitForSeconds(3f);
+            m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -419,19 +519,117 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = true;
         }
 
+        private IEnumerator HeavySlashRoutine()
+        {
+            m_phaseHandle.allowPhaseChange = false;
+
+            while (Mathf.Abs(m_lastTargetPos.x - transform.position.x) >= 30f)
+            {
+                m_animation.EnableRootMotion(true, false);
+                m_animation.SetAnimation(0, m_info.moveMedium.animation, true);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveMedium.speed);
+                yield return null;
+            }
+            m_animation.DisableRootMotion();
+            //m_character.physics.AddForce(transform.right * 1f, ForceMode2D.Impulse);
+            m_character.physics.SetVelocity(transform.localScale.x * 75f);
+            m_animation.SetAnimation(0, m_info.heavySlashAttack.animation, false).MixDuration = 0;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.heavySlashAttack.animation);
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
+            //yield return new WaitForSeconds(3f);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+
+            m_phaseHandle.allowPhaseChange = true;
+        }
+
+        private IEnumerator DodgeAttackRoutine()
+        {
+            m_phaseHandle.allowPhaseChange = false;
+
+            if (!IsFacingTarget()) CustomTurn();
+            m_animation.EnableRootMotion(true, false);
+            m_animation.SetAnimation(0, m_info.dodgeHop.animation, false);
+            m_animation.AddAnimation(0, m_info.normalAttack.animation, false, 0);
+            //if (!IsFacingTarget()) CustomTurn();
+            //yield return new WaitForSeconds(.5f);
+            //if (!IsFacingTarget()) CustomTurn();
+            //yield return new WaitForSeconds(1.5f);
+            //if (!IsFacingTarget()) CustomTurn();
+            //while (m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd)
+            //{
+            //    if (!IsFacingTarget()) CustomTurn();
+            //    yield return new WaitForSeconds(m_animation.animationState.GetCurrent(0).AnimationTime > 0.85f ? 0 :1f);
+            //    yield return null;
+            //}
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.normalAttack.animation);
+            m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
+            m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
+            //yield return new WaitForSeconds(3f);
+            m_attackDecider.hasDecidedOnAttack = false;
+            m_animation.DisableRootMotion();
+            m_currentAttackCoroutine = null;
+            m_stateHandle.ApplyQueuedState();
+            yield return null;
+
+            m_phaseHandle.allowPhaseChange = true;
+        }
+
+        private IEnumerator GuardAttackRoutine(bool hasBlocked, bool willDodge)
+        {
+            m_phaseHandle.allowPhaseChange = false;
+
+            if (!hasBlocked)
+            {
+                m_hitbox.SetCanBlockDamageState(true);
+                m_animation.SetAnimation(0, willDodge ? m_info.idleCombatAnimation : m_info.idleGuardAnimation, true);
+                yield return new WaitForSeconds(3f);
+            }
+            m_hitbox.SetCanBlockDamageState(false);
+            if (!willDodge)
+            {
+                if (!IsFacingTarget()) CustomTurn();
+                m_animation.EnableRootMotion(true, false);
+                m_animation.SetAnimation(0, m_info.guardTriggerAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.guardTriggerAnimation);
+                m_animation.SetAnimation(0, m_info.guardAttack.animation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.guardAttack.animation);
+                m_attackDecider.hasDecidedOnAttack = false;
+                m_currentAttackCoroutine = null;
+                m_stateHandle.ApplyQueuedState();
+            }
+            else
+            {
+                m_currentAttackCoroutine = StartCoroutine(DodgeAttackRoutine());
+            }
+            //m_currentAttackCoroutine = StartCoroutine(SpecialThrustAttackRoutine());
+            yield return null;
+
+            m_phaseHandle.allowPhaseChange = true;
+        }
+
+        private void DamageBlocked(object sender, Damageable.DamageEventArgs eventArgs)
+        {
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_info.idleGuardAnimation)
+            {
+                StopCoroutine(m_currentAttackCoroutine);
+                m_currentAttackCoroutine = StartCoroutine(GuardAttackRoutine(true, m_willDodgeGuard));
+            }
+        }
+
         private IEnumerator EarthShakerAttackRoutine()
         {
             m_phaseHandle.allowPhaseChange = false;
 
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.earthShakerAttack.animation, false).MixDuration = 0;
-            //yield return new WaitForSeconds(0.5f);
-            //m_character.physics.SetVelocity(m_info.shoulderBashVelocity.x * transform.localScale.x, 0);
-            //yield return new WaitForSeconds(0.15f);
-            //m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.earthShakerAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.earthShakerAttack.animation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            DecidedOnAttack(false);
+            m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
+            m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -449,8 +647,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.specialThrustAttack.animation, false);
             m_animation.AddAnimation(0, m_info.specialThrustHitAnimation, false, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.specialThrustHitAnimation);
-            m_animation.SetAnimation(0, m_info.idleAnimation, true);
-            DecidedOnAttack(false);
+            m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
+            m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
@@ -475,8 +673,8 @@ namespace DChild.Gameplay.Characters.Enemies
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
             {
                 m_animation.EnableRootMotion(true, false);
-                m_animation.SetAnimation(0, m_info.moveMedium.animation, true);
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveMedium.speed);
+                m_animation.SetAnimation(0, m_currentMovementAnimation, true);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMovementSpeed);
             }
             else
             {
@@ -486,62 +684,19 @@ namespace DChild.Gameplay.Characters.Enemies
         }
         #endregion
 
-        private bool AllowAttack(int phaseIndex, State state)
-        {
-            if (m_currentPhaseIndex >= phaseIndex)
-            {
-                return true;
-            }
-            else
-            {
-                DecidedOnAttack(false);
-                m_stateHandle.OverrideState(state);
-                return false;
-            }
-        }
-
-        private void DecidedOnAttack(bool condition)
-        {
-            //m_patternDecider.hasDecidedOnAttack = condition;
-            for (int i = 0; i < m_attackDecider.Length; i++)
-            {
-                m_attackDecider[i].hasDecidedOnAttack = condition;
-            }
-        }
-
         private void UpdateAttackDeciderList()
         {
             //m_patternDecider.SetList(new AttackInfo<Pattern>(Pattern.AttackPattern1, m_info.targetDistanceTolerance),
             //                        new AttackInfo<Pattern>(Pattern.AttackPattern2, m_info.targetDistanceTolerance),
             //                        new AttackInfo<Pattern>(Pattern.AttackPattern3, m_info.targetDistanceTolerance));
-            m_attackDecider[0].SetList(new AttackInfo<Attack>(Attack.Normal, m_info.normalAttack.range)
+            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Normal, m_info.normalAttack.range)
+                                    , new AttackInfo<Attack>(Attack.HeavySlash, m_info.heavySlashAttack.range)
                                     , new AttackInfo<Attack>(Attack.EarthShaker, m_info.earthShakerAttack.range)
                                     , new AttackInfo<Attack>(Attack.SpecialThrust, m_info.specialThrustAttack.range)
-                                    , new AttackInfo<Attack>(Attack.Dodge, m_info.dodgeAttack.range));
-            m_attackDecider[1].SetList(new AttackInfo<Attack>(Attack.Normal, m_info.normalAttack.range)
-                                    , new AttackInfo<Attack>(Attack.EarthShaker, m_info.earthShakerAttack.range)
-                                    , new AttackInfo<Attack>(Attack.SpecialThrust, m_info.specialThrustAttack.range)
-                                    , new AttackInfo<Attack>(Attack.Dodge, m_info.dodgeAttack.range));
-            m_attackDecider[2].SetList(new AttackInfo<Attack>(Attack.Normal, m_info.normalAttack.range)
-                                    , new AttackInfo<Attack>(Attack.EarthShaker, m_info.earthShakerAttack.range)
-                                    , new AttackInfo<Attack>(Attack.SpecialThrust, m_info.specialThrustAttack.range)
-                                    , new AttackInfo<Attack>(Attack.Dodge, m_info.dodgeAttack.range));
-            DecidedOnAttack(false);
-        }
-
-        public override void ApplyData()
-        {
-            //if (m_patternDecider != null)
-            //{
-            //}
-            //for (int i = 0; i < m_attackDecider.Length; i++)
-            //{
-            //    if (m_attackDecider[i] != null)
-            //    {
-            //        UpdateAttackDeciderList();
-            //    }
-            //}
-            base.ApplyData();
+                                    , new AttackInfo<Attack>(Attack.Dodge, m_info.dodgeAttack.range)
+                                    , new AttackInfo<Attack>(Attack.Guard, m_info.guardAttack.range)
+                                    , new AttackInfo<Attack>(Attack.DodgeGuard, m_info.dodgeAttack.range));
+            m_attackDecider.hasDecidedOnAttack = false;
         }
 
         private Vector2 GroundPosition()
@@ -550,14 +705,14 @@ namespace DChild.Gameplay.Characters.Enemies
             return hit.point;
         }
 
-        private void ChooseAttack(int patternIndex)
+        private void ChooseAttack()
         {
-            if (!m_attackDecider[patternIndex].hasDecidedOnAttack)
+            if (!m_attackDecider.hasDecidedOnAttack)
             {
                 IsAllAttackComplete();
                 for (int i = 0; i < m_attackCache.Count; i++)
                 {
-                    m_attackDecider[patternIndex].DecideOnAttack();
+                    m_attackDecider.DecideOnAttack();
                     if (m_attackCache[i] != m_currentAttack && !m_attackUsed[i])
                     {
                         m_attackUsed[i] = true;
@@ -566,85 +721,6 @@ namespace DChild.Gameplay.Characters.Enemies
                         return;
                     }
                 }
-            }
-        }
-
-        private void ExecuteAttack(int patternIndex)
-        {
-            if (m_attackCount < m_patternCount[patternIndex])
-            {
-                ChooseAttack(patternIndex);
-                if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
-                {
-                    m_stateHandle.Wait(State.Attacking);
-                    switch (m_currentAttack)
-                    {
-                        case Attack.Normal:
-                            if (patternIndex == 0 || patternIndex == 1)
-                            {
-                                if (m_currentPhaseIndex != 3)
-                                {
-                                    m_attackCount++;
-                                    m_currentAttackCoroutine = StartCoroutine(NormalAttackRoutine());
-                                }
-                                else
-                                {
-                                    DecidedOnAttack(false);
-                                    m_stateHandle.ApplyQueuedState();
-                                }
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            break;
-                        case Attack.EarthShaker:
-                            if (m_currentPhaseIndex == 3)
-                            {
-                                m_attackCount++;
-                                m_currentAttackCoroutine = StartCoroutine(EarthShakerAttackRoutine());
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            break;
-                        case Attack.SpecialThrust:
-                            if (patternIndex == 0 || patternIndex == 2)
-                            {
-                                if (AllowAttack(0, State.Attacking))
-                                {
-                                    m_attackCount++;
-                                    m_currentAttackCoroutine = StartCoroutine(SpecialThrustAttackRoutine());
-                                }
-                            }
-                            else
-                            {
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
-                            }
-                            break;
-                        case Attack.Dodge:
-                            if (AllowAttack(3, State.Attacking))
-                            {
-                                m_attackCount++;
-                                DecidedOnAttack(false);
-                                m_stateHandle.ApplyQueuedState();
-
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    MoveToTarget(m_currentAttackRange);
-                }
-            }
-            else
-            {
-                m_stateHandle.OverrideState(State.Chasing);
             }
         }
 
@@ -679,13 +755,13 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        void UpdateRangeCache(params float[] list)
-        {
-            for (int i = 0; i < list.Length; i++)
-            {
-                m_attackRangeCache[i] = list[i];
-            }
-        }
+        //void UpdateRangeCache(params float[] list)
+        //{
+        //    for (int i = 0; i < list.Length; i++)
+        //    {
+        //        m_attackRangeCache[i] = list[i];
+        //    }
+        //}
 
         protected override void Awake()
         {
@@ -693,19 +769,70 @@ namespace DChild.Gameplay.Characters.Enemies
             m_turnHandle.TurnDone += OnTurnDone;
             m_deathHandle.SetAnimation(m_info.defeatStartAnimation);
             //m_patternDecider = new RandomAttackDecider<Pattern>();
-            m_attackDecider = new RandomAttackDecider<Attack>[3];
-            for (int i = 0; i < 3; i++)
-            {
-                m_attackDecider[i] = new RandomAttackDecider<Attack>();
-            }
+            m_attackDecider = new RandomAttackDecider<Attack>();
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
-            m_patternCount = new float[3];
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.Normal, Attack.EarthShaker, Attack.SpecialThrust, Attack.Dodge);
+            AddToAttackCache(Attack.Normal, Attack.HeavySlash, Attack.EarthShaker, Attack.SpecialThrust, Attack.Dodge, Attack.Guard);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.normalAttack.range, m_info.earthShakerAttack.range, m_info.specialThrustAttack.range, m_info.dodgeAttack.range);
+            AddToRangeCache(m_info.normalAttack.range, m_info.heavySlashAttack.range, m_info.earthShakerAttack.range, m_info.specialThrustAttack.range, m_info.dodgeAttack.range, m_info.guardAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
+            m_damageable.DamageTaken += DamageBlocked;
+            m_currentFullCD = new List<float>();
+        }
+
+        private void SwordThrustRootMoveEnd()
+        {
+            m_movement.Stop();
+        }
+
+        private void SwordThrustRootMoveStart()
+        {
+            m_character.physics.SetVelocity(transform.right * 5f);
+        }
+
+        private void SwordSlash1()
+        {
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordSlash1BB, 0.25f));
+        }
+
+        private void SwordSlash2()
+        {
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordSlash2BB, 0.25f));
+        }
+
+        private void SwordSlash3()
+        {
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordSlash3BB, 0.25f));
+        }
+
+        private void SwordStab()
+        {
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordStabBB, 0.25f));
+        }
+
+        private void HeavySlash()
+        {
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_heavySlashBB, 0.25f));
+        }
+
+        private void EarthShaker()
+        {
+            m_earthShakerFX.Play();
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_earthShakerBB, 0.25f));
+        }
+
+        private void SpecialThrust()
+        {
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_specialThrustBB, 0.5f));
+        }
+
+        private IEnumerator BoundingBoxRoutine(Collider2D hurtbox, float duration)
+        {
+            hurtbox.enabled = true;
+            yield return new WaitForSeconds(duration);
+            hurtbox.enabled = false;
+            yield return null;
         }
 
         protected override void Start()
@@ -713,10 +840,20 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Start();
             //m_spineListener.Subscribe(m_info.phaseEvent, PhaseFX);
             m_animation.DisableRootMotion();
-
             m_phaseHandle = new PhaseHandle<Phase, PhaseInfo>();
             m_phaseHandle.Initialize(Phase.PhaseOne, m_info.phaseInfo, m_character, ChangeState, ApplyPhaseData);
             m_phaseHandle.ApplyChange();
+
+            m_spineListener.Subscribe(m_info.swordSlash1Event, SwordSlash1);
+            m_spineListener.Subscribe(m_info.swordSlash2Event, SwordSlash2);
+            m_spineListener.Subscribe(m_info.swordSlash3Event, SwordSlash3);
+            m_spineListener.Subscribe(m_info.swordStabEvent, SwordStab);
+            m_spineListener.Subscribe(m_info.heavySlashEvent, HeavySlash);
+            m_spineListener.Subscribe(m_info.earthShakerEvent, EarthShaker);
+            m_spineListener.Subscribe(m_info.specialThrustEvent, SpecialThrust);
+            m_spineListener.Subscribe(m_info.rootMoveEndEvent, SwordThrustRootMoveEnd);
+            m_spineListener.Subscribe(m_info.rootMoveStartEvent, SwordThrustRootMoveStart);
+            m_spineListener.Subscribe(m_info.specialThrustEvent, SpecialThrust);
         }
 
         private void Update()
@@ -754,48 +891,89 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_movement.Stop();
                     break;
                 case State.Attacking:
+                    m_stateHandle.Wait(State.Cooldown);
+                    switch (m_currentAttack)
+                    {
+                        case Attack.Normal:
+                            m_currentAttackCoroutine = StartCoroutine(NormalAttackRoutine());
+                            m_pickedCD = m_currentFullCD[0];
+                            break;
+                        case Attack.HeavySlash:
+                            m_lastTargetPos = m_targetInfo.position;
+                            m_currentAttackCoroutine = StartCoroutine(HeavySlashRoutine());
+                            m_pickedCD = m_currentFullCD[1];
+                            break;
+                        case Attack.EarthShaker:
+                            m_currentAttackCoroutine = StartCoroutine(EarthShakerAttackRoutine());
+                            m_pickedCD = m_currentFullCD[2];
+                            break;
+                        case Attack.SpecialThrust:
+                            m_currentAttackCoroutine = StartCoroutine(SpecialThrustAttackRoutine());
+                            m_pickedCD = m_currentFullCD[3];
+                            break;
+                        case Attack.Dodge:
+                            m_currentAttackCoroutine = StartCoroutine(DodgeAttackRoutine());
+                            m_pickedCD = m_currentFullCD[4];
+                            break;
+                        case Attack.Guard:
+                            m_willDodgeGuard = false;
+                            m_currentAttackCoroutine = StartCoroutine(GuardAttackRoutine(false, m_willDodgeGuard));
+                            m_pickedCD = m_currentFullCD[5];
+                            break;
+                        case Attack.DodgeGuard:
+                            m_willDodgeGuard = true;
+                            m_currentAttackCoroutine = StartCoroutine(GuardAttackRoutine(false, m_willDodgeGuard));
+                            m_pickedCD = m_currentFullCD[6];
+                            break;
+                    }
+
+                    break;
+
+                case State.Cooldown:
+                    //m_stateHandle.Wait(State.ReevaluateSituation);
+                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                    if (!IsFacingTarget())
+                    {
+                        m_turnState = State.Cooldown;
+                        m_stateHandle.SetState(State.Turning);
+                    }
+                    else
+                    {
+                        m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
+                    }
+
+                    if (m_currentCD <= m_pickedCD)
+                    {
+                        m_currentCD += Time.deltaTime;
+                    }
+                    else
+                    {
+                        m_currentCD = 0;
+                        m_stateHandle.OverrideState(State.ReevaluateSituation);
+                    }
+
+                    break;
+
+                case State.Chasing:
                     if (IsFacingTarget())
                     {
-                        switch (m_phaseHandle.currentPhase)
+                        ChooseAttack();
+                        if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
                         {
-                            case Phase.PhaseOne:
-                                UpdateRangeCache(m_info.normalAttack.range, m_info.specialThrustAttack.range);
-                                ExecuteAttack(0);
-                                break;
-                            case Phase.PhaseTwo:
-                                UpdateRangeCache(m_info.specialThrustAttack.range, m_info.specialThrustAttack.range);
-                                ExecuteAttack(1);
-                                break;
-                            case Phase.PhaseThree:
-                                UpdateRangeCache(m_info.earthShakerAttack.range, m_info.earthShakerAttack.range);
-                                ExecuteAttack(2);
-                                break;
+                            m_attackDecider.hasDecidedOnAttack = false;
+                            m_stateHandle.SetState(State.Attacking);
+                        }
+                        else
+                        {
+                            MoveToTarget(m_currentAttackRange);
                         }
                     }
                     else
                     {
                         m_turnState = State.Attacking;
                         //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
-                            m_stateHandle.SetState(State.Turning);
+                        m_stateHandle.SetState(State.Turning);
                     }
-
-                    break;
-
-                case State.Chasing:
-                    m_attackCount = 0;
-                    DecidedOnAttack(false);
-                    //m_patternDecider.DecideOnAttack();
-                    //m_chosenPattern = m_patternDecider.chosenAttack.attack;
-                    //if (m_chosenPattern == m_previousPattern)
-                    //{
-                    //    m_patternDecider.hasDecidedOnAttack = false;
-                    //}
-                    //if (m_patternDecider.hasDecidedOnAttack)
-                    //{
-                    //    m_previousPattern = m_chosenPattern;
-                    //    m_stateHandle.SetState(State.Attacking);
-                    //}
-                    m_stateHandle.SetState(State.Attacking);
                     break;
 
                 case State.ReevaluateSituation:

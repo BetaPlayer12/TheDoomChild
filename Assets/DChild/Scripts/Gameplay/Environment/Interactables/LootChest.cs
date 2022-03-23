@@ -35,39 +35,54 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private Vector3 m_promptOffset;
         [SerializeField]
+        private Sprite m_closeVersion;
+        [SerializeField]
+        private Sprite m_openVersion;
+        [SerializeField]
         private ILootDataContainer m_loot;
         private bool m_isLooted;
 
-        public bool showPrompt => m_isLooted == false;
+
+        public bool showPrompt => true;
 
         public string promptMessage => "Open";
 
         public Vector3 promptPosition => transform.position + m_promptOffset;
         public void Load(ISaveData data)
         {
-           m_isLooted = ((SaveData)data).isLooted;
+            m_isLooted = ((SaveData)data).isLooted;
             if (m_isLooted)
             {
                 //Force Player Animation?
                 //Enable Cinematic Thingy?
                 //Temporary Fix, If All Chest are the same dont make UnityEvent
-                gameObject.SetActive(false);
-                
+                GetComponent<SpriteRenderer>().sprite = m_openVersion;
+                GetComponent<Collider2D>().enabled = false;
+                //gameObject.SetActive(false);
+
             }
             else
             {
                 //Temporary Fix, If All Chest are the same dont make UnityEvent
-                gameObject.SetActive(true);
+                GetComponent<SpriteRenderer>().sprite = m_closeVersion;
+                GetComponent<Collider2D>().enabled = true;
+                //gameObject.SetActive(true);
             }
         }
-
+        public void Initialize()
+        {
+            m_isLooted = false;
+            gameObject.SetActive(true);
+        }
         public ISaveData Save() => new SaveData(m_isLooted);
 
         public void Interact(Character character)
         {
-            m_loot.DropLoot(transform.position);
+            m_loot?.DropLoot(transform.position);
             m_isLooted = true;
-            Debug.Log("Chest Opened");
+            GetComponent<SpriteRenderer>().sprite = m_openVersion;
+            GetComponent<Collider2D>().enabled = false;
+            GetComponent<VFXSpawner>().Spawn();
         }
 
         private void OnDrawGizmosSelected()

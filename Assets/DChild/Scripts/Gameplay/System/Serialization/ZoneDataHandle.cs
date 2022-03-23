@@ -171,6 +171,10 @@ namespace DChild.Serialization
                     {
                         m_cacheComponentSerializer.LoadData(m_zoneData.GetData(m_cacheComponentSerializer.ID));
                     }
+                    else
+                    {
+                        m_cacheComponentSerializer.InitializeComponentData();
+                    }
                 }
                 catch (Exception e)
                 {

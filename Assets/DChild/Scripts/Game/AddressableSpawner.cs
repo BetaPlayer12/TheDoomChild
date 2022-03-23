@@ -32,9 +32,8 @@ namespace DChild
         private static Dictionary<AssetReferenceT<GameObject>, int> m_toBeInstantiatedCount = new Dictionary<AssetReferenceT<GameObject>, int>();
         public static event Action<GameObject> OnSpawn;
 
-        public static void Spawn(AssetReferenceT<GameObject> asset, Vector3 position, int index, Action<GameObject, int> CallBack = null)
+        public static void Spawn(AssetReferenceT<GameObject> asset, Vector3 position, int index = 0, Action<GameObject, int> CallBack = null)
         {
-
             var request = new Request(position, index, CallBack != null);
             if (m_loadedAssets.ContainsKey(asset))
             {

@@ -515,6 +515,27 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
+        public void LaunchAmbush(Vector2 position)
+        {
+            enabled = true;
+            m_aggroCollider.enabled = true;
+            m_stateHandle.OverrideState(State.Detect);
+        }
+
+        public void PrepareAmbush(Vector2 position)
+        {
+            StopAllCoroutines();
+
+            m_character.physics.simulateGravity = false;
+            m_character.physics.SetVelocity(Vector2.zero);
+            m_hitbox.Disable();
+            m_animation.SetAnimation(0, m_info.dormantAnimation, true);
+            m_movement.Stop();
+            m_aggroCollider.enabled = false;
+            m_stateHandle.OverrideState(State.Dormant);
+            enabled = false;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -539,7 +560,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             //m_randomSpawnColliders = new List<Collider2D>();
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, m_projectilePoint.transform);
-            m_stateHandle = new StateHandle<State>(m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
+            m_stateHandle = new StateHandle<State>(!enabled ? State.Dormant : State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
         }
@@ -561,6 +582,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
+                    m_character.physics.simulateGravity = true;
+                    m_hitbox.Enable();
+                    m_aggroCollider.enabled = true;
+
                     if (Vector2.Distance(m_initialPos, transform.position) >= 100)
                     {
                         StartCoroutine(TeleportRoutine());
@@ -772,23 +797,6 @@ namespace DChild.Gameplay.Characters.Enemies
         protected override void OnForbidFromAttackTarget()
         {
             ResetAI();
-        }
-
-        public void LaunchAmbush(Vector2 position)
-        {
-            enabled = true;
-            m_aggroCollider.enabled = true;
-            m_stateHandle.OverrideState(State.Detect);
-        }
-
-        public void PrepareAmbush(Vector2 position)
-        {
-            enabled = false;
-            StopAllCoroutines();
-
-            m_character.physics.simulateGravity = false;
-            m_hitbox.Disable();
-            m_stateHandle.OverrideState(State.Dormant);
         }
     }
 }

@@ -5,11 +5,8 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.NavigationMap
 {
-
     public class NavMapTracker : MonoBehaviour
     {
-        [SerializeField]
-        private Transform m_inGameTrackReferencePoint;
         [SerializeField]
         private Transform m_toTrack;
         [SerializeField]
@@ -21,6 +18,9 @@ namespace DChild.Gameplay.NavigationMap
         private Vector2 m_calculationOffset;
         [SerializeField]
         private Vector2 m_scaleOffset = Vector2.one;
+
+        private Transform m_inGameTrackReferencePoint;
+        public Vector2 trackerPosition => m_tracker.anchoredPosition;
 
         public void SetToTrack(Transform toTrack)
         {
@@ -53,8 +53,11 @@ namespace DChild.Gameplay.NavigationMap
         [Button]
         public void UpdateTrackerPosition()
         {
-            var distanceToRefencePoint = (Vector2)(m_toTrack.position - m_inGameTrackReferencePoint.position) * m_scaleOffset;
-            m_tracker.anchoredPosition = m_uiReferencePoint.anchoredPosition + distanceToRefencePoint + m_calculationOffset;
+            if (m_inGameTrackReferencePoint)
+            {
+                var distanceToRefencePoint = (Vector2)(m_toTrack.position - m_inGameTrackReferencePoint.position) * m_scaleOffset;
+                m_tracker.anchoredPosition = m_uiReferencePoint.anchoredPosition + distanceToRefencePoint + m_calculationOffset;
+            }
         }
     }
 }

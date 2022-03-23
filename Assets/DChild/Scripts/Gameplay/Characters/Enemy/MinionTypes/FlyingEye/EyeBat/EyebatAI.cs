@@ -785,7 +785,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.ReturnToPatrol:
                     if (IsFacing(m_startPos))
                     {
-                        if (Vector2.Distance(m_startPos, transform.position) > 5f)
+                        if (Vector2.Distance(m_startPos, transform.position) > 10f)
                         {
                             var rb2d = GetComponent<Rigidbody2D>();
                             m_bodycollider.enabled = false;

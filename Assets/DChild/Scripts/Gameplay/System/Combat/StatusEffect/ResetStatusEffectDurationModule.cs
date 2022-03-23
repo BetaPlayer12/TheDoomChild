@@ -11,6 +11,8 @@ namespace DChild.Gameplay.Combat.StatusAilment
         [SerializeField]
        private StatusEffectType m_type;
 
+        public IStatusEffectModule GetInstance() => this;
+
         public void Start(Character character)
         {
             character.GetComponent<StatusEffectReciever>().ResetDuration(m_type);

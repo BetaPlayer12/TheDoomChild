@@ -64,7 +64,12 @@ namespace DChild.Gameplay.Items
             m_model.SetActive(hasNotBeenPickedUp);
             m_trigger.enabled = hasNotBeenPickedUp;
         }
+        public void Initialize()
+        {
+            m_model.SetActive(true);
+            m_trigger.enabled = true;
 
+        }
         private void UpdateSprite()
         {
             m_sprite.sprite = m_fragmentDatas[m_fragmentIndex].icon;

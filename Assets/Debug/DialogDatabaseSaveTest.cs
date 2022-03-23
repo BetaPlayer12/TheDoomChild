@@ -1,18 +1,16 @@
-﻿using System.Collections;
+﻿using PixelCrushers.DialogueSystem;
+using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DialogDatabaseSaveTest : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private string save;
+    [Button]
+    private void getsave()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        save=PersistentDataManager.GetSaveData();
+        Debug.Log("Result:"+save);
     }
 }

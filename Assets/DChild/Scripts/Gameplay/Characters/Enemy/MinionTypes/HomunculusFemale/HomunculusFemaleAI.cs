@@ -491,6 +491,27 @@ namespace DChild.Gameplay.Characters.Enemies
             m_idleDuringPatrolDurationTimer = m_info.GetRandomIdleDuringPatrolDuration();
         }
 
+        public void LaunchAmbush(Vector2 position)
+        {
+            enabled = true;
+            m_aggroCollider.enabled = true;
+            m_stateHandle.OverrideState(State.Detect);
+        }
+
+        public void PrepareAmbush(Vector2 position)
+        {
+            StopAllCoroutines();
+
+            m_character.physics.simulateGravity = false;
+            m_character.physics.SetVelocity(Vector2.zero);
+            m_hitbox.Disable();
+            m_animation.SetAnimation(0, m_info.dormantAnimation, true);
+            m_moveHandle.Stop();
+            m_aggroCollider.enabled = false;
+            m_stateHandle.OverrideState(State.Dormant);
+            enabled = false;
+        }
+
         protected override void Start()
         {
             base.Start();
@@ -508,7 +529,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.Awake();
             m_patrolHandle.Initialize();
             m_patrolHandle.TurnRequest += OnTurnRequest;
-            m_stateHandle = new StateHandle<State>(m_animation.GetCurrentAnimation(0).ToString() == m_info.dormantAnimation ? State.Dormant : State.Patrol, State.WaitForBehaviour);
+            m_stateHandle = new StateHandle<State>(!enabled ? State.Dormant : State.Patrol, State.WaitForBehaviour);
             m_turnHandle.TurnDone += OnTurnDone;
             m_canIdleDuringPatrol = true;
             m_idleDuringPatrolCooldownTimer = m_info.GetRandomIdleDuringPatrolCooldown();
@@ -530,10 +551,10 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Patrol:
-                    if (!m_aggroCollider.enabled)
-                    {
-                        m_aggroCollider.enabled = true;
-                    }
+                    m_character.physics.simulateGravity = true;
+                    m_hitbox.Enable();
+                    m_aggroCollider.enabled = true;
+
                     //m_character.physics.simulateGravity = true;
                     var patrolCharacterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                     m_patrolHandle.Patrol(m_moveHandle, m_info.walkInfo.speed, patrolCharacterInfo);
@@ -656,23 +677,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                 }
             }
-        }
-
-        public void LaunchAmbush(Vector2 position)
-        {
-            enabled = true;
-            m_aggroCollider.enabled = true;
-            m_stateHandle.OverrideState(State.Detect);
-        }
-
-        public void PrepareAmbush(Vector2 position)
-        {
-            enabled = false;
-            StopAllCoroutines();
-
-            m_character.physics.simulateGravity = false;
-            m_hitbox.Disable();
-            m_stateHandle.OverrideState(State.Dormant);
         }
     }
 

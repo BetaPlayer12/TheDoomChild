@@ -67,7 +67,13 @@ namespace DChild.Gameplay.Environment
                 m_startAsOffState?.Invoke();
             }
         }
-
+        public void Initialize()
+        {
+            m_isPulled = false;
+            m_movableSwitch.position = m_startingPosition;
+            m_movableObjectComponent.SetMovable(true);
+            m_startAsOffState?.Invoke();
+        }
         public ISaveData Save() => new SaveData(m_isPulled);
 
         public void SetMovableState(bool isMovable)

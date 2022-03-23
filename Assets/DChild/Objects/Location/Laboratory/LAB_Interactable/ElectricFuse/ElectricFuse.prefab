@@ -11,19 +11,6 @@ SortingGroup:
   m_SortingLayerID: -1150295711
   m_SortingLayer: -1
   m_SortingOrder: 0
---- !u!114 &6879561348155703853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818607245291125122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_maxHealth: 1
 --- !u!114 &2014615923605342530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1452,6 +1439,19 @@ MonoBehaviour:
   useUnitySubmitSound: 0
   useUnityCancelSound: 0
   useUnityToggleSound: 0
+--- !u!114 &6879561348155703853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818607245291125122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a345e74751b90eb46865600dc3709da1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 1
 --- !u!61 &4017547202898228919
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1492,6 +1492,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collider2Ds:
   - {fileID: 4017547202898228919}
+  m_damageFXInfo:
+    m_fx: {fileID: 0}
+    m_overrideColor: 0
+    m_colorToUse: {r: 0, g: 0, b: 0, a: 0}
+    m_overrideScale: 0
+    m_scaleToUse: {x: 0, y: 0, z: 0}
   m_invulnerabilityLevel: 0
   m_damageReduction: 0
   m_canBlockDamage: 0
@@ -1792,6 +1798,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_copySorting
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713767410971931232, guid: f0d6278d2f66d5344b76dacbcf596621,
+        type: 3}
+      propertyPath: m_debris.m_AssetGUID
+      value: 5f8eb48527bf31e49950fa494b9a0826
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0d6278d2f66d5344b76dacbcf596621, type: 3}

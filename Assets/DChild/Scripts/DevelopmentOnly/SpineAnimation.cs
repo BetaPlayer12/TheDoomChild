@@ -141,7 +141,7 @@ namespace DChild.Gameplay
 
         public TrackEntry AddEmptyAnimation(int trackIndex, float mixDuration, float delay) => m_skeletonAnimation.state.AddEmptyAnimation(trackIndex, mixDuration, delay);
 
-        protected Track GetTrack(int id)
+        public Track GetTrack(int id)
         {
             for (int i = 0; i < m_animationTracks.Count; i++)
             {

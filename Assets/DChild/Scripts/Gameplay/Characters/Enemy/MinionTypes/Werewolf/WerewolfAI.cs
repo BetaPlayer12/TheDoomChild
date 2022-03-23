@@ -150,6 +150,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
+            m_flinchHandle.m_enableMixFlinch = true;
             m_stateHandle.ApplyQueuedState();
         }
 
@@ -393,6 +394,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
+                    m_flinchHandle.m_enableMixFlinch = false;
 
                     switch (m_attackDecider.chosenAttack.attack)
                     {
@@ -446,7 +448,9 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_attackDecider.DecideOnAttack();
                             if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
                             {
-                                m_movement.Stop();
+                                if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                    m_movement.Stop();
+
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 m_stateHandle.SetState(State.Attacking);
@@ -468,7 +472,9 @@ namespace DChild.Gameplay.Characters.Enemies
                                 else
                                 {
                                     Debug.Log("IDLE CHASING");
-                                    m_movement.Stop();
+                                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                        m_movement.Stop();
+
                                     m_selfCollider.enabled = true;
                                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                         m_animation.SetAnimation(0, m_info.idleAnimation, true);

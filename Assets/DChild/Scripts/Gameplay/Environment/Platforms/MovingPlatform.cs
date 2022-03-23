@@ -115,6 +115,10 @@ namespace DChild.Gameplay.Environment
             m_currentWayPoint = m_wayPointDestination;
             m_incrementerValue = saveData.incrementerValue;
         }
+        public void Initialize()
+        {
+           //editore set up initialize
+        }
 
         public void PingPongNextWaypoint(bool next)
         {

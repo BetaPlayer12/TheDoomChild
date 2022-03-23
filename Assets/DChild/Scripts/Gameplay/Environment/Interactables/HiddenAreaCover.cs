@@ -81,7 +81,14 @@ namespace DChild.Gameplay.Environment
                 LerpColors(lerpValue);
             }
         }
-
+        public void Initialize()
+        {
+            m_visible = true;
+            SetVisibility(m_visible);
+            var lerpValue = m_visible ? 1 : 0;
+            m_lerpDuration.SetValue(lerpValue);
+            LerpColors(lerpValue);
+        }
         public void SetVisibility(bool isVisible)
         {
             if (m_visible != isVisible)
@@ -111,7 +118,7 @@ namespace DChild.Gameplay.Environment
         public void SetAsVisible(bool isVisible)
         {
             StopAllCoroutines();
-            LerpColors(isVisible ? 0 : 1);
+            LerpColors(isVisible ? 1 : 0);
             SetRenderersActive(isVisible);
             m_visible = isVisible;
         }
