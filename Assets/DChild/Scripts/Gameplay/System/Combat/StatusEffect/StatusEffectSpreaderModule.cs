@@ -13,14 +13,12 @@ public class StatusEffectSpreaderModule : IStatusEffectModule
 
     private StatusEffectSpreaderHandler m_spreadStatus;
 
-
+    public IStatusEffectModule GetInstance() => this;
 
     public void Start(Character character)
     {
-
         m_spreadStatus = character.gameObject.AddComponent<StatusEffectSpreaderHandler>();
         m_spreadStatus.statusEffectList.Add(m_data, m_chance);
-
     }
 
     public void Stop(Character character)

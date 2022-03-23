@@ -26,7 +26,7 @@ MonoBehaviour:
       Data: 0|DChild.Serialization.CampaignSlot, Assembly-CSharp
     - Name: m_id
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: m_demoGame
       Entry: 5
       Data: false
@@ -129,7 +129,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_soulCrystals
+    - Name: m_questItems
       Entry: 7
       Data: 6|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
     - Name: m_datas
@@ -147,33 +147,15 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_questItems
-      Entry: 7
-      Data: 8|DChild.Serialization.ItemContainerSaveData, Assembly-CSharp
-    - Name: m_datas
-      Entry: 7
-      Data: 9|DChild.Serialization.ItemContainerSaveData+Item[], Assembly-CSharp
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: m_bestiaryProgressData
       Entry: 7
-      Data: 10|DChild.Serialization.AcquisitionData, Assembly-CSharp
+      Data: 8|DChild.Serialization.AcquisitionData, Assembly-CSharp
     - Name: m_serializeDatas
       Entry: 7
-      Data: 11|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
+      Data: 9|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
     - Name: 
       Entry: 12
       Data: 1
@@ -210,27 +192,30 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_soulSkillAcquisitionData
+    - Name: m_soulSkillData
       Entry: 7
-      Data: 12|DChild.Serialization.AcquisitionData, Assembly-CSharp
-    - Name: m_serializeDatas
-      Entry: 7
-      Data: 13|DChild.Serialization.AcquisitionData+SerializeData[], Assembly-CSharp
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: DChild.Serialization.AcquisitionData+SerializeData, Assembly-CSharp
-    - Name: m_ID
+      Data: 10|DChild.Gameplay.SoulSkills.PlayerSoulSkillData, Assembly-CSharp
+    - Name: m_maxSoulCapacity
       Entry: 3
+      Data: 1
+    - Name: m_acquiredSoulSkills
+      Entry: 7
+      Data: 11|System.Int32[], mscorlib
+    - Name: 
+      Entry: 14
       Data: 0
-    - Name: m_hasData
-      Entry: 5
-      Data: false
+    - Name: 
+      Entry: 13
+      Data: 
     - Name: 
       Entry: 8
       Data: 
+    - Name: m_activatedSoulSkills
+      Entry: 7
+      Data: 12|System.Int32[], mscorlib
+    - Name: 
+      Entry: 14
+      Data: 0
     - Name: 
       Entry: 13
       Data: 
@@ -240,37 +225,19 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: m_equippedSoulSkillData
-      Entry: 7
-      Data: DChild.Serialization.EquippedSoulSkillData, Assembly-CSharp
-    - Name: m_armorSkill
-      Entry: 3
-      Data: 0
-    - Name: m_supportSkill
-      Entry: 3
-      Data: 0
-    - Name: m_weaponSkill1
-      Entry: 3
-      Data: 0
-    - Name: m_weaponSkill2
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: m_campaignProgress
       Entry: 7
-      Data: 14|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 13|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 15|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 14|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 16|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 15|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -288,14 +255,14 @@ MonoBehaviour:
       Data: 
     - Name: m_zoneDatas
       Entry: 7
-      Data: 17|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 16|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 18|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 17|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 19|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 18|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -316,14 +283,14 @@ MonoBehaviour:
       Data: 
     - Name: m_miscDatas
       Entry: 7
-      Data: 20|DChild.Serialization.SerializeDataList, Assembly-CSharp
+      Data: 19|DChild.Serialization.SerializeDataList, Assembly-CSharp
     - Name: m_saveDatas
       Entry: 7
-      Data: 21|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
+      Data: 20|System.Collections.Generic.Dictionary`2[[DChild.Serialization.SerializeID,
         Assembly-CSharp],[DChild.Serialization.ISaveData, Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 22|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
+      Data: 21|DChild.Serialization.SerializeID+EqualityComparer, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -340,9 +307,15 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: m_dialogueSaveData
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: 'Variable={Alert="", FurryWhispererEquipped=false}; Item["New_Game_Intro"]={Name="New
+        Game Intro", Pictures="[]", Description="", Success_Description="", Failure_Description="",
+        State="success", Is_Item=false, }; Actor={Player={Name="Player", Pictures="[]",
+        Description="The Main Character of the game", IsPlayer=true, Display_Name=""},
+        Store={Name="Store", Pictures="[]", Description="The book that Player has",
+        IsPlayer=false}, Albin={Name="Albin", Pictures="[]", Description="Some dude",
+        IsPlayer=false}}; StatusTable = ""; RelationshipTable = ""; '
     - Name: 
       Entry: 8
       Data: 
-  m_ID: 1
+  m_ID: 2

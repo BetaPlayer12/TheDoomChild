@@ -8,6 +8,8 @@ using UnityEngine;
 using System.Threading.Tasks;
 using Doozy.Engine;
 using System;
+using PixelCrushers.DialogueSystem;
+using PixelCrushers;
 #if UNITY_EDITOR
 using DChildDebug;
 #endif
@@ -62,6 +64,9 @@ namespace DChild.Gameplay
         private bool m_writeSaveFileToDisk =true;
         [OdinSerialize, HideReferenceObjectPicker]
         private CampaignSlot m_slot = new CampaignSlot();
+
+        private bool m_willLoadDialogueSerializedData;
+        private string m_loadDialogueSerializedData;
 
         public event EventAction<CampaignSlotUpdateEventArgs> PreSerialization;
         public event EventAction<CampaignSlotUpdateEventArgs> PostDeserialization;
@@ -139,6 +144,16 @@ namespace DChild.Gameplay
                 PostDeserialization?.Invoke(this, cacheEventArgs.Value);
                 cacheEventArgs.Release();
             }
+        }
+        private void OnDialogueDatabaseAdded()
+        {
+            PersistentDataManager.ApplySaveData(m_slot.dialogueSaveData);
+        }
+
+        private void Start()
+        {
+            PersistentDataManager.ApplySaveData(m_slot.dialogueSaveData);
+            ExtraDatabases.addedDatabases += OnDialogueDatabaseAdded;
         }
     }
 }

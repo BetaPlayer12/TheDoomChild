@@ -35,7 +35,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
         public StatusEffectType type => m_type;
         private float m_baseDuration;
 
-        public StatusEffectHandle(StatusEffectType m_type, float m_duration,float m_baseDuration, IStatusEffectModule[] m_modules, IStatusEffectUpdatableModule[] m_updatableModules)
+        public StatusEffectHandle(StatusEffectType m_type, float m_duration, float m_baseDuration, IStatusEffectModule[] m_modules, IStatusEffectUpdatableModule[] m_updatableModules)
         {
             this.m_type = m_type;
             this.m_duration = m_duration;
@@ -48,11 +48,7 @@ namespace DChild.Gameplay.Combat.StatusAilment
 
         public void ResetDuration()
         {
-
             m_duration = m_baseDuration;
-           
-            Debug.Log($"{m_duration}");
-
         }
 
 

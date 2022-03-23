@@ -234,6 +234,11 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_edgeSensor;
 
+        [SerializeField, TabGroup("Hurtbox")]
+        private Transform m_slamBB;
+        [SerializeField, TabGroup("Hurtbox")]
+        private Transform m_chargeBB;
+
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
         [ShowInInspector]
@@ -276,21 +281,34 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_flinch2Handle.gameObject.SetActive(true);
                     break;
             }
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         private void ChangeState()
         {
             if (m_changePhaseCoroutine == null)
             {
-                Debug.Log("DireBrothers Change State");
-                if (m_currentAttackCoroutine != null)
-                {
-                    StopCoroutine(m_currentAttackCoroutine);
-                    m_currentAttackCoroutine = null;
-                }
-                //SetAIToPhasing();
-                m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
+                StartCoroutine(SmartChangePhaseRoutine());
             }
+        }
+
+        private IEnumerator SmartChangePhaseRoutine()
+        {
+            yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            m_animation.SetEmptyAnimation(0, 0);
+            m_animation.SetEmptyAnimation(1, 0);
+            m_animation.SetEmptyAnimation(2, 0);
+            StopAllCoroutines();
+            m_phaseHandle.allowPhaseChange = false;
+            Debug.Log("DireBrothers Change State");
+            if (m_currentAttackCoroutine != null)
+            {
+                StopCoroutine(m_currentAttackCoroutine);
+                m_currentAttackCoroutine = null;
+            }
+            //SetAIToPhasing();
+            m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
+            yield return null;
         }
 
         private IEnumerator ChangePhaseRoutine()
@@ -302,18 +320,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_attackRangeCache.Clear();
             AddToRangeCache(m_info.shieldDashAttack.range/*, m_info.shieldBashAttack.range*/);
             m_attackUsed = new bool[m_attackCache.Count];
-            m_phaseHandle.ApplyChange();
-            m_hitbox.Disable();
+            m_hitbox.gameObject.SetActive(false);
             m_movement.Stop();
             var sp_deathAnim = UnityEngine.Random.Range(0, 2) == 0 ? m_info.sh_death1Animation : m_info.sh_death2Animation;
             m_animation.SetAnimation(0, sp_deathAnim, false).MixDuration = 0;
             yield return new WaitForAnimationComplete(m_animation.animationState, sp_deathAnim);
             m_currentFlinchHandle.gameObject.SetActive(true);
-            m_hitbox.Enable();
+            m_hitbox.gameObject.SetActive(true);
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
-            m_changePhaseCoroutine = null;
+            m_phaseHandle.ApplyChange();
             m_stateHandle.ApplyQueuedState();
             yield return null;
+
+            m_changePhaseCoroutine = null;
         }
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
@@ -322,7 +341,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle.ApplyQueuedState();
         }
 
-        private void OnTurnRequest(object sender, EventActionArgs eventArgs) => m_stateHandle.SetState(State.Turning);
+        private void OnTurnRequest(object sender, EventActionArgs eventArgs)
+        {
+            m_stateHandle.SetState(State.Turning);
+            m_phaseHandle.allowPhaseChange = false;
+        }
 
         public override void SetTarget(IDamageable damageable, Character m_target = null)
         {
@@ -366,6 +389,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
             m_stateHandle.ApplyQueuedState();
+            m_phaseHandle.allowPhaseChange = true;
         }
 
         //Patience Handler
@@ -391,20 +415,21 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            m_animation.EnableRootMotion(true, false);
             if (m_currentAttackCoroutine != null)
             {
                 StopCoroutine(m_currentAttackCoroutine);
                 m_currentAttackCoroutine = null;
             }
             m_selfCollider.SetActive(false);
-            m_hitbox.Disable();
+            m_hitbox.gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             m_movement.Stop();
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
         {
-            if (m_animation.GetCurrentAnimation(0).ToString() == m_currentIdleAnimation)
+            if (m_animation.GetCurrentAnimation(0).ToString() == m_currentIdleAnimation && m_changePhaseCoroutine == null)
             {
                 m_currentFlinchHandle.m_autoFlinch = true;
                 StopAllCoroutines();
@@ -484,6 +509,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HeavyGroundBashAttackRoutine()
         {
+            m_slamBB.gameObject.SetActive(true);
+            m_chargeBB.gameObject.SetActive(false);
             m_currentFlinchHandle.m_enableMixFlinch = false;
             m_animation.SetAnimation(0, m_info.heavyGroundBashAttack.animation, false);
             yield return new WaitForSeconds(1.5f);
@@ -507,6 +534,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ShieldDashAttackRoutine(Vector2 targetPos)
         {
+            m_slamBB.gameObject.SetActive(false);
+            m_chargeBB.gameObject.SetActive(true);
             //m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.sh_run.animation, true);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.runAttack.animation);
@@ -709,6 +738,8 @@ namespace DChild.Gameplay.Characters.Enemies
                         {
                             if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                             {
+                                m_slamBB.gameObject.SetActive(false);
+                                m_chargeBB.gameObject.SetActive(true);
                                 m_animation.EnableRootMotion(false, false);
                                 m_animation.SetAnimation(0, m_currentRunAnimation, true);
                                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_phaseHandle.currentPhase == Phase.BothAlive ? m_info.run.speed : m_info.sh_run.speed);

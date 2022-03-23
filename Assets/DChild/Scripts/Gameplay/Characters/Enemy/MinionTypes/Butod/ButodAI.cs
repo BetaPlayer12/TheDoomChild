@@ -406,6 +406,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator VomitRoutine()
         {
+            //m_flinchHandle.m_enableMixFlinch = false;
             m_utilityBone.mode = SkeletonUtilityBone.Mode.Override;
             m_utilityBone.transform.position = GroundPosition(new Vector2(m_targetLastPos.x, transform.position.y + 5f));
             m_animation.SetAnimation(0, m_info.vomitAttack.animation, false);
@@ -417,6 +418,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             //var acidPool = Instantiate(m_info.acidPool, m_utilityBone.transform.position, Quaternion.identity);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.vomitAttack.animation);
+            //m_flinchHandle.m_enableMixFlinch = true;
             m_utilityBone.mode = SkeletonUtilityBone.Mode.Follow;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();

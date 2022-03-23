@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Environment.Interractables
 {
+
     public class Door : MonoBehaviour, ISerializableComponent, ILerpHandling
     {
         [System.Serializable]
@@ -66,8 +67,6 @@ namespace DChild.Gameplay.Environment.Interractables
             }
 
 #if UNITY_EDITOR
-
-
             [ResponsiveButtonGroup("Open/Button"), Button("Use Current"), ShowIf("m_doorPanel")]
             private void UseCurrentForOpenPosition()
             {
@@ -86,6 +85,8 @@ namespace DChild.Gameplay.Environment.Interractables
         private DoorPanel[] m_panels;
         [SerializeField]
         private AnimationCurve m_speed;
+        [SerializeField,MinValue(0.1f)]
+        private float m_duration = 1f;
         [SerializeField, OnValueChanged("OnStateChange")]
         private bool m_isOpen;
 
@@ -177,6 +178,13 @@ namespace DChild.Gameplay.Environment.Interractables
 
         public ISaveData Save() => new SaveData(m_isOpen);
 
+        public void Initialize()
+        {
+            m_isOpen = false;
+            SetAsOpen(m_isOpen);
+
+        }
+
         private void Awake()
         {
             SetAsOpen(m_isOpen);
@@ -186,7 +194,7 @@ namespace DChild.Gameplay.Environment.Interractables
         private void LateUpdate()
         {
             m_animationTime += GameplaySystem.time.deltaTime;
-            var lerpValue = m_speed.Evaluate(m_animationTime);
+            var lerpValue = m_speed.Evaluate(m_animationTime/ m_duration);
             for (int i = 0; i < m_panels.Length; i++)
             {
                 m_panels[i].Lerp(lerpValue);

@@ -178,6 +178,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
+            m_flinchHandle.m_enableMixFlinch = true;
             m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_stateHandle.ApplyQueuedState();
@@ -212,6 +213,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_enablePatience = true;
                 //StartCoroutine(PatienceRoutine());
             }
+        }
+
+        private bool TargetBlocked()
+        {
+            Vector2 wat = m_character.centerMass.position;
+            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay(wat, m_targetInfo.position - wat);
+            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -343,8 +354,10 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator DetectRoutine()
         {
             m_movement.Stop();
+            m_animation.EnableRootMotion(true, true);
             m_animation.SetAnimation(0, m_info.detectAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            m_animation.DisableRootMotion();
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -381,6 +394,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_currentRunAttackDuration = 0;
+            m_flinchHandle.m_enableMixFlinch = true;
             //yield return new WaitForSeconds(m_info.runAttackDuration);
             //m_animation.EnableRootMotion(false, false);
             m_animation.SetAnimation(0, m_info.idleAnimation, true).MixDuration = 0.25f;
@@ -548,6 +562,7 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_selfCollider.enabled = true;
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
 
+                            m_flinchHandle.m_enableMixFlinch = false;
                             switch (/*m_attackDecider.chosenAttack.attack*/ m_currentAttack)
                             {
                                 case Attack.Attack1:
@@ -577,16 +592,19 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                            m_animation.EnableRootMotion(false, m_groundSensor.isDetecting ? true : false);
+
+                            if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting 
+                                && ((/*Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 50f &&*/ !TargetBlocked())))
                             {
-                                var distance = Vector2.Distance(m_targetInfo.position, transform.position);
-                                m_animation.EnableRootMotion(false, false);
+                                //var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                 m_selfCollider.enabled = false;
-                                m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
-                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.patrol.speed);
+                                m_animation.SetAnimation(0, m_info.move.animation, true);
+                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
                             }
                             else
                             {
+
                                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                     m_movement.Stop();
 

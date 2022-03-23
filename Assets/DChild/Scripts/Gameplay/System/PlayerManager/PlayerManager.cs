@@ -4,6 +4,7 @@ using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
 using DChild.Inputs;
+using DChild.Visuals;
 using Doozy.Engine;
 using Holysoft;
 using Holysoft.Collections;
@@ -26,6 +27,7 @@ namespace DChild.Gameplay.Systems
         void StopCharacterControlOverride();
         void DisableControls();
         void EnableControls();
+        void SyncVisualsWith(SpineSyncer spineSyncer);
     }
 
     public class PlayerManager : MonoBehaviour, IGameplaySystemModule, IGameplayInitializable, IPlayerManager
@@ -52,6 +54,11 @@ namespace DChild.Gameplay.Systems
 
         public GameplayInput gameplayInput => m_gameplayInput;
         public IAutoReflexHandler autoReflex => m_autoReflex;
+
+        public void SyncVisualsWith(SpineSyncer spineSyncer)
+        {
+            player.character.GetComponent<SpineSyncer>().SyncWith(spineSyncer);
+        }
 
         public void DisableInput()
         {
@@ -131,6 +138,8 @@ namespace DChild.Gameplay.Systems
             var character = m_player.character;
             m_collisionRegistrator = character.GetComponentInChildren<CollisionRegistrator>();
             m_interactableDetector = character.GetComponentInChildren<InteractableDetector>();
+
+            m_player.Initialize();
             GameplaySystem.campaignSerializer.PostDeserialization += OnPostDeserialization;
             GameplaySystem.campaignSerializer.PreSerialization += OnPreSerialization;
             m_respawnDelay.CountdownEnd += OnRespawnPlayer;

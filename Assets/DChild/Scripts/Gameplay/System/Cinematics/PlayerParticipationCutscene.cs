@@ -8,6 +8,7 @@
 using DChild.Gameplay.Characters.Players;
 using Spine.Unity;
 using Spine.Unity.Playables;
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -19,10 +20,23 @@ namespace DChild.Gameplay.Cinematics
     {
         [SerializeField]
         private PlayableDirector m_cutscene;
+        [SerializeField]
+        private bool m_stopPlayerControlOverrideAfterCutscene = true;
 
         private PlayerControlledObject m_controlledObject;
         private Animator m_animator;
         private Scene m_originalScene;
+
+        public void RemovePlayerFromCutscene()
+        {
+            m_controlledObject.transform.parent = null;
+            SceneManager.MoveGameObjectToScene(m_controlledObject.gameObject, m_originalScene);
+            m_animator.enabled = true;
+            if (m_stopPlayerControlOverrideAfterCutscene)
+            {
+                GameplaySystem.playerManager.StopCharacterControlOverride();
+            }
+        }
 
         private void OnCutscenePlay(PlayableDirector obj)
         {
@@ -40,10 +54,7 @@ namespace DChild.Gameplay.Cinematics
 
         private void OnCutsceneDone(PlayableDirector obj)
         {
-            m_controlledObject.transform.parent = null;
-            SceneManager.MoveGameObjectToScene(m_controlledObject.gameObject, m_originalScene);
-            m_animator.enabled = true;
-            GameplaySystem.playerManager.StopCharacterControlOverride();
+            RemovePlayerFromCutscene();
         }
 
         private void Awake()
@@ -54,6 +65,7 @@ namespace DChild.Gameplay.Cinematics
 
             var animation = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
             var timelineAsset = m_cutscene.playableAsset as TimelineAsset;
+
 
             for (int i = 0; i < timelineAsset.rootTrackCount; i++)
             {
@@ -77,11 +89,11 @@ namespace DChild.Gameplay.Cinematics
                     }
                     break;
                 }
- 
-               
+
+
             }
 
-           
+
         }
     }
 }

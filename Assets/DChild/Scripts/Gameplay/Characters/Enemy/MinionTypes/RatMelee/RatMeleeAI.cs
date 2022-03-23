@@ -329,8 +329,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
-            m_animation.SetAnimation(0, m_info.detectAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
+            //m_animation.SetAnimation(0, m_info.detectAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.detectAnimation);
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.OverrideState(State.ReevaluateSituation);
             yield return null;
@@ -576,6 +576,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                 }
                                 else
                                 {
+                                    if (m_character.physics.velocity.x != 0) m_animation.SetAnimation(0, m_info.idleAnimation, true);
+
                                     m_movement.Stop();
                                     m_selfCollider.enabled = true;
                                     var animation = UnityEngine.Random.Range(0, 100) > 2 ? m_info.idleAnimation : m_info.idle2Animation;

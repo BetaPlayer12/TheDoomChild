@@ -63,6 +63,14 @@ namespace DChild.Gameplay
             SetGlows(!m_isUsed);
         }
 
+        public void Initialize()
+        {
+            m_isUsed = false;
+            m_collider.enabled = true;
+            SetGlows(true);
+
+        }
+
         public void Interact(Character character)
         {
             if (m_isUsed == false)

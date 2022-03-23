@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.Players;
+﻿
+using DChild.Gameplay.Characters.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

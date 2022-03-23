@@ -41,7 +41,7 @@ namespace DChild.Menu.Bestiary
             if (m_data != data)
             {
                 m_data = data;
-                m_info.SetInfo(data);
+                m_info?.SetInfo(data);
             }
         }
 

@@ -104,6 +104,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_selfCollider;
+        [SerializeField, TabGroup("Reference")]
+        private GameObject m_shadow;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -215,6 +217,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SinkRoutine()
         {
+            m_shadow.SetActive(false);
             m_animation.SetAnimation(0, m_info.sinkIdleAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.sinkIdleAnimation);
             //m_animation.SetAnimation(0, m_info.si, true);
@@ -250,6 +253,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_rb2d.sharedMaterial = null;
             m_movement.Stop();
             m_selfCollider.enabled = false;
+            m_shadow.SetActive(false);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -304,6 +308,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectRoutine()
         {
+            m_shadow.SetActive(true);
             m_animation.SetAnimation(0, m_info.immerseAnimation, false);
             yield return new WaitForSeconds(.25f);
             m_hitbox.gameObject.SetActive(true);
@@ -371,7 +376,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
-
+                    m_shadow.SetActive(false);
                     break;
 
                 case State.Patrol:
@@ -447,7 +452,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting && m_groundSensor.isDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) /*&& !m_wallSensor.allRaysDetecting*/ && m_groundSensor.isDetecting)
                             {
                                 m_character.physics.UseStepClimb(false);
                                 m_movement.Stop();
