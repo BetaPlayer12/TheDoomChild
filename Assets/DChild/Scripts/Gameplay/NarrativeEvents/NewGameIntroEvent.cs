@@ -117,10 +117,9 @@ namespace DChild.Gameplay.Narrative
                 yield return null;
             }
 
-            m_afterWakeupDialogue.OnUse();
-
-            SetStorePickupSequence(true);
             GameplaySystem.playerManager.StopCharacterControlOverride();
+            m_afterWakeupDialogue.OnUse();
+            SetStorePickupSequence(true);
             yield return null;
         }
     }
