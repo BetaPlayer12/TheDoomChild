@@ -7,6 +7,7 @@ namespace DChild.Gameplay.Cinematics
     public interface ICinema
     {
         Camera mainCamera { get; }
+        CinemachineBrain currentBrain { get; }
 
         void SetMainCamera(Camera camera);
         void EnableCameraShake(bool enable);

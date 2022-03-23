@@ -426,9 +426,10 @@ namespace DChild.Gameplay.Characters.Enemies
             //        break;
             //}
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.intro1Animation, false);
-            m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
+            //m_animation.SetAnimation(0, m_info.intro1Animation, false);
+            //m_animation.AddAnimation(0, m_info.idleAnimation, true, 0);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleAnimation);
+            m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_animation.DisableRootMotion();
             m_hitbox.Enable();
             m_hitbox.SetInvulnerability(Invulnerability.None);
