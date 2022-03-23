@@ -26,6 +26,8 @@ namespace DChild.Gameplay.Systems
         private WorldMapHandler m_worldMap;
         [SerializeField]
         private NavigationMapManager m_navMap;
+        [SerializeField]
+        private LoreInfoUI m_loreUI;
 
         public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
@@ -199,8 +201,9 @@ namespace DChild.Gameplay.Systems
             StartCoroutine(PromptJournalUpdateRoutine(duration));
         }
 
-        public void ShowLoreNote(LoreData m_data)
+        public void ShowLoreNote(LoreData data)
         {
+            m_loreUI.SetInfo(data);
             GameEventMessage.SendEvent("Show LoreNote");
         }
 

@@ -494,6 +494,7 @@ namespace DChild.Gameplay.Environment
         }
 
 #if UNITY_EDITOR
+        [Button]
         private void UpdateReference()
         {
             for (int i = 0; i < m_idlingBehaviour.Length; i++)
