@@ -7,15 +7,15 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
 {
     public class BackgroundCreatureAmbience : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField, OnValueChanged("SetProperties")]
         private Vector2 m_noiseOffset;
-        [SerializeField]
+        [SerializeField, OnValueChanged("SetProperties")]
         private float m_noiseScale;
-        [SerializeField, ColorUsage(true, true)]
+        [SerializeField, ColorUsage(true, true), OnValueChanged("SetProperties")]
         private Color m_glowColor;
-        [SerializeField, ColorUsage(true, true)]
+        [SerializeField, ColorUsage(true, true), OnValueChanged("SetProperties")]
         private Color m_glowOverlay;
-        [SerializeField, ColorUsage(true, true)]
+        [SerializeField, ColorUsage(true, true), OnValueChanged("SetProperties")]
         private Color m_OverallTexColor;
 
 
@@ -25,11 +25,16 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
         private const string REFERENCE_GLOWOVERLAY = "Color_GlowOverlay";
         private const string REFERENCE_OVERALLTEXCOLOR = "Color_OverallTexColor";
 
-        private static MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+        private static MaterialPropertyBlock propertyBlock;
 
         [Button]
         private void SetProperties()
         {
+#if UNITY_EDITOR
+            if (Application.isPlaying == false)
+                return;
+#endif
+
             var mesh = GetComponent<MeshRenderer>();
             mesh.GetPropertyBlock(propertyBlock);
 
@@ -44,6 +49,10 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
 
         private void Start()
         {
+            if(propertyBlock == null)
+            {
+                propertyBlock = new MaterialPropertyBlock();
+            }
             SetProperties();
         }
 
