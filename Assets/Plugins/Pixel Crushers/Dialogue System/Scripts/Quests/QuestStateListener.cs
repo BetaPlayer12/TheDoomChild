@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using System.Collections;
+using Sirenix.OdinInspector;
 
 namespace PixelCrushers.DialogueSystem
 {

@@ -9,7 +9,7 @@ namespace DChild.Gameplay.Systems.Journal
         [SerializeField]
         private JournalData m_data;
 
-        private static Player m_player;
+        protected static Player m_player;
         private static JournalProgress m_journalProgess;
 
         [Button, HideInEditorMode]
@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Systems.Journal
             m_journalProgess.UpdateJournal(m_data);
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             var currentPlayer = GameplaySystem.playerManager.player;
             if (m_player == null || m_player == currentPlayer)
@@ -28,4 +28,6 @@ namespace DChild.Gameplay.Systems.Journal
             }
         }
     }
+
+
 }
