@@ -32,9 +32,10 @@ namespace DChild.Gameplay.Characters.Players
         private Character m_character;
         private Vector2 m_prevCharacterPosition;
 
-        private List<IButtonToInteract> m_objectsInRange;
         [ShowInInspector]
         private IButtonToInteract m_closestObject;
+        [ShowInInspector,HideInEditorMode]
+        private List<IButtonToInteract> m_objectsInRange;
         public event EventAction<DetectedInteractableEventArgs> InteractableDetected;
 
         public IButtonToInteract closestObject => m_closestObject;
