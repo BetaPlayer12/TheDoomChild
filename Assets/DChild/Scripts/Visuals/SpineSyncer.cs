@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Spine.Unity;
+using System.Collections;
 using UnityEngine;
 
 namespace DChild.Visuals
@@ -7,8 +8,9 @@ namespace DChild.Visuals
     {
         [SerializeField]
         private DChild.Gameplay.SpineAnimation m_animation;
-
-        public Gameplay.SpineAnimation animation => m_animation;
+        [SerializeField]
+        private SkeletonAnimation m_skeleton;
+        public SkeletonAnimation skeleton => m_skeleton;
 
         public void SyncWith(SpineSyncer reference)
         {
@@ -18,13 +20,15 @@ namespace DChild.Visuals
 
         private IEnumerator DelayedSync(SpineSyncer reference)
         {
-
-            var trackToReference = reference.animation.animationState.GetCurrent(0);
-            m_animation.SetAnimation(0, trackToReference.Animation.Name, trackToReference.Loop);
-            m_animation.animationState.GetCurrent(0).TrackTime = trackToReference.TrackTime;
-            yield return new WaitForEndOfFrame();
-            var referenceTransform = reference.transform;
-            transform.position = referenceTransform.position;
+            if (m_animation != null)
+            {
+                var trackToReference = reference.skeleton.state.GetCurrent(0);
+                m_animation.SetAnimation(0, trackToReference.Animation.Name, trackToReference.Loop);
+                m_animation.animationState.GetCurrent(0).TrackTime = trackToReference.TrackTime;
+                yield return new WaitForEndOfFrame();
+                var referenceTransform = reference.transform;
+                transform.position = referenceTransform.position;
+            }
         }
     }
 
