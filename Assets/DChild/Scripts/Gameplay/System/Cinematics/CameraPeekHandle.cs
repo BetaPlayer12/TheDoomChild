@@ -123,7 +123,7 @@ namespace DChild.Gameplay.Cinematics
         private void Awake()
         {
             m_disabledPeekonfigData = new ConfigurationData();
-            SetConfiguration(CameraPeekConfiguration.Normal);
+            SetConfiguration(CameraPeekConfiguration.None);
         }
     }
 }

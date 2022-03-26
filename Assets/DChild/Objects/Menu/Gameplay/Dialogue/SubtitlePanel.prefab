@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 3191079558887883695}
   - component: {fileID: 8868007815801068470}
   - component: {fileID: 5006046646244091741}
+  - component: {fileID: 7058469358472732054}
   m_Layer: 0
   m_Name: SubtitlePanel
   m_TagString: Untagged
@@ -140,7 +141,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 5913503584248966872}
+      - m_Target: {fileID: 7058469358472732054}
         m_MethodName: UseHighlightState
         m_Mode: 1
         m_Arguments:
@@ -189,7 +190,7 @@ MonoBehaviour:
   onFocus:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5913503584248966872}
+      - m_Target: {fileID: 7058469358472732054}
         m_MethodName: Highlight
         m_Mode: 1
         m_Arguments:
@@ -214,8 +215,8 @@ MonoBehaviour:
   onUnfocus:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5913503584248966872}
-        m_MethodName: Normalize
+      - m_Target: {fileID: 7058469358472732054}
+        m_MethodName: Highlight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1040,6 +1041,22 @@ MonoBehaviour:
   UseCustomStartAnchoredPosition: 1
   ViewCategory: General
   ViewName: Unnamed
+--- !u!114 &7058469358472732054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3031269995409893341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b720e500022f04489b4280574dcaff1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_highlight: 1
+  m_highlights:
+  - {fileID: 5913503584248966872}
+  - {fileID: 513498996250153218}
 --- !u!1 &4271461835495060518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1205,7 +1222,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.9
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1259,6 +1276,7 @@ GameObject:
   - component: {fileID: 2628705116244014913}
   - component: {fileID: 6838096484254682299}
   - component: {fileID: 5913503584248966872}
+  - component: {fileID: 513498996250153218}
   m_Layer: 0
   m_Name: Portrait
   m_TagString: Untagged
@@ -1274,15 +1292,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7743635569594836365}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 6295911109720953795}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: -0.00000006357829, y: 0}
   m_AnchorMax: {x: 0.39583328, y: 0.7453704}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1, y: 1}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &2628705116244014913
@@ -1336,3 +1354,17 @@ MonoBehaviour:
   m_target: {fileID: 6838096484254682299}
   m_deselected: {r: 0.33333334, g: 0.33333334, b: 0.33333334, a: 1}
   m_selected: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &513498996250153218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7743635569594836365}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3ab4de487fcaa4b98ee144fbf9ac35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_target: {fileID: 1073643021130443615}
+  m_data: {fileID: 11400000, guid: db7f740a93f04e041ac0fdfa989d2919, type: 2}
