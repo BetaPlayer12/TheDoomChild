@@ -305,7 +305,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_projectileThrow = m_character.GetComponentInChildren<ProjectileThrow>();
             m_projectileThrow.ExecutionRequested += OnProjectileThrowRequest;
             m_block = m_character.GetComponentInChildren<PlayerBlock>();
-            m_introController = m_character.GetComponent<PlayerIntroControlsController>();
+
+            //Intro Controller
+            m_introController = GetComponent<PlayerIntroControlsController>();
 
             m_updateEnabled = true;
         }
@@ -317,6 +319,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (m_state.isDead)
                 return;
+            
+            if (m_introController.IsUsingIntroControls())
+            {
+                m_introController.HandleIntroControlsFixedUpdate();
+                return;
+            }
 
             if (m_state.isGrounded)
             {
@@ -385,9 +393,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_state.isDead)
                 return;
 
-            if (m_introController?.IsUsingIntroControls() ?? false)
+            if (m_introController.IsUsingIntroControls())
             {
-
+                m_introController.HandleIntroControls();
+                return;
             }
 
             if (m_shadowGaugeRegen?.CanRegen() ?? false)
@@ -410,7 +419,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_shadowGaugeRegen?.Enable(true);
                 }
             }
-
 
             if (m_state.isDoingCombo)
             {

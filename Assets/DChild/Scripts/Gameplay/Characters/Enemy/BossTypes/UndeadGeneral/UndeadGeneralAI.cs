@@ -69,17 +69,17 @@ namespace DChild.Gameplay.Characters.Enemies
             private SimpleAttackInfo m_earthShakerAttack = new SimpleAttackInfo();
             public SimpleAttackInfo earthShakerAttack => m_earthShakerAttack;
             [SerializeField, BoxGroup("Earth Shaker")]
-            private SimpleAttackInfo m_earthShakerPlusAttack = new SimpleAttackInfo();
-            public SimpleAttackInfo earthShakerPlusAttack => m_earthShakerPlusAttack;
+            private float m_earthShakerJumpSpeed;
+            public float earthShakerJumpSpeed => m_earthShakerJumpSpeed;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Earth Shaker")]
-            private string m_earthShakerCancelAnimation;
-            public string earthShakerCancelAnimation => m_earthShakerCancelAnimation;
+            private string m_earthShakerJumpAnimation;
+            public string earthShakerJumpAnimation => m_earthShakerJumpAnimation;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Earth Shaker")]
-            private string m_earthShakerStunnedLoopAnimation;
-            public string earthShakerStunnedLoopAnimation => m_earthShakerStunnedLoopAnimation;
+            private string m_earthShakerSwordStabAnimation;
+            public string earthShakerSwordStabAnimation => m_earthShakerSwordStabAnimation;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Earth Shaker")]
-            private string m_earthShakerRecoverAnimation;
-            public string earthShakerRecoverAnimation => m_earthShakerRecoverAnimation;
+            private string m_earthShakerEndAnimation;
+            public string earthShakerEndAnimation => m_earthShakerEndAnimation;
             [SerializeField, BoxGroup("Special Thrust")]
             private SimpleAttackInfo m_specialThrustAttack = new SimpleAttackInfo();
             public SimpleAttackInfo specialThrustAttack => m_specialThrustAttack;
@@ -215,7 +215,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_threeHitComboAttack.SetData(m_skeletonDataAsset);
                 m_runningSlashAttack.SetData(m_skeletonDataAsset);
                 m_earthShakerAttack.SetData(m_skeletonDataAsset);
-                m_earthShakerPlusAttack.SetData(m_skeletonDataAsset);
                 m_earthShakerAttack.SetData(m_skeletonDataAsset);
                 m_swordThrustAttack.SetData(m_skeletonDataAsset);
                 m_specialThrustAttack.SetData(m_skeletonDataAsset);
@@ -352,20 +351,20 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_phaseHandle.currentPhase)
             {
                 case Phase.PhaseOne:
-                    m_currentMovementAnimation = m_info.moveSlow.animation;
-                    m_currentMovementSpeed = m_info.moveSlow.speed;
+                    m_currentMovementAnimation = m_info.moveMedium.animation;
+                    m_currentMovementSpeed = m_info.moveMedium.speed;
                     AddToAttackCache(Attack.OneHitCombo, Attack.RunningSlash);
                     AddToRangeCache(m_info.oneHitComboAttack.range, m_info.runningSlashAttack.range);
                     break;
                 case Phase.PhaseTwo:
-                    m_currentMovementAnimation = m_info.moveSlow.animation;
-                    m_currentMovementSpeed = m_info.moveSlow.speed;
+                    m_currentMovementAnimation = m_info.moveMedium.animation;
+                    m_currentMovementSpeed = m_info.moveMedium.speed;
                     AddToAttackCache(Attack.TwoHitCombo, Attack.RunningSlash, Attack.EarthShaker);
                     AddToRangeCache(m_info.twoHitComboAttack.range, m_info.runningSlashAttack.range, m_info.earthShakerAttack.range);
                     break;
                 case Phase.PhaseThree:
-                    m_currentMovementAnimation = m_info.moveMedium.animation;
-                    m_currentMovementSpeed = m_info.moveMedium.speed;
+                    m_currentMovementAnimation = m_info.moveFast.animation;
+                    m_currentMovementSpeed = m_info.moveFast.speed;
                     AddToAttackCache(Attack.ThreeHitCombo, Attack.RunningSlash, Attack.EarthShaker, Attack.SpecialThrust);
                     AddToRangeCache(m_info.threeHitComboAttack.range, m_info.runningSlashAttack.range, m_info.earthShakerAttack.range, m_info.specialThrustAttack.range);
                     break;
@@ -627,20 +626,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.oneHitComboAttack.animation, false);
             m_animation.AddAnimation(0, m_info.twoHitComboAttack.animation, false, 0);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twoHitComboAttack.animation);
+            m_animation.DisableRootMotion();
             m_animation.AddAnimation(0, m_info.threeHitComboAttack.animation, false, 0);
-            //yield return new WaitForSeconds(0.5f);
-            //m_character.physics.SetVelocity(m_info.shoulderBashVelocity.x * transform.localScale.x, 0);
-            //yield return new WaitForSeconds(0.15f);
-            //m_movement.Stop();
-            //while (m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd)
-            //{
-            //    if (!IsFacingTarget()) CustomTurn();
-            //    yield return new WaitForSeconds(m_animation.animationState.GetCurrent(0).AnimationTime > 0.85f ? 0 : 1f);
-            //    yield return null;
-            //}
-            //m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
-            //m_animation.animationState.GetCurrent(0).MixDuration = 0;
-            m_animation.AddAnimation(0, m_info.idleToCombatTransitionAnimation, false, 0);
+            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f;
+            while (m_animation.animationState.GetCurrent(0).AnimationTime <= waitTime)
+            {
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveFast.speed);
+                yield return null;
+            }
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.idleToCombatTransitionAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleToCombatTransitionAnimation);
             //m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
             //yield return new WaitForSeconds(3f);
@@ -656,8 +652,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RunningSlasAttackhRoutine()
         {
             m_phaseHandle.allowPhaseChange = false;
-            m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
+            if (m_animation.GetCurrentAnimation(0).ToString() != m_info.moveFastAnticipationAnimation)
+            {
+                m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
+                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
+            }
             while (Mathf.Abs(m_lastTargetPos.x - transform.position.x) >= 30f)
             {
                 m_animation.EnableRootMotion(true, false);
@@ -693,22 +692,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.dodgeHop.animation, false);
             m_animation.AddAnimation(0, m_info.oneHitComboAttack.animation, false, 0);
             m_animation.AddAnimation(0, m_info.twoHitComboAttack.animation, false, 0);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.twoHitComboAttack.animation);
+            m_animation.DisableRootMotion();
             m_animation.AddAnimation(0, m_info.threeHitComboAttack.animation, false, 0);
-            //if (!IsFacingTarget()) CustomTurn();
-            //yield return new WaitForSeconds(.5f);
-            //if (!IsFacingTarget()) CustomTurn();
-            //yield return new WaitForSeconds(1.5f);
-            //if (!IsFacingTarget()) CustomTurn();
-            //while (m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd)
-            //{
-            //    if (!IsFacingTarget()) CustomTurn();
-            //    yield return new WaitForSeconds(m_animation.animationState.GetCurrent(0).AnimationTime > 0.85f ? 0 :1f);
-            //    yield return null;
-            //}
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.normalAttack.animation);
-            //m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
-            //m_animation.animationState.GetCurrent(0).MixDuration = 0;
-            m_animation.AddAnimation(0, m_info.idleToCombatTransitionAnimation, false, 0);
+            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f;
+            while (m_animation.animationState.GetCurrent(0).AnimationTime <= waitTime)
+            {
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveFast.speed);
+                yield return null;
+            }
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.idleToCombatTransitionAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleToCombatTransitionAnimation);
             //yield return new WaitForSeconds(3f);
             m_hitCounter = 0;
@@ -738,8 +732,16 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.EnableRootMotion(true, false);
                 m_animation.SetAnimation(0, m_info.guardTriggerAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.guardTriggerAnimation);
+                m_animation.DisableRootMotion();
                 m_animation.SetAnimation(0, m_info.guardAttack.animation, false);
-                m_animation.AddAnimation(0, m_info.idleToCombatTransitionAnimation, false, 0);
+                var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f;
+                while (m_animation.animationState.GetCurrent(0).AnimationTime <= waitTime)
+                {
+                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveFast.speed);
+                    yield return null;
+                }
+                m_movement.Stop();
+                m_animation.SetAnimation(0, m_info.idleToCombatTransitionAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleToCombatTransitionAnimation);
                 m_hitCounter = 0;
                 m_attackDecider.hasDecidedOnAttack = false;
@@ -761,7 +763,27 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = false;
 
             m_animation.EnableRootMotion(true, false);
-            m_animation.SetAnimation(0, m_info.earthShakerAttack.animation, false);
+            m_animation.SetAnimation(0, m_info.earthShakerJumpAnimation, false);
+            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.3f;
+            yield return new WaitForSeconds(waitTime);
+            m_lastTargetPos = m_targetInfo.position;
+            //var attackTimeScale = m_info.earthShakerAttack.range / Mathf.Abs(m_lastTargetPos.x - transform.position.x);
+            //m_animation.animationState.TimeScale = attackTimeScale;
+            var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_info.earthShakerJumpSpeed * 1.25f);
+            adaptiveMoveSpeed = adaptiveMoveSpeed * m_info.earthShakerJumpSpeed;
+            if (!IsFacingTarget())
+            {
+                CustomTurn();
+            }
+            m_animation.DisableRootMotion();
+            while (/*Mathf.Abs(m_lastTargetPos.x - transform.position.x) > 1f*/!m_animation.animationState.GetCurrent(0).IsComplete)
+            {
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, adaptiveMoveSpeed);
+                yield return null;
+            }
+            m_animation.animationState.TimeScale = 1f;
+            m_movement.Stop();
+            m_animation.SetAnimation(0, m_info.earthShakerSwordStabAnimation, false).MixDuration = 0;
             m_animation.AddAnimation(0, m_info.idleToCombatTransitionAnimation, false, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleToCombatTransitionAnimation);
             m_animation.SetAnimation(0, m_info.idleCombatAnimation, true);
@@ -809,7 +831,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_phaseHandle.allowPhaseChange = false;
 
-            m_stateHandle.Wait(State.ReevaluateSituation);
             if (m_currentMovementAnimation != m_info.moveSlow.animation)
             {
                 m_animation.EnableRootMotion(true, false);
@@ -822,6 +843,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_phaseHandle.allowPhaseChange = true;
         }
+
         private void MoveToTarget(float targetRange)
         {
             if (!IsTargetInRange(targetRange) && m_groundSensor.isDetecting /*&& !m_wallSensor.isDetecting && m_edgeSensor.isDetecting*/)
@@ -928,9 +950,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             UpdateAttackDeciderList();
             m_attackCache = new List<Attack>();
-            AddToAttackCache(Attack.OneHitCombo, Attack.TwoHitCombo, Attack.ThreeHitCombo, Attack.RunningSlash, Attack.SwordThrust, Attack.SpecialThrust, Attack.EarthShaker);
+            AddToAttackCache(Attack.OneHitCombo, Attack.TwoHitCombo, Attack.ThreeHitCombo, Attack.RunningSlash, Attack.SwordThrust, Attack.SpecialThrust, Attack.EarthShaker, Attack.EarthShakerPlus);
             m_attackRangeCache = new List<float>();
-            AddToRangeCache(m_info.oneHitComboAttack.range, m_info.twoHitComboAttack.range, m_info.threeHitComboAttack.range, m_info.runningSlashAttack.range, m_info.swordThrustAttack.range, m_info.specialThrustAttack.range, m_info.earthShakerAttack.range);
+            AddToRangeCache(m_info.oneHitComboAttack.range, m_info.twoHitComboAttack.range, m_info.threeHitComboAttack.range, m_info.runningSlashAttack.range, m_info.swordThrustAttack.range, m_info.specialThrustAttack.range, m_info.earthShakerAttack.range, m_info.earthShakerAttack.range);
             m_attackUsed = new bool[m_attackCache.Count];
             m_currentFullCD = new List<float>();
         }
@@ -1050,6 +1072,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         case Attack.OneHitCombo:
                             m_currentAttackCoroutine = StartCoroutine(OneHitComboAttackRoutine());
+                            //m_currentAttackCoroutine = StartCoroutine(EarthShakerAttackRoutine());
                             m_pickedCD = m_currentFullCD[0];
                             break;
                         case Attack.TwoHitCombo:
@@ -1065,6 +1088,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         case Attack.RunningSlash:
                             m_lastTargetPos = m_targetInfo.position;
                             m_currentAttackCoroutine = StartCoroutine(RunningSlasAttackhRoutine());
+                            //m_currentAttackCoroutine = StartCoroutine(EarthShakerAttackRoutine());
                             m_pickedCD = m_currentFullCD[1];
                             break;
                         case Attack.EarthShaker:
@@ -1080,8 +1104,6 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Cooldown:
-                    //m_stateHandle.Wait(State.ReevaluateSituation);
-                    //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
@@ -1100,6 +1122,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_currentCD = 0;
                         //m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        m_stateHandle.Wait(State.ReevaluateSituation);
                         StartCoroutine(RunAnticipationRoutine());
                     }
 
