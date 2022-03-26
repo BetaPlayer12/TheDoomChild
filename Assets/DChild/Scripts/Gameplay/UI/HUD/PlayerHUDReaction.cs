@@ -28,7 +28,12 @@ namespace DChild.Gameplay.UI
         private void OnPlayerDamaged(object sender, Damageable.DamageEventArgs eventArgs)
         {
             m_avatar.ExecuteFlinch();
-            StopCoroutine(m_screenDamageRoutine);
+
+            if (m_screenDamageRoutine != null)
+            {
+                StopCoroutine(m_screenDamageRoutine);
+            }
+
             m_screenDamageRoutine = StartCoroutine(ScreenFXRoutine());
         }
 

@@ -58,7 +58,11 @@ namespace DChild
                 m_cacheAnimationInfo = m_data.GetAnimationInfo(i);
                 if (m_cacheAnimation == m_cacheAnimationInfo.animationName)
                 {
-                    m_cacheAnimationInfo.StopSound(m_callback);
+                    if (m_cacheAnimationInfo.soundStopsWithAnimation == true)
+                    {
+                        m_cacheAnimationInfo.StopSound(m_callback);
+                    }
+
                     break;
                 }
             }
