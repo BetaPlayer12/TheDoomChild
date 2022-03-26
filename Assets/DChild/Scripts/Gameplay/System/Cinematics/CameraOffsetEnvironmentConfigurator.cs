@@ -25,11 +25,9 @@ namespace DChild.Gameplay.Cinematics
         {
             if (GameplaySystem.playerManager.IsPartOfPlayer(collision.gameObject))
             {
-                GameplaySystem.cinema.SetCameraPeekConfiguration(DChild.Gameplay.Cinematics.CameraPeekConfiguration.Normal);
+                GameplaySystem.cinema.SetCameraPeekConfiguration(DChild.Gameplay.Cinematics.CameraPeekConfiguration.None);
 
             }
         }
-
-
     }
 }

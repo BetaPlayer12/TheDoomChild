@@ -1,15 +1,10 @@
 ﻿using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Environment;
 using DChild.Gameplay.Environment.Interractables;
-using DChild.Gameplay.Systems;
 using DChild.Serialization;
-using Doozy.Engine;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using PixelCrushers.DialogueSystem;
 
 namespace DChild.Gameplay
 {
@@ -47,6 +42,8 @@ namespace DChild.Gameplay
         private Collider2D m_collider;
         [SerializeField, OnValueChanged("OnIsUsedChanged")]
         private bool m_isUsed;
+        [SerializeField,LuaScriptWizard(true)]
+        private string m_onInteractionCommand;
 
         public bool showPrompt => true;
 
@@ -91,6 +88,7 @@ namespace DChild.Gameplay
 
                 m_isUsed = true;
                 m_collider.enabled = false;
+                Lua.Run(m_onInteractionCommand);
             }
         }
 
