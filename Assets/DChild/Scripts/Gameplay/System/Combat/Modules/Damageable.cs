@@ -127,13 +127,13 @@ namespace DChild.Gameplay.Combat
         }
 
         [Button, ShowIf("isAlive"), HideInEditorMode]
-        private void KillSelf()
+        public void KillSelf()
         {
             TakeDamage(999999999, DamageType.True);
         }
 
         [Button, HideIf("isAlive"), HideInEditorMode]
-        private void RessurectSelf()
+        public void RessurectSelf()
         {
             Heal(999999999);
         }

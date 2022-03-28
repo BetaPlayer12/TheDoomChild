@@ -6,12 +6,14 @@
  ************************************/
 
 using Cinemachine;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
 
 namespace DChild.Gameplay.Cinematics
 {
+
     [RequireComponent(typeof(PlayableDirector))]
     public class ForceCameraAfterCutscene : MonoBehaviour
     {
