@@ -464,8 +464,8 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
 
                     m_stateHandle.Wait(State.ReevaluateSituation);
-                    //m_counterAttackCoroutine = UnityEngine.Random.Range(0, 2) == 0 ? StartCoroutine(DodgeAttackRoutine()) : StartCoroutine(GuardAttackRoutine(false, false));
-                    m_counterAttackCoroutine = StartCoroutine(GuardAttackRoutine(false, false));
+                    m_counterAttackCoroutine = UnityEngine.Random.Range(0, 2) == 0 ? StartCoroutine(DodgeAttackRoutine()) : StartCoroutine(GuardAttackRoutine(false, false));
+                    //m_counterAttackCoroutine = StartCoroutine(GuardAttackRoutine(false, false));
                 }
             }
         }
