@@ -157,7 +157,7 @@ namespace PixelCrushers.DialogueSystem
             for (int i = 0; i < questStateIndicatorLevels.Length; i++)
             {
                 var questStateIndicatorLevel = questStateIndicatorLevels[i];
-                if (questState == questStateIndicatorLevel.questState && questStateIndicatorLevel.condition.IsTrue(null))
+                if (questStateIndicatorLevel.questState.HasFlag(questState) && questStateIndicatorLevel.condition.IsTrue(null))
                 {
                     if (DialogueDebug.logInfo) Debug.Log("Dialogue System: " + name + ": Quest '" + questName + "' changed to state " + questState + ".", this);
                     if (questStateIndicator != null) questStateIndicator.SetIndicatorLevel(this, questStateIndicatorLevel.indicatorLevel);
