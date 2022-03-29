@@ -57,7 +57,7 @@ namespace DChild.Gameplay.Systems
 
         public void SyncVisualsWith(SpineSyncer spineSyncer)
         {
-            player.character.GetComponent<SpineSyncer>().SyncWith(spineSyncer);
+            player.character.GetComponent<PlayerSpineSyncer>().SyncWith(spineSyncer);
         }
 
         public void DisableInput()
