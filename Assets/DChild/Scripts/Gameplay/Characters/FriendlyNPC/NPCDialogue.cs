@@ -52,7 +52,7 @@ namespace DChild.Gameplay.Characters.NPC
         private void Awake()
         {
             m_trigger = GetComponent<DialogueSystemTrigger>();
-            m_trigger.conversationActor = GameplaySystem.playerManager.player.character.transform;
+            //m_trigger.conversationActor = GameplaySystem.playerManager.player.character.transform;
         }
 
         private void OnDrawGizmosSelected()
