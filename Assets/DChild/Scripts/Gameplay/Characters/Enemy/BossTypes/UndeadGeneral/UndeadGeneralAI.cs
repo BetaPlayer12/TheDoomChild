@@ -701,9 +701,9 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_character.physics.SetVelocity(transform.localScale.x * 75f);
             m_animation.SetAnimation(0, m_info.runningSlashAttack.animation, false).MixDuration = 0;
             var time = 0f;
-            while (time < 0.75f)
+            while (time < 0.35f)
             {
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, 50);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentThirdSlashDashSpeed);
                 time += Time.deltaTime;
                 yield return null;
             }
