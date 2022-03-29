@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Holysoft.Collections;
 using Sirenix.OdinInspector;
+using DarkTonic.MasterAudio;
 #if UNITY_EDITOR
 #endif
 
@@ -10,6 +11,7 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
     {
         [SerializeField]
         private Animator m_lightningAnimator;
+
         [SerializeField]
         private RangeFloat m_interval;
 
@@ -19,8 +21,11 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
 #endif
         [SerializeField]
         private AnimationClip[] m_clips;
+        [SerializeField, SoundGroup]
+        private string[] m_matchingAudio;
 
         private float m_nextLightningInterval;
+        private CallBackSounds m_callbackSounds;
 
         private void PlayRandomLightning()
         {
@@ -28,11 +33,17 @@ namespace DChild.Gameplay.Environment.VisualConfigurators
             var currentClip = m_clips[lightningIndex];
 
             m_lightningAnimator.Play(currentClip.name);
+            m_callbackSounds.PlaySound(m_matchingAudio[lightningIndex]);
             m_nextLightningInterval = currentClip.length + m_interval.GenerateRandomValue();
 
 #if UNITY_EDITOR
             m_currentIndexPlayed = lightningIndex;
 #endif
+        }
+
+        private void Awake()
+        {
+            m_callbackSounds = GetComponent<CallBackSounds>();
         }
 
         private void OnEnable()
