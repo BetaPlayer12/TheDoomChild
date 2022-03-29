@@ -12,8 +12,8 @@ public class GameTutorialHandle : MonoBehaviour
     public UIView m_dropdown;
     public UIView m_attack;
     public bool m_active;
-   
-    private void Movement(bool active)
+
+    public void SetMovementTutorialVisibility(bool active)
     {
         if (active)
         {
@@ -24,7 +24,7 @@ public class GameTutorialHandle : MonoBehaviour
             m_movement.Hide();
         }
     }
-    private void Jump(bool active)
+    public void SetJumpTutorialVisibility(bool active)
     {
         if (active)
         {
@@ -35,7 +35,7 @@ public class GameTutorialHandle : MonoBehaviour
             m_jump.Hide();
         }
     }
-    private void Highjump(bool active)
+    public void SetHighJumpTutorialVisibility(bool active)
     {
         if (active)
         {
@@ -46,7 +46,7 @@ public class GameTutorialHandle : MonoBehaviour
             m_highjump.Hide();
         }
     }
-    private void Crouch(bool active)
+    public void SetCrouchTutorialVisibility(bool active)
     {
         if (active)
         {
@@ -57,7 +57,7 @@ public class GameTutorialHandle : MonoBehaviour
             m_crouch.Hide();
         }
     }
-    private void Dropdown(bool active)
+    public void SetDropdownTutorialVisibility(bool active)
     {
         if (active)
         {
@@ -68,7 +68,7 @@ public class GameTutorialHandle : MonoBehaviour
             m_dropdown.Hide();
         }
     }
-    private void Attack(bool active)
+    public void SetAttackTutorialVisibility(bool active)
     {
         if (active)
         {
