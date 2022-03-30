@@ -716,7 +716,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var time = 0f;
             while (time < 0.35f)
             {
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentThirdSlashDashSpeed);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMovementSpeed);
                 time += Time.deltaTime;
                 yield return null;
             }
