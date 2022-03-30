@@ -1,16 +1,10 @@
 ﻿using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Inventories;
 using Holysoft.Event;
-using Holysoft.UI;
-using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DChild.Menu.Trading
-{
     public class MerchantTradingManager : MonoBehaviour
     {
         [SerializeField]
