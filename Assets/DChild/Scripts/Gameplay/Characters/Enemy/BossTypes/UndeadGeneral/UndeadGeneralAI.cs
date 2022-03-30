@@ -302,8 +302,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private BlackDeathCinematicPlayah m_cinematic;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_groundSensor;
-        [SerializeField, TabGroup("Effects")]
-        private ParticleSystem m_earthShakerFX;
         [SerializeField, TabGroup("Hurtbox")]
         private Collider2D m_swordSlash1BB;
         [SerializeField, TabGroup("Hurtbox")]
@@ -323,6 +321,10 @@ namespace DChild.Gameplay.Characters.Enemies
 #if UNITY_EDITOR
         [SerializeField, TabGroup("FX")]
         private SkeletonAnimation m_earthShakerSpineFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_enragedFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_trailFX;
 
         public void InitializeField(SpineRootAnimation spineRoot, SkeletonAnimation animationF, SkeletonAnimation animationB)
         {
@@ -476,6 +478,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_attackDecider.hasDecidedOnAttack = false;
                     }
 
+                    m_trailFX.Stop();
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_counterAttackCoroutine = UnityEngine.Random.Range(0, 2) == 0 ? StartCoroutine(DodgeAttackRoutine()) : StartCoroutine(GuardAttackRoutine(false, false));
                     //m_counterAttackCoroutine = StartCoroutine(GuardAttackRoutine(false, false));
@@ -560,10 +563,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_hitbox.Disable();
+            m_trailFX.Stop();
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.phasingEnragedAnimation, false);
             m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
+            yield return new WaitWhile(() => m_animation.animationState.GetCurrent(0).AnimationTime < 0.5f);
+            m_enragedFX.Play();
+            yield return new WaitWhile (() => m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd * 0.8f) ;
+            m_enragedFX.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
             m_animation.SetAnimation(0, m_currentIdleAnimation, true);
             m_animation.DisableRootMotion();
@@ -689,6 +697,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
             }
+            m_trailFX.Play();
             while (Mathf.Abs(m_lastTargetPos.x - transform.position.x) >= 30f)
             {
                 m_animation.EnableRootMotion(true, false);
@@ -696,6 +705,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.moveMedium.speed);
                 yield return null;
             }
+            m_trailFX.Stop();
             m_animation.DisableRootMotion();
             //m_character.physics.AddForce(transform.right * 1f, ForceMode2D.Impulse);
             //m_character.physics.SetVelocity(transform.localScale.x * 75f);
@@ -901,6 +911,7 @@ namespace DChild.Gameplay.Characters.Enemies
             StopAllCoroutines();
             //m_deathFX.Play();
             m_movement.Stop();
+            m_trailFX.Stop();
         }
 
         #region Movement
@@ -914,6 +925,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
                 m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
+                m_trailFX.Play();
             }
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -1151,6 +1163,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute();
                     m_movement.Stop();
+                    m_trailFX.Stop();
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
@@ -1221,6 +1234,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
                         {
                             m_attackDecider.hasDecidedOnAttack = false;
+                            m_trailFX.Stop();
                             m_stateHandle.SetState(State.Attacking);
                         }
                         else
