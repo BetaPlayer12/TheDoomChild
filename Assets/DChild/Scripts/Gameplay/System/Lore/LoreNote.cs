@@ -19,7 +19,7 @@ namespace DChild.Gameplay.Systems.Lore
 
         public void Interact(Character character)
         {
-            GameplaySystem.gamplayUIHandle.ShowLoreNote(m_data);
+            //GameplaySystem.gamplayUIHandle.ShowLoreNote(m_data);
             gameObject.SetActive(false);
         }
 
