@@ -1163,6 +1163,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute();
                     m_movement.Stop();
+                    m_trailFX.Stop();
                     break;
                 case State.Attacking:
                     m_stateHandle.Wait(State.Cooldown);
