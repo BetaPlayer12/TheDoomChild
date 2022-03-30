@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace DChild.Menu.Trading
+{
     public class MerchantTradingManager : MonoBehaviour
     {
         [SerializeField]
