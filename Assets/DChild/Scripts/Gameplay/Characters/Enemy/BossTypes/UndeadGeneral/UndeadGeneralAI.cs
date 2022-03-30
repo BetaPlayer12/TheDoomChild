@@ -573,8 +573,11 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitWhile (() => m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd * 0.8f) ;
             m_enragedFX.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
-            m_animation.SetAnimation(0, m_currentIdleAnimation, true);
-            m_animation.DisableRootMotion();
+            //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
+            m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
+            m_trailFX.Play();
+            //m_animation.DisableRootMotion();
             m_hitbox.Enable();
             m_changePhaseCoroutine = null;
             m_stateHandle.ApplyQueuedState();
