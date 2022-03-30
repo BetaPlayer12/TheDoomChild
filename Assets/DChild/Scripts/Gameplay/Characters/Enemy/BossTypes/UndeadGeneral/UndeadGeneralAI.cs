@@ -566,13 +566,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_trailFX.Stop();
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.phasingEnragedAnimation, false);
-            m_animation.AddAnimation(0, m_info.idleGuardAnimation, false, 0).TimeScale = 5f;
             m_animation.animationState.GetCurrent(0).MixDuration = 0;
             yield return new WaitWhile(() => m_animation.animationState.GetCurrent(0).AnimationTime < 0.5f);
             m_enragedFX.Play();
             yield return new WaitWhile (() => m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd * 0.8f) ;
             m_enragedFX.Stop();
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.idleGuardAnimation);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phasingEnragedAnimation);
             //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
             m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
@@ -666,15 +665,16 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.animationState.TimeScale = attackTimeScale;
             //var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_currentThirdSlashDashSpeed * 1.25f);
             //adaptiveMoveSpeed = adaptiveMoveSpeed * m_currentThirdSlashDashSpeed;
+            var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_currentThirdSlashDashSpeed * 1.25f);
+            adaptiveMoveSpeed = adaptiveMoveSpeed * m_currentThirdSlashDashSpeed;
             if (!IsFacingTarget())
             {
                 CustomTurn();
             }
-            var time = 0f;
-            while (time < 0.75f)
+            m_animation.DisableRootMotion();
+            while (m_animation.animationState.GetCurrent(0).AnimationTime < (m_animation.animationState.GetCurrent(0).AnimationEnd * 0.5f))
             {
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentThirdSlashDashSpeed);
-                time += Time.deltaTime;
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, adaptiveMoveSpeed);
                 yield return null;
             }
             m_animation.animationState.TimeScale = 1f;
@@ -716,7 +716,7 @@ namespace DChild.Gameplay.Characters.Enemies
             var time = 0f;
             while (time < 0.35f)
             {
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentThirdSlashDashSpeed);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMovementSpeed);
                 time += Time.deltaTime;
                 yield return null;
             }
@@ -755,15 +755,16 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.animationState.TimeScale = attackTimeScale;
             //var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_currentThirdSlashDashSpeed * 1.25f);
             //adaptiveMoveSpeed = adaptiveMoveSpeed * m_currentThirdSlashDashSpeed;
+            var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_currentThirdSlashDashSpeed * 1.25f);
+            adaptiveMoveSpeed = adaptiveMoveSpeed * m_currentThirdSlashDashSpeed;
             if (!IsFacingTarget())
             {
                 CustomTurn();
             }
-            var time = 0f;
-            while (time < 0.75f)
+            m_animation.DisableRootMotion();
+            while (m_animation.animationState.GetCurrent(0).AnimationTime < (m_animation.animationState.GetCurrent(0).AnimationEnd * 0.5f))
             {
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentThirdSlashDashSpeed);
-                time += Time.deltaTime;
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, adaptiveMoveSpeed);
                 yield return null;
             }
             m_animation.animationState.TimeScale = 1f;

@@ -4,7 +4,8 @@ using Holysoft.Event;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DChild.Menu.Trading { 
+namespace DChild.Menu.Trading
+{
     public class MerchantTradingManager : MonoBehaviour
     {
         [SerializeField]
