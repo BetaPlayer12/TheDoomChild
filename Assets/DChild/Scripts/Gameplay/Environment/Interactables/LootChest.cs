@@ -6,6 +6,7 @@
  * 
  **************************************/
 
+using DarkTonic.MasterAudio;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems;
 using DChild.Serialization;
@@ -82,6 +83,7 @@ namespace DChild.Gameplay.Environment
             m_isLooted = true;
             GetComponent<SpriteRenderer>().sprite = m_openVersion;
             GetComponent<Collider2D>().enabled = false;
+            GetComponent<EventSounds>().ActivateCodeTriggeredEvent1();
             GetComponent<VFXSpawner>().Spawn();
         }
 
