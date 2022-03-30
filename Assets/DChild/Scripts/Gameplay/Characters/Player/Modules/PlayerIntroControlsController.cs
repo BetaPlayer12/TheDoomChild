@@ -15,19 +15,34 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private Rigidbody2D m_rigidbody;
 
+        [SerializeField]
         private bool m_isUsingIntroControls = false;
+        [SerializeField]
         private bool m_canJump = false;
+        [SerializeField]
+        private bool m_canCrouch = false;
+        [SerializeField]
         private bool m_canSlash = false;
 
-        #region Behaviors
-        private PlayerPhysicsMatHandle m_physicsMat;
-        private GroundednessHandle m_groundedness;
-        private InitialDescentBoost m_initialDescentBoost;
+        //private bool m_isUsingIntroControls = false;
+        //private bool m_canJump = false;
+        //private bool m_canCrouch = false;
+        //private bool m_canSlash = false;
 
+        #region Behaviors
+        private PlayerStatisticTracker m_tracker;
+        private GroundednessHandle m_groundedness;
+        private PlayerPhysicsMatHandle m_physicsMat;
+        private InitialDescentBoost m_initialDescentBoost;
+        private PlayerOneWayPlatformDropHandle m_platformDrop;
+        private CombatReadiness m_combatReadiness;
         private IdleHandle m_idle;
+
         private Movement m_movement;
         private GroundJump m_groundJump;
         private Crouch m_crouch;
+        private LedgeGrab m_ledgeGrab;
+        private AutoStepClimb m_stepClimb;
 
         private CollisionRegistrator m_attackRegistrator;
         private BasicSlashes m_basicSlashes;
@@ -43,6 +58,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Disable()
         {
+            m_idle?.Execute(false);
+            m_movement?.Cancel();
+            m_crouch?.Cancel();
+
             m_isUsingIntroControls = false;
         }
 
@@ -50,7 +69,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void EnableIntroControls()
         {
-            m_isUsingIntroControls = true;
+            if (m_isUsingIntroControls == false)
+            {
+                m_isUsingIntroControls = true;
+            }
         }
 
         public void EnableJump()
@@ -58,10 +80,52 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_canJump = true;
         }
 
+        public void EnableCrouch()
+        {
+            m_canCrouch = true;
+        }
+
+        public void EnableAttacks()
+        {
+            m_canSlash = true;
+        }
+
         public void HandleIntroControls()
         {
+            if (m_state.isDoingCombo)
+            {
+                if (m_state.waitForBehaviour == false)
+                {
+                    if (m_state.canAttack == false)
+                    {
+                        m_slashCombo.HandleComboAttackDelay();
+                    }
+                }
+
+                HandleGroundBehaviour();
+                return;
+            }
+
             if (m_state.waitForBehaviour)
                 return;
+
+            if (m_state.isCombatReady)
+            {
+                m_combatReadiness?.HandleDuration();
+            }
+
+            if (m_state.canAttack == true)
+            {
+                m_slashCombo.HandleComboResetTimer();
+            }
+            else
+            {
+                m_basicSlashes.HandleNextAttackDelay();
+                m_slashCombo.HandleComboAttackDelay();
+            }
+
+            m_tracker.Execute(m_input);
+            m_platformDrop.HandleDroppablePlatformCollision();
 
             if (m_state.isGrounded)
             {
@@ -94,6 +158,20 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
+                if ((int)m_character.facing == m_input.horizontalInput)
+                {
+                    if (m_state.waitForBehaviour)
+                        return;
+
+                    if (m_ledgeGrab?.IsDoable() ?? false)
+                    {
+                        if (m_state.isAttacking == false)
+                        {
+                            m_ledgeGrab?.Execute();
+                        }
+                    }
+                }
+
                 m_initialDescentBoost?.Handle();
                 if (m_rigidbody.velocity.y < m_groundedness?.groundCheckOffset)
                 {
@@ -107,39 +185,159 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void HandleGroundBehaviour()
         {
-            if (m_input.jumpPressed)
+            if (m_state.isDoingCombo == true)
             {
-                m_idle?.Cancel();
-                m_movement?.SwitchConfigTo(Movement.Type.MidAir);
-                m_groundedness?.ChangeValue(false);
-                m_groundJump?.Execute();
+                if (m_state.canAttack)
+                {
+                    if (m_input.slashPressed)
+                    {
+                        PrepareForGroundAttack();
+                        m_slashCombo.Execute();
+                        return;
+                    }
+                }
+
+                return;
+            }
+
+            if (m_state.isAttacking)
+            {
+                m_attackRegistrator?.ResetHitCache();
+            }
+
+            if (m_state.isCrouched)
+            {
+                if (m_state.canAttack)
+                {
+                    if (m_input.slashPressed && m_canSlash)
+                    {
+                        PrepareForGroundAttack();
+                        m_basicSlashes.Execute(BasicSlashes.Type.Crouch);
+                        return;
+                    }
+                }
+
+                if (m_input.jumpPressed == true)
+                {
+                    if (m_platformDrop?.IsThereADroppablePlatform() == true)
+                    {
+                        m_platformDrop.Execute();
+
+                        return;
+                    }
+                }
+
+                MoveCharacter();
+
+                if (m_input.crouchHeld == false)
+                {
+                    if (m_crouch?.IsThereNoCeiling() ?? true)
+                    {
+                        m_crouch?.Cancel();
+                        m_movement?.SwitchConfigTo(Movement.Type.Jog);
+                    }
+                }
             }
             else
             {
-                MoveCharacter();
+                if (m_state.canAttack)
+                {
+                    #region Ground Attacks
+                    if (m_input.slashPressed && m_canSlash)
+                    {
+                        if (m_input.verticalInput > 0)
+                        {
+                            PrepareForGroundAttack();
+                            m_basicSlashes.Execute(BasicSlashes.Type.Ground_Overhead);
+                            return;
+                        }
+                        else
+                        {
+                            PrepareForGroundAttack();
+                            m_slashCombo.Execute();
+                            return;
+                        }
+                    }
+                    #endregion
+                }
+
+                if (m_input.crouchHeld && m_canCrouch)
+                {
+                    m_crouch?.Execute();
+                    m_idle?.Cancel();
+                    m_movement?.SwitchConfigTo(Movement.Type.Crouch);
+                }
+                else if (m_input.jumpPressed && m_canJump)
+                {
+                    m_idle?.Cancel();
+                    m_movement?.SwitchConfigTo(Movement.Type.MidAir);
+                    m_groundedness?.ChangeValue(false);
+                    m_groundJump?.Execute();
+                }
+                else
+                {
+                    MoveCharacter();
+                    if (m_input.horizontalInput != 0)
+                    {
+                        if (m_stepClimb.CheckForStepClimbableSurface())
+                        {
+                            m_stepClimb.ClimbSurface();
+                        }
+                    }
+                }
             }
         }
 
         private void HandleAirBehaviour()
         {
-            if (m_state.isHighJumping)
+            if (m_state.isAttacking)
             {
-                if (m_groundJump?.CanCutoffJump() ?? true)
+                if (m_rigidbody.velocity.y < 0)
                 {
-                    if (m_input.jumpHeld == false)
-                    {
-                        m_groundJump?.CutOffJump();
-                    }
+                    m_groundedness?.Evaluate();
                 }
-
-                if (m_rigidbody.velocity.y <= (m_groundJump?.highJumpCutoffThreshold ?? 0f))
-                {
-                    m_groundJump?.EndExecution();
-                }
-                m_groundJump?.HandleCutoffTimer();
             }
+            else
+            {
+                if (m_state.canAttack)
+                {
+                    #region MidAir Attacks
+                    if (m_input.slashPressed && m_canSlash)
+                    {
+                        PrepareForMidairAttack();
 
-            m_movement.Move(m_input.horizontalInput, true);
+                        if (m_input.verticalInput > 0)
+                        {
+                            m_basicSlashes.Execute(BasicSlashes.Type.MidAir_Overhead);
+                        }
+                        else if (m_input.verticalInput == 0)
+                        {
+                            m_basicSlashes.Execute(BasicSlashes.Type.MidAir_Forward);
+                        }
+                        return;
+                    }
+                    #endregion
+                }
+
+                if (m_state.isHighJumping)
+                {
+                    if (m_groundJump?.CanCutoffJump() ?? true)
+                    {
+                        if (m_input.jumpHeld == false)
+                        {
+                            m_groundJump?.CutOffJump();
+                        }
+                    }
+
+                    if (m_rigidbody.velocity.y <= (m_groundJump?.highJumpCutoffThreshold ?? 0f))
+                    {
+                        m_groundJump?.EndExecution();
+                    }
+                    m_groundJump?.HandleCutoffTimer();
+                }
+
+                m_movement.Move(m_input.horizontalInput, true);
+            }
         }
 
         private void MoveCharacter()
@@ -154,23 +352,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
 
             m_movement?.Move(m_input.horizontalInput, true);
-        }
-
-        private void Awake()
-        {
-            m_physicsMat = m_character.GetComponentInChildren<PlayerPhysicsMatHandle>();
-            m_groundedness = m_character.GetComponentInChildren<GroundednessHandle>();
-            m_groundedness.StateChange += OnGroundednessStateChange;
-            m_initialDescentBoost = m_character.GetComponentInChildren<InitialDescentBoost>();
-
-            m_idle = m_character.GetComponentInChildren<IdleHandle>();
-            m_movement = m_character.GetComponentInChildren<Movement>();
-            m_groundJump = m_character.GetComponentInChildren<GroundJump>();
-            m_crouch = m_character.GetComponentInChildren<Crouch>();
-
-            m_attackRegistrator = m_character.GetComponentInChildren<CollisionRegistrator>();
-            m_basicSlashes = m_character.GetComponentInChildren<BasicSlashes>();
-            m_slashCombo = m_character.GetComponentInChildren<SlashCombo>();
         }
 
         private void OnGroundednessStateChange(object sender, EventActionArgs eventArgs)
@@ -208,6 +389,47 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
                 #endregion
             }
+        }
+
+        private void PrepareForGroundAttack()
+        {
+            m_combatReadiness?.Execution();
+            m_idle?.Cancel();
+            m_movement?.Cancel();
+            m_attackRegistrator?.ResetHitCache();
+        }
+
+        private void PrepareForMidairAttack()
+        {
+            if (m_state.isHighJumping == true)
+            {
+                m_groundJump?.CutOffJump();
+            }
+
+            m_combatReadiness?.Execution();
+            m_attackRegistrator?.ResetHitCache();
+        }
+
+        private void Awake()
+        {
+            m_tracker = m_character.GetComponentInChildren<PlayerStatisticTracker>();
+            m_physicsMat = m_character.GetComponentInChildren<PlayerPhysicsMatHandle>();
+            m_groundedness = m_character.GetComponentInChildren<GroundednessHandle>();
+            m_groundedness.StateChange += OnGroundednessStateChange;
+            m_initialDescentBoost = m_character.GetComponentInChildren<InitialDescentBoost>();
+            m_platformDrop = m_character.GetComponentInChildren<PlayerOneWayPlatformDropHandle>();
+
+            m_idle = m_character.GetComponentInChildren<IdleHandle>();
+            m_combatReadiness = m_character.GetComponentInChildren<CombatReadiness>();
+            m_movement = m_character.GetComponentInChildren<Movement>();
+            m_groundJump = m_character.GetComponentInChildren<GroundJump>();
+            m_crouch = m_character.GetComponentInChildren<Crouch>();
+            m_stepClimb = m_character.GetComponentInChildren<AutoStepClimb>();
+            m_ledgeGrab = m_character.GetComponentInChildren<LedgeGrab>();
+
+            m_attackRegistrator = m_character.GetComponentInChildren<CollisionRegistrator>();
+            m_basicSlashes = m_character.GetComponentInChildren<BasicSlashes>();
+            m_slashCombo = m_character.GetComponentInChildren<SlashCombo>();
         }
     }
 }
