@@ -9,6 +9,7 @@ namespace DChild.Configurations
     [System.Serializable]
     public class ColoredColliderSettings : SerializedScriptableObject
     {
+#if UNITY_EDITOR
         private const string FILENAME = "ColoredColliderSettings.asset";
         private const string FILEDIRECTORY = "Assets/DChild/Objects/DevelopementOnly/Editor/Resources/";
         private static string filepath => FILEDIRECTORY + FILENAME;
@@ -35,6 +36,7 @@ namespace DChild.Configurations
         private Dictionary<string, Color> list = new Dictionary<string, Color>();
 
         public string[] GetOptions() => list.Keys.ToArray();
-        public Color GetColor(string colorLabel) => list[colorLabel];
+        public Color GetColor(string colorLabel) => list[colorLabel]; 
+#endif
     }
 }
