@@ -1,45 +1,26 @@
-﻿using DChild.Gameplay;
-using DChild.Gameplay.Characters.Players;
-using DChild.Gameplay.Systems;
-using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class SoulEssenceJournalNotifier : MonoBehaviour
+﻿namespace DChild.Gameplay.Systems.Journal
 {
-    protected static Player m_player;
-    public bool m_notified=false;
-
-   
-    protected virtual void OnEnable()
+    public class SoulEssenceJournalNotifier : JournalNotifier
     {
-        var currentPlayer = GameplaySystem.playerManager.player;
-        if (m_player == null || m_player == currentPlayer)
+        private bool m_notified = false;
+
+        protected override void OnEnable()
         {
-            m_player = GameplaySystem.playerManager.player;
-            m_player.inventory.OnAmountAdded += OnNewSoulEssence;
+            base.OnEnable();
+            if (m_notified)
+            {
+                m_player.inventory.OnAmountAdded += OnNewSoulEssence;
+            }
+        }
+
+        private void OnNewSoulEssence(object sender, CurrencyUpdateEventArgs eventArgs)
+        {
+            if (m_notified == false)
+            {
+                SendNotification();
+                m_notified = true;
+                m_player.inventory.OnAmountAdded -= OnNewSoulEssence;
+            }
         }
     }
-
-    private void OnNewSoulEssence(object sender, CurrencyUpdateEventArgs eventArgs)
-    {
-        if (m_notified == false)
-        {
-            notify();
-        }
-        else
-        {
-
-        }
-    }
-
-    private void notify()
-    {
-        m_notified = true;
-    }
-
-  
-
 }
