@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Combat;
@@ -27,6 +28,9 @@ namespace DChild.Gameplay.Systems
         void StopCharacterControlOverride();
         void DisableControls();
         void EnableControls();
+        void EnableIntroControls();
+        void DisableIntroControls();
+        void EnableIntroAction(List<IntroActions> action);
         void SyncVisualsWith(SpineSyncer spineSyncer);
     }
 
@@ -111,6 +115,21 @@ namespace DChild.Gameplay.Systems
             m_gameplayInput?.SetStoreInputActive(true);
             m_characterInput?.Enable();
             m_player.controller.Enable();
+        }
+
+        public void EnableIntroControls()
+        {
+            m_player.introController.EnableIntroControls();
+        }
+
+        public void DisableIntroControls()
+        {
+            m_player.introController.DisableIntroControls();
+        }
+
+        public void EnableIntroAction(List<IntroActions> action)
+        {
+            m_player.introController.EnableIntroAction(action);
         }
 
         public void ClearCache()

@@ -1,9 +1,17 @@
 ﻿using DChild.Gameplay.Combat;
 using Holysoft.Event;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Characters.Players.Modules
 {
+    public enum IntroActions 
+    {
+        Jump,
+        Crouch,
+        Attack
+    }
+
     public class PlayerIntroControlsController : MonoBehaviour, IMainController
     {
         [SerializeField]
@@ -94,6 +102,27 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public void EnableAttacks()
         {
             m_canSlash = true;
+        }
+
+        public void EnableIntroAction(List<IntroActions> actions)
+        {
+            foreach (var introAction in actions)
+            {
+                switch (introAction)
+                {
+                    case IntroActions.Jump:
+                        m_canJump = true;
+                        break;
+                    case IntroActions.Crouch:
+                        m_canCrouch = true;
+                        break;
+                    case IntroActions.Attack:
+                        m_canSlash = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         public void HandleIntroControls()

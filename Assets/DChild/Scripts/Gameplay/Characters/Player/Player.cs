@@ -65,6 +65,8 @@ namespace DChild.Gameplay.Characters.Players
         [SerializeField]
         private PlayerCharacterController m_controller;
         [SerializeField]
+        private PlayerIntroControlsController m_introController;
+        [SerializeField]
         private PlayerInventory m_inventory;
 
 
@@ -109,6 +111,7 @@ namespace DChild.Gameplay.Characters.Players
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
         public IMainController controller => m_controller;
+        public PlayerIntroControlsController introController => m_introController;
         public LootPicker lootPicker => m_lootPicker;
 
         public StatusEffectReciever statusEffectReciever => m_statusEffectReciever;
