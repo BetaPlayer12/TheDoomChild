@@ -368,6 +368,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_pickedCD;
         private int m_hitCounter;
         private bool m_canBlockCounter;
+        private Collider2D m_currentHurtbox;
         private List<float> m_currentFullCD;
 
         private void ApplyPhaseData(PhaseInfo obj)
@@ -478,6 +479,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_attackDecider.hasDecidedOnAttack = false;
                     }
 
+                    m_currentHurtbox.enabled = false;
                     m_trailFX.Stop();
                     m_stateHandle.Wait(State.ReevaluateSituation);
                     m_counterAttackCoroutine = UnityEngine.Random.Range(0, 2) == 0 ? StartCoroutine(DodgeAttackRoutine()) : StartCoroutine(GuardAttackRoutine(false, false));
@@ -857,7 +859,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.earthShakerJumpAnimation, false);
             var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.3f;
             yield return new WaitForSeconds(waitTime);
-            m_lastTargetPos = m_targetInfo.position;
+            m_lastTargetPos = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < m_info.earthShakerAttack.range ? m_targetInfo.position : new Vector2(transform.position.x + (m_info.earthShakerAttack.range * transform.localScale.x), m_targetInfo.position.y);
             //var attackTimeScale = m_info.earthShakerAttack.range / Mathf.Abs(m_lastTargetPos.x - transform.position.x);
             //m_animation.animationState.TimeScale = attackTimeScale;
             var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_info.earthShakerJumpSpeed * 1.25f);
@@ -914,6 +916,7 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
             //m_deathFX.Play();
+            m_currentHurtbox.enabled = false;
             m_movement.Stop();
             m_trailFX.Stop();
         }
@@ -1062,39 +1065,47 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void SwordSlash1()
         {
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordSlash1BB, 0.25f));
+            m_currentHurtbox = m_swordSlash1BB;
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.25f));
         }
 
         private void SwordSlash2()
         {
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordSlash2BB, 0.25f));
+            m_currentHurtbox = m_swordSlash2BB;
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.25f));
         }
 
         private void SwordSlash3()
         {
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordSlash3BB, 0.25f));
+            m_currentHurtbox = m_swordSlash3BB;
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.25f));
         }
 
         private void SwordStab()
         {
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_swordStabBB, 0.25f));
+            m_currentHurtbox = m_swordStabBB;
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.25f));
         }
 
         private void HeavySlash()
         {
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_heavySlashBB, 0.25f));
+            m_currentHurtbox = m_heavySlashBB;
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.25f));
         }
 
         private void EarthShaker()
         {
             //m_earthShakerFX.Play();
             StartCoroutine(EarthShakerFXRoutine());
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_earthShakerBB, 0.25f));
+            StartCoroutine(EarthShakerBBRoutine(20f));
+            m_currentHurtbox = m_earthShakerBB;
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.20f));
         }
 
         private void SpecialThrust()
         {
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(m_specialThrustBB, 0.5f));
+            m_currentHurtbox = m_specialThrustBB;
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.5f));
         }
 
         private IEnumerator EarthShakerFXRoutine()
@@ -1105,11 +1116,26 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator BoundingBoxRoutine(Collider2D hurtbox, float duration)
+        private IEnumerator EarthShakerBBRoutine(float expandSpeed)
         {
-            hurtbox.enabled = true;
+            m_earthShakerBB.transform.localScale = Vector3.one * 0.1f;
+            var offset = 0f;
+            while (m_earthShakerBB.transform.localScale.x < 0.95f)
+            {
+                offset = Time.deltaTime * expandSpeed;
+                m_earthShakerBB.transform.localScale += new Vector3(m_earthShakerBB.transform.localScale.x * offset, m_earthShakerBB.transform.localScale.y * offset);
+                yield return null;
+            }
+            m_earthShakerBB.transform.localScale = Vector3.one;
+            //yield return new WaitForSeconds(1f);
+            yield return null;
+        }
+
+        private IEnumerator BoundingBoxRoutine(/*Collider2D hurtbox,*/ float duration)
+        {
+            m_currentHurtbox.enabled = true;
             yield return new WaitForSeconds(duration);
-            hurtbox.enabled = false;
+            m_currentHurtbox.enabled = false;
             yield return null;
         }
 
