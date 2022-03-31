@@ -623,7 +623,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.oneHitComboAttack.animation, false);
-            m_animation.AddAnimation(0, m_info.twoHitComboAttack.animation, false, 0);
+            m_animation.AddAnimation(0, m_info.twoHitComboAttack.animation, false, 0).MixDuration = 0;
             //yield return new WaitForSeconds(0.5f);
             //m_character.physics.SetVelocity(m_info.shoulderBashVelocity.x * transform.localScale.x, 0);
             //yield return new WaitForSeconds(0.15f);
@@ -666,7 +666,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_currentThirdSlashDashSpeed * 1.25f);
             //adaptiveMoveSpeed = adaptiveMoveSpeed * m_currentThirdSlashDashSpeed;
             var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_currentThirdSlashDashSpeed * 1.25f);
-            adaptiveMoveSpeed = adaptiveMoveSpeed * m_currentThirdSlashDashSpeed;
+            adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) < m_info.threeHitComboAttack.range ? adaptiveMoveSpeed * m_currentThirdSlashDashSpeed : m_currentThirdSlashDashSpeed;
             if (!IsFacingTarget())
             {
                 CustomTurn();
