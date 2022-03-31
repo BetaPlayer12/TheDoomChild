@@ -17,15 +17,15 @@ namespace DChild.Configurations
         {
             get
             {
-                if (m_instance == null)
-                {
-                    m_instance = AssetDatabase.LoadAssetAtPath<ColoredColliderSettings>(filepath);
-                    if (m_instance == null)
-                    {
-                        m_instance = CreateInstance<ColoredColliderSettings>();
-                        AssetDatabase.CreateAsset(m_instance, filepath);
-                    }
-                }
+                //if (m_instance == null)
+                //{
+                //    m_instance = AssetDatabase.LoadAssetAtPath<ColoredColliderSettings>(filepath);
+                //    if (m_instance == null)
+                //    {
+                //        m_instance = CreateInstance<ColoredColliderSettings>();
+                //        AssetDatabase.CreateAsset(m_instance, filepath);
+                //    }
+                //}
                 return m_instance;
             }
 

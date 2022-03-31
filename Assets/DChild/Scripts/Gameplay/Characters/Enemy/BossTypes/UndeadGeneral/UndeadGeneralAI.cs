@@ -318,14 +318,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_specialThrustBB;
         [SerializeField, TabGroup("FX")]
         private SpineRootAnimation m_spineFX;
-#if UNITY_EDITOR
+
         [SerializeField, TabGroup("FX")]
         private SkeletonAnimation m_earthShakerSpineFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_enragedFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_trailFX;
-
+#if UNITY_EDITOR
         public void InitializeField(SpineRootAnimation spineRoot, SkeletonAnimation animationF, SkeletonAnimation animationB)
         {
             m_spineFX = spineRoot;

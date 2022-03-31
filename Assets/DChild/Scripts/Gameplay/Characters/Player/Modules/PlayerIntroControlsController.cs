@@ -43,6 +43,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private PlayerPhysicsMatHandle m_physicsMat;
         private InitialDescentBoost m_initialDescentBoost;
         private PlayerOneWayPlatformDropHandle m_platformDrop;
+        private ObjectInteraction m_objectInteraction;
         private CombatReadiness m_combatReadiness;
         private IdleHandle m_idle;
 
@@ -299,6 +300,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     #endregion
                 }
 
+                if (m_input.interactPressed)
+                {
+                    m_objectInteraction?.Interact();
+                    return;
+                }
+
                 if (m_input.crouchHeld && m_canCrouch)
                 {
                     m_crouch?.Execute();
@@ -456,9 +463,10 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_groundedness.StateChange += OnGroundednessStateChange;
             m_initialDescentBoost = m_character.GetComponentInChildren<InitialDescentBoost>();
             m_platformDrop = m_character.GetComponentInChildren<PlayerOneWayPlatformDropHandle>();
-
+            m_objectInteraction = m_character.GetComponentInChildren<ObjectInteraction>();
             m_idle = m_character.GetComponentInChildren<IdleHandle>();
             m_combatReadiness = m_character.GetComponentInChildren<CombatReadiness>();
+
             m_movement = m_character.GetComponentInChildren<Movement>();
             m_groundJump = m_character.GetComponentInChildren<GroundJump>();
             m_crouch = m_character.GetComponentInChildren<Crouch>();
