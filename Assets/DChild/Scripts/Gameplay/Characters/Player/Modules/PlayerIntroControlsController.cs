@@ -15,19 +15,19 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private Rigidbody2D m_rigidbody;
 
-        [SerializeField]
-        private bool m_isUsingIntroControls = false;
-        [SerializeField]
-        private bool m_canJump = false;
-        [SerializeField]
-        private bool m_canCrouch = false;
-        [SerializeField]
-        private bool m_canSlash = false;
-
+        //[SerializeField]
         //private bool m_isUsingIntroControls = false;
+        //[SerializeField]
         //private bool m_canJump = false;
+        //[SerializeField]
         //private bool m_canCrouch = false;
+        //[SerializeField]
         //private bool m_canSlash = false;
+
+        private bool m_isUsingIntroControls = false;
+        private bool m_canJump = false;
+        private bool m_canCrouch = false;
+        private bool m_canSlash = false;
 
         #region Behaviors
         private PlayerStatisticTracker m_tracker;
@@ -49,20 +49,18 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private SlashCombo m_slashCombo;
         #endregion
 
+        private bool m_updateEnabled = true;
+
         public event EventAction<EventActionArgs> ControllerDisabled;
 
         public void Enable()
         {
-            m_isUsingIntroControls = true;
+            m_updateEnabled = true;
         }
 
         public void Disable()
         {
-            m_idle?.Execute(false);
-            m_movement?.Cancel();
-            m_crouch?.Cancel();
-
-            m_isUsingIntroControls = false;
+            m_updateEnabled = false;
         }
 
         public bool IsUsingIntroControls() => m_isUsingIntroControls;
@@ -72,6 +70,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_isUsingIntroControls == false)
             {
                 m_isUsingIntroControls = true;
+            }
+        }
+
+        public void DisableIntroControls()
+        {
+            if (m_isUsingIntroControls == true)
+            {
+                m_isUsingIntroControls = false;
             }
         }
 
@@ -92,6 +98,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void HandleIntroControls()
         {
+            if (m_updateEnabled == false)
+                return;
+
             if (m_state.isDoingCombo)
             {
                 if (m_state.waitForBehaviour == false)
@@ -430,6 +439,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_attackRegistrator = m_character.GetComponentInChildren<CollisionRegistrator>();
             m_basicSlashes = m_character.GetComponentInChildren<BasicSlashes>();
             m_slashCombo = m_character.GetComponentInChildren<SlashCombo>();
+
+            m_updateEnabled = true;
         }
     }
 }
