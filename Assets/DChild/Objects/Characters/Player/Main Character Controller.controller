@@ -2104,9 +2104,9 @@ AnimatorStateMachine:
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: 2985841194216897217}
-    second: []
   - first: {fileID: 6666718990999279506}
+    second: []
+  - first: {fileID: 2985841194216897217}
     second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 40, y: -230, z: 0}
@@ -4375,11 +4375,11 @@ AnimatorStateMachine:
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: -7512139068771737675}
-    second: []
   - first: {fileID: -3449115681744519358}
     second: []
   - first: {fileID: 1947937904971691213}
+    second: []
+  - first: {fileID: -7512139068771737675}
     second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -1580, y: 370, z: 0}
@@ -6850,6 +6850,7 @@ AnimatorState:
   - {fileID: 8921722939927506102}
   - {fileID: -5107021737479070012}
   - {fileID: 7495363725154887538}
+  - {fileID: 8490542202483752149}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -13521,11 +13522,11 @@ AnimatorStateMachine:
   - {fileID: -4660494694994448227}
   m_EntryTransitions: []
   m_StateMachineTransitions:
+  - first: {fileID: -3552188932511713265}
+    second: []
   - first: {fileID: -2413754440193084978}
     second:
     - {fileID: 7606808007018068312}
-  - first: {fileID: -3552188932511713265}
-    second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -180, y: -200, z: 0}
   m_EntryPosition: {x: -180, y: -120, z: 0}
@@ -14469,6 +14470,37 @@ AnimatorStateTransition:
   m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!1101 &8490542202483752149
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsGrounded
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: WallStick
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: IsJumping
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: -9211280535221205563}
+  m_DstState: {fileID: 0}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
