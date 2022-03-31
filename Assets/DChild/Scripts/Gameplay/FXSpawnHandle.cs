@@ -14,7 +14,7 @@ namespace DChild.Gameplay
         {
             var instance = InstantiateFX(fx, position);
             instance.SetFacing(direction);
-            if(parent != null)
+            if (parent != null)
             {
                 instance.transform.SetParent(parent);
             }
@@ -34,11 +34,16 @@ namespace DChild.Gameplay
         public T InstantiateFX(GameObject fx, Vector3 position, Transform parent = null)
         {
             var instance = GameplaySystem.fXManager.InstantiateFX<T>(fx, position);
-            instance.Play();
-            if (parent != null)
+
+            if (fx != null)
             {
-                instance.transform.SetParent(parent);
+                instance.Play();
+                if (parent != null)
+                {
+                    instance.transform.SetParent(parent);
+                }
             }
+
             return instance;
         }
 

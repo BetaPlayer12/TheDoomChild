@@ -880,10 +880,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                         return;
                     }
-                    else if (m_input.jumpPressed)
-                    {
-                        //Platform Drop
-                    }
                 }
 
                 if (m_input.jumpPressed == true)
