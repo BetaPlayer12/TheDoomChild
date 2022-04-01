@@ -499,7 +499,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 }
 
                 StopCoroutine(m_counterAttackCoroutine);
-                m_counterAttackCoroutine = StartCoroutine(GuardAttackRoutine(true, false));
+                m_counterAttackCoroutine = StartCoroutine(GuardAttackRoutine(true, Vector2.Distance(m_targetInfo.position, transform.position) > m_info.oneHitComboAttack.range ? false : true));
             }
         }
 
@@ -772,9 +772,9 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.animationState.TimeScale = 1f;
             m_movement.Stop();
-            //m_animation.AddAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true, 0);
-            //yield return new WaitForAnimationComplete(m_animation.animationState, m_currentIdleTransitionAnimation);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.threeHitComboAttack.animation);
+            yield return new WaitUntil(() => m_animation.animationState.GetCurrent(0).AnimationTime >= (m_animation.animationState.GetCurrent(0).AnimationEnd * 0.75f));
+            m_animation.SetAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_currentIdleTransitionAnimation);
             //yield return new WaitForSeconds(3f);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
@@ -809,9 +809,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 //yield return new WaitForSeconds(3f);
             }
             m_hitbox.SetCanBlockDamageState(false);
+            m_canBlockCounter = false;
             if (!willDodge)
             {
-                m_canBlockCounter = false;
                 if (!IsFacingTarget()) CustomTurn();
                 m_animation.EnableRootMotion(true, false);
                 m_animation.SetAnimation(0, m_info.guardTriggerAnimation, false).MixDuration = 0;
@@ -898,7 +898,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.EnableRootMotion(true, false);
             //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
             m_animation.SetAnimation(0, m_info.specialThrustAttack.animation, false);
-            m_animation.AddAnimation(0, m_info.specialThrustHitAnimation, false, 0);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.specialThrustAttack.animation);
+            m_animation.SetAnimation(0, m_info.specialThrustHitAnimation, false);
             m_animation.AddAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true, 0);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentIdleTransitionAnimation);
             m_attackDecider.hasDecidedOnAttack = false;
@@ -1252,8 +1253,16 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_currentCD = 0;
                         //m_stateHandle.OverrideState(State.ReevaluateSituation);
-                        m_stateHandle.Wait(State.ReevaluateSituation);
-                        StartCoroutine(RunAnticipationRoutine());
+                        ChooseAttack();
+                        if (Vector2.Distance(m_targetInfo.position, transform.position) > m_currentAttackRange)
+                        {
+                            m_stateHandle.Wait(State.ReevaluateSituation);
+                            StartCoroutine(RunAnticipationRoutine());
+                        }
+                        else
+                        {
+                            m_stateHandle.OverrideState(State.ReevaluateSituation);
+                        }
                     }
 
                     break;
@@ -1261,7 +1270,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     if (IsFacingTarget())
                     {
-                        ChooseAttack();
                         if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
                         {
                             m_attackDecider.hasDecidedOnAttack = false;
