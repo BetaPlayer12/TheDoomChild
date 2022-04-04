@@ -585,7 +585,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
-                            if (m_attackDecider.hasDecidedOnAttack && IsTargetInRange(m_attackDecider.chosenAttack.range) && !m_wallSensor.allRaysDetecting)
+                            if (m_attackDecider.hasDecidedOnAttack && /*IsTargetInRange(m_attackDecider.chosenAttack.range)*/Mathf.Abs(m_targetInfo.position.x - transform.position.x) <= m_attackDecider.chosenAttack.range && !m_wallSensor.allRaysDetecting)
                             {
                                 m_movement.Stop();
                                 m_selfCollider.enabled = true;
