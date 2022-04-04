@@ -36,6 +36,7 @@ namespace DChild.Gameplay
             instance.transform.parent = transform;
             instance.transform.localScale = Vector3.one;
             instance.transform.parent = null;
+            instance.GetComponent<FX>().Play();
         }
 
         private void Awake()

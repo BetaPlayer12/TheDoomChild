@@ -7,6 +7,7 @@ namespace DChild.Configurations
     [System.Serializable]
     public class ColliderColor
     {
+#if UNITY_EDITOR
         [SerializeField, LabelText("Color Group"), ValueDropdown("GetOptions"), HorizontalGroup]
         private string m_colorName;
         [SerializeField, LabelText("Color Group"), ShowIf("isCustomColor")]
@@ -32,6 +33,7 @@ namespace DChild.Configurations
             }
             list.Add(CUSTOMOPTION);
             return list;
-        }
+        } 
+#endif
     }
 }
