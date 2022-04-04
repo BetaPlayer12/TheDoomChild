@@ -9,9 +9,9 @@ namespace DChild.Gameplay
 {
     public class GameplaySignalHandle : MonoBehaviour
     {
-        public void SyncPlayerVisualsWith(SpineSyncer spineSyncer, bool syncAnimation)
+        public void SyncPlayerVisualsWith(SpineSyncer spineSyncer)
         {
-            GameplaySystem.playerManager.SyncVisualsWith(spineSyncer, syncAnimation);
+            GameplaySystem.playerManager.SyncVisualsWith(spineSyncer);
         }
 
         public void DoCinematicUIMode(bool value)

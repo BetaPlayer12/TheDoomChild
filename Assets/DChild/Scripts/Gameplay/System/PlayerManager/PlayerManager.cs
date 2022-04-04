@@ -31,7 +31,7 @@ namespace DChild.Gameplay.Systems
         void EnableIntroControls();
         void DisableIntroControls();
         void EnableIntroAction(List<IntroActions> action);
-        void SyncVisualsWith(SpineSyncer spineSyncer, bool syncAnimation);
+        void SyncVisualsWith(SpineSyncer spineSyncer);
     }
 
     public class PlayerManager : MonoBehaviour, IGameplaySystemModule, IGameplayInitializable, IPlayerManager
@@ -59,9 +59,9 @@ namespace DChild.Gameplay.Systems
         public GameplayInput gameplayInput => m_gameplayInput;
         public IAutoReflexHandler autoReflex => m_autoReflex;
 
-        public void SyncVisualsWith(SpineSyncer spineSyncer, bool syncAnimation)
+        public void SyncVisualsWith(SpineSyncer spineSyncer)
         {
-            player.character.GetComponent<PlayerSpineSyncer>().SyncWith(spineSyncer, syncAnimation);
+            player.character.GetComponent<PlayerSpineSyncer>().SyncWith(spineSyncer);
         }
 
         public void DisableInput()

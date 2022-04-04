@@ -14,19 +14,16 @@ namespace DChild.Visuals
         [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_afterSyncAnimation;
 
-        public void SyncWith(SpineSyncer reference, bool syncAnimation)
+        public void SyncWith(SpineSyncer reference)
         {
             StopAllCoroutines();
-            StartCoroutine(DelayedSync(reference, syncAnimation));
+            StartCoroutine(DelayedSync(reference));
         }
 
-        private IEnumerator DelayedSync(SpineSyncer reference, bool syncAnimation)
+        private IEnumerator DelayedSync(SpineSyncer reference)
         {
-            if (syncAnimation == true)
-            {
-                m_skeletonAnimation.state.SetAnimation(0, m_afterSyncAnimation, true);
-                m_skeletonAnimation.AnimationState.GetCurrent(0).TrackTime = reference.skeleton.state.GetCurrent(0).TrackTime;
-            }
+            m_skeletonAnimation.state.SetAnimation(0, m_afterSyncAnimation, true);
+            m_skeletonAnimation.AnimationState.GetCurrent(0).TrackTime = reference.skeleton.state.GetCurrent(0).TrackTime;
             yield return new WaitForEndOfFrame();
             var referenceTransform = reference.transform;
             referenceTransform.position = transform.position;
