@@ -778,6 +778,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //yield return new WaitForSeconds(3f);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
+            m_currentAttackCoroutine = null;
             m_counterAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
@@ -839,6 +840,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_animation.AddAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true, 0);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_currentIdleTransitionAnimation);
                 m_attackDecider.hasDecidedOnAttack = false;
+                m_currentAttackCoroutine = null;
                 m_counterAttackCoroutine = null;
                 m_stateHandle.ApplyQueuedState();
             }
