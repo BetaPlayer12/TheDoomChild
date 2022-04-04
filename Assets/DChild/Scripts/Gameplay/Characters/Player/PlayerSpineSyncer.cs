@@ -1,7 +1,6 @@
-﻿using DChild.Visuals;
+﻿using DChild.Gameplay;
 using Spine.Unity;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Visuals
@@ -9,13 +8,14 @@ namespace DChild.Visuals
     public class PlayerSpineSyncer : MonoBehaviour
     {
         [SerializeField]
+        private Character m_character;
+        [SerializeField]
         private SkeletonAnimation m_skeletonAnimation;
-        [SerializeField, SpineAnimation(dataField = "m_skeletonAnimation")]
+        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_skeletonAnimation")]
         private string m_afterSyncAnimation;
 
         public void SyncWith(SpineSyncer reference)
         {
-            Debug.Log("Player Syncer Test.");
             StopAllCoroutines();
             StartCoroutine(DelayedSync(reference));
         }
@@ -26,7 +26,13 @@ namespace DChild.Visuals
             m_skeletonAnimation.AnimationState.GetCurrent(0).TrackTime = reference.skeleton.state.GetCurrent(0).TrackTime;
             yield return new WaitForEndOfFrame();
             var referenceTransform = reference.transform;
-            transform.position = referenceTransform.position;
+            referenceTransform.position = transform.position;
+            referenceTransform.localScale = transform.localScale;
+
+            //if ((int)m_character.facing != reference.transform.localScale.x)
+            //{
+            //    reference.transform.localScale = new Vector3((int)m_character.facing, reference.transform.localScale.y, reference.transform.localScale.z);
+            //}
         }
     }
 }

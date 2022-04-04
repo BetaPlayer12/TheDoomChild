@@ -64,6 +64,7 @@ namespace DChild.Gameplay.Cinematics
 
 
             var animation = GameplaySystem.playerManager.player.character.GetComponentInChildren<SkeletonAnimation>();
+            var playerObject = GameplaySystem.playerManager.player.character.gameObject;
             var timelineAsset = m_cutscene.playableAsset as TimelineAsset;
 
 
@@ -84,6 +85,11 @@ namespace DChild.Gameplay.Cinematics
                             if (binding.sourceObject is SpineAnimationStateTrack)
                             {
                                 m_cutscene.SetGenericBinding(binding.sourceObject, animation);
+                            }
+
+                            if (binding.sourceObject is ActivationTrack)
+                            {
+                                m_cutscene.SetGenericBinding(binding.sourceObject, playerObject);
                             }
                         }
                     }

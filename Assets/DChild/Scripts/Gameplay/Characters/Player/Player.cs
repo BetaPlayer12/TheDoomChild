@@ -160,6 +160,19 @@ namespace DChild.Gameplay.Characters.Players
             m_damageable.SetHitboxActive(false);
         }
 
+        public void Revitilize()
+        {
+            health.ResetValueToMax();
+            magic.ResetValueToMax();
+            m_statusEffectReciever.RemoveAllActiveStatusEffects();
+            //Stop Coroutines for items
+        }
+
+        public void Reset()
+        {
+            m_controller.Enable();
+        }
+
 #if UNITY_EDITOR
         public void Initialize(GameObject character)
         {
