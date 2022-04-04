@@ -27,12 +27,12 @@ namespace DChild.Visuals
             yield return new WaitForEndOfFrame();
             var referenceTransform = reference.transform;
             referenceTransform.position = transform.position;
-            //transform.position = referenceTransform.position;
+            referenceTransform.localScale = transform.localScale;
 
-            if ((int)m_character.facing != reference.transform.localScale.x)
-            {
-                reference.transform.localScale = new Vector3((int)m_character.facing, reference.transform.localScale.y, reference.transform.localScale.z);
-            }
+            //if ((int)m_character.facing != reference.transform.localScale.x)
+            //{
+            //    reference.transform.localScale = new Vector3((int)m_character.facing, reference.transform.localScale.y, reference.transform.localScale.z);
+            //}
         }
     }
 }
