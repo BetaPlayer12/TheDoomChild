@@ -44,7 +44,7 @@ namespace PixelCrushers.DialogueSystem
         /// Useful to avoid stutter when adding several databases.
         /// </summary>
         [Tooltip("Add/remove one database per frame instead of adding them all at the same time. Useful to avoid stutter when adding several databases.")]
-        public bool onePerFrame = false;
+        public bool addAllInOneFrame = false;
 
         /// <summary>
         /// This event is called after ExtraDatabases has finished adding its list of databases
@@ -198,61 +198,61 @@ namespace PixelCrushers.DialogueSystem
 
         public void Start()
         {
-            if (addTrigger == DialogueTriggerEvent.OnStart) TryAddDatabases(null, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnStart) TryRemoveDatabases(null, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnStart) TryAddDatabases(null, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnStart) TryRemoveDatabases(null, addAllInOneFrame);
         }
 
         public void OnEnable()
         {
-            if (addTrigger == DialogueTriggerEvent.OnEnable) TryAddDatabases(null, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnEnable) TryRemoveDatabases(null, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnEnable) TryAddDatabases(null, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnEnable) TryRemoveDatabases(null, addAllInOneFrame);
         }
 
         public void OnDisable()
         {
-            if (addTrigger == DialogueTriggerEvent.OnDisable) TryAddDatabases(null, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnDisable) TryRemoveDatabases(null, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnDisable) TryAddDatabases(null, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnDisable) TryRemoveDatabases(null, addAllInOneFrame);
         }
 
         public void OnDestroy()
         {
-            if (addTrigger == DialogueTriggerEvent.OnDestroy) TryAddDatabases(null, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnDestroy) TryRemoveDatabases(null, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnDestroy) TryAddDatabases(null, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnDestroy) TryRemoveDatabases(null, addAllInOneFrame);
         }
 
         public void OnUse(Transform actor)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(actor, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(actor, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(actor, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(actor, addAllInOneFrame);
         }
 
         public void OnUse(string message)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(null, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(null, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(null, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(null, addAllInOneFrame);
         }
 
         public void OnUse()
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(null, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(null, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnUse) TryAddDatabases(null, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnUse) TryRemoveDatabases(null, addAllInOneFrame);
         }
 
         public void OnTriggerEnter(Collider other)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnTriggerEnter) TryAddDatabases(other.transform, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnTriggerEnter) TryRemoveDatabases(other.transform, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnTriggerEnter) TryAddDatabases(other.transform, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnTriggerEnter) TryRemoveDatabases(other.transform, addAllInOneFrame);
         }
 
         public void OnTriggerExit(Collider other)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnTriggerExit) TryAddDatabases(other.transform, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnTriggerExit) TryRemoveDatabases(other.transform, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnTriggerExit) TryAddDatabases(other.transform, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnTriggerExit) TryRemoveDatabases(other.transform, addAllInOneFrame);
         }
 
 #if USE_PHYSICS2D || !UNITY_2018_1_OR_NEWER
@@ -260,15 +260,15 @@ namespace PixelCrushers.DialogueSystem
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnTriggerEnter) TryAddDatabases(other.transform, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnTriggerEnter) TryRemoveDatabases(other.transform, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnTriggerEnter) TryAddDatabases(other.transform, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnTriggerEnter) TryRemoveDatabases(other.transform, addAllInOneFrame);
         }
 
         public void OnTriggerExit2D(Collider2D other)
         {
             if (!enabled) return;
-            if (addTrigger == DialogueTriggerEvent.OnTriggerExit) TryAddDatabases(other.transform, onePerFrame);
-            if (removeTrigger == DialogueTriggerEvent.OnTriggerExit) TryRemoveDatabases(other.transform, onePerFrame);
+            if (addTrigger == DialogueTriggerEvent.OnTriggerExit) TryAddDatabases(other.transform, addAllInOneFrame);
+            if (removeTrigger == DialogueTriggerEvent.OnTriggerExit) TryRemoveDatabases(other.transform, addAllInOneFrame);
         }
 
 #endif
