@@ -87,6 +87,7 @@ namespace DChild.Gameplay
         public void Save(SerializationScope scope)
         {
             GameEventMessage.SendEvent("Game Save Start");
+            m_slot.SetAsNewGame(false);
             CallPreSerialization(scope);
             if (m_writeSaveFileToDisk)
             {
