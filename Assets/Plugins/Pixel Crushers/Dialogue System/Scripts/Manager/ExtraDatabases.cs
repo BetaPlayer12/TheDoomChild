@@ -70,7 +70,10 @@ namespace PixelCrushers.DialogueSystem
                     if ((condition == null) || condition.IsTrue(interactor))
                     {
                         AddDatabases(immediate);
-                        if (once) Destroy(this);
+                        if (immediate == false)
+                        {
+                            if (once) Destroy(this);
+                        }
                     }
                 }
                 finally
@@ -109,6 +112,11 @@ namespace PixelCrushers.DialogueSystem
                 yield return null;
             }
             addedDatabases();
+
+            if (once)
+            {
+                Destroy(this);
+            }
         }
 
         private void AddDatabase(DialogueDatabase database)
@@ -130,7 +138,10 @@ namespace PixelCrushers.DialogueSystem
                     if ((condition == null) || condition.IsTrue(interactor))
                     {
                         RemoveDatabases(immediate);
-                        if (once) Destroy(this);
+                        if (immediate == false)
+                        {
+                            if (once) Destroy(this);
+                        }
                     }
                 }
                 finally
@@ -169,6 +180,11 @@ namespace PixelCrushers.DialogueSystem
                 yield return null;
             }
             removedDatabases();
+
+            if (once)
+            {
+                Destroy(this);
+            }
         }
 
         private void RemoveDatabase(DialogueDatabase database)

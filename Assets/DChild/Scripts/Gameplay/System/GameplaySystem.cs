@@ -168,8 +168,8 @@ namespace DChild.Gameplay
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_campaignSerializer.Load(SerializationScope.Gameplay, true);
             m_gameplayUIHandle.ResetGameplayUI();
-            m_playerManager.player.healableModule.Heal(999999);
-            m_playerManager.player.controller.Enable();
+            m_playerManager.player.Revitilize();
+            m_playerManager.player.Reset();
             LoadingHandle.SceneDone -= LoadGameDone;
         }
 

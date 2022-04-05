@@ -26,6 +26,11 @@ namespace DChild.UI
             //GameEventMessage.SendEvent($"Dialogue End");
         }
 
+        public void SetPanelStateToOpen()
+        {
+            panelState = PanelState.Open;
+        }
+
         public override void Open()
         {
             if (panelState == PanelState.Open || panelState == PanelState.Opening) return;
