@@ -34,6 +34,32 @@ MonoBehaviour:
     italic: 0
     underline: 0
   actors:
+  - id: 1
+    fields:
+    - title: Name
+      value: Player
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: The Main Character of the game
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
   - id: 2
     fields:
     - title: Name
@@ -53,7 +79,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: 6f7934b12a1c43e40bd41414b6131de9, type: 3}
+    spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
   - id: 3
@@ -78,37 +104,10 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 4
-    fields:
-    - title: Name
-      value: Player
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: The Main Character of the game
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: IsPlayer
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Display Name
-      value: Z
-      type: 0
-      typeString: CustomFieldType_Text
-    portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: 56dc71c15b0681041ab3a592eb0b9f05, type: 3}
-    alternatePortraits: []
-    spritePortraits:
-    - {fileID: 21300000, guid: ed103a6bfbc9fe646bfb4596953f12ca, type: 3}
   items: []
   locations: []
   variables:
-  - id: 10
+  - id: 7
     fields:
     - title: Name
       value: HasWarnedPlayerAboutBlackBlood
@@ -122,7 +121,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 11
+  - id: 6
     fields:
     - title: Name
       value: Alert
@@ -137,7 +136,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
   conversations:
-  - id: 13
+  - id: 5
     fields:
     - title: Title
       value: Intro/Warn Player About BlackBlood
@@ -225,7 +224,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 13
+      conversationID: 5
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -233,9 +232,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 13
+      - originConversationID: 5
         originDialogueID: 0
-        destinationConversationID: 13
+        destinationConversationID: 5
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -296,7 +295,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 13
+      conversationID: 5
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -304,9 +303,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 13
+      - originConversationID: 5
         originDialogueID: 2
-        destinationConversationID: 13
+        destinationConversationID: 5
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -367,7 +366,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 13
+      conversationID: 5
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -388,7 +387,7 @@ MonoBehaviour:
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 14
+  - id: 6
     fields:
     - title: Title
       value: Intro/Player Wakes up
@@ -403,7 +402,7 @@ MonoBehaviour:
       type: 0
       typeString: 
     - title: Actor
-      value: 4
+      value: 1
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
@@ -445,7 +444,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 4
+        value: -1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -476,7 +475,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 14
+      conversationID: 6
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -484,9 +483,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 14
+      - originConversationID: 6
         originDialogueID: 0
-        destinationConversationID: 14
+        destinationConversationID: 6
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -516,7 +515,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 4
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -547,7 +546,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 14
+      conversationID: 6
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -568,7 +567,7 @@ MonoBehaviour:
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 15
+  - id: 7
     fields:
     - title: Title
       value: Intro/Store Introduces itself to Player
@@ -656,7 +655,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 15
+      conversationID: 7
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -664,9 +663,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 15
+      - originConversationID: 7
         originDialogueID: 0
-        destinationConversationID: 15
+        destinationConversationID: 7
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
@@ -700,7 +699,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 4
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -727,7 +726,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 15
+      conversationID: 7
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -743,7 +742,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 156
-        y: 334.91745
+        y: 334
         width: 160
         height: 30
     - id: 2
@@ -761,7 +760,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 4
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -793,11 +792,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      - title: Response Menu Sequence
-        value: 
-        type: 0
-        typeString: 
-      conversationID: 15
+      conversationID: 7
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -805,9 +800,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 15
+      - originConversationID: 7
         originDialogueID: 2
-        destinationConversationID: 15
+        destinationConversationID: 7
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -818,7 +813,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 161.08258
+        x: 162
         y: 186
         width: 160
         height: 30
@@ -841,7 +836,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 4
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -869,11 +864,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      - title: Response Menu Sequence
-        value: 
-        type: 0
-        typeString: 
-      conversationID: 15
+      conversationID: 7
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -881,9 +872,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 15
+      - originConversationID: 7
         originDialogueID: 3
-        destinationConversationID: 15
+        destinationConversationID: 7
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -917,7 +908,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 4
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -944,7 +935,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 15
+      conversationID: 7
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -952,9 +943,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 15
+      - originConversationID: 7
         originDialogueID: 4
-        destinationConversationID: 15
+        destinationConversationID: 7
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -965,12 +956,12 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 193.91742
+        x: 193
         y: 103
         width: 160
         height: 30
-    canvasScrollPosition: {x: 56.951996, y: 0}
-    canvasZoom: 1.0899999
+    canvasScrollPosition: {x: 97.2832, y: 11.699031}
+    canvasZoom: 1.2399998
   syncInfo:
     syncActors: 0
     syncItems: 0
