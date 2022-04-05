@@ -248,6 +248,8 @@ namespace DChild.Gameplay
                 m_campaignSerializer.SetSlot(m_campaignToLoad);
                 m_campaignToLoad = null;
             }
+
+            m_gameplayUIHandle.ShowGameplayUI(true);
         }
 
         private void OnEnable()
