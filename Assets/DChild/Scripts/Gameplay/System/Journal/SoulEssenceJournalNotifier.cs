@@ -7,7 +7,7 @@
         protected override void OnEnable()
         {
             base.OnEnable();
-            if (m_notified)
+            if (m_notified == false)
             {
                 m_player.inventory.OnAmountAdded += OnNewSoulEssence;
             }

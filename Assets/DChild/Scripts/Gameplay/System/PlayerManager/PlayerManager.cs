@@ -190,6 +190,7 @@ namespace DChild.Gameplay.Systems
         }
         private void OnRespawnPlayer(object sender, EventActionArgs eventArgs)
         {
+            GameplaySystem.campaignSerializer.Load(SerializationScope.Gameplay, false);
             GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, Menu.LoadingHandle.LoadType.Smart);
             m_player.Revitilize();
             m_player.Reset();
