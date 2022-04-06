@@ -191,6 +191,8 @@ namespace DChild.Gameplay.Systems
         private void OnRespawnPlayer(object sender, EventActionArgs eventArgs)
         {
             GameplaySystem.LoadGame(GameplaySystem.campaignSerializer.slot, Menu.LoadingHandle.LoadType.Smart);
+            m_player.Revitilize();
+            m_player.Reset();
             //GameplaySystem.campaignSerializer.Load(true);
             m_playerIsDead = false;
         }

@@ -17,8 +17,7 @@ namespace DChild.Gameplay
         [Button]
         public void SaveGame()
         {
-            GameplaySystem.playerManager.player.health.ResetValueToMax();
-            GameplaySystem.playerManager.player.magic.ResetValueToMax();
+            GameplaySystem.playerManager.player.Revitilize();
 
             //#if UNITY_EDITOR
             if (m_dontActuallySave)

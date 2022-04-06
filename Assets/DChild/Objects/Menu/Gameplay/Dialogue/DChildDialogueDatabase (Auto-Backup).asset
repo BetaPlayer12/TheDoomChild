@@ -56,7 +56,8 @@ MonoBehaviour:
     portrait: {fileID: 0}
     spritePortrait: {fileID: 21300000, guid: 6f7934b12a1c43e40bd41414b6131de9, type: 3}
     alternatePortraits: []
-    spritePortraits: []
+    spritePortraits:
+    - {fileID: 21300000, guid: 9301e4781f75ca64c80fc9e4365dc822, type: 3}
   - id: 3
     fields:
     - title: Name
@@ -76,7 +77,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: 1488e3de80a4e624ebe8784bbb3c3c76, type: 3}
     alternatePortraits: []
     spritePortraits: []
   - id: 4
@@ -106,8 +107,61 @@ MonoBehaviour:
     alternatePortraits: []
     spritePortraits:
     - {fileID: 21300000, guid: ed103a6bfbc9fe646bfb4596953f12ca, type: 3}
+  - id: 5
+    fields:
+    - title: Name
+      value: Gladiator
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: The Dumbass
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: dc6dbeeb5ae77874ba3adc17fbf82c99, type: 3}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 6
+    fields:
+    - title: Name
+      value: Undead General
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: 0a1d471b4fbfe4e47a66a1fb92c3da69, type: 3}
+    alternatePortraits: []
+    spritePortraits:
+    - {fileID: 21300000, guid: ed24b16bffaede8438dbed856ecb2eae, type: 3}
   items:
-  - id: 1
+  - id: 3
     fields:
     - title: Name
       value: New Game Intro
@@ -131,36 +185,6 @@ MonoBehaviour:
       typeString: 
     - title: State
       value: active
-      type: 0
-      typeString: 
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-  - id: 3
-    fields:
-    - title: Name
-      value: Kill Lich Lord
-      type: 0
-      typeString: 
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: 
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: 
-    - title: State
-      value: unassigned
       type: 0
       typeString: 
     - title: Is Item
@@ -199,7 +223,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Entry Count
-      value: 3
+      value: 2
       type: 1
       typeString: CustomFieldType_Number
     - title: Entry 1 State
@@ -222,17 +246,39 @@ MonoBehaviour:
       value: unassigned
       type: 0
       typeString: 
-    - title: Entry 3 State
+  - id: 4
+    fields:
+    - title: Name
+      value: Kill Lich Lord
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
       value: unassigned
       type: 0
       typeString: 
-    - title: Entry 3
-      value: Return To Albin
-      type: 0
-      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
   locations: []
   variables:
-  - id: 5
+  - id: 12
     fields:
     - title: Name
       value: CathedralDoor_Open
@@ -246,7 +292,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 6
+  - id: 11
     fields:
     - title: Name
       value: Alert
@@ -261,7 +307,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
   conversations:
-  - id: 3
+  - id: 16
     fields:
     - title: Title
       value: Sample Dialogue
@@ -353,7 +399,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 3
+      conversationID: 16
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -361,9 +407,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 3
+      - originConversationID: 16
         originDialogueID: 0
-        destinationConversationID: 3
+        destinationConversationID: 16
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -424,7 +470,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 3
+      conversationID: 16
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -432,9 +478,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 3
+      - originConversationID: 16
         originDialogueID: 1
-        destinationConversationID: 3
+        destinationConversationID: 16
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -495,7 +541,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 3
+      conversationID: 16
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -516,7 +562,7 @@ MonoBehaviour:
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1
-  - id: 4
+  - id: 17
     fields:
     - title: Title
       value: Sample Banter
@@ -608,7 +654,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 4
+      conversationID: 17
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -616,9 +662,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 4
+      - originConversationID: 17
         originDialogueID: 0
-        destinationConversationID: 4
+        destinationConversationID: 17
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -679,7 +725,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 4
+      conversationID: 17
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -687,9 +733,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 4
+      - originConversationID: 17
         originDialogueID: 1
-        destinationConversationID: 4
+        destinationConversationID: 17
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -750,7 +796,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 4
+      conversationID: 17
       isRoot: 0
       isGroup: 0
       nodeColor: 
