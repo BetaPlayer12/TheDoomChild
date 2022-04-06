@@ -167,7 +167,7 @@ namespace DChild.Gameplay
         {
             m_campaignSerializer.SetSlot(m_campaignToLoad);
             m_gameplayUIHandle.ResetGameplayUI();
-            m_campaignSerializer.Load(SerializationScope.Gameplay, false);
+            m_campaignSerializer.Load(SerializationScope.Gameplay, true);
             //m_playerManager.player.Revitilize();
             //m_playerManager.player.Reset();
             LoadingHandle.SceneDone -= LoadGameDone;
@@ -248,6 +248,8 @@ namespace DChild.Gameplay
                 m_campaignSerializer.SetSlot(m_campaignToLoad);
                 m_campaignToLoad = null;
             }
+
+            m_gameplayUIHandle.ShowGameplayUI(true);
         }
 
         private void OnEnable()

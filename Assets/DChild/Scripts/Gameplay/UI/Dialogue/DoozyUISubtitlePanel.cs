@@ -54,7 +54,6 @@ namespace DChild.UI
                 if (panelState == PanelState.Closed || panelState == PanelState.Closing) return;
                 panelState = PanelState.Closing;
                 onClose.Invoke();
-                //GameEventMessage.SendEvent($"Dialogue End");
 
                 // Deselect ours:
                 if (UnityEngine.EventSystems.EventSystem.current != null && selectables.Contains(UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject))
