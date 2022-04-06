@@ -709,7 +709,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Chasing:
                     {
-                        if (IsTargetInRange(m_info.attack.range) && !m_breakSensor.allRaysDetecting)
+                        if (IsTargetInRange(m_info.attack.range) && !m_breakSensor.allRaysDetecting && m_edgeSensor.allRaysDetecting)
                         {
                             m_movement.Stop();
                             m_chargerMovement?.Stop();

@@ -132,6 +132,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_legCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Modules")]
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -204,7 +206,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void OnAttackDone(object sender, EventActionArgs eventArgs)
         {
             m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
-            m_animation.DisableRootMotion();
             m_flinchHandle.m_autoFlinch = true;
             m_character.physics.UseStepClimb(true);
             m_stateHandle.ApplyQueuedState();
@@ -295,9 +296,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_targetPointIK.mode = SkeletonUtilityBone.Mode.Follow;
             m_selfCollider.enabled = false;
             m_hitbox.Disable();
+            m_animation.DisableRootMotion();
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             StopAllCoroutines();
             m_movement.Stop();
+            StartCoroutine(DeathRoutine());
+        }
+
+        private IEnumerator DeathRoutine()
+        {
+            yield return new WaitWhile(() => m_animation.animationState.GetCurrent(0).AnimationTime < (m_animation.animationState.GetCurrent(0).AnimationEnd * 0.2f));
+            m_legCollider.enabled = false;
+            m_bodyCollider.enabled = false;
+            yield return null;
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -541,13 +552,13 @@ namespace DChild.Gameplay.Characters.Enemies
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack1:
-                            m_animation.EnableRootMotion(true, false);
+                            m_animation.EnableRootMotion(true, true);
                             m_attackHandle.ExecuteAttack(m_info.attack1.animation, m_info.idleAnimation);
                             break;
                         case Attack.Attack2:
                             m_targetLastPos = m_targetInfo.position;
                             m_targetPointIK.mode = SkeletonUtilityBone.Mode.Override;
-                            m_animation.EnableRootMotion(true, false);
+                            m_animation.EnableRootMotion(true, true);
                             m_attackHandle.ExecuteAttack(m_info.attack2.animation, m_info.idleAnimation);
                             //StartCoroutine(Attack2Routine());
                             break;
@@ -563,7 +574,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
-
+                    
                     if (m_currentCD <= m_currentFullCD)
                     {
                         m_currentCD += Time.deltaTime;
@@ -611,6 +622,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                     {
                                         m_movement.Stop();
+                                        m_animation.EnableRootMotion(true, true);
                                     }
                                     m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -655,12 +667,16 @@ namespace DChild.Gameplay.Characters.Enemies
             m_enablePatience = false;
             m_isDetecting = false;
             m_selfCollider.enabled = false;
+            m_legCollider.enabled = true;
+            m_bodyCollider.enabled = true;
         }
 
         public void ResetAI()
         {
             m_selfCollider.enabled = false;
             m_targetInfo.Set(null, null);
+            m_legCollider.enabled = true;
+            m_bodyCollider.enabled = true;
             m_flinchHandle.m_autoFlinch = true;
             m_isDetecting = false;
             m_enablePatience = false;
