@@ -153,6 +153,9 @@ namespace DChild.Serialization
         public T GetData<T>(SerializeID ID) where T : ISaveData => (T)m_miscDatas.GetData(ID);
 
         public void UpdateDialogueSaveData() => m_dialogueSaveData = PersistentDataManager.GetSaveData();
+
+        public void SetAsNewGame(bool isNewGame) => m_newGame = isNewGame;
+
         #region EditorOnly
 #if UNITY_EDITOR
         public CampaignSlot(CampaignSlot slot)

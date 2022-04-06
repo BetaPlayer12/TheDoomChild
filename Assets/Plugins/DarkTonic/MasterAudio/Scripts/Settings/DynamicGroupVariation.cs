@@ -190,7 +190,7 @@ namespace DarkTonic.MasterAudio {
                     return true;
                 }
                 if (DistortionFilter != null && DistortionFilter.enabled) {
-                    return true;
+                     return true;
                 }
                 if (EchoFilter != null && EchoFilter.enabled) {
                     return true;

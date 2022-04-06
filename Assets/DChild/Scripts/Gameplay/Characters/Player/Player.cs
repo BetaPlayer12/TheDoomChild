@@ -162,6 +162,7 @@ namespace DChild.Gameplay.Characters.Players
 
         public void Revitilize()
         {
+            healableModule.Heal(9999999);
             health.ResetValueToMax();
             magic.ResetValueToMax();
             m_statusEffectReciever.RemoveAllActiveStatusEffects();

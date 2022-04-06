@@ -2930,6 +2930,7 @@ GameObject:
   - component: {fileID: 7309899279631561472}
   - component: {fileID: 7309899279631561473}
   - component: {fileID: 7631399174731848679}
+  - component: {fileID: 1183723008656210329}
   m_Layer: 0
   m_Name: Button - Dialogue Continue
   m_TagString: Untagged
@@ -3036,6 +3037,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1183723008656210329}
+        m_MethodName: SendSavedEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 7631399174731848679}
         m_MethodName: OnFastForward
         m_Mode: 1
@@ -3927,8 +3939,7 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls: []
-      GameEvents:
-      - ContinueDiag
+      GameEvents: []
       SoundData:
         SoundSource: 0
         DatabaseName: General
@@ -5242,8 +5253,8 @@ MonoBehaviour:
     IsPlaying: 0
     LoopAnimationType: 0
     LoadSelectedPresetAtRuntime: 0
-    PresetCategory: 
-    PresetName: 
+    PresetCategory: Uncategorized
+    PresetName: Default
   SelectedLoopAnimation:
     Animation:
       AnimationType: 3
@@ -5356,6 +5367,23 @@ MonoBehaviour:
   dialogueUI: {fileID: 3130085212731728697}
   typewriterEffect: {fileID: 4539383880214100848}
   hideContinueButtonOnContinue: 0
+--- !u!114 &1183723008656210329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7309899279631561475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95ea9eff009fbb642bcdd025d86ddc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_event: ContinueDiag
+  m_systemToSendTo: 0
+  m_doozyEvent: ContinueDiag
+  m_masterAudioEvent: 
+  m_dialogueSystemMessage: 
 --- !u!1 &7309899279648242420
 GameObject:
   m_ObjectHideFlags: 0
@@ -6206,7 +6234,18 @@ MonoBehaviour:
         CustomSortingLayer: Default
       Event:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 8306258452995815613}
+            m_MethodName: StartLoopAnimation
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -9013,6 +9052,12 @@ PrefabInstance:
       objectReference: {fileID: 7309899279631561475}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bc95963540c5b145994851751e49e81, type: 3}
+--- !u!224 &6501850389540609438 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6295911109720953795, guid: 8bc95963540c5b145994851751e49e81,
+    type: 3}
+  m_PrefabInstance: {fileID: 965080625442180701}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7813575458030115212 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6992897028163344337, guid: 8bc95963540c5b145994851751e49e81,
@@ -9025,12 +9070,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0847abc455ccbc4bb36bae6307b051d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &6501850389540609438 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6295911109720953795, guid: 8bc95963540c5b145994851751e49e81,
-    type: 3}
-  m_PrefabInstance: {fileID: 965080625442180701}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8362002926178345903
 PrefabInstance:
   m_ObjectHideFlags: 0
