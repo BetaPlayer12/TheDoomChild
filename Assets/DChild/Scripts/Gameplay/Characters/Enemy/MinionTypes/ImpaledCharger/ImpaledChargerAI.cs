@@ -339,6 +339,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_Audiosource.Play();
             StopAllCoroutines();
             base.OnDestroyed(sender, eventArgs);
+            this.transform.SetParent(null);
+            m_hitbox.Disable();
             IsDead?.Invoke(this, new EventActionArgs());
             m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             if (m_attackRoutine != null)

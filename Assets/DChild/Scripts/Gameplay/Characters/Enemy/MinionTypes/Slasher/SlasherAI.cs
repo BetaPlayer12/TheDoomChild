@@ -402,12 +402,14 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator AttackRoutine()
         {
+            m_flinchHandle.m_enableMixFlinch = false;
             for (int i = 0; i < 3; i++)
             {
                 m_animation.SetAnimation(0, m_info.attack.animation, false);
                 yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
                 m_animation.SetEmptyAnimation(0, 0);
             }
+            m_flinchHandle.m_enableMixFlinch = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
             yield return null;
