@@ -384,13 +384,14 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RunAttackRoutine()
         {
             //m_animation.EnableRootMotion(true, false);
+            var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.runAttack.animation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.runAttack.animation);
             while (m_info.runAttackDuration >= m_currentRunAttackDuration)
             {
                 m_currentRunAttackDuration += Time.deltaTime;
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                m_character.physics.SetVelocity(toTarget.normalized.x * m_currentMoveSpeed, m_character.physics.velocity.y);
                 yield return null;
             }
             m_currentRunAttackDuration = 0;
@@ -527,8 +528,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Idle:
+                    if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                    {
+                        m_movement.Stop();
+                        m_animation.EnableRootMotion(true, true);
+                    }
                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                    m_movement.Stop();
                     break;
 
                 case State.Patrol:
@@ -542,7 +547,11 @@ namespace DChild.Gameplay.Characters.Enemies
                     }
                     else
                     {
-                        m_movement.Stop();
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                        {
+                            m_movement.Stop();
+                            m_animation.EnableRootMotion(true, true);
+                        }
                         m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     }
                     break;
@@ -550,12 +559,14 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
                     m_movement.Stop();
+                    m_animation.EnableRootMotion(true, true);
                     m_turnHandle.Execute(m_info.turnAnimation, m_info.idleAnimation);
                     break;
 
                 case State.Attacking:
                     if (IsFacingTarget())
                     {
+                        var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
                         if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting)
                         {
                             m_stateHandle.Wait(State.Cooldown);
@@ -578,6 +589,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_attackHandle.ExecuteAttack(m_info.attack3.animation, m_info.idleAnimation);
                                     break;
                                 case Attack.RunAttack:
+                                    m_animation.EnableRootMotion(false, false);
                                     if (!m_wallSensor.isDetecting)
                                     {
                                         StartCoroutine(RunAttackRoutine());
@@ -592,21 +604,25 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            m_animation.EnableRootMotion(false, m_groundSensor.isDetecting ? true : false);
+                            //m_animation.EnableRootMotion(false, m_groundSensor.isDetecting ? true : false);
 
                             if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting 
                                 && ((/*Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 50f &&*/ !TargetBlocked())))
                             {
                                 //var distance = Vector2.Distance(m_targetInfo.position, transform.position);
+                                m_animation.EnableRootMotion(false, false);
                                 m_selfCollider.enabled = false;
                                 m_animation.SetAnimation(0, m_info.move.animation, true);
-                                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                                m_character.physics.SetVelocity(toTarget.normalized.x * m_currentMoveSpeed, m_character.physics.velocity.y);
                             }
                             else
                             {
 
                                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
+                                {
                                     m_movement.Stop();
+                                    m_animation.EnableRootMotion(true, true);
+                                }
 
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -639,14 +655,14 @@ namespace DChild.Gameplay.Characters.Enemies
                                 m_animation.EnableRootMotion(false, false);
                                 m_animation.SetAnimation(0, m_info.backMove.animation, true);
                                 m_selfCollider.enabled = false;
-                                m_movement.MoveTowards(Vector2.one * -transform.localScale.x, m_currentBackMoveSpeed);
-                                transform.position = new Vector2(transform.position.x, GroundPosition().y + 0.25f);
+                                m_character.physics.SetVelocity(-transform.localScale.x * m_currentBackMoveSpeed, m_character.physics.velocity.y);
                             }
                             else
                             {
                                 if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                 {
                                     m_movement.Stop();
+                                    m_animation.EnableRootMotion(true, true);
                                 }
                                 m_selfCollider.enabled = true;
                                 m_animation.SetAnimation(0, m_info.idleAnimation, true);
@@ -680,22 +696,6 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_flinchHandle.m_autoFlinch = false;
                             m_stateHandle.SetState(State.Attacking);
                         }
-                        //else
-                        //{
-                        //    m_attackDecider.hasDecidedOnAttack = false;
-                        //    if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
-                        //    {
-                        //        var distance = Vector2.Distance(m_targetInfo.position, transform.position);
-                        //        m_animation.EnableRootMotion(false, false);
-                        //        m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.move.animation : m_info.patrol.animation, true);
-                        //        m_movement.MoveTowards(Vector2.one * transform.localScale.x, distance >= m_info.targetDistanceTolerance ? m_info.move.speed : m_info.patrol.speed);
-                        //    }
-                        //    else
-                        //    {
-                        //        m_movement.Stop();
-                        //        m_animation.SetAnimation(0, m_info.idleAnimation, true);
-                        //    }
-                        //}
                     }
                     break;
 

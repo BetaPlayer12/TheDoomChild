@@ -316,25 +316,18 @@ namespace DChild.Gameplay.Characters.Enemies
         private Collider2D m_earthShakerBB;
         [SerializeField, TabGroup("Hurtbox")]
         private Collider2D m_specialThrustBB;
-        [SerializeField, TabGroup("FX")]
-        private SpineRootAnimation m_spineFX;
 
         [SerializeField, TabGroup("FX")]
-        private SkeletonAnimation m_earthShakerSpineFX;
+        private ParticleFX m_earthShakerExplosionFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_earthShakerGlitterFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_earthShakerSwordTrailFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_enragedFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_trailFX;
-#if UNITY_EDITOR
-        public void InitializeField(SpineRootAnimation spineRoot, SkeletonAnimation animationF, SkeletonAnimation animationB)
-        {
-            m_spineFX = spineRoot;
-            //m_skeletonFAnimation = animationF;
-            //m_skeletonBAnimation = animationB;
-        }
-#endif
-        [SerializeField, Spine.Unity.SpineAnimation(dataField = "m_earthShakerSpineFX"), TabGroup("FX")]
-        private string m_explodeAnimation;
+
         [SerializeField]
         private SpineEventListener m_spineListener;
 
@@ -859,6 +852,9 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.allowPhaseChange = false;
 
             m_animation.EnableRootMotion(true, false);
+            m_earthShakerExplosionFX.Play();
+            m_earthShakerGlitterFX.Play();
+            m_earthShakerSwordTrailFX.Play();
             m_animation.SetAnimation(0, m_info.earthShakerJumpAnimation, false);
             var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.3f;
             yield return new WaitForSeconds(waitTime);
@@ -878,6 +874,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 yield return null;
             }
             m_animation.animationState.TimeScale = 1f;
+            m_earthShakerGlitterFX.Stop();
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.earthShakerSwordStabAnimation, false).MixDuration = 0;
             m_animation.AddAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true, 0);
@@ -1100,7 +1097,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private void EarthShaker()
         {
             //m_earthShakerFX.Play();
-            StartCoroutine(EarthShakerFXRoutine());
             StartCoroutine(EarthShakerBBRoutine(20f));
             m_currentHurtbox = m_earthShakerBB;
             m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.20f));
@@ -1110,14 +1106,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             m_currentHurtbox = m_specialThrustBB;
             m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.5f));
-        }
-
-        private IEnumerator EarthShakerFXRoutine()
-        {
-            m_spineFX.SetAnimation(0, m_explodeAnimation, false);
-            yield return new WaitForAnimationComplete(m_spineFX.animationState, m_explodeAnimation);
-            m_spineFX.SetEmptyAnimation(0, 0);
-            yield return null;
         }
 
         private IEnumerator EarthShakerBBRoutine(float expandSpeed)

@@ -611,7 +611,7 @@ namespace DChild.Gameplay.Characters.Enemies
                                     m_animation.EnableRootMotion(false, false);
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, distance >= m_info.targetDistanceTolerance ? m_info.run.animation : m_info.walk.animation, true);
-                                    m_movement.MoveTowards(toTarget.normalized, distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed);
+                                    m_character.physics.SetVelocity(toTarget.normalized.x * (distance >= m_info.targetDistanceTolerance ? m_currentMoveSpeed : m_info.walk.speed), m_character.physics.velocity.y);
                                     //if (m_groundSensor.allRaysDetecting)
                                     //{
                                     //    transform.position = new Vector2(transform.position.x, (GroundPosition().y + 0.35f) - m_legCollider.offset.y);
