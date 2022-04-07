@@ -30,6 +30,8 @@ namespace DChild.Gameplay.Environment
         private Vector3 m_promptOffset;
         [SerializeField]
         private ItemRequirement m_itemRequirement;
+        [SerializeField]
+        private string m_validmessagePrompt;
         [SerializeField, OnValueChanged("OnUnlockedChanged")]
         private bool m_isUnlocked;
 
@@ -51,7 +53,7 @@ namespace DChild.Gameplay.Environment
 
         public Vector3 promptPosition => transform.position + m_promptOffset;
 
-        public string promptMessage => throw new System.NotImplementedException();
+        public string promptMessage => m_validmessagePrompt;
 
         public void Interact(Character character)
         {
