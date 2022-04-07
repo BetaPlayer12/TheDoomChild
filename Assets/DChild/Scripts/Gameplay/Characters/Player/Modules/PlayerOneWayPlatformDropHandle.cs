@@ -49,7 +49,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_droppablePlatformSensor.Cast();
 
-            if (m_droppablePlatformSensor.allRaysDetecting)
+            if (m_droppablePlatformSensor.isDetecting)
             {
                 var hits = m_droppablePlatformSensor.GetUniqueHits();
 
@@ -67,6 +67,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
                             if (m_cacheCollider.CompareTag("Droppable") == true)
                             {
                                 isValid = true;
+                            }
+                            else if (isValid == true)
+                            {
+                                if (hits[i].collider == null)
+                                {
+                                    Debug.Log("Hangin");
+                                }
+                            }
+                            else
+                            {
+                                isValid = false;
                             }
                         }
                         else

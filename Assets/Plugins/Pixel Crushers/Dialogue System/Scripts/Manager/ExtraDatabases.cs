@@ -70,7 +70,7 @@ namespace PixelCrushers.DialogueSystem
                     if ((condition == null) || condition.IsTrue(interactor))
                     {
                         AddDatabases(immediate);
-                        if (immediate == false)
+                        if (immediate)
                         {
                             if (once) Destroy(this);
                         }
@@ -138,7 +138,7 @@ namespace PixelCrushers.DialogueSystem
                     if ((condition == null) || condition.IsTrue(interactor))
                     {
                         RemoveDatabases(immediate);
-                        if (immediate == false)
+                        if (immediate)
                         {
                             if (once) Destroy(this);
                         }

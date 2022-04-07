@@ -315,6 +315,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChargeAttackRoutine()
         {
+            var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
             m_animation.EnableRootMotion(false, false);
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.prepAttackAnimation, false);
@@ -328,7 +329,8 @@ namespace DChild.Gameplay.Characters.Enemies
             while (time < 3)
             {
                 time += Time.deltaTime;
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                m_character.physics.SetVelocity(toTarget.normalized.x * m_currentMoveSpeed, m_character.physics.velocity.y);
                 if (!m_edgeSensor.isDetecting)
                 {
                     time = 3;
@@ -363,7 +365,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator DetectWallRoutine()
         {
-            yield return new WaitUntil(() => m_wallSensor.isDetecting);
+            yield return new WaitUntil(() => m_wallSensor.allRaysDetecting);
             StopAllCoroutines();
             m_attackHandle.ExecuteAttack(m_info.attackBreakAnimation, m_info.idleAnimation);
         }
@@ -485,6 +487,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     {
                         m_flinchHandle.m_autoFlinch = false;
+                        var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
                         if (IsFacingTarget())
                         {
                             m_attackDecider.DecideOnAttack();
@@ -497,11 +500,13 @@ namespace DChild.Gameplay.Characters.Enemies
                             else
                             {
                                 m_animation.EnableRootMotion(false, false);
-                                if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
+                                if (!m_wallSensor.allRaysDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting)
                                 {
                                     m_selfCollider.enabled = false;
                                     m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = m_currentTimeScale;
-                                    m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                                    //m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+                                    //m_movement.MoveTowards(toTarget.normalized, m_currentMoveSpeed);
+                                    m_character.physics.SetVelocity(toTarget.normalized.x * m_currentMoveSpeed, m_character.physics.velocity.y);
                                 }
                                 else
                                 {
