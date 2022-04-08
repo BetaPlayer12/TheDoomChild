@@ -10,6 +10,7 @@
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems;
 using DChild.Gameplay.Systems.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -34,6 +35,8 @@ namespace DChild.Gameplay.Environment
         private Collider2D m_trigger;
         private SpineAnimation m_spineAnimation;
         private LocationPoster m_locationPoster;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 

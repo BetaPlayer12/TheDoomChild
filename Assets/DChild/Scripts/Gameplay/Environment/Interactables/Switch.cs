@@ -70,6 +70,7 @@ namespace DChild.Gameplay.Environment
 
 
         public event EventAction<HitDirectionEventArgs> OnHit;
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public Vector2 position => transform.position;
 

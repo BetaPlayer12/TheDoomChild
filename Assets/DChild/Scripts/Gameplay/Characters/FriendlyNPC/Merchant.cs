@@ -30,6 +30,8 @@ namespace DChild.Gameplay.Characters.NPC
         [SerializeField, TabGroup("AskingPrice/Tab", "Selling"), HideLabel]
         private TradeAskingPrice m_sellAskingPrice = new TradeAskingPrice();
 
+        public event EventAction<EventActionArgs> InteractionOptionChange;
+
         public bool showPrompt => true;
 
         public string promptMessage => "Trade";

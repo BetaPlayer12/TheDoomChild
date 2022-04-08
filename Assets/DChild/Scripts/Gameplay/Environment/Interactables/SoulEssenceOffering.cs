@@ -3,6 +3,7 @@ using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using Doozy.Engine;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -50,6 +51,8 @@ namespace DChild.Gameplay.Environment
 
         private Collider2D m_trigger;
         private static GameplayUIHandle m_gameplayUIHandle;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 

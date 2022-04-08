@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Environment.Interractables;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ namespace DChild.Gameplay.Systems.Lore
         private Vector3 m_promptOffset;
         [SerializeField]
         private LoreData m_data;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 
