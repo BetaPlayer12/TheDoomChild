@@ -154,11 +154,14 @@ namespace DChild.Gameplay.Characters.Players
                 var currentPosition = (Vector2)m_character.centerMass.position;
                 if (m_prevCharacterPosition != currentPosition || m_closestObject == null)
                 {
-                    float closestDistance = Vector2.Distance(currentPosition, m_objectsInRange[0].transform.position);
+                    //float closestDistance = Vector2.Distance(currentPosition, m_objectsInRange[0].transform.position);
+                    float closestDistance = Mathf.Abs(currentPosition.x - m_objectsInRange[0].transform.position.x);
+
                     var closestObject = m_objectsInRange[0];
                     for (int i = 1; i < m_objectsInRange.Count; i++)
                     {
-                        var distance = Vector2.Distance(currentPosition, m_objectsInRange[i].transform.position);
+                        //var distance = Vector2.Distance(currentPosition, m_objectsInRange[i].transform.position);
+                        var distance = Mathf.Abs(currentPosition.x - m_objectsInRange[i].transform.position.x);
                         if (distance < closestDistance)
                         {
                             closestDistance = distance;
@@ -182,6 +185,7 @@ namespace DChild.Gameplay.Characters.Players
                 }
             }
         }
+
 
         private void RemoveIndexSafely(int i)
         {
