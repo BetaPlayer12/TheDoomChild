@@ -898,8 +898,8 @@ namespace DChild.Gameplay.Characters.Enemies
             //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
             m_animation.SetAnimation(0, m_info.specialThrustAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.specialThrustAttack.animation);
-            m_animation.SetAnimation(0, m_info.specialThrustHitAnimation, false);
-            m_animation.AddAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true, 0);
+            //m_animation.SetAnimation(0, m_info.specialThrustHitAnimation, false);
+            m_animation.SetAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentIdleTransitionAnimation);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
