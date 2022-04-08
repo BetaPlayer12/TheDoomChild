@@ -22,14 +22,15 @@ namespace Holysoft.UI
         {
             enabled = true;
             m_isHighlighted = false;
-            m_target.anchoredPosition3D = m_data.deselected;
+            //m_target.anchoredPosition3D = m_data.deselected;
         }
 
         public override void UseHighlightState()
         {
             enabled = false;
             m_isHighlighted = true;
-            m_target.anchoredPosition3D = m_data.selected;
+            //m_target.anchoredPosition3D = m_data.selected;
+            m_lerp.SetValue(1);
             m_target.localScale = Vector3.Lerp(m_data.deselected, m_data.selected, 1);
         }
 
@@ -37,6 +38,7 @@ namespace Holysoft.UI
         {
             enabled = false;
             m_isHighlighted = false;
+            m_lerp.SetValue(0);
             m_target.localScale = Vector3.Lerp(m_data.deselected, m_data.selected, 0);
         }
 
