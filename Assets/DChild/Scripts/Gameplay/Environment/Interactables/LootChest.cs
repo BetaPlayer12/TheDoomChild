@@ -10,6 +10,7 @@ using DarkTonic.MasterAudio;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems;
 using DChild.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -43,6 +44,7 @@ namespace DChild.Gameplay.Environment
         private ILootDataContainer m_loot;
         private bool m_isLooted;
 
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 

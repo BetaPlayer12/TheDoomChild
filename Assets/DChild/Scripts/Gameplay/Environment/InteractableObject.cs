@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Environment.Interractables;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,6 +18,8 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private UnityEvent m_onInteraction;
         private bool m_canInteract;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public Vector3 promptPosition => transform.position + m_promptOffset;
 

@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Serialization;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,6 +49,8 @@ namespace DChild.Gameplay.Environment
         private UnityEvent m_invalidAttempt;
         [SerializeField, TabGroup("Main/Transistion", "Unlock")]
         private UnityEvent m_onUnlock;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 

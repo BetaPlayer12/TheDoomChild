@@ -24,6 +24,8 @@ namespace DChild.Gameplay.Systems
 
         private LocationPoster m_poster;
 
+        public event EventAction<EventActionArgs> InteractionOptionChange;
+
         public bool showPrompt => m_handle.needsButtonInteraction;
 
         public Vector3 promptPosition => m_handle.promptPosition;

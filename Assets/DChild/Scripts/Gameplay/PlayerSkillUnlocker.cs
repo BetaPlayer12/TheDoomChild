@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Playables;
 using PixelCrushers.DialogueSystem;
+using Holysoft.Event;
 
 namespace DChild.Gameplay
 {
@@ -44,6 +45,8 @@ namespace DChild.Gameplay
         private bool m_isUsed;
         [SerializeField,LuaScriptWizard(true)]
         private string m_onInteractionCommand;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 
