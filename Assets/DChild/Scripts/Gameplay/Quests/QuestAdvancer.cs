@@ -9,22 +9,22 @@ namespace DChild.Gameplay.Quests
 {
     public abstract class QuestAdvancer : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField, ToggleGroup("m_runLua", "Run Lua")]
         private bool m_runLua;
-        [SerializeField,LuaScriptWizard, Indent,ShowIf("m_runLua")]
+        [SerializeField,LuaScriptWizard, Indent,ToggleGroup("m_runLua","Run Lua")]
         private string m_script;
 
-        [SerializeField]
+        [SerializeField, ToggleGroup("m_changeQuestState", "Change Quest")]
         private bool m_changeQuestState;
-        [SerializeField,QuestPopup(true), Indent, ShowIf("m_changeQuestState")]
-        private string m_questName;
-        [SerializeField,QuestState, Indent, ShowIf("m_changeQuestState")]
+        [SerializeField,QuestPopup(true), Indent, ToggleGroup("m_changeQuestState", "Change Quest")]
+        private string questName;
+        [SerializeField,QuestState, Indent, ToggleGroup("m_changeQuestState", "Change Quest")]
         private QuestState m_questState;
-        [SerializeField,Tooltip("Set state of a quest entry."), Indent, ShowIf("m_changeQuestState")]
+        [SerializeField,Tooltip("Set state of a quest entry."), Indent, ToggleGroup("m_setQuestEntryState", "Change Quest Entry")]
         private bool m_setQuestEntryState = false;
-        [SerializeField,QuestEntryPopup, Indent, ShowIf("m_setQuestEntryState")]
+        [SerializeField,QuestEntryPopup, Indent, ToggleGroup("m_setQuestEntryState", "Change Quest Entry")]
         private int m_questEntryNumber = 1;
-        [SerializeField,QuestState, Indent, ShowIf("m_setQuestEntryState")]
+        [SerializeField,QuestState, Indent, ToggleGroup("m_setQuestEntryState", "Change Quest Entry")]
         private QuestState m_questEntryState;
 
         protected void ExecuteLuaScript()
@@ -36,9 +36,9 @@ namespace DChild.Gameplay.Quests
 
             if (m_changeQuestState)
             {
-                if (string.IsNullOrEmpty(m_questName)) return;
-                if (m_changeQuestState) QuestLog.SetQuestState(m_questName, m_questState);
-                if (m_setQuestEntryState) QuestLog.SetQuestEntryState(m_questName, m_questEntryNumber, m_questEntryState);
+                if (string.IsNullOrEmpty(questName)) return;
+                if (m_changeQuestState) QuestLog.SetQuestState(questName, m_questState);
+                if (m_setQuestEntryState) QuestLog.SetQuestEntryState(questName, m_questEntryNumber, m_questEntryState);
             }
         }
     }
