@@ -3,6 +3,7 @@ using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems;
 using DChild.Serialization;
 using Doozy.Engine;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -40,6 +41,8 @@ namespace DChild.Gameplay.Items
         private ItemData[] m_fragmentDatas;
 
         private Collider2D m_trigger;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 

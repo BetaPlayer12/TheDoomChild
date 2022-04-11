@@ -433,6 +433,10 @@ namespace DChild.Gameplay.Environment
             {
                 m_currentBehaviour = m_idlingBehaviour[m_idlingBehaviourIndex];
             }
+
+#if UNITY_EDITOR
+            startPosition = transform.position;
+#endif
         }
 
         private void Start()
@@ -494,6 +498,8 @@ namespace DChild.Gameplay.Environment
         }
 
 #if UNITY_EDITOR
+        public Vector3 startPosition { get; private set; }
+
         [Button]
         private void UpdateReference()
         {

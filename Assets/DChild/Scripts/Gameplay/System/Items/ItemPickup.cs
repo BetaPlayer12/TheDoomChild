@@ -2,6 +2,7 @@
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Serialization;
 using Doozy.Engine;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,6 +41,8 @@ namespace DChild.Gameplay.Items
         private bool m_hasBeenPickedUp;
 
         private Collider2D m_trigger;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 

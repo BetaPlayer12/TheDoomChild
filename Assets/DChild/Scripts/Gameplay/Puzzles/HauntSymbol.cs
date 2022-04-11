@@ -1,5 +1,6 @@
 ﻿using System;
 using DChild.Gameplay.Environment.Interractables;
+using Holysoft.Event;
 using UnityEngine;
 
 namespace DChild.Gameplay.Puzzles
@@ -16,6 +17,8 @@ namespace DChild.Gameplay.Puzzles
         public string promptMessage => null;
 
         public Vector3 promptPosition => transform.position + m_promptOffset;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public void Interact(Character character)
         {

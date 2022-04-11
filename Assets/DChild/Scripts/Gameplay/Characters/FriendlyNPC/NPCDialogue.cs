@@ -17,6 +17,7 @@ namespace DChild.Gameplay.Characters.NPC
 
         private DialogueSystemTrigger m_trigger;
         public event EventAction<EventActionArgs> OnDialogueStart;
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool hasDialogue
         {
@@ -47,6 +48,7 @@ namespace DChild.Gameplay.Characters.NPC
         {
             m_trigger.OnUse(character.transform);
             OnDialogueStart?.Invoke(this, EventActionArgs.Empty);
+            InteractionOptionChange?.Invoke(this, EventActionArgs.Empty);
         }
 
         private void Awake()

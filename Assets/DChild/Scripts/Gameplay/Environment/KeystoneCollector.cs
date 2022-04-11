@@ -6,6 +6,7 @@ using System;
 using DChild.Serialization;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Characters.Players;
+using Holysoft.Event;
 
 namespace DChild.Gameplay.Environment
 {
@@ -38,6 +39,8 @@ namespace DChild.Gameplay.Environment
         private AbyssmalGateSlot[] m_reactions = new AbyssmalGateSlot[1];
 
         private int m_currentKeyStones;
+
+        public event EventAction<EventActionArgs> InteractionOptionChange;
 
         public bool showPrompt => true;
 

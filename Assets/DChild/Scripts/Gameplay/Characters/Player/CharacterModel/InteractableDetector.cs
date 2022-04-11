@@ -34,7 +34,7 @@ namespace DChild.Gameplay.Characters.Players
 
         [ShowInInspector]
         private IButtonToInteract m_closestObject;
-        [ShowInInspector,HideInEditorMode]
+        [ShowInInspector, HideInEditorMode]
         private List<IButtonToInteract> m_objectsInRange;
         public event EventAction<DetectedInteractableEventArgs> InteractableDetected;
 
@@ -55,8 +55,35 @@ namespace DChild.Gameplay.Characters.Players
         public void ClearAllInteractableReferences()
         {
             m_objectsInRange.Clear();
-            m_closestObject = null;
-            CallInteractableDetectedEvent(m_closestObject);
+            SetAsClosestInteractableObject(null);
+        }
+
+        private void SetAsClosestInteractableObject(IButtonToInteract interactable)
+        {
+            if (m_closestObject != null)
+            {
+                if (m_closestObject != interactable)
+                {
+                    m_closestObject.InteractionOptionChange -= OnInteractableOptionChange;
+                }
+            }
+
+            m_closestObject = interactable;
+            if (m_closestObject != null)
+            {
+                m_closestObject.InteractionOptionChange += OnInteractableOptionChange;
+            }
+            CallInteractableDetectedEvent(closestObject);
+        }
+
+        private void OnInteractableOptionChange(object sender, EventActionArgs eventArgs)
+        {
+            if (m_closestObject.showPrompt == false)
+            {
+                m_closestObject.InteractionOptionChange -= OnInteractableOptionChange;
+                m_objectsInRange.Remove(m_closestObject);
+                SetAsClosestInteractableObject(null);
+            }
         }
 
         private void CallInteractableDetectedEvent(IButtonToInteract interactable)
@@ -127,13 +154,16 @@ namespace DChild.Gameplay.Characters.Players
             if (m_objectsInRange.Count > 1)
             {
                 var currentPosition = (Vector2)m_character.centerMass.position;
-                if (m_prevCharacterPosition != currentPosition)
+                if (m_prevCharacterPosition != currentPosition || m_closestObject == null)
                 {
-                    float closestDistance = Vector2.Distance(currentPosition, m_objectsInRange[0].transform.position);
+                    //float closestDistance = Vector2.Distance(currentPosition, m_objectsInRange[0].transform.position);
+                    float closestDistance = Mathf.Abs(currentPosition.x - m_objectsInRange[0].transform.position.x);
+
                     var closestObject = m_objectsInRange[0];
                     for (int i = 1; i < m_objectsInRange.Count; i++)
                     {
-                        var distance = Vector2.Distance(currentPosition, m_objectsInRange[i].transform.position);
+                        //var distance = Vector2.Distance(currentPosition, m_objectsInRange[i].transform.position);
+                        var distance = Mathf.Abs(currentPosition.x - m_objectsInRange[i].transform.position.x);
                         if (distance < closestDistance)
                         {
                             closestDistance = distance;
@@ -143,9 +173,8 @@ namespace DChild.Gameplay.Characters.Players
 
                     if (m_closestObject != closestObject)
                     {
-                        CallInteractableDetectedEvent(closestObject);
+                        SetAsClosestInteractableObject(closestObject);
                     }
-                    m_closestObject = closestObject;
                     m_prevCharacterPosition = currentPosition;
                 }
             }
@@ -153,10 +182,11 @@ namespace DChild.Gameplay.Characters.Players
             {
                 if (m_closestObject != m_objectsInRange[0])
                 {
-                    m_closestObject = m_objectsInRange[0];
+                    SetAsClosestInteractableObject(m_objectsInRange[0]);
                 }
             }
         }
+
 
         private void RemoveIndexSafely(int i)
         {
@@ -164,7 +194,7 @@ namespace DChild.Gameplay.Characters.Players
 
             if (m_objectsInRange.Count == 0)
             {
-                CallInteractableDetectedEvent(null);
+                SetAsClosestInteractableObject(null);
             }
         }
 
@@ -179,8 +209,7 @@ namespace DChild.Gameplay.Characters.Players
                         m_objectsInRange.Add(interactableObject);
                         if (m_objectsInRange.Count == 1)
                         {
-                            m_closestObject = interactableObject;
-                            CallInteractableDetectedEvent(interactableObject);
+                            SetAsClosestInteractableObject(interactableObject);
                         }
                     }
                 }
@@ -196,8 +225,7 @@ namespace DChild.Gameplay.Characters.Players
                     m_objectsInRange.Remove(interactableObject);
                     if (m_objectsInRange.Count == 0)
                     {
-                        m_closestObject = null;
-                        CallInteractableDetectedEvent(null);
+                        SetAsClosestInteractableObject(null);
                     }
                 }
             }

@@ -8,6 +8,9 @@
 
 using Sirenix.OdinInspector;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DChild.Gameplay.Environment
 {
@@ -44,7 +47,7 @@ namespace DChild.Gameplay.Environment
         public void LateUpdate()
         {
             var playerPosition = m_distanceToReference.position;
-            var distance = Vector3.Distance(spriteCenter, playerPosition);
+            var distance = Vector2.Distance(spriteCenter, playerPosition);
 
             var lerpValue = 0f;
             if (distance <= m_minDistanceThreshold)
@@ -80,6 +83,25 @@ namespace DChild.Gameplay.Environment
 
         private void OnDrawGizmosSelected()
         {
+            if (m_distanceToReferenceIsPlayer)
+            {
+                if (Application.isPlaying)
+                {
+                    var position = GameplaySystem.playerManager.player.character.centerMass.position;
+                    Gizmos.DrawLine(spriteCenter, position);
+#if UNITY_EDITOR
+                    Handles.Label(transform.position, $"{Vector2.Distance(spriteCenter, position)}");
+#endif
+                }
+            }
+            else if(m_distanceToReference != null)
+            {
+                var position = m_distanceToReference.position;
+                Gizmos.DrawLine(spriteCenter, position);
+#if UNITY_EDITOR
+                Handles.Label(transform.position, $"{Vector2.Distance(spriteCenter, position)}");
+#endif
+            }
 
             Gizmos.color = new Color(0.5f, 0.5f, 0, 0.25f);
             Gizmos.DrawSphere(spriteCenter, m_minDistanceThreshold);

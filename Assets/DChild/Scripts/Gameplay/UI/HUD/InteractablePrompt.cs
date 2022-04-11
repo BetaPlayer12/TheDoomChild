@@ -25,23 +25,29 @@ namespace DChild.Gameplay.UI
         private TextMeshProUGUI m_requirementMessage;
         private UIView m_view;
         private Vector3 m_showStartPosition;
-        
+
+        private Vector3 m_newPromptPosition;
+
         private void OnInteractableDetected(object sender, DetectedInteractableEventArgs eventArgs)
         {
             GameplaySystem.gamplayUIHandle.ShowInteractionPrompt(false);
             if (eventArgs.interactable?.showPrompt ?? false)
             {
-                var position = eventArgs.interactable.promptPosition;
-                m_prompt.transform.position = position;
+                m_newPromptPosition = eventArgs.interactable.promptPosition;
                 var move = m_view.ShowBehavior.Animation.Move;
-                move.From = position + m_showStartPosition;
-                move.To = position;
+                move.From = m_newPromptPosition + m_showStartPosition;
+                move.To = m_newPromptPosition;
                 m_validPrompt.enabled = eventArgs.showInteractionButton;
                 m_invalidPrompt.enabled = !eventArgs.showInteractionButton;
                 m_promptMessage.text = eventArgs.message;
                 m_requirementMessage.text = eventArgs.message;
                 GameplaySystem.gamplayUIHandle.ShowInteractionPrompt(true); 
             }
+        }
+
+        public void MoveToNewPromptPosition()
+        {
+            m_prompt.transform.position = m_newPromptPosition;
         }
 
         private void Awake()
