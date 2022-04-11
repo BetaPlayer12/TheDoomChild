@@ -76,7 +76,6 @@ namespace DChild.Gameplay.Combat
         public void Initialize()
         {
             m_isTriggered = false;
-           
         }
 
         private void OnCinematicStop(PlayableDirector obj)
