@@ -5,6 +5,7 @@ using Sirenix.Utilities.Editor;
 
 namespace DChild.Gameplay.Systems
 {
+
     [System.Serializable]
     public class LootListData : ILootDataContainer
     {
@@ -16,6 +17,14 @@ namespace DChild.Gameplay.Systems
             for (int i = 0; i < m_loots.Length; i++)
             {
                 m_loots[i].DropLoot(position);
+            }
+        }
+
+        public void GenerateLootInfo(ref LootList recordList)
+        {
+            for (int i = 0; i < m_loots.Length; i++)
+            {
+                m_loots[i].GenerateLootInfo(ref recordList);
             }
         }
 
@@ -36,7 +45,7 @@ namespace DChild.Gameplay.Systems
             {
                 SirenixEditorGUI.EndBox();
             }
-        } 
+        }
 #endif
     }
 }
