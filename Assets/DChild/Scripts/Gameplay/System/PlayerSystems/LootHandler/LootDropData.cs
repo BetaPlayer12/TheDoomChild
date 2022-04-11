@@ -76,6 +76,11 @@ namespace DChild.Gameplay.Systems
             GetRandomLoot()?.DropLoot(position);
         }
 
+        public void GenerateLootInfo(ref LootList recordList)
+        {
+            GetRandomLoot()?.GenerateLootInfo(ref recordList);
+        }
+
 #if UNITY_EDITOR
         [NonSerialized]
         public bool m_forcedEdit;
