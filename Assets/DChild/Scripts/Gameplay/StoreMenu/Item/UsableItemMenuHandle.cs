@@ -11,11 +11,6 @@ namespace DChild.Menu.Item
 {
     public class UsableItemMenuHandle : MonoBehaviour
     {
-        [SerializeField]
-        private ItemInfoPage m_infoPage;
-        [SerializeField]
-        private SingleFocusHandler m_highlighter;
-
         private Player m_player;
         private PlayerInventory m_inventory;
         private UsableItemData m_item;
