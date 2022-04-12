@@ -10,20 +10,13 @@ namespace DChild.Gameplay.Quests
         [SerializeField]
         private GameObject[] m_toInitialize;
 
-        private void OnValidate()
+        private void Awake()
         {
-            if (Application.isPlaying)
-            {
-                for (int i = 0; i < m_toInitialize.Length; i++)
-                {
-                    m_toInitialize[i].SetActive(false);
-                }
-            }
-            
+            DeactivateAllObjects();
         }
 
         [Button]
-        public void TurnOff()
+        private void DeactivateAllObjects()
         {
             for (int i = 0; i < m_toInitialize.Length; i++)
             {
