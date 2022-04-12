@@ -52,19 +52,20 @@ namespace DChildEditor.Gameplay.Environment
                 movementList.Clear();
             }
 
-            var gameObject = (target as ComplexIdlingCreature).gameObject;
+            var creature = (target as ComplexIdlingCreature);
+            var gameObject = creature.gameObject;
             var objectName = gameObject.name;
-            var currentPosition = gameObject.transform.position;
+            var startPosition = Application.isPlaying ? creature.startPosition : gameObject.transform.position;
 
-            movementList.Add(new Info() { destination = currentPosition });
-            AddIdlingBehaviourMovement(currentPosition);
+            movementList.Add(new Info() { destination = startPosition });
+            AddIdlingBehaviourMovement(startPosition);
             DrawMovement($"Idle-{objectName}");
 
             movementList.Clear();
 
             Handles.color = Color.cyan;
-            movementList.Add(new Info() { destination = currentPosition, drawLabel = false });
-            AddReactingBehaviourMovement(currentPosition);
+            movementList.Add(new Info() { destination = startPosition, drawLabel = false });
+            AddReactingBehaviourMovement(startPosition);
             DrawMovement($"React-{objectName}");
         }
 
@@ -109,7 +110,7 @@ namespace DChildEditor.Gameplay.Environment
         private static void RecordMovementSegment(Vector3 currentPosition, ComplexIdlingCreature.IBehaviour[] idlingBehaviours, int i)
         {
             var behaviour = (ComplexIdlingCreature.MovingBehaviour)idlingBehaviours[i];
-            if (Event.current.shift == false)
+            if (Application.isPlaying == false && Event.current.shift == false)
             {
                 behaviour.destination = behaviour.m_relativeDestination + currentPosition;
             }

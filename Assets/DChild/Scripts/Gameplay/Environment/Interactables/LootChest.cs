@@ -81,12 +81,36 @@ namespace DChild.Gameplay.Environment
 
         public void Interact(Character character)
         {
-            m_loot?.DropLoot(transform.position);
             m_isLooted = true;
+            GivePlayerLoot();
+            SendNotification();
+            ShowOpenChestVisual();
+        }
+
+        private void ShowOpenChestVisual()
+        {
             GetComponent<SpriteRenderer>().sprite = m_openVersion;
             GetComponent<Collider2D>().enabled = false;
             GetComponent<EventSounds>().ActivateCodeTriggeredEvent1();
             GetComponent<VFXSpawner>().Spawn();
+        }
+
+        private void GivePlayerLoot()
+        {
+            var playerInventory = GameplaySystem.playerManager.player.inventory;
+            LootList lootList = new LootList();
+            m_loot.GenerateLootInfo(ref lootList);
+            var lootItems = lootList.GetAllItems();
+            for (int i = 0; i < lootItems.Length; i++)
+            {
+                var item = lootItems[i];
+                playerInventory.AddItem(item, lootList.GetCountOf(item));
+            }
+        }
+
+        private void SendNotification()
+        {
+
         }
 
         private void OnDrawGizmosSelected()

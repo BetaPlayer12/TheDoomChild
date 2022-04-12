@@ -24,6 +24,11 @@ namespace DChild.Gameplay.Systems
             GameplaySystem.lootHandler.DropLoot(new LootDropRequest(m_reference.loot, m_count, position));
         }
 
+        public void GenerateLootInfo(ref LootList recordList)
+        {
+            recordList.Add(m_reference.data, m_count);
+        }
+
 #if UNITY_EDITOR
         public LootReference reference => m_reference;
         public int count => m_count;
