@@ -12,19 +12,19 @@ namespace DChild.Gameplay.Quests
         [SerializeField]
         private TextMeshProUGUI m_questEntry;
 
-        public void OnQuestStateChange(string questName)
+        private void OnQuestStateChange(string questName, QuestState state)
         {
-            if (QuestLog.IsQuestTrackingAvailable(questName) == false || QuestLog.GetQuestState(questName) != QuestState.Active)
+            if (QuestLog.IsQuestTrackingAvailable(questName) == false || state != QuestState.Active)
                 return;
 
             m_questTitle.text = FormattedText.Parse(questName).text;
             m_questEntry.text = "";
-            ShowNotifier();
+            //ShowNotifier();
         }
 
-        public void OnQuestEntryStateChange(QuestEntryArgs questInfo)
+        private void OnQuestEntryStateChange(QuestEntryArgs questInfo, QuestState state)
         {
-            if (QuestLog.IsQuestTrackingAvailable(questInfo.questName) == false || QuestLog.GetQuestEntryState(questInfo.questName, questInfo.entryNumber) != QuestState.Active)
+            if (QuestLog.IsQuestTrackingAvailable(questInfo.questName) == false || state != QuestState.Active)
                 return;
 
             m_questTitle.text = FormattedText.Parse(questInfo.questName).text;
@@ -33,9 +33,15 @@ namespace DChild.Gameplay.Quests
             ShowNotifier();
         }
 
-        public void ShowNotifier()
+        private void ShowNotifier()
         {
             GameEventMessage.SendEvent("Quest Notify");
+        }
+
+        private void Awake()
+        {
+            QuestStateChangeDispatcher.QuestStateChange += OnQuestStateChange;
+            QuestStateChangeDispatcher.QuestEntryStateChange += OnQuestEntryStateChange;
         }
     }
 }
