@@ -327,6 +327,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_enragedFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_trailFX;
+        [SerializeField, TabGroup("FX")]
+        private Transform m_fxParent;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -881,6 +883,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForSeconds(0.1f);
             EarthShaker();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentIdleTransitionAnimation);
+            m_earthShakerExplosionFX.transform.SetParent(null);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
@@ -1097,9 +1100,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private void EarthShaker()
         {
             //m_earthShakerFX.Play();
-            StartCoroutine(EarthShakerBBRoutine(20f));
+            StartCoroutine(EarthShakerBBRoutine(40f));
             m_currentHurtbox = m_earthShakerBB;
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.20f));
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.40f));
         }
 
         private void SpecialThrust()
@@ -1213,6 +1216,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCD = m_currentFullCD[1];
                             break;
                         case Attack.EarthShaker:
+                            if (m_earthShakerExplosionFX.transform.parent == null)
+                            {
+                                m_earthShakerExplosionFX.transform.SetParent(m_fxParent);
+                                m_earthShakerExplosionFX.transform.localPosition = Vector3.zero;
+                                m_earthShakerExplosionFX.transform.localScale = new Vector3(-1.333333f, 1.333333f, 1);
+                            }
                             m_currentAttackCoroutine = StartCoroutine(EarthShakerAttackRoutine());
                             m_pickedCD = m_currentFullCD[2];
                             break;
