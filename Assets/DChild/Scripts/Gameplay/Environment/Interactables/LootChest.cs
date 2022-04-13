@@ -82,8 +82,11 @@ namespace DChild.Gameplay.Environment
         public void Interact(Character character)
         {
             m_isLooted = true;
-            GivePlayerLoot();
-            SendNotification();
+            if (m_loot != null)
+            {
+                GivePlayerLoot();
+                SendNotification();
+            }
             ShowOpenChestVisual();
         }
 
