@@ -174,6 +174,21 @@ namespace DChild.Gameplay.Environment
                     m_instantiatedDebris.GetComponent<RendererColorChangeHandle>()?.ApplyColor(m_colorToApply);
                 }
             }
+            else
+            {
+                //assuming the game object is particle effects rather than actual debris and effects shgould be going left to right
+                if(m_forceDirection.x == -1)
+                {
+
+                    instanceTransform.localScale = new Vector3(m_forceDirection.x, instanceTransform.localScale.y);
+
+                }
+                else
+                {
+
+                }
+            }
+
             if (m_copySorting)
             {
                 var renderers = instance.GetComponentsInChildren<Renderer>();
