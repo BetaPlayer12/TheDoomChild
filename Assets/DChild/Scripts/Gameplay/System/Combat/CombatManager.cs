@@ -45,6 +45,11 @@ namespace DChild.Gameplay.Combat
         {
             AttackSummaryInfo summary = m_damageCalculator.CalculateDamage(attacker.attackInfo, targetInfo.instance.attackResistance, targetInfo.canBlockDamage, DamageCalculator.Operations.All);
             m_cacheTarget = targetInfo.instance;
+            if (targetInfo.breakableObject)
+            {
+                targetInfo.breakableObject.RecordForceReceived(attacker.instance.transform.localScale, 5);
+            }
+
             ApplyAttackDamage(summary, m_cacheTarget, targetInfo.isCharacter); //reference Struct
             m_combatFXHandle.SpawnFX(attacker.hitCollider, attacker.damageFX, targetInfo.hitCollider, targetInfo.instance, targetInfo.damageFXInfo);
 
