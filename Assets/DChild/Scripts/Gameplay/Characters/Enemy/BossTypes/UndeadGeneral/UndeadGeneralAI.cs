@@ -68,18 +68,12 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Earth Shaker")]
             private SimpleAttackInfo m_earthShakerAttack = new SimpleAttackInfo();
             public SimpleAttackInfo earthShakerAttack => m_earthShakerAttack;
-            [SerializeField, BoxGroup("Earth Shaker")]
-            private float m_earthShakerJumpSpeed;
-            public float earthShakerJumpSpeed => m_earthShakerJumpSpeed;
+            [SerializeField, BoxGroup("Earth Shaker"), Range(0, 1)]
+            private float m_earthShakerTrackingDelay;
+            public float earthShakerTrackingDelay => m_earthShakerTrackingDelay;
             [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Earth Shaker")]
-            private string m_earthShakerJumpAnimation;
-            public string earthShakerJumpAnimation => m_earthShakerJumpAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Earth Shaker")]
-            private string m_earthShakerSwordStabAnimation;
-            public string earthShakerSwordStabAnimation => m_earthShakerSwordStabAnimation;
-            [SerializeField, ValueDropdown("GetAnimations"), BoxGroup("Earth Shaker")]
-            private string m_earthShakerEndAnimation;
-            public string earthShakerEndAnimation => m_earthShakerEndAnimation;
+            private string m_earthShakerDisappearAnimation;
+            public string earthShakerDisappearAnimation => m_earthShakerDisappearAnimation;
             [SerializeField, BoxGroup("Special Thrust")]
             private SimpleAttackInfo m_specialThrustAttack = new SimpleAttackInfo();
             public SimpleAttackInfo specialThrustAttack => m_specialThrustAttack;
@@ -327,6 +321,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_enragedFX;
         [SerializeField, TabGroup("FX")]
         private ParticleFX m_trailFX;
+        [SerializeField, TabGroup("FX")]
+        private Transform m_fxParent;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -855,32 +851,19 @@ namespace DChild.Gameplay.Characters.Enemies
             m_earthShakerExplosionFX.Play();
             m_earthShakerGlitterFX.Play();
             m_earthShakerSwordTrailFX.Play();
-            m_animation.SetAnimation(0, m_info.earthShakerJumpAnimation, false);
-            var waitTime = m_animation.animationState.GetCurrent(0).AnimationEnd * 0.3f;
-            yield return new WaitForSeconds(waitTime);
-            m_lastTargetPos = Mathf.Abs(m_targetInfo.position.x - transform.position.x) < m_info.earthShakerAttack.range ? m_targetInfo.position : new Vector2(transform.position.x + (m_info.earthShakerAttack.range * transform.localScale.x), m_targetInfo.position.y);
-            //var attackTimeScale = m_info.earthShakerAttack.range / Mathf.Abs(m_lastTargetPos.x - transform.position.x);
-            //m_animation.animationState.TimeScale = attackTimeScale;
-            var adaptiveMoveSpeed = Mathf.Abs(m_lastTargetPos.x - transform.position.x) / (m_info.earthShakerJumpSpeed * 1.25f);
-            adaptiveMoveSpeed = adaptiveMoveSpeed * m_info.earthShakerJumpSpeed;
-            if (!IsFacingTarget())
-            {
-                CustomTurn();
-            }
-            m_animation.DisableRootMotion();
-            while (/*Mathf.Abs(m_lastTargetPos.x - transform.position.x) > 1f*/!m_animation.animationState.GetCurrent(0).IsComplete)
-            {
-                m_movement.MoveTowards(Vector2.one * transform.localScale.x, adaptiveMoveSpeed);
-                yield return null;
-            }
+            m_hitbox.Disable();
+            m_animation.SetAnimation(0, m_info.earthShakerDisappearAnimation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.earthShakerDisappearAnimation);
+            transform.position = new Vector2(m_targetInfo.position.x, GroundPosition().y);
             m_animation.animationState.TimeScale = 1f;
-            m_earthShakerGlitterFX.Stop();
-            m_movement.Stop();
-            m_animation.SetAnimation(0, m_info.earthShakerSwordStabAnimation, false).MixDuration = 0;
+            m_animation.SetAnimation(0, m_info.earthShakerAttack.animation, false).MixDuration = 0;
             m_animation.AddAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true, 0);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1.0f);
+            m_hitbox.Enable();
+            m_earthShakerGlitterFX.Stop();
             EarthShaker();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentIdleTransitionAnimation);
+            m_earthShakerExplosionFX.transform.SetParent(null);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
             m_currentAttackCoroutine = null;
@@ -1097,9 +1080,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private void EarthShaker()
         {
             //m_earthShakerFX.Play();
-            StartCoroutine(EarthShakerBBRoutine(20f));
+            StartCoroutine(EarthShakerBBRoutine(40f));
             m_currentHurtbox = m_earthShakerBB;
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.20f));
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.40f));
         }
 
         private void SpecialThrust()
@@ -1213,6 +1196,12 @@ namespace DChild.Gameplay.Characters.Enemies
                             m_pickedCD = m_currentFullCD[1];
                             break;
                         case Attack.EarthShaker:
+                            if (m_earthShakerExplosionFX.transform.parent == null)
+                            {
+                                m_earthShakerExplosionFX.transform.SetParent(m_fxParent);
+                                m_earthShakerExplosionFX.transform.localPosition = Vector3.zero;
+                                m_earthShakerExplosionFX.transform.localScale = new Vector3(-1.333333f, 1.333333f, 1);
+                            }
                             m_currentAttackCoroutine = StartCoroutine(EarthShakerAttackRoutine());
                             m_pickedCD = m_currentFullCD[2];
                             break;
