@@ -6,7 +6,7 @@ using DChild.Gameplay.Environment;
 using DChild.Gameplay.Inventories;
 using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.Systems.Lore;
-using DChild.Gameplay.Trade;
+//using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trading;
 using Doozy.Engine;
@@ -42,10 +42,10 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Trade Open");
         }
 
-        public void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate)
-        {
+       // public void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate)
+        //{
             // throw new System.NotImplementedException();
-        }
+       // }
 
         public void OpenStorePage(StorePage storePage)
         {
