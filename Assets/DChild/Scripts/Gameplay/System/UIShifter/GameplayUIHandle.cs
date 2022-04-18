@@ -42,10 +42,10 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Trade Open");
         }
 
-        //public void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate)
+       // public void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate)
         //{
-        //   // throw new System.NotImplementedException();
-        //}
+            // throw new System.NotImplementedException();
+       // }
 
         public void OpenStorePage(StorePage storePage)
         {
