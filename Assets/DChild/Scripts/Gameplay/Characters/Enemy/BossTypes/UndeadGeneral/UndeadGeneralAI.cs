@@ -515,7 +515,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator SmartChangePhaseRoutine()
         {
-            yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
+            //yield return new WaitWhile(() => !m_phaseHandle.allowPhaseChange);
             StopCurrentAttackRoutine();
             SetAIToPhasing();
             yield return null;
