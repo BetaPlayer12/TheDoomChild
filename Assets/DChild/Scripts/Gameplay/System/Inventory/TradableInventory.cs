@@ -128,11 +128,11 @@ namespace DChild.Gameplay.Inventories
         {
             if (m_markAllItemsAsTradable)
             {
-                return m_items.Where((x) => x.data.category == category).ToArray();
+                return m_items.Where((x) => category.HasFlag(x.data.category)).ToArray();
             }
             else
             {
-                return m_items.Where((x) => x.data.category == category && x.data.canBeSold).ToArray();
+                return m_items.Where((x) => category.HasFlag(x.data.category) && x.data.canBeSold).ToArray();
             }
         }
 

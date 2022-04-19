@@ -1,4 +1,4 @@
-﻿using Holysoft.UI;
+﻿using DChild.Gameplay.Items;
 using System;
 using UnityEngine;
 
@@ -6,19 +6,21 @@ namespace DChild.Menu.Trade
 {
     public class TradePoolFilterButton : MonoBehaviour
     {
-        //[SerializeField]
-        //private MerchantTradingManager m_manager;
         [SerializeField]
-        private TradePoolFilter m_filter;
+        private TradePoolFilterHandle m_handle;
+        [SerializeField]
+        private ItemCategory m_filter;
+        [SerializeField]
+        private string m_filterName;
 
         public void Select()
         {
-            //m_manager.SetTradingFilter(m_filter);
+            m_handle.SetFilter(m_filter, m_filterName);
         }
 
         private void OnValidate()
         {
-            gameObject.name = m_filter.ToString() + "TradeFilterTab";
+            gameObject.name = m_filterName + "TradeFilterTab";
         }
     }
 }

@@ -9,6 +9,7 @@ using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using DChild.Gameplay.Items;
 
 namespace DChild.Gameplay.Trade
 {
@@ -23,7 +24,7 @@ namespace DChild.Gameplay.Trade
         [SerializeField]
         private TradePlayerCurrencies m_playerCurrencies;
         [SerializeField]
-        private InventoryListUI<ITradeInventory> m_listUI;
+        private FilteredInventoryListUI<ITradeInventory> m_listUI;
         [SerializeField]
         private ItemUI m_firstSelectedItemUI;
         [SerializeField]
@@ -40,7 +41,7 @@ namespace DChild.Gameplay.Trade
         {
             m_tradeHandle.SetTraders(buyer, seller);
             m_tradeOption.ChangeToBuyOption(true);
-            InitializeTradeUI();
+            ResetTradeUI();
             UpdateCurrencyUI();
         }
 
@@ -62,7 +63,19 @@ namespace DChild.Gameplay.Trade
             m_highlight.rectTransform.position = item.transform.position;
         }
 
-        public void InitializeTradeUI()
+        public void SetTradeFilter(ItemCategory filter)
+        {
+            m_listUI.SetFilter(filter);
+            InitializeTradeUI();
+        }
+
+        public void ResetTradeUI()
+        {
+            m_listUI.ResetFilter();
+            InitializeTradeUI();
+        }
+
+        private void InitializeTradeUI()
         {
             m_listUI.Reset();
             m_listUI.SetInventoryReference(m_tradeHandle.currentSeller);

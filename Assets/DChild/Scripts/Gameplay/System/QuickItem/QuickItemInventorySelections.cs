@@ -46,7 +46,7 @@ namespace DChild.Gameplay.Inventories
 
         public override void UpdateSelection()
         {
-            m_currentList = m_inventory.FindStoredItemsOfTypes(ItemCategory.Consumable, ItemCategory.Throwable);
+            m_currentList = m_inventory.FindStoredItemsOfType(ItemCategory.QuickItem);
         }
 
         private void OnMassInventoryUpdate(object sender, EventActionArgs eventArgs)

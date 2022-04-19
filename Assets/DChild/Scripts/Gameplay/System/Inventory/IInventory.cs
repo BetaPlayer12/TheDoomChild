@@ -13,6 +13,5 @@ namespace DChild.Gameplay.Inventories
         void RemoveItem(ItemData itemData, int count = 1);
         void SetItem(ItemData itemData, int count = 1);
         IStoredItem[] FindStoredItemsOfType(ItemCategory category);
-        IStoredItem[] FindStoredItemsOfTypes(params ItemCategory[] categories);
     }
 }

@@ -12,7 +12,7 @@ namespace DChild.Gameplay.Inventories.UI
 
         public event EventAction<EventActionArgs> ListOverallChange;
 
-        protected int itemUICount => m_itemUIs.Length;
+        protected virtual int itemUICount => m_itemUIs.Length;
 
         public void SetInventoryReference(T tradeInventory)
         {

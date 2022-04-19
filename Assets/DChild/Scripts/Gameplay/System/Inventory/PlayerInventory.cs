@@ -142,11 +142,6 @@ namespace DChild.Gameplay.Inventories
         {
             return m_inventory.GetStoredItem(item);
         }
-
-        public IStoredItem[] FindStoredItemsOfTypes(params ItemCategory[] categories)
-        {
-            return m_inventory.FindStoredItemsOfTypes(categories);
-        }
         #endregion
     }
 }

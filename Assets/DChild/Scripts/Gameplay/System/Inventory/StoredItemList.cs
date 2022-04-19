@@ -55,7 +55,6 @@ namespace DChild.Gameplay.Inventories
         public abstract void SetItem(ItemData itemData, int count = 1);
 
         public abstract IStoredItem[] FindStoredItemsOfType(ItemCategory category);
-        public abstract IStoredItem[] FindStoredItemsOfTypes(params ItemCategory[] categories);
 
         public abstract IStoredItem GetItem(int index);
         public abstract IStoredItem GetItem(ItemData itemData);
@@ -105,24 +104,7 @@ namespace DChild.Gameplay.Inventories
             return null;
         }
 
-        public override IStoredItem[] FindStoredItemsOfType(ItemCategory category) => m_items.Where((x) => x.data.category == category).ToArray();
-        public override IStoredItem[] FindStoredItemsOfTypes(params ItemCategory[] categories)
-        {
-            List<IStoredItem> list = new List<IStoredItem>();
-            for (int i = 0; i < m_items.Count; i++)
-            {
-                var item = m_items[i];
-                for (int j = 0; j < categories.Length; j++)
-                {
-                    if (categories[j] == item.data.category)
-                    {
-                        list.Add(item);
-                        break;
-                    }
-                }
-            }
-            return list.ToArray();
-        }
+        public override IStoredItem[] FindStoredItemsOfType(ItemCategory category) => m_items.Where((x) => category.HasFlag(x.data.category)).ToArray();
 
         public override void AddItem(ItemData itemData, int count = 1)
         {

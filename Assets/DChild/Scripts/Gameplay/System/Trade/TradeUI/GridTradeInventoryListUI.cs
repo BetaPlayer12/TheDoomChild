@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Inventories.UI;
+﻿using DChild.Gameplay.Inventories;
+using DChild.Gameplay.Inventories.UI;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Trade.UI
 {
-    public class GridTradeInventoryListUI : InventoryListUI<ITradeInventory>
+    public class GridTradeInventoryListUI : FilteredInventoryListUI<ITradeInventory>
     {
         [SerializeField, MinValue(1), PropertyOrder(-1)]
         private int m_page;
@@ -27,7 +28,24 @@ namespace DChild.Gameplay.Trade.UI
         public override void UpdateUIList()
         {
             int i = 0;
-            var tradableItems = m_inventory.GetTradableItems();
+            if (m_currentFilter == Items.ItemCategory.All)
+            {
+                UpdateUIList(ref i, m_inventory.GetTradableItems());
+            }
+            else
+            {
+                UpdateUIList(ref i, m_inventory.FindTradeItemsOfType(m_currentFilter));
+            }
+
+            for (; i < itemUICount; i++)
+            {
+                m_itemUIs[i].Hide();
+            }
+            InvokeListOverallChange();
+        }
+
+        private void UpdateUIList(ref int i, ITradeItem[] tradableItems)
+        {
             for (; i <= m_availableSlot; i++)
             {
                 var itemIndex = m_startIndex + i;
@@ -41,12 +59,6 @@ namespace DChild.Gameplay.Trade.UI
                     itemUI.SetReference(storedItem);
                 }
             }
-
-            for (; i < itemUICount; i++)
-            {
-                m_itemUIs[i].Hide();
-            }
-            InvokeListOverallChange();
         }
 
         public override void Reset()
