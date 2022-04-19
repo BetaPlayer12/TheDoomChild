@@ -1,8 +1,10 @@
 ﻿using DChild;
 using DChild.Gameplay;
 using DChild.Gameplay.Characters;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using Spine.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,11 +14,13 @@ public class CrystalCrawlerSpike : FX
     [SerializeField, BoxGroup("FX")]
     private ParticleFX m_dustFX;
     [SerializeField, BoxGroup("FX")]
-    private ParticleFX m_explodeFX;
+    private GameObject m_explodeFXGO;
     [SerializeField, BoxGroup("Spine")]
     private SpineEventListener m_spineListener;
     [SerializeField, BoxGroup("Spine")]
     private SpineRootAnimation m_spine;
+    [SerializeField, BoxGroup("Audio")]
+    private AudioSource m_audio;
 
 #if UNITY_EDITOR
     [SerializeField, BoxGroup("Spine")]
@@ -81,6 +85,10 @@ public class CrystalCrawlerSpike : FX
 
     private IEnumerator SpikeRoutine()
     {
+        m_dustFX?.Play();
+        var explodFX = GameSystem.poolManager.GetPool<FXPool>().GetOrCreateItem(m_explodeFXGO);
+        explodFX.transform.position = transform.position;
+        m_audio.Play();
         m_spine.SetAnimation(0, m_startAnimation, false);
         yield return new WaitForAnimationComplete(m_spine.animationState, m_startAnimation);
         m_spine.SetAnimation(0, m_loopAnimation, false);
