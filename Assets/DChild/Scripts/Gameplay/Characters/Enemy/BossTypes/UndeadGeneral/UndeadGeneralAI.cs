@@ -323,6 +323,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private ParticleFX m_trailFX;
         [SerializeField, TabGroup("FX")]
         private Transform m_fxParent;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_swordThrustChargeFX;
 
         [SerializeField]
         private SpineEventListener m_spineListener;
@@ -879,6 +881,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_animation.EnableRootMotion(true, false);
             //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
+            m_swordThrustChargeFX.Play();
             m_animation.SetAnimation(0, m_info.specialThrustAttack.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.specialThrustAttack.animation);
             //m_animation.SetAnimation(0, m_info.specialThrustHitAnimation, false);

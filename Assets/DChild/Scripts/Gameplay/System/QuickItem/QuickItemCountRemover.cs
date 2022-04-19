@@ -8,12 +8,12 @@ namespace DChild.Gameplay.Inventories
     [System.Serializable]
     public class QuickItemCountRemover
     {
-        private IItemContainer m_container;
+        private IInventory m_container;
         private ItemData m_toRemove;
         private int m_removeCount;
         private bool m_executeRemoveOnThrow;
 
-        public QuickItemCountRemover(IPlayer player, IItemContainer container)
+        public QuickItemCountRemover(IPlayer player, IInventory container)
         {
             player.character.GetComponentInChildren<ProjectileThrow>().ProjectileThrown += OnProjectileThrow;
             m_container = container;

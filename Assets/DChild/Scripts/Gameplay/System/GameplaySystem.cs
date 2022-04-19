@@ -10,6 +10,7 @@ using Holysoft.Event;
 using System;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
+using System.Collections;
 
 namespace DChild.Gameplay
 {
@@ -190,6 +191,17 @@ namespace DChild.Gameplay
 
         private void AssignModule<T>(out T module) where T : MonoBehaviour, IGameplaySystemModule => module = GetComponentInChildren<T>();
 
+        private IEnumerator DelayedShowGameplay()
+        {
+            int frameCount = 5;
+            do
+            {
+                yield return null;
+                frameCount--;
+            } while (frameCount > 0);
+            m_gameplayUIHandle.ShowGameplayUI(true);
+        }
+
 #if UNITY_EDITOR
         private void ValidateModule<T>() where T : MonoBehaviour, IGameplaySystemModule => this.ValidateChildComponent<T>();
 #endif
@@ -249,8 +261,10 @@ namespace DChild.Gameplay
                 m_campaignToLoad = null;
             }
 
-            m_gameplayUIHandle.ShowGameplayUI(true);
+            StartCoroutine(DelayedShowGameplay());
         }
+
+     
 
         private void OnEnable()
         {

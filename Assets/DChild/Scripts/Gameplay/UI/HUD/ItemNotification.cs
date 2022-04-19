@@ -20,8 +20,8 @@ namespace DChild.Gameplay.UI
 
         [SerializeField]
         private TextMeshProUGUI m_notification;
-        [SerializeField]
-        private IItemContainer[] m_toListen;
+        //[SerializeField]
+        //private IItemContainer[] m_toListen;
 
         
         public void ShowNextNotif()
@@ -58,10 +58,10 @@ namespace DChild.Gameplay.UI
         {
             m_messages = new List<string>();
             m_notificationTimer.CountdownEnd += OnNotifEnd;
-            for (int i = 0; i < m_toListen.Length; i++)
-            {
-                m_toListen[i].ItemUpdate += ItemUpdate;
-            }
+            //for (int i = 0; i < m_toListen.Length; i++)
+            //{
+            //    m_toListen[i].ItemUpdate += ItemUpdate;
+            //}
             enabled = false;
         }
 
