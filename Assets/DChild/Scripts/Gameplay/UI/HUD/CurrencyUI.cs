@@ -94,6 +94,27 @@ namespace DChild.Gameplay.UI
             m_updateRateIntervalTimer = m_increaseUpdateRateInterval;
         }
 
+        private void CapCurrentUpdateFactor()
+        {
+            var simulatedAddedAmount = addedAmount;
+            if (m_addedAmountIsNegative)
+            {
+                simulatedAddedAmount += m_currentUpdateFactor;
+                if(simulatedAddedAmount> 0)
+                {
+                    m_currentUpdateFactor -= simulatedAddedAmount;
+                }
+            }
+            else
+            {
+                simulatedAddedAmount -= m_currentUpdateFactor;
+                if (simulatedAddedAmount < 0)
+                {
+                    m_currentUpdateFactor += simulatedAddedAmount;
+                }
+            }
+        }
+
         private void Awake()
         {
             if (m_currency != null)
@@ -119,6 +140,7 @@ namespace DChild.Gameplay.UI
                 else
                 {
                     bool stopUpdate = false;
+                    CapCurrentUpdateFactor();
                     if (m_addedAmountIsNegative)
                     {
                         addedAmount += m_currentUpdateFactor;

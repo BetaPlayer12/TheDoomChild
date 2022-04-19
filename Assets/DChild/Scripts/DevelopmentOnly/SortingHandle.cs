@@ -22,6 +22,7 @@ namespace DChild
         [SerializeField, OnValueChanged("UpdateSorting")]
         private int m_referenceOrder;
 
+
         [SerializeField, DisableInEditorMode]
         private Renderer[] m_renderers;
         [SerializeField, HideInInspector]
@@ -34,11 +35,23 @@ namespace DChild
         {
             m_referenceLayer = layerID;
             m_referenceOrder = sortingOrder;
-            for (int i = 0; i < m_renderers.Length; i++)
+            if (Application.isPlaying)
             {
-                m_renderers[i].sortingLayerID = layerID;
-                m_renderers[i].sortingOrder = m_baseOrders[i] + sortingOrder;
+                for (int i = 0; i < m_renderers.Length; i++)
+                {
+                    m_renderers[i].sortingLayerID = layerID;
+                    m_renderers[i].sortingOrder = m_baseOrders[i] + sortingOrder;
+                }
             }
+#if UNITY_EDITOR
+            else
+            {
+                for (int i = 0; i < m_rendererList.Count; i++)
+                {
+                    m_rendererList[i].UpdateSorting(m_referenceLayer, m_referenceOrder);
+                }
+            } 
+#endif
         }
 
 #if UNITY_EDITOR
@@ -71,6 +84,8 @@ namespace DChild
             }
         }
 
+        [SerializeField]
+        private bool m_allowEditorUpdate = true;
         [SerializeField, HideInInspector]
         private int m_previousReferenceOrder;
         [SerializeField, ListDrawerSettings(DraggableItems = false, HideAddButton = true, OnTitleBarGUI = "OnListGUI", HideRemoveButton = true)]
@@ -97,13 +112,20 @@ namespace DChild
 
         private void UpdateSorting()
         {
-            for (int i = 0; i < m_rendererList.Count; i++)
+            if (m_allowEditorUpdate)
             {
-                m_rendererList[i].UseCurrentAsBaseOrder(m_previousReferenceOrder);
-                m_rendererList[i].UpdateSorting(m_referenceLayer, m_referenceOrder);
+                for (int i = 0; i < m_rendererList.Count; i++)
+                {
+                    m_rendererList[i].UseCurrentAsBaseOrder(m_previousReferenceOrder);
+                    m_rendererList[i].UpdateSorting(m_referenceLayer, m_referenceOrder);
+                }
+                m_previousReferenceOrder = m_referenceOrder;
+                EditorUtility.SetDirty(gameObject);
             }
-            m_previousReferenceOrder = m_referenceOrder;
-            EditorUtility.SetDirty(gameObject);
+            else
+            {
+                m_previousReferenceOrder = m_referenceOrder;
+            }
         }
 
         private void OnValidate()

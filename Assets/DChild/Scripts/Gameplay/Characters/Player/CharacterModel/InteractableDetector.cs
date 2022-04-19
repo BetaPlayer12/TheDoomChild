@@ -55,8 +55,7 @@ namespace DChild.Gameplay.Characters.Players
         public void ClearAllInteractableReferences()
         {
             m_objectsInRange.Clear();
-            m_closestObject = null;
-            CallInteractableDetectedEvent(m_closestObject);
+            SetAsClosestInteractableObject(null);
         }
 
         private void SetAsClosestInteractableObject(IButtonToInteract interactable)
@@ -70,7 +69,11 @@ namespace DChild.Gameplay.Characters.Players
             }
 
             m_closestObject = interactable;
-            m_closestObject.InteractionOptionChange += OnInteractableOptionChange;
+            if (m_closestObject != null)
+            {
+                m_closestObject.InteractionOptionChange += OnInteractableOptionChange;
+            }
+            CallInteractableDetectedEvent(closestObject);
         }
 
         private void OnInteractableOptionChange(object sender, EventActionArgs eventArgs)
@@ -79,8 +82,7 @@ namespace DChild.Gameplay.Characters.Players
             {
                 m_closestObject.InteractionOptionChange -= OnInteractableOptionChange;
                 m_objectsInRange.Remove(m_closestObject);
-                m_closestObject = null;
-                CallInteractableDetectedEvent(null);
+                SetAsClosestInteractableObject(null);
             }
         }
 
@@ -172,7 +174,6 @@ namespace DChild.Gameplay.Characters.Players
                     if (m_closestObject != closestObject)
                     {
                         SetAsClosestInteractableObject(closestObject);
-                        CallInteractableDetectedEvent(closestObject);
                     }
                     m_prevCharacterPosition = currentPosition;
                 }
@@ -181,7 +182,7 @@ namespace DChild.Gameplay.Characters.Players
             {
                 if (m_closestObject != m_objectsInRange[0])
                 {
-                    m_closestObject = m_objectsInRange[0];
+                    SetAsClosestInteractableObject(m_objectsInRange[0]);
                 }
             }
         }
@@ -193,7 +194,7 @@ namespace DChild.Gameplay.Characters.Players
 
             if (m_objectsInRange.Count == 0)
             {
-                CallInteractableDetectedEvent(null);
+                SetAsClosestInteractableObject(null);
             }
         }
 
@@ -209,7 +210,6 @@ namespace DChild.Gameplay.Characters.Players
                         if (m_objectsInRange.Count == 1)
                         {
                             SetAsClosestInteractableObject(interactableObject);
-                            CallInteractableDetectedEvent(interactableObject);
                         }
                     }
                 }
@@ -226,7 +226,6 @@ namespace DChild.Gameplay.Characters.Players
                     if (m_objectsInRange.Count == 0)
                     {
                         SetAsClosestInteractableObject(null);
-                        CallInteractableDetectedEvent(null);
                     }
                 }
             }
