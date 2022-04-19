@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Linq;
 using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Items;
 using Doozy.Engine.Nody;
@@ -10,7 +12,6 @@ using UnityEngine.UI;
 
 namespace DChild.Gameplay.Inventories
 {
-
     public class QuickItemHandle : SerializedMonoBehaviour
     {
         public class SelectionEventArgs : IEventActionArgs
@@ -23,11 +24,11 @@ namespace DChild.Gameplay.Inventories
             }
 
             public int currentIndex { get; private set; }
-            public ItemSlot currentSlot { get; private set; }
+            public IStoredItem currentSlot { get; private set; }
             public SelectionType selectionType { get; private set; }
 
 
-            public void Initialize(int currentIndex, ItemSlot currentSlot, SelectionType selectionType)
+            public void Initialize(int currentIndex, IStoredItem currentSlot, SelectionType selectionType)
             {
                 this.currentIndex = currentIndex;
                 this.currentSlot = currentSlot;
@@ -38,7 +39,9 @@ namespace DChild.Gameplay.Inventories
         [SerializeField]
         private IPlayer m_player;
         [SerializeField]
-        private IItemContainer m_container;
+        private IInventory m_inventory;
+        [SerializeField]
+        private QuickItemSelections m_selections;
         [SerializeField]
         private bool m_wrapped;
 
@@ -51,8 +54,8 @@ namespace DChild.Gameplay.Inventories
         private QuickItemCooldown m_cooldown;
 
         private bool m_removeItemCountOnConsume;
-        private ItemSlot m_currentSlot;
-        private ConsumableItemData m_currentItem;
+        private IStoredItem m_currentItem;
+        private ConsumableItemData m_currentItemData;
         private QuickItemCountRemover m_itemCountRemover;
 
         private bool m_hideUI;
@@ -62,11 +65,10 @@ namespace DChild.Gameplay.Inventories
 
         public bool isWrapped => m_wrapped;
         public int currentIndex => m_currentIndex;
-        public IItemContainer container => m_container;
         public bool removeItemCountOnConsume { get => m_removeItemCountOnConsume; set => m_removeItemCountOnConsume = value; }
         public bool hideUI => m_hideUI;
 
-        public bool CanUseCurrentItem() => m_currentItem.CanBeUse(m_player);
+        public bool CanUseCurrentItem() => m_currentItemData.CanBeUse(m_player);
 
         public void UseCurrentItem()
         {
@@ -74,13 +76,12 @@ namespace DChild.Gameplay.Inventories
             {
                 if (m_player != null)
                 {
-                    m_currentItem.Use(m_player);
+                    m_currentItemData.Use(m_player);
                     m_cooldown.StartCooldown();
-
                 }
                 if (m_removeItemCountOnConsume)
                 {
-                    m_itemCountRemover.Remove(m_currentSlot.item, 1);
+                    m_itemCountRemover.Remove(m_currentItem.data, 1);
                 }
             }
         }
@@ -92,7 +93,7 @@ namespace DChild.Gameplay.Inventories
             {
                 if (m_wrapped)
                 {
-                    m_currentIndex = m_container.Count - 1;
+                    m_currentIndex = m_selections.itemCount - 1;
                     StoreSelectedItem(SelectionEventArgs.SelectionType.Previous);
                 }
                 else
@@ -110,7 +111,7 @@ namespace DChild.Gameplay.Inventories
         [Button, HorizontalGroup("Split"), HideInEditorMode]
         public void Next()
         {
-            if (m_currentIndex == m_container.Count - 1)
+            if (m_currentIndex == m_selections.itemCount - 1)
             {
                 if (m_wrapped)
                 {
@@ -131,25 +132,31 @@ namespace DChild.Gameplay.Inventories
 
         private void StoreSelectedItem(SelectionEventArgs.SelectionType selectionType)
         {
-            m_currentSlot = m_container.GetSlot(m_currentIndex);
-            if (m_currentSlot == null)
+            m_currentItem = m_selections.GetItem(m_currentIndex);
+            if (m_currentItem == null)
             {
                 m_currentIndex--;
-                m_currentSlot = m_container.GetSlot(m_currentIndex);
+                m_currentItem = m_selections.GetItem(m_currentIndex);
             }
 
-            m_currentItem = (ConsumableItemData)m_currentSlot.item;
+            m_currentItemData = (ConsumableItemData)m_currentItem.data;
+            InvokeSelectedItemEvent(selectionType);
+        }
+
+        private void InvokeSelectedItemEvent(SelectionEventArgs.SelectionType selectionType)
+        {
             using (Cache<SelectionEventArgs> cacheEventArgs = Cache<SelectionEventArgs>.Claim())
             {
-                cacheEventArgs.Value.Initialize(m_currentIndex, m_currentSlot, selectionType);
+                cacheEventArgs.Value.Initialize(m_currentIndex, m_currentItem, selectionType);
                 SelectedItem?.Invoke(this, cacheEventArgs.Value);
                 cacheEventArgs.Release();
             }
         }
 
-        private void OnItemUpdate(object sender, ItemEventArgs eventArgs)
+
+        private void OnSelectionUpdate(object sender, EventActionArgs eventArgs)
         {
-            if (HasItemsInQuickSlot())
+            if (m_selections.HasItems())
             {
                 if (m_hideUI)
                 {
@@ -157,15 +164,15 @@ namespace DChild.Gameplay.Inventories
                     m_hideUI = false;
                 }
 
-                if (eventArgs.count == 0 && eventArgs.data == m_currentSlot.item)
+                if (m_selections.IsInSelections(m_currentItemData))
                 {
-                    StoreSelectedItem(SelectionEventArgs.SelectionType.Previous);
+                    UpdateCurrentItemIndex();
+                    StoreSelectedItem(SelectionEventArgs.SelectionType.None);
                 }
                 else
                 {
-                    StoreSelectedItem(SelectionEventArgs.SelectionType.None);
+                    StoreSelectedItem(SelectionEventArgs.SelectionType.Previous);
                 }
-
             }
             else
             {
@@ -177,9 +184,21 @@ namespace DChild.Gameplay.Inventories
             }
         }
 
-        private bool HasItemsInQuickSlot()
+        private void OnSelectionDetailsUpdate(object sender, EventActionArgs eventArgs)
         {
-            return m_container.HasItemCategory(ItemCategory.Consumable) || m_container.HasItemCategory(ItemCategory.Throwable);
+            StoreSelectedItem(SelectionEventArgs.SelectionType.None);
+        }
+
+        private void UpdateCurrentItemIndex()
+        {
+            if (m_currentItemData == null)
+            {
+                m_currentIndex = 0;
+            }
+            else
+            {
+                m_currentIndex = m_selections.FindIndexOf(m_currentItem);
+            }
         }
 
         private IEnumerator DelayedInitialiationRoutine()
@@ -189,7 +208,7 @@ namespace DChild.Gameplay.Inventories
                 yield return null;
             } while (m_graph.Initialized == false);
             yield return null;
-            var hasQuickSlot = HasItemsInQuickSlot();
+            var hasQuickSlot = m_selections.HasItems();
             m_hideUI = hasQuickSlot == false;
             GameplaySystem.gamplayUIHandle.ShowQuickItem(hasQuickSlot);
         }
@@ -197,12 +216,16 @@ namespace DChild.Gameplay.Inventories
         private void Awake()
         {
             m_currentIndex = 0;
-            m_currentSlot = m_container.GetSlot(m_currentIndex);
-            if (m_currentSlot != null)
+            if (m_currentItem != null)
             {
-                m_currentItem = (ConsumableItemData)m_currentSlot.item;
+                m_currentItemData = (ConsumableItemData)m_currentItem.data;
             }
-            m_container.ItemUpdate += OnItemUpdate;
+            m_selections.SelectionUpdate += OnSelectionUpdate;
+            m_selections.SelectionDetailsUpdate += OnSelectionDetailsUpdate;
+            if (m_selections.HasItems())
+            {
+                m_currentItem = m_selections.GetItem(m_currentIndex);
+            }
             m_removeItemCountOnConsume = true;
         }
 
@@ -211,7 +234,7 @@ namespace DChild.Gameplay.Inventories
             m_hideUI = true;
             //This waits for the Nody Graph to initialize itself
             StartCoroutine(DelayedInitialiationRoutine());
-            m_itemCountRemover = new QuickItemCountRemover(m_player, m_container);
+            m_itemCountRemover = new QuickItemCountRemover(m_player, m_inventory);
             m_cooldown.ResetCooldown();
         }
     }

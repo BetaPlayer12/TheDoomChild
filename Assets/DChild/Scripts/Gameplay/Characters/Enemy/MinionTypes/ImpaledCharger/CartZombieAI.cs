@@ -404,6 +404,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_chargerAI.transform.SetParent(null);
             m_chargerMovement = null;
             m_hitbox.Enable();
+            m_dustBackFX.Stop();
+            m_dustFrontFX.Stop();
             StopAllCoroutines();
             m_stateHandle.OverrideState(State.Idle);
         }
