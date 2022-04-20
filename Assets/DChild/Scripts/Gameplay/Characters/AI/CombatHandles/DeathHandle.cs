@@ -6,6 +6,7 @@ using DChild.Gameplay.Combat;
 using Spine;
 using UnityEngine;
 using Spine.Unity;
+using System.Collections.Generic;
 
 namespace DChild.Gameplay.Characters
 {
@@ -29,6 +30,8 @@ namespace DChild.Gameplay.Characters
         private string m_animation;
         [SerializeField]
         private CountdownTimer m_bodyDuration;
+        [SerializeField]
+        private List<ParticleSystem> m_fx;
         [SerializeField]
         private bool m_destroySource;
 
@@ -69,6 +72,11 @@ namespace DChild.Gameplay.Characters
                 m_source.SetHitboxActive(false);
                 m_animator.SetAnimation(0, m_animation, false, 0);
                 m_animator.animationState.Complete += OnDeathAnimationComplete;
+            }
+
+            for (int i = 0; i < m_fx.Count; i++)
+            {
+                m_fx[i].Stop();
             }
         }
 
