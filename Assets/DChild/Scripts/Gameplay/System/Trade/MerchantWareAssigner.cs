@@ -1,22 +1,34 @@
-﻿using Sirenix.OdinInspector;
+﻿using DChild.Gameplay.Trade;
+using PixelCrushers.DialogueSystem;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DChild.Menu.Trade
+namespace DChild.Gameplay.Trade
 {
     public class MerchantWareAssigner : MonoBehaviour
     {
-        [SerializeField,InlineProperty]
+        [SerializeField, InlineProperty]
         private ConditionedMechantWaresData m_data;
 
         private IMerchantStore m_store;
 
-
-        [Button]
-        private void UpdateMerchanteWares()
+        [Button,HideInEditorMode]
+        public void UpdateMerchanteWares()
         {
-            m_store.SetWaresReference(m_data.GetAppropriateWares());
+            m_store.SetWares(m_data.GetAppropriateWares());
             m_store.ResetWares();
+        }
+
+        private void Awake()
+        {
+            m_store = GetComponent<IMerchantStore>();
+            UpdateMerchanteWares();
+        }
+
+        private void Start()
+        {
+            UpdateMerchanteWares();
         }
     }
 }
