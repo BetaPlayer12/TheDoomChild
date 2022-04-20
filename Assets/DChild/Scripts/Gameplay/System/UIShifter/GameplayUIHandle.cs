@@ -6,8 +6,9 @@ using DChild.Gameplay.Environment;
 using DChild.Gameplay.Inventories;
 using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.Systems.Lore;
+using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
-using DChild.Menu.Trading;
+using DChild.Menu.Trade;
 using Doozy.Engine;
 using System.Collections;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace DChild.Gameplay.Systems
     public class GameplayUIHandle : MonoBehaviour, IGameplayUIHandle, IGameplaySystemModule
     {
         [SerializeField]
-        private MerchantTradingManager m_merchantManager;
+        private TradeManager m_tradeManager;
         [SerializeField]
         private StoreNavigator m_storeNavigator;
         [SerializeField]
@@ -34,10 +35,11 @@ namespace DChild.Gameplay.Systems
             m_navMap.UpdateConfiguration(location, inGameReference, mapReferencePoint, calculationOffset);
         }
 
-        public void OpenTradeWindow(NPCProfile merchantData, ITradableInventory merchantInventory, ITraderAskingPrice merchantAskingPrice)
+        public void OpenTradeWindow(NPCProfile merchantData, ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate)
         {
-            m_merchantManager.SetProfile(merchantData);
-            m_merchantManager.SetTradingPool(merchantInventory, merchantAskingPrice, GameplaySystem.playerManager.player.inventory);
+            m_tradeManager.SetSellerProfile(merchantData);
+            m_tradeManager.SetSellingTradeRates(merchantBuyingPriceRate);
+            m_tradeManager.SetupTrade(GameplaySystem.playerManager.player.inventory, merchantInventory);
             GameEventMessage.SendEvent("Trade Open");
         }
 

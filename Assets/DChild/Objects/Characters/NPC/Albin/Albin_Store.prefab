@@ -9,9 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4083272032033839314}
-  - component: {fileID: 4083272032033839324}
-  - component: {fileID: 4083272032033839327}
-  - component: {fileID: 4083272032033839325}
+  - component: {fileID: 9135603834243713628}
+  - component: {fileID: 6733480423172358211}
   - component: {fileID: 7994922768268429980}
   - component: {fileID: 3229121963395161193}
   - component: {fileID: 5869015828390855376}
@@ -37,7 +36,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4083272032033839324
+--- !u!114 &9135603834243713628
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,30 +45,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4083272032033839315}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b96cb077525df94fb8083c1dc2378bf, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d04b4da709ae804eaffd988a81aab06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   m_npcData: {fileID: 11400000, guid: 4b0cc1cf34020a1499a7799812157e27, type: 2}
-  m_promptOffset: {x: 0, y: 14.09, z: 0}
-  m_inventory: {fileID: 4083272032033839327}
+  m_store: {fileID: 6733480423172358211}
+  m_promptOffset: {x: 0, y: 19.53, z: 0}
   m_hasDialogue: 0
-  m_buyAskingPrice:
-    m_defaultPriceModifier: 100
-    m_priceModifierData: {fileID: 11400000, guid: 7f26d3c3422149344b42cbdc0cdce1da,
-      type: 2}
-  m_sellAskingPrice:
-    m_defaultPriceModifier: 30
-    m_priceModifierData: {fileID: 0}
---- !u!114 &4083272032033839327
+--- !u!114 &6733480423172358211
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,38 +61,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4083272032033839315}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a2cfea40d0c7014d8684822a8f84a04, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d7bdfa20736dd14494352995c7c0bac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 4083272032033839325}
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: m_items
-      Entry: 10
-      Data: 0
-  m_waresReference: {fileID: 11400000, guid: 422d0bde30cac264593bb63e5aba652e, type: 2}
-  m_soulEssence: 0
-  m_allowBuyBack: 1
---- !u!114 &4083272032033839325
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4083272032033839315}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a360c2313ace1454ca9f98dd210f3168, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_list: []
+  m_tradeRates: {fileID: 0}
+  m_inventory:
+    m_items: []
+    m_markAllItemsAsTradable: 1
+    m_restrictItemsToQuanitityLimit: 0
+    soulEssence: 0
 --- !u!114 &7994922768268429980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,6 +535,7 @@ MonoBehaviour:
   m_referenceOrder: 0
   m_renderers: []
   m_baseOrders: 
+  m_allowEditorUpdate: 1
   m_previousReferenceOrder: 0
   m_rendererList:
   - m_renderer: {fileID: 535283513414223460}

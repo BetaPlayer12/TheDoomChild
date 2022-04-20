@@ -6,6 +6,7 @@ using DChild.Menu.Bestiary;
 using DChild.Gameplay.Characters.Players.SoulSkills;
 using System;
 using DChild.Gameplay.SoulSkills;
+using DChild.Gameplay.Inventories;
 
 namespace DChild.Serialization
 {
@@ -13,7 +14,7 @@ namespace DChild.Serialization
     public class PlayerCharacterData
     {
         [SerializeField,TabGroup("Inventory"),HideReferenceObjectPicker,HideLabel]
-        private PlayerInventoryData m_inventoryData;
+        private TradableInventorySerialization m_inventoryData;
         [SerializeField, TabGroup("Bestiary"),HideReferenceObjectPicker,HideLabel]
         private AcquisitionData m_bestiaryProgressData;
         [SerializeField, TabGroup("Skills")]
@@ -21,20 +22,20 @@ namespace DChild.Serialization
         [SerializeField, TabGroup("Soul Skill")]
         private PlayerSoulSkillData m_soulSkillData;
 
-        public PlayerInventoryData inventoryData => m_inventoryData;
+        public TradableInventorySerialization inventoryData => m_inventoryData;
         public AcquisitionData bestiaryProgressData { get => m_bestiaryProgressData; }
         public PrimarySkillsData skills { get => m_skills; }
         public PlayerSoulSkillData soulSkillData { get => m_soulSkillData; }
 
         public PlayerCharacterData()
         {
-            m_inventoryData = new PlayerInventoryData();
+            m_inventoryData = new TradableInventorySerialization();
             m_bestiaryProgressData = new AcquisitionData();
             m_skills = new PrimarySkillsData();
             m_soulSkillData = new PlayerSoulSkillData();
         }
 
-        public PlayerCharacterData(PlayerInventoryData m_inventoryData, AcquisitionData m_bestiaryProgressData, PrimarySkillsData m_skills, PlayerSoulSkillData m_soulSkillData)
+        public PlayerCharacterData(TradableInventorySerialization m_inventoryData, AcquisitionData m_bestiaryProgressData, PrimarySkillsData m_skills, PlayerSoulSkillData m_soulSkillData)
         {
             this.m_inventoryData = m_inventoryData;
             this.m_bestiaryProgressData = m_bestiaryProgressData;
@@ -44,7 +45,7 @@ namespace DChild.Serialization
 
         public PlayerCharacterData(PlayerCharacterData data)
         {
-            this.m_inventoryData = new PlayerInventoryData(data.inventoryData);
+            this.m_inventoryData = new TradableInventorySerialization(data.inventoryData);
             this.m_bestiaryProgressData = new AcquisitionData(data.bestiaryProgressData);
             this.m_skills = data.skills;
             this.m_soulSkillData = data.soulSkillData;
