@@ -46,43 +46,56 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public bool IsThereADroppablePlatform()
         {
             bool isValid = false;
+            bool colliderHit = false;
 
             m_droppablePlatformSensor.Cast();
 
             if (m_droppablePlatformSensor.isDetecting)
             {
-                var hits = m_droppablePlatformSensor.GetUniqueHits();
+                //var hits = m_droppablePlatformSensor.GetUniqueHits();
+                var hitsList = m_droppablePlatformSensor.GetHitsList();
 
-                for (int i = 0; i < hits.Length; i++)
+                for (int i = 0; i < hitsList.Count; i++)
                 {
-                    m_cacheCollider = hits[i].collider;
-                    if (m_cacheCollider.isTrigger)
+                    if (hitsList[i] != null)
                     {
-                        return false;
-                    }
-                    else
-                    {
-                        if (m_cacheCollider.CompareTag("InvisibleWall") == false)
+                        for (int c = 0; c < hitsList[i].Length; c++)
                         {
-                            if (m_cacheCollider.CompareTag("Droppable") == true)
+                            if (hitsList[i][c].collider != null)
                             {
-                                isValid = true;
+                                m_cacheCollider = hitsList[i][c].collider;
                             }
-                            else if (isValid == true)
+
+                            if (m_cacheCollider != null)
                             {
-                                if (hits[i].collider == null)
+                                if (m_cacheCollider.isTrigger)
                                 {
-                                    Debug.Log("Hangin");
+                                    return false;
+                                }
+                                else
+                                {
+                                    if (m_cacheCollider.CompareTag("InvisibleWall") == false)
+                                    {
+                                        if (m_cacheCollider.CompareTag("Droppable") == true)
+                                        {
+                                            if (colliderHit == true && isValid == false)
+                                            {
+                                                isValid = false;
+                                            }
+                                            else
+                                            {
+                                                isValid = true;
+                                                colliderHit = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            isValid = false;
+                                            colliderHit = true;
+                                        }
+                                    }
                                 }
                             }
-                            else
-                            {
-                                isValid = false;
-                            }
-                        }
-                        else
-                        {
-                            return false;
                         }
                     }
                 }
