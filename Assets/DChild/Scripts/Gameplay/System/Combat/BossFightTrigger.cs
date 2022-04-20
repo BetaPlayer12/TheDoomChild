@@ -46,6 +46,8 @@ namespace DChild.Gameplay.Combat
         private PlayableDirector m_director;
         [SerializeField, ShowIf("@m_prefight == PreFight.Cinematic")]
         private PlayableAsset m_cinematic;
+        [SerializeField, ShowIf("@m_prefight == PreFight.Cinematic")]
+        private bool m_afterCinematicDialogue;
         [SerializeField, TabGroup("Upon Trigger")]
         private UnityEvent m_uponTrigger;
         [SerializeField, TabGroup("On Defeat")]
@@ -61,6 +63,12 @@ namespace DChild.Gameplay.Combat
             var player = GameplaySystem.playerManager.player;
             m_targetTuple = ((Damageable)player.damageableModule, player.character);
             StartFight();
+        }
+
+        public void StartCombat()
+        {
+            m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
+            m_boss.Enable();
         }
 
         public ISaveData Save() => new SaveData(m_isTriggered);
@@ -80,8 +88,11 @@ namespace DChild.Gameplay.Combat
 
         private void OnCinematicStop(PlayableDirector obj)
         {
-            m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
-            m_boss.Enable();
+            if (m_afterCinematicDialogue == false)
+            {
+                StartCombat();
+            }
+
         }
 
         private void OnBossKilled(object sender, EventActionArgs eventArgs)
@@ -94,7 +105,6 @@ namespace DChild.Gameplay.Combat
             yield return new WaitForSeconds(m_startDelay);
             m_boss.SetTarget(damageable, character);
             m_boss.Enable();
-            Debug.Log("wake up");
         }
 
         private void StartFight()
@@ -103,9 +113,7 @@ namespace DChild.Gameplay.Combat
             switch (m_prefight)
             {
                 case PreFight.None:
-                    m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
-                    m_boss.Enable();
-                    Debug.Log("wake up");
+                    StartCombat();
                     break;
                 case PreFight.Delay:
                     StartCoroutine(DelayedAwakeRoutine(m_targetTuple.damageable, m_targetTuple.character));
