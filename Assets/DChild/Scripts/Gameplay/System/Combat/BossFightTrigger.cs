@@ -94,6 +94,7 @@ namespace DChild.Gameplay.Combat
             yield return new WaitForSeconds(m_startDelay);
             m_boss.SetTarget(damageable, character);
             m_boss.Enable();
+            Debug.Log("wake up");
         }
 
         private void StartFight()
@@ -104,6 +105,7 @@ namespace DChild.Gameplay.Combat
                 case PreFight.None:
                     m_boss.SetTarget(m_targetTuple.damageable, m_targetTuple.character);
                     m_boss.Enable();
+                    Debug.Log("wake up");
                     break;
                 case PreFight.Delay:
                     StartCoroutine(DelayedAwakeRoutine(m_targetTuple.damageable, m_targetTuple.character));

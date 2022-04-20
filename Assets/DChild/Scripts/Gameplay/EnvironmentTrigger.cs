@@ -50,13 +50,16 @@ namespace DChild.Gameplay
             {
                 if ((m_oneTimeOnly && !m_wasTriggered) || !m_oneTimeOnly)
                 {
+                    Debug.Log("i was wrong");
                     m_enterEvents?.Invoke();
                 }
                 if (m_oneTimeOnly)
                 {
                     m_wasTriggered = true;
                 }
+                
             }
+            
         }
 
         private void OnTriggerExit2D(Collider2D collision)

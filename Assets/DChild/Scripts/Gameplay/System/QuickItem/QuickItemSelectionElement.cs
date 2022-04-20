@@ -8,16 +8,16 @@ namespace DChild.Gameplay.Inventories.QuickItem
         [SerializeField]
         private Image m_icon;
 
-        private void UpdateSlot(ItemSlot slot)
-        {
-            if (slot == null)
-            {
-                m_icon.sprite = null;
-            }
-            else
-            {
-                m_icon.sprite = slot.item.icon;
-            }
-        }
+        //private void UpdateSlot(ItemSlot slot)
+        //{
+        //    if (slot == null)
+        //    {
+        //        m_icon.sprite = null;
+        //    }
+        //    else
+        //    {
+        //        m_icon.sprite = slot.item.icon;
+        //    }
+        //}
     }
 }
