@@ -1,10 +1,10 @@
 ﻿using DChild.Gameplay.Inventories;
 
-namespace DChild.Menu.Trade
+namespace DChild.Gameplay.Trade
 {
     public interface IMerchantStore
     {
-        void SetWaresReference(InventoryData inventory);
+        void SetWares(IInventoryInfo inventory);
         void ResetWares();
     }
 }

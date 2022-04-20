@@ -8,7 +8,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Trade
 {
 
-    public class MerchantStore : MonoBehaviour, ITradeInventory
+    public class MerchantStore : MonoBehaviour, ITradeInventory, IMerchantStore
     {
         [SerializeField]
         private TradeRates m_tradeRates;
@@ -30,9 +30,16 @@ namespace DChild.Gameplay.Trade
             {
                 var storedItem = reference.GetItem(i);
                 m_inventory.AddItem(storedItem.data, out inventoryItem, storedItem.count);
-                inventoryItem.SetCountToInfinite(storedItem.hasInfiniteCount);
+                if (storedItem.hasInfiniteCount)
+                {
+                    inventoryItem.SetCountToInfinite(storedItem.hasInfiniteCount);
+                }
                 ApplyCurrentTradeRates(inventoryItem);
             }
+        }
+
+        public void ResetWares()
+        {
         }
 
         public void SetTradeRates(TradeRates tradeRates)

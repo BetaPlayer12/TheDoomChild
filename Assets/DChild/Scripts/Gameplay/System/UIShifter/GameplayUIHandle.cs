@@ -3,7 +3,6 @@ using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Combat.UI;
 using DChild.Gameplay.Environment;
-using DChild.Gameplay.Inventories;
 using DChild.Gameplay.NavigationMap;
 using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;

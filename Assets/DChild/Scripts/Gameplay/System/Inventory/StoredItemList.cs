@@ -54,6 +54,8 @@ namespace DChild.Gameplay.Inventories
         public abstract void RemoveItem(ItemData itemData, int count = 1);
         public abstract void SetItem(ItemData itemData, int count = 1);
 
+        public abstract void SetItemAsInfinite(ItemData data, bool isInfinite);
+
         public abstract IStoredItem[] FindStoredItemsOfType(ItemCategory category);
 
         public abstract IStoredItem GetItem(int index);
@@ -150,6 +152,18 @@ namespace DChild.Gameplay.Inventories
             {
                 storedItem.SetCount(count);
             }
+            InvokeInventoryItemUpdate(itemData, storedItem.count);
+        }
+
+        public override void SetItemAsInfinite(ItemData itemData, bool isInfinite)
+        {
+            T storedItem;
+            if (TryGetStoredItem(itemData, out storedItem) == false)
+            {
+                storedItem = CreateNewStoredItem(itemData, 99);
+                m_items.Add(storedItem);
+            }
+            storedItem.SetCountToInfinite(isInfinite);
             InvokeInventoryItemUpdate(itemData, storedItem.count);
         }
 
