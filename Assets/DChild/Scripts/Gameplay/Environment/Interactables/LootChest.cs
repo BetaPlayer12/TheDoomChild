@@ -85,8 +85,9 @@ namespace DChild.Gameplay.Environment
             if (m_loot != null)
             {
                 GivePlayerLoot();
-                SendNotification();
+                
             }
+            SendNotification();
             ShowOpenChestVisual();
         }
 
@@ -113,7 +114,8 @@ namespace DChild.Gameplay.Environment
 
         private void SendNotification()
         {
-
+            //Notify UI of loot chest content
+            GameplaySystem.gamplayUIHandle.ShowLootChestItemAcquired();
         }
 
         private void OnDrawGizmosSelected()

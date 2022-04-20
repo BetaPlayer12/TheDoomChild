@@ -42,5 +42,6 @@ namespace DChild.Gameplay.Systems
         void ShowGameOverScreen(bool willshow);
         void ShowItemAcquired(bool willshow);
         void ShowGameplayUI(bool willshow);
+        void ShowLootChestItemAcquired();
     }
 }

@@ -220,6 +220,10 @@ namespace DChild.Gameplay.Systems
             yield return new WaitForSeconds(duration);
             GameEventMessage.SendEvent("Hide JournalUpdate");
         }
+        public void ShowLootChestItemAcquired()
+        {
+            GameEventMessage.SendEvent("Loot Notify");
+        }
 
     }
 }
