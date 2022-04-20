@@ -65,7 +65,7 @@ namespace DChild.Gameplay
 
         public RaycastHit2D m_castHit;
         public RaycastHit2D[] GetHits() => m_multiRaycast.hits;
-
+        public List<RaycastHit2D[]> GetHitsList() => m_multiRaycast.hitsList;
         public RaycastHit2D[] GetUniqueHits()
         {
             if (m_updatedUniqueHits)
