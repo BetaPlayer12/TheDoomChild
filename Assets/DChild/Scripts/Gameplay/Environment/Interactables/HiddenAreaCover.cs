@@ -123,6 +123,14 @@ namespace DChild.Gameplay.Environment
             m_visible = isVisible;
         }
 
+        public void InitializeAsVisible(bool isVisible)
+        {
+            if (m_currentRoutine == null)
+            {
+                SetAsVisible(isVisible);
+            }
+        }
+
         private IEnumerator LerpTo(bool isVisible)
         {
             int destination = isVisible ? 0 : 1;
@@ -144,6 +152,7 @@ namespace DChild.Gameplay.Environment
             {
                 SetRenderersActive(false);
             }
+            m_currentRoutine = null;
         }
 
         private void LerpColors(float lerpValue)
