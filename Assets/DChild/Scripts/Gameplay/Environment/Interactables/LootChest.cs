@@ -9,6 +9,7 @@
 using DarkTonic.MasterAudio;
 using DChild.Gameplay.Environment.Interractables;
 using DChild.Gameplay.Systems;
+using DChild.Gameplay.UI;
 using DChild.Serialization;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
@@ -43,6 +44,8 @@ namespace DChild.Gameplay.Environment
         [SerializeField]
         private ILootDataContainer m_loot;
         private bool m_isLooted;
+
+        private static LootList m_lootList;
 
         public event EventAction<EventActionArgs> InteractionOptionChange;
 
@@ -85,9 +88,9 @@ namespace DChild.Gameplay.Environment
             if (m_loot != null)
             {
                 GivePlayerLoot();
-                
+                SendNotification();
             }
-            SendNotification();
+
             ShowOpenChestVisual();
         }
 
@@ -102,20 +105,33 @@ namespace DChild.Gameplay.Environment
         private void GivePlayerLoot()
         {
             var playerInventory = GameplaySystem.playerManager.player.inventory;
-            LootList lootList = new LootList();
-            m_loot.GenerateLootInfo(ref lootList);
-            var lootItems = lootList.GetAllItems();
+            m_lootList.Clear();
+            m_loot.GenerateLootInfo(ref m_lootList);
+            var lootItems = m_lootList.GetAllItems();
             for (int i = 0; i < lootItems.Length; i++)
             {
                 var item = lootItems[i];
-                playerInventory.AddItem(item, lootList.GetCountOf(item));
+                playerInventory.AddItem(item, m_lootList.GetCountOf(item));
+            }
+            if (m_lootList.soulEssenceAmount > 0)
+            {
+
+                playerInventory.AddSoulEssence(m_lootList.soulEssenceAmount);
             }
         }
 
         private void SendNotification()
         {
             //Notify UI of loot chest content
-            GameplaySystem.gamplayUIHandle.ShowLootChestItemAcquired();
+            GameplaySystem.gamplayUIHandle.ShowLootChestItemAcquired(m_lootList);
+        }
+
+        private void Awake()
+        {
+            if (m_lootList == null)
+            {
+                m_lootList = new LootList();
+            }
         }
 
         private void OnDrawGizmosSelected()
