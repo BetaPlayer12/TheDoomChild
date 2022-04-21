@@ -28,6 +28,8 @@ namespace DChild.Gameplay.Systems
         private NavigationMapManager m_navMap;
         [SerializeField]
         private LoreInfoUI m_loreUI;
+        [SerializeField]
+        private LootAcquiredUI m_lootAcquiredUI;
 
         public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
@@ -218,6 +220,11 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Show JournalUpdate");
             yield return new WaitForSeconds(duration);
             GameEventMessage.SendEvent("Hide JournalUpdate");
+        }
+        public void ShowLootChestItemAcquired(LootList lootList)
+        {
+            m_lootAcquiredUI.SetDetails(lootList);
+            GameEventMessage.SendEvent("Loot Notify");
         }
 
     }

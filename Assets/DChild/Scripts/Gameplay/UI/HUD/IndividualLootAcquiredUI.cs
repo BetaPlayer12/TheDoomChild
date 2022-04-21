@@ -13,10 +13,18 @@ namespace DChild.Gameplay.UI
         private TextMeshProUGUI m_countLabel;
 
         private Canvas m_canvas;
-
+        //Assumin Soul Essence is the only loot without data
         public void SetDetails(ItemData item, int count)
         {
-            m_nameLabel.text = item.itemName;
+            if (item == null)
+            {
+                m_nameLabel.text = "Soul Essence";
+            }
+            else
+            {
+                m_nameLabel.text = item.itemName;
+
+            }
             m_countLabel.text = $"+ {count}";
         }
 
