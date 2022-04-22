@@ -45,6 +45,8 @@ namespace DChild.Gameplay
         private bool m_isUsed;
         [SerializeField,LuaScriptWizard(true)]
         private string m_onInteractionCommand;
+        [SerializeField]
+        SkillShrineVisualHandle m_shrineVisualHandle;
 
         public event EventAction<EventActionArgs> InteractionOptionChange;
 
@@ -61,6 +63,7 @@ namespace DChild.Gameplay
             m_isUsed = ((SaveData)data).isUsed;
             m_collider.enabled = !m_isUsed;
             SetGlows(!m_isUsed);
+            m_shrineVisualHandle.SkillShrineState(m_isUsed);
         }
 
         public void Initialize()
@@ -68,6 +71,7 @@ namespace DChild.Gameplay
             m_isUsed = false;
             m_collider.enabled = true;
             SetGlows(true);
+            m_shrineVisualHandle.SkillShrineState(m_isUsed);
 
         }
 
@@ -78,11 +82,13 @@ namespace DChild.Gameplay
                 if (character)
                 {
                     character.GetComponent<PlayerControlledObject>().owner.skills.SetSkillStatus(m_toUnlock, true);
+                    
                 }
 
                 if (m_cinematic == null)
                 {
                     GameplaySystem.gamplayUIHandle.PromptPrimarySkillNotification();
+                    m_shrineVisualHandle.SkillShrineState(true);
                 }
                 else
                 {
@@ -99,6 +105,7 @@ namespace DChild.Gameplay
         {
             NotifySkill(m_toUnlock);
             SetGlows(false);
+            m_shrineVisualHandle.SkillShrineState(false);
         }
 
         private void NotifySkill(PrimarySkill skill)
