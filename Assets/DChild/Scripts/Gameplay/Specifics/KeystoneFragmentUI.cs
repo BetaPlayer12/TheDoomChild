@@ -76,7 +76,7 @@ namespace DChild.Gameplay.Items
 
         private void ItemUpdated(object sender, ItemEventArgs eventArgs)
         {
-            if (eventArgs.count > 0)
+            if (eventArgs.currentCount > 0)
             {
                 for (int i = 0; i < m_infos.Length; i++)
                 {

@@ -1,5 +1,6 @@
 ﻿using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Items;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,18 @@ namespace DChild.Gameplay.Trade
         private TradeRates m_tradeRates;
         [SerializeField, HideLabel, FoldoutGroup("Inventory")]
         private TradableInventory m_inventory = new TradableInventory(true, false);
+
+        public event EventAction<ItemEventArgs> InventoryItemUpdate
+        {
+            add
+            {
+                m_inventory.InventoryItemUpdate += value;
+            }
+            remove
+            {
+                m_inventory.InventoryItemUpdate -= value;
+            }
+        }
 
         public TradeRates tradeRates => m_tradeRates;
 
