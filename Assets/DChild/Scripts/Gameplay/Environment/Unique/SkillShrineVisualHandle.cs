@@ -35,12 +35,16 @@ public class SkillShrineVisualHandle : SkillShrineVisuals
         GetChidren();
         if (shrineState)
         {
-            for(int x = 0; x < m_children.Count; x++)
+            for (int x = 0; x < m_children.Count; x++)
             {
                 var renderer = m_children[x].GetComponent<SpriteRenderer>();
                 if (renderer)
                 {
                     renderer.material = m_defaultMaterial;
+                }
+                else if (m_children[x].GetComponent<PolygonCollider2D>())
+                {
+
                 }
                 else
                 {
