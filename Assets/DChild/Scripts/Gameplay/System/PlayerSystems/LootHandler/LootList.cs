@@ -12,9 +12,13 @@ namespace DChild.Gameplay.Systems
     {
         private Dictionary<ItemData, int> m_lootAmountPair;
 
+        private int m_soulEssenceAmount;
+        public int soulEssenceAmount => m_soulEssenceAmount;
+
         public LootList()
         {
             m_lootAmountPair = new Dictionary<ItemData, int>();
+            m_soulEssenceAmount = 0;
         }
 
         public void Add(ItemData item, int count)
@@ -38,6 +42,10 @@ namespace DChild.Gameplay.Systems
         }
 
         public ItemData[] GetAllItems() => m_lootAmountPair.Keys.ToArray();
+        public void AddSoulEssence(int soulcount)
+        {
+            m_soulEssenceAmount += soulcount;
+        }
 
         public int GetCountOf(ItemData itemData)
         {
@@ -48,6 +56,7 @@ namespace DChild.Gameplay.Systems
         public void Clear()
         {
             m_lootAmountPair.Clear();
+            m_soulEssenceAmount = 0;
         }
     }
 }

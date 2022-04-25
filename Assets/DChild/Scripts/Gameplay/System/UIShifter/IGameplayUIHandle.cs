@@ -1,12 +1,9 @@
 ﻿using DChild.Gameplay.Characters.Enemies;
 using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Environment;
-using DChild.Gameplay.Inventories;
 using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
 using DChild.Menu.Trade;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DChild.Gameplay.Systems
@@ -42,5 +39,6 @@ namespace DChild.Gameplay.Systems
         void ShowGameOverScreen(bool willshow);
         void ShowItemAcquired(bool willshow);
         void ShowGameplayUI(bool willshow);
+        void ShowLootChestItemAcquired(LootList lootList);
     }
 }

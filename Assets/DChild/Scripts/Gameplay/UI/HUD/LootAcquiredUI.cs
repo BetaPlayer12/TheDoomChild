@@ -10,10 +10,21 @@ namespace DChild.Gameplay.UI
 
         public void SetDetails(LootList lootList)
         {
-            var lootItems = lootList.GetAllItems();
-            for (int i = 0; i < m_individualLootUIs.Length; i++)
+            var soulUi = m_individualLootUIs[0];
+            if (lootList.soulEssenceAmount > 0)
             {
-                if(i < lootItems.Length)
+                soulUi.SetDetails(null, lootList.soulEssenceAmount);
+                soulUi.Show();
+            }
+            else
+            {
+                soulUi.Hide();
+            }
+
+            var lootItems = lootList.GetAllItems();
+            for (int i = 1; i < m_individualLootUIs.Length; i++)
+            {
+                if (i < lootItems.Length)
                 {
                     var ui = m_individualLootUIs[i];
                     ui.Show();
@@ -26,5 +37,6 @@ namespace DChild.Gameplay.UI
                 }
             }
         }
+
     }
 }

@@ -26,7 +26,17 @@ namespace DChild.Gameplay.Systems
 
         public void GenerateLootInfo(ref LootList recordList)
         {
-            recordList.Add(m_reference.data, m_count);
+            if (m_reference.data == null)
+            {
+                var soulEssenceValue = m_reference.loot.GetComponent<SoulEssenceLoot>().value;
+                soulEssenceValue *= m_count;
+                recordList.AddSoulEssence(soulEssenceValue);
+            }
+            else
+            {
+
+                recordList.Add(m_reference.data, m_count);
+            }
         }
 
 #if UNITY_EDITOR

@@ -196,7 +196,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
                 //{
                 //}
-                if (!TargetBlocked() && !m_enablePatience)
+                if (/*!TargetBlocked() && */!m_enablePatience)
                 {
                     m_selfCollider.enabled = false;
 
@@ -494,8 +494,19 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                         m_movement.Stop();
 
-                    m_stateHandle.Wait(State.ReevaluateSituation);
-                    StartCoroutine(DetectRoutine());
+                    m_movement.Stop();
+                    m_flinchHandle.m_autoFlinch = false;
+                    if (IsFacingTarget())
+                    {
+                        m_stateHandle.Wait(State.ReevaluateSituation);
+                        StartCoroutine(DetectRoutine());
+                    }
+                    else
+                    {
+                        m_turnState = State.Detect;
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                            m_stateHandle.SetState(State.Turning);
+                    }
                     break;
 
                 case State.Mining:

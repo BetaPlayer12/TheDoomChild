@@ -170,7 +170,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
                 //{
                 //}
-                if (!TargetBlocked() && !m_enablePatience)
+                if (/*!TargetBlocked() &&*/ !m_enablePatience)
                 {
                     if (!m_isDetecting)
                     {

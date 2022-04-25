@@ -511,6 +511,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Enable();
             m_hitbox.SetInvulnerability(Invulnerability.None);
             //m_stateHandle.ApplyQueuedState();
+            ChooseAttack();
             StartCoroutine(RunAnticipationRoutine());
             yield return null;
         }
