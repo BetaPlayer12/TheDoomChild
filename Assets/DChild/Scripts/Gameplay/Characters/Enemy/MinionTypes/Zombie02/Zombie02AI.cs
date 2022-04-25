@@ -622,8 +622,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                     {
                                         m_movement.Stop();
-                                        m_animation.EnableRootMotion(true, true);
                                     }
+                                    m_animation.EnableRootMotion(true, m_groundSensor.isDetecting ? true : false);
                                     m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }
