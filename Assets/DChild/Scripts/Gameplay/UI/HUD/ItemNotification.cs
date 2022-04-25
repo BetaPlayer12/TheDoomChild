@@ -35,8 +35,8 @@ namespace DChild.Gameplay.UI
 
         private void ItemUpdate(object sender, ItemEventArgs eventArgs)
         {
-            var action = eventArgs.count < 0 ? "Lost" : "Acquired";
-            var message = $"{Mathf.Abs(eventArgs.count)} {eventArgs.data.itemName} {action}";
+            var action = eventArgs.countModification < 0 ? "Lost" : "Acquired";
+            var message = $"{Mathf.Abs(eventArgs.countModification)} {eventArgs.data.itemName} {action}";
             if (m_messages.Count == 0)
             {
                 m_notificationTimer.Reset();

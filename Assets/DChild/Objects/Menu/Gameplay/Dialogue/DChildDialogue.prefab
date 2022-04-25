@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1943106018679278920}
   - component: {fileID: 3250846561580661462}
   - component: {fileID: 8818724792219423344}
+  - component: {fileID: 421815283207924009}
   m_Layer: 0
   m_Name: SkipIcon
   m_TagString: Untagged
@@ -74,6 +75,19 @@ MonoBehaviour:
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &421815283207924009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 73499738947589770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eecb8bfed95532343b1ead456885de11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_progressionUI: {fileID: 8818724792219423344}
 --- !u!1 &1701304339205128966
 GameObject:
   m_ObjectHideFlags: 0
@@ -2425,6 +2439,7 @@ MonoBehaviour:
   QTEIndicatorElements:
     QTEIndicators: []
   addEventSystemIfNeeded: 1
+  m_skipDialogue: {fileID: 2380243224747117834}
   m_dialoguePanel: {fileID: 7309899279648242410}
   m_dialoguePCSubtitlePanel: {fileID: 7813575458030115212}
   m_dialogueNPCSubtitlePanel: {fileID: 1513226618614363262}
@@ -3076,7 +3091,7 @@ MonoBehaviour:
   StartRotation: {x: 0, y: 0, z: 0}
   StartScale: {x: 1, y: 1, z: 1}
   StartAlpha: 1
-  AllowMultipleClicks: 1
+  AllowMultipleClicks: 0
   ButtonCategory: Custom
   ButtonName: Dialogue Continue
   ClickMode: 0
@@ -3085,7 +3100,7 @@ MonoBehaviour:
   DoubleClickRegisterInterval: 0.2
   InputData:
     EnableAlternateInputs: 1
-    InputMode: 2
+    InputMode: 1
     KeyCode: 13
     KeyCodeAlt: 32
     VirtualButtonName: Submit
@@ -7306,13 +7321,14 @@ GameObject:
   - component: {fileID: 7974304913528162079}
   - component: {fileID: 2380243224747117834}
   - component: {fileID: 3450357361878506529}
+  - component: {fileID: 5775625697410570114}
   m_Layer: 0
   m_Name: View - Skip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5673462402974691659
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7501,7 +7517,7 @@ MonoBehaviour:
         Duration: 1
     AutoStartLoopAnimation: 1
     LoadSelectedPresetAtRuntime: 0
-    InstantAnimation: 0
+    InstantAnimation: 1
     OnFinished:
       AnimatorEvents: []
       Effect:
@@ -7534,7 +7550,18 @@ MonoBehaviour:
         CustomSortingLayer: Default
       Event:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 5775625697410570114}
+            m_MethodName: set_enabled
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -7775,7 +7802,7 @@ MonoBehaviour:
         Duration: 1
     AutoStartLoopAnimation: 1
     LoadSelectedPresetAtRuntime: 0
-    InstantAnimation: 0
+    InstantAnimation: 1
     OnFinished:
       AnimatorEvents: []
       Effect:
@@ -7808,7 +7835,18 @@ MonoBehaviour:
         CustomSortingLayer: Default
       Event:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 5775625697410570114}
+            m_MethodName: set_enabled
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
       GameEvents: []
       SoundData:
         SoundSource: 0
@@ -7833,6 +7871,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8558516542605957272}
   m_CullTransparentMesh: 0
+--- !u!114 &5775625697410570114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558516542605957272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0649f8101c44ce849bccc3d7125e7fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ui: {fileID: 421815283207924009}
+  m_holdButtonDuration: 3
 --- !u!1 &8659114229182100647
 GameObject:
   m_ObjectHideFlags: 0
@@ -9052,12 +9104,6 @@ PrefabInstance:
       objectReference: {fileID: 7309899279631561475}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bc95963540c5b145994851751e49e81, type: 3}
---- !u!224 &6501850389540609438 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6295911109720953795, guid: 8bc95963540c5b145994851751e49e81,
-    type: 3}
-  m_PrefabInstance: {fileID: 965080625442180701}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7813575458030115212 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6992897028163344337, guid: 8bc95963540c5b145994851751e49e81,
@@ -9070,6 +9116,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0847abc455ccbc4bb36bae6307b051d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &6501850389540609438 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6295911109720953795, guid: 8bc95963540c5b145994851751e49e81,
+    type: 3}
+  m_PrefabInstance: {fileID: 965080625442180701}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8362002926178345903
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9305,6 +9357,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bc95963540c5b145994851751e49e81, type: 3}
+--- !u!224 &2545761495564251244 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6295911109720953795, guid: 8bc95963540c5b145994851751e49e81,
+    type: 3}
+  m_PrefabInstance: {fileID: 8362002926178345903}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1513226618614363262 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6992897028163344337, guid: 8bc95963540c5b145994851751e49e81,
@@ -9317,9 +9375,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0847abc455ccbc4bb36bae6307b051d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2545761495564251244 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6295911109720953795, guid: 8bc95963540c5b145994851751e49e81,
-    type: 3}
-  m_PrefabInstance: {fileID: 8362002926178345903}
-  m_PrefabAsset: {fileID: 0}
