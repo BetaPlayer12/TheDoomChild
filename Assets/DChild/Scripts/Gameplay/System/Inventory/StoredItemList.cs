@@ -63,13 +63,13 @@ namespace DChild.Gameplay.Inventories
 
         public void InvokeMassInventoryItemUpdate() => MassInventoryItemUpdate?.Invoke(this, EventActionArgs.Empty);
 
-        protected void InvokeInventoryItemUpdate(ItemData data, int count)
+        protected void InvokeInventoryItemUpdate(ItemData data, int currentCount, int countModification)
         {
             if (InventoryItemUpdate != null)
             {
                 using (Cache<ItemEventArgs> cachedEvent = Cache<ItemEventArgs>.Claim())
                 {
-                    cachedEvent.Value.Initialize(data, count);
+                    cachedEvent.Value.Initialize(data, currentCount, countModification);
                     InventoryItemUpdate.Invoke(this, cachedEvent);
                     cachedEvent.Release();
                 }
@@ -111,7 +111,7 @@ namespace DChild.Gameplay.Inventories
         public override void AddItem(ItemData itemData, int count = 1)
         {
             AddItem(itemData, out T storedItem, count);
-            InvokeInventoryItemUpdate(itemData, storedItem.count);
+            InvokeInventoryItemUpdate(itemData, storedItem.count, count);
         }
 
         public virtual void AddItem(ItemData itemData, out T storedItem, int count = 1)
@@ -136,7 +136,7 @@ namespace DChild.Gameplay.Inventories
                 {
                     m_items.Remove(storedItem);
                 }
-                InvokeInventoryItemUpdate(itemData, storedItem.count);
+                InvokeInventoryItemUpdate(itemData, storedItem.count,count);
             }
         }
 
@@ -152,7 +152,7 @@ namespace DChild.Gameplay.Inventories
             {
                 storedItem.SetCount(count);
             }
-            InvokeInventoryItemUpdate(itemData, storedItem.count);
+            InvokeInventoryItemUpdate(itemData, storedItem.count,count);
         }
 
         public override void SetItemAsInfinite(ItemData itemData, bool isInfinite)
@@ -164,7 +164,7 @@ namespace DChild.Gameplay.Inventories
                 m_items.Add(storedItem);
             }
             storedItem.SetCountToInfinite(isInfinite);
-            InvokeInventoryItemUpdate(itemData, storedItem.count);
+            InvokeInventoryItemUpdate(itemData, storedItem.count, 99);
         }
 
         public void ClearList()

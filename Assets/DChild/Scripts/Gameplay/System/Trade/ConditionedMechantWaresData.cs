@@ -23,21 +23,36 @@ namespace DChild.Gameplay.Trade
 
         [SerializeField]
         private InventoryData m_initialWare;
-        [OdinSerialize, HideReferenceObjectPicker]
-        private ConditionedWares[] m_conditionsWares = new ConditionedWares[0];
+        [OdinSerialize, HideReferenceObjectPicker, TabGroup("Additonal")]
+        private ConditionedWares[] m_additionalWares = new ConditionedWares[0];
+        [OdinSerialize, HideReferenceObjectPicker, TabGroup("Remove One Time")]
+        private ConditionedWares[] m_removeOneTimeWares = new ConditionedWares[0];
+
 
         public IInventoryInfo GetAppropriateWares()
         {
             BaseStoredItemList itemList = new BaseStoredItemList();
 
-            AddInfoTo(m_initialWare,ref itemList);
-
-            for (int i = 0; i < m_conditionsWares.Length; i++)
+            if (m_initialWare != null)
             {
-                var conditionedWare = m_conditionsWares[i];
+                AddInfoTo(m_initialWare, ref itemList);
+            }
+
+            for (int i = 0; i < m_additionalWares.Length; i++)
+            {
+                var conditionedWare = m_additionalWares[i];
                 if (Lua.IsTrue(conditionedWare.condition))
                 {
                     AddInfoTo(conditionedWare.inventoryInfo, ref itemList);
+                }
+            }
+
+            for (int i = 0; i < m_removeOneTimeWares.Length; i++)
+            {
+                var conditionedWare = m_removeOneTimeWares[i];
+                if (Lua.IsTrue(conditionedWare.condition))
+                {
+                    RemoveInfoTo(conditionedWare.inventoryInfo, ref itemList);
                 }
             }
             return itemList;
@@ -56,6 +71,15 @@ namespace DChild.Gameplay.Trade
                 {
                     target.AddItem(item.data, item.count);
                 }
+            }
+        }
+
+        private void RemoveInfoTo(IInventoryInfo reference, ref BaseStoredItemList target)
+        {
+            for (int i = 0; i < reference.storedItemCount; i++)
+            {
+                var item = reference.GetItem(i);
+                target.AddItem(item.data, -item.count);
             }
         }
     }

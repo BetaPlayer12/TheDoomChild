@@ -58,12 +58,12 @@ namespace DChild.Gameplay.Inventories
         {
             if (IsAValidQuickItem(eventArgs.data))
             {
-                if (eventArgs.count == 0)
+                if (eventArgs.currentCount == 0)
                 {
                     UpdateSelection();
                     InvokeSelectionUpdate();
                 }
-                else if (eventArgs.count > 0 && IsInSelections(eventArgs.data))
+                else if (eventArgs.currentCount > 0 && IsInSelections(eventArgs.data))
                 {
                     UpdateSelection();
                     InvokeSelectionUpdate();
