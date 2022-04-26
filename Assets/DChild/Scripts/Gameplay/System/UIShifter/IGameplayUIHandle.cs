@@ -11,7 +11,6 @@ namespace DChild.Gameplay.Systems
     public interface IGameplayUIHandle
     {
         void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset);
-        //void OpenTradeWindow(NPCProfile merchantData,ITradableInventory merchantInventory, ITraderAskingPrice merchantAskingPrice);
         void OpenTradeWindow(NPCProfile merchantData,ITradeInventory merchantInventory, TradeAskingPrice merchantBuyingPriceRate);
         void ShowLoreNote(LoreData m_data);
         void OpenStorePage(StorePage storePage);
@@ -40,5 +39,7 @@ namespace DChild.Gameplay.Systems
         void ShowItemAcquired(bool willshow);
         void ShowGameplayUI(bool willshow);
         void ShowLootChestItemAcquired(LootList lootList);
+
+        void ShowSequenceSkip();
     }
 }
