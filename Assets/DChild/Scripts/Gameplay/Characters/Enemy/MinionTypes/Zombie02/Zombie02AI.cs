@@ -344,7 +344,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),
+            m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),*/
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
