@@ -1196,7 +1196,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Intro;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && m_changePhaseCoroutine == null)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
@@ -1257,12 +1257,12 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && m_changePhaseCoroutine == null)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else
                     {
-                        m_animation.SetAnimation(0, m_currentIdleAnimation, true);
+                        m_animation.SetAnimation(0, m_currentIdleAnimation, true).TimeScale = 1;
                     }
 
                     if (m_currentCD <= m_pickedCD)
@@ -1304,7 +1304,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Attacking;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && m_changePhaseCoroutine == null)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
