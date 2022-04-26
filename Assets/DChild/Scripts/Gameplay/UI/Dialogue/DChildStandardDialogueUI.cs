@@ -1,7 +1,9 @@
 ﻿using DChild.Gameplay;
+using DChildDebug.Cutscene;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace DChild.UI
@@ -35,16 +37,28 @@ namespace DChild.UI
                 }
                 else
                 {
+                    if (conversation.LookupBool("IsSkippable"))
+                    {
+                        SequenceSkipHandle.SkipExecute += OnSkipExecute;
+                        GameplaySystem.gamplayUIHandle.ShowSequenceSkip();
+                    }
                     conversationUIElements.mainPanel = m_dialoguePanel;
                     conversationUIElements.defaultPCSubtitlePanel = m_dialoguePCSubtitlePanel;
                     conversationUIElements.defaultNPCSubtitlePanel = m_dialogueNPCSubtitlePanel;
 
                     GameplaySystem.playerManager.DisableControls();
                 }
+
             }
 
             base.Open();
 
+        }
+
+        private void OnSkipExecute()
+        {
+            DialogueManager.StopConversation();
+            SequenceSkipHandle.SkipExecute -= OnSkipExecute;
         }
 
         public override void Close()
@@ -53,6 +67,7 @@ namespace DChild.UI
             {
                 GameplaySystem.playerManager.EnableControls();
             }
+            SequenceSkipHandle.SkipExecute -= OnSkipExecute;
             base.Close();
         }
     }

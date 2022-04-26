@@ -1,5 +1,6 @@
 ﻿using System;
 using Unity.Collections;
+using UnityEngine;
 using UnityEngine.Playables;
 
 namespace DChildDebug.Cutscene
@@ -7,9 +8,9 @@ namespace DChildDebug.Cutscene
     [Serializable]
     public class CutsceneMarkerBehaviour : PlayableBehaviour
     {
-        [ReadOnly]
+        [HideInInspector]
         public double clipStart;
-        [ReadOnly]
+        [HideInInspector]
         public double clipEnd;
     }
 }
