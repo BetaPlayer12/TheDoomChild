@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using DChild.Gameplay;
+using PixelCrushers.DialogueSystem;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Playables;
 
 namespace DChildDebug.Cutscene
@@ -21,13 +25,31 @@ namespace DChildDebug.Cutscene
                     ScriptPlayable<CutsceneMarkerBehaviour> inputPlayable = (ScriptPlayable<CutsceneMarkerBehaviour>)playable.GetInput(i);
                     var behaviour = inputPlayable.GetBehaviour();
                     m_endClipDuration = behaviour.clipEnd;
+                    if (Application.isPlaying)
+                    {
+                        SequenceSkipHandle.SkipExecute += OnSkip;
+                        GameplaySystem.gamplayUIHandle.ShowSequenceSkip(); 
+                    }
                     m_playedBehaviourIndex.Add(i);
                 }
                 else if(inputWeight < 0.001f && m_playedBehaviourIndex.Contains(i))
                 {
+                    if (Application.isPlaying)
+                    {
+                        SequenceSkipHandle.SkipExecute -= OnSkip;
+                    }
                     m_playedBehaviourIndex.Remove(i);
                 }
             }
+        }
+
+        private void OnSkip()
+        {
+            m_director.time = m_endClipDuration;
+            var sequence = $"required Timeline(speed, {m_director.gameObject.name},1);";
+            DialogueManager.PlaySequence(sequence);
+            DialogueManager.StopConversation();
+            SequenceSkipHandle.SkipExecute -= OnSkip;
         }
 
         public override void OnGraphStart(Playable playable)

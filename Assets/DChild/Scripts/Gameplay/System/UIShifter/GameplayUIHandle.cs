@@ -9,6 +9,7 @@ using DChild.Gameplay.Trade;
 using DChild.Gameplay.UI;
 using DChild.Menu.Trade;
 using Doozy.Engine;
+using Doozy.Engine.UI;
 using System.Collections;
 using UnityEngine;
 
@@ -30,6 +31,8 @@ namespace DChild.Gameplay.Systems
         private LoreInfoUI m_loreUI;
         [SerializeField]
         private LootAcquiredUI m_lootAcquiredUI;
+        [SerializeField]
+        private UIView m_skippableUI;
 
         public void UpdateNavMapConfiguration(Location location, Transform inGameReference, Vector2 mapReferencePoint, Vector2 calculationOffset)
         {
@@ -227,5 +230,9 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Loot Notify");
         }
 
+        public void ShowSequenceSkip()
+        {
+            m_skippableUI.Show();
+        }
     }
 }

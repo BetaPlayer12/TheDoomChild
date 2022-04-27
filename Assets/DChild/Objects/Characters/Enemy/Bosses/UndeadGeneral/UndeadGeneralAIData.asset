@@ -16,7 +16,7 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: c43ea028ffa48e14c990fe9f7883a455, type: 2}
+    - {fileID: 11400000, guid: 8ac218de05304194a994877e8bcc27ec, type: 2}
     - {fileID: 11400000, guid: 7749ef2c6beec3e49b5b1f45583b4427, type: 2}
     - {fileID: 11400000, guid: 18470d791bf43e345bf3e606bbe1a777, type: 2}
     - {fileID: 11400000, guid: 76fbc9f27c6939d4390a583c17ed230a, type: 2}
@@ -341,7 +341,7 @@ MonoBehaviour:
         Assembly-CSharp]], Assembly-CSharp
     - Name: m_animation
       Entry: 1
-      Data: Attack_SpecialThrust
+      Data: Attack_SpecialThrust_Hit
     - Name: m_range
       Entry: 4
       Data: 500
@@ -351,9 +351,18 @@ MonoBehaviour:
     - Name: m_specialThrustStartAnimation
       Entry: 1
       Data: Attack_SpecialThrust_Start
-    - Name: m_specialThrustHitAnimation
+    - Name: m_specialThrustAirStartAnimation
       Entry: 1
-      Data: Attack_SpecialThrust_Hit
+      Data: Attack_SpecialThrust_Start_Air
+    - Name: m_specialThrustFallAnimation
+      Entry: 1
+      Data: Fall
+    - Name: m_specialThrustLandAnimation
+      Entry: 1
+      Data: Land
+    - Name: m_specialThrustAirStartHeight
+      Entry: 4
+      Data: 75
     - Name: m_dodgeAttack
       Entry: 7
       Data: 19|DChild.Gameplay.Characters.AI.AIBrain`1+BaseInfo+SimpleAttackInfo[[DChild.Gameplay.Characters.Enemies.UndeadGeneralAI+Info,
@@ -413,6 +422,9 @@ MonoBehaviour:
     - Name: m_idleToCombatTransitionAnimation
       Entry: 1
       Data: IdletoCombat_Transition
+    - Name: m_turnAnimation
+      Entry: 1
+      Data: Turn
     - Name: m_moveFastAnticipationAnimation
       Entry: 1
       Data: RunAnticipation
@@ -479,6 +491,9 @@ MonoBehaviour:
     - Name: m_specialThrustEvent
       Entry: 1
       Data: Hit_SpecialThrust
+    - Name: m_jumpEvent
+      Entry: 1
+      Data: Jump_Start
     - Name: 
       Entry: 8
       Data: 
