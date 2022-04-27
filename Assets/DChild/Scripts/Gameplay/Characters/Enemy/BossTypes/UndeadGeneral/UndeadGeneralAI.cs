@@ -550,10 +550,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_phaseHandle.ApplyChange();
             m_animation.DisableRootMotion();
             m_animation.SetEmptyAnimation(0, 0);
-            if (m_changePhaseCoroutine == null)
-            {
-                m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
-            }
+            m_stateHandle.OverrideState(State.Phasing);
         }
 
         private void StopCurrentAttackRoutine()
@@ -573,8 +570,6 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             m_stateHandle.Wait(State.ReevaluateSituation);
             m_hitbox.Disable();
             m_trailFX.Stop();
@@ -595,15 +590,11 @@ namespace DChild.Gameplay.Characters.Enemies
             m_changePhaseCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
         #region Attacks
 
         private IEnumerator OneHitComboAttackRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.oneHitComboAttack.animation, false);
             //yield return new WaitForSeconds(0.5f);
@@ -627,14 +618,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator TwoHitComboAttackRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.oneHitComboAttack.animation, false);
             m_animation.AddAnimation(0, m_info.twoHitComboAttack.animation, false, 0).MixDuration = 0;
@@ -658,14 +645,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator ThreeHitComboAttackRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.oneHitComboAttack.animation, false);
             m_animation.AddAnimation(0, m_info.twoHitComboAttack.animation, false, 0);
@@ -702,13 +685,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator RunningSlasAttackhRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
             m_animation.EnableRootMotion(true, false);
             m_animation.SetAnimation(0, m_info.dodgeHop.animation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.dodgeHop.animation);
@@ -747,14 +727,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator DodgeAttackRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             if (!IsFacingTarget()) CustomTurn();
             m_animation.EnableRootMotion(true, false);
             m_hitCounter = 0;
@@ -796,14 +772,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_counterAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator GuardAttackRoutine(bool hasBlocked, bool willDodge)
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             m_hitCounter = 0;
             if (!hasBlocked)
             {
@@ -864,14 +836,10 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             //m_currentAttackCoroutine = StartCoroutine(SpecialThrustAttackRoutine());
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         private IEnumerator EarthShakerAttackRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             m_animation.EnableRootMotion(true, false);
             m_earthShakerExplosionFX.Play();
             m_earthShakerGlitterFX.Play();
@@ -894,14 +862,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
         
         private IEnumerator SpecialThrustAttackRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
             m_swordThrustChargeFX.Play();
             var startAnimation = UnityEngine.Random.Range(0, 2) == 1 ? m_info.specialThrustStartAnimation : m_info.specialThrustAirStartAnimation;
@@ -923,8 +887,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_currentAttackCoroutine = null;
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         #endregion
@@ -943,8 +905,6 @@ namespace DChild.Gameplay.Characters.Enemies
         #region Movement
         private IEnumerator RunAnticipationRoutine()
         {
-            m_phaseHandle.allowPhaseChange = false;
-
             if (m_currentMovementAnimation != m_info.moveSlow.animation)
             {
                 m_animation.EnableRootMotion(true, false);
@@ -955,8 +915,6 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_stateHandle.ApplyQueuedState();
             yield return null;
-
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         private void MoveToTarget(float targetRange)
@@ -1196,15 +1154,28 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Intro;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && m_changePhaseCoroutine == null)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
                 case State.Phasing:
-                    StartCoroutine(ChangePhaseRoutine());
+                    if (IsFacingTarget())
+                    {
+                        if (m_changePhaseCoroutine == null)
+                        {
+                            m_changePhaseCoroutine = StartCoroutine(ChangePhaseRoutine());
+                        }
+                    }
+                    else
+                    {
+                        //m_turnState = State.Phasing;
+                        //if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
+                        //    m_stateHandle.SetState(State.Turning);
+                        CustomTurn();
+                    }
                     break;
                 case State.Turning:
-                    //m_phaseHandle.allowPhaseChange = false;
+                    m_phaseHandle.allowPhaseChange = false;
                     m_stateHandle.Wait(m_turnState);
                     m_turnHandle.Execute(m_info.turnAnimation, m_currentIdleAnimation);
                     m_movement.Stop();
@@ -1257,7 +1228,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     if (!IsFacingTarget())
                     {
                         m_turnState = State.Cooldown;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && m_changePhaseCoroutine == null)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     else
@@ -1304,7 +1275,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     else
                     {
                         m_turnState = State.Attacking;
-                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation && m_changePhaseCoroutine == null)
+                        if (m_animation.GetCurrentAnimation(0).ToString() != m_info.turnAnimation)
                             m_stateHandle.SetState(State.Turning);
                     }
                     break;
