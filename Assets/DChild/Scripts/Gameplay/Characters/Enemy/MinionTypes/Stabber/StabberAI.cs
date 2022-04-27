@@ -430,16 +430,29 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.attackChargeLoopAnimation, true);
             yield return new WaitForSeconds(m_info.chargeDuration);
-            for (int i = 0; i < m_info.attackRepeats; i++)
+            //for (int i = 0; i < m_info.attackRepeats; i++)
+            //{
+            //    if (!IsFacingTarget())
+            //    {
+            //        CustomTurn();
+            //    }
+            //    m_animation.SetAnimation(0, m_info.attackLoopAnimation, false);
+            //    yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackLoopAnimation);
+            //    m_animation.SetEmptyAnimation(0, 0);
+            //}
+            var time = 0f;
+            while (time < 3f)
             {
                 if (!IsFacingTarget())
-                {
                     CustomTurn();
-                }
-                m_animation.SetAnimation(0, m_info.attackLoopAnimation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attackLoopAnimation);
-                m_animation.SetEmptyAnimation(0, 0);
+
+                m_animation.SetAnimation(0, m_info.attackLoopAnimation, true);
+                m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_currentMoveSpeed);
+
+                time += Time.deltaTime;
+                yield return null;
             }
+            m_movement.Stop();
             m_attackBB.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
@@ -540,7 +553,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_stateHandle.Wait(State.Cooldown);
 
                     m_selfCollider.enabled = false;
-                    m_animation.EnableRootMotion(true, false);
+                    m_animation.EnableRootMotion(false, false);
                     switch (m_attackDecider.chosenAttack.attack)
                     {
                         case Attack.Attack:
