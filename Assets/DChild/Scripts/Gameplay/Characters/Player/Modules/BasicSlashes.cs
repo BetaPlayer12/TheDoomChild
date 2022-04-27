@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spine.Unity;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         }
 
         [SerializeField]
+        private SkeletonAnimation m_attackFX;
+        [SerializeField]
         private Info m_groundOverhead;
         [SerializeField]
         private Info m_crouch;
@@ -32,6 +35,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_cacheGravity;
         private bool m_adjustGravity;
 
+        private Animator m_fxAnimator;
+
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
@@ -40,6 +45,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_executedTypes = new List<Type>();
             m_cacheGravity = m_rigidbody.gravityScale;
             m_adjustGravity = true;
+
+            m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
         }
 
         public override void Cancel()
@@ -140,15 +147,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
             {
                 case Type.Ground_Overhead:
                     m_groundOverhead.PlayFX(play);
+                    m_attackFX.transform.position = m_groundOverhead.fxPosition.position;
+                    m_fxAnimator.SetTrigger("GroundOverhead");
                     break;
                 case Type.Crouch:
                     m_crouch.PlayFX(play);
+                    m_attackFX.transform.position = m_crouch.fxPosition.position;
+                    m_fxAnimator.SetTrigger("Crouch");
                     break;
                 case Type.MidAir_Forward:
                     m_midAirForward.PlayFX(play);
+                    m_attackFX.transform.position = m_midAirForward.fxPosition.position;
+                    m_fxAnimator.Play("JumpSlash");
                     break;
                 case Type.MidAir_Overhead:
                     m_midAirOverhead.PlayFX(play);
+                    m_attackFX.transform.position = m_midAirOverhead.fxPosition.position;
+                    m_fxAnimator.SetTrigger("JumpOverhead");
                     break;
             }
         }
@@ -164,6 +179,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_rigidbody.gravityScale = m_cacheGravity;
             m_adjustGravity = false;
+            m_fxAnimator.Play("Buffer");
         }
 
         public void ClearFXFor(Type type)

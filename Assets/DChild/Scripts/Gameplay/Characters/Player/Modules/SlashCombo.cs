@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay.Characters.Players.Behaviour;
+using Spine.Unity;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
 {
     public class SlashCombo : AttackBehaviour
     {
+        [SerializeField]
+        private SkeletonAnimation m_attackFX;
         [SerializeField]
         private int m_slashStateAmount;
         [SerializeField]
@@ -21,6 +24,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_allowAttackDelayHandling;
         private int m_slashStateAnimationParameter;
 
+        private Animator m_fxAnimator;
+
         public override void Initialize(ComplexCharacterInfo info)
         {
             base.Initialize(info);
@@ -32,6 +37,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_comboAttackDelayTimer = -1;
             m_comboResetDelayTimer = -1;
             m_allowAttackDelayHandling = true;
+
+            m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
         }
 
         public override void Reset()
@@ -82,18 +89,34 @@ namespace DChild.Gameplay.Characters.Players.Modules
         {
             m_rigidBody.WakeUp();
             m_slashComboInfo[m_currentVisualSlashState].ShowCollider(value);
+            m_attackFX.transform.position = m_slashComboInfo[m_currentVisualSlashState].fxPosition.position;
+
+            switch (m_currentVisualSlashState)
+            {
+                case 0:
+                    m_fxAnimator.Play("SlashCombo1");
+                    break;
+                case 1:
+                    m_fxAnimator.Play("SlashCombo2");
+                    break;
+                case 2:
+                    //m_fxAnimator.Play("SlashCombo3");
+                    break;
+                default:
+                    break;
+            }
         }
 
         public override void AttackOver()
         {
             base.AttackOver();
-            //m_state.isAttacking = false;
-            //m_state.waitForBehaviour = false;
 
             for (int i = 0; i < m_slashComboInfo.Count; i++)
             {
                 m_slashComboInfo[i].ShowCollider(false);
             }
+
+            m_fxAnimator.Play("Buffer");
         }
 
         public void ComboEnd()
