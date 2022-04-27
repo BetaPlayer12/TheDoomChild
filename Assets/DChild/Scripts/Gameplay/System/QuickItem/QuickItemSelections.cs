@@ -1,6 +1,7 @@
 ﻿using DChild.Gameplay.Items;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace DChild.Gameplay.Inventories
 {

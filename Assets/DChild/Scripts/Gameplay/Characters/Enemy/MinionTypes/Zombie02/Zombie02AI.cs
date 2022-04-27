@@ -344,7 +344,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void UpdateAttackDeciderList()
         {
-            m_attackDecider.SetList(new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),
+            m_attackDecider.SetList(/*new AttackInfo<Attack>(Attack.Attack1, m_info.attack1.range),*/
                                     new AttackInfo<Attack>(Attack.Attack2, m_info.attack2.range));
             m_attackDecider.hasDecidedOnAttack = false;
         }
@@ -622,8 +622,8 @@ namespace DChild.Gameplay.Characters.Enemies
                                     if (m_animation.GetCurrentAnimation(0).ToString() != m_info.idleAnimation)
                                     {
                                         m_movement.Stop();
-                                        m_animation.EnableRootMotion(true, true);
                                     }
+                                    m_animation.EnableRootMotion(true, m_groundSensor.isDetecting ? true : false);
                                     m_selfCollider.enabled = true;
                                     m_animation.SetAnimation(0, m_info.idleAnimation, true);
                                 }

@@ -193,7 +193,7 @@ namespace DChild.Gameplay
 
         private IEnumerator DelayedShowGameplay()
         {
-            int frameCount = 5;
+            int frameCount = 30;
             do
             {
                 yield return null;
