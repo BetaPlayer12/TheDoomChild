@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using Sirenix.OdinInspector;
 using DChild.Gameplay.Essence;
-using Holysoft.Collections;
 
 #if UNITY_EDITOR
 using UnityEditor;
