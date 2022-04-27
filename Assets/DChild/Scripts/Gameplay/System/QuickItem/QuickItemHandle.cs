@@ -137,9 +137,18 @@ namespace DChild.Gameplay.Inventories
             {
                 m_currentIndex--;
                 m_currentItem = m_selections.GetItem(m_currentIndex);
+
+            }
+            if (m_currentItem != null)
+            {
+                m_currentItemData = (ConsumableItemData)m_currentItem.data;
+
+            }
+            else
+            {
+                m_currentItem = null;
             }
 
-            m_currentItemData = (ConsumableItemData)m_currentItem.data;
             InvokeSelectedItemEvent(selectionType);
         }
 

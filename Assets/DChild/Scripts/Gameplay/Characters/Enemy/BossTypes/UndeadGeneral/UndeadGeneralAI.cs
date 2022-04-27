@@ -456,6 +456,7 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             if (damageable != null)
             {
+                Debug.Log("UG Ecnountered Player");
                 base.SetTarget(damageable, m_target);
                 m_stateHandle.OverrideState(State.Intro);
                 GameEventMessage.SendEvent("Boss Encounter");
@@ -900,6 +901,17 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.DisableRootMotion();
             m_movement.Stop();
             m_trailFX.Stop();
+            StartCoroutine(DefeatRoutine());
+        }
+
+        private IEnumerator DefeatRoutine()
+        {
+            this.transform.SetParent(null);
+            m_animation.SetAnimation(0, m_info.defeatStartAnimation, false).MixDuration = 0;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
+            m_animation.SetAnimation(0, m_info.defeatLoopAnimation, true);
+            enabled = false;
+            yield return null;
         }
 
         #region Movement
@@ -1143,7 +1155,7 @@ namespace DChild.Gameplay.Characters.Enemies
             switch (m_stateHandle.currentState)
             {
                 case State.Idle:
-                    //m_animation.SetAnimation(0, m_info.idleAnimation, true);
+                    m_animation.SetAnimation(0, m_info.idleAnimation, true);
                     break;
                 case State.Intro:
                     if (IsFacingTarget())
