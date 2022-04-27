@@ -35,7 +35,7 @@ MonoBehaviour:
     italic: 0
     underline: 0
   actors:
-  - id: 2
+  - id: 7
     fields:
     - title: Name
       value: Store
@@ -58,7 +58,7 @@ MonoBehaviour:
     alternatePortraits: []
     spritePortraits:
     - {fileID: 21300000, guid: 9301e4781f75ca64c80fc9e4365dc822, type: 3}
-  - id: 3
+  - id: 8
     fields:
     - title: Name
       value: Albin
@@ -80,34 +80,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 21300000, guid: 1488e3de80a4e624ebe8784bbb3c3c76, type: 3}
     alternatePortraits: []
     spritePortraits: []
-  - id: 4
-    fields:
-    - title: Name
-      value: Player
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: The Main Character of the game
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: IsPlayer
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Display Name
-      value: Z
-      type: 0
-      typeString: CustomFieldType_Text
-    portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: 56dc71c15b0681041ab3a592eb0b9f05, type: 3}
-    alternatePortraits: []
-    spritePortraits:
-    - {fileID: 21300000, guid: ed103a6bfbc9fe646bfb4596953f12ca, type: 3}
-  - id: 5
+  - id: 9
     fields:
     - title: Name
       value: Gladiator
@@ -133,6 +106,28 @@ MonoBehaviour:
     spritePortrait: {fileID: 21300000, guid: dc6dbeeb5ae77874ba3adc17fbf82c99, type: 3}
     alternatePortraits: []
     spritePortraits: []
+  - id: 4
+    fields:
+    - title: Name
+      value: Player
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+    - title: IsPlayer
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
   - id: 6
     fields:
     - title: Name
@@ -144,7 +139,7 @@ MonoBehaviour:
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: 
+      value: No idea
       type: 0
       typeString: CustomFieldType_Text
     - title: IsPlayer
@@ -156,12 +151,11 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: 0a1d471b4fbfe4e47a66a1fb92c3da69, type: 3}
+    spritePortrait: {fileID: 0}
     alternatePortraits: []
-    spritePortraits:
-    - {fileID: 21300000, guid: ed24b16bffaede8438dbed856ecb2eae, type: 3}
+    spritePortraits: []
   items:
-  - id: 3
+  - id: 8
     fields:
     - title: Name
       value: New Game Intro
@@ -191,7 +185,7 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-  - id: 5
+  - id: 9
     fields:
     - title: Name
       value: Kill Lich Lord
@@ -221,7 +215,7 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-  - id: 6
+  - id: 10
     fields:
     - title: Name
       value: Rescue Albin
@@ -316,7 +310,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Boolean
   locations: []
   variables:
-  - id: 12
+  - id: 14
     fields:
     - title: Name
       value: CathedralDoor_Open
@@ -330,7 +324,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 13
+  - id: 15
     fields:
     - title: Name
       value: Alert
@@ -344,7 +338,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 14
+  - id: 16
     fields:
     - title: Name
       value: Albin_AncientPotionBought
@@ -358,7 +352,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 15
+  - id: 17
     fields:
     - title: Name
       value: Albin_AncientPotionAvailable
@@ -372,8 +366,22 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+  - id: 13
+    fields:
+    - title: Name
+      value: UndeadGeneral_HasBeenDefeated
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
   conversations:
-  - id: 16
+  - id: 36
     fields:
     - title: Title
       value: Sample Dialogue
@@ -442,7 +450,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 3
+        value: 8
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -469,7 +477,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 16
+      conversationID: 36
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -477,9 +485,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 16
+      - originConversationID: 36
         originDialogueID: 0
-        destinationConversationID: 16
+        destinationConversationID: 36
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -509,7 +517,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 3
+        value: 8
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -540,7 +548,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 16
+      conversationID: 36
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -548,9 +556,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 16
+      - originConversationID: 36
         originDialogueID: 1
-        destinationConversationID: 16
+        destinationConversationID: 36
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -584,7 +592,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 3
+        value: 8
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -611,7 +619,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 16
+      conversationID: 36
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -619,9 +627,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 16
+      - originConversationID: 36
         originDialogueID: 2
-        destinationConversationID: 16
+        destinationConversationID: 36
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -651,7 +659,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 3
+        value: 8
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -682,7 +690,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 16
+      conversationID: 36
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -690,9 +698,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 16
+      - originConversationID: 36
         originDialogueID: 3
-        destinationConversationID: 16
+        destinationConversationID: 36
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
@@ -726,7 +734,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 3
+        value: 8
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -753,7 +761,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 16
+      conversationID: 36
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -774,7 +782,7 @@ MonoBehaviour:
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 0.7000003
-  - id: 17
+  - id: 37
     fields:
     - title: Title
       value: Sample Banter
@@ -793,7 +801,7 @@ MonoBehaviour:
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
-      value: 2
+      value: 7
       type: 5
       typeString: CustomFieldType_Actor
     - title: IsBanter
@@ -839,7 +847,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -866,7 +874,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 17
+      conversationID: 37
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -874,9 +882,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 17
+      - originConversationID: 37
         originDialogueID: 0
-        destinationConversationID: 17
+        destinationConversationID: 37
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -906,7 +914,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -937,7 +945,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 17
+      conversationID: 37
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -945,9 +953,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 17
+      - originConversationID: 37
         originDialogueID: 1
-        destinationConversationID: 17
+        destinationConversationID: 37
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -977,7 +985,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -1008,7 +1016,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 17
+      conversationID: 37
       isRoot: 0
       isGroup: 0
       nodeColor: 
