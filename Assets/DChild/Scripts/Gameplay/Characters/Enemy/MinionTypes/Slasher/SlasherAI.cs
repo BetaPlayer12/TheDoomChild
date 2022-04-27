@@ -30,6 +30,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, TabGroup("Attack")]
             private SimpleAttackInfo m_attack = new SimpleAttackInfo();
             public SimpleAttackInfo attack => m_attack;
+            [SerializeField, ValueDropdown("GetAnimations"), TabGroup("Attack")]
+            private string m_attack2Animation;
+            public string attack2Animation => m_attack2Animation;
             [SerializeField, MinValue(0), TabGroup("Attack")]
             private float m_attackCD;
             public float attackCD => m_attackCD;
@@ -403,12 +406,13 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator AttackRoutine()
         {
             m_flinchHandle.m_enableMixFlinch = false;
-            for (int i = 0; i < 3; i++)
-            {
-                m_animation.SetAnimation(0, m_info.attack.animation, false);
-                yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
-                m_animation.SetEmptyAnimation(0, 0);
-            }
+            m_animation.SetAnimation(0, m_info.attack.animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_animation.SetAnimation(0, m_info.attack2Animation, false);
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack2Animation);
+            m_animation.SetAnimation(0, m_info.attack.animation, false).AnimationStart = 0.1f;
+            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
+            m_animation.SetEmptyAnimation(0, 0);
             m_flinchHandle.m_enableMixFlinch = true;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
             m_stateHandle.ApplyQueuedState();
