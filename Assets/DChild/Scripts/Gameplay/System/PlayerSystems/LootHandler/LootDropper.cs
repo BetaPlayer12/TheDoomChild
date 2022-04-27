@@ -15,8 +15,6 @@ namespace DChild.Gameplay.Systems
         [SerializeField]
         private LootData m_loot;
 
-        
-
         [SerializeField]
         private bool m_dropWhenDestroyed;
         private Damageable m_damageable;
