@@ -310,8 +310,6 @@ namespace DChild.Gameplay.Characters.Enemies
         private AnimatedTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
         private MovementHandle2D m_movement;
-        [SerializeField, TabGroup("Modules")]
-        private DeathHandle m_deathHandle;
         [SerializeField, TabGroup("Cinematic")]
         private BlackDeathCinematicPlayah m_cinematic;
         [SerializeField, TabGroup("Sensors")]
@@ -896,8 +894,8 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.OnDestroyed(sender, eventArgs);
             StopAllCoroutines();
-            //m_deathFX.Play();
             m_currentHurtbox.enabled = false;
+            m_hitbox.Disable();
             m_animation.DisableRootMotion();
             m_movement.Stop();
             m_trailFX.Stop();
@@ -1027,7 +1025,6 @@ namespace DChild.Gameplay.Characters.Enemies
         {
             base.Awake();
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.defeatStartAnimation);
             m_damageable.DamageTaken += OnDamageTaken;
             m_damageable.DamageTaken += OnDamageBlocked;
             //m_patternDecider = new RandomAttackDecider<Pattern>();
