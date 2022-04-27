@@ -14,14 +14,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
             [SerializeField]
             private ParticleSystem m_fx;
             [SerializeField]
+            private Transform m_fxPosition;
+            [SerializeField]
             private Collider2D m_collider;
             [SerializeField, MinValue(0)]
             private float m_damageModifier = 1;
             [SerializeField, MinValue(0)]
-            private float m_nextAttackDelay;
+            private float m_nextAttackDelay; 
 
             public float nextAttackDelay => m_nextAttackDelay;
             public float damageModifier => m_damageModifier;
+            public Transform fxPosition => m_fxPosition;
 
             public void PlayFX(bool value)
             {
