@@ -63,7 +63,7 @@ namespace DChild.Gameplay.Inventories
                     UpdateSelection();
                     InvokeSelectionUpdate();
                 }
-                else if (eventArgs.currentCount > 0 && IsInSelections(eventArgs.data))
+                else if (eventArgs.currentCount > 0 && !IsInSelections(eventArgs.data))
                 {
                     UpdateSelection();
                     InvokeSelectionUpdate();
