@@ -36,11 +36,9 @@ namespace DChild.Gameplay.Environment
         }
 
         [SerializeField]
+        private LootChestVisual m_visuals;
+        [SerializeField]
         private Vector3 m_promptOffset;
-        [SerializeField]
-        private Sprite m_closeVersion;
-        [SerializeField]
-        private Sprite m_openVersion;
         [SerializeField]
         private ILootDataContainer m_loot;
         private bool m_isLooted;
@@ -62,7 +60,7 @@ namespace DChild.Gameplay.Environment
                 //Force Player Animation?
                 //Enable Cinematic Thingy?
                 //Temporary Fix, If All Chest are the same dont make UnityEvent
-                GetComponent<SpriteRenderer>().sprite = m_openVersion;
+                m_visuals.Open(true);
                 GetComponent<Collider2D>().enabled = false;
                 //gameObject.SetActive(false);
 
@@ -70,7 +68,7 @@ namespace DChild.Gameplay.Environment
             else
             {
                 //Temporary Fix, If All Chest are the same dont make UnityEvent
-                GetComponent<SpriteRenderer>().sprite = m_closeVersion;
+                m_visuals.Close(true);
                 GetComponent<Collider2D>().enabled = true;
                 //gameObject.SetActive(true);
             }
@@ -96,7 +94,7 @@ namespace DChild.Gameplay.Environment
 
         private void ShowOpenChestVisual()
         {
-            GetComponent<SpriteRenderer>().sprite = m_openVersion;
+            m_visuals.Open();
             GetComponent<Collider2D>().enabled = false;
             GetComponent<EventSounds>().ActivateCodeTriggeredEvent1();
             GetComponent<VFXSpawner>().Spawn();
