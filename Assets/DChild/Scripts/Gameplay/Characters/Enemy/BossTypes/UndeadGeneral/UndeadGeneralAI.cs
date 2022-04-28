@@ -569,7 +569,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ChangePhaseRoutine()
         {
-            m_stateHandle.Wait(State.ReevaluateSituation);
+            //m_stateHandle.Wait(State.ReevaluateSituation);
             m_hitbox.Disable();
             m_trailFX.Stop();
             m_animation.EnableRootMotion(true, false);
@@ -580,14 +580,22 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitWhile (() => m_animation.animationState.GetCurrent(0).AnimationTime < m_animation.animationState.GetCurrent(0).AnimationEnd * 0.8f) ;
             m_enragedFX.Stop();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.phasingEnragedAnimation);
-            //m_animation.SetAnimation(0, m_info.specialThrustStartAnimation, false);
-            m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
-            yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
-            m_trailFX.Play();
-            //m_animation.DisableRootMotion();
+            //m_animation.SetAnimation(0, m_info.moveFastAnticipationAnimation, false);
+            //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.moveFastAnticipationAnimation);
+            //m_trailFX.Play();
             m_hitbox.Enable();
             m_changePhaseCoroutine = null;
-            m_stateHandle.ApplyQueuedState();
+            //m_stateHandle.ApplyQueuedState();
+            switch (m_phaseHandle.currentPhase)
+            {
+                case Phase.PhaseTwo:
+                    m_currentAttack = Attack.EarthShaker;
+                    break;
+                case Phase.PhaseThree:
+                    m_currentAttack = Attack.SpecialThrust;
+                    break;
+            }
+            m_stateHandle.OverrideState(State.Attacking);
             yield return null;
         }
         #region Attacks
@@ -1082,9 +1090,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private void EarthShaker()
         {
             //m_earthShakerFX.Play();
-            StartCoroutine(EarthShakerBBRoutine(40f));
+            StartCoroutine(EarthShakerBBRoutine(5f));
             m_currentHurtbox = m_earthShakerBB;
-            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.40f));
+            m_hurtboxCoroutine = StartCoroutine(BoundingBoxRoutine(0.50f));
         }
 
         private void SpecialThrust()

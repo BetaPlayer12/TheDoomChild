@@ -441,7 +441,7 @@ namespace DChild.Gameplay.Characters.Enemies
             //    m_animation.SetEmptyAnimation(0, 0);
             //}
             var time = 0f;
-            while (time < 3f)
+            while (time < 3f && m_edgeSensor.isDetecting)
             {
                 if (!IsFacingTarget())
                     CustomTurn();

@@ -79,6 +79,8 @@ namespace DChild.Serialization
         private ComponentSerializer[] m_componentSerializers;
         [SerializeField, ValueDropdown("GetDynamicSerializers", IsUniqueList = true), TabGroup("Serializer", "Dynamic"), OnValueChanged("UpdateEditorData", true)]
         private DynamicSerializableComponent[] m_dynamicSerializers;
+        [SerializeField, TabGroup("Serializer", "Dialogue Updates")]
+        private DialogueSystemTrigger[] m_dialogueSystemUpdates;
         [SerializeField, TabGroup("Serializer", "Quest Listeners")]
         private QuestStateListener[] m_questsListener;
         [OdinSerialize, HideInEditorMode]
@@ -139,6 +141,11 @@ namespace DChild.Serialization
             }
             var slot = GameplaySystem.campaignSerializer.slot;
             slot.UpdateZoneData(m_ID, m_zoneData);
+
+            for (int i = 0; i < m_dialogueSystemUpdates.Length; i++)
+            {
+                m_dialogueSystemUpdates[i].OnUse();
+            }
             slot.UpdateDialogueSaveData();
         }
 
