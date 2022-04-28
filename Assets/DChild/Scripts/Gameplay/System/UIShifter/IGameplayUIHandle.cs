@@ -40,6 +40,6 @@ namespace DChild.Gameplay.Systems
         void ShowGameplayUI(bool willshow);
         void ShowLootChestItemAcquired(LootList lootList);
 
-        void ShowSequenceSkip();
+        void ShowSequenceSkip(bool willShow);
     }
 }

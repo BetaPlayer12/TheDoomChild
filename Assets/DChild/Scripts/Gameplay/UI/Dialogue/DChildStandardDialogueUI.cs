@@ -23,6 +23,7 @@ namespace DChild.UI
         private StandardUISubtitlePanel m_banterSubtitlePanel;
 
         public static bool isInCutscene;
+        private bool m_skipUIShown;
 
         public override void Open()
         {
@@ -40,7 +41,8 @@ namespace DChild.UI
                     if (conversation.LookupBool("IsSkippable"))
                     {
                         SequenceSkipHandle.SkipExecute += OnSkipExecute;
-                        GameplaySystem.gamplayUIHandle.ShowSequenceSkip();
+                        GameplaySystem.gamplayUIHandle.ShowSequenceSkip(true);
+                        m_skipUIShown = true;
                     }
                     conversationUIElements.mainPanel = m_dialoguePanel;
                     conversationUIElements.defaultPCSubtitlePanel = m_dialoguePCSubtitlePanel;
@@ -57,6 +59,7 @@ namespace DChild.UI
 
         private void OnSkipExecute()
         {
+            GameplaySystem.gamplayUIHandle.ShowSequenceSkip(false);
             DialogueManager.StopConversation();
             SequenceSkipHandle.SkipExecute -= OnSkipExecute;
         }
@@ -66,8 +69,12 @@ namespace DChild.UI
             if (isInCutscene == false)
             {
                 GameplaySystem.playerManager.EnableControls();
+                if (m_skipUIShown)
+                {
+                    GameplaySystem.gamplayUIHandle.ShowSequenceSkip(false);
+                    SequenceSkipHandle.SkipExecute -= OnSkipExecute;
+                }
             }
-            SequenceSkipHandle.SkipExecute -= OnSkipExecute;
             base.Close();
         }
     }
