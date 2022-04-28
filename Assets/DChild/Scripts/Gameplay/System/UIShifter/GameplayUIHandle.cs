@@ -230,9 +230,16 @@ namespace DChild.Gameplay.Systems
             GameEventMessage.SendEvent("Loot Notify");
         }
 
-        public void ShowSequenceSkip()
+        public void ShowSequenceSkip(bool willShow)
         {
-            m_skippableUI.Show();
+            if (willShow)
+            {
+                m_skippableUI.Show();
+            }
+            else
+            {
+                m_skippableUI.Hide();
+            }
         }
     }
 }
