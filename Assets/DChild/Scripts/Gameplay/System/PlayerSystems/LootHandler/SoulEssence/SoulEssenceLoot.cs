@@ -10,8 +10,8 @@ namespace DChild.Gameplay.Essence
         [SerializeField, Min(1)]
         private int m_value;
 
-#if UNITY_EDITOR
         public int value => m_value;
+#if UNITY_EDITOR
 
         [Button]
         private void StartPop()

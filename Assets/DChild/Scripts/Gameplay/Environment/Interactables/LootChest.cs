@@ -80,6 +80,7 @@ namespace DChild.Gameplay.Environment
         }
         public ISaveData Save() => new SaveData(m_isLooted);
 
+        [Button]
         public void Interact(Character character)
         {
             m_isLooted = true;
