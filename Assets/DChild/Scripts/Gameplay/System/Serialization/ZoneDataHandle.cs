@@ -130,7 +130,7 @@ namespace DChild.Serialization
                 {
                     m_zoneData.SetData(m_cacheComponentSerializer.ID, m_cacheComponentSerializer.SaveData());
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Debug.LogError($"Serialization Error: {m_cacheComponentSerializer.gameObject.name} \n {e.Message}", m_cacheComponentSerializer);
                 }
@@ -141,10 +141,17 @@ namespace DChild.Serialization
             }
             var slot = GameplaySystem.campaignSerializer.slot;
             slot.UpdateZoneData(m_ID, m_zoneData);
+            slot.UpdateDialogueSaveData();
+        }
 
-            for (int i = 0; i < m_dialogueSystemUpdates.Length; i++)
+        private void UpdateDialogueSaveData(CampaignSlot slot)
+        {
+            if (m_dialogueSystemUpdates != null)
             {
-                m_dialogueSystemUpdates[i].OnUse();
+                for (int i = 0; i < m_dialogueSystemUpdates.Length; i++)
+                {
+                    m_dialogueSystemUpdates[i].OnUse();
+                }
             }
             slot.UpdateDialogueSaveData();
         }
@@ -268,6 +275,9 @@ namespace DChild.Serialization
 
         private void OnDestroy()
         {
+            var slot = GameplaySystem.campaignSerializer.slot;
+            UpdateDialogueSaveData(slot);
+
             GameplaySystem.campaignSerializer.PreSerialization -= OnPreSerialization;
             GameplaySystem.campaignSerializer.PostDeserialization -= OnPostDeserialization;
         }
