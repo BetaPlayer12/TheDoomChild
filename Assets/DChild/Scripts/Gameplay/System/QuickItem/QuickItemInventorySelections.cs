@@ -30,7 +30,7 @@ namespace DChild.Gameplay.Inventories
 
         public override IStoredItem GetItem(int index)
         {
-               return index > 0 && index < itemCount ? m_currentList.ElementAt(index) : null;
+               return index >= 0 && index < itemCount ? m_currentList.ElementAt(index) : null;
         }
         public override bool IsInSelections(ItemData data)
         {
