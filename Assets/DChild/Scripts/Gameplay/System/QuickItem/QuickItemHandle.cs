@@ -136,6 +136,10 @@ namespace DChild.Gameplay.Inventories
             if (m_currentItem == null)
             {
                 m_currentIndex--;
+                if (m_currentIndex < 0)
+                {
+                    m_currentIndex = 0;
+                }
                 m_currentItem = m_selections.GetItem(m_currentIndex);
 
             }
