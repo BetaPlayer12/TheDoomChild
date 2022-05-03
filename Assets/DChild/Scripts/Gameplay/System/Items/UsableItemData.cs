@@ -9,7 +9,7 @@ using UnityEngine;
 namespace DChild.Gameplay.Items
 {
     [CreateAssetMenu(fileName = "UsableItemData", menuName = "DChild/Database/Usable Item Data")]
-    public class UsableItemData : ConsumableItemData
+    public class UsableItemData : ConsumableItemData, IItemDurationEffectInfo
     {
         [SerializeField, BoxGroup("m_enableEdit/Effect")]
         private bool m_durationEffect;
@@ -26,9 +26,6 @@ namespace DChild.Gameplay.Items
         [SerializeField, HideReferenceObjectPicker, ShowIf("m_durationEffect"), TabGroup("m_enableEdit/Effect/Tab/Duration", "Updatable")]
         private IUpdatableItemEffect[] m_updatableEffectList = new IUpdatableItemEffect[0];
 
-
-        private static Dictionary<IPlayer, DurationItemHandle> m_activeList = new Dictionary<IPlayer, DurationItemHandle>();
-
         public override bool CanBeUse(IPlayer player)
         {
             if (m_moduleList != null)
@@ -42,6 +39,8 @@ namespace DChild.Gameplay.Items
 
             return true;
         }
+
+        public DurationItemHandle GenerateEffectHandle(IPlayer reference) => new DurationItemHandle(reference, this, m_duration, m_durationEffectList, m_updatableEffectList);
 
         public override void Use(IPlayer player)
         {
@@ -57,24 +56,8 @@ namespace DChild.Gameplay.Items
             }
             if (m_durationEffect)
             {
-                if (m_activeList.TryGetValue(player, out DurationItemHandle handle))
-                {
-                    handle.ResetTimer();
-                }
-                else
-                {
-                    handle = new DurationItemHandle(player, m_duration, m_durationEffectList, m_updatableEffectList);
-                    handle.EffectEnd += OnEffectEnd;
-                    m_activeList.Add(player, handle);
-                    handle.Start();
-                }
+                player.itemEffect.ActivateEffect(this);
             }
-        }
-
-        private void OnEffectEnd(object sender, EventActionArgs eventArgs)
-        {
-
-            m_activeList.Remove(((DurationItemHandle)sender).player);
         }
 
 #if UNITY_EDITOR

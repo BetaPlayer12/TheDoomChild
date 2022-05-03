@@ -1,29 +1,33 @@
 ﻿using DChild.Gameplay.Characters.Players;
-using Holysoft.Event;
-using System.Collections;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace DChild.Gameplay.Items
 {
+    [System.Serializable, ReadOnly]
     public class DurationItemHandle
     {
-        private Character m_character;
         private IDurationItemEffect[] m_durationItemEffects;
         private IUpdatableItemEffect[] m_updatableItemEffects;
         private bool m_hasDurationEffects;
         private bool m_hasUpdateableItemEffects;
         private float m_duration;
+        [SerializeField, HorizontalGroup,LabelWidth(50)]
+        private ItemData m_source;
+        [SerializeField, HorizontalGroup, SuffixLabel("@m_duration", overlay: true)]
         private float m_timer;
-        private Coroutine m_activeRoutine;
+        private bool m_isActive;
 
         public IPlayer player { get; }
+        public ItemData source => m_source;
 
-        public event EventAction<EventActionArgs> EffectEnd;
+        public bool isDone => m_isActive == true && m_timer <= 0;
+        public float durationPercent => m_timer / m_duration;
 
-        public DurationItemHandle(IPlayer player, float duration, IDurationItemEffect[] durationItemEffects, IUpdatableItemEffect[] updatableItemEffects)
+        public DurationItemHandle(IPlayer player, ItemData itemData, float duration, IDurationItemEffect[] durationItemEffects, IUpdatableItemEffect[] updatableItemEffects)
         {
             this.player = player;
-            m_character = player.character;
+            m_source = itemData;
             m_duration = duration;
             m_durationItemEffects = durationItemEffects;
             m_hasDurationEffects = durationItemEffects != null && durationItemEffects.Length > 0;
@@ -39,13 +43,19 @@ namespace DChild.Gameplay.Items
             m_hasUpdateableItemEffects = false;
         }
 
-        public void Start()
+        public void StartEffect()
         {
-            if (m_activeRoutine == null)
+            if (m_isActive == false)
             {
                 m_timer = m_duration;
-                m_activeRoutine = m_character.StartCoroutine(DurationRoutine());
-                player.damageableModule.Destroyed += OnDeath;
+                if (m_hasDurationEffects)
+                {
+                    for (int i = 0; i < m_durationItemEffects.Length; i++)
+                    {
+                        m_durationItemEffects[i].StartEffect(player);
+                    }
+                }
+                m_isActive = true;
             }
         }
 
@@ -55,11 +65,10 @@ namespace DChild.Gameplay.Items
             m_timer = m_duration;
         }
 
-        private void OnDeath(object sender, EventActionArgs eventArgs)
+        public void StopEffect()
         {
-            if(player.damageableModule.isAlive == false)
+            if (m_isActive)
             {
-                m_character.StopCoroutine(m_activeRoutine);
                 if (m_hasDurationEffects)
                 {
                     for (int i = 0; i < m_durationItemEffects.Length; i++)
@@ -67,53 +76,22 @@ namespace DChild.Gameplay.Items
                         m_durationItemEffects[i].StopEffect(player);
                     }
                 }
-                player.damageableModule.Destroyed -= OnDeath;
-                EffectEnd?.Invoke(this, EventActionArgs.Empty);
+
+                m_isActive = false;
             }
         }
 
-        private IEnumerator DurationRoutine()
+        public void UpdateEffect(float deltaTime)
         {
-            if (m_hasDurationEffects)
+            m_timer -= deltaTime;
+            if (m_hasUpdateableItemEffects && m_timer > 0)
             {
-                for (int i = 0; i < m_durationItemEffects.Length; i++)
+                for (int i = 0; i < m_updatableItemEffects.Length; i++)
                 {
-                    m_durationItemEffects[i].StartEffect(player);
+                    m_updatableItemEffects[i].Execute(player, deltaTime);
                 }
             }
-
-            if (m_hasUpdateableItemEffects)
-            {
-                while (m_timer > 0)
-                {
-                    var deltaTime = GameplaySystem.time.deltaTime;
-                    for (int i = 0; i < m_updatableItemEffects.Length; i++)
-                    {
-                        m_updatableItemEffects[i].Execute(player, deltaTime);
-                    }
-                    m_timer -= deltaTime;
-                    yield return null;
-                }
-            }
-            else
-            {
-                while (m_timer > 0)
-                {
-                    m_timer -= GameplaySystem.time.deltaTime;
-                    yield return null;
-                }
-            }
-
-            if (m_hasDurationEffects)
-            {
-                for (int i = 0; i < m_durationItemEffects.Length; i++)
-                {
-                    m_durationItemEffects[i].StopEffect(player);
-                }
-            }
-
-            m_activeRoutine = null;
-            EffectEnd?.Invoke(this, EventActionArgs.Empty);
         }
     }
+
 }
