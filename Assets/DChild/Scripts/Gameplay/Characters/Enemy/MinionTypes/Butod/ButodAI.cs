@@ -541,7 +541,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     {
                         m_turnState = State.ReevaluateSituation;
                         m_animation.EnableRootMotion(false, false);
-                        m_animation.SetAnimation(0, m_info.move.animation, true).TimeScale = 0.5f;
+                        m_animation.SetAnimation(0, m_info.move.animation, true)/*.TimeScale = 0.5f*/;
                         var characterInfo = new PatrolHandle.CharacterInfo(m_character.centerMass.position, m_character.facing);
                         m_patrolHandle.Patrol(m_movement, m_info.move.speed, characterInfo);
                     }
