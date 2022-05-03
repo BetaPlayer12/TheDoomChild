@@ -80,7 +80,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 21300000, guid: 1488e3de80a4e624ebe8784bbb3c3c76, type: 3}
     alternatePortraits: []
     spritePortraits: []
-  - id: 9
+  - id: 11
     fields:
     - title: Name
       value: Gladiator
@@ -106,30 +106,7 @@ MonoBehaviour:
     spritePortrait: {fileID: 21300000, guid: dc6dbeeb5ae77874ba3adc17fbf82c99, type: 3}
     alternatePortraits: []
     spritePortraits: []
-  - id: 10
-    fields:
-    - title: Name
-      value: Player
-      type: 0
-      typeString: 
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-    - title: IsPlayer
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    portrait: {fileID: 0}
-    spritePortrait: {fileID: 21300000, guid: 56dc71c15b0681041ab3a592eb0b9f05, type: 3}
-    alternatePortraits: []
-    spritePortraits:
-    - {fileID: 21300000, guid: ed103a6bfbc9fe646bfb4596953f12ca, type: 3}
-  - id: 11
+  - id: 12
     fields:
     - title: Name
       value: Undead General
@@ -156,6 +133,59 @@ MonoBehaviour:
     alternatePortraits: []
     spritePortraits:
     - {fileID: 21300000, guid: ed24b16bffaede8438dbed856ecb2eae, type: 3}
+  - id: 13
+    fields:
+    - title: Name
+      value: Lich Lord
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
+  - id: 10
+    fields:
+    - title: Name
+      value: Player
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 21300000, guid: 56dc71c15b0681041ab3a592eb0b9f05, type: 3}
+    alternatePortraits: []
+    spritePortraits:
+    - {fileID: 21300000, guid: ed103a6bfbc9fe646bfb4596953f12ca, type: 3}
   items:
   - id: 8
     fields:
@@ -310,9 +340,39 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+  - id: 12
+    fields:
+    - title: Name
+      value: Defeat Lich Lord
+      type: 0
+      typeString: 
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: 
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: 
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: 
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
   locations: []
   variables:
-  - id: 14
+  - id: 21
     fields:
     - title: Name
       value: CathedralDoor_Open
@@ -326,7 +386,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
-  - id: 15
+  - id: 20
     fields:
     - title: Name
       value: Alert
@@ -340,7 +400,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 16
+  - id: 22
     fields:
     - title: Name
       value: Albin_AncientPotionBought
@@ -354,7 +414,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 17
+  - id: 23
     fields:
     - title: Name
       value: Albin_AncientPotionAvailable
@@ -368,7 +428,7 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 18
+  - id: 24
     fields:
     - title: Name
       value: UndeadGeneral_HasBeenDefeated
@@ -382,8 +442,22 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
+  - id: 27
+    fields:
+    - title: Name
+      value: LichLord_HasBeenDefeated
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   conversations:
-  - id: 36
+  - id: 41
     fields:
     - title: Title
       value: Sample Dialogue
@@ -479,7 +553,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 36
+      conversationID: 41
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -487,9 +561,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 36
+      - originConversationID: 41
         originDialogueID: 0
-        destinationConversationID: 36
+        destinationConversationID: 41
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -550,7 +624,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 36
+      conversationID: 41
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -558,9 +632,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 36
+      - originConversationID: 41
         originDialogueID: 1
-        destinationConversationID: 36
+        destinationConversationID: 41
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -621,7 +695,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      conversationID: 36
+      conversationID: 41
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -629,9 +703,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 36
+      - originConversationID: 41
         originDialogueID: 2
-        destinationConversationID: 36
+        destinationConversationID: 41
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -692,7 +766,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 36
+      conversationID: 41
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -700,9 +774,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 36
+      - originConversationID: 41
         originDialogueID: 3
-        destinationConversationID: 36
+        destinationConversationID: 41
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
@@ -763,7 +837,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 36
+      conversationID: 41
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -784,7 +858,7 @@ MonoBehaviour:
         height: 30
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 0.7000003
-  - id: 37
+  - id: 42
     fields:
     - title: Title
       value: Sample Banter
@@ -876,7 +950,7 @@ MonoBehaviour:
         value: None()
         type: 0
         typeString: 
-      conversationID: 37
+      conversationID: 42
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -884,9 +958,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 37
+      - originConversationID: 42
         originDialogueID: 0
-        destinationConversationID: 37
+        destinationConversationID: 42
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
@@ -947,7 +1021,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 37
+      conversationID: 42
       isRoot: 0
       isGroup: 0
       nodeColor: 
@@ -955,9 +1029,9 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
-      - originConversationID: 37
+      - originConversationID: 42
         originDialogueID: 1
-        destinationConversationID: 37
+        destinationConversationID: 42
         destinationDialogueID: 2
         isConnector: 0
         priority: 2
@@ -1018,7 +1092,7 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
-      conversationID: 37
+      conversationID: 42
       isRoot: 0
       isGroup: 0
       nodeColor: 
