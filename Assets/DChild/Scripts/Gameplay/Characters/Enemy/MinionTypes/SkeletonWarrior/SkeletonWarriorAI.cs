@@ -575,9 +575,13 @@ namespace DChild.Gameplay.Characters.Enemies
                         m_currentTargetPos = m_targetInfo.position;
                         if (IsTargetInRange(m_chaseAttackRange))
                         {
-                            m_currentTargetPos = new Vector2(m_targetInfo.position.x, m_character.centerMass.position.y);
+                            m_currentTargetPos = new Vector2(m_targetInfo.position.x, GroundPosition().y);
                             m_isInAttackrange = true;
                         }
+                    }
+                    else
+                    {
+                        m_currentTargetPos = new Vector2(m_currentTargetPos.x, GroundPosition().y);
                     }
                     var toTarget = m_currentTargetPos - (Vector2)m_character.centerMass.position;
 
