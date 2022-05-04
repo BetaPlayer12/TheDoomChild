@@ -1,4 +1,5 @@
 ﻿using DChild.Configurations.Visuals;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +21,10 @@ namespace DChild.Configurations
 
         private GameSettingsConfiguration m_configuration;
 
+        public event EventAction<EventActionArgs> SceneVisualsChange;
+
         public SupportedResolutions supportedResolutions => m_supportedResolutions;
+
 
 
 #if UNITY_EDITOR
@@ -73,6 +77,7 @@ namespace DChild.Configurations
             {
                 m_screenLighting.brightness = value;
                 m_configuration.visualConfiguration.brightness = value;
+                SceneVisualsChange?.Invoke(this,EventActionArgs.Empty);
             }
         }
 
@@ -87,6 +92,7 @@ namespace DChild.Configurations
             {
                 m_screenLighting.contrast = value;
                 m_configuration.visualConfiguration.contrast = value;
+                SceneVisualsChange?.Invoke(this, EventActionArgs.Empty);
             }
         }
 
