@@ -572,9 +572,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Attacking:
                     if (!m_isInAttackrange)
                     {
-                        m_currentTargetPos = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y);
+                        m_currentTargetPos = m_targetInfo.position;
                         if (IsTargetInRange(m_chaseAttackRange))
                         {
+                            m_currentTargetPos = new Vector2(m_targetInfo.position.x, m_character.centerMass.position.y);
                             m_isInAttackrange = true;
                         }
                     }
