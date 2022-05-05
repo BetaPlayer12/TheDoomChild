@@ -1,5 +1,7 @@
 ﻿using DChild;
+using Holysoft.Event;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +13,8 @@ namespace DChild.Configurations.Visuals
 {
     public class GammaAdjuster : MonoBehaviour
     {
-        public static GammaAdjuster instance;
-
         [HideInInspector] public Volume renderingVolume;
         LiftGammaGain liftGammaGain;
-
-
 
         [Button]
         public void SetGammaAlpha(float gammaAlpha)
@@ -25,16 +23,29 @@ namespace DChild.Configurations.Visuals
         }
 
         public float GetGammaAlpha() { return liftGammaGain.gamma.value.w; }
+        private void OnValueChange(object sender, EventActionArgs eventArgs)
+        {
+            SetGammaAlpha(GameSystem.settings.configuration.visualConfiguration.brightness);
+        }
+
         private void Awake()
         {
-            instance = this;
             renderingVolume = GetComponent<Volume>();
             if (!renderingVolume.profile.TryGet(out liftGammaGain)) throw new System.NullReferenceException(nameof(liftGammaGain));
         }
 
         private void OnEnable()
         {
-            SetGammaAlpha(GameSystem.settings.configuration.visualConfiguration.brightness);
+            var settings = GameSystem.settings;
+            settings.visual.SceneVisualsChange += OnValueChange;
+            SetGammaAlpha(settings.configuration.visualConfiguration.brightness);
+        }
+
+
+        private void OnDisable()
+        {
+            var settings = GameSystem.settings;
+            settings.visual.SceneVisualsChange -= OnValueChange;
         }
     }
 }
