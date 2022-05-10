@@ -83,8 +83,12 @@ namespace DChild.Menu.Bestiary
         private string m_idleAnimation;
         [SerializeField, TextArea, ToggleGroup("m_enableEdit")]
         private string m_description;
+        [SerializeField, TextArea, ToggleGroup("m_enableEdit")]
+        private string m_storeNotes;
+        [SerializeField, TextArea, ToggleGroup("m_enableEdit")]
+        private string m_hunterNotes;
         //[SerializeField, ValueDropdown("GetLocations", IsUniqueList = true), ToggleGroup("m_enableEdit")]
-        [SerializeField,DrawWithUnity]
+        [SerializeField, DrawWithUnity]
         private Location[] m_locatedIn;
 
         public int id { get => m_ID; }
@@ -94,6 +98,8 @@ namespace DChild.Menu.Bestiary
         public Sprite infoImage { get => m_infoImage; }
         public Sprite sketchImage { get => m_sketchImage; }
         public string description { get => m_description; }
+        public string storeNotes { get => m_storeNotes; }
+        public string hunterNotes { get => m_hunterNotes; }
         public Location[] locatedIn { get => m_locatedIn; }
         public void SetupSpine(SkeletonAnimation animation)
         {
