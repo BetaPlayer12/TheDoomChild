@@ -198,20 +198,17 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
                 //{
                 //}
-                if (!TargetBlocked() && !m_enablePatience)
-                {
 
-                    if (!m_isDetecting)
-                    {
-                        m_isDetecting = true;
-                        m_stateHandle.SetState(State.Detect);
-                    }
-                    m_currentPatience = 0;
-                    //m_randomIdleRoutine = null;
-                    //var patienceRoutine = PatienceRoutine();
-                    //StopCoroutine(patienceRoutine);
-                    m_enablePatience = false;
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
                 }
+                m_currentPatience = 0;
+                //m_randomIdleRoutine = null;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
+                m_enablePatience = false;
             }
             else
             {
@@ -226,16 +223,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_isDetecting = true;
             m_stateHandle.OverrideState(State.Detect);
             m_chargerAI?.OverrideState(ImpaledChargerAI.State.Detect);
-        }
-
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)

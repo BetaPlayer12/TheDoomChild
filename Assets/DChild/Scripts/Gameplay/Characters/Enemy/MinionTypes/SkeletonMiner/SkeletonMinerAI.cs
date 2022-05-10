@@ -196,41 +196,31 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
                 //{
                 //}
-                if (/*!TargetBlocked() && */!m_enablePatience)
-                {
-                    m_selfCollider.enabled = false;
+                //if (/*!TargetBlocked() && */!m_enablePatience)
+                //{
+                //}
+                m_selfCollider.enabled = false;
 
-                    if (!m_isDetecting)
+                if (!m_isDetecting)
+                {
+                    if (m_miningRoutine != null)
                     {
-                        if (m_miningRoutine != null)
-                        {
-                            StopCoroutine(m_miningRoutine);
-                            m_miningRoutine = null;
-                        }
-                        m_isDetecting = true;
-                        m_stateHandle.OverrideState(State.Detect);
-                        Debug.Log("Detected Player");
+                        StopCoroutine(m_miningRoutine);
+                        m_miningRoutine = null;
                     }
-                    m_currentPatience = 0;
-                    //m_randomIdleRoutine = null;
-                    //var patienceRoutine = PatienceRoutine();
-                    //StopCoroutine(patienceRoutine);
-                    m_enablePatience = false;
+                    m_isDetecting = true;
+                    m_stateHandle.OverrideState(State.Detect);
                 }
+                m_currentPatience = 0;
+                //m_randomIdleRoutine = null;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
+                m_enablePatience = false;
             }
             else
             {
                 m_enablePatience = true;
             }
-        }
-
-        private bool TargetBlocked()
-        {
-            RaycastHit2D hit = Physics2D.Raycast((Vector2)m_character.centerMass.position, m_targetInfo.position - (Vector2)m_character.centerMass.position, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay((Vector2)m_character.centerMass.position, m_targetInfo.position - (Vector2)m_character.centerMass.position);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
