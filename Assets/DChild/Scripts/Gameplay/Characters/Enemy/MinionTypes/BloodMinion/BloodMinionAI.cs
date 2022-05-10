@@ -304,7 +304,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.imerseAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.imerseAnimation);
             m_hitbox.gameObject.SetActive(false);
-            m_slashFX.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().flip = transform.position.x > m_targetInfo.position.x ? Vector3.zero : Vector3.right;
+            m_slashFX.GetComponent<ParticleSystemRenderer>().flip = transform.position.x < m_targetInfo.position.x ? Vector3.zero : Vector3.right;
             m_slashFX.Play();
             m_animation.SetAnimation(0, m_info.attack1.animation, false);
             yield return new WaitForSeconds(.75f);

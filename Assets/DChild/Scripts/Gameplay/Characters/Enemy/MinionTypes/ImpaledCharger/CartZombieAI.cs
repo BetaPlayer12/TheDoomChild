@@ -147,11 +147,11 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_breakSensor;
 
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_dustStartFX;
+        private ParticleFX m_dustStartFX;
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_dustFrontFX;
+        private ParticleFX m_dustFrontFX;
         [SerializeField, TabGroup("FX")]
-        private ParticleSystem m_dustBackFX;
+        private ParticleFX m_dustBackFX;
 
         [SerializeField, TabGroup("Pusher")]
         private ImpaledChargerAI m_chargerAI;
