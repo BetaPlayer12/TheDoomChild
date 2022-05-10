@@ -229,21 +229,18 @@ namespace DChild.Gameplay.Characters.Enemies
             if (damageable != null)
             {
                 base.SetTarget(damageable);
-                if (!TargetBlocked() && !m_enablePatience)
-                {
-                    m_selfCollider.enabled = false;
+                m_selfCollider.enabled = false;
 
-                    if (!m_isDetecting)
-                    {
-                        m_isDetecting = true;
-                        m_stateHandle.SetState(State.Detect);
-                    }
-                    m_currentPatience = 0;
-                    //m_randomIdleRoutine = null;
-                    //var patienceRoutine = PatienceRoutine();
-                    //StopCoroutine(patienceRoutine);
-                    m_enablePatience = false;
+                if (!m_isDetecting)
+                {
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
                 }
+                m_currentPatience = 0;
+                //m_randomIdleRoutine = null;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
+                m_enablePatience = false;
             }
             else
             {
