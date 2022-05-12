@@ -184,46 +184,33 @@ namespace DChild.Gameplay.Characters.Enemies
                 //    && m_stateHandle.currentState != State.WaitBehaviourEnd)
                 //{
                 //}
-                if (/*!TargetBlocked() &&*/ !m_enablePatience)
-                {
-                    m_selfCollider.enabled = false;
+                m_selfCollider.enabled = false;
 
-                    if (!m_isDetecting)
+                if (!m_isDetecting)
+                {
+                    if (m_randomIdleRoutine != null)
                     {
-                        if (m_randomIdleRoutine != null)
-                        {
-                            StopCoroutine(m_randomIdleRoutine);
-                            m_randomIdleRoutine = null;
-                        }
-                        if (m_randomTurnRoutine != null)
-                        {
-                            StopCoroutine(m_randomTurnRoutine);
-                            m_randomTurnRoutine = null;
-                        }
-                        m_isDetecting = true;
-                        m_stateHandle.SetState(State.Detect);
+                        StopCoroutine(m_randomIdleRoutine);
+                        m_randomIdleRoutine = null;
                     }
-                    m_currentPatience = 0;
-                    //m_randomIdleRoutine = null;
-                    //var patienceRoutine = PatienceRoutine();
-                    //StopCoroutine(patienceRoutine);
-                    m_enablePatience = false;
+                    if (m_randomTurnRoutine != null)
+                    {
+                        StopCoroutine(m_randomTurnRoutine);
+                        m_randomTurnRoutine = null;
+                    }
+                    m_isDetecting = true;
+                    m_stateHandle.SetState(State.Detect);
                 }
+                m_currentPatience = 0;
+                //m_randomIdleRoutine = null;
+                //var patienceRoutine = PatienceRoutine();
+                //StopCoroutine(patienceRoutine);
+                m_enablePatience = false;
             }
             else
             {
                 m_enablePatience = true;
             }
-        }
-
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
