@@ -335,6 +335,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
+            if (IsFacingTarget())
+                CustomTurn();
+
             m_agent.Stop();
             m_bodyCollider.enabled = false;
             m_selfCollider.SetActive(false);
