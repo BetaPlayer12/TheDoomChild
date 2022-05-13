@@ -13,6 +13,7 @@ using UnityEngine;
 using DChild.Gameplay.Characters.Players.Behaviour;
 using PlayerNew;
 using DChild.Gameplay.SoulSkills;
+using DChild.Gameplay.Items;
 
 namespace DChild.Gameplay.Characters.Players
 {
@@ -36,6 +37,7 @@ namespace DChild.Gameplay.Characters.Players
         StatusEffectResistance statusResistance { get; }
         IMainController controller { get; }
         PlayerInventory inventory { get; }
+        ItemEffectHandle itemEffect { get; }
         LootPicker lootPicker { get; }
         StatusEffectReciever statusEffectReciever { get; }
         Character character { get; }
@@ -68,6 +70,8 @@ namespace DChild.Gameplay.Characters.Players
         private PlayerIntroControlsController m_introController;
         [SerializeField]
         private PlayerInventory m_inventory;
+        [SerializeField]
+        private ItemEffectHandle m_itemEffectHandle;
 
 
         [Title("Serialzables")]
@@ -110,6 +114,7 @@ namespace DChild.Gameplay.Characters.Players
         public PlayerWeapon weapon => m_weapon;
         public ExtendedAttackResistance attackResistance => m_attackResistance;
         public PlayerInventory inventory => m_inventory;
+        public ItemEffectHandle itemEffect => m_itemEffectHandle;
         public IMainController controller => m_controller;
         public PlayerIntroControlsController introController => m_introController;
         public LootPicker lootPicker => m_lootPicker;
@@ -119,6 +124,7 @@ namespace DChild.Gameplay.Characters.Players
         public StatusEffectResistance statusResistance => m_statusResistance;
 
         public Character character => m_controlledCharacter;
+
 
         public PlayerCharacterData SaveData()
         {

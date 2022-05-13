@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using PixelCrushers.DialogueSystem;
 using Holysoft.Event;
+using System.Collections;
 
 namespace DChild.Gameplay
 {
@@ -26,7 +27,7 @@ namespace DChild.Gameplay
             ISaveData ISaveData.ProduceCopy() => new SaveData(m_isUsed);
         }
 
-        [SerializeField,FoldoutGroup("Has Skill Indicator")]
+        [SerializeField, FoldoutGroup("Has Skill Indicator")]
         private GameObject m_platformGlow;
         [SerializeField, FoldoutGroup("Has Skill Indicator")]
         private GameObject m_leftStatueGlow;
@@ -43,7 +44,7 @@ namespace DChild.Gameplay
         private Collider2D m_collider;
         [SerializeField, OnValueChanged("OnIsUsedChanged")]
         private bool m_isUsed;
-        [SerializeField,LuaScriptWizard(true)]
+        [SerializeField, LuaScriptWizard(true)]
         private string m_onInteractionCommand;
         [SerializeField]
         SkillShrineVisualHandle m_shrineVisualHandle;
@@ -82,7 +83,7 @@ namespace DChild.Gameplay
                 if (character)
                 {
                     character.GetComponent<PlayerControlledObject>().owner.skills.SetSkillStatus(m_toUnlock, true);
-                    
+
                 }
 
                 if (m_cinematic == null)
@@ -93,7 +94,7 @@ namespace DChild.Gameplay
                 else
                 {
                     m_cinematic.Play();
-                }
+                }   
 
                 m_isUsed = true;
                 m_collider.enabled = false;
@@ -103,9 +104,18 @@ namespace DChild.Gameplay
 
         private void OnCutsceneDone(PlayableDirector obj)
         {
+            StartCoroutine(OnCutsceneEnded());
+        }
+
+        private IEnumerator OnCutsceneEnded()
+        {
+         //makes sure cutscene has ended before calling notifyskill  
+            yield return new WaitForSeconds(1);
             NotifySkill(m_toUnlock);
             SetGlows(false);
             m_shrineVisualHandle.SkillShrineState(false);
+
+
         }
 
         private void NotifySkill(PrimarySkill skill)

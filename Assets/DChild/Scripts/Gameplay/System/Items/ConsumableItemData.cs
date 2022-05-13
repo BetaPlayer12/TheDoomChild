@@ -14,4 +14,9 @@ namespace DChild.Gameplay.Items
         public abstract bool CanBeUse(IPlayer player);
         public abstract void Use(IPlayer player);
     }
+
+    public interface IItemDurationEffectInfo
+    {
+        DurationItemHandle GenerateEffectHandle(IPlayer reference);
+    }
 }

@@ -51,6 +51,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, MinValue(0)]
             private float m_attackCD;
             public float attackCD => m_attackCD;
+            [SerializeField, MinValue(0)]
+            private float m_attackAllowanceRange;
+            public float attackAllowanceRange => m_attackAllowanceRange;
             //
             [SerializeField, MinValue(0)]
             private float m_patience;
@@ -160,6 +163,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RandomAttackDecider<Attack> m_attackDecider;
         private Attack m_currentAttack;
         private float m_currentAttackRange;
+        private float m_chaseAttackRange;
+        private bool m_isInAttackrange;
+        private Vector2 m_currentTargetPos;
 
         private bool[] m_attackUsed;
         private List<Attack> m_attackCache;
@@ -213,16 +219,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_enablePatience = true;
                 //StartCoroutine(PatienceRoutine());
             }
-        }
-
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_character.centerMass.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
@@ -384,7 +380,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private IEnumerator RunAttackRoutine()
         {
             //m_animation.EnableRootMotion(true, false);
-            var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
+            var toTarget = m_currentTargetPos - (Vector2)m_character.centerMass.position;
             m_selfCollider.enabled = false;
             m_animation.SetAnimation(0, m_info.runAttack.animation, false);
             //yield return new WaitForAnimationComplete(m_animation.animationState, m_info.runAttack.animation);
@@ -564,13 +560,29 @@ namespace DChild.Gameplay.Characters.Enemies
                     break;
 
                 case State.Attacking:
-                    if (IsFacingTarget())
+                    if (!m_isInAttackrange)
                     {
-                        var toTarget = m_targetInfo.position - (Vector2)m_character.centerMass.position;
-                        if (IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting)
+                        m_currentTargetPos = m_targetInfo.position;
+                        if (IsTargetInRange(m_chaseAttackRange))
+                        {
+                            m_currentTargetPos = new Vector2(m_targetInfo.position.x, GroundPosition().y);
+                            m_isInAttackrange = true;
+                        }
+                    }
+                    else
+                    {
+                        m_currentTargetPos = new Vector2(m_currentTargetPos.x, GroundPosition().y);
+                    }
+                    var toTarget = m_currentTargetPos - (Vector2)m_character.centerMass.position;
+
+                    if (IsFacing(m_currentTargetPos))
+                    {
+
+                        if (m_isInAttackrange && Vector2.Distance(m_currentTargetPos, m_character.centerMass.position) <= m_currentAttackRange && !m_wallSensor.allRaysDetecting)
                         {
                             m_stateHandle.Wait(State.Cooldown);
                             m_selfCollider.enabled = true;
+                            m_isInAttackrange = false;
                             m_animation.SetAnimation(0, m_info.idleAnimation, true);
 
                             m_flinchHandle.m_enableMixFlinch = false;
@@ -604,12 +616,9 @@ namespace DChild.Gameplay.Characters.Enemies
                         }
                         else
                         {
-                            //m_animation.EnableRootMotion(false, m_groundSensor.isDetecting ? true : false);
-
                             if (!m_wallSensor.isDetecting && m_groundSensor.isDetecting && m_edgeSensor.isDetecting 
-                                && ((/*Mathf.Abs(m_targetInfo.position.y - transform.position.y) < 50f &&*/ !TargetBlocked())))
+                                && (!TargetBlocked()))
                             {
-                                //var distance = Vector2.Distance(m_targetInfo.position, transform.position);
                                 m_animation.EnableRootMotion(false, false);
                                 m_selfCollider.enabled = false;
                                 m_animation.SetAnimation(0, m_info.move.animation, true);
@@ -690,6 +699,7 @@ namespace DChild.Gameplay.Characters.Enemies
                         //m_attackDecider.DecideOnAttack();
                         m_attackDecider.hasDecidedOnAttack = false;
                         ChooseAttack();
+                        m_chaseAttackRange = m_currentAttackRange * m_info.attackAllowanceRange;
                         if (m_attackDecider.hasDecidedOnAttack /*&& IsTargetInRange(m_currentAttackRange) && !m_wallSensor.allRaysDetecting*/)
                         {
                             m_movement.Stop();

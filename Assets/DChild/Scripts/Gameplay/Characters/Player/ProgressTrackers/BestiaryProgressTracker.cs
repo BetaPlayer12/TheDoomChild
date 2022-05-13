@@ -35,9 +35,9 @@ namespace DChild.Gameplay.Characters.Players
 
         private void OnTargetDamaged(object sender, CombatConclusionEventArgs eventArgs)
         {
-            if (eventArgs.target.instance.isAlive == false && eventArgs.target.hasID)
+            if (eventArgs.target.instance.isAlive == false && eventArgs.target.hasBestiaryData)
             {
-                RecordCreatureToBestiary(eventArgs.target.characterID);
+                RecordCreatureToBestiary(eventArgs.target.bestiaryID);
             }
         }
 
