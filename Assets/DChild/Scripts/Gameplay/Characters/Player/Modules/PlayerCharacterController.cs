@@ -319,7 +319,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             if (m_state.isDead)
                 return;
-            
+
             if (m_introController.IsUsingIntroControls())
             {
                 m_introController.HandleIntroControlsFixedUpdate();
@@ -440,6 +440,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             if (m_state.isCombatReady)
             {
                 m_combatReadiness?.HandleDuration();
+            }
+
+            if (m_slashCombo.CanSlashCombo() == false)
+            {
+                m_slashCombo.HandleSlashComboTimer();
             }
 
             if (m_state.canAttack == true)
@@ -756,25 +761,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         private void HandleGroundBehaviour()
         {
-            if (m_state.isDoingCombo == true)
-            {
-                if (m_state.canAttack)
-                {
-                    if (m_input.slashPressed)
-                    {
-                        PrepareForGroundAttack();
-                        m_slashCombo.Execute();
-                        return;
-                    }
-                }
-                //if (m_state.isAttacking == false)
-                //{
-                //    MoveCharacter(m_state.isGrabbing);
-                //}
-
-                return;
-            }
-
             if (m_state.isDashing == false && m_state.canDash == false)
             {
                 m_dash?.HandleCooldown();
@@ -1033,9 +1019,12 @@ namespace DChild.Gameplay.Characters.Players.Modules
                         }
                         else
                         {
-                            PrepareForGroundAttack();
-                            m_slashCombo.Execute();
-                            return;
+                            if (m_slashCombo.CanSlashCombo() == true)
+                            {
+                                PrepareForGroundAttack();
+                                m_slashCombo.Execute();
+                                return;
+                            }
                         }
                     }
                     else if (m_input.whipPressed)

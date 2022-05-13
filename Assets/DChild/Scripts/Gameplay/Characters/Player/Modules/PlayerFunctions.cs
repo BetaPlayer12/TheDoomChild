@@ -101,6 +101,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void ComboEnd()
         {
+            Debug.Log("Combo End");
             m_slashCombo?.ComboEnd();
         }
 
@@ -188,5 +189,17 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_shadowMorph = character.GetComponentInChildren<ShadowMorph>();
             m_shadowGaugeRegen = character.GetComponentInChildren<ShadowGaugeRegen>();
         }
+
+        #region TESTING
+        public void StartSlashCombo()
+        {
+
+        }
+
+        public void EndSlashCombo()
+        {
+
+        }
+        #endregion
     }
 }
