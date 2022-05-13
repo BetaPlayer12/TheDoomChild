@@ -146,7 +146,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_bodyCollider.enabled = false;
             m_explodeBB.enabled = true;
-            yield return new WaitForSeconds(.2f);
+            yield return new WaitForSeconds(.25f);
             m_explodeBB.enabled = false;
             yield return null;
         }
