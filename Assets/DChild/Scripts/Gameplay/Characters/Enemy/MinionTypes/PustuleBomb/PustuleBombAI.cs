@@ -35,6 +35,13 @@ namespace DChild.Gameplay.Characters.Enemies
             private float m_floatTwitchInterval;
             public float floatTwitchInterval => m_floatTwitchInterval;
 
+            [SerializeField, BoxGroup("Attack")]
+            private float m_explodeTimer;
+            public float explodeTimer => m_explodeTimer;
+            [SerializeField, BoxGroup("Attack")]
+            private float m_pushForce;
+            public float pushForce => m_pushForce;
+
             [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
@@ -53,41 +60,29 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private enum State
-        {
-            Floating,
-            WaitBehaviourEnd,
-        }
-
         [SerializeField, TabGroup("Reference")]
         private SpineEventListener m_spineEventListener;
-        [SerializeField, TabGroup("Reference")]
-        private Rigidbody2D m_rigidbody2D;
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
         private Health m_health;
         [SerializeField, TabGroup("Reference")]
-        private GameObject m_selfCollider;
-        [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
-        private Collider2D m_legCollider;
-        [SerializeField, TabGroup("Modules")]
-        private TransformTurnHandle m_turnHandle;
-        [SerializeField, TabGroup("Modules")]
-        private DeathHandle m_deathHandle;
+        private Transform m_pushDirection;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
-
-        [ShowInInspector]
-        private StateHandle<State> m_stateHandle;
-        private State m_turnState;
-
-        private Vector2 m_lastTargetPos;
-        private Vector2 m_startPos;
+        [SerializeField, TabGroup("HurtBox")]
+        private Collider2D m_explodeBB;
+        [SerializeField, TabGroup("Chain")]
+        private GameObject m_chain;
+        [SerializeField, TabGroup("Chain")]
+        private List<Rigidbody2D> m_chainRigidbodies;
+        
         private bool m_willTwitch;
         private float m_currentTwitchTimer;
+
+        private Coroutine m_floatRoutine;
 
         private void CustomTurn()
         {
@@ -103,27 +98,84 @@ namespace DChild.Gameplay.Characters.Enemies
             }
         }
 
-        private void OnTurnDone(object sender, FacingEventArgs eventArgs)
-        {
-            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-            m_stateHandle.ApplyQueuedState();
-        }
-
         private bool IsInRange(Vector2 position, float distance) => Vector2.Distance(position, m_character.centerMass.position) <= distance;
 
         protected override void OnDestroyed(object sender, EventActionArgs eventArgs)
         {
-            StopAllCoroutines();
+            //if (m_targetInfo.isValid)
+            //{
+            //}
+            //else
+            //{
+            //    m_health.SetHealthPercentage(1f);
+            //    m_hitbox.Enable();
+            //}
+            if (m_floatRoutine != null)
+            {
+                StopCoroutine(m_floatRoutine);
+                m_floatRoutine = null;
+            }
 
-            m_bodyCollider.enabled = false;
-            m_selfCollider.SetActive(false);
-            m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+            m_chain.SetActive(false);
+            for (int i = 0; i < m_chainRigidbodies.Count; i++)
+            {
+                m_chainRigidbodies[i].velocity = Vector2.zero;
+            }
+            //m_character.physics.SetVelocity(Vector2.zero);
             m_animation.DisableRootMotion();
-            var rb2d = GetComponent<Rigidbody2D>();
-            rb2d.isKinematic = false;
-            m_stateHandle.OverrideState(State.WaitBehaviourEnd);
             m_hitbox.Disable();
             m_animation.SetEmptyAnimation(0, 0);
+            StartCoroutine(ExplodeRoutine());
+        }
+
+        private IEnumerator ExplodeRoutine()
+        {
+            if (m_targetInfo.isValid)
+            {
+                Vector3 v_diff = (m_targetInfo.position - (Vector2)m_character.centerMass.position);
+                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                m_pushDirection.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
+                m_character.physics.AddForce(-m_pushDirection.right * m_info.pushForce, ForceMode2D.Force);
+                m_animation.SetAnimation(0, m_info.flinchAnimation, true);
+                yield return new WaitForSeconds(m_info.explodeTimer);
+            }
+            m_animation.SetAnimation(0, m_info.deathAnimation, false);
+            yield return new WaitForSeconds(1f);
+            m_character.physics.SetVelocity(Vector2.zero);
+            enabled = false;
+            m_hitbox.Disable();
+            m_bodyCollider.enabled = false;
+            m_explodeBB.enabled = true;
+            yield return new WaitForSeconds(.25f);
+            m_explodeBB.enabled = false;
+            yield return null;
+        }
+
+        private IEnumerator FloatingRoutine()
+        {
+            while (true)
+            {
+                if (m_willTwitch
+                    /*Mathf.Abs(m_character.physics.velocity.x) < m_info.minFloatVelocity.x && Mathf.Abs(m_character.physics.velocity.y) < m_info.minFloatVelocity.y*/)
+                {
+                    m_willTwitch = false;
+                    m_character.physics.SetVelocity(Vector2.zero);
+                    var forceVelocity = new Vector2(UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x), UnityEngine.Random.Range(-m_info.forceVelocity.y, m_info.forceVelocity.y));
+                    m_character.physics.AddForce(forceVelocity, ForceMode2D.Impulse);
+                    this.transform.Rotate(new Vector3(0, 0, 1f), UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x));
+                }
+
+                if (m_currentTwitchTimer < m_info.floatTwitchInterval)
+                {
+                    m_currentTwitchTimer += Time.deltaTime;
+                }
+                else
+                {
+                    m_willTwitch = true;
+                    m_currentTwitchTimer = 0;
+                }
+                yield return null;
+            }
         }
 
         protected override void Start()
@@ -132,64 +184,27 @@ namespace DChild.Gameplay.Characters.Enemies
 
             m_willTwitch = true;
             m_animation.DisableRootMotion();
-            m_bodyCollider.enabled = false;
-            m_startPos = transform.position;
+            //m_knockbackFlinchHandle.ApplyKnockbackForce(m_info.pushForce);
 
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
+            m_floatRoutine = StartCoroutine(FloatingRoutine());
         }
 
         protected override void Awake()
         {
-            Debug.Log(m_info);
+            //Debug.Log(m_info);
             base.Awake();
-            //m_flinchHandle.FlinchStart += OnFlinchStart;
-            //m_flinchHandle.FlinchEnd += OnFlinchEnd;
-            m_turnHandle.TurnDone += OnTurnDone;
-            m_stateHandle = new StateHandle<State>(State.Floating, State.WaitBehaviourEnd);
-        }
-
-        private void Update()
-        {
-
-            switch (m_stateHandle.currentState)
-            {
-                case State.Floating:
-                    if (m_willTwitch
-                        /*Mathf.Abs(m_character.physics.velocity.x) < m_info.minFloatVelocity.x && Mathf.Abs(m_character.physics.velocity.y) < m_info.minFloatVelocity.y*/)
-                    {
-                        m_willTwitch = false;
-                        m_character.physics.SetVelocity(Vector2.zero);
-                        var forceVelocity = new Vector2(UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x), UnityEngine.Random.Range(-m_info.forceVelocity.y, m_info.forceVelocity.y));
-                        m_character.physics.AddForce(forceVelocity, ForceMode2D.Impulse);
-                        this.transform.Rotate(new Vector3(0, 0, 1f), UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x));
-                    }
-
-                    if (m_currentTwitchTimer < m_info.floatTwitchInterval)
-                    {
-                        m_currentTwitchTimer += Time.deltaTime;
-                    }
-                    else
-                    {
-                        m_willTwitch = true;
-                        m_currentTwitchTimer = 0;
-                    }
-                    break;
-
-                case State.WaitBehaviourEnd:
-                    return;
-            }
+            //m_hitbox.SetInvulnerability(Invulnerability.Level_2);
         }
 
         protected override void OnTargetDisappeared()
         {
-            m_stateHandle.OverrideState(State.Floating);
             m_hitbox.gameObject.SetActive(true);
         }
 
         public void ResetAI()
         {
             m_targetInfo.Set(null, null);
-            m_stateHandle.OverrideState(State.Floating);
             enabled = true;
         }
 
