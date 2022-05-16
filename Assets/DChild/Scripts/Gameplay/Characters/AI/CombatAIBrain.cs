@@ -80,8 +80,6 @@ namespace DChild.Gameplay.Characters.AI
             m_targetInfo.Set(damageable, m_target);
         }
 
-
-
         public virtual void Enable()
         {
             enabled = true;
@@ -152,6 +150,15 @@ namespace DChild.Gameplay.Characters.AI
                 m_aggroBoundary.gameObject.SetActive(true);
                 m_currentRestrictions &= ~Restriction.IgnoreTarget;
             }
+        }
+
+        protected bool TargetBlocked()
+        {
+            RaycastHit2D hit = Physics2D.Raycast((Vector2)m_character.centerMass.position, m_targetInfo.position - (Vector2)m_character.centerMass.position, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
+            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
+            Debug.DrawRay((Vector2)m_character.centerMass.position, m_targetInfo.position - (Vector2)m_character.centerMass.position);
+            //Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
+            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
 

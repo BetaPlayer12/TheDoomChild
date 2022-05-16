@@ -118,9 +118,13 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Hitbox m_hitbox;
         [SerializeField, TabGroup("Reference")]
+        private Health m_health;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_selfCollider;
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
+        [SerializeField, TabGroup("Reference")]
+        private Collider2D m_legCollider;
         [SerializeField, TabGroup("Modules")]
         private TransformTurnHandle m_turnHandle;
         [SerializeField, TabGroup("Modules")]
@@ -141,6 +145,9 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_roofSensor;
         [SerializeField, TabGroup("Sensors")]
         private RaySensor m_selfSensor;
+
+        [SerializeField, TabGroup("Magister")]
+        private Transform m_magister;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -198,16 +205,6 @@ namespace DChild.Gameplay.Characters.Enemies
                 //var patienceRoutine = PatienceRoutine();
                 //StopCoroutine(patienceRoutine);
             }
-        }
-
-        private bool TargetBlocked()
-        {
-            Vector2 wat = m_selfSensor.transform.position;
-            RaycastHit2D hit = Physics2D.Raycast(/*m_projectilePoint.position*/wat, m_targetInfo.position - wat, 1000, LayerMask.GetMask("Player") + DChildUtility.GetEnvironmentMask());
-            var eh = hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
-            Debug.DrawRay(wat, m_targetInfo.position - wat);
-            Debug.Log("Shot is " + eh + " by " + LayerMask.LayerToName(hit.transform.gameObject.layer));
-            return hit.transform.gameObject.layer == LayerMask.NameToLayer("Player") ? false : true;
         }
 
         public void SetAI(AITargetInfo targetInfo)
@@ -338,6 +335,9 @@ namespace DChild.Gameplay.Characters.Enemies
                 StopCoroutine(m_executeMoveCoroutine);
                 m_executeMoveCoroutine = null;
             }
+            if (IsFacingTarget())
+                CustomTurn();
+
             m_agent.Stop();
             m_bodyCollider.enabled = false;
             m_selfCollider.SetActive(false);
@@ -358,13 +358,31 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.deathStartAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathStartAnimation);
             m_character.physics.simulateGravity = true;
+            m_legCollider.enabled = true;
             m_animation.SetAnimation(0, m_info.deathLoopAnimation, true);
             yield return new WaitUntil(() => m_groundSensor.isDetecting);
             m_animation.SetAnimation(0, m_info.deathEndAnimation, false);
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.deathEndAnimation);
             enabled = false;
             this.gameObject.SetActive(false);
+            this.transform.SetParent(m_magister);
             yield return null;
+        }
+
+        public void SummonTome(AITargetInfo target)
+        {
+            m_targetInfo = target;
+            transform.position = new Vector2(m_targetInfo.position.x, m_targetInfo.position.y + 10f);
+            m_character.physics.simulateGravity = false;
+            m_legCollider.enabled = false;
+            m_hitbox.Enable();
+            m_flinchHandle.gameObject.SetActive(true);
+            m_health.SetHealthPercentage(1f);
+            enabled = true;
+            this.gameObject.SetActive(true);
+            this.transform.SetParent(null);
+            Awake();
+            m_stateHandle.OverrideState(State.ReevaluateSituation);
         }
 
         #region Attack
@@ -700,7 +718,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_flinchHandle.FlinchStart += OnFlinchStart;
             m_flinchHandle.FlinchEnd += OnFlinchEnd;
             m_turnHandle.TurnDone += OnTurnDone;
-            m_deathHandle.SetAnimation(m_info.deathStartAnimation);
+            m_deathHandle?.SetAnimation(m_info.deathStartAnimation);
             m_projectileLauncher = new ProjectileLauncher(m_info.projectile.projectileInfo, transform);
             m_stateHandle = new StateHandle<State>(State.Patrol, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();

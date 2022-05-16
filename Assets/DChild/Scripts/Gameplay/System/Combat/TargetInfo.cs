@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.Players;
 using DChild.Gameplay.Combat.StatusAilment;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.VFX;
+using DChild.Menu.Bestiary;
 using UnityEngine;
 
 namespace DChild.Gameplay.Combat
@@ -17,8 +18,8 @@ namespace DChild.Gameplay.Combat
 
 
         public bool isCharacter { get; private set; }
-        public bool hasID { get; private set; }
-        public int characterID { get; private set; }
+        public bool hasBestiaryData { get; private set; }
+        public int bestiaryID { get; private set; }
         public HorizontalDirection facing { get; private set; }
         public IFlinch flinchHandler { get; private set; }
         public bool isPlayer { get; private set; }
@@ -37,10 +38,17 @@ namespace DChild.Gameplay.Combat
             {
                 facing = character.facing;
                 statusEffectReciever = character.GetComponent<StatusEffectReciever>();
-                isPlayer = GameplaySystem.playerManager.IsPartOfPlayer(character.gameObject,out m_owner);
-                hasID = character.hasID;
-                characterID = character.ID;
+                isPlayer = GameplaySystem.playerManager.IsPartOfPlayer(character.gameObject, out m_owner);
             }
+
+            var bestiaryEntity = character.GetComponent< BestiaryEntity>();
+            hasBestiaryData = bestiaryEntity;
+            if (hasBestiaryData)
+            {
+                bestiaryID = bestiaryEntity.bestiaryID;
+            }
+
+
             this.flinchHandler = flinchHandler;
             isBreakableObject = false;
             breakableObject = null;
@@ -55,11 +63,18 @@ namespace DChild.Gameplay.Combat
                 this.breakableObject = breakableObject;
             }
 
+            var bestiaryEntity = breakableObject.GetComponent<BestiaryEntity>();
+            hasBestiaryData = bestiaryEntity;
+            if (hasBestiaryData)
+            {
+                bestiaryID = bestiaryEntity.bestiaryID;
+            }
+
             isCharacter = false;
             isPlayer = false;
             statusEffectReciever = null;
             m_owner = null;
-            hasID = false;
+            hasBestiaryData = false;
             flinchHandler = null;
         }
 
@@ -72,9 +87,16 @@ namespace DChild.Gameplay.Combat
                 facing = character.facing;
                 statusEffectReciever = character.GetComponent<StatusEffectReciever>();
                 isPlayer = GameplaySystem.playerManager.IsPartOfPlayer(character.gameObject, out m_owner);
-                hasID = character.hasID;
-                characterID = character.ID;
+                hasBestiaryData = character.hasID;
             }
+
+            var bestiaryEntity = character.GetComponent<BestiaryEntity>();
+            hasBestiaryData = bestiaryEntity;
+            if (hasBestiaryData)
+            {
+                bestiaryID = bestiaryEntity.bestiaryID;
+            }
+
             this.flinchHandler = flinchHandler;
             isBreakableObject = false;
             breakableObject = null;
@@ -89,11 +111,18 @@ namespace DChild.Gameplay.Combat
                 this.breakableObject = breakableObject;
             }
 
+            var bestiaryEntity = breakableObject.GetComponent<BestiaryEntity>();
+            hasBestiaryData = bestiaryEntity;
+            if (hasBestiaryData)
+            {
+                bestiaryID = bestiaryEntity.bestiaryID;
+            }
+
             isCharacter = false;
             isPlayer = false;
             statusEffectReciever = null;
             m_owner = null;
-            hasID = false;
+            hasBestiaryData = false;
             flinchHandler = null;
 
         }

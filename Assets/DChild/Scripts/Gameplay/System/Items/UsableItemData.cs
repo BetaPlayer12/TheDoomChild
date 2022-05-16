@@ -36,7 +36,6 @@ namespace DChild.Gameplay.Items
                         return false;
                 }
             }
-
             return true;
         }
 
