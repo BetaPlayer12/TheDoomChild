@@ -29,9 +29,6 @@ namespace DChild.Gameplay.Characters.Enemies
             private Vector2 m_forceVelocity;
             public Vector2 forceVelocity => m_forceVelocity;
             [SerializeField, BoxGroup("Movement")]
-            private Vector2 m_minFloatVelocity;
-            public Vector2 minFloatVelocity => m_minFloatVelocity;
-            [SerializeField, BoxGroup("Movement")]
             private float m_floatTwitchInterval;
             public float floatTwitchInterval => m_floatTwitchInterval;
 
@@ -45,6 +42,9 @@ namespace DChild.Gameplay.Characters.Enemies
             [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
             private string m_idleAnimation;
             public string idleAnimation => m_idleAnimation;
+            [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
+            private string m_contactAnimation;
+            public string contactAnimation => m_contactAnimation;
             [SerializeField, BoxGroup("Animation"), ValueDropdown("GetAnimations")]
             private string m_deathAnimation;
             public string deathAnimation => m_deathAnimation;
@@ -69,6 +69,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_parentObject;
+        [SerializeField, TabGroup("Reference")]
         private Transform m_pushDirection;
         [SerializeField, TabGroup("Modules")]
         private FlinchHandler m_flinchHandle;
@@ -83,6 +85,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentTwitchTimer;
 
         private Coroutine m_floatRoutine;
+        private Coroutine m_rotateRoutine;
 
         private void CustomTurn()
         {
@@ -126,6 +129,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_animation.SetEmptyAnimation(0, 0);
             StartCoroutine(ExplodeRoutine());
+            m_rotateRoutine = StartCoroutine(RotateRoutine());
         }
 
         private IEnumerator ExplodeRoutine()
@@ -136,11 +140,13 @@ namespace DChild.Gameplay.Characters.Enemies
                 float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
                 m_pushDirection.rotation = Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg);
                 m_character.physics.AddForce(-m_pushDirection.right * m_info.pushForce, ForceMode2D.Force);
-                m_animation.SetAnimation(0, m_info.flinchAnimation, true);
+                //m_animation.SetAnimation(0, m_info.flinchAnimation, true);
+                m_animation.SetAnimation(0, m_info.contactAnimation, true);
                 yield return new WaitForSeconds(m_info.explodeTimer);
             }
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             yield return new WaitForSeconds(1f);
+            StopCoroutine(m_rotateRoutine);
             m_character.physics.SetVelocity(Vector2.zero);
             enabled = false;
             m_hitbox.Disable();
@@ -148,15 +154,25 @@ namespace DChild.Gameplay.Characters.Enemies
             m_explodeBB.enabled = true;
             yield return new WaitForSeconds(.25f);
             m_explodeBB.enabled = false;
+            m_parentObject.SetActive(false);
             yield return null;
+        }
+
+        private IEnumerator RotateRoutine()
+        {
+            var rotateDirection = UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x);
+            while (true)
+            {
+                this.transform.Rotate(new Vector3(0, 0, 1f), rotateDirection);
+                yield return null;
+            }
         }
 
         private IEnumerator FloatingRoutine()
         {
             while (true)
             {
-                if (m_willTwitch
-                    /*Mathf.Abs(m_character.physics.velocity.x) < m_info.minFloatVelocity.x && Mathf.Abs(m_character.physics.velocity.y) < m_info.minFloatVelocity.y*/)
+                if (m_willTwitch)
                 {
                     m_willTwitch = false;
                     m_character.physics.SetVelocity(Vector2.zero);
