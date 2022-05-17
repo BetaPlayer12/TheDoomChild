@@ -69,6 +69,8 @@ namespace DChild.Gameplay.Characters.Enemies
         [SerializeField, TabGroup("Reference")]
         private Collider2D m_bodyCollider;
         [SerializeField, TabGroup("Reference")]
+        private GameObject m_model;
+        [SerializeField, TabGroup("Reference")]
         private GameObject m_parentObject;
         [SerializeField, TabGroup("Reference")]
         private Transform m_pushDirection;
@@ -85,7 +87,7 @@ namespace DChild.Gameplay.Characters.Enemies
         private float m_currentTwitchTimer;
 
         private Coroutine m_floatRoutine;
-        private Coroutine m_rotateRoutine;
+        //private Coroutine m_rotateRoutine;
 
         private void CustomTurn()
         {
@@ -129,7 +131,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.Disable();
             m_animation.SetEmptyAnimation(0, 0);
             StartCoroutine(ExplodeRoutine());
-            m_rotateRoutine = StartCoroutine(RotateRoutine());
+            //m_rotateRoutine = StartCoroutine(RotateRoutine());
         }
 
         private IEnumerator ExplodeRoutine()
@@ -146,7 +148,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
             yield return new WaitForSeconds(1f);
-            StopCoroutine(m_rotateRoutine);
+            //StopCoroutine(m_rotateRoutine);
             m_character.physics.SetVelocity(Vector2.zero);
             enabled = false;
             m_hitbox.Disable();
@@ -158,15 +160,15 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return null;
         }
 
-        private IEnumerator RotateRoutine()
-        {
-            var rotateDirection = UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x);
-            while (true)
-            {
-                this.transform.Rotate(new Vector3(0, 0, 1f), rotateDirection);
-                yield return null;
-            }
-        }
+        //private IEnumerator RotateRoutine()
+        //{
+        //    var rotateDirection = UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x);
+        //    while (true)
+        //    {
+        //        m_model.transform.Rotate(new Vector3(0, 0, 1f), rotateDirection);
+        //        yield return null;
+        //    }
+        //}
 
         private IEnumerator FloatingRoutine()
         {
@@ -178,7 +180,7 @@ namespace DChild.Gameplay.Characters.Enemies
                     m_character.physics.SetVelocity(Vector2.zero);
                     var forceVelocity = new Vector2(UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x), UnityEngine.Random.Range(-m_info.forceVelocity.y, m_info.forceVelocity.y));
                     m_character.physics.AddForce(forceVelocity, ForceMode2D.Impulse);
-                    this.transform.Rotate(new Vector3(0, 0, 1f), UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x));
+                    m_model.transform.Rotate(new Vector3(0, 0, 1f), UnityEngine.Random.Range(-m_info.forceVelocity.x, m_info.forceVelocity.x));
                 }
 
                 if (m_currentTwitchTimer < m_info.floatTwitchInterval)

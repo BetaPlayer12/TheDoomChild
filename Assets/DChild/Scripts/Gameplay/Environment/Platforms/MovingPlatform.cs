@@ -120,6 +120,8 @@ namespace DChild.Gameplay.Environment
            //editore set up initialize
         }
 
+        public Vector2 GetWayPoint(int index) => m_waypoints[index];
+
         public void PingPongNextWaypoint(bool next)
         {
             m_pingPongWaypoint += next ? 1 : -1;
