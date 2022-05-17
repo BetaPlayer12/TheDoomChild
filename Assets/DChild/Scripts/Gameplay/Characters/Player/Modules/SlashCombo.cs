@@ -12,19 +12,23 @@ namespace DChild.Gameplay.Characters.Players.Modules
         [SerializeField]
         private int m_slashStateAmount;
         [SerializeField]
-        private float m_comboResetDelay;
+        private float m_slashComboCooldown;
         [SerializeField]
         private List<Info> m_slashComboInfo;
 
+        private bool m_canSlashCombo;
         private IPlayerModifer m_modifier;
         private int m_currentSlashState;
         private int m_currentVisualSlashState;
         private float m_comboAttackDelayTimer;
         private float m_comboResetDelayTimer;
+        private float m_slashComboCooldownTimer;
         private bool m_allowAttackDelayHandling;
         private int m_slashStateAnimationParameter;
 
         private Animator m_fxAnimator;
+
+        public bool CanSlashCombo() => m_canSlashCombo;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -36,7 +40,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_currentVisualSlashState = 0;
             m_comboAttackDelayTimer = -1;
             m_comboResetDelayTimer = -1;
+            m_slashComboCooldownTimer = m_slashComboCooldown;
             m_allowAttackDelayHandling = true;
+            m_canSlashCombo = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
         }
@@ -55,22 +61,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_state.waitForBehaviour = true;
             m_state.isAttacking = true;
             m_state.canAttack = false;
-            m_state.isDoingCombo = true;
-
             m_animator.SetBool(m_animationParameter, true);
             m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
-
             m_attacker.SetDamageModifier(m_slashComboInfo[m_currentSlashState].damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
-
-            m_comboResetDelayTimer = m_comboResetDelay;
-            m_comboAttackDelayTimer = m_slashComboInfo[m_currentSlashState].nextAttackDelay;
             m_currentVisualSlashState = m_currentSlashState;
             m_currentSlashState++;
-
-            if (m_currentSlashState >= m_slashStateAmount)
-            {
-                m_currentSlashState = 0;
-            }
         }
 
         public override void Cancel()
@@ -100,7 +95,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     m_fxAnimator.Play("SlashCombo2");
                     break;
                 case 2:
-                    //m_fxAnimator.Play("SlashCombo3");
+                    m_fxAnimator.Play("SlashCombo3");
                     break;
                 default:
                     break;
@@ -116,16 +111,30 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_slashComboInfo[i].ShowCollider(false);
             }
 
+            if (m_currentSlashState >= m_slashStateAmount)
+            {
+                m_currentSlashState = 0;
+                m_canSlashCombo = false;
+            }
+
             m_fxAnimator.Play("Buffer");
         }
 
         public void ComboEnd()
         {
-            m_state.isDoingCombo = false;
-            m_currentSlashState = 0;
-            m_currentVisualSlashState = 0;
-            m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
-            //Reset();
+            if (m_state.isAttacking == true)
+            {
+
+            }
+            else
+            {
+                base.AttackOver();
+
+                m_canSlashCombo = false;
+                m_currentSlashState = 0;
+                m_currentVisualSlashState = 0;
+                m_animator.SetInteger(m_slashStateAnimationParameter, m_currentSlashState);
+            }
         }
 
         public void AllowNextAttackDelay()
@@ -150,14 +159,28 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void HandleComboResetTimer()
         {
-            if(m_comboResetDelayTimer >= 0)
+            if (m_comboResetDelayTimer >= 0)
             {
                 m_comboResetDelayTimer -= GameplaySystem.time.deltaTime;
 
-                if(m_comboResetDelayTimer <= 0)
+                if (m_comboResetDelayTimer <= 0)
                 {
                     Reset();
                 }
+            }
+        }
+
+        public void HandleSlashComboTimer()
+        {
+            if (m_slashComboCooldownTimer > 0)
+            {
+                m_slashComboCooldownTimer -= GameplaySystem.time.deltaTime;
+                m_canSlashCombo = false;
+            }
+            else
+            {
+                m_slashComboCooldownTimer = m_slashComboCooldown;
+                m_canSlashCombo = true;
             }
         }
     }
