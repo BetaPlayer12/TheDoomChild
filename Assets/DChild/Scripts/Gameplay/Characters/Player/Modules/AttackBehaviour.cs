@@ -72,7 +72,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_animator.SetBool(m_animationParameter, false);
             m_state.isAttacking = false;
             m_state.waitForBehaviour = false;
-            m_state.canAttack = true;
         }
 
         public virtual void Initialize(ComplexCharacterInfo info)
