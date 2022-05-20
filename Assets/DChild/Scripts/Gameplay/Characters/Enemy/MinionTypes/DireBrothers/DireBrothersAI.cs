@@ -238,6 +238,16 @@ namespace DChild.Gameplay.Characters.Enemies
         private Transform m_slamBB;
         [SerializeField, TabGroup("Hurtbox")]
         private Transform m_chargeBB;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_chargePhaseFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_effectsHolderFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_shieldGoingUpFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_dashFX;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_dashEndFX;
 
         [ShowInInspector]
         private StateHandle<State> m_stateHandle;
@@ -300,6 +310,12 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(2, 0);
             StopAllCoroutines();
             m_phaseHandle.allowPhaseChange = false;
+            m_wallSensor.gameObject.SetActive(true);
+            m_chargePhaseFX.Stop();
+            m_effectsHolderFX.Stop();
+            m_shieldGoingUpFX.Stop();
+            m_dashFX.Stop();
+            m_dashEndFX.Stop();
             Debug.Log("DireBrothers Change State");
             if (m_currentAttackCoroutine != null)
             {
@@ -378,6 +394,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            m_wallSensor.gameObject.SetActive(true);
             m_stateHandle.ApplyQueuedState();
             m_phaseHandle.allowPhaseChange = true;
         }
@@ -476,6 +493,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HeavyGroundAttackRoutine()
         {
+            m_chargePhaseFX.Play();
+            m_effectsHolderFX.Play();
+            m_shieldGoingUpFX.Play();
             m_currentFlinchHandle.m_enableMixFlinch = false;
             m_animation.SetAnimation(0, m_info.heavyGroundStabAttack.animation, false);
             yield return new WaitForSeconds(1.5f); 
@@ -499,6 +519,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator HeavyGroundBashAttackRoutine()
         {
+            m_chargePhaseFX.Play();
+            m_effectsHolderFX.Play();
+            m_shieldGoingUpFX.Play();
             m_slamBB.gameObject.SetActive(true);
             m_chargeBB.gameObject.SetActive(false);
             m_currentFlinchHandle.m_enableMixFlinch = false;
@@ -524,6 +547,8 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private IEnumerator ShieldDashAttackRoutine(Vector2 targetPos)
         {
+            m_dashFX.gameObject.SetActive(true);
+            m_dashFX.Play();
             m_slamBB.gameObject.SetActive(false);
             m_chargeBB.gameObject.SetActive(true);
             //m_animation.EnableRootMotion(true, false);
@@ -536,6 +561,10 @@ namespace DChild.Gameplay.Characters.Enemies
                 m_movement.MoveTowards(Vector2.one * transform.localScale.x, m_info.sh_run.speed);
                 yield return null;
             }
+            m_dashFX.gameObject.SetActive(false);
+            m_dashFX.Stop();
+            m_dashEndFX.gameObject.SetActive(true);
+            m_dashEndFX.Play();
             m_currentShieldDashAttackDuration = 0;
             m_movement.Stop();
             m_animation.SetAnimation(0, m_info.sh_stopAnimation, false);
@@ -689,6 +718,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
+                    m_wallSensor.gameObject.SetActive(false);
+                    m_dashEndFX.Stop();
+                    m_dashEndFX.gameObject.SetActive(false);
                     m_turnHandle.Execute(m_currentTurnAnimation, m_currentIdleAnimation);
                     break;
 
