@@ -105,6 +105,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         public override void AttackOver()
         {
             base.AttackOver();
+            m_state.canAttack = true;
 
             for (int i = 0; i < m_slashComboInfo.Count; i++)
             {
@@ -128,7 +129,9 @@ namespace DChild.Gameplay.Characters.Players.Modules
             }
             else
             {
+                Debug.Log("Attack Over");
                 base.AttackOver();
+                m_state.canAttack = true;
 
                 m_canSlashCombo = false;
                 m_currentSlashState = 0;
