@@ -39,6 +39,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private float m_stackedConsumptionRate;
         private IPlayerModifer m_modifier;
         private SkeletonGhost m_skeletonGhost;
+        private string SHADOW_MORPH_ANIMATION_STATE = "Shadow Morph Start";
 
         public event EventAction<EventActionArgs> ExecuteModule;
         public event EventAction<EventActionArgs> End;
@@ -70,13 +71,15 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
         public void Execute()
         {
+            Debug.Log("Shadow Morph");
+            m_animator.Play(SHADOW_MORPH_ANIMATION_STATE);
             m_shadowMorphFX.Play();
             m_damageable.SetInvulnerability(Invulnerability.Level_2);
-            m_state.waitForBehaviour = true;
-            m_animator.SetBool(m_animationParameter, true);
+            //m_animator.SetBool(m_animationParameter, true);
             m_skeletonGhost.enabled = true;
             m_playerShadow.SetActive(false);
             ExecuteModule?.Invoke(this, EventActionArgs.Empty);
+            m_state.waitForBehaviour = true;
         }
 
         public void Cancel()

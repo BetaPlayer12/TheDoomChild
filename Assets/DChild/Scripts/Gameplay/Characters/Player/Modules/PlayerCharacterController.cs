@@ -420,20 +420,6 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 }
             }
 
-            if (m_state.isDoingCombo)
-            {
-                if (m_state.waitForBehaviour == false)
-                {
-                    if (m_state.canAttack == false)
-                    {
-                        m_slashCombo.HandleComboAttackDelay();
-                    }
-                }
-
-                HandleGroundBehaviour();
-                return;
-            }
-
             if (m_state.waitForBehaviour)
                 return;
 
