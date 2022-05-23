@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DChild.Gameplay.Overworld
 {
+
     public class OverworldGridDataConverter : MonoBehaviour
     {
         [SerializeField]
@@ -14,9 +15,7 @@ namespace DChild.Gameplay.Overworld
         [SerializeField]
         private Transform m_scope;
 
-#if UNITY_EDITOR
-        [Button]
-        private void Convert()
+        public (OverworldGridCalculator calculator, GameObject[] grids, GameObject[,] gridData) GetData()
         {
             var objectCount = m_scope.childCount;
             GameObject[] grids = new GameObject[objectCount];
@@ -35,18 +34,27 @@ namespace DChild.Gameplay.Overworld
             var maxYValue = Mathf.Max(gridsYPositions);
             var gridYCount = GetGridDimensionCount(minYValue, maxYValue) + 1;
 
+            var gridData = new GameObject[gridXCount, gridYCount];
             OverworldGridCalculator calculator = new OverworldGridCalculator(m_gridsize, minXValue, maxYValue);
 
-            var gridData = new GameObject[gridXCount, gridYCount];
-            for (int i = 0; i < grids.Length; i++)
+            return (calculator, grids, gridData);
+        }
+
+#if UNITY_EDITOR
+        [Button]
+        private void Convert()
+        {
+            var data = GetData();
+
+            for (int i = 0; i < data.grids.Length; i++)
             {
-                var grid = grids[i];
+                var grid = data.grids[i];
                 var gridPosition = grid.transform.position;
-                var index = calculator.GetGridIndex(gridPosition);
-                gridData[index.x, index.y] = PrefabUtility.GetCorrespondingObjectFromSource<GameObject>(grid);
+                var index = data.calculator.GetGridIndex(gridPosition);
+                data.gridData[index.x, index.y] = PrefabUtility.GetCorrespondingObjectFromSource<GameObject>(grid);
             }
 
-            m_data.SetData(gridData);
+            m_data.SetData(data.calculator, data.gridData);
         }
 
         private int GetGridDimensionCount(float minDimensionValue, float maxDimensionValue)
