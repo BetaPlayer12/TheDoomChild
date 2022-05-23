@@ -432,6 +432,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             m_movement.Stop();
+            m_dashFX.Stop();
+            m_dashFX.gameObject.SetActive(false);
+            m_dashEndFX.Stop();
+            m_dashEndFX.gameObject.SetActive(false);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
