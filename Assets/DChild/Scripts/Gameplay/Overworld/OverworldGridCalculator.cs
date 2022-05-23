@@ -19,7 +19,7 @@ namespace DChild.Gameplay.Overworld
             m_maxYValue = maxYValue;
         }
 
-        public (int x, int y) GetGridIndex(Vector2 position) => (GetXIndex(position.x), GetYIndex(position.y));
+        public Vector2Int GetGridIndex(Vector2 position) => new Vector2Int(GetXIndex(position.x), GetYIndex(position.y));
 
         public int GetXIndex(float value) => GetIndex(value - m_minXValue, m_gridsize.x);
 
@@ -33,7 +33,26 @@ namespace DChild.Gameplay.Overworld
             }
             else
             {
-                return Mathf.FloorToInt(value / modifier);
+                var unrefinedIndex = value / modifier;
+                var isWholeNumber = unrefinedIndex % 1 == 0;
+                if (isWholeNumber)
+                {
+                    return (int)unrefinedIndex;
+                }
+                else
+                {
+
+                    //var floorIndex = Mathf.FloorToInt(unrefinedIndex);
+                    //var ceilIndex = Mathf.CeilToInt(unrefinedIndex);
+                    //var toFloorDistance = unrefinedIndex - unrefinedIndex;
+                    //var toCeilDistance = unrefinedIndex - ceilIndex;
+
+                    //if(toFloorDistance < toCeilDistance)
+
+                    //return Mathf.FloorToInt(value / modifier);
+
+                    return Mathf.RoundToInt(unrefinedIndex);
+                }
             }
         }
     }

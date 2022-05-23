@@ -81,6 +81,78 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!68 &2535270304397402457
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6980399757547541682}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.7141361, y: 2.7837753}
+  - {x: 1.4592586, y: 1.3776169}
+  - {x: 2.5217772, y: 1.2950134}
+  - {x: 3.2123966, y: 1.8082638}
+--- !u!1 &1724839115370601320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5133571586385113212}
+  - component: {fileID: 9198245753341044827}
+  m_Layer: 11
+  m_Name: InnerRoadCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5133571586385113212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724839115370601320}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4473025917727594893}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!68 &9198245753341044827
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724839115370601320}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: 0.9553113, y: 2.835022}
+  - {x: 1.4305816, y: 2.3708744}
+  - {x: 2.1238804, y: 2.3058176}
+  - {x: 2.6357174, y: 2.608221}
+  - {x: 2.7680173, y: 2.9673233}
 --- !u!1 &2952651145281197097
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,6 +965,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8012374559121976841, guid: 876b63fd735aa774eb184c88d0826776,
+        type: 3}
+      propertyPath: m_Name
+      value: OuterRoadCollider
+      objectReference: {fileID: 0}
     - target: {fileID: 8165318859488477363, guid: 876b63fd735aa774eb184c88d0826776,
         type: 3}
       propertyPath: m_Name
@@ -900,9 +977,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 876b63fd735aa774eb184c88d0826776, type: 3}
+--- !u!1 &6980399757547541682 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8012374559121976841, guid: 876b63fd735aa774eb184c88d0826776,
+    type: 3}
+  m_PrefabInstance: {fileID: 1148119582071831227}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6898237189831923524 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5788680787706359295, guid: 876b63fd735aa774eb184c88d0826776,
+    type: 3}
+  m_PrefabInstance: {fileID: 1148119582071831227}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4473025917727594893 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3602195748894761782, guid: 876b63fd735aa774eb184c88d0826776,
     type: 3}
   m_PrefabInstance: {fileID: 1148119582071831227}
   m_PrefabAsset: {fileID: 0}
