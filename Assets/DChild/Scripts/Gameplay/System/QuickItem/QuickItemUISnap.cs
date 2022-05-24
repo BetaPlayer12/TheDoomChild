@@ -49,6 +49,12 @@ namespace DChild.Gameplay.Inventories.QuickItem
                     m_next.ShowDetails(currentIndex == length - 1 ? null : m_selections.GetItem(currentIndex + 1));
                 }
             }
+            else
+            {
+                m_chosen.ShowDetails(null);
+                m_prev.ShowDetails(null);
+                m_next.ShowDetails(null);
+            }
         }
 
         private void Start()
