@@ -6,8 +6,8 @@ namespace DChild.Gameplay.Overworld
 {
     public class OverworldGridRemover : MonoBehaviour
     {
-        [SerializeField]
-        private float 
+        //[SerializeField]
+        //private float 
         public event Action<Vector2Int> GridIndexRemoved;
 
         private Dictionary<GameObject, Vector2Int> m_forRemovalPair;
