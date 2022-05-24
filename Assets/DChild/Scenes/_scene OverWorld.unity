@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -222,10 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3796eae92aa31f143bb4941f27eaa2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_moveSpeed: 0
-  horizontalInput: 0
-  verticalInput: 0
-  interactPressed: 0
 --- !u!114 &36157723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822,6 +818,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1502282831}
   - component: {fileID: 1502282832}
+  - component: {fileID: 1502282833}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -855,7 +852,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625df12dd6115704ba418e92b4cb1394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_activeTilesPair
+      Entry: 6
+      Data: 
   m_gridData: {fileID: 11400000, guid: 675c023822d865a46925d9841cbed7c7, type: 2}
   m_referencePoint: {fileID: 539941568}
   m_visibleGrids: {x: 2, y: 2}
+  m_remover: {fileID: 1502282833}
   m_activeTiles: []
+--- !u!114 &1502282833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502282830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbfafb4bb232af24cb227216d4bdfca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_reference: {fileID: 539941568}
+  m_distanceFromGridThreshold: 15.36
