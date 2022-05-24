@@ -171,11 +171,11 @@ namespace DChild.Gameplay.Inventories
         {
             if (m_selections.HasItems())
             {
-                if (m_hideUI)
-                {
-                    GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
-                    m_hideUI = false;
-                }
+                //if (m_hideUI)
+                //{
+                //    GameplaySystem.gamplayUIHandle.ShowQuickItem(true);
+                //    m_hideUI = false;
+                //}
 
                 if (m_selections.IsInSelections(m_currentItemData))
                 {
@@ -189,11 +189,11 @@ namespace DChild.Gameplay.Inventories
             }
             else
             {
-                if (m_hideUI == false)
-                {
-                    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
-                    m_hideUI = true;
-                }
+                //if (m_hideUI == false)
+                //{
+                //    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
+                //    m_hideUI = true;
+                //}
             }
         }
 
@@ -222,8 +222,8 @@ namespace DChild.Gameplay.Inventories
             } while (m_graph.Initialized == false);
             yield return null;
             var hasQuickSlot = m_selections.HasItems();
-            m_hideUI = hasQuickSlot == false;
-            GameplaySystem.gamplayUIHandle.ShowQuickItem(hasQuickSlot);
+            //m_hideUI = hasQuickSlot == false;
+            //GameplaySystem.gamplayUIHandle.ShowQuickItem(hasQuickSlot);
         }
 
         private void Awake()
