@@ -310,6 +310,7 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetEmptyAnimation(2, 0);
             StopAllCoroutines();
             m_phaseHandle.allowPhaseChange = false;
+            m_wallSensor.gameObject.SetActive(true);
             m_chargePhaseFX.Stop();
             m_effectsHolderFX.Stop();
             m_shieldGoingUpFX.Stop();
@@ -393,6 +394,7 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
+            m_wallSensor.gameObject.SetActive(true);
             m_stateHandle.ApplyQueuedState();
             m_phaseHandle.allowPhaseChange = true;
         }
@@ -430,6 +432,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_hitbox.gameObject.SetActive(false);
             m_boundBoxGO.SetActive(false);
             m_movement.Stop();
+            m_dashFX.Stop();
+            m_dashFX.gameObject.SetActive(false);
+            m_dashEndFX.Stop();
+            m_dashEndFX.gameObject.SetActive(false);
         }
 
         private void OnFlinchStart(object sender, EventActionArgs eventArgs)
@@ -561,6 +567,7 @@ namespace DChild.Gameplay.Characters.Enemies
             }
             m_dashFX.gameObject.SetActive(false);
             m_dashFX.Stop();
+            m_dashEndFX.gameObject.SetActive(true);
             m_dashEndFX.Play();
             m_currentShieldDashAttackDuration = 0;
             m_movement.Stop();
@@ -715,6 +722,9 @@ namespace DChild.Gameplay.Characters.Enemies
 
                 case State.Turning:
                     m_stateHandle.Wait(m_turnState);
+                    m_wallSensor.gameObject.SetActive(false);
+                    m_dashEndFX.Stop();
+                    m_dashEndFX.gameObject.SetActive(false);
                     m_turnHandle.Execute(m_currentTurnAnimation, m_currentIdleAnimation);
                     break;
 
