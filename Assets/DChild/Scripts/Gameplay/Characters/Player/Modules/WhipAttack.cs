@@ -134,6 +134,14 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 case Type.MidAir_Overhead:
                     m_timer = m_midAirOverhead.nextAttackDelay;
                     m_attacker.SetDamageModifier(m_midAirOverhead.damageModifier * m_modifier.Get(PlayerModifier.AttackDamage));
+
+                    if (m_adjustGravity == true)
+                    {
+                        m_cacheGravity = m_rigidbody.gravityScale;
+                        m_rigidbody.gravityScale = m_aerialGravity;
+                        m_rigidbody.velocity = Vector2.zero;
+                    }
+
                     break;
                 case Type.Crouch_Forward:
                     m_timer = m_crouchForward.nextAttackDelay;
@@ -164,7 +172,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_timer -= GameplaySystem.time.deltaTime;
                 if (m_timer <= 0)
                 {
-                    m_timer = -1;
+                    m_timer = 1;
                     m_state.canAttack = true;
                 }
             }

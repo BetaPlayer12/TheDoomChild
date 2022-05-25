@@ -36,6 +36,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private bool m_adjustGravity;
 
         private Animator m_fxAnimator;
+        private SkeletonAnimation m_skeletonAnimation;
 
         public override void Initialize(ComplexCharacterInfo info)
         {
@@ -47,6 +48,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_adjustGravity = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
+            m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
         }
 
         public override void Cancel()
@@ -123,7 +125,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
-                        m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
+                        //m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
+                        m_rigidbody.velocity = Vector2.zero;
                     }
                     break;
                 case Type.MidAir_Overhead:
@@ -134,7 +137,8 @@ namespace DChild.Gameplay.Characters.Players.Modules
                     {
                         m_cacheGravity = m_rigidbody.gravityScale;
                         m_rigidbody.gravityScale = m_aerialGravity;
-                        m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
+                        //m_rigidbody.velocity = new Vector2(m_rigidBody.velocity.x, 0);
+                        m_rigidbody.velocity = Vector2.zero;
                     }
                     break;
             }
@@ -179,7 +183,11 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
             m_rigidbody.gravityScale = m_cacheGravity;
             m_adjustGravity = false;
-            m_fxAnimator.Play("Buffer");
+            //m_fxAnimator.Play("Buffer");
+            //test.state.AddEmptyAnimation(0, 0, 0);
+            //test.state.ClearTrack(0);
+            m_skeletonAnimation.state.SetEmptyAnimation(0, 0);
+            //m_fxAnimator.Play("Buffer");
         }
 
         public void ClearFXFor(Type type)
@@ -208,7 +216,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 m_timer -= GameplaySystem.time.deltaTime;
                 if (m_timer <= 0)
                 {
-                    m_timer = -1;
+                    m_timer = 1;
                     m_state.canAttack = true;
                 }
             }
