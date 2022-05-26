@@ -262,7 +262,6 @@ namespace DChild.Gameplay.Characters.Enemies
             base.OnDestroyed(sender, eventArgs);
             m_bodyCollider.SetActive(true);
             m_agent.Stop();
-            m_character.physics.simulateGravity = true;
         }
         #region Attack
         private void ExecuteAttack(Attack m_attack)

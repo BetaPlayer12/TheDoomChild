@@ -27,6 +27,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
         private int m_slashStateAnimationParameter;
 
         private Animator m_fxAnimator;
+        private SkeletonAnimation m_skeletonAnimation;
 
         public bool CanSlashCombo() => m_canSlashCombo;
 
@@ -45,6 +46,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
             m_canSlashCombo = true;
 
             m_fxAnimator = m_attackFX.gameObject.GetComponentInChildren<Animator>();
+            m_skeletonAnimation = m_attackFX.gameObject.GetComponent<SkeletonAnimation>();
         }
 
         public override void Reset()
@@ -132,7 +134,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
                 Debug.Log("Attack Over");
                 base.AttackOver();
                 m_state.canAttack = true;
-
+                //m_skeletonAnimation.state.SetEmptyAnimation(0, 0);
                 m_canSlashCombo = false;
                 m_currentSlashState = 0;
                 m_currentVisualSlashState = 0;
@@ -153,7 +155,7 @@ namespace DChild.Gameplay.Characters.Players.Modules
 
                 if (m_comboAttackDelayTimer <= 0)
                 {
-                    m_comboAttackDelayTimer = -1;
+                    m_comboAttackDelayTimer = 1;
                     m_state.canAttack = true;
                     m_allowAttackDelayHandling = false;
                 }

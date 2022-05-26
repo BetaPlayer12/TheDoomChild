@@ -244,7 +244,6 @@ namespace DChild.Gameplay.Inventories
 
         private void Start()
         {
-            m_hideUI = true;
             //This waits for the Nody Graph to initialize itself
             StartCoroutine(DelayedInitialiationRoutine());
             m_itemCountRemover = new QuickItemCountRemover(m_player, m_inventory);
