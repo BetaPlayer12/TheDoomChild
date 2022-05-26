@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -145,7 +145,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &36157720
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -467,6 +467,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zee_Overworld
       objectReference: {fileID: 0}
+    - target: {fileID: 5631114891450443223, guid: ef98856ba2652f349b416fd7c2630a1d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Character
+      objectReference: {fileID: 0}
     - target: {fileID: 6901704789148163854, guid: ef98856ba2652f349b416fd7c2630a1d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -679,6 +684,118 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1272411852 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5631114891450443223, guid: ef98856ba2652f349b416fd7c2630a1d,
+    type: 3}
+  m_PrefabInstance: {fileID: 539941567}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1272411853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272411852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62b69801781d5241b551f508c560853, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_height: 0.5
+  m_centerMass: {fileID: 539941568}
+  m_isolatedObject: {fileID: 0}
+  m_physics: {fileID: 0}
+  m_colliders: {fileID: 0}
+  m_facing: 1
+  m_bodyReference:
+    m_default: {fileID: 0}
+    m_list: []
+--- !u!114 &1272411854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272411852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cf10f8a80548b342bb13663c16d14e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_interactableDetector: {fileID: 1272411856}
+--- !u!114 &1272411855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272411852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ddacfd9ab58734aade11dc96bf5974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_detector: {fileID: 1272411856}
+--- !u!114 &1272411856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272411852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e37f00e40b99a48bf1e528069e22cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1272411858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272411852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3796eae92aa31f143bb4941f27eaa2d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_moveSpeed: 2
+  horizontalInput: 0
+  verticalInput: 0
+  interactPressed: 0
+--- !u!114 &1272411859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272411852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 2e0d81e8951c3384cba5207fae67c9a4,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Gameplay
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1437477409
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,7 +972,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625df12dd6115704ba418e92b4cb1394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: m_activeTilesPair
+      Entry: 6
+      Data: 
   m_gridData: {fileID: 11400000, guid: 675c023822d865a46925d9841cbed7c7, type: 2}
   m_referencePoint: {fileID: 539941568}
   m_visibleGrids: {x: 2, y: 2}
+  m_remover: {fileID: 0}
   m_activeTiles: []
