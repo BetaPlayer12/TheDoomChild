@@ -189,6 +189,10 @@ namespace DChild.Gameplay.Inventories
             }
             else
             {
+                m_currentItem = null;
+                m_currentItemData = null;
+                m_currentIndex = 0;
+                StoreSelectedItem(SelectionEventArgs.SelectionType.None);
                 //if (m_hideUI == false)
                 //{
                 //    GameplaySystem.gamplayUIHandle.ShowQuickItem(false);
