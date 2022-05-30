@@ -60,8 +60,6 @@ namespace DChild.Gameplay
         }
 #endif
 
-        [SerializeField]
-        private bool m_writeSaveFileToDisk =true;
         [OdinSerialize, HideReferenceObjectPicker]
         private CampaignSlot m_slot = new CampaignSlot();
 
@@ -89,7 +87,7 @@ namespace DChild.Gameplay
             GameEventMessage.SendEvent("Game Save Start");
             m_slot.SetAsNewGame(false);
             CallPreSerialization(scope);
-            if (m_writeSaveFileToDisk)
+            if (m_slot.allowWriteToDisk)
             {
                 SerializationHandle.SaveCampaignSlot(m_slot.id, m_slot);
             }
