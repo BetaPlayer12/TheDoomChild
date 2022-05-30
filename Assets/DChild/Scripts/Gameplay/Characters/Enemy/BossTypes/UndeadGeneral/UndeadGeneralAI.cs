@@ -463,12 +463,15 @@ namespace DChild.Gameplay.Characters.Enemies
 
         private void OnTurnDone(object sender, FacingEventArgs eventArgs)
         {
-            if (m_stateHandle.currentState != State.Phasing /*&& !m_hasPhaseChanged*/)
+            if (m_currentAttackCoroutine == null)
             {
-                m_animation.animationState.TimeScale = 1f;
-                m_stateHandle.ApplyQueuedState();
+                if (m_stateHandle.currentState != State.Phasing)
+                {
+                    m_animation.animationState.TimeScale = 1f;
+                    m_stateHandle.ApplyQueuedState();
+                }
+                m_phaseHandle.allowPhaseChange = true;
             }
-            m_phaseHandle.allowPhaseChange = true;
         }
 
         private void OnDamageTaken(object sender, Damageable.DamageEventArgs eventArgs)

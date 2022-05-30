@@ -144,6 +144,8 @@ namespace DChild.Gameplay.Characters.Enemies
         private RaySensor m_edgeSensor;
         [SerializeField, TabGroup("BoundingBox")]
         private Collider2D m_attackBB;
+        [SerializeField, TabGroup("FX")]
+        private ParticleFX m_stabFX;
 
         [SerializeField]
         private bool m_willPatrol;
@@ -309,6 +311,7 @@ namespace DChild.Gameplay.Characters.Enemies
             {
                 StopCoroutine(m_sneerRoutine);
             }
+            m_stabFX.Stop();
             m_attackBB.enabled = false;
             m_animation.SetEmptyAnimation(0, 0);
             m_animation.SetAnimation(0, m_info.deathAnimation, false);
@@ -420,6 +423,7 @@ namespace DChild.Gameplay.Characters.Enemies
             yield return new WaitForAnimationComplete(m_animation.animationState, m_info.attack.animation);
             m_animation.SetAnimation(0, m_info.attackChargeLoopAnimation, true);
             yield return new WaitForSeconds(m_info.chargeDuration);
+            m_stabFX.Play();
             //for (int i = 0; i < m_info.attackRepeats; i++)
             //{
             //    if (!IsFacingTarget())
@@ -442,6 +446,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 time += Time.deltaTime;
                 yield return null;
             }
+            m_stabFX.Stop();
             m_movement.Stop();
             m_attackBB.enabled = false;
             m_animation.SetAnimation(0, m_info.idleAnimation, true);
