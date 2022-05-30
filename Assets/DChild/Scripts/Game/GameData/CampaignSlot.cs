@@ -19,6 +19,8 @@ namespace DChild.Serialization
         private bool m_demoGame;
         [SerializeField, OnValueChanged("OnNewGameChange"), BoxGroup("Slot Info")]
         private bool m_newGame;
+        [SerializeField]
+        private bool m_allowWriteToDisk;
         [SerializeField, BoxGroup("Slot Info")]
         private SceneInfo m_sceneToLoad;
         [SerializeField, HideIf("m_newGame"), BoxGroup("Slot Info")]
@@ -48,13 +50,14 @@ namespace DChild.Serialization
         }
         [SerializeField, HideReferenceObjectPicker, HideIf("m_newGame"), TabGroup("Misc")]
         private SerializeDataList m_miscDatas;
-        [SerializeField, HideReferenceObjectPicker,TextArea(5,999)]
+        [SerializeField, HideReferenceObjectPicker, TextArea(5, 999)]
         private string m_dialogueSaveData;
 
         public CampaignSlot(int m_id)
         {
             this.m_id = m_id;
             m_newGame = true;
+            m_allowWriteToDisk = true;
             m_location = DLocation.None;
             m_spawnPosition = new SerializedVector2();
             m_completion = 0;
@@ -70,6 +73,7 @@ namespace DChild.Serialization
         {
             this.m_id = 1;
             m_newGame = true;
+            m_allowWriteToDisk = true;
             m_location = DLocation.None;
             m_spawnPosition = new SerializedVector2();
             m_completion = 0;
@@ -84,6 +88,7 @@ namespace DChild.Serialization
         public int id => m_id;
         public bool demoGame => m_demoGame;
         public bool newGame => m_newGame;
+        public bool allowWriteToDisk => m_allowWriteToDisk;
         public SceneInfo sceneToLoad => m_sceneToLoad;
         public DLocation location => m_location;
         public int completion => m_completion;
