@@ -276,7 +276,9 @@ namespace DChild.Serialization
         private void OnDestroy()
         {
             var slot = GameplaySystem.campaignSerializer.slot;
-            UpdateDialogueSaveData(slot);
+
+            //Bug if not empty somewhere update data it will not proceed to last 2 lines.....
+            //UpdateDialogueSaveData(slot);
 
             GameplaySystem.campaignSerializer.PreSerialization -= OnPreSerialization;
             GameplaySystem.campaignSerializer.PostDeserialization -= OnPostDeserialization;
