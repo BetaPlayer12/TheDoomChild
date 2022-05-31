@@ -6,11 +6,16 @@ namespace DChildDebug
 {
     public class EditorOnlyObject : MonoBehaviour
     {
-
         private void OnValidate()
         {
-            gameObject.tag = "EditorOnly";
+            var allChildren = GetComponentsInChildren<Transform>();
+            foreach (var child in allChildren)
+            {
+                if(child.tag != "EditorOnly")
+                {
+                    child.tag = "EditorOnly";
+                }
+            }
         }
     }
-
 }
