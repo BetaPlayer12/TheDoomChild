@@ -1,17 +1,14 @@
 ﻿using DChild.Gameplay.Inventories;
-using DChild.Gameplay.Systems;
-using Doozy.Engine;
 using Holysoft.Collections;
 using Holysoft.Event;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 namespace DChild.Gameplay.UI
 {
+
     public class ItemNotification : SerializedMonoBehaviour
     {
         private List<string> m_messages;
@@ -23,7 +20,7 @@ namespace DChild.Gameplay.UI
         //[SerializeField]
         //private IItemContainer[] m_toListen;
 
-        
+
         public void ShowNextNotif()
         {
             if (m_messages.Count > 0)
