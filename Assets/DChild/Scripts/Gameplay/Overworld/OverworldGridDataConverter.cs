@@ -40,6 +40,23 @@ namespace DChild.Gameplay.Overworld
             return (calculator, grids, gridData);
         }
 
+        private int GetGridDimensionCount(float minDimensionValue, float maxDimensionValue)
+        {
+            return GetIndex(Mathf.Abs(minDimensionValue), m_gridsize.x) + GetIndex(Mathf.Abs(maxDimensionValue), m_gridsize.x);
+        }
+
+        private int GetIndex(float value, float modifier)
+        {
+            if (value == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return Mathf.FloorToInt(value / modifier);
+            }
+        }
+
 #if UNITY_EDITOR
         [Button]
         private void Convert()
@@ -57,22 +74,6 @@ namespace DChild.Gameplay.Overworld
             m_data.SetData(data.calculator, data.gridData);
         }
 
-        private int GetGridDimensionCount(float minDimensionValue, float maxDimensionValue)
-        {
-            return GetIndex(Mathf.Abs(minDimensionValue), m_gridsize.x) + GetIndex(Mathf.Abs(maxDimensionValue), m_gridsize.x);
-        }
-
-        private int GetIndex(float value, float modifier)
-        {
-            if (value == 0)
-            {
-                return 0;
-            }
-            else
-            {
-                return Mathf.FloorToInt(value / modifier);
-            }
-        }
 #endif
 
     }
