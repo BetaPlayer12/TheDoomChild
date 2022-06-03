@@ -862,10 +862,10 @@ namespace DChild.Gameplay.Characters.Enemies
             m_animation.SetAnimation(0, m_info.earthShakerAttack.animation, false).MixDuration = 0;
             m_animation.AddAnimation(0, m_currentIdleTransitionAnimation, m_currentIdleTransitionAnimation == m_info.idleToCombatTransitionAnimation ? false : true, 0).TimeScale = m_phaseHandle.currentPhase == Phase.PhaseThree ? 5 : 1;
             yield return new WaitForSeconds(1.0f);
-            m_hitbox.Enable();
             m_earthShakerGlitterFX.Stop();
             EarthShaker();
             yield return new WaitForAnimationComplete(m_animation.animationState, m_currentIdleTransitionAnimation);
+            m_hitbox.Enable();
             m_earthShakerExplosionFX.transform.SetParent(null);
             m_attackDecider.hasDecidedOnAttack = false;
             m_animation.DisableRootMotion();
@@ -1281,7 +1281,7 @@ namespace DChild.Gameplay.Characters.Enemies
                 case State.Chasing:
                     if (IsFacingTarget())
                     {
-                        if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null)
+                        if (IsTargetInRange(m_currentAttackRange) && m_currentAttackCoroutine == null && !m_hitbox.canBlockDamage)
                         {
                             m_attackDecider.hasDecidedOnAttack = false;
                             m_trailFX.Stop();
