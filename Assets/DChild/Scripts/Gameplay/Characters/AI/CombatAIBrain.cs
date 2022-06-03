@@ -210,6 +210,16 @@ namespace DChild.Gameplay.Characters.AI
             }
         }
 
+        private void OnEnable()
+        {
+            CombatAIManager.instance?.Add(this);
+        }
+
+        private void OnDisable()
+        {
+            CombatAIManager.instance?.Remove(this);
+        }
+
         protected virtual void LateUpdate()
         {
             if (m_targetInfo.isValid && m_targetInfo.doesTargetExist == false)
