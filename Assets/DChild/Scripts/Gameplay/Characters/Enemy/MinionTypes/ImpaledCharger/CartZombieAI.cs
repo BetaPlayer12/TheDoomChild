@@ -578,7 +578,6 @@ namespace DChild.Gameplay.Characters.Enemies
             m_initialPos = new Vector2(transform.position.x, GroundPosition().y);
             m_hitbox.SetInvulnerability(Invulnerability.Level_1);
 
-            m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
         }
 
         protected override void Awake()
@@ -598,6 +597,8 @@ namespace DChild.Gameplay.Characters.Enemies
             m_stateHandle = new StateHandle<State>(State.Idle, State.WaitBehaviourEnd);
             m_attackDecider = new RandomAttackDecider<Attack>();
             UpdateAttackDeciderList();
+
+            m_randomTurnRoutine = StartCoroutine(RandomTurnRoutine());
         }
 
         private void Update()

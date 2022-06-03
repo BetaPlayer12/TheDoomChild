@@ -1,4 +1,5 @@
 ﻿using DChild.Gameplay;
+using DChild.Gameplay.Characters.AI;
 using DChildDebug.Cutscene;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
@@ -49,6 +50,11 @@ namespace DChild.UI
                     conversationUIElements.defaultNPCSubtitlePanel = m_dialogueNPCSubtitlePanel;
 
                     GameplaySystem.playerManager.DisableControls();
+
+                    if (!isInCutscene)
+                    {
+                        CombatAIManager.instance?.ForbidAllFromAttackTarget(true);
+                    }
                 }
 
             }
@@ -68,6 +74,7 @@ namespace DChild.UI
         {
             if (isInCutscene == false)
             {
+                CombatAIManager.instance?.ForbidAllFromAttackTarget(false);
                 GameplaySystem.playerManager.EnableControls();
                 if (m_skipUIShown)
                 {
