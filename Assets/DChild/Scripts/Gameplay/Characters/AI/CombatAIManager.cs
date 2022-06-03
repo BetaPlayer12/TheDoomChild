@@ -12,6 +12,8 @@ namespace DChild.Gameplay.Characters.AI
 {
     public class CombatAIManager : SerializedMonoBehaviour
     {
+        public static CombatAIManager instance { get; private set; }
+
         [SerializeField, ValueDropdown("GetCombatAIs", IsUniqueList = true)]
         private List<ICombatAIBrain> m_combatAI = new List<ICombatAIBrain>();
         private bool m_allForbiddenToAttack;
@@ -87,6 +89,26 @@ namespace DChild.Gameplay.Characters.AI
                 {
                     m_combatAI[i].ReturnToSpawnPoint();
                 }
+            }
+        }
+
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (instance == this)
+            {
+                instance = null;
             }
         }
 

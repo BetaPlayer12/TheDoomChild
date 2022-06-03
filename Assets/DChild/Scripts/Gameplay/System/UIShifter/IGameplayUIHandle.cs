@@ -3,6 +3,7 @@ using DChild.Gameplay.Characters.NPC;
 using DChild.Gameplay.Environment;
 using DChild.Gameplay.Systems.Lore;
 using DChild.Gameplay.Trade;
+using DChild.Gameplay.UI;
 using DChild.Menu.Trade;
 using UnityEngine;
 
@@ -39,7 +40,7 @@ namespace DChild.Gameplay.Systems
         void ShowItemAcquired(bool willshow);
         void ShowGameplayUI(bool willshow);
         void ShowLootChestItemAcquired(LootList lootList);
-
+        void ShowNotification(StoreNotificationType storeNotificationType);
         void ShowSequenceSkip(bool willShow);
     }
 }
