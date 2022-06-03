@@ -117,8 +117,11 @@ namespace DChild.Gameplay.Narrative
                 yield return null;
             }
 
+            Debug.Log("Wake Up Animation Completed");
             GameplaySystem.playerManager.StopCharacterControlOverride();
+            Debug.Log("Returned Player Controlls");
             m_afterWakeupDialogue.OnUse();
+            Debug.Log("Wake Up Dialogue Initialized");
             SetStorePickupSequence(true);
             yield return null;
         }

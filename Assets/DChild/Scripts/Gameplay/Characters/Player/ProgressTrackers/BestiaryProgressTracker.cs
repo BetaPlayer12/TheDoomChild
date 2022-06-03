@@ -18,7 +18,7 @@ namespace DChild.Gameplay.Characters.Players
         {
             if (m_progress.HasInfoOf(ID) == false)
             {
-                GameplaySystem.gamplayUIHandle.PromptBestiaryNotification();
+                GameplaySystem.gamplayUIHandle.ShowNotification(UI.StoreNotificationType.Bestiary);
             }
             m_progress.SetProgress(ID, true);
         }

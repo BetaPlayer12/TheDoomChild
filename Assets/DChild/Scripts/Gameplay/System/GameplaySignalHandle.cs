@@ -1,4 +1,5 @@
-﻿using DChild.Gameplay.Characters.Players.Modules;
+﻿using DChild.Gameplay.Characters.AI;
+using DChild.Gameplay.Characters.Players.Modules;
 using DChild.Gameplay.Systems.Serialization;
 using DChild.Menu;
 using DChild.Visuals;
@@ -48,6 +49,11 @@ namespace DChild.Gameplay
         public void ShowDialogue(bool value)
         {
             GameEventMessage.SendEvent(value ? "Dialogue Start" : "Dialogue End");
+        }
+
+        public void MakeAllEnemiesPassive(bool arePassive)
+        {
+            CombatAIManager.instance?.ForbidAllFromAttackTarget(arePassive);
         }
 
         public void TransferPlayerTo(LocationData locationData)

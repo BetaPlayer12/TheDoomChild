@@ -6,6 +6,7 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using DChild.UI;
+using DChildDebug.Cutscene;
 using Doozy.Engine;
 using System;
 using System.Collections.Generic;
@@ -76,7 +77,7 @@ namespace PixelCrushers.DialogueSystem
                 }
             }
 
-            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false ;
+            m_typeWriterEffectIsPlaying = DChildStandardUIContinueButtonFastForward.currentTypewriterEffect?.isPlaying ?? false;
         }
 
         private void OnContinueDiag(GameEventMessage obj)
@@ -136,6 +137,15 @@ namespace PixelCrushers.DialogueSystem
                 PreviewUI.ShowMessage(message, 2, 0);
             }
         }
+        private void OnCutsceneSkip()
+        {
+            foreach (var input in m_behaviours)
+            {
+                PlaySequence(input.GetEndBehaviourSequence());
+                input.isWaitingForInput = false;
+                break;
+            }
+        }
 
         public override void OnGraphStart(Playable playable)
         {
@@ -145,8 +155,8 @@ namespace PixelCrushers.DialogueSystem
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = true;
+            SequenceSkipHandle.SkipExecute += OnCutsceneSkip;
         }
-
 
 
         public override void OnGraphStop(Playable playable)
@@ -156,6 +166,7 @@ namespace PixelCrushers.DialogueSystem
             m_played.Clear();
             m_behaviours.Clear();
             DChildStandardDialogueUI.isInCutscene = false;
+            SequenceSkipHandle.SkipExecute -= OnCutsceneSkip;
         }
     }
 }
